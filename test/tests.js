@@ -1,6 +1,11 @@
 // Tests largely based on those of Esprima
 // (http://esprima.org/test/)
 
+if (typeof exports != "undefined") {
+  var test = require("./driver.js").test;
+  var testFail = require("./driver.js").testFail;
+}
+
 test("this\n", {
   type: "Program",
   start: {
