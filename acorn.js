@@ -461,9 +461,26 @@
   }
 
   function parseExprAtom() {
-    if (tokType === _new) return parseNew();
-
     switch (tokType) {
+    case _name:
+      if (tokVal === "this") {
+        var node = startNode();
+        next();
+        return finishNode(node, "ThisExpression");
+      } else return parseIdent();
+
+    case _num: case _string: case _regexp:
+      var node = startNode();
+      node.value = tokVal;
+      next();
+      return finishNode(node, "Literal");
+
+    case _null: case _true: case _false:
+      var node = startNode();
+      node.value = tokType.atomValue;
+      next();
+      return finishNode(node, "Literal");
+
     case _parenL:
       next();
       var val = parseExpression();
@@ -484,24 +501,8 @@
       next();
       return parseFunction(node, false);
 
-    case _num: case _string: case _regexp:
-      var node = startNode();
-      node.value = tokVal;
-      next();
-      return finishNode(node, "Literal");
-
-    case _null: case _true: case _false:
-      var node = startNode();
-      node.value = tokType.atomValue;
-      next();
-      return finishNode(node, "Literal");
-
-    case _name:
-      if (tokVal === "this") {
-        var node = startNode();
-        next();
-        return finishNode(node, "ThisExpression");
-      } else return parseIdent();
+    case _new:
+      return parseNew();
 
     default:
       unexpected();
