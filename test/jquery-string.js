@@ -1,5 +1,4 @@
-// Silly noise to be able to load in source code without doing an XMLHttpReq
-var jquery164 = "/*!\n\
+/* Silly noise to be able to load in source code without doing an XMLHttpReq */var jquery164 = "/*!\n\
  * jQuery JavaScript Library v1.6.4\n\
  * http://jquery.com/\n\
  *\n\
