@@ -3,16 +3,20 @@
   <meta charset="utf-8">
   <title>Acorn benchmark</title>
   <script src="../acorn.js"></script>
+  <script src="compare/esprima.js"></script>
+  <script src="compare/uglifyjs.js"></script>
   <script src="jquery-string.js"></script>
 </head>
 
-<button onclick="test()">GO</button>
+<button onclick="test('acorn')">Acorn</button>
+<button onclick="test('esprima')">Esprima</button>
+<button onclick="test('uglifyjs')">UglifyJS</button>
 
 <script>
-  function test() {
-    for (var i =0, t0 = +new Date; i < 10; ++i) acorn.parse(jquery164);
-    var n = (+new Date - t0) + "ms";
-    console.log(n);
-    document.body.appendChild(document.createElement("pre")).innerHTML = n;
+  function test(which) {
+    var lib = window[which];
+    for (var i =0, t0 = +new Date; i < 10; ++i) lib.parse(jquery164);
+    document.body.appendChild(document.createElement("pre")).innerHTML =
+      which + ": " + (+new Date - t0) + "ms";
   }
 </script>
