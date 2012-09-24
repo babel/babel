@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Acorn</title>
+  <style>
+    body { max-width: 55em; margin-left: 2em; font-family: arial; }
+  </style>
+</head>
+
+<h1>Acorn</h1>
+
+<p>(This is a temporary placeholder project page. Better is to come in
+the future.)</p>
+
+<p>Acorn is a tiny, fast JavaScript parser written in JavaScript. If
+defines <code>acorn.parse</code>, which, when given a string and an
+optional options argument, will spit out an abstract syntax tree.</p>
+
+<p>The output conforms largely to
+the <a href="https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API">Mozilla
+parser API</a> with the caveat that non-ECMAscript features
+(<code>let</code>, <code>yield</code>, inline XML, etc) are not
+supported, and that node <code>start</code>/<code>end</code>
+information is attached directly to the nodes themselves, rather than
+wrapped in another object and attached as a <code>loc</code> property.</p>
+
+<p>See <code>acorn.defaultOptions</code> for the kind of options that
+the parser supports.</p>
+
+<p>Get the code and report bugs on
+the <a href="https://github.com/marijnh/acorn">Github page</a>.</p>

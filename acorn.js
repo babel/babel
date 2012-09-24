@@ -15,7 +15,7 @@
 
   // PARSER
 
-  var defaultOptions = {
+  var defaultOptions = exports.defaultOptions = {
     ecmaVersion: 5,
     strictSemicolons: false,
     allowTrailingCommas: true,
