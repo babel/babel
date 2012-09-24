@@ -7,12 +7,11 @@
     "engines": {"node": ">=0.4.0"},
     "maintainers": [{"name": "Marijn Haverbeke",
                      "email": "marijnh@gmail.com",
-                     "web": "http://marijnhaverbeke.nl"
-    }],
+                     "web": "http://marijnhaverbeke.nl"}],
     "repositories": [{"type": "git",
                       "url": "http://marijnhaverbeke.nl/git/acorn"},
                      {"type": "git",
-                      "url": "https://github.com/marijnh/acorn.git"}]
+                      "url": "https://github.com/marijnh/acorn.git"}],
     "licenses": [{"type": "MIT",
                   "url": "http://marijnhaverbeke.nl/acorn/LICENSE"}],
     "scripts": {"test": "node test/run.js"}
