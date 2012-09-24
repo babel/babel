@@ -194,7 +194,6 @@
     case _switch:
       next();
       node.discriminant = parseParenExpression();
-      node.lexical = false;
       node.cases = [];
       expect(_braceL);
       labels.push({kind: "switch"});
@@ -346,7 +345,7 @@
       var decl = startNode();
       decl.id = parseIdent();
       if (strict && strictBadWords.test(decl.id.name))
-        raise(id.start, "Binding " + decl.id.name + " in strict mode");
+        raise(decl.id.start, "Binding " + decl.id.name + " in strict mode");
       decl.init = eat(_eq) ? parseExpression(true, noIn) : null;
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
@@ -650,7 +649,7 @@
                       "typeof": {keyword: "typeof", prefix: true},
                       "void": {keyword: "void", prefix: true},
                       "delete": {keyword: "delete", prefix: true}};
-  var keywords = /^(?:break|case|catch|const|continue|debugger|default|do|else|finally|for|function|if|return|switch|throw|try|var|while|with|null|true|false|instanceof|typeof|void|delete|new|in)$/;
+  var keywords = /^(?:break|case|catch|continue|debugger|default|do|else|finally|for|function|if|return|switch|throw|try|var|while|with|null|true|false|instanceof|typeof|void|delete|new|in)$/;
 
   var _bracketL = {type: "[", beforeExpr: true}, _bracketR = {type: "]"}, _braceL = {type: "{", beforeExpr: true}, _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"}, _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true}, _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
   var puncTypes = {"[": _bracketL, "]": _bracketR, "{": _braceL, "}": _braceR, "(": _parenL,

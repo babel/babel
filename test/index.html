@@ -1,0 +1,23 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Acorn test suite</title>
+  <script src="../acorn.js"></script>
+  <script src="driver.js"></script>
+  <script src="tests.js"></script>
+</head>
+
+<script>
+  var testsRun = 0, failed = 0;
+  function report(state, code, message) {
+    if (state != "ok") {++failed; console.log(code, message);}
+    ++testsRun;
+  }
+  window.onload = function(){
+    var t0 = +new Date;
+    runTests(report);
+    console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
+    if (failed) console.log(failed + " failures.");
+    else console.log("All passed.");
+  };
+</script>
