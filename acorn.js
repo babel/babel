@@ -960,7 +960,7 @@
 
     var str = input.slice(start, tokPos), val;
     if (isFloat) val = parseFloat(str);
-    else if (ch !== "0") val = parseInt(str, 10);
+    else if (ch !== "0" || str.length === 1) val = parseInt(str, 10);
     else if (/[89]/.test(str) || strict) raise(start, "Invalid number");
     else val = parseInt(str, 8);
     return finishToken(_num, val);
