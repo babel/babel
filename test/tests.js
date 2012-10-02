@@ -2495,7 +2495,7 @@ test("switch (answer) { case 42: /* perfect */ bingo() }", {
             value: 42,
             end: {line: 1, column: 25}
           },
-          end: {line: 1, column: 50}
+          end: {line: 1, column: 48}
         }
       ],
       end: {line: 1, column: 50}
@@ -9390,7 +9390,7 @@ test("switch (answer) { case 42: hi(); break; }", {
             value: 42,
             end: {line: 1, column: 25}
           },
-          end: {line: 1, column: 41}
+          end: {line: 1, column: 39}
         }
       ],
       end: {line: 1, column: 41}
@@ -9461,7 +9461,7 @@ test("switch (answer) { case 42: hi(); break; default: break }", {
             }
           ],
           test: null,
-          end: {line: 1, column: 56}
+          end: {line: 1, column: 54}
         }
       ],
       end: {line: 1, column: 56}
