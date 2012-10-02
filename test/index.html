@@ -16,8 +16,9 @@
   window.onload = function(){
     var t0 = +new Date;
     runTests(report);
-    console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
-    if (failed) console.log(failed + " failures.");
-    else console.log("All passed.");
+    var out = testsRun + " tests run in " + (+new Date - t0) + "ms\n";
+    if (failed) out += failed + " failures.\n";
+    else out += "All passed.\n";
+    document.body.appendChild(document.createElement("pre")).appendChild(document.createTextNode(out));
   };
 </script>
