@@ -6,17 +6,71 @@
   <script src="compare/esprima.js"></script>
   <script src="compare/uglifyjs.js"></script>
   <script src="jquery-string.js"></script>
+  <script src="codemirror-string.js"></script>
+  <style>
+    td { text-align: right; padding-right: 20px; }
+    th { text-align: left; padding-right: 40px; }
+  </style>
 </head>
 
-<button onclick="test('acorn')">Acorn</button>
-<button onclick="test('esprima')">Esprima</button>
-<button onclick="test('uglifyjs')">UglifyJS</button>
+<h1>Acorn/Esprima/UglifyJS speed comparison</h1>
+
+<p>This will run three parsers on the source code of jQuery 1.6.4 and CodeMirror 3.0b1, and show the number of lines parsed per second for each of the parsers in a table.<p>
+
+<button onclick="run(false)">Compare without location data</button>
+<button onclick="run(true)">Compare with location data</button>
+<span id="running"></span>
 
 <script>
-  function test(which) {
-    var lib = window[which];
-    for (var i =0, t0 = +new Date; i < 10; ++i) lib.parse(jquery164);
-    document.body.appendChild(document.createElement("pre")).innerHTML =
-      which + ": " + (+new Date - t0) + "ms";
+  function runAcorn(code, locations) {
+    acorn.parse(code, {linePositions: locations});
+  }
+  function runEsprima(code, locations) {
+    esprima.parse(code, {loc: locations});
+  }
+  function runUglifyJS(code) {
+    uglifyjs.parse(code);
+  }
+
+  var totalLines = codemirror30.split("\n").length + jquery164.split("\n").length;
+
+  function benchmark(runner, locations) {
+    // Give it a chance to warm up (first runs are usually outliers)
+    runner(jquery164, locations);
+    runner(codemirror30, locations);
+    var t0 = +new Date, t1, lines = 0;
+    for (;;) {
+      runner(jquery164, locations);
+      runner(codemirror30, locations);
+      lines += totalLines;
+      t1 = +new Date;
+      if (t1 - t0 > 2000) break;
+    }
+    return lines / ((t1 - t0) / 1000);
+  }
+
+  function showOutput(values) {
+    var html = "<hr><table>";
+    for (var i = 0; i < values.length; ++i)
+      html += "<tr><th>" + values[i].name + "</td><td>" + Math.round(values[i].score) + " lines per second</td><td>" +
+                        Math.round(values[i].score * 100 / values[0].score) + "%</td></tr>";
+    document.body.appendChild(document.createElement("div")).innerHTML = html;
+  }
+
+  function run(locations) {
+    var running = document.getElementById("running");
+    running.innerHTML = "(Running...)";
+    var data = [{name: "Acorn", runner: runAcorn},
+                {name: "Esprima", runner: runEsprima},
+                {name: "UglifyJS", runner: runUglifyJS}];
+    var pos = 0;
+    function next() {
+      data[pos].score = benchmark(data[pos].runner, locations);
+      if (++pos == data.length) {
+        running.innerHTML = "";
+        showOutput(data);
+      } else setTimeout(next, 100);
+    }
+    setTimeout(next, 50);
   }
 </script>
