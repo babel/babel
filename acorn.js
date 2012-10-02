@@ -3,6 +3,15 @@
 // Acorn was written by Marijn Haverbeke and released under an MIT
 // license. The Unicode regexps (for identifiers and whitespace) were
 // taken from [Esprima](http://esprima.org) by Ariya Hidayat.
+//
+// Git repositories for Acorn are available at
+//
+//     http://marijnhaverbeke.nl/git/acorn
+//     https://github.com/marijnh/acorn.git
+//
+// Please use the [github bug tracker][ghbt] to report issues.
+//
+// [ghbt]: https://github.com/marijnh/acorn/issues
 
 (function(exports) {
   "strict mode";
@@ -1477,9 +1486,16 @@
       node.params.push(parseIdent());
     }
 
+    // Start a new scope with regard to labels and the `inFunction`
+    // flag (restore them to their old value afterwards).
     var oldInFunc = inFunction, oldLabels = labels;
     inFunction = true; labels = [];
     node.body = parseBlock(true);
+    inFunction = oldInFunc; labels = oldLabels;
+
+    // If this is a strict mode function, verify that argument names
+    // are not repeated, and it does not try to bind the words `eval`
+    // or `arguments`.
     if (strict || node.body.body.length && isUseStrict(node.body.body[0])) {
       for (var i = node.id ? -1 : 0; i < node.params.length; ++i) {
         var id = i < 0 ? node.id : node.params[i];
@@ -1490,9 +1506,14 @@
       }
     }
 
-    inFunction = oldInFunc; labels = oldLabels;
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
+
+  // Parses a comma-separated list of expressions, and returns them as
+  // an array. `close` is the token type that ends the list, and
+  // `allowEmpty` can be turned on to allow subsequent commas with
+  // nothing in between them to be parsed as `null` (which is needed
+  // for array literals).
 
   function parseExprList(close, allowTrailingComma, allowEmpty) {
     var elts = [], first = true;
@@ -1508,12 +1529,13 @@
     return elts;
   }
 
+  // Parse the next token as an identifier. If `liberal` is true (used
+  // when parsing properties), it will also convert keywords into
+  // identifiers.
+
   function parseIdent(liberal) {
     var node = startNode();
-    if (tokType !== _name) {
-      if (liberal && tokType.keyword) node.name = tokType.keyword;
-      else unexpected();
-    } else node.name = tokVal;
+    node.name = tokType === _name ? tokVal : (liberal && tokType.keyword) || unexpected();
     next();
     return finishNode(node, "Identifier");
   }
