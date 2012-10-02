@@ -10,15 +10,27 @@
   <style>
     td { text-align: right; padding-right: 20px; }
     th { text-align: left; padding-right: 40px; }
+    body { max-width: 50em; padding: 1em 2em; }
+    h1 { font-size: 150%; }
   </style>
 </head>
 
 <h1>Acorn/Esprima/UglifyJS speed comparison</h1>
 
-<p>This will run three parsers on the source code of jQuery 1.6.4 and CodeMirror 3.0b1, and show the number of lines parsed per second for each of the parsers in a table.<p>
+<p>This will run each of the three parsers on the source code of
+jQuery 1.6.4 and CodeMirror 3.0b1 for two seconds, and show a table
+indicating the number of lines parsed per second. Note that UglifyJS
+always stores location data, and is thus not fairly compared by the
+benchmark <em>without</em> location data.<p>
 
-<button onclick="run(false)">Compare without location data</button>
-<button onclick="run(true)">Compare with location data</button>
+<p>Also note that having the developer tools open in Chrome, or
+Firebug in Firefox <em>heavily</em> influences the numbers you get. In
+Chrome, the effect even lingers (in the tab) after you close the
+developer tools. Load in a fresh tab to get (halfway) stable
+numbers.</p>
+
+<button onclick="run(false)">Compare <strong>without</strong> location data</button>
+<button onclick="run(true)">Compare <strong>with</strong> location data</button>
 <span id="running"></span>
 
 <script>
@@ -59,7 +71,7 @@
 
   function run(locations) {
     var running = document.getElementById("running");
-    running.innerHTML = "(Running...)";
+    running.innerHTML = "Running benchmark...";
     var data = [{name: "Acorn", runner: runAcorn},
                 {name: "Esprima", runner: runEsprima},
                 {name: "UglifyJS", runner: runUglifyJS}];
