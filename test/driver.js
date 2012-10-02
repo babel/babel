@@ -10,7 +10,7 @@
   };
 
   exports.runTests = function(callback) {
-    var opts = {linePositions: true};
+    var opts = {locations: true};
     for (var i = 0; i < tests.length; ++i) {
       var test = tests[i];
       try {
@@ -58,4 +58,27 @@
       }
     }
   }
+
+  function mangle(ast) {
+    if (typeof ast != "object" || !ast) return;
+    if (ast.slice) {
+      for (var i = 0; i < ast.length; ++i) mangle(ast[i]);
+    } else {
+      var loc = ast.start && ast.end && {start: ast.start, end: ast.end};
+      if (loc) { delete ast.start; delete ast.end; }
+      for (var name in ast) if (ast.hasOwnProperty(name)) mangle(ast[name]);
+      if (loc) ast.loc = loc;
+    }
+  }
+
+  exports.printTests = function() {
+    var out = "";
+    for (var i = 0; i < tests.length; ++i) {
+      if (tests[i].error) continue;
+      mangle(tests[i].ast);
+      out += "test(" + JSON.stringify(tests[i].code) + ", " + JSON.stringify(tests[i].ast, null, 2) + ");\n\n";
+    }
+    document.body.innerHTML = "";
+    document.body.appendChild(document.createElement("pre")).appendChild(document.createTextNode(out));
+  };
 })(typeof exports == "undefined" ? window : exports);

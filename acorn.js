@@ -22,10 +22,7 @@
   // browser) is a `parse` function that takes a code string and
   // returns an abstract syntax tree as specified by [Mozilla parser
   // API][api], with the caveat that the SpiderMonkey-specific syntax
-  // (`let`, `yield`, inline XML, etc) is not recognized, and that
-  // range information is attached directly to the AST nodes as
-  // `start` and `end` properties, rather than wrapped in an
-  // additional object under a `loc` property.
+  // (`let`, `yield`, inline XML, etc) is not recognized.
   //
   // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 
@@ -64,15 +61,15 @@
     // after and before it), but never twice in the before (or after)
     // array of different nodes.
     trackComments: false,
-    // By default, the `start` and `end` properties attached to nodes hold
-    // offsets into the file. When `linePositions` is on, they will hold
-    // `{offset, line, column}` (with line being 1-based and column
-    // 0-based) instead.
-    linePositions: false
+    // When `locations` is on, `loc` properties holding objects with
+    // `start` and `end` properties in `{line, column}` form (with
+    // line being 1-based and column 0-based) will be attached to the
+    // nodes.
+    locations: false
   };
 
   // The `getLineInfo` function is mostly useful when the
-  // `linePositions` option is off (for performance reasons) and you
+  // `locations` option is off (for performance reasons) and you
   // want to find the line/column position for a given character
   // offset. `input` should be the code string that the offset refers
   // into.
@@ -98,11 +95,14 @@
 
   var tokPos;
 
-  // The start and end positions of the current token. These hold
-  // integers when `options.linePositions` is false, and objects
-  // otherwise.
+  // The start and end offsets of the current token.
 
   var tokStart, tokEnd;
+
+  // When `options.locations` is true, these hold objects
+  // containing the tokens start and end line/column pairs.
+
+  var tokStartLoc, tokEndLoc;
 
   // The type and value of the current token. Token types are objects,
   // named by variables against which they can be compared, and
@@ -128,16 +128,16 @@
 
   var tokRegexpAllowed, tokComments;
 
-  // When `options.linePositions` is true, these are used to keep
+  // When `options.locations` is true, these are used to keep
   // track of the current line, and know when a new line has been
-  // entered. See the `curLinePos` function.
+  // entered. See the `curLineLoc` function.
 
   var tokCurLine, tokLineStart, tokLineStartNext;
 
   // These store the position of the previous token, which is useful
   // when finishing a node and assigning its `end` position.
 
-  var lastStart, lastEnd;
+  var lastStart, lastEnd, lastEndLoc;
 
   // This is the parser's state. `inFunction` is used to reject
   // `return` statements outside of functions, `labels` to verify that
@@ -358,10 +358,9 @@
 
   // ## Tokenizer
 
-  // These are used when `options.linePositions` is on, in order to
-  // track the current line number and start of line offset, so that
-  // `tokStart` and `tokEnd` refer to position objects indead of
-  // integer offsets.
+  // These are used when `options.locations` is on, in order to track
+  // the current line number and start of line offset, in order to set
+  // `tokStartLoc` and `tokEndLoc`.
 
   function nextLineStart() {
     lineBreak.lastIndex = tokLineStart;
@@ -369,13 +368,13 @@
     return match ? match.index + match[0].length : input.length + 1;
   }
 
-  function curLinePos() {
+  function curLineLoc() {
     while (tokLineStartNext <= tokPos) {
       ++tokCurLine;
       tokLineStart = tokLineStartNext;
       tokLineStartNext = nextLineStart();
     }
-    return {offset: tokPos, line: tokCurLine, column: tokPos - tokLineStart};
+    return {line: tokCurLine, column: tokPos - tokLineStart};
   }
 
   // Reset the token state. Used at the start of a parse.
@@ -395,7 +394,8 @@
   // the right position.
 
   function finishToken(type, val) {
-    tokEnd = options.linePositions ? curLinePos() : tokPos;
+    tokEnd = tokPos;
+    if (options.locations) tokEndLoc = curLineLoc();
     tokType = type;
     skipSpace();
     tokVal = val;
@@ -456,7 +456,8 @@
   // `tokRegexpAllowed` trick does not work. See `parseStatement`.
 
   function readToken(forceRegexp) {
-    tokStart = options.linePositions ? curLinePos() : tokPos;
+    tokStart = tokPos;
+    if (options.locations) tokStartLoc = curLineLoc();
     tokCommentsBefore = tokComments;
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
@@ -782,6 +783,7 @@
   function next() {
     lastStart = tokStart;
     lastEnd = tokEnd;
+    lastEndLoc = tokEndLoc;
     readToken();
   }
 
@@ -790,7 +792,7 @@
 
   function setStrict(strct) {
     strict = strct;
-    tokPos = options.linePositions ? lastEnd.offset : lastEnd;
+    tokPos = lastEnd;
     skipSpace();
     readToken();
   }
@@ -804,6 +806,8 @@
       node.commentsBefore = tokCommentsBefore;
       tokCommentsBefore = null;
     }
+    if (options.locations)
+      node.loc = {start: tokStartLoc, end: null};
     return node;
   }
 
@@ -818,6 +822,9 @@
       node.commentsBefore = other.commentsBefore;
       other.commentsBefore = null;
     }
+    if (options.locations)
+      node.loc = {start: other.loc.start, end: null};
+
     return node;
   }
 
@@ -844,6 +851,8 @@
       }
       lastFinishedNode = node;
     }
+    if (options.locations)
+      node.loc.end = lastEndLoc;
     return node;
   }
 
@@ -869,8 +878,7 @@
   function canInsertSemicolon() {
     return tokType === _eof || tokType === _braceR ||
       !options.strictSemicolons &&
-      newline.test(options.linePositions ? input.slice(lastEnd.offset, tokStart.offset)
-                                         : input.slice(lastEnd, tokStart));
+      newline.test(input.slice(lastEnd, tokStart));
   }
 
   // Consume a semicolon, or, failing that, see if we are allowed to
@@ -911,7 +919,8 @@
 
   function parseTopLevel() {
     initTokenState();
-    lastStart = lastEnd = options.linePositions ? curLinePos() : tokPos;
+    lastStart = lastEnd = tokPos;
+    if (options.locations) lastEndLoc = curLineLoc();
     inFunction = strict = null;
     labels = [];
     readToken();
