@@ -14,8 +14,8 @@ https://github.com/marijnh/acorn.git
   <span class="s2">&quot;strict mode&quot;</span><span class="p">;</span>
 
   <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>window.acorn</code> when in the
-browser) a <code>parse</code> function that takes a code string and returns
-an abstract syntax tree as specified by <a href="https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API">Mozilla parser
+browser) is a <code>parse</code> function that takes a code string and
+returns an abstract syntax tree as specified by <a href="https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API">Mozilla parser
 API</a>, with the caveat that the SpiderMonkey-specific syntax
 (<code>let</code>, <code>yield</code>, inline XML, etc) is not recognized, and that
 range information is attached directly to the AST nodes as

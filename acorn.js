@@ -19,8 +19,8 @@
   exports.version = "0.0.1";
 
   // The main exported interface (under `window.acorn` when in the
-  // browser) a `parse` function that takes a code string and returns
-  // an abstract syntax tree as specified by [Mozilla parser
+  // browser) is a `parse` function that takes a code string and
+  // returns an abstract syntax tree as specified by [Mozilla parser
   // API][api], with the caveat that the SpiderMonkey-specific syntax
   // (`let`, `yield`, inline XML, etc) is not recognized, and that
   // range information is attached directly to the AST nodes as
