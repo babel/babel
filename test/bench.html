@@ -35,7 +35,7 @@ numbers.</p>
 
 <script>
   function runAcorn(code, locations) {
-    acorn.parse(code, {linePositions: locations});
+    acorn.parse(code, {locations: locations});
   }
   function runEsprima(code, locations) {
     esprima.parse(code, {loc: locations});
