@@ -25724,6 +25724,118 @@ test("", {
   }
 });
 
+test("foo: if (true) break foo;", {
+  type: "Program",
+  start: 0,
+  end: 25,
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 25
+    }
+  },
+  body: [
+    {
+      type: "LabeledStatement",
+      start: 0,
+      end: 25,
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 25
+        }
+      },
+      body: {
+        type: "IfStatement",
+        start: 5,
+        end: 25,
+        loc: {
+          start: {
+            line: 1,
+            column: 5
+          },
+          end: {
+            line: 1,
+            column: 25
+          }
+        },
+        test: {
+          type: "Literal",
+          start: 9,
+          end: 13,
+          loc: {
+            start: {
+              line: 1,
+              column: 9
+            },
+            end: {
+              line: 1,
+              column: 13
+            }
+          },
+          value: true
+        },
+        consequent: {
+          type: "BreakStatement",
+          start: 15,
+          end: 25,
+          loc: {
+            start: {
+              line: 1,
+              column: 15
+            },
+            end: {
+              line: 1,
+              column: 25
+            }
+          },
+          label: {
+            type: "Identifier",
+            start: 21,
+            end: 24,
+            loc: {
+              start: {
+                line: 1,
+                column: 21
+              },
+              end: {
+                line: 1,
+                column: 24
+              }
+            },
+            name: "foo"
+          }
+        },
+        alternate: null
+      },
+      label: {
+        type: "Identifier",
+        start: 0,
+        end: 3,
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 3
+          }
+        },
+        name: "foo"
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",

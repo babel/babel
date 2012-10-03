@@ -970,8 +970,10 @@
       // continue to.
       for (var i = 0; i < labels.length; ++i) {
         var lab = labels[i];
-        if ((node.label == null || lab.name === node.label.name) &&
-            lab.kind != null && (isBreak || lab.kind === "loop")) break;
+        if (node.label == null || lab.name === node.label.name) {
+          if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
+          if (node.label && isBreak) break;
+        }
       }
       if (i === labels.length) raise(node.start, "Unsyntactic " + starttype.keyword);
       return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
