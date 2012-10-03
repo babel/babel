@@ -338,7 +338,7 @@
   // Matches a whole line break (where CRLF is considered a single
   // line break). Used to count lines.
 
-  var lineBreak = /\r\n?|[\n\r\u2028\u2029]/g;
+  var lineBreak = /\r\n|[\n\r\u2028\u2029]/g;
 
   // Test whether a given character code starts an identifier.
 
