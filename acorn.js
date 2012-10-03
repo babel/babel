@@ -660,6 +660,7 @@
         var octal = /^[0-7]+/.exec(input.slice(tokPos, tokPos + 3));
         if (octal) octal = octal[0];
         while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, octal.length - 1);
+        if (octal === "0") octal = null;
         ++tokPos;
         if (octal) {
           if (strict) raise(tokPos - 2, "Octal literal in strict mode");

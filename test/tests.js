@@ -25836,6 +25836,151 @@ test("foo: if (true) break foo;", {
   ]
 });
 
+test("(function () { 'use strict'; '\0'; }())", {
+  type: "Program",
+  start: 0,
+  end: 38,
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 38
+    }
+  },
+  body: [
+    {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 38,
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 38
+        }
+      },
+      expression: {
+        type: "CallExpression",
+        start: 1,
+        loc: {
+          start: {
+            line: 1,
+            column: 1
+          },
+          end: {
+            line: 1,
+            column: 37
+          }
+        },
+        callee: {
+          type: "FunctionExpression",
+          start: 1,
+          end: 35,
+          loc: {
+            start: {
+              line: 1,
+              column: 1
+            },
+            end: {
+              line: 1,
+              column: 35
+            }
+          },
+          id: null,
+          params: [],
+          body: {
+            type: "BlockStatement",
+            start: 13,
+            end: 35,
+            loc: {
+              start: {
+                line: 1,
+                column: 13
+              },
+              end: {
+                line: 1,
+                column: 35
+              }
+            },
+            body: [
+              {
+                type: "ExpressionStatement",
+                start: 15,
+                end: 28,
+                loc: {
+                  start: {
+                    line: 1,
+                    column: 15
+                  },
+                  end: {
+                    line: 1,
+                    column: 28
+                  }
+                },
+                expression: {
+                  type: "Literal",
+                  start: 15,
+                  end: 27,
+                  loc: {
+                    start: {
+                      line: 1,
+                      column: 15
+                    },
+                    end: {
+                      line: 1,
+                      column: 27
+                    }
+                  },
+                  value: "use strict"
+                }
+              },
+              {
+                type: "ExpressionStatement",
+                start: 29,
+                end: 33,
+                loc: {
+                  start: {
+                    line: 1,
+                    column: 29
+                  },
+                  end: {
+                    line: 1,
+                    column: 33
+                  }
+                },
+                expression: {
+                  type: "Literal",
+                  start: 29,
+                  end: 32,
+                  loc: {
+                    start: {
+                      line: 1,
+                      column: 29
+                    },
+                    end: {
+                      line: 1,
+                      column: 32
+                    }
+                  },
+                  value: "\u0000"
+                }
+              }
+            ]
+          }
+        },
+        arguments: [],
+        end: 37
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",
