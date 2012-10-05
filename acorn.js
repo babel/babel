@@ -26,14 +26,15 @@
   //
   // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 
-  var options, input, inputLen;
+  var options, input, inputLen, sourceFile;
 
   exports.parse = function(inpt, opts) {
     input = String(inpt); inputLen = input.length;
     options = opts || {};
     for (var opt in defaultOptions) if (!options.hasOwnProperty(opt))
       options[opt] = defaultOptions[opt];
-    return parseTopLevel();
+    sourceFile = options.sourceFile || null;
+    return parseTopLevel(options.program);
   };
 
   // A second optional argument can be given to further configure
@@ -808,7 +809,7 @@
       tokCommentsBefore = null;
     }
     if (options.locations)
-      node.loc = {start: tokStartLoc, end: null};
+      node.loc = {start: tokStartLoc, end: null, source: sourceFile};
     return node;
   }
 
@@ -824,7 +825,7 @@
       other.commentsBefore = null;
     }
     if (options.locations)
-      node.loc = {start: other.loc.start, end: null};
+      node.loc = {start: other.loc.start, end: null, source: other.loc.source};
 
     return node;
   }
@@ -916,9 +917,11 @@
   // ### Statement parsing
 
   // Parse a program. Initializes the parser, reads any number of
-  // statements, and wraps them in a Program node.
+  // statements, and wraps them in a Program node.  Optionally takes a
+  // `program` argument.  If present, the statements will be appended
+  // to its body instead of creating a new node.
 
-  function parseTopLevel() {
+  function parseTopLevel(program) {
     initTokenState();
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = curLineLoc();
@@ -926,8 +929,8 @@
     labels = [];
     readToken();
 
-    var node = startNode(), first = true;
-    node.body = [];
+    var node = program || startNode(), first = true;
+    if (!program) node.body = [];
     while (tokType !== _eof) {
       var stmt = parseStatement();
       node.body.push(stmt);
