@@ -67,6 +67,15 @@
     // line being 1-based and column 0-based) will be attached to the
     // nodes.
     locations: false,
+    // Nodes have their start and end characters offsets recorded in
+    // `start` and `end` properties (directly on the node, rather than
+    // the `loc` object, which holds line/column data. To also add a
+    // [semi-standardized][range] `range` property holding a `[start,
+    // end]` array with the same numbers, set the `ranges` option to
+    // `true`.
+    //
+    // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
+    ranges: false,
     // It is possible to parse multiple files into a single AST by
     // passing the tree produced by parsing the first file as
     // `program` option in subsequent parses. This will add the
@@ -819,6 +828,8 @@
     }
     if (options.locations)
       node.loc = {start: tokStartLoc, end: null, source: sourceFile};
+    if (options.ranges)
+      node.range = [tokStart, 0];
     return node;
   }
 
@@ -835,6 +846,8 @@
     }
     if (options.locations)
       node.loc = {start: other.loc.start, end: null, source: other.loc.source};
+    if (options.ranges)
+      node.range = [other.range[0], 0];
 
     return node;
   }
@@ -864,6 +877,8 @@
     }
     if (options.locations)
       node.loc.end = lastEndLoc;
+    if (options.ranges)
+      node.range[1] = lastEnd;
     return node;
   }
 
