@@ -4,7 +4,7 @@
   <title>Acorn benchmark</title>
   <script src="../acorn.js"></script>
   <script src="compare/esprima.js"></script>
-  <script src="compare/uglifyjs.js"></script>
+  <script src="compare/uglifyjs2.js"></script>
   <script src="jquery-string.js"></script>
   <script src="codemirror-string.js"></script>
   <style>
@@ -15,7 +15,7 @@
   </style>
 </head>
 
-<h1>Acorn/Esprima/UglifyJS speed comparison</h1>
+<h1>Acorn/Esprima/UglifyJS2 speed comparison</h1>
 
 <p>This will run each of the three parsers on the source code of
 jQuery 1.6.4 and CodeMirror 3.0b1 for two seconds, and show a table
@@ -74,7 +74,7 @@ numbers.</p>
     running.innerHTML = "Running benchmark...";
     var data = [{name: "Acorn", runner: runAcorn},
                 {name: "Esprima", runner: runEsprima},
-                {name: "UglifyJS", runner: runUglifyJS}];
+                {name: "UglifyJS2", runner: runUglifyJS}];
     var pos = 0;
     function next() {
       data[pos].score = benchmark(data[pos].runner, locations);
