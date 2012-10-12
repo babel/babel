@@ -66,7 +66,16 @@
     // `start` and `end` properties in `{line, column}` form (with
     // line being 1-based and column 0-based) will be attached to the
     // nodes.
-    locations: false
+    locations: false,
+    // It is possible to parse multiple files into a single AST by
+    // passing the tree produced by parsing the first file as
+    // `program` option in subsequent parses. This will add the
+    // toplevel forms of the parsed file to the `Program` (top) node
+    // of an existing parse tree.
+    program: null,
+    // When `location` is on, you can pass this to record the source
+    // file in every node's `loc` object.
+    sourceFile: null
   };
 
   // The `getLineInfo` function is mostly useful when the
