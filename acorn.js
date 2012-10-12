@@ -262,7 +262,7 @@
 
   function makePredicate(words) {
     words = words.split(" ");
-    var f = "(function(str){", cats = [];
+    var f = "", cats = [];
     out: for (var i = 0; i < words.length; ++i) {
       for (var j = 0; j < cats.length; ++j)
         if (cats[j][0].length == words[i].length) {
@@ -296,7 +296,7 @@
     } else {
       compareTo(words);
     }
-    return (1, eval)(f + "})");
+    return new Function("str", f);
   }
 
   // The ECMAScript 3 reserved word list.
