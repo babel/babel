@@ -25981,6 +25981,50 @@ test("(function () { 'use strict'; '\0'; }())", {
   ]
 });
 
+test("123..toString(10)", {
+  type: "Program",
+  start: 0,
+  end: 17,
+  body: [
+    {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 17,
+      expression: {
+        type: "CallExpression",
+        start: 0,
+        callee: {
+          type: "MemberExpression",
+          start: 0,
+          object: {
+            type: "Literal",
+            start: 0,
+            end: 4,
+            value: 123
+          },
+          property: {
+            type: "Identifier",
+            start: 5,
+            end: 13,
+            name: "toString"
+          },
+          computed: false,
+          end: 13
+        },
+        arguments: [
+          {
+            type: "Literal",
+            start: 14,
+            end: 16,
+            value: 10
+          }
+        ],
+        end: 17
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",

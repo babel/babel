@@ -643,7 +643,7 @@
     if (isFloat || input.charAt(tokPos) === ".") {
       var next = input.charAt(++tokPos);
       if (next === "-" || next === "+") ++tokPos;
-      if (readInt(10) === null) raise(start, "Invalid number");
+      if (readInt(10) === null && ch === ".") raise(start, "Invalid number");
       isFloat = true;
     }
     if (/e/i.test(input.charAt(tokPos))) {
