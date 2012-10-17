@@ -26025,6 +26025,36 @@ test("123..toString(10)", {
   ]
 });
 
+test("a\u2028b", {
+  type: "Program",
+  start: 0,
+  end: 3,
+  body: [
+    {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 1,
+      expression: {
+        type: "Identifier",
+        start: 0,
+        end: 1,
+        name: "a"
+      }
+    },
+    {
+      type: "ExpressionStatement",
+      start: 2,
+      end: 3,
+      expression: {
+        type: "Identifier",
+        start: 2,
+        end: 3,
+        name: "b"
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",
@@ -26584,3 +26614,5 @@ testFail("(function a(eval) { \"use strict\"; })",
 
 testFail("(function a(package) { \"use strict\"; })",
          "Defining 'package' in strict mode (1:12)");
+
+testFail("var this = 10;", "Unexpected token (1:4)");
