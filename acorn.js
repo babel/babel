@@ -363,9 +363,11 @@
   // Test whether a given character code starts an identifier.
 
   function isIdentifierStart(code) {
-    return (code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
-      code === 36 || code === 95 ||
-      (code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code)));
+    if (code < 65) return code === 36;
+    if (code < 91) return true;
+    if (code < 97) return code === 95;
+    if (code < 123)return true;
+    return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code));
   }
 
   // Test whether a given character is part of an identifier.
