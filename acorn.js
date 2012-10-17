@@ -212,6 +212,7 @@
   var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
   var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"}, _var = {keyword: "var"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
+  var _this = {keyword: "this"};
 
   // The keywords that denote values.
 
@@ -232,7 +233,7 @@
                       "function": _function, "if": _if, "return": _return, "switch": _switch,
                       "throw": _throw, "try": _try, "var": _var, "while": _while, "with": _with,
                       "null": _null, "true": _true, "false": _false, "new": _new, "in": _in,
-                      "instanceof": {keyword: "instanceof", binop: 7},
+                      "instanceof": {keyword: "instanceof", binop: 7}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true},
                       "void": {keyword: "void", prefix: true},
                       "delete": {keyword: "delete", prefix: true}};
@@ -335,7 +336,7 @@
 
   // And the keywords.
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in");
+  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this");
 
   // ## Character categories
 
@@ -563,7 +564,6 @@
       return finishOp(code === 61 ? _eq : _prefix, 1);
 
     case 126: // '~'
-      if (next === 61) return finishOp(_assign, 2);
       return finishOp(_prefix, 1);
     }
 
@@ -1400,13 +1400,12 @@
 
   function parseExprAtom() {
     switch (tokType) {
+    case _this:
+      var node = startNode();
+      next();
+      return finishNode(node, "ThisExpression");
     case _name:
-      if (tokVal === "this") {
-        var node = startNode();
-        next();
-        return finishNode(node, "ThisExpression");
-      } else return parseIdent();
-
+      return parseIdent();
     case _num: case _string: case _regexp:
       var node = startNode();
       node.value = tokVal;
