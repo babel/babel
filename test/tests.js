@@ -17697,19 +17697,6 @@ test("do keep(); while (true);", {
         },
         end: {
           line: 1,
-          column: 23
-        }
-      }
-    },
-    {
-      type: "EmptyStatement",
-      loc: {
-        start: {
-          line: 1,
-          column: 23
-        },
-        end: {
-          line: 1,
           column: 24
         }
       }
@@ -17897,7 +17884,7 @@ test("do { x++; y--; } while (x < 10)", {
   }
 });
 
-test("{ do { } while (false) false }", {
+test("{ do { } while (false);false }", {
   type: "Program",
   body: [
     {
@@ -17940,7 +17927,7 @@ test("{ do { } while (false) false }", {
             },
             end: {
               line: 1,
-              column: 22
+              column: 23
             }
           }
         },

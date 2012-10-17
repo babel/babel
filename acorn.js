@@ -1017,6 +1017,7 @@
       labels.pop();
       expect(_while);
       node.test = parseParenExpression();
+      semicolon();
       return finishNode(node, "DoWhileStatement");
 
       // Disambiguating between a `for` and a `for`/`in` loop is

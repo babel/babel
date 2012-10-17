@@ -699,6 +699,7 @@ continue to.</p>             </td>             <td class="code">               <
       <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
       <span class="nx">expect</span><span class="p">(</span><span class="nx">_while</span><span class="p">);</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+      <span class="nx">semicolon</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DoWhileStatement&quot;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-93">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-93">&#182;</a>               </div>               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> loop is
 non-trivial. Basically, we have to parse the init <code>var</code>
 statement or expression, disallowing the <code>in</code> operator (see
