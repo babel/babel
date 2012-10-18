@@ -26269,9 +26269,6 @@ testFail("throw",
 testFail("throw;",
          "Unexpected token (1:5)");
 
-testFail("throw\n",
-         "Unexpected token (2:0)");
-
 testFail("for (var i, i2 in {});",
          "Unexpected token (1:15)");
 
@@ -26603,3 +26600,5 @@ testFail("(function a(package) { \"use strict\"; })",
          "Defining 'package' in strict mode (1:12)");
 
 testFail("var this = 10;", "Unexpected token (1:4)");
+
+testFail("throw\n10;", "Illegal newline after throw (1:5)");

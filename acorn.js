@@ -1104,6 +1104,8 @@
 
     case _throw:
       next();
+      if (newline.test(input.slice(lastEnd, tokStart)))
+        raise(lastEnd, "Illegal newline after throw");
       node.argument = parseExpression();
       return finishNode(node, "ThrowStatement");
 
