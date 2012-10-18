@@ -372,10 +372,14 @@
 
   // Test whether a given character is part of an identifier.
 
-  function isIdentifierChar(ch) {
-    return ((ch >= "a" && ch <= "z") || (ch >= "A" && ch <= "Z") ||
-            (ch >= "0" && ch <= "9") || ch === "$" || ch === "_" ||
-            (ch >= "\xaa" && nonASCIIidentifier.test(ch)));
+  function isIdentifierChar(code) {
+    if (code < 48) return code === 36;
+    if (code < 58) return true;
+    if (code < 65) return false;
+    if (code < 91) return true;
+    if (code < 97) return code === 95;
+    if (code < 123)return true;
+    return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code));
   }
 
   // ## Tokenizer
@@ -688,11 +692,11 @@
           str += String.fromCharCode(parseInt(octal, 8));
           tokPos += octal.length - 1;
         } else if (ch === "x") {
-          str += readHexChar(2);
+          str += String.fromCharCode(readHexChar(2));
         } else if (ch === "u") {
-          str += readHexChar(4);
+          str += String.fromCharCode(readHexChar(4));
         } else if (ch === "U") {
-          str += readHexChar(8);
+          str += String.fromCharCode(readHexChar(8));
         } else {
           switch (ch) {
           case "n" : str += "\n"; break;
@@ -720,7 +724,7 @@
   function readHexChar(len) {
     var n = readInt(16, len);
     if (n === null) raise(tokStart, "Bad character escape sequence");
-    return String.fromCharCode(n);
+    return n;
   }
 
   // Used to signal to callers of `readWord1` whether the word
@@ -739,21 +743,22 @@
     containsEsc = false;
     var word, first = true, start = tokPos;
     for (;;) {
-      var ch = input.charAt(tokPos);
+      var ch = input.charCodeAt(tokPos);
       if (isIdentifierChar(ch)) {
-        if (containsEsc) word += ch;
+        if (containsEsc) word += input.charAt(tokPos);
         ++tokPos;
-      } else if (ch === "\\") {
+      } else if (ch === 92) { // "\"
         if (!containsEsc) word = input.slice(start, tokPos);
         containsEsc = true;
-        if (input.charAt(++tokPos) != "u")
+        if (input.charCodeAt(++tokPos) != 117) // "u"
           raise(tokPos, "Expecting Unicode escape sequence \\uXXXX");
         ++tokPos;
         var esc = readHexChar(4);
-        if (!esc) raise(tokPos - 1, "Invalid Unicode escape");
-        if (!(first ? isIdentifierStart(esc.charCodeAt(0)) : isIdentifierChar(esc)))
+        var escStr = String.fromCharCode(esc);
+        if (!escStr) raise(tokPos - 1, "Invalid Unicode escape");
+        if (!(first ? isIdentifierStart(esc) : isIdentifierChar(esc)))
           raise(tokPos - 4, "Invalid Unicode escape");
-        word += esc;
+        word += escStr;
       } else {
         break;
       }
