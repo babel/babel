@@ -524,7 +524,7 @@
 
       // Quotes produce strings.
     case 34: case 39: // '"', "'"
-      return readString(String.fromCharCode(code));
+      return readString(code);
 
     // Operators are parsed inline in tiny state machines. '=' (61) is
     // often referred to. `finishOp` simply skips the amount of
@@ -672,16 +672,16 @@
 
   function readString(quote) {
     tokPos++;
-    var str = "";
+    var str = [];
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
-      var ch = input.charAt(tokPos);
+      var ch = input.charCodeAt(tokPos);
       if (ch === quote) {
         ++tokPos;
-        return finishToken(_string, str);
+        return finishToken(_string, String.fromCharCode.apply(null, str));
       }
-      if (ch === "\\") {
-        ch = input.charAt(++tokPos);
+      if (ch === 92) { // '\'
+        ch = input.charCodeAt(++tokPos);
         var octal = /^[0-7]+/.exec(input.slice(tokPos, tokPos + 3));
         if (octal) octal = octal[0];
         while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, octal.length - 1);
@@ -689,31 +689,33 @@
         ++tokPos;
         if (octal) {
           if (strict) raise(tokPos - 2, "Octal literal in strict mode");
-          str += String.fromCharCode(parseInt(octal, 8));
+          str.push(parseInt(octal, 8));
           tokPos += octal.length - 1;
-        } else if (ch === "x") {
-          str += String.fromCharCode(readHexChar(2));
-        } else if (ch === "u") {
-          str += String.fromCharCode(readHexChar(4));
-        } else if (ch === "U") {
-          str += String.fromCharCode(readHexChar(8));
         } else {
-          switch (ch) {
-          case "n" : str += "\n"; break;
-          case "r" : str += "\r"; break;
-          case "t" : str += "\t"; break;
-          case "b" : str += "\b"; break;
-          case "v" : str += "\u000b"; break;
-          case "f" : str += "\f"; break;
-          case "0" : str += "\0"; break;
-          case "\r": if (input.charAt(tokPos) === "\n") ++tokPos;
-          case "\n": break;
-          default: str += ch; break;
+          if (ch === 120) { // 'x'
+            str.push(readHexChar(2));
+          } else if (ch === 117) { // 'u'
+            str.push(readHexChar(4));
+          } else if (ch === 85) { // 'U'
+            str.push(readHexChar(8));
+          } else {
+            switch (ch) {
+            case 110: str.push(10); break; // 'n' -> '\n'
+            case 114: str.push(13); break; // 'r' -> '\r'
+            case 116: str.push(9); break; // 't' -> '\t'
+            case 98: str.push(8); break; // 'b' -> '\b'
+            case 118: str.push(11); break; // 'v' -> '\u000b'
+            case 102: str.push(12); break; // 'f' -> '\f'
+            case 48: str.push(0); break; // 0 -> '\0'
+            case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
+            case 10: break; // ' \n'
+            default: str.push(ch); break;
+            }
           }
         }
       } else {
-        if (newline.test(ch)) raise(tokStart, "Unterminated string constant");
-        if (ch !== "\\") str += ch;
+        if (ch === 13 || ch === 10 || ch === 8232 || ch === 8329) raise(tokStart, "Unterminated string constant");
+        if (ch !== 92) str.push(ch); // '\'
         ++tokPos;
       }
     }
