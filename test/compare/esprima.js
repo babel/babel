@@ -37,19 +37,19 @@ parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseLeftHandSideExpression: true,
 parseStatement: true, parseSourceElement: true */
 
-(function (factory) {
+(function (root, factory) {
     'use strict';
 
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
-    // and plain browser loading,
+    // Rhino, and plain browser loading.
     if (typeof define === 'function' && define.amd) {
         define(['exports'], factory);
     } else if (typeof exports !== 'undefined') {
         factory(exports);
     } else {
-        factory((window.esprima = {}));
+        factory((root.esprima = {}));
     }
-}(function (exports) {
+}(this, function (exports) {
     'use strict';
 
     var Token,
