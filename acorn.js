@@ -1421,6 +1421,7 @@
     case _num: case _string: case _regexp:
       var node = startNode();
       node.value = tokVal;
+      node.raw = input.slice(tokStart, tokEnd);
       next();
       return finishNode(node, "Literal");
 

@@ -1033,6 +1033,7 @@ or <code>{}</code>.</p>             </td>             <td class="code">         
     <span class="k">case</span> <span class="nx">_num</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_string</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_regexp</span><span class="o">:</span>
       <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tokVal</span><span class="p">;</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nx">raw</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="nx">tokEnd</span><span class="p">);</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;Literal&quot;</span><span class="p">);</span>
 
