@@ -911,9 +911,8 @@
   // Test whether a semicolon can be inserted at the current position.
 
   function canInsertSemicolon() {
-    return tokType === _eof || tokType === _braceR ||
-      !options.strictSemicolons &&
-      newline.test(input.slice(lastEnd, tokStart));
+    return !options.strictSemicolons &&
+      (tokType === _eof || tokType === _braceR || newline.test(input.slice(lastEnd, tokStart)));
   }
 
   // Consume a semicolon, or, failing that, see if we are allowed to
