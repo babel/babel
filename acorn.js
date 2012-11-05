@@ -444,7 +444,8 @@
       ++tokPos;
       ch = input.charCodeAt(tokPos);
     }
-    (tokComments || (tokComments = [])).push(input.slice(start, tokPos));
+    if (options.trackComments)
+      (tokComments || (tokComments = [])).push(input.slice(start, tokPos));
   }
 
   // Called at the start of the parse and after every token. Skips
@@ -878,7 +879,8 @@
       if (tokCommentsAfter) {
         node.commentsAfter = tokCommentsAfter;
         tokCommentsAfter = null;
-      } else if (lastFinishedNode && lastFinishedNode.end === lastEnd) {
+      } else if (lastFinishedNode && lastFinishedNode.end === lastEnd &&
+                 lastFinishedNode.commentsAfter) {
         node.commentsAfter = lastFinishedNode.commentsAfter;
         lastFinishedNode.commentsAfter = null;
       }
