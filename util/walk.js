@@ -1,6 +1,23 @@
+// AST walker module for Mozilla Parser API compatible trees
+
 (function(exports) {
   "use strict";
 
+  // A simple walk is one where you simply specify callbacks to be
+  // called on specific nodes. The last two arguments are optional. A
+  // simple use would be
+  //
+  //     walk.simple(myTree, {
+  //         Expression: function(node) { ... }
+  //     });
+  //
+  // to do something with all expressions. All Parser API node types
+  // can be used to identify node types, as well as Expression,
+  // Statement, and ScopeBody, which denote categories of nodes.
+  //
+  // The base argument can be used to pass a custom (recursive)
+  // walker, and state can be used to give this walked an initial
+  // state.
   exports.simple = function(node, visitors, base, state) {
     if (!base) base = exports;
     function c(node, st, override) {
@@ -10,6 +27,12 @@
     }
     c(node, state);
   };
+
+  // A recursive walk is one where your functions override the default
+  // walkers. They can modify and replace the state parameter that's
+  // threaded through the walk, and can opt how and whether to walk
+  // their child nodes (by calling their third argument on these
+  // nodes).
   exports.recursive = function(node, state, funcs, base) {
     var visitor = exports.make(funcs, base);
     function c(node, st, override) {
@@ -17,6 +40,9 @@
     }
     c(node, state);
   };
+
+  // Used to create a custom walker. Will fill in all missing node
+  // type properties with the defaults.
   exports.make = function(funcs, base) {
     if (!base) base = exports;
     var visitor = {};
@@ -27,6 +53,8 @@
 
   function skipThrough(node, st, c) { c(node, st); }
   function ignore(node, st, c) {}
+
+  // Node walkers.
 
   exports.Program = exports.BlockStatement = function(node, st, c) {
     for (var i = 0; i < node.body.length; ++i)
@@ -106,7 +134,9 @@
   exports.Function = function(node, st, c) {
     c(node.body, st, "ScopeBody");
   };
-  exports.ScopeBody = skipThrough;
+  exports.ScopeBody = function(node, st, c) {
+    c(node, st, "Statement");
+  };
 
   exports.Expression = skipThrough;
   exports.ThisExpression = ignore;
@@ -148,6 +178,8 @@
   };
   exports.Identifier = exports.Literal = ignore;
 
+  // A custom walker that keeps track of the scope chain and the
+  // variables defined in it.
   function makeScope(prev) {
     return {vars: Object.create(null), prev: prev};
   }
