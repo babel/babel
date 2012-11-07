@@ -187,18 +187,19 @@
     Function: function(node, scope, c) {
       var inner = makeScope(scope);
       for (var i = 0; i < node.params.length; ++i)
-        inner.vars[node.params[i].name] = "argument";
-      if (node.type == "FunctionDeclaration")
-        scope.vars[node.id.name] = "function";
-      else if (node.id)
-        inner.vars[node.id.name] = "function'";
+        inner.vars[node.params[i].name] = {type: "argument", node: node.params[i]};
+      if (node.id) {
+        var decl = node.type == "FunctionDeclaration";
+        (decl ? scope : inner).vars[node.id.name] =
+          {type: decl ? "function" : "function name", node: node.id};
+      }
       c(node.body, inner, "ScopeBody");
     },
     TryStatement: function(node, scope, c) {
       c(node.block, scope, "Statement");
       for (var i = 0; i < node.handlers.length; ++i) {
         var handler = node.handlers[i], inner = makeScope(scope);
-        inner.vars[handler.param.name] = "catch";
+        inner.vars[handler.param.name] = {type: "catch clause", node: handler.param};
         c(handler.body, inner, "ScopeBody");
       }
       if (node.finalizer) c(node.finalizer, scope, "Statement");
@@ -206,7 +207,7 @@
     VariableDeclaration: function(node, scope, c) {
       for (var i = 0; i < node.declarations.length; ++i) {
         var decl = node.declarations[i];
-        scope.vars[decl.id.name] = "var";
+        scope.vars[decl.id.name] = {type: "var", node: decl.id};
         if (decl.init) c(decl.init, scope, "Expression");
       }
     }
