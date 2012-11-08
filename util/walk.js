@@ -46,8 +46,8 @@
   exports.make = function(funcs, base) {
     if (!base) base = exports;
     var visitor = {};
-    for (var type in base)
-      visitor[type] = funcs.hasOwnProperty(type) ? funcs[type] : base[type];
+    for (var type in base) visitor[type] = base[type];
+    for (var type in funcs) visitor[type] = funcs[type];
     return visitor;
   };
 
