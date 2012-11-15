@@ -487,26 +487,72 @@
   // The `forceRegexp` parameter is used in the one case where the
   // `tokRegexpAllowed` trick does not work. See `parseStatement`.
 
-  function readToken(forceRegexp) {
-    tokStart = tokPos;
-    if (options.locations) tokStartLoc = curLineLoc();
-    tokCommentsBefore = tokComments;
-    if (forceRegexp) return readRegexp();
-    if (tokPos >= inputLen) return finishToken(_eof);
-
-    var code = input.charCodeAt(tokPos);
-    // Identifier or keyword. '\uXXXX' sequences are allowed in
-    // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+  function readToken_46(code) { // '.'
     var next = input.charCodeAt(tokPos+1);
+    if (next >= 48 && next <= 57) return readNumber(String.fromCharCode(code));
+    ++tokPos;
+    return finishToken(_dot);
+  }
+
+  function readToken_47() { // '/'
+    var next = input.charCodeAt(tokPos+1);
+    if (tokRegexpAllowed) {++tokPos; return readRegexp();}
+    if (next === 61) return finishOp(_assign, 2);
+    return finishOp(_slash, 1);
+  }
+
+  function readToken_37_42() { // '%*'
+    var next = input.charCodeAt(tokPos+1);
+    if (next === 61) return finishOp(_assign, 2);
+    return finishOp(_bin10, 1);
+  }
+
+  function readToken_124_38(code) { // '|&'
+    var next = input.charCodeAt(tokPos+1);
+    if (next === code) return finishOp(code === 124 ? _bin1 : _bin2, 2);
+    if (next === 61) return finishOp(_assign, 2);
+    return finishOp(code === 124 ? _bin3 : _bin5, 1);
+  }
+
+  function readToken_94() { // '^'
+    var next = input.charCodeAt(tokPos+1);
+    if (next === 61) return finishOp(_assign, 2);
+    return finishOp(_bin4, 1);    
+  }
+
+  function readToken_43_45(code) { // '+-'
+    var next = input.charCodeAt(tokPos+1);
+    if (next === code) return finishOp(_incdec, 2);
+    if (next === 61) return finishOp(_assign, 2);
+    return finishOp(_plusmin, 1);    
+  }
+
+  function readToken_60_62(code) { // '<>'
+    var next = input.charCodeAt(tokPos+1);
+    var size = 1;
+    if (next === code) {
+      size = code === 62 && input.charCodeAt(tokPos+2) === 62 ? 3 : 2;
+      if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
+      return finishOp(_bin8, size);
+    }
+    if (next === 61)
+      size = input.charCodeAt(tokPos+2) === 61 ? 3 : 2;
+    return finishOp(_bin7, size);
+  }
+  
+  function readToken_61_33(code) { // '=!'
+    var next = input.charCodeAt(tokPos+1);
+    if (next === 61) return finishOp(_bin6, input.charCodeAt(tokPos+2) === 61 ? 3 : 2);
+    return finishOp(code === 61 ? _eq : _prefix, 1);
+  }
+
+  function getTokenFromCode(code) {
 
     switch(code) {
       // The interpretation of a dot depends on whether it is followed
       // by a digit.
     case 46: // '.'
-      if (next >= 48 && next <= 57) return readNumber(String.fromCharCode(code));
-      ++tokPos;
-      return finishToken(_dot);
+      return readToken_46(code);
 
       // Punctuation tokens.
     case 40: ++tokPos; return finishToken(_parenL);
@@ -522,6 +568,7 @@
 
       // '0x' is a hexadecimal number.
     case 48: // '0'
+      var next = input.charCodeAt(tokPos+1);
       if (next === 120 || next === 88) return readHexNumber();
       // Anything else beginning with a digit is an integer, octal
       // number, or float.
@@ -538,52 +585,55 @@
     // of the type given by its first argument.
 
     case 47: // '/'
-      if (tokRegexpAllowed) {++tokPos; return readRegexp();}
-      if (next === 61) return finishOp(_assign, 2);
-      return finishOp(_slash, 1);
+      return readToken_47(code);
 
     case 37: case 42: // '%*'
-      if (next === 61) return finishOp(_assign, 2);
-      return finishOp(_bin10, 1);
+      return readToken_37_42();
 
     case 124: case 38: // '|&'
-      if (next === code) return finishOp(code === 124 ? _bin1 : _bin2, 2);
-      if (next === 61) return finishOp(_assign, 2);
-      return finishOp(code === 124 ? _bin3 : _bin5, 1);
+      return readToken_124_38(code);
 
     case 94: // '^'
-      if (next === 61) return finishOp(_assign, 2);
-      return finishOp(_bin4, 1);
+      return readToken_94();
 
     case 43: case 45: // '+-'
-      if (next === code) return finishOp(_incdec, 2);
-      if (next === 61) return finishOp(_assign, 2);
-      return finishOp(_plusmin, 1);
+      return readToken_43_45(code);
 
     case 60: case 62: // '<>'
-      var size = 1;
-      if (next === code) {
-        size = code === 62 && input.charCodeAt(tokPos+2) === 62 ? 3 : 2;
-        if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
-        return finishOp(_bin8, size);
-      }
-      if (next === 61)
-        size = input.charCodeAt(tokPos+2) === 61 ? 3 : 2;
-      return finishOp(_bin7, size);
+      return readToken_60_62(code);
 
     case 61: case 33: // '=!'
-      if (next === 61) return finishOp(_bin6, input.charCodeAt(tokPos+2) === 61 ? 3 : 2);
-      return finishOp(code === 61 ? _eq : _prefix, 1);
+      return readToken_61_33(code);
 
     case 126: // '~'
       return finishOp(_prefix, 1);
     }
 
-    // If we are here, we either found a non-ASCII identifier
-    // character, or something that's entirely disallowed.
-    var ch = String.fromCharCode(code);
-    if (ch === "\\" || nonASCIIidentifierStart.test(ch)) return readWord();
-    raise(tokPos, "Unexpected character '" + ch + "'");
+    return false;
+  }
+
+  function readToken(forceRegexp) {
+    tokStart = tokPos;
+    if (options.locations) tokStartLoc = curLineLoc();
+    tokCommentsBefore = tokComments;
+    if (forceRegexp) return readRegexp();
+    if (tokPos >= inputLen) return finishToken(_eof);
+
+    var code = input.charCodeAt(tokPos);
+    // Identifier or keyword. '\uXXXX' sequences are allowed in
+    // identifiers, so '\' also dispatches to that.
+    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    
+    var tok = getTokenFromCode(code);
+
+    if(tok === false) {
+      // If we are here, we either found a non-ASCII identifier
+      // character, or something that's entirely disallowed.
+      var ch = String.fromCharCode(code);
+      if (ch === "\\" || nonASCIIidentifierStart.test(ch)) return readWord();
+      raise(tokPos, "Unexpected character '" + ch + "'");
+    } 
+    return tok;
   }
 
   function finishOp(type, size) {
