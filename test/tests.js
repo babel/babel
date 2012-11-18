@@ -175,11 +175,11 @@ test("(1 + 2 ) * 3", {
           loc: {
             start: {
               line: 1,
-              column: 1
+              column: 0
             },
             end: {
               line: 1,
-              column: 6
+              column: 8
             }
           }
         },
@@ -201,7 +201,7 @@ test("(1 + 2 ) * 3", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
@@ -8175,11 +8175,11 @@ test("( new foo).bar()", {
             loc: {
               start: {
                 line: 1,
-                column: 2
+                column: 0
               },
               end: {
                 line: 1,
-                column: 9
+                column: 10
               }
             }
           },
@@ -8201,7 +8201,7 @@ test("( new foo).bar()", {
           loc: {
             start: {
               line: 1,
-              column: 2
+              column: 0
             },
             end: {
               line: 1,
@@ -8213,7 +8213,7 @@ test("( new foo).bar()", {
         loc: {
           start: {
             line: 1,
-            column: 2
+            column: 0
           },
           end: {
             line: 1,
@@ -8344,11 +8344,11 @@ test("(    foo  )()", {
           loc: {
             start: {
               line: 1,
-              column: 5
+              column: 0
             },
             end: {
               line: 1,
-              column: 8
+              column: 11
             }
           }
         },
@@ -8356,7 +8356,7 @@ test("(    foo  )()", {
         loc: {
           start: {
             line: 1,
-            column: 5
+            column: 0
           },
           end: {
             line: 1,
@@ -17190,11 +17190,11 @@ test("if (morning) (function(){})", {
           loc: {
             start: {
               line: 1,
-              column: 14
+              column: 13
             },
             end: {
               line: 1,
-              column: 26
+              column: 27
             }
           }
         },
@@ -20481,11 +20481,11 @@ test("(function(){ return })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 21
+            column: 22
           }
         }
       },
@@ -20554,11 +20554,11 @@ test("(function(){ return; })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 22
+            column: 23
           }
         }
       },
@@ -20640,11 +20640,11 @@ test("(function(){ return x; })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 24
+            column: 25
           }
         }
       },
@@ -20754,11 +20754,11 @@ test("(function(){ return x * y })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 27
+            column: 28
           }
         }
       },
@@ -23193,11 +23193,11 @@ test("(function test(t, t) { })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 24
+            column: 25
           }
         }
       },
@@ -24099,11 +24099,11 @@ test("(function(){})", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 13
+            column: 14
           }
         }
       },
@@ -25209,11 +25209,11 @@ test("(function(){ return\nx; })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 2,
-            column: 4
+            column: 5
           }
         }
       },
@@ -25309,11 +25309,11 @@ test("(function(){ return // Comment\nx; })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 2,
-            column: 4
+            column: 5
           }
         }
       },
@@ -25409,11 +25409,11 @@ test("(function(){ return/* Multiline\nComment */x; })", {
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 2,
-            column: 14
+            column: 15
           }
         }
       },
@@ -25854,15 +25854,15 @@ test("(function () { 'use strict'; '\0'; }())", {
       },
       expression: {
         type: "CallExpression",
-        start: 1,
+        start: 0,
         loc: {
           start: {
             line: 1,
-            column: 1
+            column: 0
           },
           end: {
             line: 1,
-            column: 37
+            column: 38
           }
         },
         callee: {
@@ -25962,7 +25962,7 @@ test("(function () { 'use strict'; '\0'; }())", {
           }
         },
         arguments: [],
-        end: 37
+        end: 38
       }
     }
   ]
@@ -26120,7 +26120,7 @@ testFail("func() = 4",
          "Assigning to rvalue (1:0)");
 
 testFail("(1 + 1) = 10",
-         "Assigning to rvalue (1:1)");
+         "Assigning to rvalue (1:0)");
 
 testFail("1++",
          "Assigning to rvalue (1:0)");
@@ -26135,7 +26135,7 @@ testFail("--1",
          "Assigning to rvalue (1:2)");
 
 testFail("for((1 + 1) in list) process(x);",
-         "Assigning to rvalue (1:5)");
+         "Assigning to rvalue (1:4)");
 
 testFail("[",
          "Unexpected token (1:1)");

@@ -1045,8 +1045,17 @@ or <code>{}</code>.</p>             </td>             <td class="code">         
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;Literal&quot;</span><span class="p">);</span>
 
     <span class="k">case</span> <span class="nx">_parenL</span><span class="o">:</span>
+      <span class="kd">var</span> <span class="nx">tokStartLoc1</span> <span class="o">=</span> <span class="nx">tokStartLoc</span><span class="p">,</span> <span class="nx">tokStart1</span> <span class="o">=</span> <span class="nx">tokStart</span><span class="p">;</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
+      <span class="nx">val</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">tokStart1</span><span class="p">;</span>
+      <span class="nx">val</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="nx">tokEnd</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">locations</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">val</span><span class="p">.</span><span class="nx">loc</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">tokStartLoc1</span><span class="p">;</span>
+        <span class="nx">val</span><span class="p">.</span><span class="nx">loc</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="nx">tokEndLoc</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ranges</span><span class="p">)</span>
+        <span class="nx">val</span><span class="p">.</span><span class="nx">range</span> <span class="o">=</span> <span class="p">[</span><span class="nx">tokStart1</span><span class="p">,</span> <span class="nx">tokEnd</span><span class="p">];</span>
       <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenR</span><span class="p">);</span>
       <span class="k">return</span> <span class="nx">val</span><span class="p">;</span>
 

@@ -1433,8 +1433,17 @@
       return finishNode(node, "Literal");
 
     case _parenL:
+      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart;
       next();
       var val = parseExpression();
+      val.start = tokStart1;
+      val.end = tokEnd;
+      if (options.locations) {
+        val.loc.start = tokStartLoc1;
+        val.loc.end = tokEndLoc;
+      }
+      if (options.ranges)
+        val.range = [tokStart1, tokEnd];
       expect(_parenR);
       return val;
 
