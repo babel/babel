@@ -487,47 +487,47 @@
   // The `forceRegexp` parameter is used in the one case where the
   // `tokRegexpAllowed` trick does not work. See `parseStatement`.
 
-  function readToken_46(code) { // '.'
+  function readToken_dot(code) {
     var next = input.charCodeAt(tokPos+1);
     if (next >= 48 && next <= 57) return readNumber(String.fromCharCode(code));
     ++tokPos;
     return finishToken(_dot);
   }
 
-  function readToken_47() { // '/'
+  function readToken_slash() { // '/'
     var next = input.charCodeAt(tokPos+1);
     if (tokRegexpAllowed) {++tokPos; return readRegexp();}
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_slash, 1);
   }
 
-  function readToken_37_42() { // '%*'
+  function readToken_mult_modulo() { // '%*'
     var next = input.charCodeAt(tokPos+1);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_bin10, 1);
   }
 
-  function readToken_124_38(code) { // '|&'
+  function readToken_pipe_amp(code) { // '|&'
     var next = input.charCodeAt(tokPos+1);
     if (next === code) return finishOp(code === 124 ? _bin1 : _bin2, 2);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(code === 124 ? _bin3 : _bin5, 1);
   }
 
-  function readToken_94() { // '^'
+  function readToken_caret() { // '^'
     var next = input.charCodeAt(tokPos+1);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_bin4, 1);    
   }
 
-  function readToken_43_45(code) { // '+-'
+  function readToken_plus_min(code) { // '+-'
     var next = input.charCodeAt(tokPos+1);
     if (next === code) return finishOp(_incdec, 2);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_plusmin, 1);    
   }
 
-  function readToken_60_62(code) { // '<>'
+  function readToken_lt_gt(code) { // '<>'
     var next = input.charCodeAt(tokPos+1);
     var size = 1;
     if (next === code) {
@@ -540,19 +540,18 @@
     return finishOp(_bin7, size);
   }
   
-  function readToken_61_33(code) { // '=!'
+  function readToken_eq_excl(code) { // '=!'
     var next = input.charCodeAt(tokPos+1);
     if (next === 61) return finishOp(_bin6, input.charCodeAt(tokPos+2) === 61 ? 3 : 2);
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
 
   function getTokenFromCode(code) {
-
     switch(code) {
       // The interpretation of a dot depends on whether it is followed
       // by a digit.
     case 46: // '.'
-      return readToken_46(code);
+      return readToken_dot(code);
 
       // Punctuation tokens.
     case 40: ++tokPos; return finishToken(_parenL);
@@ -585,25 +584,25 @@
     // of the type given by its first argument.
 
     case 47: // '/'
-      return readToken_47(code);
+      return readToken_slash(code);
 
     case 37: case 42: // '%*'
-      return readToken_37_42();
+      return readToken_mult_modulo();
 
     case 124: case 38: // '|&'
-      return readToken_124_38(code);
+      return readToken_pipe_amp(code);
 
     case 94: // '^'
-      return readToken_94();
+      return readToken_caret();
 
     case 43: case 45: // '+-'
-      return readToken_43_45(code);
+      return readToken_plus_min(code);
 
     case 60: case 62: // '<>'
-      return readToken_60_62(code);
+      return readToken_lt_gt(code);
 
     case 61: case 33: // '=!'
-      return readToken_61_33(code);
+      return readToken_eq_excl(code);
 
     case 126: // '~'
       return finishOp(_prefix, 1);
