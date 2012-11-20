@@ -31,6 +31,7 @@ numbers.</p>
 
 <button onclick="run(false)">Compare <strong>without</strong> location data</button>
 <button onclick="run(true)">Compare <strong>with</strong> location data</button>
+<button onclick="run(false, true)">Run only Acorn</button>
 <span id="running"></span>
 
 <script>
@@ -69,12 +70,13 @@ numbers.</p>
     document.body.appendChild(document.createElement("div")).innerHTML = html;
   }
 
-  function run(locations) {
+  function run(locations, acornOnly) {
     var running = document.getElementById("running");
     running.innerHTML = "Running benchmark...";
     var data = [{name: "Acorn", runner: runAcorn},
                 {name: "Esprima", runner: runEsprima},
                 {name: "UglifyJS2", runner: runUglifyJS}];
+    if (acornOnly) data.length = 1;
     var pos = 0;
     function next() {
       data[pos].score = benchmark(data[pos].runner, locations);
