@@ -26101,9 +26101,6 @@ testFail("x\\u005c",
 testFail("x\\u002a",
          "Invalid Unicode escape (1:3)");
 
-testFail("var x = /(s/g",
-         "Invalid regular expression: /(s/: Unterminated group");
-
 testFail("/",
          "Unterminated regular expression (1:1)");
 
