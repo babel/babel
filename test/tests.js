@@ -26029,6 +26029,42 @@ test("'a\\u0026b'", {
   ]
 });
 
+test("foo: 10; foo: 20;", {
+  type: "Program",
+  body: [
+    {
+      type: "LabeledStatement",
+      body: {
+        type: "ExpressionStatement",
+        expression: {
+          type: "Literal",
+          value: 10,
+          raw: "10"
+        }
+      },
+      label: {
+        type: "Identifier",
+        name: "foo"
+      }
+    },
+    {
+      type: "LabeledStatement",
+      body: {
+        type: "ExpressionStatement",
+        expression: {
+          type: "Literal",
+          value: 20,
+          raw: "20"
+        }
+      },
+      label: {
+        type: "Identifier",
+        name: "foo"
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",

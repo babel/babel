@@ -1233,6 +1233,7 @@
         var kind = tokType.isLoop ? "loop" : tokType === _switch ? "switch" : null;
         labels.push({name: maybeName, kind: kind});
         node.body = parseStatement();
+        labels.pop();
         node.label = expr;
         return finishNode(node, "LabeledStatement");
       } else {
