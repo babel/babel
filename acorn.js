@@ -1067,6 +1067,7 @@
 
     case _debugger:
       next();
+      semicolon();
       return finishNode(node, "DebuggerStatement");
 
     case _do:
@@ -1166,6 +1167,7 @@
       if (newline.test(input.slice(lastEnd, tokStart)))
         raise(lastEnd, "Illegal newline after throw");
       node.argument = parseExpression();
+      semicolon();
       return finishNode(node, "ThrowStatement");
 
     case _try:

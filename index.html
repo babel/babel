@@ -750,6 +750,7 @@ continue to.</p>             </td>             <td class="code">               <
 
     <span class="k">case</span> <span class="nx">_debugger</span><span class="o">:</span>
       <span class="nx">next</span><span class="p">();</span>
+      <span class="nx">semicolon</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DebuggerStatement&quot;</span><span class="p">);</span>
 
     <span class="k">case</span> <span class="nx">_do</span><span class="o">:</span>
@@ -839,6 +840,7 @@ adding statements to.</p>             </td>             <td class="code">       
       <span class="k">if</span> <span class="p">(</span><span class="nx">newline</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="nx">tokStart</span><span class="p">)))</span>
         <span class="nx">raise</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="s2">&quot;Illegal newline after throw&quot;</span><span class="p">);</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
+      <span class="nx">semicolon</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThrowStatement&quot;</span><span class="p">);</span>
 
     <span class="k">case</span> <span class="nx">_try</span><span class="o">:</span>

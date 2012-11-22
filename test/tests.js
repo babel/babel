@@ -21636,19 +21636,6 @@ test("throw x;", {
         },
         end: {
           line: 1,
-          column: 7
-        }
-      }
-    },
-    {
-      type: "EmptyStatement",
-      loc: {
-        start: {
-          line: 1,
-          column: 7
-        },
-        end: {
-          line: 1,
           column: 8
         }
       }
@@ -22789,19 +22776,6 @@ test("debugger;", {
         start: {
           line: 1,
           column: 0
-        },
-        end: {
-          line: 1,
-          column: 8
-        }
-      }
-    },
-    {
-      type: "EmptyStatement",
-      loc: {
-        start: {
-          line: 1,
-          column: 8
         },
         end: {
           line: 1,
