@@ -673,7 +673,7 @@
 
   function readInt(radix, len) {
     var start = tokPos, total = 0;
-    for (;;) {
+    for (var i = 0, e = len == null ? Infinity : len; i < e; ++i) {
       var code = input.charCodeAt(tokPos), val;
       if (code >= 97) val = code - 97 + 10; // a
       else if (code >= 65) val = code - 65 + 10; // A

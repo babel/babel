@@ -26016,6 +26016,19 @@ test("a\u2028b", {
   ]
 });
 
+test("'a\\u0026b'", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        value: "a\u0026b"
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",
