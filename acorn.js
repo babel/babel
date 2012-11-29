@@ -18,7 +18,7 @@
 
   exports.version = "0.0.1";
 
-  // The main exported interface (under `window.acorn` when in the
+  // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
   // returns an abstract syntax tree as specified by [Mozilla parser
   // API][api], with the caveat that the SpiderMonkey-specific syntax
@@ -1653,4 +1653,4 @@
     return finishNode(node, "Identifier");
   }
 
-})(typeof exports === "undefined" ? (window.acorn = {}) : exports);
+})(typeof exports === "undefined" ? (self.acorn = {}) : exports);

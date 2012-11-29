@@ -13,7 +13,7 @@ https://github.com/marijnh/acorn.git
 <p>Please use the <a href="https://github.com/marijnh/acorn/issues">github bug tracker</a> to report issues.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
   <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-  <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>window.acorn</code> when in the
+  <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>self.acorn</code> when in the
 browser) is a <code>parse</code> function that takes a code string and
 returns an abstract syntax tree as specified by <a href="https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API">Mozilla parser
 API</a>, with the caveat that the SpiderMonkey-specific syntax
@@ -1236,6 +1236,6 @@ identifiers.</p>             </td>             <td class="code">               <
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;Identifier&quot;</span><span class="p">);</span>
   <span class="p">}</span>
 
-<span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">acorn</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
+<span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">acorn</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
