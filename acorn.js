@@ -881,14 +881,26 @@
   // Start an AST node, attaching a start offset and optionally a
   // `commentsBefore` property to it.
 
+  var node_t = function(s) {
+    this.type=null;
+    this.start=tokStart;
+    this.end=null;
+  };
+
+  var node_loc_t = function(s) {
+    this.start=tokStartLoc;
+    this.end=null;
+  };
+  node_loc_t.prototype.source=sourceFile;
+
   function startNode() {
-    var node = {type: null, start: tokStart, end: null};
+    var node = new node_t();
     if (options.trackComments && tokCommentsBefore) {
       node.commentsBefore = tokCommentsBefore;
       tokCommentsBefore = null;
     }
     if (options.locations)
-      node.loc = {start: tokStartLoc, end: null, source: sourceFile};
+      node.loc = new node_loc_t();
     if (options.ranges)
       node.range = [tokStart, 0];
     return node;
@@ -900,13 +912,16 @@
   // already been parsed.
 
   function startNodeFrom(other) {
-    var node = {type: null, start: other.start};
+    var node = new node_t();
+    node.start = other.start;
     if (other.commentsBefore) {
       node.commentsBefore = other.commentsBefore;
       other.commentsBefore = null;
     }
-    if (options.locations)
-      node.loc = {start: other.loc.start, end: null, source: other.loc.source};
+    if (options.locations) {
+      node.loc = new node_loc_t();
+      node.loc.start = other.loc.start;//{start: other.loc.start, end: null, source: other.loc.source};
+    }
     if (options.ranges)
       node.range = [other.range[0], 0];
 
