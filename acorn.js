@@ -394,13 +394,18 @@
     return match ? match.index + match[0].length : input.length + 1;
   }
 
+  var line_loc_t = function() {
+    this.line = tokCurLine;
+    this.column = tokPos - tokLineStart;
+  }
+
   function curLineLoc() {
     while (tokLineStartNext <= tokPos) {
       ++tokCurLine;
       tokLineStart = tokLineStartNext;
       tokLineStartNext = nextLineStart();
     }
-    return {line: tokCurLine, column: tokPos - tokLineStart};
+    return new line_loc_t();
   }
 
   // Reset the token state. Used at the start of a parse.
@@ -920,7 +925,7 @@
     }
     if (options.locations) {
       node.loc = new node_loc_t();
-      node.loc.start = other.loc.start;//{start: other.loc.start, end: null, source: other.loc.source};
+      node.loc.start = other.loc.start;
     }
     if (options.ranges)
       node.range = [other.range[0], 0];
