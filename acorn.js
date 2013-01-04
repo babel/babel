@@ -887,15 +887,15 @@
   // `commentsBefore` property to it.
 
   var node_t = function(s) {
-    this.type=null;
-    this.start=tokStart;
-    this.end=null;
+    this.type = null;
+    this.start = tokStart;
+    this.end = null;
   };
 
   var node_loc_t = function(s) {
-    this.start=tokStartLoc;
-    this.end=null;
-    if (sourceFile !== null) this.source=sourceFile;
+    this.start = tokStartLoc;
+    this.end = null;
+    if (sourceFile !== null) this.source = sourceFile;
   };
 
   function startNode() {

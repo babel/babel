@@ -26068,90 +26068,90 @@ test("foo: 10; foo: 20;", {
 // option tests
 
 test("var a = 1;", {
-  "type": "Program",
-  "start": 0,
-  "end": 10,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
+  type: "Program",
+  start: 0,
+  end: 10,
+  loc: {
+    start: {
+      line: 1,
+      column: 0
     },
-    "end": {
-      "line": 1,
-      "column": 10
+    end: {
+      line: 1,
+      column: 10
     },
-    "source": "test.js"
+    source: "test.js"
   },
-  "body": [
+  body: [
     {
-      "type": "VariableDeclaration",
-      "start": 0,
-      "end": 9,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
+      type: "VariableDeclaration",
+      start: 0,
+      end: 9,
+      loc: {
+        start: {
+          line: 1,
+          column: 0
         },
-        "end": {
-          "line": 1,
-          "column": 9
+        end: {
+          line: 1,
+          column: 9
         },
-        "source": "test.js"
+        source: "test.js"
       },
-      "declarations": [
+      declarations: [
         {
-          "type": "VariableDeclarator",
-          "start": 4,
-          "end": 9,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
+          type: "VariableDeclarator",
+          start: 4,
+          end: 9,
+          loc: {
+            start: {
+              line: 1,
+              column: 4
             },
-            "end": {
-              "line": 1,
-              "column": 9
+            end: {
+              line: 1,
+              column: 9
             },
-            "source": "test.js"
+            source: "test.js"
           },
-          "id": {
-            "type": "Identifier",
-            "start": 4,
-            "end": 5,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
+          id: {
+            type: "Identifier",
+            start: 4,
+            end: 5,
+            loc: {
+              start: {
+                line: 1,
+                column: 4
               },
-              "end": {
-                "line": 1,
-                "column": 5
+              end: {
+                line: 1,
+                column: 5
               },
-              "source": "test.js"
+              source: "test.js"
             },
-            "name": "a"
+            name: "a"
           },
-          "init": {
-            "type": "Literal",
-            "start": 8,
-            "end": 9,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 8
+          init: {
+            type: "Literal",
+            start: 8,
+            end: 9,
+            loc: {
+              start: {
+                line: 1,
+                column: 8
               },
-              "end": {
-                "line": 1,
-                "column": 9
+              end: {
+                line: 1,
+                column: 9
               },
-              "source": "test.js"
+              source: "test.js"
             },
-            "value": 1,
-            "raw": "1"
+            value: 1,
+            raw: "1"
           }
         }
       ],
-      "kind": "var"
+      kind: "var"
     }
   ]
 }, {
