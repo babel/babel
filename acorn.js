@@ -895,8 +895,8 @@
   var node_loc_t = function(s) {
     this.start=tokStartLoc;
     this.end=null;
+    if (sourceFile !== null) this.source=sourceFile;
   };
-  node_loc_t.prototype.source=sourceFile;
 
   function startNode() {
     var node = new node_t();
