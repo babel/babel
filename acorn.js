@@ -772,7 +772,7 @@
         }
       } else {
         if (ch === 13 || ch === 10 || ch === 8232 || ch === 8329) raise(tokStart, "Unterminated string constant");
-        if (ch !== 92) rs_str.push(ch); // '\'
+        rs_str.push(ch); // '\'
         ++tokPos;
       }
     }
