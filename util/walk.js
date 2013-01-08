@@ -34,7 +34,7 @@
   // their child nodes (by calling their third argument on these
   // nodes).
   exports.recursive = function(node, state, funcs, base) {
-    var visitor = exports.make(funcs, base);
+    var visitor = funcs ? exports.make(funcs, base) : base;
     function c(node, st, override) {
       visitor[override || node.type](node, st, c);
     }
