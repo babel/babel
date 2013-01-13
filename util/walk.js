@@ -22,8 +22,8 @@
     if (!base) base = exports;
     function c(node, st, override) {
       var type = override || node.type, found = visitors[type];
-      if (found) found(node, st);
       base[type](node, st, c);
+      if (found) found(node, st);
     }
     c(node, state);
   };
