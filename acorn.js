@@ -231,10 +231,10 @@
                       "function": _function, "if": _if, "return": _return, "switch": _switch,
                       "throw": _throw, "try": _try, "var": _var, "while": _while, "with": _with,
                       "null": _null, "true": _true, "false": _false, "new": _new, "in": _in,
-                      "instanceof": {keyword: "instanceof", binop: 7}, "this": _this,
-                      "typeof": {keyword: "typeof", prefix: true},
-                      "void": {keyword: "void", prefix: true},
-                      "delete": {keyword: "delete", prefix: true}};
+                      "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
+                      "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
+                      "void": {keyword: "void", prefix: true, beforeExpr: true},
+                      "delete": {keyword: "delete", prefix: true, beforeExpr: true}};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -467,9 +467,7 @@
         } else if (next === 47) { // '/'
           skipLineComment();
         } else break;
-      } else if (ch < 14 && ch > 8) {
-        ++tokPos;
-      } else if (ch === 32 || ch === 160) { // ' ', '\xa0'
+      } else if ((ch < 14 && ch > 8) || ch === 32 || ch === 160) { // ' ', '\xa0'
         ++tokPos;
       } else if (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
         ++tokPos;
