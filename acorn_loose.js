@@ -40,6 +40,7 @@
     if (!opts) opts = {};
     input = String(inpt);
     options = opts;
+    if (!opts.tabSize) opts.tabSize = 4;
     fetchToken = acorn.tokenize(inpt, opts);
     next();
     return parseTopLevel();
@@ -126,7 +127,7 @@
     for (var cur = lineStart(pos), count = 0; cur < pos; ++cur) {
       var ch = input.charCodeAt(cur);
       if (ch === 32) ++count;
-      else if (ch === 9) count += 4;
+      else if (ch === 9) count += options.tabSize;
     }
     return count;
   }
