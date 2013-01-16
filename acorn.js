@@ -133,15 +133,14 @@
       t.type = tokType; t.value = tokVal;
       return t;
     }
-    getToken.jumpTo = function(pos) {
+    getToken.jumpTo = function(pos, reAllowed) {
       tokPos = pos;
       if (options.locations) {
         tokCurLine = tokLineStart = 0;
         tokLineStartNext = nextLineStart();
       }
       var ch = input.charAt(pos - 1);
-      tokRegexpAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
-        /[enwfd]/.test(ch) && /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(input.slice(pos - 9, pos + 1));
+      tokRegexpAllowed = reAllowed;
       skipSpace();
     };
     return getToken;
@@ -210,7 +209,7 @@
     var loc = getLineInfo(input, pos);
     message += " (" + loc.line + ":" + loc.column + ")";
     var err = new SyntaxError(message);
-    err.pos = pos; err.loc = loc;
+    err.pos = pos; err.loc = loc; err.raisedAt = tokPos;
     throw err;
   }
 
@@ -312,7 +311,8 @@
 
   exports.tokTypes = {bracketL: _bracketL, bracketR: _bracketR, braceL: _braceL, braceR: _braceR,
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
-                      dot: _dot, question: _question, slash: _slash, eq: _eq};
+                      dot: _dot, question: _question, slash: _slash, eq: _eq, name: _name, eof: _eof,
+                      num: _num, regexp: _regexp, string: _string};
   for (var kw in keywordTypes) exports.tokTypes[kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -928,13 +928,13 @@
 
   // Start an AST node, attaching a start offset.
 
-  function node_t(s) {
+  function node_t() {
     this.type = null;
     this.start = tokStart;
     this.end = null;
   }
 
-  function node_loc_t(s) {
+  function node_loc_t() {
     this.start = tokStartLoc;
     this.end = null;
     if (sourceFile !== null) this.source = sourceFile;
@@ -1056,7 +1056,7 @@
       first = false;
     }
     return finishNode(node, "Program");
-  };
+  }
 
   var loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
 
@@ -1564,7 +1564,7 @@
   function parseNew() {
     var node = startNode();
     next();
-    node.callee = parseSubscripts(parseExprAtom(false), true);
+    node.callee = parseSubscripts(parseExprAtom(), true);
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
     else node.arguments = [];
     return finishNode(node, "NewExpression");
@@ -1591,7 +1591,7 @@
         isGetSet = sawGetSet = true;
         kind = prop.kind = prop.key.name;
         prop.key = parsePropertyName();
-        if (!tokType === _parenL) unexpected();
+        if (tokType !== _parenL) unexpected();
         prop.value = parseFunction(startNode(), false);
       } else unexpected();
 
