@@ -132,7 +132,7 @@
     return count;
   }
   function closesBlock(closeTok, indent) {
-    return token.type === closeTok || token.type === tt.eof || indent > indentationAt(token.start);
+    return token.type === closeTok || token.type === tt.eof || indent > token.start - lineStart(token.start);
   }
 
   function node_t(start) {
@@ -627,16 +627,17 @@
     else node.id = null;
     node.params = [];
     expect(tt.parenL);
-    while (!eat(tt.parenR)) {
+    while (node.type == tt.name) {
       node.params.push(parseIdent());
       eat(tt.comma);
     }
+    eat(tt.parenR);
     node.body = parseBlock();
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
   function parseExprList(close) {
-    var elts = [], indent = indentationAt(token.start);
+    var elts = [], indent = indentationAt(token.start) + 1;
     while (!closesBlock(close, indent)) {
       elts.push(parseExpression$(true));
       while (eat(tt.comma)) {}
