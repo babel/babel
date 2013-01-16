@@ -97,7 +97,7 @@
       var tok = readToken();
       ahead.push({start: tok.from, end: tok.end, type: tok.type, value: tok.value});
     }
-    return ahead[n];
+    return ahead[n-1];
   }
 
   var newline = /[\n\r\u2028\u2029]/;
@@ -125,7 +125,6 @@
     }
     return count;
   }
-  // FIXME maybe use smarter heuristics (look at next lines, etc)
   function closesBlock(closeTok, indent) {
     return token.type === closeTok || token.type === tt.eof || indent > indentationAt(token.start);
   }
@@ -172,9 +171,14 @@
 
   function expect(type) {
     if (eat(type)) return true;
-    // FIXME
-    // - it might just be missing, in which case ignoring is good
-    // + custom strategies for re-syncing in other cases
+    if (lookAhead(1).type == type) {
+      next(); next();
+      return true;
+    }
+    if (lookAhead(2).type == type) {
+      next(); next(); next();
+      return true;
+    }
   }
 
   function checkLVal(expr) {
