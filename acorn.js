@@ -30,10 +30,8 @@
 
   exports.parse = function(inpt, opts) {
     input = String(inpt); inputLen = input.length;
-    options = opts || {};
-    for (var opt in defaultOptions) if (!options.hasOwnProperty(opt))
-      options[opt] = defaultOptions[opt];
-    sourceFile = options.sourceFile || null;
+    setOptions(opts);
+    initTokenState();
     return parseTopLevel(options.program);
   };
 
@@ -90,6 +88,13 @@
     sourceFile: null
   };
 
+  function setOptions(opts) {
+    options = opts || {};
+    for (var opt in defaultOptions) if (!options.hasOwnProperty(opt))
+      options[opt] = defaultOptions[opt];
+    sourceFile = options.sourceFile || null;
+  }
+
   // The `getLineInfo` function is mostly useful when the
   // `locations` option is off (for performance reasons) and you
   // want to find the line/column position for a given character
@@ -109,9 +114,41 @@
   };
 
   // Acorn is organized as a tokenizer and a recursive-descent parser.
-  // Both use (closure-)global variables to keep their state and
-  // communicate. We already saw the `options`, `input`, and
-  // `inputLen` variables above (set in `parse`).
+  // The `tokenize` export provides an interface to the tokenizer.
+  // Because the tokenizer is optimized for being efficiently used by
+  // the Acorn parser itself, this interface is somewhat crude and not
+  // very modular. Performing another parse or call to `tokenize` will
+  // reset the internal state, and invalidate existing tokenizers.
+
+  exports.tokenize = function(inpt, opts) {
+    input = String(inpt); inputLen = input.length;
+    setOptions(opts);
+    initTokenState();
+
+    var t = {};
+    function getToken(forceRegexp) {
+      readToken(forceRegexp);
+      t.start = tokStart; t.end = tokEnd;
+      t.startLoc = tokStartLoc; t.endLoc = tokEndLoc;
+      t.type = tokType; t.value = tokVal;
+      return t;
+    }
+    getToken.jumpTo = function(pos) {
+      tokPos = pos;
+      if (options.locations) {
+        tokCurLine = tokLineStart = 0;
+        tokLineStartNext = nextLineStart();
+      }
+      var ch = input.charAt(pos - 1);
+      tokRegexpAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
+        /[enwfd]/.test(ch) && /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(input.slice(pos - 9, pos + 1));
+      skipSpace();
+    };
+    return getToken;
+  };
+
+  // State is kept in (closure-)global variables. We already saw the
+  // `options`, `input`, and `inputLen` variables above.
 
   // The current position of the tokenizer in the input.
 
@@ -269,6 +306,14 @@
   var _bin5 = {binop: 5, beforeExpr: true}, _bin6 = {binop: 6, beforeExpr: true};
   var _bin7 = {binop: 7, beforeExpr: true}, _bin8 = {binop: 8, beforeExpr: true};
   var _bin10 = {binop: 10, beforeExpr: true};
+
+  // Provide access to the token types for external users of the
+  // tokenizer.
+
+  exports.tokTypes = {bracketL: _bracketL, bracketR: _bracketR, braceL: _braceL, braceR: _braceR,
+                      parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
+                      dot: _dot, question: _question, slash: _slash, eq: _eq};
+  for (var kw in keywordTypes) exports.tokTypes[kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a
@@ -996,7 +1041,6 @@
   // to its body instead of creating a new node.
 
   function parseTopLevel(program) {
-    initTokenState();
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = curLineLoc();
     inFunction = strict = null;
