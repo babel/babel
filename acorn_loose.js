@@ -18,6 +18,11 @@
 //
 // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 //
+// The expected use for this is to *first* try `acorn.parse`, and only
+// if that fails switch to `parse_dammit`. The loose parser might
+// parse badly indented code incorrectly, so **don't** use it as
+// your default parser.
+//
 // Quite a lot of acorn.js is duplicated here. The alternative was to
 // add a *lot* of extra cruft to that file, making it less readable
 // and slower. Copying and editing the code allowed me to make
