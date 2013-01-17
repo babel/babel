@@ -629,7 +629,7 @@
     while (!closesBlock(close, indent)) {
       var elt = parseExpression(true);
       if (isDummy(elt)) {
-        if (closesBlock(close, ident)) break;
+        if (closesBlock(close, indent)) break;
         next();
       } else {
         elts.push(elt);
