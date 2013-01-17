@@ -627,7 +627,7 @@
     else node.id = null;
     node.params = [];
     expect(tt.parenL);
-    while (node.type == tt.name) {
+    while (token.type == tt.name) {
       node.params.push(parseIdent());
       eat(tt.comma);
     }
