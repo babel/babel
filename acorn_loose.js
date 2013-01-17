@@ -65,9 +65,18 @@
 
         // Try to skip some text, based on the error message, and then continue
         var msg = e.message, pos = e.raisedAt, replace = true;
+        console.log(msg);
         if (/unterminated/i.test(msg)) {
           pos = lineEnd(e.pos);
-          replace = !/comment/i.test(msg);
+          if (/string/.test(msg)) {
+            replace = {start: e.pos, end: pos, type: tt.string, value: input.slice(e.pos + 1, pos)};
+          } else if (/regular expr/i.test(msg)) {
+            var re = input.slice(e.pos, pos);
+            try { re = new RegExp(re); } catch(e) {}
+            replace = {start: e.pos, end: pos, type: tt.regexp, value: re};
+          } else {
+            replace = false;
+          }
         } else if (/invalid (unicode|regexp|number)|expecting unicode|octal literal|is reserved|directly after number/i.test(msg)) {
           while (pos < input.length && !isSpace(input.charCodeAt(pos))) ++pos;
         } else if (/character escape|expected hexadecimal/i.test(msg)) {
@@ -82,7 +91,8 @@
           throw e;
         }
         resetTo(pos);
-        if (replace) return {start: pos, end: pos, type: tt.name, value: "✖"};
+        if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖"};
+        if (replace) return replace;
       }
     }
   }
@@ -339,6 +349,7 @@
       var maybeName = token.value, expr = parseExpression();
       if (isDummy(expr)) {
         next();
+        if (token.type === tt.eof) return finishNode(node, "EmptyStatement");
         return parseStatement();
       } else if (starttype === tt.name && expr.type === "Identifier" && eat(tt.colon)) {
         node.body = parseStatement();
