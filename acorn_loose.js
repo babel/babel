@@ -13,7 +13,7 @@
 // - Label consistency (no conflicts, break only to existing labels)
 //   is not enforced.
 //
-// - Bogus Identifier nodes with a name of `"?"` are inserted whenever
+// - Bogus Identifier nodes with a name of `"✖"` are inserted whenever
 //   the parser got too confused to return anything meaningful.
 //
 // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
@@ -82,7 +82,7 @@
           throw e;
         }
         resetTo(pos);
-        if (replace) return {start: pos, end: pos, type: tt.name, value: "?"};
+        if (replace) return {start: pos, end: pos, type: tt.name, value: "✖"};
       }
     }
   }
@@ -157,10 +157,10 @@
     var dummy = new node_t(0);
     dummy.type = "Identifier";
     dummy.end = 0;
-    dummy.name = "?";
+    dummy.name = "✖";
     return dummy;
   }
-  function isDummy(node) { return node.name == "?"; }
+  function isDummy(node) { return node.name == "✖"; }
 
   function eat(type) {
     if (token.type === type) {
