@@ -160,6 +160,7 @@
     dummy.name = "?";
     return dummy;
   }
+  function isDummy(node) { return node.name == "?"; }
 
   function eat(type) {
     if (token.type === type) {
@@ -335,8 +336,11 @@
       return finishNode(node, "EmptyStatement");
 
     default:
-      var maybeName = token.value, expr = parseExpression$();
-      if (starttype === tt.name && expr.type === "Identifier" && eat(tt.colon)) {
+      var maybeName = token.value, expr = parseExpression();
+      if (isDummy(expr)) {
+        next();
+        return parseStatement();
+      } else if (starttype === tt.name && expr.type === "Identifier" && eat(tt.colon)) {
         node.body = parseStatement();
         node.label = expr;
         return finishNode(node, "LabeledStatement");
@@ -389,18 +393,7 @@
     return finishNode(node, "VariableDeclaration");
   }
 
-  var mustConsume;
-
   function parseExpression(noComma, noIn) {
-    return parseExpressionInner(noComma, noIn, false);
-  }
-  function parseExpression$(noComma, noIn) {
-    return parseExpressionInner(noComma, noIn, true);
-  }
-
-  function parseExpressionInner(noComma, noIn, consume) {
-    var old = mustConsume;
-    mustConsume = consume;
     var expr = parseMaybeAssign(noIn);
     if (!noComma && token.type === tt.comma) {
       var node = startNodeFrom(expr);
@@ -408,7 +401,6 @@
       while (eat(tt.comma)) node.expressions.push(parseMaybeAssign(noIn));
       return finishNode(node, "SequenceExpression");
     }
-    mustConsume = old;
     return expr;
   }
 
@@ -561,11 +553,7 @@
       return parseNew();
 
     default:
-      if (mustConsume) {
-        next();
-        mustConsume = false;
-        return parseExprAtom();
-      } else return dummyIdent();
+      return dummyIdent();
     }
   }
 
@@ -585,7 +573,7 @@
     var propIndent = indentationAt(token.start);
     while (!closesBlock(tt.braceR, propIndent)) {
       var name = parsePropertyName();
-      if (!name) { parseExpression$(true); eat(tt.comma); continue; }
+      if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       var prop = {key: name}, isGetSet = false, kind;
       if (eat(tt.colon)) {
         prop.value = parseExpression(true);
@@ -639,7 +627,13 @@
   function parseExprList(close) {
     var elts = [], indent = indentationAt(token.start) + 1;
     while (!closesBlock(close, indent)) {
-      elts.push(parseExpression$(true));
+      var elt = parseExpression(true);
+      if (isDummy(elt)) {
+        if (closesBlock(close, ident)) break;
+        next();
+      } else {
+        elts.push(elt);
+      }
       while (eat(tt.comma)) {}
     }
     eat(close);
