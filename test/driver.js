@@ -8,6 +8,9 @@
   exports.testFail = function(code, message, options) {
     tests.push({code: code, error: message, options: options});
   };
+  exports.testAssert = function(code, assert, options) {
+    tests.push({code: code, assert: assert, options: options});
+  };
 
   exports.runTests = function(callback) {
     var opts = {locations: true};
@@ -17,7 +20,12 @@
         var ast = acorn.parse(test.code, test.options || opts);
         if (test.error) callback("fail", test.code,
                                  "Expected error message: " + test.error + "\nBut parsing succeeded.");
-        else {
+        else if (test.assert) {
+          var error = test.assert(ast);
+          if (error) callback("fail", test.code,
+                                 "\n  Assertion failed:\n " + error);
+          else callback("ok", test.code);
+        } else {
           var mis = misMatch(test.ast, ast);
           if (!mis) callback("ok", test.code);
           else callback("fail", test.code, mis);

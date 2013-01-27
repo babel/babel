@@ -497,7 +497,7 @@
       ch = input.charCodeAt(tokPos);
     }
     if (options.onComment)
-      options.onComment(false, input.slice(start + 2, tokPos - 1), start, tokPos,
+      options.onComment(false, input.slice(start + 2, tokPos), start, tokPos,
                         startLoc, options.locations && curLineLoc());
   }
 

@@ -4,6 +4,7 @@
 if (typeof exports != "undefined") {
   var test = require("./driver.js").test;
   var testFail = require("./driver.js").testFail;
+  var testAssert = require("./driver.js").testAssert;
 }
 
 test("this\n", {
@@ -26716,3 +26717,55 @@ testFail("(function a(package) { \"use strict\"; })",
 testFail("var this = 10;", "Unexpected token (1:4)");
 
 testFail("throw\n10;", "Illegal newline after throw (1:5)");
+
+// Assertion Tests
+(function() {
+  var actualComments = [],
+      expectedComments = [
+        " Bear class",
+        " Whatever",
+        [" 1",
+         "         2",
+         "         3"
+        ].join('\n'),
+        "stuff"
+      ];
+  testAssert(
+    function TestComments() {
+      // Bear class
+      function Bear(x,y,z) {
+        this.position = [x||0,y||0,z||0]
+      }
+
+      Bear.prototype.roar = function(message) {
+        return 'RAWWW: ' + message; // Whatever
+      };
+
+      function Cat() {
+      /* 1
+         2
+         3*/
+      }
+
+      Cat.prototype.roar = function(message) {
+        return 'MEOOWW: ' + /*stuff*/ message;
+      };
+    }.toString(),
+    function assert(ast) {
+      if (actualComments.length !== expectedComments.length) {
+        return JSON.stringify(actualComments) + " !== " + JSON.stringify(expectedComments);
+      } else {
+        for (var i=0, n=actualComments.length; i < n; i++) {
+          if (actualComments[i] !== expectedComments[i])
+            return JSON.stringify(actualComments[i]) + ' !== ' + JSON.stringify(expectedComments[i]);
+        }
+      }
+    },
+    {
+      onComment: function(isMultiline, text) {
+        actualComments.push(text);
+      }
+    }
+  );
+})();
+  
