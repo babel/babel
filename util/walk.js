@@ -66,6 +66,26 @@
     }
   };
 
+  // Find the innermost node of a given type that contains the given
+  // position. Interface similar to findNodeAt.
+  exports.findNodeAround = function(node, pos, targetType, base, state) {
+    try {
+      if (!base) base = exports;
+      var c = function(node, st, override) {
+        var type = override || node.type;
+        var inside = node.start <= pos && node.end >= pos;
+        if (inside)
+          base[type](node, st, c);
+        if (inside && (targetType == null || type == targetType))
+          throw new Found(node, st);
+      };
+      c(node, state);
+    } catch (e) {
+      if (e instanceof Found) return e;
+      throw e;
+    }
+  };
+
   // Used to create a custom walker. Will fill in all missing node
   // type properties with the defaults.
   exports.make = function(funcs, base) {
