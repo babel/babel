@@ -34,7 +34,7 @@
 
   var acorn = exports.parse ? exports : require("./acorn"), tt = acorn.tokTypes;
 
-  var options, input, fetchToken;
+  var options, input, fetchToken, context;
 
   exports.parse_dammit = function(inpt, opts) {
     if (!opts) opts = {};
@@ -42,11 +42,14 @@
     options = opts;
     if (!opts.tabSize) opts.tabSize = 4;
     fetchToken = acorn.tokenize(inpt, opts);
+    context = [];
+    nextLineStart = 0;
     next();
     return parseTopLevel();
   };
 
   var lastEnd, token = {start: 0, end: 0}, ahead = [];
+  var curLineStart, nextLineStart, curIndent;
 
   function next() {
     lastEnd = token.end;
@@ -54,6 +57,13 @@
       token = ahead.shift();
     else
       token = readToken();
+    if (token.start >= nextLineStart) {
+      while (token.start >= nextLineStart) {
+        curLineStart = nextLineStart;
+        nextLineStart = lineEnd(curLineStart) + 1;
+      }
+      curIndent = indentationAfter(curLineStart);
+    }
   }
 
   function readToken() {
@@ -124,6 +134,13 @@
     return (ch < 14 && ch > 8) || ch === 32 || ch === 160 || isNewline(ch);
   }
 
+  function pushCx() {
+    context.push(curIndent);
+  }
+  function popCx() {
+    curIndent = context.pop();
+  }
+
   function lineEnd(pos) {
     while (pos < input.length && !isNewline(input.charCodeAt(pos))) ++pos;
     return pos;
@@ -132,16 +149,21 @@
     while (pos > 0 && !isNewline(input.charCodeAt(pos - 1))) --pos;
     return pos;
   }
-  function indentationAt(pos) {
-    for (var cur = lineStart(pos), count = 0; cur < pos; ++cur) {
-      var ch = input.charCodeAt(cur);
+  function indentationAfter(pos) {
+    for (var count = 0;; ++pos) {
+      var ch = input.charCodeAt(pos);
       if (ch === 32) ++count;
       else if (ch === 9) count += options.tabSize;
+      else return count;
     }
-    return count;
   }
-  function closesBlock(closeTok, indent) {
-    return token.type === closeTok || token.type === tt.eof || indent > token.start - lineStart(token.start);
+
+  function closesBlock(closeTok, indent, line) {
+    if (token.type === closeTok || token.type === tt.eof) return true;
+    if (line != curLineStart && curIndent < indent &&
+        (nextLineStart >= input.length ||
+         indentationAfter(nextLineStart) < indent)) return true;
+    return false;
   }
 
   function node_t(start) {
@@ -234,6 +256,7 @@
 
     case tt.for:
       next();
+      pushCx();
       expect(tt.parenL);
       if (token.type === tt.semi) return parseFor(node, null);
       if (token.type === tt.var) {
@@ -266,13 +289,14 @@
       return finishNode(node, "ReturnStatement");
 
     case tt.switch:
-      var blockIndent = indentationAt(token.start);
+      var blockIndent = curIndent, line = curLineStart;
       next();
       node.discriminant = parseParenExpression();
       node.cases = [];
+      pushCx();
       expect(tt.braceL);
 
-      for (var cur; !closesBlock(tt.braceR, blockIndent);) {
+      for (var cur; !closesBlock(tt.braceR, blockIndent, line);) {
         if (token.type === tt.case || token.type === tt.default) {
           var isCase = token.type === tt.case;
           if (cur) finishNode(cur, "SwitchCase");
@@ -292,6 +316,7 @@
         }
       }
       if (cur) finishNode(cur, "SwitchCase");
+      popCx();
       eat(tt.braceR);
       return finishNode(node, "SwitchStatement");
 
@@ -363,11 +388,13 @@
   }
 
   function parseBlock() {
+    pushCx();
     expect(tt.braceL);
-    var node = startNode(), blockIndent = indentationAt(token.start);
+    var node = startNode(), blockIndent = curIndent, line = curLineStart;
     node.body = [];
-    while (!closesBlock(tt.braceR, blockIndent))
+    while (!closesBlock(tt.braceR, blockIndent, line))
       node.body.push(parseStatement());
+    popCx();
     eat(tt.braceR);
     return finishNode(node, "BlockStatement");
   }
@@ -377,6 +404,7 @@
     node.test = node.update = null;
     if (eat(tt.semi) && token.type !== tt.semi) node.test = parseExpression();
     if (eat(tt.semi) && token.type !== tt.parenR) node.update = parseExpression();
+    popCx();
     expect(tt.parenR);
     node.body = parseStatement();
     return finishNode(node, "ForStatement");
@@ -385,6 +413,7 @@
   function parseForIn(node, init) {
     node.left = init;
     node.right = parseExpression();
+    popCx();
     expect(tt.parenR);
     node.body = parseStatement();
     return finishNode(node, "ForInStatement");
@@ -415,8 +444,10 @@
   }
 
   function parseParenExpression() {
+    pushCx();
     expect(tt.parenL);
     var val = parseExpression();
+    popCx();
     expect(tt.parenR);
     return val;
   }
@@ -447,10 +478,12 @@
   }
 
   function parseExprOps(noIn) {
-    return parseExprOp(parseMaybeUnary(noIn), -1, noIn);
+    var indent = curIndent, line = curLineStart;
+    return parseExprOp(parseMaybeUnary(noIn), -1, noIn, indent, line);
   }
 
-  function parseExprOp(left, minPrec, noIn) {
+  function parseExprOp(left, minPrec, noIn, indent, line) {
+    if (curLineStart != line && curIndent < indent) return left;
     var prec = token.type.binop;
     if (prec != null && (!noIn || token.type !== tt.in)) {
       if (prec > minPrec) {
@@ -458,9 +491,12 @@
         node.left = left;
         node.operator = token.value;
         next();
-        node.right = parseExprOp(parseMaybeUnary(noIn), prec, noIn);
+        if (curLineStart != line && curIndent < indent)
+          node.right = dummyIdent();
+        else
+          node.right = parseExprOp(parseMaybeUnary(noIn), prec, noIn, indent, line);
         var node = finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(node, minPrec, noIn);
+        return parseExprOp(node, minPrec, noIn, indent, line);
       }
     }
     return left;
@@ -489,29 +525,49 @@
   }
 
   function parseExprSubscripts() {
-    return parseSubscripts(parseExprAtom());
+    var indent = curIndent, line = curLineStart;
+    return parseSubscripts(parseExprAtom(), false, curIndent, line);
   }
 
-  function parseSubscripts(base, noCalls) {
-    if (eat(tt.dot)) {
-      var node = startNodeFrom(base);
-      node.object = base;
-      node.property = parsePropertyName() || dummyIdent();
-      node.computed = false;
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
-    } else if (eat(tt.bracketL)) {
-      var node = startNodeFrom(base);
-      node.object = base;
-      node.property = parseExpression();
-      node.computed = true;
-      expect(tt.bracketR);
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
-    } else if (!noCalls && eat(tt.parenL)) {
-      var node = startNodeFrom(base);
-      node.callee = base;
-      node.arguments = parseExprList(tt.parenR);
-      return parseSubscripts(finishNode(node, "CallExpression"), noCalls);
-    } else return base;
+  function parseSubscripts(base, noCalls, startIndent, line) {
+    for (;;) {
+      if (curLineStart != line && curIndent <= startIndent) {
+        if (token.type == tt.dot && curIndent == startIndent)
+          --startIndent;
+        else
+          return base;
+      }
+
+      if (eat(tt.dot)) {
+        var node = startNodeFrom(base);
+        node.object = base;
+        if (curLineStart != line && curIndent <= startIndent)
+          node.property = dummyIdent();
+        else
+          node.property = parsePropertyName() || dummyIdent();
+        node.computed = false;
+        base = finishNode(node, "MemberExpression");
+      } else if (token.type == tt.bracketL) {
+        pushCx();
+        next();
+        var node = startNodeFrom(base);
+        node.object = base;
+        node.property = parseExpression();
+        node.computed = true;
+        popCx();
+        expect(tt.bracketR);
+        base = finishNode(node, "MemberExpression");
+      } else if (!noCalls && token.type == tt.parenL) {
+        pushCx();
+        next();
+        var node = startNodeFrom(base);
+        node.callee = base;
+        node.arguments = parseExprList(tt.parenR);
+        base = finishNode(node, "CallExpression");
+      } else {
+        return base;
+      }
+    }
   }
 
   function parseExprAtom() {
@@ -547,6 +603,7 @@
 
     case tt.bracketL:
       var node = startNode();
+      pushCx();
       next();
       node.elements = parseExprList(tt.bracketR);
       return finishNode(node, "ArrayExpression");
@@ -568,20 +625,25 @@
   }
 
   function parseNew() {
-    var node = startNode();
+    var node = startNode(), startIndent = curIndent, line = curLineStart;
     next();
-    node.callee = parseSubscripts(parseExprAtom(), true);
-    if (eat(tt.parenL)) node.arguments = parseExprList(tt.parenR);
-    else node.arguments = [];
+    node.callee = parseSubscripts(parseExprAtom(), true, startIndent, line);
+    if (token.type == tt.parenL) {
+      pushCx();
+      node.arguments = parseExprList(tt.parenR);
+    } else {
+      node.arguments = [];
+    }
     return finishNode(node, "NewExpression");
   }
 
   function parseObj() {
     var node = startNode();
     node.properties = [];
+    pushCx();
     next();
-    var propIndent = indentationAt(token.start);
-    while (!closesBlock(tt.braceR, propIndent)) {
+    var propIndent = curIndent, line = curLineStart;
+    while (!closesBlock(tt.braceR, propIndent, line)) {
       var name = parsePropertyName();
       if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       var prop = {key: name}, isGetSet = false, kind;
@@ -603,6 +665,7 @@
       node.properties.push(prop);
       eat(tt.comma);
     }
+    popCx();
     eat(tt.braceR);
     return finishNode(node, "ObjectExpression");
   }
@@ -624,28 +687,31 @@
     else if (isStatement) node.id = dummyIdent();
     else node.id = null;
     node.params = [];
+    pushCx();
     expect(tt.parenL);
     while (token.type == tt.name) {
       node.params.push(parseIdent());
       eat(tt.comma);
     }
+    popCx();
     eat(tt.parenR);
     node.body = parseBlock();
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
   function parseExprList(close) {
-    var elts = [], indent = indentationAt(token.start) + 1;
-    while (!closesBlock(close, indent)) {
+    var elts = [], indent = curIndent + 1, line = curLineStart;
+    while (!closesBlock(close, indent, line)) {
       var elt = parseExpression(true);
       if (isDummy(elt)) {
-        if (closesBlock(close, indent)) break;
+        if (closesBlock(close, indent, line)) break;
         next();
       } else {
         elts.push(elt);
       }
       while (eat(tt.comma)) {}
     }
+    popCx();
     eat(close);
     return elts;
   }
