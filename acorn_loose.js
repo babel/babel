@@ -65,7 +65,6 @@
 
         // Try to skip some text, based on the error message, and then continue
         var msg = e.message, pos = e.raisedAt, replace = true;
-        console.log(msg);
         if (/unterminated/i.test(msg)) {
           pos = lineEnd(e.pos);
           if (/string/.test(msg)) {

@@ -41,6 +41,31 @@
     c(node, state);
   };
 
+  function Found(node, state) { this.node = node; this.state = state; }
+
+  // Find a node with a given start, end, and type (all are optional,
+  // null can be used as wildcard). Returns a {node, state} object, or
+  // undefined when it doesn't find a matching node.
+  exports.findNodeAt = function(node, start, end, targetType, base, state) {
+    try {
+      if (!base) base = exports;
+      var c = function(node, st, override) {
+        var type = override || node.type;
+        if ((start == null || node.start <= start) &&
+            (end == null || node.end >= end))
+          base[type](node, st, c);
+        if ((targetType == null || type == targetType) &&
+            (start == null || node.start == start) &&
+            (end == null || node.end == end))
+          throw new Found(node, st);
+      };
+      c(node, state);
+    } catch (e) {
+      if (e instanceof Found) return e;
+      throw e;
+    }
+  };
+
   // Used to create a custom walker. Will fill in all missing node
   // type properties with the defaults.
   exports.make = function(funcs, base) {
