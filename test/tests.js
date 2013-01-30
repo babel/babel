@@ -25987,6 +25987,37 @@ test("123..toString(10)", {
   ]
 });
 
+test("123.+2", {
+  type: "Program",
+  start: 0,
+  end: 6,
+  body: [
+    {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 6,
+      expression: {
+        type: "BinaryExpression",
+        start: 0,
+        left: {
+          type: "Literal",
+          start: 0,
+          end: 4,
+          value: 123
+        },
+        operator: "+",
+        right: {
+          type: "Literal",
+          start: 5,
+          end: 6,
+          value: 2
+        },
+        end: 6
+      }
+    }
+  ]
+});
+
 test("a\u2028b", {
   type: "Program",
   start: 0,

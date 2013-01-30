@@ -536,9 +536,9 @@
   // The `forceRegexp` parameter is used in the one case where the
   // `tokRegexpAllowed` trick does not work. See `parseStatement`.
 
-  function readToken_dot(code) {
+  function readToken_dot() {
     var next = input.charCodeAt(tokPos+1);
-    if (next >= 48 && next <= 57) return readNumber(String.fromCharCode(code));
+    if (next >= 48 && next <= 57) return readNumber(true);
     ++tokPos;
     return finishToken(_dot);
   }
@@ -600,7 +600,7 @@
       // The interpretation of a dot depends on whether it is followed
       // by a digit.
     case 46: // '.'
-      return readToken_dot(code);
+      return readToken_dot();
 
       // Punctuation tokens.
     case 40: ++tokPos; return finishToken(_parenL);
@@ -621,7 +621,7 @@
       // Anything else beginning with a digit is an integer, octal
       // number, or float.
     case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
-      return readNumber(String.fromCharCode(code));
+      return readNumber(false);
 
       // Quotes produce strings.
     case 34: case 39: // '"', "'"
@@ -746,18 +746,18 @@
 
   // Read an integer, octal integer, or floating-point number.
   
-  function readNumber(ch) {
-    var start = tokPos, isFloat = ch === ".";
-    if (!isFloat && readInt(10) == null) raise(start, "Invalid number");
-    if (isFloat || input.charAt(tokPos) === ".") {
-      var next = input.charAt(++tokPos);
-      if (next === "-" || next === "+") ++tokPos;
-      if (readInt(10) === null && ch === ".") raise(start, "Invalid number");
+  function readNumber(startsWithDot) {
+    var start = tokPos, isFloat = false, octal = input.charCodeAt(tokPos) === 48;
+    if (!startsWithDot && readInt(10) === null) raise(start, "Invalid number");
+    if (input.charCodeAt(tokPos) === 46) {
+      ++tokPos;
+      readInt(10);
       isFloat = true;
     }
-    if (/e/i.test(input.charAt(tokPos))) {
-      var next = input.charAt(++tokPos);
-      if (next === "-" || next === "+") ++tokPos;
+    var next = input.charCodeAt(tokPos);
+    if (next === 69 || next === 101) { // 'eE'
+      next = input.charCodeAt(++tokPos);
+      if (next === 43 || next === 45) ++tokPos; // '+-'
       if (readInt(10) === null) raise(start, "Invalid number")
       isFloat = true;
     }
@@ -765,7 +765,7 @@
 
     var str = input.slice(start, tokPos), val;
     if (isFloat) val = parseFloat(str);
-    else if (ch !== "0" || str.length === 1) val = parseInt(str, 10);
+    else if (!octal || str.length === 1) val = parseInt(str, 10);
     else if (/[89]/.test(str) || strict) raise(start, "Invalid number");
     else val = parseInt(str, 8);
     return finishToken(_num, val);
