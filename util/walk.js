@@ -19,7 +19,7 @@
   // walker, and state can be used to give this walked an initial
   // state.
   exports.simple = function(node, visitors, base, state) {
-    if (!base) base = exports;
+    if (!base) base = exports.base;
     function c(node, st, override) {
       var type = override || node.type, found = visitors[type];
       base[type](node, st, c);
@@ -48,7 +48,7 @@
   // undefined when it doesn't find a matching node.
   exports.findNodeAt = function(node, start, end, targetType, base, state) {
     try {
-      if (!base) base = exports;
+      if (!base) base = exports.base;
       var c = function(node, st, override) {
         var type = override || node.type;
         if ((start == null || node.start <= start) &&
@@ -70,7 +70,7 @@
   // position. Interface similar to findNodeAt.
   exports.findNodeAround = function(node, pos, targetType, base, state) {
     try {
-      if (!base) base = exports;
+      if (!base) base = exports.base;
       var c = function(node, st, override) {
         var type = override || node.type;
         var inside = node.start <= pos && node.end >= pos;
@@ -89,7 +89,7 @@
   // Used to create a custom walker. Will fill in all missing node
   // type properties with the defaults.
   exports.make = function(funcs, base) {
-    if (!base) base = exports;
+    if (!base) base = exports.base;
     var visitor = {};
     for (var type in base) visitor[type] = base[type];
     for (var type in funcs) visitor[type] = funcs[type];
@@ -101,29 +101,30 @@
 
   // Node walkers.
 
-  exports.Program = exports.BlockStatement = function(node, st, c) {
+  var base = exports.base = {};
+  base.Program = base.BlockStatement = function(node, st, c) {
     for (var i = 0; i < node.body.length; ++i)
       c(node.body[i], st, "Statement");
   };
-  exports.Statement = skipThrough;
-  exports.EmptyStatement = ignore;
-  exports.ExpressionStatement = function(node, st, c) {
+  base.Statement = skipThrough;
+  base.EmptyStatement = ignore;
+  base.ExpressionStatement = function(node, st, c) {
     c(node.expression, st, "Expression");
   };
-  exports.IfStatement = function(node, st, c) {
+  base.IfStatement = function(node, st, c) {
     c(node.test, st, "Expression");
     c(node.consequent, st, "Statement");
     if (node.alternate) c(node.alternate, st, "Statement");
   };
-  exports.LabeledStatement = function(node, st, c) {
+  base.LabeledStatement = function(node, st, c) {
     c(node.body, st, "Statement");
   };
-  exports.BreakStatement = exports.ContinueStatement = ignore;
-  exports.WithStatement = function(node, st, c) {
+  base.BreakStatement = base.ContinueStatement = ignore;
+  base.WithStatement = function(node, st, c) {
     c(node.object, st, "Expression");
     c(node.body, st, "Statement");
   };
-  exports.SwitchStatement = function(node, st, c) {
+  base.SwitchStatement = function(node, st, c) {
     c(node.discriminant, st, "Expression");
     for (var i = 0; i < node.cases.length; ++i) {
       var cs = node.cases[i];
@@ -132,96 +133,96 @@
         c(cs.consequent[j], st, "Statement");
     }
   };
-  exports.ReturnStatement = function(node, st, c) {
+  base.ReturnStatement = function(node, st, c) {
     if (node.argument) c(node.argument, st, "Expression");
   };
-  exports.ThrowStatement = function(node, st, c) {
+  base.ThrowStatement = function(node, st, c) {
     c(node.argument, st, "Expression");
   };
-  exports.TryStatement = function(node, st, c) {
+  base.TryStatement = function(node, st, c) {
     c(node.block, st, "Statement");
     for (var i = 0; i < node.handlers.length; ++i)
       c(node.handlers[i].body, st, "ScopeBody");
     if (node.finalizer) c(node.finalizer, st, "Statement");
   };
-  exports.WhileStatement = function(node, st, c) {
+  base.WhileStatement = function(node, st, c) {
     c(node.test, st, "Expression");
     c(node.body, st, "Statement");
   };
-  exports.DoWhileStatement = exports.WhileStatement;
-  exports.ForStatement = function(node, st, c) {
+  base.DoWhileStatement = base.WhileStatement;
+  base.ForStatement = function(node, st, c) {
     if (node.init) c(node.init, st, "ForInit");
     if (node.test) c(node.test, st, "Expression");
     if (node.update) c(node.update, st, "Expression");
     c(node.body, st, "Statement");
   };
-  exports.ForInStatement = function(node, st, c) {
+  base.ForInStatement = function(node, st, c) {
     c(node.left, st, "ForInit");
     c(node.right, st, "Expression");
     c(node.body, st, "Statement");
   };
-  exports.ForInit = function(node, st, c) {
+  base.ForInit = function(node, st, c) {
     if (node.type == "VariableDeclaration") c(node, st);
     else c(node, st, "Expression");
   };
-  exports.DebuggerStatement = ignore;
+  base.DebuggerStatement = ignore;
 
-  exports.FunctionDeclaration = function(node, st, c) {
+  base.FunctionDeclaration = function(node, st, c) {
     c(node, st, "Function");
   };
-  exports.VariableDeclaration = function(node, st, c) {
+  base.VariableDeclaration = function(node, st, c) {
     for (var i = 0; i < node.declarations.length; ++i) {
       var decl = node.declarations[i];
       if (decl.init) c(decl.init, st, "Expression");
     }
   };
 
-  exports.Function = function(node, st, c) {
+  base.Function = function(node, st, c) {
     c(node.body, st, "ScopeBody");
   };
-  exports.ScopeBody = function(node, st, c) {
+  base.ScopeBody = function(node, st, c) {
     c(node, st, "Statement");
   };
 
-  exports.Expression = skipThrough;
-  exports.ThisExpression = ignore;
-  exports.ArrayExpression = function(node, st, c) {
+  base.Expression = skipThrough;
+  base.ThisExpression = ignore;
+  base.ArrayExpression = function(node, st, c) {
     for (var i = 0; i < node.elements.length; ++i) {
       var elt = node.elements[i];
       if (elt) c(elt, st, "Expression");
     }
   };
-  exports.ObjectExpression = function(node, st, c) {
+  base.ObjectExpression = function(node, st, c) {
     for (var i = 0; i < node.properties.length; ++i)
       c(node.properties[i].value, st, "Expression");
   };
-  exports.FunctionExpression = exports.FunctionDeclaration;
-  exports.SequenceExpression = function(node, st, c) {
+  base.FunctionExpression = base.FunctionDeclaration;
+  base.SequenceExpression = function(node, st, c) {
     for (var i = 0; i < node.expressions.length; ++i)
       c(node.expressions[i], st, "Expression");
   };
-  exports.UnaryExpression = exports.UpdateExpression = function(node, st, c) {
+  base.UnaryExpression = base.UpdateExpression = function(node, st, c) {
     c(node.argument, st, "Expression");
   };
-  exports.BinaryExpression = exports.AssignmentExpression = exports.LogicalExpression = function(node, st, c) {
+  base.BinaryExpression = base.AssignmentExpression = base.LogicalExpression = function(node, st, c) {
     c(node.left, st, "Expression");
     c(node.right, st, "Expression");
   };
-  exports.ConditionalExpression = function(node, st, c) {
+  base.ConditionalExpression = function(node, st, c) {
     c(node.test, st, "Expression");
     c(node.consequent, st, "Expression");
     c(node.alternate, st, "Expression");
   };
-  exports.NewExpression = exports.CallExpression = function(node, st, c) {
+  base.NewExpression = base.CallExpression = function(node, st, c) {
     c(node.callee, st, "Expression");
     if (node.arguments) for (var i = 0; i < node.arguments.length; ++i)
       c(node.arguments[i], st, "Expression");
   };
-  exports.MemberExpression = function(node, st, c) {
+  base.MemberExpression = function(node, st, c) {
     c(node.object, st, "Expression");
     if (node.computed) c(node.property, st, "Expression");
   };
-  exports.Identifier = exports.Literal = ignore;
+  base.Identifier = base.Literal = ignore;
 
   // A custom walker that keeps track of the scope chain and the
   // variables defined in it.
