@@ -160,10 +160,18 @@
 
   function closesBlock(closeTok, indent, line) {
     if (token.type === closeTok || token.type === tt.eof) return true;
-    if (line != curLineStart && curIndent < indent &&
+    if (line != curLineStart && curIndent < indent && tokenStartsLine() &&
         (nextLineStart >= input.length ||
          indentationAfter(nextLineStart) < indent)) return true;
     return false;
+  }
+
+  function tokenStartsLine() {
+    for (var p = token.start - 1; p > curLineStart; --p) {
+      var ch = input.charCodeAt(p);
+      if (ch !== 9 && ch !== 32) return false;
+    }
+    return true;
   }
 
   function node_t(start) {
@@ -483,7 +491,7 @@
   }
 
   function parseExprOp(left, minPrec, noIn, indent, line) {
-    if (curLineStart != line && curIndent < indent) return left;
+    if (curLineStart != line && curIndent < indent && tokenStartsLine()) return left;
     var prec = token.type.binop;
     if (prec != null && (!noIn || token.type !== tt.in)) {
       if (prec > minPrec) {
@@ -491,7 +499,7 @@
         node.left = left;
         node.operator = token.value;
         next();
-        if (curLineStart != line && curIndent < indent)
+        if (curLineStart != line && curIndent < indent && tokenStartsLine())
           node.right = dummyIdent();
         else
           node.right = parseExprOp(parseMaybeUnary(noIn), prec, noIn, indent, line);
@@ -531,7 +539,7 @@
 
   function parseSubscripts(base, noCalls, startIndent, line) {
     for (;;) {
-      if (curLineStart != line && curIndent <= startIndent) {
+      if (curLineStart != line && curIndent <= startIndent && tokenStartsLine()) {
         if (token.type == tt.dot && curIndent == startIndent)
           --startIndent;
         else
@@ -541,7 +549,7 @@
       if (eat(tt.dot)) {
         var node = startNodeFrom(base);
         node.object = base;
-        if (curLineStart != line && curIndent <= startIndent)
+        if (curLineStart != line && curIndent <= startIndent && tokenStartsLine())
           node.property = dummyIdent();
         else
           node.property = parsePropertyName() || dummyIdent();
