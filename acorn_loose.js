@@ -567,7 +567,6 @@
         base = finishNode(node, "MemberExpression");
       } else if (!noCalls && token.type == tt.parenL) {
         pushCx();
-        next();
         var node = startNodeFrom(base);
         node.callee = base;
         node.arguments = parseExprList(tt.parenR);
@@ -612,7 +611,6 @@
     case tt.bracketL:
       var node = startNode();
       pushCx();
-      next();
       node.elements = parseExprList(tt.bracketR);
       return finishNode(node, "ArrayExpression");
 
@@ -708,7 +706,8 @@
   }
 
   function parseExprList(close) {
-    var elts = [], indent = curIndent + 1, line = curLineStart;
+    var indent = curIndent + 1, line = curLineStart, elts = [];
+    next(); // Opening bracket
     while (!closesBlock(close, indent, line)) {
       var elt = parseExpression(true);
       if (isDummy(elt)) {
