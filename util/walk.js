@@ -41,12 +41,22 @@
     c(node, state);
   };
 
+  function makeTest(test) {
+    if (typeof test == "string")
+      return function(node) { node.type == test; };
+    else if (!test)
+      return function() { return true; };
+    else
+      return test;
+  }
+
   function Found(node, state) { this.node = node; this.state = state; }
 
   // Find a node with a given start, end, and type (all are optional,
   // null can be used as wildcard). Returns a {node, state} object, or
   // undefined when it doesn't find a matching node.
-  exports.findNodeAt = function(node, start, end, targetType, base, state) {
+  exports.findNodeAt = function(node, start, end, test, base, state) {
+    test = makeTest(test);
     try {
       if (!base) base = exports.base;
       var c = function(node, st, override) {
@@ -54,7 +64,7 @@
         if ((start == null || node.start <= start) &&
             (end == null || node.end >= end))
           base[type](node, st, c);
-        if ((targetType == null || type == targetType) &&
+        if (test(node) &&
             (start == null || node.start == start) &&
             (end == null || node.end == end))
           throw new Found(node, st);
@@ -68,7 +78,8 @@
 
   // Find the innermost node of a given type that contains the given
   // position. Interface similar to findNodeAt.
-  exports.findNodeAround = function(node, pos, targetType, base, state) {
+  exports.findNodeAround = function(node, pos, test, base, state) {
+    test = makeTest(test);
     try {
       if (!base) base = exports.base;
       var c = function(node, st, override) {
@@ -76,7 +87,7 @@
         var inside = node.start <= pos && node.end >= pos;
         if (inside)
           base[type](node, st, c);
-        if (inside && (targetType == null || type == targetType))
+        if (inside && test(node))
           throw new Found(node, st);
       };
       c(node, state);
