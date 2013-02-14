@@ -12,11 +12,18 @@
 // Please use the [github bug tracker][ghbt] to report issues.
 //
 // [ghbt]: https://github.com/marijnh/acorn/issues
+//
+// This file defines the main parser interface. The library also comes
+// with a [error-tolerant parser][dammit] and an
+// [abstract syntax tree walker][walk], defined in other files.
+//
+// [dammit]: acorn_loose.js
+// [walk]: util/walk.js
 
 (function(exports) {
   "use strict";
 
-  exports.version = "0.0.2";
+  exports.version = "0.1.0";
 
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
