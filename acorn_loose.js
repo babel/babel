@@ -44,6 +44,7 @@
     fetchToken = acorn.tokenize(inpt, opts);
     context = [];
     nextLineStart = 0;
+    ahead.length = 0;
     next();
     return parseTopLevel();
   };
