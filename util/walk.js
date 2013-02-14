@@ -43,7 +43,7 @@
 
   function makeTest(test) {
     if (typeof test == "string")
-      return function(node) { node.type == test; };
+      return function(type) { return type == test; };
     else if (!test)
       return function() { return true; };
     else
@@ -64,7 +64,7 @@
         if ((start == null || node.start <= start) &&
             (end == null || node.end >= end))
           base[type](node, st, c);
-        if (test(node) &&
+        if (test(type, node) &&
             (start == null || node.start == start) &&
             (end == null || node.end == end))
           throw new Found(node, st);
@@ -84,11 +84,9 @@
       if (!base) base = exports.base;
       var c = function(node, st, override) {
         var type = override || node.type;
-        var inside = node.start <= pos && node.end >= pos;
-        if (inside)
-          base[type](node, st, c);
-        if (inside && test(node))
-          throw new Found(node, st);
+        if (node.start > pos || node.end < pos) return;
+        base[type](node, st, c);
+        if (test(type, node)) throw new Found(node, st);
       };
       c(node, state);
     } catch (e) {
