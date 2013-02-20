@@ -397,9 +397,10 @@
   }
 
   function parseBlock() {
+    var node = startNode();
     pushCx();
     expect(tt.braceL);
-    var node = startNode(), blockIndent = curIndent, line = curLineStart;
+    var blockIndent = curIndent, line = curLineStart;
     node.body = [];
     while (!closesBlock(tt.braceR, blockIndent, line))
       node.body.push(parseStatement());
