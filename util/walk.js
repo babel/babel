@@ -95,6 +95,24 @@
     }
   };
 
+  // Find the outermost matching node after a given position.
+  exports.findNodeAfter = function(node, pos, test, base, state) {
+    test = makeTest(test);
+    try {
+      if (!base) base = exports.base;
+      var c = function(node, st, override) {
+        if (node.end < pos) return;
+        var type = override || node.type;
+        if (node.start >= pos && test(node, type)) throw new Found(node, st);
+        base[type](node, st, c);
+      };
+      c(node, state);
+    } catch (e) {
+      if (e instanceof Found) return e;
+      throw e;
+    }
+  };
+
   // Used to create a custom walker. Will fill in all missing node
   // type properties with the defaults.
   exports.make = function(funcs, base) {
