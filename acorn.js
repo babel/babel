@@ -791,17 +791,15 @@
 
   // Read a string value, interpreting backslash-escapes.
 
-  var rs_str = [];
-
   function readString(quote) {
     tokPos++;
-    rs_str.length = 0;
+    var out = "";
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
       var ch = input.charCodeAt(tokPos);
       if (ch === quote) {
         ++tokPos;
-        return finishToken(_string, String.fromCharCode.apply(null, rs_str));
+        return finishToken(_string, out);
       }
       if (ch === 92) { // '\'
         ch = input.charCodeAt(++tokPos);
@@ -812,30 +810,30 @@
         ++tokPos;
         if (octal) {
           if (strict) raise(tokPos - 2, "Octal literal in strict mode");
-          rs_str.push(parseInt(octal, 8));
+          out += String.fromCharCode(parseInt(octal, 8));
           tokPos += octal.length - 1;
         } else {
           switch (ch) {
-          case 110: rs_str.push(10); break; // 'n' -> '\n'
-          case 114: rs_str.push(13); break; // 'r' -> '\r'
-          case 120: rs_str.push(readHexChar(2)); break; // 'x'
-          case 117: rs_str.push(readHexChar(4)); break; // 'u'
-          case 85: rs_str.push(readHexChar(8)); break; // 'U'
-          case 116: rs_str.push(9); break; // 't' -> '\t'
-          case 98: rs_str.push(8); break; // 'b' -> '\b'
-          case 118: rs_str.push(11); break; // 'v' -> '\u000b'
-          case 102: rs_str.push(12); break; // 'f' -> '\f'
-          case 48: rs_str.push(0); break; // 0 -> '\0'
+          case 110: out += "\n"; break; // 'n' -> '\n'
+          case 114: out += "\r"; break; // 'r' -> '\r'
+          case 120: out += String.fromCharCode(readHexChar(2)); break; // 'x'
+          case 117: out += String.fromCharCode(readHexChar(4)); break; // 'u'
+          case 85: out += String.fromCharCode(readHexChar(8)); break; // 'U'
+          case 116: out += "\t"; break; // 't' -> '\t'
+          case 98: out += "\b"; break; // 'b' -> '\b'
+          case 118: out += "\v"; break; // 'v' -> '\u000b'
+          case 102: out += "\f"; break; // 'f' -> '\f'
+          case 48: out += "\0"; break; // 0 -> '\0'
           case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
           case 10: // ' \n'
             if (options.locations) { tokLineStart = tokPos; ++tokCurLine; }
             break;
-          default: rs_str.push(ch); break;
+          default: out += String.fromCharCode(ch); break;
           }
         }
       } else {
         if (ch === 13 || ch === 10 || ch === 8232 || ch === 8329) raise(tokStart, "Unterminated string constant");
-        rs_str.push(ch); // '\'
+        out += String.fromCharCode(ch); // '\'
         ++tokPos;
       }
     }
