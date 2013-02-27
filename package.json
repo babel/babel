@@ -14,5 +14,6 @@
                       "url": "https://github.com/marijnh/acorn.git"}],
     "licenses": [{"type": "MIT",
                   "url": "http://marijnhaverbeke.nl/acorn/LICENSE"}],
-    "scripts": {"test": "node test/run.js"}
+    "scripts": {"test": "node test/run.js"},
+    "bin": {"acorn": "./bin/acorn"}
 }
