@@ -17,7 +17,6 @@ for (var i = 2; i < process.argv.length; ++i) {
   if (arg == "--ecma3") options.ecmaVersion = 3;
   else if (arg == "--ecma5") options.ecmaVersion = 5;
   else if (arg == "--strictSemicolons") options.strictSemicolons = true;
-  else if (arg == "--trackComments") options.trackComments = true;
   else if (arg == "--locations") options.locations = true;
   else if (arg == "--silent") silent = true;
   else if (arg == "--compact") compact = true;
