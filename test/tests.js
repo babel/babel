@@ -26097,6 +26097,38 @@ test("foo: 10; foo: 20;", {
   ]
 });
 
+test("if(1)/  foo/", {
+  type: "Program",
+  start: 0,
+  end: 12,
+  body: [
+    {
+      type: "IfStatement",
+      start: 0,
+      end: 12,
+      test: {
+        type: "Literal",
+        start: 3,
+        end: 4,
+        value: 1,
+        raw: "1"
+      },
+      consequent: {
+        type: "ExpressionStatement",
+        start: 5,
+        end: 12,
+        expression: {
+          type: "Literal",
+          start: 5,
+          end: 12,
+          raw: "/  foo/"
+        }
+      },
+      alternate: null
+    }
+  ]
+});
+
 // option tests
 
 test("var a = 1;", {

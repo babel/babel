@@ -679,7 +679,8 @@
   }
 
   function readToken(forceRegexp) {
-    tokStart = tokPos;
+    if (!forceRegexp) tokStart = tokPos;
+    else tokPos = tokStart + 1;
     if (options.locations) tokStartLoc = new line_loc_t;
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
