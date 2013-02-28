@@ -103,7 +103,7 @@
       var c = function(node, st, override) {
         if (node.end < pos) return;
         var type = override || node.type;
-        if (node.start >= pos && test(node, type)) throw new Found(node, st);
+        if (node.start >= pos && test(type, node)) throw new Found(node, st);
         base[type](node, st, c);
       };
       c(node, state);
@@ -111,6 +111,22 @@
       if (e instanceof Found) return e;
       throw e;
     }
+  };
+
+  // Find the outermost matching node before a given position.
+  exports.findNodeBefore = function(node, pos, test, base, state) {
+    test = makeTest(test);
+    if (!base) base = exports.base;
+    var max;
+    var c = function(node, st, override) {
+      if (node.start > pos) return;
+      var type = override || node.type;
+      if (node.end <= pos && (!max || max.node.end < node.end) && test(type, node))
+        max = new Found(node, st);
+      base[type](node, st, c);
+    };
+    c(node, state);
+    return max;
   };
 
   // Used to create a custom walker. Will fill in all missing node

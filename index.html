@@ -464,7 +464,8 @@ of the type given by its first argument.</p>             </td>             <td c
   <span class="p">}</span>
 
   <span class="kd">function</span> <span class="nx">readToken</span><span class="p">(</span><span class="nx">forceRegexp</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">tokStart</span> <span class="o">=</span> <span class="nx">tokPos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">forceRegexp</span><span class="p">)</span> <span class="nx">tokStart</span> <span class="o">=</span> <span class="nx">tokPos</span><span class="p">;</span>
+    <span class="k">else</span> <span class="nx">tokPos</span> <span class="o">=</span> <span class="nx">tokStart</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">locations</span><span class="p">)</span> <span class="nx">tokStartLoc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">line_loc_t</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">forceRegexp</span><span class="p">)</span> <span class="k">return</span> <span class="nx">readRegexp</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">tokPos</span> <span class="o">&gt;=</span> <span class="nx">inputLen</span><span class="p">)</span> <span class="k">return</span> <span class="nx">finishToken</span><span class="p">(</span><span class="nx">_eof</span><span class="p">);</span>
