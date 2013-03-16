@@ -42,6 +42,7 @@
     options = opts;
     if (!opts.tabSize) opts.tabSize = 4;
     fetchToken = acorn.tokenize(inpt, opts);
+    sourceFile = options.sourceFile || null;
     context = [];
     nextLineStart = 0;
     ahead.length = 0;
@@ -50,14 +51,18 @@
   };
 
   var lastEnd, token = {start: 0, end: 0}, ahead = [];
-  var curLineStart, nextLineStart, curIndent;
+  var curLineStart, nextLineStart, curIndent, lastEndLoc, sourceFile;
 
   function next() {
     lastEnd = token.end;
+    if (options.locations)
+      lastEndLoc = token.endLoc;
+
     if (ahead.length)
       token = ahead.shift();
     else
       token = readToken();
+
     if (token.start >= nextLineStart) {
       while (token.start >= nextLineStart) {
         curLineStart = nextLineStart;
@@ -181,8 +186,17 @@
     this.end = null;
   }
 
+  function node_loc_t() {
+    this.start = token.startLoc;
+    this.end = null;
+    if (sourceFile !== null) this.source = sourceFile;
+  }
+
   function startNode() {
-    return new node_t(token.start);
+    var node = new node_t(token.start);
+    if (options.locations)
+      node.loc = new node_loc_t();
+    return node
   }
   function startNodeFrom(other) {
     return new node_t(other.start);
@@ -190,6 +204,8 @@
   function finishNode(node, type) {
     node.type = type;
     node.end = lastEnd;
+    if (options.locations)
+      node.loc.end = lastEndLoc;
     return node;
   }
 
