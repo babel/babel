@@ -110,7 +110,7 @@
           throw e;
         }
         resetTo(pos);
-        if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖"};
+        if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖", loc: getDummyLoc()};
         if (replace) return replace;
       }
     }
@@ -202,9 +202,16 @@
       node.loc = new node_loc_t();
     return node
   }
+
   function startNodeFrom(other) {
-    return new node_t(other.start);
+    var node = new node_t(other.start);
+    if (options.locations) {
+      node.loc = new node_loc_t();
+      node.loc.start = other.loc.start;
+    }
+    return node;
   }
+
   function finishNode(node, type) {
     node.type = type;
     node.end = lastEnd;
@@ -213,11 +220,23 @@
     return node;
   }
 
+  function getDummyLoc(dummy) {
+    if (options.locations) {
+      var loc = new node_loc_t();
+      loc.end = {
+        line: loc.start.line,
+        column: loc.start.column + 1
+      };
+      return loc;
+    }
+  };
+
   function dummyIdent() {
     var dummy = new node_t(0);
     dummy.type = "Identifier";
     dummy.end = 0;
     dummy.name = "✖";
+    dummy.loc = getDummyLoc();
     return dummy;
   }
   function isDummy(node) { return node.name == "✖"; }
