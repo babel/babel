@@ -29,10 +29,14 @@
 // invasive changes and simplifications without creating a complicated
 // tangle.
 
-(function(exports) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") return mod(exports, require("./acorn")); // CommonJS
+  if (typeof define == "function" && define.amd) return define(["exports", "./acorn"], mod); // AMD
+  mod(self.acorn || (self.acorn = {}), self.acorn); // Plain browser env
+})(function(exports, acorn) {
   "use strict";
 
-  var acorn = exports.parse ? exports : require("./acorn"), tt = acorn.tokTypes;
+  var tt = acorn.tokTypes;
 
   var options, input, fetchToken, context;
 
@@ -740,4 +744,4 @@
     eat(close);
     return elts;
   }
-})(typeof exports === "undefined" ? self.acorn : exports);
+});

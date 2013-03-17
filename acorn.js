@@ -20,7 +20,11 @@
 // [dammit]: acorn_loose.js
 // [walk]: util/walk.js
 
-(function(exports) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") return mod(exports); // CommonJS
+  if (typeof define == "function" && define.amd) return define(["exports"], mod); // AMD
+  mod(self.acorn || (self.acorn = {})); // Plain browser env
+})(function(exports) {
   "use strict";
 
   exports.version = "0.1.01";
@@ -1708,4 +1712,4 @@
     return finishNode(node, "Identifier");
   }
 
-})(typeof exports === "undefined" ? (self.acorn = {}) : exports);
+});

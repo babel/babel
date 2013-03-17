@@ -14,7 +14,11 @@ https://github.com/marijnh/acorn.git
 
 <p>This file defines the main parser interface. The library also comes
 with a <a href="acorn_loose.js">error-tolerant parser</a> and an
-<a href="util/walk.js">abstract syntax tree walker</a>, defined in other files.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
+<a href="util/walk.js">abstract syntax tree walker</a>, defined in other files.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">mod</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="nx">mod</span><span class="p">(</span><span class="nx">exports</span><span class="p">);</span> <span class="c1">// CommonJS</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">define</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">define</span><span class="p">.</span><span class="nx">amd</span><span class="p">)</span> <span class="k">return</span> <span class="nx">define</span><span class="p">([</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span> <span class="nx">mod</span><span class="p">);</span> <span class="c1">// AMD</span>
+  <span class="nx">mod</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">acorn</span> <span class="o">||</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">acorn</span> <span class="o">=</span> <span class="p">{}));</span> <span class="c1">// Plain browser env</span>
+<span class="p">})(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
   <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
   <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.1.01&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>self.acorn</code> when in the
@@ -1284,6 +1288,6 @@ identifiers.</p>             </td>             <td class="code">               <
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;Identifier&quot;</span><span class="p">);</span>
   <span class="p">}</span>
 
-<span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">acorn</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
+<span class="p">});</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

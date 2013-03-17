@@ -1,6 +1,10 @@
 // AST walker module for Mozilla Parser API compatible trees
 
-(function(exports) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") return mod(exports); // CommonJS
+  if (typeof define == "function" && define.amd) return define(["exports"], mod); // AMD
+  mod(self.acorn.walk = {}); // Plain browser env
+})(function(exports) {
   "use strict";
 
   // A simple walk is one where you simply specify callbacks to be
@@ -302,4 +306,4 @@
     }
   });
 
-})(typeof exports == "undefined" ? acorn.walk = {} : exports);
+});
