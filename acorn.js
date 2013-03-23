@@ -826,7 +826,7 @@
           case 85: out += String.fromCharCode(readHexChar(8)); break; // 'U'
           case 116: out += "\t"; break; // 't' -> '\t'
           case 98: out += "\b"; break; // 'b' -> '\b'
-          case 118: out += "\v"; break; // 'v' -> '\u000b'
+          case 118: out += "\u000b"; break; // 'v' -> '\u000b'
           case 102: out += "\f"; break; // 'f' -> '\f'
           case 48: out += "\0"; break; // 0 -> '\0'
           case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
