@@ -25798,33 +25798,33 @@ test("foo: if (true) break foo;", {
   ]
 });
 
-test("(function () { 'use strict'; '\0'; }())", {
+test("(function () {\n 'use strict';\n '\0';\n}())", {
   type: "Program",
   start: 0,
-  end: 38,
+  end: 40,
   loc: {
     start: {
       line: 1,
       column: 0
     },
     end: {
-      line: 1,
-      column: 38
+      line: 4,
+      column: 4
     }
   },
   body: [
     {
       type: "ExpressionStatement",
       start: 0,
-      end: 38,
+      end: 40,
       loc: {
         start: {
           line: 1,
           column: 0
         },
         end: {
-          line: 1,
-          column: 38
+          line: 4,
+          column: 4
         }
       },
       expression: {
@@ -25836,22 +25836,22 @@ test("(function () { 'use strict'; '\0'; }())", {
             column: 0
           },
           end: {
-            line: 1,
-            column: 38
+            line: 4,
+            column: 4
           }
         },
         callee: {
           type: "FunctionExpression",
           start: 1,
-          end: 35,
+          end: 37,
           loc: {
             start: {
               line: 1,
               column: 1
             },
             end: {
-              line: 1,
-              column: 35
+              line: 4,
+              column: 1
             }
           },
           id: null,
@@ -25859,44 +25859,44 @@ test("(function () { 'use strict'; '\0'; }())", {
           body: {
             type: "BlockStatement",
             start: 13,
-            end: 35,
+            end: 37,
             loc: {
               start: {
                 line: 1,
                 column: 13
               },
               end: {
-                line: 1,
-                column: 35
+                line: 4,
+                column: 1
               }
             },
             body: [
               {
                 type: "ExpressionStatement",
-                start: 15,
-                end: 28,
+                start: 16,
+                end: 29,
                 loc: {
                   start: {
-                    line: 1,
-                    column: 15
+                    line: 2,
+                    column: 1
                   },
                   end: {
-                    line: 1,
-                    column: 28
+                    line: 2,
+                    column: 14
                   }
                 },
                 expression: {
                   type: "Literal",
-                  start: 15,
-                  end: 27,
+                  start: 16,
+                  end: 28,
                   loc: {
                     start: {
-                      line: 1,
-                      column: 15
+                      line: 2,
+                      column: 1
                     },
                     end: {
-                      line: 1,
-                      column: 27
+                      line: 2,
+                      column: 13
                     }
                   },
                   value: "use strict"
@@ -25904,30 +25904,30 @@ test("(function () { 'use strict'; '\0'; }())", {
               },
               {
                 type: "ExpressionStatement",
-                start: 29,
-                end: 33,
+                start: 31,
+                end: 35,
                 loc: {
                   start: {
-                    line: 1,
-                    column: 29
+                    line: 3,
+                    column: 1
                   },
                   end: {
-                    line: 1,
-                    column: 33
+                    line: 3,
+                    column: 5
                   }
                 },
                 expression: {
                   type: "Literal",
-                  start: 29,
-                  end: 32,
+                  start: 31,
+                  end: 34,
                   loc: {
                     start: {
-                      line: 1,
-                      column: 29
+                      line: 3,
+                      column: 1
                     },
                     end: {
-                      line: 1,
-                      column: 32
+                      line: 3,
+                      column: 4
                     }
                   },
                   value: "\u0000"
@@ -25937,7 +25937,7 @@ test("(function () { 'use strict'; '\0'; }())", {
           }
         },
         arguments: [],
-        end: 38
+        end: 40
       }
     }
   ]
