@@ -901,8 +901,8 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="k">case</span> <span class="nx">_try</span><span class="o">:</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">block</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">handlers</span> <span class="o">=</span> <span class="p">[];</span>
-      <span class="k">while</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_catch</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_catch</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">clause</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
         <span class="nx">next</span><span class="p">();</span>
         <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
@@ -912,10 +912,10 @@ adding statements to.</p>             </td>             <td class="code">       
         <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenR</span><span class="p">);</span>
         <span class="nx">clause</span><span class="p">.</span><span class="nx">guard</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="nx">clause</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">handlers</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">finishNode</span><span class="p">(</span><span class="nx">clause</span><span class="p">,</span> <span class="s2">&quot;CatchClause&quot;</span><span class="p">));</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">clause</span><span class="p">,</span> <span class="s2">&quot;CatchClause&quot;</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_finally</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseBlock</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">handlers</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span><span class="p">)</span>
         <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Missing catch or finally clause&quot;</span><span class="p">);</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;TryStatement&quot;</span><span class="p">);</span>
 

@@ -377,8 +377,8 @@
     case tt.try:
       next();
       node.block = parseBlock();
-      node.handlers = [];
-      while (token.type === tt.catch) {
+      node.handler = null;
+      if (token.type === tt.catch) {
         var clause = startNode();
         next();
         expect(tt.parenL);
@@ -386,10 +386,10 @@
         expect(tt.parenR);
         clause.guard = null;
         clause.body = parseBlock();
-        node.handlers.push(finishNode(clause, "CatchClause"));
+        node.handler = finishNode(clause, "CatchClause");
       }
       node.finalizer = eat(tt.finally) ? parseBlock() : null;
-      if (!node.handlers.length && !node.finalizer) return node.block;
+      if (!node.handler && !node.finalizer) return node.block;
       return finishNode(node, "TryStatement");
 
     case tt.var:
