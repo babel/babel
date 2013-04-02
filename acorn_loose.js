@@ -110,8 +110,14 @@
           throw e;
         }
         resetTo(pos);
-        if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖", loc: getDummyLoc()};
-        if (replace) return replace;
+        if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖"};
+        if (replace) {
+          if (options.locations) {
+            replace.startLoc = acorn.getLineInfo(input, replace.start);
+            replace.endLoc = acorn.getLineInfo(input, replace.end);
+          }
+          return replace;
+        }
       }
     }
   }
@@ -123,15 +129,22 @@
     fetchToken.jumpTo(pos, reAllowed);
   }
 
+  function copyToken(token) {
+    var copy = {start: token.start, end: token.end, type: token.type, value: token.value};
+    if (options.locations) {
+      copy.startLoc = token.startLoc;
+      copy.endLoc = token.endLoc;
+    }
+    return copy;
+  }
+
   function lookAhead(n) {
     // Copy token objects, because fetchToken will overwrite the one
     // it returns, and in this case we still need it
     if (!ahead.length)
-      token = {start: token.start, end: token.end, type: token.type, value: token.value};
-    while (n > ahead.length) {
-      var tok = readToken();
-      ahead.push({start: tok.from, end: tok.end, type: tok.type, value: tok.value});
-    }
+      token = copyToken(token);
+    while (n > ahead.length)
+      ahead.push(copyToken(readToken()));
     return ahead[n-1];
   }
 
@@ -190,8 +203,8 @@
     this.end = null;
   }
 
-  function node_loc_t() {
-    this.start = token.startLoc;
+  function node_loc_t(start) {
+    this.start = start || token.startLoc || {line: 1, column: 0};
     this.end = null;
     if (sourceFile !== null) this.source = sourceFile;
   }
@@ -205,10 +218,8 @@
 
   function startNodeFrom(other) {
     var node = new node_t(other.start);
-    if (options.locations) {
-      node.loc = new node_loc_t();
-      node.loc.start = other.loc.start;
-    }
+    if (options.locations)
+      node.loc = new node_loc_t(other.loc.start);
     return node;
   }
 
@@ -220,21 +231,18 @@
     return node;
   }
 
-  function getDummyLoc(dummy) {
+  function getDummyLoc() {
     if (options.locations) {
       var loc = new node_loc_t();
-      loc.end = {
-        line: loc.start.line,
-        column: loc.start.column + 1
-      };
+      loc.end = loc.start;
       return loc;
     }
   };
 
   function dummyIdent() {
-    var dummy = new node_t(0);
+    var dummy = new node_t(token.start);
     dummy.type = "Identifier";
-    dummy.end = 0;
+    dummy.end = token.start;
     dummy.name = "✖";
     dummy.loc = getDummyLoc();
     return dummy;
