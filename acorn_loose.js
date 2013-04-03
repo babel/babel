@@ -707,7 +707,7 @@
         kind = prop.kind = "init";
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
-        isGetSet = sawGetSet = true;
+        isGetSet = true;
         kind = prop.kind = prop.key.name;
         prop.key = parsePropertyName() || dummyIdent();
         prop.value = parseFunction(startNode(), false);
