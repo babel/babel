@@ -32,7 +32,7 @@
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") return mod(exports, require("./acorn")); // CommonJS
   if (typeof define == "function" && define.amd) return define(["exports", "./acorn"], mod); // AMD
-  mod(self.acorn || (self.acorn = {}), self.acorn); // Plain browser env
+  mod(this.acorn || (this.acorn = {}), this.acorn); // Plain browser env
 })(function(exports, acorn) {
   "use strict";
 
