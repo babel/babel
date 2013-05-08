@@ -755,7 +755,7 @@
   }
 
   function parseExprList(close) {
-    var indent = curIndent + 1, line = curLineStart, elts = [];
+    var indent = curIndent, line = curLineStart, elts = [];
     next(); // Opening bracket
     while (!closesBlock(close, indent, line)) {
       var elt = parseExpression(true);
