@@ -190,7 +190,7 @@
   }
 
   function tokenStartsLine() {
-    for (var p = token.start - 1; p > curLineStart; --p) {
+    for (var p = token.start - 1; p >= curLineStart; --p) {
       var ch = input.charCodeAt(p);
       if (ch !== 9 && ch !== 32) return false;
     }
