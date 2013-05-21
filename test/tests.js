@@ -26128,6 +26128,21 @@ test("if(1)/  foo/", {
   ]
 });
 
+test("price_9̶9̶_89", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Identifier",
+        name: "price_9̶9̶_89",
+        start: 0,
+        end: 13
+      }
+    }
+  ]
+});
+
 // option tests
 
 test("var a = 1;", {
