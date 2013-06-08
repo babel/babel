@@ -101,7 +101,7 @@
 
   function setOptions(opts) {
     options = opts || {};
-    for (var opt in defaultOptions) if (!options.hasOwnProperty(opt))
+    for (var opt in defaultOptions) if (!Object.prototype.hasOwnProperty.call(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || null;
   }
