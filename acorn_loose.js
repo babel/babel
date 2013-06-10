@@ -181,10 +181,10 @@
     }
   }
 
-  function closesBlock(closeTok, indent, line) {
+  function closes(closeTok, indent, line, blockHeuristic) {
     if (token.type === closeTok || token.type === tt.eof) return true;
     if (line != curLineStart && curIndent < indent && tokenStartsLine() &&
-        (nextLineStart >= input.length ||
+        (!blockHeuristic || nextLineStart >= input.length ||
          indentationAfter(nextLineStart) < indent)) return true;
     return false;
   }
@@ -352,7 +352,7 @@
       pushCx();
       expect(tt.braceL);
 
-      for (var cur; !closesBlock(tt.braceR, blockIndent, line);) {
+      for (var cur; !closes(tt.braceR, blockIndent, line, true);) {
         if (token.type === tt._case || token.type === tt._default) {
           var isCase = token.type === tt._case;
           if (cur) finishNode(cur, "SwitchCase");
@@ -449,7 +449,7 @@
     expect(tt.braceL);
     var blockIndent = curIndent, line = curLineStart;
     node.body = [];
-    while (!closesBlock(tt.braceR, blockIndent, line))
+    while (!closes(tt.braceR, blockIndent, line, true))
       node.body.push(parseStatement());
     popCx();
     eat(tt.braceR);
@@ -698,7 +698,7 @@
     pushCx();
     next();
     var propIndent = curIndent, line = curLineStart;
-    while (!closesBlock(tt.braceR, propIndent, line)) {
+    while (!closes(tt.braceR, propIndent, line)) {
       var name = parsePropertyName();
       if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       var prop = {key: name}, isGetSet = false, kind;
@@ -755,12 +755,12 @@
   }
 
   function parseExprList(close) {
-    var indent = curIndent, line = curLineStart, elts = [];
+    var indent = curIndent, line = curLineStart, elts = [], continuedLine = nextLineStart;
     next(); // Opening bracket
-    while (!closesBlock(close, indent, line)) {
+    while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
       var elt = parseExpression(true);
       if (isDummy(elt)) {
-        if (closesBlock(close, indent, line)) break;
+        if (closes(close, indent, line)) break;
         next();
       } else {
         elts.push(elt);
