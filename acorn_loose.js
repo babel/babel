@@ -213,7 +213,7 @@
     var node = new node_t(token.start);
     if (options.locations)
       node.loc = new node_loc_t();
-    return node
+    return node;
   }
 
   function startNodeFrom(other) {
@@ -644,7 +644,7 @@
     case tt._null: case tt._true: case tt._false:
       var node = startNode();
       node.value = token.type.atomValue;
-      node.raw = token.type.keyword
+      node.raw = token.type.keyword;
       next();
       return finishNode(node, "Literal");
 
