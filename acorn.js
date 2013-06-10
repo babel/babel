@@ -328,7 +328,7 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, question: _question, slash: _slash, eq: _eq, name: _name, eof: _eof,
                       num: _num, regexp: _regexp, string: _string};
-  for (var kw in keywordTypes) exports.tokTypes[kw] = keywordTypes[kw];
+  for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a

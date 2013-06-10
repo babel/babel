@@ -291,60 +291,60 @@
     var starttype = token.type, node = startNode();
 
     switch (starttype) {
-    case tt.break: case tt.continue:
+    case tt._break: case tt._continue:
       next();
-      var isBreak = starttype === tt.break;
+      var isBreak = starttype === tt._break;
       node.label = token.type === tt.name ? parseIdent() : null;
       semicolon();
       return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
 
-    case tt.debugger:
+    case tt._debugger:
       next();
       semicolon();
       return finishNode(node, "DebuggerStatement");
 
-    case tt.do:
+    case tt._do:
       next();
       node.body = parseStatement();
-      node.test = eat(tt.while) ? parseParenExpression() : dummyIdent();
+      node.test = eat(tt._while) ? parseParenExpression() : dummyIdent();
       semicolon();
       return finishNode(node, "DoWhileStatement");
 
-    case tt.for:
+    case tt._for:
       next();
       pushCx();
       expect(tt.parenL);
       if (token.type === tt.semi) return parseFor(node, null);
-      if (token.type === tt.var) {
+      if (token.type === tt._var) {
         var init = startNode();
         next();
         parseVar(init, true);
-        if (init.declarations.length === 1 && eat(tt.in))
+        if (init.declarations.length === 1 && eat(tt._in))
           return parseForIn(node, init);
         return parseFor(node, init);
       }
       var init = parseExpression(false, true);
-      if (eat(tt.in)) {return parseForIn(node, checkLVal(init));}
+      if (eat(tt._in)) {return parseForIn(node, checkLVal(init));}
       return parseFor(node, init);
 
-    case tt.function:
+    case tt._function:
       next();
       return parseFunction(node, true);
 
-    case tt.if:
+    case tt._if:
       next();
       node.test = parseParenExpression();
       node.consequent = parseStatement();
-      node.alternate = eat(tt.else) ? parseStatement() : null;
+      node.alternate = eat(tt._else) ? parseStatement() : null;
       return finishNode(node, "IfStatement");
 
-    case tt.return:
+    case tt._return:
       next();
       if (eat(tt.semi) || canInsertSemicolon()) node.argument = null;
       else { node.argument = parseExpression(); semicolon(); }
       return finishNode(node, "ReturnStatement");
 
-    case tt.switch:
+    case tt._switch:
       var blockIndent = curIndent, line = curLineStart;
       next();
       node.discriminant = parseParenExpression();
@@ -353,8 +353,8 @@
       expect(tt.braceL);
 
       for (var cur; !closesBlock(tt.braceR, blockIndent, line);) {
-        if (token.type === tt.case || token.type === tt.default) {
-          var isCase = token.type === tt.case;
+        if (token.type === tt._case || token.type === tt._default) {
+          var isCase = token.type === tt._case;
           if (cur) finishNode(cur, "SwitchCase");
           node.cases.push(cur = startNode());
           cur.consequent = [];
@@ -376,17 +376,17 @@
       eat(tt.braceR);
       return finishNode(node, "SwitchStatement");
 
-    case tt.throw:
+    case tt._throw:
       next();
       node.argument = parseExpression();
       semicolon();
       return finishNode(node, "ThrowStatement");
 
-    case tt.try:
+    case tt._try:
       next();
       node.block = parseBlock();
       node.handler = null;
-      if (token.type === tt.catch) {
+      if (token.type === tt._catch) {
         var clause = startNode();
         next();
         expect(tt.parenL);
@@ -396,23 +396,23 @@
         clause.body = parseBlock();
         node.handler = finishNode(clause, "CatchClause");
       }
-      node.finalizer = eat(tt.finally) ? parseBlock() : null;
+      node.finalizer = eat(tt._finally) ? parseBlock() : null;
       if (!node.handler && !node.finalizer) return node.block;
       return finishNode(node, "TryStatement");
 
-    case tt.var:
+    case tt._var:
       next();
       node = parseVar(node);
       semicolon();
       return node;
 
-    case tt.while:
+    case tt._while:
       next();
       node.test = parseParenExpression();
       node.body = parseStatement();
       return finishNode(node, "WhileStatement");
 
-    case tt.with:
+    case tt._with:
       next();
       node.object = parseParenExpression();
       node.body = parseStatement();
@@ -542,7 +542,7 @@
   function parseExprOp(left, minPrec, noIn, indent, line) {
     if (curLineStart != line && curIndent < indent && tokenStartsLine()) return left;
     var prec = token.type.binop;
-    if (prec != null && (!noIn || token.type !== tt.in)) {
+    if (prec != null && (!noIn || token.type !== tt._in)) {
       if (prec > minPrec) {
         var node = startNodeFrom(left);
         node.left = left;
@@ -628,7 +628,7 @@
 
   function parseExprAtom() {
     switch (token.type) {
-    case tt.this:
+    case tt._this:
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
@@ -641,7 +641,7 @@
       next();
       return finishNode(node, "Literal");
 
-    case tt.null: case tt.true: case tt.false:
+    case tt._null: case tt._true: case tt._false:
       var node = startNode();
       node.value = token.type.atomValue;
       node.raw = token.type.keyword
@@ -666,12 +666,12 @@
     case tt.braceL:
       return parseObj();
 
-    case tt.function:
+    case tt._function:
       var node = startNode();
       next();
       return parseFunction(node, false);
 
-    case tt.new:
+    case tt._new:
       return parseNew();
 
     default:
