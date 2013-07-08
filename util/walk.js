@@ -144,7 +144,7 @@
   };
 
   function skipThrough(node, st, c) { c(node, st); }
-  function ignore(node, st, c) {}
+  function ignore(_node, _st, _c) {}
 
   // Node walkers.
 

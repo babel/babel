@@ -110,7 +110,6 @@ reset the internal state, and invalidate existing tokenizers.</p>             </
           <span class="nx">tokLineStart</span> <span class="o">=</span> <span class="nx">match</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="nx">match</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">ch</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
       <span class="nx">tokRegexpAllowed</span> <span class="o">=</span> <span class="nx">reAllowed</span><span class="p">;</span>
       <span class="nx">skipSpace</span><span class="p">();</span>
     <span class="p">};</span>
@@ -978,11 +977,11 @@ function bodies).</p>             </td>             <td class="code">           
     <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_braceR</span><span class="p">))</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">stmt</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stmt</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">first</span> <span class="o">&amp;&amp;</span> <span class="nx">isUseStrict</span><span class="p">(</span><span class="nx">stmt</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">first</span> <span class="o">&amp;&amp;</span> <span class="nx">allowStrict</span> <span class="o">&amp;&amp;</span> <span class="nx">isUseStrict</span><span class="p">(</span><span class="nx">stmt</span><span class="p">))</span> <span class="p">{</span>
         <span class="nx">oldStrict</span> <span class="o">=</span> <span class="nx">strict</span><span class="p">;</span>
         <span class="nx">setStrict</span><span class="p">(</span><span class="nx">strict</span> <span class="o">=</span> <span class="kc">true</span><span class="p">);</span>
       <span class="p">}</span>
-      <span class="nx">first</span> <span class="o">=</span> <span class="kc">false</span>
+      <span class="nx">first</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oldStrict</span><span class="p">)</span> <span class="nx">setStrict</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;BlockStatement&quot;</span><span class="p">);</span>
@@ -1146,7 +1145,7 @@ or <code>{}</code>.</p>             </td>             <td class="code">         
     <span class="k">case</span> <span class="nx">_null</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_true</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_false</span><span class="o">:</span>
       <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">atomValue</span><span class="p">;</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">raw</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">keyword</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nx">raw</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">keyword</span><span class="p">;</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;Literal&quot;</span><span class="p">);</span>
 

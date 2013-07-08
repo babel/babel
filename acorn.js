@@ -154,7 +154,6 @@
           tokLineStart = match.index + match[0].length;
         }
       }
-      var ch = input.charAt(pos - 1);
       tokRegexpAllowed = reAllowed;
       skipSpace();
     };
@@ -1332,11 +1331,11 @@
     while (!eat(_braceR)) {
       var stmt = parseStatement();
       node.body.push(stmt);
-      if (first && isUseStrict(stmt)) {
+      if (first && allowStrict && isUseStrict(stmt)) {
         oldStrict = strict;
         setStrict(strict = true);
       }
-      first = false
+      first = false;
     }
     if (strict && !oldStrict) setStrict(false);
     return finishNode(node, "BlockStatement");
@@ -1548,7 +1547,7 @@
     case _null: case _true: case _false:
       var node = startNode();
       node.value = tokType.atomValue;
-      node.raw = tokType.keyword
+      node.raw = tokType.keyword;
       next();
       return finishNode(node, "Literal");
 

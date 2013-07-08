@@ -168,10 +168,6 @@
     while (pos < input.length && !isNewline(input.charCodeAt(pos))) ++pos;
     return pos;
   }
-  function lineStart(pos) {
-    while (pos > 0 && !isNewline(input.charCodeAt(pos - 1))) --pos;
-    return pos;
-  }
   function indentationAfter(pos) {
     for (var count = 0;; ++pos) {
       var ch = input.charCodeAt(pos);
@@ -426,7 +422,7 @@
       return finishNode(node, "EmptyStatement");
 
     default:
-      var maybeName = token.value, expr = parseExpression();
+      var expr = parseExpression();
       if (isDummy(expr)) {
         next();
         if (token.type === tt.eof) return finishNode(node, "EmptyStatement");
@@ -582,8 +578,7 @@
   }
 
   function parseExprSubscripts() {
-    var indent = curIndent, line = curLineStart;
-    return parseSubscripts(parseExprAtom(), false, curIndent, line);
+    return parseSubscripts(parseExprAtom(), false, curIndent, curLineStart);
   }
 
   function parseSubscripts(base, noCalls, startIndent, line) {
