@@ -228,6 +228,10 @@
     throw err;
   }
 
+  // Reused empty array added for node fields that are always empty.
+
+  var empty = [];
+
   // ## Token types
 
   // The assignment of fine-grained, information-carrying type objects
@@ -1248,6 +1252,7 @@
         clause.body = parseBlock();
         node.handler = finishNode(clause, "CatchClause");
       }
+      node.guardedHandlers = empty;
       node.finalizer = eat(_finally) ? parseBlock() : null;
       if (!node.handler && !node.finalizer)
         raise(node.start, "Missing catch or finally clause");
@@ -1593,7 +1598,7 @@
     next();
     node.callee = parseSubscripts(parseExprAtom(), true);
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
-    else node.arguments = [];
+    else node.arguments = empty;
     return finishNode(node, "NewExpression");
   }
 
