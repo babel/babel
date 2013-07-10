@@ -539,7 +539,7 @@
         } else if (next === 47) { // '/'
           skipLineComment();
         } else break;
-      } else if ((ch < 14 && ch > 8) || ch === 32 || ch === 160) { // ' ', '\xa0'
+      } else if (ch === 160) { // '\xa0'
         ++tokPos;
       } else if (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
         ++tokPos;
