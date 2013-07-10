@@ -147,7 +147,8 @@
     getToken.jumpTo = function(pos, reAllowed) {
       tokPos = pos;
       if (options.locations) {
-        tokCurLine = tokLineStart = lineBreak.lastIndex = 0;
+        tokCurLine = 1;
+        tokLineStart = lineBreak.lastIndex = 0;
         var match;
         while ((match = lineBreak.exec(input)) && match.index < pos) {
           ++tokCurLine;
