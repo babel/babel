@@ -1443,7 +1443,7 @@
   // Start the precedence parser.
 
   function parseExprOps(noIn) {
-    return parseExprOp(parseMaybeUnary(noIn), -1, noIn);
+    return parseExprOp(parseMaybeUnary(), -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -1460,7 +1460,7 @@
         node.left = left;
         node.operator = tokVal;
         next();
-        node.right = parseExprOp(parseMaybeUnary(noIn), prec, noIn);
+        node.right = parseExprOp(parseMaybeUnary(), prec, noIn);
         var node = finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
         return parseExprOp(node, minPrec, noIn);
       }
@@ -1470,13 +1470,13 @@
 
   // Parse unary operators, both prefix and postfix.
 
-  function parseMaybeUnary(noIn) {
+  function parseMaybeUnary() {
     if (tokType.prefix) {
       var node = startNode(), update = tokType.isUpdate;
       node.operator = tokVal;
       node.prefix = true;
       next();
-      node.argument = parseMaybeUnary(noIn);
+      node.argument = parseMaybeUnary();
       if (update) checkLVal(node.argument);
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
