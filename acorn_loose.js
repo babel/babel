@@ -29,11 +29,11 @@
 // invasive changes and simplifications without creating a complicated
 // tangle.
 
-(function(mod) {
+(function(root, mod) {
   if (typeof exports == "object" && typeof module == "object") return mod(exports, require("./acorn")); // CommonJS
   if (typeof define == "function" && define.amd) return define(["exports", "./acorn"], mod); // AMD
-  mod(this.acorn || (this.acorn = {}), this.acorn); // Plain browser env
-})(function(exports, acorn) {
+  mod(root.acorn || (root.acorn = {}), root.acorn); // Plain browser env
+})(this, function(exports, acorn) {
   "use strict";
 
   var tt = acorn.tokTypes;
