@@ -26235,7 +26235,36 @@ test("var a = 1;", {
 }, {
   locations: true,
   sourceFile: "test.js"
-})
+});
+
+test("a.in / b", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "BinaryExpression",
+        left: {
+          type: "MemberExpression",
+          object: {
+            type: "Identifier",
+            name: "a"
+          },
+          property: {
+            type: "Identifier",
+            name: "in"
+          },
+          computed: false
+        },
+        operator: "/",
+        right: {
+          type: "Identifier",
+          name: "b"
+        }
+      }
+    }
+  ]
+});
 
 // Failure tests
 

@@ -1717,6 +1717,7 @@
   function parseIdent(liberal) {
     var node = startNode();
     node.name = tokType === _name ? tokVal : (liberal && !options.forbidReserved && tokType.keyword) || unexpected();
+    tokRegexpAllowed = false;
     next();
     return finishNode(node, "Identifier");
   }
