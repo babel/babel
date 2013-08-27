@@ -752,6 +752,7 @@
   function parseExprList(close) {
     var indent = curIndent, line = curLineStart, elts = [], continuedLine = nextLineStart;
     next(); // Opening bracket
+    if (curLineStart > continuedLine) continuedLine = curLineStart;
     while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
       var elt = parseExpression(true);
       if (isDummy(elt)) {
