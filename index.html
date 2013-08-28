@@ -1082,6 +1082,7 @@ operator that has a lower precedence than the set it is parsing.</p>            
       <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">(),</span> <span class="nx">update</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">isUpdate</span><span class="p">;</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">operator</span> <span class="o">=</span> <span class="nx">tokVal</span><span class="p">;</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">tokRegexpAllowed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseMaybeUnary</span><span class="p">();</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">update</span><span class="p">)</span> <span class="nx">checkLVal</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">argument</span><span class="p">);</span>

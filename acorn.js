@@ -1476,6 +1476,7 @@
       var node = startNode(), update = tokType.isUpdate;
       node.operator = tokVal;
       node.prefix = true;
+      tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
       if (update) checkLVal(node.argument);
