@@ -776,7 +776,7 @@ to its body instead of creating a new node.</p>             </td>             <t
 regular expression literal. This is to handle cases like
 <code>if (foo) /blah/.exec(foo);</code>, where looking at the previous token
 does not help.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseStatement</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_slash</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_slash</span> <span class="o">||</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_assign</span> <span class="o">&amp;&amp;</span> <span class="nx">tokVal</span> <span class="o">==</span> <span class="s2">&quot;/=&quot;</span><span class="p">)</span>
       <span class="nx">readToken</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
 
     <span class="kd">var</span> <span class="nx">starttype</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">,</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-93">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-93">&#182;</a>               </div>               <p>Most types of statements are recognized by the keyword they

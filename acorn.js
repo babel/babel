@@ -1099,7 +1099,7 @@
   // does not help.
 
   function parseStatement() {
-    if (tokType === _slash)
+    if (tokType === _slash || tokType === _assign && tokVal == "/=")
       readToken(true);
 
     var starttype = tokType, node = startNode();

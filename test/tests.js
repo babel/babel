@@ -26266,6 +26266,23 @@ test("a.in / b", {
   ]
 });
 
+test("{}/=/", {
+  type: "Program",
+  body: [
+    {
+      type: "BlockStatement",
+      body: []
+    },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        raw: "/=/"
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",
@@ -26874,4 +26891,3 @@ testFail("throw\n10;", "Illegal newline after throw (1:5)");
     }
   );
 })();
-  
