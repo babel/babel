@@ -2,13 +2,13 @@
 
 var path = require('path');
 var fs = require('fs');
-var acorn = require(path.join(path.dirname(fs.realpathSync(__filename)), "../acorn.js"));
+var acorn = require('../acorn.js');
 
 var infile, parsed, options = {}, silent = false, compact = false;
 
 function help(status) {
   console.log("usage: " + path.basename(process.argv[1]) + " infile [--ecma3|--ecma5] [--strictSemicolons]");
-  console.log("        [--trackComments] [--locations] [--compact] [--silent] [--help]");
+  console.log("        [--locations] [--compact] [--silent] [--help]");
   process.exit(status);
 }
 
