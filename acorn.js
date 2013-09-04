@@ -517,13 +517,13 @@
       var ch = input.charCodeAt(tokPos);
       if (ch === 32) { // ' '
         ++tokPos;
-      } else if(ch === 13) {
+      } else if (ch === 13) {
         ++tokPos;
         var next = input.charCodeAt(tokPos);
-        if(next === 10) {
+        if (next === 10) {
           ++tokPos;
         }
-        if(options.locations) {
+        if (options.locations) {
           ++tokCurLine;
           tokLineStart = tokPos;
         }
@@ -531,7 +531,7 @@
         ++tokPos;
         ++tokCurLine;
         tokLineStart = tokPos;
-      } else if(ch < 14 && ch > 8) {
+      } else if (ch > 8 && ch < 14) {
         ++tokPos;
       } else if (ch === 47) { // '/'
         var next = input.charCodeAt(tokPos+1);
