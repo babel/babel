@@ -534,7 +534,7 @@
       } else if (ch > 8 && ch < 14) {
         ++tokPos;
       } else if (ch === 47) { // '/'
-        var next = input.charCodeAt(tokPos+1);
+        var next = input.charCodeAt(tokPos + 1);
         if (next === 42) { // '*'
           skipBlockComment();
         } else if (next === 47) { // '/'
@@ -563,52 +563,68 @@
   // `tokRegexpAllowed` trick does not work. See `parseStatement`.
 
   function readToken_dot() {
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
     ++tokPos;
     return finishToken(_dot);
   }
 
   function readToken_slash() { // '/'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (tokRegexpAllowed) {++tokPos; return readRegexp();}
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_slash, 1);
   }
 
   function readToken_mult_modulo() { // '%*'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_bin10, 1);
   }
 
   function readToken_pipe_amp(code) { // '|&'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (next === code) return finishOp(code === 124 ? _bin1 : _bin2, 2);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(code === 124 ? _bin3 : _bin5, 1);
   }
 
   function readToken_caret() { // '^'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_bin4, 1);
   }
 
   function readToken_plus_min(code) { // '+-'
-    var next = input.charCodeAt(tokPos+1);
-    if (next === code) return finishOp(_incdec, 2);
+    var next = input.charCodeAt(tokPos + 1);
+    if (next === code) {
+      if (next == 45 && input.charCodeAt(tokPos + 2) == 62 && lastEnd < tokLineStart) {
+        // A '-->' line comment
+        tokPos += 3;
+        skipLineComment();
+        skipSpace();
+        return readToken();
+      }
+      return finishOp(_incdec, 2);
+    }
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_plusmin, 1);
   }
 
   function readToken_lt_gt(code) { // '<>'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     var size = 1;
     if (next === code) {
       size = code === 62 && input.charCodeAt(tokPos+2) === 62 ? 3 : 2;
       if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
       return finishOp(_bin8, size);
+    }
+    if (next == 33 && code == 60 && input.charCodeAt(tokPos + 2) == 45 && input.charCodeAt(tokPos + 3) == 45) {
+      // '<!--', an XML-style comment that should be interpreted as a line comment
+      tokPos += 4;
+      skipLineComment();
+      skipSpace();
+      return readToken();
     }
     if (next === 61)
       size = input.charCodeAt(tokPos+2) === 61 ? 3 : 2;
@@ -616,7 +632,7 @@
   }
 
   function readToken_eq_excl(code) { // '=!'
-    var next = input.charCodeAt(tokPos+1);
+    var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_bin6, input.charCodeAt(tokPos+2) === 61 ? 3 : 2);
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
@@ -642,7 +658,7 @@
 
       // '0x' is a hexadecimal number.
     case 48: // '0'
-      var next = input.charCodeAt(tokPos+1);
+      var next = input.charCodeAt(tokPos + 1);
       if (next === 120 || next === 88) return readHexNumber();
       // Anything else beginning with a digit is an integer, octal
       // number, or float.

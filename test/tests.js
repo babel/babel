@@ -26283,6 +26283,71 @@ test("{}/=/", {
   ]
 });
 
+test("foo <!--bar\n+baz", {
+  type: "Program",
+  start: 0,
+  end: 16,
+  body: [
+    {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 16,
+      expression: {
+        type: "BinaryExpression",
+        start: 0,
+        end: 16,
+        left: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "foo"
+        },
+        operator: "+",
+        right: {
+          type: "Identifier",
+          start: 13,
+          end: 16,
+          name: "baz"
+        }
+      }
+    }
+  ]
+});
+
+test("x = y-->10;\n --> nothing", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        operator: "=",
+        left: {
+          type: "Identifier",
+          name: "x"
+        },
+        right: {
+          type: "BinaryExpression",
+          left: {
+            type: "UpdateExpression",
+            operator: "--",
+            prefix: false,
+            argument: {
+              type: "Identifier",
+              name: "y"
+            }
+          },
+          operator: ">",
+          right: {
+            type: "Literal",
+            value: 10
+          }
+        }
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",
