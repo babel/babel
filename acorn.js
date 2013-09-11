@@ -599,7 +599,7 @@
     var next = input.charCodeAt(tokPos + 1);
     if (next === code) {
       if (next == 45 && input.charCodeAt(tokPos + 2) == 62 && lastEnd < tokLineStart) {
-        // A '-->' line comment
+        // A `-->` line comment
         tokPos += 3;
         skipLineComment();
         skipSpace();
@@ -620,7 +620,8 @@
       return finishOp(_bin8, size);
     }
     if (next == 33 && code == 60 && input.charCodeAt(tokPos + 2) == 45 &&
-        input.charCodeAt(tokPos + 3) == 45) { // '<!--', an XML-style comment that should be interpreted as a line comment
+        input.charCodeAt(tokPos + 3) == 45) {
+      // `<!--`, an XML-style comment that should be interpreted as a line comment
       tokPos += 4;
       skipLineComment();
       skipSpace();
