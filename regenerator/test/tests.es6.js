@@ -172,3 +172,28 @@ describe("try-catch-finally generator", function() {
     check(gen(), [0, 1, 2, 3, 6]);
   });
 });
+
+describe("dynamic exception", function() {
+  function *gen(x, fname) {
+    try {
+      return fns[fname](x);
+    } catch (thrown) {
+      yield thrown;
+    }
+  }
+
+  var fns = {
+    f: function(x) {
+      throw x;
+    },
+
+    g: function(x) {
+      return x;
+    }
+  };
+
+  it("should be dispatched correctly", function() {
+    check(gen("asdf", "f"), ["asdf"]);
+    check(gen("asdf", "g"), [], "asdf");
+  });
+});
