@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var file = process.argv[2];
+
+require("assert").strictEqual(
+  typeof file, "string",
+  "Missing argument for " + __filename
+);
+
+require("fs").readFile(file, "utf-8", function(err, source) {
+  if (err) throw err;
+  process.stdout.write(require("regenerator")(source));
+});
