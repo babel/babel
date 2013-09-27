@@ -1,4 +1,5 @@
 var assert = require("assert");
+var path = require("path");
 var transform = require("./lib/visit").transform;
 var guessTabWidth = require("./lib/util").guessTabWidth;
 var recast = require("recast");
@@ -22,6 +23,11 @@ function regenerate(source) {
 
 // To modify an AST directly, call require("regenerator").transform(ast).
 regenerate.transform = transform;
+
+regenerate.runtime = {
+  dev: path.join(__dirname, "runtime", "dev.js"),
+  min: path.join(__dirname, "runtime", "min.js")
+};
 
 // To transform a string of ES6 code, call require("regenerator")(source);
 module.exports = regenerate;
