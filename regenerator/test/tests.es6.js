@@ -243,3 +243,14 @@ describe("for-in loop generator", function() {
       ["why not", ["a", 1], ["b", 2]], 2);
   });
 });
+
+describe("yield chain", function() {
+  function *gen(n) {
+    return yield yield yield yield n;
+  }
+
+  it("should have correct associativity", function() {
+    check(gen(5), [5, 1, 2, 3], 4);
+    check(gen("asdf"), ["asdf", 1, 2, 3], 4);
+  });
+});
