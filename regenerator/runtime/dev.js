@@ -37,11 +37,11 @@
 
     function assertCanInvoke() {
       if (state === GenStateExecuting) {
-        throw new TypeError("generator already executing");
+        throw new Error("Generator is already running");
       }
 
       if (state === GenStateCompleted) {
-        throw new TypeError("generator already completed");
+        throw new Error("Generator has already finished");
       }
     }
 

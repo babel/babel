@@ -356,10 +356,10 @@ describe("generator reentry attempt", function() {
     var g = gen(3);
     assert.deepEqual(g.next(), { value: 3, done: false });
     var complaint = g.next(g); // Sending the generator to itself.
-    assert.ok(complaint.value instanceof TypeError);
+    assert.ok(complaint.value instanceof Error);
     assert.strictEqual(
       complaint.value.message,
-      "generator already executing"
+      "Generator is already running"
     );
     assert.deepEqual(g.next(), { value: 4, done: true });
   });
@@ -381,8 +381,11 @@ describe("completed generator", function() {
       g.next();
       assert.ok(false, "should have thrown an exception");
     } catch (err) {
-      assert.ok(err instanceof TypeError);
-      assert.strictEqual(err.message, "generator already completed");
+      assert.ok(err instanceof Error);
+      assert.strictEqual(
+        err.message,
+        "Generator has already finished"
+      );
     }
   });
 });
