@@ -148,3 +148,27 @@ describe("try-finally generator", function() {
     check(gen(false), [0, 1, 6], 7);
   });
 });
+
+describe("try-catch-finally generator", function() {
+  function *gen() {
+    yield 0;
+    try {
+      try {
+        yield 1;
+        throw 2;
+        yield 3;
+      } catch (x) {
+        throw yield x;
+      } finally {
+        yield 5;
+      }
+    } catch (thrown) {
+      yield thrown;
+    }
+    yield 6;
+  }
+
+  it("should catch and then finalize", function() {
+    check(gen(), [0, 1, 2, 3, 6]);
+  });
+});
