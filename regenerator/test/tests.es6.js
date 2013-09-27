@@ -341,3 +341,48 @@ describe("generator function expression", function() {
     }(3, 7), [3, 7, 10], 21);
   })
 });
+
+describe("generator reentry attempt", function() {
+  function *gen(x) {
+    try {
+      (yield x).next(x);
+    } catch (err) {
+      yield err;
+    }
+    return x + 1;
+  }
+
+  it("should complain with a TypeError", function() {
+    var g = gen(3);
+    assert.deepEqual(g.next(), { value: 3, done: false });
+    var complaint = g.next(g); // Sending the generator to itself.
+    assert.ok(complaint.value instanceof TypeError);
+    assert.strictEqual(
+      complaint.value.message,
+      "generator already executing"
+    );
+    assert.deepEqual(g.next(), { value: 4, done: true });
+  });
+});
+
+describe("completed generator", function() {
+  function *gen() {
+    return "ALL DONE";
+  }
+
+  it("should refuse to resume", function() {
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: "ALL DONE", done: true
+    });
+
+    try {
+      g.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.ok(err instanceof TypeError);
+      assert.strictEqual(err.message, "generator already completed");
+    }
+  });
+});

@@ -14,21 +14,43 @@
     exports.wrapGenerator = wrapGenerator;
   }
 
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
   function Generator(innerFn, self) {
     var generator = this;
     var context = new Context;
-    var firstCall = true;
+    var state = GenStateSuspendedStart;
 
     function invoke() {
+      state = GenStateExecuting;
       var value = innerFn.call(self, context);
+      // If an exception is thrown from innerFn, we leave state ===
+      // GenStateExecuting and loop back for another invocation.
+      state = context.done
+        ? GenStateCompleted
+        : GenStateSuspendedYield;
       return { value: value, done: context.done };
     }
 
+    function assertCanInvoke() {
+      if (state === GenStateExecuting) {
+        throw new TypeError("generator already executing");
+      }
+
+      if (state === GenStateCompleted) {
+        throw new TypeError("generator already completed");
+      }
+    }
+
     generator.next = function(value) {
-      if (!firstCall) {
+      assertCanInvoke();
+
+      if (state === GenStateSuspendedYield) {
         context.sent = value;
       }
-      firstCall = false;
 
       while (true) try {
         return invoke();
@@ -38,6 +60,13 @@
     };
 
     generator["throw"] = function(exception) {
+      assertCanInvoke();
+
+      if (state === GenStateSuspendedStart) {
+        state = GenStateCompleted;
+        throw exception;
+      }
+
       while (true) try {
         context.dispatchException(exception);
         return invoke();
