@@ -105,3 +105,23 @@ describe("collatz generator", function() {
     check(gen(82), eightyTwo, 110);
   });
 });
+
+describe("try-catch generator", function() {
+  function *gen(x) {
+    yield 0;
+    try {
+      yield 1;
+      if (x % 2 === 0)
+        throw 2;
+      yield x;
+    } catch (x) {
+      yield x;
+    }
+    yield 3;
+  }
+
+  it("should catch exceptions properly", function() {
+    check(gen(4), [0, 1, 2, 3]);
+    check(gen(5), [0, 1, 5, 3]);
+  });
+});
