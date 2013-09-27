@@ -103,6 +103,8 @@ Ep.stop = function(rval) {
 };
 
 Ep.setReturnValue = function(value) {
+  n.Expression.assert(value);
+
   this.emitAssign(
     this.contextProperty("rval"),
     this.explodeExpression(value)

@@ -238,7 +238,10 @@ LMp.emitReturn = function(argument) {
     throw new Error("illegal return statement");
   }
 
-  this.emitter.setReturnValue(argument);
+  if (argument) {
+    this.emitter.setReturnValue(argument);
+  }
+
   this.emitter.jump(loc);
 };
 
