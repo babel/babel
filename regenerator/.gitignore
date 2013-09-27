@@ -1,0 +1,5 @@
+npm-debug.log
+node_modules
+
+test/tests.es5.js
+test/tests.browser.js
