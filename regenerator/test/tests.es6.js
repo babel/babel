@@ -197,3 +197,27 @@ describe("dynamic exception", function() {
     check(gen("asdf", "g"), [], "asdf");
   });
 });
+
+describe("nested finally blocks", function() {
+  function *gen() {
+    try {
+      try {
+        try {
+          throw "thrown";
+        } finally {
+          yield 1;
+        }
+      } catch (thrown) {
+        yield thrown;
+      } finally {
+        yield 2;
+      }
+    } finally {
+      yield 3;
+    }
+  }
+
+  it("should execute in order", function() {
+    check(gen(), [1, "thrown", 2, 3]);
+  });
+});
