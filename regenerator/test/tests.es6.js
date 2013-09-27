@@ -268,3 +268,19 @@ describe("object literal generator", function() {
     check(gen(4, 2), [4, 2, { a: 3, b: 2 }]);
   });
 });
+
+describe("switch statement generator", function() {
+  function *gen(a) {
+    switch (yield a) {
+    case (yield "x") - a:
+      return "first case";
+    case (yield "y") - a:
+      return "second case";
+    }
+  }
+
+  it("should jump to the correct cases", function() {
+    check(gen(1), [1, "x"], "first case");
+    check(gen(2), [2, "x", "y"], "second case");
+  });
+});
