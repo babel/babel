@@ -23,6 +23,9 @@
     "url": "git://github.com/benjamn/regenerator.git"
   },
   "main": "main.js",
+  "bin": {
+    "regenerate": "bin/regenerate"
+  },
   "scripts": {
     "test": "node test/run.js"
   },

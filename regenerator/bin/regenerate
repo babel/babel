@@ -1,13 +1,12 @@
 #!/usr/bin/env node
+// -*- mode: js -*-
 
 var file = process.argv[2];
 
 require("assert").strictEqual(
   typeof file, "string",
-  "Missing argument for " + __filename
+  "Missing file argument for " + __filename
 );
 
-require("fs").readFile(file, "utf-8", function(err, source) {
-  if (err) throw err;
-  process.stdout.write(require("regenerator")(source));
-});
+var source = require("fs").readFileSync(file, "utf-8");
+process.stdout.write(require("regenerator")(source));
