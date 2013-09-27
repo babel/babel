@@ -254,3 +254,17 @@ describe("yield chain", function() {
     check(gen("asdf"), ["asdf", 1, 2, 3], 4);
   });
 });
+
+describe("object literal generator", function() {
+  function *gen(a, b) {
+    yield {
+      a: a - (yield a),
+      b: yield b
+    };
+  }
+
+  it("should yield the correct object", function() {
+    check(gen(1, 2), [1, 2, { a: 0, b: 2 }]);
+    check(gen(4, 2), [4, 2, { a: 3, b: 2 }]);
+  });
+});
