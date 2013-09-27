@@ -125,3 +125,26 @@ describe("try-catch generator", function() {
     check(gen(5), [0, 1, 5, 3]);
   });
 });
+
+describe("try-finally generator", function() {
+  function *gen(condition) {
+    yield 0;
+    try {
+      yield 1;
+      throw 2;
+      yield 3;
+    } finally {
+      if (condition) {
+        yield 4;
+        return 5;
+      }
+      yield 6;
+      return 7;
+    }
+  }
+
+  it("should execute finally blocks", function() {
+    check(gen(true), [0, 1, 4], 5);
+    check(gen(false), [0, 1, 6], 7);
+  });
+});
