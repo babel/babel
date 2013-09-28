@@ -19,6 +19,10 @@
   var GenStateExecuting = "executing";
   var GenStateCompleted = "completed";
 
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
   function Generator(innerFn, self) {
     var generator = this;
     var context = new Context;
@@ -26,7 +30,8 @@
 
     function invoke() {
       state = GenStateExecuting;
-      var value = innerFn.call(self, context);
+      do var value = innerFn.call(self, context);
+      while (value === ContinueSentinel);
       // If an exception is thrown from innerFn, we leave state ===
       // GenStateExecuting and loop back for another invocation.
       state = context.done
@@ -48,6 +53,15 @@
     generator.next = function(value) {
       assertCanInvoke();
 
+      if (context.delegate) {
+        var info = context.delegate.next(value);
+        if (info.done) {
+          context.delegate = null;
+        } else {
+          return info;
+        }
+      }
+
       if (state === GenStateSuspendedYield) {
         context.sent = value;
       }
@@ -61,6 +75,15 @@
 
     generator["throw"] = function(exception) {
       assertCanInvoke();
+
+      if (context.delegate) {
+        var info = context.delegate["throw"](exception);
+        if (info.done) {
+          context.delegate = null;
+        } else {
+          return info;
+        }
+      }
 
       if (state === GenStateSuspendedStart) {
         state = GenStateCompleted;
@@ -88,6 +111,7 @@
       this.sent = void 0;
       this.tryStack = [];
       this.done = false;
+      this.delegate = null;
 
       // Pre-initialize at least 20 temporary variables to enable hidden
       // class optimizations for simple generators.
@@ -180,6 +204,18 @@
       while ((entry = finallyEntries.pop())) {
         this[entry.finallyTempVarName] = this.next;
         this.next = entry.finallyLoc;
+      }
+    },
+
+    delegateYield: function(delegate, afterLoc) {
+      this.next = afterLoc;
+      var info = delegate.next(this.sent);
+      if (info.done) {
+        this.delegate = null;
+        return ContinueSentinel;
+      } else {
+        this.delegate = delegate;
+        return info.value;
       }
     }
   };

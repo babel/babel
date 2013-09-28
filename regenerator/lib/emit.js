@@ -905,8 +905,14 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   case "YieldExpression":
     var after = loc();
     var arg = expr.argument && self.explodeExpression(expr.argument);
-    self.emitAssign(self.contextProperty("next"), after);
-    self.emit(b.returnStatement(arg || null));
+    if (arg && expr.delegate) {
+      self.emit(b.returnStatement(b.callExpression(
+        self.contextProperty("delegateYield"), [arg, after]
+      )));
+    } else {
+      self.emitAssign(self.contextProperty("next"), after);
+      self.emit(b.returnStatement(arg || null));
+    }
     self.mark(after);
     return self.contextProperty("sent");
 

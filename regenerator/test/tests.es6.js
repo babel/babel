@@ -389,3 +389,72 @@ describe("completed generator", function() {
     }
   });
 });
+
+describe("delegated yield", function() {
+  it("should delegate correctly", function() {
+    function *gen(condition) {
+      yield 0;
+      if (condition) {
+        yield 1;
+        yield* gen(false);
+        yield 2;
+      }
+      yield 3;
+    }
+
+    check(gen(true), [0, 1, 0, 3, 2, 3]);
+    check(gen(false), [0, 3]);
+  });
+
+  it("should cope with empty delegatees", function() {
+    function *gen(condition) {
+      if (condition) {
+        yield 0;
+        yield* gen(false);
+        yield 1;
+      }
+    }
+
+    check(gen(true), [0, 1]);
+    check(gen(false), []);
+  });
+
+  it("should support deeper nesting", function() {
+    function *outer(n) {
+      yield n;
+      yield* middle(n - 1, inner(n + 10));
+      yield n + 1;
+    }
+
+    function *middle(n, plusTen) {
+      yield n;
+      yield* inner(n - 1);
+      yield n + 1;
+      yield* plusTen;
+    }
+
+    function *inner(n) {
+      yield n;
+    }
+
+    check(outer(5), [5, 4, 3, 5, 15, 6]);
+  });
+
+  it("should pass sent values through", function() {
+    function *outer(n) {
+      yield* inner(n << 1);
+      yield "zxcv";
+    }
+
+    function *inner(n) {
+      return yield yield yield n;
+    }
+
+    var g = outer(3);
+    assert.deepEqual(g.next(), { value: 6, done: false });
+    assert.deepEqual(g.next(1), { value: 1, done: false });
+    assert.deepEqual(g.next(2), { value: 2, done: false });
+    assert.deepEqual(g.next(4), { value: "zxcv", done: false });
+    assert.deepEqual(g.next(5), { value: void 0, done: true });
+  });
+});
