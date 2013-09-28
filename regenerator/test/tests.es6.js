@@ -169,7 +169,7 @@ describe("try-catch-finally generator", function() {
   }
 
   it("should catch and then finalize", function() {
-    check(gen(), [0, 1, 2, 3, 6]);
+    check(gen(), [0, 1, 2, 5, 3, 6]);
   });
 });
 

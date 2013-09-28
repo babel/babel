@@ -141,22 +141,30 @@ LMp.withEntry = function(entry, callback) {
 LMp._leapToEntry = function(predicate, defaultLoc) {
   var entry, loc;
   var finallyEntries = [];
-  var skipNextTryEntry = false;
+  var skipNextTryEntry = null;
 
   for (var i = this.entryStack.length - 1; i >= 0; --i) {
     entry = this.entryStack[i];
 
     if (entry instanceof CatchEntry ||
-      entry instanceof FinallyEntry) {
+        entry instanceof FinallyEntry) {
 
       // If we are inside of a catch or finally block, then we must
       // have exited the try block already, so we shouldn't consider
       // the next TryStatement as a handler for this throw.
-      skipNextTryEntry = true;
+      skipNextTryEntry = entry;
 
     } else if (entry instanceof TryEntry) {
       if (skipNextTryEntry) {
-        skipNextTryEntry = false;
+        // If an exception was thrown from inside a catch block and this
+        // try statement has a finally block, make sure we execute that
+        // finally block.
+        if (skipNextTryEntry instanceof CatchEntry &&
+            entry.finallyEntry) {
+          finallyEntries.push(entry.finallyEntry);
+        }
+
+        skipNextTryEntry = null;
 
       } else if ((loc = predicate.call(this, entry))) {
         break;
