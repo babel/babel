@@ -14,6 +14,12 @@ function check(g, yields, returnValue) {
   });
 }
 
+// A version of `throw` whose behavior can't be statically analyzed.
+// Useful for testing dynamic exception dispatching.
+function raise(argument) {
+  throw argument;
+}
+
 describe("wrapGenerator", function() {
   it("should be defined globally", function() {
     var global = Function("return this")();
@@ -107,7 +113,7 @@ describe("collatz generator", function() {
 });
 
 describe("try-catch generator", function() {
-  function *gen(x) {
+  function *usingThrow(x) {
     yield 0;
     try {
       yield 1;
@@ -120,14 +126,32 @@ describe("try-catch generator", function() {
     yield 3;
   }
 
-  it("should catch exceptions properly", function() {
-    check(gen(4), [0, 1, 2, 3]);
-    check(gen(5), [0, 1, 5, 3]);
+  function *usingRaise(x) {
+    yield 0;
+    try {
+      yield 1;
+      if (x % 2 === 0)
+        raise(2);
+      yield x;
+    } catch (x) {
+      yield x;
+    }
+    yield 3;
+  }
+
+  it("should catch static exceptions properly", function() {
+    check(usingThrow(4), [0, 1, 2, 3]);
+    check(usingThrow(5), [0, 1, 5, 3]);
+  });
+
+  it("should catch dynamic exceptions properly", function() {
+    check(usingRaise(4), [0, 1, 2, 3]);
+    check(usingRaise(5), [0, 1, 5, 3]);
   });
 });
 
 describe("try-finally generator", function() {
-  function *gen(condition) {
+  function *usingThrow(condition) {
     yield 0;
     try {
       yield 1;
@@ -143,14 +167,35 @@ describe("try-finally generator", function() {
     }
   }
 
-  it("should execute finally blocks", function() {
-    check(gen(true), [0, 1, 4], 5);
-    check(gen(false), [0, 1, 6], 7);
+  function *usingRaise(condition) {
+    yield 0;
+    try {
+      yield 1;
+      raise(2);
+      yield 3;
+    } finally {
+      if (condition) {
+        yield 4;
+        return 5;
+      }
+      yield 6;
+      return 7;
+    }
+  }
+
+  it("should execute finally blocks statically", function() {
+    check(usingThrow(true), [0, 1, 4], 5);
+    check(usingThrow(false), [0, 1, 6], 7);
+  });
+
+  it("should execute finally blocks dynamically", function() {
+    check(usingRaise(true), [0, 1, 4], 5);
+    check(usingRaise(false), [0, 1, 6], 7);
   });
 });
 
 describe("try-catch-finally generator", function() {
-  function *gen() {
+  function *usingThrow() {
     yield 0;
     try {
       try {
@@ -168,8 +213,30 @@ describe("try-catch-finally generator", function() {
     yield 6;
   }
 
-  it("should catch and then finalize", function() {
-    check(gen(), [0, 1, 2, 5, 3, 6]);
+  function *usingRaise() {
+    yield 0;
+    try {
+      try {
+        yield 1;
+        raise(2);
+        yield 3;
+      } catch (x) {
+        throw yield x;
+      } finally {
+        yield 5;
+      }
+    } catch (thrown) {
+      yield thrown;
+    }
+    yield 6;
+  }
+
+  it("should statically catch and then finalize", function() {
+    check(usingThrow(), [0, 1, 2, 5, 3, 6]);
+  });
+
+  it("should dynamically catch and then finalize", function() {
+    check(usingRaise(), [0, 1, 2, 5, 3, 6]);
   });
 });
 
@@ -199,7 +266,7 @@ describe("dynamic exception", function() {
 });
 
 describe("nested finally blocks", function() {
-  function *gen() {
+  function *usingThrow() {
     try {
       try {
         try {
@@ -217,8 +284,30 @@ describe("nested finally blocks", function() {
     }
   }
 
-  it("should execute in order", function() {
-    check(gen(), [1, "thrown", 2, 3]);
+  function *usingRaise() {
+    try {
+      try {
+        try {
+          raise("thrown");
+        } finally {
+          yield 1;
+        }
+      } catch (thrown) {
+        yield thrown;
+      } finally {
+        yield 2;
+      }
+    } finally {
+      yield 3;
+    }
+  }
+
+  it("should statically execute in order", function() {
+    check(usingThrow(), [1, "thrown", 2, 3]);
+  });
+
+  it("should dynamically execute in order", function() {
+    check(usingRaise(), [1, "thrown", 2, 3]);
   });
 });
 

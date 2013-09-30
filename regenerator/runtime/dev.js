@@ -191,6 +191,7 @@
           this.thrown = exception;
           this.next = entry.catchLoc;
           dispatched = true;
+          break;
         } else if (entry.finallyLoc) {
           finallyEntries.push(entry);
           dispatched = true;
@@ -202,7 +203,7 @@
       }
 
       while ((entry = finallyEntries.pop())) {
-        this[entry.finallyTempVarName] = this.next;
+        this[entry.finallyTempVar] = this.next;
         this.next = entry.finallyLoc;
       }
     },
