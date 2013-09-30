@@ -30,9 +30,9 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "esprima": "git://github.com/benjamn/esprima.git#harmony",
-    "ast-types": "~0.2.23",
-    "recast": "~0.4.20",
+    "esprima": "git://github.com/ariya/esprima.git#harmony",
+    "ast-types": "~0.3.0",
+    "recast": "~0.4.23",
     "private": "~0.0.5"
   },
   "optionalDependencies": {
