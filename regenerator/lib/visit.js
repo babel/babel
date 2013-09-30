@@ -28,7 +28,7 @@ var GenFunVisitor = recast.Visitor.extend({
     gfun.generator = false;
 
     // TODO Ensure that the context is named uniquely.
-    var contextId = b.identifier("context");
+    var contextId = b.identifier("$ctx");
 
     if (gfun.expression) {
       // Transform expression lambdas into normal functions.
