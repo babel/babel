@@ -755,7 +755,7 @@ Ep.explodeExpression = function(expr, ignoreResult) {
       // Side effects already emitted above.
 
     } else if (tempVar || (hasLeapingChildren &&
-                 meta.hasSideEffects(result))) {
+                           meta.hasSideEffects(result))) {
       // If tempVar was provided, then the result will always be assigned
       // to it, even if the result does not otherwise need to be assigned
       // to a temporary variable.  When no tempVar is provided, we have

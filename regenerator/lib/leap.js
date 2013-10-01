@@ -201,7 +201,7 @@ function getLeapLocation(entry, property, label) {
   if (loc) {
     if (label) {
       if (entry.label &&
-        entry.label.name === label.name) {
+          entry.label.name === label.name) {
         return loc;
       }
     } else {
