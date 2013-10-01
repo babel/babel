@@ -215,7 +215,7 @@ Ep.getDispatchLoop = function() {
       alreadyEnded = false;
     }
 
-    if (true || !alreadyEnded) {
+    if (!alreadyEnded) {
       current.push(stmt);
       if (isSwitchCaseEnder(stmt))
         alreadyEnded = true;
@@ -670,7 +670,6 @@ Ep.popCatch = function(catchEntry) {
   // now, emitting context.popCatch(null) is good for sanity checking.
 
   this.emit(b.callExpression(
-    // TODO Remember to implement this runtime context method.
     this.contextProperty("popCatch"),
     [catchLoc]
   ));
@@ -695,7 +694,6 @@ Ep.popFinally = function(finallyEntry) {
   // checking.
 
   this.emit(b.callExpression(
-    // TODO Remember to implement this runtime context method.
     this.contextProperty("popFinally"),
     [finallyLoc]
   ));
@@ -709,6 +707,7 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   }
 
   var self = this;
+  var result; // Used optionally by several cases below.
 
   function finish(expr) {
     n.Expression.assert(expr);
@@ -813,7 +812,6 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   case "SequenceExpression":
     var children = expr.expressions;
     var lastIndex = children.length - 1;
-    var result;
 
     children.forEach(function(child, i) {
       if (i === lastIndex) {
@@ -827,7 +825,6 @@ Ep.explodeExpression = function(expr, ignoreResult) {
 
   case "LogicalExpression":
     var after = loc();
-    var result;
 
     if (!ignoreResult) {
       result = self.makeTempVar();
@@ -851,12 +848,10 @@ Ep.explodeExpression = function(expr, ignoreResult) {
     var elseLoc = loc();
     var after = loc();
     var test = self.explodeExpression(expr.test);
-    var result; // TODO Hoist?
 
     self.jumpIfNot(test, elseLoc);
 
     if (!ignoreResult) {
-      // TODO Maybe hoist this above the switch statement?
       result = self.makeTempVar();
     }
 
