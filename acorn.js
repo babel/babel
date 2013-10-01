@@ -1479,8 +1479,8 @@
         node.operator = tokVal;
         next();
         node.right = parseExprOp(parseMaybeUnary(), prec, noIn);
-        var node = finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(node, minPrec, noIn);
+        var exprNode = finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
+        return parseExprOp(exprNode, minPrec, noIn);
       }
     }
     return left;
