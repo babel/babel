@@ -129,9 +129,7 @@ Ep.clearPendingException = function(assignee) {
     this.emitAssign(assignee, cp);
   }
 
-  this.emit(b.expressionStatement(
-    b.unaryExpression("delete", cp)
-  ));
+  this.emit(b.unaryExpression("delete", cp));
 };
 
 // Emits code for an unconditional jump to the given location, even if the
@@ -652,7 +650,7 @@ Ep.pushTry = function(tryEntry) {
     ) || nil
   ];
 
-  this.emit(b.expressionStatement(b.callExpression(method, args)));
+  this.emit(b.callExpression(method, args));
 };
 
 // Emit a runtime call to context.popCatch(catchLoc) so that the runtime
@@ -671,11 +669,11 @@ Ep.popCatch = function(catchEntry) {
   // TODO Think about not emitting anything when catchEntry === null.  For
   // now, emitting context.popCatch(null) is good for sanity checking.
 
-  this.emit(b.expressionStatement(b.callExpression(
+  this.emit(b.callExpression(
     // TODO Remember to implement this runtime context method.
     this.contextProperty("popCatch"),
     [catchLoc]
-  )));
+  ));
 };
 
 // Emit a runtime call to context.popFinally(finallyLoc) so that the
@@ -696,11 +694,11 @@ Ep.popFinally = function(finallyEntry) {
   // For now, emitting context.popFinally(null) is good for sanity
   // checking.
 
-  this.emit(b.expressionStatement(b.callExpression(
+  this.emit(b.callExpression(
     // TODO Remember to implement this runtime context method.
     this.contextProperty("popFinally"),
     [finallyLoc]
-  )));
+  ));
 };
 
 Ep.explodeExpression = function(expr, ignoreResult) {
