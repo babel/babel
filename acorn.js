@@ -1180,6 +1180,7 @@
         var init = startNode();
         next();
         parseVar(init, true);
+        finishNode(init, "VariableDeclaration");
         if (init.declarations.length === 1 && eat(_in))
           return parseForIn(node, init);
         return parseFor(node, init);
@@ -1277,9 +1278,9 @@
 
     case _var:
       next();
-      node = parseVar(node);
+      parseVar(node);
       semicolon();
-      return node;
+      return finishNode(node, "VariableDeclaration");
 
     case _while:
       next();
@@ -1400,7 +1401,7 @@
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
     }
-    return finishNode(node, "VariableDeclaration");
+    return node;
   }
 
   // ### Expression parsing

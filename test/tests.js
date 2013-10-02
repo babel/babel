@@ -16215,7 +16215,7 @@ test("var x, y;", {
         },
         end: {
           line: 1,
-          column: 8
+          column: 9
         }
       }
     }
@@ -17307,7 +17307,7 @@ test("if (morning) var x = 0;", {
           },
           end: {
             line: 1,
-            column: 22
+            column: 23
           }
         }
       },
@@ -23685,7 +23685,7 @@ test("var hi = function() { sayHi() };", {
         },
         end: {
           line: 1,
-          column: 31
+          column: 32
         }
       }
     }
@@ -23786,7 +23786,7 @@ test("var hi = function eval() { };", {
         },
         end: {
           line: 1,
-          column: 28
+          column: 29
         }
       }
     }
@@ -23887,7 +23887,7 @@ test("var hi = function arguments() { };", {
         },
         end: {
           line: 1,
-          column: 33
+          column: 34
         }
       }
     }
@@ -24030,7 +24030,7 @@ test("var hello = function hi() { sayHi() };", {
         },
         end: {
           line: 1,
-          column: 37
+          column: 38
         }
       }
     }
@@ -24348,7 +24348,7 @@ test("var x /* comment */;", {
         },
         end: {
           line: 1,
-          column: 5
+          column: 20
         }
       }
     }
@@ -26164,7 +26164,7 @@ test("var a = 1;", {
     {
       type: "VariableDeclaration",
       start: 0,
-      end: 9,
+      end: 10,
       loc: {
         start: {
           line: 1,
@@ -26172,7 +26172,7 @@ test("var a = 1;", {
         },
         end: {
           line: 1,
-          column: 9
+          column: 10
         },
         source: "test.js"
       },

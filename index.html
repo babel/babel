@@ -842,6 +842,7 @@ a regular <code>for</code> loop.</p>             </td>             <td class="co
         <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
         <span class="nx">next</span><span class="p">();</span>
         <span class="nx">parseVar</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="nx">finishNode</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">init</span><span class="p">.</span><span class="nx">declarations</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_in</span><span class="p">))</span>
           <span class="k">return</span> <span class="nx">parseForIn</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
@@ -931,9 +932,9 @@ adding statements to.</p>             </td>             <td class="code">       
 
     <span class="k">case</span> <span class="nx">_var</span><span class="o">:</span>
       <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span> <span class="o">=</span> <span class="nx">parseVar</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+      <span class="nx">parseVar</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
       <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
 
     <span class="k">case</span> <span class="nx">_while</span><span class="o">:</span>
       <span class="nx">next</span><span class="p">();</span>
@@ -1030,7 +1031,7 @@ expression.</p>             </td>             <td class="code">               <d
       <span class="nx">node</span><span class="p">.</span><span class="nx">declarations</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">finishNode</span><span class="p">(</span><span class="nx">decl</span><span class="p">,</span> <span class="s2">&quot;VariableDeclarator&quot;</span><span class="p">));</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_comma</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-106">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-106">&#182;</a>               </div>               <h3>Expression parsing</h3>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-107">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-107">&#182;</a>               </div>               <p>These nest, from the most general expression type at the top to
 'atomic', nondivisible expression types at the bottom. Most of
 the functions will simply let the function(s) below them parse,
@@ -1085,8 +1086,8 @@ operator that has a lower precedence than the set it is parsing.</p>            
         <span class="nx">node</span><span class="p">.</span><span class="nx">operator</span> <span class="o">=</span> <span class="nx">tokVal</span><span class="p">;</span>
         <span class="nx">next</span><span class="p">();</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="nx">parseExprOp</span><span class="p">(</span><span class="nx">parseMaybeUnary</span><span class="p">(),</span> <span class="nx">prec</span><span class="p">,</span> <span class="nx">noIn</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="sr">/&amp;&amp;|\|\|/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">operator</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;LogicalExpression&quot;</span> <span class="o">:</span> <span class="s2">&quot;BinaryExpression&quot;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">parseExprOp</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">minPrec</span><span class="p">,</span> <span class="nx">noIn</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">exprNode</span> <span class="o">=</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="sr">/&amp;&amp;|\|\|/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">operator</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;LogicalExpression&quot;</span> <span class="o">:</span> <span class="s2">&quot;BinaryExpression&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">parseExprOp</span><span class="p">(</span><span class="nx">exprNode</span><span class="p">,</span> <span class="nx">minPrec</span><span class="p">,</span> <span class="nx">noIn</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">left</span><span class="p">;</span>
