@@ -16,11 +16,11 @@
     "desugaring",
     "ES6"
   ],
-  "version": "0.1.0",
-  "homepage": "http://github.com/benjamn/regenerator",
+  "version": "0.1.1",
+  "homepage": "http://github.com/facebook/regenerator",
   "repository": {
     "type": "git",
-    "url": "git://github.com/benjamn/regenerator.git"
+    "url": "git://github.com/facebook/regenerator.git"
   },
   "main": "main.js",
   "bin": {
@@ -38,7 +38,7 @@
   "optionalDependencies": {
     "mocha": "~1.13.0",
     "semver": "~2.1.0",
-    "browserify": "~2.33.0"
+    "browserify": "~2.34.0"
   },
   "license": "BSD",
   "engines": {
