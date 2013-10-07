@@ -2,7 +2,6 @@ var fs = require("fs");
 var path = require("path");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
-var recast = require("recast");
 var regenerate = require("../main");
 
 function convert(es6File, es5File, callback) {
@@ -11,12 +10,7 @@ function convert(es6File, es5File, callback) {
       return callback(err);
     }
 
-    var tabWidth = require("../lib/util").guessTabWidth(es6);
-    var options = { tabWidth: tabWidth };
-    var ast = recast.parse(es6, options);
-    var es5 = recast.print(regenerate.transform(ast), options);
-
-    fs.writeFile(es5File, es5, callback);
+    fs.writeFile(es5File, regenerate(es6), callback);
   });
 }
 
