@@ -4,6 +4,7 @@ var transform = require("./lib/visit").transform;
 var guessTabWidth = require("./lib/util").guessTabWidth;
 var recast = require("recast");
 var esprimaHarmony = require("esprima");
+var genFunExp = /\bfunction\s*\*/;
 
 assert.ok(
   /harmony/.test(esprimaHarmony.version),
@@ -11,12 +12,17 @@ assert.ok(
 );
 
 function regenerate(source) {
+  if (!genFunExp.test(source)) {
+    return source; // Shortcut: no generators to transform.
+  }
+
   var options = {
     tabWidth: guessTabWidth(source),
     // Use the harmony branch of Esprima that installs with regenerator
     // instead of the master branch that recast provides.
     esprima: esprimaHarmony
   };
+
   var ast = recast.parse(source, options);
   return recast.print(transform(ast), options);
 }
