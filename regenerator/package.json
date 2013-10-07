@@ -40,6 +40,7 @@
     "semver": "~2.1.0",
     "browserify": "~2.33.0"
   },
+  "license": "BSD",
   "engines": {
     "node": ">= 0.11"
   }
