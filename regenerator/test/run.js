@@ -30,7 +30,7 @@ var queue = [];
 function enqueue(cmd, args) {
   queue.push({
     cmd: cmd,
-    args: args
+    args: args || []
   });
 }
 
@@ -74,6 +74,20 @@ enqueue("mocha", [
   "--reporter", "spec",
   "test/tests.es5.js"
 ]);
+
+var mochaDir = path.dirname(require.resolve("mocha"));
+function makeMochaCopyFunction(fileName) {
+  return function copy(callback) {
+    var src = path.join(mochaDir, fileName);
+    var dst = path.join(__dirname, fileName);
+    fs.unlink(dst, function() {
+      fs.symlink(src, dst, callback);
+    });
+  };
+}
+
+enqueue(makeMochaCopyFunction("mocha.js"));
+enqueue(makeMochaCopyFunction("mocha.css"));
 
 enqueue(bundle, [
   "./test/tests.es5.js",
