@@ -1,7 +1,7 @@
 {
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "name": "regenerator",
-  "description": "Desugaring transpiler for ES6 generator functions",
+  "description": "Source transformer enabling ECMAScript 6 generator functions (yield) in JavaScript-of-today (ES5)",
   "keywords": [
     "generator",
     "yield",

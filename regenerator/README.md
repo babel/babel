@@ -6,9 +6,9 @@ takes the proposed syntax for generators/`yield` from future versions of
 JS (ECMAScript6 or ES6, experimentally implemented in Node.js v0.11) and
 spits out efficient JS-of-today (ES5) that behaves the same way.
 
-A small runtime library (664 bytes uglified and gzipped) is required to
-provide the `wrapGenerator` function. You can install it either as a
-CommonJS module or as a standalone .js file, whichever you prefer.
+A small runtime library (less than 1KB compressed) is required to provide the
+`wrapGenerator` function. You can install it either as a CommonJS module
+or as a standalone .js file, whichever you prefer.
 
 Installation
 ---
