@@ -251,8 +251,9 @@ Ep.getDispatchLoop = function() {
 // See comment above re: alreadyEnded.
 function isSwitchCaseEnder(stmt) {
   return n.BreakStatement.check(stmt)
-    || n.ContinueStatement.check(stmt)
-    || n.ReturnStatement.check(stmt);
+      || n.ContinueStatement.check(stmt)
+      || n.ReturnStatement.check(stmt)
+      || n.ThrowStatement.check(stmt);
 }
 
 // All side effects must be realized in order.
@@ -632,7 +633,10 @@ Ep.explodeStatement = function(stmt, labelId) {
     break;
 
   case "ThrowStatement":
-    self.leapManager.emitThrow(stmt.argument);
+    self.emit(b.throwStatement(
+      self.explodeExpression(stmt.argument)
+    ));
+
     break;
 
   default:

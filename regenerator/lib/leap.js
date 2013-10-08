@@ -261,23 +261,3 @@ LMp.emitReturn = function(argument) {
 
   this.emitter.jump(loc);
 };
-
-function getCatchLocation(entry) {
-  var catchEntry = entry.catchEntry;
-  return catchEntry && catchEntry.firstLoc || null;
-}
-
-LMp.emitThrow = function(argument) {
-  var loc = this._leapToEntry(
-    getCatchLocation,
-    this.emitter.finalLoc
-  );
-
-  this.emitter.setPendingException(argument);
-
-  if (loc) {
-    this.emitter.jump(loc);
-  } else {
-    this.emitter.stop();
-  }
-};
