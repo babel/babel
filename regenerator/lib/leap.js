@@ -8,9 +8,9 @@
  */
 
 var assert = require("assert");
-var recast = require("recast");
-var n = recast.namedTypes;
-var b = recast.builders;
+var types = require("ast-types");
+var n = types.namedTypes;
+var b = types.builders;
 var inherits = require("util").inherits;
 
 function Entry() {
