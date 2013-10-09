@@ -118,17 +118,6 @@ Ep.setReturnValue = function(value) {
     this.contextProperty("rval"),
     this.explodeExpression(value)
   );
-
-  // Returning successfully from the generator function overrides any
-  // pending exception we might have set.
-  this.clearPendingException();
-};
-
-Ep.setPendingException = function(value) {
-  this.emitAssign(
-    this.contextProperty("thrown"),
-    this.explodeExpression(value)
-  );
 };
 
 Ep.clearPendingException = function(assignee) {

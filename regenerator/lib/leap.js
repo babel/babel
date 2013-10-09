@@ -259,5 +259,6 @@ LMp.emitReturn = function(argument) {
     this.emitter.setReturnValue(argument);
   }
 
+  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
