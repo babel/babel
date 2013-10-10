@@ -598,7 +598,8 @@
   function readToken_plus_min(code) { // '+-'
     var next = input.charCodeAt(tokPos + 1);
     if (next === code) {
-      if (next == 45 && input.charCodeAt(tokPos + 2) == 62 && lastEnd < tokLineStart) {
+      if (next == 45 && input.charCodeAt(tokPos + 2) == 62 &&
+          newline.test(input.slice(lastEnd, tokPos))) {
         // A `-->` line comment
         tokPos += 3;
         skipLineComment();
