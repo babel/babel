@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var path = require('path');
-var fs = require('fs');
-var acorn = require('../acorn.js');
+var path = require("path");
+var fs = require("fs");
+var acorn = require("../acorn.js");
 
 var infile, parsed, options = {}, silent = false, compact = false;
 
