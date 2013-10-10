@@ -20,6 +20,8 @@ exports.transform = function(ast) {
 
 function visitNode(node) {
   if (!n.Function.check(node) || !node.generator) {
+    // Note that because we are not returning false here the traversal
+    // will continue into the subtree rooted at this node, as desired.
     return;
   }
 

@@ -52,8 +52,14 @@ exports.hoist = function(fun) {
       if (expr === null) {
         this.replace();
       } else {
+        // We don't need to traverse this expression any further because
+        // there can't be any new declarations inside an expression.
         this.replace(b.expressionStatement(expr));
       }
+
+      // Since the original node has been either removed or replaced,
+      // avoid traversing it any further.
+      return false;
 
     } else if (n.ForStatement.check(node)) {
       if (n.VariableDeclaration.check(node.init)) {
