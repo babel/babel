@@ -43,13 +43,6 @@ function visitNode(node) {
   var emitter = new Emitter(contextId);
   emitter.explode(node.body);
 
-  // TODO Need to do something about FunctionDeclarations.
-  // They don't need to be exploded, and it's probably safer to move
-  // them out of the inner function like the hoisted variables.
-  // How about this:
-  // 1. hoist the function names as variables, and then
-  // 2. turn each declaration site into an assignment to the name.
-
   var outerBody = [];
 
   if (vars && vars.declarations.length > 0) {

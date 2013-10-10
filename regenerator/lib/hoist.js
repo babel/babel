@@ -20,6 +20,7 @@ var hasOwn = Object.prototype.hasOwnProperty;
 exports.hoist = function(fun) {
   n.Function.assert(fun);
   var vars = {};
+  var funDeclsToRaise = [];
 
   function varDeclToExpr(vdec, includeIdentifiers) {
     n.VariableDeclaration.assert(vdec);
@@ -76,7 +77,8 @@ exports.hoist = function(fun) {
     } else if (n.FunctionDeclaration.check(node)) {
       vars[node.id.name] = node.id;
 
-      this.replace(b.expressionStatement(
+      var parentNode = this.parent.node;
+      var assignment = b.expressionStatement(
         b.assignmentExpression(
           "=",
           node.id,
@@ -88,7 +90,21 @@ exports.hoist = function(fun) {
             node.expression
           )
         )
-      ));
+      );
+
+      if (n.BlockStatement.check(this.parent.node)) {
+        funDeclsToRaise.push({
+          block: this.parent.node,
+          assignment: assignment
+        });
+
+        // Remove the function declaration for now, but reinsert the assignment
+        // form later, at the top of the enclosing BlockStatement.
+        this.replace();
+
+      } else {
+        this.replace(assignment);
+      }
 
       // Don't hoist variables out of inner functions.
       return false;
@@ -97,6 +113,10 @@ exports.hoist = function(fun) {
       // Don't descend into nested function expressions.
       return false;
     }
+  });
+
+  funDeclsToRaise.forEach(function(entry) {
+    entry.block.body.unshift(entry.assignment);
   });
 
   var paramNames = {};

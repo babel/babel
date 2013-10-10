@@ -556,3 +556,36 @@ describe("delegated yield", function() {
     assert.deepEqual(g.next(5), { value: void 0, done: true });
   });
 });
+
+describe("function declaration hoisting", function() {
+  it("should work even if the declarations are out of order", function() {
+    function *gen(n) {
+      yield increment(n);
+
+      function increment(x) {
+        return x + 1;
+      }
+
+      if (n % 2) {
+        yield halve(decrement(n));
+
+        function halve(x) {
+          return x >> 1;
+        }
+
+        function decrement(x) {
+          return x - 1;
+        }
+      } else function increment(x) {
+        return x + 2;
+      }
+
+      yield typeof halve;
+
+      yield increment(increment(n));
+    }
+
+    check(gen(3), [4, 1, "function", 5]);
+    check(gen(4), [5, "undefined", 8]);
+  });
+});
