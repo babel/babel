@@ -27,9 +27,6 @@ function visitNode(node) {
 
   node.generator = false;
 
-  // TODO Ensure that the context is named uniquely.
-  var contextId = b.identifier("$ctx");
-
   if (node.expression) {
     // Transform expression lambdas into normal functions.
     node.expression = false;
@@ -38,7 +35,18 @@ function visitNode(node) {
     ]);
   }
 
+  // TODO Ensure these identifiers are named uniquely.
+  var contextId = b.identifier("$ctx");
+  var argsId = b.identifier("$args");
+  var shouldAliasArguments = renameArguments(node, argsId);
   var vars = hoist(node);
+
+  if (shouldAliasArguments) {
+    vars = vars || b.variableDeclaration("var", []);
+    vars.declarations.push(b.variableDeclarator(
+      argsId, b.identifier("arguments")
+    ));
+  }
 
   var emitter = new Emitter(contextId);
   emitter.explode(node.body);
@@ -57,4 +65,35 @@ function visitNode(node) {
   ));
 
   node.body = b.blockStatement(outerBody);
+}
+
+function renameArguments(func, argsId) {
+  var didReplaceArguments = false;
+  var hasImplicitArguments = false;
+
+  types.traverse(func, function(node) {
+    if (node === func) {
+      hasImplicitArguments = !this.scope.lookup("arguments");
+    } else if (n.Function.check(node)) {
+      return false;
+    }
+
+    if (n.Identifier.check(node) && node.name === "arguments") {
+      var isMemberProperty =
+        n.MemberExpression.check(this.parent.node) &&
+        this.name === "property" &&
+        !this.parent.node.computed;
+
+      if (!isMemberProperty) {
+        this.replace(argsId);
+        didReplaceArguments = true;
+        return false;
+      }
+    }
+  });
+
+  // If the traversal replaced any arguments identifiers, and those
+  // identifiers were free variables, then we need to alias the outer
+  // function's arguments object to the variable named by argsId.
+  return didReplaceArguments && hasImplicitArguments;
 }

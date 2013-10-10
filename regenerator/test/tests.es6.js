@@ -589,3 +589,86 @@ describe("function declaration hoisting", function() {
     check(gen(4), [5, "undefined", 8]);
   });
 });
+
+describe("the arguments object", function() {
+  it("should work in simple variadic functions", function() {
+    function *sum() {
+      var result = 0;
+
+      for (var i = 0; i < arguments.length; ++i) {
+        yield result += arguments[i];
+      }
+
+      return result;
+    }
+
+    check(sum(1, 2, 3), [1, 3, 6], 6);
+    check(sum(9, -5, 3, 0, 2), [9, 4, 7, 7, 9], 9);
+  });
+
+  it("should alias function parameters", function() {
+    function *gen(x, y) {
+      yield x;
+      ++arguments[0];
+      yield x;
+
+      yield y;
+      --arguments[1];
+      yield y;
+
+      var temp = y;
+      y = x;
+      x = temp;
+
+      yield x;
+      yield y;
+    }
+
+    check(gen(3, 7), [3, 4, 7, 6, 6, 4]);
+    check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
+  });
+
+  it("should be shadowable by explicit declarations", function() {
+    function *asParameter(x, arguments) {
+      yield x + arguments;
+    }
+
+    check(asParameter(4, 5), [9]);
+    check(asParameter("asdf", "zxcv"), ["asdfzxcv"]);
+
+    function *asVariable(x) {
+      yield arguments;
+      var arguments = x + 1;
+      yield arguments;
+    }
+
+    check(asVariable(4), [void 0, 5]);
+    check(asVariable("asdf"), [void 0, "asdf1"]);
+  });
+
+  it("should not get confused by properties", function() {
+    function *gen(obj) {
+      yield obj.arguments;
+      obj.arguments = "oyez";
+      yield obj;
+    }
+
+    check(gen({ arguments: 42 }), [42, { arguments: "oyez" }]);
+  });
+
+  it("supports .callee", function() {
+    function *gen(doYield) {
+      yield 1;
+      if (doYield) {
+        yield 2;
+      } else {
+        yield 3
+        yield* arguments.callee(true);
+        yield 4
+      }
+      yield 5;
+    }
+
+    check(gen(false), [1, 3, 1, 2, 5, 4, 5]);
+  });
+});
