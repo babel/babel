@@ -21,7 +21,7 @@ with a <a href="acorn_loose.js">error-tolerant parser</a> and an
 <span class="p">})(</span><span class="k">this</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
   <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-  <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.3.2&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>self.acorn</code> when in the
+  <span class="nx">exports</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.4.0&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>The main exported interface (under <code>self.acorn</code> when in the
 browser) is a <code>parse</code> function that takes a code string and
 returns an abstract syntax tree as specified by <a href="https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API">Mozilla parser
 API</a>, with the caveat that the SpiderMonkey-specific syntax
@@ -333,8 +333,10 @@ whitespace and comments, and.</p>             </td>             <td class="code"
         <span class="p">}</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">ch</span> <span class="o">===</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">ch</span> <span class="o">===</span> <span class="mi">8232</span> <span class="o">||</span> <span class="nx">ch</span> <span class="o">===</span> <span class="mi">8233</span><span class="p">)</span> <span class="p">{</span>
         <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span>
-        <span class="o">++</span><span class="nx">tokCurLine</span><span class="p">;</span>
-        <span class="nx">tokLineStart</span> <span class="o">=</span> <span class="nx">tokPos</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">locations</span><span class="p">)</span> <span class="p">{</span>
+          <span class="o">++</span><span class="nx">tokCurLine</span><span class="p">;</span>
+          <span class="nx">tokLineStart</span> <span class="o">=</span> <span class="nx">tokPos</span><span class="p">;</span>
+        <span class="p">}</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">ch</span> <span class="o">&gt;</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">&lt;</span> <span class="mi">14</span><span class="p">)</span> <span class="p">{</span>
         <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">ch</span> <span class="o">===</span> <span class="mi">47</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// &#39;/&#39;</span>
@@ -690,9 +692,11 @@ precedence levels that JavaScript defines.</p>             </td>             <td
 tests ("use strict"; 010; -- should fail).</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">setStrict</span><span class="p">(</span><span class="nx">strct</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">strict</span> <span class="o">=</span> <span class="nx">strct</span><span class="p">;</span>
     <span class="nx">tokPos</span> <span class="o">=</span> <span class="nx">lastEnd</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="nx">tokPos</span> <span class="o">&lt;</span> <span class="nx">tokLineStart</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tokLineStart</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span> <span class="nx">tokLineStart</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="o">--</span><span class="nx">tokCurLine</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">locations</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">tokPos</span> <span class="o">&lt;</span> <span class="nx">tokLineStart</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">tokLineStart</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span> <span class="nx">tokLineStart</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="o">--</span><span class="nx">tokCurLine</span><span class="p">;</span>
+      <span class="p">}</span>
     <span class="p">}</span>
     <span class="nx">skipSpace</span><span class="p">();</span>
     <span class="nx">readToken</span><span class="p">();</span>
