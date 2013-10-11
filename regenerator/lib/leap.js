@@ -246,7 +246,9 @@ LMp.emitContinue = function(label) {
   this.emitter.jump(loc);
 };
 
-LMp.emitReturn = function(argument) {
+LMp.emitReturn = function(argPath) {
+  assert.ok(argPath instanceof types.NodePath);
+
   var loc = this._leapToEntry(function(entry) {
     return getLeapLocation(entry, "returnLoc");
   });
@@ -255,8 +257,8 @@ LMp.emitReturn = function(argument) {
     throw new Error("illegal return statement");
   }
 
-  if (argument) {
-    this.emitter.setReturnValue(argument);
+  if (argPath.value) {
+    this.emitter.setReturnValue(argPath);
   }
 
   this.emitter.clearPendingException();

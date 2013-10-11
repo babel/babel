@@ -111,12 +111,12 @@ Ep.stop = function(rval) {
   this.jump(this.finalLoc);
 };
 
-Ep.setReturnValue = function(value) {
-  n.Expression.assert(value);
+Ep.setReturnValue = function(valuePath) {
+  n.Expression.assert(valuePath.value);
 
   this.emitAssign(
     this.contextProperty("rval"),
-    this.explodeExpression(value)
+    this.explodeExpression(valuePath)
   );
 };
 
@@ -252,24 +252,29 @@ function isSwitchCaseEnder(stmt) {
 
 // No destructive modification of AST nodes.
 
-Ep.explode = function(node, ignoreResult) {
-  n.Node.assert(node);
+Ep.explode = function(path, ignoreResult) {
+  assert.ok(path instanceof types.NodePath);
+
+  var node = path.value;
   var self = this;
 
+  n.Node.assert(node);
+
   if (n.Statement.check(node))
-    return self.explodeStatement(node);
+    return self.explodeStatement(path);
 
   if (n.Expression.check(node))
-    return self.explodeExpression(node, ignoreResult);
+    return self.explodeExpression(path, ignoreResult);
 
   if (n.Declaration.check(node))
     throw getDeclError(node);
 
   switch (node.type) {
   case "Program":
-    return node.body.map(function(stmt) {
-      return self.explodeStatement(stmt);
-    });
+    return path.get("body").map(
+      self.explodeStatement,
+      self
+    );
 
   case "VariableDeclarator":
     throw getDeclError(node);
@@ -296,9 +301,13 @@ function getDeclError(node) {
     JSON.stringify(node));
 }
 
-Ep.explodeStatement = function(stmt, labelId) {
-  n.Statement.assert(stmt);
+Ep.explodeStatement = function(path, labelId) {
+  assert.ok(path instanceof types.NodePath);
+
+  var stmt = path.value;
   var self = this;
+
+  n.Statement.assert(stmt);
 
   if (labelId) {
     n.Identifier.assert(labelId);
@@ -309,9 +318,10 @@ Ep.explodeStatement = function(stmt, labelId) {
   // Explode BlockStatement nodes even if they do not contain a yield,
   // because we don't want or need the curly braces.
   if (n.BlockStatement.check(stmt)) {
-    return stmt.body.forEach(function(child) {
-      self.explodeStatement(child);
-    });
+    return path.get("body").each(
+      self.explodeStatement,
+      self
+    );
   }
 
   if (!meta.containsLeap(stmt)) {
@@ -322,11 +332,11 @@ Ep.explodeStatement = function(stmt, labelId) {
 
   switch (stmt.type) {
   case "ExpressionStatement":
-    self.explodeExpression(stmt.expression, true);
+    self.explodeExpression(path.get("expression"), true);
     break;
 
   case "LabeledStatement":
-    self.explodeStatement(stmt.body, stmt.label);
+    self.explodeStatement(path.get("body"), stmt.label);
     break;
 
   case "WhileStatement":
@@ -334,10 +344,10 @@ Ep.explodeStatement = function(stmt, labelId) {
     var after = loc();
 
     self.mark(before);
-    self.jumpIfNot(self.explodeExpression(stmt.test), after);
+    self.jumpIfNot(self.explodeExpression(path.get("test")), after);
     self.leapManager.withEntry(
       new leap.LoopEntry(after, before, labelId),
-      function() { self.explodeStatement(stmt.body) }
+      function() { self.explodeStatement(path.get("body")) }
     );
     self.jump(before);
     self.mark(after);
@@ -352,10 +362,10 @@ Ep.explodeStatement = function(stmt, labelId) {
     self.mark(first);
     self.leapManager.withEntry(
       new leap.LoopEntry(after, test, labelId),
-      function() { self.explode(stmt.body) }
+      function() { self.explode(path.get("body")) }
     );
     self.mark(test);
-    self.jumpIf(self.explodeExpression(stmt.test), first);
+    self.jumpIf(self.explodeExpression(path.get("test")), first);
     self.mark(after);
 
     break;
@@ -368,20 +378,20 @@ Ep.explodeStatement = function(stmt, labelId) {
     if (stmt.init) {
       // We pass true here to indicate that if stmt.init is an expression
       // then we do not care about its result.
-      self.explode(stmt.init, true);
+      self.explode(path.get("init"), true);
     }
 
     self.mark(head);
 
     if (stmt.test) {
-      self.jumpIfNot(self.explodeExpression(stmt.test), after);
+      self.jumpIfNot(self.explodeExpression(path.get("test")), after);
     } else {
       // No test means continue unconditionally.
     }
 
     self.leapManager.withEntry(
       new leap.LoopEntry(after, update, labelId),
-      function() { self.explodeStatement(stmt.body) }
+      function() { self.explodeStatement(path.get("body")) }
     );
 
     self.mark(update);
@@ -389,7 +399,7 @@ Ep.explodeStatement = function(stmt, labelId) {
     if (stmt.update) {
       // We pass true here to indicate that if stmt.update is an
       // expression then we do not care about its result.
-      self.explode(stmt.update, true);
+      self.explode(path.get("update"), true);
     }
 
     self.jump(head);
@@ -404,12 +414,14 @@ Ep.explodeStatement = function(stmt, labelId) {
     var head = loc();
     var after = loc();
 
+    var keysPath = new types.NodePath(b.callExpression(
+      self.contextProperty("keys"),
+      [stmt.right]
+    ), path, "right");
+
     var keys = self.emitAssign(
       self.makeTempVar(),
-      self.explodeExpression(b.callExpression(
-        self.contextProperty("keys"),
-        [stmt.right]
-      ))
+      self.explodeExpression(keysPath)
     );
 
     self.mark(head);
@@ -437,7 +449,7 @@ Ep.explodeStatement = function(stmt, labelId) {
 
     self.leapManager.withEntry(
       new leap.LoopEntry(after, head, labelId),
-      function() { self.explodeStatement(stmt.body) }
+      function() { self.explodeStatement(path.get("body")) }
     );
 
     self.jump(head);
@@ -459,7 +471,7 @@ Ep.explodeStatement = function(stmt, labelId) {
     // test expressions overwrite values like context.sent.
     var disc = self.emitAssign(
       self.makeTempVar(),
-      self.explodeExpression(stmt.discriminant)
+      self.explodeExpression(path.get("discriminant"))
     );
 
     var after = loc();
@@ -485,16 +497,23 @@ Ep.explodeStatement = function(stmt, labelId) {
       }
     }
 
-    self.jump(self.explodeExpression(condition));
+    self.jump(self.explodeExpression(
+      new types.NodePath(condition, path, "discriminant")
+    ));
 
     self.leapManager.withEntry(
       new leap.SwitchEntry(after),
       function() {
-        cases.forEach(function(c, i) {
+        path.get("cases").each(function(casePath) {
+          var c = casePath.value;
+          var i = casePath.name;
+
           self.mark(caseLocs[i]);
-          c.consequent.forEach(function(child) {
-            self.explodeStatement(child);
-          });
+
+          casePath.get("consequent").each(
+            self.explodeStatement,
+            self
+          );
         });
       }
     );
@@ -512,16 +531,16 @@ Ep.explodeStatement = function(stmt, labelId) {
     var after = loc();
 
     self.jumpIfNot(
-      self.explodeExpression(stmt.test),
+      self.explodeExpression(path.get("test")),
       elseLoc || after
     );
 
-    self.explodeStatement(stmt.consequent);
+    self.explodeStatement(path.get("consequent"));
 
     if (elseLoc) {
       self.jump(after);
       self.mark(elseLoc);
-      self.explodeStatement(stmt.alternate);
+      self.explodeStatement(path.get("alternate"));
     }
 
     self.mark(after);
@@ -529,7 +548,7 @@ Ep.explodeStatement = function(stmt, labelId) {
     break;
 
   case "ReturnStatement":
-    self.leapManager.emitReturn(stmt.argument);
+    self.leapManager.emitReturn(path.get("argument"));
     break;
 
   case "WithStatement":
@@ -570,7 +589,7 @@ Ep.explodeStatement = function(stmt, labelId) {
     self.pushTry(tryEntry);
 
     self.leapManager.withEntry(tryEntry, function() {
-      self.explodeStatement(stmt.block);
+      self.explodeStatement(path.get("block"));
 
       if (catchLoc) {
         // If execution leaves the try block normally, the associated
@@ -600,7 +619,7 @@ Ep.explodeStatement = function(stmt, labelId) {
         self.clearPendingException(handler.param);
 
         self.leapManager.withEntry(catchEntry, function() {
-          self.explodeStatement(handler.body);
+          self.explodeStatement(path.get("handler", "body"));
         });
       }
 
@@ -610,7 +629,7 @@ Ep.explodeStatement = function(stmt, labelId) {
         self.popFinally(finallyEntry);
 
         self.leapManager.withEntry(finallyEntry, function() {
-          self.explodeStatement(stmt.finalizer);
+          self.explodeStatement(path.get("finalizer"));
         });
 
         self.jump(finallyEntry.nextLocTempVar);
@@ -623,7 +642,7 @@ Ep.explodeStatement = function(stmt, labelId) {
 
   case "ThrowStatement":
     self.emit(b.throwStatement(
-      self.explodeExpression(stmt.argument)
+      self.explodeExpression(path.get("argument"))
     ));
 
     break;
@@ -701,7 +720,10 @@ Ep.popFinally = function(finallyEntry) {
   ));
 };
 
-Ep.explodeExpression = function(expr, ignoreResult) {
+Ep.explodeExpression = function(path, ignoreResult) {
+  assert.ok(path instanceof types.NodePath);
+
+  var expr = path.value;
   if (expr) {
     n.Expression.assert(expr);
   } else {
@@ -741,14 +763,16 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   // Michael Bay movies. The point of exploding subexpressions is to
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
-  function explodeViaTempVar(tempVar, child, ignoreChildResult) {
+  function explodeViaTempVar(tempVar, childPath, ignoreChildResult) {
+    assert.ok(childPath instanceof types.NodePath);
+
     assert.ok(
       !ignoreChildResult || !tempVar,
       "Ignoring the result of a child expression but forcing it to " +
         "be assigned to a temporary variable?"
     );
 
-    var result = self.explodeExpression(child, ignoreChildResult);
+    var result = self.explodeExpression(childPath, ignoreChildResult);
 
     if (ignoreChildResult) {
       // Side effects already emitted above.
@@ -778,48 +802,47 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   switch (expr.type) {
   case "MemberExpression":
     return finish(b.memberExpression(
-      self.explodeExpression(expr.object),
+      self.explodeExpression(path.get("object")),
       expr.computed
-        ? explodeViaTempVar(null, expr.property)
+        ? explodeViaTempVar(null, path.get("property"))
         : expr.property,
       expr.computed
     ));
 
   case "CallExpression":
     return finish(b.callExpression(
-      self.explodeExpression(expr.callee),
-      expr.arguments.map(function(arg) {
-        return explodeViaTempVar(null, arg);
+      self.explodeExpression(path.get("callee")),
+      path.get("arguments").map(function(argPath) {
+        return explodeViaTempVar(null, argPath);
       })
     ));
 
   case "ObjectExpression":
     return finish(b.objectExpression(
-      expr.properties.map(function(prop) {
+      path.get("properties").map(function(propPath) {
         return b.property(
-          prop.kind,
-          prop.key,
-          explodeViaTempVar(null, prop.value)
+          propPath.value.kind,
+          propPath.value.key,
+          explodeViaTempVar(null, propPath.get("value"))
         );
       })
     ));
 
   case "ArrayExpression":
     return finish(b.arrayExpression(
-      expr.elements.map(function(elem) {
-        return explodeViaTempVar(null, elem);
+      path.get("elements").map(function(elemPath) {
+        return explodeViaTempVar(null, elemPath);
       })
     ));
 
   case "SequenceExpression":
-    var children = expr.expressions;
-    var lastIndex = children.length - 1;
+    var lastIndex = expr.expressions.length - 1;
 
-    children.forEach(function(child, i) {
-      if (i === lastIndex) {
-        result = self.explodeExpression(child, ignoreResult);
+    path.get("expressions").each(function(exprPath) {
+      if (exprPath.name === lastIndex) {
+        result = self.explodeExpression(exprPath, ignoreResult);
       } else {
-        self.explodeExpression(child, true);
+        self.explodeExpression(exprPath, true);
       }
     });
 
@@ -832,7 +855,7 @@ Ep.explodeExpression = function(expr, ignoreResult) {
       result = self.makeTempVar();
     }
 
-    var left = explodeViaTempVar(result, expr.left);
+    var left = explodeViaTempVar(result, path.get("left"));
 
     if (expr.operator === "&&") {
       self.jumpIfNot(left, after);
@@ -840,7 +863,7 @@ Ep.explodeExpression = function(expr, ignoreResult) {
       self.jumpIf(left, after);
     }
 
-    explodeViaTempVar(result, expr.right, ignoreResult);
+    explodeViaTempVar(result, path.get("right"), ignoreResult);
 
     self.mark(after);
 
@@ -849,7 +872,7 @@ Ep.explodeExpression = function(expr, ignoreResult) {
   case "ConditionalExpression":
     var elseLoc = loc();
     var after = loc();
-    var test = self.explodeExpression(expr.test);
+    var test = self.explodeExpression(path.get("test"));
 
     self.jumpIfNot(test, elseLoc);
 
@@ -857,11 +880,11 @@ Ep.explodeExpression = function(expr, ignoreResult) {
       result = self.makeTempVar();
     }
 
-    explodeViaTempVar(result, expr.consequent, ignoreResult);
+    explodeViaTempVar(result, path.get("consequent"), ignoreResult);
     self.jump(after);
 
     self.mark(elseLoc);
-    explodeViaTempVar(result, expr.alternate, ignoreResult);
+    explodeViaTempVar(result, path.get("alternate"), ignoreResult);
 
     self.mark(after);
 
@@ -872,34 +895,34 @@ Ep.explodeExpression = function(expr, ignoreResult) {
       expr.operator,
       // Can't (and don't need to) break up the syntax of the argument.
       // Think about delete a[b].
-      self.explodeExpression(expr.argument),
+      self.explodeExpression(path.get("argument")),
       !!expr.prefix
     ));
 
   case "BinaryExpression":
     return finish(b.binaryExpression(
       expr.operator,
-      explodeViaTempVar(null, expr.left),
-      explodeViaTempVar(null, expr.right)
+      explodeViaTempVar(null, path.get("left")),
+      explodeViaTempVar(null, path.get("right"))
     ));
 
   case "AssignmentExpression":
     return finish(b.assignmentExpression(
       expr.operator,
-      self.explodeExpression(expr.left),
-      self.explodeExpression(expr.right)
+      self.explodeExpression(path.get("left")),
+      self.explodeExpression(path.get("right"))
     ));
 
   case "UpdateExpression":
     return finish(b.updateExpression(
       expr.operator,
-      self.explodeExpression(expr.argument),
+      self.explodeExpression(path.get("argument")),
       expr.prefix
     ));
 
   case "YieldExpression":
     var after = loc();
-    var arg = expr.argument && self.explodeExpression(expr.argument);
+    var arg = expr.argument && self.explodeExpression(path.get("argument"));
     if (arg && expr.delegate) {
       self.emit(b.returnStatement(b.callExpression(
         self.contextProperty("delegateYield"), [arg, after]

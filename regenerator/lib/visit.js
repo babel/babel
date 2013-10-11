@@ -49,7 +49,8 @@ function visitNode(node) {
   }
 
   var emitter = new Emitter(contextId);
-  emitter.explode(node.body);
+  var path = new types.NodePath(node);
+  emitter.explode(path.get("body"));
 
   var outerBody = [];
 
