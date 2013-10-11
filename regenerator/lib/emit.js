@@ -285,7 +285,7 @@ Ep.explode = function(node, ignoreResult) {
   default:
     throw new Error(
       "unknown Node of type " +
-        JSON.stringify(expr.type));
+        JSON.stringify(node.type));
   }
 }
 
@@ -389,7 +389,7 @@ Ep.explodeStatement = function(stmt, labelId) {
     if (stmt.update) {
       // We pass true here to indicate that if stmt.update is an
       // expression then we do not care about its result.
-      self.explode(self.explode(stmt.update), true);
+      self.explode(stmt.update, true);
     }
 
     self.jump(head);
