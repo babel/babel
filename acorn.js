@@ -317,13 +317,18 @@
   // in AssignmentExpression nodes.
 
   var _slash = {binop: 10, beforeExpr: true}, _eq = {isAssign: true, beforeExpr: true};
-  var _assign = {isAssign: true, beforeExpr: true}, _plusmin = {binop: 9, prefix: true, beforeExpr: true};
-  var _incdec = {postfix: true, prefix: true, isUpdate: true}, _prefix = {prefix: true, beforeExpr: true};
-  var _bin1 = {binop: 1, beforeExpr: true}, _bin2 = {binop: 2, beforeExpr: true};
-  var _bin3 = {binop: 3, beforeExpr: true}, _bin4 = {binop: 4, beforeExpr: true};
-  var _bin5 = {binop: 5, beforeExpr: true}, _bin6 = {binop: 6, beforeExpr: true};
-  var _bin7 = {binop: 7, beforeExpr: true}, _bin8 = {binop: 8, beforeExpr: true};
-  var _bin10 = {binop: 10, beforeExpr: true};
+  var _assign = {isAssign: true, beforeExpr: true};
+  var _incDec = {postfix: true, prefix: true, isUpdate: true}, _prefix = {prefix: true, beforeExpr: true};
+  var _logicalOR = {binop: 1, beforeExpr: true};
+  var _logicalAND = {binop: 2, beforeExpr: true};
+  var _bitwiseOR = {binop: 3, beforeExpr: true};
+  var _bitwiseXOR = {binop: 4, beforeExpr: true};
+  var _bitwiseAND = {binop: 5, beforeExpr: true};
+  var _equality = {binop: 6, beforeExpr: true};
+  var _relational = {binop: 7, beforeExpr: true};
+  var _bitShift = {binop: 8, beforeExpr: true};
+  var _plusMin = {binop: 9, prefix: true, beforeExpr: true};
+  var _multiplyModulo = {binop: 10, beforeExpr: true};
 
   // Provide access to the token types for external users of the
   // tokenizer.
@@ -581,20 +586,20 @@
   function readToken_mult_modulo() { // '%*'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(_bin10, 1);
+    return finishOp(_multiplyModulo, 1);
   }
 
   function readToken_pipe_amp(code) { // '|&'
     var next = input.charCodeAt(tokPos + 1);
-    if (next === code) return finishOp(code === 124 ? _bin1 : _bin2, 2);
+    if (next === code) return finishOp(code === 124 ? _logicalOR : _logicalAND, 2);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(code === 124 ? _bin3 : _bin5, 1);
+    return finishOp(code === 124 ? _bitwiseOR : _bitwiseAND, 1);
   }
 
   function readToken_caret() { // '^'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(_bin4, 1);
+    return finishOp(_bitwiseXOR, 1);
   }
 
   function readToken_plus_min(code) { // '+-'
@@ -608,19 +613,19 @@
         skipSpace();
         return readToken();
       }
-      return finishOp(_incdec, 2);
+      return finishOp(_incDec, 2);
     }
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(_plusmin, 1);
+    return finishOp(_plusMin, 1);
   }
 
   function readToken_lt_gt(code) { // '<>'
     var next = input.charCodeAt(tokPos + 1);
     var size = 1;
     if (next === code) {
-      size = code === 62 && input.charCodeAt(tokPos+2) === 62 ? 3 : 2;
+      size = code === 62 && input.charCodeAt(tokPos + 2) === 62 ? 3 : 2;
       if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
-      return finishOp(_bin8, size);
+      return finishOp(_bitShift, size);
     }
     if (next == 33 && code == 60 && input.charCodeAt(tokPos + 2) == 45 &&
         input.charCodeAt(tokPos + 3) == 45) {
@@ -631,13 +636,13 @@
       return readToken();
     }
     if (next === 61)
-      size = input.charCodeAt(tokPos+2) === 61 ? 3 : 2;
-    return finishOp(_bin7, size);
+      size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
+    return finishOp(_relational, size);
   }
 
   function readToken_eq_excl(code) { // '=!'
     var next = input.charCodeAt(tokPos + 1);
-    if (next === 61) return finishOp(_bin6, input.charCodeAt(tokPos+2) === 61 ? 3 : 2);
+    if (next === 61) return finishOp(_equality, input.charCodeAt(tokPos + 2) === 61 ? 3 : 2);
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
 
@@ -1483,9 +1488,10 @@
         var node = startNodeFrom(left);
         node.left = left;
         node.operator = tokVal;
+        var op = tokType;
         next();
         node.right = parseExprOp(parseMaybeUnary(), prec, noIn);
-        var exprNode = finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
+        var exprNode = finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
         return parseExprOp(exprNode, minPrec, noIn);
       }
     }
