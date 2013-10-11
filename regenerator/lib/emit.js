@@ -615,11 +615,25 @@ Ep.explodeStatement = function(path, labelId) {
         // context.popCatch yet.  Call it here instead.
         self.popCatch(catchEntry);
 
-        // TODO This doesn't have quite the right shadowing behavior.
-        self.clearPendingException(handler.param);
+        var bodyPath = path.get("handler", "body");
+        var safeParam = self.makeTempVar();
+        self.clearPendingException(safeParam);
+
+        types.traverse(bodyPath, function(node) {
+          var scope = this.scope.lookup(handler.param.name);
+          if (scope && scope.depth >= bodyPath.scope.depth) {
+            return false;
+          }
+
+          if (n.Identifier.check(node) &&
+              node.name === handler.param.name) {
+            this.replace(safeParam);
+            return false;
+          }
+        });
 
         self.leapManager.withEntry(catchEntry, function() {
-          self.explodeStatement(path.get("handler", "body"));
+          self.explodeStatement(bodyPath);
         });
       }
 

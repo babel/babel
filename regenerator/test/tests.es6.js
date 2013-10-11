@@ -677,3 +677,65 @@ describe("the arguments object", function() {
     check(gen(false), [1, 3, 1, 2, 5, 4, 5]);
   });
 });
+
+describe("catch parameter shadowing", function() {
+  it("should leave outer variables unmodified", function() {
+    function *gen(x) {
+      var y = x + 1;
+      try {
+        throw x + 2;
+      } catch (x) {
+        yield x;
+        x += 1;
+        yield x;
+      }
+      yield x;
+      try {
+        throw x + 3;
+      } catch (y) {
+        yield y;
+        y *= 2;
+        yield y;
+      }
+      yield y;
+    }
+
+    check(gen(1), [3, 4, 1, 4, 8, 2]);
+    check(gen(2), [4, 5, 2, 5, 10, 3]);
+  });
+
+  it("should not replace variables defined in inner scopes", function() {
+    function *gen(x) {
+      try {
+        throw x;
+      } catch (x) {
+        yield x;
+
+        yield (function(x) {
+          return x += 1;
+        }(x + 1));
+
+        yield (function() {
+          var x = arguments[0];
+          return x * 2;
+        }(x + 2));
+
+        yield (function() {
+          function notCalled(x) {
+            throw x;
+          }
+
+          x >>= 1;
+          return x;
+        }());
+
+        yield x -= 1;
+      }
+
+      yield x;
+    }
+
+    check(gen(10), [10, 12, 24, 5, 4, 10]);
+    check(gen(11), [11, 13, 26, 5, 4, 11]);
+  });
+});
