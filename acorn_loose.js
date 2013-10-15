@@ -209,6 +209,8 @@
     var node = new node_t(token.start);
     if (options.locations)
       node.loc = new node_loc_t();
+    if (options.directSourceFile)
+      node.sourceFile = options.directSourceFile;
     return node;
   }
 

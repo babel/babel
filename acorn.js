@@ -96,7 +96,10 @@
     program: null,
     // When `location` is on, you can pass this to record the source
     // file in every node's `loc` object.
-    sourceFile: null
+    sourceFile: null,
+    // This value, if given, is stored in every node, whether
+    // `location` is on or off.
+    directSourceFile: null
   };
 
   function setOptions(opts) {
@@ -1002,6 +1005,8 @@
     var node = new node_t();
     if (options.locations)
       node.loc = new node_loc_t();
+    if (options.directSourceFile)
+      node.sourceFile = options.directSourceFile;
     if (options.ranges)
       node.range = [tokStart, 0];
     return node;
