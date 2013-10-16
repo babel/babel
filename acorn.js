@@ -94,11 +94,11 @@
     // toplevel forms of the parsed file to the `Program` (top) node
     // of an existing parse tree.
     program: null,
-    // When `location` is on, you can pass this to record the source
+    // When `locations` is on, you can pass this to record the source
     // file in every node's `loc` object.
     sourceFile: null,
     // This value, if given, is stored in every node, whether
-    // `location` is on or off.
+    // `locations` is on or off.
     directSourceFile: null
   };
 
