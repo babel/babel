@@ -1,7 +1,15 @@
+body {
+  background-image: url("yield_ahead.200px.png");
+  background-position: 25px 25px;
+  background-repeat: no-repeat;
+}
+
 #content {
+  position: relative;
   font-family: sans-serif;
-  margin: 0 auto;
-  width: 800px;
+  margin: 0 250px;
+  min-width: 800px;
+  max-width: 1024px;
 }
 
 h1, h2 {
