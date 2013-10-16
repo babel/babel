@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="sandbox.css" />
+    <script src="codemirror/mode/javascript.js"></script>
+    <script src="../runtime/dev.js"></script>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <a href="https://github.com/facebook/regenerator">
+      <img style="position: absolute; top: 0; right: 0; border: 0;"
+           src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"
+           alt="Fork me on GitHub" />
+    </a>
+
+    <div id="content">
+      <h1>Let&rsquo;s get serious about ES6 generator functions.</h1>
+
+      <p>
+        Several months have passed since support
+        for <a href="http://jlongster.com/2012/10/05/javascript-yield.html">generator
+        functions</a> and the <code>yield</code>
+        keyword <a href="http://wingolog.org/archives/2013/05/08/generators-in-v8">arrived</a>
+        in Node.js v0.11.2. This news was
+        <a href="http://devsmash.com/blog/whats-the-big-deal-with-generators">greeted</a>
+        <a href="http://tobyho.com/2013/06/16/what-are-generators/">with</a>
+        <a href="http://blog.alexmaccaw.com/how-yield-will-transform-node">great</a>
+        <a href="http://almostobsolete.net/coffeescript-generators.html">excitement</a>,
+        because generator syntax
+        provides <a href="http://jlongster.com/A-Study-on-Solving-Callbacks-with-JavaScript-Generators">a
+        much cleaner alternative</a> to using callbacks when writing
+        asynchronous server-side code.
+      </p>
+
+      <p>
+        One of the biggest benefits of using JavaScript on the server is
+        that you can (in theory at least) run the very same code in a web
+        browser. However, if you choose to use generator functions in
+        Node.js, you end up with a bunch of code that can't be executed
+        client-side. So there's the rub: native support for generators is
+        only so exciting because it enables you to write really clean,
+        powerful, unportable code.
+      </p>
+
+      <p>
+        I got tired of waiting for the future to get here, so I developed
+        a tool
+        called <a href="https://npmjs.org/package/regenerator">regenerator</a>
+        to replace generator functions with efficient JavaScript-of-today
+        (ECMAScript 5 or ES5 for short) that behaves the same way. Since
+        the tool itself is implemented in ES5, you can try it right now,
+        in this web browser, without leaving this web page.
+      </p>
+
+      <p>
+        Regenerator relies heavily on
+        the <a href="https://github.com/ariya/esprima/tree/harmony">Esprima</a>
+        JavaScript parser and two libraries that I maintain for
+        manipulating abstract syntax
+        trees, <a href="https://npmjs.org/package/ast-types">ast-types</a>
+        and <a href="https://npmjs.org/package/recast">recast</a>. It is
+        similar in spirit to
+        Google's <a href="https://github.com/google/traceur-compiler">Traceur
+        Compiler</a>, which supports generators and many other ES6
+        features through source transformation, but I would argue it
+        compares favorably to
+        Traceur <a href="javascript:toggleComparison()">in several
+        ways</a><span id="punctuation">.</span>
+        <ul id="comparison" class="hidden">
+          <li>
+            Traceur supports <code>yield</code> expressions only on the
+            right-hand sides of assignment statements and variable
+            declarations, or as standalone statements, whereas regenerator
+            allows a <code>yield</code> expression to appear anywhere an
+            expression is permitted to appear.
+          </li>
+          <li>
+            Regenerator aims to generate as little boilerplate as
+            possible, whereas Traceur
+            generates <a href="http://traceur-compiler.googlecode.com/git/demo/repl.html#function%20*gen(x)%20%7B%0A%20%20yield%20x%3B%0A%7D" target="_blank">more
+            than fifty lines of code</a> for the simplest of generators.
+          </li>
+          <li>
+            Regenerator transforms generator functions and nothing else,
+            so you don't have to buy into the entire Traceur runtime just
+            to get support for generators.
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        Please give the transformer a try below, and feel free to report
+        bugs.  Regenerator
+        is <a href="https://github.com/facebook/regenerator/blob/master/test/tests.es6.js">well-tested</a>
+        and feature-complete, but I would love your help in making it
+        completely bulletproof!
+      </p>
+
+      <div style="position: relative">
+        <div id="inputWrapper">
+          <h2>Input:
+            <span class="hint">
+              <a href="javascript:reportBug()"
+                 target="_blank">report</a> a bug
+            </span>
+          </h2>
+        </div>
+        <div id="outputWrapper">
+          <h2>Output:
+            <span class="hint">
+              control-return to <a href="javascript:evaluateOutput()">run</a>
+            </span>
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <script src="sandbox.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+#content {
+  font-family: sans-serif;
+  margin: 0 auto;
+  width: 800px;
+}
+
+h1, h2 {
+  letter-spacing: -1px;
+}
+
+.CodeMirror {
+  height: auto;
+}
+
+#inputWrapper, #outputWrapper {
+  width: 45%;
+  position: absolute;
+  height: auto;
+}
+
+#inputWrapper {
+  top: 0;
+  left: 0;
+}
+
+#outputWrapper {
+  top: 0;
+  right: 0;
+}
+
+.CodeMirror-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.hint {
+  color: #999;
+  float: right;
+}
+
+.hidden {
+  display: none;
+}
