@@ -58,6 +58,7 @@ h1, h2 {
   position: fixed;
   bottom: 25px;
   background: white;
+  max-width: 250px;
 }
 
 #attribution {
