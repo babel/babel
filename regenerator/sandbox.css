@@ -2,11 +2,11 @@ body {
   background-image: url("yield_ahead.200px.png");
   background-position: 25px 25px;
   background-repeat: no-repeat;
+  font-family: sans-serif;
 }
 
 #content {
   position: relative;
-  font-family: sans-serif;
   margin: 0 250px;
   min-width: 800px;
   max-width: 1024px;
@@ -48,4 +48,22 @@ h1, h2 {
 
 .hidden {
   display: none;
+}
+
+#sandbox {
+  position: relative;
+}
+
+#attribution, #copyright {
+  position: fixed;
+  bottom: 25px;
+  background: white;
+}
+
+#attribution {
+  left: 25px;
+}
+
+#copyright {
+  right: 25px;
 }
