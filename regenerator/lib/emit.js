@@ -325,8 +325,12 @@ Ep.explodeStatement = function(path, labelId) {
   }
 
   if (!meta.containsLeap(stmt)) {
-    if (meta.hasSideEffects(stmt))
-      self.emit(stmt);
+    // Technically we should be able to avoid emitting the statement
+    // altogether if !meta.hasSideEffects(stmt), but that leads to
+    // confusing generated code (for instance, `while (true) {}` just
+    // disappears) and is probably a more appropriate job for a dedicated
+    // dead code elimination pass.
+    self.emit(stmt);
     return;
   }
 

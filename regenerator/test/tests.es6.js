@@ -739,3 +739,24 @@ describe("catch parameter shadowing", function() {
     check(gen(11), [11, 13, 26, 5, 4, 11]);
   });
 });
+
+describe("empty while loops", function() {
+  it("should be preserved in generated code", function() {
+    function *gen(x) {
+      while (x) {
+        // empty while loop
+      }
+
+      do {
+        // empty do-while loop
+      } while (x);
+
+      return gen.toString();
+    }
+
+    var info = gen(false).next();
+    assert.strictEqual(info.done, true);
+    assert.ok(/empty while loop/.test(info.value));
+    assert.ok(/empty do-while loop/.test(info.value));
+  });
+});
