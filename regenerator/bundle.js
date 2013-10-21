@@ -4054,8 +4054,12 @@ Ep.explodeStatement = function(path, labelId) {
   }
 
   if (!meta.containsLeap(stmt)) {
-    if (meta.hasSideEffects(stmt))
-      self.emit(stmt);
+    // Technically we should be able to avoid emitting the statement
+    // altogether if !meta.hasSideEffects(stmt), but that leads to
+    // confusing generated code (for instance, `while (true) {}` just
+    // disappears) and is probably a more appropriate job for a dedicated
+    // dead code elimination pass.
+    self.emit(stmt);
     return;
   }
 
@@ -9429,11 +9433,10 @@ parseYieldExpression: true
             };
         },
 
-        createExportDeclaration: function (def, declaration, specifiers, source) {
+        createExportDeclaration: function (declaration, specifiers, source) {
             return {
                 type: Syntax.ExportDeclaration,
                 declaration: declaration,
-                default: def,
                 specifiers: specifiers,
                 source: source
             };
@@ -10652,11 +10655,7 @@ parseYieldExpression: true
             id = parseArrayInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
         } else {
-            if (state.allowDefault) {
-                id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
-            } else {
-                id = parseVariableIdentifier();
-            }
+            id = state.allowKeyword ? parseNonComputedProperty() : parseVariableIdentifier();
             // 12.2.1
             if (strict && isRestrictedWord(id.name)) {
                 throwErrorTolerant({}, Messages.StrictVarName);
@@ -10774,35 +10773,9 @@ parseYieldExpression: true
     }
 
     function parseExportDeclaration() {
-        var previousAllowDefault, decl, def, src, specifiers;
+        var previousAllowKeyword, decl, def, src, specifiers;
 
         expectKeyword('export');
-
-        if (matchKeyword('default')) {
-            lex();
-            if (match('=')) {
-                lex();
-                def = parseAssignmentExpression();
-            } else if (lookahead.type === Token.Keyword) {
-                switch (lookahead.value) {
-                case 'let':
-                case 'const':
-                case 'var':
-                case 'class':
-                    def = parseSourceElement();
-                    break;
-                case 'function':
-                    def = parseFunctionExpression();
-                    break;
-                default:
-                    throwUnexpected(lex());
-                }
-            } else {
-                def = parseAssignmentExpression();
-            }
-            consumeSemicolon();
-            return delegate.createExportDeclaration(true, def, null, null);
-        }
 
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
@@ -10811,13 +10784,16 @@ parseYieldExpression: true
             case 'var':
             case 'class':
             case 'function':
-                previousAllowDefault = state.allowDefault;
-                state.allowDefault = true;
-                decl = delegate.createExportDeclaration(false, parseSourceElement(), null, null);
-                state.allowDefault = previousAllowDefault;
-                return decl;
+                return delegate.createExportDeclaration(parseSourceElement(), null, null);
             }
-            throwUnexpected(lex());
+        }
+
+        if (isIdentifierName(lookahead)) {
+            previousAllowKeyword = state.allowKeyword;
+            state.allowKeyword = true;
+            decl = parseVariableDeclarationList('let');
+            state.allowKeyword = previousAllowKeyword;
+            return delegate.createExportDeclaration(decl, null, null);
         }
 
         specifiers = [];
@@ -10843,7 +10819,7 @@ parseYieldExpression: true
 
         consumeSemicolon();
 
-        return delegate.createExportDeclaration(false, null, specifiers, src);
+        return delegate.createExportDeclaration(null, specifiers, src);
     }
 
     function parseImportDeclaration() {
@@ -11651,11 +11627,8 @@ parseYieldExpression: true
 
         token = lookahead;
 
-        if (state.allowDefault) {
-            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
-        } else {
-            id = parseVariableIdentifier();
-        }
+        id = parseVariableIdentifier();
+
         if (strict) {
             if (isRestrictedWord(token.value)) {
                 throwErrorTolerant(token, Messages.StrictFunctionName);
@@ -11945,11 +11918,7 @@ parseYieldExpression: true
 
         expectKeyword('class');
 
-        if (state.allowDefault) {
-            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
-        } else {
-            id = parseVariableIdentifier();
-        }
+        id = parseVariableIdentifier();
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
@@ -12811,7 +12780,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
-            allowDefault: true,
+            allowKeyword: true,
             allowIn: true,
             labelSet: {},
             inFunctionBody: false,
@@ -12912,7 +12881,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
-            allowDefault: false,
+            allowKeyword: false,
             allowIn: true,
             labelSet: {},
             parenthesizedCount: 0,
