@@ -36,13 +36,18 @@ var output = CodeMirror(function(output) {
 
 var doc = document;
 var head = doc.documentElement.firstChild;
+var delayTimer;
+var delayMS = 100;
 
 CodeMirror.on(input.doc, "change", function(instance) {
-  try {
-    output.setValue(regenerator(instance.getValue()));
-  } catch (err) {
-    console.log(err);
-  }
+  clearTimeout(delayTimer);
+  delayTimer = setTimeout(function() {
+    try {
+      output.setValue(regenerator(instance.getValue()));
+    } catch (err) {
+      console.log(err);
+    }
+  }, delayMS);
 });
 
 function toggleComparison(a) {
