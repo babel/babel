@@ -31,7 +31,7 @@ var output = CodeMirror(function(output) {
   document.getElementById("outputWrapper").appendChild(output);
 }, {
   value: regenerator(input.getValue()),
-  readOnly: "nocursor"
+  readOnly: true
 });
 
 var doc = document;
