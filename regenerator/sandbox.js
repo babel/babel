@@ -69,12 +69,12 @@ function reportBug() {
   var body = title.cloneNode(false);
 
   title.setAttribute("name", "title");
-  title.setAttribute("value", "Faulty sandbox example");
+  title.setAttribute("value", "Sandbox bug report");
   form.appendChild(title);
 
   body.setAttribute("name", "body");
   body.setAttribute("value", [
-    "This code does not behave as expected:",
+    "The following code does not transform as expected:",
     "```js",
     input.getValue(),
     "```"
@@ -85,7 +85,9 @@ function reportBug() {
   form.setAttribute("method", "GET");
   form.setAttribute("target", "_blank");
 
+  document.body.appendChild(form);
   form.submit();
+  form.parentNode.removeChild(form);
 }
 
 function evaluateOutput() {
