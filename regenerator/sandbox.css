@@ -8,7 +8,7 @@ body {
 #content {
   position: relative;
   margin: 0 250px;
-  min-width: 800px;
+  min-width: 600px;
   max-width: 1024px;
 }
 
@@ -22,6 +22,7 @@ h1, h2 {
 
 #inputWrapper, #outputWrapper {
   width: 45%;
+  min-width: 300px;
   position: absolute;
   height: auto;
 }
@@ -57,8 +58,8 @@ h1, h2 {
 #attribution, #copyright {
   position: fixed;
   bottom: 25px;
-  background: white;
   max-width: 250px;
+  border: none;
 }
 
 #attribution {
