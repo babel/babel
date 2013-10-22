@@ -5412,13 +5412,13 @@ def("Node")
     .field("loc", or(
         def("SourceLocation"),
         null
-    ), defaults.null);
+    ), defaults["null"]);
 
 def("SourceLocation")
     .build("start", "end", "source")
     .field("start", def("Position"))
     .field("end", def("Position"))
-    .field("source", or(isString, null), defaults.null);
+    .field("source", or(isString, null), defaults["null"]);
 
 def("Position")
     .build("line", "column")
@@ -5432,13 +5432,13 @@ def("Program")
 
 def("Function")
     .bases("Node")
-    .field("id", or(def("Identifier"), null), defaults.null)
+    .field("id", or(def("Identifier"), null), defaults["null"])
     .field("params", [def("Pattern")])
     .field("body", or(def("BlockStatement"), def("Expression")))
-    .field("generator", isBoolean, defaults.false)
-    .field("expression", isBoolean, defaults.false)
+    .field("generator", isBoolean, defaults["false"])
+    .field("expression", isBoolean, defaults["false"])
     .field("defaults", [def("Expression")], defaults.emptyArray)
-    .field("rest", or(def("Identifier"), null), defaults.null);
+    .field("rest", or(def("Identifier"), null), defaults["null"]);
 
 def("Statement").bases("Node");
 
@@ -5463,7 +5463,7 @@ def("IfStatement")
     .build("test", "consequent", "alternate")
     .field("test", def("Expression"))
     .field("consequent", def("Statement"))
-    .field("alternate", or(def("Statement"), null), defaults.null);
+    .field("alternate", or(def("Statement"), null), defaults["null"]);
 
 def("LabeledStatement")
     .bases("Statement")
@@ -5474,12 +5474,12 @@ def("LabeledStatement")
 def("BreakStatement")
     .bases("Statement")
     .build("label")
-    .field("label", or(def("Identifier"), null), defaults.null);
+    .field("label", or(def("Identifier"), null), defaults["null"]);
 
 def("ContinueStatement")
     .bases("Statement")
     .build("label")
-    .field("label", or(def("Identifier"), null), defaults.null);
+    .field("label", or(def("Identifier"), null), defaults["null"]);
 
 def("WithStatement")
     .bases("Statement")
@@ -5492,7 +5492,7 @@ def("SwitchStatement")
     .build("discriminant", "cases", "lexical")
     .field("discriminant", def("Expression"))
     .field("cases", [def("SwitchCase")])
-    .field("lexical", isBoolean, defaults.false);
+    .field("lexical", isBoolean, defaults["false"]);
 
 def("ReturnStatement")
     .bases("Statement")
@@ -5515,13 +5515,13 @@ def("TryStatement")
         return this.handler ? [this.handler] : [];
     }, true) // Indicates this field is hidden from eachField iteration.
     .field("guardedHandlers", [def("CatchClause")], defaults.emptyArray)
-    .field("finalizer", or(def("BlockStatement"), null), defaults.null);
+    .field("finalizer", or(def("BlockStatement"), null), defaults["null"]);
 
 def("CatchClause")
     .bases("Node")
     .build("param", "guard", "body")
     .field("param", def("Pattern"))
-    .field("guard", or(def("Expression"), null), defaults.null)
+    .field("guard", or(def("Expression"), null), defaults["null"])
     .field("body", def("BlockStatement"));
 
 def("WhileStatement")
@@ -5608,8 +5608,8 @@ def("Property")
     .field("key", or(def("Literal"), def("Identifier")))
     .field("value", def("Expression"))
     // Esprima extensions not mentioned in the Mozilla Parser API:
-    .field("method", isBoolean, defaults.false)
-    .field("shorthand", isBoolean, defaults.false);
+    .field("method", isBoolean, defaults["false"])
+    .field("shorthand", isBoolean, defaults["false"]);
 
 def("SequenceExpression")
     .bases("Expression")
@@ -5627,7 +5627,7 @@ def("UnaryExpression")
     .field("argument", def("Expression"))
     // TODO Esprima doesn't bother with this field, presumably because
     // it's always true for unary operators.
-    .field("prefix", isBoolean, defaults.true);
+    .field("prefix", isBoolean, defaults["true"]);
 
 var BinaryOperator = or(
     "==", "!=", "===", "!==",
@@ -5759,7 +5759,6 @@ var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isString = builtin.string;
 var isBoolean = builtin.boolean;
-var defaults = require("../lib/shared").defaults;
 
 // Note that none of these types are buildable because the Mozilla Parser
 // API doesn't specify any builder functions, and nobody uses E4X anymore.
@@ -5843,7 +5842,7 @@ def("XMLProcessingInstruction")
 
 types.finalize();
 
-},{"../lib/shared":22,"../lib/types":24,"./core":15}],17:[function(require,module,exports){
+},{"../lib/types":24,"./core":15}],17:[function(require,module,exports){
 require("./core");
 var types = require("../lib/types");
 var def = types.Type.def;
@@ -5860,10 +5859,10 @@ def("ArrowFunctionExpression")
     .build("params", "body", "expression")
     // The forced null value here is compatible with the overridden
     // definition of the "id" field in the Function interface.
-    .field("id", null, defaults.null)
+    .field("id", null, defaults["null"])
     // The current spec forbids arrow generators, so I have taken the
     // liberty of enforcing that. TODO Report this.
-    .field("generator", false, defaults.false);
+    .field("generator", false, defaults["false"]);
 
 def("YieldExpression")
     .bases("Expression")
@@ -5943,14 +5942,14 @@ def("ClassDeclaration")
     .build("id", "body", "superClass")
     .field("id", def("Identifier"))
     .field("body", def("ClassBody"))
-    .field("superClass", or(def("Expression"), null), defaults.null);
+    .field("superClass", or(def("Expression"), null), defaults["null"]);
 
 def("ClassExpression")
     .bases("Expression")
     .build("id", "body", "superClass")
-    .field("id", or(def("Identifier"), null), defaults.null)
+    .field("id", or(def("Identifier"), null), defaults["null"])
     .field("body", def("ClassBody"))
-    .field("superClass", or(def("Expression"), null), defaults.null);
+    .field("superClass", or(def("Expression"), null), defaults["null"]);
 
 // Specifier and NamedSpecifier are non-standard types that I introduced
 // for definitional convenience.
@@ -5958,7 +5957,7 @@ def("Specifier").bases("Node");
 def("NamedSpecifier")
     .bases("Specifier")
     .field("id", def("Identifier"))
-    .field("name", def("Identifier"), defaults.null);
+    .field("name", def("Identifier"), defaults["null"]);
 
 def("ExportSpecifier")
     .bases("NamedSpecifier")
@@ -6013,13 +6012,13 @@ def("XJSAttribute")
         def("Literal"), // attr="value"
         def("XJSExpressionContainer"), // attr={value}
         null // attr= or just attr
-    ), defaults.null);
+    ), defaults["null"]);
 
 def("XJSIdentifier")
     .bases("Node")
     .build("name", "namespace")
     .field("name", isString)
-    .field("namespace", or(isString, null), defaults.null);
+    .field("namespace", or(isString, null), defaults["null"]);
 
 def("XJSExpressionContainer")
     .bases("Expression")
@@ -6030,7 +6029,7 @@ def("XJSElement")
     .bases("Expression")
     .build("openingElement", "closingElement", "children")
     .field("openingElement", def("XJSOpeningElement"))
-    .field("closingElement", or(def("XJSClosingElement"), null), defaults.null)
+    .field("closingElement", or(def("XJSClosingElement"), null), defaults["null"])
     .field("children", [or(
         def("XJSElement"),
         def("XJSExpressionContainer"),
@@ -6057,7 +6056,7 @@ def("XJSOpeningElement")
     .build("name", "attributes", "selfClosing")
     .field("name", def("XJSIdentifier"))
     .field("attributes", [def("XJSAttribute")], defaults.emptyArray)
-    .field("selfClosing", isBoolean, defaults.false);
+    .field("selfClosing", isBoolean, defaults["false"]);
 
 def("XJSClosingElement")
     .bases("Node") // TODO Same concern.
