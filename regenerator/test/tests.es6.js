@@ -760,3 +760,25 @@ describe("empty while loops", function() {
     assert.ok(/empty do-while loop/.test(info.value));
   });
 });
+
+describe("object literals with multiple yields", function() {
+  it("should receive different sent values", function() {
+    function *gen(fn) {
+      return {
+        a: yield "a",
+        b: yield "b",
+        c: fn(yield "c", yield "d"),
+        d: [yield "e", yield "f"]
+      };
+    }
+
+    check(gen(function sum(x, y) {
+      return x + y;
+    }), ["a", "b", "c", "d", "e", "f"], {
+      a: 1,
+      b: 2,
+      c: 3 + 4,
+      d: [5, 6]
+    });
+  });
+});
