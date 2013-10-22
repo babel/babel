@@ -7,7 +7,7 @@ body {
 
 #content {
   position: relative;
-  margin: 0 250px;
+  margin: 0 250px 40px;
   min-width: 600px;
   max-width: 1024px;
 }
@@ -20,21 +20,23 @@ h1, h2 {
   height: auto;
 }
 
+#sandbox {
+}
+
 #inputWrapper, #outputWrapper {
-  width: 45%;
-  min-width: 300px;
-  position: absolute;
-  height: auto;
+  width: 50%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 #inputWrapper {
-  top: 0;
-  left: 0;
+  float: left;
+  padding-right: 20px;
 }
 
 #outputWrapper {
-  top: 0;
-  right: 0;
+  float: right;
+  padding-left: 20px;
 }
 
 .CodeMirror-scroll {
@@ -51,10 +53,6 @@ h1, h2 {
   display: none;
 }
 
-#sandbox {
-  position: relative;
-}
-
 #attribution, #copyright {
   position: fixed;
   bottom: 25px;
@@ -68,4 +66,10 @@ h1, h2 {
 
 #copyright {
   right: 25px;
+}
+
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: table;
 }
