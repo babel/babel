@@ -9,6 +9,16 @@
     <script src="bundle.js"></script>
   </head>
   <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=35921810593";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <a href="https://github.com/facebook/regenerator">
       <img style="position: absolute; top: 0; right: 0; border: 0;"
            src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"
@@ -17,6 +27,15 @@
 
     <div id="content">
       <h1>Let&rsquo;s get serious about ES6 generator functions.</h1>
+
+      <div class="fb-like"
+           data-href="https://facebook.github.io/regenerator"
+           data-colorscheme="light"
+           data-layout="standard"
+           data-action="like"
+           data-show-faces="true"
+           data-send="true">
+      </div>
 
       <p>
         Several months have passed since support
