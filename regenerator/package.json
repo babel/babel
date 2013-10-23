@@ -23,9 +23,7 @@
     "url": "git://github.com/facebook/regenerator.git"
   },
   "main": "main.js",
-  "bin": {
-    "regenerate": "bin/regenerate"
-  },
+  "bin": "bin/regenerator",
   "scripts": {
     "test": "node test/run.js"
   },

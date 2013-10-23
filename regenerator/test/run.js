@@ -11,7 +11,7 @@ var fs = require("fs");
 var path = require("path");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
-var regenerate = require("../main");
+var regenerator = require("../main");
 
 function convert(es6File, es5File, callback) {
   fs.readFile(es6File, "utf-8", function(err, es6) {
@@ -19,7 +19,7 @@ function convert(es6File, es5File, callback) {
       return callback(err);
     }
 
-    fs.writeFile(es5File, regenerate(es6), callback);
+    fs.writeFile(es5File, regenerator(es6), callback);
   });
 }
 
