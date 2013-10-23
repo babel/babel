@@ -20,7 +20,7 @@ assert.ok(
   "Bad esprima version: " + esprimaHarmony.version
 );
 
-function regenerate(source) {
+function regenerator(source) {
   if (!genFunExp.test(source)) {
     return source; // Shortcut: no generators to transform.
   }
@@ -37,12 +37,12 @@ function regenerate(source) {
 }
 
 // To modify an AST directly, call require("regenerator").transform(ast).
-regenerate.transform = transform;
+regenerator.transform = transform;
 
-regenerate.runtime = {
+regenerator.runtime = {
   dev: path.join(__dirname, "runtime", "dev.js"),
   min: path.join(__dirname, "runtime", "min.js")
 };
 
 // To transform a string of ES6 code, call require("regenerator")(source);
-module.exports = regenerate;
+module.exports = regenerator;

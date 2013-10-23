@@ -34,7 +34,7 @@ You have several options for using this module.
 
 Simplest usage:
 ```sh
-path/to/node_modules/regenerator/bin/regenerate es6.js > es5.js
+path/to/node_modules/regenerator/bin/regenerator es6.js > es5.js
 ```
 
 Programmatic usage:
