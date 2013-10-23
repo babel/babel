@@ -14,6 +14,7 @@ var b = types.builders;
 var n = types.namedTypes;
 var leap = require("./leap");
 var meta = require("./meta");
+var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
   assert.ok(this instanceof Emitter);
@@ -100,6 +101,36 @@ Ep.contextProperty = function(name) {
     b.identifier(name),
     false
   );
+};
+
+var volatileContextPropertyNames = {
+  next: true,
+  sent: true,
+  rval: true,
+  thrown: true
+};
+
+// A "volatile" context property is a MemberExpression like context.sent
+// that should probably be stored in a temporary variable when there's a
+// possibility the property will get overwritten.
+Ep.isVolatileContextProperty = function(expr) {
+  if (n.MemberExpression.check(expr)) {
+    if (expr.computed) {
+      // If it's a computed property such as context[couldBeAnything],
+      // assume the worst in terms of volatility.
+      return true;
+    }
+
+    if (n.Identifier.check(expr.object) &&
+        n.Identifier.check(expr.property) &&
+        expr.object.name === this.contextId.name &&
+        hasOwn.call(volatileContextPropertyNames,
+                    expr.property.name)) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 // Shorthand for setting context.rval and jumping to `context.stop()`.
@@ -796,15 +827,17 @@ Ep.explodeExpression = function(path, ignoreResult) {
       // Side effects already emitted above.
 
     } else if (tempVar || (hasLeapingChildren &&
-                           meta.hasSideEffects(result))) {
+                           (self.isVolatileContextProperty(result) ||
+                            meta.hasSideEffects(result)))) {
       // If tempVar was provided, then the result will always be assigned
       // to it, even if the result does not otherwise need to be assigned
       // to a temporary variable.  When no tempVar is provided, we have
       // the flexibility to decide whether a temporary variable is really
       // necessary.  In general, temporary assignment is required only
       // when some other child contains a leap and the child in question
-      // has side effects that need to occur in proper sequence relative
-      // to the leap.
+      // is a context property like $ctx.sent that might get overwritten
+      // or an expression with side effects that need to occur in proper
+      // sequence relative to the leap.
       result = self.emitAssign(
         tempVar || self.makeTempVar(),
         result
@@ -831,10 +864,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
     return finish(b.callExpression(
       self.explodeExpression(path.get("callee")),
       path.get("arguments").map(function(argPath) {
-        return explodeViaTempVar(
-          hasLeapingChildren ? self.makeTempVar() : null,
-          argPath
-        );
+        return explodeViaTempVar(null, argPath);
       })
     ));
 
@@ -844,10 +874,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         return b.property(
           propPath.value.kind,
           propPath.value.key,
-          explodeViaTempVar(
-            hasLeapingChildren ? self.makeTempVar() : null,
-            propPath.get("value")
-          )
+          explodeViaTempVar(null, propPath.get("value"))
         );
       })
     ));
@@ -855,10 +882,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "ArrayExpression":
     return finish(b.arrayExpression(
       path.get("elements").map(function(elemPath) {
-        return explodeViaTempVar(
-          hasLeapingChildren ? self.makeTempVar() : null,
-          elemPath
-        );
+        return explodeViaTempVar(null, elemPath);
       })
     ));
 
@@ -949,7 +973,6 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
   case "YieldExpression":
     var after = loc();
-    var result = self.makeTempVar();
     var arg = expr.argument && self.explodeExpression(path.get("argument"));
     if (arg && expr.delegate) {
       self.emit(b.returnStatement(b.callExpression(
@@ -960,8 +983,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
       self.emit(b.returnStatement(arg || null));
     }
     self.mark(after);
-    self.emitAssign(result, self.contextProperty("sent"));
-    return result;
+    return self.contextProperty("sent");
 
   default:
     throw new Error(
