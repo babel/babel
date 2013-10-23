@@ -53,6 +53,18 @@ var es5Source = recast.print(ast);
 How can you get involved?
 ---
 
-Fork the repository, create some failing tests cases, and send me pull
-requests. If you're feeling brave, you are more than welcome to dive into
-the transformer code and fix the bug(s) yourself.
+The easiest way to get involved is to look for buggy examples using [the
+sandbox](http://facebook.github.io/regenerator/), and when you find
+something strange just click the "report a bug" link (the new issue form
+will be populated automatically with the problematic code).
+
+Alternatively, you can
+[fork](https://github.com/facebook/regenerator/fork) the repository,
+create some failing tests cases in [test/tests.es6.js](
+https://github.com/facebook/regenerator/blob/master/test/tests.es6.js),
+and send pull requests for me to fix.
+
+If you're feeling especially brave, you are more than welcome to dive into
+the transformer code and fix the bug(s) yourself, but I must warn you that
+the code could really benefit from [better implementation
+comments](https://github.com/facebook/regenerator/issues/7).
