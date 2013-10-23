@@ -292,7 +292,7 @@ Ep.explode = function(path, ignoreResult) {
       "unknown Node of type " +
         JSON.stringify(node.type));
   }
-}
+};
 
 function getDeclError(node) {
   return new Error(
@@ -351,7 +351,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.jumpIfNot(self.explodeExpression(path.get("test")), after);
     self.leapManager.withEntry(
       new leap.LoopEntry(after, before, labelId),
-      function() { self.explodeStatement(path.get("body")) }
+      function() { self.explodeStatement(path.get("body")); }
     );
     self.jump(before);
     self.mark(after);
@@ -366,7 +366,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.mark(first);
     self.leapManager.withEntry(
       new leap.LoopEntry(after, test, labelId),
-      function() { self.explode(path.get("body")) }
+      function() { self.explode(path.get("body")); }
     );
     self.mark(test);
     self.jumpIf(self.explodeExpression(path.get("test")), first);
@@ -395,7 +395,7 @@ Ep.explodeStatement = function(path, labelId) {
 
     self.leapManager.withEntry(
       new leap.LoopEntry(after, update, labelId),
-      function() { self.explodeStatement(path.get("body")) }
+      function() { self.explodeStatement(path.get("body")); }
     );
 
     self.mark(update);
@@ -453,7 +453,7 @@ Ep.explodeStatement = function(path, labelId) {
 
     self.leapManager.withEntry(
       new leap.LoopEntry(after, head, labelId),
-      function() { self.explodeStatement(path.get("body")) }
+      function() { self.explodeStatement(path.get("body")); }
     );
 
     self.jump(head);
