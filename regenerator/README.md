@@ -15,7 +15,7 @@ Installation
 
 From NPM:
 ```sh
-npm install regenerator
+npm install -g regenerator
 ```
 
 From GitHub:
@@ -34,8 +34,8 @@ You have several options for using this module.
 
 Simplest usage:
 ```sh
-bin/regenerator es6.js > es5.js
-bin/regenerator --include-runtime es6.js > es5.js
+regenerator es6.js > es5.js # Just the transform.
+regenerator --include-runtime es6.js > es5.js # Add the runtime too.
 ```
 
 Programmatic usage:
