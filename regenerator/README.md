@@ -3,7 +3,7 @@ regenerator [![Build Status](https://travis-ci.org/facebook/regenerator.png?bran
 
 This package implements a fully-functional source transformation that
 takes the proposed syntax for generators/`yield` from future versions of
-JS ([ECMAScript6 or ES6](http://wiki.ecmascript.org/doku.php?id=harmony:generators), experimentally implemented in Node.js v0.11) and
+JS ([ECMAScript6 or ES6](http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts), experimentally implemented in Node.js v0.11) and
 spits out efficient JS-of-today (ES5) that behaves the same way.
 
 A small runtime library (less than 1KB compressed) is required to provide the
