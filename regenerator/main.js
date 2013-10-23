@@ -9,6 +9,7 @@
 
 var assert = require("assert");
 var path = require("path");
+var fs = require("fs");
 var transform = require("./lib/visit").transform;
 var guessTabWidth = require("./lib/util").guessTabWidth;
 var recast = require("recast");
@@ -20,9 +21,13 @@ assert.ok(
   "Bad esprima version: " + esprimaHarmony.version
 );
 
-function regenerator(source) {
+function regenerator(source, includeRuntime) {
+  var runtime = includeRuntime ? fs.readFileSync(
+    regenerator.runtime.dev, "utf-8"
+  ) + "\n" : "";
+
   if (!genFunExp.test(source)) {
-    return source; // Shortcut: no generators to transform.
+    return runtime + source; // Shortcut: no generators to transform.
   }
 
   var options = {
@@ -33,7 +38,8 @@ function regenerator(source) {
   };
 
   var ast = recast.parse(source, options);
-  return recast.print(transform(ast), options);
+  var es5 = recast.print(transform(ast), options);
+  return runtime + es5;
 }
 
 // To modify an AST directly, call require("regenerator").transform(ast).

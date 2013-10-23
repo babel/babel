@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 // -*- mode: js -*-
 
-var fs = require("fs");
-
 var options = require("commander")
   .version(require("../package.json").version)
   .usage("[options] <file>")
@@ -15,12 +13,7 @@ if (typeof file !== "string") {
   process.exit(-1);
 }
 
-var source = fs.readFileSync(file, "utf-8");
-
-if (options.includeRuntime) {
-  source = fs.readFileSync(require("path").join(
-    __dirname, "..", "runtime", "dev.js"
-  ), "utf-8") + "\n" + source;
-}
-
-process.stdout.write(require("../main")(source));
+process.stdout.write(require("../main")(
+  require("fs").readFileSync(file, "utf-8"),
+  options.includeRuntime
+));
