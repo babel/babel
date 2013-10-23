@@ -831,7 +831,10 @@ Ep.explodeExpression = function(path, ignoreResult) {
     return finish(b.callExpression(
       self.explodeExpression(path.get("callee")),
       path.get("arguments").map(function(argPath) {
-        return explodeViaTempVar(null, argPath);
+        return explodeViaTempVar(
+          hasLeapingChildren ? self.makeTempVar() : null,
+          argPath
+        );
       })
     ));
 
@@ -841,7 +844,10 @@ Ep.explodeExpression = function(path, ignoreResult) {
         return b.property(
           propPath.value.kind,
           propPath.value.key,
-          explodeViaTempVar(null, propPath.get("value"))
+          explodeViaTempVar(
+            hasLeapingChildren ? self.makeTempVar() : null,
+            propPath.get("value")
+          )
         );
       })
     ));
@@ -849,7 +855,10 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "ArrayExpression":
     return finish(b.arrayExpression(
       path.get("elements").map(function(elemPath) {
-        return explodeViaTempVar(null, elemPath);
+        return explodeViaTempVar(
+          hasLeapingChildren ? self.makeTempVar() : null,
+          elemPath
+        );
       })
     ));
 
