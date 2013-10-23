@@ -60,8 +60,7 @@ will be populated automatically with the problematic code).
 
 Alternatively, you can
 [fork](https://github.com/facebook/regenerator/fork) the repository,
-create some failing tests cases in [test/tests.es6.js](
-https://github.com/facebook/regenerator/blob/master/test/tests.es6.js),
+create some failing tests cases in [test/tests.es6.js](test/tests.es6.js),
 and send pull requests for me to fix.
 
 If you're feeling especially brave, you are more than welcome to dive into
