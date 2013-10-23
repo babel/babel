@@ -9,4 +9,4 @@ require("assert").strictEqual(
 );
 
 var source = require("fs").readFileSync(file, "utf-8");
-process.stdout.write(require("regenerator")(source));
+process.stdout.write(require("../main")(source));
