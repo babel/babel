@@ -949,6 +949,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
   case "YieldExpression":
     var after = loc();
+    var result = self.makeTempVar();
     var arg = expr.argument && self.explodeExpression(path.get("argument"));
     if (arg && expr.delegate) {
       self.emit(b.returnStatement(b.callExpression(
@@ -959,7 +960,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
       self.emit(b.returnStatement(arg || null));
     }
     self.mark(after);
-    return self.contextProperty("sent");
+    self.emitAssign(result, self.contextProperty("sent"));
+    return result;
 
   default:
     throw new Error(

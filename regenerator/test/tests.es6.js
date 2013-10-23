@@ -50,6 +50,14 @@ describe("simple argument yielder", function() {
     check(gen("oyez"), ["oyez"]);
     check(gen("foo", "bar"), ["foo"]);
   });
+
+  it("should support multiple yields in expression", function() {
+    function *gen() { return (yield 0) + (yield 0); }
+    var itr = gen();
+    itr.next();
+    itr.next(1);
+    assert.equal(itr.next(2).value, 3);
+  });
 });
 
 describe("range generator", function() {
