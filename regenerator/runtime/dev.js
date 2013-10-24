@@ -125,12 +125,10 @@
 
       // Pre-initialize at least 20 temporary variables to enable hidden
       // class optimizations for simple generators.
-      var tempIndex = 0;
-      var tempName;
-      while ((tempName = "t" + tempIndex) &&
-             (tempIndex < 20 || hasOwn.call(this, tempName))) {
+      for (var tempIndex = 0, tempName;
+           hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
+           ++tempIndex) {
         this[tempName] = null;
-        ++tempIndex;
       }
     },
 
