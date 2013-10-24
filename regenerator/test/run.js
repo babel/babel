@@ -98,13 +98,18 @@ function makeMochaCopyFunction(fileName) {
 enqueue(makeMochaCopyFunction("mocha.js"));
 enqueue(makeMochaCopyFunction("mocha.css"));
 
+// uglify-js does not work properly due to Node 0.11.7 bug.
+// (https://github.com/joyent/node/issues/6235)
 if (!semver.eq(process.version, "0.11.7")) {
-  // uglify-js does not work properly due to Node 0.11.7 bug.
-  // (https://github.com/joyent/node/issues/6235)
-  enqueue(bundle, [
-    "./test/tests.es5.js",
-    "test/tests.browser.js"
-  ]);
+  try {
+    require.resolve("browserify"); // Throws if missing.
+    enqueue(bundle, [
+      "./test/tests.es5.js",
+      "test/tests.browser.js"
+    ]);
+  } catch (ignored) {
+    console.error("browserify not installed; skipping bundle step");
+  }
 }
 
 flush();
