@@ -21,8 +21,14 @@ assert.ok(
   "Bad esprima version: " + esprimaHarmony.version
 );
 
-function regenerator(source, includeRuntime) {
-  var runtime = includeRuntime ? fs.readFileSync(
+function regenerator(source, options) {
+  if (!options) {
+    options = {
+      includeRuntime: false
+    };
+  }
+
+  var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
   ) + "\n" : "";
 
@@ -30,15 +36,15 @@ function regenerator(source, includeRuntime) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var options = {
+  var recastOptions = {
     tabWidth: guessTabWidth(source),
     // Use the harmony branch of Esprima that installs with regenerator
     // instead of the master branch that recast provides.
     esprima: esprimaHarmony
   };
 
-  var ast = recast.parse(source, options);
-  var es5 = recast.print(transform(ast), options);
+  var ast = recast.parse(source, recastOptions);
+  var es5 = recast.print(transform(ast), recastOptions);
   return runtime + es5;
 }
 
