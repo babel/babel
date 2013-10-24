@@ -15,5 +15,5 @@ if (typeof file !== "string") {
 
 process.stdout.write(require("../main")(
   require("fs").readFileSync(file, "utf-8"),
-  options.includeRuntime
+  options // note: `regenerator` will ignore any unknown options anyway
 ));
