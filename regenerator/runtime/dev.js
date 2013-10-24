@@ -34,13 +34,14 @@
 
   function Generator(innerFn, self) {
     var generator = this;
-    var context = new Context;
+    var context = new Context();
     var state = GenStateSuspendedStart;
 
     function invoke() {
       state = GenStateExecuting;
-      do var value = innerFn.call(self, context);
-      while (value === ContinueSentinel);
+      do {
+        var value = innerFn.call(self, context);
+      } while (value === ContinueSentinel);
       // If an exception is thrown from innerFn, we leave state ===
       // GenStateExecuting and loop back for another invocation.
       state = context.done
@@ -126,8 +127,8 @@
       // class optimizations for simple generators.
       var tempIndex = 0;
       var tempName;
-      while (tempName = "t" + tempIndex, // N.B. Comma operator!
-             tempIndex < 20 || hasOwn.call(this, tempName)) {
+      while ((tempName = "t" + tempIndex) &&
+             (tempIndex < 20 || hasOwn.call(this, tempName))) {
         this[tempName] = null;
         ++tempIndex;
       }
