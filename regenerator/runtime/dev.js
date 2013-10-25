@@ -83,11 +83,11 @@
       }
     };
 
-    generator["throw"] = function(exception) {
+    generator.throw = function(exception) {
       assertCanInvoke();
 
       if (context.delegate) {
-        var info = context.delegate["throw"](exception);
+        var info = context.delegate.throw(exception);
         if (info.done) {
           context.delegate = null;
         } else {
