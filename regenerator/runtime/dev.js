@@ -100,11 +100,13 @@
         throw exception;
       }
 
-      while (true) try {
+      while (true) {
         context.dispatchException(exception);
-        return invoke();
-      } catch (thrown) {
-        exception = thrown;
+        try {
+          return invoke();
+        } catch (thrown) {
+          exception = thrown;
+        }
       }
     };
   }
