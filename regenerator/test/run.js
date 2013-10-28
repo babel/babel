@@ -67,21 +67,21 @@ function asyncCallback(err) {
 }
 
 enqueue(convert, [
-  "test/tests.es6.js",
-  "test/tests.es5.js"
+  "./test/tests.es6.js",
+  "./test/tests.es5.js"
 ]);
 
 if (semver.gte(process.version, "0.11.0")) {
   enqueue("mocha", [
     "--harmony-generators",
     "--reporter", "spec",
-    "test/tests.es6.js"
+    "./test/tests.es6.js"
   ]);
 }
 
 enqueue("mocha", [
   "--reporter", "spec",
-  "test/tests.es5.js"
+  "./test/tests.es5.js"
 ]);
 
 var mochaDir = path.dirname(require.resolve("mocha"));
@@ -105,7 +105,7 @@ if (!semver.eq(process.version, "0.11.7")) {
     require.resolve("browserify"); // Throws if missing.
     enqueue(bundle, [
       "./test/tests.es5.js",
-      "test/tests.browser.js"
+      "./test/tests.browser.js"
     ]);
   } catch (ignored) {
     console.error("browserify not installed; skipping bundle step");
