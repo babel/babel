@@ -790,3 +790,22 @@ describe("object literals with multiple yields", function() {
     });
   });
 });
+
+describe("generator .throw method", function() {
+  it("should work after the final call to .next", function() {
+    function *gen() {
+      yield 1;
+    }
+
+    var g = gen();
+    assert.deepEqual(g.next(), { value: 1, done: false });
+
+    var exception = new Error("unhandled exception");
+    try {
+      g.throw(exception);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, exception);
+    }
+  });
+});
