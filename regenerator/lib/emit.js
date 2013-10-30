@@ -861,8 +861,25 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "CallExpression":
+    var oldCalleePath = path.get("callee");
+    var newCallee = self.explodeExpression(oldCalleePath);
+
+    // If the callee was not previously a MemberExpression, then the
+    // CallExpression was "unqualified," meaning its `this` object should
+    // be the global object. If the exploded expression has become a
+    // MemberExpression, then we need to force it to be unqualified by
+    // using the (0, object.property)(...) trick; otherwise, it will
+    // receive the object of the MemberExpression as its `this` object.
+    if (!n.MemberExpression.check(oldCalleePath.node) &&
+        n.MemberExpression.check(newCallee)) {
+      newCallee = b.sequenceExpression([
+        b.literal(0),
+        newCallee
+      ]);
+    }
+
     return finish(b.callExpression(
-      self.explodeExpression(path.get("callee")),
+      newCallee,
       path.get("arguments").map(function(argPath) {
         return explodeViaTempVar(null, argPath);
       })
