@@ -71,7 +71,7 @@ enqueue(convert, [
   "./test/tests.es5.js"
 ]);
 
-if (semver.gte(process.version, "0.11.0")) {
+if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
     "--harmony-generators",
     "--reporter", "spec",
