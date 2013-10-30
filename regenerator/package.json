@@ -34,7 +34,7 @@
     "recast": "~0.4.23",
     "private": "~0.0.5"
   },
-  "optionalDependencies": {
+  "devDependencies": {
     "mocha": "~1.13.0",
     "semver": "~2.1.0"
   },
