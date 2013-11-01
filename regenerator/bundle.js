@@ -1608,12 +1608,20 @@ Ep.getDispatchLoop = function() {
   // we can finally resolve this.finalLoc.value.
   this.finalLoc.value = this.listing.length;
 
-  cases.push(b.switchCase(this.finalLoc, [
-    // This will check/clear both context.thrown and context.rval.
-    b.returnStatement(
-      b.callExpression(this.contextProperty("stop"), [])
-    )
-  ]));
+  cases.push(
+    b.switchCase(this.finalLoc, [
+      // Intentionally fall through to the "end" case...
+    ]),
+
+    // So that the runtime can jump to the final location without having
+    // to know its offset, we provide the "end" case as a synonym.
+    b.switchCase(b.literal("end"), [
+      // This will check/clear both context.thrown and context.rval.
+      b.returnStatement(
+        b.callExpression(this.contextProperty("stop"), [])
+      )
+    ])
+  );
 
   return b.whileStatement(
     b.literal(1),
