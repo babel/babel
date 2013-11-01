@@ -596,6 +596,36 @@ describe("delegated yield", function() {
     assert.deepEqual(g.next(4), { value: "zxcv", done: false });
     assert.deepEqual(g.next(5), { value: void 0, done: true });
   });
+
+  it("should be governed by enclosing try statements", function() {
+    var error = new Error("thrown");
+
+    function *outer(n) {
+      try {
+        yield 0;
+        yield* inner(n);
+        yield 1;
+      } catch (err) {
+        yield err.message;
+      }
+      yield 4;
+    }
+
+    function *inner(n) {
+      while (n --> 0) {
+        try {
+          if (n === 3) {
+            raise(error);
+          }
+        } finally {
+          yield n;
+        }
+      }
+    }
+
+    check(outer(3), [0, 2, 1, 0, 1, 4]);
+    check(outer(5), [0, 4, 3, "thrown", 4]);
+  });
 });
 
 describe("function declaration hoisting", function() {
