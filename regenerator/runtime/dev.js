@@ -135,13 +135,14 @@
     },
 
     stop: function() {
+      this.done = true;
+
       if (hasOwn.call(this, "thrown")) {
         var thrown = this.thrown;
         delete this.thrown;
         throw thrown;
       }
 
-      this.done = true;
       return this.rval;
     },
 
@@ -187,7 +188,6 @@
     },
 
     dispatchException: function(exception) {
-      var entry;
       var finallyEntries = [];
       var dispatched = false;
 
@@ -195,10 +195,13 @@
         throw exception;
       }
 
+      // Dispatch the exception to the "end" location by default.
+      this.thrown = exception;
+      this.next = "end";
+
       for (var i = this.tryStack.length - 1; i >= 0; --i) {
-        entry = this.tryStack[i];
+        var entry = this.tryStack[i];
         if (entry.catchLoc) {
-          this.thrown = exception;
           this.next = entry.catchLoc;
           dispatched = true;
           break;
@@ -206,10 +209,6 @@
           finallyEntries.push(entry);
           dispatched = true;
         }
-      }
-
-      if (!dispatched) {
-        throw exception;
       }
 
       while ((entry = finallyEntries.pop())) {
