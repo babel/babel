@@ -209,6 +209,39 @@ describe("try-finally generator", function() {
     check(usingRaise(true), [0, 1, 4], 5);
     check(usingRaise(false), [0, 1, 6], 7);
   });
+
+  it("should execute finally blocks before throwing", function() {
+    var uncaughtError = new Error("uncaught");
+
+    function *uncaught(condition) {
+      try {
+        yield 0;
+        if (condition) {
+          yield 1;
+          raise(uncaughtError);
+        }
+        yield 2;
+      } finally {
+        yield 3;
+      }
+      yield 4;
+    }
+
+    check(uncaught(false), [0, 2, 3, 4]);
+
+    var u = uncaught(true);
+
+    assert.deepEqual(u.next(), { value: 0, done: false });
+    assert.deepEqual(u.next(), { value: 1, done: false });
+    assert.deepEqual(u.next(), { value: 3, done: false });
+
+    try {
+      u.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, uncaughtError);
+    }
+  });
 });
 
 describe("try-catch-finally generator", function() {
@@ -562,6 +595,36 @@ describe("delegated yield", function() {
     assert.deepEqual(g.next(2), { value: 2, done: false });
     assert.deepEqual(g.next(4), { value: "zxcv", done: false });
     assert.deepEqual(g.next(5), { value: void 0, done: true });
+  });
+
+  it("should be governed by enclosing try statements", function() {
+    var error = new Error("thrown");
+
+    function *outer(n) {
+      try {
+        yield 0;
+        yield* inner(n);
+        yield 1;
+      } catch (err) {
+        yield err.message;
+      }
+      yield 4;
+    }
+
+    function *inner(n) {
+      while (n --> 0) {
+        try {
+          if (n === 3) {
+            raise(error);
+          }
+        } finally {
+          yield n;
+        }
+      }
+    }
+
+    check(outer(3), [0, 2, 1, 0, 1, 4]);
+    check(outer(5), [0, 4, 3, "thrown", 4]);
   });
 });
 
