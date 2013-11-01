@@ -64,12 +64,18 @@
       assertCanInvoke();
 
       if (context.delegate) {
-        var info = context.delegate.next(value);
-        if (info.done) {
+        try {
+          var info = context.delegate.next(value);
+        } catch (uncaught) {
           context.delegate = null;
-        } else {
+          return generator.throw(uncaught);
+        }
+
+        if (info && !info.done) {
           return info;
         }
+
+        context.delegate = null;
       }
 
       if (state === GenStateSuspendedYield) {
@@ -87,12 +93,22 @@
       assertCanInvoke();
 
       if (context.delegate) {
-        var info = context.delegate.throw(exception);
-        if (info.done) {
-          context.delegate = null;
-        } else {
+        try {
+          var info = context.delegate.throw(exception);
+        } catch (uncaught) {
+          // If the context.delegate generator throws an exception (even
+          // if it's not the original exception), we need to re-throw that
+          // exception into the parent (current) generator. Note that info
+          // will be left uninitialized in such cases, so we'll fall
+          // through to setting context.delegate = null, below.
+          exception = uncaught;
+        }
+
+        if (info && !info.done) {
           return info;
         }
+
+        context.delegate = null;
       }
 
       if (state === GenStateSuspendedStart) {
