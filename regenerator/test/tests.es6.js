@@ -209,6 +209,39 @@ describe("try-finally generator", function() {
     check(usingRaise(true), [0, 1, 4], 5);
     check(usingRaise(false), [0, 1, 6], 7);
   });
+
+  it("should execute finally blocks before throwing", function() {
+    var uncaughtError = new Error("uncaught");
+
+    function *uncaught(condition) {
+      try {
+        yield 0;
+        if (condition) {
+          yield 1;
+          raise(uncaughtError);
+        }
+        yield 2;
+      } finally {
+        yield 3;
+      }
+      yield 4;
+    }
+
+    check(uncaught(false), [0, 2, 3, 4]);
+
+    var u = uncaught(true);
+
+    assert.deepEqual(u.next(), { value: 0, done: false });
+    assert.deepEqual(u.next(), { value: 1, done: false });
+    assert.deepEqual(u.next(), { value: 3, done: false });
+
+    try {
+      u.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, uncaughtError);
+    }
+  });
 });
 
 describe("try-catch-finally generator", function() {
