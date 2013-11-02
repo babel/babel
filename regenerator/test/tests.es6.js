@@ -939,6 +939,7 @@ describe("yield* generator", function () {
 
     var gen = foo()
     gen.next()
+    gen.next()
     var value = gen.next().value
 
     assert.equal(value, 4)
