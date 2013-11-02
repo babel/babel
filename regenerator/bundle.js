@@ -2352,15 +2352,27 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "YieldExpression":
     var after = loc();
     var arg = expr.argument && self.explodeExpression(path.get("argument"));
+
     if (arg && expr.delegate) {
+      var result = self.makeTempVar();
+
       self.emit(b.returnStatement(b.callExpression(
-        self.contextProperty("delegateYield"), [arg, after]
+        self.contextProperty("delegateYield"), [
+          arg,
+          b.literal(result.property.name),
+          after
+        ]
       )));
-    } else {
-      self.emitAssign(self.contextProperty("next"), after);
-      self.emit(b.returnStatement(arg || null));
+
+      self.mark(after);
+
+      return result;
     }
+
+    self.emitAssign(self.contextProperty("next"), after);
+    self.emit(b.returnStatement(arg || null));
     self.mark(after);
+
     return self.contextProperty("sent");
 
   default:
