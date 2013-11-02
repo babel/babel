@@ -944,4 +944,30 @@ describe("yield* generator", function () {
 
     assert.equal(value, 4)
   })
+
+  it("returns correc thing", function () {
+    function pumpNumber(gen) {
+      var n = 0
+
+      while (true) {
+        var res = gen.next(n)
+        n = res.value
+        if (res.done) return n
+      }
+    }
+
+    function* foo() {
+      return (yield* bar()) + (yield* bar())
+    }
+
+    function* bar() {
+      return (yield 2) + (yield 3)
+    }
+
+    var res1 = pumpNumber(bar())
+    var res2 = pumpNumber(foo())
+
+    assert.equal(res1, 5)
+    assert.equal(res2, 10)
+  })
 })
