@@ -963,3 +963,43 @@ describe("yield* expression results", function () {
     assert.strictEqual(pumpNumber(foo()), 10);
   });
 });
+
+describe("isGeneratorFunction", function() {
+  it("should work for function declarations", function() {
+    // Do the assertions up here to make sure the generator function is
+    // marked at the beginning of the block the function is declared in.
+    assert.strictEqual(
+      wrapGenerator.isGeneratorFunction(genFun),
+      true
+    );
+
+    assert.strictEqual(
+      wrapGenerator.isGeneratorFunction(normalFun),
+      false
+    );
+
+    function normalFun() {
+      return 0;
+    }
+
+    function *genFun() {
+      yield 0;
+    }
+  });
+
+  it("should work for function expressions", function() {
+    assert.strictEqual(
+      wrapGenerator.isGeneratorFunction(function *genFun() {
+        yield 0;
+      }),
+      true
+    );
+
+    assert.strictEqual(
+      wrapGenerator.isGeneratorFunction(function normalFun() {
+        return 0;
+      }),
+      false
+    );
+  });
+});

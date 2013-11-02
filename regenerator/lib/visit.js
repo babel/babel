@@ -38,6 +38,7 @@ function visitNode(node) {
   // TODO Ensure these identifiers are named uniquely.
   var contextId = b.identifier("$ctx");
   var argsId = b.identifier("$args");
+  var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(node, argsId);
   var vars = hoist(node);
 
@@ -59,13 +60,31 @@ function visitNode(node) {
   }
 
   outerBody.push(b.returnStatement(
-    b.callExpression(b.identifier("wrapGenerator"), [
+    b.callExpression(wrapGeneratorId, [
       emitter.getContextFunction(),
       b.thisExpression()
     ])
   ));
 
   node.body = b.blockStatement(outerBody);
+
+  var markMethod = b.memberExpression(
+    wrapGeneratorId,
+    b.identifier("mark"),
+    false
+  );
+
+  if (n.FunctionDeclaration.check(node)) {
+    var firstStmtPath = this.parentPath.get(0);
+    firstStmtPath.replace(
+      b.expressionStatement(b.callExpression(markMethod, [node.id])),
+      firstStmtPath.value
+    );
+
+  } else {
+    n.FunctionExpression.assert(node);
+    this.replace(b.callExpression(markMethod, [node]));
+  }
 }
 
 function renameArguments(func, argsId) {
