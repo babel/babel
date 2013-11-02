@@ -922,3 +922,44 @@ describe("unqualified function calls", function() {
     assert.strictEqual(info.done, true);
   });
 });
+
+describe("yield* expression results", function () {
+  it("have correct values", function () {
+    function* foo() {
+      yield 0;
+      return yield* bar();
+    }
+
+    function* bar() {
+      yield 1;
+      return 2;
+    }
+
+    check(foo(), [0, 1], 2);
+  });
+
+  it("can be used in complex expressions", function () {
+    function pumpNumber(gen) {
+      var n = 0;
+
+      while (true) {
+        var res = gen.next(n);
+        n = res.value;
+        if (res.done) {
+          return n;
+        }
+      }
+    }
+
+    function* foo() {
+      return (yield* bar()) + (yield* bar());
+    }
+
+    function* bar() {
+      return (yield 2) + (yield 3);
+    }
+
+    assert.strictEqual(pumpNumber(bar()), 5);
+    assert.strictEqual(pumpNumber(foo()), 10);
+  });
+});

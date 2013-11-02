@@ -60,22 +60,35 @@
       }
     }
 
-    generator.next = function(value) {
-      assertCanInvoke();
-
-      if (context.delegate) {
+    function handleDelegate(method, arg) {
+      var delegate = context.delegate;
+      if (delegate) {
         try {
-          var info = context.delegate.next(value);
+          var info = delegate.generator[method](arg);
         } catch (uncaught) {
           context.delegate = null;
           return generator.throw(uncaught);
         }
 
-        if (info && !info.done) {
-          return info;
+        if (info) {
+          if (info.done) {
+            context[delegate.resultName] = info.value;
+            context.next = delegate.nextLoc;
+          } else {
+            return info;
+          }
         }
 
         context.delegate = null;
+      }
+    }
+
+    generator.next = function(value) {
+      assertCanInvoke();
+
+      var delegateInfo = handleDelegate("next", value);
+      if (delegateInfo) {
+        return delegateInfo;
       }
 
       if (state === GenStateSuspendedYield) {
@@ -92,23 +105,9 @@
     generator.throw = function(exception) {
       assertCanInvoke();
 
-      if (context.delegate) {
-        try {
-          var info = context.delegate.throw(exception);
-        } catch (uncaught) {
-          // If the context.delegate generator throws an exception (even
-          // if it's not the original exception), we need to re-throw that
-          // exception into the parent (current) generator. Note that info
-          // will be left uninitialized in such cases, so we'll fall
-          // through to setting context.delegate = null, below.
-          exception = uncaught;
-        }
-
-        if (info && !info.done) {
-          return info;
-        }
-
-        context.delegate = null;
+      var delegateInfo = handleDelegate("throw", exception);
+      if (delegateInfo) {
+        return delegateInfo;
       }
 
       if (state === GenStateSuspendedStart) {
@@ -233,16 +232,24 @@
       }
     },
 
-    delegateYield: function(delegate, afterLoc) {
-      this.next = afterLoc;
-      var info = delegate.next(this.sent);
+    delegateYield: function(generator, resultName, nextLoc) {
+      var info = generator.next(this.sent);
+
       if (info.done) {
         this.delegate = null;
+        this[resultName] = info.value;
+        this.next = nextLoc;
+
         return ContinueSentinel;
-      } else {
-        this.delegate = delegate;
-        return info.value;
       }
+
+      this.delegate = {
+        generator: generator,
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      return info.value;
     }
   };
 })(Function("return this")());
