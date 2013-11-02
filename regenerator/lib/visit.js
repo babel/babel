@@ -77,7 +77,8 @@ function visitNode(node) {
   if (n.FunctionDeclaration.check(node)) {
     var path = this.parent;
 
-    while (path && !n.BlockStatement.check(path.value)) {
+    while (path && !(n.BlockStatement.check(path.value) ||
+                     n.Program.check(path.value))) {
       path = path.parent;
     }
 
