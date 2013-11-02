@@ -923,51 +923,43 @@ describe("unqualified function calls", function() {
   });
 });
 
-describe("yield* generator", function () {
-  it("returns correct value", function () {
+describe("yield* expression results", function () {
+  it("have correct values", function () {
     function* foo() {
-      yield 3;
-
-      return yield* bar()
+      yield 0;
+      return yield* bar();
     }
 
     function* bar() {
-      yield 3;
-
-      return 4
+      yield 1;
+      return 2;
     }
 
-    var gen = foo()
-    gen.next()
-    gen.next()
-    var value = gen.next().value
+    check(foo(), [0, 1], 2);
+  });
 
-    assert.equal(value, 4)
-  })
-
-  it("returns correc thing", function () {
+  it("can be used in complex expressions", function () {
     function pumpNumber(gen) {
-      var n = 0
+      var n = 0;
 
       while (true) {
-        var res = gen.next(n)
-        n = res.value
-        if (res.done) return n
+        var res = gen.next(n);
+        n = res.value;
+        if (res.done) {
+          return n;
+        }
       }
     }
 
     function* foo() {
-      return (yield* bar()) + (yield* bar())
+      return (yield* bar()) + (yield* bar());
     }
 
     function* bar() {
-      return (yield 2) + (yield 3)
+      return (yield 2) + (yield 3);
     }
 
-    var res1 = pumpNumber(bar())
-    var res2 = pumpNumber(foo())
-
-    assert.equal(res1, 5)
-    assert.equal(res2, 10)
-  })
-})
+    assert.strictEqual(pumpNumber(bar()), 5);
+    assert.strictEqual(pumpNumber(foo()), 10);
+  });
+});
