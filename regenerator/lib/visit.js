@@ -75,11 +75,19 @@ function visitNode(node) {
   );
 
   if (n.FunctionDeclaration.check(node)) {
-    var firstStmtPath = this.parentPath.get(0);
-    firstStmtPath.replace(
-      b.expressionStatement(b.callExpression(markMethod, [node.id])),
-      firstStmtPath.value
-    );
+    var path = this.parent;
+
+    while (path && !n.BlockStatement.check(path.value)) {
+      path = path.parent;
+    }
+
+    if (path) {
+      var firstStmtPath = path.get("body", 0);
+      firstStmtPath.replace(
+        b.expressionStatement(b.callExpression(markMethod, [node.id])),
+        firstStmtPath.value
+      );
+    }
 
   } else {
     n.FunctionExpression.assert(node);
