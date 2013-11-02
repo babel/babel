@@ -922,3 +922,25 @@ describe("unqualified function calls", function() {
     assert.strictEqual(info.done, true);
   });
 });
+
+describe("yield* generator", function () {
+  it("returns correct value", function () {
+    function* foo() {
+      yield 3;
+
+      return yield* bar()
+    }
+
+    function* bar() {
+      yield 3;
+
+      return 4
+    }
+
+    var gen = foo()
+    gen.next()
+    var value = gen.next().value
+
+    assert.equal(value, 4)
+  })
+})
