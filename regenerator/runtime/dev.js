@@ -32,6 +32,20 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
+  // Dummy constructor that we use as the .constructor property for
+  // functions that return Generator objects.
+  function GeneratorFunction() {}
+
+  wrapGenerator.mark = function(genFun) {
+    genFun.constructor = GeneratorFunction;
+    return genFun;
+  };
+
+  wrapGenerator.isGeneratorFunction = function(genFun) {
+    var ctor = genFun && genFun.constructor;
+    return ctor ? "GeneratorFunction" === ctor.name : false;
+  };
+
   function Generator(innerFn, self) {
     var generator = this;
     var context = new Context();
