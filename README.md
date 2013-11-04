@@ -31,7 +31,7 @@ properties will be added to that.
 This file contains the actual parser (and is what you get when you
 `require("acorn")` in node.js).
 
-**parse**(input, options)` is used to parse a JavaScript program.
+**parse**`(input, options)` is used to parse a JavaScript program.
 The `input` parameter is a string, `options` can be undefined or an
 object setting some of the options listed below. The return value will
 be an abstract syntax tree object as specified by the
@@ -102,10 +102,10 @@ object referring to that same position.
 
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
 
-**getLineInfo**(input, offset)` can be used to get a `{line,
+**getLineInfo**`(input, offset)` can be used to get a `{line,
 column}` object for a given program string and character offset.
 
-**tokenize**(input, options)` exports a primitive interface to
+**tokenize**`(input, options)` exports a primitive interface to
 Acorn's tokenizer. The function takes an input string and options
 similar to `parse` (though only some options are meaningful here), and
 returns a function that can be called repeatedly to read a single
@@ -122,7 +122,7 @@ that end up in the `type` properties of tokens.
 This file implements an error-tolerant parser. It exposes a single
 function.
 
-**parse_dammit**(input, options)` takes the same arguments and
+**parse_dammit**`(input, options)` takes the same arguments and
 returns the same syntax tree as the `parse` function in `acorn.js`,
 but never raises an error, and will do its best to parse syntactically
 invalid code in as meaningful a way as it can. It'll insert identifier
@@ -135,7 +135,7 @@ tokenizer.
 Implements an abstract syntax tree walker. Will store its interface in
 `acorn.walk` when used without a module system.
 
-**simple**(node, visitors, base, state)` does a 'simple' walk over
+**simple**`(node, visitors, base, state)` does a 'simple' walk over
 a tree. `node` should be the AST node to walk, and `visitors` an
 object with properties whose names correspond to node types in the
 [Mozilla Parser API][mozapi]. The properties should contain functions
@@ -146,7 +146,7 @@ simply visit all statements and expressions and not produce a
 meaningful state. (An example of a use of state it to track scope at
 each point in the tree.)
 
-**recursive**(node, state, functions, base)` does a 'recursive'
+**recursive**`(node, state, functions, base)` does a 'recursive'
 walk, where the walker functions are responsible for continuing the
 walk on the child nodes of their target node. `state` is the start
 state, and `functions` should contain an object that maps node types
@@ -157,11 +157,11 @@ the `c` argument on it with `(node, state)` arguments. The optional
 that aren't handled in the `functions` object. If not given, the
 default walkers will be used.
 
-**make**(functions, base)` builds a new walker object by using the
+**make**`(functions, base)` builds a new walker object by using the
 walker functions in `functions` and filling in the missing ones by
 taking defaults from `base`.
 
-**findNodeAt**(node, start, end, test, base, state)` tries to
+**findNodeAt**`(node, start, end, test, base, state)` tries to
 locate a node in a tree at the given start and/or end offsets, which
 satisfies the predicate `test`. `start` end `end` can be either `null`
 (as wildcard) or a number. `test` may be a string (indicating a node
@@ -171,11 +171,11 @@ and `state` are optional, and can be used to specify a custom walker.
 Nodes are tested from inner to outer, so if two nodes match the
 boundaries, the inner one will be preferred.
 
-**findNodeAround**(node, pos, test, base, state)` is a lot like
+**findNodeAround**`(node, pos, test, base, state)` is a lot like
 `findNodeAt`, but will match any node that exists 'around' (spanning)
 the given position.
 
-**findNodeAfter**(node, pos, test, base, state)` is similar to
+**findNodeAfter**`(node, pos, test, base, state)` is similar to
 `findNodeAround`, but will match all nodes *after* the given position
 (testing outer nodes before inner nodes).
 
