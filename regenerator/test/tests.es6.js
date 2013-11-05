@@ -809,6 +809,24 @@ describe("catch parameter shadowing", function() {
     check(gen(10), [10, 12, 24, 5, 4, 10]);
     check(gen(11), [11, 13, 26, 5, 4, 11]);
   });
+
+  it("should allow nested catch parameters of the same name", function() {
+    function *gen() {
+      try {
+        raise("e1");
+      } catch (e) {
+        yield e;
+        try {
+          raise("e2");
+        } catch (e) {
+          yield e;
+        }
+        yield e;
+      }
+    }
+
+    check(gen(), ["e1", "e2", "e1"]);
+  });
 });
 
 describe("empty while loops", function() {
