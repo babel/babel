@@ -37,6 +37,7 @@ function visitNode(node) {
 
   // TODO Ensure these identifiers are named uniquely.
   var contextId = b.identifier("$ctx");
+  var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(node, argsId);
@@ -61,7 +62,7 @@ function visitNode(node) {
 
   outerBody.push(b.returnStatement(
     b.callExpression(wrapGeneratorId, [
-      emitter.getContextFunction(),
+      emitter.getContextFunction(functionId),
       b.thisExpression()
     ])
   ));
