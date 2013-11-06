@@ -662,14 +662,15 @@ Ep.explodeStatement = function(path, labelId) {
         var safeParam = self.makeTempVar();
         self.clearPendingException(safeParam);
 
-        types.traverse(bodyPath, function(node) {
-          var scope = this.scope.lookup(handler.param.name);
-          if (scope && scope.depth >= bodyPath.scope.depth) {
-            return false;
-          }
+        var catchScope = bodyPath.scope;
+        var catchParamName = handler.param.name;
+        n.CatchClause.assert(catchScope.node);
+        assert.strictEqual(catchScope.lookup(catchParamName), catchScope);
 
+        types.traverse(bodyPath, function(node) {
           if (n.Identifier.check(node) &&
-              node.name === handler.param.name) {
+              node.name === catchParamName &&
+              this.scope.lookup(catchParamName) === catchScope) {
             this.replace(safeParam);
             return false;
           }
