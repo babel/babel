@@ -1559,9 +1559,9 @@ Ep.makeTempVar = function() {
   return this.contextProperty("t" + nextTempId++);
 };
 
-Ep.getContextFunction = function() {
+Ep.getContextFunction = function(id) {
   return b.functionExpression(
-    null, // Anonymous.
+    id || null/*Anonymous*/,
     [this.contextId],
     b.blockStatement([this.getDispatchLoop()]),
     false, // Not a generator anymore!
@@ -2015,14 +2015,15 @@ Ep.explodeStatement = function(path, labelId) {
         var safeParam = self.makeTempVar();
         self.clearPendingException(safeParam);
 
-        types.traverse(bodyPath, function(node) {
-          var scope = this.scope.lookup(handler.param.name);
-          if (scope && scope.depth >= bodyPath.scope.depth) {
-            return false;
-          }
+        var catchScope = bodyPath.scope;
+        var catchParamName = handler.param.name;
+        n.CatchClause.assert(catchScope.node);
+        assert.strictEqual(catchScope.lookup(catchParamName), catchScope);
 
+        types.traverse(bodyPath, function(node) {
           if (n.Identifier.check(node) &&
-              node.name === handler.param.name) {
+              node.name === catchParamName &&
+              this.scope.lookup(catchParamName) === catchScope) {
             this.replace(safeParam);
             return false;
           }
@@ -2975,6 +2976,7 @@ function visitNode(node) {
 
   // TODO Ensure these identifiers are named uniquely.
   var contextId = b.identifier("$ctx");
+  var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(node, argsId);
@@ -2999,7 +3001,7 @@ function visitNode(node) {
 
   outerBody.push(b.returnStatement(
     b.callExpression(wrapGeneratorId, [
-      emitter.getContextFunction(),
+      emitter.getContextFunction(functionId),
       b.thisExpression()
     ])
   ));
@@ -3893,7 +3895,7 @@ function NodePath(value, parentPath, name) {
         node = value;
 
         if (Scope.isEstablishedBy(node)) {
-            scope = new Scope(node, scope);
+            scope = new Scope(this, scope);
         }
 
     } else {
@@ -4174,9 +4176,11 @@ var Node = namedTypes.Node;
 var isArray = types.builtInTypes.array;
 var hasOwn = Object.prototype.hasOwnProperty;
 
-function Scope(node, parentScope) {
+function Scope(path, parentScope) {
     assert.ok(this instanceof Scope);
-    assert.ok(Scope.isEstablishedBy(node));
+    assert.ok(path instanceof require("./node-path"));
+    ScopeType.assert(path.value);
+
     var depth;
 
     if (parentScope) {
@@ -4188,7 +4192,8 @@ function Scope(node, parentScope) {
     }
 
     Object.defineProperties(this, {
-        node: { value: node },
+        path: { value: path },
+        node: { value: path.value },
         isGlobal: { value: !parentScope, enumerable: true },
         depth: { value: depth },
         parent: { value: parentScope },
@@ -4231,66 +4236,108 @@ Sp.declares = function(name) {
             // Empty out this.bindings, just in cases.
             delete this.bindings[name];
         }
-        scanScope(this.node, this.bindings);
+        scanScope(this.path, this.bindings);
         this.didScan = true;
     }
 
     return hasOwn.call(this.bindings, name);
 };
 
-// TODO What about CatchClause??
-function scanScope(node, bindings) {
+function scanScope(path, bindings) {
+    var node = path.value;
+    ScopeType.assert(node);
+
+    if (namedTypes.CatchClause.check(node)) {
+        // A catch clause establishes a new scope but the only variable
+        // bound in that scope is the catch parameter. Any other
+        // declarations create bindings in the outer scope.
+        addPattern(path.get("param"), bindings);
+
+    } else {
+        recursiveScanScope(path, bindings);
+    }
+}
+
+function recursiveScanScope(path, bindings) {
+    var node = path.value;
+
     if (isArray.check(node)) {
-        node.forEach(function(child) {
-            scanChild(child, bindings);
+        path.each(function(childPath) {
+            recursiveScanChild(childPath, bindings);
         });
 
     } else if (namedTypes.Function.check(node)) {
-        node.params.map(function(param) {
-            addPattern(param, bindings);
+        path.get("params").each(function(paramPath) {
+            addPattern(paramPath, bindings);
         });
 
-        scanChild(node.body, bindings);
+        recursiveScanChild(path.get("body"), bindings);
 
     } else if (namedTypes.VariableDeclarator.check(node)) {
-        addPattern(node.id, bindings);
-        scanChild(node.init, bindings);
+        addPattern(path.get("id"), bindings);
+        recursiveScanChild(path.get("init"), bindings);
 
     } else if (namedTypes.ImportSpecifier &&
                namedTypes.ImportSpecifier.check(node)) {
-        addPattern(node.name || node.id);
+        addPattern(node.name ? path.get("name") : path.get("id"));
 
     } else if (Node.check(node)) {
         types.eachField(node, function(name, child) {
-            scanChild(child, bindings);
+            var childPath = path.get(name);
+            assert.strictEqual(childPath.value, child);
+            recursiveScanChild(childPath, bindings);
         });
     }
 }
 
-function scanChild(node, bindings) {
+function recursiveScanChild(path, bindings) {
+    var node = path.value;
+
     if (namedTypes.FunctionDeclaration.check(node)) {
-        addPattern(node.id, bindings);
+        addPattern(path.get("id"), bindings);
 
     } else if (namedTypes.ClassDeclaration &&
                namedTypes.ClassDeclaration.check(node)) {
-        addPattern(node.id, bindings);
+        addPattern(path.get("id"), bindings);
 
     } else if (Scope.isEstablishedBy(node)) {
-        // Don't descend into nested scopes.
+        if (namedTypes.CatchClause.check(node)) {
+            var catchParamName = node.param.name;
+            var hadBinding = hasOwn.call(bindings, catchParamName);
+
+            // Any declarations that occur inside the catch body that do
+            // not have the same name as the catch parameter should count
+            // as bindings in the outer scope.
+            recursiveScanScope(path.get("body"), bindings);
+
+            // If a new binding matching the catch parameter name was
+            // created while scanning the catch body, ignore it because it
+            // actually refers to the catch parameter and not the outer
+            // scope that we're currently scanning.
+            if (!hadBinding) {
+                delete bindings[catchParamName];
+            }
+        }
 
     } else {
-        scanScope(node, bindings);
+        recursiveScanScope(path, bindings);
     }
 }
 
-function addPattern(pattern, bindings) {
+function addPattern(patternPath, bindings) {
+    var pattern = patternPath.value;
     namedTypes.Pattern.assert(pattern);
 
     if (namedTypes.Identifier.check(pattern)) {
-        bindings[pattern.name] = pattern;
+        if (hasOwn.call(bindings, pattern.name)) {
+            bindings[pattern.name].push(patternPath);
+        } else {
+            bindings[pattern.name] = [patternPath];
+        }
+
     } else if (namedTypes.SpreadElement &&
                namedTypes.SpreadElement.check(pattern)) {
-        addPattern(pattern.argument, bindings);
+        addPattern(patternPath.get("argument"), bindings);
     }
 }
 
@@ -4310,7 +4357,7 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./types":23,"assert":2}],21:[function(require,module,exports){
+},{"./node-path":19,"./types":23,"assert":2}],21:[function(require,module,exports){
 var types = require("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
