@@ -206,9 +206,9 @@ Ep.makeTempVar = function() {
   return this.contextProperty("t" + nextTempId++);
 };
 
-Ep.getContextFunction = function() {
+Ep.getContextFunction = function(id) {
   return b.functionExpression(
-    null, // Anonymous.
+    id || null/*Anonymous*/,
     [this.contextId],
     b.blockStatement([this.getDispatchLoop()]),
     false, // Not a generator anymore!
