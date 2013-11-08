@@ -2247,6 +2247,14 @@ Ep.explodeExpression = function(path, ignoreResult) {
       })
     ));
 
+  case "NewExpression":
+    return finish(b.newExpression(
+      explodeViaTempVar(null, path.get("callee")),
+      path.get("arguments").map(function(argPath) {
+        return explodeViaTempVar(null, argPath);
+      })
+    ));
+
   case "ObjectExpression":
     return finish(b.objectExpression(
       path.get("properties").map(function(propPath) {
@@ -5443,7 +5451,7 @@ parseYieldExpression: true
     };
 
     ClassPropertyType = {
-        static: 'static',
+        'static': 'static',
         prototype: 'prototype'
     };
 
