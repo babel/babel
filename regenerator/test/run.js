@@ -66,11 +66,6 @@ function asyncCallback(err) {
   }
 }
 
-enqueue(convert, [
-  "./test/tests.es6.js",
-  "./test/tests.es5.js"
-]);
-
 if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
     "--harmony-generators",
@@ -78,6 +73,11 @@ if (semver.gte(process.version, "0.11.2")) {
     "./test/tests.es6.js"
   ]);
 }
+
+enqueue(convert, [
+  "./test/tests.es6.js",
+  "./test/tests.es5.js"
+]);
 
 enqueue("mocha", [
   "--reporter", "spec",
