@@ -26956,3 +26956,10 @@ testFail("throw\n10;", "Illegal newline after throw (1:5)");
     }
   );
 })();
+
+(function() {
+  var comments = 0;
+  testAssert("\nfunction plop() {\n'use strict';\n/* Comment */\n}", function() {
+    if (comments != 1) return "Comment after strict counted twice.";
+  }, {onComment: function() {++comments;}});
+})();
