@@ -3137,7 +3137,7 @@ regenerator.runtime = {
 // To transform a string of ES6 code, call require("regenerator")(source);
 module.exports = regenerator;
 
-},{"./lib/util":11,"./lib/visit":12,"assert":2,"esprima":27,"fs":3,"path":4,"recast":39}],14:[function(require,module,exports){
+},{"./lib/util":11,"./lib/visit":12,"assert":2,"esprima":27,"fs":3,"path":4,"recast":38}],14:[function(require,module,exports){
 var types = require("../lib/types");
 var Type = types.Type;
 var def = Type.def;
@@ -4455,9 +4455,11 @@ var Ap = Array.prototype;
 var slice = Ap.slice;
 var map = Ap.map;
 var each = Ap.forEach;
-var objToStr = Object.prototype.toString;
+var Op = Object.prototype;
+var objToStr = Op.toString;
 var funObjStr = objToStr.call(function(){});
 var strObjStr = objToStr.call("");
+var hasOwn = Op.hasOwnProperty;
 
 // A type is an object with a .check method that takes a value and returns
 // true or false according to whether the value matches the type.
@@ -4482,7 +4484,7 @@ function Type(check, name) {
         check: {
             value: function(value, deep) {
                 var result = check.call(self, value, deep);
-                if (!result && objToStr.call(deep) === funObjStr)
+                if (!result && deep && objToStr.call(deep) === funObjStr)
                     deep(self, value);
                 return result;
             }
@@ -4698,7 +4700,7 @@ Fp.getValue = function(obj) {
 // type d.type by calling methods such as d.bases, d.build, and d.field.
 Type.def = function(typeName) {
     isString.assert(typeName);
-    return defCache.hasOwnProperty(typeName)
+    return hasOwn.call(defCache, typeName)
         ? defCache[typeName]
         : defCache[typeName] = new Def(typeName);
 };
@@ -4730,8 +4732,8 @@ function Def(typeName) {
 
 Def.fromValue = function(value) {
     if (isObject.check(value) &&
-        value.hasOwnProperty("type") &&
-        defCache.hasOwnProperty(value.type))
+        hasOwn.call(value, "type") &&
+        hasOwn.call(defCache, value.type))
     {
         var vDef = defCache[value.type];
         assert.strictEqual(vDef.finalized, true);
@@ -4742,10 +4744,13 @@ Def.fromValue = function(value) {
 var Dp = Def.prototype;
 
 Dp.isSupertypeOf = function(that) {
-    assert.ok(that instanceof Def, that + " is not a Def");
-    assert.strictEqual(this.finalized, true);
-    assert.strictEqual(that.finalized, true);
-    return that.allSupertypes.hasOwnProperty(this.typeName);
+    if (that instanceof Def) {
+        assert.strictEqual(this.finalized, true);
+        assert.strictEqual(that.finalized, true);
+        return hasOwn.call(that.allSupertypes, this.typeName);
+    } else {
+        assert.ok(false, that + " is not a Def");
+    }
 };
 
 Dp.checkAllFields = function(value, deep) {
@@ -4773,12 +4778,21 @@ Dp.check = function(value, deep) {
         return false;
 
     var vDef = Def.fromValue(value);
+    if (!vDef) {
+        // If we couldn't infer the Def associated with the given value,
+        // and we expected it to be a SourceLocation or a Position, it was
+        // probably just missing a "type" field (because Esprima does not
+        // assign a type property to such nodes). Be optimistic and let
+        // this.checkAllFields make the final decision.
+        if (this.typeName === "SourceLocation" ||
+            this.typeName === "Position") {
+            return this.checkAllFields(value, deep);
+        }
 
-    // If we couldn't determine the Def associated with the given value,
-    // it was probably just missing a "type" field, so be optimistic and
-    // let this.checkAllFields make the final decision.
-    if (!vDef)
-        return this.checkAllFields(value, deep);
+        // Calling this.checkAllFields for any other type of node is both
+        // bad for performance and way too forgiving.
+        return false;
+    }
 
     // If checking deeply and vDef === this, then we only need to call
     // checkAllFields once. Calling checkAllFields is too strict when deep
@@ -4862,11 +4876,11 @@ Dp.build = function(/* param1, param2, ... */) {
                 "attempting to instantiate unfinalized type " + typeName);
 
             function add(param, i) {
-                if (built.hasOwnProperty(param))
+                if (hasOwn.call(built, param))
                     return;
 
                 var all = self.allFields;
-                assert.ok(all.hasOwnProperty(param), param);
+                assert.ok(hasOwn.call(all, param), param);
 
                 var field = all[param];
                 var type = field.type;
@@ -4980,6 +4994,17 @@ Object.defineProperty(exports, "eachField", {
                     callback.call(this, name, field.getValue(object));
                 }
             }, context);
+        } else {
+            assert.strictEqual(
+                "type" in object, false,
+                "did not recognize object of type " + JSON.stringify(object.type)
+            );
+
+            // If we could not infer a Def type for this object, just
+            // iterate over its keys in the normal way.
+            Object.keys(object).forEach(function(name) {
+                callback.call(this, name, object[name]);
+            }, context);
         }
     }
 });
@@ -5002,9 +5027,16 @@ Object.defineProperty(exports, "someField", {
             }, context);
         }
 
-        // If the object has no fields, then of course no field satisified
-        // the predicate.
-        return false;
+        assert.strictEqual(
+            "type" in object, false,
+            "did not recognize object of type " + JSON.stringify(object.type)
+        );
+
+        // If we could not infer a Def type for this object, just iterate
+        // over its keys in the normal way.
+        return Object.keys(object).some(function(name) {
+            return callback.call(this, name, object[name]);
+        }, context);
     }
 });
 
@@ -10858,132 +10890,13 @@ defProp(exports, "makeAccessor", {
 });
 
 },{}],29:[function(require,module,exports){
-var fnTest = /xyz/.test(function(){return xyz;}) ? /\b_super\b/ : /.*/,
-    empty = function() {},
-    populating = {};
-
-function clone(obj) {
-    empty.prototype = obj || null;
-    return new empty;
-}
-
-function makeClass(base, newProps) {
-    var baseProto = base.prototype,
-        ownProto = clone(baseProto),
-        newStatics = newProps.statics,
-        populated;
-
-    function constructor() {
-        if (!populated) {
-            // Ensure population of baseProto.
-            base.call(populating);
-
-            populate(ownProto, newProps, baseProto);
-
-            // Help the garbage collector reclaim this object, since we
-            // don't need it anymore.
-            newProps = null;
-
-            populated = true;
-        }
-
-        // When we invoke a constructor just for the sake of making sure
-        // its prototype has been populated, the receiver object (this)
-        // will be strictly equal to the populating object, which means we
-        // want to avoid invoking this.init.
-        if (this === populating)
-            return;
-
-        // Evaluate this.init only once to avoid looking up .init in the
-        // prototype chain twice.
-        var init = this.init;
-        if (init)
-            init.apply(this, arguments);
-    }
-
-    // Copy any static properties that have been assigned to the base
-    // class over to the subclass.
-    populate(constructor, base);
-
-    if (newStatics) {
-        // Remove the statics property from newProps so that it does not
-        // get copied to the prototype.
-        delete newProps.statics;
-
-        // We re-use populate for static properties, so static methods
-        // have the same access to this._super that normal methods have.
-        populate(constructor, newStatics, base);
-
-        // Help the GC reclaim this object.
-        newStatics = null;
-    }
-
-    // These property assignments overwrite any properties of the same
-    // name that may have been copied from base, above. Note that ownProto
-    // has not been populated with any methods or properties, yet, because
-    // we postpone that work until the subclass is instantiated for the
-    // first time. Also note that we share a single implementation of
-    // extend between all classes.
-    constructor.prototype = ownProto;
-    constructor.extend = extend;
-
-    // Setting constructor.prototype.constructor = constructor is
-    // important so that instanceof works properly in all browsers.
-    ownProto.constructor = constructor;
-
-    // Setting .cls as a shorthand for .constructor is purely a
-    // convenience to make calling static methods easier.
-    ownProto.cls = constructor;
-
-    // If there is a static initializer, call it now. This needs to happen
-    // last so that the constructor is ready to be used if, for example,
-    // constructor.init needs to create an instance of the new class.
-    if (constructor.init)
-        constructor.init(constructor);
-
-    return constructor;
-}
-
-function populate(target, source, parent) {
-    for (var name in source)
-        if (source.hasOwnProperty(name))
-            target[name] = parent ? maybeWrap(name, source, parent) : source[name];
-}
-
-function maybeWrap(name, child, parent) {
-    var cval = child && child[name],
-        pval = parent && parent[name];
-
-    if (typeof cval === "function" &&
-        typeof pval === "function" &&
-        cval !== pval && // Avoid infinite recursion.
-        cval.extend !== extend && // Don't wrap classes.
-        fnTest.test(cval)) // Only wrap if this._super needed.
-    {
-        return function() {
-            var saved = this._super;
-            this._super = parent[name];
-            try { return cval.apply(this, arguments) }
-            finally { this._super = saved };
-        };
-    }
-
-    return cval;
-}
-
-function extend(newProps) {
-    return makeClass(this, newProps || {});
-}
-
-exports.Class = extend.call(function(){});
-
-},{}],30:[function(require,module,exports){
 var assert = require("assert");
 var linesModule = require("./lines");
 var fromString = linesModule.fromString;
 var Lines = linesModule.Lines;
 var concat = linesModule.concat;
 var Visitor = require("./visitor").Visitor;
+var comparePos = require("./util").comparePos;
 
 exports.add = function(ast, lines) {
     var comments = ast.comments;
@@ -11021,7 +10934,7 @@ exports.add = function(ast, lines) {
         });
     }
 
-    sorted.sort(cmpPos);
+    sorted.sort(comparePos);
 
     var pendingComments = [];
     var previousNode;
@@ -11160,10 +11073,6 @@ function getKey(node, which) {
     return pos && (pos.line + "," + pos.column);
 }
 
-function cmpPos(a, b) {
-    return (a.line - b.line) || (a.column - b.column);
-}
-
 function printLeadingComment(comment) {
     var orig = comment.original;
     var loc = orig && orig.loc;
@@ -11282,7 +11191,7 @@ exports.printComments = function(comments, innerLines) {
     return concat(parts);
 };
 
-},{"./lines":31,"./visitor":38,"assert":2}],31:[function(require,module,exports){
+},{"./lines":30,"./util":36,"./visitor":37,"assert":2}],30:[function(require,module,exports){
 var assert = require("assert");
 var normalizeOptions = require("./options").normalize;
 var getSecret = require("private").makeAccessor();
@@ -11361,14 +11270,15 @@ function countSpaces(spaces, tabWidth) {
 }
 exports.countSpaces = countSpaces;
 
-function fromString(string, tabWidth) {
+function fromString(string, options) {
     if (string instanceof Lines)
         return string;
 
     string += "";
 
+    var tabWidth = options && options.tabWidth;
     var tabless = string.indexOf("\t") < 0;
-    var cacheable = tabless && (string.length <= maxCacheKeyLen);
+    var cacheable = !options && tabless && (string.length <= maxCacheKeyLen);
 
     assert.ok(tabWidth || tabless, "encountered tabs, but no tab width specified");
 
@@ -11383,7 +11293,7 @@ function fromString(string, tabWidth) {
             sliceStart: spaces.length,
             sliceEnd: line.length
         };
-    }));
+    }), options && options.sourceFileName);
 
     if (cacheable)
         fromStringCache[string] = lines;
@@ -11818,7 +11728,7 @@ Lp.concat = function(other) {
     return emptyLines.join(list);
 };
 
-},{"./options":32,"assert":2,"private":28}],32:[function(require,module,exports){
+},{"./options":31,"assert":2,"private":28}],31:[function(require,module,exports){
 var defaults = {
     tabWidth: 4,
     useTabs: false,
@@ -11848,10 +11758,9 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima":27}],33:[function(require,module,exports){
+},{"esprima":27}],32:[function(require,module,exports){
 var assert = require("assert");
 var types = require("./types");
-var Syntax = types.Syntax;
 var n = types.namedTypes;
 var b = types.builders;
 var Patcher = require("./patcher").Patcher;
@@ -11861,8 +11770,7 @@ var normalizeOptions = require("./options").normalize;
 exports.parse = function(source, options) {
     options = normalizeOptions(options);
 
-    var lines = require("./lines").fromString(
-        source, options.tabWidth);
+    var lines = require("./lines").fromString(source, options);
 
     var pure = options.esprima.parse(lines.toString({
         tabWidth: options.tabWidth,
@@ -11966,7 +11874,7 @@ function copyAst(node, parent) {
             }
         }
 
-        if (parent && (node.type in Syntax)) {
+        if (parent && n.Node.check(node)) {
             // Allow upwards traversal of the original AST.
             Object.defineProperty(node, "parentNode", {
                 value: parent
@@ -11987,13 +11895,14 @@ function copyAst(node, parent) {
     return node;
 }
 
-},{"./comments":30,"./lines":31,"./options":32,"./patcher":34,"./types":36,"./visitor":38,"assert":2}],34:[function(require,module,exports){
+},{"./comments":29,"./lines":30,"./options":31,"./patcher":33,"./types":35,"./visitor":37,"assert":2}],33:[function(require,module,exports){
 var assert = require("assert");
 var linesModule = require("./lines");
 var typesModule = require("./types");
-var Syntax = typesModule.Syntax;
 var getFieldValue = typesModule.getFieldValue;
+var Node = typesModule.namedTypes.Node;
 var util = require("./util");
+var comparePos = util.comparePos;
 var NodePath = require("ast-types").NodePath;
 
 function Patcher(lines) {
@@ -12026,14 +11935,14 @@ function Patcher(lines) {
             toConcat = [];
 
         function pushSlice(from, to) {
-            assert.ok(cmpPos(from, to) <= 0);
+            assert.ok(comparePos(from, to) <= 0);
             toConcat.push(lines.slice(from, to));
         }
 
         replacements.sort(function(a, b) {
-            return cmpPos(a.start, b.start);
+            return comparePos(a.start, b.start);
         }).forEach(function(rep) {
-            if (cmpPos(sliceFrom, rep.start) > 0) {
+            if (comparePos(sliceFrom, rep.start) > 0) {
                 // Ignore nested replacement ranges.
             } else {
                 pushSlice(sliceFrom, rep.start);
@@ -12048,11 +11957,6 @@ function Patcher(lines) {
     };
 }
 exports.Patcher = Patcher;
-
-// TODO unify this with other cmpPos functions
-function cmpPos(a, b) {
-    return (a.line - b.line) || (a.column - b.column);
-}
 
 exports.getReprinter = function(path) {
     assert.ok(path instanceof NodePath);
@@ -12161,7 +12065,7 @@ function findObjectReprints(path, oldNode, reprints) {
     var childReprints = [];
     var canReprintChildren = findChildReprints(path, oldNode, childReprints);
 
-    if (newNode.type in Syntax) {
+    if (Node.check(newNode)) {
         // TODO Decompose this check: if (!printTheSame(newNode, oldNode))
         if (newNode.type !== oldNode.type)
             return false;
@@ -12230,9 +12134,8 @@ function findChildReprints(path, oldNode, reprints) {
     return true;
 }
 
-},{"./lines":31,"./types":36,"./util":37,"assert":2,"ast-types":24}],35:[function(require,module,exports){
+},{"./lines":30,"./types":35,"./util":36,"assert":2,"ast-types":24}],34:[function(require,module,exports){
 var assert = require("assert");
-var Syntax = require("./types").Syntax;
 var printComments = require("./comments").printComments;
 var linesModule = require("./lines");
 var fromString = linesModule.fromString;
@@ -12306,7 +12209,7 @@ function genericPrintNoParens(path, options, print) {
     }
 
     if (typeof n === "string") {
-        return fromString(n, options.tabWidth);
+        return fromString(n, options);
     }
 
     types.Node.assert(n);
@@ -12353,7 +12256,7 @@ function genericPrintNoParens(path, options, print) {
         return fromString(".").join(n.body);
 
     case "Identifier":
-        return fromString(n.name, options.tabWidth);
+        return fromString(n.name, options);
 
     case "SpreadElement":
         return concat(["...", print(path.get("argument"))]);
@@ -12555,7 +12458,9 @@ function genericPrintNoParens(path, options, print) {
                 if (prop.hasOwnProperty("kind")) {
                     prop.type = "Property";
                 } else {
-                    prop.type = Syntax.PropertyPattern || "Property";
+                    prop.type = types.namedTypes.PropertyPattern
+                        ? "PropertyPattern"
+                        : "Property";
                 }
             }
 
@@ -12647,13 +12552,13 @@ function genericPrintNoParens(path, options, print) {
 
     case "Literal":
         if (typeof n.value !== "string")
-            return fromString(n.value, options.tabWidth);
+            return fromString(n.value, options);
 
         // intentionally fall through...
 
     case "ModuleSpecifier":
         // A ModuleSpecifier is a string-valued Literal.
-        return fromString(nodeStr(n), options.tabWidth);
+        return fromString(nodeStr(n), options);
 
     case "UnaryExpression":
         var parts = [n.operator];
@@ -12900,7 +12805,7 @@ function genericPrintNoParens(path, options, print) {
         var str = n.name;
         if (typeof n.namespace === "string")
             str = n.namespace + ":" + str;
-        return fromString(str, options.tabWidth);
+        return fromString(str, options);
 
     case "XJSExpressionContainer":
         return concat(["{", print(path.get("expression")), "}"]);
@@ -12912,8 +12817,8 @@ function genericPrintNoParens(path, options, print) {
             parts.push(
                 concat(path.get("children").map(function(childPath) {
                     var child = childPath.value;
-                    if (child.type === Syntax.Literal)
-                        child.type = Syntax.XJSText;
+                    if (types.namedTypes.Literal.check(child))
+                        child.type = "XJSText";
                     return print(childPath);
                 })),
                 print(path.get("closingElement"))
@@ -12937,7 +12842,7 @@ function genericPrintNoParens(path, options, print) {
         return concat(["</", print(path.get("name")), ">"]);
 
     case "XJSText":
-        return fromString(n.value, options.tabWidth);
+        return fromString(n.value, options);
 
     case "XJSEmptyExpression":
         return fromString("");
@@ -13144,7 +13049,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":30,"./lines":31,"./options":32,"./patcher":34,"./types":36,"assert":2,"ast-types":24}],36:[function(require,module,exports){
+},{"./comments":29,"./lines":30,"./options":31,"./patcher":33,"./types":35,"assert":2,"ast-types":24}],35:[function(require,module,exports){
 var types = require("ast-types");
 var def = types.Type.def;
 
@@ -13155,22 +13060,9 @@ def("File")
 
 types.finalize();
 
-exports.builders = types.builders;
-exports.namedTypes = types.namedTypes;
-exports.getFieldValue = types.getFieldValue;
+module.exports = types;
 
-var Syntax = exports.Syntax = {};
-Object.keys(types.namedTypes).forEach(function(name) {
-    if (def(name).buildable)
-        Syntax[name] = name;
-});
-
-// These two types are buildable but do not technically count as syntax
-// because they are not printable.
-delete Syntax.SourceLocation;
-delete Syntax.Position;
-
-},{"ast-types":24}],37:[function(require,module,exports){
+},{"ast-types":24}],36:[function(require,module,exports){
 var assert = require("assert");
 var getFieldValue = require("./types").getFieldValue;
 
@@ -13255,16 +13147,17 @@ function deepObjEquiv(a, b) {
     return true;
 }
 
-},{"./types":36,"assert":2}],38:[function(require,module,exports){
-var Syntax = require("./types").Syntax,
-    Class = require("./Class").Class,
-    assert = require("assert"),
-    slice = Array.prototype.slice,
-    removeRequests = [];
-
-function isAstNode(node) {
-    return !!(node && (node.type in Syntax));
+function comparePos(pos1, pos2) {
+    return (pos1.line - pos2.line) || (pos1.column - pos2.column);
 }
+exports.comparePos = comparePos;
+
+},{"./types":35,"assert":2}],37:[function(require,module,exports){
+var assert = require("assert");
+var Class = require("cls");
+var Node = require("./types").namedTypes.Node;
+var slice = Array.prototype.slice;
+var removeRequests = [];
 
 var Visitor = exports.Visitor = Class.extend({
     visit: function(node) {
@@ -13276,7 +13169,7 @@ var Visitor = exports.Visitor = Class.extend({
         } else if (node instanceof Array) {
             node = self.visitArray(node);
 
-        } else if (isAstNode(node)) {
+        } else if (Node.check(node)) {
             var methodName = "visit" + node.type,
                 method = self[methodName] || self.genericVisit;
             node = method.call(this, node);
@@ -13361,7 +13254,7 @@ var Visitor = exports.Visitor = Class.extend({
             if (oldValue instanceof Array) {
                 this.visitArray(oldValue);
 
-            } else if (isAstNode(oldValue)) {
+            } else if (Node.check(oldValue)) {
                 newValue = this.visit(oldValue);
 
                 if (typeof newValue === "undefined") {
@@ -13379,7 +13272,7 @@ var Visitor = exports.Visitor = Class.extend({
     }
 });
 
-},{"./Class":29,"./types":36,"assert":2}],39:[function(require,module,exports){
+},{"./types":35,"assert":2,"cls":39}],38:[function(require,module,exports){
 var process=require("__browserify_process");var fs = require("fs");
 var normalizeOptions = require("./lib/options").normalize;
 var types = require("./lib/types");
@@ -13444,12 +13337,34 @@ Object.defineProperties(exports, {
      */
     Syntax: {
         enumerable: true,
-        value: types.Syntax,
+        value: (function() {
+            var def = types.Type.def;
+            var Syntax = {};
+
+            Object.keys(types.namedTypes).forEach(function(name) {
+                if (def(name).buildable)
+                    Syntax[name] = name;
+            });
+
+            // These two types are buildable but do not technically count
+            // as syntax because they are not printable.
+            delete Syntax.SourceLocation;
+            delete Syntax.Position;
+
+            return Syntax;
+        })()
     },
 
     Visitor: {
         enumerable: true,
         value: require("./lib/visitor").Visitor
+    },
+
+    // Properties like require("recast").namedTypes exist for backwards
+    // compatibility; prefer require("recast").types.namedTypes.
+    types: {
+        enumerable: true,
+        value: types
     },
 
     builder: { // Legacy singular form.
@@ -13458,12 +13373,12 @@ Object.defineProperties(exports, {
     },
 
     builders: { // Plural preferred.
-        enumerable: true,
+        enumerable: false,
         value: types.builders
     },
 
     namedTypes: {
-        enumerable: true,
+        enumerable: false,
         value: types.namedTypes
     },
 
@@ -13486,7 +13401,128 @@ Object.defineProperties(exports, {
     }
 });
 
-},{"./lib/options":32,"./lib/parser":33,"./lib/printer":35,"./lib/types":36,"./lib/visitor":38,"__browserify_process":6,"fs":3}]},{},[13])
+},{"./lib/options":31,"./lib/parser":32,"./lib/printer":34,"./lib/types":35,"./lib/visitor":37,"__browserify_process":6,"fs":3}],39:[function(require,module,exports){
+// Sentinel value passed to base constructors to skip invoking this.init.
+var populating = {};
+
+function makeClass(base, newProps) {
+    var baseProto = base.prototype;
+    var ownProto = Object.create(baseProto);
+    var newStatics = newProps.statics;
+    var populated;
+
+    function constructor() {
+        if (!populated) {
+            if (base.extend === extend) {
+                // Ensure population of baseProto if base created by makeClass.
+                base.call(populating);
+            }
+
+            // Wrap override methods to make this._super available.
+            populate(ownProto, newProps, baseProto);
+
+            // Help the garbage collector reclaim this object, since we
+            // don't need it anymore.
+            newProps = null;
+
+            populated = true;
+        }
+
+        // When we invoke a constructor just for the sake of making sure
+        // its prototype has been populated, the receiver object (this)
+        // will be strictly equal to the populating object, which means we
+        // want to avoid invoking this.init.
+        if (this === populating)
+            return;
+
+        // Evaluate this.init only once to avoid looking up .init in the
+        // prototype chain twice.
+        var init = this.init;
+        if (init)
+            init.apply(this, arguments);
+    }
+
+    // Copy any static properties that have been assigned to the base
+    // class over to the subclass.
+    populate(constructor, base);
+
+    if (newStatics) {
+        // Remove the statics property from newProps so that it does not
+        // get copied to the prototype.
+        delete newProps.statics;
+
+        // We re-use populate for static properties, so static methods
+        // have the same access to this._super that normal methods have.
+        populate(constructor, newStatics, base);
+
+        // Help the GC reclaim this object.
+        newStatics = null;
+    }
+
+    // These property assignments overwrite any properties of the same
+    // name that may have been copied from base, above. Note that ownProto
+    // has not been populated with any methods or properties, yet, because
+    // we postpone that work until the subclass is instantiated for the
+    // first time. Also note that we share a single implementation of
+    // extend between all classes.
+    constructor.prototype = ownProto;
+    constructor.extend = extend;
+    constructor.base = baseProto;
+
+    // Setting constructor.prototype.constructor = constructor is
+    // important so that instanceof works properly in all browsers.
+    ownProto.constructor = constructor;
+
+    // Setting .cls as a shorthand for .constructor is purely a
+    // convenience to make calling static methods easier.
+    ownProto.cls = constructor;
+
+    // If there is a static initializer, call it now. This needs to happen
+    // last so that the constructor is ready to be used if, for example,
+    // constructor.init needs to create an instance of the new class.
+    if (constructor.init)
+        constructor.init(constructor);
+
+    return constructor;
+}
+
+function populate(target, source, parent) {
+    for (var name in source)
+        if (source.hasOwnProperty(name))
+            target[name] = parent ? maybeWrap(name, source, parent) : source[name];
+}
+
+var hasOwnExp = /\bhasOwnProperty\b/;
+var superExp = hasOwnExp.test(populate) ? /\b_super\b/ : /.*/;
+
+function maybeWrap(name, child, parent) {
+    var cval = child && child[name];
+    var pval = parent && parent[name];
+
+    if (typeof cval === "function" &&
+        typeof pval === "function" &&
+        cval !== pval && // Avoid infinite recursion.
+        cval.extend !== extend && // Don't wrap classes.
+        superExp.test(cval)) // Only wrap if this._super needed.
+    {
+        return function() {
+            var saved = this._super;
+            this._super = parent[name];
+            try { return cval.apply(this, arguments) }
+            finally { this._super = saved };
+        };
+    }
+
+    return cval;
+}
+
+function extend(newProps) {
+    return makeClass(this, newProps || {});
+}
+
+module.exports = extend.call(function(){});
+
+},{}]},{},[13])
 (13)
 });
 ;
