@@ -308,7 +308,7 @@
   var _bracketL = {type: "[", beforeExpr: true}, _bracketR = {type: "]"}, _braceL = {type: "{", beforeExpr: true};
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
-  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
+  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _ellipsis = {type: "..."}, _question = {type: "?", beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -345,8 +345,8 @@
 
   exports.tokTypes = {bracketL: _bracketL, bracketR: _bracketR, braceL: _braceL, braceR: _braceR,
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
-                      dot: _dot, question: _question, slash: _slash, eq: _eq, name: _name, eof: _eof,
-                      num: _num, regexp: _regexp, string: _string};
+                      dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
+                      name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -582,8 +582,14 @@
   function readToken_dot() {
     var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
-    ++tokPos;
-    return finishToken(_dot);
+    var next2 = input.charCodeAt(tokPos + 2);
+    if (options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+      tokPos += 3;
+      return finishToken(_ellipsis);
+    } else {
+      ++tokPos;
+      return finishToken(_dot);
+    }
   }
 
   function readToken_slash() { // '/'
@@ -659,7 +665,7 @@
   function getTokenFromCode(code) {
     switch(code) {
       // The interpretation of a dot depends on whether it is followed
-      // by a digit.
+      // by a digit or another two dots.
     case 46: // '.'
       return readToken_dot();
 
@@ -1706,11 +1712,22 @@
     else if (isStatement) unexpected();
     else node.id = null;
     node.params = [];
-    var first = true;
+    node.rest = null;
     expect(_parenL);
-    while (!eat(_parenR)) {
-      if (!first) expect(_comma); else first = false;
-      node.params.push(parseIdent());
+    for (;;) {
+      if (eat(_parenR)) {
+        break;
+      } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
+        node.rest = parseIdent();
+        expect(_parenR);
+        break;
+      } else {
+        node.params.push(parseIdent());
+        if (!eat(_comma)) {
+          expect(_parenR);
+          break;
+        }
+      }
     }
 
     // Start a new scope with regard to labels and the `inFunction`
