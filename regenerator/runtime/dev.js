@@ -7,7 +7,10 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-(function(global) {
+(function(global,
+  // Dummy constructor that we use as the .constructor property for
+  // functions that return Generator objects.
+  GeneratorFunction) {
   var hasOwn = Object.prototype.hasOwnProperty;
 
   if (global.wrapGenerator) {
@@ -32,9 +35,10 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  function GeneratorFunction() {}
+  if(GeneratorFunction.name !== "GeneratorFunction") {
+    // Monkey patch for IE
+    GeneratorFunction.name = "GeneratorFunction";
+  }
 
   wrapGenerator.mark = function(genFun) {
     genFun.constructor = GeneratorFunction;
@@ -270,4 +274,4 @@
       return info.value;
     }
   };
-})(Function("return this")());
+})((0,eval)("this"), (0,eval)("(function GeneratorFunction(){})"));
