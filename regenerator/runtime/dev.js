@@ -274,4 +274,4 @@
       return info.value;
     }
   };
-})((0,eval)("this"), (0,eval)("(function GeneratorFunction(){})"));
+}).apply(this, Function("return [this, function GeneratorFunction(){}]")());
