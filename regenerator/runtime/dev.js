@@ -7,7 +7,14 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-(function(global) {
+(function(
+  // Reliable reference to the global object (i.e. window in browsers).
+  global,
+
+  // Dummy constructor that we use as the .constructor property for
+  // functions that return Generator objects.
+  GeneratorFunction
+) {
   var hasOwn = Object.prototype.hasOwnProperty;
 
   if (global.wrapGenerator) {
@@ -32,18 +39,19 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  function GeneratorFunction() {}
-
   wrapGenerator.mark = function(genFun) {
     genFun.constructor = GeneratorFunction;
     return genFun;
   };
 
+  // Ensure isGeneratorFunction works when Function#name not supported.
+  if (GeneratorFunction.name !== "GeneratorFunction") {
+    GeneratorFunction.name = "GeneratorFunction";
+  }
+
   wrapGenerator.isGeneratorFunction = function(genFun) {
     var ctor = genFun && genFun.constructor;
-    return ctor ? "GeneratorFunction" === ctor.name : false;
+    return ctor ? GeneratorFunction.name === ctor.name : false;
   };
 
   function Generator(innerFn, self) {
@@ -139,6 +147,10 @@
       }
     };
   }
+
+  Generator.prototype.toString = function() {
+    return "[object Generator]";
+  };
 
   function Context() {
     this.reset();
@@ -266,4 +278,4 @@
       return info.value;
     }
   };
-})(Function("return this")());
+}).apply(this, Function("return [this, function GeneratorFunction(){}]")());
