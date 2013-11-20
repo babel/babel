@@ -767,7 +767,13 @@
     // here (don't ask).
     var mods = readWord1();
     if (mods && !/^[gmsiy]*$/.test(mods)) raise(start, "Invalid regexp flag");
-    return finishToken(_regexp, new RegExp(content, mods));
+    try {
+      var value = new RegExp(content, mods);
+    } catch (e) {
+      if (e instanceof SyntaxError) raise(start, e.message);
+      raise(e);
+    }
+    return finishToken(_regexp, value);
   }
 
   // Read an integer in the given radix. Return null if zero digits
