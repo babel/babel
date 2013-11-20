@@ -77,7 +77,8 @@
     // character offsets that denote the start and end of the comment.
     // When the `locations` option is on, two more parameters are
     // passed, the full `{line, column}` locations of the start and
-    // end of the comments.
+    // end of the comments. Note that you are not allowed to call the
+    // parser from the callback—that will corrupt its internal state.
     onComment: null,
     // Nodes have their start and end characters offsets recorded in
     // `start` and `end` properties (directly on the node, rather than

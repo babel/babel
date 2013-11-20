@@ -50,7 +50,8 @@ boolean indicating whether this is a block (<code>/* */</code>) comment,
 character offsets that denote the start and end of the comment.
 When the <code>locations</code> option is on, two more parameters are
 passed, the full <code>{line, column}</code> locations of the start and
-end of the comments.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">onComment</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>Nodes have their start and end characters offsets recorded in
+end of the comments. Note that you are not allowed to call the
+parser from the callback—that will corrupt its internal state.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">onComment</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>Nodes have their start and end characters offsets recorded in
 <code>start</code> and <code>end</code> properties (directly on the node, rather than
 the <code>loc</code> object, which holds line/column data. To also add a
 <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=745678">semi-standardized</a> <code>range</code> property holding a <code>[start,

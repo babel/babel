@@ -78,6 +78,9 @@ object referring to that same position.
   of the comment’s start and end are passed as two additional
   parameters.
 
+  Note that you are not allowed to call the parser from the
+  callback—that will corrupt its internal state.
+
 - **ranges**: Nodes have their start and end characters offsets
   recorded in `start` and `end` properties (directly on the node,
   rather than the `loc` object, which holds line/column data. To also
