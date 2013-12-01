@@ -11,10 +11,11 @@ var assert = require("assert");
 var path = require("path");
 var fs = require("fs");
 var transform = require("./lib/visit").transform;
-var guessTabWidth = require("./lib/util").guessTabWidth;
+var utils = require("./lib/util");
 var recast = require("recast");
 var esprimaHarmony = require("esprima");
 var genFunExp = /\bfunction\s*\*/;
+var blockBindingExp = /\b(let|const)\s*/;
 
 assert.ok(
   /harmony/.test(esprimaHarmony.version),
@@ -22,11 +23,11 @@ assert.ok(
 );
 
 function regenerator(source, options) {
-  if (!options) {
-    options = {
-      includeRuntime: false
-    };
-  }
+  options = utils.extend(options || {}, {
+      includeRuntime: false,
+      supportBlockBinding: true
+    }
+  );
 
   var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
@@ -36,15 +37,41 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
+  var supportBlockBinding = options.supportBlockBinding;
+  if (supportBlockBinding) {
+    if (!blockBindingExp.test(source)) {
+      supportBlockBinding = false;
+    }
+  }
+
   var recastOptions = {
-    tabWidth: guessTabWidth(source),
+    tabWidth: utils.guessTabWidth(source),
     // Use the harmony branch of Esprima that installs with regenerator
     // instead of the master branch that recast provides.
-    esprima: esprimaHarmony
+    esprima: esprimaHarmony,
+    range: supportBlockBinding
   };
 
-  var ast = recast.parse(source, recastOptions);
-  var es5 = recast.print(transform(ast), recastOptions);
+  var recastAst = recast.parse(source, recastOptions);
+  var ast = recastAst.program;
+
+  if (supportBlockBinding) {// smart transpiling let/const into var
+    var defsResult = require("defs")(ast, {
+      ast: true,
+      disallowUnknownReferences: false,
+      disallowDuplicated: false,
+      disallowVars: false,
+      loopClosures: "iife"
+    });
+    
+    if (defsResult.errors) {
+      throw new Error(defsResult.errors.join("\n"))
+    }
+  }
+
+  recastAst.program = transform(ast);
+
+  var es5 = recast.print(recastAst, recastOptions);
   return runtime + es5;
 }
 

@@ -1048,3 +1048,61 @@ describe("new expressions", function() {
     assert.deepEqual(g.next("qwer"), { value: "qwer", done: true });
   });
 });
+
+describe("block binding", function() {
+  it("should translate block binding correctly", function() {
+    "use strict";
+
+    function *gen() {
+      var a$0 = 0, a$1 = 1;
+
+      let a = 3;
+
+      {
+        let a = 1;
+        yield a + a$0;
+      }
+
+      {
+        let a = 2;
+        yield a - 1 + a$1;
+      }
+
+      yield a;
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.next(), { value: 1, done: false });
+    assert.deepEqual(g.next(), { value: 2, done: false });
+    assert.deepEqual(g.next(), { value: 3, done: false });
+    assert.deepEqual(g.next(), { value: void 0, done: true });
+  });
+
+  it("should translate block binding with iife correctly", function() {
+    "use strict";
+
+    function *gen() {
+      let arr = [];
+  
+      for (let x = 0; x < 3; x++) {
+        let y = x;
+        arr.push(function() { return y; });
+      }
+  
+      {
+        let x;
+        while( x = arr.pop() ) {
+          yield x;
+        }
+      }
+    }
+
+    var g = gen();
+
+    assert.equal(g.next().value(), 2);
+    assert.equal(g.next().value(), 1);
+    assert.equal(g.next().value(), 0);
+    assert.deepEqual(g.next(), { value: void 0, done: true });
+  });
+});

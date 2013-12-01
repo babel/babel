@@ -33,3 +33,22 @@ exports.guessTabWidth = function(source) {
 
   return result;
 };
+
+exports.extend = function(obj) {
+  var len = arguments.length;
+  var extension;
+  
+  for (var i = 1;
+       i < len;
+       i++) {
+    if (extension = arguments[i]) {
+      for (var key in extension) {
+        if (Object.prototype.hasOwnProperty.call(extension, key)) {
+          obj[key] = extension[key];
+        }
+      }
+    }
+  }
+
+  return obj;
+}
