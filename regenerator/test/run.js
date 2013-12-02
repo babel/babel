@@ -68,7 +68,7 @@ function asyncCallback(err) {
 
 if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
-    "--harmony-generators",
+    "--harmony",
     "--reporter", "spec",
     "./test/tests.es6.js"
   ]);
