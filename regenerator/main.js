@@ -15,7 +15,7 @@ var utils = require("./lib/util");
 var recast = require("recast");
 var esprimaHarmony = require("esprima");
 var genFunExp = /\bfunction\s*\*/;
-var blockBindingExp = /\b(let|const)\s*/;
+var blockBindingExp = /\b(let|const)\s+/;
 
 assert.ok(
   /harmony/.test(esprimaHarmony.version),
@@ -24,10 +24,9 @@ assert.ok(
 
 function regenerator(source, options) {
   options = utils.extend(options || {}, {
-      includeRuntime: false,
-      supportBlockBinding: true
-    }
-  );
+    includeRuntime: false,
+    supportBlockBinding: true
+  });
 
   var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
@@ -37,7 +36,7 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var supportBlockBinding = options.supportBlockBinding;
+  var supportBlockBinding = !!options.supportBlockBinding;
   if (supportBlockBinding) {
     if (!blockBindingExp.test(source)) {
       supportBlockBinding = false;
