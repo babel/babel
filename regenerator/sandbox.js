@@ -27,10 +27,14 @@ var input = CodeMirror(function(input) {
   autofocus: true
 });
 
+var regeneratorOptions = {
+  supportBlockBinding: true
+};
+
 var output = CodeMirror(function(output) {
   document.getElementById("outputWrapper").appendChild(output);
 }, {
-  value: regenerator(input.getValue()),
+  value: regenerator(input.getValue(), regeneratorOptions),
   readOnly: true
 });
 
@@ -43,7 +47,10 @@ CodeMirror.on(input.doc, "change", function(instance) {
   clearTimeout(delayTimer);
   delayTimer = setTimeout(function() {
     try {
-      output.setValue(regenerator(instance.getValue()));
+      output.setValue(regenerator(
+        instance.getValue(),
+        regeneratorOptions
+      ));
     } catch (err) {
       console.log(err);
     }
