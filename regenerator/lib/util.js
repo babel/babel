@@ -7,6 +7,8 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
+var hasOwn = Object.prototype.hasOwnProperty;
+
 exports.guessTabWidth = function(source) {
   var counts = []; // Sparse array.
   var lastIndent = 0;
@@ -41,7 +43,7 @@ exports.defaults = function(obj) {
   for (var i = 1; i < len; ++i) {
     if ((extension = arguments[i])) {
       for (var key in extension) {
-        if (obj[key] === undefined) {
+        if (hasOwn.call(extension, key) && !hasOwn.call(obj, key)) {
           obj[key] = extension[key];
         }
       }
