@@ -54,7 +54,8 @@ function regenerator(source, options) {
   var recastAst = recast.parse(source, recastOptions);
   var ast = recastAst.program;
 
-  if (supportBlockBinding) {// smart transpiling let/const into var
+  // Transpile let/const into var declarations.
+  if (supportBlockBinding) {
     var defsResult = require("defs")(ast, {
       ast: true,
       disallowUnknownReferences: false,
@@ -62,7 +63,7 @@ function regenerator(source, options) {
       disallowVars: false,
       loopClosures: "iife"
     });
-    
+
     if (defsResult.errors) {
       throw new Error(defsResult.errors.join("\n"))
     }

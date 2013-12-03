@@ -1084,12 +1084,12 @@ describe("block binding", function() {
 
     function *gen() {
       let arr = [];
-  
+
       for (let x = 0; x < 3; x++) {
         let y = x;
         arr.push(function() { return y; });
       }
-  
+
       {
         let x;
         while( x = arr.pop() ) {
