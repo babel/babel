@@ -23,7 +23,7 @@ assert.ok(
 );
 
 function regenerator(source, options) {
-  options = utils.extend(options || {}, {
+  options = utils.defaults(options || {}, {
     includeRuntime: false,
     supportBlockBinding: true
   });
