@@ -36,6 +36,10 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
+  var runtimeBody = recast.parse(runtime, {
+    sourceFileName: regenerator.runtime.dev
+  }).program.body;
+
   var supportBlockBinding = !!options.supportBlockBinding;
   if (supportBlockBinding) {
     if (!blockBindingExp.test(source)) {
@@ -71,8 +75,14 @@ function regenerator(source, options) {
 
   recastAst.program = transform(ast);
 
-  var es5 = recast.print(recastAst, recastOptions).code;
-  return runtime + es5;
+  // Include the runtime by modifying the AST rather than by concatenating
+  // strings. This technique will allow for more accurate source mapping.
+  if (options.includeRuntime) {
+    var body = recastAst.program.body;
+    body.unshift.apply(body, runtimeBody);
+  }
+
+  return recast.print(recastAst, recastOptions).code;
 }
 
 // To modify an AST directly, call require("regenerator").transform(ast).
