@@ -28,12 +28,12 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "commander": "~2.0.0",
+    "commander": "~2.1.0",
     "esprima": "git://github.com/ariya/esprima.git#harmony",
-    "ast-types": ">= 0.3.8",
-    "recast": "~0.4.25",
-    "private": "~0.0.5",
-    "defs": "~0.6.0"
+    "ast-types": ">= 0.3.11",
+    "recast": "~0.5.2",
+    "private": "~0.1.0",
+    "defs": "~0.6.2"
   },
   "devDependencies": {
     "mocha": "~1.13.0",

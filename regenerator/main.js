@@ -71,7 +71,7 @@ function regenerator(source, options) {
 
   recastAst.program = transform(ast);
 
-  var es5 = recast.print(recastAst, recastOptions);
+  var es5 = recast.print(recastAst, recastOptions).code;
   return runtime + es5;
 }
 
