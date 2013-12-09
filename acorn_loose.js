@@ -484,6 +484,11 @@
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(tt.comma)) break;
     }
+    if (!node.declarations.length) {
+      var decl = startNode();
+      decl.id = dummyIdent();
+      node.declarations.push(finishNode(decl, "VariableDeclarator"));
+    }
     return finishNode(node, "VariableDeclaration");
   }
 
