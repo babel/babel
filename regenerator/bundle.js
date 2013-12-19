@@ -1356,8 +1356,9 @@ process.chdir = function (dir) {
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -2397,8 +2398,9 @@ Ep.explodeExpression = function(path, ignoreResult) {
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -2544,8 +2546,9 @@ exports.hoist = function(fun) {
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -2812,8 +2815,9 @@ LMp.emitReturn = function(argPath) {
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -2913,8 +2917,9 @@ exports.containsLeap = makePredicate("containsLeap", leapTypes);
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -2969,8 +2974,9 @@ exports.defaults = function(obj) {
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -3100,8 +3106,9 @@ var __dirname="/";/**
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 var assert = require("assert");
@@ -4471,7 +4478,10 @@ var Node = types.namedTypes.Node;
 var isArray = types.builtInTypes.array;
 var NodePath = require("./node-path");
 
-module.exports = function(node, callback) {
+// Good for traversals that need to modify the syntax tree or to access
+// path/scope information via `this` (a NodePath object). Somewhat slower
+// than traverseWithNoPathInfo because of the NodePath bookkeeping.
+function traverseWithFullPathInfo(node, callback) {
     function traverse(path) {
         assert.ok(path instanceof NodePath);
 
@@ -4503,7 +4513,40 @@ module.exports = function(node, callback) {
         traverse(rootPath.get("root"));
         return rootPath.value.root;
     }
-};
+}
+
+// Good for read-only traversals that do not require any NodePath
+// information. Faster than traverseWithFullPathInfo because less
+// information is exposed. A context parameter is supported because `this`
+// no longer has to be a NodePath object.
+function traverseWithNoPathInfo(node, callback, context) {
+    context = context || null;
+
+    function traverse(node) {
+        if (isArray.check(node)) {
+            node.forEach(traverse);
+
+        } else if (Node.check(node)) {
+            if (callback.call(context, node, traverse) === false) {
+                return;
+            }
+
+            types.eachField(node, function(name, child) {
+                traverse(child);
+            });
+        }
+    }
+
+    traverse(node);
+}
+
+// Since we export traverseWithFullPathInfo as module.exports, we need to
+// attach traverseWithNoPathInfo to it as a property. In other words, you
+// should use require("ast-types").traverse.fast(ast, ...) to invoke the
+// quick-and-dirty traverseWithNoPathInfo function.
+traverseWithFullPathInfo.fast = traverseWithNoPathInfo;
+
+module.exports = traverseWithFullPathInfo;
 
 },{"./node-path":19,"./types":23,"assert":2}],23:[function(require,module,exports){
 var assert = require("assert");
@@ -15682,7 +15725,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
+        var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator;
 
         expectKeyword('function');
 
@@ -15720,9 +15763,7 @@ parseYieldExpression: true
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = generator;
 
-        // here we redo some work in order to set 'expression'
-        expression = !match('{');
-        body = parseConciseBody();
+        body = parseFunctionSourceElements();
 
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
@@ -15736,11 +15777,11 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
+        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false);
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator, expression;
+        var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator;
 
         expectKeyword('function');
 
@@ -15779,9 +15820,7 @@ parseYieldExpression: true
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = generator;
 
-        // here we redo some work in order to set 'expression'
-        expression = !match('{');
-        body = parseConciseBody();
+        body = parseFunctionSourceElements();
 
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
@@ -15795,7 +15834,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
+        return delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false);
     }
 
     function parseYieldExpression() {
@@ -17570,23 +17609,37 @@ Lp.toString = function(options) {
     return this.sliceString(this.firstPos(), this.lastPos(), options);
 };
 
-Lp.getSourceMap = function(sourceMapName) {
-    isString.assert(sourceMapName);
+Lp.getSourceMap = function(sourceMapName, sourceRoot) {
+    if (!sourceMapName) {
+        // Although we could make up a name or generate an anonymous
+        // source map, instead we assume that any consumer who does not
+        // provide a name does not actually want a source map.
+        return null;
+    }
+
     var targetLines = this;
+
+    function updateJSON(json) {
+        json = json || {};
+
+        isString.assert(sourceMapName);
+        json.file = sourceMapName;
+
+        if (sourceRoot) {
+            isString.assert(sourceRoot);
+            json.sourceRoot = sourceRoot;
+        }
+
+        return json;
+    }
 
     var secret = getSecret(targetLines);
     if (secret.cachedSourceMap) {
         // Since Lines objects are immutable, we can reuse any source map
-        // that was previously generated.
-        var json = secret.cachedSourceMap.toJSON();
-
-        // In case the name of the requested source map is different from
-        // what was previously cached, update the JSON.
-        json.file = sourceMapName;
-
-        // Return a new JSON object to protect the cached source map from
-        // outside modification.
-        return json;
+        // that was previously generated. Nevertheless, we return a new
+        // JSON object here to protect the cached source map from outside
+        // modification.
+        return updateJSON(secret.cachedSourceMap.toJSON());
     }
 
     assert.ok(
@@ -17595,9 +17648,8 @@ Lp.getSourceMap = function(sourceMapName) {
             '"source.js" } to recast.parse to enable source mapping.'
     );
 
-    var smg = new sourceMap.SourceMapGenerator({
-        file: sourceMapName
-    });
+    var smg = new sourceMap.SourceMapGenerator(updateJSON());
+    var sourcesToContents = {};
 
     secret.mappings.forEach(function(mapping) {
         var sourceCursor = mapping.sourceLines.skipSpaces(
@@ -17613,15 +17665,22 @@ Lp.getSourceMap = function(sourceMapName) {
             var targetChar = targetLines.charAt(targetCursor);
             assert.strictEqual(sourceChar, targetChar);
 
+            var sourceName = mapping.sourceLines.name;
+
             // Add mappings one character at a time for maximum resolution.
             smg.addMapping({
-                source: mapping.sourceLines.name,
+                source: sourceName,
                 original: { line: sourceCursor.line,
                             column: sourceCursor.column },
                 generated: { line: targetCursor.line,
-                             column: targetCursor.column },
-                name: targetChar
+                             column: targetCursor.column }
             });
+
+            if (!hasOwn.call(sourcesToContents, sourceName)) {
+                var sourceContent = mapping.sourceLines.toString();
+                smg.setSourceContent(sourceName, sourceContent);
+                sourcesToContents[sourceName] = sourceContent;
+            }
 
             targetLines.nextPos(targetCursor, true);
             mapping.sourceLines.nextPos(sourceCursor, true);
@@ -17769,6 +17828,38 @@ Lp.getIndentAt = function(line) {
     var secret = getSecret(this),
         info = secret.infos[line - 1];
     return Math.max(info.indent, 0);
+};
+
+Lp.guessTabWidth = function() {
+    var secret = getSecret(this);
+    if (hasOwn.call(secret, "cachedTabWidth")) {
+        return secret.cachedTabWidth;
+    }
+
+    var counts = []; // Sparse array.
+    var lastIndent = 0;
+
+    for (var line = 1, last = this.length; line <= last; ++line) {
+        var info = secret.infos[line - 1];
+        var diff = Math.abs(info.indent - lastIndent);
+        counts[diff] = ~~counts[diff] + 1;
+        lastIndent = info.indent;
+    }
+
+    var maxCount = -1;
+    var result = 2;
+
+    for (var tabWidth = 1;
+         tabWidth < counts.length;
+         tabWidth += 1) {
+        if (hasOwn.call(counts, tabWidth) &&
+            counts[tabWidth] > maxCount) {
+            maxCount = counts[tabWidth];
+            result = tabWidth;
+        }
+    }
+
+    return secret.cachedTabWidth = result;
 };
 
 Lp.isOnlyWhitespace = function() {
@@ -18469,6 +18560,8 @@ var defaults = {
     wrapColumn: 74, // Aspirational for now.
     sourceFileName: null,
     sourceMapName: null,
+    sourceRoot: null,
+    inputSourceMap: null,
     esprima: require("esprima"),
     range: false,
     tolerant: true
@@ -18491,6 +18584,8 @@ exports.normalize = function(options) {
         wrapColumn: Math.max(get("wrapColumn"), 0),
         sourceFileName: get("sourceFileName"),
         sourceMapName: get("sourceMapName"),
+        sourceRoot: get("sourceRoot"),
+        inputSourceMap: get("inputSourceMap"),
         esprima: get("esprima"),
         range: get("range"),
         tolerant: get("tolerant")
@@ -18876,6 +18971,7 @@ function findChildReprints(path, oldNode, reprints) {
 
 },{"./lines":46,"./types":52,"./util":53,"assert":2,"ast-types":24}],51:[function(require,module,exports){
 var assert = require("assert");
+var sourceMap = require("source-map");
 var printComments = require("./comments").printComments;
 var linesModule = require("./lines");
 var fromString = linesModule.fromString;
@@ -18886,19 +18982,27 @@ var types = require("./types");
 var namedTypes = types.namedTypes;
 var isString = types.builtInTypes.string;
 var isObject = types.builtInTypes.object;
-var NodePath = require("ast-types").NodePath;
+var NodePath = types.NodePath;
+var util = require("./util");
 
 function PrintResult(code, sourceMap) {
     assert.ok(this instanceof PrintResult);
     isString.assert(code);
 
     var properties = {
-        code: { value: code }
+        code: {
+            value: code,
+            enumerable: true
+        }
     };
 
     if (sourceMap) {
         isObject.assert(sourceMap);
-        properties.map = { value: sourceMap };
+
+        properties.map = {
+            value: sourceMap,
+            enumerable: true
+        };
     }
 
     Object.defineProperties(this, properties);
@@ -18926,6 +19030,7 @@ var emptyPrintResult = new PrintResult("");
 function Printer(options) {
     assert.ok(this instanceof Printer);
 
+    var explicitTabWidth = options && options.tabWidth;
     options = normalizeOptions(options);
 
     function printWithComments(path) {
@@ -18939,10 +19044,28 @@ function Printer(options) {
 
         assert.ok(path instanceof NodePath);
 
+        if (!explicitTabWidth) {
+            var oldTabWidth = options.tabWidth;
+            var orig = path.node.original;
+            var origLoc = orig && orig.loc;
+            var origLines = origLoc && origLoc.lines;
+            if (origLines) {
+                options.tabWidth = origLines.guessTabWidth();
+                try {
+                    return maybeReprint(path);
+                } finally {
+                    options.tabWidth = oldTabWidth;
+                }
+            }
+        }
+
+        return maybeReprint(path);
+    }
+
+    function maybeReprint(path) {
         var reprinter = getReprinter(path);
         if (reprinter)
             return maybeAddParens(path, reprinter(printRootGenerically));
-
         return printRootGenerically(path);
     }
 
@@ -18960,10 +19083,15 @@ function Printer(options) {
     this.print = function(ast) {
         if (!ast) return emptyPrintResult;
         var lines = print(new NodePath(ast), true);
-        var mapName = options.sourceMapName;
         return new PrintResult(
             lines.toString(options),
-            mapName && lines.getSourceMap(mapName)
+            util.composeSourceMaps(
+                options.inputSourceMap,
+                lines.getSourceMap(
+                    options.sourceMapName,
+                    options.sourceRoot
+                )
+            )
         );
     };
 
@@ -19833,7 +19961,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"assert":2,"ast-types":24}],52:[function(require,module,exports){
+},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"./util":53,"assert":2,"source-map":57}],52:[function(require,module,exports){
 var types = require("ast-types");
 var def = types.Type.def;
 
@@ -19849,6 +19977,10 @@ module.exports = types;
 },{"ast-types":24}],53:[function(require,module,exports){
 var assert = require("assert");
 var getFieldValue = require("./types").getFieldValue;
+var sourceMap = require("source-map");
+var SourceMapConsumer = sourceMap.SourceMapConsumer;
+var SourceMapGenerator = sourceMap.SourceMapGenerator;
+var hasOwn = Object.prototype.hasOwnProperty;
 
 function getUnionOfKeys(obj) {
     for (var i = 0, key,
@@ -19860,7 +19992,7 @@ function getUnionOfKeys(obj) {
     {
         obj = objs[i];
         for (key in obj)
-            if (obj.hasOwnProperty(key))
+            if (hasOwn.call(obj, key))
                 result[key] = true;
     }
     return result;
@@ -19936,7 +20068,56 @@ function comparePos(pos1, pos2) {
 }
 exports.comparePos = comparePos;
 
-},{"./types":52,"assert":2}],54:[function(require,module,exports){
+exports.composeSourceMaps = function(formerMap, latterMap) {
+    if (formerMap) {
+        if (!latterMap) {
+            return formerMap;
+        }
+    } else {
+        return latterMap || null;
+    }
+
+    var smcFormer = new SourceMapConsumer(formerMap);
+    var smcLatter = new SourceMapConsumer(latterMap);
+    var smg = new SourceMapGenerator({
+        file: latterMap.file,
+        sourceRoot: latterMap.sourceRoot
+    });
+
+    var sourcesToContents = {};
+
+    smcLatter.eachMapping(function(mapping) {
+        var origPos = smcFormer.originalPositionFor({
+            line: mapping.originalLine,
+            column: mapping.originalColumn
+        });
+
+        var sourceName = origPos.source;
+
+        smg.addMapping({
+            source: sourceName,
+            original: {
+                line: origPos.line,
+                column: origPos.column
+            },
+            generated: {
+                line: mapping.generatedLine,
+                column: mapping.generatedColumn
+            },
+            name: mapping.name
+        });
+
+        var sourceContent = smcFormer.sourceContentFor(sourceName);
+        if (sourceContent && !hasOwn.call(sourcesToContents, sourceName)) {
+            sourcesToContents[sourceName] = sourceContent;
+            smg.setSourceContent(sourceName, sourceContent);
+        }
+    });
+
+    return smg.toJSON();
+};
+
+},{"./types":52,"assert":2,"source-map":57}],54:[function(require,module,exports){
 var assert = require("assert");
 var Class = require("cls");
 var Node = require("./types").namedTypes.Node;
