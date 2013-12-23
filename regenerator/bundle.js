@@ -3951,33 +3951,73 @@ var Scope = require("./scope");
 function NodePath(value, parentPath, name) {
     assert.ok(this instanceof NodePath);
     Path.call(this, value, parentPath, name);
+}
 
-    // Conservatively update parameters to reflect any alterations made by
-    // the Path constructor.
-    value = this.value;
-    parentPath = this.parentPath;
-    name = this.name;
+require("util").inherits(NodePath, Path);
+var NPp = NodePath.prototype;
 
-    var node = null;
-    var pp = parentPath;
-    var scope = pp && pp.scope;
+Object.defineProperties(NPp, {
+    node: {
+        get: function() {
+            Object.defineProperty(this, "node", {
+                value: this._computeNode()
+            });
+
+            return this.node;
+        }
+    },
+
+    parent: {
+        get: function() {
+            Object.defineProperty(this, "parent", {
+                value: this._computeParent()
+            });
+
+            return this.parent;
+        }
+    },
+
+    scope: {
+        get: function() {
+            Object.defineProperty(this, "scope", {
+                value: this._computeScope()
+            });
+
+            return this.scope;
+        }
+    }
+});
+
+// The value of the first ancestor Path whose value is a Node.
+NPp._computeNode = function() {
+    var value = this.value;
 
     if (n.Node.check(value)) {
-        node = value;
+        return value;
+    }
 
-        if (Scope.isEstablishedBy(node)) {
-            scope = new Scope(this, scope);
+    var pp = this.parentPath;
+
+    for (var pp = this.parentPath; pp; pp = pp.parentPath) {
+        if (n.Node.check(value = pp.value)) {
+            return value;
         }
+    }
 
-    } else {
+    return null;
+};
+
+// The first ancestor Path whose value is a Node distinct from this.node.
+NPp._computeParent = function() {
+    var value = this.value;
+    var pp = this.parentPath;
+
+    if (!n.Node.check(value)) {
         while (pp && !n.Node.check(pp.value)) {
-            assert.strictEqual(pp.scope, scope);
             pp = pp.parentPath;
         }
 
         if (pp) {
-            assert.strictEqual(pp.scope, scope);
-            node = pp.value || null;
             pp = pp.parentPath;
         }
     }
@@ -3986,26 +4026,22 @@ function NodePath(value, parentPath, name) {
         pp = pp.parentPath;
     }
 
-    if (pp && node) {
-        assert.notStrictEqual(pp.value, node);
-        assert.notStrictEqual(pp.node, node);
+    return pp || null;
+};
+
+// The closest enclosing scope that governs this node.
+NPp._computeScope = function() {
+    var value = this.value;
+    var pp = this.parentPath;
+    var scope = pp && pp.scope;
+
+    if (n.Node.check(value) &&
+        Scope.isEstablishedBy(value)) {
+        scope = new Scope(this, scope);
     }
 
-    Object.defineProperties(this, {
-        // The value of the first ancestor Path whose value is a Node.
-        node: { value: node || null },
-
-        // The first ancestor Path whose value is a Node distinct from
-        // this.node.
-        parent: { value: pp || null },
-
-        // The closest enclosing scope that governs this node.
-        scope: { value: scope || null }
-    });
-}
-
-require("util").inherits(NodePath, Path);
-var NPp = NodePath.prototype;
+    return scope || null;
+};
 
 NPp.getValueProperty = function(name) {
     return types.getFieldValue(this.value, name);
@@ -4477,11 +4513,21 @@ var types = require("./types");
 var Node = types.namedTypes.Node;
 var isArray = types.builtInTypes.array;
 var NodePath = require("./node-path");
+var funToStr = Function.prototype.toString;
+var thisPattern = /\bthis\b/;
 
 // Good for traversals that need to modify the syntax tree or to access
 // path/scope information via `this` (a NodePath object). Somewhat slower
 // than traverseWithNoPathInfo because of the NodePath bookkeeping.
 function traverseWithFullPathInfo(node, callback) {
+    if (!thisPattern.test(funToStr.call(callback))) {
+        // If the callback function contains no references to `this`, then
+        // it will have no way of using any of the NodePath information
+        // that traverseWithFullPathInfo provides, so we can skip that
+        // bookkeeping altogether.
+        return traverseWithNoPathInfo(node, callback);
+    }
+
     function traverse(path) {
         assert.ok(path instanceof NodePath);
 
@@ -4538,6 +4584,8 @@ function traverseWithNoPathInfo(node, callback, context) {
     }
 
     traverse(node);
+
+    return node;
 }
 
 // Since we export traverseWithFullPathInfo as module.exports, we need to
