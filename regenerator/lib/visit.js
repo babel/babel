@@ -41,7 +41,7 @@ function visitNode(node) {
   var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
-  var shouldAliasArguments = renameArguments(node, argsId);
+  var shouldAliasArguments = renameArguments(this, argsId);
   var vars = hoist(node);
 
   if (shouldAliasArguments) {
@@ -98,11 +98,13 @@ function visitNode(node) {
   }
 }
 
-function renameArguments(func, argsId) {
+function renameArguments(funcPath, argsId) {
+  assert.ok(funcPath instanceof types.NodePath);
+  var func = funcPath.value;
   var didReplaceArguments = false;
   var hasImplicitArguments = false;
 
-  types.traverse(func, function(node) {
+  types.traverse(funcPath, function(node) {
     if (node === func) {
       hasImplicitArguments = !this.scope.lookup("arguments");
     } else if (n.Function.check(node)) {
