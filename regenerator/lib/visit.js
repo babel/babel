@@ -42,7 +42,7 @@ function visitNode(node) {
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(this, argsId);
-  var vars = hoist(node);
+  var vars = hoist(this);
 
   if (shouldAliasArguments) {
     vars = vars || b.variableDeclaration("var", []);

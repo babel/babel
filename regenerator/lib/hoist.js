@@ -18,8 +18,10 @@ var hasOwn = Object.prototype.hasOwnProperty;
 // and replaces any Declaration nodes in its body with assignments, then
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
-exports.hoist = function(fun) {
-  n.Function.assert(fun);
+exports.hoist = function(funPath) {
+  assert.ok(funPath instanceof types.NodePath);
+  n.Function.assert(funPath.value);
+
   var vars = {};
   var funDeclsToRaise = [];
 
@@ -48,7 +50,7 @@ exports.hoist = function(fun) {
     return b.sequenceExpression(exprs);
   }
 
-  types.traverse(fun.body, function(node) {
+  types.traverse(funPath.get("body"), function(node) {
     if (n.VariableDeclaration.check(node)) {
       var expr = varDeclToExpr(node, false);
       if (expr === null) {
@@ -121,7 +123,8 @@ exports.hoist = function(fun) {
   });
 
   var paramNames = {};
-  fun.params.forEach(function(param) {
+  funPath.get("params").each(function(paramPath) {
+    var param = paramPath.value;
     if (n.Identifier.check(param)) {
       paramNames[param.name] = param;
     } else {
