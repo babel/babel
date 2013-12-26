@@ -56,12 +56,11 @@ function regenerator(source, options) {
     range: supportBlockBinding
   };
 
-  var recastAst = recast.parse(source, recastOptions);
-  var ast = recastAst.program;
+  var ast = recast.parse(source, recastOptions);
 
   // Transpile let/const into var declarations.
   if (supportBlockBinding) {
-    var defsResult = require("defs")(ast, {
+    var defsResult = require("defs")(ast.program, {
       ast: true,
       disallowUnknownReferences: false,
       disallowDuplicated: false,
@@ -74,16 +73,16 @@ function regenerator(source, options) {
     }
   }
 
-  recastAst.program = transform(ast);
+  ast.program = transform(ast.program);
 
   // Include the runtime by modifying the AST rather than by concatenating
   // strings. This technique will allow for more accurate source mapping.
   if (options.includeRuntime) {
-    var body = recastAst.program.body;
+    var body = ast.program.body;
     body.unshift.apply(body, runtimeBody);
   }
 
-  return recast.print(recastAst, recastOptions).code;
+  return recast.print(ast, recastOptions).code;
 }
 
 // To modify an AST directly, call require("regenerator").transform(ast).
