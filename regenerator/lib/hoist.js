@@ -23,7 +23,6 @@ exports.hoist = function(funPath) {
   n.Function.assert(funPath.value);
 
   var vars = {};
-  var funDeclsToRaise = [];
 
   function varDeclToExpr(vdec, includeIdentifiers) {
     n.VariableDeclaration.assert(vdec);
@@ -96,16 +95,24 @@ exports.hoist = function(funPath) {
       );
 
       if (n.BlockStatement.check(this.parent.node)) {
-        funDeclsToRaise.push({
-          block: this.parent.node,
-          assignment: assignment
-        });
+        // Note that the function declaration we want to remove might be
+        // the same node that firstStmtPath refers to, in case the
+        // function declaration was already the first statement in the
+        // enclosing block statement.
+        var firstStmtPath = this.parent.get("body", 0);
 
-        // Remove the function declaration for now, but reinsert the assignment
-        // form later, at the top of the enclosing BlockStatement.
+        // Insert the assignment form before the first statement in the
+        // enclosing block.
+        firstStmtPath.replace(assignment, firstStmtPath.value);
+
+        // Remove the function declaration now that we've inserted the
+        // equivalent assignment form at the beginning of the block.
         this.replace();
 
       } else {
+        // If the parent node is not a block statement, then we can just
+        // replace the declaration with the equivalent assignment form
+        // without worrying about hoisting it.
         this.replace(assignment);
       }
 
@@ -116,10 +123,6 @@ exports.hoist = function(funPath) {
       // Don't descend into nested function expressions.
       return false;
     }
-  });
-
-  funDeclsToRaise.forEach(function(entry) {
-    entry.block.body.unshift(entry.assignment);
   });
 
   var paramNames = {};
