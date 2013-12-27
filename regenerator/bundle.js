@@ -2413,10 +2413,11 @@ var hasOwn = Object.prototype.hasOwnProperty;
 // and replaces any Declaration nodes in its body with assignments, then
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
-exports.hoist = function(fun) {
-  n.Function.assert(fun);
+exports.hoist = function(funPath) {
+  assert.ok(funPath instanceof types.NodePath);
+  n.Function.assert(funPath.value);
+
   var vars = {};
-  var funDeclsToRaise = [];
 
   function varDeclToExpr(vdec, includeIdentifiers) {
     n.VariableDeclaration.assert(vdec);
@@ -2443,7 +2444,7 @@ exports.hoist = function(fun) {
     return b.sequenceExpression(exprs);
   }
 
-  types.traverse(fun.body, function(node) {
+  types.traverse(funPath.get("body"), function(node) {
     if (n.VariableDeclaration.check(node)) {
       var expr = varDeclToExpr(node, false);
       if (expr === null) {
@@ -2489,16 +2490,24 @@ exports.hoist = function(fun) {
       );
 
       if (n.BlockStatement.check(this.parent.node)) {
-        funDeclsToRaise.push({
-          block: this.parent.node,
-          assignment: assignment
-        });
+        // Note that the function declaration we want to remove might be
+        // the same node that firstStmtPath refers to, in case the
+        // function declaration was already the first statement in the
+        // enclosing block statement.
+        var firstStmtPath = this.parent.get("body", 0);
 
-        // Remove the function declaration for now, but reinsert the assignment
-        // form later, at the top of the enclosing BlockStatement.
+        // Insert the assignment form before the first statement in the
+        // enclosing block.
+        firstStmtPath.replace(assignment, firstStmtPath.value);
+
+        // Remove the function declaration now that we've inserted the
+        // equivalent assignment form at the beginning of the block.
         this.replace();
 
       } else {
+        // If the parent node is not a block statement, then we can just
+        // replace the declaration with the equivalent assignment form
+        // without worrying about hoisting it.
         this.replace(assignment);
       }
 
@@ -2511,12 +2520,9 @@ exports.hoist = function(fun) {
     }
   });
 
-  funDeclsToRaise.forEach(function(entry) {
-    entry.block.body.unshift(entry.assignment);
-  });
-
   var paramNames = {};
-  fun.params.forEach(function(param) {
+  funPath.get("params").each(function(paramPath) {
+    var param = paramPath.value;
     if (n.Identifier.check(param)) {
       paramNames[param.name] = param;
     } else {
@@ -3012,8 +3018,8 @@ function visitNode(node) {
   var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
-  var shouldAliasArguments = renameArguments(node, argsId);
-  var vars = hoist(node);
+  var shouldAliasArguments = renameArguments(this, argsId);
+  var vars = hoist(this);
 
   if (shouldAliasArguments) {
     vars = vars || b.variableDeclaration("var", []);
@@ -3023,8 +3029,7 @@ function visitNode(node) {
   }
 
   var emitter = new Emitter(contextId);
-  var path = new types.NodePath(node);
-  emitter.explode(path.get("body"));
+  emitter.explode(this.get("body"));
 
   var outerBody = [];
 
@@ -3069,11 +3074,13 @@ function visitNode(node) {
   }
 }
 
-function renameArguments(func, argsId) {
+function renameArguments(funcPath, argsId) {
+  assert.ok(funcPath instanceof types.NodePath);
+  var func = funcPath.value;
   var didReplaceArguments = false;
   var hasImplicitArguments = false;
 
-  types.traverse(func, function(node) {
+  types.traverse(funcPath, function(node) {
     if (node === func) {
       hasImplicitArguments = !this.scope.lookup("arguments");
     } else if (n.Function.check(node)) {
@@ -3159,12 +3166,11 @@ function regenerator(source, options) {
     range: supportBlockBinding
   };
 
-  var recastAst = recast.parse(source, recastOptions);
-  var ast = recastAst.program;
+  var ast = recast.parse(source, recastOptions);
 
   // Transpile let/const into var declarations.
   if (supportBlockBinding) {
-    var defsResult = require("defs")(ast, {
+    var defsResult = require("defs")(ast.program, {
       ast: true,
       disallowUnknownReferences: false,
       disallowDuplicated: false,
@@ -3177,16 +3183,18 @@ function regenerator(source, options) {
     }
   }
 
-  recastAst.program = transform(ast);
+  var path = new recast.types.NodePath(ast);
+
+  transform(path.get("program"));
 
   // Include the runtime by modifying the AST rather than by concatenating
   // strings. This technique will allow for more accurate source mapping.
   if (options.includeRuntime) {
-    var body = recastAst.program.body;
+    var body = ast.program.body;
     body.unshift.apply(body, runtimeBody);
   }
 
-  return recast.print(recastAst, recastOptions).code;
+  return recast.print(path, recastOptions).code;
 }
 
 // To modify an AST directly, call require("regenerator").transform(ast).
@@ -3991,20 +3999,12 @@ Object.defineProperties(NPp, {
 // The value of the first ancestor Path whose value is a Node.
 NPp._computeNode = function() {
     var value = this.value;
-
     if (n.Node.check(value)) {
         return value;
     }
 
     var pp = this.parentPath;
-
-    for (var pp = this.parentPath; pp; pp = pp.parentPath) {
-        if (n.Node.check(value = pp.value)) {
-            return value;
-        }
-    }
-
-    return null;
+    return pp && pp.node || null;
 };
 
 // The first ancestor Path whose value is a Node distinct from this.node.
@@ -4162,6 +4162,9 @@ NPp.needsParens = function() {
     if (n.ObjectExpression.check(node) &&
         this.firstInStatement())
         return true;
+
+    if (n.YieldExpression.check(node))
+        return isBinary(parent);
 
     return false;
 };
@@ -4511,6 +4514,7 @@ exports.isPrimitive = new Type(function(value) {
 var assert = require("assert");
 var types = require("./types");
 var Node = types.namedTypes.Node;
+var isObject = types.builtInTypes.object;
 var isArray = types.builtInTypes.array;
 var NodePath = require("./node-path");
 var funToStr = Function.prototype.toString;
@@ -4530,35 +4534,41 @@ function traverseWithFullPathInfo(node, callback) {
 
     function traverse(path) {
         assert.ok(path instanceof NodePath);
+        var value = path.value;
 
-        if (isArray.check(path.value)) {
+        if (isArray.check(value)) {
             path.each(traverse);
+            return;
+        }
 
-        } else if (Node.check(path.value)) {
-            var node = path.value;
-
-            if (callback.call(path, node, traverse) === false) {
+        if (Node.check(value)) {
+            if (callback.call(path, value, traverse) === false) {
                 return;
             }
-
-            types.eachField(node, function(name, child) {
-                var childPath = path.get(name);
-                assert.strictEqual(childPath.value, child);
-                traverse(childPath);
-            });
+        } else if (!isObject.check(value)) {
+            return;
         }
+
+        types.eachField(value, function(name, child) {
+            var childPath = path.get(name);
+            if (childPath.value !== child) {
+                childPath.replace(child);
+            }
+
+            traverse(childPath);
+        });
     }
 
     if (node instanceof NodePath) {
         traverse(node);
         return node.value;
-    } else {
-        // Just in case we call this.replace at the root, there needs to
-        // be an additional parent Path to update.
-        var rootPath = new NodePath({ root: node });
-        traverse(rootPath.get("root"));
-        return rootPath.value.root;
     }
+
+    // Just in case we call this.replace at the root, there needs to be an
+    // additional parent Path to update.
+    var rootPath = new NodePath({ root: node });
+    traverse(rootPath.get("root"));
+    return rootPath.value.root;
 }
 
 // Good for read-only traversals that do not require any NodePath
@@ -4571,16 +4581,20 @@ function traverseWithNoPathInfo(node, callback, context) {
     function traverse(node) {
         if (isArray.check(node)) {
             node.forEach(traverse);
+            return;
+        }
 
-        } else if (Node.check(node)) {
+        if (Node.check(node)) {
             if (callback.call(context, node, traverse) === false) {
                 return;
             }
-
-            types.eachField(node, function(name, child) {
-                traverse(child);
-            });
+        } else if (!isObject.check(node)) {
+            return;
         }
+
+        types.eachField(node, function(name, child) {
+            traverse(child);
+        });
     }
 
     traverse(node);
@@ -19129,8 +19143,13 @@ function Printer(options) {
     }
 
     this.print = function(ast) {
-        if (!ast) return emptyPrintResult;
-        var lines = print(new NodePath(ast), true);
+        if (!ast) {
+            return emptyPrintResult;
+        }
+
+        var path = ast instanceof NodePath ? ast : new NodePath(ast);
+        var lines = print(path, true);
+
         return new PrintResult(
             lines.toString(options),
             util.composeSourceMaps(
@@ -19144,8 +19163,13 @@ function Printer(options) {
     };
 
     this.printGenerically = function(ast) {
-        if (!ast) return emptyPrintResult;
-        var lines = printGenerically(new NodePath(ast));
+        if (!ast) {
+            return emptyPrintResult;
+        }
+
+        var path = ast instanceof NodePath ? ast : new NodePath(ast);
+        var lines = printGenerically(path);
+
         return new PrintResult(lines.toString(options));
     };
 }
