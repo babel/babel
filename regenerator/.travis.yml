@@ -4,3 +4,7 @@ node_js:
   - "0.10"
   - "0.8"
   - "0.6"
+
+matrix:
+  allow_failures:
+    - "0.6"
