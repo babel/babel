@@ -168,6 +168,28 @@ describe("try-catch generator", function() {
   });
 });
 
+describe("nested generators in try-catch", function() {
+  function *gen() {
+    try {
+       nonExistent;
+    } catch (e) {
+      yield function* () {
+        yield e;
+      }
+    }
+  }
+
+  it('should get a reference to the caught error', function () {
+    var gen2 = gen().next().value();
+    var res = gen2.next();
+    assert.ok(res.value instanceof ReferenceError);
+    // Note that we don't do strict equality over the message because it varies
+    // across browsers (if we ever want to run tests in browsers).
+    assert.ok(res.value.message.match(/nonExistent/));
+  });
+
+});
+
 describe("try-finally generator", function() {
   function *usingThrow(condition) {
     yield 0;

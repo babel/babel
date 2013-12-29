@@ -19,6 +19,14 @@ exports.transform = function(ast) {
   return types.traverse(ast, visitNode);
 };
 
+// Makes a unique context identifier. This is needed to handle retrieval of
+// tempvars from contexts up the scope in nested generator situation.
+// see issue #70
+var nextCtxId = 0;
+function makeContextId() {
+  return b.identifier("$ctx" + nextCtxId++);
+}
+
 function visitNode(node) {
   if (!n.Function.check(node) || !node.generator) {
     // Note that because we are not returning false here the traversal
@@ -37,7 +45,7 @@ function visitNode(node) {
   }
 
   // TODO Ensure these identifiers are named uniquely.
-  var contextId = b.identifier("$ctx");
+  var contextId = makeContextId();
   var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
