@@ -2996,6 +2996,14 @@ exports.transform = function(ast) {
   return types.traverse(ast, visitNode);
 };
 
+// Makes a unique context identifier. This is needed to handle retrieval of
+// tempvars from contexts up the scope in nested generator situation.
+// see issue #70
+var nextCtxId = 0;
+function makeContextId() {
+  return b.identifier("$ctx" + nextCtxId++);
+}
+
 function visitNode(node) {
   if (!n.Function.check(node) || !node.generator) {
     // Note that because we are not returning false here the traversal
@@ -3014,7 +3022,7 @@ function visitNode(node) {
   }
 
   // TODO Ensure these identifiers are named uniquely.
-  var contextId = b.identifier("$ctx");
+  var contextId = makeContextId();
   var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
@@ -4114,6 +4122,15 @@ NPp.needsParens = function() {
             || n.Property.check(parent)
             || n.ConditionalExpression.check(parent);
 
+    if (n.YieldExpression.check(node))
+        return isBinary(parent)
+            || n.CallExpression.check(parent)
+            || n.MemberExpression.check(parent)
+            || n.NewExpression.check(parent)
+            || n.ConditionalExpression.check(parent)
+            || n.UnaryExpression.check(parent)
+            || n.YieldExpression.check(parent);
+
     if (n.NewExpression.check(parent) &&
         this.name === "callee") {
         assert.strictEqual(parent.callee, node);
@@ -4162,9 +4179,6 @@ NPp.needsParens = function() {
     if (n.ObjectExpression.check(node) &&
         this.firstInStatement())
         return true;
-
-    if (n.YieldExpression.check(node))
-        return isBinary(parent);
 
     return false;
 };
@@ -4341,7 +4355,12 @@ var Sp = Scope.prototype;
 Sp.didScan = false;
 
 Sp.declares = function(name) {
-    if (!this.didScan) {
+    this.scan();
+    return hasOwn.call(this.bindings, name);
+};
+
+Sp.scan = function(force) {
+    if (force || !this.didScan) {
         for (var name in this.bindings) {
             // Empty out this.bindings, just in cases.
             delete this.bindings[name];
@@ -4349,8 +4368,11 @@ Sp.declares = function(name) {
         scanScope(this.path, this.bindings);
         this.didScan = true;
     }
+};
 
-    return hasOwn.call(this.bindings, name);
+Sp.getBindings = function () {
+    this.scan();
+    return this.bindings;
 };
 
 function scanScope(path, bindings) {
