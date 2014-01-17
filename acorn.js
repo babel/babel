@@ -142,6 +142,7 @@
 
     var t = {};
     function getToken(forceRegexp) {
+      lastEnd = tokEnd;
       readToken(forceRegexp);
       t.start = tokStart; t.end = tokEnd;
       t.startLoc = tokStartLoc; t.endLoc = tokEndLoc;

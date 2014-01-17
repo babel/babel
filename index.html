@@ -96,6 +96,7 @@ reset the internal state, and invalidate existing tokenizers.</p>             </
 
     <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="kd">function</span> <span class="nx">getToken</span><span class="p">(</span><span class="nx">forceRegexp</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">lastEnd</span> <span class="o">=</span> <span class="nx">tokEnd</span><span class="p">;</span>
       <span class="nx">readToken</span><span class="p">(</span><span class="nx">forceRegexp</span><span class="p">);</span>
       <span class="nx">t</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">tokStart</span><span class="p">;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="nx">tokEnd</span><span class="p">;</span>
       <span class="nx">t</span><span class="p">.</span><span class="nx">startLoc</span> <span class="o">=</span> <span class="nx">tokStartLoc</span><span class="p">;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">endLoc</span> <span class="o">=</span> <span class="nx">tokEndLoc</span><span class="p">;</span>
