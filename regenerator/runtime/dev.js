@@ -60,17 +60,6 @@
     var context = new Context();
     var state = GenStateSuspendedStart;
 
-    function invoke() {
-      state = GenStateExecuting;
-      var value = innerFn.call(self, context);
-      // If an exception is thrown from innerFn, we leave state ===
-      // GenStateExecuting and loop back for another invocation.
-      state = context.done
-        ? GenStateCompleted
-        : GenStateSuspendedYield;
-      return { value: value, done: context.done };
-    }
-
     function assertCanInvoke() {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
@@ -81,7 +70,7 @@
       }
     }
 
-    function helper(method, arg) {
+    function invoke(method, arg) {
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
@@ -121,11 +110,22 @@
           context.dispatchException(arg);
         }
 
+        state = GenStateExecuting;
+
         try {
-          var info = invoke();
+          var value = innerFn.call(self, context);
+
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          var info = { value: value, done: context.done };
           if (info.value !== ContinueSentinel) {
             return info;
           }
+
         } catch (thrown) {
           if (method === "next") {
             context.dispatchException(thrown);
@@ -138,12 +138,12 @@
 
     generator.next = function(value) {
       assertCanInvoke();
-      return helper("next", value);
+      return invoke("next", value);
     };
 
     generator.throw = function(exception) {
       assertCanInvoke();
-      return helper("throw", exception);
+      return invoke("throw", exception);
     };
   }
 
