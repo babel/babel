@@ -87,18 +87,19 @@ function regenerator(source, options) {
   return recast.print(path, recastOptions).code;
 }
 
-// To modify an AST directly, call require("regenerator").transform(ast).
-regenerator.transform = transform;
-
-regenerator.runtime = runtime;
-
-// To include the runtime in the current node process, call require("regenerator").runtime().
 function runtime() {
   require(runtime.dev);
 }
 
 runtime.dev = path.join(__dirname, "runtime", "dev.js");
 runtime.min = path.join(__dirname, "runtime", "min.js");
+
+// To modify an AST directly, call require("regenerator").transform(ast).
+regenerator.transform = transform;
+
+// To include the runtime in the current node process, call
+// require("regenerator").runtime().
+regenerator.runtime = runtime;
 
 // To transform a string of ES6 code, call require("regenerator")(source);
 module.exports = regenerator;
