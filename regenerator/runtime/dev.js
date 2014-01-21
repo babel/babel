@@ -62,9 +62,7 @@
 
     function invoke() {
       state = GenStateExecuting;
-      do {
-        var value = innerFn.call(self, context);
-      } while (value === ContinueSentinel);
+      var value = innerFn.call(self, context);
       // If an exception is thrown from innerFn, we leave state ===
       // GenStateExecuting and loop back for another invocation.
       state = context.done
@@ -109,39 +107,48 @@
     generator.next = function(value) {
       assertCanInvoke();
 
-      var delegateInfo = handleDelegate("next", value);
-      if (delegateInfo) {
-        return delegateInfo;
-      }
+      while (true) {
+        var delegateInfo = handleDelegate("next", value);
+        if (delegateInfo) {
+          return delegateInfo;
+        }
 
-      if (state === GenStateSuspendedYield) {
-        context.sent = value;
-      }
+        if (state === GenStateSuspendedYield) {
+          context.sent = value;
+        }
 
-      while (true) try {
-        return invoke();
-      } catch (exception) {
-        context.dispatchException(exception);
+        try {
+          var info = invoke();
+          if (info.value !== ContinueSentinel) {
+            return info;
+          }
+        } catch (exception) {
+          context.dispatchException(exception);
+        }
       }
     };
 
     generator.throw = function(exception) {
       assertCanInvoke();
 
-      var delegateInfo = handleDelegate("throw", exception);
-      if (delegateInfo) {
-        return delegateInfo;
-      }
-
-      if (state === GenStateSuspendedStart) {
-        state = GenStateCompleted;
-        throw exception;
-      }
-
       while (true) {
+        var delegateInfo = handleDelegate("throw", exception);
+        if (delegateInfo) {
+          return delegateInfo;
+        }
+
+        if (state === GenStateSuspendedStart) {
+          state = GenStateCompleted;
+          throw exception;
+        }
+
         context.dispatchException(exception);
+
         try {
-          return invoke();
+          var info = invoke();
+          if (info.value !== ContinueSentinel) {
+            return info;
+          }
         } catch (thrown) {
           exception = thrown;
         }
@@ -260,23 +267,13 @@
     },
 
     delegateYield: function(generator, resultName, nextLoc) {
-      var info = generator.next(this.sent);
-
-      if (info.done) {
-        this.delegate = null;
-        this[resultName] = info.value;
-        this.next = nextLoc;
-
-        return ContinueSentinel;
-      }
-
       this.delegate = {
         generator: generator,
         resultName: resultName,
         nextLoc: nextLoc
       };
 
-      return info.value;
+      return ContinueSentinel;
     }
   };
 }).apply(this, Function("return [this, function GeneratorFunction(){}]")());
