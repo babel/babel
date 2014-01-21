@@ -71,6 +71,8 @@
     }
 
     function invoke(method, arg) {
+      assertCanInvoke();
+
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
@@ -136,15 +138,8 @@
       }
     }
 
-    generator.next = function(value) {
-      assertCanInvoke();
-      return invoke("next", value);
-    };
-
-    generator.throw = function(exception) {
-      assertCanInvoke();
-      return invoke("throw", exception);
-    };
+    generator.next = invoke.bind(generator, "next");
+    generator.throw = invoke.bind(generator, "throw");
   }
 
   Generator.prototype.toString = function() {
