@@ -60,7 +60,7 @@
     var context = new Context();
     var state = GenStateSuspendedStart;
 
-    function assertCanInvoke() {
+    function invoke(method, arg) {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
       }
@@ -68,10 +68,6 @@
       if (state === GenStateCompleted) {
         throw new Error("Generator has already finished");
       }
-    }
-
-    function invoke(method, arg) {
-      assertCanInvoke();
 
       while (true) {
         var delegate = context.delegate;
