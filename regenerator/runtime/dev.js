@@ -104,45 +104,26 @@
       }
     }
 
-    generator.next = function(value) {
-      assertCanInvoke();
-
+    function helper(method, arg) {
       while (true) {
-        var delegateInfo = handleDelegate("next", value);
+        var delegateInfo = handleDelegate(method, arg);
         if (delegateInfo) {
           return delegateInfo;
         }
 
-        if (state === GenStateSuspendedYield) {
-          context.sent = value;
-        }
-
-        try {
-          var info = invoke();
-          if (info.value !== ContinueSentinel) {
-            return info;
+        if (method === "next") {
+          if (state === GenStateSuspendedYield) {
+            context.sent = arg;
           }
-        } catch (exception) {
-          context.dispatchException(exception);
+
+        } else if (method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw arg;
+          }
+
+          context.dispatchException(arg);
         }
-      }
-    };
-
-    generator.throw = function(exception) {
-      assertCanInvoke();
-
-      while (true) {
-        var delegateInfo = handleDelegate("throw", exception);
-        if (delegateInfo) {
-          return delegateInfo;
-        }
-
-        if (state === GenStateSuspendedStart) {
-          state = GenStateCompleted;
-          throw exception;
-        }
-
-        context.dispatchException(exception);
 
         try {
           var info = invoke();
@@ -150,9 +131,23 @@
             return info;
           }
         } catch (thrown) {
-          exception = thrown;
+          if (method === "next") {
+            context.dispatchException(thrown);
+          } else {
+            arg = thrown;
+          }
         }
       }
+    }
+
+    generator.next = function(value) {
+      assertCanInvoke();
+      return helper("next", value);
+    };
+
+    generator.throw = function(exception) {
+      assertCanInvoke();
+      return helper("throw", exception);
     };
   }
 
