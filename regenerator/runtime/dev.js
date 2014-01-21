@@ -81,34 +81,30 @@
       }
     }
 
-    function handleDelegate(method, arg) {
-      var delegate = context.delegate;
-      if (delegate) {
-        try {
-          var info = delegate.generator[method](arg);
-        } catch (uncaught) {
-          context.delegate = null;
-          return generator.throw(uncaught);
-        }
+    function helper(method, arg) {
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          try {
+            var info = delegate.generator[method](arg);
+          } catch (uncaught) {
+            context.delegate = null;
 
-        if (info) {
+            // Like returning generator.throw(uncaught), but without the
+            // overhead of an extra function call.
+            method = "throw";
+            arg = uncaught;
+            continue;
+          }
+
           if (info.done) {
             context[delegate.resultName] = info.value;
             context.next = delegate.nextLoc;
           } else {
             return info;
           }
-        }
 
-        context.delegate = null;
-      }
-    }
-
-    function helper(method, arg) {
-      while (true) {
-        var delegateInfo = handleDelegate(method, arg);
-        if (delegateInfo) {
-          return delegateInfo;
+          context.delegate = null;
         }
 
         if (method === "next") {
