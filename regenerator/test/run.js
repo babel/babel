@@ -80,22 +80,6 @@ enqueue(convert, [
   "./test/tests.es5.js"
 ]);
 
-enqueue("mocha", [
-  "--reporter", "spec",
-  "./test/tests.es5.js"
-]);
-
-var mochaDir = path.dirname(require.resolve("mocha"));
-function makeMochaCopyFunction(fileName) {
-  return function copy(callback) {
-    var src = path.join(mochaDir, fileName);
-    var dst = path.join(__dirname, fileName);
-    fs.unlink(dst, function() {
-      fs.symlink(src, dst, callback);
-    });
-  };
-}
-
 enqueue(makeMochaCopyFunction("mocha.js"));
 enqueue(makeMochaCopyFunction("mocha.css"));
 
@@ -111,6 +95,22 @@ if (!semver.eq(process.version, "0.11.7")) {
   } catch (ignored) {
     console.error("browserify not installed; skipping bundle step");
   }
+}
+
+enqueue("mocha", [
+  "--reporter", "spec",
+  "./test/tests.es5.js"
+]);
+
+var mochaDir = path.dirname(require.resolve("mocha"));
+function makeMochaCopyFunction(fileName) {
+  return function copy(callback) {
+    var src = path.join(mochaDir, fileName);
+    var dst = path.join(__dirname, fileName);
+    fs.unlink(dst, function() {
+      fs.symlink(src, dst, callback);
+    });
+  };
 }
 
 flush();
