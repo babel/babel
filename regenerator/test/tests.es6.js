@@ -13,15 +13,15 @@ require("../runtime/dev");
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
-    var info = g.next(i);
+    var info = i > 0 ? g.next(i) : g.next();
     assert.deepEqual(info.value, yields[i]);
     assert.strictEqual(info.done, false);
   }
 
-  assert.deepEqual(g.next(i), {
-    value: returnValue,
-    done: true
-  });
+  assert.deepEqual(
+    i > 0 ? g.next(i) : g.next(),
+    { value: returnValue, done: true }
+  );
 }
 
 // A version of `throw` whose behavior can't be statically analyzed.
@@ -984,7 +984,7 @@ describe("yield* expression results", function () {
       var n = 0;
 
       while (true) {
-        var res = gen.next(n);
+        var res = n > 0 ? gen.next(n) : gen.next();
         n = res.value;
         if (res.done) {
           return n;
@@ -1127,5 +1127,39 @@ describe("block binding", function() {
     assert.equal(g.next().value(), 1);
     assert.equal(g.next().value(), 0);
     assert.deepEqual(g.next(), { value: void 0, done: true });
+  });
+});
+
+describe("newborn generators", function() {
+  it("should be able to yield* non-newborn generators", function() {
+    function *inner() {
+      return [yield 1, yield 2];
+    }
+
+    function *outer(delegate) {
+      return yield* delegate;
+    }
+
+    var n = inner();
+
+    assert.deepEqual(n.next(), {
+      value: 1,
+      done: false
+    });
+
+    var g = outer(n);
+
+    // I would really like to be able to pass 3 to gen.next here, but V8
+    // ignores values sent to newborn generators, and SpiderMonkey throws
+    // a TypeError.
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+
+    assert.deepEqual(g.next(4), {
+      value: [void 0, 4],
+      done: true
+    });
   });
 });
