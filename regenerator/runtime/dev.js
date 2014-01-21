@@ -92,6 +92,7 @@
             context[delegate.resultName] = info.value;
             context.next = delegate.nextLoc;
           } else {
+            state = GenStateSuspendedYield;
             return info;
           }
 
