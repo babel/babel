@@ -3,8 +3,9 @@
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
  */
 
 (function(
@@ -39,6 +40,10 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
+  // It's too hard to know if a delegate generator is newborn or not, so
+  // we don't throw a TypeError when a value is accidentally sent.
+  var permitNewbornSend = false;
+
   wrapGenerator.mark = function(genFun) {
     genFun.constructor = GeneratorFunction;
     return genFun;
@@ -59,20 +64,7 @@
     var context = new Context();
     var state = GenStateSuspendedStart;
 
-    function invoke() {
-      state = GenStateExecuting;
-      do {
-        var value = innerFn.call(self, context);
-      } while (value === ContinueSentinel);
-      // If an exception is thrown from innerFn, we leave state ===
-      // GenStateExecuting and loop back for another invocation.
-      state = context.done
-        ? GenStateCompleted
-        : GenStateSuspendedYield;
-      return { value: value, done: context.done };
-    }
-
-    function assertCanInvoke() {
+    function invoke(method, arg) {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
       }
@@ -80,72 +72,90 @@
       if (state === GenStateCompleted) {
         throw new Error("Generator has already finished");
       }
-    }
 
-    function handleDelegate(method, arg) {
-      var delegate = context.delegate;
-      if (delegate) {
-        try {
-          var info = delegate.generator[method](arg);
-        } catch (uncaught) {
-          context.delegate = null;
-          return generator.throw(uncaught);
-        }
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var pns = permitNewbornSend;
+          permitNewbornSend = true;
+          try {
+            var info = delegate.generator[method](arg);
+            permitNewbornSend = pns;
+          } catch (uncaught) {
+            permitNewbornSend = pns;
+            context.delegate = null;
 
-        if (info) {
+            // Like returning generator.throw(uncaught), but without the
+            // overhead of an extra function call.
+            method = "throw";
+            arg = uncaught;
+            continue;
+          }
+
           if (info.done) {
             context[delegate.resultName] = info.value;
             context.next = delegate.nextLoc;
           } else {
+            state = GenStateSuspendedYield;
             return info;
           }
+
+          context.delegate = null;
         }
 
-        context.delegate = null;
+        if (method === "next") {
+          if (state === GenStateSuspendedStart &&
+              typeof arg !== "undefined" &&
+              !permitNewbornSend) {
+            // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+            throw new TypeError(
+              "attempt to send " + arg + " to newborn generator"
+            );
+          }
+
+          if (state === GenStateSuspendedYield) {
+            context.sent = arg;
+          } else {
+            delete context.sent;
+          }
+
+        } else if (method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw arg;
+          }
+
+          context.dispatchException(arg);
+        }
+
+        state = GenStateExecuting;
+
+        try {
+          var value = innerFn.call(self, context);
+
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          var info = { value: value, done: context.done };
+          if (info.value !== ContinueSentinel) {
+            return info;
+          }
+
+        } catch (thrown) {
+          if (method === "next") {
+            context.dispatchException(thrown);
+          } else {
+            arg = thrown;
+          }
+        }
       }
     }
 
-    generator.next = function(value) {
-      assertCanInvoke();
-
-      var delegateInfo = handleDelegate("next", value);
-      if (delegateInfo) {
-        return delegateInfo;
-      }
-
-      if (state === GenStateSuspendedYield) {
-        context.sent = value;
-      }
-
-      while (true) try {
-        return invoke();
-      } catch (exception) {
-        context.dispatchException(exception);
-      }
-    };
-
-    generator.throw = function(exception) {
-      assertCanInvoke();
-
-      var delegateInfo = handleDelegate("throw", exception);
-      if (delegateInfo) {
-        return delegateInfo;
-      }
-
-      if (state === GenStateSuspendedStart) {
-        state = GenStateCompleted;
-        throw exception;
-      }
-
-      while (true) {
-        context.dispatchException(exception);
-        try {
-          return invoke();
-        } catch (thrown) {
-          exception = thrown;
-        }
-      }
-    };
+    generator.next = invoke.bind(generator, "next");
+    generator.throw = invoke.bind(generator, "throw");
   }
 
   Generator.prototype.toString = function() {
@@ -259,23 +269,13 @@
     },
 
     delegateYield: function(generator, resultName, nextLoc) {
-      var info = generator.next(this.sent);
-
-      if (info.done) {
-        this.delegate = null;
-        this[resultName] = info.value;
-        this.next = nextLoc;
-
-        return ContinueSentinel;
-      }
-
       this.delegate = {
         generator: generator,
         resultName: resultName,
         nextLoc: nextLoc
       };
 
-      return info.value;
+      return ContinueSentinel;
     }
   };
 }).apply(this, Function("return [this, function GeneratorFunction(){}]")());
