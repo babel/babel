@@ -109,7 +109,7 @@
               !permitNewbornSend) {
             // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
             throw new TypeError(
-              "attempt to send " + arg + " to newborn generator"
+              "attempt to send " + JSON.stringify(arg) + " to newborn generator"
             );
           }
 
