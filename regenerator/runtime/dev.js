@@ -40,10 +40,6 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
-  // It's too hard to know if a delegate generator is newborn or not, so
-  // we don't throw a TypeError when a value is accidentally sent.
-  var permitNewbornSend = false;
-
   wrapGenerator.mark = function(genFun) {
     genFun.constructor = GeneratorFunction;
     return genFun;
@@ -76,13 +72,9 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
-          var pns = permitNewbornSend;
-          permitNewbornSend = true;
           try {
             var info = delegate.generator[method](arg);
-            permitNewbornSend = pns;
           } catch (uncaught) {
-            permitNewbornSend = pns;
             context.delegate = null;
 
             // Like returning generator.throw(uncaught), but without the
@@ -105,8 +97,7 @@
 
         if (method === "next") {
           if (state === GenStateSuspendedStart &&
-              typeof arg !== "undefined" &&
-              !permitNewbornSend) {
+              typeof arg !== "undefined") {
             // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
             throw new TypeError(
               "attempt to send " + JSON.stringify(arg) + " to newborn generator"
@@ -139,8 +130,18 @@
             ? GenStateCompleted
             : GenStateSuspendedYield;
 
-          var info = { value: value, done: context.done };
-          if (info.value !== ContinueSentinel) {
+          var info = {
+            value: value,
+            done: context.done
+          };
+
+          if (value === ContinueSentinel) {
+            if (context.delegate && method === "next") {
+              // Deliberately forget the last sent value so that we don't
+              // accidentally pass it on to the delegate.
+              arg = void 0;
+            }
+          } else {
             return info;
           }
 
