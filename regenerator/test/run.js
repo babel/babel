@@ -71,6 +71,7 @@ if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
     "--harmony",
     "--reporter", "spec",
+    "--require", "runtime/dev",
     "./test/tests.es6.js"
   ]);
 }
@@ -99,6 +100,7 @@ if (!semver.eq(process.version, "0.11.7")) {
 
 enqueue("mocha", [
   "--reporter", "spec",
+  "--require", "runtime/dev",
   "./test/tests.es5.js"
 ]);
 

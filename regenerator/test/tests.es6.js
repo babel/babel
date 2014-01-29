@@ -9,7 +9,6 @@
  */
 
 var assert = require("assert");
-require("../runtime/dev");
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
