@@ -931,7 +931,7 @@ describe("generator .throw method", function() {
     }
   });
 
-  it("should not propogate handled errors inside a delegate", function() {
+  it("should not propagate errors handled inside a delegate", function() {
     function *outer() {
       try {
         yield* inner();
@@ -954,7 +954,7 @@ describe("generator .throw method", function() {
     assert.equal(g.throw(new Error('foo')).value, 1);
   });
 
-  it("should propogate unhandled errors inside a delegate", function() {
+  it("should propagate errors unhandled inside a delegate", function() {
     function *outer() {
       try {
         yield* inner();
