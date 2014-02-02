@@ -74,6 +74,9 @@
         if (delegate) {
           try {
             var info = delegate.generator[method](arg);
+            // Delegate generator ran and handled it's own exceptions so
+            // regardless of what the method is we continue as if it is "next".
+            method = "next";
           } catch (uncaught) {
             context.delegate = null;
 

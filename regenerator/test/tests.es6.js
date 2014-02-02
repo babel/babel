@@ -930,6 +930,48 @@ describe("generator .throw method", function() {
       assert.strictEqual(began, false);
     }
   });
+
+  it("should not propogate handled errors inside a delegate", function() {
+    function *outer() {
+      try {
+        yield* inner();
+      } catch (err) {
+        return -1;
+      }
+      return 1;
+    }
+
+    function *inner() {
+      try {
+        yield undefined;
+      } catch (e) {
+        return;
+      }
+    }
+
+    var g = outer();
+    g.next();
+    assert.equal(g.throw(new Error('foo')).value, 1);
+  });
+
+  it("should propogate unhandled errors inside a delegate", function() {
+    function *outer() {
+      try {
+        yield* inner();
+      } catch (err) {
+        return -1;
+      }
+      return 1;
+    }
+
+    function *inner() {
+      yield undefined;
+    }
+
+    var g = outer();
+    g.next();
+    assert.equal(g.throw(new Error('foo')).value, -1);
+  });
 });
 
 describe("unqualified function calls", function() {
