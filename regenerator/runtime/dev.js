@@ -75,11 +75,12 @@
           try {
             var info = delegate.generator[method](arg);
 
-            // Delegate generator ran and handled it's own exceptions so
-            // regardless of what the method is, we continue as if it is "next"
-            // with an undefined arg.
+            // Delegate generator ran and handled its own exceptions so
+            // regardless of what the method was, we continue as if it is
+            // "next" with an undefined arg.
             method = "next";
             arg = void 0;
+
           } catch (uncaught) {
             context.delegate = null;
 
@@ -87,6 +88,7 @@
             // overhead of an extra function call.
             method = "throw";
             arg = uncaught;
+
             continue;
           }
 

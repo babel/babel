@@ -943,7 +943,7 @@ describe("generator .throw method", function() {
 
     function *inner() {
       try {
-        yield undefined;
+        yield void 0;
       } catch (e) {
         return;
       }
@@ -965,7 +965,7 @@ describe("generator .throw method", function() {
     }
 
     function *inner() {
-      yield undefined;
+      yield void 0;
     }
 
     var g = outer();
