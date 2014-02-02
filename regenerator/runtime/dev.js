@@ -124,7 +124,12 @@
             throw arg;
           }
 
-          context.dispatchException(arg);
+          if (context.dispatchException(arg)) {
+            // If the dispatched exception was caught by a catch block,
+            // then let that catch block handle the exception normally.
+            method = "next";
+            arg = void 0;
+          }
         }
 
         state = GenStateExecuting;
@@ -249,7 +254,7 @@
 
     dispatchException: function(exception) {
       var finallyEntries = [];
-      var dispatched = false;
+      var caught = false;
 
       if (this.done) {
         throw exception;
@@ -263,11 +268,10 @@
         var entry = this.tryStack[i];
         if (entry.catchLoc) {
           this.next = entry.catchLoc;
-          dispatched = true;
+          caught = true;
           break;
         } else if (entry.finallyLoc) {
           finallyEntries.push(entry);
-          dispatched = true;
         }
       }
 
@@ -275,6 +279,8 @@
         this[entry.finallyTempVar] = this.next;
         this.next = entry.finallyLoc;
       }
+
+      return caught;
     },
 
     delegateYield: function(generator, resultName, nextLoc) {
