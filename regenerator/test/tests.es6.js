@@ -264,6 +264,50 @@ describe("try-finally generator", function() {
       assert.strictEqual(err, uncaughtError);
     }
   });
+
+  it("should throw correct error when finally contains catch", function() {
+    var right = new Error("right");
+    var wrong = new Error("wrong");
+
+    function *gen() {
+      try {
+        yield 0;
+        raise(right);
+      } finally {
+        yield 1;
+        try {
+          raise(wrong);
+        } catch (err) {
+          assert.strictEqual(err, wrong);
+          yield 2;
+        }
+      }
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+
+    try {
+      g.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, right);
+    }
+  });
 });
 
 describe("try-catch-finally generator", function() {
