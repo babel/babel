@@ -14,6 +14,7 @@ var fs = require("fs");
 var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
 var recast = require("recast");
+var types = recast.types;
 var esprimaHarmony = require("esprima");
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
@@ -37,10 +38,35 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var runtimeBody = recast.parse(runtime, {
-    sourceFileName: regenerator.runtime.dev
-  }).program.body;
+  var path = parse(source);
+  var programPath = path.get("program");
 
+  if (shouldVarify(source, options)) {
+    // Transpile let/const into var declarations.
+    varifyAst(programPath.node);
+  }
+
+  transform(programPath);
+
+  injectRuntime(runtime, programPath.node);
+
+  return recast.print(path).code;
+}
+
+function parse(source) {
+  types.builtInTypes.string.assert(source);
+
+  var ast = recast.parse(source, {
+    // Use the harmony branch of Esprima that installs with regenerator
+    // instead of the master branch that recast provides.
+    esprima: esprimaHarmony,
+    range: true
+  });
+
+  return new types.NodePath(ast);
+}
+
+function shouldVarify(source, options) {
   var supportBlockBinding = !!options.supportBlockBinding;
   if (supportBlockBinding) {
     if (!blockBindingExp.test(source)) {
@@ -48,43 +74,49 @@ function regenerator(source, options) {
     }
   }
 
-  var recastOptions = {
-    tabWidth: utils.guessTabWidth(source),
-    // Use the harmony branch of Esprima that installs with regenerator
-    // instead of the master branch that recast provides.
-    esprima: esprimaHarmony,
-    range: supportBlockBinding
-  };
+  return supportBlockBinding;
+}
 
-  var ast = recast.parse(source, recastOptions);
+function varify(source) {
+  var path = parse(source);
+  varifyAst(path.get("program").node);
+  return recast.print(path).code;
+}
 
-  // Transpile let/const into var declarations.
-  if (supportBlockBinding) {
-    var defsResult = require("defs")(ast.program, {
-      ast: true,
-      disallowUnknownReferences: false,
-      disallowDuplicated: false,
-      disallowVars: false,
-      loopClosures: "iife"
-    });
+function varifyAst(ast) {
+  types.namedTypes.Program.assert(ast);
 
-    if (defsResult.errors) {
-      throw new Error(defsResult.errors.join("\n"))
-    }
+  var defsResult = require("defs")(ast, {
+    ast: true,
+    disallowUnknownReferences: false,
+    disallowDuplicated: false,
+    disallowVars: false,
+    loopClosures: "iife"
+  });
+
+  if (defsResult.errors) {
+    throw new Error(defsResult.errors.join("\n"))
   }
 
-  var path = new recast.types.NodePath(ast);
+  return ast;
+}
 
-  transform(path.get("program"));
+function injectRuntime(runtime, ast) {
+  types.builtInTypes.string.assert(runtime);
+  types.namedTypes.Program.assert(ast);
 
   // Include the runtime by modifying the AST rather than by concatenating
   // strings. This technique will allow for more accurate source mapping.
-  if (options.includeRuntime) {
-    var body = ast.program.body;
+  if (runtime !== "") {
+    var runtimeBody = recast.parse(runtime, {
+      sourceFileName: regenerator.runtime.dev
+    }).program.body;
+
+    var body = ast.body;
     body.unshift.apply(body, runtimeBody);
   }
 
-  return recast.print(path, recastOptions).code;
+  return ast;
 }
 
 function runtime() {
@@ -93,6 +125,9 @@ function runtime() {
 
 runtime.dev = path.join(__dirname, "runtime", "dev.js");
 runtime.min = path.join(__dirname, "runtime", "min.js");
+
+// Convenience for just translating let/const to var declarations.
+regenerator.varify = varify;
 
 // To modify an AST directly, call require("regenerator").transform(ast).
 regenerator.transform = transform;
