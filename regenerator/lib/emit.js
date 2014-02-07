@@ -640,6 +640,8 @@ Ep.explodeStatement = function(path, labelId) {
       finallyEntry
     );
 
+    self.updateContextPrevLoc(tryEntry.firstLoc);
+
     // Push information about this try statement so that the runtime can
     // figure out what to do if it gets an uncaught exception.
     self.pushTry(tryEntry);
@@ -664,7 +666,7 @@ Ep.explodeStatement = function(path, labelId) {
           self.jump(after);
         }
 
-        self.mark(catchLoc);
+        self.updateContextPrevLoc(self.mark(catchLoc));
 
         // On entering a catch block, we must not have exited the
         // associated try block normally, so we won't have called
@@ -695,7 +697,7 @@ Ep.explodeStatement = function(path, labelId) {
       }
 
       if (finallyLoc) {
-        self.mark(finallyLoc);
+        self.updateContextPrevLoc(self.mark(finallyLoc));
 
         self.popFinally(finallyEntry);
 
@@ -736,6 +738,39 @@ Ep.explodeStatement = function(path, labelId) {
 // code shorter.
 Ep.getUnmarkedCurrentLoc = function() {
   return b.literal(this.listing.length);
+};
+
+// The context.prev property takes the value of context.next whenever we
+// evaluate the switch statement discriminant, which is generally good
+// enough for tracking the last location we jumped to, but sometimes
+// context.prev needs to be more precise, such as when we fall
+// successfully out of a try block and into a finally block without
+// jumping. This method exists to update context.prev to the freshest
+// available location. If we were implementing a full interpreter, we
+// would know the location of the current instruction with complete
+// precision at all times, but we don't have that luxury here, as it would
+// be costly and verbose to set context.prev before every statement.
+Ep.updateContextPrevLoc = function(loc) {
+  if (loc) {
+    n.Literal.assert(loc);
+
+    if (loc.value === -1) {
+      // If an uninitialized location literal was passed in, set its value
+      // to the current this.listing.length.
+      loc.value = this.listing.length;
+    } else {
+      // Otherwise assert that the location matches the current offset.
+      assert.strictEqual(loc.value, this.listing.length);
+    }
+
+  } else {
+    loc = this.getUnmarkedCurrentLoc();
+  }
+
+  // Make sure context.prev is up to date in case we fell into this try
+  // statement without jumping to it. TODO Consider avoiding this
+  // assignment when we know control must have jumped here.
+  this.emitAssign(this.contextProperty("prev"), loc);
 };
 
 // Emit a runtime call to context.pushTry(catchLoc, finallyLoc) so that
