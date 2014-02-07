@@ -184,6 +184,7 @@
     constructor: Context,
 
     reset: function() {
+      this.prev = 0;
       this.next = 0;
       this.sent = void 0;
       this.tryStack = [];

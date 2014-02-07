@@ -105,6 +105,7 @@ Ep.contextProperty = function(name) {
 };
 
 var volatileContextPropertyNames = {
+  prev: true,
   next: true,
   sent: true,
   rval: true,
@@ -273,7 +274,14 @@ Ep.getDispatchLoop = function() {
 
   return b.whileStatement(
     b.literal(1),
-    b.switchStatement(this.contextProperty("next"), cases)
+    b.switchStatement(
+      b.assignmentExpression(
+        "=",
+        this.contextProperty("prev"),
+        this.contextProperty("next")
+      ),
+      cases
+    )
   );
 };
 
