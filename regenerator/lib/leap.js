@@ -66,8 +66,10 @@ function SwitchEntry(breakLoc) {
 inherits(SwitchEntry, Entry);
 exports.SwitchEntry = SwitchEntry;
 
-function TryEntry(catchEntry, finallyEntry) {
+function TryEntry(firstLoc, catchEntry, finallyEntry) {
   Entry.call(this);
+
+  n.Literal.assert(firstLoc);
 
   if (catchEntry) {
     assert.ok(catchEntry instanceof CatchEntry);
@@ -81,7 +83,11 @@ function TryEntry(catchEntry, finallyEntry) {
     finallyEntry = null;
   }
 
+  // Have to have one or the other (or both).
+  assert.ok(catchEntry || finallyEntry);
+
   Object.defineProperties(this, {
+    firstLoc: { value: firstLoc },
     catchEntry: { value: catchEntry },
     finallyEntry: { value: finallyEntry }
   });

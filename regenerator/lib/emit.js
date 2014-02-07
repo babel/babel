@@ -634,7 +634,11 @@ Ep.explodeStatement = function(path, labelId) {
       self.emitAssign(finallyEntry.nextLocTempVar, after);
     }
 
-    var tryEntry = new leap.TryEntry(catchEntry, finallyEntry);
+    var tryEntry = new leap.TryEntry(
+      self.getUnmarkedCurrentLoc(),
+      catchEntry,
+      finallyEntry
+    );
 
     // Push information about this try statement so that the runtime can
     // figure out what to do if it gets an uncaught exception.
@@ -719,6 +723,19 @@ Ep.explodeStatement = function(path, labelId) {
       "unknown Statement of type " +
         JSON.stringify(stmt.type));
   }
+};
+
+// Not all offsets into emitter.listing are potential jump targets. For
+// example, execution typically falls into the beginning of a try block
+// without jumping directly there. This method returns the current offset
+// without marking it, so that a switch case will not necessarily be
+// generated for this offset (I say "not necessarily" because the same
+// location might end up being marked in the process of emitting other
+// statements). There's no logical harm in marking such locations as jump
+// targets, but minimizing the number of switch cases keeps the generated
+// code shorter.
+Ep.getUnmarkedCurrentLoc = function() {
+  return b.literal(this.listing.length);
 };
 
 // Emit a runtime call to context.pushTry(catchLoc, finallyLoc) so that
