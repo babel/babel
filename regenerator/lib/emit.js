@@ -38,7 +38,10 @@ function Emitter(contextId) {
 
     // The last location will be marked when this.getDispatchLoop is
     // called.
-    finalLoc: { value: loc() }
+    finalLoc: { value: loc() },
+
+    // A list of all leap.TryEntry statements emitted.
+    tryEntries: { value: [] }
   });
 
   // The .leapManager property needs to be defined by a separate
@@ -298,6 +301,30 @@ function isSwitchCaseEnder(stmt) {
       || n.ReturnStatement.check(stmt)
       || n.ThrowStatement.check(stmt);
 }
+
+Ep.getTryEntryList = function() {
+  return b.arrayExpression(
+    this.tryEntries.map(function(tryEntry) {
+      var ce = tryEntry.catchEntry;
+      var fe = tryEntry.finallyEntry;
+
+      var triple = [
+        tryEntry.firstLoc,
+        // The null here makes a hole in the array.
+        ce ? ce.firstLoc : null
+      ];
+
+      if (fe) {
+        triple[2] = b.arrayExpression([
+          fe.firstLoc,
+          b.literal(fe.nextLocTempVar.property.name)
+        ]);
+      }
+
+      return b.arrayExpression(triple);
+    })
+  );
+};
 
 // All side effects must be realized in order.
 
@@ -783,6 +810,10 @@ Ep.updateContextPrevLoc = function(loc) {
 // the runtime wrapper can dispatch uncaught exceptions appropriately.
 Ep.pushTry = function(tryEntry) {
   assert.ok(tryEntry instanceof leap.TryEntry);
+
+  // These entries will be reflected to the runtime so that it can
+  // determine how to dispatch uncaught exceptions.
+  this.tryEntries.push(tryEntry);
 
   var nil = b.literal(null);
   var catchEntry = tryEntry.catchEntry;

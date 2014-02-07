@@ -71,7 +71,8 @@ function visitNode(node) {
   outerBody.push(b.returnStatement(
     b.callExpression(wrapGeneratorId, [
       emitter.getContextFunction(functionId),
-      b.thisExpression()
+      b.thisExpression(),
+      emitter.getTryEntryList()
     ])
   ));
 
