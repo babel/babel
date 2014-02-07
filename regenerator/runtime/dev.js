@@ -22,8 +22,8 @@
     return;
   }
 
-  function wrapGenerator(innerFn, self) {
-    return new Generator(innerFn, self || null);
+  function wrapGenerator(innerFn, self, tryList) {
+    return new Generator(innerFn, self || null, tryList || []);
   }
 
   global.wrapGenerator = wrapGenerator;
@@ -55,9 +55,9 @@
     return ctor ? GeneratorFunction.name === ctor.name : false;
   };
 
-  function Generator(innerFn, self) {
+  function Generator(innerFn, self, tryList) {
     var generator = this;
-    var context = new Context();
+    var context = new Context(tryList);
     var state = GenStateSuspendedStart;
 
     function invoke(method, arg) {
@@ -176,8 +176,34 @@
     return "[object Generator]";
   };
 
-  function Context() {
+  function tryTripleToObj(triple) {
+    var entry = { tryLoc: triple[0] };
+
+    if (triple[1]) {
+      entry.catchLoc = triple[1];
+    }
+
+    var fin = triple[2];
+    if (fin) {
+      entry.finallyLoc = fin[0];
+      entry.finallyTempVar = fin[1];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function Context(tryList) {
     this.reset();
+
+    this.tryEntries = [{
+      // This implicit root object (effectively a try statement without a
+      // real catch or a finally block) gives us a place to store values
+      // thrown when there is no enclosing try statement.
+      tryLoc: 0,
+      catchLoc: "end"
+    }];
+
+    tryList.forEach(tryTripleToObj, this);
   }
 
   Context.prototype = {
@@ -190,6 +216,12 @@
       this.tryStack = [];
       this.done = false;
       this.delegate = null;
+
+      if (this.tryEntries) {
+        this.tryEntries.forEach(function(entry) {
+          delete entry.thrown;
+        });
+      }
 
       // Pre-initialize at least 20 temporary variables to enable hidden
       // class optimizations for simple generators.
