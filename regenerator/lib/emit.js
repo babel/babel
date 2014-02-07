@@ -69,7 +69,13 @@ function loc() {
 Ep.mark = function(loc) {
   n.Literal.assert(loc);
   var index = this.listing.length;
-  loc.value = index;
+  if (loc.value === -1) {
+    loc.value = index;
+  } else {
+    // Locations can be marked redundantly, but their values cannot change
+    // once set the first time.
+    assert.strictEqual(loc.value, index);
+  }
   this.marked[index] = true;
   return loc;
 };
