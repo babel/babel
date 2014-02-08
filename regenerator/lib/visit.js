@@ -68,12 +68,18 @@ function visitNode(node) {
     outerBody.push(vars);
   }
 
+  var wrapGenArgs = [
+    emitter.getContextFunction(functionId),
+    b.thisExpression()
+  ];
+
+  var tryEntryList = emitter.getTryEntryList();
+  if (tryEntryList) {
+    wrapGenArgs.push(tryEntryList);
+  }
+
   outerBody.push(b.returnStatement(
-    b.callExpression(wrapGeneratorId, [
-      emitter.getContextFunction(functionId),
-      b.thisExpression(),
-      emitter.getTryEntryList()
-    ])
+    b.callExpression(wrapGeneratorId, wrapGenArgs)
   ));
 
   node.body = b.blockStatement(outerBody);

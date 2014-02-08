@@ -307,6 +307,12 @@ function isSwitchCaseEnder(stmt) {
 }
 
 Ep.getTryEntryList = function() {
+  if (this.tryEntries.length === 0) {
+    // To avoid adding a needless [] to the majority of wrapGenerator
+    // argument lists, force the caller to handle this case specially.
+    return null;
+  }
+
   return b.arrayExpression(
     this.tryEntries.map(function(tryEntry) {
       var ce = tryEntry.catchEntry;
