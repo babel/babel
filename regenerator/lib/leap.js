@@ -66,8 +66,10 @@ function SwitchEntry(breakLoc) {
 inherits(SwitchEntry, Entry);
 exports.SwitchEntry = SwitchEntry;
 
-function TryEntry(catchEntry, finallyEntry) {
+function TryEntry(firstLoc, catchEntry, finallyEntry) {
   Entry.call(this);
+
+  n.Literal.assert(firstLoc);
 
   if (catchEntry) {
     assert.ok(catchEntry instanceof CatchEntry);
@@ -81,7 +83,11 @@ function TryEntry(catchEntry, finallyEntry) {
     finallyEntry = null;
   }
 
+  // Have to have one or the other (or both).
+  assert.ok(catchEntry || finallyEntry);
+
   Object.defineProperties(this, {
+    firstLoc: { value: firstLoc },
     catchEntry: { value: catchEntry },
     finallyEntry: { value: finallyEntry }
   });
@@ -156,12 +162,16 @@ LMp._leapToEntry = function(predicate, defaultLoc) {
   for (var i = this.entryStack.length - 1; i >= 0; --i) {
     entry = this.entryStack[i];
 
-    if (entry instanceof CatchEntry ||
-        entry instanceof FinallyEntry) {
+    if (entry instanceof CatchEntry) {
+      this.emitter.clearPendingException(entry.firstLoc);
 
       // If we are inside of a catch or finally block, then we must
       // have exited the try block already, so we shouldn't consider
       // the next TryStatement as a handler for this throw.
+      skipNextTryEntry = entry;
+
+    } else if (entry instanceof FinallyEntry) {
+      // Same comment as above.
       skipNextTryEntry = entry;
 
     } else if (entry instanceof TryEntry) {
@@ -183,8 +193,14 @@ LMp._leapToEntry = function(predicate, defaultLoc) {
         finallyEntries.push(entry.finallyEntry);
       }
 
-    } else if ((loc = predicate.call(this, entry))) {
-      break;
+    } else {
+      if (entry instanceof FunctionEntry) {
+        this.emitter.clearPendingException(b.literal("end"));
+      }
+
+      if ((loc = predicate.call(this, entry))) {
+        break;
+      }
     }
   }
 
@@ -230,7 +246,6 @@ LMp.emitBreak = function(label) {
     throw new Error("illegal break statement");
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
 
@@ -243,7 +258,6 @@ LMp.emitContinue = function(label) {
     throw new Error("illegal continue statement");
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
 
@@ -262,6 +276,5 @@ LMp.emitReturn = function(argPath) {
     this.emitter.setReturnValue(argPath);
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
