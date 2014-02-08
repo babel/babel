@@ -213,7 +213,6 @@
       this.prev = 0;
       this.next = 0;
       this.sent = void 0;
-      this.tryStack = [];
       this.done = false;
       this.delegate = null;
 
@@ -235,10 +234,11 @@
     stop: function() {
       this.done = true;
 
-      if (hasOwn.call(this, "thrown")) {
-        var thrown = this.thrown;
-        delete this.thrown;
-        throw thrown;
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (hasOwn.call(entry, "thrown")) {
+          throw entry.thrown;
+        }
       }
 
       return this.rval;
@@ -246,43 +246,6 @@
 
     keys: function(object) {
       return Object.keys(object).reverse();
-    },
-
-    pushTry: function(catchLoc, finallyLoc, finallyTempVar) {
-      if (finallyLoc) {
-        this.tryStack.push({
-          finallyLoc: finallyLoc,
-          finallyTempVar: finallyTempVar
-        });
-      }
-
-      if (catchLoc) {
-        this.tryStack.push({
-          catchLoc: catchLoc
-        });
-      }
-    },
-
-    popCatch: function(catchLoc) {
-      var lastIndex = this.tryStack.length - 1;
-      var entry = this.tryStack[lastIndex];
-
-      if (entry && entry.catchLoc === catchLoc) {
-        this.tryStack.length = lastIndex;
-      }
-    },
-
-    popFinally: function(finallyLoc) {
-      var lastIndex = this.tryStack.length - 1;
-      var entry = this.tryStack[lastIndex];
-
-      if (!entry || !hasOwn.call(entry, "finallyLoc")) {
-        entry = this.tryStack[--lastIndex];
-      }
-
-      if (entry && entry.finallyLoc === finallyLoc) {
-        this.tryStack.length = lastIndex;
-      }
     },
 
     dispatchException: function(exception) {
@@ -293,19 +256,36 @@
         throw exception;
       }
 
-      // Dispatch the exception to the "end" location by default.
-      this.thrown = exception;
-      this.next = "end";
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
 
-      for (var i = this.tryStack.length - 1; i >= 0; --i) {
-        var entry = this.tryStack[i];
         if (entry.catchLoc) {
-          this.next = entry.catchLoc;
-          caught = true;
-          break;
-        } else if (entry.finallyLoc) {
+          if (entry.catchLoc === "end") {
+            // If the lookup reaches the implicit root try statement, skip
+            // on down to the if (!caught) block below.
+            break;
+          }
+
+          if (entry.tryLoc <= this.prev &&
+              this.prev < entry.catchLoc) {
+            entry.thrown = exception;
+            this.next = entry.catchLoc;
+            caught = true;
+            break;
+          }
+        }
+
+        if (entry.finallyLoc &&
+            entry.tryLoc <= this.prev &&
+            this.prev < entry.finallyLoc) {
           finallyEntries.push(entry);
         }
+      }
+
+      if (!caught) {
+        // Dispatch uncaught exceptions to the implicit root object.
+        this.tryEntries[0].thrown = exception;
+        this.next = "end";
       }
 
       while ((entry = finallyEntries.pop())) {
@@ -314,6 +294,21 @@
       }
 
       return caught;
+    },
+
+    "catch": function(catchLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.catchLoc === catchLoc) {
+          var thrown = entry.thrown;
+          delete entry.thrown;
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
     },
 
     delegateYield: function(generator, resultName, nextLoc) {

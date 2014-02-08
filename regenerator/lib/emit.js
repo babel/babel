@@ -117,8 +117,7 @@ var volatileContextPropertyNames = {
   prev: true,
   next: true,
   sent: true,
-  rval: true,
-  thrown: true
+  rval: true
 };
 
 // A "volatile" context property is a MemberExpression like context.sent
@@ -162,14 +161,19 @@ Ep.setReturnValue = function(valuePath) {
   );
 };
 
-Ep.clearPendingException = function(assignee) {
-  var cp = this.contextProperty("thrown");
+Ep.clearPendingException = function(catchLoc, assignee) {
+  n.Literal.assert(catchLoc);
+
+  var catchCall = b.callExpression(
+    this.contextProperty("catch"),
+    [catchLoc]
+  );
 
   if (assignee) {
-    this.emitAssign(assignee, cp);
+    this.emitAssign(assignee, catchCall);
+  } else {
+    this.emit(catchCall);
   }
-
-  this.emit(b.unaryExpression("delete", cp));
 };
 
 // Emits code for an unconditional jump to the given location, even if the
@@ -673,20 +677,13 @@ Ep.explodeStatement = function(path, labelId) {
       finallyEntry
     );
 
+    self.tryEntries.push(tryEntry);
     self.updateContextPrevLoc(tryEntry.firstLoc);
-
-    // Push information about this try statement so that the runtime can
-    // figure out what to do if it gets an uncaught exception.
-    self.pushTry(tryEntry);
 
     self.leapManager.withEntry(tryEntry, function() {
       self.explodeStatement(path.get("block"));
 
       if (catchLoc) {
-        // If execution leaves the try block normally, the associated
-        // catch block no longer applies.
-        self.popCatch(catchEntry);
-
         if (finallyLoc) {
           // If we have both a catch block and a finally block, then
           // because we emit the catch block first, we need to jump over
@@ -701,14 +698,9 @@ Ep.explodeStatement = function(path, labelId) {
 
         self.updateContextPrevLoc(self.mark(catchLoc));
 
-        // On entering a catch block, we must not have exited the
-        // associated try block normally, so we won't have called
-        // context.popCatch yet.  Call it here instead.
-        self.popCatch(catchEntry);
-
         var bodyPath = path.get("handler", "body");
         var safeParam = self.makeTempVar();
-        self.clearPendingException(safeParam);
+        self.clearPendingException(catchLoc, safeParam);
 
         var catchScope = bodyPath.scope;
         var catchParamName = handler.param.name;
@@ -731,8 +723,6 @@ Ep.explodeStatement = function(path, labelId) {
 
       if (finallyLoc) {
         self.updateContextPrevLoc(self.mark(finallyLoc));
-
-        self.popFinally(finallyEntry);
 
         self.leapManager.withEntry(finallyEntry, function() {
           self.explodeStatement(path.get("finalizer"));
@@ -804,76 +794,6 @@ Ep.updateContextPrevLoc = function(loc) {
   // statement without jumping to it. TODO Consider avoiding this
   // assignment when we know control must have jumped here.
   this.emitAssign(this.contextProperty("prev"), loc);
-};
-
-// Emit a runtime call to context.pushTry(catchLoc, finallyLoc) so that
-// the runtime wrapper can dispatch uncaught exceptions appropriately.
-Ep.pushTry = function(tryEntry) {
-  assert.ok(tryEntry instanceof leap.TryEntry);
-
-  // These entries will be reflected to the runtime so that it can
-  // determine how to dispatch uncaught exceptions.
-  this.tryEntries.push(tryEntry);
-
-  var nil = b.literal(null);
-  var catchEntry = tryEntry.catchEntry;
-  var finallyEntry = tryEntry.finallyEntry;
-  var method = this.contextProperty("pushTry");
-  var args = [
-    catchEntry && catchEntry.firstLoc || nil,
-    finallyEntry && finallyEntry.firstLoc || nil,
-    finallyEntry && b.literal(
-      finallyEntry.nextLocTempVar.property.name
-    ) || nil
-  ];
-
-  this.emit(b.callExpression(method, args));
-};
-
-// Emit a runtime call to context.popCatch(catchLoc) so that the runtime
-// wrapper knows when a catch block reported to pushTry no longer applies.
-Ep.popCatch = function(catchEntry) {
-  var catchLoc;
-
-  if (catchEntry) {
-    assert.ok(catchEntry instanceof leap.CatchEntry);
-    catchLoc = catchEntry.firstLoc;
-  } else {
-    assert.strictEqual(catchEntry, null);
-    catchLoc = b.literal(null);
-  }
-
-  // TODO Think about not emitting anything when catchEntry === null.  For
-  // now, emitting context.popCatch(null) is good for sanity checking.
-
-  this.emit(b.callExpression(
-    this.contextProperty("popCatch"),
-    [catchLoc]
-  ));
-};
-
-// Emit a runtime call to context.popFinally(finallyLoc) so that the
-// runtime wrapper knows when a finally block reported to pushTry no
-// longer applies.
-Ep.popFinally = function(finallyEntry) {
-  var finallyLoc;
-
-  if (finallyEntry) {
-    assert.ok(finallyEntry instanceof leap.FinallyEntry);
-    finallyLoc = finallyEntry.firstLoc;
-  } else {
-    assert.strictEqual(finallyEntry, null);
-    finallyLoc = b.literal(null);
-  }
-
-  // TODO Think about not emitting anything when finallyEntry === null.
-  // For now, emitting context.popFinally(null) is good for sanity
-  // checking.
-
-  this.emit(b.callExpression(
-    this.contextProperty("popFinally"),
-    [finallyLoc]
-  ));
 };
 
 Ep.explodeExpression = function(path, ignoreResult) {
