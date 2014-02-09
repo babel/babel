@@ -1391,7 +1391,10 @@ function Emitter(contextId) {
 
     // The last location will be marked when this.getDispatchLoop is
     // called.
-    finalLoc: { value: loc() }
+    finalLoc: { value: loc() },
+
+    // A list of all leap.TryEntry statements emitted.
+    tryEntries: { value: [] }
   });
 
   // The .leapManager property needs to be defined by a separate
@@ -1422,7 +1425,13 @@ function loc() {
 Ep.mark = function(loc) {
   n.Literal.assert(loc);
   var index = this.listing.length;
-  loc.value = index;
+  if (loc.value === -1) {
+    loc.value = index;
+  } else {
+    // Locations can be marked redundantly, but their values cannot change
+    // once set the first time.
+    assert.strictEqual(loc.value, index);
+  }
   this.marked[index] = true;
   return loc;
 };
@@ -1458,10 +1467,10 @@ Ep.contextProperty = function(name) {
 };
 
 var volatileContextPropertyNames = {
+  prev: true,
   next: true,
   sent: true,
-  rval: true,
-  thrown: true
+  rval: true
 };
 
 // A "volatile" context property is a MemberExpression like context.sent
@@ -1505,14 +1514,19 @@ Ep.setReturnValue = function(valuePath) {
   );
 };
 
-Ep.clearPendingException = function(assignee) {
-  var cp = this.contextProperty("thrown");
+Ep.clearPendingException = function(catchLoc, assignee) {
+  n.Literal.assert(catchLoc);
+
+  var catchCall = b.callExpression(
+    this.contextProperty("catch"),
+    [catchLoc]
+  );
 
   if (assignee) {
-    this.emitAssign(assignee, cp);
+    this.emitAssign(assignee, catchCall);
+  } else {
+    this.emit(catchCall);
   }
-
-  this.emit(b.unaryExpression("delete", cp));
 };
 
 // Emits code for an unconditional jump to the given location, even if the
@@ -1626,7 +1640,14 @@ Ep.getDispatchLoop = function() {
 
   return b.whileStatement(
     b.literal(1),
-    b.switchStatement(this.contextProperty("next"), cases)
+    b.switchStatement(
+      b.assignmentExpression(
+        "=",
+        this.contextProperty("prev"),
+        this.contextProperty("next")
+      ),
+      cases
+    )
   );
 };
 
@@ -1637,6 +1658,36 @@ function isSwitchCaseEnder(stmt) {
       || n.ReturnStatement.check(stmt)
       || n.ThrowStatement.check(stmt);
 }
+
+Ep.getTryEntryList = function() {
+  if (this.tryEntries.length === 0) {
+    // To avoid adding a needless [] to the majority of wrapGenerator
+    // argument lists, force the caller to handle this case specially.
+    return null;
+  }
+
+  return b.arrayExpression(
+    this.tryEntries.map(function(tryEntry) {
+      var ce = tryEntry.catchEntry;
+      var fe = tryEntry.finallyEntry;
+
+      var triple = [
+        tryEntry.firstLoc,
+        // The null here makes a hole in the array.
+        ce ? ce.firstLoc : null
+      ];
+
+      if (fe) {
+        triple[2] = b.arrayExpression([
+          fe.firstLoc,
+          b.literal(fe.nextLocTempVar.property.name)
+        ]);
+      }
+
+      return b.arrayExpression(triple);
+    })
+  );
+};
 
 // All side effects must be realized in order.
 
@@ -1979,20 +2030,19 @@ Ep.explodeStatement = function(path, labelId) {
       self.emitAssign(finallyEntry.nextLocTempVar, after);
     }
 
-    var tryEntry = new leap.TryEntry(catchEntry, finallyEntry);
+    var tryEntry = new leap.TryEntry(
+      self.getUnmarkedCurrentLoc(),
+      catchEntry,
+      finallyEntry
+    );
 
-    // Push information about this try statement so that the runtime can
-    // figure out what to do if it gets an uncaught exception.
-    self.pushTry(tryEntry);
+    self.tryEntries.push(tryEntry);
+    self.updateContextPrevLoc(tryEntry.firstLoc);
 
     self.leapManager.withEntry(tryEntry, function() {
       self.explodeStatement(path.get("block"));
 
       if (catchLoc) {
-        // If execution leaves the try block normally, the associated
-        // catch block no longer applies.
-        self.popCatch(catchEntry);
-
         if (finallyLoc) {
           // If we have both a catch block and a finally block, then
           // because we emit the catch block first, we need to jump over
@@ -2005,16 +2055,11 @@ Ep.explodeStatement = function(path, labelId) {
           self.jump(after);
         }
 
-        self.mark(catchLoc);
-
-        // On entering a catch block, we must not have exited the
-        // associated try block normally, so we won't have called
-        // context.popCatch yet.  Call it here instead.
-        self.popCatch(catchEntry);
+        self.updateContextPrevLoc(self.mark(catchLoc));
 
         var bodyPath = path.get("handler", "body");
         var safeParam = self.makeTempVar();
-        self.clearPendingException(safeParam);
+        self.clearPendingException(catchLoc, safeParam);
 
         var catchScope = bodyPath.scope;
         var catchParamName = handler.param.name;
@@ -2036,9 +2081,7 @@ Ep.explodeStatement = function(path, labelId) {
       }
 
       if (finallyLoc) {
-        self.mark(finallyLoc);
-
-        self.popFinally(finallyEntry);
+        self.updateContextPrevLoc(self.mark(finallyLoc));
 
         self.leapManager.withEntry(finallyEntry, function() {
           self.explodeStatement(path.get("finalizer"));
@@ -2066,70 +2109,50 @@ Ep.explodeStatement = function(path, labelId) {
   }
 };
 
-// Emit a runtime call to context.pushTry(catchLoc, finallyLoc) so that
-// the runtime wrapper can dispatch uncaught exceptions appropriately.
-Ep.pushTry = function(tryEntry) {
-  assert.ok(tryEntry instanceof leap.TryEntry);
-
-  var nil = b.literal(null);
-  var catchEntry = tryEntry.catchEntry;
-  var finallyEntry = tryEntry.finallyEntry;
-  var method = this.contextProperty("pushTry");
-  var args = [
-    catchEntry && catchEntry.firstLoc || nil,
-    finallyEntry && finallyEntry.firstLoc || nil,
-    finallyEntry && b.literal(
-      finallyEntry.nextLocTempVar.property.name
-    ) || nil
-  ];
-
-  this.emit(b.callExpression(method, args));
+// Not all offsets into emitter.listing are potential jump targets. For
+// example, execution typically falls into the beginning of a try block
+// without jumping directly there. This method returns the current offset
+// without marking it, so that a switch case will not necessarily be
+// generated for this offset (I say "not necessarily" because the same
+// location might end up being marked in the process of emitting other
+// statements). There's no logical harm in marking such locations as jump
+// targets, but minimizing the number of switch cases keeps the generated
+// code shorter.
+Ep.getUnmarkedCurrentLoc = function() {
+  return b.literal(this.listing.length);
 };
 
-// Emit a runtime call to context.popCatch(catchLoc) so that the runtime
-// wrapper knows when a catch block reported to pushTry no longer applies.
-Ep.popCatch = function(catchEntry) {
-  var catchLoc;
+// The context.prev property takes the value of context.next whenever we
+// evaluate the switch statement discriminant, which is generally good
+// enough for tracking the last location we jumped to, but sometimes
+// context.prev needs to be more precise, such as when we fall
+// successfully out of a try block and into a finally block without
+// jumping. This method exists to update context.prev to the freshest
+// available location. If we were implementing a full interpreter, we
+// would know the location of the current instruction with complete
+// precision at all times, but we don't have that luxury here, as it would
+// be costly and verbose to set context.prev before every statement.
+Ep.updateContextPrevLoc = function(loc) {
+  if (loc) {
+    n.Literal.assert(loc);
 
-  if (catchEntry) {
-    assert.ok(catchEntry instanceof leap.CatchEntry);
-    catchLoc = catchEntry.firstLoc;
+    if (loc.value === -1) {
+      // If an uninitialized location literal was passed in, set its value
+      // to the current this.listing.length.
+      loc.value = this.listing.length;
+    } else {
+      // Otherwise assert that the location matches the current offset.
+      assert.strictEqual(loc.value, this.listing.length);
+    }
+
   } else {
-    assert.strictEqual(catchEntry, null);
-    catchLoc = b.literal(null);
+    loc = this.getUnmarkedCurrentLoc();
   }
 
-  // TODO Think about not emitting anything when catchEntry === null.  For
-  // now, emitting context.popCatch(null) is good for sanity checking.
-
-  this.emit(b.callExpression(
-    this.contextProperty("popCatch"),
-    [catchLoc]
-  ));
-};
-
-// Emit a runtime call to context.popFinally(finallyLoc) so that the
-// runtime wrapper knows when a finally block reported to pushTry no
-// longer applies.
-Ep.popFinally = function(finallyEntry) {
-  var finallyLoc;
-
-  if (finallyEntry) {
-    assert.ok(finallyEntry instanceof leap.FinallyEntry);
-    finallyLoc = finallyEntry.firstLoc;
-  } else {
-    assert.strictEqual(finallyEntry, null);
-    finallyLoc = b.literal(null);
-  }
-
-  // TODO Think about not emitting anything when finallyEntry === null.
-  // For now, emitting context.popFinally(null) is good for sanity
-  // checking.
-
-  this.emit(b.callExpression(
-    this.contextProperty("popFinally"),
-    [finallyLoc]
-  ));
+  // Make sure context.prev is up to date in case we fell into this try
+  // statement without jumping to it. TODO Consider avoiding this
+  // assignment when we know control must have jumped here.
+  this.emitAssign(this.contextProperty("prev"), loc);
 };
 
 Ep.explodeExpression = function(path, ignoreResult) {
@@ -2615,8 +2638,10 @@ function SwitchEntry(breakLoc) {
 inherits(SwitchEntry, Entry);
 exports.SwitchEntry = SwitchEntry;
 
-function TryEntry(catchEntry, finallyEntry) {
+function TryEntry(firstLoc, catchEntry, finallyEntry) {
   Entry.call(this);
+
+  n.Literal.assert(firstLoc);
 
   if (catchEntry) {
     assert.ok(catchEntry instanceof CatchEntry);
@@ -2630,7 +2655,11 @@ function TryEntry(catchEntry, finallyEntry) {
     finallyEntry = null;
   }
 
+  // Have to have one or the other (or both).
+  assert.ok(catchEntry || finallyEntry);
+
   Object.defineProperties(this, {
+    firstLoc: { value: firstLoc },
     catchEntry: { value: catchEntry },
     finallyEntry: { value: finallyEntry }
   });
@@ -2705,12 +2734,16 @@ LMp._leapToEntry = function(predicate, defaultLoc) {
   for (var i = this.entryStack.length - 1; i >= 0; --i) {
     entry = this.entryStack[i];
 
-    if (entry instanceof CatchEntry ||
-        entry instanceof FinallyEntry) {
+    if (entry instanceof CatchEntry) {
+      this.emitter.clearPendingException(entry.firstLoc);
 
       // If we are inside of a catch or finally block, then we must
       // have exited the try block already, so we shouldn't consider
       // the next TryStatement as a handler for this throw.
+      skipNextTryEntry = entry;
+
+    } else if (entry instanceof FinallyEntry) {
+      // Same comment as above.
       skipNextTryEntry = entry;
 
     } else if (entry instanceof TryEntry) {
@@ -2732,8 +2765,14 @@ LMp._leapToEntry = function(predicate, defaultLoc) {
         finallyEntries.push(entry.finallyEntry);
       }
 
-    } else if ((loc = predicate.call(this, entry))) {
-      break;
+    } else {
+      if (entry instanceof FunctionEntry) {
+        this.emitter.clearPendingException(b.literal("end"));
+      }
+
+      if ((loc = predicate.call(this, entry))) {
+        break;
+      }
     }
   }
 
@@ -2779,7 +2818,6 @@ LMp.emitBreak = function(label) {
     throw new Error("illegal break statement");
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
 
@@ -2792,7 +2830,6 @@ LMp.emitContinue = function(label) {
     throw new Error("illegal continue statement");
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
 
@@ -2811,7 +2848,6 @@ LMp.emitReturn = function(argPath) {
     this.emitter.setReturnValue(argPath);
   }
 
-  this.emitter.clearPendingException();
   this.emitter.jump(loc);
 };
 
@@ -3045,11 +3081,18 @@ function visitNode(node) {
     outerBody.push(vars);
   }
 
+  var wrapGenArgs = [
+    emitter.getContextFunction(functionId),
+    b.thisExpression()
+  ];
+
+  var tryEntryList = emitter.getTryEntryList();
+  if (tryEntryList) {
+    wrapGenArgs.push(tryEntryList);
+  }
+
   outerBody.push(b.returnStatement(
-    b.callExpression(wrapGeneratorId, [
-      emitter.getContextFunction(functionId),
-      b.thisExpression()
-    ])
+    b.callExpression(wrapGeneratorId, wrapGenArgs)
   ));
 
   node.body = b.blockStatement(outerBody);
@@ -3132,6 +3175,7 @@ var fs = require("fs");
 var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
 var recast = require("recast");
+var types = recast.types;
 var esprimaHarmony = require("esprima");
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
@@ -3155,10 +3199,35 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var runtimeBody = recast.parse(runtime, {
-    sourceFileName: regenerator.runtime.dev
-  }).program.body;
+  var path = parse(source);
+  var programPath = path.get("program");
 
+  if (shouldVarify(source, options)) {
+    // Transpile let/const into var declarations.
+    varifyAst(programPath.node);
+  }
+
+  transform(programPath);
+
+  injectRuntime(runtime, programPath.node);
+
+  return recast.print(path).code;
+}
+
+function parse(source) {
+  types.builtInTypes.string.assert(source);
+
+  var ast = recast.parse(source, {
+    // Use the harmony branch of Esprima that installs with regenerator
+    // instead of the master branch that recast provides.
+    esprima: esprimaHarmony,
+    range: true
+  });
+
+  return new types.NodePath(ast);
+}
+
+function shouldVarify(source, options) {
   var supportBlockBinding = !!options.supportBlockBinding;
   if (supportBlockBinding) {
     if (!blockBindingExp.test(source)) {
@@ -3166,43 +3235,49 @@ function regenerator(source, options) {
     }
   }
 
-  var recastOptions = {
-    tabWidth: utils.guessTabWidth(source),
-    // Use the harmony branch of Esprima that installs with regenerator
-    // instead of the master branch that recast provides.
-    esprima: esprimaHarmony,
-    range: supportBlockBinding
-  };
+  return supportBlockBinding;
+}
 
-  var ast = recast.parse(source, recastOptions);
+function varify(source) {
+  var path = parse(source);
+  varifyAst(path.get("program").node);
+  return recast.print(path).code;
+}
 
-  // Transpile let/const into var declarations.
-  if (supportBlockBinding) {
-    var defsResult = require("defs")(ast.program, {
-      ast: true,
-      disallowUnknownReferences: false,
-      disallowDuplicated: false,
-      disallowVars: false,
-      loopClosures: "iife"
-    });
+function varifyAst(ast) {
+  types.namedTypes.Program.assert(ast);
 
-    if (defsResult.errors) {
-      throw new Error(defsResult.errors.join("\n"))
-    }
+  var defsResult = require("defs")(ast, {
+    ast: true,
+    disallowUnknownReferences: false,
+    disallowDuplicated: false,
+    disallowVars: false,
+    loopClosures: "iife"
+  });
+
+  if (defsResult.errors) {
+    throw new Error(defsResult.errors.join("\n"))
   }
 
-  var path = new recast.types.NodePath(ast);
+  return ast;
+}
 
-  transform(path.get("program"));
+function injectRuntime(runtime, ast) {
+  types.builtInTypes.string.assert(runtime);
+  types.namedTypes.Program.assert(ast);
 
   // Include the runtime by modifying the AST rather than by concatenating
   // strings. This technique will allow for more accurate source mapping.
-  if (options.includeRuntime) {
-    var body = ast.program.body;
+  if (runtime !== "") {
+    var runtimeBody = recast.parse(runtime, {
+      sourceFileName: regenerator.runtime.dev
+    }).program.body;
+
+    var body = ast.body;
     body.unshift.apply(body, runtimeBody);
   }
 
-  return recast.print(path, recastOptions).code;
+  return ast;
 }
 
 function runtime() {
@@ -3211,6 +3286,9 @@ function runtime() {
 
 runtime.dev = path.join(__dirname, "runtime", "dev.js");
 runtime.min = path.join(__dirname, "runtime", "min.js");
+
+// Convenience for just translating let/const to var declarations.
+regenerator.varify = varify;
 
 // To modify an AST directly, call require("regenerator").transform(ast).
 regenerator.transform = transform;
