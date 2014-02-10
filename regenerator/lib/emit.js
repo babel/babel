@@ -968,7 +968,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
     if (expr.operator === "&&") {
       self.jumpIfNot(left, after);
-    } else if (expr.operator = "||") {
+    } else {
+      assert.strictEqual(expr.operator, "||");
       self.jumpIf(left, after);
     }
 
