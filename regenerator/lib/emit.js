@@ -161,12 +161,12 @@ Ep.setReturnValue = function(valuePath) {
   );
 };
 
-Ep.clearPendingException = function(catchLoc, assignee) {
-  n.Literal.assert(catchLoc);
+Ep.clearPendingException = function(tryLoc, assignee) {
+  n.Literal.assert(tryLoc);
 
   var catchCall = b.callExpression(
     this.contextProperty("catch"),
-    [catchLoc]
+    [tryLoc]
   );
 
   if (assignee) {
@@ -706,7 +706,7 @@ Ep.explodeStatement = function(path, labelId) {
 
         var bodyPath = path.get("handler", "body");
         var safeParam = self.makeTempVar();
-        self.clearPendingException(catchLoc, safeParam);
+        self.clearPendingException(tryEntry.firstLoc, safeParam);
 
         var catchScope = bodyPath.scope;
         var catchParamName = handler.param.name;

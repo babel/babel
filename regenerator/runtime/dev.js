@@ -197,10 +197,9 @@
 
     this.tryEntries = [{
       // This implicit root object (effectively a try statement without a
-      // real catch or a finally block) gives us a place to store values
-      // thrown when there is no enclosing try statement.
-      tryLoc: 0,
-      catchLoc: "end"
+      // catch or a finally block) gives us a place to store values thrown
+      // when there is no enclosing try statement.
+      tryLoc: "root"
     }];
 
     tryList.forEach(tryTripleToObj, this);
@@ -259,20 +258,19 @@
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
 
-        if (entry.catchLoc) {
-          if (entry.catchLoc === "end") {
-            // If the lookup reaches the implicit root try statement, skip
-            // on down to the if (!caught) block below.
-            break;
-          }
+        if (entry.tryLoc === "root") {
+          // If the lookup reaches the implicit root try statement, skip
+          // on down to the if (!caught) block below.
+          break;
+        }
 
-          if (entry.tryLoc <= this.prev &&
-              this.prev < entry.catchLoc) {
-            entry.thrown = exception;
-            this.next = entry.catchLoc;
-            caught = true;
-            break;
-          }
+        if (entry.catchLoc &&
+            entry.tryLoc <= this.prev &&
+            this.prev < entry.catchLoc) {
+          entry.thrown = exception;
+          this.next = entry.catchLoc;
+          caught = true;
+          break;
         }
 
         if (entry.finallyLoc &&
@@ -296,10 +294,10 @@
       return caught;
     },
 
-    "catch": function(catchLoc) {
+    "catch": function(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-        if (entry.catchLoc === catchLoc) {
+        if (entry.tryLoc === tryLoc) {
           var thrown = entry.thrown;
           delete entry.thrown;
           return thrown;
