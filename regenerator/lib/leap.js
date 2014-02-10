@@ -264,16 +264,16 @@ LMp.emitContinue = function(label) {
 LMp.emitReturn = function(argPath) {
   assert.ok(argPath instanceof types.NodePath);
 
+  if (argPath.value) {
+    this.emitter.setReturnValue(argPath);
+  }
+
   var loc = this._leapToEntry(function(entry) {
     return getLeapLocation(entry, "returnLoc");
   });
 
   if (loc === null) {
     throw new Error("illegal return statement");
-  }
-
-  if (argPath.value) {
-    this.emitter.setReturnValue(argPath);
   }
 
   this.emitter.jump(loc);
