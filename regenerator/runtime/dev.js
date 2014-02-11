@@ -179,12 +179,12 @@
   function tryTripleToObj(triple) {
     var entry = { tryLoc: triple[0] };
 
-    if (triple[1]) {
+    if (1 in triple) {
       entry.catchLoc = triple[1];
     }
 
-    var fin = triple[2];
-    if (fin) {
+    if (2 in triple) {
+      var fin = triple[2];
       entry.finallyLoc = fin[0];
       entry.finallyTempVar = fin[1];
     }
