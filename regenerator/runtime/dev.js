@@ -264,19 +264,22 @@
           break;
         }
 
-        if (entry.catchLoc &&
-            entry.tryLoc <= this.prev &&
-            this.prev < entry.catchLoc) {
-          entry.thrown = exception;
-          this.next = entry.catchLoc;
-          caught = true;
-          break;
-        }
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
 
-        if (entry.finallyLoc &&
-            entry.tryLoc <= this.prev &&
-            this.prev < entry.finallyLoc) {
-          finallyEntries.push(entry);
+          if (hasCatch &&
+              this.prev < entry.catchLoc) {
+            entry.thrown = exception;
+            this.next = entry.catchLoc;
+            caught = true;
+            break;
+          }
+
+          if (hasFinally &&
+              this.prev < entry.finallyLoc) {
+            finallyEntries.push(entry);
+          }
         }
       }
 
