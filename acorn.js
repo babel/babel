@@ -64,6 +64,9 @@
     // By default, reserved words are not enforced. Enable
     // `forbidReserved` to enforce them.
     forbidReserved: false,
+    // When enabled, a return at the top level is not considered an
+    // error.
+    allowReturnOutsideFunction: false,
     // When `locations` is on, `loc` properties holding objects with
     // `start` and `end` properties in `{line, column}` form (with
     // line being 1-based and column 0-based) will be attached to the
@@ -1224,7 +1227,8 @@
       return finishNode(node, "IfStatement");
 
     case _return:
-      if (!inFunction) raise(tokStart, "'return' outside of function");
+      if (!inFunction && !options.allowReturnOutsideFunction)
+        raise(tokStart, "'return' outside of function");
       next();
 
       // In `return` (and `break`/`continue`), the keywords with

@@ -58,6 +58,10 @@ object referring to that same position.
 
 - **forbidReserved**: If `true`, using a reserved word will generate
   an error. Defaults to `false`.
+  
+- **allowReturnOutsideFunction**: By default, a return statement at
+  the top level raises an error. Set this to `true` to accept such
+  code.
 
 - **locations**: When `true`, each node has a `loc` object attached
   with `start` and `end` subobjects, each of which contains the
