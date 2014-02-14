@@ -313,8 +313,14 @@ Ep.getTryEntryList = function() {
     return null;
   }
 
+  var lastLocValue = 0;
+
   return b.arrayExpression(
     this.tryEntries.map(function(tryEntry) {
+      var thisLocValue = tryEntry.firstLoc.value;
+      assert.ok(thisLocValue >= lastLocValue, "try entries out of order");
+      lastLocValue = thisLocValue;
+
       var ce = tryEntry.catchEntry;
       var fe = tryEntry.finallyEntry;
 
@@ -325,10 +331,7 @@ Ep.getTryEntryList = function() {
       ];
 
       if (fe) {
-        triple[2] = b.arrayExpression([
-          fe.firstLoc,
-          b.literal(fe.nextLocTempVar.property.name)
-        ]);
+        triple[2] = fe.firstLoc;
       }
 
       return b.arrayExpression(triple);
@@ -554,11 +557,19 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "BreakStatement":
-    self.leapManager.emitBreak(stmt.label);
+    self.emitAbruptCompletion({
+      type: "break",
+      target: self.leapManager.getBreakLoc(stmt.label)
+    });
+
     break;
 
   case "ContinueStatement":
-    self.leapManager.emitContinue(stmt.label);
+    self.emitAbruptCompletion({
+      type: "continue",
+      target: self.leapManager.getContinueLoc(stmt.label)
+    });
+
     break;
 
   case "SwitchStatement":
@@ -643,7 +654,11 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "ReturnStatement":
-    self.leapManager.emitReturn(path.get("argument"));
+    self.emitAbruptCompletion({
+      type: "return",
+      value: self.explodeExpression(path.get("argument"))
+    });
+
     break;
 
   case "WithStatement":
@@ -665,17 +680,7 @@ Ep.explodeStatement = function(path, labelId) {
     );
 
     var finallyLoc = stmt.finalizer && loc();
-    var finallyEntry = finallyLoc && new leap.FinallyEntry(
-      finallyLoc,
-      self.makeTempVar()
-    );
-
-    if (finallyEntry) {
-      // Finally blocks examine their .nextLocTempVar property to figure
-      // out where to jump next, so we must set that property to the
-      // fall-through location, by default.
-      self.emitAssign(finallyEntry.nextLocTempVar, after);
-    }
+    var finallyEntry = finallyLoc && new leap.FinallyEntry(finallyLoc);
 
     var tryEntry = new leap.TryEntry(
       self.getUnmarkedCurrentLoc(),
@@ -734,7 +739,10 @@ Ep.explodeStatement = function(path, labelId) {
           self.explodeStatement(path.get("finalizer"));
         });
 
-        self.jump(finallyEntry.nextLocTempVar);
+        self.emit(b.callExpression(
+          self.contextProperty("finish"),
+          [finallyEntry.firstLoc]
+        ));
       }
     });
 
@@ -755,6 +763,65 @@ Ep.explodeStatement = function(path, labelId) {
         JSON.stringify(stmt.type));
   }
 };
+
+Ep.emitAbruptCompletion = function(record) {
+  assert.ok(
+    isValidCompletion(record),
+    "invalid completion record: " +
+      JSON.stringify(record)
+  );
+
+  assert.notStrictEqual(
+    record.type, "normal",
+    "normal completions are not abrupt"
+  );
+
+  var abruptArgs = [b.literal(record.type)];
+
+  if (record.type === "break" ||
+      record.type === "continue") {
+    n.Literal.assert(record.target);
+    abruptArgs[1] = record.target;
+  } else if (record.type === "return" ||
+             record.type === "throw") {
+    if (record.value) {
+      n.Expression.assert(record.value);
+      abruptArgs[1] = record.value;
+    }
+  }
+
+  this.emit(
+    b.returnStatement(
+      b.callExpression(
+        this.contextProperty("abrupt"),
+        abruptArgs
+      )
+    )
+  );
+};
+
+function isValidCompletion(record) {
+  var type = record.type;
+
+  if (type === "normal") {
+    return !hasOwn.call(record, "target");
+  }
+
+  if (type === "break" ||
+      type === "continue") {
+    return !hasOwn.call(record, "value")
+        && n.Literal.check(record.target);
+  }
+
+  if (type === "return" ||
+      type === "throw") {
+    return hasOwn.call(record, "value")
+        && !hasOwn.call(record, "target");
+  }
+
+  return false;
+}
+
 
 // Not all offsets into emitter.listing are potential jump targets. For
 // example, execution typically falls into the beginning of a try block

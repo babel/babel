@@ -13,6 +13,7 @@ var types = require("ast-types");
 var n = types.namedTypes;
 var b = types.builders;
 var inherits = require("util").inherits;
+var hasOwn = Object.prototype.hasOwnProperty;
 
 function Entry() {
   assert.ok(this instanceof Entry);
@@ -111,15 +112,13 @@ function CatchEntry(firstLoc, paramId) {
 inherits(CatchEntry, Entry);
 exports.CatchEntry = CatchEntry;
 
-function FinallyEntry(firstLoc, nextLocTempVar) {
+function FinallyEntry(firstLoc) {
   Entry.call(this);
 
   n.Literal.assert(firstLoc);
-  n.MemberExpression.assert(nextLocTempVar);
 
   Object.defineProperties(this, {
-    firstLoc: { value: firstLoc },
-    nextLocTempVar: { value: nextLocTempVar }
+    firstLoc: { value: firstLoc }
   });
 }
 
@@ -154,124 +153,29 @@ LMp.withEntry = function(entry, callback) {
   }
 };
 
-LMp._leapToEntry = function(predicate, defaultLoc) {
-  var entry, loc;
-  var finallyEntries = [];
-  var skipNextTryEntry = null;
-
+LMp._findLeapLocation = function(property, label) {
   for (var i = this.entryStack.length - 1; i >= 0; --i) {
-    entry = this.entryStack[i];
-
-    if (entry instanceof CatchEntry ||
-        entry instanceof FinallyEntry) {
-      // If we are inside of a catch or finally block, then we must
-      // have exited the try block already, so we shouldn't consider
-      // the next TryStatement as a handler for this throw.
-      skipNextTryEntry = entry;
-
-    } else if (entry instanceof TryEntry) {
-      if (skipNextTryEntry) {
-        // If an exception was thrown from inside a catch block and this
-        // try statement has a finally block, make sure we execute that
-        // finally block.
-        if (skipNextTryEntry instanceof CatchEntry &&
-            entry.finallyEntry) {
-          finallyEntries.push(entry.finallyEntry);
+    var entry = this.entryStack[i];
+    var loc = entry[property];
+    if (loc) {
+      if (label) {
+        if (entry.label &&
+            entry.label.name === label.name) {
+          return loc;
         }
-
-        skipNextTryEntry = null;
-
-      } else if ((loc = predicate.call(this, entry))) {
-        break;
-
-      } else if (entry.finallyEntry) {
-        finallyEntries.push(entry.finallyEntry);
-      }
-
-      this.emitter.clearPendingException(entry.firstLoc);
-
-    } else {
-      if (entry instanceof FunctionEntry) {
-        this.emitter.clearPendingException(b.literal("root"));
-      }
-
-      if ((loc = predicate.call(this, entry))) {
-        break;
-      }
-    }
-  }
-
-  if (loc) {
-    // fall through
-  } else if (defaultLoc) {
-    loc = defaultLoc;
-  } else {
-    return null;
-  }
-
-  n.Literal.assert(loc);
-
-  while ((finallyEntry = finallyEntries.pop())) {
-    this.emitter.emitAssign(finallyEntry.nextLocTempVar, loc);
-    loc = finallyEntry.firstLoc;
-  }
-
-  return loc;
-};
-
-function getLeapLocation(entry, property, label) {
-  var loc = entry[property];
-  if (loc) {
-    if (label) {
-      if (entry.label &&
-          entry.label.name === label.name) {
+      } else {
         return loc;
       }
-    } else {
-      return loc;
     }
   }
+
   return null;
-}
-
-LMp.emitBreak = function(label) {
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "breakLoc", label);
-  });
-
-  if (loc === null) {
-    throw new Error("illegal break statement");
-  }
-
-  this.emitter.jump(loc);
 };
 
-LMp.emitContinue = function(label) {
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "continueLoc", label);
-  });
-
-  if (loc === null) {
-    throw new Error("illegal continue statement");
-  }
-
-  this.emitter.jump(loc);
+LMp.getBreakLoc = function(label) {
+  return this._findLeapLocation("breakLoc", label);
 };
 
-LMp.emitReturn = function(argPath) {
-  assert.ok(argPath instanceof types.NodePath);
-
-  if (argPath.value) {
-    this.emitter.setReturnValue(argPath);
-  }
-
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "returnLoc");
-  });
-
-  if (loc === null) {
-    throw new Error("illegal return statement");
-  }
-
-  this.emitter.jump(loc);
+LMp.getContinueLoc = function(label) {
+  return this._findLeapLocation("continueLoc", label);
 };
