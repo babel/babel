@@ -176,34 +176,34 @@
     return "[object Generator]";
   };
 
-  function tryTripleToObj(triple) {
+  function pushTryEntry(triple) {
     var entry = { tryLoc: triple[0] };
 
-    if (triple[1]) {
+    if (1 in triple) {
       entry.catchLoc = triple[1];
     }
 
-    var fin = triple[2];
-    if (fin) {
-      entry.finallyLoc = fin[0];
-      entry.finallyTempVar = fin[1];
+    if (2 in triple) {
+      entry.finallyLoc = triple[2];
     }
 
     this.tryEntries.push(entry);
   }
 
+  function resetTryEntry(entry, i) {
+    var record = entry.completion || {};
+    record.type = i === 0 ? "normal" : "return";
+    delete record.arg;
+    entry.completion = record;
+  }
+
   function Context(tryList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryList.forEach(pushTryEntry, this);
     this.reset();
-
-    this.tryEntries = [{
-      // This implicit root object (effectively a try statement without a
-      // real catch or a finally block) gives us a place to store values
-      // thrown when there is no enclosing try statement.
-      tryLoc: 0,
-      catchLoc: "end"
-    }];
-
-    tryList.forEach(tryTripleToObj, this);
   }
 
   Context.prototype = {
@@ -216,11 +216,7 @@
       this.done = false;
       this.delegate = null;
 
-      if (this.tryEntries) {
-        this.tryEntries.forEach(function(entry) {
-          delete entry.thrown;
-        });
-      }
+      this.tryEntries.forEach(resetTryEntry);
 
       // Pre-initialize at least 20 temporary variables to enable hidden
       // class optimizations for simple generators.
@@ -234,11 +230,10 @@
     stop: function() {
       this.done = true;
 
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (hasOwn.call(entry, "thrown")) {
-          throw entry.thrown;
-        }
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
       }
 
       return this.rval;
@@ -249,59 +244,115 @@
     },
 
     dispatchException: function(exception) {
-      var finallyEntries = [];
-      var caught = false;
-
       if (this.done) {
         throw exception;
       }
 
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.catchLoc) {
-          if (entry.catchLoc === "end") {
-            // If the lookup reaches the implicit root try statement, skip
-            // on down to the if (!caught) block below.
-            break;
-          }
-
-          if (entry.tryLoc <= this.prev &&
-              this.prev < entry.catchLoc) {
-            entry.thrown = exception;
-            this.next = entry.catchLoc;
-            caught = true;
-            break;
-          }
-        }
-
-        if (entry.finallyLoc &&
-            entry.tryLoc <= this.prev &&
-            this.prev < entry.finallyLoc) {
-          finallyEntries.push(entry);
-        }
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+        return !!caught;
       }
 
-      if (!caught) {
-        // Dispatch uncaught exceptions to the implicit root object.
-        this.tryEntries[0].thrown = exception;
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    _findFinallyEntry: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") && (
+              entry.finallyLoc === finallyLoc ||
+              this.prev < entry.finallyLoc)) {
+          return entry;
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      var entry = this._findFinallyEntry();
+      var record = entry ? entry.completion : {};
+
+      record.type = type;
+      record.arg = arg;
+
+      if (entry) {
+        this.next = entry.finallyLoc;
+      } else {
+        this.complete(record);
+      }
+
+      return ContinueSentinel;
+    },
+
+    complete: function(record) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = record.arg;
         this.next = "end";
       }
 
-      while ((entry = finallyEntries.pop())) {
-        this[entry.finallyTempVar] = this.next;
-        this.next = entry.finallyLoc;
-      }
-
-      return caught;
+      return ContinueSentinel;
     },
 
-    "catch": function(catchLoc) {
+    finish: function(finallyLoc) {
+      var entry = this._findFinallyEntry(finallyLoc);
+      return this.complete(entry.completion);
+    },
+
+    "catch": function(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-        if (entry.catchLoc === catchLoc) {
-          var thrown = entry.thrown;
-          delete entry.thrown;
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry, i);
+          }
           return thrown;
         }
       }
