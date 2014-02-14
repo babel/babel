@@ -1514,12 +1514,12 @@ Ep.setReturnValue = function(valuePath) {
   );
 };
 
-Ep.clearPendingException = function(catchLoc, assignee) {
-  n.Literal.assert(catchLoc);
+Ep.clearPendingException = function(tryLoc, assignee) {
+  n.Literal.assert(tryLoc);
 
   var catchCall = b.callExpression(
     this.contextProperty("catch"),
-    [catchLoc]
+    [tryLoc]
   );
 
   if (assignee) {
@@ -1666,8 +1666,14 @@ Ep.getTryEntryList = function() {
     return null;
   }
 
+  var lastLocValue = 0;
+
   return b.arrayExpression(
     this.tryEntries.map(function(tryEntry) {
+      var thisLocValue = tryEntry.firstLoc.value;
+      assert.ok(thisLocValue >= lastLocValue, "try entries out of order");
+      lastLocValue = thisLocValue;
+
       var ce = tryEntry.catchEntry;
       var fe = tryEntry.finallyEntry;
 
@@ -1678,10 +1684,7 @@ Ep.getTryEntryList = function() {
       ];
 
       if (fe) {
-        triple[2] = b.arrayExpression([
-          fe.firstLoc,
-          b.literal(fe.nextLocTempVar.property.name)
-        ]);
+        triple[2] = fe.firstLoc;
       }
 
       return b.arrayExpression(triple);
@@ -1907,11 +1910,19 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "BreakStatement":
-    self.leapManager.emitBreak(stmt.label);
+    self.emitAbruptCompletion({
+      type: "break",
+      target: self.leapManager.getBreakLoc(stmt.label)
+    });
+
     break;
 
   case "ContinueStatement":
-    self.leapManager.emitContinue(stmt.label);
+    self.emitAbruptCompletion({
+      type: "continue",
+      target: self.leapManager.getContinueLoc(stmt.label)
+    });
+
     break;
 
   case "SwitchStatement":
@@ -1996,7 +2007,11 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "ReturnStatement":
-    self.leapManager.emitReturn(path.get("argument"));
+    self.emitAbruptCompletion({
+      type: "return",
+      value: self.explodeExpression(path.get("argument"))
+    });
+
     break;
 
   case "WithStatement":
@@ -2018,17 +2033,7 @@ Ep.explodeStatement = function(path, labelId) {
     );
 
     var finallyLoc = stmt.finalizer && loc();
-    var finallyEntry = finallyLoc && new leap.FinallyEntry(
-      finallyLoc,
-      self.makeTempVar()
-    );
-
-    if (finallyEntry) {
-      // Finally blocks examine their .nextLocTempVar property to figure
-      // out where to jump next, so we must set that property to the
-      // fall-through location, by default.
-      self.emitAssign(finallyEntry.nextLocTempVar, after);
-    }
+    var finallyEntry = finallyLoc && new leap.FinallyEntry(finallyLoc);
 
     var tryEntry = new leap.TryEntry(
       self.getUnmarkedCurrentLoc(),
@@ -2059,7 +2064,7 @@ Ep.explodeStatement = function(path, labelId) {
 
         var bodyPath = path.get("handler", "body");
         var safeParam = self.makeTempVar();
-        self.clearPendingException(catchLoc, safeParam);
+        self.clearPendingException(tryEntry.firstLoc, safeParam);
 
         var catchScope = bodyPath.scope;
         var catchParamName = handler.param.name;
@@ -2087,7 +2092,10 @@ Ep.explodeStatement = function(path, labelId) {
           self.explodeStatement(path.get("finalizer"));
         });
 
-        self.jump(finallyEntry.nextLocTempVar);
+        self.emit(b.callExpression(
+          self.contextProperty("finish"),
+          [finallyEntry.firstLoc]
+        ));
       }
     });
 
@@ -2108,6 +2116,65 @@ Ep.explodeStatement = function(path, labelId) {
         JSON.stringify(stmt.type));
   }
 };
+
+Ep.emitAbruptCompletion = function(record) {
+  assert.ok(
+    isValidCompletion(record),
+    "invalid completion record: " +
+      JSON.stringify(record)
+  );
+
+  assert.notStrictEqual(
+    record.type, "normal",
+    "normal completions are not abrupt"
+  );
+
+  var abruptArgs = [b.literal(record.type)];
+
+  if (record.type === "break" ||
+      record.type === "continue") {
+    n.Literal.assert(record.target);
+    abruptArgs[1] = record.target;
+  } else if (record.type === "return" ||
+             record.type === "throw") {
+    if (record.value) {
+      n.Expression.assert(record.value);
+      abruptArgs[1] = record.value;
+    }
+  }
+
+  this.emit(
+    b.returnStatement(
+      b.callExpression(
+        this.contextProperty("abrupt"),
+        abruptArgs
+      )
+    )
+  );
+};
+
+function isValidCompletion(record) {
+  var type = record.type;
+
+  if (type === "normal") {
+    return !hasOwn.call(record, "target");
+  }
+
+  if (type === "break" ||
+      type === "continue") {
+    return !hasOwn.call(record, "value")
+        && n.Literal.check(record.target);
+  }
+
+  if (type === "return" ||
+      type === "throw") {
+    return hasOwn.call(record, "value")
+        && !hasOwn.call(record, "target");
+  }
+
+  return false;
+}
+
 
 // Not all offsets into emitter.listing are potential jump targets. For
 // example, execution typically falls into the beginning of a try block
@@ -2321,7 +2388,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
     if (expr.operator === "&&") {
       self.jumpIfNot(left, after);
-    } else if (expr.operator = "||") {
+    } else {
+      assert.strictEqual(expr.operator, "||");
       self.jumpIf(left, after);
     }
 
@@ -2585,6 +2653,7 @@ var types = require("ast-types");
 var n = types.namedTypes;
 var b = types.builders;
 var inherits = require("util").inherits;
+var hasOwn = Object.prototype.hasOwnProperty;
 
 function Entry() {
   assert.ok(this instanceof Entry);
@@ -2683,15 +2752,13 @@ function CatchEntry(firstLoc, paramId) {
 inherits(CatchEntry, Entry);
 exports.CatchEntry = CatchEntry;
 
-function FinallyEntry(firstLoc, nextLocTempVar) {
+function FinallyEntry(firstLoc) {
   Entry.call(this);
 
   n.Literal.assert(firstLoc);
-  n.MemberExpression.assert(nextLocTempVar);
 
   Object.defineProperties(this, {
-    firstLoc: { value: firstLoc },
-    nextLocTempVar: { value: nextLocTempVar }
+    firstLoc: { value: firstLoc }
   });
 }
 
@@ -2726,129 +2793,31 @@ LMp.withEntry = function(entry, callback) {
   }
 };
 
-LMp._leapToEntry = function(predicate, defaultLoc) {
-  var entry, loc;
-  var finallyEntries = [];
-  var skipNextTryEntry = null;
-
+LMp._findLeapLocation = function(property, label) {
   for (var i = this.entryStack.length - 1; i >= 0; --i) {
-    entry = this.entryStack[i];
-
-    if (entry instanceof CatchEntry) {
-      this.emitter.clearPendingException(entry.firstLoc);
-
-      // If we are inside of a catch or finally block, then we must
-      // have exited the try block already, so we shouldn't consider
-      // the next TryStatement as a handler for this throw.
-      skipNextTryEntry = entry;
-
-    } else if (entry instanceof FinallyEntry) {
-      // Same comment as above.
-      skipNextTryEntry = entry;
-
-    } else if (entry instanceof TryEntry) {
-      if (skipNextTryEntry) {
-        // If an exception was thrown from inside a catch block and this
-        // try statement has a finally block, make sure we execute that
-        // finally block.
-        if (skipNextTryEntry instanceof CatchEntry &&
-            entry.finallyEntry) {
-          finallyEntries.push(entry.finallyEntry);
+    var entry = this.entryStack[i];
+    var loc = entry[property];
+    if (loc) {
+      if (label) {
+        if (entry.label &&
+            entry.label.name === label.name) {
+          return loc;
         }
-
-        skipNextTryEntry = null;
-
-      } else if ((loc = predicate.call(this, entry))) {
-        break;
-
-      } else if (entry.finallyEntry) {
-        finallyEntries.push(entry.finallyEntry);
-      }
-
-    } else {
-      if (entry instanceof FunctionEntry) {
-        this.emitter.clearPendingException(b.literal("end"));
-      }
-
-      if ((loc = predicate.call(this, entry))) {
-        break;
-      }
-    }
-  }
-
-  if (loc) {
-    // fall through
-  } else if (defaultLoc) {
-    loc = defaultLoc;
-  } else {
-    return null;
-  }
-
-  n.Literal.assert(loc);
-
-  while ((finallyEntry = finallyEntries.pop())) {
-    this.emitter.emitAssign(finallyEntry.nextLocTempVar, loc);
-    loc = finallyEntry.firstLoc;
-  }
-
-  return loc;
-};
-
-function getLeapLocation(entry, property, label) {
-  var loc = entry[property];
-  if (loc) {
-    if (label) {
-      if (entry.label &&
-          entry.label.name === label.name) {
+      } else {
         return loc;
       }
-    } else {
-      return loc;
     }
   }
+
   return null;
-}
-
-LMp.emitBreak = function(label) {
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "breakLoc", label);
-  });
-
-  if (loc === null) {
-    throw new Error("illegal break statement");
-  }
-
-  this.emitter.jump(loc);
 };
 
-LMp.emitContinue = function(label) {
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "continueLoc", label);
-  });
-
-  if (loc === null) {
-    throw new Error("illegal continue statement");
-  }
-
-  this.emitter.jump(loc);
+LMp.getBreakLoc = function(label) {
+  return this._findLeapLocation("breakLoc", label);
 };
 
-LMp.emitReturn = function(argPath) {
-  assert.ok(argPath instanceof types.NodePath);
-
-  var loc = this._leapToEntry(function(entry) {
-    return getLeapLocation(entry, "returnLoc");
-  });
-
-  if (loc === null) {
-    throw new Error("illegal return statement");
-  }
-
-  if (argPath.value) {
-    this.emitter.setReturnValue(argPath);
-  }
-
-  this.emitter.jump(loc);
+LMp.getContinueLoc = function(label) {
+  return this._findLeapLocation("continueLoc", label);
 };
 
 },{"./emit":7,"assert":2,"ast-types":24,"util":5}],10:[function(require,module,exports){
@@ -21289,6 +21258,7 @@ define(function (require, exports, module) {
         }
       }
 
+      this.__generatedMappings.sort(util.compareByGeneratedPositions);
       this.__originalMappings.sort(util.compareByOriginalPositions);
     };
 
@@ -21763,7 +21733,7 @@ define(function (require, exports, module) {
         throw new Error('Invalid mapping: ' + JSON.stringify({
           generated: aGenerated,
           source: aSource,
-          orginal: aOriginal,
+          original: aOriginal,
           name: aName
         }));
       }
