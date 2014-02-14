@@ -62,7 +62,9 @@
     // trailing commas in array and object literals.
     allowTrailingCommas: true,
     // By default, reserved words are not enforced. Enable
-    // `forbidReserved` to enforce them.
+    // `forbidReserved` to enforce them. When this option has the
+    // value "everywhere", reserved words and keywords can also not be
+    // used as property names.
     forbidReserved: false,
     // When enabled, a return at the top level is not considered an
     // error.
@@ -941,13 +943,8 @@
   function readWord() {
     var word = readWord1();
     var type = _name;
-    if (!containsEsc) {
-      if (isKeyword(word)) type = keywordTypes[word];
-      else if (options.forbidReserved &&
-               (options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(word) ||
-               strict && isStrictReservedWord(word))
-        raise(tokStart, "The keyword '" + word + "' is reserved");
-    }
+    if (!containsEsc && isKeyword(word))
+      type = keywordTypes[word];
     return finishToken(type, word);
   }
 
@@ -1763,7 +1760,20 @@
 
   function parseIdent(liberal) {
     var node = startNode();
-    node.name = tokType === _name ? tokVal : (liberal && !options.forbidReserved && tokType.keyword) || unexpected();
+    if (liberal && options.forbidReserved == "everywhere") liberal = false;
+    if (tokType === _name) {
+      if (!liberal &&
+          (options.forbidReserved &&
+           (options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(tokVal) ||
+           strict && isStrictReservedWord(tokVal)) &&
+          input.slice(tokStart, tokEnd).indexOf("\\") == -1)
+        raise(tokStart, "The keyword '" + tokVal + "' is reserved");
+      node.name = tokVal;
+    } else if (liberal && tokType.keyword) {
+      node.name = tokType.keyword;
+    } else {
+      unexpected();
+    }
     tokRegexpAllowed = false;
     next();
     return finishNode(node, "Identifier");

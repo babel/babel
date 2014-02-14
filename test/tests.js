@@ -26348,6 +26348,39 @@ test("x = y-->10;\n --> nothing", {
   ]
 });
 
+test("'use strict';\nobject.static();", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        value: "use strict",
+        raw: "'use strict'"
+      }
+    },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "CallExpression",
+        callee: {
+          type: "MemberExpression",
+          object: {
+            type: "Identifier",
+            name: "object"
+          },
+          property: {
+            type: "Identifier",
+            name: "static"
+          },
+          computed: false
+        },
+        arguments: []
+      }
+    }
+  ]
+});
+
 // Failure tests
 
 testFail("{",

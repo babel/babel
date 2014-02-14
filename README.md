@@ -57,7 +57,9 @@ object referring to that same position.
   trailing commas in array and object literals. Default is `true`.
 
 - **forbidReserved**: If `true`, using a reserved word will generate
-  an error. Defaults to `false`.
+  an error. Defaults to `false`. When given the value `"everywhere"`,
+  reserved words and keywords can also not be used as property names
+  (as in Internet Explorer's old parser).
   
 - **allowReturnOutsideFunction**: By default, a return statement at
   the top level raises an error. Set this to `true` to accept such
