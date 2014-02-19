@@ -17279,27 +17279,67 @@ defProp(exports, "makeUniqueKey", {
     value: makeUniqueKey
 });
 
-function makeAccessor() {
-    var secrets = {};
+function wrap(obj, value) {
+    var old = obj[value.name];
+    defProp(obj, value.name, { value: value });
+    return old;
+}
+
+// Object.getOwnPropertyNames is the only way to enumerate non-enumerable
+// properties, so if we wrap it to ignore our secret keys, there should be
+// no way (except guessing) to access those properties.
+var realGetOPNs = wrap(Object, function getOwnPropertyNames(object) {
+    for (var names = realGetOPNs(object),
+             src = 0,
+             dst = 0,
+             len = names.length;
+         src < len;
+         ++src) {
+        if (!hasOwn.call(uniqueKeys, names[src])) {
+            if (src > dst) {
+                names[dst] = names[src];
+            }
+            ++dst;
+        }
+    }
+    names.length = dst;
+    return names;
+});
+
+function defaultCreatorFn(object) {
+    return create(null);
+}
+
+function makeAccessor(secretCreatorFn) {
     var brand = makeUniqueKey();
+    var passkey = create(null);
+
+    secretCreatorFn = secretCreatorFn || defaultCreatorFn;
 
     function register(object) {
-        var key = makeUniqueKey();
-        defProp(object, brand, { value: key });
+        var secret; // Created lazily.
+        defProp(object, brand, {
+            value: function(key, forget) {
+                // Only code that has access to the passkey can retrieve
+                // (or forget) the secret object.
+                if (key === passkey) {
+                    return forget
+                        ? secret = null
+                        : secret || (secret = secretCreatorFn(object));
+                }
+            }
+        });
     }
 
     function accessor(object) {
         if (!hasOwn.call(object, brand))
             register(object);
-
-        var key = object[brand];
-        return hasOwn.call(secrets, key)
-            ? secrets[key]
-            : secrets[key] = create(null);
+        return object[brand](passkey);
     }
 
     accessor.forget = function(object) {
-        delete secrets[object[brand]];
+        if (hasOwn.call(object, brand))
+            object[brand](passkey, true);
     };
 
     return accessor;
@@ -18410,7 +18450,7 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":47,"./options":48,"./types":52,"./util":53,"assert":2,"private":44,"source-map":57}],47:[function(require,module,exports){
+},{"./mapping":47,"./options":48,"./types":52,"./util":53,"assert":2,"private":44,"source-map":58}],47:[function(require,module,exports){
 var assert = require("assert");
 var types = require("./types");
 var isString = types.builtInTypes.string;
@@ -18729,7 +18769,7 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima":43}],49:[function(require,module,exports){
+},{"esprima":57}],49:[function(require,module,exports){
 var assert = require("assert");
 var types = require("./types");
 var n = types.namedTypes;
@@ -20108,7 +20148,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"./util":53,"assert":2,"source-map":57}],52:[function(require,module,exports){
+},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"./util":53,"assert":2,"source-map":58}],52:[function(require,module,exports){
 var types = require("ast-types");
 var def = types.Type.def;
 
@@ -20264,7 +20304,7 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
     return smg.toJSON();
 };
 
-},{"./types":52,"assert":2,"source-map":57}],54:[function(require,module,exports){
+},{"./types":52,"assert":2,"source-map":58}],54:[function(require,module,exports){
 var assert = require("assert");
 var Class = require("cls");
 var Node = require("./types").namedTypes.Node;
@@ -20617,6 +20657,8 @@ function extend(newProps) {
 module.exports = extend.call(function(){});
 
 },{}],57:[function(require,module,exports){
+module.exports=require(38)
+},{}],58:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -20626,7 +20668,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":62,"./source-map/source-map-generator":63,"./source-map/source-node":64}],58:[function(require,module,exports){
+},{"./source-map/source-map-consumer":63,"./source-map/source-map-generator":64,"./source-map/source-node":65}],59:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20725,7 +20767,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":65,"amdefine":66}],59:[function(require,module,exports){
+},{"./util":66,"amdefine":67}],60:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20871,7 +20913,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":60,"amdefine":66}],60:[function(require,module,exports){
+},{"./base64":61,"amdefine":67}],61:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20915,7 +20957,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":66}],61:[function(require,module,exports){
+},{"amdefine":67}],62:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20998,7 +21040,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":66}],62:[function(require,module,exports){
+},{"amdefine":67}],63:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21478,7 +21520,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":58,"./base64-vlq":59,"./binary-search":61,"./util":65,"amdefine":66}],63:[function(require,module,exports){
+},{"./array-set":59,"./base64-vlq":60,"./binary-search":62,"./util":66,"amdefine":67}],64:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21860,7 +21902,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":58,"./base64-vlq":59,"./util":65,"amdefine":66}],64:[function(require,module,exports){
+},{"./array-set":59,"./base64-vlq":60,"./util":66,"amdefine":67}],65:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22233,7 +22275,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":63,"./util":65,"amdefine":66}],65:[function(require,module,exports){
+},{"./source-map-generator":64,"./util":66,"amdefine":67}],66:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22440,7 +22482,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":66}],66:[function(require,module,exports){
+},{"amdefine":67}],67:[function(require,module,exports){
 var process=require("__browserify_process"),__filename="/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js";/** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
