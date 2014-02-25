@@ -32,6 +32,23 @@
     c(node, state);
   };
 
+  // An ancestor walk builds up an array of ancestor nodes (including
+  // the current node) and passes them to the callback as the state parameter.
+  exports.ancestor = function(node, visitors, base, state) {
+    if (!base) base = exports.base;
+    if (!state) state = [];
+    function c(node, st, override) {
+      var type = override || node.type, found = visitors[type];
+      if (node != st[st.length - 1]) {
+        st = st.slice();
+        st.push(node);
+      }
+      base[type](node, st, c);
+      if (found) found(node, st);
+    }
+    c(node, state);
+  };
+
   // A recursive walk is one where your functions override the default
   // walkers. They can modify and replace the state parameter that's
   // threaded through the walk, and can opt how and whether to walk

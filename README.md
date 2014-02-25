@@ -155,6 +155,10 @@ simply visit all statements and expressions and not produce a
 meaningful state. (An example of a use of state it to track scope at
 each point in the tree.)
 
+**ancestor**`(node, visitors, base, state)` does a 'simple' walk over
+a tree, building up an array of ancestor nodes (including the current node)
+and passing the array to callbacks in the `state` parameter.
+
 **recursive**`(node, state, functions, base)` does a 'recursive'
 walk, where the walker functions are responsible for continuing the
 walk on the child nodes of their target node. `state` is the start
