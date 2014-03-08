@@ -428,24 +428,76 @@ describe("nested finally blocks", function() {
 });
 
 describe("for-in loop generator", function() {
-  function *gen(obj) {
-    var count = 0;
-    for (var key in (yield "why not", obj)) {
-      if (obj.hasOwnProperty(key)) {
-        if (key === "skip") {
-          break;
-        }
-        count += 1;
+  it("should handle the simple case", function() {
+    function *gen() {
+      var count = 0;
+      var obj = {foo: 1, bar: 2};
+      for (var key in obj) {
+        assert(obj.hasOwnProperty(key), key + " must be own property");
         yield [key, obj[key]];
+        count += 1;
       }
+      return count;
     }
-    return count;
-  }
 
-  it("should visit properties until 'skip'", function() {
+    check(gen(), [["foo", 1], ["bar", 2]], 2);
+  });
+
+  it("should handle break in loop", function() {
+    function *gen(obj) {
+      var count = 0;
+      for (var key in (yield "why not", obj)) {
+        if (obj.hasOwnProperty(key)) {
+          if (key === "skip") {
+            break;
+          }
+          count += 1;
+          yield [key, obj[key]];
+        }
+      }
+      return count;
+    }
+
     check(
       gen({ a: 1, b: 2, skip: 3, c: 4 }),
-      ["why not", ["a", 1], ["b", 2]], 2);
+      ["why not", ["a", 1], ["b", 2]],
+      2
+    );
+  });
+
+  it("should handle property deletion in loop", function() {
+    function *gen() {
+      var count = 0;
+      var obj = {foo: 1, bar: 2};
+      for (var key in obj) {
+        assert(obj.hasOwnProperty(key), key + " must be own property");
+        yield [key, obj[key]];
+        delete obj.bar;
+        count += 1;
+      }
+      return count;
+    }
+
+    check(gen(), [["foo", 1]], 1);
+  });
+
+  it("should loop over inherited properties", function() {
+    function *gen() {
+      var count = 0;
+      function Foo() {
+        this.baz = 1
+      }
+      Foo.prototype.bar = 2;
+
+      var foo = new Foo();
+      for (var key in foo) {
+        yield [key, foo[key]];
+        count += 1;
+      }
+      return count;
+    }
+
+    check(gen(), [["baz", 1], ["bar", 2]], 2);
   });
 });
 
