@@ -512,9 +512,9 @@ Ep.explodeStatement = function(path, labelId) {
     var head = loc();
     var after = loc();
 
-    var keyIterTmpVar = self.makeTempVar();
+    var keyIterNextFn = self.makeTempVar();
     self.emitAssign(
-      keyIterTmpVar,
+      keyIterNextFn,
       b.callExpression(
         self.contextProperty("keys"),
         [self.explodeExpression(path.get("right"))]
@@ -529,14 +529,7 @@ Ep.explodeStatement = function(path, labelId) {
         b.assignmentExpression(
           "=",
           keyInfoTmpVar,
-          b.callExpression(
-            b.memberExpression(
-              keyIterTmpVar,
-              b.identifier("next"),
-              false
-            ),
-            []
-          )
+          b.callExpression(keyIterNextFn, [])
         ),
         b.identifier("done"),
         false

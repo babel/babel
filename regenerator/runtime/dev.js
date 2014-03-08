@@ -251,7 +251,9 @@
       // need a new object each time.
       var info = {};
 
-      function next() {
+      // Rather than returning an object with a next method, we keep
+      // things simple and return the next function itself.
+      return function next() {
         while (keys.length) {
           var key = keys.pop();
           if (key in object) {
@@ -263,9 +265,7 @@
 
         info.done = true;
         return info;
-      }
-
-      return { next: next };
+      };
     },
 
     dispatchException: function(exception) {
