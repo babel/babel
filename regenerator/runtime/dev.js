@@ -240,11 +240,11 @@
     },
 
     keys: function(object) {
-      var ret = [];
-      for (var prop in object) {
-        ret.unshift(prop);
+      var keys = [];
+      for (var key in object) {
+        keys.push(key);
       }
-      return ret;
+      return keys.reverse();
     },
 
     dispatchException: function(exception) {
