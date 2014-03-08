@@ -240,7 +240,11 @@
     },
 
     keys: function(object) {
-      return Object.keys(object).reverse();
+      var ret = [];
+      for (var prop in object) {
+        ret.unshift(prop);
+      }
+      return ret;
     },
 
     dispatchException: function(exception) {
