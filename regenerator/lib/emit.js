@@ -512,56 +512,45 @@ Ep.explodeStatement = function(path, labelId) {
     var head = loc();
     var after = loc();
 
-    var stmtRightPath = new types.NodePath(stmt.right, path, "right");
-
-    var stmtRightVal = self.emitAssign(
-      self.makeTempVar(),
-      self.explodeExpression(stmtRightPath)
-    );
-
-    var keys = self.emitAssign(
-      self.makeTempVar(),
+    var keyIterTmpVar = self.makeTempVar();
+    self.emitAssign(
+      keyIterTmpVar,
       b.callExpression(
         self.contextProperty("keys"),
-        [stmtRightVal]
+        [self.explodeExpression(path.get("right"))]
       )
     );
 
     self.mark(head);
 
-    self.jumpIfNot(
+    var keyInfoTmpVar = self.makeTempVar();
+    self.jumpIf(
       b.memberExpression(
-        keys,
-        b.identifier("length"),
-        false
-      ),
-      after
-    );
-
-    var key = self.emitAssign(
-      self.makeTempVar(),
-      b.callExpression(
-        b.memberExpression(
-          keys,
-          b.identifier("pop"),
-          false
+        b.assignmentExpression(
+          "=",
+          keyInfoTmpVar,
+          b.callExpression(
+            b.memberExpression(
+              keyIterTmpVar,
+              b.identifier("next"),
+              false
+            ),
+            []
+          )
         ),
-        []
-      )
-    );
-
-    self.jumpIfNot(
-      b.binaryExpression(
-        'in',
-        key,
-        stmtRightVal
+        b.identifier("done"),
+        false
       ),
       after
     );
 
     self.emitAssign(
       stmt.left,
-      key
+      b.memberExpression(
+        keyInfoTmpVar,
+        b.identifier("value"),
+        false
+      )
     );
 
     self.leapManager.withEntry(
