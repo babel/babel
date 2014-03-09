@@ -1,248 +1,37 @@
-!function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.regenerator=e():"undefined"!=typeof global?global.regenerator=e():"undefined"!=typeof self&&(self.regenerator=e())}(function(){var define,module,exports;
-return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.regenerator=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 
-
+},{}],2:[function(_dereq_,module,exports){
+// http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
-// The shims in this file are not fully implemented shims for the ES5
-// features, but do work for the particular usecases there is in
-// the other modules.
+// THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
 //
-
-var toString = Object.prototype.toString;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-// Array.isArray is supported in IE9
-function isArray(xs) {
-  return toString.call(xs) === '[object Array]';
-}
-exports.isArray = typeof Array.isArray === 'function' ? Array.isArray : isArray;
-
-// Array.prototype.indexOf is supported in IE9
-exports.indexOf = function indexOf(xs, x) {
-  if (xs.indexOf) return xs.indexOf(x);
-  for (var i = 0; i < xs.length; i++) {
-    if (x === xs[i]) return i;
-  }
-  return -1;
-};
-
-// Array.prototype.filter is supported in IE9
-exports.filter = function filter(xs, fn) {
-  if (xs.filter) return xs.filter(fn);
-  var res = [];
-  for (var i = 0; i < xs.length; i++) {
-    if (fn(xs[i], i, xs)) res.push(xs[i]);
-  }
-  return res;
-};
-
-// Array.prototype.forEach is supported in IE9
-exports.forEach = function forEach(xs, fn, self) {
-  if (xs.forEach) return xs.forEach(fn, self);
-  for (var i = 0; i < xs.length; i++) {
-    fn.call(self, xs[i], i, xs);
-  }
-};
-
-// Array.prototype.map is supported in IE9
-exports.map = function map(xs, fn) {
-  if (xs.map) return xs.map(fn);
-  var out = new Array(xs.length);
-  for (var i = 0; i < xs.length; i++) {
-    out[i] = fn(xs[i], i, xs);
-  }
-  return out;
-};
-
-// Array.prototype.reduce is supported in IE9
-exports.reduce = function reduce(array, callback, opt_initialValue) {
-  if (array.reduce) return array.reduce(callback, opt_initialValue);
-  var value, isValueSet = false;
-
-  if (2 < arguments.length) {
-    value = opt_initialValue;
-    isValueSet = true;
-  }
-  for (var i = 0, l = array.length; l > i; ++i) {
-    if (array.hasOwnProperty(i)) {
-      if (isValueSet) {
-        value = callback(value, array[i], i, array);
-      }
-      else {
-        value = array[i];
-        isValueSet = true;
-      }
-    }
-  }
-
-  return value;
-};
-
-// String.prototype.substr - negative index don't work in IE8
-if ('ab'.substr(-1) !== 'b') {
-  exports.substr = function (str, start, length) {
-    // did we get a negative start, calculate how much it is from the beginning of the string
-    if (start < 0) start = str.length + start;
-
-    // call the original function
-    return str.substr(start, length);
-  };
-} else {
-  exports.substr = function (str, start, length) {
-    return str.substr(start, length);
-  };
-}
-
-// String.prototype.trim is supported in IE9
-exports.trim = function (str) {
-  if (str.trim) return str.trim();
-  return str.replace(/^\s+|\s+$/g, '');
-};
-
-// Function.prototype.bind is supported in IE9
-exports.bind = function () {
-  var args = Array.prototype.slice.call(arguments);
-  var fn = args.shift();
-  if (fn.bind) return fn.bind.apply(fn, args);
-  var self = args.shift();
-  return function () {
-    fn.apply(self, args.concat([Array.prototype.slice.call(arguments)]));
-  };
-};
-
-// Object.create is supported in IE9
-function create(prototype, properties) {
-  var object;
-  if (prototype === null) {
-    object = { '__proto__' : null };
-  }
-  else {
-    if (typeof prototype !== 'object') {
-      throw new TypeError(
-        'typeof prototype[' + (typeof prototype) + '] != \'object\''
-      );
-    }
-    var Type = function () {};
-    Type.prototype = prototype;
-    object = new Type();
-    object.__proto__ = prototype;
-  }
-  if (typeof properties !== 'undefined' && Object.defineProperties) {
-    Object.defineProperties(object, properties);
-  }
-  return object;
-}
-exports.create = typeof Object.create === 'function' ? Object.create : create;
-
-// Object.keys and Object.getOwnPropertyNames is supported in IE9 however
-// they do show a description and number property on Error objects
-function notObject(object) {
-  return ((typeof object != "object" && typeof object != "function") || object === null);
-}
-
-function keysShim(object) {
-  if (notObject(object)) {
-    throw new TypeError("Object.keys called on a non-object");
-  }
-
-  var result = [];
-  for (var name in object) {
-    if (hasOwnProperty.call(object, name)) {
-      result.push(name);
-    }
-  }
-  return result;
-}
-
-// getOwnPropertyNames is almost the same as Object.keys one key feature
-//  is that it returns hidden properties, since that can't be implemented,
-//  this feature gets reduced so it just shows the length property on arrays
-function propertyShim(object) {
-  if (notObject(object)) {
-    throw new TypeError("Object.getOwnPropertyNames called on a non-object");
-  }
-
-  var result = keysShim(object);
-  if (exports.isArray(object) && exports.indexOf(object, 'length') === -1) {
-    result.push('length');
-  }
-  return result;
-}
-
-var keys = typeof Object.keys === 'function' ? Object.keys : keysShim;
-var getOwnPropertyNames = typeof Object.getOwnPropertyNames === 'function' ?
-  Object.getOwnPropertyNames : propertyShim;
-
-if (new Error().hasOwnProperty('description')) {
-  var ERROR_PROPERTY_FILTER = function (obj, array) {
-    if (toString.call(obj) === '[object Error]') {
-      array = exports.filter(array, function (name) {
-        return name !== 'description' && name !== 'number' && name !== 'message';
-      });
-    }
-    return array;
-  };
-
-  exports.keys = function (object) {
-    return ERROR_PROPERTY_FILTER(object, keys(object));
-  };
-  exports.getOwnPropertyNames = function (object) {
-    return ERROR_PROPERTY_FILTER(object, getOwnPropertyNames(object));
-  };
-} else {
-  exports.keys = keys;
-  exports.getOwnPropertyNames = getOwnPropertyNames;
-}
-
-// Object.getOwnPropertyDescriptor - supported in IE8 but only on dom elements
-function valueObject(value, key) {
-  return { value: value[key] };
-}
-
-if (typeof Object.getOwnPropertyDescriptor === 'function') {
-  try {
-    Object.getOwnPropertyDescriptor({'a': 1}, 'a');
-    exports.getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-  } catch (e) {
-    // IE8 dom element issue - use a try catch and default to valueObject
-    exports.getOwnPropertyDescriptor = function (value, key) {
-      try {
-        return Object.getOwnPropertyDescriptor(value, key);
-      } catch (e) {
-        return valueObject(value, key);
-      }
-    };
-  }
-} else {
-  exports.getOwnPropertyDescriptor = valueObject;
-}
-
-},{}],2:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
+// Originally from narwhal.js (http://narwhaljs.org)
+// Copyright (c) 2009 Thomas Robinson <280north.com>
 //
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the 'Software'), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// UTILITY
-var util = require('util');
-var shims = require('_shims');
+// when used in node, this will actually load the util module we depend on
+// versus loading the builtin util module as happens otherwise
+// this is a bug in node module loading as far as I am concerned
+var util = _dereq_('util/');
+
 var pSlice = Array.prototype.slice;
+var hasOwn = Object.prototype.hasOwnProperty;
 
 // 1. The assert module provides functions that throw
 // AssertionError's when particular conditions are not met. The
@@ -260,7 +49,37 @@ assert.AssertionError = function AssertionError(options) {
   this.actual = options.actual;
   this.expected = options.expected;
   this.operator = options.operator;
-  this.message = options.message || getMessage(this);
+  if (options.message) {
+    this.message = options.message;
+    this.generatedMessage = false;
+  } else {
+    this.message = getMessage(this);
+    this.generatedMessage = true;
+  }
+  var stackStartFunction = options.stackStartFunction || fail;
+
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, stackStartFunction);
+  }
+  else {
+    // non v8 browsers so we can have a stacktrace
+    var err = new Error();
+    if (err.stack) {
+      var out = err.stack;
+
+      // try to strip useless frames
+      var fn_name = stackStartFunction.name;
+      var idx = out.indexOf('\n' + fn_name);
+      if (idx >= 0) {
+        // once we have located the function frame
+        // we need to strip out everything before it (and its line)
+        var next_line = out.indexOf('\n', idx + 1);
+        out = out.substring(next_line + 1);
+      }
+
+      this.stack = out;
+    }
+  }
 };
 
 // assert.AssertionError instanceof Error
@@ -420,8 +239,8 @@ function objEquiv(a, b) {
     return _deepEqual(a, b);
   }
   try {
-    var ka = shims.keys(a),
-        kb = shims.keys(b),
+    var ka = objectKeys(a),
+        kb = objectKeys(b),
         key, i;
   } catch (e) {//happens when one is a string literal and the other isn't
     return false;
@@ -534,224 +353,24 @@ assert.doesNotThrow = function(block, /*optional*/message) {
 };
 
 assert.ifError = function(err) { if (err) {throw err;}};
-},{"_shims":1,"util":5}],3:[function(require,module,exports){
 
-// not implemented
-// The reason for having an empty file and not throwing is to allow
-// untraditional implementation of this module.
-
-},{}],4:[function(require,module,exports){
-var process=require("__browserify_process");// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var util = require('util');
-var shims = require('_shims');
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
+var objectKeys = Object.keys || function (obj) {
+  var keys = [];
+  for (var key in obj) {
+    if (hasOwn.call(obj, key)) keys.push(key);
   }
+  return keys;
+};
 
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
+},{"util/":4}],3:[function(_dereq_,module,exports){
+module.exports = function isBuffer(arg) {
+  return arg && typeof arg === 'object'
+    && typeof arg.copy === 'function'
+    && typeof arg.fill === 'function'
+    && typeof arg.readUInt8 === 'function';
 }
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (!util.isString(path)) {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(shims.filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = shims.substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(shims.filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(shims.filter(paths, function(p, index) {
-    if (!util.isString(p)) {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-},{"__browserify_process":6,"_shims":1,"util":5}],5:[function(require,module,exports){
+},{}],4:[function(_dereq_,module,exports){
+(function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -772,8 +391,6 @@ exports.extname = function(path) {
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var shims = require('_shims');
 
 var formatRegExp = /%[sdj%]/g;
 exports.format = function(f) {
@@ -813,6 +430,62 @@ exports.format = function(f) {
   }
   return str;
 };
+
+
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  // Allow for deprecating things in the process of starting up.
+  if (isUndefined(global.process)) {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  if (process.noDeprecation === true) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+
+var debugs = {};
+var debugEnviron;
+exports.debuglog = function(set) {
+  if (isUndefined(debugEnviron))
+    debugEnviron = process.env.NODE_DEBUG || '';
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function() {};
+    }
+  }
+  return debugs[set];
+};
+
 
 /**
  * Echos the value of a value. Trys to print the value out
@@ -900,7 +573,7 @@ function stylizeNoColor(str, styleType) {
 function arrayToHash(array) {
   var hash = {};
 
-  shims.forEach(array, function(val, idx) {
+  array.forEach(function(val, idx) {
     hash[val] = true;
   });
 
@@ -918,7 +591,7 @@ function formatValue(ctx, value, recurseTimes) {
       value.inspect !== exports.inspect &&
       // Also filter out any prototype objects using the circular check.
       !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes);
+    var ret = value.inspect(recurseTimes, ctx);
     if (!isString(ret)) {
       ret = formatValue(ctx, ret, recurseTimes);
     }
@@ -932,11 +605,18 @@ function formatValue(ctx, value, recurseTimes) {
   }
 
   // Look up the keys of the object.
-  var keys = shims.keys(value);
+  var keys = Object.keys(value);
   var visibleKeys = arrayToHash(keys);
 
   if (ctx.showHidden) {
-    keys = shims.getOwnPropertyNames(value);
+    keys = Object.getOwnPropertyNames(value);
+  }
+
+  // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+  if (isError(value)
+      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
   }
 
   // Some type of object without properties can be shortcutted.
@@ -1048,8 +728,7 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
       output.push('');
     }
   }
-
-  shims.forEach(keys, function(key) {
+  keys.forEach(function(key) {
     if (!key.match(/^\d+$/)) {
       output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
           key, true));
@@ -1061,7 +740,7 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
 
 function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
   var name, str, desc;
-  desc = shims.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
   if (desc.get) {
     if (desc.set) {
       str = ctx.stylize('[Getter/Setter]', 'special');
@@ -1073,12 +752,11 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
       str = ctx.stylize('[Setter]', 'special');
     }
   }
-
   if (!hasOwnProperty(visibleKeys, key)) {
     name = '[' + key + ']';
   }
   if (!str) {
-    if (shims.indexOf(ctx.seen, desc.value) < 0) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
       if (isNull(recurseTimes)) {
         str = formatValue(ctx, desc.value, null);
       } else {
@@ -1121,7 +799,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
 
 function reduceToSingleString(output, base, braces) {
   var numLinesEst = 0;
-  var length = shims.reduce(output, function(prev, cur) {
+  var length = output.reduce(function(prev, cur) {
     numLinesEst++;
     if (cur.indexOf('\n') >= 0) numLinesEst++;
     return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
@@ -1143,7 +821,7 @@ function reduceToSingleString(output, base, braces) {
 // NOTE: These type checking functions intentionally don't use `instanceof`
 // because it is fragile and can be easily faked with `Object.create()`.
 function isArray(ar) {
-  return shims.isArray(ar);
+  return Array.isArray(ar);
 }
 exports.isArray = isArray;
 
@@ -1188,7 +866,7 @@ function isRegExp(re) {
 exports.isRegExp = isRegExp;
 
 function isObject(arg) {
-  return typeof arg === 'object' && arg;
+  return typeof arg === 'object' && arg !== null;
 }
 exports.isObject = isObject;
 
@@ -1198,7 +876,8 @@ function isDate(d) {
 exports.isDate = isDate;
 
 function isError(e) {
-  return isObject(e) && objectToString(e) === '[object Error]';
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
 }
 exports.isError = isError;
 
@@ -1217,14 +896,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-function isBuffer(arg) {
-  return arg && typeof arg === 'object'
-    && typeof arg.copy === 'function'
-    && typeof arg.fill === 'function'
-    && typeof arg.binarySlice === 'function'
-  ;
-}
-exports.isBuffer = isBuffer;
+exports.isBuffer = _dereq_('./support/isBuffer');
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -1268,23 +940,13 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = function(ctor, superCtor) {
-  ctor.super_ = superCtor;
-  ctor.prototype = shims.create(superCtor.prototype, {
-    constructor: {
-      value: ctor,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-};
+exports.inherits = _dereq_('inherits');
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
   if (!add || !isObject(add)) return origin;
 
-  var keys = shims.keys(add);
+  var keys = Object.keys(add);
   var i = keys.length;
   while (i--) {
     origin[keys[i]] = add[keys[i]];
@@ -1296,7 +958,33 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-},{"_shims":1}],6:[function(require,module,exports){
+}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":3,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],5:[function(_dereq_,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],6:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1315,7 +1003,8 @@ process.nextTick = (function () {
     if (canPost) {
         var queue = [];
         window.addEventListener('message', function (ev) {
-            if (ev.source === window && ev.data === 'process-tick') {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
                 ev.stopPropagation();
                 if (queue.length > 0) {
                     var fn = queue.shift();
@@ -1350,7 +1039,239 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],7:[function(require,module,exports){
+},{}],7:[function(_dereq_,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6}],8:[function(_dereq_,module,exports){
+module.exports=_dereq_(3)
+},{}],9:[function(_dereq_,module,exports){
+module.exports=_dereq_(4)
+},{"./support/isBuffer":8,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],10:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -1361,13 +1282,13 @@ process.chdir = function (dir) {
  * the same directory.
  */
 
-var assert = require("assert");
-var types = require("ast-types");
+var assert = _dereq_("assert");
+var types = _dereq_("ast-types");
 var isArray = types.builtInTypes.array;
 var b = types.builders;
 var n = types.namedTypes;
-var leap = require("./leap");
-var meta = require("./meta");
+var leap = _dereq_("./leap");
+var meta = _dereq_("./meta");
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -1865,22 +1786,26 @@ Ep.explodeStatement = function(path, labelId) {
     var head = loc();
     var after = loc();
 
-    var keysPath = new types.NodePath(b.callExpression(
-      self.contextProperty("keys"),
-      [stmt.right]
-    ), path, "right");
-
-    var keys = self.emitAssign(
-      self.makeTempVar(),
-      self.explodeExpression(keysPath)
+    var keyIterNextFn = self.makeTempVar();
+    self.emitAssign(
+      keyIterNextFn,
+      b.callExpression(
+        self.contextProperty("keys"),
+        [self.explodeExpression(path.get("right"))]
+      )
     );
 
     self.mark(head);
 
-    self.jumpIfNot(
+    var keyInfoTmpVar = self.makeTempVar();
+    self.jumpIf(
       b.memberExpression(
-        keys,
-        b.identifier("length"),
+        b.assignmentExpression(
+          "=",
+          keyInfoTmpVar,
+          b.callExpression(keyIterNextFn, [])
+        ),
+        b.identifier("done"),
         false
       ),
       after
@@ -1888,13 +1813,10 @@ Ep.explodeStatement = function(path, labelId) {
 
     self.emitAssign(
       stmt.left,
-      b.callExpression(
-        b.memberExpression(
-          keys,
-          b.identifier("pop"),
-          false
-        ),
-        []
+      b.memberExpression(
+        keyInfoTmpVar,
+        b.identifier("value"),
+        false
       )
     );
 
@@ -2483,7 +2405,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
   }
 };
 
-},{"./leap":9,"./meta":10,"assert":2,"ast-types":24}],8:[function(require,module,exports){
+},{"./leap":12,"./meta":13,"assert":2,"ast-types":28}],11:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -2494,8 +2416,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
  * the same directory.
  */
 
-var assert = require("assert");
-var types = require("ast-types");
+var assert = _dereq_("assert");
+var types = _dereq_("ast-types");
 var n = types.namedTypes;
 var b = types.builders;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -2637,7 +2559,7 @@ exports.hoist = function(funPath) {
   return b.variableDeclaration("var", declarations);
 };
 
-},{"assert":2,"ast-types":24}],9:[function(require,module,exports){
+},{"assert":2,"ast-types":28}],12:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -2648,11 +2570,11 @@ exports.hoist = function(funPath) {
  * the same directory.
  */
 
-var assert = require("assert");
-var types = require("ast-types");
+var assert = _dereq_("assert");
+var types = _dereq_("ast-types");
 var n = types.namedTypes;
 var b = types.builders;
-var inherits = require("util").inherits;
+var inherits = _dereq_("util").inherits;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Entry() {
@@ -2768,7 +2690,7 @@ exports.FinallyEntry = FinallyEntry;
 function LeapManager(emitter) {
   assert.ok(this instanceof LeapManager);
 
-  var Emitter = require("./emit").Emitter;
+  var Emitter = _dereq_("./emit").Emitter;
   assert.ok(emitter instanceof Emitter);
 
   Object.defineProperties(this, {
@@ -2820,7 +2742,7 @@ LMp.getContinueLoc = function(label) {
   return this._findLeapLocation("continueLoc", label);
 };
 
-},{"./emit":7,"assert":2,"ast-types":24,"util":5}],10:[function(require,module,exports){
+},{"./emit":10,"assert":2,"ast-types":28,"util":9}],13:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -2831,9 +2753,9 @@ LMp.getContinueLoc = function(label) {
  * the same directory.
  */
 
-var assert = require("assert");
-var m = require("private").makeAccessor();
-var types = require("ast-types");
+var assert = _dereq_("assert");
+var m = _dereq_("private").makeAccessor();
+var types = _dereq_("ast-types");
 var isArray = types.builtInTypes.array;
 var n = types.namedTypes;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -2922,7 +2844,7 @@ for (var type in leapTypes) {
 exports.hasSideEffects = makePredicate("hasSideEffects", sideEffectTypes);
 exports.containsLeap = makePredicate("containsLeap", leapTypes);
 
-},{"assert":2,"ast-types":24,"private":44}],11:[function(require,module,exports){
+},{"assert":2,"ast-types":28,"private":45}],14:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -2934,33 +2856,6 @@ exports.containsLeap = makePredicate("containsLeap", leapTypes);
  */
 
 var hasOwn = Object.prototype.hasOwnProperty;
-
-exports.guessTabWidth = function(source) {
-  var counts = []; // Sparse array.
-  var lastIndent = 0;
-
-  source.split("\n").forEach(function(line) {
-    var indent = /^\s*/.exec(line)[0].length;
-    var diff = Math.abs(indent - lastIndent);
-    counts[diff] = ~~counts[diff] + 1;
-    lastIndent = indent;
-  });
-
-  var maxCount = -1;
-  var result = 2;
-
-  for (var tabWidth = 1;
-       tabWidth < counts.length;
-       tabWidth += 1) {
-    if (tabWidth in counts &&
-        counts[tabWidth] > maxCount) {
-      maxCount = counts[tabWidth];
-      result = tabWidth;
-    }
-  }
-
-  return result;
-};
 
 exports.defaults = function(obj) {
   var len = arguments.length;
@@ -2979,7 +2874,7 @@ exports.defaults = function(obj) {
   return obj;
 };
 
-},{}],12:[function(require,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
@@ -2990,12 +2885,12 @@ exports.defaults = function(obj) {
  * the same directory.
  */
 
-var assert = require("assert");
-var types = require("ast-types");
+var assert = _dereq_("assert");
+var types = _dereq_("ast-types");
 var n = types.namedTypes;
 var b = types.builders;
-var hoist = require("./hoist").hoist;
-var Emitter = require("./emit").Emitter;
+var hoist = _dereq_("./hoist").hoist;
+var Emitter = _dereq_("./emit").Emitter;
 
 exports.transform = function(ast) {
   return types.traverse(ast, visitNode);
@@ -3127,8 +3022,9 @@ function renameArguments(funcPath, argsId) {
   return didReplaceArguments && hasImplicitArguments;
 }
 
-},{"./emit":7,"./hoist":8,"assert":2,"ast-types":24}],13:[function(require,module,exports){
-var __dirname="/";/**
+},{"./emit":10,"./hoist":11,"assert":2,"ast-types":28}],16:[function(_dereq_,module,exports){
+(function (__dirname){
+/**
  * Copyright (c) 2013, Facebook, Inc.
  * All rights reserved.
  *
@@ -3138,14 +3034,14 @@ var __dirname="/";/**
  * the same directory.
  */
 
-var assert = require("assert");
-var path = require("path");
-var fs = require("fs");
-var transform = require("./lib/visit").transform;
-var utils = require("./lib/util");
-var recast = require("recast");
+var assert = _dereq_("assert");
+var path = _dereq_("path");
+var fs = _dereq_("fs");
+var transform = _dereq_("./lib/visit").transform;
+var utils = _dereq_("./lib/util");
+var recast = _dereq_("recast");
 var types = recast.types;
-var esprimaHarmony = require("esprima");
+var esprimaHarmony = _dereq_("esprima");
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
@@ -3216,7 +3112,7 @@ function varify(source) {
 function varifyAst(ast) {
   types.namedTypes.Program.assert(ast);
 
-  var defsResult = require("defs")(ast, {
+  var defsResult = _dereq_("defs")(ast, {
     ast: true,
     disallowUnknownReferences: false,
     disallowDuplicated: false,
@@ -3250,7 +3146,7 @@ function injectRuntime(runtime, ast) {
 }
 
 function runtime() {
-  require(runtime.dev);
+  _dereq_(runtime.dev);
 }
 
 runtime.dev = path.join(__dirname, "runtime", "dev.js");
@@ -3269,8 +3165,9 @@ regenerator.runtime = runtime;
 // To transform a string of ES6 code, call require("regenerator")(source);
 module.exports = regenerator;
 
-},{"./lib/util":11,"./lib/visit":12,"assert":2,"defs":28,"esprima":43,"fs":3,"path":4,"recast":55}],14:[function(require,module,exports){
-var types = require("../lib/types");
+}).call(this,"/")
+},{"./lib/util":14,"./lib/visit":15,"assert":2,"defs":29,"esprima":44,"fs":1,"path":7,"recast":56}],17:[function(_dereq_,module,exports){
+var types = _dereq_("../lib/types");
 var Type = types.Type;
 var def = Type.def;
 var or = Type.or;
@@ -3279,7 +3176,7 @@ var isString = builtin.string;
 var isNumber = builtin.number;
 var isBoolean = builtin.boolean;
 var isRegExp = builtin.RegExp;
-var shared = require("../lib/shared");
+var shared = _dereq_("../lib/shared");
 var defaults = shared.defaults;
 var geq = shared.geq;
 
@@ -3627,9 +3524,9 @@ def("Literal")
 
 types.finalize();
 
-},{"../lib/shared":21,"../lib/types":23}],15:[function(require,module,exports){
-require("./core");
-var types = require("../lib/types");
+},{"../lib/shared":25,"../lib/types":27}],18:[function(_dereq_,module,exports){
+_dereq_("./core");
+var types = _dereq_("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
@@ -3718,15 +3615,15 @@ def("XMLProcessingInstruction")
 
 types.finalize();
 
-},{"../lib/types":23,"./core":14}],16:[function(require,module,exports){
-require("./core");
-var types = require("../lib/types");
+},{"../lib/types":27,"./core":17}],19:[function(_dereq_,module,exports){
+_dereq_("./core");
+var types = _dereq_("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isBoolean = builtin.boolean;
 var isString = builtin.string;
-var defaults = require("../lib/shared").defaults;
+var defaults = _dereq_("../lib/shared").defaults;
 
 // TODO The Parser API calls this ArrowExpression, but Esprima uses
 // ArrowFunctionExpression.
@@ -3870,15 +3767,15 @@ def("ImportDeclaration")
 
 types.finalize();
 
-},{"../lib/shared":21,"../lib/types":23,"./core":14}],17:[function(require,module,exports){
-require("./core");
-var types = require("../lib/types");
+},{"../lib/shared":25,"../lib/types":27,"./core":17}],20:[function(_dereq_,module,exports){
+_dereq_("./core");
+var types = _dereq_("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isString = builtin.string;
 var isBoolean = builtin.boolean;
-var defaults = require("../lib/shared").defaults;
+var defaults = _dereq_("../lib/shared").defaults;
 
 def("XJSAttribute")
     .bases("Node")
@@ -3965,12 +3862,12 @@ def("TypeAnnotation")
 
 types.finalize();
 
-},{"../lib/shared":21,"../lib/types":23,"./core":14}],18:[function(require,module,exports){
-require("./core");
-var types = require("../lib/types");
+},{"../lib/shared":25,"../lib/types":27,"./core":17}],21:[function(_dereq_,module,exports){
+_dereq_("./core");
+var types = _dereq_("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
-var geq = require("../lib/shared").geq;
+var geq = _dereq_("../lib/shared").geq;
 
 def("ForOfStatement")
     .bases("Statement")
@@ -4008,21 +3905,21 @@ def("GraphIndexExpression")
 
 types.finalize();
 
-},{"../lib/shared":21,"../lib/types":23,"./core":14}],19:[function(require,module,exports){
-var assert = require("assert");
-var types = require("./types");
+},{"../lib/shared":25,"../lib/types":27,"./core":17}],22:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("./types");
 var n = types.namedTypes;
 var isNumber = types.builtInTypes.number;
 var isArray = types.builtInTypes.array;
-var Path = require("ast-path").Path;
-var Scope = require("./scope");
+var Path = _dereq_("./path");
+var Scope = _dereq_("./scope");
 
 function NodePath(value, parentPath, name) {
     assert.ok(this instanceof NodePath);
     Path.call(this, value, parentPath, name);
 }
 
-require("util").inherits(NodePath, Path);
+_dereq_("util").inherits(NodePath, Path);
 var NPp = NodePath.prototype;
 
 Object.defineProperties(NPp, {
@@ -4344,9 +4241,182 @@ function firstInStatement(path) {
 
 module.exports = NodePath;
 
-},{"./scope":20,"./types":23,"assert":2,"ast-path":26,"util":5}],20:[function(require,module,exports){
-var assert = require("assert");
-var types = require("./types");
+},{"./path":23,"./scope":24,"./types":27,"assert":2,"util":9}],23:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var getChildCache = _dereq_("private").makeAccessor();
+var Op = Object.prototype;
+var hasOwn = Op.hasOwnProperty;
+var toString = Op.toString;
+var arrayToString = toString.call([]);
+var Ap = Array.prototype;
+var slice = Ap.slice;
+var map = Ap.map;
+
+function Path(value, parentPath, name) {
+    assert.ok(this instanceof Path);
+
+    if (parentPath) {
+        assert.ok(parentPath instanceof Path);
+    } else {
+        parentPath = null;
+        name = null;
+    }
+
+    Object.defineProperties(this, {
+        // The value encapsulated by this Path, generally equal to
+        // parentPath.value[name] if we have a parentPath.
+        value: { value: value },
+
+        // The immediate parent Path of this Path.
+        parentPath: { value: parentPath },
+
+        // The name of the property of parentPath.value through which this
+        // Path's value was reached.
+        name: {
+            value: name,
+            configurable: true
+        }
+    });
+}
+
+var Pp = Path.prototype;
+
+function getChildPath(path, name) {
+    var cache = getChildCache(path);
+    return hasOwn.call(cache, name)
+        ? cache[name]
+        : cache[name] = new path.constructor(
+            path.getValueProperty(name), path, name);
+}
+
+// This method is designed to be overridden by subclasses that need to
+// handle missing properties, etc.
+Pp.getValueProperty = function(name) {
+    return this.value[name];
+};
+
+Pp.get = function(name) {
+    var path = this;
+    var names = arguments;
+    var count = names.length;
+
+    for (var i = 0; i < count; ++i) {
+        path = getChildPath(path, names[i]);
+    }
+
+    return path;
+};
+
+Pp.each = function(callback, context) {
+    var childPaths = [];
+    var len = this.value.length;
+    var i = 0;
+
+    // Collect all the original child paths before invoking the callback.
+    for (var i = 0; i < len; ++i) {
+        if (hasOwn.call(this.value, i)) {
+            childPaths[i] = this.get(i);
+        }
+    }
+
+    // Invoke the callback on just the original child paths, regardless of
+    // any modifications made to the array by the callback. I chose these
+    // semantics over cleverly invoking the callback on new elements because
+    // this way is much easier to reason about.
+    context = context || this;
+    for (i = 0; i < len; ++i) {
+        if (hasOwn.call(childPaths, i)) {
+            callback.call(context, childPaths[i]);
+        }
+    }
+};
+
+Pp.map = function(callback, context) {
+    var result = [];
+
+    this.each(function(childPath) {
+        result.push(callback.call(this, childPath));
+    }, context);
+
+    return result;
+};
+
+Pp.filter = function(callback, context) {
+    var result = [];
+
+    this.each(function(childPath) {
+        if (callback.call(this, childPath)) {
+            result.push(childPath);
+        }
+    }, context);
+
+    return result;
+};
+
+Pp.replace = function(replacement) {
+    var count = arguments.length;
+
+    assert.ok(
+        this.parentPath instanceof Path,
+        "Instead of replacing the root of the tree, create a new tree."
+    );
+
+    var name = this.name;
+    var parentValue = this.parentPath.value;
+    var parentCache = getChildCache(this.parentPath);
+    var results = [];
+
+    if (toString.call(parentValue) === arrayToString) {
+        delete parentCache.length;
+        delete parentCache[name];
+
+        var moved = {};
+
+        for (var i = name + 1; i < parentValue.length; ++i) {
+            var child = parentCache[i];
+            if (child) {
+                var newIndex = i - 1 + count;
+                moved[newIndex] = child;
+                Object.defineProperty(child, "name", { value: newIndex });
+                delete parentCache[i];
+            }
+        }
+
+        var args = slice.call(arguments);
+        args.unshift(name, 1);
+        parentValue.splice.apply(parentValue, args);
+
+        for (newIndex in moved) {
+            if (hasOwn.call(moved, newIndex)) {
+                parentCache[newIndex] = moved[newIndex];
+            }
+        }
+
+        for (i = name; i < name + count; ++i) {
+            results.push(this.parentPath.get(i));
+        }
+
+    } else if (count === 1) {
+        delete parentCache[name];
+        parentValue[name] = replacement;
+        results.push(this.parentPath.get(name));
+
+    } else if (count === 0) {
+        delete parentCache[name];
+        delete parentValue[name];
+
+    } else {
+        assert.ok(false, "Could not replace Path.");
+    }
+
+    return results;
+};
+
+module.exports = Path;
+
+},{"assert":2,"private":45}],24:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("./types");
 var Type = types.Type;
 var namedTypes = types.namedTypes;
 var Node = namedTypes.Node;
@@ -4355,7 +4425,7 @@ var hasOwn = Object.prototype.hasOwnProperty;
 
 function Scope(path, parentScope) {
     assert.ok(this instanceof Scope);
-    assert.ok(path instanceof require("./node-path"));
+    assert.ok(path instanceof _dereq_("./node-path"));
     ScopeType.assert(path.value);
 
     var depth;
@@ -4464,7 +4534,10 @@ function recursiveScanScope(path, bindings) {
 
     } else if (namedTypes.ImportSpecifier &&
                namedTypes.ImportSpecifier.check(node)) {
-        addPattern(node.name ? path.get("name") : path.get("id"));
+        addPattern(
+          node.name ? path.get("name") : path.get("id"),
+          bindings
+        );
 
     } else if (Node.check(node)) {
         types.eachField(node, function(name, child) {
@@ -4542,8 +4615,8 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./node-path":19,"./types":23,"assert":2}],21:[function(require,module,exports){
-var types = require("../lib/types");
+},{"./node-path":22,"./types":27,"assert":2}],25:[function(_dereq_,module,exports){
+var types = _dereq_("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
 var isNumber = builtin.number;
@@ -4585,13 +4658,13 @@ exports.isPrimitive = new Type(function(value) {
              type === "function");
 }, naiveIsPrimitive.toString());
 
-},{"../lib/types":23}],22:[function(require,module,exports){
-var assert = require("assert");
-var types = require("./types");
+},{"../lib/types":27}],26:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("./types");
 var Node = types.namedTypes.Node;
 var isObject = types.builtInTypes.object;
 var isArray = types.builtInTypes.array;
-var NodePath = require("./node-path");
+var NodePath = _dereq_("./node-path");
 var funToStr = Function.prototype.toString;
 var thisPattern = /\bthis\b/;
 
@@ -4685,8 +4758,8 @@ traverseWithFullPathInfo.fast = traverseWithNoPathInfo;
 
 module.exports = traverseWithFullPathInfo;
 
-},{"./node-path":19,"./types":23,"assert":2}],23:[function(require,module,exports){
-var assert = require("assert");
+},{"./node-path":22,"./types":27,"assert":2}],27:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
 var Ap = Array.prototype;
 var slice = Ap.slice;
 var map = Ap.map;
@@ -5355,19 +5428,19 @@ Object.defineProperty(exports, "finalize", {
     }
 });
 
-},{"assert":2}],24:[function(require,module,exports){
-var types = require("./lib/types");
+},{"assert":2}],28:[function(_dereq_,module,exports){
+var types = _dereq_("./lib/types");
 
 // This core module of AST types captures ES5 as it is parsed today by
 // git://github.com/ariya/esprima.git#master.
-require("./def/core");
+_dereq_("./def/core");
 
 // Feel free to add to or remove from this list of extension modules to
 // configure the precise type hierarchy that you need.
-require("./def/es6");
-require("./def/mozilla");
-require("./def/e4x");
-require("./def/fb-harmony");
+_dereq_("./def/es6");
+_dereq_("./def/mozilla");
+_dereq_("./def/e4x");
+_dereq_("./def/fb-harmony");
 
 exports.Type = types.Type;
 exports.builtInTypes = types.builtInTypes;
@@ -5377,285 +5450,26 @@ exports.defineMethod = types.defineMethod;
 exports.getFieldValue = types.getFieldValue;
 exports.eachField = types.eachField;
 exports.someField = types.someField;
-exports.traverse = require("./lib/traverse");
+exports.traverse = _dereq_("./lib/traverse");
 exports.finalize = types.finalize;
-exports.NodePath = require("./lib/node-path");
+exports.NodePath = _dereq_("./lib/node-path");
 
-},{"./def/core":14,"./def/e4x":15,"./def/es6":16,"./def/fb-harmony":17,"./def/mozilla":18,"./lib/node-path":19,"./lib/traverse":22,"./lib/types":23}],25:[function(require,module,exports){
-var assert = require("assert");
-var getChildCache = require("private").makeAccessor();
-var Op = Object.prototype;
-var hasOwn = Op.hasOwnProperty;
-var toString = Op.toString;
-var arrayToString = toString.call([]);
-var Ap = Array.prototype;
-var slice = Ap.slice;
-var map = Ap.map;
-
-function Path(value, parentPath, name) {
-  assert.ok(this instanceof Path);
-
-  if (parentPath) {
-    assert.ok(parentPath instanceof Path);
-  } else {
-    parentPath = null;
-    name = null;
-  }
-
-  Object.defineProperties(this, {
-    // The value encapsulated by this Path, generally equal to
-    // parentPath.value[name] if we have a parentPath.
-    value: { value: value },
-
-    // The immediate parent Path of this Path.
-    parentPath: { value: parentPath },
-
-    // The name of the property of parentPath.value through which this
-    // Path's value was reached.
-    name: {
-      value: name,
-      configurable: true
-    }
-  });
-}
-
-var Pp = Path.prototype;
-
-function getChildPath(path, name) {
-  var cache = getChildCache(path);
-  return hasOwn.call(cache, name)
-    ? cache[name]
-    : cache[name] = new path.constructor(
-        path.getValueProperty(name), path, name);
-}
-
-// This method is designed to be overridden by subclasses that need to
-// handle missing properties, etc.
-Pp.getValueProperty = function(name) {
-  return this.value[name];
-};
-
-Pp.get = function(name) {
-  var path = this;
-  var names = arguments;
-  var count = names.length;
-
-  for (var i = 0; i < count; ++i) {
-    path = getChildPath(path, names[i]);
-  }
-
-  return path;
-};
-
-Pp.each = function(callback, context) {
-  var childPaths = [];
-  var len = this.value.length;
-  var i = 0;
-
-  // Collect all the original child paths before invoking the callback.
-  for (var i = 0; i < len; ++i) {
-    if (hasOwn.call(this.value, i)) {
-      childPaths[i] = this.get(i);
-    }
-  }
-
-  // Invoke the callback on just the original child paths, regardless of
-  // any modifications made to the array by the callback. I chose these
-  // semantics over cleverly invoking the callback on new elements because
-  // this way is much easier to reason about.
-  context = context || this;
-  for (i = 0; i < len; ++i) {
-    if (hasOwn.call(childPaths, i)) {
-      callback.call(context, childPaths[i]);
-    }
-  }
-};
-
-Pp.map = function(callback, context) {
-  var result = [];
-
-  this.each(function(childPath) {
-    result.push(callback.call(this, childPath));
-  }, context);
-
-  return result;
-};
-
-Pp.filter = function(callback, context) {
-  var result = [];
-
-  this.each(function(childPath) {
-    if (callback.call(this, childPath)) {
-      result.push(childPath);
-    }
-  }, context);
-
-  return result;
-};
-
-Pp.replace = function(replacement) {
-  var count = arguments.length;
-
-  assert.ok(
-    this.parentPath instanceof Path,
-    "Instead of replacing the root of the tree, create a new tree."
-  );
-
-  var name = this.name;
-  var parentValue = this.parentPath.value;
-  var parentCache = getChildCache(this.parentPath);
-  var results = [];
-
-  if (toString.call(parentValue) === arrayToString) {
-    delete parentCache.length;
-    delete parentCache[name];
-
-    var moved = {};
-
-    for (var i = name + 1; i < parentValue.length; ++i) {
-      var child = parentCache[i];
-      if (child) {
-        var newIndex = i - 1 + count;
-        moved[newIndex] = child;
-        Object.defineProperty(child, "name", { value: newIndex });
-        delete parentCache[i];
-      }
-    }
-
-    var args = slice.call(arguments);
-    args.unshift(name, 1);
-    parentValue.splice.apply(parentValue, args);
-
-    for (newIndex in moved) {
-      if (hasOwn.call(moved, newIndex)) {
-        parentCache[newIndex] = moved[newIndex];
-      }
-    }
-
-    for (i = name; i < name + count; ++i) {
-      results.push(this.parentPath.get(i));
-    }
-
-  } else if (count === 1) {
-    delete parentCache[name];
-    parentValue[name] = replacement;
-    results.push(this.parentPath.get(name));
-
-  } else if (count === 0) {
-    delete parentCache[name];
-    delete parentValue[name];
-
-  } else {
-    assert.ok(false, "Could not replace Path.");
-  }
-
-  return results;
-};
-
-exports.Path = Path;
-
-},{"assert":2,"private":27}],26:[function(require,module,exports){
-exports.Path = require("./lib/path").Path;
-
-},{"./lib/path":25}],27:[function(require,module,exports){
+},{"./def/core":17,"./def/e4x":18,"./def/es6":19,"./def/fb-harmony":20,"./def/mozilla":21,"./lib/node-path":22,"./lib/traverse":26,"./lib/types":27}],29:[function(_dereq_,module,exports){
 "use strict";
 
-var defProp = Object.defineProperty || function(obj, name, desc) {
-    // Normal property assignment is the best we can do if
-    // Object.defineProperty is not available.
-    obj[name] = desc.value;
-};
-
-// For functions that will be invoked using .call or .apply, we need to
-// define those methods on the function objects themselves, rather than
-// inheriting them from Function.prototype, so that a malicious or clumsy
-// third party cannot interfere with the functionality of this module by
-// redefining Function.prototype.call or .apply.
-function makeSafeToCall(fun) {
-    defProp(fun, "call", { value: fun.call });
-    defProp(fun, "apply", { value: fun.apply });
-    return fun;
-}
-
-var hasOwn = makeSafeToCall(Object.prototype.hasOwnProperty);
-var numToStr = makeSafeToCall(Number.prototype.toString);
-var strSlice = makeSafeToCall(String.prototype.slice);
-
-var cloner = function(){};
-var create = Object.create || function(prototype, properties) {
-    cloner.prototype = prototype || null;
-    var obj = new cloner;
-
-    // The properties parameter is unused by this module, but I want this
-    // shim to be as complete as possible.
-    if (properties)
-        for (var name in properties)
-            if (hasOwn.call(properties, name))
-                defProp(obj, name, properties[name]);
-
-    return obj;
-};
-
-var rand = Math.random;
-var uniqueKeys = create(null);
-
-function makeUniqueKey() {
-    // Collisions are highly unlikely, but this module is in the business
-    // of making guarantees rather than safe bets.
-    do var uniqueKey = strSlice.call(numToStr.call(rand(), 36), 2);
-    while (hasOwn.call(uniqueKeys, uniqueKey));
-    return uniqueKeys[uniqueKey] = uniqueKey;
-}
-
-// External users might find this function useful, but it is not necessary
-// for the typical use of this module.
-defProp(exports, "makeUniqueKey", {
-    value: makeUniqueKey
-});
-
-function makeAccessor() {
-    var secrets = [];
-    var brand = makeUniqueKey();
-
-    function register(object) {
-        var key = secrets.length;
-        defProp(object, brand, { value: key });
-        secrets[key] = {
-            object: object,
-            value: create(null)
-        };
-    }
-
-    return function(object) {
-        if (!hasOwn.call(object, brand))
-            register(object);
-
-        var secret = secrets[object[brand]];
-        if (secret.object === object)
-            return secret.value;
-    };
-}
-
-defProp(exports, "makeAccessor", {
-    value: makeAccessor
-});
-
-},{}],28:[function(require,module,exports){
-"use strict";
-
-var assert = require("assert");
-var is = require("simple-is");
-var fmt = require("simple-fmt");
-var stringmap = require("stringmap");
-var stringset = require("stringset");
-var alter = require("alter");
-var traverse = require("ast-traverse");
-var breakable = require("breakable");
-var Scope = require("./scope");
-var error = require("./error");
-var options = require("./options");
-var Stats = require("./stats");
-var jshint_vars = require("./jshint_globals/vars.js");
+var assert = _dereq_("assert");
+var is = _dereq_("simple-is");
+var fmt = _dereq_("simple-fmt");
+var stringmap = _dereq_("stringmap");
+var stringset = _dereq_("stringset");
+var alter = _dereq_("alter");
+var traverse = _dereq_("ast-traverse");
+var breakable = _dereq_("breakable");
+var Scope = _dereq_("./scope");
+var error = _dereq_("./error");
+var options = _dereq_("./options");
+var Stats = _dereq_("./stats");
+var jshint_vars = _dereq_("./jshint_globals/vars.js");
 
 
 function getline(node) {
@@ -6321,11 +6135,11 @@ function run(src, config) {
 
 module.exports = run;
 
-},{"./error":29,"./jshint_globals/vars.js":30,"./options":31,"./scope":32,"./stats":33,"alter":34,"assert":2,"ast-traverse":36,"breakable":37,"simple-fmt":39,"simple-is":40,"stringmap":41,"stringset":42}],29:[function(require,module,exports){
+},{"./error":30,"./jshint_globals/vars.js":31,"./options":32,"./scope":33,"./stats":34,"alter":35,"assert":2,"ast-traverse":37,"breakable":38,"simple-fmt":40,"simple-is":41,"stringmap":42,"stringset":43}],30:[function(_dereq_,module,exports){
 "use strict";
 
-var fmt = require("simple-fmt");
-var assert = require("assert");
+var fmt = _dereq_("simple-fmt");
+var assert = _dereq_("assert");
 
 function error(line, var_args) {
     assert(arguments.length >= 2);
@@ -6344,7 +6158,7 @@ error.reset();
 
 module.exports = error;
 
-},{"assert":2,"simple-fmt":39}],30:[function(require,module,exports){
+},{"assert":2,"simple-fmt":40}],31:[function(_dereq_,module,exports){
 // jshint -W001
 
 "use strict";
@@ -6741,26 +6555,26 @@ exports.yui = {
 };
 
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(_dereq_,module,exports){
 // default configuration
 
 module.exports = {
     disallowVars: false,
     disallowDuplicated: true,
     disallowUnknownReferences: true,
-    parse: require("esprima").parse,
+    parse: _dereq_("esprima").parse,
 };
 
-},{"esprima":38}],32:[function(require,module,exports){
+},{"esprima":39}],33:[function(_dereq_,module,exports){
 "use strict";
 
-var assert = require("assert");
-var stringmap = require("stringmap");
-var stringset = require("stringset");
-var is = require("simple-is");
-var fmt = require("simple-fmt");
-var error = require("./error");
-var options = require("./options");
+var assert = _dereq_("assert");
+var stringmap = _dereq_("stringmap");
+var stringset = _dereq_("stringset");
+var is = _dereq_("simple-is");
+var fmt = _dereq_("simple-fmt");
+var error = _dereq_("./error");
+var options = _dereq_("./options");
 
 function Scope(args) {
     assert(is.someof(args.kind, ["hoist", "block", "catch-block"]));
@@ -6976,10 +6790,10 @@ Scope.prototype.traverse = function(options) {
 
 module.exports = Scope;
 
-},{"./error":29,"./options":31,"assert":2,"simple-fmt":39,"simple-is":40,"stringmap":41,"stringset":42}],33:[function(require,module,exports){
-var fmt = require("simple-fmt");
-var is = require("simple-is");
-var assert = require("assert");
+},{"./error":30,"./options":32,"assert":2,"simple-fmt":40,"simple-is":41,"stringmap":42,"stringset":43}],34:[function(_dereq_,module,exports){
+var fmt = _dereq_("simple-fmt");
+var is = _dereq_("simple-is");
+var assert = _dereq_("assert");
 
 function Stats() {
     this.lets = 0;
@@ -7028,13 +6842,13 @@ Stats.prototype.toString = function() {
 
 module.exports = Stats;
 
-},{"assert":2,"simple-fmt":39,"simple-is":40}],34:[function(require,module,exports){
+},{"assert":2,"simple-fmt":40,"simple-is":41}],35:[function(_dereq_,module,exports){
 // alter.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
 
-var assert = require("assert");
-var stableSort = require("stable");
+var assert = _dereq_("assert");
+var stableSort = _dereq_("stable");
 
 // fragments is a list of {start: index, end: index, str: string to replace with}
 function alter(str, fragments) {
@@ -7075,7 +6889,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = alter;
 }
 
-},{"assert":2,"stable":35}],35:[function(require,module,exports){
+},{"assert":2,"stable":36}],36:[function(_dereq_,module,exports){
 //! stable.js 0.1.4, https://github.com/Two-Screen/stable
 //! © 2012 Stéphan Kochen, Angry Bytes. MIT licensed.
 
@@ -7188,7 +7002,7 @@ else {
 
 })();
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(_dereq_,module,exports){
 function traverse(root, options) {
     "use strict";
 
@@ -7237,7 +7051,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = traverse;
 }
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(_dereq_,module,exports){
 // breakable.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -7275,7 +7089,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = breakable;
 }
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(_dereq_,module,exports){
 /*
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
@@ -11185,7 +10999,7 @@ parseStatement: true, parseSourceElement: true */
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(_dereq_,module,exports){
 // simple-fmt.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -11220,7 +11034,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = fmt;
 }
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(_dereq_,module,exports){
 // simple-is.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -11278,7 +11092,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = is;
 }
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(_dereq_,module,exports){
 // stringmap.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -11524,7 +11338,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = StringMap;
 }
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(_dereq_,module,exports){
 // stringset.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -11707,7 +11521,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = StringSet;
 }
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(_dereq_,module,exports){
 /*
   Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
@@ -17223,7 +17037,7 @@ parseYieldExpression: true
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(_dereq_,module,exports){
 "use strict";
 
 var defProp = Object.defineProperty || function(obj, name, desc) {
@@ -17349,14 +17163,14 @@ defProp(exports, "makeAccessor", {
     value: makeAccessor
 });
 
-},{}],45:[function(require,module,exports){
-var assert = require("assert");
-var linesModule = require("./lines");
+},{}],46:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var linesModule = _dereq_("./lines");
 var fromString = linesModule.fromString;
 var Lines = linesModule.Lines;
 var concat = linesModule.concat;
-var Visitor = require("./visitor").Visitor;
-var comparePos = require("./util").comparePos;
+var Visitor = _dereq_("./visitor").Visitor;
+var comparePos = _dereq_("./util").comparePos;
 
 exports.add = function(ast, lines) {
     var comments = ast.comments;
@@ -17645,15 +17459,15 @@ exports.printComments = function(comments, innerLines) {
     return concat(parts);
 };
 
-},{"./lines":46,"./util":53,"./visitor":54,"assert":2}],46:[function(require,module,exports){
-var assert = require("assert");
-var sourceMap = require("source-map");
-var normalizeOptions = require("./options").normalize;
-var getSecret = require("private").makeAccessor();
-var types = require("./types");
+},{"./lines":47,"./util":54,"./visitor":55,"assert":2}],47:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var sourceMap = _dereq_("source-map");
+var normalizeOptions = _dereq_("./options").normalize;
+var getSecret = _dereq_("private").makeAccessor();
+var types = _dereq_("./types");
 var isString = types.builtInTypes.string;
-var comparePos = require("./util").comparePos;
-var Mapping = require("./mapping");
+var comparePos = _dereq_("./util").comparePos;
+var Mapping = _dereq_("./mapping");
 
 // Goals:
 // 1. Minimize new string creation.
@@ -18018,6 +17832,14 @@ Lp.guessTabWidth = function() {
 
     for (var line = 1, last = this.length; line <= last; ++line) {
         var info = secret.infos[line - 1];
+        var sliced = info.line.slice(info.sliceStart, info.sliceEnd);
+
+        // Whitespace-only lines don't tell us much about the likely tab
+        // width of this code.
+        if (isOnlyWhitespace(sliced)) {
+            continue;
+        }
+
         var diff = Math.abs(info.indent - lastIndent);
         counts[diff] = ~~counts[diff] + 1;
         lastIndent = info.indent;
@@ -18450,15 +18272,15 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":47,"./options":48,"./types":52,"./util":53,"assert":2,"private":44,"source-map":58}],47:[function(require,module,exports){
-var assert = require("assert");
-var types = require("./types");
+},{"./mapping":48,"./options":49,"./types":53,"./util":54,"assert":2,"private":45,"source-map":59}],48:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("./types");
 var isString = types.builtInTypes.string;
 var isNumber = types.builtInTypes.number;
 var SourceLocation = types.namedTypes.SourceLocation;
 var Position = types.namedTypes.Position;
-var linesModule = require("./lines");
-var comparePos = require("./util").comparePos;
+var linesModule = _dereq_("./lines");
+var comparePos = _dereq_("./util").comparePos;
 
 function Mapping(sourceLines, sourceLoc, targetLoc) {
     assert.ok(this instanceof Mapping);
@@ -18729,7 +18551,7 @@ function skipChars(
     return sourceCursor;
 }
 
-},{"./lines":46,"./types":52,"./util":53,"assert":2}],48:[function(require,module,exports){
+},{"./lines":47,"./types":53,"./util":54,"assert":2}],49:[function(_dereq_,module,exports){
 var defaults = {
     tabWidth: 4,
     useTabs: false,
@@ -18739,7 +18561,7 @@ var defaults = {
     sourceMapName: null,
     sourceRoot: null,
     inputSourceMap: null,
-    esprima: require("esprima"),
+    esprima: _dereq_("esprima"),
     range: false,
     tolerant: true
 }, hasOwn = defaults.hasOwnProperty;
@@ -18769,19 +18591,19 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima":57}],49:[function(require,module,exports){
-var assert = require("assert");
-var types = require("./types");
+},{"esprima":58}],50:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("./types");
 var n = types.namedTypes;
 var b = types.builders;
-var Patcher = require("./patcher").Patcher;
-var Visitor = require("./visitor").Visitor;
-var normalizeOptions = require("./options").normalize;
+var Patcher = _dereq_("./patcher").Patcher;
+var Visitor = _dereq_("./visitor").Visitor;
+var normalizeOptions = _dereq_("./options").normalize;
 
 exports.parse = function(source, options) {
     options = normalizeOptions(options);
 
-    var lines = require("./lines").fromString(source, options);
+    var lines = _dereq_("./lines").fromString(source, options);
 
     var pure = options.esprima.parse(lines.toString({
         tabWidth: options.tabWidth,
@@ -18796,7 +18618,7 @@ exports.parse = function(source, options) {
 
     new LocationFixer(lines).visit(pure);
 
-    require("./comments").add(pure, lines);
+    _dereq_("./comments").add(pure, lines);
 
     // In order to ensure we reprint leading and trailing program
     // comments, wrap the original Program node with a File node.
@@ -18907,15 +18729,15 @@ function copyAst(node, parent) {
     return node;
 }
 
-},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"./visitor":54,"assert":2}],50:[function(require,module,exports){
-var assert = require("assert");
-var linesModule = require("./lines");
-var typesModule = require("./types");
+},{"./comments":46,"./lines":47,"./options":49,"./patcher":51,"./types":53,"./visitor":55,"assert":2}],51:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var linesModule = _dereq_("./lines");
+var typesModule = _dereq_("./types");
 var getFieldValue = typesModule.getFieldValue;
 var Node = typesModule.namedTypes.Node;
-var util = require("./util");
+var util = _dereq_("./util");
 var comparePos = util.comparePos;
-var NodePath = require("ast-types").NodePath;
+var NodePath = _dereq_("ast-types").NodePath;
 
 function Patcher(lines) {
     assert.ok(this instanceof Patcher);
@@ -19146,21 +18968,21 @@ function findChildReprints(path, oldNode, reprints) {
     return true;
 }
 
-},{"./lines":46,"./types":52,"./util":53,"assert":2,"ast-types":24}],51:[function(require,module,exports){
-var assert = require("assert");
-var sourceMap = require("source-map");
-var printComments = require("./comments").printComments;
-var linesModule = require("./lines");
+},{"./lines":47,"./types":53,"./util":54,"assert":2,"ast-types":28}],52:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var sourceMap = _dereq_("source-map");
+var printComments = _dereq_("./comments").printComments;
+var linesModule = _dereq_("./lines");
 var fromString = linesModule.fromString;
 var concat = linesModule.concat;
-var normalizeOptions = require("./options").normalize;
-var getReprinter = require("./patcher").getReprinter;
-var types = require("./types");
+var normalizeOptions = _dereq_("./options").normalize;
+var getReprinter = _dereq_("./patcher").getReprinter;
+var types = _dereq_("./types");
 var namedTypes = types.namedTypes;
 var isString = types.builtInTypes.string;
 var isObject = types.builtInTypes.object;
 var NodePath = types.NodePath;
-var util = require("./util");
+var util = _dereq_("./util");
 
 function PrintResult(code, sourceMap) {
     assert.ok(this instanceof PrintResult);
@@ -20148,8 +19970,8 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":45,"./lines":46,"./options":48,"./patcher":50,"./types":52,"./util":53,"assert":2,"source-map":58}],52:[function(require,module,exports){
-var types = require("ast-types");
+},{"./comments":46,"./lines":47,"./options":49,"./patcher":51,"./types":53,"./util":54,"assert":2,"source-map":59}],53:[function(_dereq_,module,exports){
+var types = _dereq_("ast-types");
 var def = types.Type.def;
 
 def("File")
@@ -20161,10 +19983,10 @@ types.finalize();
 
 module.exports = types;
 
-},{"ast-types":24}],53:[function(require,module,exports){
-var assert = require("assert");
-var getFieldValue = require("./types").getFieldValue;
-var sourceMap = require("source-map");
+},{"ast-types":28}],54:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var getFieldValue = _dereq_("./types").getFieldValue;
+var sourceMap = _dereq_("source-map");
 var SourceMapConsumer = sourceMap.SourceMapConsumer;
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -20304,10 +20126,10 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
     return smg.toJSON();
 };
 
-},{"./types":52,"assert":2,"source-map":58}],54:[function(require,module,exports){
-var assert = require("assert");
-var Class = require("cls");
-var Node = require("./types").namedTypes.Node;
+},{"./types":53,"assert":2,"source-map":59}],55:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var Class = _dereq_("cls");
+var Node = _dereq_("./types").namedTypes.Node;
 var slice = Array.prototype.slice;
 var removeRequests = [];
 
@@ -20424,10 +20246,11 @@ var Visitor = exports.Visitor = Class.extend({
     }
 });
 
-},{"./types":52,"assert":2,"cls":56}],55:[function(require,module,exports){
-var process=require("__browserify_process");var types = require("./lib/types");
-var parse = require("./lib/parser").parse;
-var Printer = require("./lib/printer").Printer;
+},{"./types":53,"assert":2,"cls":57}],56:[function(_dereq_,module,exports){
+(function (process){
+var types = _dereq_("./lib/types");
+var parse = _dereq_("./lib/parser").parse;
+var Printer = _dereq_("./lib/printer").Printer;
 
 function print(node, options) {
     return new Printer(options).print(node);
@@ -20442,7 +20265,7 @@ function run(transformer, options) {
 }
 
 function runFile(path, transformer, options) {
-    require("fs").readFile(path, "utf-8", function(err, code) {
+    _dereq_("fs").readFile(path, "utf-8", function(err, code) {
         if (err) {
             console.error(err);
             return;
@@ -20531,11 +20354,12 @@ Object.defineProperties(exports, {
 
     Visitor: {
         enumerable: false,
-        value: require("./lib/visitor").Visitor
+        value: _dereq_("./lib/visitor").Visitor
     }
 });
 
-},{"./lib/parser":49,"./lib/printer":51,"./lib/types":52,"./lib/visitor":54,"__browserify_process":6,"fs":3}],56:[function(require,module,exports){
+}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/parser":50,"./lib/printer":52,"./lib/types":53,"./lib/visitor":55,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"fs":1}],57:[function(_dereq_,module,exports){
 // Sentinel value passed to base constructors to skip invoking this.init.
 var populating = {};
 
@@ -20656,19 +20480,19 @@ function extend(newProps) {
 
 module.exports = extend.call(function(){});
 
-},{}],57:[function(require,module,exports){
-module.exports=require(38)
-},{}],58:[function(require,module,exports){
+},{}],58:[function(_dereq_,module,exports){
+module.exports=_dereq_(39)
+},{}],59:[function(_dereq_,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-exports.SourceMapGenerator = require('./source-map/source-map-generator').SourceMapGenerator;
-exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
-exports.SourceNode = require('./source-map/source-node').SourceNode;
+exports.SourceMapGenerator = _dereq_('./source-map/source-map-generator').SourceMapGenerator;
+exports.SourceMapConsumer = _dereq_('./source-map/source-map-consumer').SourceMapConsumer;
+exports.SourceNode = _dereq_('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":63,"./source-map/source-map-generator":64,"./source-map/source-node":65}],59:[function(require,module,exports){
+},{"./source-map/source-map-consumer":64,"./source-map/source-map-generator":65,"./source-map/source-node":66}],60:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20676,11 +20500,11 @@ exports.SourceNode = require('./source-map/source-node').SourceNode;
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
-  var util = require('./util');
+  var util = _dereq_('./util');
 
   /**
    * A data structure which is a combination of an array and a set. Adding a new
@@ -20767,7 +20591,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":66,"amdefine":67}],60:[function(require,module,exports){
+},{"./util":67,"amdefine":68}],61:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20805,11 +20629,11 @@ define(function (require, exports, module) {
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
-  var base64 = require('./base64');
+  var base64 = _dereq_('./base64');
 
   // A single base 64 digit can contain 6 bits of data. For the base 64 variable
   // length quantities we use in the source map spec, the first bit is the sign,
@@ -20913,7 +20737,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":61,"amdefine":67}],61:[function(require,module,exports){
+},{"./base64":62,"amdefine":68}],62:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20921,9 +20745,9 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
   var charToIntMap = {};
   var intToCharMap = {};
@@ -20957,7 +20781,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":67}],62:[function(require,module,exports){
+},{"amdefine":68}],63:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -20965,9 +20789,9 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
   /**
    * Recursive implementation of binary search.
@@ -21040,7 +20864,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":67}],63:[function(require,module,exports){
+},{"amdefine":68}],64:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21048,14 +20872,14 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
-  var util = require('./util');
-  var binarySearch = require('./binary-search');
-  var ArraySet = require('./array-set').ArraySet;
-  var base64VLQ = require('./base64-vlq');
+  var util = _dereq_('./util');
+  var binarySearch = _dereq_('./binary-search');
+  var ArraySet = _dereq_('./array-set').ArraySet;
+  var base64VLQ = _dereq_('./base64-vlq');
 
   /**
    * A SourceMapConsumer instance represents a parsed source map which we can
@@ -21520,7 +21344,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":59,"./base64-vlq":60,"./binary-search":62,"./util":66,"amdefine":67}],64:[function(require,module,exports){
+},{"./array-set":60,"./base64-vlq":61,"./binary-search":63,"./util":67,"amdefine":68}],65:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21528,13 +21352,13 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
-  var base64VLQ = require('./base64-vlq');
-  var util = require('./util');
-  var ArraySet = require('./array-set').ArraySet;
+  var base64VLQ = _dereq_('./base64-vlq');
+  var util = _dereq_('./util');
+  var ArraySet = _dereq_('./array-set').ArraySet;
 
   /**
    * An instance of the SourceMapGenerator represents a source map which is
@@ -21902,7 +21726,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":59,"./base64-vlq":60,"./util":66,"amdefine":67}],65:[function(require,module,exports){
+},{"./array-set":60,"./base64-vlq":61,"./util":67,"amdefine":68}],66:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21910,12 +21734,12 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
-  var SourceMapGenerator = require('./source-map-generator').SourceMapGenerator;
-  var util = require('./util');
+  var SourceMapGenerator = _dereq_('./source-map-generator').SourceMapGenerator;
+  var util = _dereq_('./util');
 
   /**
    * SourceNodes provide a way to abstract over interpolating/concatenating
@@ -22275,7 +22099,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":64,"./util":66,"amdefine":67}],66:[function(require,module,exports){
+},{"./source-map-generator":65,"./util":67,"amdefine":68}],67:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22283,9 +22107,9 @@ define(function (require, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
+    var define = _dereq_('amdefine')(module, _dereq_);
 }
-define(function (require, exports, module) {
+define(function (_dereq_, exports, module) {
 
   /**
    * This is a helper function for getting values from parameter/options
@@ -22482,8 +22306,9 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":67}],67:[function(require,module,exports){
-var process=require("__browserify_process"),__filename="/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js";/** vim: et:ts=4:sw=4:sts=4
+},{"amdefine":68}],68:[function(_dereq_,module,exports){
+(function (process,__filename){
+/** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/amdefine for details
@@ -22508,7 +22333,7 @@ function amdefine(module, requireFn) {
     var defineCache = {},
         loaderCache = {},
         alreadyCalled = false,
-        path = require('path'),
+        path = _dereq_('path'),
         makeRequire, stringRequire;
 
     /**
@@ -22783,7 +22608,7 @@ function amdefine(module, requireFn) {
 
 module.exports = amdefine;
 
-},{"__browserify_process":6,"path":4}]},{},[13])
-(13)
+}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
+},{"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"path":7}]},{},[16])
+(16)
 });
-;
