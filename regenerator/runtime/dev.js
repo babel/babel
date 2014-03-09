@@ -246,25 +246,23 @@
       }
       keys.reverse();
 
-      // The same { value, done } object can be reused between iterations,
-      // because we control the generated code, and we know it doesn't
-      // need a new object each time.
-      var info = {};
-
       // Rather than returning an object with a next method, we keep
       // things simple and return the next function itself.
       return function next() {
         while (keys.length) {
           var key = keys.pop();
           if (key in object) {
-            info.value = key;
-            info.done = false;
-            return info;
+            next.value = key;
+            next.done = false;
+            return next;
           }
         }
 
-        info.done = true;
-        return info;
+        // To avoid creating an additional object, we just hang the .value
+        // and .done properties off the next function object itself. This
+        // also ensures that the minifier will not anonymize the function.
+        next.done = true;
+        return next;
       };
     },
 
