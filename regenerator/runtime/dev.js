@@ -240,7 +240,32 @@
     },
 
     keys: function(object) {
-      return Object.keys(object).reverse();
+      var keys = [];
+      for (var key in object) {
+        keys.push(key);
+      }
+      keys.reverse();
+
+      // The same { value, done } object can be reused between iterations,
+      // because we control the generated code, and we know it doesn't
+      // need a new object each time.
+      var info = {};
+
+      // Rather than returning an object with a next method, we keep
+      // things simple and return the next function itself.
+      return function next() {
+        while (keys.length) {
+          var key = keys.pop();
+          if (key in object) {
+            info.value = key;
+            info.done = false;
+            return info;
+          }
+        }
+
+        info.done = true;
+        return info;
+      };
     },
 
     dispatchException: function(exception) {
