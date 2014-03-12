@@ -27,7 +27,7 @@
 })(this, function(exports) {
   "use strict";
 
-  exports.version = "0.4.1";
+  exports.version = "0.5.0";
 
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
