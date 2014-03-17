@@ -997,11 +997,13 @@
 
   // Start an AST node, attaching a start offset.
 
-  function node_t() {
+  function Node() {
     this.type = null;
     this.start = tokStart;
     this.end = null;
   }
+  
+  exports.Node = Node;
 
   function node_loc_t() {
     this.start = tokStartLoc;
@@ -1010,7 +1012,7 @@
   }
 
   function startNode() {
-    var node = new node_t();
+    var node = new Node();
     if (options.locations)
       node.loc = new node_loc_t();
     if (options.directSourceFile)
@@ -1025,7 +1027,7 @@
   // only started after its left-hand side has already been parsed.
 
   function startNodeFrom(other) {
-    var node = new node_t();
+    var node = new Node();
     node.start = other.start;
     if (options.locations) {
       node.loc = new node_loc_t();

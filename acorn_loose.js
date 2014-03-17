@@ -193,11 +193,13 @@
     return true;
   }
 
-  function node_t(start) {
+  function Node(start) {
     this.type = null;
     this.start = start;
     this.end = null;
   }
+  
+  exports.Node = Node;
 
   function node_loc_t(start) {
     this.start = start || token.startLoc || {line: 1, column: 0};
@@ -206,7 +208,7 @@
   }
 
   function startNode() {
-    var node = new node_t(token.start);
+    var node = new Node(token.start);
     if (options.locations)
       node.loc = new node_loc_t();
     if (options.directSourceFile)
@@ -215,7 +217,7 @@
   }
 
   function startNodeFrom(other) {
-    var node = new node_t(other.start);
+    var node = new Node(other.start);
     if (options.locations)
       node.loc = new node_loc_t(other.loc.start);
     return node;
@@ -238,7 +240,7 @@
   };
 
   function dummyIdent() {
-    var dummy = new node_t(token.start);
+    var dummy = new Node(token.start);
     dummy.type = "Identifier";
     dummy.end = token.start;
     dummy.name = "✖";
