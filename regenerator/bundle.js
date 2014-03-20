@@ -1273,7 +1273,7 @@ module.exports=_dereq_(3)
 module.exports=_dereq_(4)
 },{"./support/isBuffer":8,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],10:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -2407,7 +2407,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
 },{"./leap":12,"./meta":13,"assert":2,"ast-types":28}],11:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -2561,7 +2561,7 @@ exports.hoist = function(funPath) {
 
 },{"assert":2,"ast-types":28}],12:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -2744,7 +2744,7 @@ LMp.getContinueLoc = function(label) {
 
 },{"./emit":10,"assert":2,"ast-types":28,"util":9}],13:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -2846,7 +2846,7 @@ exports.containsLeap = makePredicate("containsLeap", leapTypes);
 
 },{"assert":2,"ast-types":28,"private":45}],14:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -2876,7 +2876,7 @@ exports.defaults = function(obj) {
 
 },{}],15:[function(_dereq_,module,exports){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -3025,7 +3025,7 @@ function renameArguments(funcPath, argsId) {
 },{"./emit":10,"./hoist":11,"assert":2,"ast-types":28}],16:[function(_dereq_,module,exports){
 (function (__dirname){
 /**
- * Copyright (c) 2013, Facebook, Inc.
+ * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -3730,7 +3730,7 @@ def("Specifier").bases("Node");
 def("NamedSpecifier")
     .bases("Specifier")
     .field("id", def("Identifier"))
-    .field("name", def("Identifier"), defaults["null"]);
+    .field("name", or(def("Identifier"), null), defaults["null"]);
 
 def("ExportSpecifier")
     .bases("NamedSpecifier")
@@ -3750,13 +3750,13 @@ def("ExportDeclaration")
     .field("default", isBoolean)
     .field("declaration", or(
         def("Declaration"),
-        def("AssignmentExpression") // Implies default.
+        def("Expression") // Implies default.
     ))
     .field("specifiers", [or(
         def("ExportSpecifier"),
         def("ExportBatchSpecifier")
-    )])
-    .field("source", or(ModuleSpecifier, null));
+    )], defaults.emptyArray)
+    .field("source", or(ModuleSpecifier, null), defaults["null"]);
 
 def("ImportDeclaration")
     .bases("Declaration")
@@ -4243,7 +4243,6 @@ module.exports = NodePath;
 
 },{"./path":23,"./scope":24,"./types":27,"assert":2,"util":9}],23:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
-var getChildCache = _dereq_("private").makeAccessor();
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;
 var toString = Op.toString;
@@ -4262,27 +4261,26 @@ function Path(value, parentPath, name) {
         name = null;
     }
 
-    Object.defineProperties(this, {
-        // The value encapsulated by this Path, generally equal to
-        // parentPath.value[name] if we have a parentPath.
-        value: { value: value },
+    // The value encapsulated by this Path, generally equal to
+    // parentPath.value[name] if we have a parentPath.
+    this.value = value;
 
-        // The immediate parent Path of this Path.
-        parentPath: { value: parentPath },
+    // The immediate parent Path of this Path.
+    this.parentPath = parentPath;
 
-        // The name of the property of parentPath.value through which this
-        // Path's value was reached.
-        name: {
-            value: name,
-            configurable: true
-        }
-    });
+    // The name of the property of parentPath.value through which this
+    // Path's value was reached.
+    this.name = name;
+
+    // Calling path.get("child") multiple times always returns the same
+    // child Path object, for both performance and consistency reasons.
+    this.__childCache = {};
 }
 
 var Pp = Path.prototype;
 
 function getChildPath(path, name) {
-    var cache = getChildCache(path);
+    var cache = path.__childCache;
     return hasOwn.call(cache, name)
         ? cache[name]
         : cache[name] = new path.constructor(
@@ -4363,7 +4361,7 @@ Pp.replace = function(replacement) {
 
     var name = this.name;
     var parentValue = this.parentPath.value;
-    var parentCache = getChildCache(this.parentPath);
+    var parentCache = this.parentPath.__childCache;
     var results = [];
 
     if (toString.call(parentValue) === arrayToString) {
@@ -4414,7 +4412,7 @@ Pp.replace = function(replacement) {
 
 module.exports = Path;
 
-},{"assert":2,"private":45}],24:[function(_dereq_,module,exports){
+},{"assert":2}],24:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var Type = types.Type;
@@ -4460,11 +4458,6 @@ var scopeTypes = [
     // of the same name in an outer scope.
     namedTypes.CatchClause
 ];
-
-if (namedTypes.ModuleDeclaration) {
-    // Include ModuleDeclaration only if it exists (ES6).
-    scopeTypes.push(namedTypes.ModuleDeclaration);
-}
 
 var ScopeType = Type.or.apply(Type, scopeTypes);
 
@@ -4538,6 +4531,10 @@ function recursiveScanScope(path, bindings) {
           node.name ? path.get("name") : path.get("id"),
           bindings
         );
+
+    } else if (namedTypes.ModuleDeclaration &&
+               namedTypes.ModuleDeclaration.check(node)) {
+        addPattern(path.get("id"), bindings);
 
     } else if (Node.check(node)) {
         types.eachField(node, function(name, child) {
@@ -11602,6 +11599,7 @@ parseYieldExpression: true
         delegate,
         lookahead,
         state,
+        createLocationMarkerOpt,
         extra;
 
     Token = {
@@ -14340,22 +14338,27 @@ parseYieldExpression: true
     // 11.11 Binary Logical Operators
 
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
+        var expr, token, prec, previousAllowIn, stack, right, operator, left, i,
+            marker, markers;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
 
-        expr = parseUnaryExpression();
+        marker = createLocationMarkerOpt();
+        left = parseUnaryExpression();
 
         token = lookahead;
         prec = binaryPrecedence(token, previousAllowIn);
         if (prec === 0) {
-            return expr;
+            return left;
         }
         token.prec = prec;
         lex();
 
-        stack = [expr, token, parseUnaryExpression()];
+        markers = [marker, createLocationMarkerOpt()];
+        right = parseUnaryExpression();
+
+        stack = [left, token, right];
 
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
@@ -14364,14 +14367,24 @@ parseYieldExpression: true
                 right = stack.pop();
                 operator = stack.pop().value;
                 left = stack.pop();
-                stack.push(delegate.createBinaryExpression(operator, left, right));
+                expr = delegate.createBinaryExpression(operator, left, right);
+                markers.pop();
+                marker = markers.pop();
+                if (marker) {
+                    marker.end();
+                    marker.apply(expr);
+                }
+                stack.push(expr);
+                markers.push(marker);
             }
 
             // Shift.
             token = lex();
             token.prec = prec;
             stack.push(token);
-            stack.push(parseUnaryExpression());
+            markers.push(createLocationMarkerOpt());
+            expr = parseUnaryExpression();
+            stack.push(expr);
         }
 
         state.allowIn = previousAllowIn;
@@ -14379,10 +14392,17 @@ parseYieldExpression: true
         // Final reduce to clean-up the stack.
         i = stack.length - 1;
         expr = stack[i];
+        markers.pop();
         while (i > 1) {
             expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
             i -= 2;
+            marker = markers.pop();
+            if (marker) {
+                marker.end();
+                marker.apply(expr);
+            }
         }
+
         return expr;
     }
 
@@ -16402,25 +16422,6 @@ parseYieldExpression: true
             this.loc.end.column = index - lineStart;
         },
 
-        applyGroup: function (node) {
-            if (extra.range) {
-                node.groupRange = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.groupLoc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        },
-
         apply: function (node) {
             var nodeType = typeof node;
             assert(nodeType === 'object',
@@ -16450,22 +16451,16 @@ parseYieldExpression: true
         return new LocationMarker();
     }
 
-    function trackGroupExpression() {
-        var marker, expr;
-
+    createLocationMarkerOpt = function () {
+        // parseBinaryExpression is too entangled with the location tracking,
+        // so instead of forking it, adding a new API that returns the markers
+        // conditionally.
+        if (!extra.loc && !extra.range) {
+            return null;
+        }
         skipComment();
-        marker = createLocationMarker();
-        expect('(');
-
-        ++state.parenthesizedCount;
-        expr = parseExpression();
-
-        expect(')');
-        marker.end();
-        marker.applyGroup(expr);
-
-        return expr;
-    }
+        return new LocationMarker();
+    };
 
     function trackLeftHandSideExpression() {
         var marker, expr;
@@ -16526,72 +16521,9 @@ parseYieldExpression: true
         return expr;
     }
 
-    function filterGroup(node) {
-        var n, i, entry;
-
-        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
-        for (i in node) {
-            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
-                entry = node[i];
-                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
-                    n[i] = entry;
-                } else {
-                    n[i] = filterGroup(entry);
-                }
-            }
-        }
-        return n;
-    }
-
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
-
-            function isBinary(node) {
-                return node.type === Syntax.LogicalExpression ||
-                    node.type === Syntax.BinaryExpression;
-            }
-
-            function visit(node) {
-                var start, end;
-
-                if (isBinary(node.left)) {
-                    visit(node.left);
-                }
-                if (isBinary(node.right)) {
-                    visit(node.right);
-                }
-
-                if (range) {
-                    if (node.left.groupRange || node.right.groupRange) {
-                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
-                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
-                        node.range = [start, end];
-                    } else if (typeof node.range === 'undefined') {
-                        start = node.left.range[0];
-                        end = node.right.range[1];
-                        node.range = [start, end];
-                    }
-                }
-                if (loc) {
-                    if (node.left.groupLoc || node.right.groupLoc) {
-                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
-                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
-                        node.loc = {
-                            start: start,
-                            end: end
-                        };
-                        node = delegate.postProcess(node);
-                    } else if (typeof node.loc === 'undefined') {
-                        node.loc = {
-                            start: node.left.loc.start,
-                            end: node.right.loc.end
-                        };
-                        node = delegate.postProcess(node);
-                    }
-                }
-            }
-
             return function () {
                 var marker, node;
 
@@ -16601,16 +16533,9 @@ parseYieldExpression: true
                 node = parseFunction.apply(null, arguments);
                 marker.end();
 
-                if (range && typeof node.range === 'undefined') {
+                if ((range && typeof node.range === 'undefined') ||
+                        (loc && typeof node.loc === 'undefined')) {
                     marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (isBinary(node)) {
-                    visit(node);
                 }
 
                 return node;
@@ -16629,10 +16554,8 @@ parseYieldExpression: true
 
         if (extra.range || extra.loc) {
 
-            extra.parseGroupExpression = parseGroupExpression;
             extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
             extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
-            parseGroupExpression = trackGroupExpression;
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
 
@@ -16759,7 +16682,6 @@ parseYieldExpression: true
             parseFunctionExpression = extra.parseFunctionExpression;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
-            parseGroupExpression = extra.parseGroupExpression;
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
             parseModuleDeclaration = extra.parseModuleDeclaration;
@@ -16992,9 +16914,6 @@ parseYieldExpression: true
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
-            }
-            if (extra.range || extra.loc) {
-                program.body = filterGroup(program.body);
             }
         } catch (e) {
             throw e;
