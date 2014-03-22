@@ -958,8 +958,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":3,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],5:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":3,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],5:[function(_dereq_,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -1266,12 +1266,12 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6}],8:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6}],8:[function(_dereq_,module,exports){
 module.exports=_dereq_(3)
 },{}],9:[function(_dereq_,module,exports){
 module.exports=_dereq_(4)
-},{"./support/isBuffer":8,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],10:[function(_dereq_,module,exports){
+},{"./support/isBuffer":8,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"inherits":5}],10:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -16603,6 +16603,7 @@ parseYieldExpression: true
             extra.parseClassDeclaration = parseClassDeclaration;
             extra.parseClassExpression = parseClassExpression;
             extra.parseClassBody = parseClassBody;
+            extra.parseForStatement = parseForStatement;
 
             parseArrayInitialiser = wrapTracking(extra.parseArrayInitialiser);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
@@ -16625,7 +16626,6 @@ parseYieldExpression: true
             parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
             parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);
             parseModuleBlock = wrapTracking(extra.parseModuleBlock);
-            parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
             parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectInitialiser = wrapTracking(extra.parseObjectInitialiser);
@@ -16647,6 +16647,7 @@ parseYieldExpression: true
             parseClassDeclaration = wrapTracking(extra.parseClassDeclaration);
             parseClassExpression = wrapTracking(extra.parseClassExpression);
             parseClassBody = wrapTracking(extra.parseClassBody);
+            parseForStatement = wrapTracking(extra.parseForStatement);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -16680,6 +16681,7 @@ parseYieldExpression: true
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
+            parseParams = extra.parseParams;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
@@ -16707,6 +16709,7 @@ parseYieldExpression: true
             parseClassDeclaration = extra.parseClassDeclaration;
             parseClassExpression = extra.parseClassExpression;
             parseClassBody = extra.parseClassBody;
+            parseForStatement = extra.parseForStatement;
         }
 
         if (typeof extra.scanRegExp === 'function') {
@@ -17382,7 +17385,7 @@ exports.printComments = function(comments, innerLines) {
 var assert = _dereq_("assert");
 var sourceMap = _dereq_("source-map");
 var normalizeOptions = _dereq_("./options").normalize;
-var getSecret = _dereq_("private").makeAccessor();
+var secretKey = _dereq_("private").makeUniqueKey();
 var types = _dereq_("./types");
 var isString = types.builtInTypes.string;
 var comparePos = _dereq_("./util").comparePos;
@@ -17395,16 +17398,13 @@ var Mapping = _dereq_("./mapping");
 // 4. Enforce immutability.
 // 5. No newline characters.
 
+function getSecret(lines) {
+    return lines[secretKey];
+}
+
 function Lines(infos, sourceFileName) {
-    var self = this;
-
-    assert.ok(self instanceof Lines);
+    assert.ok(this instanceof Lines);
     assert.ok(infos.length > 0);
-
-    var secret = getSecret(self);
-    secret.infos = infos;
-    secret.mappings = [];
-    secret.cachedSourceMap = null;
 
     if (sourceFileName) {
         isString.assert(sourceFileName);
@@ -17412,13 +17412,17 @@ function Lines(infos, sourceFileName) {
         sourceFileName = null;
     }
 
-    Object.defineProperties(self, {
-        length: { value: infos.length },
-        name: { value: sourceFileName }
+    Object.defineProperty(this, secretKey, {
+        value: {
+            infos: infos,
+            mappings: [],
+            name: sourceFileName,
+            cachedSourceMap: null
+        }
     });
 
     if (sourceFileName) {
-        secret.mappings.push(new Mapping(this, {
+        getSecret(this).mappings.push(new Mapping(this, {
             start: this.firstPos(),
             end: this.lastPos()
         }));
@@ -17428,10 +17432,24 @@ function Lines(infos, sourceFileName) {
 // Exposed for instanceof checks. The fromString function should be used
 // to create new Lines objects.
 exports.Lines = Lines;
+var Lp = Lines.prototype;
 
-var Lp = Lines.prototype,
-    leadingSpaceExp = /^\s*/,
-    secret;
+// These properties used to be assigned to each new object in the Lines
+// constructor, but we can more efficiently stuff them into the secret and
+// let these lazy accessors compute their values on-the-fly.
+Object.defineProperties(Lp, {
+    length: {
+        get: function() {
+            return getSecret(this).infos.length;
+        }
+    },
+
+    name: {
+        get: function() {
+            return getSecret(this).name;
+        }
+    }
+});
 
 function copyLineInfo(info) {
     return {
@@ -17478,6 +17496,8 @@ function countSpaces(spaces, tabWidth) {
     return count;
 }
 exports.countSpaces = countSpaces;
+
+var leadingSpaceExp = /^\s*/;
 
 function fromString(string, options) {
     if (string instanceof Lines)
@@ -20277,8 +20297,8 @@ Object.defineProperties(exports, {
     }
 });
 
-}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/parser":50,"./lib/printer":52,"./lib/types":53,"./lib/visitor":55,"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"fs":1}],57:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/parser":50,"./lib/printer":52,"./lib/types":53,"./lib/visitor":55,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"fs":1}],57:[function(_dereq_,module,exports){
 // Sentinel value passed to base constructors to skip invoking this.init.
 var populating = {};
 
@@ -22527,7 +22547,7 @@ function amdefine(module, requireFn) {
 
 module.exports = amdefine;
 
-}).call(this,_dereq_("/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
-},{"/Users/benjamn/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"path":7}]},{},[16])
+}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
+},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"path":7}]},{},[16])
 (16)
 });
