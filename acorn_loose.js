@@ -198,8 +198,7 @@
     this.start = start;
     this.end = null;
   }
-  
-  exports.Node = Node;
+  Node.prototype = acorn.Node.prototype;
 
   function SourceLocation(start) {
     this.start = start || token.startLoc || {line: 1, column: 0};
