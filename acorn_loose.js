@@ -201,7 +201,7 @@
   
   exports.Node = Node;
 
-  function node_loc_t(start) {
+  function SourceLocation(start) {
     this.start = start || token.startLoc || {line: 1, column: 0};
     this.end = null;
     if (sourceFile !== null) this.source = sourceFile;
@@ -210,7 +210,7 @@
   function startNode() {
     var node = new Node(token.start);
     if (options.locations)
-      node.loc = new node_loc_t();
+      node.loc = new SourceLocation();
     if (options.directSourceFile)
       node.sourceFile = options.directSourceFile;
     return node;
@@ -219,7 +219,7 @@
   function startNodeFrom(other) {
     var node = new Node(other.start);
     if (options.locations)
-      node.loc = new node_loc_t(other.loc.start);
+      node.loc = new SourceLocation(other.loc.start);
     return node;
   }
 
@@ -233,7 +233,7 @@
 
   function getDummyLoc() {
     if (options.locations) {
-      var loc = new node_loc_t();
+      var loc = new SourceLocation();
       loc.end = loc.start;
       return loc;
     }

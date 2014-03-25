@@ -466,7 +466,7 @@
   // These are used when `options.locations` is on, for the
   // `tokStartLoc` and `tokEndLoc` properties.
 
-  function line_loc_t() {
+  function Position() {
     this.line = tokCurLine;
     this.column = tokPos - tokLineStart;
   }
@@ -486,7 +486,7 @@
 
   function finishToken(type, val) {
     tokEnd = tokPos;
-    if (options.locations) tokEndLoc = new line_loc_t;
+    if (options.locations) tokEndLoc = new Position;
     tokType = type;
     skipSpace();
     tokVal = val;
@@ -494,7 +494,7 @@
   }
 
   function skipBlockComment() {
-    var startLoc = options.onComment && options.locations && new line_loc_t;
+    var startLoc = options.onComment && options.locations && new Position;
     var start = tokPos, end = input.indexOf("*/", tokPos += 2);
     if (end === -1) raise(tokPos - 2, "Unterminated comment");
     tokPos = end + 2;
@@ -508,12 +508,12 @@
     }
     if (options.onComment)
       options.onComment(true, input.slice(start + 2, end), start, tokPos,
-                        startLoc, options.locations && new line_loc_t);
+                        startLoc, options.locations && new Position);
   }
 
   function skipLineComment() {
     var start = tokPos;
-    var startLoc = options.onComment && options.locations && new line_loc_t;
+    var startLoc = options.onComment && options.locations && new Position;
     var ch = input.charCodeAt(tokPos+=2);
     while (tokPos < inputLen && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
       ++tokPos;
@@ -521,7 +521,7 @@
     }
     if (options.onComment)
       options.onComment(false, input.slice(start + 2, tokPos), start, tokPos,
-                        startLoc, options.locations && new line_loc_t);
+                        startLoc, options.locations && new Position);
   }
 
   // Called at the start of the parse and after every token. Skips
@@ -724,7 +724,7 @@
   function readToken(forceRegexp) {
     if (!forceRegexp) tokStart = tokPos;
     else tokPos = tokStart + 1;
-    if (options.locations) tokStartLoc = new line_loc_t;
+    if (options.locations) tokStartLoc = new Position;
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
 
@@ -1005,7 +1005,7 @@
   
   exports.Node = Node;
 
-  function node_loc_t() {
+  function SourceLocation() {
     this.start = tokStartLoc;
     this.end = null;
     if (sourceFile !== null) this.source = sourceFile;
@@ -1014,7 +1014,7 @@
   function startNode() {
     var node = new Node();
     if (options.locations)
-      node.loc = new node_loc_t();
+      node.loc = new SourceLocation();
     if (options.directSourceFile)
       node.sourceFile = options.directSourceFile;
     if (options.ranges)
@@ -1030,7 +1030,7 @@
     var node = new Node();
     node.start = other.start;
     if (options.locations) {
-      node.loc = new node_loc_t();
+      node.loc = new SourceLocation();
       node.loc.start = other.loc.start;
     }
     if (options.ranges)
@@ -1115,7 +1115,7 @@
 
   function parseTopLevel(program) {
     lastStart = lastEnd = tokPos;
-    if (options.locations) lastEndLoc = new line_loc_t;
+    if (options.locations) lastEndLoc = new Position;
     inFunction = strict = null;
     labels = [];
     readToken();
