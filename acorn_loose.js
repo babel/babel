@@ -106,6 +106,8 @@
         } else if (/unexpected character/i.test(msg)) {
           pos++;
           replace = false;
+        } else if (/regular expression/i.test(msg)) {
+          replace = true;
         } else {
           throw e;
         }
