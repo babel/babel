@@ -850,6 +850,24 @@ describe("function declaration hoisting", function() {
     check(gen(3), [4, 1, "function", 5]);
     check(gen(4), [5, "undefined", 6]);
   });
+
+  it("should work for nested generator function declarations", function() {
+    function *outer(n) {
+      yield 0;
+      assert.ok(wrapGenerator.isGeneratorFunction(inner));
+      return yield* inner(n);
+
+      // Note that this function declaration comes after everything else
+      // in the outer function, but needs to be fully available above.
+      function *inner(n) {
+        yield n - 1;
+        yield n;
+        return yield n + 1;
+      }
+    }
+
+    check(outer(2), [0, 1, 2, 3], 4);
+  });
 });
 
 describe("the arguments object", function() {
