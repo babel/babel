@@ -9,7 +9,7 @@
  */
 
 var assert = require("assert");
-var types = require("ast-types");
+var types = require("recast").types;
 var isArray = types.builtInTypes.array;
 var b = types.builders;
 var n = types.namedTypes;

@@ -30,8 +30,7 @@
   "dependencies": {
     "commander": "~2.1.0",
     "esprima": "git://github.com/ariya/esprima.git#harmony",
-    "ast-types": "~0.3.20",
-    "recast": "~0.5.11",
+    "recast": "~0.5.13",
     "private": "~0.1.2",
     "defs": "~0.6.2"
   },

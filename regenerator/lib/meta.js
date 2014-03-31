@@ -10,7 +10,7 @@
 
 var assert = require("assert");
 var m = require("private").makeAccessor();
-var types = require("ast-types");
+var types = require("recast").types;
 var isArray = types.builtInTypes.array;
 var n = types.namedTypes;
 var hasOwn = Object.prototype.hasOwnProperty;

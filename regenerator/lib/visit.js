@@ -9,7 +9,7 @@
  */
 
 var assert = require("assert");
-var types = require("ast-types");
+var types = require("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
 var hoist = require("./hoist").hoist;
