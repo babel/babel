@@ -15,20 +15,11 @@ var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
 var recast = require("recast");
 var types = recast.types;
-var esprimaHarmony = require("esprima");
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
-assert.ok(
-  /harmony/.test(esprimaHarmony.version),
-  "Bad esprima version: " + esprimaHarmony.version
-);
-
 function regenerator(source, options) {
-  options = utils.defaults(options || {}, {
-    includeRuntime: false,
-    supportBlockBinding: true
-  });
+  options = normalizeOptions(options);
 
   var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
@@ -38,7 +29,9 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var path = parse(source);
+  var recastOptions = getRecastOptions(options);
+  var ast = recast.parse(source, recastOptions);
+  var path = new types.NodePath(ast);
   var programPath = path.get("program");
 
   if (shouldVarify(source, options)) {
@@ -50,20 +43,45 @@ function regenerator(source, options) {
 
   injectRuntime(runtime, programPath.node);
 
-  return recast.print(path).code;
+  return recast.print(path, recastOptions).code;
 }
 
-function parse(source) {
-  types.builtInTypes.string.assert(source);
-
-  var ast = recast.parse(source, {
-    // Use the harmony branch of Esprima that installs with regenerator
-    // instead of the master branch that recast provides.
-    esprima: esprimaHarmony,
-    range: true
+function normalizeOptions(options) {
+  options = utils.defaults(options || {}, {
+    includeRuntime: false,
+    supportBlockBinding: true
   });
 
-  return new types.NodePath(ast);
+  if (!options.esprima) {
+    options.esprima = require("esprima");
+  }
+
+  assert.ok(
+    /harmony/.test(options.esprima.version),
+    "Bad esprima version: " + options.esprima.version
+  );
+
+  return options;
+}
+
+function getRecastOptions(options) {
+  var recastOptions = {
+    range: true
+  };
+
+  function copy(name) {
+    if (name in options) {
+      recastOptions[name] = options[name];
+    }
+  }
+
+  copy("esprima");
+  copy("sourceFileName");
+  copy("sourceMapName");
+  copy("inputSourceMap");
+  copy("sourceRoot");
+
+  return recastOptions;
 }
 
 function shouldVarify(source, options) {
@@ -77,10 +95,11 @@ function shouldVarify(source, options) {
   return supportBlockBinding;
 }
 
-function varify(source) {
-  var path = parse(source);
-  varifyAst(path.get("program").node);
-  return recast.print(path).code;
+function varify(source, options) {
+  var recastOptions = getRecastOptions(normalizeOptions(options));
+  var ast = recast.parse(source, recastOptions);
+  varifyAst(ast.program);
+  return recast.print(ast, recastOptions).code;
 }
 
 function varifyAst(ast) {
