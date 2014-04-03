@@ -14,7 +14,10 @@
 
   // Dummy constructor that we use as the .constructor property for
   // functions that return Generator objects.
-  GeneratorFunction
+  GeneratorFunction,
+
+  // Undefined value, more compressible than void 0.
+  undefined
 ) {
   var hasOwn = Object.prototype.hasOwnProperty;
 
@@ -79,7 +82,7 @@
             // regardless of what the method was, we continue as if it is
             // "next" with an undefined arg.
             method = "next";
-            arg = void 0;
+            arg = undefined;
 
           } catch (uncaught) {
             context.delegate = null;
@@ -128,7 +131,7 @@
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
             method = "next";
-            arg = void 0;
+            arg = undefined;
           }
         }
 
@@ -152,7 +155,7 @@
             if (context.delegate && method === "next") {
               // Deliberately forget the last sent value so that we don't
               // accidentally pass it on to the delegate.
-              arg = void 0;
+              arg = undefined;
             }
           } else {
             return info;
@@ -212,7 +215,7 @@
     reset: function() {
       this.prev = 0;
       this.next = 0;
-      this.sent = void 0;
+      this.sent = undefined;
       this.done = false;
       this.delegate = null;
 
