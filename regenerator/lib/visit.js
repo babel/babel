@@ -21,6 +21,7 @@ var runtimeProperty = require("./util").runtimeProperty;
 var runtimeWrapMethod = runtimeProperty("wrap");
 var runtimeMarkMethod = runtimeProperty("mark");
 var runtimeValuesMethod = runtimeProperty("values");
+var runtimeAsyncMethod = runtimeProperty("async");
 
 exports.transform = function(node) {
   return types.visit(node, visitor);
@@ -33,7 +34,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var node = path.value;
 
-    if (!node.generator) {
+    if (!node.generator && !node.async) {
       return;
     }
 
@@ -47,9 +48,14 @@ var visitor = types.PathVisitor.fromMethodsObject({
       ]);
     }
 
+    if (node.async) {
+      awaitVisitor.visit(path.get("body"));
+    }
+
     var outerFnId = node.id || (
       node.id = path.scope.parent.declareTemporary("callee$")
     );
+
     var innerFnId = b.identifier(node.id.name + "$");
     var contextId = path.scope.declareTemporary("context$");
     var argsId = path.scope.declareTemporary("args$");
@@ -74,7 +80,9 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var wrapArgs = [
       emitter.getContextFunction(innerFnId),
-      outerFnId,
+      // Async functions don't care about the outer function because they
+      // don't need it to be marked and don't inherit from its .prototype.
+      node.async ? b.literal(null) : outerFnId,
       b.thisExpression()
     ];
 
@@ -83,11 +91,18 @@ var visitor = types.PathVisitor.fromMethodsObject({
       wrapArgs.push(tryEntryList);
     }
 
-    outerBody.push(b.returnStatement(
-      b.callExpression(runtimeWrapMethod, wrapArgs)
-    ));
+    var wrapCall = b.callExpression(
+      node.async ? runtimeAsyncMethod : runtimeWrapMethod,
+      wrapArgs
+    );
 
+    outerBody.push(b.returnStatement(wrapCall));
     node.body = b.blockStatement(outerBody);
+
+    if (node.async) {
+      node.async = false;
+      return;
+    }
 
     if (n.FunctionDeclaration.check(node)) {
       var pp = path.parent;
@@ -325,3 +340,14 @@ function renameArguments(funcPath, argsId) {
   // function's arguments object to the variable named by argsId.
   return didReplaceArguments && hasImplicitArguments;
 }
+
+var awaitVisitor = types.PathVisitor.fromMethodsObject({
+  visitFunction: function(path) {
+    return false; // Don't descend into nested function scopes.
+  },
+
+  visitAwaitExpression: function(path) {
+    // Convert await expressions to yield expressions.
+    return b.yieldExpression(path.value.argument, false);
+  }
+});
