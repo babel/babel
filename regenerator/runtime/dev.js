@@ -162,6 +162,8 @@
           }
 
         } catch (thrown) {
+          state = GenStateCompleted;
+
           if (method === "next") {
             context.dispatchException(thrown);
           } else {
