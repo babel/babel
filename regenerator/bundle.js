@@ -3041,20 +3041,11 @@ var transform = _dereq_("./lib/visit").transform;
 var utils = _dereq_("./lib/util");
 var recast = _dereq_("recast");
 var types = recast.types;
-var esprimaHarmony = _dereq_("esprima");
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
-assert.ok(
-  /harmony/.test(esprimaHarmony.version),
-  "Bad esprima version: " + esprimaHarmony.version
-);
-
 function regenerator(source, options) {
-  options = utils.defaults(options || {}, {
-    includeRuntime: false,
-    supportBlockBinding: true
-  });
+  options = normalizeOptions(options);
 
   var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
@@ -3064,7 +3055,9 @@ function regenerator(source, options) {
     return runtime + source; // Shortcut: no generators to transform.
   }
 
-  var path = parse(source);
+  var recastOptions = getRecastOptions(options);
+  var ast = recast.parse(source, recastOptions);
+  var path = new types.NodePath(ast);
   var programPath = path.get("program");
 
   if (shouldVarify(source, options)) {
@@ -3076,20 +3069,45 @@ function regenerator(source, options) {
 
   injectRuntime(runtime, programPath.node);
 
-  return recast.print(path).code;
+  return recast.print(path, recastOptions).code;
 }
 
-function parse(source) {
-  types.builtInTypes.string.assert(source);
-
-  var ast = recast.parse(source, {
-    // Use the harmony branch of Esprima that installs with regenerator
-    // instead of the master branch that recast provides.
-    esprima: esprimaHarmony,
-    range: true
+function normalizeOptions(options) {
+  options = utils.defaults(options || {}, {
+    includeRuntime: false,
+    supportBlockBinding: true
   });
 
-  return new types.NodePath(ast);
+  if (!options.esprima) {
+    options.esprima = _dereq_("esprima");
+  }
+
+  assert.ok(
+    /harmony/.test(options.esprima.version),
+    "Bad esprima version: " + options.esprima.version
+  );
+
+  return options;
+}
+
+function getRecastOptions(options) {
+  var recastOptions = {
+    range: true
+  };
+
+  function copy(name) {
+    if (name in options) {
+      recastOptions[name] = options[name];
+    }
+  }
+
+  copy("esprima");
+  copy("sourceFileName");
+  copy("sourceMapName");
+  copy("inputSourceMap");
+  copy("sourceRoot");
+
+  return recastOptions;
 }
 
 function shouldVarify(source, options) {
@@ -3103,10 +3121,11 @@ function shouldVarify(source, options) {
   return supportBlockBinding;
 }
 
-function varify(source) {
-  var path = parse(source);
-  varifyAst(path.get("program").node);
-  return recast.print(path).code;
+function varify(source, options) {
+  var recastOptions = getRecastOptions(normalizeOptions(options));
+  var ast = recast.parse(source, recastOptions);
+  varifyAst(ast.program);
+  return recast.print(ast, recastOptions).code;
 }
 
 function varifyAst(ast) {
@@ -14434,9 +14453,9 @@ parseYieldExpression: true
 "use strict";
 
 var defProp = Object.defineProperty || function(obj, name, desc) {
-    // Normal property assignment is the best we can do if
-    // Object.defineProperty is not available.
-    obj[name] = desc.value;
+  // Normal property assignment is the best we can do if
+  // Object.defineProperty is not available.
+  obj[name] = desc.value;
 };
 
 // For functions that will be invoked using .call or .apply, we need to
@@ -14445,9 +14464,9 @@ var defProp = Object.defineProperty || function(obj, name, desc) {
 // third party cannot interfere with the functionality of this module by
 // redefining Function.prototype.call or .apply.
 function makeSafeToCall(fun) {
-    defProp(fun, "call", { value: fun.call });
-    defProp(fun, "apply", { value: fun.apply });
-    return fun;
+  defProp(fun, "call", { value: fun.call });
+  defProp(fun, "apply", { value: fun.apply });
+  return fun;
 }
 
 var hasOwn = makeSafeToCall(Object.prototype.hasOwnProperty);
@@ -14456,104 +14475,105 @@ var strSlice = makeSafeToCall(String.prototype.slice);
 
 var cloner = function(){};
 var create = Object.create || function(prototype, properties) {
-    cloner.prototype = prototype || null;
-    var obj = new cloner;
+  cloner.prototype = prototype || null;
+  var obj = new cloner;
 
-    // The properties parameter is unused by this module, but I want this
-    // shim to be as complete as possible.
-    if (properties)
-        for (var name in properties)
-            if (hasOwn.call(properties, name))
-                defProp(obj, name, properties[name]);
+  // The properties parameter is unused by this module, but I want this
+  // shim to be as complete as possible.
+  if (properties)
+    for (var name in properties)
+      if (hasOwn.call(properties, name))
+        defProp(obj, name, properties[name]);
 
-    return obj;
+  return obj;
 };
 
 var rand = Math.random;
 var uniqueKeys = create(null);
 
 function makeUniqueKey() {
-    // Collisions are highly unlikely, but this module is in the business
-    // of making guarantees rather than safe bets.
-    do var uniqueKey = strSlice.call(numToStr.call(rand(), 36), 2);
-    while (hasOwn.call(uniqueKeys, uniqueKey));
-    return uniqueKeys[uniqueKey] = uniqueKey;
+  // Collisions are highly unlikely, but this module is in the business of
+  // making guarantees rather than safe bets.
+  do var uniqueKey = strSlice.call(numToStr.call(rand(), 36), 2);
+  while (hasOwn.call(uniqueKeys, uniqueKey));
+  return uniqueKeys[uniqueKey] = uniqueKey;
 }
 
 // External users might find this function useful, but it is not necessary
 // for the typical use of this module.
 defProp(exports, "makeUniqueKey", {
-    value: makeUniqueKey
+  value: makeUniqueKey
 });
 
 function wrap(obj, value) {
-    var old = obj[value.name];
-    defProp(obj, value.name, { value: value });
-    return old;
+  var old = obj[value.name];
+  defProp(obj, value.name, { value: value });
+  return old;
 }
 
 // Object.getOwnPropertyNames is the only way to enumerate non-enumerable
 // properties, so if we wrap it to ignore our secret keys, there should be
 // no way (except guessing) to access those properties.
 var realGetOPNs = wrap(Object, function getOwnPropertyNames(object) {
-    for (var names = realGetOPNs(object),
-             src = 0,
-             dst = 0,
-             len = names.length;
-         src < len;
-         ++src) {
-        if (!hasOwn.call(uniqueKeys, names[src])) {
-            if (src > dst) {
-                names[dst] = names[src];
-            }
-            ++dst;
-        }
+  for (var names = realGetOPNs(object),
+           src = 0,
+           dst = 0,
+           len = names.length;
+       src < len;
+       ++src) {
+    if (!hasOwn.call(uniqueKeys, names[src])) {
+      if (src > dst) {
+        names[dst] = names[src];
+      }
+      ++dst;
     }
-    names.length = dst;
-    return names;
+  }
+  names.length = dst;
+  return names;
 });
 
 function defaultCreatorFn(object) {
-    return create(null);
+  return create(null);
 }
 
 function makeAccessor(secretCreatorFn) {
-    var brand = makeUniqueKey();
-    var passkey = create(null);
+  var brand = makeUniqueKey();
+  var passkey = create(null);
 
-    secretCreatorFn = secretCreatorFn || defaultCreatorFn;
+  secretCreatorFn = secretCreatorFn || defaultCreatorFn;
 
-    function register(object) {
-        var secret; // Created lazily.
-        defProp(object, brand, {
-            value: function(key, forget) {
-                // Only code that has access to the passkey can retrieve
-                // (or forget) the secret object.
-                if (key === passkey) {
-                    return forget
-                        ? secret = null
-                        : secret || (secret = secretCreatorFn(object));
-                }
-            }
-        });
+  function register(object) {
+    var secret; // Created lazily.
+
+    function vault(key, forget) {
+      // Only code that has access to the passkey can retrieve (or forget)
+      // the secret object.
+      if (key === passkey) {
+        return forget
+          ? secret = null
+          : secret || (secret = secretCreatorFn(object));
+      }
     }
 
-    function accessor(object) {
-        if (!hasOwn.call(object, brand))
-            register(object);
-        return object[brand](passkey);
-    }
+    defProp(object, brand, { value: vault });
+  }
 
-    accessor.forget = function(object) {
-        if (hasOwn.call(object, brand))
-            object[brand](passkey, true);
-    };
+  function accessor(object) {
+    if (!hasOwn.call(object, brand))
+      register(object);
+    return object[brand](passkey);
+  }
 
-    return accessor;
+  accessor.forget = function(object) {
+    if (hasOwn.call(object, brand))
+      object[brand](passkey, true);
+  };
+
+  return accessor;
 }
 
 defProp(exports, "makeAccessor", {
-    value: makeAccessor
+  value: makeAccessor
 });
 
 },{}],34:[function(_dereq_,module,exports){
@@ -15054,10 +15074,12 @@ Lp.getSourceMap = function(sourceMapName, sourceRoot) {
 
     secret.mappings.forEach(function(mapping) {
         var sourceCursor = mapping.sourceLines.skipSpaces(
-            mapping.sourceLoc.start);
+            mapping.sourceLoc.start
+        ) || mapping.sourceLines.lastPos();
 
         var targetCursor = targetLines.skipSpaces(
-            mapping.targetLoc.start);
+            mapping.targetLoc.start
+        ) || targetLines.lastPos();
 
         while (comparePos(sourceCursor, mapping.sourceLoc.end) < 0 &&
                comparePos(targetCursor, mapping.targetLoc.end) < 0) {
@@ -16436,11 +16458,17 @@ PRp.toString = function() {
 
 var emptyPrintResult = new PrintResult("");
 
-function Printer(options) {
+function Printer(originalOptions) {
     assert.ok(this instanceof Printer);
 
-    var explicitTabWidth = options && options.tabWidth;
-    options = normalizeOptions(options);
+    var explicitTabWidth = originalOptions && originalOptions.tabWidth;
+    var options = normalizeOptions(originalOptions);
+    assert.notStrictEqual(options, originalOptions);
+
+    // It's common for client code to pass the same options into both
+    // recast.parse and recast.print, but the Printer doesn't need (and
+    // can be confused by) options.sourceFileName, so we null it out.
+    options.sourceFileName = null;
 
     function printWithComments(path) {
         assert.ok(path instanceof NodePath);
@@ -16767,6 +16795,8 @@ function genericPrintNoParens(path, options, print) {
         if (n.argument)
             parts.push(" ", print(path.get("argument")));
 
+        parts.push(";");
+
         return concat(parts);
 
     case "CallExpression":
@@ -16928,12 +16958,16 @@ function genericPrintNoParens(path, options, print) {
 
         if (maxLen === 1) {
             parts.push(fromString(", ").join(printed));
-        } else {
+        } else if (printed.length > 1 ) {
             parts.push(
                 fromString(",\n").join(printed)
                     .indentTail("var ".length)
             );
+        } else {
+            parts.push(printed[0]);
         }
+
+        parts.push(";");
 
         return concat(parts);
 
@@ -17033,12 +17067,14 @@ function genericPrintNoParens(path, options, print) {
         var parts = ["break"];
         if (n.label)
             parts.push(" ", print(path.get("label")));
+        parts.push(";");
         return concat(parts);
 
     case "ContinueStatement":
         var parts = ["continue"];
         if (n.label)
             parts.push(" ", print(path.get("label")));
+        parts.push(";");
         return concat(parts);
 
     case "LabeledStatement":
@@ -17077,7 +17113,8 @@ function genericPrintNoParens(path, options, print) {
     case "ThrowStatement":
         return concat([
             "throw ",
-            print(path.get("argument"))
+            print(path.get("argument")),
+            ";"
         ]);
 
     case "SwitchStatement":
@@ -17109,7 +17146,7 @@ function genericPrintNoParens(path, options, print) {
         return concat(parts);
 
     case "DebuggerStatement":
-        return fromString("debugger");
+        return fromString("debugger;");
 
     // XJS extensions below.
 
@@ -20088,118 +20125,123 @@ exports.NodePath = _dereq_("./lib/node-path");
 var populating = {};
 
 function makeClass(base, newProps) {
-    var baseProto = base.prototype;
-    var ownProto = Object.create(baseProto);
-    var newStatics = newProps.statics;
-    var populated;
+  var baseProto = base.prototype;
+  var ownProto = Object.create(baseProto);
+  var newStatics = newProps.statics;
+  var populated;
 
-    function constructor() {
-        if (!populated) {
-            if (base.extend === extend) {
-                // Ensure population of baseProto if base created by makeClass.
-                base.call(populating);
-            }
+  function constructor() {
+    if (!populated) {
+      if (base.extend === extend) {
+        // Ensure population of baseProto if base created by makeClass.
+        base.call(populating);
+      }
 
-            // Wrap override methods to make this._super available.
-            populate(ownProto, newProps, baseProto);
+      // Wrap override methods to make this._super available.
+      populate(ownProto, newProps, baseProto);
 
-            // Help the garbage collector reclaim this object, since we
-            // don't need it anymore.
-            newProps = null;
+      // Help the garbage collector reclaim this object, since we
+      // don't need it anymore.
+      newProps = null;
 
-            populated = true;
-        }
-
-        // When we invoke a constructor just for the sake of making sure
-        // its prototype has been populated, the receiver object (this)
-        // will be strictly equal to the populating object, which means we
-        // want to avoid invoking this.init.
-        if (this === populating)
-            return;
-
-        // Evaluate this.init only once to avoid looking up .init in the
-        // prototype chain twice.
-        var init = this.init;
-        if (init)
-            init.apply(this, arguments);
+      populated = true;
     }
 
-    // Copy any static properties that have been assigned to the base
-    // class over to the subclass.
-    populate(constructor, base);
-
-    if (newStatics) {
-        // Remove the statics property from newProps so that it does not
-        // get copied to the prototype.
-        delete newProps.statics;
-
-        // We re-use populate for static properties, so static methods
-        // have the same access to this._super that normal methods have.
-        populate(constructor, newStatics, base);
-
-        // Help the GC reclaim this object.
-        newStatics = null;
+    // When we invoke a constructor just for the sake of making sure
+    // its prototype has been populated, the receiver object (this)
+    // will be strictly equal to the populating object, which means we
+    // want to avoid invoking this.init.
+    if (this === populating) {
+      return;
     }
 
-    // These property assignments overwrite any properties of the same
-    // name that may have been copied from base, above. Note that ownProto
-    // has not been populated with any methods or properties, yet, because
-    // we postpone that work until the subclass is instantiated for the
-    // first time. Also note that we share a single implementation of
-    // extend between all classes.
-    constructor.prototype = ownProto;
-    constructor.extend = extend;
-    constructor.base = baseProto;
+    // Evaluate this.init only once to avoid looking up .init in the
+    // prototype chain twice.
+    var init = this.init;
+    if (init) {
+      init.apply(this, arguments);
+    }
+  }
 
-    // Setting constructor.prototype.constructor = constructor is
-    // important so that instanceof works properly in all browsers.
-    ownProto.constructor = constructor;
+  // Copy any static properties that have been assigned to the base
+  // class over to the subclass.
+  populate(constructor, base);
 
-    // Setting .cls as a shorthand for .constructor is purely a
-    // convenience to make calling static methods easier.
-    ownProto.cls = constructor;
+  if (newStatics) {
+    // Remove the statics property from newProps so that it does not
+    // get copied to the prototype.
+    delete newProps.statics;
 
-    // If there is a static initializer, call it now. This needs to happen
-    // last so that the constructor is ready to be used if, for example,
-    // constructor.init needs to create an instance of the new class.
-    if (constructor.init)
-        constructor.init(constructor);
+    // We re-use populate for static properties, so static methods
+    // have the same access to this._super that normal methods have.
+    populate(constructor, newStatics, base);
 
-    return constructor;
+    // Help the GC reclaim this object.
+    newStatics = null;
+  }
+
+  // These property assignments overwrite any properties of the same
+  // name that may have been copied from base, above. Note that ownProto
+  // has not been populated with any methods or properties, yet, because
+  // we postpone that work until the subclass is instantiated for the
+  // first time. Also note that we share a single implementation of
+  // extend between all classes.
+  constructor.prototype = ownProto;
+  constructor.extend = extend;
+  constructor.base = baseProto;
+
+  // Setting constructor.prototype.constructor = constructor is
+  // important so that instanceof works properly in all browsers.
+  ownProto.constructor = constructor;
+
+  // Setting .cls as a shorthand for .constructor is purely a
+  // convenience to make calling static methods easier.
+  ownProto.cls = constructor;
+
+  // If there is a static initializer, call it now. This needs to happen
+  // last so that the constructor is ready to be used if, for example,
+  // constructor.init needs to create an instance of the new class.
+  if (constructor.init) {
+    constructor.init(constructor);
+  }
+
+  return constructor;
 }
 
 function populate(target, source, parent) {
-    for (var name in source)
-        if (source.hasOwnProperty(name))
-            target[name] = parent ? maybeWrap(name, source, parent) : source[name];
+  for (var name in source) {
+    if (source.hasOwnProperty(name)) {
+      target[name] = parent ? maybeWrap(name, source, parent) : source[name];
+    }
+  }
 }
 
 var hasOwnExp = /\bhasOwnProperty\b/;
 var superExp = hasOwnExp.test(populate) ? /\b_super\b/ : /.*/;
 
 function maybeWrap(name, child, parent) {
-    var cval = child && child[name];
-    var pval = parent && parent[name];
+  var cval = child && child[name];
+  var pval = parent && parent[name];
 
-    if (typeof cval === "function" &&
-        typeof pval === "function" &&
-        cval !== pval && // Avoid infinite recursion.
-        cval.extend !== extend && // Don't wrap classes.
-        superExp.test(cval)) // Only wrap if this._super needed.
-    {
-        return function() {
-            var saved = this._super;
-            this._super = parent[name];
-            try { return cval.apply(this, arguments) }
-            finally { this._super = saved };
-        };
-    }
+  if (typeof cval === "function" &&
+      typeof pval === "function" &&
+      cval !== pval && // Avoid infinite recursion.
+      cval.extend !== extend && // Don't wrap classes.
+      superExp.test(cval)) // Only wrap if this._super needed.
+  {
+    return function() {
+      var saved = this._super;
+      this._super = parent[name];
+      try { return cval.apply(this, arguments) }
+      finally { this._super = saved };
+    };
+  }
 
-    return cval;
+  return cval;
 }
 
 function extend(newProps) {
-    return makeClass(this, newProps || {});
+  return makeClass(this, newProps || {});
 }
 
 module.exports = extend.call(function(){});
