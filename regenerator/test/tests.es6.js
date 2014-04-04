@@ -129,7 +129,7 @@ describe("collatz generator", function() {
   });
 });
 
-describe("throw", function() {  
+describe("throw", function() {
   it("should complete generator", function() {
     function *gen(x) {
       throw 1;
@@ -140,7 +140,7 @@ describe("throw", function() {
     try {
       u.next();
     } catch (err) {
-
+      assert.strictEqual(err, 1);
     }
 
     try {
@@ -1116,9 +1116,9 @@ describe("generator .throw method", function() {
     u.next();
 
     try {
-      u.throw();
+      u.throw(2);
     } catch (err) {
-
+      assert.strictEqual(err, 2);
     }
 
     try {
