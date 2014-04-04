@@ -129,6 +129,33 @@ describe("collatz generator", function() {
   });
 });
 
+describe("throw", function() {
+  it("should complete generator", function() {
+    function *gen(x) {
+      throw 1;
+    }
+  
+    var u = gen();
+
+    try {
+      u.next();
+    } catch (err) {
+      assert.strictEqual(err, 1);
+    }
+
+    try {
+      u.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.ok(err instanceof Error);
+      assert.strictEqual(
+        err.message,
+        "Generator has already finished"
+      );
+    }
+  });
+});
+
 describe("try-catch generator", function() {
   function *usingThrow(x) {
     yield 0;
@@ -1078,6 +1105,34 @@ describe("object literals with multiple yields", function() {
 });
 
 describe("generator .throw method", function() {
+  it("should complete generator", function() {
+    function *gen(x) {
+      yield 2;
+      throw 1;
+    }
+
+    var u = gen();
+
+    u.next();
+
+    try {
+      u.throw(2);
+    } catch (err) {
+      assert.strictEqual(err, 2);
+    }
+
+    try {
+      u.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.ok(err instanceof Error);
+      assert.strictEqual(
+        err.message,
+        "Generator has already finished"
+      );
+    }
+  });
+
   it("should work after the final call to .next", function() {
     function *gen() {
       yield 1;
