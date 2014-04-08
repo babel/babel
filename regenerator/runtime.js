@@ -18,6 +18,7 @@
 ) {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
+  var Promise = global.Promise || (global.Promise = require("promise"));
 
   if (global.regeneratorRuntime) {
     return;
