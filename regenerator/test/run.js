@@ -13,6 +13,7 @@ var path = require("path");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
 var regenerator = require("../main");
+var mochaDir = path.dirname(require.resolve("mocha"));
 
 function convert(es6File, es5File, callback) {
   fs.readFile(es6File, "utf-8", function(err, es6) {
@@ -67,6 +68,16 @@ function asyncCallback(err) {
   }
 }
 
+function makeMochaCopyFunction(fileName) {
+  return function copy(callback) {
+    var src = path.join(mochaDir, fileName);
+    var dst = path.join(__dirname, fileName);
+    fs.unlink(dst, function() {
+      fs.symlink(src, dst, callback);
+    });
+  };
+}
+
 if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
     "--harmony",
@@ -103,16 +114,5 @@ enqueue("mocha", [
   "--require", "runtime/dev",
   "./test/tests.es5.js"
 ]);
-
-var mochaDir = path.dirname(require.resolve("mocha"));
-function makeMochaCopyFunction(fileName) {
-  return function copy(callback) {
-    var src = path.join(mochaDir, fileName);
-    var dst = path.join(__dirname, fileName);
-    fs.unlink(dst, function() {
-      fs.symlink(src, dst, callback);
-    });
-  };
-}
 
 flush();
