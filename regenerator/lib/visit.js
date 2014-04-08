@@ -100,6 +100,15 @@ function visitNode(node) {
 
     if (path) {
       var firstStmtPath = path.get("body", 0);
+
+      // If the first statement is a "use strict" declaration, make sure to
+      // insert our call afterwards
+      if (n.ExpressionStatement.check(firstStmtPath.value) &&
+          n.Literal.check(firstStmtPath.value.expression) &&
+          firstStmtPath.value.expression.value === "use strict") {
+        firstStmtPath = path.get("body", 1);
+      }
+
       firstStmtPath.replace(
         b.expressionStatement(b.callExpression(markMethod, [node.id])),
         firstStmtPath.value
