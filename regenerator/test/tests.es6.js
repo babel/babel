@@ -1636,3 +1636,15 @@ describe("labeled break and continue statements", function() {
     }
   });
 });
+
+describe("for loop with var decl and no update expression", function() {
+  // https://github.com/facebook/regenerator/issues/103
+  function *range() {
+    for (var i = 0; false; ) {
+    }
+  }
+
+  it("should compile and run", function() {
+    check(range(), []);
+  });
+});
