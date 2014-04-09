@@ -25,11 +25,10 @@ function convert(es6File, es5File, callback) {
   });
 }
 
-function bundle(es5File, browserFile, callback) {
-  var browserify = require("browserify");
-  var b = browserify();
-  b.add(es5File);
-  b.bundle(function(err, src) {
+function bundle(es5Files, browserFile, callback) {
+  var bundle = require("browserify")();
+  es5Files.forEach(bundle.add, bundle);
+  bundle.bundle(function(err, src) {
     if (err) {
       return callback(err);
     }
@@ -101,7 +100,8 @@ if (!semver.eq(process.version, "0.11.7")) {
   try {
     require.resolve("browserify"); // Throws if missing.
     enqueue(bundle, [
-      "./test/tests.es5.js",
+      ["./runtime/dev.js",
+       "./test/tests.es5.js"],
       "./test/tests.browser.js"
     ]);
   } catch (ignored) {
