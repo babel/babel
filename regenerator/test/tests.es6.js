@@ -9,10 +9,7 @@
  */
 
 var assert = require("assert");
-var runningNatively = false;
-try {
-  runningNatively = !!Function("return function*(){}")();
-} catch (e) {}
+var runningInTranslation = /\bwrapGenerator\b/.test(function*(){});
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
@@ -134,7 +131,7 @@ describe("collatz generator", function() {
 });
 
 describe("throw", function() {
-  (runningNatively ? xit : it)("should complete generator", function() {
+  (runningInTranslation ? it : xit)("should complete generator", function() {
     function *gen(x) {
       throw 1;
     }
@@ -1109,7 +1106,7 @@ describe("object literals with multiple yields", function() {
 });
 
 describe("generator .throw method", function() {
-  (runningNatively ? xit : it)("should complete generator", function() {
+  (runningInTranslation ? it : xit)("should complete generator", function() {
     function *gen(x) {
       yield 2;
       throw 1;
