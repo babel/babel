@@ -1799,8 +1799,28 @@ describe("for-of loops", function() {
 });
 
 describe("generator return method", function() {
-  (runningInTranslation ? it : xit)
-  ("should behave as if generator actually returned", function() {
+  if (!runningInTranslation) {
+    // The return method has not been specified or implemented natively,
+    // yet, so these tests need only pass in translation.
+    return;
+  }
+
+  it("should work with newborn generators", function() {
+    function *gen() {
+      yield 0;
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.return("argument"), {
+      value: "argument",
+      done: true
+    });
+
+    assertAlreadyFinished(g);
+  });
+
+  it("should behave as if generator actually returned", function() {
     var executedFinally = false;
 
     function *gen() {
