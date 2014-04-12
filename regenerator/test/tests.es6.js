@@ -30,6 +30,19 @@ function raise(argument) {
   throw argument;
 }
 
+function assertAlreadyFinished(generator) {
+  try {
+    generator.next();
+    assert.ok(false, "should have thrown an exception");
+  } catch (err) {
+    assert.ok(err instanceof Error);
+    assert.strictEqual(
+      err.message,
+      "Generator has already finished"
+    );
+  }
+}
+
 describe("wrapGenerator", function() {
   it("should be defined globally", function() {
     var global = Function("return this")();
@@ -144,16 +157,7 @@ describe("throw", function() {
       assert.strictEqual(err, 1);
     }
 
-    try {
-      u.next();
-      assert.ok(false, "should have thrown an exception");
-    } catch (err) {
-      assert.ok(err instanceof Error);
-      assert.strictEqual(
-        err.message,
-        "Generator has already finished"
-      );
-    }
+    assertAlreadyFinished(u);
   });
 });
 
@@ -691,16 +695,7 @@ describe("completed generator", function() {
       value: "ALL DONE", done: true
     });
 
-    try {
-      g.next();
-      assert.ok(false, "should have thrown an exception");
-    } catch (err) {
-      assert.ok(err instanceof Error);
-      assert.strictEqual(
-        err.message,
-        "Generator has already finished"
-      );
-    }
+    assertAlreadyFinished(g);
   });
 });
 
@@ -1122,16 +1117,7 @@ describe("generator .throw method", function() {
       assert.strictEqual(err, 2);
     }
 
-    try {
-      u.next();
-      assert.ok(false, "should have thrown an exception");
-    } catch (err) {
-      assert.ok(err instanceof Error);
-      assert.strictEqual(
-        err.message,
-        "Generator has already finished"
-      );
-    }
+    assertAlreadyFinished(u);
   });
 
   it("should work after the final call to .next", function() {
