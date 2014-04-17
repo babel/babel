@@ -606,7 +606,7 @@
         if (curLineStart != line && curIndent <= startIndent && tokenStartsLine())
           node.property = dummyIdent();
         else
-          node.property = parsePropertyName() || dummyIdent();
+          node.property = parsePropertyAccessor() || dummyIdent();
         node.computed = false;
         base = finishNode(node, "MemberExpression");
       } else if (token.type == tt.bracketL) {
@@ -732,6 +732,10 @@
 
   function parsePropertyName() {
     if (token.type === tt.num || token.type === tt.string) return parseExprAtom();
+    if (token.type === tt.name || token.type.keyword) return parseIdent();
+  }
+
+  function parsePropertyAccessor() {
     if (token.type === tt.name || token.type.keyword) return parseIdent();
   }
 
