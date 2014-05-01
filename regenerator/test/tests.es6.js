@@ -211,7 +211,9 @@ describe("nested generators in try-catch", function() {
   }
 
   it('should get a reference to the caught error', function () {
-    var gen2 = gen().next().value();
+    var genFun2 = gen().next().value;
+    assert.ok(wrapGenerator.isGeneratorFunction(genFun2));
+    var gen2 = genFun2();
     var res = gen2.next();
     assert.ok(res.value instanceof ReferenceError);
     // Note that we don't do strict equality over the message because it varies
