@@ -12,11 +12,47 @@ var assert = require("assert");
 var types = require("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
+var isArray = types.builtInTypes.array;
+var isObject = types.builtInTypes.object;
+var NodePath = types.NodePath;
 var hoist = require("./hoist").hoist;
 var Emitter = require("./emit").Emitter;
 
-exports.transform = function(ast) {
-  return types.traverse(ast, visitNode);
+exports.transform = function(node) {
+  function postOrderTraverse(path) {
+    assert.ok(path instanceof NodePath);
+    var value = path.value;
+
+    if (isArray.check(value)) {
+      path.each(postOrderTraverse);
+      return;
+    }
+
+    if (!isObject.check(value)) {
+      return;
+    }
+
+    types.eachField(value, function(name, child) {
+      var childPath = path.get(name);
+      if (childPath.value !== child) {
+        childPath.replace(child);
+      }
+      postOrderTraverse(childPath);
+    });
+
+    if (n.Node.check(value)) {
+      visitNode.call(path, value, postOrderTraverse);
+    }
+  }
+
+  if (node instanceof NodePath) {
+    postOrderTraverse(node);
+    return node.value;
+  }
+
+  var rootPath = new NodePath({ root: node });
+  postOrderTraverse(rootPath.get("root"));
+  return rootPath.value.root;
 };
 
 // Makes a unique context identifier. This is needed to handle retrieval of
