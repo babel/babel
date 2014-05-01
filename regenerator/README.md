@@ -21,7 +21,7 @@ npm install -g regenerator
 From GitHub:
 ```sh
 cd path/to/node_modules
-git clone git://github.com/benjamn/regenerator.git
+git clone git://github.com/facebook/regenerator.git
 cd regenerator
 npm install .
 npm test
