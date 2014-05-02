@@ -2889,11 +2889,47 @@ var assert = _dereq_("assert");
 var types = _dereq_("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
+var isArray = types.builtInTypes.array;
+var isObject = types.builtInTypes.object;
+var NodePath = types.NodePath;
 var hoist = _dereq_("./hoist").hoist;
 var Emitter = _dereq_("./emit").Emitter;
 
-exports.transform = function(ast) {
-  return types.traverse(ast, visitNode);
+exports.transform = function(node) {
+  function postOrderTraverse(path) {
+    assert.ok(path instanceof NodePath);
+    var value = path.value;
+
+    if (isArray.check(value)) {
+      path.each(postOrderTraverse);
+      return;
+    }
+
+    if (!isObject.check(value)) {
+      return;
+    }
+
+    types.eachField(value, function(name, child) {
+      var childPath = path.get(name);
+      if (childPath.value !== child) {
+        childPath.replace(child);
+      }
+      postOrderTraverse(childPath);
+    });
+
+    if (n.Node.check(value)) {
+      visitNode.call(path, value, postOrderTraverse);
+    }
+  }
+
+  if (node instanceof NodePath) {
+    postOrderTraverse(node);
+    return node.value;
+  }
+
+  var rootPath = new NodePath({ root: node });
+  postOrderTraverse(rootPath.get("root"));
+  return rootPath.value.root;
 };
 
 // Makes a unique context identifier. This is needed to handle retrieval of
@@ -2921,9 +2957,12 @@ function visitNode(node) {
     ]);
   }
 
+  // TODO Ensure $callee is not the name of any hoisted variable.
+  var outerFnId = node.id || (node.id = b.identifier("$callee"));
+  var innerFnId = b.identifier(node.id.name + "$");
+
   // TODO Ensure these identifiers are named uniquely.
   var contextId = makeContextId();
-  var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(this, argsId);
@@ -2946,7 +2985,8 @@ function visitNode(node) {
   }
 
   var wrapGenArgs = [
-    emitter.getContextFunction(functionId),
+    emitter.getContextFunction(innerFnId),
+    outerFnId,
     b.thisExpression()
   ];
 
@@ -2976,17 +3016,115 @@ function visitNode(node) {
     }
 
     if (path) {
-      var firstStmtPath = path.get("body", 0);
-      firstStmtPath.replace(
-        b.expressionStatement(b.callExpression(markMethod, [node.id])),
-        firstStmtPath.value
-      );
+      // Here we turn the FunctionDeclaration into a named
+      // FunctionExpression that will be assigned to a variable of the
+      // same name at the top of the enclosing block. This is important
+      // for a very subtle reason: named function expressions can refer to
+      // themselves by name without fear that the binding may change due
+      // to code executing outside the function, whereas function
+      // declarations are vulnerable to the following rebinding:
+      //
+      //   function f() { return f }
+      //   var g = f;
+      //   f = "asdf";
+      //   g(); // "asdf"
+      //
+      // One way to prevent the problem illustrated above is to transform
+      // the function declaration thus:
+      //
+      //   var f = function f() { return f };
+      //   var g = f;
+      //   f = "asdf";
+      //   g(); // f
+      //   g()()()()(); // f
+      //
+      // In the code below, we transform generator function declarations
+      // in the following way:
+      //
+      //   gen().next(); // { value: gen, done: true }
+      //   function *gen() {
+      //     return gen;
+      //   }
+      //
+      // becomes something like
+      //
+      //   var gen = wrapGenerator.mark(function *gen() {
+      //     return gen;
+      //   });
+      //   gen().next(); // { value: gen, done: true }
+      //
+      // which ensures that the generator body can always reliably refer
+      // to gen by name.
+
+      // Remove the FunctionDeclaration so that we can add it back as a
+      // FunctionExpression passed to wrapGenerator.mark.
+      this.replace();
+
+      // Change the type of the function to be an expression instead of a
+      // declaration. Note that all the other fields are the same.
+      node.type = "FunctionExpression";
+
+      var varDecl = b.variableDeclaration("var", [
+        b.variableDeclarator(
+          node.id,
+          b.callExpression(markMethod, [node])
+        )
+      ]);
+
+      if (node.comments) {
+        // Copy any comments preceding the function declaration to the
+        // variable declaration, to avoid weird formatting consequences.
+        varDecl.comments = node.comments;
+        node.comments = null;
+      }
+
+      var bodyPath = path.get("body");
+      var bodyLen = bodyPath.value.length;
+
+      for (var i = 0; i < bodyLen; ++i) {
+        var firstStmtPath = bodyPath.get(i);
+        if (!shouldNotHoistAbove(firstStmtPath)) {
+          firstStmtPath.replace(varDecl, firstStmtPath.value);
+          return;
+        }
+      }
+
+      bodyPath.value.push(varDecl);
     }
 
   } else {
     n.FunctionExpression.assert(node);
     this.replace(b.callExpression(markMethod, [node]));
   }
+}
+
+function shouldNotHoistAbove(stmtPath) {
+  var value = stmtPath.value;
+  n.Statement.assert(value);
+
+  // If the first statement is a "use strict" declaration, make sure to
+  // insert hoisted declarations afterwards.
+  if (n.ExpressionStatement.check(value) &&
+      n.Literal.check(value.expression) &&
+      value.expression.value === "use strict") {
+    return true;
+  }
+
+  if (n.VariableDeclaration.check(value)) {
+    for (var i = 0; i < value.declarations.length; ++i) {
+      var decl = value.declarations[i];
+      if (n.CallExpression.check(decl.init) &&
+          n.MemberExpression.check(decl.init.callee) &&
+          n.Identifier.check(decl.init.callee.object) &&
+          n.Identifier.check(decl.init.callee.property) &&
+          decl.init.callee.object.name === "wrapGenerator" &&
+          decl.init.callee.property.name === "mark") {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function renameArguments(funcPath, argsId) {
@@ -4621,8 +4759,8 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
 }
 
 },{"assert":2,"stable":24}],24:[function(_dereq_,module,exports){
-//! stable.js 0.1.4, https://github.com/Two-Screen/stable
-//! © 2012 Stéphan Kochen, Angry Bytes. MIT licensed.
+//! stable.js 0.1.5, https://github.com/Two-Screen/stable
+//! © 2014 Angry Bytes and contributors. MIT licensed.
 
 (function() {
 
@@ -9383,7 +9521,6 @@ parseYieldExpression: true
         ClassBody: 'ClassBody',
         ClassDeclaration: 'ClassDeclaration',
         ClassExpression: 'ClassExpression',
-        ClassHeritage: 'ClassHeritage',
         ComprehensionBlock: 'ComprehensionBlock',
         ComprehensionExpression: 'ComprehensionExpression',
         ConditionalExpression: 'ConditionalExpression',
@@ -11111,7 +11248,8 @@ parseYieldExpression: true
             return {
                 type: Syntax.UnaryExpression,
                 operator: operator,
-                argument: argument
+                argument: argument,
+                prefix: true
             };
         },
 
@@ -15132,6 +15270,9 @@ Lp.bootstrapCharAt = function(pos) {
         line < strings.length)
         return "\n";
 
+    if (column >= string.length)
+        return "";
+
     return string.charAt(column);
 };
 
@@ -15155,9 +15296,13 @@ Lp.charAt = function(pos) {
         return " ";
 
     c += info.sliceStart - indent;
+
     if (c === info.sliceEnd &&
         line < this.length)
         return "\n";
+
+    if (c >= info.sliceEnd)
+        return "";
 
     return info.line.charAt(c);
 };
@@ -16169,7 +16314,11 @@ var getFieldValue = typesModule.getFieldValue;
 var Node = typesModule.namedTypes.Node;
 var util = _dereq_("./util");
 var comparePos = util.comparePos;
-var NodePath = _dereq_("ast-types").NodePath;
+var types = _dereq_("./types");
+var NodePath = types.NodePath;
+var isObject = types.builtInTypes.object;
+var isArray = types.builtInTypes.array;
+var isString = types.builtInTypes.string;
 
 function Patcher(lines) {
     assert.ok(this instanceof Patcher);
@@ -16179,7 +16328,7 @@ function Patcher(lines) {
         replacements = [];
 
     self.replace = function(loc, lines) {
-        if (typeof lines === "string")
+        if (isString.check(lines))
             lines = linesModule.fromString(lines);
 
         replacements.push({
@@ -16226,6 +16375,11 @@ exports.Patcher = Patcher;
 
 exports.getReprinter = function(path) {
     assert.ok(path instanceof NodePath);
+
+    // Make sure that this path refers specifically to a Node, rather than
+    // some non-Node subproperty of a Node.
+    if (path.node !== path.value)
+        return;
 
     var orig = path.node.original;
     var origLoc = orig && orig.loc;
@@ -16297,10 +16451,10 @@ function findAnyReprints(path, oldNode, reprints) {
     if (newNode === oldNode)
         return true;
 
-    if (newNode instanceof Array)
+    if (isArray.check(newNode))
         return findArrayReprints(path, oldNode, reprints);
 
-    if (typeof newNode === "object")
+    if (isObject.check(newNode))
         return findObjectReprints(path, oldNode, reprints);
 
     return false;
@@ -16308,10 +16462,10 @@ function findAnyReprints(path, oldNode, reprints) {
 
 function findArrayReprints(path, oldNode, reprints) {
     var newNode = path.value;
-    assert.ok(newNode instanceof Array);
+    isArray.assert(newNode);
     var len = newNode.length;
 
-    if (!(oldNode instanceof Array &&
+    if (!(isArray.check(oldNode) &&
           oldNode.length === len))
         return false;
 
@@ -16324,8 +16478,8 @@ function findArrayReprints(path, oldNode, reprints) {
 
 function findObjectReprints(path, oldNode, reprints) {
     var newNode = path.value;
-    assert.strictEqual(typeof newNode, "object");
-    if (!newNode || !oldNode || typeof oldNode !== "object")
+    isObject.assert(newNode);
+    if (!isObject.check(oldNode))
         return false;
 
     var childReprints = [];
@@ -16372,8 +16526,8 @@ function hasParens(oldNode) {
 
 function findChildReprints(path, oldNode, reprints) {
     var newNode = path.value;
-    assert.strictEqual(typeof newNode, "object");
-    assert.strictEqual(typeof oldNode, "object");
+    isObject.assert(oldNode);
+    isObject.assert(newNode);
 
     // If this node needs parentheses and will not be wrapped with
     // parentheses when reprinted, then return false to skip reprinting
@@ -16400,7 +16554,7 @@ function findChildReprints(path, oldNode, reprints) {
     return true;
 }
 
-},{"./lines":35,"./types":41,"./util":42,"assert":2,"ast-types":56}],40:[function(_dereq_,module,exports){
+},{"./lines":35,"./types":41,"./util":42,"assert":2}],40:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var sourceMap = _dereq_("source-map");
 var printComments = _dereq_("./comments").printComments;
@@ -16967,7 +17121,15 @@ function genericPrintNoParens(path, options, print) {
             parts.push(printed[0]);
         }
 
-        parts.push(";");
+        // We generally want to terminate all variable declarations with a
+        // semicolon, except when they are children of for loops.
+        var parentNode = path.parent && path.parent.node;
+        if (!namedTypes.ForStatement.check(parentNode) &&
+            !namedTypes.ForInStatement.check(parentNode) &&
+            !(namedTypes.ForOfStatement &&
+              namedTypes.ForOfStatement.check(parentNode))) {
+            parts.push(";");
+        }
 
         return concat(parts);
 
@@ -17430,7 +17592,7 @@ function nodeStr(n) {
 
 function maybeAddSemicolon(lines) {
     var eoc = lastNonSpaceCharacter(lines);
-    if (eoc && "\n};".indexOf(eoc) < 0)
+    if (!eoc || "\n};".indexOf(eoc) < 0)
         return concat([lines, ";"]);
     return lines;
 }
@@ -18281,6 +18443,7 @@ var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isBoolean = builtin.boolean;
+var isObject = builtin.object;
 var isString = builtin.string;
 var defaults = _dereq_("../lib/shared").defaults;
 
@@ -18429,6 +18592,23 @@ def("ImportDeclaration")
     .field("specifiers", [def("ImportSpecifier")])
     .field("kind", or("named", "default"))
     .field("source", ModuleSpecifier);
+
+def("TaggedTemplateExpression")
+    .bases("Expression")
+    .field("tag", def("Expression"))
+    .field("quasi", def("TemplateLiteral"));
+
+def("TemplateLiteral")
+    .bases("Expression")
+    .build("quasis", "expressions")
+    .field("quasis", [def("TemplateElement")])
+    .field("expressions", [def("Expression")]);
+
+def("TemplateElement")
+    .bases("Node")
+    .build("value", "tail")
+    .field("value", {"cooked": isString, "raw": isString})
+    .field("tail", isBoolean);
 
 types.finalize();
 
@@ -18735,7 +18915,8 @@ NPp.needsParens = function() {
             || n.MemberExpression.check(parent)
             || n.ArrayExpression.check(parent)
             || n.Property.check(parent)
-            || n.ConditionalExpression.check(parent);
+            || n.ConditionalExpression.check(parent)
+            || n.AssignmentExpression.check(parent);
 
     if (n.YieldExpression.check(node))
         return isBinary(parent)
@@ -18946,10 +19127,16 @@ var Pp = Path.prototype;
 
 function getChildPath(path, name) {
     var cache = path.__childCache;
-    return hasOwn.call(cache, name)
-        ? cache[name]
-        : cache[name] = new path.constructor(
-            path.getValueProperty(name), path, name);
+    var actualChildValue = path.getValueProperty(name);
+    var childPath = cache[name];
+    if (!hasOwn.call(cache, name) ||
+        // Ensure consistency between cache and reality.
+        childPath.value !== actualChildValue) {
+        childPath = cache[name] = new path.constructor(
+            actualChildValue, path, name
+        );
+    }
+    return childPath;
 }
 
 // This method is designed to be overridden by subclasses that need to
@@ -19030,15 +19217,32 @@ Pp.replace = function(replacement) {
     var results = [];
 
     if (toString.call(parentValue) === arrayToString) {
+        var i;
+        var newIndex;
+
+        if (this.value !== parentCache[name].value) {
+            // Something caused our index (name) to become out of date.
+            for (i = 0; i < parentValue.length; ++i) {
+                if (parentValue[i] === this.value) {
+                    this.name = name = i;
+                    break;
+                }
+            }
+            assert.ok(
+                this.value === parentCache[name].value,
+                "Cannot replace already replaced node: " + this.value.type
+            );
+        }
+
         delete parentCache.length;
         delete parentCache[name];
 
         var moved = {};
 
-        for (var i = name + 1; i < parentValue.length; ++i) {
+        for (i = name + 1; i < parentValue.length; ++i) {
             var child = parentCache[i];
             if (child) {
-                var newIndex = i - 1 + count;
+                newIndex = i - 1 + count;
                 moved[newIndex] = child;
                 Object.defineProperty(child, "name", { value: newIndex });
                 delete parentCache[i];
@@ -19174,7 +19378,12 @@ function scanScope(path, bindings) {
 function recursiveScanScope(path, bindings) {
     var node = path.value;
 
-    if (isArray.check(node)) {
+    if (path.parent &&
+        namedTypes.FunctionExpression.check(path.parent.node) &&
+        path.parent.node.id) {
+        addPattern(path.parent.get("id"), bindings);
+
+    } else if (isArray.check(node)) {
         path.each(function(childPath) {
             recursiveScanChild(childPath, bindings);
         });
