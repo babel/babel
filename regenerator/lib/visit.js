@@ -80,9 +80,12 @@ function visitNode(node) {
     ]);
   }
 
+  // TODO Ensure $callee is not the name of any hoisted variable.
+  var outerFnId = node.id || (node.id = b.identifier("$callee"));
+  var innerFnId = b.identifier(node.id.name + "$");
+
   // TODO Ensure these identifiers are named uniquely.
   var contextId = makeContextId();
-  var functionId = node.id ? b.identifier(node.id.name + "$") : null/*Anonymous*/;
   var argsId = b.identifier("$args");
   var wrapGeneratorId = b.identifier("wrapGenerator");
   var shouldAliasArguments = renameArguments(this, argsId);
@@ -105,7 +108,8 @@ function visitNode(node) {
   }
 
   var wrapGenArgs = [
-    emitter.getContextFunction(functionId),
+    emitter.getContextFunction(innerFnId),
+    outerFnId,
     b.thisExpression()
   ];
 

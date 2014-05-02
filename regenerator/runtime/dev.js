@@ -25,8 +25,8 @@
     return;
   }
 
-  function wrapGenerator(innerFn, self, tryList) {
-    return new Generator(innerFn, self || null, tryList || []);
+  function wrapGenerator(innerFn, outerFn, self, tryList) {
+    return new Generator(innerFn, outerFn, self || null, tryList || []);
   }
 
   global.wrapGenerator = wrapGenerator;
@@ -58,7 +58,7 @@
     return ctor ? GeneratorFunction.name === ctor.name : false;
   };
 
-  function Generator(innerFn, self, tryList) {
+  function Generator(innerFn, outerFn, self, tryList) {
     var generator = this;
     var context = new Context(tryList);
     var state = GenStateSuspendedStart;
