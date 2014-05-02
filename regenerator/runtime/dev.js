@@ -43,8 +43,15 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
+  var Gp = Generator.prototype;
+  var GFp = GeneratorFunction.prototype = Object.create(Function.prototype);
+  GFp.constructor = GeneratorFunction;
+  GFp.prototype = Gp;
+  Gp.constructor = GFp;
+
   wrapGenerator.mark = function(genFun) {
-    genFun.constructor = GeneratorFunction;
+    genFun.__proto__ = GFp;
+    genFun.prototype = Object.create(Gp);
     return genFun;
   };
 
@@ -59,7 +66,7 @@
   };
 
   function Generator(innerFn, outerFn, self, tryList) {
-    var generator = this;
+    var generator = outerFn ? Object.create(outerFn.prototype) : this;
     var context = new Context(tryList);
     var state = GenStateSuspendedStart;
 
@@ -175,6 +182,8 @@
 
     generator.next = invoke.bind(generator, "next");
     generator.throw = invoke.bind(generator, "throw");
+
+    return generator;
   }
 
   Generator.prototype.toString = function() {
