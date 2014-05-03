@@ -700,7 +700,7 @@
     // of the type given by its first argument.
 
     case 47: // '/'
-      return readToken_slash(code);
+      return readToken_slash();
 
     case 37: case 42: // '%*'
       return readToken_mult_modulo();
