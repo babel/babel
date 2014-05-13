@@ -4,28 +4,42 @@ var path = require("path");
 var fs = require("fs");
 var acorn = require("../acorn.js");
 
-var infile, parsed, options = {}, silent = false, compact = false;
+var infile, infilecount = 0;
+var options = {}, silent = false, compact = false;
+var parsed;
 
 function help(status) {
-  console.log("usage: " + path.basename(process.argv[1]) + " infile [--ecma3|--ecma5] [--strictSemicolons]");
-  console.log("        [--locations] [--compact] [--silent] [--help]");
+  // we want to print to stderr, not stdout, on errors.
+  var print = (status == 0) ? console.out : console.err;
+  print("usage: " + path.basename(process.argv[1]) + " [--ecma3|--ecma5] [--strictSemicolons]");
+  print("        [--locations] [--compact] [--silent] [--help] [--] infile");
   process.exit(status);
 }
 
 for (var i = 2; i < process.argv.length; ++i) {
   var arg = process.argv[i];
-  if (arg == "--ecma3") options.ecmaVersion = 3;
+  if (arg[0] != "-") {
+    infile = arg;
+    ++infilecount;
+    continue;
+  } else if (arg == "--") {
+    if (i < process.argv.length - 2) help(1); // we have too many remaining `infile`s
+    infile = process.argv[i + 1]; // we want the *next* argument, not the current one
+    ++infilecount;
+    break;
+  }
+  else if (arg == "--ecma3") options.ecmaVersion = 3;
   else if (arg == "--ecma5") options.ecmaVersion = 5;
   else if (arg == "--strictSemicolons") options.strictSemicolons = true;
   else if (arg == "--locations") options.locations = true;
   else if (arg == "--silent") silent = true;
   else if (arg == "--compact") compact = true;
   else if (arg == "--help") help(0);
-  else if (arg[0] == "-") help(1);
-  else infile = arg;
+  else help(1); // we already took care of all arguments without a starting dash
 }
 
-if (!infile) help(1);
+// test against counter: we want exactly 1 file. Any more or less should error.
+if (infilecount !== 1) help(1);
 
 try {
   var code = fs.readFileSync(infile, "utf8");
