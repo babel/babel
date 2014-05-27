@@ -83,7 +83,7 @@
         var delegate = context.delegate;
         if (delegate) {
           try {
-            var info = delegate.generator[method](arg);
+            var info = delegate.iterator[method](arg);
 
             // Delegate generator ran and handled its own exceptions so
             // regardless of what the method was, we continue as if it is
@@ -423,9 +423,9 @@
       throw new Error("illegal catch attempt");
     },
 
-    delegateYield: function(generator, resultName, nextLoc) {
+    delegateYield: function(iterable, resultName, nextLoc) {
       this.delegate = {
-        generator: generator,
+        iterator: values(iterable),
         resultName: resultName,
         nextLoc: nextLoc
       };

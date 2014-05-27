@@ -838,6 +838,21 @@ describe("delegated yield", function() {
       done: true
     });
   });
+
+  (runningInTranslation ? it : xit)
+  ("should support any iterable argument", function() {
+    function *gen() {
+      yield 0;
+      yield* [
+        yield "one",
+        yield "two",
+        yield "three"
+      ];
+      yield 5;
+    }
+
+    check(gen(), [0, "one", "two", "three", 2, 3, 4, 5]);
+  });
 });
 
 describe("function declaration hoisting", function() {
