@@ -525,7 +525,11 @@ Ep.explodeStatement = function(path, labelId) {
     self.emitAssign(
       keyIterNextFn,
       b.callExpression(
-        self.contextProperty("keys"),
+        b.memberExpression(
+          b.identifier("wrapGenerator"),
+          b.identifier("keys"),
+          false
+        ),
         [self.explodeExpression(path.get("right"))]
       )
     );
