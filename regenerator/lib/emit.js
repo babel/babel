@@ -202,8 +202,17 @@ Ep.jumpIfNot = function(test, toLoc) {
   n.Expression.assert(test);
   n.Literal.assert(toLoc);
 
+  var negatedTest;
+  if (n.UnaryExpression.check(test) &&
+      test.operator === "!") {
+    // Avoid double negation.
+    negatedTest = test.argument;
+  } else {
+    negatedTest = b.unaryExpression("!", test);
+  }
+
   this.emit(b.ifStatement(
-    b.unaryExpression("!", test),
+    negatedTest,
     b.blockStatement([
       this.assign(this.contextProperty("next"), toLoc),
       b.breakStatement()
