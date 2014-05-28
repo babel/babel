@@ -690,7 +690,8 @@ describe("completed generator", function() {
     return "ALL DONE";
   }
 
-  it("should refuse to resume", function() {
+  (runningInTranslation ? it : xit)
+  ("should refuse to resume", function() {
     var g = gen();
 
     assert.deepEqual(g.next(), {
