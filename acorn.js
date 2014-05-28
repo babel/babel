@@ -1741,8 +1741,17 @@
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
     if (strict || node.body.body.length && isUseStrict(node.body.body[0])) {
-      for (var i = node.id ? -1 : 0; i < node.params.length; ++i) {
-        var id = i < 0 ? node.id : node.params[i];
+      // Negative indices are used to reuse loop body for node.rest and node.id
+      for (var i = -2, id; i < node.params.length; ++i) {
+        if (i >= 0) {
+          id = node.params[i];
+        } else if (i == -2) {
+          if (node.rest) id = node.rest;
+          else continue;
+        } else {
+          if (node.id) id = node.id;
+          else continue;
+        }
         if (isStrictReservedWord(id.name) || isStrictBadIdWord(id.name))
           raise(id.start, "Defining '" + id.name + "' in strict mode");
         if (i >= 0) for (var j = 0; j < i; ++j) if (id.name === node.params[j].name)
