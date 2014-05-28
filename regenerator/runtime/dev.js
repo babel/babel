@@ -247,6 +247,30 @@
     };
   };
 
+  function values(iterable) {
+    var iterator = iterable;
+    var Symbol = global.Symbol;
+    if (Symbol && Symbol.iterator in iterable) {
+      iterator = iterable[Symbol.iterator]();
+    } else if (!isNaN(iterable.length)) {
+      var i = -1;
+      iterator = function next() {
+        while (++i < iterable.length) {
+          if (i in iterable) {
+            next.value = iterable[i];
+            next.done = false;
+            return next;
+          }
+        };
+        next.done = true;
+        return next;
+      };
+      iterator.next = iterator;
+    }
+    return iterator;
+  }
+  wrapGenerator.values = values;
+
   Context.prototype = {
     constructor: Context,
 

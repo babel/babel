@@ -41,6 +41,7 @@ exports.transform = function(node) {
     });
 
     if (n.Node.check(value)) {
+      visitForOfStatement.call(path, value, postOrderTraverse);
       visitNode.call(path, value, postOrderTraverse);
     }
   }
@@ -281,4 +282,88 @@ function renameArguments(funcPath, argsId) {
   // identifiers were free variables, then we need to alias the outer
   // function's arguments object to the variable named by argsId.
   return didReplaceArguments && hasImplicitArguments;
+}
+
+function visitForOfStatement(node, traversePath) {
+  if (!n.ForOfStatement.check(node)) {
+    return;
+  }
+
+  var tempIterId = this.scope.declareTemporary("t$");
+  var tempIterDecl = b.variableDeclarator(
+    tempIterId,
+    b.callExpression(
+      b.memberExpression(
+        b.identifier("wrapGenerator"),
+        b.identifier("values"),
+        false
+      ),
+      [node.right]
+    )
+  );
+
+  var tempInfoId = this.scope.declareTemporary("t$");
+  var tempInfoDecl = b.variableDeclarator(tempInfoId, null);
+
+  var init = node.left;
+  var loopId;
+  if (n.VariableDeclaration.check(init)) {
+    loopId = init.declarations[0].id;
+    init.declarations.push(tempIterDecl, tempInfoDecl);
+  } else {
+    loopId = init;
+    init = b.variableDeclaration("var", [
+      tempIterDecl,
+      tempInfoDecl
+    ]);
+  }
+  n.Identifier.assert(loopId);
+
+  var loopIdAssignExprStmt = b.expressionStatement(
+    b.assignmentExpression(
+      "=",
+      loopId,
+      b.memberExpression(
+        tempInfoId,
+        b.identifier("value"),
+        false
+      )
+    )
+  );
+
+  if (n.BlockStatement.check(node.body)) {
+    node.body.body.unshift(loopIdAssignExprStmt);
+  } else {
+    node.body = b.blockStatement([
+      loopIdAssignExprStmt,
+      node.body
+    ]);
+  }
+
+  this.replace(
+    b.forStatement(
+      init,
+      b.unaryExpression(
+        "!",
+        b.memberExpression(
+          b.assignmentExpression(
+            "=",
+            tempInfoId,
+            b.callExpression(
+              b.memberExpression(
+                tempIterId,
+                b.identifier("next"),
+                false
+              ),
+              []
+            )
+          ),
+          b.identifier("done"),
+          false
+        )
+      ),
+      null,
+      node.body
+    )
+  );
 }
