@@ -83,7 +83,7 @@
         var delegate = context.delegate;
         if (delegate) {
           try {
-            var info = delegate.generator[method](arg);
+            var info = delegate.iterator[method](arg);
 
             // Delegate generator ran and handled its own exceptions so
             // regardless of what the method was, we continue as if it is
@@ -220,6 +220,57 @@
     this.reset();
   }
 
+  wrapGenerator.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    var iterator = iterable;
+    var Symbol = global.Symbol;
+    if (Symbol && Symbol.iterator in iterable) {
+      iterator = iterable[Symbol.iterator]();
+    } else if (!isNaN(iterable.length)) {
+      var i = -1;
+      iterator = function next() {
+        while (++i < iterable.length) {
+          if (i in iterable) {
+            next.value = iterable[i];
+            next.done = false;
+            return next;
+          }
+        };
+        next.done = true;
+        return next;
+      };
+      iterator.next = iterator;
+    }
+    return iterator;
+  }
+  wrapGenerator.values = values;
+
   Context.prototype = {
     constructor: Context,
 
@@ -251,33 +302,6 @@
       }
 
       return this.rval;
-    },
-
-    keys: function(object) {
-      var keys = [];
-      for (var key in object) {
-        keys.push(key);
-      }
-      keys.reverse();
-
-      // Rather than returning an object with a next method, we keep
-      // things simple and return the next function itself.
-      return function next() {
-        while (keys.length) {
-          var key = keys.pop();
-          if (key in object) {
-            next.value = key;
-            next.done = false;
-            return next;
-          }
-        }
-
-        // To avoid creating an additional object, we just hang the .value
-        // and .done properties off the next function object itself. This
-        // also ensures that the minifier will not anonymize the function.
-        next.done = true;
-        return next;
-      };
     },
 
     dispatchException: function(exception) {
@@ -399,9 +423,9 @@
       throw new Error("illegal catch attempt");
     },
 
-    delegateYield: function(generator, resultName, nextLoc) {
+    delegateYield: function(iterable, resultName, nextLoc) {
       this.delegate = {
-        generator: generator,
+        iterator: values(iterable),
         resultName: resultName,
         nextLoc: nextLoc
       };
