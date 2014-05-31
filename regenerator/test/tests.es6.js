@@ -55,6 +55,33 @@ describe("wrapGenerator", function() {
   });
 });
 
+(runningInTranslation ? describe : xdescribe)("@@iterator", function() {
+  var Symbol;
+
+  before(function() {
+    Symbol = global.Symbol;
+    global.Symbol = function(){};
+    global.Symbol.iterator = '@@iterator';
+  });
+
+  after(function() {
+    global.Symbol = Symbol;
+  });
+
+  it("is defined on generator iterators to return themselves", function() {
+    function *gen(){}
+    var iterator = gen();
+    assert.strictEqual(iterator['@@iterator'](), iterator);
+  });
+
+  it("uses whatever Symbol.iterator is as the property", function() {
+    global.Symbol.iterator = 'ITERITER';
+    function *gen(){}
+    var iterator = gen();
+    assert.strictEqual(iterator.ITERITER(), iterator);
+  });
+});
+
 describe("simple argument yielder", function() {
   it("should yield only its first argument", function() {
     function *gen(x) {
