@@ -832,192 +832,229 @@ does not help.</p>             </td>             <td class="code">              
     <span class="kd">var</span> <span class="nx">starttype</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">,</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-97">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-97">&#182;</a>               </div>               <p>Most types of statements are recognized by the keyword they
 start with. Many are trivial to parse, some require a bit of
 complexity.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">switch</span> <span class="p">(</span><span class="nx">starttype</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="nx">_break</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_continue</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="kd">var</span> <span class="nx">isBreak</span> <span class="o">=</span> <span class="nx">starttype</span> <span class="o">===</span> <span class="nx">_break</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_semi</span><span class="p">)</span> <span class="o">||</span> <span class="nx">canInsertSemicolon</span><span class="p">())</span> <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">!==</span> <span class="nx">_name</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
-      <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">parseIdent</span><span class="p">();</span>
-        <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-98">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-98">&#182;</a>               </div>               <p>Verify that there is an actual destination to break or
-continue to.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">lab</span> <span class="o">=</span> <span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">lab</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">label</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">lab</span><span class="p">.</span><span class="nx">kind</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">isBreak</span> <span class="o">||</span> <span class="nx">lab</span><span class="p">.</span><span class="nx">kind</span> <span class="o">===</span> <span class="s2">&quot;loop&quot;</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">&amp;&amp;</span> <span class="nx">isBreak</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Unsyntactic &quot;</span> <span class="o">+</span> <span class="nx">starttype</span><span class="p">.</span><span class="nx">keyword</span><span class="p">);</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">isBreak</span> <span class="o">?</span> <span class="s2">&quot;BreakStatement&quot;</span> <span class="o">:</span> <span class="s2">&quot;ContinueStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_debugger</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DebuggerStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_do</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
-      <span class="nx">expect</span><span class="p">(</span><span class="nx">_while</span><span class="p">);</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
-      <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DoWhileStatement&quot;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-99">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-99">&#182;</a>               </div>               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> loop is
-non-trivial. Basically, we have to parse the init <code>var</code>
-statement or expression, disallowing the <code>in</code> operator (see
-the second parameter to <code>parseExpression</code>), and then check
-whether the next token is <code>in</code>. When there is no init part
-(semicolon immediately after the opening parenthesis), it is
-a regular <code>for</code> loop.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">case</span> <span class="nx">_for</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
-      <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_semi</span><span class="p">)</span> <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_var</span> <span class="o">||</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_let</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">varKind</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">keyword</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
-        <span class="nx">next</span><span class="p">();</span>
-        <span class="nx">parseVar</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">varKind</span><span class="p">);</span>
-        <span class="nx">finishNode</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">init</span><span class="p">.</span><span class="nx">declarations</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_in</span><span class="p">))</span>
-          <span class="k">return</span> <span class="nx">parseForIn</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_in</span><span class="p">))</span> <span class="p">{</span><span class="nx">checkLVal</span><span class="p">(</span><span class="nx">init</span><span class="p">);</span> <span class="k">return</span> <span class="nx">parseForIn</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);}</span>
-      <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_function</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">parseFunction</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_if</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">consequent</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">alternate</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_else</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseStatement</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;IfStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_return</span><span class="o">:</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">inFunction</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowReturnOutsideFunction</span><span class="p">)</span>
-        <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;return&#39; outside of function&quot;</span><span class="p">);</span>
-      <span class="nx">next</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-100">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-100">&#182;</a>               </div>               <p>In <code>return</code> (and <code>break</code>/<code>continue</code>), the keywords with
-optional arguments, we eagerly look for a semicolon or the
-possibility to insert one.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_semi</span><span class="p">)</span> <span class="o">||</span> <span class="nx">canInsertSemicolon</span><span class="p">())</span> <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">else</span> <span class="p">{</span> <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span> <span class="nx">semicolon</span><span class="p">();</span> <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ReturnStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_switch</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">discriminant</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">cases</span> <span class="o">=</span> <span class="p">[];</span>
-      <span class="nx">expect</span><span class="p">(</span><span class="nx">_braceL</span><span class="p">);</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">switchLabel</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-101">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-101">&#182;</a>               </div>               <p>Statements under must be grouped (by label) in SwitchCase
-nodes. <code>cur</code> is used to keep the node that we are currently
-adding statements to.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">sawDefault</span><span class="p">;</span> <span class="nx">tokType</span> <span class="o">!=</span> <span class="nx">_braceR</span><span class="p">;)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_case</span> <span class="o">||</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_default</span><span class="p">)</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">isCase</span> <span class="o">=</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_case</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">cur</span><span class="p">,</span> <span class="s2">&quot;SwitchCase&quot;</span><span class="p">);</span>
-          <span class="nx">node</span><span class="p">.</span><span class="nx">cases</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">cur</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">());</span>
-          <span class="nx">cur</span><span class="p">.</span><span class="nx">consequent</span> <span class="o">=</span> <span class="p">[];</span>
-          <span class="nx">next</span><span class="p">();</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">isCase</span><span class="p">)</span> <span class="nx">cur</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
-          <span class="k">else</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">sawDefault</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">lastStart</span><span class="p">,</span> <span class="s2">&quot;Multiple default clauses&quot;</span><span class="p">);</span> <span class="nx">sawDefault</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="nx">cur</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-          <span class="p">}</span>
-          <span class="nx">expect</span><span class="p">(</span><span class="nx">_colon</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
-          <span class="nx">cur</span><span class="p">.</span><span class="nx">consequent</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">parseStatement</span><span class="p">());</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">cur</span><span class="p">,</span> <span class="s2">&quot;SwitchCase&quot;</span><span class="p">);</span>
-      <span class="nx">next</span><span class="p">();</span> <span class="c1">// Closing brace</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;SwitchStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_throw</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">newline</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="nx">tokStart</span><span class="p">)))</span>
-        <span class="nx">raise</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="s2">&quot;Illegal newline after throw&quot;</span><span class="p">);</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
-      <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThrowStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_try</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">block</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_catch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">clause</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
-        <span class="nx">next</span><span class="p">();</span>
-        <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
-        <span class="nx">clause</span><span class="p">.</span><span class="nx">param</span> <span class="o">=</span> <span class="nx">parseIdent</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span> <span class="o">&amp;&amp;</span> <span class="nx">isStrictBadIdWord</span><span class="p">(</span><span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">name</span><span class="p">))</span>
-          <span class="nx">raise</span><span class="p">(</span><span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Binding &quot;</span> <span class="o">+</span> <span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; in strict mode&quot;</span><span class="p">);</span>
-        <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenR</span><span class="p">);</span>
-        <span class="nx">clause</span><span class="p">.</span><span class="nx">guard</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="nx">clause</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">clause</span><span class="p">,</span> <span class="s2">&quot;CatchClause&quot;</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">guardedHandlers</span> <span class="o">=</span> <span class="nx">empty</span><span class="p">;</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_finally</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseBlock</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span><span class="p">)</span>
-        <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Missing catch or finally clause&quot;</span><span class="p">);</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;TryStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_const</span><span class="o">:</span>
-    <span class="k">case</span> <span class="nx">_let</span><span class="o">:</span>
-    <span class="k">case</span> <span class="nx">_var</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">parseVar</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">starttype</span><span class="p">.</span><span class="nx">keyword</span><span class="p">);</span>
-      <span class="nx">semicolon</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_while</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
-      <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WhileStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_with</span><span class="o">:</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;with&#39; in strict mode&quot;</span><span class="p">);</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">object</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WithStatement&quot;</span><span class="p">);</span>
-
-    <span class="k">case</span> <span class="nx">_braceL</span><span class="o">:</span>
-      <span class="k">return</span> <span class="nx">parseBlock</span><span class="p">();</span>
-
-    <span class="k">case</span> <span class="nx">_semi</span><span class="o">:</span>
-      <span class="nx">next</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;EmptyStatement&quot;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-102">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-102">&#182;</a>               </div>               <p>If the statement does not start with a statement keyword or a
+    <span class="k">case</span> <span class="nx">_break</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_continue</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseBreakContinueStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">starttype</span><span class="p">.</span><span class="nx">keyword</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_debugger</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseDebuggerStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_do</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseDoStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_for</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseForStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_function</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseFunctionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_if</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseIfStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_return</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseReturnStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_switch</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseSwitchStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_throw</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseThrowStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_try</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseTryStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_var</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_let</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_const</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseVarStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">starttype</span><span class="p">.</span><span class="nx">keyword</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_while</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseWhileStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_with</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseWithStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="k">case</span> <span class="nx">_braceL</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseBlock</span><span class="p">();</span> <span class="c1">// no point creating a function for this</span>
+    <span class="k">case</span> <span class="nx">_semi</span><span class="o">:</span> <span class="k">return</span> <span class="nx">parseEmptyStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-98">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-98">&#182;</a>               </div>               <p>If the statement does not start with a statement keyword or a
 brace, it's an ExpressionStatement or LabeledStatement. We
 simply start parsing an expression, and afterwards, if the
 next token is a colon and the expression was a simple
 Identifier node, we switch to interpreting it as a label.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">default</span><span class="o">:</span>
       <span class="kd">var</span> <span class="nx">maybeName</span> <span class="o">=</span> <span class="nx">tokVal</span><span class="p">,</span> <span class="nx">expr</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">starttype</span> <span class="o">===</span> <span class="nx">_name</span> <span class="o">&amp;&amp;</span> <span class="nx">expr</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;Identifier&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_colon</span><span class="p">))</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">===</span> <span class="nx">maybeName</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">expr</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Label &#39;&quot;</span> <span class="o">+</span> <span class="nx">maybeName</span> <span class="o">+</span> <span class="s2">&quot;&#39; is already declared&quot;</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">kind</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">isLoop</span> <span class="o">?</span> <span class="s2">&quot;loop&quot;</span> <span class="o">:</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_switch</span> <span class="o">?</span> <span class="s2">&quot;switch&quot;</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="nx">maybeName</span><span class="p">,</span> <span class="nx">kind</span><span class="o">:</span> <span class="nx">kind</span><span class="p">});</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
-        <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;LabeledStatement&quot;</span><span class="p">);</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">expression</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
-        <span class="nx">semicolon</span><span class="p">();</span>
-        <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ExpressionStatement&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">starttype</span> <span class="o">===</span> <span class="nx">_name</span> <span class="o">&amp;&amp;</span> <span class="nx">expr</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;Identifier&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_colon</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nx">parseLabeledStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">maybeName</span><span class="p">,</span> <span class="nx">expr</span><span class="p">);</span>
+      <span class="k">else</span> <span class="k">return</span> <span class="nx">parseExpressionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">expr</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseBreakContinueStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">keyword</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">isBreak</span> <span class="o">=</span> <span class="nx">keyword</span> <span class="o">==</span> <span class="s2">&quot;break&quot;</span><span class="p">;</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_semi</span><span class="p">)</span> <span class="o">||</span> <span class="nx">canInsertSemicolon</span><span class="p">())</span> <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">!==</span> <span class="nx">_name</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">parseIdent</span><span class="p">();</span>
+      <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-99">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-99">&#182;</a>               </div>               <p>Verify that there is an actual destination to break or
+continue to.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">lab</span> <span class="o">=</span> <span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">lab</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">label</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">lab</span><span class="p">.</span><span class="nx">kind</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">isBreak</span> <span class="o">||</span> <span class="nx">lab</span><span class="p">.</span><span class="nx">kind</span> <span class="o">===</span> <span class="s2">&quot;loop&quot;</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">&amp;&amp;</span> <span class="nx">isBreak</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
       <span class="p">}</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Unsyntactic &quot;</span> <span class="o">+</span> <span class="nx">keyword</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">isBreak</span> <span class="o">?</span> <span class="s2">&quot;BreakStatement&quot;</span> <span class="o">:</span> <span class="s2">&quot;ContinueStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseDebuggerStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DebuggerStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseDoStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_while</span><span class="p">);</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DoWhileStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  </pre></div>             </td>           </tr>                               <tr id="section-100">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-100">&#182;</a>               </div>               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> loop is
+non-trivial. Basically, we have to parse the init <code>var</code>
+statement or expression, disallowing the <code>in</code> operator (see
+the second parameter to <code>parseExpression</code>), and then check
+whether the next token is <code>in</code>. When there is no init part
+(semicolon immediately after the opening parenthesis), it is
+a regular <code>for</code> loop.</p>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="kd">function</span> <span class="nx">parseForStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_semi</span><span class="p">)</span> <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_var</span> <span class="o">||</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_let</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">(),</span> <span class="nx">varKind</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">keyword</span><span class="p">;</span>
+      <span class="nx">next</span><span class="p">();</span>
+      <span class="nx">parseVar</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">varKind</span><span class="p">);</span>
+      <span class="nx">finishNode</span><span class="p">(</span><span class="nx">init</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">init</span><span class="p">.</span><span class="nx">declarations</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_in</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nx">parseForIn</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_in</span><span class="p">))</span> <span class="p">{</span><span class="nx">checkLVal</span><span class="p">(</span><span class="nx">init</span><span class="p">);</span> <span class="k">return</span> <span class="nx">parseForIn</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);}</span>
+    <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseFunctionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">parseFunction</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseIfStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">consequent</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">alternate</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_else</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseStatement</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;IfStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseReturnStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">inFunction</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowReturnOutsideFunction</span><span class="p">)</span>
+      <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;return&#39; outside of function&quot;</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-101">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-101">&#182;</a>               </div>               <p>In <code>return</code> (and <code>break</code>/<code>continue</code>), the keywords with
+optional arguments, we eagerly look for a semicolon or the
+possibility to insert one.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_semi</span><span class="p">)</span> <span class="o">||</span> <span class="nx">canInsertSemicolon</span><span class="p">())</span> <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span> <span class="nx">semicolon</span><span class="p">();</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ReturnStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseSwitchStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">discriminant</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">cases</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_braceL</span><span class="p">);</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">switchLabel</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-102">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-102">&#182;</a>               </div>               <p>Statements under must be grouped (by label) in SwitchCase
+nodes. <code>cur</code> is used to keep the node that we are currently
+adding statements to.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">sawDefault</span><span class="p">;</span> <span class="nx">tokType</span> <span class="o">!=</span> <span class="nx">_braceR</span><span class="p">;)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_case</span> <span class="o">||</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_default</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">isCase</span> <span class="o">=</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_case</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">cur</span><span class="p">,</span> <span class="s2">&quot;SwitchCase&quot;</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">cases</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">cur</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">());</span>
+        <span class="nx">cur</span><span class="p">.</span><span class="nx">consequent</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="nx">next</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">isCase</span><span class="p">)</span> <span class="nx">cur</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">sawDefault</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">lastStart</span><span class="p">,</span> <span class="s2">&quot;Multiple default clauses&quot;</span><span class="p">);</span> <span class="nx">sawDefault</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+          <span class="nx">cur</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">_colon</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
+        <span class="nx">cur</span><span class="p">.</span><span class="nx">consequent</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">parseStatement</span><span class="p">());</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cur</span><span class="p">)</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">cur</span><span class="p">,</span> <span class="s2">&quot;SwitchCase&quot;</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span> <span class="c1">// Closing brace</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;SwitchStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseThrowStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">newline</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="nx">tokStart</span><span class="p">)))</span>
+      <span class="nx">raise</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="s2">&quot;Illegal newline after throw&quot;</span><span class="p">);</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThrowStatement&quot;</span><span class="p">);</span><span class="nx">next</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">newline</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="nx">tokStart</span><span class="p">)))</span>
+      <span class="nx">raise</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="s2">&quot;Illegal newline after throw&quot;</span><span class="p">);</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThrowStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseTryStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">block</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_catch</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">clause</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
+      <span class="nx">next</span><span class="p">();</span>
+      <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
+      <span class="nx">clause</span><span class="p">.</span><span class="nx">param</span> <span class="o">=</span> <span class="nx">parseIdent</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span> <span class="o">&amp;&amp;</span> <span class="nx">isStrictBadIdWord</span><span class="p">(</span><span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">name</span><span class="p">))</span>
+        <span class="nx">raise</span><span class="p">(</span><span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Binding &quot;</span> <span class="o">+</span> <span class="nx">clause</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; in strict mode&quot;</span><span class="p">);</span>
+      <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenR</span><span class="p">);</span>
+      <span class="nx">clause</span><span class="p">.</span><span class="nx">guard</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="nx">clause</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">clause</span><span class="p">,</span> <span class="s2">&quot;CatchClause&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">guardedHandlers</span> <span class="o">=</span> <span class="nx">empty</span><span class="p">;</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_finally</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseBlock</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">handler</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">finalizer</span><span class="p">)</span>
+      <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Missing catch or finally clause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;TryStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseVarStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">kind</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">parseVar</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">kind</span><span class="p">);</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseWhileStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WhileStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseWithStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;with&#39; in strict mode&quot;</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">object</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WithStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseEmptyStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;EmptyStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseLabeledStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">maybeName</span><span class="p">,</span> <span class="nx">expr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">===</span> <span class="nx">maybeName</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">expr</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Label &#39;&quot;</span> <span class="o">+</span> <span class="nx">maybeName</span> <span class="o">+</span> <span class="s2">&quot;&#39; is already declared&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">kind</span> <span class="o">=</span> <span class="nx">tokType</span><span class="p">.</span><span class="nx">isLoop</span> <span class="o">?</span> <span class="s2">&quot;loop&quot;</span> <span class="o">:</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_switch</span> <span class="o">?</span> <span class="s2">&quot;switch&quot;</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="nx">maybeName</span><span class="p">,</span> <span class="nx">kind</span><span class="o">:</span> <span class="nx">kind</span><span class="p">});</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
+    <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;LabeledStatement&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">parseExpressionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">expr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">expression</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
+    <span class="nx">semicolon</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ExpressionStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-103">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-103">&#182;</a>               </div>               <p>Used for constructs like <code>switch</code> and <code>if</code> that insist on
 parentheses around their expression.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseParenExpression</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>

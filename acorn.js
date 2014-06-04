@@ -1167,211 +1167,245 @@
     // complexity.
 
     switch (starttype) {
-    case _break: case _continue:
-      next();
-      var isBreak = starttype === _break;
-      if (eat(_semi) || canInsertSemicolon()) node.label = null;
-      else if (tokType !== _name) unexpected();
-      else {
-        node.label = parseIdent();
-        semicolon();
-      }
-
-      // Verify that there is an actual destination to break or
-      // continue to.
-      for (var i = 0; i < labels.length; ++i) {
-        var lab = labels[i];
-        if (node.label == null || lab.name === node.label.name) {
-          if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
-          if (node.label && isBreak) break;
-        }
-      }
-      if (i === labels.length) raise(node.start, "Unsyntactic " + starttype.keyword);
-      return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
-
-    case _debugger:
-      next();
-      semicolon();
-      return finishNode(node, "DebuggerStatement");
-
-    case _do:
-      next();
-      labels.push(loopLabel);
-      node.body = parseStatement();
-      labels.pop();
-      expect(_while);
-      node.test = parseParenExpression();
-      semicolon();
-      return finishNode(node, "DoWhileStatement");
-
-      // Disambiguating between a `for` and a `for`/`in` loop is
-      // non-trivial. Basically, we have to parse the init `var`
-      // statement or expression, disallowing the `in` operator (see
-      // the second parameter to `parseExpression`), and then check
-      // whether the next token is `in`. When there is no init part
-      // (semicolon immediately after the opening parenthesis), it is
-      // a regular `for` loop.
-
-    case _for:
-      next();
-      labels.push(loopLabel);
-      expect(_parenL);
-      if (tokType === _semi) return parseFor(node, null);
-      if (tokType === _var || tokType === _let) {
-        var varKind = tokType.keyword;
-        var init = startNode();
-        next();
-        parseVar(init, true, varKind);
-        finishNode(init, "VariableDeclaration");
-        if (init.declarations.length === 1 && eat(_in))
-          return parseForIn(node, init);
-        return parseFor(node, init);
-      }
-      var init = parseExpression(false, true);
-      if (eat(_in)) {checkLVal(init); return parseForIn(node, init);}
-      return parseFor(node, init);
-
-    case _function:
-      next();
-      return parseFunction(node, true);
-
-    case _if:
-      next();
-      node.test = parseParenExpression();
-      node.consequent = parseStatement();
-      node.alternate = eat(_else) ? parseStatement() : null;
-      return finishNode(node, "IfStatement");
-
-    case _return:
-      if (!inFunction && !options.allowReturnOutsideFunction)
-        raise(tokStart, "'return' outside of function");
-      next();
-
-      // In `return` (and `break`/`continue`), the keywords with
-      // optional arguments, we eagerly look for a semicolon or the
-      // possibility to insert one.
-
-      if (eat(_semi) || canInsertSemicolon()) node.argument = null;
-      else { node.argument = parseExpression(); semicolon(); }
-      return finishNode(node, "ReturnStatement");
-
-    case _switch:
-      next();
-      node.discriminant = parseParenExpression();
-      node.cases = [];
-      expect(_braceL);
-      labels.push(switchLabel);
-
-      // Statements under must be grouped (by label) in SwitchCase
-      // nodes. `cur` is used to keep the node that we are currently
-      // adding statements to.
-
-      for (var cur, sawDefault; tokType != _braceR;) {
-        if (tokType === _case || tokType === _default) {
-          var isCase = tokType === _case;
-          if (cur) finishNode(cur, "SwitchCase");
-          node.cases.push(cur = startNode());
-          cur.consequent = [];
-          next();
-          if (isCase) cur.test = parseExpression();
-          else {
-            if (sawDefault) raise(lastStart, "Multiple default clauses"); sawDefault = true;
-            cur.test = null;
-          }
-          expect(_colon);
-        } else {
-          if (!cur) unexpected();
-          cur.consequent.push(parseStatement());
-        }
-      }
-      if (cur) finishNode(cur, "SwitchCase");
-      next(); // Closing brace
-      labels.pop();
-      return finishNode(node, "SwitchStatement");
-
-    case _throw:
-      next();
-      if (newline.test(input.slice(lastEnd, tokStart)))
-        raise(lastEnd, "Illegal newline after throw");
-      node.argument = parseExpression();
-      semicolon();
-      return finishNode(node, "ThrowStatement");
-
-    case _try:
-      next();
-      node.block = parseBlock();
-      node.handler = null;
-      if (tokType === _catch) {
-        var clause = startNode();
-        next();
-        expect(_parenL);
-        clause.param = parseIdent();
-        if (strict && isStrictBadIdWord(clause.param.name))
-          raise(clause.param.start, "Binding " + clause.param.name + " in strict mode");
-        expect(_parenR);
-        clause.guard = null;
-        clause.body = parseBlock();
-        node.handler = finishNode(clause, "CatchClause");
-      }
-      node.guardedHandlers = empty;
-      node.finalizer = eat(_finally) ? parseBlock() : null;
-      if (!node.handler && !node.finalizer)
-        raise(node.start, "Missing catch or finally clause");
-      return finishNode(node, "TryStatement");
-
-    case _const:
-    case _let:
-    case _var:
-      next();
-      parseVar(node, false, starttype.keyword);
-      semicolon();
-      return finishNode(node, "VariableDeclaration");
-
-    case _while:
-      next();
-      node.test = parseParenExpression();
-      labels.push(loopLabel);
-      node.body = parseStatement();
-      labels.pop();
-      return finishNode(node, "WhileStatement");
-
-    case _with:
-      if (strict) raise(tokStart, "'with' in strict mode");
-      next();
-      node.object = parseParenExpression();
-      node.body = parseStatement();
-      return finishNode(node, "WithStatement");
-
-    case _braceL:
-      return parseBlock();
-
-    case _semi:
-      next();
-      return finishNode(node, "EmptyStatement");
+    case _break: case _continue: return parseBreakContinueStatement(node, starttype.keyword);
+    case _debugger: return parseDebuggerStatement(node);
+    case _do: return parseDoStatement(node);
+    case _for: return parseForStatement(node);
+    case _function: return parseFunctionStatement(node);
+    case _if: return parseIfStatement(node);
+    case _return: return parseReturnStatement(node);
+    case _switch: return parseSwitchStatement(node);
+    case _throw: return parseThrowStatement(node);
+    case _try: return parseTryStatement(node);
+    case _var: case _let: case _const: return parseVarStatement(node, starttype.keyword);
+    case _while: return parseWhileStatement(node);
+    case _with: return parseWithStatement(node);
+    case _braceL: return parseBlock(); // no point creating a function for this
+    case _semi: return parseEmptyStatement(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
       // simply start parsing an expression, and afterwards, if the
       // next token is a colon and the expression was a simple
       // Identifier node, we switch to interpreting it as a label.
-
     default:
       var maybeName = tokVal, expr = parseExpression();
-      if (starttype === _name && expr.type === "Identifier" && eat(_colon)) {
-        for (var i = 0; i < labels.length; ++i)
-          if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
-        var kind = tokType.isLoop ? "loop" : tokType === _switch ? "switch" : null;
-        labels.push({name: maybeName, kind: kind});
-        node.body = parseStatement();
-        labels.pop();
-        node.label = expr;
-        return finishNode(node, "LabeledStatement");
-      } else {
-        node.expression = expr;
-        semicolon();
-        return finishNode(node, "ExpressionStatement");
+      if (starttype === _name && expr.type === "Identifier" && eat(_colon))
+        return parseLabeledStatement(node, maybeName, expr);
+      else return parseExpressionStatement(node, expr);
+    }
+  }
+  
+  function parseBreakContinueStatement(node, keyword) {
+    var isBreak = keyword == "break";
+    next();
+    if (eat(_semi) || canInsertSemicolon()) node.label = null;
+    else if (tokType !== _name) unexpected();
+    else {
+      node.label = parseIdent();
+      semicolon();
+    }
+
+    // Verify that there is an actual destination to break or
+    // continue to.
+    for (var i = 0; i < labels.length; ++i) {
+      var lab = labels[i];
+      if (node.label == null || lab.name === node.label.name) {
+        if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
+        if (node.label && isBreak) break;
       }
     }
+    if (i === labels.length) raise(node.start, "Unsyntactic " + keyword);
+    return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
+  }
+  
+  function parseDebuggerStatement(node) {
+    next();
+    semicolon();
+    return finishNode(node, "DebuggerStatement");
+  }
+  
+  function parseDoStatement(node) {
+    next();
+    labels.push(loopLabel);
+    node.body = parseStatement();
+    labels.pop();
+    expect(_while);
+    node.test = parseParenExpression();
+    semicolon();
+    return finishNode(node, "DoWhileStatement");
+  }
+  
+  // Disambiguating between a `for` and a `for`/`in` loop is
+  // non-trivial. Basically, we have to parse the init `var`
+  // statement or expression, disallowing the `in` operator (see
+  // the second parameter to `parseExpression`), and then check
+  // whether the next token is `in`. When there is no init part
+  // (semicolon immediately after the opening parenthesis), it is
+  // a regular `for` loop.
+  
+  function parseForStatement(node) {
+    next();
+    labels.push(loopLabel);
+    expect(_parenL);
+    if (tokType === _semi) return parseFor(node, null);
+    if (tokType === _var || tokType === _let) {
+      var init = startNode(), varKind = tokType.keyword;
+      next();
+      parseVar(init, true, varKind);
+      finishNode(init, "VariableDeclaration");
+      if (init.declarations.length === 1 && eat(_in))
+        return parseForIn(node, init);
+      return parseFor(node, init);
+    }
+    var init = parseExpression(false, true);
+    if (eat(_in)) {checkLVal(init); return parseForIn(node, init);}
+    return parseFor(node, init);
+  }
+  
+  function parseFunctionStatement(node) {
+    next();
+    return parseFunction(node, true);
+  }
+  
+  function parseIfStatement(node) {
+    next();
+    node.test = parseParenExpression();
+    node.consequent = parseStatement();
+    node.alternate = eat(_else) ? parseStatement() : null;
+    return finishNode(node, "IfStatement");
+  }
+  
+  function parseReturnStatement(node) {
+    if (!inFunction && !options.allowReturnOutsideFunction)
+      raise(tokStart, "'return' outside of function");
+    next();
+
+    // In `return` (and `break`/`continue`), the keywords with
+    // optional arguments, we eagerly look for a semicolon or the
+    // possibility to insert one.
+
+    if (eat(_semi) || canInsertSemicolon()) node.argument = null;
+    else { node.argument = parseExpression(); semicolon(); }
+    return finishNode(node, "ReturnStatement");
+  }
+  
+  function parseSwitchStatement(node) {
+    next();
+    node.discriminant = parseParenExpression();
+    node.cases = [];
+    expect(_braceL);
+    labels.push(switchLabel);
+
+    // Statements under must be grouped (by label) in SwitchCase
+    // nodes. `cur` is used to keep the node that we are currently
+    // adding statements to.
+
+    for (var cur, sawDefault; tokType != _braceR;) {
+      if (tokType === _case || tokType === _default) {
+        var isCase = tokType === _case;
+        if (cur) finishNode(cur, "SwitchCase");
+        node.cases.push(cur = startNode());
+        cur.consequent = [];
+        next();
+        if (isCase) cur.test = parseExpression();
+        else {
+          if (sawDefault) raise(lastStart, "Multiple default clauses"); sawDefault = true;
+          cur.test = null;
+        }
+        expect(_colon);
+      } else {
+        if (!cur) unexpected();
+        cur.consequent.push(parseStatement());
+      }
+    }
+    if (cur) finishNode(cur, "SwitchCase");
+    next(); // Closing brace
+    labels.pop();
+    return finishNode(node, "SwitchStatement");
+  }
+  
+  function parseThrowStatement(node) {
+    next();
+    if (newline.test(input.slice(lastEnd, tokStart)))
+      raise(lastEnd, "Illegal newline after throw");
+    node.argument = parseExpression();
+    semicolon();
+    return finishNode(node, "ThrowStatement");next();
+    if (newline.test(input.slice(lastEnd, tokStart)))
+      raise(lastEnd, "Illegal newline after throw");
+    node.argument = parseExpression();
+    semicolon();
+    return finishNode(node, "ThrowStatement");
+  }
+  
+  function parseTryStatement(node) {
+    next();
+    node.block = parseBlock();
+    node.handler = null;
+    if (tokType === _catch) {
+      var clause = startNode();
+      next();
+      expect(_parenL);
+      clause.param = parseIdent();
+      if (strict && isStrictBadIdWord(clause.param.name))
+        raise(clause.param.start, "Binding " + clause.param.name + " in strict mode");
+      expect(_parenR);
+      clause.guard = null;
+      clause.body = parseBlock();
+      node.handler = finishNode(clause, "CatchClause");
+    }
+    node.guardedHandlers = empty;
+    node.finalizer = eat(_finally) ? parseBlock() : null;
+    if (!node.handler && !node.finalizer)
+      raise(node.start, "Missing catch or finally clause");
+    return finishNode(node, "TryStatement");
+  }
+  
+  function parseVarStatement(node, kind) {
+    next();
+    parseVar(node, false, kind);
+    semicolon();
+    return finishNode(node, "VariableDeclaration");
+  }
+  
+  function parseWhileStatement(node) {
+    next();
+    node.test = parseParenExpression();
+    labels.push(loopLabel);
+    node.body = parseStatement();
+    labels.pop();
+    return finishNode(node, "WhileStatement");
+  }
+  
+  function parseWithStatement(node) {
+    if (strict) raise(tokStart, "'with' in strict mode");
+    next();
+    node.object = parseParenExpression();
+    node.body = parseStatement();
+    return finishNode(node, "WithStatement");
+  }
+  
+  function parseEmptyStatement(node) {
+    next();
+    return finishNode(node, "EmptyStatement");
+  }
+  
+  function parseLabeledStatement(node, maybeName, expr) {
+    for (var i = 0; i < labels.length; ++i)
+      if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
+    var kind = tokType.isLoop ? "loop" : tokType === _switch ? "switch" : null;
+    labels.push({name: maybeName, kind: kind});
+    node.body = parseStatement();
+    labels.pop();
+    node.label = expr;
+    return finishNode(node, "LabeledStatement");
+  }
+  
+  function parseExpressionStatement(node, expr) {
+    node.expression = expr;
+    semicolon();
+    return finishNode(node, "ExpressionStatement");
   }
 
   // Used for constructs like `switch` and `if` that insist on
