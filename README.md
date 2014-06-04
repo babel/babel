@@ -22,9 +22,10 @@ git clone https://github.com/marijnh/acorn.git
 
 When run in a CommonJS (node.js) or AMD environment, exported values
 appear in the interfaces exposed by the individual files, as usual.
-When loaded in the browser without any kind of module management, a
-single global object `acorn` will be defined, and all the exported
-properties will be added to that.
+When loaded in the browser (Acorn works in any JS-enabled browser more
+recent than IE5) without any kind of module management, a single
+global object `acorn` will be defined, and all the exported properties
+will be added to that.
 
 ### acorn.js
 
