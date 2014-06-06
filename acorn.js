@@ -51,9 +51,9 @@
 
   var defaultOptions = exports.defaultOptions = {
     // `ecmaVersion` indicates the ECMAScript version to parse. Must
-    // be either 3, or 5, or 6. This
-    // influences support for strict mode, the set of reserved words,
-    // support for getters and setters and other features.
+    // be either 3, or 5, or 6. This influences support for strict
+    // mode, the set of reserved words, support for getters and
+    // setters and other features. ES6 support is only partial.
     ecmaVersion: 5,
     // Turn on `strictSemicolons` to prevent the parser from doing
     // automatic semicolon insertion.
