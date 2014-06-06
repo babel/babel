@@ -51,9 +51,9 @@
 
   var defaultOptions = exports.defaultOptions = {
     // `ecmaVersion` indicates the ECMAScript version to parse. Must
-    // be either 3 or 5. This
-    // influences support for strict mode, the set of reserved words, and
-    // support for getters and setter.
+    // be either 3, or 5, or 6. This
+    // influences support for strict mode, the set of reserved words,
+    // support for getters and setters and other features.
     ecmaVersion: 5,
     // Turn on `strictSemicolons` to prevent the parser from doing
     // automatic semicolon insertion.
@@ -113,6 +113,8 @@
     for (var opt in defaultOptions) if (!Object.prototype.hasOwnProperty.call(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || null;
+
+    isKeyword = options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
   }
 
   // The `getLineInfo` function is mostly useful when the
@@ -276,6 +278,7 @@
   var _finally = {keyword: "finally"}, _for = {keyword: "for", isLoop: true}, _function = {keyword: "function"};
   var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
   var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"}, _var = {keyword: "var"};
+  var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
 
@@ -296,7 +299,8 @@
                       "continue": _continue, "debugger": _debugger, "default": _default,
                       "do": _do, "else": _else, "finally": _finally, "for": _for,
                       "function": _function, "if": _if, "return": _return, "switch": _switch,
-                      "throw": _throw, "try": _try, "var": _var, "while": _while, "with": _with,
+                      "throw": _throw, "try": _try, "var": _var, "let": _let, "const": _const,
+                      "while": _while, "with": _with,
                       "null": _null, "true": _true, "false": _false, "new": _new, "in": _in,
                       "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
@@ -415,7 +419,13 @@
 
   // And the keywords.
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this");
+  var ecma5AndLessKeywords = "break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this";
+
+  var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
+
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const");
+
+  var isKeyword = isEcma5AndLessKeyword;
 
   // ## Character categories
 
@@ -1207,10 +1217,11 @@
       labels.push(loopLabel);
       expect(_parenL);
       if (tokType === _semi) return parseFor(node, null);
-      if (tokType === _var) {
+      if (tokType === _var || tokType === _let) {
+        var varKind = tokType.keyword;
         var init = startNode();
         next();
-        parseVar(init, true);
+        parseVar(init, true, varKind);
         finishNode(init, "VariableDeclaration");
         if (init.declarations.length === 1 && eat(_in))
           return parseForIn(node, init);
@@ -1308,9 +1319,11 @@
         raise(node.start, "Missing catch or finally clause");
       return finishNode(node, "TryStatement");
 
+    case _const:
+    case _let:
     case _var:
       next();
-      parseVar(node);
+      parseVar(node, false, starttype.keyword);
       semicolon();
       return finishNode(node, "VariableDeclaration");
 
@@ -1421,15 +1434,15 @@
 
   // Parse a list of variable declarations.
 
-  function parseVar(node, noIn) {
+  function parseVar(node, noIn, kind) {
     node.declarations = [];
-    node.kind = "var";
+    node.kind = kind;
     for (;;) {
       var decl = startNode();
       decl.id = parseIdent();
       if (strict && isStrictBadIdWord(decl.id.name))
         raise(decl.id.start, "Binding " + decl.id.name + " in strict mode");
-      decl.init = eat(_eq) ? parseExpression(true, noIn) : null;
+      decl.init = eat(_eq) ? parseExpression(true, noIn) : (kind === _const.keyword ? unexpected() : null);
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
     }
