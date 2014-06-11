@@ -183,13 +183,16 @@
     generator.next = invoke.bind(generator, "next");
     generator.throw = invoke.bind(generator, "throw");
 
-    var iteratorSymbol = typeof Symbol === "function" && Symbol.iterator || "@@iterator";
-    generator[iteratorSymbol] = function() { return generator; };
-
     return generator;
   }
 
-  Generator.prototype.toString = function() {
+  Gp[typeof Symbol === "function"
+     && Symbol.iterator
+     || "@@iterator"] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
     return "[object Generator]";
   };
 

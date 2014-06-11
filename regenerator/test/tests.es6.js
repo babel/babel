@@ -61,24 +61,22 @@ describe("wrapGenerator", function() {
   before(function() {
     Symbol = global.Symbol;
     global.Symbol = function(){};
-    global.Symbol.iterator = '@@iterator';
+    global.Symbol.iterator = "@@iterator";
   });
 
   after(function() {
     global.Symbol = Symbol;
   });
 
-  it("is defined on generator iterators to return themselves", function() {
+  it("is defined on Generator.prototype and returns this", function() {
     function *gen(){}
     var iterator = gen();
-    assert.strictEqual(iterator['@@iterator'](), iterator);
-  });
-
-  it("uses whatever Symbol.iterator is as the property", function() {
-    global.Symbol.iterator = 'ITERITER';
-    function *gen(){}
-    var iterator = gen();
-    assert.strictEqual(iterator.ITERITER(), iterator);
+    assert.ok(!iterator.hasOwnProperty("@@iterator"));
+    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty("@@iterator"));
+    assert.ok(Object.getPrototypeOf(
+      Object.getPrototypeOf(iterator)
+    ).hasOwnProperty("@@iterator"));
+    assert.strictEqual(iterator["@@iterator"](), iterator);
   });
 });
 
