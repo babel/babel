@@ -13,5 +13,7 @@
     "licenses": [{"type": "MIT",
                   "url": "http://marijnhaverbeke.nl/acorn/LICENSE"}],
     "scripts": {"test": "node test/run.js"},
-    "bin": {"acorn": "./bin/acorn"}
+    "bin": {"acorn": "./bin/acorn"},
+    "devDependencies": {"regenerate": "~0.6.2",
+                        "unicode-7.0.0": "~0.1.5"}
 }
