@@ -241,7 +241,7 @@
   // that `break` and `continue` have somewhere to jump to, and
   // `strict` indicates whether strict mode is on.
 
-  var inFunction, inGenerator, labels, strict;
+  var inFunction, inGenerator, labels, strict, inXJSChild, inXJSTag;
 
   // This counter is used for checking that arrow expressions did
   // not contain nested parentheses in argument list.
@@ -2015,6 +2015,11 @@
     case _bquote:
       return parseTemplate();
 
+    case _relational:
+      if (tokVal === '<') {
+        return parseXJSElement();
+      }
+
     default:
       unexpected();
     }
@@ -2524,6 +2529,150 @@
     expect(isGenerator ? _parenR : _bracketR);
     node.generator = isGenerator;
     return finishNode(node, "ComprehensionExpression");
+  }
+
+  function getQualifiedXJSName(object) {
+    if (object.type === "XJSIdentifier") {
+      return object.name;
+    }
+    if (object.type === "XJSNamespacedName") {
+      return object.namespace.name + ':' + object.name.name;
+    }
+    if (object.type === "XJSMemberExpression") {
+      return (
+        getQualifiedXJSName(object.object) + '.' +
+        getQualifiedXJSName(object.property)
+      );
+    }
+  }
+
+  function parseXJSIdentifier() {
+    var node = startNode();
+    if (tokType === _name) {
+      node.name = tokVal;
+    } else {
+      unexpected();
+    }
+    tokRegexpAllowed = false;
+    next();
+    return finishNode(node, "XJSIdentifier");
+  }
+
+  function parseXJSElementName() {
+    return parseXJSIdentifier();
+  }
+
+  function parseXJSChild() {
+    /*
+    var token, marker;
+    if (tokVal === '{') {
+      token = parseXJSExpressionContainer();
+    } else if (lookahead.type === Token.XJSText) {
+      marker = markerCreatePreserveWhitespace();
+      token = markerApply(marker, delegate.createLiteral(lex()));
+    } else {
+      token = parseXJSElement();
+    }
+    return token;
+    */
+    return parseXJSElement();
+  }
+
+  function parseXJSClosingElement() {
+    var node = startNode();
+    var origInXJSChild = inXJSChild;
+    var origInXJSTag = inXJSTag;
+    inXJSChild = false;
+    inXJSTag = true;
+    tokRegexpAllowed = false;
+    tokVal === '<' ? next() : unexpected();
+    tokVal === '/' ? next() : unexpected();
+    node.name = parseXJSElementName();
+    // Because advance() (called by lex() called by expect()) expects there
+    // to be a valid token after >, it needs to know whether to look for a
+    // standard JS token or an XJS text node
+    inXJSChild = origInXJSChild;
+    inXJSTag = origInXJSTag;
+    tokVal === '>' ? next() : unexpected();
+    return finishNode(node, "XJSClosingElement");
+  }
+
+  function parseXJSOpeningElement() {
+    var node = startNode(), attributes = node.attributes = [];
+
+    var origInXJSChild = inXJSChild;
+    var origInXJSTag = inXJSTag;
+    inXJSChild = false;
+    inXJSTag = true;
+
+    tokVal === '<' ? next() : unexpected();
+
+    node.name = parseXJSElementName();
+
+    /*
+    while (index < length &&
+      lookahead.value !== '/' &&
+      lookahead.value !== '>') {
+      attributes.push(parseXJSAttribute());
+    }
+    */
+
+    inXJSTag = origInXJSTag;
+
+    if (tokType === _slash) {
+      next();
+      inXJSChild = origInXJSChild;
+      node.selfClosing = true;
+    } else {
+      inXJSChild = true;
+      node.selfClosing = false;
+    }
+    tokVal === '>' ? next() : unexpected();
+    return finishNode(node, "XJSOpeningElement");
+  }
+
+  function parseXJSElement() {
+    var node = startNode();
+    var children = [];
+
+    var origInXJSChild = inXJSChild;
+    var origInXJSTag = inXJSTag;
+    var openingElement = parseXJSOpeningElement();
+
+    if (!openingElement.selfClosing) {
+      while (tokType !== _eof) {
+        inXJSChild = false; // Call lookahead2() with inXJSChild = false because </ should not be considered in the child
+        if (tokVal === '<' && input.charAt(tokPos) === '/') {
+          break;
+        }
+        inXJSChild = true;
+        children.push(parseXJSChild());
+      }
+      inXJSChild = origInXJSChild;
+      inXJSTag = origInXJSTag;
+      var closingElement = parseXJSClosingElement();
+      if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
+        raise(tokStart, "Expected corresponding XJS closing tag for '" + getQualifiedXJSName(openingElement.name) + "'");
+      }
+    }
+
+    // When (erroneously) writing two adjacent tags like
+    //
+    //     var x = <div>one</div><div>two</div>;
+    //
+    // the default error message is a bit incomprehensible. Since it's
+    // rarely (never?) useful to write a less-than sign after an XJS
+    // element, we disallow it here in the parser in order to provide a
+    // better error message. (In the rare case that the less-than operator
+    // was intended, the left tag can be wrapped in parentheses.)
+    if (!origInXJSChild && tokVal === '<') {
+      raise(tokStart, "Adjacent XJS elements must be wrapped in an enclosing tag");
+    }
+
+    node.openingElement = openingElement;
+    node.closingElement = closingElement;
+    node.children = children;
+    return finishNode(node, "XJSElement");
   }
 
 });
