@@ -1248,6 +1248,20 @@
     eat(type) || unexpected();
   }
 
+  // Expect a char. If found, consume it, otherwise,
+  // raise an unexpected token error.
+
+  function expectChar(ch) {
+    if (tokVal === ch) next();
+    else unexpected();
+  }
+
+  // Get following char.
+
+  function nextChar() {
+    return input[tokPos];
+  }
+
   // Raise an unexpected token error.
 
   function unexpected(pos) {
@@ -2547,35 +2561,67 @@
   }
 
   function parseXJSIdentifier() {
+    var node = parseIdent(true);
+    node.type = "XJSIdentifier";
+    return node;
+  }
+
+  function parseXJSNamespacedName() {
     var node = startNode();
-    if (tokType === _name) {
-      node.name = tokVal;
-    } else {
-      unexpected();
+
+    node.namespace = parseXJSIdentifier();
+    expect(_colon);
+    node.name = parseXJSIdentifier();
+
+    return finishNode(node, "XJSNamespacedName");
+  }
+
+  function parseXJSMemberExpression() {
+    var node = parseXJSIdentifier();
+
+    while (eat(_dot)) {
+      var newNode = startNodeFrom(node);
+      newNode.object = node;
+      newNode.property = parseXJSIdentifier();
+      node = finishNode(newNode, "XJSMemberExpression");
     }
-    tokRegexpAllowed = false;
-    next();
-    return finishNode(node, "XJSIdentifier");
+
+    return node;
   }
 
   function parseXJSElementName() {
+    switch (nextChar()) {
+      case ':':
+        return parseXJSNamespacedName();
+
+      case '.':
+        return parseXJSMemberExpression();
+
+      default:
+        return parseXJSIdentifier();
+    }
+  }
+
+  function parseXJSAttributeName() {
+    if (nextChar() === ':') {
+      return parseXJSNamespacedName();
+    }
+
     return parseXJSIdentifier();
   }
 
   function parseXJSChild() {
+    var token;
     /*
-    var token, marker;
     if (tokVal === '{') {
       token = parseXJSExpressionContainer();
     } else if (lookahead.type === Token.XJSText) {
       marker = markerCreatePreserveWhitespace();
       token = markerApply(marker, delegate.createLiteral(lex()));
-    } else {
+    } else*/ {
       token = parseXJSElement();
     }
     return token;
-    */
-    return parseXJSElement();
   }
 
   function parseXJSClosingElement() {
@@ -2585,15 +2631,15 @@
     inXJSChild = false;
     inXJSTag = true;
     tokRegexpAllowed = false;
-    tokVal === '<' ? next() : unexpected();
-    tokVal === '/' ? next() : unexpected();
+    expectChar('<');
+    expectChar('/');
     node.name = parseXJSElementName();
     // Because advance() (called by lex() called by expect()) expects there
     // to be a valid token after >, it needs to know whether to look for a
     // standard JS token or an XJS text node
     inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
-    tokVal === '>' ? next() : unexpected();
+    expectChar('>');
     return finishNode(node, "XJSClosingElement");
   }
 
@@ -2605,17 +2651,13 @@
     inXJSChild = false;
     inXJSTag = true;
 
-    tokVal === '<' ? next() : unexpected();
+    expectChar('<');
 
     node.name = parseXJSElementName();
 
-    /*
-    while (index < length &&
-      lookahead.value !== '/' &&
-      lookahead.value !== '>') {
-      attributes.push(parseXJSAttribute());
+    while (tokType !== _eof && tokVal !== '/' && tokVal !== '>') {
+      //attributes.push(parseXJSAttribute());
     }
-    */
 
     inXJSTag = origInXJSTag;
 
@@ -2627,7 +2669,7 @@
       inXJSChild = true;
       node.selfClosing = false;
     }
-    tokVal === '>' ? next() : unexpected();
+    expectChar('>');
     return finishNode(node, "XJSOpeningElement");
   }
 
@@ -2642,7 +2684,7 @@
     if (!openingElement.selfClosing) {
       while (tokType !== _eof) {
         inXJSChild = false; // Call lookahead2() with inXJSChild = false because </ should not be considered in the child
-        if (tokVal === '<' && input.charAt(tokPos) === '/') {
+        if (tokVal === '<' && nextChar() === '/') {
           break;
         }
         inXJSChild = true;
