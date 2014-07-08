@@ -287,6 +287,10 @@
   var _num = {type: "num"}, _regexp = {type: "regexp"}, _string = {type: "string"};
   var _name = {type: "name"}, _eof = {type: "eof"};
 
+  // These are JSX-specific token types
+
+  var _xjsName = {type: "xjsName"}, _xjsText = {type: "xjsText"};
+
   // Keyword tokens. The `keyword` property (also used in keyword-like
   // operators) indicates that the token originated from an
   // identifier-like word, which is used when parsing property names.
@@ -388,7 +392,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL};
+                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL,
+                      xjsName: _xjsName, xjsText: _xjsText};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -527,7 +532,7 @@
     tokPos = tokLineStart = 0;
     tokRegexpAllowed = true;
     metParenL = 0;
-    inTemplate = false;
+    inTemplate = inXJSChild = inXJSTag = false;
     skipSpace();
   }
 
@@ -1071,10 +1076,10 @@
     var word, first = true, start = tokPos;
     for (;;) {
       var ch = input.charCodeAt(tokPos);
-      if (isIdentifierChar(ch)) {
+      if (isIdentifierChar(ch) || (inXJSTag && ch === 45)) {
         if (containsEsc) word += input.charAt(tokPos);
         ++tokPos;
-      } else if (ch === 92) { // "\"
+      } else if (ch === 92 && !inXJSTag) { // "\"
         if (!containsEsc) word = input.slice(start, tokPos);
         containsEsc = true;
         if (input.charCodeAt(++tokPos) != 117) // "u"
@@ -1099,7 +1104,7 @@
 
   function readWord() {
     var word = readWord1();
-    var type = _name;
+    var type = inXJSTag ? _xjsName : _name;
     if (!containsEsc && isKeyword(word))
       type = keywordTypes[word];
     return finishToken(type, word);
@@ -2561,9 +2566,17 @@
   }
 
   function parseXJSIdentifier() {
-    var node = parseIdent(true);
-    node.type = "XJSIdentifier";
-    return node;
+    var node = startNode();
+    if (tokType === _xjsName) {
+      node.name = tokVal;
+    } else if (tokType.keyword) {
+      node.name = tokType.keyword;
+    } else {
+      unexpected();
+    }
+    tokRegexpAllowed = false;
+    next();
+    return finishNode(node, "XJSIdentifier");
   }
 
   function parseXJSNamespacedName() {
