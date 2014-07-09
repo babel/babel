@@ -732,12 +732,13 @@ Ep.explodeStatement = function(path, labelId) {
         n.CatchClause.assert(catchScope.node);
         assert.strictEqual(catchScope.lookup(catchParamName), catchScope);
 
-        types.traverse(bodyPath, function(node) {
-          if (n.Identifier.check(node) &&
-              node.name === catchParamName &&
-              this.scope.lookup(catchParamName) === catchScope) {
-            this.replace(safeParam);
-            return false;
+        types.visit(bodyPath, {
+          visitIdentifier: function(path) {
+            if (path.value.name === catchParamName &&
+                path.scope.lookup(catchParamName) === catchScope) {
+              return safeParam;
+            }
+            this.traverse(path);
           }
         });
 

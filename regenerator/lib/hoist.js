@@ -49,37 +49,43 @@ exports.hoist = function(funPath) {
     return b.sequenceExpression(exprs);
   }
 
-  types.traverse(funPath.get("body"), function(node) {
-    if (n.VariableDeclaration.check(node)) {
-      var expr = varDeclToExpr(node, false);
+  types.visit(funPath.get("body"), {
+    visitVariableDeclaration: function(path) {
+      var expr = varDeclToExpr(path.value, false);
       if (expr === null) {
-        this.replace();
+        path.replace();
       } else {
         // We don't need to traverse this expression any further because
         // there can't be any new declarations inside an expression.
-        this.replace(b.expressionStatement(expr));
+        return b.expressionStatement(expr);
       }
 
       // Since the original node has been either removed or replaced,
       // avoid traversing it any further.
       return false;
+    },
 
-    } else if (n.ForStatement.check(node)) {
-      if (n.VariableDeclaration.check(node.init)) {
-        var expr = varDeclToExpr(node.init, false);
-        this.get("init").replace(expr);
+    visitForStatement: function(path) {
+      var init = path.value.init;
+      if (n.VariableDeclaration.check(init)) {
+        path.get("init").replace(varDeclToExpr(init, false));
       }
+      this.traverse(path);
+    },
 
-    } else if (n.ForInStatement.check(node)) {
-      if (n.VariableDeclaration.check(node.left)) {
-        var expr = varDeclToExpr(node.left, true);
-        this.get("left").replace(expr);
+    visitForInStatement: function(path) {
+      var left = path.value.left;
+      if (n.VariableDeclaration.check(left)) {
+        path.get("left").replace(varDeclToExpr(left, true));
       }
+      this.traverse(path);
+    },
 
-    } else if (n.FunctionDeclaration.check(node)) {
+    visitFunctionDeclaration: function(path) {
+      var node = path.value;
       vars[node.id.name] = node.id;
 
-      var parentNode = this.parent.node;
+      var parentNode = path.parent.node;
       var assignment = b.expressionStatement(
         b.assignmentExpression(
           "=",
@@ -94,32 +100,27 @@ exports.hoist = function(funPath) {
         )
       );
 
-      if (n.BlockStatement.check(this.parent.node)) {
-        // Note that the function declaration we want to remove might be
-        // the same node that firstStmtPath refers to, in case the
-        // function declaration was already the first statement in the
-        // enclosing block statement.
-        var firstStmtPath = this.parent.get("body", 0);
-
+      if (n.BlockStatement.check(path.parent.node)) {
         // Insert the assignment form before the first statement in the
         // enclosing block.
-        firstStmtPath.replace(assignment, firstStmtPath.value);
+        path.parent.get("body").unshift(assignment);
 
         // Remove the function declaration now that we've inserted the
         // equivalent assignment form at the beginning of the block.
-        this.replace();
+        path.replace();
 
       } else {
         // If the parent node is not a block statement, then we can just
         // replace the declaration with the equivalent assignment form
         // without worrying about hoisting it.
-        this.replace(assignment);
+        path.replace(assignment);
       }
 
       // Don't hoist variables out of inner functions.
       return false;
+    },
 
-    } else if (n.FunctionExpression.check(node)) {
+    visitFunctionExpression: function(path) {
       // Don't descend into nested function expressions.
       return false;
     }
