@@ -3050,6 +3050,7 @@
     // standard JS token or an XJS text node
     inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
+    tokRegexpAllowed = false;
     expectChar('>');
     return finishNode(node, "XJSClosingElement");
   }
