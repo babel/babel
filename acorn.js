@@ -2623,18 +2623,82 @@
     return parseXJSIdentifier();
   }
 
-  function parseXJSChild() {
-    var token;
-    /*
-    if (tokVal === '{') {
-      token = parseXJSExpressionContainer();
-    } else if (lookahead.type === Token.XJSText) {
-      marker = markerCreatePreserveWhitespace();
-      token = markerApply(marker, delegate.createLiteral(lex()));
-    } else*/ {
-      token = parseXJSElement();
+  function parseXJSAttributeValue() {
+    var node;
+    if (tokType === _braceL) {
+      node = parseXJSExpressionContainer();
+      if (node.expression.type === "XJSEmptyExpression") {
+        raise(
+          node.start,
+            'XJS attributes must only be assigned a non-empty ' +
+            'expression'
+        );
+      }
+    } else if (tokVal === '<') {
+      node = parseXJSElement();
+    } else if (tokType === _string) {
+      node = startNode();
+      node.value = tokVal;
+      finishNode(node, "Literal");
+      next();
+    } else {
+      raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
     }
-    return token;
+    return node;
+  }
+
+  function parseXJSEmptyExpression() {
+    var node = startNode();
+    if (tokType !== _braceR) {
+      unexpected();
+    }
+    return finishNode(node, "XJSEmptyExpression");
+  }
+
+  function parseXJSExpressionContainer() {
+    var node = startNode();
+
+    var origInXJSChild = inXJSChild;
+    var origInXJSTag = inXJSTag;
+    inXJSChild = false;
+    inXJSTag = false;
+
+    expect(_braceL);
+
+    node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
+
+    inXJSChild = origInXJSChild;
+    inXJSTag = origInXJSTag;
+
+    expect(_braceR);
+
+    return finishNode(node, "XJSExpressionContainer");
+  }
+
+  function parseXJSAttribute() {
+    var node = startNode();
+
+    node.name = parseXJSAttributeName();
+
+    // HTML empty attribute
+    if (tokVal === "=") {
+      next();
+      node.value = parseXJSAttributeValue();
+    }
+
+    return finishNode(node, "XJSAttribute");
+  }
+
+  function parseXJSChild() {
+    if (tokVal === '{') {
+      return parseXJSExpressionContainer();
+    } else if (tokType === _xjsText) {
+      var node = startNode();
+      node.value = tokVal;
+      return finishNode(node, "Literal");
+    } else {
+      return parseXJSElement();
+    }
   }
 
   function parseXJSClosingElement() {
@@ -2645,7 +2709,7 @@
     inXJSTag = true;
     tokRegexpAllowed = false;
     expectChar('<');
-    expectChar('/');
+    expect(_slash);
     node.name = parseXJSElementName();
     // Because advance() (called by lex() called by expect()) expects there
     // to be a valid token after >, it needs to know whether to look for a
@@ -2668,8 +2732,8 @@
 
     node.name = parseXJSElementName();
 
-    while (tokType !== _eof && tokVal !== '/' && tokVal !== '>') {
-      //attributes.push(parseXJSAttribute());
+    while (tokType !== _eof && tokType !== _slash && tokVal !== '>') {
+      attributes.push(parseXJSAttribute());
     }
 
     inXJSTag = origInXJSTag;
@@ -2707,7 +2771,10 @@
       inXJSTag = origInXJSTag;
       var closingElement = parseXJSClosingElement();
       if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
-        raise(tokStart, "Expected corresponding XJS closing tag for '" + getQualifiedXJSName(openingElement.name) + "'");
+        raise(
+          closingElement.start,
+          "Expected corresponding XJS closing tag for '" + getQualifiedXJSName(openingElement.name) + "'"
+        );
       }
     }
 
