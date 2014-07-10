@@ -1,8 +1,19 @@
-# Acorn
+# Acorn (JSX edition)
 
-[![Build Status](https://travis-ci.org/marijnh/acorn.svg?branch=master)](https://travis-ci.org/marijnh/acorn)
+This is modification of [Acorn][acorn] - a tiny, fast JavaScript parser, written completely in JavaScript.
 
-A tiny, fast JavaScript parser, written completely in JavaScript.
+It was forked to create experimental, alternative, faster [React.js JSX][jsx] parser since, according to
+[benchmarks](http://marijnhaverbeke.nl/acorn/test/bench.html), Acorn is 5x faster than Esprima when parsing code
+with location tracking (call it "source maps enabled mode"), and JSX extensions almost don't affect those numbers.
+
+This parser was created by integrating pieces of code from official parser, modified to match Acorn's parsing logic.
+
+Currently, it consumes all the ES5+JSX syntax that can be consumed by official [Esprima-based parser][esprima-fb].
+However, official parser can consume ES6 syntax as well, and is maintained by authors of React.js itself, so it's preferred to be used in real projects.
+
+[acorn]: http://marijnhaverbeke.nl/acorn/
+[esprima-fb]: https://github.com/facebook/esprima
+[jsx]: http://facebook.github.io/react/docs/jsx-in-depth.html
 
 ## Installation
 
@@ -11,13 +22,13 @@ The easiest way to install acorn is with [`npm`][npm].
 [npm]: http://npmjs.org
 
 ```sh
-npm install acorn
+npm install acorn-jsx
 ```
 
 Alternately, download the source.
 
 ```sh
-git clone https://github.com/marijnh/acorn.git
+git clone https://github.com/RReverser/acorn-jsx.git
 ```
 
 ## Components

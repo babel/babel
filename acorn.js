@@ -2883,6 +2883,8 @@
     return finishNode(node, "ComprehensionExpression");
   }
 
+  // Transforms JSX element name to string.
+
   function getQualifiedXJSName(object) {
     if (object.type === "XJSIdentifier") {
       return object.name;
@@ -2898,6 +2900,8 @@
     }
   }
 
+  // Parse next token as JSX identifier
+
   function parseXJSIdentifier() {
     var node = startNode();
     if (tokType === _xjsName) {
@@ -2912,6 +2916,8 @@
     return finishNode(node, "XJSIdentifier");
   }
 
+  // Parse namespaced identifier.
+
   function parseXJSNamespacedName() {
     var node = startNode();
 
@@ -2921,6 +2927,8 @@
 
     return finishNode(node, "XJSNamespacedName");
   }
+
+  // Parse JSX object.
 
   function parseXJSMemberExpression() {
     var node = parseXJSIdentifier();
@@ -2935,6 +2943,9 @@
     return node;
   }
 
+  // Parses element name in any form - namespaced, object
+  // or single identifier.
+
   function parseXJSElementName() {
     switch (nextChar()) {
       case ':':
@@ -2948,6 +2959,8 @@
     }
   }
 
+  // Parses attribute name as optionally namespaced identifier.
+
   function parseXJSAttributeName() {
     if (nextChar() === ':') {
       return parseXJSNamespacedName();
@@ -2955,6 +2968,8 @@
 
     return parseXJSIdentifier();
   }
+
+  // Parses any type of JSX attribute value.
 
   function parseXJSAttributeValue() {
     var node;
@@ -2977,16 +2992,14 @@
     return node;
   }
 
+  // XJSEmptyExpression is unique type since it doesn't actually parse anything,
+  // and so it should start at the end of last read token (left brace) and finish
+  // at the beginning of the next one (right brace).
+
   function parseXJSEmptyExpression() {
     if (tokType !== _braceR) {
       unexpected();
     }
-
-    /**
-     * XJSEmptyExpression is unique type since it doesn't actually parse anything,
-     * and so it should start at the end of last read token (left brace) and finish
-     * at the beginning of the next one (right brace).
-     */
 
     var tmp;
 
@@ -3000,6 +3013,8 @@
 
     return finishNode(startNode(), "XJSEmptyExpression");
   }
+
+  // Parses JSX expression enclosed into curly brackets.
 
   function parseXJSExpressionContainer() {
     var node = startNode();
@@ -3018,6 +3033,8 @@
     return finishNode(node, "XJSExpressionContainer");
   }
 
+  // Parses following JSX attribute name-value pair.
+
   function parseXJSAttribute() {
     var node = startNode();
 
@@ -3032,6 +3049,8 @@
     return finishNode(node, "XJSAttribute");
   }
 
+  // Parses any type of JSX contents (expression, text or another tag).
+
   function parseXJSChild() {
     switch (tokType) {
       case _braceL:
@@ -3045,26 +3064,7 @@
     }
   }
 
-  function parseXJSClosingElement() {
-    var node = startNode();
-    var origInXJSChild = inXJSChild;
-    var origInXJSTag = inXJSTag;
-    inXJSChild = false;
-    inXJSTag = true;
-    tokRegexpAllowed = false;
-    expectChar('<');
-    expect(_slash);
-    node.name = parseXJSElementName();
-    skipSpace();
-    // Because advance() (called by lex() called by expect()) expects there
-    // to be a valid token after >, it needs to know whether to look for a
-    // standard JS token or an XJS text node
-    inXJSChild = origInXJSChild;
-    inXJSTag = origInXJSTag;
-    tokRegexpAllowed = false;
-    expectChar('>');
-    return finishNode(node, "XJSClosingElement");
-  }
+  // Parses JSX open tag.
 
   function parseXJSOpeningElement() {
     var node = startNode(), attributes = node.attributes = [];
@@ -3084,18 +3084,42 @@
 
     inXJSTag = false;
 
-    if (eat(_slash)) {
+    if (node.selfClosing = !!eat(_slash)) {
       inXJSTag = origInXJSTag;
       inXJSChild = origInXJSChild;
-      node.selfClosing = true;
-      expectChar('>');
     } else {
       inXJSChild = true;
-      node.selfClosing = false;
-      expectChar('>');
     }
+
+    expectChar('>');
+
     return finishNode(node, "XJSOpeningElement");
   }
+
+  // Parses JSX closing tag.
+
+  function parseXJSClosingElement() {
+    var node = startNode();
+    var origInXJSChild = inXJSChild;
+    var origInXJSTag = inXJSTag;
+    inXJSChild = false;
+    inXJSTag = true;
+    tokRegexpAllowed = false;
+    expectChar('<');
+    expect(_slash);
+    node.name = parseXJSElementName();
+    skipSpace();
+    // A valid token is expected after >, so parser needs to know
+    // whether to look for a standard JS token or an XJS text node
+    inXJSChild = origInXJSChild;
+    inXJSTag = origInXJSTag;
+    tokRegexpAllowed = false;
+    expectChar('>');
+    return finishNode(node, "XJSClosingElement");
+  }
+
+  // Parses entire JSX element, including it's opening tag,
+  // attributes, contents and closing tag.
 
   function parseXJSElement() {
     var node = startNode();
