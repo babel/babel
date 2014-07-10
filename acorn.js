@@ -2281,7 +2281,7 @@
       }
       return id;
 
-    case _num: case _string: case _regexp:
+    case _num: case _string: case _regexp: case _xjsText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);
@@ -2968,11 +2968,7 @@
     } else if (tokVal === '<') {
       node = parseXJSElement();
     } else if (tokType === _xjsText) {
-      node = startNode();
-      node.value = tokVal;
-      node.raw = input.slice(tokStart, tokEnd);
-      next();
-      finishNode(node, "Literal");
+      node = parseExprAtom();
     } else {
       raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
     }
@@ -3038,16 +3034,15 @@
   }
 
   function parseXJSChild() {
-    if (tokType === _braceL) {
-      return parseXJSExpressionContainer();
-    } else if (tokType === _xjsText) {
-      var node = startNode();
-      node.value = tokVal;
-      node.raw = input.slice(tokStart, tokEnd);
-      next();
-      return finishNode(node, "Literal");
-    } else {
-      return parseXJSElement();
+    switch (tokType) {
+      case _braceL:
+        return parseXJSExpressionContainer();
+
+      case _xjsText:
+        return parseExprAtom();
+
+      default:
+        return parseXJSElement();
     }
   }
 
@@ -3089,8 +3084,7 @@
 
     inXJSTag = origInXJSTag;
 
-    if (tokType === _slash) {
-      next();
+    if (eat(_slash)) {
       inXJSChild = origInXJSChild;
       node.selfClosing = true;
     } else {
