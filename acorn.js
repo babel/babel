@@ -544,9 +544,7 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSTag && val === '>')) {
-      skipSpace();
-    }
+    if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
