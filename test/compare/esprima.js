@@ -42,6 +42,10 @@ parseImportSpecifier: true,
 parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
 parseSpreadOrAssignmentExpression: true,
 parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true,
+advanceXJSChild: true, isXJSIdentifierStart: true, isXJSIdentifierPart: true,
+scanXJSStringLiteral: true, scanXJSIdentifier: true,
+parseXJSAttributeValue: true, parseXJSChild: true, parseXJSElement: true, parseXJSExpressionContainer: true, parseXJSEmptyExpression: true,
+parseTypeAnnotation: true, parseTypeAnnotatableIdentifier: true,
 parseYieldExpression: true
 */
 
@@ -68,6 +72,7 @@ parseYieldExpression: true
         Messages,
         Regex,
         SyntaxTreeDelegate,
+        XHTMLEntities,
         ClassPropertyType,
         source,
         strict,
@@ -90,7 +95,9 @@ parseYieldExpression: true
         Punctuator: 7,
         StringLiteral: 8,
         RegularExpression: 9,
-        Template: 10
+        Template: 10,
+        XJSIdentifier: 11,
+        XJSText: 12
     };
 
     TokenName = {};
@@ -102,6 +109,8 @@ parseYieldExpression: true
     TokenName[Token.NumericLiteral] = 'Numeric';
     TokenName[Token.Punctuator] = 'Punctuator';
     TokenName[Token.StringLiteral] = 'String';
+    TokenName[Token.XJSIdentifier] = 'XJSIdentifier';
+    TokenName[Token.XJSText] = 'XJSText';
     TokenName[Token.RegularExpression] = 'RegularExpression';
 
     // A function following one of those tokens is an expression.
@@ -128,6 +137,7 @@ parseYieldExpression: true
         ClassBody: 'ClassBody',
         ClassDeclaration: 'ClassDeclaration',
         ClassExpression: 'ClassExpression',
+        ClassProperty: 'ClassProperty',
         ComprehensionBlock: 'ComprehensionBlock',
         ComprehensionExpression: 'ComprehensionExpression',
         ConditionalExpression: 'ConditionalExpression',
@@ -157,11 +167,16 @@ parseYieldExpression: true
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         ObjectPattern: 'ObjectPattern',
+        ObjectTypeAnnotation: 'ObjectTypeAnnotation',
+        OptionalParameter: 'OptionalParameter',
+        ParametricTypeAnnotation: 'ParametricTypeAnnotation',
+        ParametricallyTypedIdentifier: 'ParametricallyTypedIdentifier',
         Program: 'Program',
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SpreadElement: 'SpreadElement',
+        SpreadProperty: 'SpreadProperty',
         SwitchCase: 'SwitchCase',
         SwitchStatement: 'SwitchStatement',
         TaggedTemplateExpression: 'TaggedTemplateExpression',
@@ -170,12 +185,26 @@ parseYieldExpression: true
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
+        TypeAnnotatedIdentifier: 'TypeAnnotatedIdentifier',
+        TypeAnnotation: 'TypeAnnotation',
         UnaryExpression: 'UnaryExpression',
         UpdateExpression: 'UpdateExpression',
         VariableDeclaration: 'VariableDeclaration',
         VariableDeclarator: 'VariableDeclarator',
+        VoidTypeAnnotation: 'VoidTypeAnnotation',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement',
+        XJSIdentifier: 'XJSIdentifier',
+        XJSNamespacedName: 'XJSNamespacedName',
+        XJSMemberExpression: 'XJSMemberExpression',
+        XJSEmptyExpression: 'XJSEmptyExpression',
+        XJSExpressionContainer: 'XJSExpressionContainer',
+        XJSElement: 'XJSElement',
+        XJSClosingElement: 'XJSClosingElement',
+        XJSOpeningElement: 'XJSOpeningElement',
+        XJSAttribute: 'XJSAttribute',
+        XJSSpreadAttribute: 'XJSSpreadAttribute',
+        XJSText: 'XJSText',
         YieldExpression: 'YieldExpression'
     };
 
@@ -223,6 +252,7 @@ parseYieldExpression: true
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
         DefaultRestParameter: 'Rest parameter can not have a default value',
         ElementAfterSpreadElement: 'Spread must be the final element of an element list',
+        PropertyAfterSpreadProperty: 'A rest property must be the final property of an object literal',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
@@ -242,7 +272,10 @@ parseYieldExpression: true
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
         ComprehensionError:  'Comprehension Error',
-        EachNotAllowed:  'Each is not supported'
+        EachNotAllowed:  'Each is not supported',
+        InvalidXJSAttributeValue: 'XJS value should be either an expression or a quoted XJS text',
+        ExpectedXJSClosingTag: 'Expected corresponding XJS closing tag for %0',
+        AdjacentXJSElements: 'Adjacent XJS elements must be wrapped in an enclosing tag'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -1409,7 +1442,9 @@ parseYieldExpression: true
     function advance() {
         var ch;
 
-        skipComment();
+        if (!state.inXJSChild) {
+            skipComment();
+        }
 
         if (index >= length) {
             return {
@@ -1418,6 +1453,10 @@ parseYieldExpression: true
                 lineStart: lineStart,
                 range: [index, index]
             };
+        }
+
+        if (state.inXJSChild) {
+            return advanceXJSChild();
         }
 
         ch = source.charCodeAt(index);
@@ -1429,7 +1468,14 @@ parseYieldExpression: true
 
         // String literal starts with single quote (#39) or double quote (#34).
         if (ch === 39 || ch === 34) {
+            if (state.inXJSTag) {
+                return scanXJSStringLiteral();
+            }
             return scanStringLiteral();
+        }
+
+        if (state.inXJSTag && isXJSIdentifierStart(ch)) {
+            return scanXJSIdentifier();
         }
 
         if (ch === 96) {
@@ -1521,6 +1567,13 @@ parseYieldExpression: true
             return undefined;
         }
         skipComment();
+        return {offset: index, line: lineNumber, col: index - lineStart};
+    }
+
+    function markerCreatePreserveWhitespace() {
+        if (!extra.loc && !extra.range) {
+            return undefined;
+        }
         return {offset: index, line: lineNumber, col: index - lineStart};
     }
 
@@ -1681,7 +1734,8 @@ parseYieldExpression: true
             };
         },
 
-        createFunctionDeclaration: function (id, params, defaults, body, rest, generator, expression) {
+        createFunctionDeclaration: function (id, params, defaults, body, rest, generator, expression,
+                                             returnType, parametricType) {
             return {
                 type: Syntax.FunctionDeclaration,
                 id: id,
@@ -1690,11 +1744,14 @@ parseYieldExpression: true
                 body: body,
                 rest: rest,
                 generator: generator,
-                expression: expression
+                expression: expression,
+                returnType: returnType,
+                parametricType: parametricType
             };
         },
 
-        createFunctionExpression: function (id, params, defaults, body, rest, generator, expression) {
+        createFunctionExpression: function (id, params, defaults, body, rest, generator, expression,
+                                            returnType, parametricType) {
             return {
                 type: Syntax.FunctionExpression,
                 id: id,
@@ -1703,13 +1760,143 @@ parseYieldExpression: true
                 body: body,
                 rest: rest,
                 generator: generator,
-                expression: expression
+                expression: expression,
+                returnType: returnType,
+                parametricType: parametricType
             };
         },
 
         createIdentifier: function (name) {
             return {
                 type: Syntax.Identifier,
+                name: name,
+                // Only here to initialize the shape of the object to ensure
+                // that the 'typeAnnotation' key is ordered before others that
+                // are added later (like 'loc' and 'range'). This just helps
+                // keep the shape of Identifier nodes consistent with everything
+                // else.
+                typeAnnotation: undefined
+            };
+        },
+
+        createTypeAnnotation: function (typeIdentifier, parametricType, params, returnType, nullable) {
+            return {
+                type: Syntax.TypeAnnotation,
+                id: typeIdentifier,
+                parametricType: parametricType,
+                params: params,
+                returnType: returnType,
+                nullable: nullable
+            };
+        },
+
+        createParametricTypeAnnotation: function (parametricTypes) {
+            return {
+                type: Syntax.ParametricTypeAnnotation,
+                params: parametricTypes
+            };
+        },
+
+        createVoidTypeAnnotation: function () {
+            return {
+                type: Syntax.VoidTypeAnnotation
+            };
+        },
+
+        createObjectTypeAnnotation: function (properties) {
+            return {
+                type: Syntax.ObjectTypeAnnotation,
+                properties: properties
+            };
+        },
+
+        createTypeAnnotatedIdentifier: function (identifier, annotation, isOptionalParam) {
+            return {
+                type: Syntax.TypeAnnotatedIdentifier,
+                id: identifier,
+                annotation: annotation
+            };
+        },
+
+        createOptionalParameter: function (identifier) {
+            return {
+                type: Syntax.OptionalParameter,
+                id: identifier
+            };
+        },
+
+        createXJSAttribute: function (name, value) {
+            return {
+                type: Syntax.XJSAttribute,
+                name: name,
+                value: value
+            };
+        },
+
+        createXJSSpreadAttribute: function (argument) {
+            return {
+                type: Syntax.XJSSpreadAttribute,
+                argument: argument
+            };
+        },
+
+        createXJSIdentifier: function (name) {
+            return {
+                type: Syntax.XJSIdentifier,
+                name: name
+            };
+        },
+
+        createXJSNamespacedName: function (namespace, name) {
+            return {
+                type: Syntax.XJSNamespacedName,
+                namespace: namespace,
+                name: name
+            };
+        },
+
+        createXJSMemberExpression: function (object, property) {
+            return {
+                type: Syntax.XJSMemberExpression,
+                object: object,
+                property: property
+            };
+        },
+
+        createXJSElement: function (openingElement, closingElement, children) {
+            return {
+                type: Syntax.XJSElement,
+                openingElement: openingElement,
+                closingElement: closingElement,
+                children: children
+            };
+        },
+
+        createXJSEmptyExpression: function () {
+            return {
+                type: Syntax.XJSEmptyExpression
+            };
+        },
+
+        createXJSExpressionContainer: function (expression) {
+            return {
+                type: Syntax.XJSExpressionContainer,
+                expression: expression
+            };
+        },
+
+        createXJSOpeningElement: function (name, attributes, selfClosing) {
+            return {
+                type: Syntax.XJSOpeningElement,
+                name: name,
+                selfClosing: selfClosing,
+                attributes: attributes
+            };
+        },
+
+        createXJSClosingElement: function (name) {
+            return {
+                type: Syntax.XJSClosingElement,
                 name: name
             };
         },
@@ -1916,6 +2103,13 @@ parseYieldExpression: true
             };
         },
 
+        createSpreadProperty: function (argument) {
+            return {
+                type: Syntax.SpreadProperty,
+                argument: argument
+            };
+        },
+
         createTaggedTemplateExpression: function (tag, quasi) {
             return {
                 type: Syntax.TaggedTemplateExpression,
@@ -1947,6 +2141,13 @@ parseYieldExpression: true
             };
         },
 
+        createClassProperty: function (propertyIdentifier) {
+            return {
+                type: Syntax.ClassProperty,
+                id: propertyIdentifier
+            };
+        },
+
         createClassBody: function (body) {
             return {
                 type: Syntax.ClassBody,
@@ -1954,21 +2155,24 @@ parseYieldExpression: true
             };
         },
 
-        createClassExpression: function (id, superClass, body) {
+        createClassExpression: function (id, superClass, body, parametricType) {
             return {
                 type: Syntax.ClassExpression,
                 id: id,
                 superClass: superClass,
-                body: body
+                body: body,
+                parametricType: parametricType
             };
         },
 
-        createClassDeclaration: function (id, superClass, body) {
+        createClassDeclaration: function (id, superClass, body, parametricType, superParametricType) {
             return {
                 type: Syntax.ClassDeclaration,
                 id: id,
                 superClass: superClass,
-                body: body
+                body: body,
+                parametricType: parametricType,
+                superParametricType: superParametricType
             };
         },
 
@@ -2110,7 +2314,7 @@ parseYieldExpression: true
             throwError(token, Messages.UnexpectedNumber);
         }
 
-        if (token.type === Token.StringLiteral) {
+        if (token.type === Token.StringLiteral || token.type === Token.XJSText) {
             throwError(token, Messages.UnexpectedString);
         }
 
@@ -2323,7 +2527,9 @@ parseYieldExpression: true
             body,
             options.rest || null,
             options.generator,
-            body.type !== Syntax.BlockStatement
+            body.type !== Syntax.BlockStatement,
+            options.returnType,
+            options.parametricType
         ));
     }
 
@@ -2345,7 +2551,9 @@ parseYieldExpression: true
             params: tmp.params,
             defaults: tmp.defaults,
             rest: tmp.rest,
-            generator: options.generator
+            generator: options.generator,
+            returnType: tmp.returnType,
+            parametricType: options.parametricType
         });
 
         strict = previousStrict;
@@ -2408,7 +2616,7 @@ parseYieldExpression: true
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
-                param = [ parseVariableIdentifier() ];
+                param = [ parseTypeAnnotatableIdentifier() ];
                 expect(')');
                 return markerApply(marker, delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false, computed));
             }
@@ -2452,6 +2660,12 @@ parseYieldExpression: true
         throwUnexpected(lex());
     }
 
+    function parseObjectSpreadProperty() {
+        var marker = markerCreate();
+        expect('...');
+        return markerApply(marker, delegate.createSpreadProperty(parseAssignmentExpression()));
+    }
+
     function parseObjectInitialiser() {
         var properties = [], property, name, key, kind, map = {}, toString = String,
             marker = markerCreate();
@@ -2459,33 +2673,37 @@ parseYieldExpression: true
         expect('{');
 
         while (!match('}')) {
-            property = parseObjectProperty();
-
-            if (property.key.type === Syntax.Identifier) {
-                name = property.key.name;
+            if (match('...')) {
+                property = parseObjectSpreadProperty();
             } else {
-                name = toString(property.key.value);
-            }
-            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+                property = parseObjectProperty();
 
-            key = '$' + name;
-            if (Object.prototype.hasOwnProperty.call(map, key)) {
-                if (map[key] === PropertyKind.Data) {
-                    if (strict && kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
-                    } else if (kind !== PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    }
+                if (property.key.type === Syntax.Identifier) {
+                    name = property.key.name;
                 } else {
-                    if (kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    } else if (map[key] & kind) {
-                        throwErrorTolerant({}, Messages.AccessorGetSet);
-                    }
+                    name = toString(property.key.value);
                 }
-                map[key] |= kind;
-            } else {
-                map[key] = kind;
+                kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+
+                key = '$' + name;
+                if (Object.prototype.hasOwnProperty.call(map, key)) {
+                    if (map[key] === PropertyKind.Data) {
+                        if (strict && kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.StrictDuplicateProperty);
+                        } else if (kind !== PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        }
+                    } else {
+                        if (kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        } else if (map[key] & kind) {
+                            throwErrorTolerant({}, Messages.AccessorGetSet);
+                        }
+                    }
+                    map[key] |= kind;
+                } else {
+                    map[key] = kind;
+                }
             }
 
             properties.push(property);
@@ -2617,6 +2835,10 @@ parseYieldExpression: true
 
         if (type === Token.Template) {
             return parseTemplateLiteral();
+        }
+
+        if (match('<')) {
+            return parseXJSElement();
         }
 
         throwUnexpected(lex());
@@ -2983,10 +3205,17 @@ parseYieldExpression: true
             expr.type = Syntax.ObjectPattern;
             for (i = 0, len = expr.properties.length; i < len; i += 1) {
                 property = expr.properties[i];
-                if (property.kind !== 'init') {
-                    throwError({}, Messages.InvalidLHSInAssignment);
+                if (property.type === Syntax.SpreadProperty) {
+                    if (i < len - 1) {
+                        throwError({}, Messages.PropertyAfterSpreadProperty);
+                    }
+                    reinterpretAsAssignmentBindingPattern(property.argument);
+                } else {
+                    if (property.kind !== 'init') {
+                        throwError({}, Messages.InvalidLHSInAssignment);
+                    }
+                    reinterpretAsAssignmentBindingPattern(property.value);
                 }
-                reinterpretAsAssignmentBindingPattern(property.value);
             }
         } else if (expr.type === Syntax.ArrayExpression) {
             expr.type = Syntax.ArrayPattern;
@@ -3020,10 +3249,17 @@ parseYieldExpression: true
             expr.type = Syntax.ObjectPattern;
             for (i = 0, len = expr.properties.length; i < len; i += 1) {
                 property = expr.properties[i];
-                if (property.kind !== 'init') {
-                    throwError({}, Messages.InvalidLHSInFormalsList);
+                if (property.type === Syntax.SpreadProperty) {
+                    if (i < len - 1) {
+                        throwError({}, Messages.PropertyAfterSpreadProperty);
+                    }
+                    reinterpretAsDestructuredParameter(options, property.argument);
+                } else {
+                    if (property.kind !== 'init') {
+                        throwError({}, Messages.InvalidLHSInFormalsList);
+                    }
+                    reinterpretAsDestructuredParameter(options, property.value);
                 }
-                reinterpretAsDestructuredParameter(options, property.value);
             }
         } else if (expr.type === Syntax.ArrayExpression) {
             expr.type = Syntax.ArrayPattern;
@@ -3273,6 +3509,120 @@ parseYieldExpression: true
 
     // 12.2 Variable Statement
 
+    function parseObjectTypeAnnotation() {
+        var isMethod, marker, properties = [], property, propertyKey,
+            propertyTypeAnnotation;
+
+        expect('{');
+
+        while (!match('}')) {
+            marker = markerCreate();
+            propertyKey = parseObjectPropertyKey();
+            isMethod = match('(');
+            propertyTypeAnnotation = parseTypeAnnotation();
+            properties.push(markerApply(marker, delegate.createProperty(
+                'init',
+                propertyKey,
+                propertyTypeAnnotation,
+                isMethod,
+                false
+            )));
+
+            if (!match('}')) {
+                if (match(',') || match(';')) {
+                    lex();
+                } else {
+                    throwUnexpected(lookahead);
+                }
+            }
+        }
+
+        expect('}');
+
+        return delegate.createObjectTypeAnnotation(properties);
+    }
+
+    function parseVoidTypeAnnotation() {
+        var marker = markerCreate();
+        expectKeyword('void');
+        return markerApply(marker, delegate.createVoidTypeAnnotation());
+    }
+
+    function parseParametricTypeAnnotation() {
+        var marker = markerCreate(), typeIdentifier, paramTypes = [];
+
+        expect('<');
+        while (!match('>')) {
+            paramTypes.push(parseVariableIdentifier());
+            if (!match('>')) {
+                expect(',');
+            }
+        }
+        expect('>');
+
+        return markerApply(marker, delegate.createParametricTypeAnnotation(
+            paramTypes
+        ));
+    }
+
+    function parseTypeAnnotation(dontExpectColon) {
+        var typeIdentifier = null, params = null, returnType = null,
+            nullable = false, marker = markerCreate(), returnTypeMarker = null,
+            parametricType, annotation;
+
+        if (!dontExpectColon) {
+            expect(':');
+        }
+
+        if (match('{')) {
+            return markerApply(marker, parseObjectTypeAnnotation());
+        }
+
+        if (match('?')) {
+            lex();
+            nullable = true;
+        }
+
+        if (lookahead.type === Token.Identifier) {
+            typeIdentifier = parseVariableIdentifier();
+            if (match('<')) {
+                parametricType = parseParametricTypeAnnotation();
+            }
+        } else if (match('(')) {
+            lex();
+            params = [];
+            while (lookahead.type === Token.Identifier || match('?')) {
+                params.push(parseTypeAnnotatableIdentifier(
+                    true, /* requireTypeAnnotation */
+                    true /* canBeOptionalParam */
+                ));
+                if (!match(')')) {
+                    expect(',');
+                }
+            }
+            expect(')');
+
+            returnTypeMarker = markerCreate();
+            expect('=>');
+
+            returnType = parseTypeAnnotation(true);
+        } else {
+            if (!matchKeyword('void')) {
+                throwUnexpected(lookahead);
+            } else {
+                return parseVoidTypeAnnotation();
+            }
+        }
+
+        return markerApply(marker, delegate.createTypeAnnotation(
+            typeIdentifier,
+            parametricType,
+            params,
+            returnType,
+            nullable
+        ));
+    }
+
     function parseVariableIdentifier() {
         var marker = markerCreate(),
             token = lex();
@@ -3282,6 +3632,30 @@ parseYieldExpression: true
         }
 
         return markerApply(marker, delegate.createIdentifier(token.value));
+    }
+
+    function parseTypeAnnotatableIdentifier(requireTypeAnnotation, canBeOptionalParam) {
+        var marker = markerCreate(),
+            ident = parseVariableIdentifier(),
+            isOptionalParam = false;
+
+        if (canBeOptionalParam && match('?')) {
+            expect('?');
+            isOptionalParam = true;
+        }
+
+        if (requireTypeAnnotation || match(':')) {
+            ident = markerApply(marker, delegate.createTypeAnnotatedIdentifier(
+                ident,
+                parseTypeAnnotation()
+            ));
+        }
+
+        if (isOptionalParam) {
+            ident = markerApply(marker, delegate.createOptionalParameter(ident));
+        }
+
+        return ident;
     }
 
     function parseVariableDeclaration(kind) {
@@ -3295,7 +3669,7 @@ parseYieldExpression: true
             id = parseArrayInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
         } else {
-            id = state.allowKeyword ? parseNonComputedProperty() : parseVariableIdentifier();
+            id = state.allowKeyword ? parseNonComputedProperty() : parseTypeAnnotatableIdentifier();
             // 12.2.1
             if (strict && isRestrictedWord(id.name)) {
                 throwErrorTolerant({}, Messages.StrictVarName);
@@ -4207,7 +4581,15 @@ parseYieldExpression: true
             param = parseObjectInitialiser();
             reinterpretAsDestructuredParameter(options, param);
         } else {
-            param = parseVariableIdentifier();
+            // Typing rest params is awkward, so punting on that for now
+            param =
+                rest
+                ? parseVariableIdentifier()
+                : parseTypeAnnotatableIdentifier(
+                    false, /* requireTypeAnnotation */
+                    true /* canBeOptionalParam */
+                );
+
             validateParam(options, token, token.value);
         }
 
@@ -4262,12 +4644,16 @@ parseYieldExpression: true
             options.defaults = [];
         }
 
+        if (match(':')) {
+            options.returnType = parseTypeAnnotation();
+        }
+
         return markerApply(marker, options);
     }
 
     function parseFunctionDeclaration() {
         var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator,
-            marker = markerCreate();
+            marker = markerCreate(), parametricType;
 
         expectKeyword('function');
 
@@ -4280,6 +4666,10 @@ parseYieldExpression: true
         token = lookahead;
 
         id = parseVariableIdentifier();
+
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
 
         if (strict) {
             if (isRestrictedWord(token.value)) {
@@ -4316,12 +4706,13 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return markerApply(marker, delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false));
+        return markerApply(marker, delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false,
+            tmp.returnType, parametricType));
     }
 
     function parseFunctionExpression() {
         var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator,
-            marker = markerCreate();
+            marker = markerCreate(), parametricType;
 
         expectKeyword('function');
 
@@ -4333,20 +4724,27 @@ parseYieldExpression: true
         }
 
         if (!match('(')) {
-            token = lookahead;
-            id = parseVariableIdentifier();
-            if (strict) {
-                if (isRestrictedWord(token.value)) {
-                    throwErrorTolerant(token, Messages.StrictFunctionName);
+            if (!match('<')) {
+                token = lookahead;
+                id = parseVariableIdentifier();
+
+                if (strict) {
+                    if (isRestrictedWord(token.value)) {
+                        throwErrorTolerant(token, Messages.StrictFunctionName);
+                    }
+                } else {
+                    if (isRestrictedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictFunctionName;
+                    } else if (isStrictModeReservedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictReservedWord;
+                    }
                 }
-            } else {
-                if (isRestrictedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictFunctionName;
-                } else if (isStrictModeReservedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictReservedWord;
-                }
+            }
+
+            if (match('<')) {
+                parametricType = parseParametricTypeAnnotation();
             }
         }
 
@@ -4371,7 +4769,8 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return markerApply(marker, delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false));
+        return markerApply(marker, delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false,
+            tmp.returnType, parametricType));
     }
 
     function parseYieldExpression() {
@@ -4399,7 +4798,8 @@ parseYieldExpression: true
 
     function parseMethodDefinition(existingPropNames) {
         var token, key, param, propType, isValidDuplicateProp = false,
-            marker = markerCreate();
+            marker = markerCreate(), token2, parametricType,
+            parametricTypeMarker, annotationMarker;
 
         if (lookahead.value === 'static') {
             propType = ClassPropertyType.static;
@@ -4419,6 +4819,7 @@ parseYieldExpression: true
         }
 
         token = lookahead;
+        //parametricTypeMarker = markerCreate();
         key = parseObjectPropertyKey();
 
         if (token.value === 'get' && !match('(')) {
@@ -4474,7 +4875,7 @@ parseYieldExpression: true
 
             expect('(');
             token = lookahead;
-            param = [ parseVariableIdentifier() ];
+            param = [ parseTypeAnnotatableIdentifier() ];
             expect(')');
             return markerApply(marker, delegate.createMethodDefinition(
                 propType,
@@ -4482,6 +4883,10 @@ parseYieldExpression: true
                 key,
                 parsePropertyFunction({ params: param, generator: false, name: token })
             ));
+        }
+
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
         }
 
         // It is a syntax error if any other properties have the same name as a
@@ -4497,7 +4902,21 @@ parseYieldExpression: true
             propType,
             '',
             key,
-            parsePropertyMethodFunction({ generator: false })
+            parsePropertyMethodFunction({
+                generator: false,
+                parametricType: parametricType
+            })
+        ));
+    }
+
+    function parseClassProperty(existingPropNames) {
+        var marker = markerCreate(), propertyIdentifier;
+
+        propertyIdentifier = parseTypeAnnotatableIdentifier();
+        expect(';');
+
+        return markerApply(marker, delegate.createClassProperty(
+            propertyIdentifier
         ));
     }
 
@@ -4506,6 +4925,14 @@ parseYieldExpression: true
             lex();
             return;
         }
+
+        var doubleLookahead = lookahead2();
+        if (doubleLookahead.type === Token.Punctuator) {
+            if (doubleLookahead.value === ':') {
+                return parseClassProperty(existingProps);
+            }
+        }
+
         return parseMethodDefinition(existingProps);
     }
 
@@ -4534,7 +4961,8 @@ parseYieldExpression: true
     }
 
     function parseClassExpression() {
-        var id, previousYieldAllowed, superClass = null, marker = markerCreate();
+        var id, previousYieldAllowed, superClass = null, marker = markerCreate(),
+            parametricType;
 
         expectKeyword('class');
 
@@ -4542,6 +4970,10 @@ parseYieldExpression: true
             id = parseVariableIdentifier();
         }
 
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
+
         if (matchKeyword('extends')) {
             expectKeyword('extends');
             previousYieldAllowed = state.yieldAllowed;
@@ -4550,16 +4982,21 @@ parseYieldExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        return markerApply(marker, delegate.createClassExpression(id, superClass, parseClassBody()));
+        return markerApply(marker, delegate.createClassExpression(id, superClass, parseClassBody(), parametricType));
     }
 
     function parseClassDeclaration() {
-        var id, previousYieldAllowed, superClass = null, marker = markerCreate();
+        var id, previousYieldAllowed, superClass = null, marker = markerCreate(),
+            parametricType, superParametricType;
 
         expectKeyword('class');
 
         id = parseVariableIdentifier();
 
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
+
         if (matchKeyword('extends')) {
             expectKeyword('extends');
             previousYieldAllowed = state.yieldAllowed;
@@ -4568,7 +5005,7 @@ parseYieldExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        return markerApply(marker, delegate.createClassDeclaration(id, superClass, parseClassBody()));
+        return markerApply(marker, delegate.createClassDeclaration(id, superClass, parseClassBody(), parametricType, superParametricType));
     }
 
     // 15 Program
@@ -4857,10 +5294,659 @@ parseYieldExpression: true
         }
     }
 
+    // 16 XJS
+
+    XHTMLEntities = {
+        quot: '\u0022',
+        amp: '&',
+        apos: '\u0027',
+        lt: '<',
+        gt: '>',
+        nbsp: '\u00A0',
+        iexcl: '\u00A1',
+        cent: '\u00A2',
+        pound: '\u00A3',
+        curren: '\u00A4',
+        yen: '\u00A5',
+        brvbar: '\u00A6',
+        sect: '\u00A7',
+        uml: '\u00A8',
+        copy: '\u00A9',
+        ordf: '\u00AA',
+        laquo: '\u00AB',
+        not: '\u00AC',
+        shy: '\u00AD',
+        reg: '\u00AE',
+        macr: '\u00AF',
+        deg: '\u00B0',
+        plusmn: '\u00B1',
+        sup2: '\u00B2',
+        sup3: '\u00B3',
+        acute: '\u00B4',
+        micro: '\u00B5',
+        para: '\u00B6',
+        middot: '\u00B7',
+        cedil: '\u00B8',
+        sup1: '\u00B9',
+        ordm: '\u00BA',
+        raquo: '\u00BB',
+        frac14: '\u00BC',
+        frac12: '\u00BD',
+        frac34: '\u00BE',
+        iquest: '\u00BF',
+        Agrave: '\u00C0',
+        Aacute: '\u00C1',
+        Acirc: '\u00C2',
+        Atilde: '\u00C3',
+        Auml: '\u00C4',
+        Aring: '\u00C5',
+        AElig: '\u00C6',
+        Ccedil: '\u00C7',
+        Egrave: '\u00C8',
+        Eacute: '\u00C9',
+        Ecirc: '\u00CA',
+        Euml: '\u00CB',
+        Igrave: '\u00CC',
+        Iacute: '\u00CD',
+        Icirc: '\u00CE',
+        Iuml: '\u00CF',
+        ETH: '\u00D0',
+        Ntilde: '\u00D1',
+        Ograve: '\u00D2',
+        Oacute: '\u00D3',
+        Ocirc: '\u00D4',
+        Otilde: '\u00D5',
+        Ouml: '\u00D6',
+        times: '\u00D7',
+        Oslash: '\u00D8',
+        Ugrave: '\u00D9',
+        Uacute: '\u00DA',
+        Ucirc: '\u00DB',
+        Uuml: '\u00DC',
+        Yacute: '\u00DD',
+        THORN: '\u00DE',
+        szlig: '\u00DF',
+        agrave: '\u00E0',
+        aacute: '\u00E1',
+        acirc: '\u00E2',
+        atilde: '\u00E3',
+        auml: '\u00E4',
+        aring: '\u00E5',
+        aelig: '\u00E6',
+        ccedil: '\u00E7',
+        egrave: '\u00E8',
+        eacute: '\u00E9',
+        ecirc: '\u00EA',
+        euml: '\u00EB',
+        igrave: '\u00EC',
+        iacute: '\u00ED',
+        icirc: '\u00EE',
+        iuml: '\u00EF',
+        eth: '\u00F0',
+        ntilde: '\u00F1',
+        ograve: '\u00F2',
+        oacute: '\u00F3',
+        ocirc: '\u00F4',
+        otilde: '\u00F5',
+        ouml: '\u00F6',
+        divide: '\u00F7',
+        oslash: '\u00F8',
+        ugrave: '\u00F9',
+        uacute: '\u00FA',
+        ucirc: '\u00FB',
+        uuml: '\u00FC',
+        yacute: '\u00FD',
+        thorn: '\u00FE',
+        yuml: '\u00FF',
+        OElig: '\u0152',
+        oelig: '\u0153',
+        Scaron: '\u0160',
+        scaron: '\u0161',
+        Yuml: '\u0178',
+        fnof: '\u0192',
+        circ: '\u02C6',
+        tilde: '\u02DC',
+        Alpha: '\u0391',
+        Beta: '\u0392',
+        Gamma: '\u0393',
+        Delta: '\u0394',
+        Epsilon: '\u0395',
+        Zeta: '\u0396',
+        Eta: '\u0397',
+        Theta: '\u0398',
+        Iota: '\u0399',
+        Kappa: '\u039A',
+        Lambda: '\u039B',
+        Mu: '\u039C',
+        Nu: '\u039D',
+        Xi: '\u039E',
+        Omicron: '\u039F',
+        Pi: '\u03A0',
+        Rho: '\u03A1',
+        Sigma: '\u03A3',
+        Tau: '\u03A4',
+        Upsilon: '\u03A5',
+        Phi: '\u03A6',
+        Chi: '\u03A7',
+        Psi: '\u03A8',
+        Omega: '\u03A9',
+        alpha: '\u03B1',
+        beta: '\u03B2',
+        gamma: '\u03B3',
+        delta: '\u03B4',
+        epsilon: '\u03B5',
+        zeta: '\u03B6',
+        eta: '\u03B7',
+        theta: '\u03B8',
+        iota: '\u03B9',
+        kappa: '\u03BA',
+        lambda: '\u03BB',
+        mu: '\u03BC',
+        nu: '\u03BD',
+        xi: '\u03BE',
+        omicron: '\u03BF',
+        pi: '\u03C0',
+        rho: '\u03C1',
+        sigmaf: '\u03C2',
+        sigma: '\u03C3',
+        tau: '\u03C4',
+        upsilon: '\u03C5',
+        phi: '\u03C6',
+        chi: '\u03C7',
+        psi: '\u03C8',
+        omega: '\u03C9',
+        thetasym: '\u03D1',
+        upsih: '\u03D2',
+        piv: '\u03D6',
+        ensp: '\u2002',
+        emsp: '\u2003',
+        thinsp: '\u2009',
+        zwnj: '\u200C',
+        zwj: '\u200D',
+        lrm: '\u200E',
+        rlm: '\u200F',
+        ndash: '\u2013',
+        mdash: '\u2014',
+        lsquo: '\u2018',
+        rsquo: '\u2019',
+        sbquo: '\u201A',
+        ldquo: '\u201C',
+        rdquo: '\u201D',
+        bdquo: '\u201E',
+        dagger: '\u2020',
+        Dagger: '\u2021',
+        bull: '\u2022',
+        hellip: '\u2026',
+        permil: '\u2030',
+        prime: '\u2032',
+        Prime: '\u2033',
+        lsaquo: '\u2039',
+        rsaquo: '\u203A',
+        oline: '\u203E',
+        frasl: '\u2044',
+        euro: '\u20AC',
+        image: '\u2111',
+        weierp: '\u2118',
+        real: '\u211C',
+        trade: '\u2122',
+        alefsym: '\u2135',
+        larr: '\u2190',
+        uarr: '\u2191',
+        rarr: '\u2192',
+        darr: '\u2193',
+        harr: '\u2194',
+        crarr: '\u21B5',
+        lArr: '\u21D0',
+        uArr: '\u21D1',
+        rArr: '\u21D2',
+        dArr: '\u21D3',
+        hArr: '\u21D4',
+        forall: '\u2200',
+        part: '\u2202',
+        exist: '\u2203',
+        empty: '\u2205',
+        nabla: '\u2207',
+        isin: '\u2208',
+        notin: '\u2209',
+        ni: '\u220B',
+        prod: '\u220F',
+        sum: '\u2211',
+        minus: '\u2212',
+        lowast: '\u2217',
+        radic: '\u221A',
+        prop: '\u221D',
+        infin: '\u221E',
+        ang: '\u2220',
+        and: '\u2227',
+        or: '\u2228',
+        cap: '\u2229',
+        cup: '\u222A',
+        'int': '\u222B',
+        there4: '\u2234',
+        sim: '\u223C',
+        cong: '\u2245',
+        asymp: '\u2248',
+        ne: '\u2260',
+        equiv: '\u2261',
+        le: '\u2264',
+        ge: '\u2265',
+        sub: '\u2282',
+        sup: '\u2283',
+        nsub: '\u2284',
+        sube: '\u2286',
+        supe: '\u2287',
+        oplus: '\u2295',
+        otimes: '\u2297',
+        perp: '\u22A5',
+        sdot: '\u22C5',
+        lceil: '\u2308',
+        rceil: '\u2309',
+        lfloor: '\u230A',
+        rfloor: '\u230B',
+        lang: '\u2329',
+        rang: '\u232A',
+        loz: '\u25CA',
+        spades: '\u2660',
+        clubs: '\u2663',
+        hearts: '\u2665',
+        diams: '\u2666'
+    };
+
+    function getQualifiedXJSName(object) {
+        if (object.type === Syntax.XJSIdentifier) {
+            return object.name;
+        }
+        if (object.type === Syntax.XJSNamespacedName) {
+            return object.namespace.name + ':' + object.name.name;
+        }
+        if (object.type === Syntax.XJSMemberExpression) {
+            return (
+                getQualifiedXJSName(object.object) + '.' +
+                getQualifiedXJSName(object.property)
+            );
+        }
+    }
+
+    function isXJSIdentifierStart(ch) {
+        // exclude backslash (\)
+        return (ch !== 92) && isIdentifierStart(ch);
+    }
+
+    function isXJSIdentifierPart(ch) {
+        // exclude backslash (\) and add hyphen (-)
+        return (ch !== 92) && (ch === 45 || isIdentifierPart(ch));
+    }
+
+    function scanXJSIdentifier() {
+        var ch, start, value = '';
+
+        start = index;
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (!isXJSIdentifierPart(ch)) {
+                break;
+            }
+            value += source[index++];
+        }
+
+        return {
+            type: Token.XJSIdentifier,
+            value: value,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
+    function scanXJSEntity() {
+        var ch, str = '', count = 0, entity;
+        ch = source[index];
+        assert(ch === '&', 'Entity must start with an ampersand');
+        index++;
+        while (index < length && count++ < 10) {
+            ch = source[index++];
+            if (ch === ';') {
+                break;
+            }
+            str += ch;
+        }
+
+        if (str[0] === '#' && str[1] === 'x') {
+            entity = String.fromCharCode(parseInt(str.substr(2), 16));
+        } else if (str[0] === '#') {
+            entity = String.fromCharCode(parseInt(str.substr(1), 10));
+        } else {
+            entity = XHTMLEntities[str];
+        }
+        return entity;
+    }
+
+    function scanXJSText(stopChars) {
+        var ch, str = '', start;
+        start = index;
+        while (index < length) {
+            ch = source[index];
+            if (stopChars.indexOf(ch) !== -1) {
+                break;
+            }
+            if (ch === '&') {
+                str += scanXJSEntity();
+            } else {
+                index++;
+                if (isLineTerminator(ch.charCodeAt(0))) {
+                    ++lineNumber;
+                    lineStart = index;
+                }
+                str += ch;
+            }
+        }
+        return {
+            type: Token.XJSText,
+            value: str,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
+    function scanXJSStringLiteral() {
+        var innerToken, quote, start;
+
+        quote = source[index];
+        assert((quote === '\'' || quote === '"'),
+            'String literal must starts with a quote');
+
+        start = index;
+        ++index;
+
+        innerToken = scanXJSText([quote]);
+
+        if (quote !== source[index]) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        ++index;
+
+        innerToken.range = [start, index];
+
+        return innerToken;
+    }
+
+    /**
+     * Between XJS opening and closing tags (e.g. <foo>HERE</foo>), anything that
+     * is not another XJS tag and is not an expression wrapped by {} is text.
+     */
+    function advanceXJSChild() {
+        var ch = source.charCodeAt(index);
+
+        // { (123) and < (60)
+        if (ch !== 123 && ch !== 60) {
+            return scanXJSText(['<', '{']);
+        }
+
+        return scanPunctuator();
+    }
+
+    function parseXJSIdentifier() {
+        var token, marker = markerCreate();
+
+        if (lookahead.type !== Token.XJSIdentifier) {
+            throwUnexpected(lookahead);
+        }
+
+        token = lex();
+        return markerApply(marker, delegate.createXJSIdentifier(token.value));
+    }
+
+    function parseXJSNamespacedName() {
+        var namespace, name, marker = markerCreate();
+
+        namespace = parseXJSIdentifier();
+        expect(':');
+        name = parseXJSIdentifier();
+
+        return markerApply(marker, delegate.createXJSNamespacedName(namespace, name));
+    }
+
+    function parseXJSMemberExpression() {
+        var marker = markerCreate(),
+            expr = parseXJSIdentifier();
+
+        while (match('.')) {
+            lex();
+            expr = markerApply(marker, delegate.createXJSMemberExpression(expr, parseXJSIdentifier()));
+        }
+
+        return expr;
+    }
+
+    function parseXJSElementName() {
+        if (lookahead2().value === ':') {
+            return parseXJSNamespacedName();
+        }
+        if (lookahead2().value === '.') {
+            return parseXJSMemberExpression();
+        }
+
+        return parseXJSIdentifier();
+    }
+
+    function parseXJSAttributeName() {
+        if (lookahead2().value === ':') {
+            return parseXJSNamespacedName();
+        }
+
+        return parseXJSIdentifier();
+    }
+
+    function parseXJSAttributeValue() {
+        var value, marker;
+        if (match('{')) {
+            value = parseXJSExpressionContainer();
+            if (value.expression.type === Syntax.XJSEmptyExpression) {
+                throwError(
+                    value,
+                    'XJS attributes must only be assigned a non-empty ' +
+                        'expression'
+                );
+            }
+        } else if (match('<')) {
+            value = parseXJSElement();
+        } else if (lookahead.type === Token.XJSText) {
+            marker = markerCreate();
+            value = markerApply(marker, delegate.createLiteral(lex()));
+        } else {
+            throwError({}, Messages.InvalidXJSAttributeValue);
+        }
+        return value;
+    }
+
+    function parseXJSEmptyExpression() {
+        var marker = markerCreatePreserveWhitespace();
+        while (source.charAt(index) !== '}') {
+            index++;
+        }
+        return markerApply(marker, delegate.createXJSEmptyExpression());
+    }
+
+    function parseXJSExpressionContainer() {
+        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        state.inXJSChild = false;
+        state.inXJSTag = false;
+
+        expect('{');
+
+        if (match('}')) {
+            expression = parseXJSEmptyExpression();
+        } else {
+            expression = parseExpression();
+        }
+
+        state.inXJSChild = origInXJSChild;
+        state.inXJSTag = origInXJSTag;
+
+        expect('}');
+
+        return markerApply(marker, delegate.createXJSExpressionContainer(expression));
+    }
+
+    function parseXJSSpreadAttribute() {
+        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        state.inXJSChild = false;
+        state.inXJSTag = false;
+
+        expect('{');
+        expect('...');
+
+        expression = parseAssignmentExpression();
+
+        state.inXJSChild = origInXJSChild;
+        state.inXJSTag = origInXJSTag;
+
+        expect('}');
+
+        return markerApply(marker, delegate.createXJSSpreadAttribute(expression));
+    }
+
+    function parseXJSAttribute() {
+        var name, marker;
+
+        if (match('{')) {
+            return parseXJSSpreadAttribute();
+        }
+
+        marker = markerCreate();
+
+        name = parseXJSAttributeName();
+
+        // HTML empty attribute
+        if (match('=')) {
+            lex();
+            return markerApply(marker, delegate.createXJSAttribute(name, parseXJSAttributeValue()));
+        }
+
+        return markerApply(marker, delegate.createXJSAttribute(name));
+    }
+
+    function parseXJSChild() {
+        var token, marker;
+        if (match('{')) {
+            token = parseXJSExpressionContainer();
+        } else if (lookahead.type === Token.XJSText) {
+            marker = markerCreatePreserveWhitespace();
+            token = markerApply(marker, delegate.createLiteral(lex()));
+        } else {
+            token = parseXJSElement();
+        }
+        return token;
+    }
+
+    function parseXJSClosingElement() {
+        var name, origInXJSChild, origInXJSTag, marker = markerCreate();
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        state.inXJSChild = false;
+        state.inXJSTag = true;
+        expect('<');
+        expect('/');
+        name = parseXJSElementName();
+        // Because advance() (called by lex() called by expect()) expects there
+        // to be a valid token after >, it needs to know whether to look for a
+        // standard JS token or an XJS text node
+        state.inXJSChild = origInXJSChild;
+        state.inXJSTag = origInXJSTag;
+        expect('>');
+        return markerApply(marker, delegate.createXJSClosingElement(name));
+    }
+
+    function parseXJSOpeningElement() {
+        var name, attribute, attributes = [], selfClosing = false, origInXJSChild, origInXJSTag, marker = markerCreate();
+
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        state.inXJSChild = false;
+        state.inXJSTag = true;
+
+        expect('<');
+
+        name = parseXJSElementName();
+
+        while (index < length &&
+                lookahead.value !== '/' &&
+                lookahead.value !== '>') {
+            attributes.push(parseXJSAttribute());
+        }
+
+        state.inXJSTag = origInXJSTag;
+
+        if (lookahead.value === '/') {
+            expect('/');
+            // Because advance() (called by lex() called by expect()) expects
+            // there to be a valid token after >, it needs to know whether to
+            // look for a standard JS token or an XJS text node
+            state.inXJSChild = origInXJSChild;
+            expect('>');
+            selfClosing = true;
+        } else {
+            state.inXJSChild = true;
+            expect('>');
+        }
+        return markerApply(marker, delegate.createXJSOpeningElement(name, attributes, selfClosing));
+    }
+
+    function parseXJSElement() {
+        var openingElement, closingElement, children = [], origInXJSChild, origInXJSTag, marker = markerCreate();
+
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        openingElement = parseXJSOpeningElement();
+
+        if (!openingElement.selfClosing) {
+            while (index < length) {
+                state.inXJSChild = false; // Call lookahead2() with inXJSChild = false because </ should not be considered in the child
+                if (lookahead.value === '<' && lookahead2().value === '/') {
+                    break;
+                }
+                state.inXJSChild = true;
+                children.push(parseXJSChild());
+            }
+            state.inXJSChild = origInXJSChild;
+            state.inXJSTag = origInXJSTag;
+            closingElement = parseXJSClosingElement();
+            if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
+                throwError({}, Messages.ExpectedXJSClosingTag, getQualifiedXJSName(openingElement.name));
+            }
+        }
+
+        // When (erroneously) writing two adjacent tags like
+        //
+        //     var x = <div>one</div><div>two</div>;
+        //
+        // the default error message is a bit incomprehensible. Since it's
+        // rarely (never?) useful to write a less-than sign after an XJS
+        // element, we disallow it here in the parser in order to provide a
+        // better error message. (In the rare case that the less-than operator
+        // was intended, the left tag can be wrapped in parentheses.)
+        if (!origInXJSChild && match('<')) {
+            throwError(lookahead, Messages.AdjacentXJSElements);
+        }
+
+        return markerApply(marker, delegate.createXJSElement(openingElement, closingElement, children));
+    }
+
     function collectToken() {
         var start, loc, token, range, value;
 
-        skipComment();
+        if (!state.inXJSChild) {
+            skipComment();
+        }
+
         start = index;
         loc = {
             start: {
@@ -5123,6 +6209,8 @@ parseYieldExpression: true
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
+            inXJSChild: false,
+            inXJSTag: false,
             lastCommentStart: -1,
             yieldAllowed: false
         };
@@ -5187,7 +6275,7 @@ parseYieldExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '1.1.0-dev-harmony';
+    exports.version = '4001.3001.0000-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 

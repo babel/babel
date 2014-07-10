@@ -2,14 +2,18 @@
 
 This is modification of [Acorn][acorn] - a tiny, fast JavaScript parser, written completely in JavaScript.
 
-It was forked to create experimental, alternative, faster [React.js JSX][jsx] parser since, according to
-[benchmarks](http://marijnhaverbeke.nl/acorn/test/bench.html), Acorn is 5x faster than Esprima when parsing code
-with location tracking (call it "source maps enabled mode"), and JSX extensions almost don't affect those numbers.
+It was forked to create experimental, alternative, faster [React.js JSX][jsx] parser by integrating pieces
+of code from official parser, modified to match Acorn's parsing logic.
 
-This parser was created by integrating pieces of code from official parser, modified to match Acorn's parsing logic.
+According to [benchmarks](http://marijnhaverbeke.nl/acorn/test/bench.html), Acorn is 5x faster than Esprima
+when parsing code with location tracking (call it "source maps enabled mode"), and JSX extensions almost don't
+affect those numbers. However, [esprima-fb](https://github.com/facebook/esprima) is forked&maintained from
+harmony branch of esprima which is being heavily optimized and currently `acorn-jsx` is only 1.5-2x faster than
+`esprima-fb`.
 
 Currently, it consumes all the ES5+JSX syntax that can be consumed by official [Esprima-based parser][esprima-fb].
-However, official parser can consume ES6 syntax as well, and is maintained by authors of React.js itself, so it's preferred to be used in real projects.
+However, official parser can consume ES6 syntax as well, and is maintained by authors of React.js itself, so it's
+preferred to be used in real projects.
 
 [acorn]: http://marijnhaverbeke.nl/acorn/
 [esprima-fb]: https://github.com/facebook/esprima
