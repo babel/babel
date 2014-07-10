@@ -544,7 +544,9 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false) skipSpace();
+    if (shouldSkipSpace !== false && !(inXJSTag && val === '>')) {
+      skipSpace();
+    }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
@@ -830,14 +832,14 @@
     if (options.locations) tokStartLoc = new Position;
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
-    if (inXJSChild) {
-      readXJSText(['<', '{']);
-      if (tokEnd > tokStart) {
-        return;
-      }
-    }
 
     var code = input.charCodeAt(tokPos);
+
+    // JSX content - either simple text, start of <tag> or {expression}
+    if (inXJSChild && code !== 60 && code !== 123) {
+      return readXJSText(['<', '{']);
+    }
+
 
     if (inTemplate) return getTemplateToken(code);
 
