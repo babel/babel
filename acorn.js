@@ -2982,11 +2982,27 @@
   }
 
   function parseXJSEmptyExpression() {
-    var node = startNode();
     if (tokType !== _braceR) {
       unexpected();
     }
-    return finishNode(node, "XJSEmptyExpression");
+
+    /**
+     * XJSEmptyExpression is unique type since it doesn't actually parse anything,
+     * and so it should start at the end of last read token (left brace) and finish
+     * at the beginning of the next one (right brace).
+     */
+
+    var tmp;
+
+    tmp = tokStart;
+    tokStart = lastEnd;
+    lastEnd = tmp;
+
+    tmp = tokStartLoc;
+    tokStartLoc = lastEndLoc;
+    lastEndLoc = tmp;
+
+    return finishNode(startNode(), "XJSEmptyExpression");
   }
 
   function parseXJSExpressionContainer() {
