@@ -2022,10 +2022,10 @@ var fbTestFixture = {
             }
           },
           children: [],
-          range: [1, 8],
+          range: [0, 9],
           loc: {
-            start: { line: 1, column: 1 },
-            end: { line: 1, column: 8 }
+            start: { line: 1, column: 0 },
+            end: { line: 1, column: 9 }
           }
         },
         right: {
