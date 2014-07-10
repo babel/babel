@@ -544,7 +544,9 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false) skipSpace();
+    if (shouldSkipSpace !== false && !(inXJSTag && val === '>')) {
+      skipSpace();
+    }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
@@ -3056,6 +3058,7 @@
     expectChar('<');
     expect(_slash);
     node.name = parseXJSElementName();
+    skipSpace();
     // Because advance() (called by lex() called by expect()) expects there
     // to be a valid token after >, it needs to know whether to look for a
     // standard JS token or an XJS text node
@@ -3082,16 +3085,18 @@
       attributes.push(parseXJSAttribute());
     }
 
-    inXJSTag = origInXJSTag;
+    inXJSTag = false;
 
     if (eat(_slash)) {
+      inXJSTag = origInXJSTag;
       inXJSChild = origInXJSChild;
       node.selfClosing = true;
+      expectChar('>');
     } else {
       inXJSChild = true;
       node.selfClosing = false;
+      expectChar('>');
     }
-    expectChar('>');
     return finishNode(node, "XJSOpeningElement");
   }
 
@@ -3103,8 +3108,8 @@
     var openingElement = parseXJSOpeningElement();
 
     if (!openingElement.selfClosing) {
-      inXJSChild = true;
       while (tokType !== _eof && !(tokVal === '<' && nextChar() === '/')) {
+        inXJSChild = true;
         children.push(parseXJSChild());
       }
       inXJSChild = origInXJSChild;
