@@ -544,7 +544,7 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSTag && val === '>')) {
+    if (shouldSkipSpace !== false && !(inXJSTag && val === '>') && !(inXJSChild && tokType !== _braceL)) {
       skipSpace();
     }
     tokVal = val;
@@ -836,7 +836,7 @@
     var code = input.charCodeAt(tokPos);
 
     // JSX content - either simple text, start of <tag> or {expression}
-    if (inXJSChild && code !== 60 && code !== 123) {
+    if (inXJSChild && tokType !== _braceL && code !== 60 && code !== 123 && code !== 125) {
       return readXJSText(['<', '{']);
     }
 
@@ -3004,16 +3004,13 @@
   function parseXJSExpressionContainer() {
     var node = startNode();
 
-    var origInXJSChild = inXJSChild;
     var origInXJSTag = inXJSTag;
-    inXJSChild = false;
     inXJSTag = false;
 
     expect(_braceL);
 
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
-    inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
 
     expect(_braceR);
