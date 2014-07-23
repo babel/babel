@@ -692,10 +692,13 @@
     case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
 
-      // '0x' is a hexadecimal number.
     case 48: // '0'
       var next = input.charCodeAt(tokPos + 1);
-      if (next === 120 || next === 88) return readHexNumber();
+      if (next === 120 || next === 88) return readRadixNumber(16); // '0x', '0X' - hex number
+      if (options.ecmaVersion >= 6) {
+        if (next === 111 || next === 79) return readRadixNumber(8); // '0o', '0O' - octal number
+        if (next === 98 || next === 66) return readRadixNumber(2); // '0b', '0B' - binary number
+      }
       // Anything else beginning with a digit is an integer, octal
       // number, or float.
     case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
@@ -821,10 +824,10 @@
     return total;
   }
 
-  function readHexNumber() {
+  function readRadixNumber(radix) {
     tokPos += 2; // 0x
-    var val = readInt(16);
-    if (val == null) raise(tokStart + 2, "Expected hexadecimal number");
+    var val = readInt(radix);
+    if (val == null) raise(tokStart + 2, "Expected number in radix " + radix);
     if (isIdentifierStart(input.charCodeAt(tokPos))) raise(tokPos, "Identifier directly after number");
     return finishToken(_num, val);
   }
@@ -862,6 +865,7 @@
     var ch = input.charCodeAt(tokPos), code;
     
     if (ch === 123) {
+      if (options.ecmaVersion < 6) unexpected();
       ++tokPos;
       code = readHexChar();
       ch = input.charCodeAt(tokPos++);
@@ -1776,6 +1780,9 @@
     else if (isStatement) unexpected();
     else node.id = null;
     node.params = [];
+    if (options.ecmaVersion >= 6) {
+      node.defaults = [];
+    }
     node.rest = null;
     expect(_parenL);
     for (;;) {
