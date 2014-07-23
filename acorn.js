@@ -858,6 +858,27 @@
 
   // Read a string value, interpreting backslash-escapes.
 
+  function readCodePoint() {
+    var ch = input.charCodeAt(tokPos), code;
+    
+    if (ch === 123) {
+      ++tokPos;
+      code = readHexChar();
+      ch = input.charCodeAt(tokPos++);
+      if (code > 0x10FFFF || ch !== 125 /* '}' */) unexpected();
+    } else {
+      code = readHexChar(4);
+    }
+
+    // UTF-16 Encoding
+    if (code <= 0xFFFF) {
+      return String.fromCharCode(code);
+    }
+    var cu1 = ((code - 0x10000) >> 10) + 0xD800;
+    var cu2 = ((code - 0x10000) & 1023) + 0xDC00;
+    return String.fromCharCode(cu1, cu2);
+  }
+
   function readString(quote) {
     tokPos++;
     var out = "";
@@ -884,7 +905,7 @@
           case 110: out += "\n"; break; // 'n' -> '\n'
           case 114: out += "\r"; break; // 'r' -> '\r'
           case 120: out += String.fromCharCode(readHexChar(2)); break; // 'x'
-          case 117: out += String.fromCharCode(readHexChar(4)); break; // 'u'
+          case 117: out += readCodePoint(); break; // 'u'
           case 85: out += String.fromCharCode(readHexChar(8)); break; // 'U'
           case 116: out += "\t"; break; // 't' -> '\t'
           case 98: out += "\b"; break; // 'b' -> '\b'
