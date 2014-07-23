@@ -28982,7 +28982,7 @@ testFail("for(const x = 0;;);", "Unexpected token (1:4)", {ecmaVersion: 6});
       Cat.prototype.roar = function(message) {
         return 'MEOOWW: ' + /*stuff*/ message;
       };
-    }.toString(),
+    }.toString().replace(/\r\n/g, '\n'),
     function assert(ast) {
       if (actualComments.length !== expectedComments.length) {
         return JSON.stringify(actualComments) + " !== " + JSON.stringify(expectedComments);
