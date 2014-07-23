@@ -26723,7 +26723,7 @@ testFail("3x0",
          "Identifier directly after number (1:1)");
 
 testFail("0x",
-         "Expected hexadecimal number (1:2)");
+         "Expected number in radix 16 (1:2)");
 
 testFail("09",
          "Invalid number (1:0)");
