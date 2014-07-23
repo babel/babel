@@ -1782,8 +1782,10 @@
     node.params = [];
     if (options.ecmaVersion >= 6) {
       node.defaults = [];
+      node.rest = null;
+      node.generator = false;
+      node.expression = false;
     }
-    node.rest = null;
     expect(_parenL);
     for (;;) {
       if (eat(_parenR)) {
