@@ -65,7 +65,11 @@ test("\"\\u{714E}\\u{8336}\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"", {
   type: "Program",
@@ -92,7 +96,11 @@ test("\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Numeric Literal
 
@@ -121,7 +129,11 @@ test("00", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 2}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0o0", {
   type: "Program",
@@ -148,7 +160,11 @@ test("0o0", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function test() {'use strict'; 0o0; }", {
   type: "Program",
@@ -225,7 +241,11 @@ test("function test() {'use strict'; 0o0; }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0o2", {
   type: "Program",
@@ -252,7 +272,11 @@ test("0o2", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0o12", {
   type: "Program",
@@ -279,7 +303,11 @@ test("0o12", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0O0", {
   type: "Program",
@@ -306,7 +334,11 @@ test("0O0", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function test() {'use strict'; 0O0; }", {
   type: "Program",
@@ -383,7 +415,11 @@ test("function test() {'use strict'; 0O0; }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0O2", {
   type: "Program",
@@ -410,7 +446,11 @@ test("0O2", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0O12", {
   type: "Program",
@@ -437,7 +477,11 @@ test("0O12", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0b0", {
   type: "Program",
@@ -464,7 +508,11 @@ test("0b0", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0b1", {
   type: "Program",
@@ -491,7 +539,11 @@ test("0b1", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0b10", {
   type: "Program",
@@ -518,7 +570,11 @@ test("0b10", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0B0", {
   type: "Program",
@@ -545,7 +601,11 @@ test("0B0", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0B1", {
   type: "Program",
@@ -572,7 +632,11 @@ test("0B1", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("0B10", {
   type: "Program",
@@ -599,7 +663,11 @@ test("0B10", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6 Template Strings
 
@@ -637,7 +705,11 @@ test("`42`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("raw`42`", {
   type: "Program",
@@ -690,7 +762,11 @@ test("raw`42`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 7}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("raw`hello ${name}`", {
   type: "Program",
@@ -763,7 +839,11 @@ test("raw`hello ${name}`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("`$`", {
   type: "Program",
@@ -799,7 +879,11 @@ test("`$`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
   type: "Program",
@@ -835,7 +919,11 @@ test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
     start: {line: 1, column: 0},
     end: {line: 3, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("`\n\r\n`", {
   type: "Program",
@@ -871,7 +959,11 @@ test("`\n\r\n`", {
     start: {line: 1, column: 0},
     end: {line: 3, column: 5}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("`\\u{000042}\\u0042\\x42\\u0\\102\\A`", {
   type: "Program",
@@ -907,7 +999,11 @@ test("`\\u{000042}\\u0042\\x42\\u0\\102\\A`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("new raw`42`", {
   type: "Program",
@@ -969,7 +1065,11 @@ test("new raw`42`", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Switch Case Declaration
 
@@ -1062,7 +1162,11 @@ test("switch (answer) { case 42: let t = 42; break; }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 47}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Arrow Function
 
@@ -1105,7 +1209,11 @@ test("() => \"test\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("e => \"test\"", {
   type: "Program",
@@ -1154,7 +1262,11 @@ test("e => \"test\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(e) => \"test\"", {
   type: "Program",
@@ -1203,7 +1315,11 @@ test("(e) => \"test\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(a, b) => \"test\"", {
   type: "Program",
@@ -1263,7 +1379,11 @@ test("(a, b) => \"test\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("e => { 42; }", {
   type: "Program",
@@ -1328,7 +1448,11 @@ test("e => { 42; }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("e => ({ property: 42 })", {
   type: "Program",
@@ -1406,7 +1530,11 @@ test("e => ({ property: 42 })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("e => { label: 42 }", {
   type: "Program",
@@ -1488,7 +1616,11 @@ test("e => { label: 42 }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(a, b) => { 42; }", {
   type: "Program",
@@ -1564,7 +1696,11 @@ test("(a, b) => { 42; }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("([a, , b]) => 42", {
   type: "Program",
@@ -1633,7 +1769,11 @@ test("([a, , b]) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("([a.a]) => 42", {
   type: "Program",
@@ -1708,7 +1848,11 @@ test("([a.a]) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(x=1) => x * x", {
   type: "Program",
@@ -1783,7 +1927,11 @@ test("(x=1) => x * x", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("eval => 42", {
   type: "Program",
@@ -1832,7 +1980,11 @@ test("eval => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("arguments => 42", {
   type: "Program",
@@ -1881,7 +2033,11 @@ test("arguments => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(a) => 00", {
   type: "Program",
@@ -1930,7 +2086,11 @@ test("(a) => 00", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 9}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(eval, a) => 42", {
   type: "Program",
@@ -1990,7 +2150,11 @@ test("(eval, a) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(eval = 10) => 42", {
   type: "Program",
@@ -2048,7 +2212,11 @@ test("(eval = 10) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(eval, a = 10) => 42", {
   type: "Program",
@@ -2120,7 +2288,11 @@ test("(eval, a = 10) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(x => x)", {
   type: "Program",
@@ -2168,7 +2340,11 @@ test("(x => x)", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 8}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x => y => 42", {
   type: "Program",
@@ -2239,7 +2415,11 @@ test("x => y => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(x) => ((y, z) => (x, y, z))", {
   type: "Program",
@@ -2348,7 +2528,11 @@ test("(x) => ((y, z) => (x, y, z))", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("foo(() => {})", {
   type: "Program",
@@ -2405,7 +2589,11 @@ test("foo(() => {})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("foo((x, y) => {})", {
   type: "Program",
@@ -2481,7 +2669,11 @@ test("foo((x, y) => {})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Method Definition
 
@@ -2570,7 +2762,11 @@ test("x = { method() { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { method(test) { } }", {
   type: "Program",
@@ -2665,7 +2861,11 @@ test("x = { method(test) { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { 'method'() { } }", {
   type: "Program",
@@ -2753,7 +2953,11 @@ test("x = { 'method'() { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { get() { } }", {
   type: "Program",
@@ -2840,7 +3044,11 @@ test("x = { get() { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { set() { } }", {
   type: "Program",
@@ -2927,7 +3135,11 @@ test("x = { set() { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { method() 42 }", {
   type: "Program",
@@ -3015,7 +3227,11 @@ test("x = { method() 42 }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { get method() 42 }", {
   type: "Program",
@@ -3103,7 +3319,11 @@ test("x = { get method() 42 }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { set method(val) v = val }", {
   type: "Program",
@@ -3216,7 +3436,11 @@ test("x = { set method(val) v = val }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Array Comprehension
 
@@ -3365,7 +3589,11 @@ test("[[x,b,c] for (x in []) for (b in []) if (b && c)]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 49}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[x for (a in [])]", {
   type: "Program",
@@ -3428,7 +3656,11 @@ test("[x for (a in [])]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[1 for (x in [])]", {
   type: "Program",
@@ -3492,7 +3724,11 @@ test("[1 for (x in [])]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[(x,1) for (x in [])]", {
   type: "Program",
@@ -3575,7 +3811,11 @@ test("[(x,1) for (x in [])]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 21}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[x for (x of array)]", {
   type: "Program",
@@ -3637,7 +3877,11 @@ test("[x for (x of array)]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[x for (x of array) for (y of array2) if (x === test)]", {
   type: "Program",
@@ -3754,7 +3998,11 @@ test("[x for (x of array) for (y of array2) if (x === test)]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Object Literal Property Value Shorthand
 
@@ -3861,7 +4109,11 @@ test("x = { y, z }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Destructuring
 
@@ -3945,7 +4197,11 @@ test("[a, b] = [b, a]", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ responseText: text }) = res", {
   type: "Program",
@@ -4018,7 +4274,11 @@ test("({ responseText: text }) = res", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("const {a} = {}", {
   type: "Program",
@@ -4091,7 +4351,11 @@ test("const {a} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("const [a] = []", {
   type: "Program",
@@ -4143,7 +4407,11 @@ test("const [a] = []", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("let {a} = {}", {
   type: "Program",
@@ -4216,7 +4484,11 @@ test("let {a} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("let [a] = []", {
   type: "Program",
@@ -4268,7 +4540,11 @@ test("let [a] = []", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var {a} = {}", {
   type: "Program",
@@ -4341,7 +4617,11 @@ test("var {a} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var [a] = []", {
   type: "Program",
@@ -4393,7 +4673,11 @@ test("var [a] = []", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("const {a:b} = {}", {
   type: "Program",
@@ -4466,7 +4750,11 @@ test("const {a:b} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("let {a:b} = {}", {
   type: "Program",
@@ -4539,7 +4827,11 @@ test("let {a:b} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var {a:b} = {}", {
   type: "Program",
@@ -4612,7 +4904,11 @@ test("var {a:b} = {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Modules
 
@@ -4651,7 +4947,11 @@ test("module \"crypto\" {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module crypto from \"crypto\";", {
   type: "Program",
@@ -4688,7 +4988,11 @@ test("module crypto from \"crypto\";", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"crypto/e\" {}", {
   type: "Program",
@@ -4725,7 +5029,11 @@ test("module \"crypto/e\" {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export var document", {
   type: "Program",
@@ -4771,7 +5079,11 @@ test("export var document", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export var document = { }", {
   type: "Program",
@@ -4825,7 +5137,11 @@ test("export var document = { }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export let document", {
   type: "Program",
@@ -4871,7 +5187,11 @@ test("export let document", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export let document = { }", {
   type: "Program",
@@ -4925,7 +5245,11 @@ test("export let document = { }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export const document = { }", {
   type: "Program",
@@ -4979,7 +5303,11 @@ test("export const document = { }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export function parse() { }", {
   type: "Program",
@@ -5029,7 +5357,11 @@ test("export function parse() { }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export class Class {}", {
   type: "Program",
@@ -5075,7 +5407,11 @@ test("export class Class {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 21}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export default = 42", {
   type: "Program",
@@ -5121,7 +5457,11 @@ test("export default = 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export *", {
   type: "Program",
@@ -5148,7 +5488,11 @@ test("export *", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 8}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export * from \"crypto\"", {
   type: "Program",
@@ -5184,7 +5528,11 @@ test("export * from \"crypto\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export { encrypt }", {
   type: "Program",
@@ -5221,7 +5569,11 @@ test("export { encrypt }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export { encrypt, decrypt }", {
   type: "Program",
@@ -5278,7 +5630,11 @@ test("export { encrypt, decrypt }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export { encrypt as default }", {
   type: "Program",
@@ -5323,7 +5679,11 @@ test("export { encrypt as default }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("export { encrypt, decrypt as dec }", {
   type: "Program",
@@ -5388,7 +5748,11 @@ test("export { encrypt, decrypt as dec }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export var document }", {
   type: "Program",
@@ -5461,7 +5825,11 @@ test("module \"lib\" { export var document }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 36}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export var document = { } }", {
   type: "Program",
@@ -5542,7 +5910,11 @@ test("module \"lib\" { export var document = { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 42}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export let document }", {
   type: "Program",
@@ -5615,7 +5987,11 @@ test("module \"lib\" { export let document }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 36}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export let document = { } }", {
   type: "Program",
@@ -5696,7 +6072,11 @@ test("module \"lib\" { export let document = { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 42}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export const document = { } }", {
   type: "Program",
@@ -5777,7 +6157,11 @@ test("module \"lib\" { export const document = { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 44}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export function parse() { } }", {
   type: "Program",
@@ -5854,7 +6238,11 @@ test("module \"lib\" { export function parse() { } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 44}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export class Class {} }", {
   type: "Program",
@@ -5927,7 +6315,11 @@ test("module \"lib\" { export class Class {} }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"lib\" { export * }", {
   type: "Program",
@@ -5981,7 +6373,11 @@ test("module \"lib\" { export * }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"security\" { export * from \"crypto\" }", {
   type: "Program",
@@ -6044,7 +6440,11 @@ test("module \"security\" { export * from \"crypto\" }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 44}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"crypto\" { export { encrypt } }", {
   type: "Program",
@@ -6108,7 +6508,11 @@ test("module \"crypto\" { export { encrypt } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"crypto\" { export { encrypt, decrypt } }", {
   type: "Program",
@@ -6192,7 +6596,11 @@ test("module \"crypto\" { export { encrypt, decrypt } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 47}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"crypto\" { export { encrypt, decrypt as dec } }", {
   type: "Program",
@@ -6284,7 +6692,11 @@ test("module \"crypto\" { export { encrypt, decrypt as dec } }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import \"jquery\"", {
   type: "Program",
@@ -6312,7 +6724,11 @@ test("import \"jquery\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import $ from \"jquery\"", {
   type: "Program",
@@ -6358,7 +6774,11 @@ test("import $ from \"jquery\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import { encrypt, decrypt } from \"crypto\"", {
   type: "Program",
@@ -6424,7 +6844,11 @@ test("import { encrypt, decrypt } from \"crypto\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 41}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import { encrypt as enc } from \"crypto\"", {
   type: "Program",
@@ -6478,7 +6902,11 @@ test("import { encrypt as enc } from \"crypto\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 39}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import { decrypt, encrypt as enc } from \"crypto\"", {
   type: "Program",
@@ -6552,7 +6980,11 @@ test("import { decrypt, encrypt as enc } from \"crypto\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 48}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import default from \"foo\"", {
   type: "Program",
@@ -6598,7 +7030,11 @@ test("import default from \"foo\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("import { null as nil } from \"bar\"", {
   type: "Program",
@@ -6652,7 +7088,11 @@ test("import { null as nil } from \"bar\"", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"security\" { import \"cryto\" }", {
   type: "Program",
@@ -6707,7 +7147,11 @@ test("module \"security\" { import \"cryto\" }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 36}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module()", {
   type: "Program",
@@ -6742,7 +7186,11 @@ test("module()", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 8}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("module \"foo\" { module() }", {
   type: "Program",
@@ -6804,7 +7252,11 @@ test("module \"foo\" { module() }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Yield Expression
 
@@ -6871,7 +7323,11 @@ test("(function* () { yield v })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function* () { yield *v })", {
   type: "Program",
@@ -6936,7 +7392,11 @@ test("(function* () { yield *v })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function* test () { yield *v }", {
   type: "Program",
@@ -7001,7 +7461,11 @@ test("function* test () { yield *v }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var x = { *test () { yield *v } };", {
   type: "Program",
@@ -7113,7 +7577,11 @@ test("var x = { *test () { yield *v } };", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function* t() {}", {
   type: "Program",
@@ -7154,7 +7622,11 @@ test("function* t() {}", {
     end: {line: 1, column: 16}
   },
   errors: []
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function* () { yield yield 10 })", {
   type: "Program",
@@ -7229,7 +7701,11 @@ test("(function* () { yield yield 10 })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Iterators
 
@@ -7300,7 +7776,11 @@ test("for(x of list) process(x);", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("for (var x of list) process(x);", {
   type: "Program",
@@ -7387,7 +7867,11 @@ test("for (var x of list) process(x);", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("for (var x = 42 of list) process(x);", {
   type: "Program",
@@ -7483,7 +7967,11 @@ test("for (var x = 42 of list) process(x);", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 36}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("for (let x of list) process(x);", {
   type: "Program",
@@ -7570,7 +8058,11 @@ test("for (let x of list) process(x);", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony: Class (strawman)
 
@@ -7633,7 +8125,11 @@ test("var A = class extends B {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A extends class B extends C {} {}", {
   type: "Program",
@@ -7703,7 +8199,11 @@ test("class A extends class B extends C {} {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 39}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {get() {}}", {
   type: "Program",
@@ -7780,7 +8280,11 @@ test("class A {get() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static get() {}}", {
   type: "Program",
@@ -7857,7 +8361,11 @@ test("class A { static get() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A extends B {get foo() {}}", {
   type: "Program",
@@ -7942,7 +8450,11 @@ test("class A extends B {get foo() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 32}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A extends B { static get foo() {}}", {
   type: "Program",
@@ -8027,7 +8539,11 @@ test("class A extends B { static get foo() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 40}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {set a(v) {}}", {
   type: "Program",
@@ -8112,7 +8628,11 @@ test("class A {set a(v) {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 21}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static set a(v) {}}", {
   type: "Program",
@@ -8197,7 +8717,11 @@ test("class A { static set a(v) {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {set(v) {};}", {
   type: "Program",
@@ -8282,7 +8806,11 @@ test("class A {set(v) {};}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static set(v) {};}", {
   type: "Program",
@@ -8367,7 +8895,11 @@ test("class A { static set(v) {};}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {*gen(v) { yield v; }}", {
   type: "Program",
@@ -8477,7 +9009,11 @@ test("class A {*gen(v) { yield v; }}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static *gen(v) { yield v; }}", {
   type: "Program",
@@ -8587,7 +9123,11 @@ test("class A { static *gen(v) { yield v; }}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("\"use strict\"; (class A {constructor() { super() }})", {
   type: "Program",
@@ -8718,7 +9258,11 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
     end: {line: 1, column: 51}
   },
   comments: []
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {static foo() {}}", {
   type: "Program",
@@ -8795,7 +9339,11 @@ test("class A {static foo() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A {foo() {} static bar() {}}", {
   type: "Program",
@@ -8916,7 +9464,11 @@ test("class A {foo() {} static bar() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("\"use strict\"; (class A { static constructor() { super() }})", {
   type: "Program",
@@ -9047,7 +9599,11 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
     end: {line: 1, column: 59}
   },
   comments: []
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { foo() {} bar() {}}", {
   type: "Program",
@@ -9168,7 +9724,11 @@ test("class A { foo() {} bar() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { get foo() {} set foo(v) {}}", {
   type: "Program",
@@ -9297,7 +9857,11 @@ test("class A { get foo() {} set foo(v) {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static get foo() {} get foo() {}}", {
   type: "Program",
@@ -9418,7 +9982,11 @@ test("class A { static get foo() {} get foo() {}}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 43}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static get foo() {} static get bar() {} }", {
   type: "Program",
@@ -9539,7 +10107,11 @@ test("class A { static get foo() {} static get bar() {} }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v) {}}", {
   type: "Program",
@@ -9760,7 +10332,11 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
     start: {line: 1, column: 0},
     end: {line: 1, column: 78}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("class A { set foo(v) {} get foo() {} }", {
   type: "Program",
@@ -9889,19 +10465,47 @@ test("class A { set foo(v) {} get foo() {} }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { get foo() {} get foo() {} }", "Unexpected token (1:31)", {ecmaVersion: 6});
+testFail("class A { get foo() {} get foo() {} }", "Unexpected token (1:31)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { set foo(v) {} set foo(v) {} }", "Unexpected token (1:32)", {ecmaVersion: 6});
+testFail("class A { set foo(v) {} set foo(v) {} }", "Unexpected token (1:32)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { get foo() {} foo() {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { get foo() {} foo() {} }", "Unexpected token (1:27)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { foo() {} get foo() {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { foo() {} get foo() {} }", "Unexpected token (1:27)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { set foo(v) {} foo() {} }", "Unexpected token (1:28)", {ecmaVersion: 6});
+testFail("class A { set foo(v) {} foo() {} }", "Unexpected token (1:28)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A { foo() {} set foo(v) {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { foo() {} set foo(v) {} }", "Unexpected token (1:27)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Computed Properties
 
@@ -9959,7 +10563,11 @@ test("({[x]: 10})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({[\"x\" + \"y\"]: 10})", {
   type: "Program",
@@ -10035,7 +10643,11 @@ test("({[\"x\" + \"y\"]: 10})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({[x]: function() {}})", {
   type: "Program",
@@ -10104,7 +10716,11 @@ test("({[x]: function() {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({[x]: 10, y: 20})", {
   type: "Program",
@@ -10193,7 +10809,11 @@ test("({[x]: 10, y: 20})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({get [x]() {}, set [x](v) {}})", {
   type: "Program",
@@ -10316,7 +10936,11 @@ test("({get [x]() {}, set [x](v) {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({[x]() {}})", {
   type: "Program",
@@ -10385,7 +11009,11 @@ test("({[x]() {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var {[x]: y} = {y}", {
   type: "Program",
@@ -10487,7 +11115,11 @@ test("var {[x]: y} = {y}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function f({[x]: y}) {}", {
   type: "Program",
@@ -10564,7 +11196,11 @@ test("function f({[x]: y}) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var x = {*[test]() { yield *v; }}", {
   type: "Program",
@@ -10676,9 +11312,17 @@ test("var x = {*[test]() { yield *v; }}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({[x]})", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({[x]})", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Default parameters
 
@@ -10753,7 +11397,11 @@ test("function f([x] = [1]) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function f({x} = {x: 10}) {}", {
   type: "Program",
@@ -10868,7 +11516,11 @@ test("function f({x} = {x: 10}) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("f = function({x} = {x: 10}) {}", {
   type: "Program",
@@ -11001,7 +11653,11 @@ test("f = function({x} = {x: 10}) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({f: function({x} = {x: 10}) {}})", {
   type: "Program",
@@ -11145,7 +11801,11 @@ test("({f: function({x} = {x: 10}) {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({f({x} = {x: 10}) {}})", {
   type: "Program",
@@ -11289,7 +11949,11 @@ test("({f({x} = {x: 10}) {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(class {f({x} = {x: 10}) {}})", {
   type: "Program",
@@ -11440,7 +12104,11 @@ test("(class {f({x} = {x: 10}) {}})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(({x} = {x: 10}) => {})", {
   type: "Program",
@@ -11555,7 +12223,11 @@ test("(({x} = {x: 10}) => {})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = function(y = 1) {}", {
   type: "Program",
@@ -11630,7 +12302,11 @@ test("x = function(y = 1) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function f(a = 1) {}", {
   type: "Program",
@@ -11687,7 +12363,11 @@ test("function f(a = 1) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { f: function(a=1) {} }", {
   type: "Program",
@@ -11791,7 +12471,11 @@ test("x = { f: function(a=1) {} }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("x = { f(a=1) {} }", {
   type: "Program",
@@ -11895,7 +12579,11 @@ test("x = { f(a=1) {} }", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Rest parameters
 
@@ -11953,7 +12641,11 @@ test("function f(a, ...b) {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Destructured Parameters
 
@@ -12022,7 +12714,11 @@ test("function x([ a, b ]){}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function x({ a, b }){}", {
   type: "Program",
@@ -12131,7 +12827,11 @@ test("function x({ a, b }){}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function x(a, { a }){}", {
   type: "Program",
@@ -12219,7 +12919,11 @@ test("function x(a, { a }){}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function x(...[ a, b ]){}", {
   type: "Program",
@@ -12286,7 +12990,11 @@ test("function x(...[ a, b ]){}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
   type: "Program",
@@ -12511,7 +13219,11 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function x([ a, b ]){})", {
   type: "Program",
@@ -12586,7 +13298,11 @@ test("(function x([ a, b ]){})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function x({ a, b }){})", {
   type: "Program",
@@ -12703,7 +13419,11 @@ test("(function x({ a, b }){})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function x(...[ a, b ]){})", {
   type: "Program",
@@ -12778,7 +13498,11 @@ test("(function x(...[ a, b ]){})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
   type: "Program",
@@ -13011,7 +13735,11 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 56}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ x([ a, b ]){} })", {
   type: "Program",
@@ -13107,7 +13835,11 @@ test("({ x([ a, b ]){} })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ x(...[ a, b ]){} })", {
   type: "Program",
@@ -13203,7 +13935,11 @@ test("({ x(...[ a, b ]){} })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
   type: "Program",
@@ -13457,7 +14193,11 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(...a) => {}", {
   type: "Program",
@@ -13505,7 +14245,11 @@ test("(...a) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(a, ...b) => {}", {
   type: "Program",
@@ -13561,7 +14305,11 @@ test("(a, ...b) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ a }) => {}", {
   type: "Program",
@@ -13638,7 +14386,11 @@ test("({ a }) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ a }, ...b) => {}", {
   type: "Program",
@@ -13723,7 +14475,11 @@ test("({ a }, ...b) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(...[a, b]) => {}", {
   type: "Program",
@@ -13790,7 +14546,11 @@ test("(...[a, b]) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(a, ...[b]) => {}", {
   type: "Program",
@@ -13854,7 +14614,11 @@ test("(a, ...[b]) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ a: [a, b] }, ...c) => {}", {
   type: "Program",
@@ -13958,7 +14722,11 @@ test("({ a: [a, b] }, ...c) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("({ a: b, c }, [d, e], ...f) => {}", {
   type: "Program",
@@ -14105,7 +14873,11 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: SpreadElement
 
@@ -14167,7 +14939,11 @@ test("[...a] = b", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[a, ...b] = c", {
   type: "Program",
@@ -14238,7 +15014,11 @@ test("[a, ...b] = c", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[{ a, b }, ...c] = d", {
   type: "Program",
@@ -14370,7 +15150,11 @@ test("[{ a, b }, ...c] = d", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("[a, ...[b, c]] = d", {
   type: "Program",
@@ -14460,7 +15244,11 @@ test("[a, ...[b, c]] = d", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var [...a] = b", {
   type: "Program",
@@ -14520,7 +15308,11 @@ test("var [...a] = b", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var [a, ...b] = c", {
   type: "Program",
@@ -14591,7 +15383,11 @@ test("var [a, ...b] = c", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var [{ a, b }, ...c] = d", {
   type: "Program",
@@ -14723,7 +15519,11 @@ test("var [{ a, b }, ...c] = d", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("var [a, ...[b, c]] = d", {
   type: "Program",
@@ -14813,7 +15613,11 @@ test("var [a, ...[b, c]] = d", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("func(...a)", {
   type: "Program",
@@ -14864,7 +15668,11 @@ test("func(...a)", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("func(a, ...b)", {
   type: "Program",
@@ -14926,139 +15734,403 @@ test("func(a, ...b)", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // Harmony Invalid syntax
 
-testFail("0o", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0o1a", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0o9", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0o18", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0O", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0O1a", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0O9", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0O18", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0b", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0b1a", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0b9", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0b18", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0b12", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0B", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0B1a", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0B9", "Unexpected token (1:3)", {ecmaVersion: 6});
-
-testFail("0B18", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("0B12", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("\"\\u{110000}\"", "Unexpected token (1:12)", {ecmaVersion: 6});
-
-testFail("\"\\u{}\"", "Unexpected token (1:5)", {ecmaVersion: 6});
-
-testFail("\"\\u{FFFF\"", "Unexpected token (1:10)", {ecmaVersion: 6});
-
-testFail("\"\\u{FFZ}\"", "Unexpected token (1:8)", {ecmaVersion: 6});
-
-testFail("[v] += ary", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("[2] = 42", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("({ obj:20 }) = 42", "Unexpected token (1:13)", {ecmaVersion: 6});
-
-testFail("( { get x() {} } ) = 0", "Unexpected token (1:19)", {ecmaVersion: 6});
-
-testFail("x \n is y", "Unexpected token (2:5)", {ecmaVersion: 6});
-
-testFail("x \n isnt y", "Unexpected token (2:7)", {ecmaVersion: 6});
-
-testFail("function default() {}", "Unexpected token (1:10)", {ecmaVersion: 6});
-
-testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Unexpected token (1:45)", {ecmaVersion: 6});
-
-testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Unexpected token (1:38)", {ecmaVersion: 6});
-
-testFail("var super", "Unexpected token (1:5)", {ecmaVersion: 6});
-
-testFail("var default", "Unexpected token (1:5)", {ecmaVersion: 6});
-
-testFail("let default", "Unexpected token (1:5)", {ecmaVersion: 6});
-
-testFail("const default", "Unexpected token (1:7)", {ecmaVersion: 6});
-
-testFail("({ v: eval }) = obj", "Unexpected token (1:14)", {ecmaVersion: 6});
-
-testFail("({ v: arguments }) = obj", "Unexpected token (1:19)", {ecmaVersion: 6});
-
-testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:45)", {ecmaVersion: 6});
-
-testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:17)", {ecmaVersion: 6});
-
-testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:17)", {ecmaVersion: 6});
-
-testFail("module\n\"crypto\" {}", "Unexpected token (1:7)", {ecmaVersion: 6});
-
-testFail("module foo from bar", "Unexpected token (1:20)", {ecmaVersion: 6});
-
-testFail("module 42", "Unexpected token (1:8)", {ecmaVersion: 6});
-
-testFail("module foo bar", "Unexpected token (1:12)", {ecmaVersion: 6});
-
-testFail("module \"crypto\" { module \"e\" {} }", "Unexpected token (1:18)", {ecmaVersion: 6});
-
-testFail("module \"x\" { export * from foo }", "Unexpected token (1:31)", {ecmaVersion: 6});
-
-testFail("import foo", "Unexpected token (1:11)", {ecmaVersion: 6});
-
-testFail("import { foo, bar }", "Unexpected token (1:20)", {ecmaVersion: 6});
-
-testFail("import foo from bar", "Unexpected token (1:20)", {ecmaVersion: 6});
-
-testFail("((a)) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
-
-testFail("(a, (b)) => 42", "Unexpected token (1:10)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (eval = 10) => 42", "Unexpected token (1:16)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; eval => 42", "Unexpected token (1:25)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; arguments => 42", "Unexpected token (1:30)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (eval, a) => 42", "Unexpected token (1:30)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (arguments, a) => 42", "Unexpected token (1:35)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (eval, a = 10) => 42", "Unexpected token (1:35)", {ecmaVersion: 6});
-
-testFail("(a, a) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (a, a) => 42", "Unexpected token (1:21)", {ecmaVersion: 6});
-
-testFail("\"use strict\"; (a) => 00", "Unexpected token (1:22)", {ecmaVersion: 6});
-
-testFail("() <= 42", "Unexpected token (1:4)", {ecmaVersion: 6});
-
-testFail("(10) => 00", "Unexpected token (1:6)", {ecmaVersion: 6});
-
-testFail("(10, 20) => 00", "Unexpected token (1:10)", {ecmaVersion: 6});
-
-testFail("yield v", "Unexpected token (1:7)", {ecmaVersion: 6});
-
-testFail("yield 10", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("0o", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0o1a", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0o9", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0o18", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0O", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0O1a", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0O9", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0O18", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0b", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0b1a", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0b9", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0b18", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0b12", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0B", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0B1a", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0B9", "Unexpected token (1:3)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0B18", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("0B12", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"\\u{110000}\"", "Unexpected token (1:12)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"\\u{}\"", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"\\u{FFFF\"", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"\\u{FFZ}\"", "Unexpected token (1:8)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("[v] += ary", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("[2] = 42", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("({ obj:20 }) = 42", "Unexpected token (1:13)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("( { get x() {} } ) = 0", "Unexpected token (1:19)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("x \n is y", "Unexpected token (2:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("x \n isnt y", "Unexpected token (2:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("function default() {}", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Unexpected token (1:45)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Unexpected token (1:38)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("var super", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("var default", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("let default", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("const default", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("({ v: eval }) = obj", "Unexpected token (1:14)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("({ v: arguments }) = obj", "Unexpected token (1:19)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:45)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:17)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:17)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module\n\"crypto\" {}", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module foo from bar", "Unexpected token (1:20)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module 42", "Unexpected token (1:8)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module foo bar", "Unexpected token (1:12)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module \"crypto\" { module \"e\" {} }", "Unexpected token (1:18)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("module \"x\" { export * from foo }", "Unexpected token (1:31)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("import foo", "Unexpected token (1:11)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("import { foo, bar }", "Unexpected token (1:20)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("import foo from bar", "Unexpected token (1:20)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("((a)) => 42", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("(a, (b)) => 42", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (eval = 10) => 42", "Unexpected token (1:16)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; eval => 42", "Unexpected token (1:25)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; arguments => 42", "Unexpected token (1:30)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (eval, a) => 42", "Unexpected token (1:30)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (arguments, a) => 42", "Unexpected token (1:35)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (eval, a = 10) => 42", "Unexpected token (1:35)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("(a, a) => 42", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (a, a) => 42", "Unexpected token (1:21)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("\"use strict\"; (a) => 00", "Unexpected token (1:22)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("() <= 42", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("(10) => 00", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("(10, 20) => 00", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("yield v", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+testFail("yield 10", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("yield* 10", {
   type: "Program",
@@ -15103,7 +16175,11 @@ test("yield* 10", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 9}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("e => yield* 10", {
   type: "Program",
@@ -15170,9 +16246,17 @@ test("e => yield* 10", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(function () { yield 10 })", "Unexpected token (1:22)", {ecmaVersion: 6});
+testFail("(function () { yield 10 })", "Unexpected token (1:22)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 test("(function () { yield* 10 })", {
   type: "Program",
@@ -15247,90 +16331,266 @@ test("(function () { yield* 10 })", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(function() { \"use strict\"; f(yield v) })", "Unexpected token (1:36)", {ecmaVersion: 6});
+testFail("(function() { \"use strict\"; f(yield v) })", "Unexpected token (1:36)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("var obj = { *test** }", "Unexpected token (1:18)", {ecmaVersion: 6});
+testFail("var obj = { *test** }", "Unexpected token (1:18)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class A extends yield B { }", "Unexpected token (1:23)", {ecmaVersion: 6});
+testFail("class A extends yield B { }", "Unexpected token (1:23)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("class default", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("class default", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("`test", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("`test", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("switch `test`", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("switch `test`", "Unexpected token (1:8)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("`hello ${10 `test`", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("`hello ${10 `test`", "Unexpected token (1:19)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("`hello ${10;test`", "Unexpected token (1:12)", {ecmaVersion: 6});
+testFail("`hello ${10;test`", "Unexpected token (1:12)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:14)", {ecmaVersion: 6});
+testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:14)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[a,b if (a)] // (a,b)", "Unexpected token (1:5)", {ecmaVersion: 6});
+testFail("[a,b if (a)] // (a,b)", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("for each (let x in {}) {};", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("for each (let x in {}) {};", "Unexpected token (1:4)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[x for (let x in [])]", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("[x for (let x in [])]", "Unexpected token (1:21)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[x for (const x in [])]", "Unexpected token (1:23)", {ecmaVersion: 6});
+testFail("[x for (const x in [])]", "Unexpected token (1:23)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[x for (var x in [])]", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("[x for (var x in [])]", "Unexpected token (1:21)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[a,b for (a in [])] // (a,b) ", "Unexpected token (1:5)", {ecmaVersion: 6});
+testFail("[a,b for (a in [])] // (a,b) ", "Unexpected token (1:5)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[x if (x)]  // block required", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("[x if (x)]  // block required", "Unexpected token (1:11)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("var a = [x if (x)]", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("var a = [x if (x)]", "Unexpected token (1:19)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[for (x in [])]  // no espression", "Unexpected token (1:16)", {ecmaVersion: 6});
+testFail("[for (x in [])]  // no espression", "Unexpected token (1:16)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({ \"chance\" }) = obj", "Unexpected token (1:13)", {ecmaVersion: 6});
+testFail("({ \"chance\" }) = obj", "Unexpected token (1:13)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({ 42 }) = obj", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("({ 42 }) = obj", "Unexpected token (1:7)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("function f(a, ...b, c)", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("function f(a, ...b, c)", "Unexpected token (1:19)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("function f(a, ...b = 0)", "Unexpected token (1:20)", {ecmaVersion: 6});
+testFail("function f(a, ...b = 0)", "Unexpected token (1:20)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("function x(...{ a }){}", "Unexpected token (1:15)", {ecmaVersion: 6});
+testFail("function x(...{ a }){}", "Unexpected token (1:15)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("\"use strict\"; function x(a, { a }){}", "Unexpected token (1:37)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x(a, { a }){}", "Unexpected token (1:37)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Unexpected token (1:57)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Unexpected token (1:57)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("\"use strict\"; function x(a, ...[a]){}", "Unexpected token (1:38)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x(a, ...[a]){}", "Unexpected token (1:38)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(...a, b) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("(...a, b) => {}", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("([ 5 ]) => {}", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("([ 5 ]) => {}", "Unexpected token (1:8)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({ 5 }) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({ 5 }) => {}", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(...[ 5 ]) => {}", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("(...[ 5 ]) => {}", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[...{ a }] = b", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("[...{ a }] = b", "Unexpected token (1:11)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[...a, b] = c", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[...a, b] = c", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("func(...a, b)", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("func(...a, b)", "Unexpected token (1:10)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({ t(eval) { \"use strict\"; } });", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({ t(eval) { \"use strict\"; } });", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("\"use strict\"; `${test}\\02`;", "Unexpected token (1:22)", {ecmaVersion: 6});
+testFail("\"use strict\"; `${test}\\02`;", "Unexpected token (1:22)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("[...a, ] = b", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[...a, ] = b", "Unexpected token (1:6)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("if (b,...a, );", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("if (b,...a, );", "Unexpected token (1:11)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(b, ...a)", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("(b, ...a)", "Unexpected token (1:9)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("module \"Universe\" { ;  ;  ", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("module \"Universe\" { ;  ;  ", "Unexpected token (1:27)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:38)", {ecmaVersion: 6});
+testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:38)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("\"use strict\"; (eval) => 42", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval) => 42", "Unexpected token (1:27)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("(eval) => { \"use strict\"; 42 }", "Unexpected token (1:31)", {ecmaVersion: 6});
+testFail("(eval) => { \"use strict\"; 42 }", "Unexpected token (1:31)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
-testFail("({ get test() { } }) => 42", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("({ get test() { } }) => 42", "Unexpected token (1:21)", {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
