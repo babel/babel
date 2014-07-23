@@ -35,7 +35,8 @@ if (typeof exports != "undefined") {
 }
 
 /*
-  Tests below are automatically converted from https://github.com/ariya/esprima/blob/2bb17ef9a45c88e82d72c2c61b7b7af93caef028/test/harmonytest.js.
+  Tests below were automatically converted from https://github.com/ariya/esprima/blob/2bb17ef9a45c88e82d72c2c61b7b7af93caef028/test/harmonytest.js.
+  Locations for parenthesized expressions and expression statements were manually fixed.
 */
 
 // ES6 Unicode Code Point Escape Sequence
@@ -1504,10 +1505,10 @@ test("e => ({ property: 42 })", {
             end: {line: 1, column: 20}
           }
         }],
-        range: [6, 22],
+        range: [5, 23],
         loc: {
-          start: {line: 1, column: 6},
-          end: {line: 1, column: 22}
+          start: {line: 1, column: 5},
+          end: {line: 1, column: 23}
         }
       },
       rest: null,
@@ -1578,16 +1579,16 @@ test("e => { label: 42 }", {
                 end: {line: 1, column: 16}
               }
             },
-            range: [14, 17],
+            range: [14, 16],
             loc: {
               start: {line: 1, column: 14},
-              end: {line: 1, column: 17}
+              end: {line: 1, column: 16}
             }
           },
-          range: [7, 17],
+          range: [7, 16],
           loc: {
             start: {line: 1, column: 7},
-            end: {line: 1, column: 17}
+            end: {line: 1, column: 16}
           }
         }],
         range: [5, 18],
@@ -2323,10 +2324,10 @@ test("(x => x)", {
       rest: null,
       generator: false,
       expression: true,
-      range: [1, 7],
+      range: [0, 8],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 7}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 8}
       }
     },
     range: [0, 8],
@@ -2493,19 +2494,19 @@ test("(x) => ((y, z) => (x, y, z))", {
               }
             }
           ],
-          range: [19, 26],
+          range: [18, 27],
           loc: {
-            start: {line: 1, column: 19},
-            end: {line: 1, column: 26}
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 27}
           }
         },
         rest: null,
         generator: false,
         expression: true,
-        range: [8, 27],
+        range: [7, 28],
         loc: {
-          start: {line: 1, column: 8},
-          end: {line: 1, column: 27}
+          start: {line: 1, column: 7},
+          end: {line: 1, column: 28}
         }
       },
       rest: null,

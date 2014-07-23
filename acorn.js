@@ -313,6 +313,7 @@
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _ellipsis = {type: "..."}, _question = {type: "?", beforeExpr: true};
+  var _arrow = {type: "=>", beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -667,9 +668,13 @@
     return finishOp(_relational, size);
   }
 
-  function readToken_eq_excl(code) { // '=!'
+  function readToken_eq_excl(code) { // '=!', '=>'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_equality, input.charCodeAt(tokPos + 2) === 61 ? 3 : 2);
+    if (code === 61 && next === 62 && options.ecmaVersion >= 6) { // '=>'
+      tokPos += 2;
+      return finishToken(_arrow);
+    }
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
 
@@ -1134,8 +1139,8 @@
 
   // Raise an unexpected token error.
 
-  function unexpected() {
-    raise(tokStart, "Unexpected token");
+  function unexpected(pos) {
+    raise(pos != null ? pos : tokStart, "Unexpected token");
   }
 
   // Verify that a node is an lval — something that can be assigned
@@ -1656,8 +1661,14 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
+    
     case _name:
-      return parseIdent();
+      var id = parseIdent();
+      if (eat(_arrow)) {
+        return parseArrowExpression(startNodeFrom(id), [id]);
+      }
+      return id;
+      
     case _num: case _string: case _regexp:
       var node = startNode();
       node.value = tokVal;
@@ -1673,18 +1684,27 @@
       return finishNode(node, "Literal");
 
     case _parenL:
-      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart;
+      var node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val;
       next();
-      var val = parseExpression();
+      if (tokType !== _parenR) {
+        val = parseExpression();
+      }
+      expect(_parenR);
+      if (eat(_arrow)) {
+        val = parseArrowExpression(node, !val ? [] : val.type === "SequenceExpression" ? val.expressions : [val]);
+      } else
+      // disallow '()' before everything but error
+      if (!val) {
+        unexpected(tokPos - 1);
+      }
       val.start = tokStart1;
-      val.end = tokEnd;
+      val.end = lastEnd;
       if (options.locations) {
         val.loc.start = tokStartLoc1;
-        val.loc.end = tokEndLoc;
+        val.loc.end = lastEndLoc;
       }
       if (options.ranges)
-        val.range = [tokStart1, tokEnd];
-      expect(_parenR);
+        val.range = [tokStart1, lastEnd];
       return val;
 
     case _bracketL:
@@ -1734,7 +1754,8 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = {key: parsePropertyName()}, isGetSet = false, kind;
+      var prop = startNode(), isGetSet = false, kind;
+      prop.key = parsePropertyName();
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         kind = prop.kind = "init";
@@ -1762,7 +1783,12 @@
           }
         }
       }
-      node.properties.push(prop);
+      if (options.ecmaVersion >= 6) {
+        prop.method = false;
+        prop.shorthand = false;
+        prop.computed = false;
+      }
+      node.properties.push(finishNode(prop, "Property"));
     }
     return finishNode(node, "ObjectExpression");
   }
@@ -1833,6 +1859,43 @@
     }
 
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
+  }
+
+  // Parse arrow function expression with given parameters.
+
+  function parseArrowExpression(node, params) {
+    var defaults = [], hasDefaults = false;
+    
+    for (var i = 0; i < params.length; i++) {
+        var param = params[i];
+
+        switch (param.type) {
+        case "Identifier":
+          defaults.push(null);
+          break;
+
+        case "AssignmentExpression":
+          defaults.push(param.right);
+          hasDefaults = true;
+          params[i] = param.left;
+          break;
+
+        default:
+          unexpected(param.start);
+        }
+    }
+
+    var isExpression = tokType !== _braceL;
+    var body = isExpression ? parseExpression() : parseBlock(true);
+
+    node.id = null;
+    node.params = params;
+    node.defaults = hasDefaults ? defaults : [];
+    node.rest = null;
+    node.body = body;
+    node.generator = false;
+    node.expression = isExpression;
+    return finishNode(node, "ArrowFunctionExpression");
   }
 
   // Parses a comma-separated list of expressions, and returns them as
