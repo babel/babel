@@ -1810,7 +1810,6 @@
       node.defaults = [];
       node.rest = null;
       node.generator = false;
-      node.expression = false;
     }
     expect(_parenL);
     for (;;) {
@@ -1828,36 +1827,7 @@
         }
       }
     }
-
-    // Start a new scope with regard to labels and the `inFunction`
-    // flag (restore them to their old value afterwards).
-    var oldInFunc = inFunction, oldLabels = labels;
-    inFunction = true; labels = [];
-    node.body = parseBlock(true);
-    inFunction = oldInFunc; labels = oldLabels;
-
-    // If this is a strict mode function, verify that argument names
-    // are not repeated, and it does not try to bind the words `eval`
-    // or `arguments`.
-    if (strict || node.body.body.length && isUseStrict(node.body.body[0])) {
-      // Negative indices are used to reuse loop body for node.rest and node.id
-      for (var i = -2, id; i < node.params.length; ++i) {
-        if (i >= 0) {
-          id = node.params[i];
-        } else if (i == -2) {
-          if (node.rest) id = node.rest;
-          else continue;
-        } else {
-          if (node.id) id = node.id;
-          else continue;
-        }
-        if (isStrictReservedWord(id.name) || isStrictBadIdWord(id.name))
-          raise(id.start, "Defining '" + id.name + "' in strict mode");
-        if (i >= 0) for (var j = 0; j < i; ++j) if (id.name === node.params[j].name)
-          raise(id.start, "Argument name clash in strict mode");
-      }
-    }
-
+    parseFunctionBody(node);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
@@ -1885,17 +1855,54 @@
         }
     }
 
-    var isExpression = tokType !== _braceL;
-    var body = isExpression ? parseExpression(true) : parseBlock(true);
-
     node.id = null;
     node.params = params;
     node.defaults = hasDefaults ? defaults : [];
     node.rest = null;
-    node.body = body;
     node.generator = false;
-    node.expression = isExpression;
+    parseFunctionBody(node, true);
     return finishNode(node, "ArrowFunctionExpression");
+  }
+
+  // Parse function body and check parameters.
+
+  function parseFunctionBody(node, allowExpression) {
+    var isExpression = allowExpression && tokType !== _braceL;
+    
+    if (isExpression) {
+      node.body = parseExpression(true);
+      node.expression = true;
+    } else {
+      // Start a new scope with regard to labels and the `inFunction`
+      // flag (restore them to their old value afterwards).
+      var oldInFunc = inFunction, oldLabels = labels;
+      inFunction = true; labels = [];
+      node.body = parseBlock(true);
+      node.expression = false;
+      inFunction = oldInFunc; labels = oldLabels;
+    }
+
+    // If this is a strict mode function, verify that argument names
+    // are not repeated, and it does not try to bind the words `eval`
+    // or `arguments`.
+    if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
+      // Negative indices are used to reuse loop body for node.rest and node.id
+      for (var i = -2, id; i < node.params.length; ++i) {
+        if (i >= 0) {
+          id = node.params[i];
+        } else if (i == -2) {
+          if (node.rest) id = node.rest;
+          else continue;
+        } else {
+          if (node.id) id = node.id;
+          else continue;
+        }
+        if (isStrictReservedWord(id.name) || isStrictBadIdWord(id.name))
+          raise(id.start, "Defining '" + id.name + "' in strict mode");
+        if (i >= 0) for (var j = 0; j < i; ++j) if (id.name === node.params[j].name)
+          raise(id.start, "Argument name clash in strict mode");
+      }
+    }
   }
 
   // Parses a comma-separated list of expressions, and returns them as

@@ -15817,33 +15817,33 @@ testFail("((a)) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
 
 testFail("(a, (b)) => 42", "Unexpected token (1:10)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval = 10) => 42", "Unexpected token (1:16)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; eval => 42", "Unexpected token (1:25)", {ecmaVersion: 6});
+testFail("\"use strict\"; eval => 42", "Defining 'eval' in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; arguments => 42", "Unexpected token (1:30)", {ecmaVersion: 6});
+testFail("\"use strict\"; arguments => 42", "Defining 'arguments' in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a) => 42", "Unexpected token (1:30)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (arguments, a) => 42", "Unexpected token (1:35)", {ecmaVersion: 6});
+testFail("\"use strict\"; (arguments, a) => 42", "Defining 'arguments' in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a = 10) => 42", "Unexpected token (1:35)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a = 10) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
 
 testFail("(a, a) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (a, a) => 42", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("\"use strict\"; (a, a) => 42", "Argument name clash in strict mode (1:18)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (a) => 00", "Unexpected token (1:22)", {ecmaVersion: 6});
+testFail("\"use strict\"; (a) => 00", "Invalid number (1:21)", {ecmaVersion: 6});
 
 testFail("() <= 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
-testFail("(10) => 00", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("(10) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("(10, 20) => 00", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("(10, 20) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("yield v", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("yield 10", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("yield 10", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 test("yield* 10", {
   type: "Program",
@@ -16126,8 +16126,8 @@ testFail("module \"Universe\" { ;  ;  ", "Unexpected token (1:27)", {ecmaVersion
 
 testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:37)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval) => 42", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("(eval) => { \"use strict\"; 42 }", "Unexpected token (1:31)", {ecmaVersion: 6});
+testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
 
 testFail("({ get test() { } }) => 42", "Unexpected token (1:21)", {ecmaVersion: 6});
