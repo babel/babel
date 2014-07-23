@@ -1886,7 +1886,7 @@
     }
 
     var isExpression = tokType !== _braceL;
-    var body = isExpression ? parseExpression() : parseBlock(true);
+    var body = isExpression ? parseExpression(true) : parseBlock(true);
 
     node.id = null;
     node.params = params;
