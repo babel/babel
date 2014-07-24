@@ -15773,9 +15773,9 @@ testFail("x \n isnt y", "Unexpected token (2:7)", {ecmaVersion: 6});
 
 testFail("function default() {}", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Unexpected token (1:45)", {ecmaVersion: 6});
+testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Defining 'eval' in strict mode (1:44)", {ecmaVersion: 6});
 
-testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Unexpected token (1:38)", {ecmaVersion: 6});
+testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
 testFail("var super", "Unexpected token (1:5)", {ecmaVersion: 6});
 
