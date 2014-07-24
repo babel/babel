@@ -13,11 +13,10 @@ driver.runTests(report);
 console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
 
 if (failed) {
-  process.stdout.once('drain', function () {
+  console.log(failed + " failures.");
+  process.stdout.write("", function() {
     process.exit(1);
   });
-
-  console.log(failed + " failures.");
 } else {
   console.log("All passed.");
 }
