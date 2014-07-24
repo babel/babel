@@ -10521,10 +10521,10 @@ test("({[x]: 10})", {
           end: {line: 1, column: 9}
         }
       }],
-      range: [1, 10],
+      range: [0, 11],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 10}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 11}
       }
     },
     range: [0, 11],
@@ -10601,10 +10601,10 @@ test("({[\"x\" + \"y\"]: 10})", {
           end: {line: 1, column: 17}
         }
       }],
-      range: [1, 18],
+      range: [0, 19],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 18}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 19}
       }
     },
     range: [0, 19],
@@ -10674,10 +10674,10 @@ test("({[x]: function() {}})", {
           end: {line: 1, column: 20}
         }
       }],
-      range: [1, 21],
+      range: [0, 22],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 21}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 22}
       }
     },
     range: [0, 22],
@@ -10767,10 +10767,10 @@ test("({[x]: 10, y: 20})", {
           }
         }
       ],
-      range: [1, 17],
+      range: [0, 18],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 17}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 18}
       }
     },
     range: [0, 18],
@@ -10967,10 +10967,10 @@ test("({[x]() {}})", {
           end: {line: 1, column: 10}
         }
       }],
-      range: [1, 11],
+      range: [0, 12],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 11}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 12}
       }
     },
     range: [0, 12],

@@ -1783,12 +1783,11 @@
       } else first = false;
 
       var prop = startNode(), kind;
-      prop.key = parsePropertyName();
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        prop.computed = false;
       }
+      parsePropertyName(prop);
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         kind = prop.kind = "init";
@@ -1798,11 +1797,11 @@
         kind = prop.kind = "init";
         prop.method = true;
         prop.value = func;
-      } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
+      } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         sawGetSet = true;
         kind = prop.kind = prop.key.name;
-        prop.key = parsePropertyName();
+        parsePropertyName(prop);
         if (tokType !== _parenL) unexpected();
         var func = parseFunction(startNode(), false, options.ecmaVersion >= 6);
         if (func.body.type !== "BlockStatement") {
@@ -1837,9 +1836,18 @@
     props.push(current);
   }
 
-  function parsePropertyName() {
-    if (tokType === _num || tokType === _string) return parseExprAtom();
-    return parseIdent(true);
+  function parsePropertyName(prop) {
+    if (options.ecmaVersion >= 6) {
+      if (eat(_bracketL)) {
+        prop.computed = true;
+        prop.key = parseExpression();
+        expect(_bracketR);
+        return;
+      } else {
+        prop.computed = false;
+      }
+    }
+    prop.key = (tokType === _num || tokType === _string) ? parseExprAtom() : parseIdent(true);
   }
 
   // Initialize empty function node with given name.
