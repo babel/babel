@@ -1876,29 +1876,22 @@
 
     var defaults = node.defaults, hasDefaults = false;
     
-    for (var i = 0; i < params.length; i++) {
-        var param = params[i];
+    for (var i = 0, lastI = params.length - 1; i <= lastI; i++) {
+      var param = params[i];
 
-        switch (param.type) {
-        case "Identifier":
-          defaults.push(null);
+      if (param.type === "AssignmentExpression") {
+        hasDefaults = true;
+        params[i] = param.left;
+        defaults.push(param.right);
+      } else {
+        toAssignable(param, i === lastI);
+        defaults.push(null);
+        if (param.type === "SpreadElement") {
+          params.length--;
+          node.rest = param.argument;
           break;
-
-        case "AssignmentExpression":
-          defaults.push(param.right);
-          hasDefaults = true;
-          params[i] = param.left;
-          break;
-
-        case "SpreadElement":
-          if (i === --params.length) {
-            node.rest = param.argument;
-            break;
-          }
-
-        default:
-          unexpected(param.start);
         }
+      }
     }
 
     node.params = params;
@@ -1960,22 +1953,38 @@
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
     if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
-      // Negative indices are used to reuse loop body for node.rest and node.id
-      for (var i = -2, id; i < node.params.length; ++i) {
-        if (i >= 0) {
-          id = node.params[i];
-        } else if (i == -2) {
-          if (node.rest) id = node.rest;
-          else continue;
-        } else {
-          if (node.id) id = node.id;
-          else continue;
-        }
-        if (isStrictReservedWord(id.name) || isStrictBadIdWord(id.name))
-          raise(id.start, "Defining '" + id.name + "' in strict mode");
-        if (i >= 0) for (var j = 0; j < i; ++j) if (id.name === node.params[j].name)
-          raise(id.start, "Argument name clash in strict mode");
-      }
+      var nameHash = {};
+      if (node.id)
+        checkFunctionParam(node.id, nameHash);
+      for (var i = 0; i < node.params.length; i++)
+        checkFunctionParam(node.params[i], nameHash);
+      if (node.rest)
+        checkFunctionParam(node.rest, nameHash);
+    }
+  }
+
+  // Verify that argument names are not repeated, and it does not
+  // try to bind the words `eval` or `arguments`.
+
+  function checkFunctionParam(param, nameHash) {
+    switch (param.type) {
+      case "Identifier":
+        if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
+          raise(param.start, "Defining '" + param.name + "' in strict mode");
+        if (param.name in nameHash)
+          raise(param.start, "Argument name clash in strict mode");
+        nameHash[param.name] = true;
+        break;
+
+      case "ObjectPattern":
+        for (var i = 0; i < param.properties.length; i++)
+          checkFunctionParam(param.properties[i].value, nameHash);
+        break;
+
+      case "ArrayPattern":
+        for (var i = 0; i < param.elements.length; i++)
+          checkFunctionParam(param.elements[i], nameHash);
+        break;
     }
   }
 
@@ -2056,19 +2065,31 @@
   // Convert existing expression atom to assignable pattern
   // if possible.
 
-  function toAssignable(node) {
-    if (options.ecmaVersion >= 6) {
+  function toAssignable(node, allowSpread) {
+    if (options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "Identifier":
           break;
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
+          for (var i = 0; i < node.properties.length; i++) {
+            toAssignable(node.properties[i].value);
+          }
           break;
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
+          for (var i = 0, lastI = node.elements.length - 1; i <= lastI; i++) {
+            toAssignable(node.elements[i], i === lastI);
+          }
           break;
+
+        case "SpreadElement":
+          if (allowSpread) {
+            toAssignable(node.argument);
+            break;
+          }
 
         default:
           unexpected(node.start);

@@ -4311,10 +4311,10 @@ test("({ responseText: text }) = res", {
             end: {line: 1, column: 21}
           }
         }],
-        range: [1, 23],
+        range: [0, 24],
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 23}
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 24}
         }
       },
       right: {
@@ -12579,9 +12579,9 @@ test("x = { f(a=1) {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [13, 15],
+            range: [7, 15],
             loc: {
-              start: {line: 1, column: 13},
+              start: {line: 1, column: 7},
               end: {line: 1, column: 15}
             }
           },
@@ -13320,10 +13320,10 @@ test("(function x([ a, b ]){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 23],
+      range: [0, 24],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 23}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 24}
       }
     },
     range: [0, 24],
@@ -13441,10 +13441,10 @@ test("(function x({ a, b }){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 23],
+      range: [0, 24],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 23}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 24}
       }
     },
     range: [0, 24],
@@ -13520,10 +13520,10 @@ test("(function x(...[ a, b ]){})", {
       },
       generator: false,
       expression: false,
-      range: [1, 26],
+      range: [0, 27],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 26}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 27}
       }
     },
     range: [0, 27],
@@ -13757,10 +13757,10 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
       },
       generator: false,
       expression: false,
-      range: [1, 55],
+      range: [0, 56],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 55}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 56}
       }
     },
     range: [0, 56],
@@ -13841,9 +13841,9 @@ test("({ x([ a, b ]){} })", {
           rest: null,
           generator: false,
           expression: false,
-          range: [14, 16],
+          range: [4, 16],
           loc: {
-            start: {line: 1, column: 14},
+            start: {line: 1, column: 4},
             end: {line: 1, column: 16}
           }
         },
@@ -13857,10 +13857,10 @@ test("({ x([ a, b ]){} })", {
           end: {line: 1, column: 16}
         }
       }],
-      range: [1, 18],
+      range: [0, 19],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 18}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 19}
       }
     },
     range: [0, 19],
@@ -13941,9 +13941,9 @@ test("({ x(...[ a, b ]){} })", {
           },
           generator: false,
           expression: false,
-          range: [17, 19],
+          range: [4, 19],
           loc: {
-            start: {line: 1, column: 17},
+            start: {line: 1, column: 4},
             end: {line: 1, column: 19}
           }
         },
@@ -13957,10 +13957,10 @@ test("({ x(...[ a, b ]){} })", {
           end: {line: 1, column: 19}
         }
       }],
-      range: [1, 21],
+      range: [0, 22],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 21}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 22}
       }
     },
     range: [0, 22],
@@ -14215,10 +14215,10 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
           end: {line: 1, column: 48}
         }
       }],
-      range: [1, 50],
+      range: [0, 51],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 50}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 51}
       }
     },
     range: [0, 51],
@@ -15909,7 +15909,7 @@ testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Definin
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
-testFail("var super", "Unexpected token (1:5)", {ecmaVersion: 6, forbidReserved: true});
+testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, forbidReserved: true});
 
 testFail("var default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
@@ -16226,19 +16226,19 @@ testFail("\"use strict\"; function x(a, { a }){}", "Unexpected token (1:37)", {e
 
 testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Unexpected token (1:57)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; function x(a, ...[a]){}", "Unexpected token (1:38)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x(a, ...[a]){}", "Argument name clash in strict mode (1:32)", {ecmaVersion: 6});
 
 testFail("(...a, b) => {}", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("([ 5 ]) => {}", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("([ 5 ]) => {}", "Unexpected token (1:3)", {ecmaVersion: 6});
 
 testFail("({ 5 }) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("(...[ 5 ]) => {}", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("(...[ 5 ]) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 testFail("[...{ a }] = b", "Unexpected token (1:11)", {ecmaVersion: 6});
 
-testFail("[...a, b] = c", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[...a, b] = c", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
 
