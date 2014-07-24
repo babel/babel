@@ -1155,7 +1155,8 @@
   // to.
 
   function checkLVal(expr) {
-    if (expr.type !== "Identifier" && expr.type !== "MemberExpression")
+    if (expr.type !== "Identifier" && expr.type !== "MemberExpression" &&
+        expr.type !== "ObjectPattern" && expr.type !== "ArrayPattern")
       raise(expr.start, "Assigning to rvalue");
     if (strict && expr.type === "Identifier" && isStrictBadIdWord(expr.name))
       raise(expr.start, "Assigning to " + expr.name + " in strict mode");
@@ -1508,8 +1509,8 @@
     node.kind = kind;
     for (;;) {
       var decl = startNode();
-      decl.id = parseIdent();
-      if (strict && isStrictBadIdWord(decl.id.name))
+      decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
+      if (strict && decl.id.type === "Identifier" && isStrictBadIdWord(decl.id.name))
         raise(decl.id.start, "Binding " + decl.id.name + " in strict mode");
       decl.init = eat(_eq) ? parseExpression(true, noIn) : (kind === _const.keyword ? unexpected() : null);
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
@@ -1910,22 +1911,31 @@
   // Parse function parameters.
 
   function parseFunctionParams(node) {
+    var defaults = [], hasDefaults = false;
+    
     expect(_parenL);
     for (;;) {
       if (eat(_parenR)) {
         break;
       } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
-        node.rest = parseIdent();
+        node.rest = toAssignable(parseExprAtom());
         expect(_parenR);
         break;
       } else {
-        node.params.push(parseIdent());
+        node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent());
+        if (options.ecmaVersion >= 6 && tokVal === '=') {
+          next();
+          hasDefaults = true;
+          defaults.push(parseExpression(true));
+        }
         if (!eat(_comma)) {
           expect(_parenR);
           break;
         }
       }
     }
+
+    if (hasDefaults) node.defaults = defaults;
   }
 
   // Parse function body and check parameters.
@@ -2041,6 +2051,30 @@
     tokRegexpAllowed = false;
     next();
     return finishNode(node, "Identifier");
+  }
+
+  // Convert existing expression atom to assignable pattern
+  // if possible.
+
+  function toAssignable(node) {
+    if (options.ecmaVersion >= 6) {
+      switch (node.type) {
+        case "Identifier":
+          break;
+
+        case "ObjectExpression":
+          node.type = "ObjectPattern";
+          break;
+
+        case "ArrayExpression":
+          node.type = "ArrayPattern";
+          break;
+
+        default:
+          unexpected(node.start);
+      }
+    }
+    return node;
   }
 
 });
