@@ -1058,6 +1058,20 @@
     if (sourceFile !== null) this.source = sourceFile;
   }
 
+  function setLoc(node, other) {
+    if (options.locations && other.loc) {
+      node.loc.start = other.loc.start;
+      node.loc.end = other.loc.end;
+    }
+    if (other.range) {
+      node.start = other.range[0];
+      node.end = other.range[1];
+      if (options.ranges) {
+        node.range = other.range;
+      }
+    }
+  }
+
   function startNode() {
     var node = new Node();
     if (options.locations)
@@ -1697,14 +1711,10 @@
       if (!val) {
         unexpected(tokPos - 1);
       }
-      val.start = tokStart1;
-      val.end = lastEnd;
-      if (options.locations) {
-        val.loc.start = tokStartLoc1;
-        val.loc.end = lastEndLoc;
-      }
-      if (options.ranges)
-        val.range = [tokStart1, lastEnd];
+      setLoc(val, {
+        range: [tokStart1, lastEnd],
+        loc: {start: tokStartLoc1, end: lastEndLoc}
+      });
       return val;
 
     case _bracketL:
@@ -1756,16 +1766,31 @@
 
       var prop = startNode(), isGetSet = false, kind;
       prop.key = parsePropertyName();
+      if (options.ecmaVersion >= 6) {
+        prop.method = false;
+        prop.shorthand = false;
+        prop.computed = false;
+      }
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         kind = prop.kind = "init";
+      } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
+        var func = parseFunction(startNode(), false, true);
+        setLoc(func, func.body);
+        kind = prop.kind = "init";
+        prop.method = true;
+        prop.value = func;
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         isGetSet = sawGetSet = true;
         kind = prop.kind = prop.key.name;
         prop.key = parsePropertyName();
         if (tokType !== _parenL) unexpected();
-        prop.value = parseFunction(startNode(), false);
+        var func = parseFunction(startNode(), false, options.ecmaVersion >= 6);
+        if (func.body.type !== "BlockStatement") {
+          setLoc(func, func.body);
+        }
+        prop.value = func;
       } else unexpected();
 
       // getters and setters are not allowed to clash — either with
@@ -1783,11 +1808,6 @@
           }
         }
       }
-      if (options.ecmaVersion >= 6) {
-        prop.method = false;
-        prop.shorthand = false;
-        prop.computed = false;
-      }
       node.properties.push(finishNode(prop, "Property"));
     }
     return finishNode(node, "ObjectExpression");
@@ -1801,40 +1821,30 @@
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
-  function parseFunction(node, isStatement) {
-    if (tokType === _name) node.id = parseIdent();
-    else if (isStatement) unexpected();
-    else node.id = null;
+  function initFunction(node, id) {
+    node.id = id || null;
     node.params = [];
     if (options.ecmaVersion >= 6) {
       node.defaults = [];
       node.rest = null;
       node.generator = false;
     }
-    expect(_parenL);
-    for (;;) {
-      if (eat(_parenR)) {
-        break;
-      } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
-        node.rest = parseIdent();
-        expect(_parenR);
-        break;
-      } else {
-        node.params.push(parseIdent());
-        if (!eat(_comma)) {
-          expect(_parenR);
-          break;
-        }
-      }
-    }
-    parseFunctionBody(node);
+    return node;
+  }
+
+  function parseFunction(node, isStatement, allowExpression) {
+    initFunction(node, tokType === _name ? parseIdent() : isStatement ? unexpected() : null);
+    parseFunctionParams(node);
+    parseFunctionBody(node, allowExpression);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
   // Parse arrow function expression with given parameters.
 
   function parseArrowExpression(node, params) {
-    var defaults = [], hasDefaults = false;
+    initFunction(node);
+
+    var defaults = node.defaults, hasDefaults = false;
     
     for (var i = 0; i < params.length; i++) {
         var param = params[i];
@@ -1855,13 +1865,32 @@
         }
     }
 
-    node.id = null;
     node.params = params;
-    node.defaults = hasDefaults ? defaults : [];
-    node.rest = null;
-    node.generator = false;
+    if (!hasDefaults) node.defaults = [];
+
     parseFunctionBody(node, true);
     return finishNode(node, "ArrowFunctionExpression");
+  }
+
+  // Parse function parameters.
+
+  function parseFunctionParams(node) {
+    expect(_parenL);
+    for (;;) {
+      if (eat(_parenR)) {
+        break;
+      } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
+        node.rest = parseIdent();
+        expect(_parenR);
+        break;
+      } else {
+        node.params.push(parseIdent());
+        if (!eat(_comma)) {
+          expect(_parenR);
+          break;
+        }
+      }
+    }
   }
 
   // Parse function body and check parameters.
