@@ -1694,6 +1694,10 @@
       }
       expect(_parenR);
       if (eat(_arrow)) {
+        if (val) {
+          var innerParenL = input.slice(val.start, val.end).indexOf('(');
+          if (innerParenL >= 0) unexpected(val.start + innerParenL);
+        }
         val = parseArrowExpression(node, !val ? [] : val.type === "SequenceExpression" ? val.expressions : [val]);
       } else
       // disallow '()' before everything but error
@@ -1837,26 +1841,28 @@
     prop.key = (tokType === _num || tokType === _string) ? parseExprAtom() : parseIdent(true);
   }
 
-  // Initialize empty function node with given name.
+  // Initialize empty function node.
 
-  function initFunction(node, id) {
-    node.id = id || null;
+  function initFunction(node) {
+    node.id = null;
     node.params = [];
     if (options.ecmaVersion >= 6) {
       node.defaults = [];
       node.rest = null;
       node.generator = false;
     }
-    return node;
   }
 
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
-  function parseFunction(node, isStatement, allowExpression) {
-    initFunction(node, tokType === _name ? parseIdent() : isStatement ? unexpected() : null);
+  function parseFunction(node, isStatement, allowExpressionBody) {
+    initFunction(node);
+    if (isStatement || tokType === _name) {
+      node.id = parseIdent();
+    }
     parseFunctionParams(node);
-    parseFunctionBody(node, allowExpression);
+    parseFunctionBody(node, allowExpressionBody);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
@@ -1880,6 +1886,12 @@
           hasDefaults = true;
           params[i] = param.left;
           break;
+
+        case "SpreadElement":
+          if (i === --params.length) {
+            node.rest = param.argument;
+            break;
+          }
 
         default:
           unexpected(param.start);

@@ -2680,6 +2680,70 @@ test("foo((x, y) => {})", {
   locations: true
 });
 
+test("(a, a) => 42", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 12}
+  },
+  range: [0, 12],
+  body: [{
+    type: "ExpressionStatement",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 12}
+    },
+    range: [0, 12],
+    expression: {
+      type: "ArrowFunctionExpression",
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 12}
+      },
+      range: [0, 12],
+      id: null,
+      params: [
+        {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 2}
+          },
+          range: [1, 2],
+          name: "a"
+        },
+        {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 5}
+          },
+          range: [4, 5],
+          name: "a"
+        }
+      ],
+      defaults: [],
+      rest: null,
+      generator: false,
+      body: {
+        type: "Literal",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 12}
+        },
+        range: [10, 12],
+        value: 42,
+        raw: "42"
+      },
+      expression: true
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 // ES6: Method Definition
 
 test("x = { method() { } }", {
@@ -15715,6 +15779,72 @@ test("func(a, ...b)", {
   locations: true
 });
 
+test("func(...a, b)", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 13}
+  },
+  range: [0, 13],
+  body: [{
+    type: "ExpressionStatement",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 13}
+    },
+    range: [0, 13],
+    expression: {
+      type: "CallExpression",
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 13}
+      },
+      range: [0, 13],
+      callee: {
+        type: "Identifier",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 4}
+        },
+        range: [0, 4],
+        name: "func"
+      },
+      arguments: [
+        {
+          type: "SpreadElement",
+          loc: {
+            start: {line: 1, column: 5},
+            end: {line: 1, column: 9}
+          },
+          range: [5, 9],
+          argument: {
+            type: "Identifier",
+            loc: {
+              start: {line: 1, column: 8},
+              end: {line: 1, column: 9}
+            },
+            range: [8, 9],
+            name: "a"
+          }
+        },
+        {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 11},
+            end: {line: 1, column: 12}
+          },
+          range: [11, 12],
+          name: "b"
+        }
+      ]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 // Harmony Invalid syntax
 
 testFail("0o", "Expected number in radix 8 (1:2)", {ecmaVersion: 6});
@@ -15779,7 +15909,7 @@ testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Definin
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
-testFail("var super", "Unexpected token (1:5)", {ecmaVersion: 6});
+testFail("var super", "Unexpected token (1:5)", {ecmaVersion: 6, forbidReserved: true});
 
 testFail("var default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
@@ -15815,9 +15945,9 @@ testFail("import { foo, bar }", "Unexpected token (1:20)", {ecmaVersion: 6});
 
 testFail("import foo from bar", "Unexpected token (1:20)", {ecmaVersion: 6});
 
-testFail("((a)) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("((a)) => 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("(a, (b)) => 42", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
@@ -15830,8 +15960,6 @@ testFail("\"use strict\"; (eval, a) => 42", "Defining 'eval' in strict mode (1:1
 testFail("\"use strict\"; (arguments, a) => 42", "Defining 'arguments' in strict mode (1:15)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval, a = 10) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
-
-testFail("(a, a) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (a, a) => 42", "Argument name clash in strict mode (1:18)", {ecmaVersion: 6});
 
@@ -16064,7 +16192,7 @@ testFail("`hello ${10 `test`", "Unexpected token (1:19)", {ecmaVersion: 6});
 
 testFail("`hello ${10;test`", "Unexpected token (1:12)", {ecmaVersion: 6});
 
-testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:14)", {ecmaVersion: 6});
+testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:13)", {ecmaVersion: 6});
 
 testFail("[a,b if (a)] // (a,b)", "Unexpected token (1:5)", {ecmaVersion: 6});
 
@@ -16088,9 +16216,9 @@ testFail("({ \"chance\" }) = obj", "Unexpected token (1:13)", {ecmaVersion: 6});
 
 testFail("({ 42 }) = obj", "Unexpected token (1:7)", {ecmaVersion: 6});
 
-testFail("function f(a, ...b, c)", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("function f(a, ...b, c)", "Unexpected token (1:18)", {ecmaVersion: 6});
 
-testFail("function f(a, ...b = 0)", "Unexpected token (1:20)", {ecmaVersion: 6});
+testFail("function f(a, ...b = 0)", "Unexpected token (1:19)", {ecmaVersion: 6});
 
 testFail("function x(...{ a }){}", "Unexpected token (1:15)", {ecmaVersion: 6});
 
@@ -16100,7 +16228,7 @@ testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Unexpect
 
 testFail("\"use strict\"; function x(a, ...[a]){}", "Unexpected token (1:38)", {ecmaVersion: 6});
 
-testFail("(...a, b) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("(...a, b) => {}", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("([ 5 ]) => {}", "Unexpected token (1:8)", {ecmaVersion: 6});
 
@@ -16112,9 +16240,7 @@ testFail("[...{ a }] = b", "Unexpected token (1:11)", {ecmaVersion: 6});
 
 testFail("[...a, b] = c", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("func(...a, b)", "Unexpected token (1:10)", {ecmaVersion: 6});
-
-testFail("({ t(eval) { \"use strict\"; } });", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; `${test}\\02`;", "Unexpected token (1:22)", {ecmaVersion: 6});
 
