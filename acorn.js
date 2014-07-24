@@ -872,9 +872,9 @@
     if (ch === 123) {
       if (options.ecmaVersion < 6) unexpected();
       ++tokPos;
-      code = readHexChar();
-      ch = input.charCodeAt(tokPos++);
-      if (code > 0x10FFFF || ch !== 125 /* '}' */) unexpected();
+      code = readHexChar(input.indexOf('}', tokPos) - tokPos);
+      ++tokPos;
+      if (code > 0x10FFFF) unexpected();
     } else {
       code = readHexChar(4);
     }

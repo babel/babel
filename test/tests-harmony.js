@@ -15751,13 +15751,13 @@ testFail("0B18", "Unexpected token (1:3)", {ecmaVersion: 6});
 
 testFail("0B12", "Unexpected token (1:3)", {ecmaVersion: 6});
 
-testFail("\"\\u{110000}\"", "Unexpected token (1:12)", {ecmaVersion: 6});
+testFail("\"\\u{110000}\"", "Unexpected token (1:0)", {ecmaVersion: 6});
 
-testFail("\"\\u{}\"", "Unexpected token (1:5)", {ecmaVersion: 6});
+testFail("\"\\u{}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
 
-testFail("\"\\u{FFFF\"", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("\"\\u{FFFF\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
 
-testFail("\"\\u{FFZ}\"", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("\"\\u{FFZ}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
 
 testFail("[v] += ary", "Unexpected token (1:4)", {ecmaVersion: 6});
 
