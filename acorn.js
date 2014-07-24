@@ -1550,7 +1550,7 @@
     if (tokType.isAssign) {
       var node = startNodeFrom(left);
       node.operator = tokVal;
-      node.left = left;
+      node.left = toAssignable(left);
       next();
       node.right = parseMaybeAssign(noIn);
       checkLVal(left);
