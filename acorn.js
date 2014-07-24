@@ -1060,20 +1060,6 @@
     if (sourceFile !== null) this.source = sourceFile;
   }
 
-  function setLoc(node, other) {
-    if (options.locations && other.loc) {
-      node.loc.start = other.loc.start;
-      node.loc.end = other.loc.end;
-    }
-    if (other.range) {
-      node.start = other.range[0];
-      node.end = other.range[1];
-      if (options.ranges) {
-        node.range = other.range;
-      }
-    }
-  }
-
   function startNode() {
     var node = new Node();
     if (options.locations)
@@ -1714,10 +1700,15 @@
       if (!val) {
         unexpected(tokPos - 1);
       }
-      setLoc(val, {
-        range: [tokStart1, lastEnd],
-        loc: {start: tokStartLoc1, end: lastEndLoc}
-      });
+      val.start = tokStart1;
+      val.end = lastEnd;
+      if (options.locations) {
+        val.loc.start = tokStartLoc1;
+        val.loc.end = lastEndLoc;
+      }
+      if (options.ranges) {
+        val.range = [tokStart1, lastEnd];
+      }
       return val;
 
     case _bracketL:
@@ -1793,7 +1784,6 @@
         kind = prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         var func = parseFunction(startNode(), false, true);
-        setLoc(func, func.body);
         kind = prop.kind = "init";
         prop.method = true;
         prop.value = func;
@@ -1804,9 +1794,6 @@
         parsePropertyName(prop);
         if (tokType !== _parenL) unexpected();
         var func = parseFunction(startNode(), false, options.ecmaVersion >= 6);
-        if (func.body.type !== "BlockStatement") {
-          setLoc(func, func.body);
-        }
         prop.value = func;
       } else unexpected();
 
@@ -1990,7 +1977,6 @@
         method.kind = "";
       }
       method.value = parseFunction(startNode());
-      setLoc(method.value, method.value.body);
       addProperty(classBody.body, finishNode(method, "MethodDefinition"), sawGetSet, "");
       eat(_semi);
     }

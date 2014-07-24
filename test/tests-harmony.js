@@ -36,7 +36,11 @@ if (typeof exports != "undefined") {
 
 /*
   Tests below were automatically converted from https://github.com/ariya/esprima/blob/2bb17ef9a45c88e82d72c2c61b7b7af93caef028/test/harmonytest.js.
-  Locations for parenthesized expressions and expression statements were manually fixed.
+
+  Manually fixed locations for:
+   - parenthesized expressions (include brackets into expression's location)
+   - expression statements (excluded spaces after statement's semicolon)
+   - arrow and method functions (included arguments into function's location)
 */
 
 // ES6 Unicode Code Point Escape Sequence
@@ -2724,9 +2728,9 @@ test("x = { method() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [15, 18],
+            range: [12, 18],
             loc: {
-              start: {line: 1, column: 15},
+              start: {line: 1, column: 12},
               end: {line: 1, column: 18}
             }
           },
@@ -2823,9 +2827,9 @@ test("x = { method(test) { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [19, 22],
+            range: [12, 22],
             loc: {
-              start: {line: 1, column: 19},
+              start: {line: 1, column: 12},
               end: {line: 1, column: 22}
             }
           },
@@ -2915,9 +2919,9 @@ test("x = { 'method'() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [17, 20],
+            range: [14, 20],
             loc: {
-              start: {line: 1, column: 17},
+              start: {line: 1, column: 14},
               end: {line: 1, column: 20}
             }
           },
@@ -3006,9 +3010,9 @@ test("x = { get() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 15],
+            range: [9, 15],
             loc: {
-              start: {line: 1, column: 12},
+              start: {line: 1, column: 9},
               end: {line: 1, column: 15}
             }
           },
@@ -3097,9 +3101,9 @@ test("x = { set() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 15],
+            range: [9, 15],
             loc: {
-              start: {line: 1, column: 12},
+              start: {line: 1, column: 9},
               end: {line: 1, column: 15}
             }
           },
@@ -3189,9 +3193,9 @@ test("x = { method() 42 }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [15, 17],
+            range: [12, 17],
             loc: {
-              start: {line: 1, column: 15},
+              start: {line: 1, column: 12},
               end: {line: 1, column: 17}
             }
           },
@@ -3281,9 +3285,9 @@ test("x = { get method() 42 }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [19, 21],
+            range: [16, 21],
             loc: {
-              start: {line: 1, column: 19},
+              start: {line: 1, column: 16},
               end: {line: 1, column: 21}
             }
           },
@@ -3398,9 +3402,9 @@ test("x = { set method(val) v = val }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [22, 29],
+            range: [16, 29],
             loc: {
-              start: {line: 1, column: 22},
+              start: {line: 1, column: 16},
               end: {line: 1, column: 29}
             }
           },
@@ -8250,9 +8254,9 @@ test("class A {get() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [15, 17],
+          range: [12, 17],
           loc: {
-            start: {line: 1, column: 15},
+            start: {line: 1, column: 12},
             end: {line: 1, column: 17}
           }
         },
@@ -8331,9 +8335,9 @@ test("class A { static get() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [23, 25],
+          range: [20, 25],
           loc: {
-            start: {line: 1, column: 23},
+            start: {line: 1, column: 20},
             end: {line: 1, column: 25}
           }
         },
@@ -8420,9 +8424,9 @@ test("class A extends B {get foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [29, 31],
+          range: [26, 31],
           loc: {
-            start: {line: 1, column: 29},
+            start: {line: 1, column: 26},
             end: {line: 1, column: 31}
           }
         },
@@ -8509,9 +8513,9 @@ test("class A extends B { static get foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [37, 39],
+          range: [34, 39],
           loc: {
-            start: {line: 1, column: 37},
+            start: {line: 1, column: 34},
             end: {line: 1, column: 39}
           }
         },
@@ -8598,9 +8602,9 @@ test("class A {set a(v) {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [18, 20],
+          range: [14, 20],
           loc: {
-            start: {line: 1, column: 18},
+            start: {line: 1, column: 14},
             end: {line: 1, column: 20}
           }
         },
@@ -8687,9 +8691,9 @@ test("class A { static set a(v) {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [26, 28],
+          range: [22, 28],
           loc: {
-            start: {line: 1, column: 26},
+            start: {line: 1, column: 22},
             end: {line: 1, column: 28}
           }
         },
@@ -8776,9 +8780,9 @@ test("class A {set(v) {};}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [16, 18],
+          range: [12, 18],
           loc: {
-            start: {line: 1, column: 16},
+            start: {line: 1, column: 12},
             end: {line: 1, column: 18}
           }
         },
@@ -8865,9 +8869,9 @@ test("class A { static set(v) {};}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [24, 26],
+          range: [20, 26],
           loc: {
-            start: {line: 1, column: 24},
+            start: {line: 1, column: 20},
             end: {line: 1, column: 26}
           }
         },
@@ -9220,9 +9224,9 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
               rest: null,
               generator: false,
               expression: false,
-              range: [38, 49],
+              range: [35, 49],
               loc: {
-                start: {line: 1, column: 38},
+                start: {line: 1, column: 35},
                 end: {line: 1, column: 49}
               }
             },
@@ -9308,9 +9312,9 @@ test("class A {static foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [22, 24],
+          range: [19, 24],
           loc: {
-            start: {line: 1, column: 22},
+            start: {line: 1, column: 19},
             end: {line: 1, column: 24}
           }
         },
@@ -9390,9 +9394,9 @@ test("class A {foo() {} static bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [15, 17],
+            range: [12, 17],
             loc: {
-              start: {line: 1, column: 15},
+              start: {line: 1, column: 12},
               end: {line: 1, column: 17}
             }
           },
@@ -9432,9 +9436,9 @@ test("class A {foo() {} static bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [31, 33],
+            range: [28, 33],
             loc: {
-              start: {line: 1, column: 31},
+              start: {line: 1, column: 28},
               end: {line: 1, column: 33}
             }
           },
@@ -9560,9 +9564,9 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
               rest: null,
               generator: false,
               expression: false,
-              range: [46, 57],
+              range: [43, 57],
               loc: {
-                start: {line: 1, column: 46},
+                start: {line: 1, column: 43},
                 end: {line: 1, column: 57}
               }
             },
@@ -9649,9 +9653,9 @@ test("class A { foo() {} bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [16, 18],
+            range: [13, 18],
             loc: {
-              start: {line: 1, column: 16},
+              start: {line: 1, column: 13},
               end: {line: 1, column: 18}
             }
           },
@@ -9691,9 +9695,9 @@ test("class A { foo() {} bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [25, 27],
+            range: [22, 27],
             loc: {
-              start: {line: 1, column: 25},
+              start: {line: 1, column: 22},
               end: {line: 1, column: 27}
             }
           },
@@ -9774,9 +9778,9 @@ test("class A { get foo() {} set foo(v) {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [20, 22],
+            range: [17, 22],
             loc: {
-              start: {line: 1, column: 20},
+              start: {line: 1, column: 17},
               end: {line: 1, column: 22}
             }
           },
@@ -9824,9 +9828,9 @@ test("class A { get foo() {} set foo(v) {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [34, 36],
+            range: [30, 36],
             loc: {
-              start: {line: 1, column: 34},
+              start: {line: 1, column: 30},
               end: {line: 1, column: 36}
             }
           },
@@ -9907,9 +9911,9 @@ test("class A { static get foo() {} get foo() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [27, 29],
+            range: [24, 29],
             loc: {
-              start: {line: 1, column: 27},
+              start: {line: 1, column: 24},
               end: {line: 1, column: 29}
             }
           },
@@ -9949,9 +9953,9 @@ test("class A { static get foo() {} get foo() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [40, 42],
+            range: [37, 42],
             loc: {
-              start: {line: 1, column: 40},
+              start: {line: 1, column: 37},
               end: {line: 1, column: 42}
             }
           },
@@ -10032,9 +10036,9 @@ test("class A { static get foo() {} static get bar() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [27, 29],
+            range: [24, 29],
             loc: {
-              start: {line: 1, column: 27},
+              start: {line: 1, column: 24},
               end: {line: 1, column: 29}
             }
           },
@@ -10074,9 +10078,9 @@ test("class A { static get foo() {} static get bar() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [47, 49],
+            range: [44, 49],
             loc: {
-              start: {line: 1, column: 47},
+              start: {line: 1, column: 44},
               end: {line: 1, column: 49}
             }
           },
@@ -10157,9 +10161,9 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [27, 29],
+            range: [24, 29],
             loc: {
-              start: {line: 1, column: 27},
+              start: {line: 1, column: 24},
               end: {line: 1, column: 29}
             }
           },
@@ -10207,9 +10211,9 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [48, 50],
+            range: [44, 50],
             loc: {
-              start: {line: 1, column: 48},
+              start: {line: 1, column: 44},
               end: {line: 1, column: 50}
             }
           },
@@ -10249,9 +10253,9 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [61, 63],
+            range: [58, 63],
             loc: {
-              start: {line: 1, column: 61},
+              start: {line: 1, column: 58},
               end: {line: 1, column: 63}
             }
           },
@@ -10299,9 +10303,9 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [75, 77],
+            range: [71, 77],
             loc: {
-              start: {line: 1, column: 75},
+              start: {line: 1, column: 71},
               end: {line: 1, column: 77}
             }
           },
@@ -10390,9 +10394,9 @@ test("class A { set foo(v) {} get foo() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [21, 23],
+            range: [17, 23],
             loc: {
-              start: {line: 1, column: 21},
+              start: {line: 1, column: 17},
               end: {line: 1, column: 23}
             }
           },
@@ -10432,9 +10436,9 @@ test("class A { set foo(v) {} get foo() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [34, 36],
+            range: [31, 36],
             loc: {
-              start: {line: 1, column: 34},
+              start: {line: 1, column: 31},
               end: {line: 1, column: 36}
             }
           },
@@ -10825,9 +10829,9 @@ test("({get [x]() {}, set [x](v) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 14],
+            range: [9, 14],
             loc: {
-              start: {line: 1, column: 12},
+              start: {line: 1, column: 9},
               end: {line: 1, column: 14}
             }
           },
@@ -10877,9 +10881,9 @@ test("({get [x]() {}, set [x](v) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [27, 29],
+            range: [23, 29],
             loc: {
-              start: {line: 1, column: 27},
+              start: {line: 1, column: 23},
               end: {line: 1, column: 29}
             }
           },
@@ -10894,10 +10898,10 @@ test("({get [x]() {}, set [x](v) {}})", {
           }
         }
       ],
-      range: [1, 30],
+      range: [0, 31],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 30}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 31}
       }
     },
     range: [0, 31],
@@ -10951,9 +10955,9 @@ test("({[x]() {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [8, 10],
+          range: [5, 10],
           loc: {
-            start: {line: 1, column: 8},
+            start: {line: 1, column: 5},
             end: {line: 1, column: 10}
           }
         },
