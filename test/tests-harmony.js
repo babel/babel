@@ -11823,10 +11823,10 @@ test("({f: function({x} = {x: 10}) {}})", {
           end: {line: 1, column: 31}
         }
       }],
-      range: [1, 32],
+      range: [0, 33],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 32}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 33}
       }
     },
     range: [0, 33],
@@ -11955,9 +11955,9 @@ test("({f({x} = {x: 10}) {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [19, 21],
+          range: [3, 21],
           loc: {
-            start: {line: 1, column: 19},
+            start: {line: 1, column: 3},
             end: {line: 1, column: 21}
           }
         },
@@ -12106,9 +12106,9 @@ test("(class {f({x} = {x: 10}) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [25, 27],
+            range: [9, 27],
             loc: {
-              start: {line: 1, column: 25},
+              start: {line: 1, column: 9},
               end: {line: 1, column: 27}
             }
           },
@@ -12245,10 +12245,10 @@ test("(({x} = {x: 10}) => {})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 22],
+      range: [0, 23],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 22}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 23}
       }
     },
     range: [0, 23],
@@ -14199,9 +14199,9 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
           },
           generator: false,
           expression: false,
-          range: [46, 48],
+          range: [4, 48],
           loc: {
-            start: {line: 1, column: 46},
+            start: {line: 1, column: 4},
             end: {line: 1, column: 48}
           }
         },
@@ -16212,19 +16212,19 @@ testFail("var a = [x if (x)]", "Unexpected token (1:19)", {ecmaVersion: 6});
 
 testFail("[for (x in [])]  // no espression", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("({ \"chance\" }) = obj", "Unexpected token (1:13)", {ecmaVersion: 6});
+testFail("({ \"chance\" }) = obj", "Unexpected token (1:12)", {ecmaVersion: 6});
 
-testFail("({ 42 }) = obj", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("({ 42 }) = obj", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 testFail("function f(a, ...b, c)", "Unexpected token (1:18)", {ecmaVersion: 6});
 
 testFail("function f(a, ...b = 0)", "Unexpected token (1:19)", {ecmaVersion: 6});
 
-testFail("function x(...{ a }){}", "Unexpected token (1:15)", {ecmaVersion: 6});
+testFail("function x(...{ a }){}", "Unexpected token (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; function x(a, { a }){}", "Unexpected token (1:37)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x(a, { a }){}", "Argument name clash in strict mode (1:30)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Unexpected token (1:57)", {ecmaVersion: 6});
+testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Argument name clash in strict mode (1:47)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; function x(a, ...[a]){}", "Argument name clash in strict mode (1:32)", {ecmaVersion: 6});
 
@@ -16232,11 +16232,11 @@ testFail("(...a, b) => {}", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("([ 5 ]) => {}", "Unexpected token (1:3)", {ecmaVersion: 6});
 
-testFail("({ 5 }) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({ 5 }) => {}", "Unexpected token (1:5)", {ecmaVersion: 6});
 
 testFail("(...[ 5 ]) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("[...{ a }] = b", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("[...{ a }] = b", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("[...a, b] = c", "Unexpected token (1:1)", {ecmaVersion: 6});
 

@@ -1802,6 +1802,10 @@
         if (tokType !== _parenL) unexpected();
         var func = parseFunction(startNode(), false, options.ecmaVersion >= 6);
         prop.value = func;
+      } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
+        kind = prop.kind = "init";
+        prop.value = prop.key;
+        prop.shorthand = true;
       } else unexpected();
 
       addProperty(node.properties, finishNode(prop, "Property"), sawGetSet, "init");
@@ -1879,7 +1883,7 @@
     for (var i = 0, lastI = params.length - 1; i <= lastI; i++) {
       var param = params[i];
 
-      if (param.type === "AssignmentExpression") {
+      if (param.type === "AssignmentExpression" && param.operator === "=") {
         hasDefaults = true;
         params[i] = param.left;
         defaults.push(param.right);
@@ -1912,6 +1916,7 @@
         break;
       } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
         node.rest = toAssignable(parseExprAtom());
+        checkSpreadAssign(node.rest);
         expect(_parenR);
         break;
       } else {
@@ -2088,6 +2093,7 @@
         case "SpreadElement":
           if (allowSpread) {
             toAssignable(node.argument);
+            checkSpreadAssign(node.argument);
             break;
           }
 
@@ -2096,6 +2102,13 @@
       }
     }
     return node;
+  }
+
+  // Checks if node can be assignable spread argument.
+
+  function checkSpreadAssign(node) {
+    if (node.type !== "Identifier" && node.type !== "ArrayPattern")
+      unexpected(node.start);
   }
 
 });
