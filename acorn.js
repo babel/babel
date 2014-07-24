@@ -281,6 +281,7 @@
   var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
+  var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true}, _static = {keyword: "static"};
 
   // The keywords that denote values.
 
@@ -305,7 +306,8 @@
                       "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
-                      "delete": {keyword: "delete", prefix: true, beforeExpr: true}};
+                      "delete": {keyword: "delete", prefix: true, beforeExpr: true},
+                      "class": _class, "extends": _extends, "static": _static};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -424,7 +426,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1217,6 +1219,7 @@
     case _do: return parseDoStatement(node);
     case _for: return parseForStatement(node);
     case _function: return parseFunctionStatement(node);
+    case _class: return parseClass(node, true);
     case _if: return parseIfStatement(node);
     case _return: return parseReturnStatement(node);
     case _switch: return parseSwitchStatement(node);
@@ -1731,6 +1734,9 @@
       next();
       return parseFunction(node, false);
 
+    case _class:
+      return parseClass(startNode(), false);
+
     case _new:
       return parseNew();
 
@@ -1776,7 +1782,7 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), isGetSet = false, kind;
+      var prop = startNode(), kind;
       prop.key = parsePropertyName();
       if (options.ecmaVersion >= 6) {
         prop.method = false;
@@ -1794,7 +1800,7 @@
         prop.value = func;
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
-        isGetSet = sawGetSet = true;
+        sawGetSet = true;
         kind = prop.kind = prop.key.name;
         prop.key = parsePropertyName();
         if (tokType !== _parenL) unexpected();
@@ -1805,24 +1811,30 @@
         prop.value = func;
       } else unexpected();
 
-      // getters and setters are not allowed to clash — either with
-      // each other or with an init property — and in strict mode,
-      // init properties are also not allowed to be repeated.
-
-      if (prop.key.type === "Identifier" && (strict || sawGetSet)) {
-        for (var i = 0; i < node.properties.length; ++i) {
-          var other = node.properties[i];
-          if (other.key.name === prop.key.name) {
-            var conflict = kind == other.kind || isGetSet && other.kind === "init" ||
-              kind === "init" && (other.kind === "get" || other.kind === "set");
-            if (conflict && !strict && kind === "init" && other.kind === "init") conflict = false;
-            if (conflict) raise(prop.key.start, "Redefinition of property");
-          }
-        }
-      }
-      node.properties.push(finishNode(prop, "Property"));
+      addProperty(node.properties, finishNode(prop, "Property"), sawGetSet, "init");
     }
     return finishNode(node, "ObjectExpression");
+  }
+
+  // Add property to list with keeping in mind and checking that
+  // object/class getters and setters are not allowed to clash —
+  // either with each other or with an init property — and in
+  // strict mode, init properties are also not allowed to be repeated.
+
+  function addProperty(props, current, sawGetSet, defaultKind) {
+    if (current.key.type === "Identifier" && (strict || sawGetSet)) {
+      var kind = current.kind, isGetSet = kind !== defaultKind;
+      for (var i = 0; i < props.length; ++i) {
+        var other = props[i];
+        if (other.key.name === current.key.name && other.static === current.static) {
+          var conflict = kind == other.kind || isGetSet && other.kind === defaultKind ||
+            kind === defaultKind && (other.kind !== defaultKind);
+          if (conflict && !strict && kind === defaultKind && other.kind === defaultKind) conflict = false;
+          if (conflict) raise(current.key.start, "Redefinition of property");
+        }
+      }
+    }
+    props.push(current);
   }
 
   function parsePropertyName() {
@@ -1830,8 +1842,7 @@
     return parseIdent(true);
   }
 
-  // Parse a function declaration or literal (depending on the
-  // `isStatement` parameter).
+  // Initialize empty function node with given name.
 
   function initFunction(node, id) {
     node.id = id || null;
@@ -1843,6 +1854,9 @@
     }
     return node;
   }
+
+  // Parse a function declaration or literal (depending on the
+  // `isStatement` parameter).
 
   function parseFunction(node, isStatement, allowExpression) {
     initFunction(node, tokType === _name ? parseIdent() : isStatement ? unexpected() : null);
@@ -1944,6 +1958,36 @@
           raise(id.start, "Argument name clash in strict mode");
       }
     }
+  }
+
+  // Parse a class declaration or literal (depending on the
+  // `isStatement` parameter).
+  
+  function parseClass(node, isStatement) {
+    next();
+    node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
+    node.superClass = eat(_extends) ? parseExpression() : null;
+    var classBody = startNode(), sawGetSet = false;
+    classBody.body = [];
+    expect(_braceL);
+    while (!eat(_braceR)) {
+      var method = startNode();
+      method.static = !!eat(_static);
+      method.key = parseIdent(true);
+      if (method.key.type === "Identifier" && (method.key.name === "get" || method.key.name === "set") && tokType === _name) {
+        method.kind = method.key.name;
+        method.key = parseIdent(true);
+        sawGetSet = true;
+      } else {
+        method.kind = "";
+      }
+      method.value = parseFunction(startNode());
+      setLoc(method.value, method.value.body);
+      addProperty(classBody.body, finishNode(method, "MethodDefinition"), sawGetSet, "");
+      eat(_semi);
+    }
+    node.body = finishNode(classBody, "ClassBody");
+    return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
   }
 
   // Parses a comma-separated list of expressions, and returns them as

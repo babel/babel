@@ -9205,10 +9205,10 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                       end: {line: 1, column: 47}
                     }
                   },
-                  range: [40, 48],
+                  range: [40, 47],
                   loc: {
                     start: {line: 1, column: 40},
-                    end: {line: 1, column: 48}
+                    end: {line: 1, column: 47}
                   }
                 }],
                 range: [38, 49],
@@ -9240,10 +9240,10 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
             end: {line: 1, column: 50}
           }
         },
-        range: [15, 50],
+        range: [14, 51],
         loc: {
-          start: {line: 1, column: 15},
-          end: {line: 1, column: 50}
+          start: {line: 1, column: 14},
+          end: {line: 1, column: 51}
         }
       },
       range: [14, 51],
@@ -9257,8 +9257,7 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
-  },
-  comments: []
+  }
 }, {
   ecmaVersion: 6,
   ranges: true,
@@ -9546,10 +9545,10 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                       end: {line: 1, column: 55}
                     }
                   },
-                  range: [48, 56],
+                  range: [48, 55],
                   loc: {
                     start: {line: 1, column: 48},
-                    end: {line: 1, column: 56}
+                    end: {line: 1, column: 55}
                   }
                 }],
                 range: [46, 57],
@@ -9581,10 +9580,10 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
             end: {line: 1, column: 58}
           }
         },
-        range: [15, 58],
+        range: [14, 59],
         loc: {
-          start: {line: 1, column: 15},
-          end: {line: 1, column: 58}
+          start: {line: 1, column: 14},
+          end: {line: 1, column: 59}
         }
       },
       range: [14, 59],
@@ -9598,8 +9597,7 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 59}
-  },
-  comments: []
+  }
 }, {
   ecmaVersion: 6,
   ranges: true,
@@ -10472,17 +10470,17 @@ test("class A { set foo(v) {} get foo() {} }", {
   locations: true
 });
 
-testFail("class A { get foo() {} get foo() {} }", "Unexpected token (1:31)", {ecmaVersion: 6});
+testFail("class A { get foo() {} get foo() {} }", "Redefinition of property (1:27)", {ecmaVersion: 6});
 
-testFail("class A { set foo(v) {} set foo(v) {} }", "Unexpected token (1:32)", {ecmaVersion: 6});
+testFail("class A { set foo(v) {} set foo(v) {} }", "Redefinition of property (1:28)", {ecmaVersion: 6});
 
-testFail("class A { get foo() {} foo() {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { get foo() {} foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
 
-testFail("class A { foo() {} get foo() {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { foo() {} get foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
 
-testFail("class A { set foo(v) {} foo() {} }", "Unexpected token (1:28)", {ecmaVersion: 6});
+testFail("class A { set foo(v) {} foo() {} }", "Redefinition of property (1:24)", {ecmaVersion: 6});
 
-testFail("class A { foo() {} set foo(v) {} }", "Unexpected token (1:27)", {ecmaVersion: 6});
+testFail("class A { foo() {} set foo(v) {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
 
 // ES6: Computed Properties
 
