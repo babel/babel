@@ -226,6 +226,11 @@
 
   var inFunction, labels, strict;
 
+  // This counter is used for checking that arrow expressions did
+  // not contain nested parentheses in argument list.
+
+  var metParenL;
+
   // This function is used to raise exceptions on parse errors. It
   // takes an offset integer (into the current `input`) to indicate
   // the location of the error, attaches the position to the end
@@ -491,6 +496,7 @@
     tokCurLine = 1;
     tokPos = tokLineStart = 0;
     tokRegexpAllowed = true;
+    metParenL = 0;
     skipSpace();
   }
 
@@ -1689,20 +1695,16 @@
     case _parenL:
       var node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val;
       next();
+      var oldParenL = ++metParenL;
       if (tokType !== _parenR) {
         val = parseExpression();
       }
       expect(_parenR);
-      if (eat(_arrow)) {
-        if (val) {
-          var innerParenL = input.slice(val.start, val.end).indexOf('(');
-          if (innerParenL >= 0) unexpected(val.start + innerParenL);
-        }
+      if (metParenL === oldParenL && eat(_arrow)) {
         val = parseArrowExpression(node, !val ? [] : val.type === "SequenceExpression" ? val.expressions : [val]);
-      } else
-      // disallow '()' before everything but error
-      if (!val) {
-        unexpected(tokPos - 1);
+      } else {
+        // disallow '()' before everything but error
+        if (!val) unexpected(lastStart);
       }
       val.start = tokStart1;
       val.end = lastEnd;

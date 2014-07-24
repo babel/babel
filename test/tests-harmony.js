@@ -15945,9 +15945,9 @@ testFail("import { foo, bar }", "Unexpected token (1:20)", {ecmaVersion: 6});
 
 testFail("import foo from bar", "Unexpected token (1:20)", {ecmaVersion: 6});
 
-testFail("((a)) => 42", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("((a)) => 42", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("(a, (b)) => 42", "Unexpected token (1:9)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
