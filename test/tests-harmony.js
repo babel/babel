@@ -3700,6 +3700,209 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
   locations: true
 });
 
+test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ComprehensionExpression",
+      filter: null,
+      blocks: [
+        {
+          type: "ComprehensionBlock",
+          left: {
+            type: "ArrayPattern",
+            elements: [
+              null,
+              {
+                type: "Identifier",
+                name: "x",
+                range: [8, 9],
+                loc: {
+                  start: {line: 1, column: 8},
+                  end: {line: 1, column: 9}
+                }
+              }
+            ],
+            range: [6, 10],
+            loc: {
+              start: {line: 1, column: 6},
+              end: {line: 1, column: 10}
+            }
+          },
+          right: {
+            type: "Identifier",
+            name: "array",
+            range: [14, 19],
+            loc: {
+              start: {line: 1, column: 14},
+              end: {line: 1, column: 19}
+            }
+          },
+          range: [1, 20],
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 20}
+          },
+          of: true
+        },
+        {
+          type: "ComprehensionBlock",
+          left: {
+            type: "ObjectPattern",
+            properties: [
+              {
+                type: "Property",
+                key: {
+                  type: "MemberExpression",
+                  computed: false,
+                  object: {
+                    type: "Identifier",
+                    name: "start",
+                    range: [28, 33],
+                    loc: {
+                      start: {line: 1, column: 28},
+                      end: {line: 1, column: 33}
+                    }
+                  },
+                  property: {
+                    type: "Identifier",
+                    name: "x",
+                    range: [34, 35],
+                    loc: {
+                      start: {line: 1, column: 34},
+                      end: {line: 1, column: 35}
+                    }
+                  },
+                  range: [28, 35],
+                  loc: {
+                    start: {line: 1, column: 28},
+                    end: {line: 1, column: 35}
+                  }
+                },
+                value: {
+                  type: "Identifier",
+                  name: "x",
+                  range: [38, 39],
+                  loc: {
+                    start: {line: 1, column: 38},
+                    end: {line: 1, column: 39}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: false,
+                computed: true,
+                range: [27, 39],
+                loc: {
+                  start: {line: 1, column: 27},
+                  end: {line: 1, column: 39}
+                }
+              },
+              {
+                type: "Property",
+                key: {
+                  type: "MemberExpression",
+                  computed: false,
+                  object: {
+                    type: "Identifier",
+                    name: "start",
+                    range: [42, 47],
+                    loc: {
+                      start: {line: 1, column: 42},
+                      end: {line: 1, column: 47}
+                    }
+                  },
+                  property: {
+                    type: "Identifier",
+                    name: "y",
+                    range: [48, 49],
+                    loc: {
+                      start: {line: 1, column: 48},
+                      end: {line: 1, column: 49}
+                    }
+                  },
+                  range: [42, 49],
+                  loc: {
+                    start: {line: 1, column: 42},
+                    end: {line: 1, column: 49}
+                  }
+                },
+                value: {
+                  type: "Identifier",
+                  name: "y",
+                  range: [52, 53],
+                  loc: {
+                    start: {line: 1, column: 52},
+                    end: {line: 1, column: 53}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: false,
+                computed: true,
+                range: [41, 53],
+                loc: {
+                  start: {line: 1, column: 41},
+                  end: {line: 1, column: 53}
+                }
+              }
+            ],
+            range: [26, 54],
+            loc: {
+              start: {line: 1, column: 26},
+              end: {line: 1, column: 54}
+            }
+          },
+          right: {
+            type: "Identifier",
+            name: "array2",
+            range: [58, 64],
+            loc: {
+              start: {line: 1, column: 58},
+              end: {line: 1, column: 64}
+            }
+          },
+          range: [21, 65],
+          loc: {
+            start: {line: 1, column: 21},
+            end: {line: 1, column: 65}
+          },
+          of: true
+        }
+      ],
+      body: {
+        type: "Identifier",
+        name: "x",
+        range: [66, 67],
+        loc: {
+          start: {line: 1, column: 66},
+          end: {line: 1, column: 67}
+        }
+      },
+      range: [0, 68],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 68}
+      }
+    },
+    range: [0, 68],
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 68}
+    }
+  }],
+  range: [0, 68],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 68}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 // Harmony: Object Literal Property Value Shorthand
 
 test("x = { y, z }", {
