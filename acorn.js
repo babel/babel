@@ -287,8 +287,7 @@
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
   var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true}, _static = {keyword: "static"};
-  var _module = {keyword: "module"}, _export = {keyword: "export"};
-  var _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
+  var _export = {keyword: "export"}, _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
 
   // The keywords that denote values.
 
@@ -316,8 +315,7 @@
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
                       "class": _class, "extends": _extends, "static": _static, "of": _of,
-                      "module": _module, "export": _export, "import": _import,
-                      "from": _from, "as": _as};
+                      "export": _export, "import": _import, "from": _from, "as": _as};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -436,7 +434,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of module export import from as");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of export import from as");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1254,6 +1252,7 @@
     case _braceL: return parseBlock(); // no point creating a function for this
     case _semi: return parseEmptyStatement(node);
     case _export: return parseExport(node);
+    case _import: return parseImport(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -2178,41 +2177,108 @@
 
   function parseExport(node) {
     next();
+    // export var|const|let|function|class ...;
     if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
       node.declaration = parseStatement();
       node.default = false;
       node.specifiers = null;
       node.source = null;
     } else
+    // export default ...;
     if (eat(_default)) {
       node.declaration = parseExpression(true);
       node.default = true;
       node.specifiers = null;
       node.source = null;
       semicolon();
-    } else
-    if (tokVal === '*') {
+    } else {
+      // export * from '...'
+      // export { x, y as z } [from '...']
+      var isBatch = tokVal === '*';
       node.declaration = null;
       node.default = false;
-      var specifier = startNode();
-      next();
-      node.specifiers = [finishNode(specifier, "ExportBatchSpecifier")];
-      expect(_from);
-      node.source = tokType === _string ? parseExprAtom() : unexpected();
-    } else
-    if (eat(_braceL)) {
-      node.declaration = null;
-      node.default = false;
-      node.specifiers = parseModuleSpecifiers("ExportSpecifier");
-      node.source = eat(_from) ? (tokType === _string ? parseExprAtom() : unexpected()) : null;
-    } else unexpected();
+      node.specifiers = parseExportSpecifiers();
+      if (isBatch || tokType === _from) {
+        expect(_from);
+        node.source = tokType === _string ? parseExprAtom() : unexpected();
+      } else {
+        node.source = null;
+      }
+    }
     return finishNode(node, "ExportDeclaration");
   }
 
-  // Parses a comma-separated list of module imports/exports.
+  // Parses a comma-separated list of module exports.
 
-  function parseModuleSpecifiers(type) {
+  function parseExportSpecifiers() {
     var nodes = [], first = true;
+    if (tokVal === "*") {
+      // export * from '...'
+      var node = startNode();
+      next();
+      nodes.push(finishNode(node, "ExportBatchSpecifier"));
+    } else {
+      // export { x, y as z } [from '...']
+      expect(_braceL);
+      while (!eat(_braceR)) {
+        if (!first) {
+          expect(_comma);
+          if (options.allowTrailingCommas && eat(_braceR)) break;
+        } else first = false;
+
+        var node = startNode();
+        node.id = parseIdent();
+        node.name = eat(_as) ? parseIdent(true) : null;
+        nodes.push(finishNode(node, "ExportSpecifier"));
+      }
+    }
+    return nodes;
+  }
+
+  // Parses import declaration.
+
+  function parseImport(node) {
+    next();
+    // import '...';
+    if (tokType === _string) {
+      node.specifiers = [];
+      node.source = parseExprAtom();
+      node.kind = "";
+    } else {
+      node.specifiers = parseImportSpecifiers();
+      expect(_from);
+      node.source = tokType === _string ? parseExprAtom() : unexpected();
+      // only for backward compatibility with Esprima's AST
+      // (it doesn't support mixed default + named yet)
+      node.kind = node.specifiers[0].default ? "default" : "named";
+    }
+    return finishNode(node, "ImportDeclaration");
+  }
+
+  // Parses a comma-separated list of module imports.
+
+  function parseImportSpecifiers() {
+    var nodes = [], first = true;
+    if (tokVal === '*') {
+      var node = startNode();
+      next();
+      expect(_as);
+      node.name = parseIdent();
+      checkLVal(node.name, true);
+      nodes.push(finishNode(node, "ImportBatchSpecifier"));
+      return nodes;
+    }
+    if (tokType === _name) {
+      // import defaultObj, { x, y as z } from '...'
+      var node = startNode();
+      node.id = parseIdent();
+      checkLVal(node.id, true);
+      node.name = null;
+      node.default = true;
+      nodes.push(finishNode(node, "ImportSpecifier"));
+      if (!eat(_comma)) return nodes;
+    }
+    expect(_braceL);
     while (!eat(_braceR)) {
       if (!first) {
         expect(_comma);
@@ -2220,9 +2286,11 @@
       } else first = false;
 
       var node = startNode();
-      node.id = parseIdent();
-      node.name = eat(_as) ? parseIdent(true) : null;
-      nodes.push(finishNode(node, type));
+      node.id = parseIdent(true);
+      node.name = eat(_as) ? parseIdent() : null;
+      checkLVal(node.name || node.id, true);
+      node.default = false;
+      nodes.push(finishNode(node, "ImportSpecifier"));
     }
     return nodes;
   }
