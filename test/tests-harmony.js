@@ -3513,225 +3513,7 @@ test("x = { set method(val) v = val }", {
 
 // Array Comprehension
 
-test("[[x,b,c] for (x in []) for (b in []) if (b && c)]", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ComprehensionExpression",
-      filter: {
-        type: "LogicalExpression",
-        operator: "&&",
-        left: {
-          type: "Identifier",
-          name: "b",
-          range: [41, 42],
-          loc: {
-            start: {line: 1, column: 41},
-            end: {line: 1, column: 42}
-          }
-        },
-        right: {
-          type: "Identifier",
-          name: "c",
-          range: [46, 47],
-          loc: {
-            start: {line: 1, column: 46},
-            end: {line: 1, column: 47}
-          }
-        },
-        range: [41, 47],
-        loc: {
-          start: {line: 1, column: 41},
-          end: {line: 1, column: 47}
-        }
-      },
-      blocks: [
-        {
-          type: "ComprehensionBlock",
-          left: {
-            type: "Identifier",
-            name: "x",
-            range: [14, 15],
-            loc: {
-              start: {line: 1, column: 14},
-              end: {line: 1, column: 15}
-            }
-          },
-          right: {
-            type: "ArrayExpression",
-            elements: [],
-            range: [19, 21],
-            loc: {
-              start: {line: 1, column: 19},
-              end: {line: 1, column: 21}
-            }
-          },
-          each: false,
-          range: [9, 22],
-          loc: {
-            start: {line: 1, column: 9},
-            end: {line: 1, column: 22}
-          },
-          of: false
-        },
-        {
-          type: "ComprehensionBlock",
-          left: {
-            type: "Identifier",
-            name: "b",
-            range: [28, 29],
-            loc: {
-              start: {line: 1, column: 28},
-              end: {line: 1, column: 29}
-            }
-          },
-          right: {
-            type: "ArrayExpression",
-            elements: [],
-            range: [33, 35],
-            loc: {
-              start: {line: 1, column: 33},
-              end: {line: 1, column: 35}
-            }
-          },
-          each: false,
-          range: [23, 36],
-          loc: {
-            start: {line: 1, column: 23},
-            end: {line: 1, column: 36}
-          },
-          of: false
-        }
-      ],
-      body: {
-        type: "ArrayExpression",
-        elements: [
-          {
-            type: "Identifier",
-            name: "x",
-            range: [2, 3],
-            loc: {
-              start: {line: 1, column: 2},
-              end: {line: 1, column: 3}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "b",
-            range: [4, 5],
-            loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 5}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "c",
-            range: [6, 7],
-            loc: {
-              start: {line: 1, column: 6},
-              end: {line: 1, column: 7}
-            }
-          }
-        ],
-        range: [1, 8],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 8}
-        }
-      },
-      range: [0, 49],
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 49}
-      }
-    },
-    range: [0, 49],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 49}
-    }
-  }],
-  range: [0, 49],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 49}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
-
-test("[x for (a in [])]", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ComprehensionExpression",
-      filter: null,
-      blocks: [{
-        type: "ComprehensionBlock",
-        left: {
-          type: "Identifier",
-          name: "a",
-          range: [8, 9],
-          loc: {
-            start: {line: 1, column: 8},
-            end: {line: 1, column: 9}
-          }
-        },
-        right: {
-          type: "ArrayExpression",
-          elements: [],
-          range: [13, 15],
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 15}
-          }
-        },
-        each: false,
-        range: [3, 16],
-        loc: {
-          start: {line: 1, column: 3},
-          end: {line: 1, column: 16}
-        },
-        of: false
-      }],
-      body: {
-        type: "Identifier",
-        name: "x",
-        range: [1, 2],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
-        }
-      },
-      range: [0, 17],
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 17}
-      }
-    },
-    range: [0, 17],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 17}
-    }
-  }],
-  range: [0, 17],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 17}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
-
-test("[1 for (x in [])]", {
+test("[for (x of array) x]", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -3743,190 +3525,35 @@ test("[1 for (x in [])]", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [8, 9],
+          range: [6, 7],
           loc: {
-            start: {line: 1, column: 8},
-            end: {line: 1, column: 9}
-          }
-        },
-        right: {
-          type: "ArrayExpression",
-          elements: [],
-          range: [13, 15],
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 15}
-          }
-        },
-        each: false,
-        range: [3, 16],
-        loc: {
-          start: {line: 1, column: 3},
-          end: {line: 1, column: 16}
-        },
-        of: false
-      }],
-      body: {
-        type: "Literal",
-        value: 1,
-        raw: "1",
-        range: [1, 2],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
-        }
-      },
-      range: [0, 17],
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 17}
-      }
-    },
-    range: [0, 17],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 17}
-    }
-  }],
-  range: [0, 17],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 17}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
-
-test("[(x,1) for (x in [])]", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ComprehensionExpression",
-      filter: null,
-      blocks: [{
-        type: "ComprehensionBlock",
-        left: {
-          type: "Identifier",
-          name: "x",
-          range: [12, 13],
-          loc: {
-            start: {line: 1, column: 12},
-            end: {line: 1, column: 13}
-          }
-        },
-        right: {
-          type: "ArrayExpression",
-          elements: [],
-          range: [17, 19],
-          loc: {
-            start: {line: 1, column: 17},
-            end: {line: 1, column: 19}
-          }
-        },
-        each: false,
-        range: [7, 20],
-        loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 20}
-        },
-        of: false
-      }],
-      body: {
-        type: "SequenceExpression",
-        expressions: [
-          {
-            type: "Identifier",
-            name: "x",
-            range: [2, 3],
-            loc: {
-              start: {line: 1, column: 2},
-              end: {line: 1, column: 3}
-            }
-          },
-          {
-            type: "Literal",
-            value: 1,
-            raw: "1",
-            range: [4, 5],
-            loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 5}
-            }
-          }
-        ],
-        range: [2, 5],
-        loc: {
-          start: {line: 1, column: 2},
-          end: {line: 1, column: 5}
-        }
-      },
-      range: [0, 21],
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 21}
-      }
-    },
-    range: [0, 21],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 21}
-    }
-  }],
-  range: [0, 21],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 21}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
-
-test("[x for (x of array)]", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ComprehensionExpression",
-      filter: null,
-      blocks: [{
-        type: "ComprehensionBlock",
-        left: {
-          type: "Identifier",
-          name: "x",
-          range: [8, 9],
-          loc: {
-            start: {line: 1, column: 8},
-            end: {line: 1, column: 9}
+            start: {line: 1, column: 6},
+            end: {line: 1, column: 7}
           }
         },
         right: {
           type: "Identifier",
           name: "array",
-          range: [13, 18],
+          range: [11, 16],
           loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 18}
+            start: {line: 1, column: 11},
+            end: {line: 1, column: 16}
           }
         },
-        range: [3, 19],
+        range: [1, 17],
         loc: {
-          start: {line: 1, column: 3},
-          end: {line: 1, column: 19}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 17}
         },
         of: true
       }],
       body: {
         type: "Identifier",
         name: "x",
-        range: [1, 2],
+        range: [18, 19],
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
+          start: {line: 1, column: 18},
+          end: {line: 1, column: 19}
         }
       },
       range: [0, 20],
@@ -3952,7 +3579,7 @@ test("[x for (x of array)]", {
   locations: true
 });
 
-test("[x for (x of array) for (y of array2) if (x === test)]", {
+test("[for (x of array) for (y of array2) if (x === test) x]", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -3964,25 +3591,25 @@ test("[x for (x of array) for (y of array2) if (x === test)]", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [42, 43],
+          range: [40, 41],
           loc: {
-            start: {line: 1, column: 42},
-            end: {line: 1, column: 43}
+            start: {line: 1, column: 40},
+            end: {line: 1, column: 41}
           }
         },
         right: {
           type: "Identifier",
           name: "test",
-          range: [48, 52],
+          range: [46, 50],
           loc: {
-            start: {line: 1, column: 48},
-            end: {line: 1, column: 52}
+            start: {line: 1, column: 46},
+            end: {line: 1, column: 50}
           }
         },
-        range: [42, 52],
+        range: [40, 50],
         loc: {
-          start: {line: 1, column: 42},
-          end: {line: 1, column: 52}
+          start: {line: 1, column: 40},
+          end: {line: 1, column: 50}
         }
       },
       blocks: [
@@ -3991,25 +3618,25 @@ test("[x for (x of array) for (y of array2) if (x === test)]", {
           left: {
             type: "Identifier",
             name: "x",
-            range: [8, 9],
+            range: [6, 7],
             loc: {
-              start: {line: 1, column: 8},
-              end: {line: 1, column: 9}
+              start: {line: 1, column: 6},
+              end: {line: 1, column: 7}
             }
           },
           right: {
             type: "Identifier",
             name: "array",
-            range: [13, 18],
+            range: [11, 16],
             loc: {
-              start: {line: 1, column: 13},
-              end: {line: 1, column: 18}
+              start: {line: 1, column: 11},
+              end: {line: 1, column: 16}
             }
           },
-          range: [3, 19],
+          range: [1, 17],
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 19}
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 17}
           },
           of: true
         },
@@ -4018,25 +3645,25 @@ test("[x for (x of array) for (y of array2) if (x === test)]", {
           left: {
             type: "Identifier",
             name: "y",
-            range: [25, 26],
+            range: [23, 24],
             loc: {
-              start: {line: 1, column: 25},
-              end: {line: 1, column: 26}
+              start: {line: 1, column: 23},
+              end: {line: 1, column: 24}
             }
           },
           right: {
             type: "Identifier",
             name: "array2",
-            range: [30, 36],
+            range: [28, 34],
             loc: {
-              start: {line: 1, column: 30},
-              end: {line: 1, column: 36}
+              start: {line: 1, column: 28},
+              end: {line: 1, column: 34}
             }
           },
-          range: [20, 37],
+          range: [18, 35],
           loc: {
-            start: {line: 1, column: 20},
-            end: {line: 1, column: 37}
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 35}
           },
           of: true
         }
@@ -4044,10 +3671,10 @@ test("[x for (x of array) for (y of array2) if (x === test)]", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [1, 2],
+        range: [52, 53],
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
+          start: {line: 1, column: 52},
+          end: {line: 1, column: 53}
         }
       },
       range: [0, 54],
@@ -15921,8 +15548,6 @@ testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mod
 
 testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:44)", {ecmaVersion: 6});
-
 testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
 testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
@@ -16194,23 +15819,17 @@ testFail("`hello ${10;test`", "Unexpected token (1:12)", {ecmaVersion: 6});
 
 testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:13)", {ecmaVersion: 6});
 
-testFail("[a,b if (a)] // (a,b)", "Unexpected token (1:5)", {ecmaVersion: 6});
+testFail("[for (let x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("for each (let x in {}) {};", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("[for (const x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("[x for (let x in [])]", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("[for (var x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("[x for (const x in [])]", "Unexpected token (1:23)", {ecmaVersion: 6});
+testFail("[for (a in []) x] // (a,b) ", "Unexpected token (1:8)", {ecmaVersion: 6});
 
-testFail("[x for (var x in [])]", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("var a = [if (x) x]", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("[a,b for (a in [])] // (a,b) ", "Unexpected token (1:5)", {ecmaVersion: 6});
-
-testFail("[x if (x)]  // block required", "Unexpected token (1:11)", {ecmaVersion: 6});
-
-testFail("var a = [x if (x)]", "Unexpected token (1:19)", {ecmaVersion: 6});
-
-testFail("[for (x in [])]  // no espression", "Unexpected token (1:16)", {ecmaVersion: 6});
+testFail("[for (x of [])]  // no expression", "Unexpected token (1:14)", {ecmaVersion: 6});
 
 testFail("({ \"chance\" }) = obj", "Unexpected token (1:12)", {ecmaVersion: 6});
 

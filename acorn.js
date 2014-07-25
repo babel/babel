@@ -1174,8 +1174,10 @@
         break;
 
       case "ArrayPattern":
-        for (var i = 0; i < expr.elements.length; i++)
-          checkLVal(expr.elements[i], isBinding);
+        for (var i = 0; i < expr.elements.length; i++) {
+          var elem = expr.elements[i];
+          if (elem) checkLVal(elem, isBinding);
+        }
         break;
 
       case "SpreadElement":
@@ -1731,10 +1733,11 @@
         val = parseExpression();
       }
       expect(_parenR);
+      // if '=>' follows '(...)', convert contents to arguments
       if (metParenL === oldParenL && eat(_arrow)) {
         val = parseArrowExpression(node, !val ? [] : val.type === "SequenceExpression" ? val.expressions : [val]);
       } else {
-        // disallow '()' before everything but error
+        // forbid '()' before everything but '=>'
         if (!val) unexpected(lastStart);
       }
       val.start = tokStart1;
@@ -1751,6 +1754,28 @@
     case _bracketL:
       var node = startNode();
       next();
+      // check whether this is array comprehension or regular array
+      if (options.ecmaVersion >= 6 && tokType === _for) {
+        node.blocks = [];
+        while (tokType === _for) {
+          var block = startNode();
+          next();
+          expect(_parenL);
+          block.left = toAssignable(parseExprAtom());
+          checkLVal(block.left, true);
+          expect(_of);
+          // `of` property is here for compatibility with Esprima's AST
+          // which also supports deprecated [for (... in ...) expr]
+          block.of = true;
+          block.right = parseExpression();
+          expect(_parenR);
+          node.blocks.push(finishNode(block, "ComprehensionBlock"));
+        }
+        node.filter = eat(_if) ? parseParenExpression() : null;
+        node.body = parseExpression();
+        expect(_bracketR);
+        return finishNode(node, "ComprehensionExpression");
+      }
       node.elements = parseExprList(_bracketR, true, true);
       return finishNode(node, "ArrayExpression");
 
