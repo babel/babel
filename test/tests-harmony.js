@@ -14497,11 +14497,11 @@ testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecm
 
 testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("import foo", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("import foo", "Unexpected token (1:10)", {ecmaVersion: 6});
 
-testFail("import { foo, bar }", "Unexpected token (1:20)", {ecmaVersion: 6});
+testFail("import { foo, bar }", "Unexpected token (1:19)", {ecmaVersion: 6});
 
-testFail("import foo from bar", "Unexpected token (1:20)", {ecmaVersion: 6});
+testFail("import foo from bar", "Unexpected token (1:16)", {ecmaVersion: 6});
 
 testFail("((a)) => 42", "Unexpected token (1:6)", {ecmaVersion: 6});
 
