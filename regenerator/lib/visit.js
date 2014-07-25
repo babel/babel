@@ -22,14 +22,6 @@ exports.transform = function(node) {
   return types.visit(node, visitor);
 };
 
-// Makes a unique context identifier. This is needed to handle retrieval of
-// tempvars from contexts up the scope in nested generator situation.
-// see issue #70
-var nextCtxId = 0;
-function makeContextId() {
-  return b.identifier("$ctx" + nextCtxId++);
-}
-
 var visitor = types.PathVisitor.fromMethodsObject({
   visitFunction: function(path) {
     // Calling this.traverse(path) first makes for a post-order traversal.
@@ -51,13 +43,12 @@ var visitor = types.PathVisitor.fromMethodsObject({
       ]);
     }
 
-    // TODO Ensure $callee is not the name of any hoisted variable.
-    var outerFnId = node.id || (node.id = b.identifier("$callee"));
+    var outerFnId = node.id || (
+      node.id = path.scope.parent.declareTemporary("callee$")
+    );
     var innerFnId = b.identifier(node.id.name + "$");
-
-    // TODO Ensure these identifiers are named uniquely.
-    var contextId = makeContextId();
-    var argsId = b.identifier("$args");
+    var contextId = path.scope.declareTemporary("context$");
+    var argsId = path.scope.declareTemporary("args$");
     var wrapGeneratorId = b.identifier("wrapGenerator");
     var shouldAliasArguments = renameArguments(path, argsId);
     var vars = hoist(path);
