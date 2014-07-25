@@ -11361,7 +11361,7 @@ test("var x = {*[test]() { yield *v; }}", {
   locations: true
 });
 
-testFail("({[x]})", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("({[x]})", "Unexpected token (1:5)", {ecmaVersion: 6});
 
 // ES6: Default parameters
 
@@ -11971,10 +11971,10 @@ test("({f({x} = {x: 10}) {}})", {
           end: {line: 1, column: 21}
         }
       }],
-      range: [1, 22],
+      range: [0, 23],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 22}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 23}
       }
     },
     range: [0, 23],
@@ -12126,10 +12126,10 @@ test("(class {f({x} = {x: 10}) {}})", {
           end: {line: 1, column: 28}
         }
       },
-      range: [1, 28],
+      range: [0, 29],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 28}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 29}
       }
     },
     range: [0, 29],
@@ -15891,13 +15891,13 @@ testFail("\"\\u{FFFF\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6}
 
 testFail("\"\\u{FFZ}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
 
-testFail("[v] += ary", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("[v] += ary", "Assigning to rvalue (1:0)", {ecmaVersion: 6});
 
-testFail("[2] = 42", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("[2] = 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("({ obj:20 }) = 42", "Unexpected token (1:13)", {ecmaVersion: 6});
+testFail("({ obj:20 }) = 42", "Unexpected token (1:7)", {ecmaVersion: 6});
 
-testFail("( { get x() {} } ) = 0", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
 
 testFail("x \n is y", "Unexpected token (2:5)", {ecmaVersion: 6});
 
@@ -15917,9 +15917,9 @@ testFail("let default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("const default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("({ v: eval }) = obj", "Unexpected token (1:14)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("({ v: arguments }) = obj", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
 testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:45)", {ecmaVersion: 6});
 
@@ -15965,7 +15965,7 @@ testFail("\"use strict\"; (a, a) => 42", "Argument name clash in strict mode (1:
 
 testFail("\"use strict\"; (a) => 00", "Invalid number (1:21)", {ecmaVersion: 6});
 
-testFail("() <= 42", "Unexpected token (1:4)", {ecmaVersion: 6});
+testFail("() <= 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("(10) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
 
@@ -16153,10 +16153,10 @@ test("(function () { yield* 10 })", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 26],
+      range: [0, 27],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 26}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 27}
       }
     },
     range: [0, 27],
@@ -16244,7 +16244,69 @@ testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (
 
 testFail("\"use strict\"; `${test}\\02`;", "Unexpected token (1:22)", {ecmaVersion: 6});
 
-testFail("[...a, ] = b", "Unexpected token (1:6)", {ecmaVersion: 6});
+test("[...a, ] = b", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 12}
+  },
+  range: [0, 12],
+  body: [{
+    type: "ExpressionStatement",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 12}
+    },
+    range: [0, 12],
+    expression: {
+      type: "AssignmentExpression",
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 12}
+      },
+      range: [0, 12],
+      operator: "=",
+      left: {
+        type: "ArrayPattern",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 8}
+        },
+        range: [0, 8],
+        elements: [{
+          type: "SpreadElement",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 5}
+          },
+          range: [1, 5],
+          argument: {
+            type: "Identifier",
+            loc: {
+              start: {line: 1, column: 4},
+              end: {line: 1, column: 5}
+            },
+            range: [4, 5],
+            name: "a"
+          }
+        }]
+      },
+      right: {
+        type: "Identifier",
+        loc: {
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 12}
+        },
+        range: [11, 12],
+        name: "b"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 testFail("if (b,...a, );", "Unexpected token (1:11)", {ecmaVersion: 6});
 
@@ -16258,4 +16320,4 @@ testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)"
 
 testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
 
-testFail("({ get test() { } }) => 42", "Unexpected token (1:21)", {ecmaVersion: 6});
+testFail("({ get test() { } }) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});

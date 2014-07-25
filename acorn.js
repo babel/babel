@@ -1154,12 +1154,35 @@
   // Verify that a node is an lval — something that can be assigned
   // to.
 
-  function checkLVal(expr) {
-    if (expr.type !== "Identifier" && expr.type !== "MemberExpression" &&
-        expr.type !== "ObjectPattern" && expr.type !== "ArrayPattern")
-      raise(expr.start, "Assigning to rvalue");
-    if (strict && expr.type === "Identifier" && isStrictBadIdWord(expr.name))
-      raise(expr.start, "Assigning to " + expr.name + " in strict mode");
+  function checkLVal(expr, isBinding) {
+    switch (expr.type) {
+      case "Identifier":
+        if (strict && isStrictBadIdWord(expr.name))
+          raise(expr.start, isBinding
+            ? "Binding " + expr.name + " in strict mode"
+            : "Assigning to " + expr.name + " in strict mode"
+          );
+        break;
+      
+      case "MemberExpression":
+        if (!isBinding) break;
+
+      case "ObjectPattern":
+        for (var i = 0; i < expr.properties.length; i++)
+          checkLVal(expr.properties[i].value, isBinding);
+        break;
+
+      case "ArrayPattern":
+        for (var i = 0; i < expr.elements.length; i++)
+          checkLVal(expr.elements[i], isBinding);
+        break;
+
+      case "SpreadElement":
+        break;
+
+      default:
+        raise(expr.start, "Assigning to rvalue");
+    }
   }
 
   // ### Statement parsing
@@ -1510,8 +1533,7 @@
     for (;;) {
       var decl = startNode();
       decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
-      if (strict && decl.id.type === "Identifier" && isStrictBadIdWord(decl.id.name))
-        raise(decl.id.start, "Binding " + decl.id.name + " in strict mode");
+      checkLVal(decl.id, true);
       decl.init = eat(_eq) ? parseExpression(true, noIn) : (kind === _const.keyword ? unexpected() : null);
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
@@ -1550,10 +1572,10 @@
     if (tokType.isAssign) {
       var node = startNodeFrom(left);
       node.operator = tokVal;
-      node.left = toAssignable(left);
+      node.left = tokVal === '=' ? toAssignable(left) : left;
+      checkLVal(left);
       next();
       node.right = parseMaybeAssign(noIn);
-      checkLVal(left);
       return finishNode(node, "AssignmentExpression");
     }
     return left;
@@ -2074,12 +2096,15 @@
     if (options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "Identifier":
-          break;
+        case "MemberExpression":
+          break;          
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
           for (var i = 0; i < node.properties.length; i++) {
-            toAssignable(node.properties[i].value);
+            var prop = node.properties[i];
+            if (prop.kind !== "init") unexpected(prop.key.start);
+            toAssignable(prop.value);
           }
           break;
 
