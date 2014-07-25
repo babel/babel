@@ -287,6 +287,8 @@
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
   var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true}, _static = {keyword: "static"};
+  var _module = {keyword: "module"}, _export = {keyword: "export"};
+  var _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
 
   // The keywords that denote values.
 
@@ -313,7 +315,9 @@
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
-                      "class": _class, "extends": _extends, "static": _static, "of": _of};
+                      "class": _class, "extends": _extends, "static": _static, "of": _of,
+                      "module": _module, "export": _export, "import": _import,
+                      "from": _from, "as": _as};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -432,7 +436,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of module export import from as");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1249,6 +1253,7 @@
     case _with: return parseWithStatement(node);
     case _braceL: return parseBlock(); // no point creating a function for this
     case _semi: return parseEmptyStatement(node);
+    case _export: return parseExport(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -2167,6 +2172,59 @@
   function checkSpreadAssign(node) {
     if (node.type !== "Identifier" && node.type !== "ArrayPattern")
       unexpected(node.start);
+  }
+
+  // Parses module export declaration.
+
+  function parseExport(node) {
+    next();
+    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
+      node.declaration = parseStatement();
+      node.default = false;
+      node.specifiers = null;
+      node.source = null;
+    } else
+    if (eat(_default)) {
+      node.declaration = parseExpression(true);
+      node.default = true;
+      node.specifiers = null;
+      node.source = null;
+      semicolon();
+    } else
+    if (tokVal === '*') {
+      node.declaration = null;
+      node.default = false;
+      var specifier = startNode();
+      next();
+      node.specifiers = [finishNode(specifier, "ExportBatchSpecifier")];
+      expect(_from);
+      node.source = tokType === _string ? parseExprAtom() : unexpected();
+    } else
+    if (eat(_braceL)) {
+      node.declaration = null;
+      node.default = false;
+      node.specifiers = parseModuleSpecifiers("ExportSpecifier");
+      node.source = eat(_from) ? (tokType === _string ? parseExprAtom() : unexpected()) : null;
+    } else unexpected();
+    return finishNode(node, "ExportDeclaration");
+  }
+
+  // Parses a comma-separated list of module imports/exports.
+
+  function parseModuleSpecifiers(type) {
+    var nodes = [], first = true;
+    while (!eat(_braceR)) {
+      if (!first) {
+        expect(_comma);
+        if (options.allowTrailingCommas && eat(_braceR)) break;
+      } else first = false;
+
+      var node = startNode();
+      node.id = parseIdent();
+      node.name = eat(_as) ? parseIdent(true) : null;
+      nodes.push(finishNode(node, type));
+    }
+    return nodes;
   }
 
 });

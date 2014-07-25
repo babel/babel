@@ -4965,6 +4965,7 @@ test("export var document", {
         end: {line: 1, column: 19}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 19],
@@ -5023,6 +5024,7 @@ test("export var document = { }", {
         end: {line: 1, column: 25}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 25],
@@ -5073,6 +5075,7 @@ test("export let document", {
         end: {line: 1, column: 19}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 19],
@@ -5131,6 +5134,7 @@ test("export let document = { }", {
         end: {line: 1, column: 25}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 25],
@@ -5189,6 +5193,7 @@ test("export const document = { }", {
         end: {line: 1, column: 27}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 27],
@@ -5243,6 +5248,7 @@ test("export function parse() { }", {
         end: {line: 1, column: 27}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 27],
@@ -5293,6 +5299,7 @@ test("export class Class {}", {
         end: {line: 1, column: 21}
       }
     },
+    default: false,
     specifiers: null,
     source: null,
     range: [0, 21],
@@ -5312,49 +5319,33 @@ test("export class Class {}", {
   locations: true
 });
 
-test("export default = 42", {
+test("export default 42", {
   type: "Program",
   body: [{
     type: "ExportDeclaration",
-    declaration: [{
-      type: "VariableDeclarator",
-      id: {
-        type: "Identifier",
-        name: "default",
-        range: [7, 14],
-        loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 14}
-        }
-      },
-      init: {
-        type: "Literal",
-        value: 42,
-        raw: "42",
-        range: [17, 19],
-        loc: {
-          start: {line: 1, column: 17},
-          end: {line: 1, column: 19}
-        }
-      },
-      range: [7, 19],
+    declaration: {
+      type: "Literal",
+      value: 42,
+      raw: "42",
+      range: [15, 17],
       loc: {
-        start: {line: 1, column: 7},
-        end: {line: 1, column: 19}
+        start: {line: 1, column: 15},
+        end: {line: 1, column: 17}
       }
-    }],
+    },
+    default: true,
     specifiers: null,
     source: null,
-    range: [0, 19],
+    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
-      end: {line: 1, column: 19}
+      end: {line: 1, column: 17}
     }
   }],
-  range: [0, 19],
+  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
-    end: {line: 1, column: 19}
+    end: {line: 1, column: 17}
   }
 }, {
   ecmaVersion: 6,
@@ -5362,36 +5353,7 @@ test("export default = 42", {
   locations: true
 });
 
-test("export *", {
-  type: "Program",
-  body: [{
-    type: "ExportDeclaration",
-    declaration: null,
-    specifiers: [{
-      type: "ExportBatchSpecifier",
-      range: [7, 8],
-      loc: {
-        start: {line: 1, column: 7},
-        end: {line: 1, column: 8}
-      }
-    }],
-    source: null,
-    range: [0, 8],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 8}
-    }
-  }],
-  range: [0, 8],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 8}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
+testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6});
 
 test("export * from \"crypto\"", {
   type: "Program",
