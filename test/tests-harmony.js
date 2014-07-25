@@ -15899,9 +15899,9 @@ testFail("({ obj:20 }) = 42", "Unexpected token (1:7)", {ecmaVersion: 6});
 
 testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
 
-testFail("x \n is y", "Unexpected token (2:5)", {ecmaVersion: 6});
+testFail("x \n is y", "Unexpected token (2:4)", {ecmaVersion: 6});
 
-testFail("x \n isnt y", "Unexpected token (2:7)", {ecmaVersion: 6});
+testFail("x \n isnt y", "Unexpected token (2:6)", {ecmaVersion: 6});
 
 testFail("function default() {}", "Unexpected token (1:9)", {ecmaVersion: 6});
 
@@ -15921,11 +15921,11 @@ testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mod
 
 testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:45)", {ecmaVersion: 6});
+testFail("for (var i = function() { return 10 in [] } in list) process(x);", "Unexpected token (1:44)", {ecmaVersion: 6});
 
-testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:17)", {ecmaVersion: 6});
+testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:17)", {ecmaVersion: 6});
+testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
 testFail("module\n\"crypto\" {}", "Unexpected token (1:7)", {ecmaVersion: 6});
 

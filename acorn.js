@@ -298,6 +298,7 @@
   // we assign a variable name to it for quick comparing.
 
   var _in = {keyword: "in", binop: 7, beforeExpr: true};
+  var _of = {keyword: "of", beforeExpr: true};
 
   // Map keyword names to token types.
 
@@ -312,7 +313,7 @@
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
-                      "class": _class, "extends": _extends, "static": _static};
+                      "class": _class, "extends": _extends, "static": _static, "of": _of};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -431,7 +432,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1300,13 +1301,13 @@
     return finishNode(node, "DoWhileStatement");
   }
   
-  // Disambiguating between a `for` and a `for`/`in` loop is
-  // non-trivial. Basically, we have to parse the init `var`
+  // Disambiguating between a `for` and a `for`/`in` or `for`/`of`
+  // loop is non-trivial. Basically, we have to parse the init `var`
   // statement or expression, disallowing the `in` operator (see
   // the second parameter to `parseExpression`), and then check
-  // whether the next token is `in`. When there is no init part
-  // (semicolon immediately after the opening parenthesis), it is
-  // a regular `for` loop.
+  // whether the next token is `in` or `of`. When there is no init
+  // part (semicolon immediately after the opening parenthesis), it
+  // is a regular `for` loop.
   
   function parseForStatement(node) {
     next();
@@ -1314,16 +1315,20 @@
     expect(_parenL);
     if (tokType === _semi) return parseFor(node, null);
     if (tokType === _var || tokType === _let) {
-      var init = startNode(), varKind = tokType.keyword;
+      var init = startNode(), varKind = tokType.keyword, isLet = tokType === _let;
       next();
       parseVar(init, true, varKind);
       finishNode(init, "VariableDeclaration");
-      if (init.declarations.length === 1 && eat(_in))
+      if ((tokType === _in || tokType === _of) && init.declarations.length === 1 &&
+          !(isLet && init.declarations[0].init))
         return parseForIn(node, init);
       return parseFor(node, init);
     }
     var init = parseExpression(false, true);
-    if (eat(_in)) {checkLVal(init); return parseForIn(node, init);}
+    if (tokType === _in || tokType === _of) {
+      checkLVal(init);
+      return parseForIn(node, init);
+    }
     return parseFor(node, init);
   }
   
@@ -1514,15 +1519,18 @@
     return finishNode(node, "ForStatement");
   }
 
-  // Parse a `for`/`in` loop.
+  // Parse a `for`/`in` and `for`/`of` loop, which are almost
+  // same from parser's perspective.
 
   function parseForIn(node, init) {
+    var type = tokType === _in ? "ForInStatement" : "ForOfStatement";
+    next();
     node.left = init;
     node.right = parseExpression();
     expect(_parenR);
     node.body = parseStatement();
     labels.pop();
-    return finishNode(node, "ForInStatement");
+    return finishNode(node, type);
   }
 
   // Parse a list of variable declarations.
