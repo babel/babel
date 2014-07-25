@@ -2914,14 +2914,6 @@ exports.transform = function(node) {
   return types.visit(node, visitor);
 };
 
-// Makes a unique context identifier. This is needed to handle retrieval of
-// tempvars from contexts up the scope in nested generator situation.
-// see issue #70
-var nextCtxId = 0;
-function makeContextId() {
-  return b.identifier("$ctx" + nextCtxId++);
-}
-
 var visitor = types.PathVisitor.fromMethodsObject({
   visitFunction: function(path) {
     // Calling this.traverse(path) first makes for a post-order traversal.
@@ -2943,13 +2935,12 @@ var visitor = types.PathVisitor.fromMethodsObject({
       ]);
     }
 
-    // TODO Ensure $callee is not the name of any hoisted variable.
-    var outerFnId = node.id || (node.id = b.identifier("$callee"));
+    var outerFnId = node.id || (
+      node.id = path.scope.parent.declareTemporary("callee$")
+    );
     var innerFnId = b.identifier(node.id.name + "$");
-
-    // TODO Ensure these identifiers are named uniquely.
-    var contextId = makeContextId();
-    var argsId = b.identifier("$args");
+    var contextId = path.scope.declareTemporary("context$");
+    var argsId = path.scope.declareTemporary("args$");
     var wrapGeneratorId = b.identifier("wrapGenerator");
     var shouldAliasArguments = renameArguments(path, argsId);
     var vars = hoist(path);
@@ -15948,7 +15939,7 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":36,"./options":37,"./types":41,"./util":42,"assert":2,"private":33,"source-map":61}],36:[function(_dereq_,module,exports){
+},{"./mapping":36,"./options":37,"./types":41,"./util":42,"assert":2,"private":33,"source-map":62}],36:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var isString = types.builtInTypes.string;
@@ -16307,7 +16298,7 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima":60}],38:[function(_dereq_,module,exports){
+},{"esprima":61}],38:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var n = types.namedTypes;
@@ -17202,9 +17193,7 @@ function genericPrintNoParens(path, options, print) {
     case "CallExpression":
         return concat([
             print(path.get("callee")),
-            "(",
-            fromString(", ").join(path.get("arguments").map(print)),
-            ")"
+            printArgumentsList(path, options, print)
         ]);
 
     case "ObjectExpression":
@@ -17336,13 +17325,8 @@ function genericPrintNoParens(path, options, print) {
     case "NewExpression":
         var parts = ["new ", print(path.get("callee"))];
         var args = n.arguments;
-
         if (args) {
-            parts.push(
-                "(",
-                fromString(", ").join(path.get("arguments").map(print)),
-                ")"
-            );
+            parts.push(printArgumentsList(path, options, print));
         }
 
         return concat(parts);
@@ -17644,13 +17628,7 @@ function genericPrintNoParens(path, options, print) {
             attrLines = concat(attrParts).indentTail(options.tabWidth);
         }
 
-        parts.push(attrLines);
-
-        if (needLineWrap) {
-            parts.push("\n");
-        }
-
-        parts.push(n.selfClosing ? " />" : ">");
+        parts.push(attrLines, n.selfClosing ? " />" : ">");
 
         return concat(parts);
 
@@ -17744,53 +17722,132 @@ function printStatementSequence(path, print, inClassBody) {
         return true;
     });
 
-    var allowBreak = false,
-        len = filtered.length,
-        parts = [];
+    var prevTrailingSpace = null;
+    var len = filtered.length;
+    var parts = [];
 
-    filtered.map(function(stmtPath) {
-        var lines = print(stmtPath);
+    filtered.forEach(function(stmtPath, i) {
+        var printed = print(stmtPath);
         var stmt = stmtPath.value;
+        var needSemicolon = true;
+        var multiLine = printed.length > 1;
+        var notFirst = i > 0;
+        var notLast = i < len - 1;
+        var leadingSpace;
+        var trailingSpace;
 
         if (inClassBody) {
-            if (namedTypes.MethodDefinition.check(stmt))
-                return lines;
+            var stmt = stmtPath.value;
 
-            if (namedTypes.ClassPropertyDefinition.check(stmt) &&
-                namedTypes.MethodDefinition.check(stmt.definition))
-                return lines;
+            if (namedTypes.MethodDefinition.check(stmt) ||
+                (namedTypes.ClassPropertyDefinition.check(stmt) &&
+                 namedTypes.MethodDefinition.check(stmt.definition))) {
+                needSemicolon = false;
+            }
         }
 
-        // Try to add a semicolon to anything that isn't a method in a
-        // class body.
-        return maybeAddSemicolon(lines);
-
-    }).forEach(function(lines, i) {
-        var multiLine = lines.length > 1;
-        if (multiLine && allowBreak) {
-            // Insert an additional line break before multi-line
-            // statements, if we did not insert an extra line break
-            // after the previous statement.
-            parts.push("\n");
+        if (needSemicolon) {
+            // Try to add a semicolon to anything that isn't a method in a
+            // class body.
+            printed = maybeAddSemicolon(printed);
         }
 
-        if (!inClassBody)
-            lines = maybeAddSemicolon(lines);
+        var orig = stmt.original;
+        var trueLoc = orig && getTrueLoc(orig);
+        var lines = trueLoc && trueLoc.lines;
 
-        parts.push(lines);
+        if (notFirst) {
+            if (lines) {
+                var beforeStart = lines.skipSpaces(trueLoc.start, true);
+                var beforeStartLine = beforeStart ? beforeStart.line : 1;
+                var leadingGap = trueLoc.start.line - beforeStartLine;
+                leadingSpace = Array(leadingGap + 1).join("\n");
+            } else {
+                leadingSpace = multiLine ? "\n\n" : "\n";
+            }
+        } else {
+            leadingSpace = "";
+        }
 
-        if (i < len - 1) {
-            // Add an extra line break if the previous statement
-            // spanned multiple lines.
-            parts.push(multiLine ? "\n\n" : "\n");
+        if (notLast) {
+            if (lines) {
+                var afterEnd = lines.skipSpaces(trueLoc.end);
+                var afterEndLine = afterEnd ? afterEnd.line : lines.length;
+                var trailingGap = afterEndLine - trueLoc.end.line;
+                trailingSpace = Array(trailingGap + 1).join("\n");
+            } else {
+                trailingSpace = multiLine ? "\n\n" : "\n";
+            }
+        } else {
+            trailingSpace = "";
+        }
 
-            // Avoid adding another line break if we just added an
-            // extra one.
-            allowBreak = !multiLine;
+        parts.push(
+            maxSpace(prevTrailingSpace, leadingSpace),
+            printed
+        );
+
+        if (notLast) {
+            prevTrailingSpace = trailingSpace;
+        } else if (trailingSpace) {
+            parts.push(trailingSpace);
         }
     });
 
     return concat(parts);
+}
+
+function getTrueLoc(node) {
+    if (!node.comments) {
+        // If the node has no comments, regard node.loc as true.
+        return node.loc;
+    }
+
+    var start = node.loc.start;
+    var end = node.loc.end;
+
+    // If the node has any comments, their locations might contribute to
+    // the true start/end positions of the node.
+    node.comments.forEach(function(comment) {
+        if (comment.loc) {
+            if (util.comparePos(comment.loc.start, start) < 0) {
+                start = comment.loc.start;
+            }
+
+            if (util.comparePos(end, comment.loc.end) < 0) {
+                end = comment.loc.end;
+            }
+        }
+    });
+
+    return {
+        lines: node.loc.lines,
+        start: start,
+        end: end
+    };
+}
+
+function maxSpace(s1, s2) {
+    if (!s1 && !s2) {
+        return fromString("");
+    }
+
+    if (!s1) {
+        return fromString(s2);
+    }
+
+    if (!s2) {
+        return fromString(s1);
+    }
+
+    var spaceLines1 = fromString(s1);
+    var spaceLines2 = fromString(s2);
+
+    if (spaceLines2.length > spaceLines1.length) {
+        return spaceLines2;
+    }
+
+    return spaceLines1;
 }
 
 function printMethod(kind, keyPath, valuePath, options, print) {
@@ -17822,6 +17879,18 @@ function printMethod(kind, keyPath, valuePath, options, print) {
     );
 
     return concat(parts);
+}
+
+function printArgumentsList(path, options, print) {
+    var printed = path.get("arguments").map(print);
+
+    var joined = fromString(", ").join(printed);
+    if (joined.getLineLength(1) > options.wrapColumn) {
+        joined = fromString(",\n").join(printed);
+        return concat(["(\n", joined.indent(options.tabWidth), "\n)"]);
+    }
+
+    return concat(["(", joined, ")"]);
 }
 
 function printFunctionParams(path, options, print) {
@@ -17886,7 +17955,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":34,"./lines":35,"./options":37,"./patcher":39,"./types":41,"./util":42,"assert":2,"source-map":61}],41:[function(_dereq_,module,exports){
+},{"./comments":34,"./lines":35,"./options":37,"./patcher":39,"./types":41,"./util":42,"assert":2,"source-map":62}],41:[function(_dereq_,module,exports){
 var types = _dereq_("ast-types");
 var def = types.Type.def;
 
@@ -17899,7 +17968,7 @@ types.finalize();
 
 module.exports = types;
 
-},{"ast-types":58}],42:[function(_dereq_,module,exports){
+},{"ast-types":59}],42:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var getFieldValue = _dereq_("./types").getFieldValue;
 var sourceMap = _dereq_("source-map");
@@ -18042,7 +18111,7 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
     return smg.toJSON();
 };
 
-},{"./types":41,"assert":2,"source-map":61}],43:[function(_dereq_,module,exports){
+},{"./types":41,"assert":2,"source-map":62}],43:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var Class = _dereq_("cls");
 var Node = _dereq_("./types").namedTypes.Node;
@@ -18162,7 +18231,7 @@ var Visitor = exports.Visitor = Class.extend({
     }
 });
 
-},{"./types":41,"assert":2,"cls":59}],44:[function(_dereq_,module,exports){
+},{"./types":41,"assert":2,"cls":60}],44:[function(_dereq_,module,exports){
 (function (process){
 var types = _dereq_("./lib/types");
 var parse = _dereq_("./lib/parser").parse;
@@ -18642,7 +18711,7 @@ def("Literal")
         isRegExp
     ));
 
-},{"../lib/shared":55,"../lib/types":57}],46:[function(_dereq_,module,exports){
+},{"../lib/shared":56,"../lib/types":58}],46:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -18731,7 +18800,7 @@ def("XMLProcessingInstruction")
     .field("target", isString)
     .field("contents", or(isString, null));
 
-},{"../lib/types":57,"./core":45}],47:[function(_dereq_,module,exports){
+},{"../lib/types":58,"./core":45}],47:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -18932,7 +19001,7 @@ def("TemplateElement")
     .field("value", {"cooked": isString, "raw": isString})
     .field("tail", isBoolean);
 
-},{"../lib/shared":55,"../lib/types":57,"./core":45}],48:[function(_dereq_,module,exports){
+},{"../lib/shared":56,"../lib/types":58,"./core":45}],48:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -18969,7 +19038,7 @@ def("AwaitExpression")
     .field("argument", or(def("Expression"), null))
     .field("all", isBoolean, defaults["false"]);
 
-},{"../lib/shared":55,"../lib/types":57,"./core":45}],49:[function(_dereq_,module,exports){
+},{"../lib/shared":56,"../lib/types":58,"./core":45}],49:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -19090,7 +19159,7 @@ def("TypeAnnotation")
     .field("unionType", or(def("TypeAnnotation"), null))
     .field("nullable", isBoolean);
 
-},{"../lib/shared":55,"../lib/types":57,"./core":45}],50:[function(_dereq_,module,exports){
+},{"../lib/shared":56,"../lib/types":58,"./core":45}],50:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -19131,7 +19200,187 @@ def("GraphIndexExpression")
     .build("index")
     .field("index", geq(0));
 
-},{"../lib/shared":55,"../lib/types":57,"./core":45}],51:[function(_dereq_,module,exports){
+},{"../lib/shared":56,"../lib/types":58,"./core":45}],51:[function(_dereq_,module,exports){
+var assert = _dereq_("assert");
+var types = _dereq_("../main");
+var getFieldNames = types.getFieldNames;
+var getFieldValue = types.getFieldValue;
+var isArray = types.builtInTypes.array;
+var isObject = types.builtInTypes.object;
+var isDate = types.builtInTypes.Date;
+var isRegExp = types.builtInTypes.RegExp;
+var hasOwn = Object.prototype.hasOwnProperty;
+
+function astNodesAreEquivalent(a, b, problemPath) {
+    if (isArray.check(problemPath)) {
+        problemPath.length = 0;
+    } else {
+        problemPath = null;
+    }
+
+    return areEquivalent(a, b, problemPath);
+}
+
+astNodesAreEquivalent.assert = function(a, b) {
+    var problemPath = [];
+    if (!astNodesAreEquivalent(a, b, problemPath)) {
+        if (problemPath.length === 0) {
+            assert.strictEqual(a, b);
+        } else {
+            assert.ok(
+                false,
+                "Nodes differ in the following path: " +
+                    problemPath.map(subscriptForProperty).join("")
+            );
+        }
+    }
+};
+
+function subscriptForProperty(property) {
+    if (/[_$a-z][_$a-z0-9]*/i.test(property)) {
+        return "." + property;
+    }
+    return "[" + JSON.stringify(property) + "]";
+}
+
+function areEquivalent(a, b, problemPath) {
+    if (a === b) {
+        return true;
+    }
+
+    if (isArray.check(a)) {
+        return arraysAreEquivalent(a, b, problemPath);
+    }
+
+    if (isObject.check(a)) {
+        return objectsAreEquivalent(a, b, problemPath);
+    }
+
+    if (isDate.check(a)) {
+        return isDate.check(b) && (+a === +b);
+    }
+
+    if (isRegExp.check(a)) {
+        return isRegExp.check(b) && (
+            a.source === b.source &&
+            a.global === b.global &&
+            a.multiline === b.multiline &&
+            a.ignoreCase === b.ignoreCase
+        );
+    }
+
+    return a == b;
+}
+
+function arraysAreEquivalent(a, b, problemPath) {
+    isArray.assert(a);
+    var aLength = a.length;
+
+    if (!isArray.check(b) || b.length !== aLength) {
+        if (problemPath) {
+            problemPath.push("length");
+        }
+        return false;
+    }
+
+    for (var i = 0; i < aLength; ++i) {
+        if (problemPath) {
+            problemPath.push(i);
+        }
+
+        if (i in a !== i in b) {
+            return false;
+        }
+
+        if (!areEquivalent(a[i], b[i], problemPath)) {
+            return false;
+        }
+
+        if (problemPath) {
+            assert.strictEqual(problemPath.pop(), i);
+        }
+    }
+
+    return true;
+}
+
+function objectsAreEquivalent(a, b, problemPath) {
+    isObject.assert(a);
+    if (!isObject.check(b)) {
+        return false;
+    }
+
+    // Fast path for a common property of AST nodes.
+    if (a.type !== b.type) {
+        if (problemPath) {
+            problemPath.push("type");
+        }
+        return false;
+    }
+
+    var aNames = getFieldNames(a);
+    var aNameCount = aNames.length;
+
+    var bNames = getFieldNames(b);
+    var bNameCount = bNames.length;
+
+    if (aNameCount === bNameCount) {
+        for (var i = 0; i < aNameCount; ++i) {
+            var name = aNames[i];
+            var aChild = getFieldValue(a, name);
+            var bChild = getFieldValue(b, name);
+
+            if (problemPath) {
+                problemPath.push(name);
+            }
+
+            if (!areEquivalent(aChild, bChild, problemPath)) {
+                return false;
+            }
+
+            if (problemPath) {
+                assert.strictEqual(problemPath.pop(), name);
+            }
+        }
+
+        return true;
+    }
+
+    if (!problemPath) {
+        return false;
+    }
+
+    // Since aNameCount !== bNameCount, we need to find some name that's
+    // missing in aNames but present in bNames, or vice-versa.
+
+    var seenNames = Object.create(null);
+
+    for (i = 0; i < aNameCount; ++i) {
+        seenNames[aNames[i]] = true;
+    }
+
+    for (i = 0; i < bNameCount; ++i) {
+        name = bNames[i];
+
+        if (!hasOwn.call(seenNames, name)) {
+            problemPath.push(name);
+            return false;
+        }
+
+        delete seenNames[name];
+    }
+
+    for (name in seenNames) {
+        problemPath.push(name);
+        break;
+    }
+
+    return false;
+}
+
+module.exports = astNodesAreEquivalent;
+
+},{"../main":59,"assert":2}],52:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var n = types.namedTypes;
@@ -19510,7 +19759,7 @@ function firstInStatement(path) {
 
 module.exports = NodePath;
 
-},{"./path":53,"./scope":54,"./types":57,"assert":2,"util":9}],52:[function(_dereq_,module,exports){
+},{"./path":54,"./scope":55,"./types":58,"assert":2,"util":9}],53:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var NodePath = _dereq_("./node-path");
@@ -19525,6 +19774,7 @@ function PathVisitor() {
     assert.ok(this instanceof PathVisitor);
     this._reusableContextStack = [];
     this._methodNameTable = computeMethodNameTable(this);
+    this.Context = makeContextConstructor(this);
 }
 
 function computeMethodNameTable(visitor) {
@@ -19551,7 +19801,7 @@ function computeMethodNameTable(visitor) {
     return methodNameTable;
 }
 
-PathVisitor.fromMethodsObject = function(methods) {
+PathVisitor.fromMethodsObject = function fromMethodsObject(methods) {
     if (methods instanceof PathVisitor) {
         return methods;
     }
@@ -19572,7 +19822,8 @@ PathVisitor.fromMethodsObject = function(methods) {
     extend(Vp, methods);
     extend(Visitor, PathVisitor);
 
-    isFunction.assert(Visitor.Context);
+    isFunction.assert(Visitor.fromMethodsObject);
+    isFunction.assert(Visitor.visit);
 
     return new Visitor;
 };
@@ -19603,6 +19854,12 @@ PathVisitor.visit = function visit(node, methods) {
 var PVp = PathVisitor.prototype;
 
 PVp.visit = function(path) {
+    if (this instanceof this.Context) {
+        // If we somehow end up calling context.visit, then we need to
+        // re-invoke the .visit method against context.visitor.
+        return this.visitor.visit(path);
+    }
+
     assert.ok(path instanceof NodePath);
     var value = path.value;
 
@@ -19645,34 +19902,65 @@ function visitChildren(path, visitor) {
 
 PVp.acquireContext = function(path) {
     if (this._reusableContextStack.length === 0) {
-        return new this.constructor.Context(this).reset(path);
+        return new this.Context(path);
     }
     return this._reusableContextStack.pop().reset(path);
 };
 
 PVp.releaseContext = function(context) {
+    assert.ok(context instanceof this.Context);
     this._reusableContextStack.push(context);
     context.currentPath = null;
 };
 
-PathVisitor.Context = function Context(visitor) {
-    assert.ok(this instanceof Context);
+function makeContextConstructor(visitor) {
+    function Context(path) {
+        assert.ok(this instanceof Context);
+        assert.ok(this instanceof PathVisitor);
+        assert.ok(path instanceof NodePath);
+
+        Object.defineProperty(this, "visitor", {
+            value: visitor,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
+
+        this.currentPath = path;
+        this.needToCallTraverse = true;
+    }
+
     assert.ok(visitor instanceof PathVisitor);
-    Object.defineProperty(this, "visitor", { value: visitor });
-    this.currentPath = null;
-    this.needToCallTraverse = true;
-};
 
-var Cp = PathVisitor.Context.prototype;
+    // Note that the visitor object is the prototype of Context.prototype,
+    // so all visitor methods are inherited by context objects.
+    var Cp = Context.prototype = Object.create(visitor);
 
-Cp.reset = function(path) {
+    Cp.constructor = Context;
+    extend(Cp, sharedContextProtoMethods);
+
+    return Context;
+}
+
+// Every PathVisitor has a different this.Context constructor and
+// this.Context.prototype object, but those prototypes can all use the
+// same reset, invokeVisitorMethod, and traverse function objects.
+var sharedContextProtoMethods = Object.create(null);
+
+sharedContextProtoMethods.reset =
+function reset(path) {
+    assert.ok(this instanceof this.Context);
     assert.ok(path instanceof NodePath);
+
     this.currentPath = path;
     this.needToCallTraverse = true;
+
     return this;
 };
 
-Cp.invokeVisitorMethod = function(methodName) {
+sharedContextProtoMethods.invokeVisitorMethod =
+function invokeVisitorMethod(methodName) {
+    assert.ok(this instanceof this.Context);
     assert.ok(this.currentPath instanceof NodePath);
 
     var result = this.visitor[methodName].call(this, this.currentPath);
@@ -19701,10 +19989,14 @@ Cp.invokeVisitorMethod = function(methodName) {
     );
 };
 
-Cp.traverse = function(path, newVisitor) {
+sharedContextProtoMethods.traverse =
+function traverse(path, newVisitor) {
+    assert.ok(this instanceof this.Context);
     assert.ok(path instanceof NodePath);
     assert.ok(this.currentPath instanceof NodePath);
+
     this.needToCallTraverse = false;
+
     visitChildren(path, PathVisitor.fromMethodsObject(
         newVisitor || this.visitor
     ));
@@ -19712,7 +20004,7 @@ Cp.traverse = function(path, newVisitor) {
 
 module.exports = PathVisitor;
 
-},{"./node-path":51,"./types":57,"assert":2}],53:[function(_dereq_,module,exports){
+},{"./node-path":52,"./types":58,"assert":2}],54:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;
@@ -19949,26 +20241,52 @@ Pp.insertAfter = function insertAfter(node) {
     return pp.insertAt.apply(pp, insertAtArgs);
 };
 
+function repairRelationshipWithParent(path) {
+    assert.ok(path instanceof Path);
+
+    var pp = path.parentPath;
+    if (!pp) {
+        // Orphan paths have no relationship to repair.
+        return path;
+    }
+
+    var parentValue = pp.value;
+    var parentCache = pp.__childCache;
+
+    // Make sure parentCache[path.name] is populated.
+    if (parentValue[path.name] === path.value) {
+        parentCache[path.name] = path;
+    } else if (isArray.check(parentValue)) {
+        // Something caused path.name to become out of date, so attempt to
+        // recover by searching for path.value in parentValue.
+        var i = parentValue.indexOf(path.value);
+        if (i >= 0) {
+            parentCache[path.name = i] = path;
+        }
+    } else {
+        // If path.value disagrees with parentValue[path.name], and
+        // path.name is not an array index, let path.value become the new
+        // parentValue[path.name] and update parentCache accordingly.
+        parentValue[path.name] = path.value;
+        parentCache[path.name] = path;
+    }
+
+    assert.strictEqual(parentValue[path.name], path.value);
+    assert.strictEqual(path.parentPath.get(path.name), path);
+
+    return path;
+}
+
 Pp.replace = function replace(replacement) {
     var results = [];
     var parentValue = this.parentPath.value;
     var parentCache = this.parentPath.__childCache;
     var count = arguments.length;
 
+    repairRelationshipWithParent(this);
+
     if (isArray.check(parentValue)) {
         var originalLength = parentValue.length;
-
-        if (parentValue[this.name] !== this.value) {
-            // Something caused our index (name) to become out of date.
-            var i = parentValue.indexOf(this.value);
-            if (i >= 0) {
-                parentCache[this.name = i] = this;
-            }
-        }
-
-        assert.strictEqual(parentValue[this.name], this.value);
-        assert.strictEqual(this.parentPath.get(this.name), this);
-
         var move = getMoves(this.parentPath, count - 1, this.name + 1);
 
         var spliceArgs = [this.name, 1];
@@ -20030,12 +20348,11 @@ Pp.replace = function replace(replacement) {
 
 module.exports = Path;
 
-},{"./types":57,"assert":2}],54:[function(_dereq_,module,exports){
+},{"./types":58,"assert":2}],55:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var Type = types.Type;
 var namedTypes = types.namedTypes;
-var builders = types.builders;
 var Node = namedTypes.Node;
 var isArray = types.builtInTypes.array;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -20095,7 +20412,16 @@ Sp.declares = function(name) {
 };
 
 Sp.declareTemporary = function(prefix) {
-    assert.ok(/^[a-z$_]/i.test(prefix), prefix);
+    if (prefix) {
+        assert.ok(/^[a-z$_]/i.test(prefix), prefix);
+    } else {
+        prefix = "t$";
+    }
+
+    // Include this.depth in the name to make sure the name does not
+    // collide with any variables in nested/enclosing scopes.
+    prefix += this.depth.toString(36) + "$";
+
     this.scan();
 
     var index = 0;
@@ -20103,9 +20429,8 @@ Sp.declareTemporary = function(prefix) {
         ++index;
     }
 
-    var id = builders.identifier(prefix + index);
-    this.bindings[prefix + index] = id;
-    return id;
+    var name = prefix + index;
+    return this.bindings[name] = types.builders.identifier(name);
 };
 
 Sp.scan = function(force) {
@@ -20250,7 +20575,7 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./node-path":51,"./types":57,"assert":2}],55:[function(_dereq_,module,exports){
+},{"./node-path":52,"./types":58,"assert":2}],56:[function(_dereq_,module,exports){
 var types = _dereq_("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
@@ -20293,7 +20618,7 @@ exports.isPrimitive = new Type(function(value) {
              type === "function");
 }, naiveIsPrimitive.toString());
 
-},{"../lib/types":57}],56:[function(_dereq_,module,exports){
+},{"../lib/types":58}],57:[function(_dereq_,module,exports){
 var visit = _dereq_("./path-visitor").visit;
 var warnedAboutDeprecation = false;
 
@@ -20322,7 +20647,7 @@ function traverseWithFullPathInfo(node, callback) {
 traverseWithFullPathInfo.fast = traverseWithFullPathInfo;
 module.exports = traverseWithFullPathInfo;
 
-},{"./path-visitor":52}],57:[function(_dereq_,module,exports){
+},{"./path-visitor":53}],58:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var Ap = Array.prototype;
 var slice = Ap.slice;
@@ -20577,7 +20902,7 @@ Type.def = function(typeName) {
 
 // In order to return the same Def instance every time Type.def is called
 // with a particular name, those instances need to be stored in a cache.
-var defCache = {};
+var defCache = Object.create(null);
 
 function Def(typeName) {
     var self = this;
@@ -20586,12 +20911,12 @@ function Def(typeName) {
     Object.defineProperties(self, {
         typeName: { value: typeName },
         baseNames: { value: [] },
-        ownFields: { value: {} },
+        ownFields: { value: Object.create(null) },
 
         // These two are populated during finalization.
-        allSupertypes: { value: {} }, // Includes own typeName.
+        allSupertypes: { value: Object.create(null) }, // Includes own typeName.
         supertypeList: { value: [] }, // Linear inheritance hierarchy.
-        allFields: { value: {} }, // Includes inherited fields.
+        allFields: { value: Object.create(null) }, // Includes inherited fields.
         fieldNames: { value: [] }, // Non-hidden keys of allFields.
 
         type: {
@@ -20627,6 +20952,15 @@ Dp.isSupertypeOf = function(that) {
     } else {
         assert.ok(false, that + " is not a Def");
     }
+};
+
+// Note that the list returned by this function is a copy of the internal
+// supertypeList, *without* the typeName itself as the first element.
+exports.getSupertypeNames = function(typeName) {
+    assert.ok(hasOwn.call(defCache, typeName));
+    var d = defCache[typeName];
+    assert.strictEqual(d.finalized, true);
+    return d.supertypeList.slice(1);
 };
 
 // Returns an object mapping from every known type in the defCache to the
@@ -20995,7 +21329,7 @@ function populateSupertypeList(typeName, list) {
     list.length = 0;
     list.push(typeName);
 
-    var lastSeen = {};
+    var lastSeen = Object.create(null);
 
     for (var pos = 0; pos < list.length; ++pos) {
         typeName = list[pos];
@@ -21039,7 +21373,7 @@ exports.finalize = function() {
     });
 };
 
-},{"assert":2}],58:[function(_dereq_,module,exports){
+},{"assert":2}],59:[function(_dereq_,module,exports){
 var types = _dereq_("./lib/types");
 
 // This core module of AST types captures ES5 as it is parsed today by
@@ -21065,13 +21399,15 @@ exports.getFieldNames = types.getFieldNames;
 exports.getFieldValue = types.getFieldValue;
 exports.eachField = types.eachField;
 exports.someField = types.someField;
+exports.getSupertypeNames = types.getSupertypeNames;
+exports.astNodesAreEquivalent = _dereq_("./lib/equiv");
 exports.traverse = _dereq_("./lib/traverse");
 exports.finalize = types.finalize;
 exports.NodePath = _dereq_("./lib/node-path");
 exports.PathVisitor = _dereq_("./lib/path-visitor");
 exports.visit = exports.PathVisitor.visit;
 
-},{"./def/core":45,"./def/e4x":46,"./def/es6":47,"./def/es7":48,"./def/fb-harmony":49,"./def/mozilla":50,"./lib/node-path":51,"./lib/path-visitor":52,"./lib/traverse":56,"./lib/types":57}],59:[function(_dereq_,module,exports){
+},{"./def/core":45,"./def/e4x":46,"./def/es6":47,"./def/es7":48,"./def/fb-harmony":49,"./def/mozilla":50,"./lib/equiv":51,"./lib/node-path":52,"./lib/path-visitor":53,"./lib/traverse":57,"./lib/types":58}],60:[function(_dereq_,module,exports){
 // Sentinel value passed to base constructors to skip invoking this.init.
 var populating = {};
 
@@ -21197,9 +21533,9 @@ function extend(newProps) {
 
 module.exports = extend.call(function(){});
 
-},{}],60:[function(_dereq_,module,exports){
-module.exports=_dereq_(32)
 },{}],61:[function(_dereq_,module,exports){
+module.exports=_dereq_(32)
+},{}],62:[function(_dereq_,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -21209,7 +21545,7 @@ exports.SourceMapGenerator = _dereq_('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = _dereq_('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = _dereq_('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":66,"./source-map/source-map-generator":67,"./source-map/source-node":68}],62:[function(_dereq_,module,exports){
+},{"./source-map/source-map-consumer":67,"./source-map/source-map-generator":68,"./source-map/source-node":69}],63:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21308,7 +21644,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./util":69,"amdefine":70}],63:[function(_dereq_,module,exports){
+},{"./util":70,"amdefine":71}],64:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21454,7 +21790,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./base64":64,"amdefine":70}],64:[function(_dereq_,module,exports){
+},{"./base64":65,"amdefine":71}],65:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21498,7 +21834,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":70}],65:[function(_dereq_,module,exports){
+},{"amdefine":71}],66:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -21581,7 +21917,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":70}],66:[function(_dereq_,module,exports){
+},{"amdefine":71}],67:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22061,7 +22397,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./array-set":62,"./base64-vlq":63,"./binary-search":65,"./util":69,"amdefine":70}],67:[function(_dereq_,module,exports){
+},{"./array-set":63,"./base64-vlq":64,"./binary-search":66,"./util":70,"amdefine":71}],68:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22443,7 +22779,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./array-set":62,"./base64-vlq":63,"./util":69,"amdefine":70}],68:[function(_dereq_,module,exports){
+},{"./array-set":63,"./base64-vlq":64,"./util":70,"amdefine":71}],69:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -22816,7 +23152,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./source-map-generator":67,"./util":69,"amdefine":70}],69:[function(_dereq_,module,exports){
+},{"./source-map-generator":68,"./util":70,"amdefine":71}],70:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -23023,7 +23359,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":70}],70:[function(_dereq_,module,exports){
+},{"amdefine":71}],71:[function(_dereq_,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
