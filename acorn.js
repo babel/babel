@@ -1761,8 +1761,15 @@
       next();
       return finishNode(node, "ThisExpression");
     
+    case _yield:
+      if (inGenerator) return parseYield();
+
     case _name:
-      var id = parseIdent();
+    case _static:
+    case _from:
+    case _of:
+    case _as:
+      var id = parseIdent(tokType !== _name);
       if (eat(_arrow)) {
         return parseArrowExpression(startNodeFrom(id), [id]);
       }
@@ -1864,9 +1871,6 @@
 
     case _bquote:
       return parseTemplate();
-
-    case _yield:
-      return inGenerator ? parseYield() : parseIdent(true);
 
     default:
       unexpected();
