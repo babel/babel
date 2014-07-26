@@ -41,6 +41,7 @@ if (typeof exports != "undefined") {
    - parenthesized expressions (include brackets into expression's location)
    - expression statements (excluded spaces after statement's semicolon)
    - arrow and method functions (included arguments into function's location)
+   - template elements (excluded '`', '${' and '}' from element's location)
 */
 
 // ES6 Unicode Code Point Escape Sequence
@@ -686,10 +687,10 @@ test("`42`", {
         type: "TemplateElement",
         value: {raw: "42", cooked: "42"},
         tail: true,
-        range: [0, 4],
+        range: [1, 3],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 4}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 3}
         }
       }],
       expressions: [],
@@ -737,10 +738,10 @@ test("raw`42`", {
           type: "TemplateElement",
           value: {raw: "42", cooked: "42"},
           tail: true,
-          range: [3, 7],
+          range: [4, 6],
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 7}
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 6}
           }
         }],
         expressions: [],
@@ -795,20 +796,20 @@ test("raw`hello ${name}`", {
             type: "TemplateElement",
             value: {raw: "hello ", cooked: "hello "},
             tail: false,
-            range: [3, 12],
+            range: [4, 10],
             loc: {
-              start: {line: 1, column: 3},
-              end: {line: 1, column: 12}
+              start: {line: 1, column: 4},
+              end: {line: 1, column: 10}
             }
           },
           {
             type: "TemplateElement",
             value: {raw: "", cooked: ""},
             tail: true,
-            range: [16, 18],
+            range: [17, 17],
             loc: {
-              start: {line: 1, column: 16},
-              end: {line: 1, column: 18}
+              start: {line: 1, column: 17},
+              end: {line: 1, column: 17}
             }
           }
         ],
@@ -860,10 +861,10 @@ test("`$`", {
         type: "TemplateElement",
         value: {raw: "$", cooked: "$"},
         tail: true,
-        range: [0, 3],
+        range: [1, 2],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 3}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 2}
         }
       }],
       expressions: [],
@@ -900,29 +901,29 @@ test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
         type: "TemplateElement",
         value: {raw: "\\n\\r\\b\\v\\t\\f\\\n\\\r\n", cooked: "\n\r\b\u000b\t\f"},
         tail: true,
-        range: [0, 19],
+        range: [1, 18],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 3, column: 19}
+          start: {line: 1, column: 1},
+          end: {line: 3, column: 0}
         }
       }],
       expressions: [],
       range: [0, 19],
       loc: {
         start: {line: 1, column: 0},
-        end: {line: 3, column: 19}
+        end: {line: 3, column: 1}
       }
     },
     range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
-      end: {line: 3, column: 19}
+      end: {line: 3, column: 1}
     }
   }],
   range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
-    end: {line: 3, column: 19}
+    end: {line: 3, column: 1}
   }
 }, {
   ecmaVersion: 6,
@@ -940,29 +941,29 @@ test("`\n\r\n`", {
         type: "TemplateElement",
         value: {raw: "\n\r\n", cooked: "\n\n"},
         tail: true,
-        range: [0, 5],
+        range: [1, 4],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 3, column: 5}
+          start: {line: 1, column: 1},
+          end: {line: 3, column: 0}
         }
       }],
       expressions: [],
       range: [0, 5],
       loc: {
         start: {line: 1, column: 0},
-        end: {line: 3, column: 5}
+        end: {line: 3, column: 1}
       }
     },
     range: [0, 5],
     loc: {
       start: {line: 1, column: 0},
-      end: {line: 3, column: 5}
+      end: {line: 3, column: 1}
     }
   }],
   range: [0, 5],
   loc: {
     start: {line: 1, column: 0},
-    end: {line: 3, column: 5}
+    end: {line: 3, column: 1}
   }
 }, {
   ecmaVersion: 6,
@@ -970,7 +971,7 @@ test("`\n\r\n`", {
   locations: true
 });
 
-test("`\\u{000042}\\u0042\\x42\\u0\\102\\A`", {
+test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -978,31 +979,31 @@ test("`\\u{000042}\\u0042\\x42\\u0\\102\\A`", {
       type: "TemplateLiteral",
       quasis: [{
         type: "TemplateElement",
-        value: {raw: "\\u{000042}\\u0042\\x42\\u0\\102\\A", cooked: "BBBu0BA"},
+        value: {raw: "\\u{000042}\\u0042\\x42u0\\102\\A", cooked: "BBBu0BA"},
         tail: true,
-        range: [0, 31],
+        range: [1, 29],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 31}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 29}
         }
       }],
       expressions: [],
-      range: [0, 31],
+      range: [0, 30],
       loc: {
         start: {line: 1, column: 0},
-        end: {line: 1, column: 31}
+        end: {line: 1, column: 30}
       }
     },
-    range: [0, 31],
+    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
-      end: {line: 1, column: 31}
+      end: {line: 1, column: 30}
     }
   }],
-  range: [0, 31],
+  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
-    end: {line: 1, column: 31}
+    end: {line: 1, column: 30}
   }
 }, {
   ecmaVersion: 6,
@@ -1033,10 +1034,10 @@ test("new raw`42`", {
             type: "TemplateElement",
             value: {raw: "42", cooked: "42"},
             tail: true,
-            range: [7, 11],
+            range: [8, 10],
             loc: {
-              start: {line: 1, column: 7},
-              end: {line: 1, column: 11}
+              start: {line: 1, column: 8},
+              end: {line: 1, column: 10}
             }
           }],
           expressions: [],
@@ -6261,8 +6262,7 @@ test("function* t() {}", {
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
-  },
-  errors: []
+  }
 }, {
   ecmaVersion: 6,
   ranges: true,
@@ -14742,13 +14742,13 @@ testFail("class A extends yield B { }", "Unexpected token (1:23)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("`test", "Unterminated string constant (1:1)", {ecmaVersion: 6});
 
-testFail("switch `test`", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 
-testFail("`hello ${10 `test`", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("`hello ${10 `test`", "Unexpected token (1:18)", {ecmaVersion: 6});
 
-testFail("`hello ${10;test`", "Unexpected token (1:12)", {ecmaVersion: 6});
+testFail("`hello ${10;test`", "Unexpected token (1:11)", {ecmaVersion: 6});
 
 testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:13)", {ecmaVersion: 6});
 
@@ -14794,7 +14794,7 @@ testFail("[...a, b] = c", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; `${test}\\02`;", "Unexpected token (1:22)", {ecmaVersion: 6});
+testFail("\"use strict\"; `${test}\\02`;", "Octal literal in strict mode (1:22)", {ecmaVersion: 6});
 
 test("[...a, ] = b", {
   type: "Program",
