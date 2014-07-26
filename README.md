@@ -1,5 +1,7 @@
 # Acorn (JSX edition)
 
+[![Build Status](https://travis-ci.org/RReverser/acorn.svg?branch=master)](https://travis-ci.org/RReverser/acorn)
+
 This is modification of [Acorn][acorn] - a tiny, fast JavaScript parser, written completely in JavaScript.
 
 It was forked to create experimental, alternative, faster [React.js JSX][jsx] parser by integrating pieces

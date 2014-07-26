@@ -1,6 +1,7 @@
 var driver = require("./driver.js");
 require("./tests.js");
 require("./tests-harmony.js");
+require("./tests-jsx.js");
 
 var testsRun = 0, failed = 0;
 function report(state, code, message) {

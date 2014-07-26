@@ -6,7 +6,6 @@ if (typeof exports != "undefined") {
   var testFail = require("./driver.js").testFail;
   var testAssert = require("./driver.js").testAssert;
   var acorn = require("..");
-  require("./tests-jsx.js");
 }
 
 test("this\n", {

@@ -351,6 +351,7 @@
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _ellipsis = {type: "..."}, _question = {type: "?", beforeExpr: true};
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
+  var _ltSlash = {type: "</"};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -384,6 +385,9 @@
 
   // '*' may be multiply or have special meaning in ES6
   var _star = {binop: 10, beforeExpr: true};
+
+  // '<', '>' may be relational or have special meaning in JSX
+  var _lt = {binop: 7, beforeExpr: true}, _gt = {binop: 7, beforeExpr: true};
 
   // Provide access to the token types for external users of the
   // tokenizer.
@@ -544,14 +548,14 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSTag && val === '>') && !(inXJSChild && tokType !== _braceL)) {
+    if (shouldSkipSpace !== false && !(inXJSTag && type === _gt) && !(inXJSChild && tokType !== _braceL)) {
       skipSpace();
     }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
       options.onToken(getCurrentToken());
-    }
+  }
   }
 
   function skipBlockComment() {
@@ -712,9 +716,16 @@
       skipSpace();
       return readToken();
     }
-    if (next === 61)
+    if (next === 61) {
       size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
-    return finishOp(_relational, size);
+      return finishOp(_relational, size);
+    }
+    if (next === 47) {
+      // '</', beginning of JSX closing element
+      size = 2;
+      return finishOp(_ltSlash, size);
+    }
+    return finishOp(code === 60 ? _lt : _gt, size);
   }
 
   function readToken_eq_excl(code) { // '=!', '=>'
@@ -732,34 +743,34 @@
   function getTemplateToken(code) {
     // '`' and '${' have special meanings, but they should follow
     // string (can be empty)
-    if (tokType === _string) {
-      if (code === 96) { // '`'
-        ++tokPos;
-        return finishToken(_bquote);
+      if (tokType === _string) {
+        if (code === 96) { // '`'
+          ++tokPos;
+          return finishToken(_bquote);
       } else
-      if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
-        tokPos += 2;
-        return finishToken(_dollarBraceL);
+        if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
+          tokPos += 2;
+          return finishToken(_dollarBraceL);
+        }
       }
-    }
 
     if (code === 125) { // '}'
       ++tokPos;
       return finishToken(_braceR, undefined, false);
     }
 
-    // anything else is considered string literal
+      // anything else is considered string literal
     return readTmplString();
-  }
+    }
 
   function getTokenFromCode(code) {
-    switch (code) {
-    // The interpretation of a dot depends on whether it is followed
-    // by a digit or another two dots.
+    switch(code) {
+      // The interpretation of a dot depends on whether it is followed
+      // by a digit or another two dots.
     case 46: // '.'
       return readToken_dot();
 
-    // Punctuation tokens.
+      // Punctuation tokens.
     case 40: ++tokPos; return finishToken(_parenL);
     case 41: ++tokPos; return finishToken(_parenR);
     case 59: ++tokPos; return finishToken(_semi);
@@ -784,12 +795,12 @@
         if (next === 111 || next === 79) return readRadixNumber(8); // '0o', '0O' - octal number
         if (next === 98 || next === 66) return readRadixNumber(2); // '0b', '0B' - binary number
       }
-    // Anything else beginning with a digit is an integer, octal
-    // number, or float.
+      // Anything else beginning with a digit is an integer, octal
+      // number, or float.
     case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
       return readNumber(false);
 
-    // Quotes produce strings.
+      // Quotes produce strings.
     case 34: case 39: // '"', "'"
       return inXJSTag ? readXJSStringLiteral() : readString(code);
 
@@ -957,7 +968,7 @@
 
   function readCodePoint() {
     var ch = input.charCodeAt(tokPos), code;
-
+    
     if (ch === 123) {
       if (options.ecmaVersion < 6) unexpected();
       ++tokPos;
@@ -993,9 +1004,9 @@
         ++tokPos;
         if (newline.test(String.fromCharCode(ch))) {
           raise(tokStart, "Unterminated string constant");
-        }
+          }
         out += String.fromCharCode(ch); // '\'
-      }
+        }
     }
   }
 
@@ -1011,15 +1022,15 @@
       } else {
         ++tokPos;
         if (newline.test(String.fromCharCode(ch))) {
-          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
-            ++tokPos;
-            ch = 10;
-          }
-          if (options.locations) {
-            ++tokCurLine;
-            tokLineStart = tokPos;
-          }
-        }
+            if (ch === 13 && input.charCodeAt(tokPos) === 10) {
+              ++tokPos;
+              ch = 10;
+      }
+            if (options.locations) {
+              ++tokCurLine;
+              tokLineStart = tokPos;
+    }
+  }
         out += String.fromCharCode(ch); // '\'
       }
     }
@@ -1497,7 +1508,7 @@
     this.start = tokStart;
     this.end = null;
   }
-
+  
   exports.Node = Node;
 
   function SourceLocation() {
@@ -1611,7 +1622,7 @@
   function has(obj, propName) {
     return Object.prototype.hasOwnProperty.call(obj, propName);
   }
-  // Convert existing expression atom to assignable pattern
+// Convert existing expression atom to assignable pattern
   // if possible.
 
   function toAssignable(node, allowSpread, checkType) {
@@ -1619,7 +1630,7 @@
       switch (node.type) {
         case "Identifier":
         case "MemberExpression":
-          break;
+          break;          
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
@@ -1726,7 +1737,7 @@
             : "Assigning to " + expr.name + " in strict mode"
           );
         break;
-
+      
       case "MemberExpression":
         if (!isBinding) break;
 
@@ -1746,8 +1757,8 @@
         break;
 
       default:
-        raise(expr.start, "Assigning to rvalue");
-    }
+      raise(expr.start, "Assigning to rvalue");
+  }
   }
 
   // ### Statement parsing
@@ -1826,7 +1837,7 @@
       else return parseExpressionStatement(node, expr);
     }
   }
-
+  
   function parseBreakContinueStatement(node, keyword) {
     var isBreak = keyword == "break";
     next();
@@ -1849,13 +1860,13 @@
     if (i === labels.length) raise(node.start, "Unsyntactic " + keyword);
     return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
   }
-
+  
   function parseDebuggerStatement(node) {
     next();
     semicolon();
     return finishNode(node, "DebuggerStatement");
   }
-
+  
   function parseDoStatement(node) {
     next();
     labels.push(loopLabel);
@@ -1866,7 +1877,7 @@
     semicolon();
     return finishNode(node, "DoWhileStatement");
   }
-
+  
   // Disambiguating between a `for` and a `for`/`in` or `for`/`of`
   // loop is non-trivial. Basically, we have to parse the init `var`
   // statement or expression, disallowing the `in` operator (see
@@ -1874,7 +1885,7 @@
   // whether the next token is `in` or `of`. When there is no init
   // part (semicolon immediately after the opening parenthesis), it
   // is a regular `for` loop.
-
+  
   function parseForStatement(node) {
     next();
     labels.push(loopLabel);
@@ -1897,12 +1908,12 @@
     }
     return parseFor(node, init);
   }
-
+  
   function parseFunctionStatement(node) {
     next();
     return parseFunction(node, true);
   }
-
+  
   function parseIfStatement(node) {
     next();
     node.test = parseParenExpression();
@@ -1910,7 +1921,7 @@
     node.alternate = eat(_else) ? parseStatement() : null;
     return finishNode(node, "IfStatement");
   }
-
+  
   function parseReturnStatement(node) {
     if (!inFunction && !options.allowReturnOutsideFunction)
       raise(tokStart, "'return' outside of function");
@@ -1924,7 +1935,7 @@
     else { node.argument = parseExpression(); semicolon(); }
     return finishNode(node, "ReturnStatement");
   }
-
+  
   function parseSwitchStatement(node) {
     next();
     node.discriminant = parseParenExpression();
@@ -1959,7 +1970,7 @@
     labels.pop();
     return finishNode(node, "SwitchStatement");
   }
-
+  
   function parseThrowStatement(node) {
     next();
     if (newline.test(input.slice(lastEnd, tokStart)))
@@ -1968,7 +1979,7 @@
     semicolon();
     return finishNode(node, "ThrowStatement");
   }
-
+  
   function parseTryStatement(node) {
     next();
     node.block = parseBlock();
@@ -1991,14 +2002,14 @@
       raise(node.start, "Missing catch or finally clause");
     return finishNode(node, "TryStatement");
   }
-
+  
   function parseVarStatement(node, kind) {
     next();
     parseVar(node, false, kind);
     semicolon();
     return finishNode(node, "VariableDeclaration");
   }
-
+  
   function parseWhileStatement(node) {
     next();
     node.test = parseParenExpression();
@@ -2007,7 +2018,7 @@
     labels.pop();
     return finishNode(node, "WhileStatement");
   }
-
+  
   function parseWithStatement(node) {
     if (strict) raise(tokStart, "'with' in strict mode");
     next();
@@ -2015,12 +2026,12 @@
     node.body = parseStatement();
     return finishNode(node, "WithStatement");
   }
-
+  
   function parseEmptyStatement(node) {
     next();
     return finishNode(node, "EmptyStatement");
   }
-
+  
   function parseLabeledStatement(node, maybeName, expr) {
     for (var i = 0; i < labels.length; ++i)
       if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
@@ -2031,7 +2042,7 @@
     node.label = expr;
     return finishNode(node, "LabeledStatement");
   }
-
+  
   function parseExpressionStatement(node, expr) {
     node.expression = expr;
     semicolon();
@@ -2272,7 +2283,7 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
-
+    
     case _yield:
       if (inGenerator) return parseYield();
 
@@ -2282,7 +2293,7 @@
         return parseArrowExpression(startNodeFrom(id), [id]);
       }
       return id;
-
+      
     case _num: case _string: case _regexp: case _xjsText:
       var node = startNode();
       node.value = tokVal;
@@ -2304,27 +2315,27 @@
       if (options.ecmaVersion >= 6 && tokType === _for) {
         val = parseComprehension(startNode(), true);
       } else {
-        var oldParenL = ++metParenL;
-        if (tokType !== _parenR) {
-          val = parseExpression();
-          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-        } else {
-          exprList = [];
-        }
-        expect(_parenR);
-        // if '=>' follows '(...)', convert contents to arguments
-        if (metParenL === oldParenL && eat(_arrow)) {
+      var oldParenL = ++metParenL;
+      if (tokType !== _parenR) {
+        val = parseExpression();
+        exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+      } else {
+        exprList = [];
+      }
+      expect(_parenR);
+      // if '=>' follows '(...)', convert contents to arguments
+      if (metParenL === oldParenL && eat(_arrow)) {
           val = parseArrowExpression(startNode(), exprList);
-        } else {
-          // forbid '()' before everything but '=>'
-          if (!val) unexpected(lastStart);
-          // forbid '...' in sequence expressions
-          if (options.ecmaVersion >= 6) {
-            for (var i = 0; i < exprList.length; i++) {
-              if (exprList[i].type === "SpreadElement") unexpected();
-            }
+      } else {
+        // forbid '()' before everything but '=>'
+        if (!val) unexpected(lastStart);
+        // forbid '...' in sequence expressions
+        if (options.ecmaVersion >= 6) {
+          for (var i = 0; i < exprList.length; i++) {
+            if (exprList[i].type === "SpreadElement") unexpected();
           }
         }
+      }
       }
       val.start = tokStart1;
       val.end = lastEnd;
@@ -2343,7 +2354,7 @@
       // check whether this is array comprehension or regular array
       if (options.ecmaVersion >= 6 && tokType === _for) {
         return parseComprehension(node, false);
-      }
+        }
       node.elements = parseExprList(_bracketR, true, true);
       return finishNode(node, "ArrayExpression");
 
@@ -2367,10 +2378,8 @@
     case _bquote:
       return parseTemplate();
 
-    case _relational:
-      if (tokVal === '<') {
-        return parseXJSElement();
-      }
+    case _lt:
+      return parseXJSElement();
 
     default:
       unexpected();
@@ -2467,9 +2476,9 @@
 
       checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
-    }
+          }
     return finishNode(node, "ObjectExpression");
-  }
+        }
 
   function parsePropertyName(prop) {
     if (options.ecmaVersion >= 6) {
@@ -2494,7 +2503,7 @@
       node.defaults = [];
       node.rest = null;
       node.generator = false;
-    }
+  }
   }
 
   // Parse a function declaration or literal (depending on the
@@ -2536,7 +2545,7 @@
     initFunction(node);
 
     var defaults = node.defaults, hasDefaults = false;
-
+    
     for (var i = 0, lastI = params.length - 1; i <= lastI; i++) {
       var param = params[i];
 
@@ -2566,7 +2575,7 @@
 
   function parseFunctionParams(node) {
     var defaults = [], hasDefaults = false;
-
+    
     expect(_parenL);
     for (;;) {
       if (eat(_parenR)) {
@@ -2597,16 +2606,16 @@
 
   function parseFunctionBody(node, allowExpression) {
     var isExpression = allowExpression && tokType !== _braceL;
-
+    
     if (isExpression) {
       node.body = parseExpression(true);
       node.expression = true;
     } else {
-      // Start a new scope with regard to labels and the `inFunction`
-      // flag (restore them to their old value afterwards).
+    // Start a new scope with regard to labels and the `inFunction`
+    // flag (restore them to their old value afterwards).
       var oldInFunc = inFunction, oldInGen = inGenerator, oldLabels = labels;
       inFunction = true; inGenerator = node.generator; labels = [];
-      node.body = parseBlock(true);
+    node.body = parseBlock(true);
       node.expression = false;
       inFunction = oldInFunc; inGenerator = oldInGen; labels = oldLabels;
     }
@@ -2627,7 +2636,7 @@
 
   // Parse a class declaration or literal (depending on the
   // `isStatement` parameter).
-
+  
   function parseClass(node, isStatement) {
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
@@ -2640,9 +2649,9 @@
       if (tokType === _name && tokVal === "static") {
         next();
         method['static'] = true;
-      } else {
+        } else {
         method['static'] = false;
-      }
+        }
       var isGenerator = eat(_star);
       parsePropertyName(method);
       if (tokType === _name && !method.computed && method.key.type === "Identifier" &&
@@ -2851,8 +2860,8 @@
       node.delegate = false;
       node.argument = null;
     } else {
-      node.delegate = eat(_star);
-      node.argument = parseExpression(true);
+    node.delegate = eat(_star);
+    node.argument = parseExpression(true);
     }
     return finishNode(node, "YieldExpression");
   }
@@ -2972,24 +2981,27 @@
   // Parses any type of JSX attribute value.
 
   function parseXJSAttributeValue() {
-    var node;
-    if (tokType === _braceL) {
-      node = parseXJSExpressionContainer();
-      if (node.expression.type === "XJSEmptyExpression") {
-        raise(
-          node.start,
-            'XJS attributes must only be assigned a non-empty ' +
-            'expression'
-        );
-      }
-    } else if (tokVal === '<') {
-      node = parseXJSElement();
-    } else if (tokType === _xjsText) {
-      node = parseExprAtom();
-    } else {
-      raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
+    switch (tokType) {
+      case _braceL:
+        var node = parseXJSExpressionContainer();
+        if (node.expression.type === "XJSEmptyExpression") {
+          raise(
+            node.start,
+              'XJS attributes must only be assigned a non-empty ' +
+              'expression'
+          );
+        }
+        return node;
+
+      case _lt:
+        return parseXJSElement();
+
+      case _xjsText:
+        return parseExprAtom();
+
+      default:
+        raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
     }
-    return node;
   }
 
   // XJSEmptyExpression is unique type since it doesn't actually parse anything,
@@ -3022,28 +3034,54 @@
     var origInXJSTag = inXJSTag;
     inXJSTag = false;
 
-    expect(_braceL);
-
+    next();
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
     inXJSTag = origInXJSTag;
-
+    
     expect(_braceR);
-
     return finishNode(node, "XJSExpressionContainer");
   }
 
   // Parses following JSX attribute name-value pair.
 
   function parseXJSAttribute() {
-    var node = startNode();
+    if (tokType === _braceL) {
+      var tokStart1 = tokStart, tokStartLoc1 = tokStartLoc;
 
+      var origInXJSTag = inXJSTag;
+      inXJSTag = false;
+
+      next();
+      var node = parseSpread();
+
+      inXJSTag = origInXJSTag;
+
+      expect(_braceR);
+      node.type = "XJSSpreadAttribute";
+      
+      node.start = tokStart1;
+      node.end = lastEnd;
+      if (options.locations) {
+        node.loc.start = tokStartLoc1;
+        node.loc.end = lastEndLoc;
+      }
+      if (options.ranges) {
+        node.range = [tokStart1, lastEnd];
+      }
+
+      return node;
+    }
+
+    var node = startNode();
     node.name = parseXJSAttributeName();
 
     // HTML empty attribute
-    if (tokVal === "=") {
+    if (tokType === _eq) {
       next();
       node.value = parseXJSAttributeValue();
+    } else {
+      node.value = null;
     }
 
     return finishNode(node, "XJSAttribute");
@@ -3074,11 +3112,11 @@
     inXJSChild = false;
     inXJSTag = true;
 
-    expectChar('<');
+    next();
 
     node.name = parseXJSElementName();
 
-    while (tokType !== _eof && tokType !== _slash && tokVal !== '>') {
+    while (tokType !== _eof && tokType !== _slash && tokType !== _gt) {
       attributes.push(parseXJSAttribute());
     }
 
@@ -3091,7 +3129,7 @@
       inXJSChild = true;
     }
 
-    expectChar('>');
+    expect(_gt);
 
     return finishNode(node, "XJSOpeningElement");
   }
@@ -3105,8 +3143,7 @@
     inXJSChild = false;
     inXJSTag = true;
     tokRegexpAllowed = false;
-    expectChar('<');
-    expect(_slash);
+    expect(_ltSlash);
     node.name = parseXJSElementName();
     skipSpace();
     // A valid token is expected after >, so parser needs to know
@@ -3114,7 +3151,7 @@
     inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
     tokRegexpAllowed = false;
-    expectChar('>');
+    expect(_gt);
     return finishNode(node, "XJSClosingElement");
   }
 
@@ -3127,14 +3164,15 @@
 
     var origInXJSChild = inXJSChild;
     var openingElement = parseXJSOpeningElement();
+    var closingElement = null;
 
     if (!openingElement.selfClosing) {
-      while (tokType !== _eof && !(tokVal === '<' && nextChar() === '/')) {
+      while (tokType !== _eof && tokType !== _ltSlash) {
         inXJSChild = true;
         children.push(parseXJSChild());
       }
       inXJSChild = origInXJSChild;
-      var closingElement = parseXJSClosingElement();
+      closingElement = parseXJSClosingElement();
       if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
         raise(
           closingElement.start,
@@ -3152,7 +3190,7 @@
     // element, we disallow it here in the parser in order to provide a
     // better error message. (In the rare case that the less-than operator
     // was intended, the left tag can be wrapped in parentheses.)
-    if (!origInXJSChild && tokVal === '<') {
+    if (!origInXJSChild && tokType === _lt) {
       raise(tokStart, "Adjacent XJS elements must be wrapped in an enclosing tag");
     }
 
