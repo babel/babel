@@ -1290,20 +1290,21 @@
   // either with each other or with an init property — and in
   // strict mode, init properties are also not allowed to be repeated.
 
-  function checkPropClash(prop, defaultKind, propHash) {
+  function checkPropClash(prop, propHash) {
     var key = prop.key, name;
     switch (key.type) {
       case "Identifier": name = key.name; break;
       case "Literal": name = String(key.value); break;
       default: return;
     }
-    var kind = prop.kind, other = propHash[name];
+    var kind = prop.kind || "init", other = propHash[name];
     if (other) {
-      var isGetSet = kind !== defaultKind;
-      if ((strict || isGetSet) && other[kind] || !(isGetSet ^ other[defaultKind]))
+      var isGetSet = kind !== "init";
+      if ((strict || isGetSet) && other[kind] || !(isGetSet ^ other.init))
         raise(key.start, "Redefinition of property");
     } else {
       other = propHash[name] = hash();
+      other.init = other.get = other.set = false;
     }
     other[kind] = true;
   }
@@ -2068,7 +2069,7 @@
         prop.shorthand = true;
       } else unexpected();
 
-      checkPropClash(prop, "init", propHash);
+      checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
     }
     return finishNode(node, "ObjectExpression");
@@ -2256,7 +2257,7 @@
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, "", method.static ? staticMethodHash : methodHash);
+      checkPropClash(method, method.static ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
