@@ -361,6 +361,9 @@
   var _plusMin = {binop: 9, prefix: true, beforeExpr: true};
   var _multiplyModulo = {binop: 10, beforeExpr: true};
 
+  // '*' may be multiply or have special meaning in ES6
+  var _star = {binop: 10, beforeExpr: true};
+
   // Provide access to the token types for external users of the
   // tokenizer.
 
@@ -630,10 +633,10 @@
     return finishOp(_slash, 1);
   }
 
-  function readToken_mult_modulo() { // '%*'
+  function readToken_mult_modulo(code) { // '%*'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(_multiplyModulo, 1);
+    return finishOp(code === 42 ? _star : _multiplyModulo, 1);
   }
 
   function readToken_pipe_amp(code) { // '|&'
@@ -764,7 +767,7 @@
       return readToken_slash();
 
     case 37: case 42: // '%*'
-      return readToken_mult_modulo();
+      return readToken_mult_modulo(code);
 
     case 124: case 38: // '|&'
       return readToken_pipe_amp(code);
@@ -1170,6 +1173,8 @@
     if (tokType === type) {
       next();
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -1191,8 +1196,7 @@
   // raise an unexpected token error.
 
   function expect(type) {
-    if (tokType === type) next();
-    else unexpected();
+    eat(type) || unexpected();
   }
 
   // Raise an unexpected token error.
@@ -1205,6 +1209,103 @@
 
   function hash() {
     return Object.create(null);
+  }
+
+// Convert existing expression atom to assignable pattern
+  // if possible.
+
+  function toAssignable(node, allowSpread, checkType) {
+    if (options.ecmaVersion >= 6 && node) {
+      switch (node.type) {
+        case "Identifier":
+        case "MemberExpression":
+          break;          
+
+        case "ObjectExpression":
+          node.type = "ObjectPattern";
+          for (var i = 0; i < node.properties.length; i++) {
+            var prop = node.properties[i];
+            if (prop.kind !== "init") unexpected(prop.key.start);
+            toAssignable(prop.value, false, checkType);
+          }
+          break;
+
+        case "ArrayExpression":
+          node.type = "ArrayPattern";
+          for (var i = 0, lastI = node.elements.length - 1; i <= lastI; i++) {
+            toAssignable(node.elements[i], i === lastI, checkType);
+          }
+          break;
+
+        case "SpreadElement":
+          if (allowSpread) {
+            toAssignable(node.argument, false, checkType);
+            checkSpreadAssign(node.argument);
+          } else {
+            unexpected(node.start);
+          }
+          break;
+
+        default:
+          if (checkType) unexpected(node.start);
+      }
+    }
+    return node;
+  }
+
+  // Checks if node can be assignable spread argument.
+
+  function checkSpreadAssign(node) {
+    if (node.type !== "Identifier" && node.type !== "ArrayPattern")
+      unexpected(node.start);
+  }
+
+  // Verify that argument names are not repeated, and it does not
+  // try to bind the words `eval` or `arguments`.
+
+  function checkFunctionParam(param, nameHash) {
+    switch (param.type) {
+      case "Identifier":
+        if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
+          raise(param.start, "Defining '" + param.name + "' in strict mode");
+        if (nameHash[param.name])
+          raise(param.start, "Argument name clash in strict mode");
+        nameHash[param.name] = true;
+        break;
+
+      case "ObjectPattern":
+        for (var i = 0; i < param.properties.length; i++)
+          checkFunctionParam(param.properties[i].value, nameHash);
+        break;
+
+      case "ArrayPattern":
+        for (var i = 0; i < param.elements.length; i++)
+          checkFunctionParam(param.elements[i], nameHash);
+        break;
+    }
+  }
+
+  // Check if property name clashes with already added.
+  // Object/class getters and setters are not allowed to clash —
+  // either with each other or with an init property — and in
+  // strict mode, init properties are also not allowed to be repeated.
+
+  function checkPropClash(prop, defaultKind, propHash) {
+    var key = prop.key, name;
+    switch (key.type) {
+      case "Identifier": name = key.name; break;
+      case "Literal": name = String(key.value); break;
+      default: return;
+    }
+    var kind = prop.kind, other = propHash[name];
+    if (other) {
+      var isGetSet = kind !== defaultKind;
+      if ((strict || isGetSet) && other[kind] || !(isGetSet ^ other[defaultKind]))
+        raise(key.start, "Redefinition of property");
+    } else {
+      other = propHash[name] = hash();
+    }
+    other[kind] = true;
   }
 
   // Verify that a node is an lval — something that can be assigned
@@ -1945,7 +2046,7 @@
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        isGenerator = isStar(true);
+        isGenerator = eat(_star);
       }
       parsePropertyName(prop);
       if (eat(_colon)) {
@@ -1971,29 +2072,6 @@
       node.properties.push(finishNode(prop, "Property"));
     }
     return finishNode(node, "ObjectExpression");
-  }
-
-  // Check if property name clashes with already added.
-  // Object/class getters and setters are not allowed to clash —
-  // either with each other or with an init property — and in
-  // strict mode, init properties are also not allowed to be repeated.
-
-  function checkPropClash(prop, defaultKind, propHash) {
-    var key = prop.key, name;
-    switch (key.type) {
-      case "Identifier": name = key.name; break;
-      case "Literal": name = String(key.value); break;
-      default: return;
-    }
-    var kind = prop.kind, other = propHash[name];
-    if (other) {
-      var isGetSet = kind !== defaultKind;
-      if ((strict || isGetSet) && other[kind] || (isGetSet ^ other[defaultKind]))
-        raise(key.start, "Redefinition of property");
-    } else {
-      other = propHash[name] = hash();
-    }
-    other[kind] = true;
   }
 
   function parsePropertyName(prop) {
@@ -2022,24 +2100,13 @@
     }
   }
 
-  // Checks if there's star sign ('*').
-
-  function isStar(moveOn) {
-    if (tokType === _multiplyModulo && tokVal === '*') {
-      if (moveOn) next();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
   function parseFunction(node, isStatement, allowExpressionBody) {
     initFunction(node);
     if (options.ecmaVersion >= 6) {
-      node.generator = isStar(true);
+      node.generator = eat(_star);
     }
     if (isStatement || tokType === _name) {
       node.id = parseIdent();
@@ -2161,31 +2228,6 @@
     }
   }
 
-  // Verify that argument names are not repeated, and it does not
-  // try to bind the words `eval` or `arguments`.
-
-  function checkFunctionParam(param, nameHash) {
-    switch (param.type) {
-      case "Identifier":
-        if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
-          raise(param.start, "Defining '" + param.name + "' in strict mode");
-        if (nameHash[param.name])
-          raise(param.start, "Argument name clash in strict mode");
-        nameHash[param.name] = true;
-        break;
-
-      case "ObjectPattern":
-        for (var i = 0; i < param.properties.length; i++)
-          checkFunctionParam(param.properties[i].value, nameHash);
-        break;
-
-      case "ArrayPattern":
-        for (var i = 0; i < param.elements.length; i++)
-          checkFunctionParam(param.elements[i], nameHash);
-        break;
-    }
-  }
-
   // Parse a class declaration or literal (depending on the
   // `isStatement` parameter).
   
@@ -2204,7 +2246,7 @@
       } else {
         method.static = false;
       }
-      var isGenerator = isStar(true);
+      var isGenerator = eat(_star);
       method.key = parseIdent(true);
       if ((method.key.name === "get" || method.key.name === "set") && tokType === _name) {
         if (isGenerator) unexpected();
@@ -2267,55 +2309,6 @@
     return finishNode(node, "Identifier");
   }
 
-  // Convert existing expression atom to assignable pattern
-  // if possible.
-
-  function toAssignable(node, allowSpread, checkType) {
-    if (options.ecmaVersion >= 6 && node) {
-      switch (node.type) {
-        case "Identifier":
-        case "MemberExpression":
-          break;          
-
-        case "ObjectExpression":
-          node.type = "ObjectPattern";
-          for (var i = 0; i < node.properties.length; i++) {
-            var prop = node.properties[i];
-            if (prop.kind !== "init") unexpected(prop.key.start);
-            toAssignable(prop.value, false, checkType);
-          }
-          break;
-
-        case "ArrayExpression":
-          node.type = "ArrayPattern";
-          for (var i = 0, lastI = node.elements.length - 1; i <= lastI; i++) {
-            toAssignable(node.elements[i], i === lastI, checkType);
-          }
-          break;
-
-        case "SpreadElement":
-          if (allowSpread) {
-            toAssignable(node.argument, false, checkType);
-            checkSpreadAssign(node.argument);
-          } else {
-            unexpected(node.start);
-          }
-          break;
-
-        default:
-          if (checkType) unexpected(node.start);
-      }
-    }
-    return node;
-  }
-
-  // Checks if node can be assignable spread argument.
-
-  function checkSpreadAssign(node) {
-    if (node.type !== "Identifier" && node.type !== "ArrayPattern")
-      unexpected(node.start);
-  }
-
   // Parses module export declaration.
 
   function parseExport(node) {
@@ -2337,7 +2330,7 @@
     } else {
       // export * from '...'
       // export { x, y as z } [from '...']
-      var isBatch = isStar();
+      var isBatch = tokType === _star;
       node.declaration = null;
       node.default = false;
       node.specifiers = parseExportSpecifiers();
@@ -2356,7 +2349,7 @@
 
   function parseExportSpecifiers() {
     var nodes = [], first = true;
-    if (isStar()) {
+    if (tokType === _star) {
       // export * from '...'
       var node = startNode();
       next();
@@ -2409,7 +2402,7 @@
 
   function parseImportSpecifiers() {
     var nodes = [], first = true;
-    if (isStar()) {
+    if (tokType === _star) {
       var node = startNode();
       next();
       if (tokType !== _name || tokVal !== "as") unexpected();
@@ -2456,7 +2449,7 @@
   function parseYield() {
     var node = startNode();
     next();
-    node.delegate = isStar(true);
+    node.delegate = eat(_star);
     node.argument = parseExpression(true);
     return finishNode(node, "YieldExpression");
   }
