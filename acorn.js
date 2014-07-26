@@ -1201,6 +1201,12 @@
     raise(pos != null ? pos : tokStart, "Unexpected token");
   }
 
+  // Creates an empty hash object.
+
+  function hash() {
+    return Object.create(null);
+  }
+
   // Verify that a node is an lval — something that can be assigned
   // to.
 
@@ -1926,7 +1932,7 @@
   // Parse an object literal.
 
   function parseObj() {
-    var node = startNode(), first = true, sawGetSet = false;
+    var node = startNode(), first = true, propHash = hash();
     node.properties = [];
     next();
     while (!eat(_braceR)) {
@@ -1952,7 +1958,6 @@
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         if (isGenerator) unexpected();
-        sawGetSet = true;
         kind = prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(false);
@@ -1962,30 +1967,33 @@
         prop.shorthand = true;
       } else unexpected();
 
-      addProperty(node.properties, finishNode(prop, "Property"), sawGetSet, "init");
+      checkPropClash(prop, "init", propHash);
+      node.properties.push(finishNode(prop, "Property"));
     }
     return finishNode(node, "ObjectExpression");
   }
 
-  // Add property to list with keeping in mind and checking that
-  // object/class getters and setters are not allowed to clash —
+  // Check if property name clashes with already added.
+  // Object/class getters and setters are not allowed to clash —
   // either with each other or with an init property — and in
   // strict mode, init properties are also not allowed to be repeated.
 
-  function addProperty(props, current, sawGetSet, defaultKind) {
-    if (current.key.type === "Identifier" && (strict || sawGetSet)) {
-      var kind = current.kind, isGetSet = kind !== defaultKind;
-      for (var i = 0; i < props.length; ++i) {
-        var other = props[i];
-        if (other.key.name === current.key.name && other.static === current.static) {
-          var conflict = kind == other.kind || isGetSet && other.kind === defaultKind ||
-            kind === defaultKind && (other.kind !== defaultKind);
-          if (conflict && !strict && kind === defaultKind && other.kind === defaultKind) conflict = false;
-          if (conflict) raise(current.key.start, "Redefinition of property");
-        }
-      }
+  function checkPropClash(prop, defaultKind, propHash) {
+    var key = prop.key, name;
+    switch (key.type) {
+      case "Identifier": name = key.name; break;
+      case "Literal": name = String(key.value); break;
+      default: return;
     }
-    props.push(current);
+    var kind = prop.kind, other = propHash[name];
+    if (other) {
+      var isGetSet = kind !== defaultKind;
+      if ((strict || isGetSet) && other[kind] || (isGetSet ^ other[defaultKind]))
+        raise(key.start, "Redefinition of property");
+    } else {
+      other = propHash[name] = hash();
+    }
+    other[kind] = true;
   }
 
   function parsePropertyName(prop) {
@@ -2143,7 +2151,7 @@
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
     if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
-      var nameHash = {};
+      var nameHash = hash();
       if (node.id)
         checkFunctionParam(node.id, nameHash);
       for (var i = 0; i < node.params.length; i++)
@@ -2161,7 +2169,7 @@
       case "Identifier":
         if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
           raise(param.start, "Defining '" + param.name + "' in strict mode");
-        if (param.name in nameHash)
+        if (nameHash[param.name])
           raise(param.start, "Argument name clash in strict mode");
         nameHash[param.name] = true;
         break;
@@ -2185,7 +2193,7 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
-    var classBody = startNode(), sawGetSet = false;
+    var classBody = startNode(), methodHash = hash(), staticMethodHash = hash();
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -2202,12 +2210,12 @@
         if (isGenerator) unexpected();
         method.kind = method.key.name;
         method.key = parseIdent(true);
-        sawGetSet = true;
       } else {
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      addProperty(classBody.body, finishNode(method, "MethodDefinition"), sawGetSet, "");
+      checkPropClash(method, "", method.static ? staticMethodHash : methodHash);
+      classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
     node.body = finishNode(classBody, "ClassBody");
