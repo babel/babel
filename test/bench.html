@@ -18,7 +18,7 @@
 <h1>Acorn/Esprima/Traceur speed comparison</h1>
 
 <p>This will run each of the three ES6 parsers on the source code of
-jQuery 1.6.4 and CodeMirror 3.0b1 for two seconds, and show a table
+jQuery 1.6.4 and CodeMirror 3.0b1 for five seconds, and show a table
 indicating the number of lines parsed per second. Note that Traceur
 always stores location data, and is thus not fairly compared by the
 benchmark <em>without</em> location data.<p>
@@ -63,7 +63,7 @@ numbers.</p>
       runner(codemirror30, locations);
       lines += totalLines;
       t1 = nowHost.now();
-      if (t1 - t0 > 2000) break;
+      if (t1 - t0 > 5000) break;
     }
     return lines / ((t1 - t0) / 1000);
   }
