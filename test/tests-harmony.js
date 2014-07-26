@@ -5933,10 +5933,10 @@ test("(function* () { yield v })", {
               end: {line: 1, column: 23}
             }
           },
-          range: [16, 24],
+          range: [16, 23],
           loc: {
             start: {line: 1, column: 16},
-            end: {line: 1, column: 24}
+            end: {line: 1, column: 23}
           }
         }],
         range: [14, 25],
@@ -5948,10 +5948,10 @@ test("(function* () { yield v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 25],
+      range: [0, 26],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 25}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 26}
       }
     },
     range: [0, 26],
@@ -6002,10 +6002,10 @@ test("(function* () { yield *v })", {
               end: {line: 1, column: 24}
             }
           },
-          range: [16, 25],
+          range: [16, 24],
           loc: {
             start: {line: 1, column: 16},
-            end: {line: 1, column: 25}
+            end: {line: 1, column: 24}
           }
         }],
         range: [14, 26],
@@ -6017,10 +6017,10 @@ test("(function* () { yield *v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 26],
+      range: [0, 27],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 26}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 27}
       }
     },
     range: [0, 27],
@@ -6077,10 +6077,10 @@ test("function* test () { yield *v }", {
             end: {line: 1, column: 28}
           }
         },
-        range: [20, 29],
+        range: [20, 28],
         loc: {
           start: {line: 1, column: 20},
-          end: {line: 1, column: 29}
+          end: {line: 1, column: 28}
         }
       }],
       range: [18, 30],
@@ -6164,10 +6164,10 @@ test("var x = { *test () { yield *v } };", {
                     end: {line: 1, column: 29}
                   }
                 },
-                range: [21, 30],
+                range: [21, 29],
                 loc: {
                   start: {line: 1, column: 21},
-                  end: {line: 1, column: 30}
+                  end: {line: 1, column: 29}
                 }
               }],
               range: [19, 31],
@@ -6179,9 +6179,9 @@ test("var x = { *test () { yield *v } };", {
             rest: null,
             generator: true,
             expression: false,
-            range: [19, 31],
+            range: [16, 31],
             loc: {
-              start: {line: 1, column: 19},
+              start: {line: 1, column: 16},
               end: {line: 1, column: 31}
             }
           },
@@ -6310,10 +6310,10 @@ test("(function* () { yield yield 10 })", {
               end: {line: 1, column: 30}
             }
           },
-          range: [16, 31],
+          range: [16, 30],
           loc: {
             start: {line: 1, column: 16},
-            end: {line: 1, column: 31}
+            end: {line: 1, column: 30}
           }
         }],
         range: [14, 32],
@@ -6325,10 +6325,10 @@ test("(function* () { yield yield 10 })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 32],
+      range: [0, 33],
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 32}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 33}
       }
     },
     range: [0, 33],
@@ -7619,9 +7619,9 @@ test("class A {*gen(v) { yield v; }}", {
           rest: null,
           generator: true,
           expression: false,
-          range: [17, 29],
+          range: [13, 29],
           loc: {
-            start: {line: 1, column: 17},
+            start: {line: 1, column: 13},
             end: {line: 1, column: 29}
           }
         },
@@ -7733,9 +7733,9 @@ test("class A { static *gen(v) { yield v; }}", {
           rest: null,
           generator: true,
           expression: false,
-          range: [25, 37],
+          range: [21, 37],
           loc: {
-            start: {line: 1, column: 25},
+            start: {line: 1, column: 21},
             end: {line: 1, column: 37}
           }
         },
@@ -9887,9 +9887,9 @@ test("var x = {*[test]() { yield *v; }}", {
             rest: null,
             generator: true,
             expression: false,
-            range: [19, 32],
+            range: [16, 32],
             loc: {
-              start: {line: 1, column: 19},
+              start: {line: 1, column: 16},
               end: {line: 1, column: 32}
             }
           },
@@ -14653,7 +14653,7 @@ test("e => yield* 10", {
   locations: true
 });
 
-testFail("(function () { yield 10 })", "Unexpected token (1:22)", {ecmaVersion: 6});
+testFail("(function () { yield 10 })", "Unexpected token (1:21)", {ecmaVersion: 6});
 
 test("(function () { yield* 10 })", {
   type: "Program",
@@ -14736,9 +14736,9 @@ test("(function () { yield* 10 })", {
 
 testFail("(function() { \"use strict\"; f(yield v) })", "Unexpected token (1:36)", {ecmaVersion: 6});
 
-testFail("var obj = { *test** }", "Unexpected token (1:18)", {ecmaVersion: 6});
+testFail("var obj = { *test** }", "Unexpected token (1:17)", {ecmaVersion: 6});
 
-testFail("class A extends yield B { }", "Unexpected token (1:23)", {ecmaVersion: 6});
+testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion: 6});
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 

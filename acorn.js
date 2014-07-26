@@ -220,11 +220,12 @@
   var lastStart, lastEnd, lastEndLoc;
 
   // This is the parser's state. `inFunction` is used to reject
-  // `return` statements outside of functions, `labels` to verify that
-  // `break` and `continue` have somewhere to jump to, and `strict`
-  // indicates whether strict mode is on.
+  // `return` statements outside of functions, `inGenerator` to
+  // reject `yield`s outside of generators, `labels` to verify
+  // that `break` and `continue` have somewhere to jump to, and
+  // `strict` indicates whether strict mode is on.
 
-  var inFunction, labels, strict;
+  var inFunction, inGenerator, labels, strict;
 
   // This counter is used for checking that arrow expressions did
   // not contain nested parentheses in argument list.
@@ -294,6 +295,7 @@
   var _this = {keyword: "this"};
   var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true}, _static = {keyword: "static"};
   var _export = {keyword: "export"}, _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
+  var _yield = {keyword: "yield", beforeExpr: true};
 
   // The keywords that denote values.
 
@@ -321,7 +323,7 @@
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
                       "class": _class, "extends": _extends, "static": _static, "of": _of,
-                      "export": _export, "import": _import, "from": _from, "as": _as};
+                      "export": _export, "import": _import, "from": _from, "as": _as, "yield": _yield};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -441,7 +443,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of export import from as");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of export import from as yield");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1247,7 +1249,7 @@
   function parseTopLevel(program) {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = new Position;
-    inFunction = strict = null;
+    inFunction = inGenerator = strict = null;
     labels = [];
     readToken();
 
@@ -1855,6 +1857,9 @@
     case _bquote:
       return parseTemplate();
 
+    case _yield:
+      return inGenerator ? parseYield() : parseIdent(true);
+
     default:
       unexpected();
     }
@@ -2119,11 +2124,11 @@
     } else {
       // Start a new scope with regard to labels and the `inFunction`
       // flag (restore them to their old value afterwards).
-      var oldInFunc = inFunction, oldLabels = labels;
-      inFunction = true; labels = [];
+      var oldInFunc = inFunction, oldInGen = inGenerator, oldLabels = labels;
+      inFunction = true; inGenerator = node.generator; labels = [];
       node.body = parseBlock(true);
       node.expression = false;
-      inFunction = oldInFunc; labels = oldLabels;
+      inFunction = oldInFunc; inGenerator = oldInGen; labels = oldLabels;
     }
 
     // If this is a strict mode function, verify that argument names
@@ -2408,6 +2413,16 @@
       nodes.push(finishNode(node, "ImportSpecifier"));
     }
     return nodes;
+  }
+
+  // Parses yield expression inside generator.
+
+  function parseYield() {
+    var node = startNode();
+    next();
+    node.delegate = parseIsGenerator();
+    node.argument = parseExpression(true);
+    return finishNode(node, "YieldExpression");
   }
 
 });
