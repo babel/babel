@@ -292,8 +292,8 @@
   var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
-  var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true}, _static = {keyword: "static"};
-  var _export = {keyword: "export"}, _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
+  var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true};
+  var _export = {keyword: "export"}, _import = {keyword: "import"};
   var _yield = {keyword: "yield", beforeExpr: true};
 
   // The keywords that denote values.
@@ -306,7 +306,6 @@
   // we assign a variable name to it for quick comparing.
 
   var _in = {keyword: "in", binop: 7, beforeExpr: true};
-  var _of = {keyword: "of", beforeExpr: true};
 
   // Map keyword names to token types.
 
@@ -321,8 +320,8 @@
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
-                      "class": _class, "extends": _extends, "static": _static, "of": _of,
-                      "export": _export, "import": _import, "from": _from, "as": _as, "yield": _yield};
+                      "class": _class, "extends": _extends,
+                      "export": _export, "import": _import, "yield": _yield};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -442,7 +441,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends static of export import from as yield");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1208,7 +1207,7 @@
   function checkLVal(expr, isBinding) {
     switch (expr.type) {
       case "Identifier":
-        if (strict && isStrictBadIdWord(expr.name))
+        if (strict && (isStrictBadIdWord(expr.name) || isStrictReservedWord(expr.name)))
           raise(expr.start, isBinding
             ? "Binding " + expr.name + " in strict mode"
             : "Assigning to " + expr.name + " in strict mode"
@@ -1373,13 +1372,13 @@
       next();
       parseVar(init, true, varKind);
       finishNode(init, "VariableDeclaration");
-      if ((tokType === _in || tokType === _of) && init.declarations.length === 1 &&
+      if ((tokType === _in || (tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
           !(isLet && init.declarations[0].init))
         return parseForIn(node, init);
       return parseFor(node, init);
     }
     var init = parseExpression(false, true);
-    if (tokType === _in || tokType === _of) {
+    if (tokType === _in || (tokType === _name && tokVal === "of")) {
       checkLVal(init);
       return parseForIn(node, init);
     }
@@ -1765,10 +1764,6 @@
       if (inGenerator) return parseYield();
 
     case _name:
-    case _static:
-    case _from:
-    case _of:
-    case _as:
       var id = parseIdent(tokType !== _name);
       if (eat(_arrow)) {
         return parseArrowExpression(startNodeFrom(id), [id]);
@@ -1836,7 +1831,8 @@
           expect(_parenL);
           block.left = toAssignable(parseExprAtom());
           checkLVal(block.left, true);
-          expect(_of);
+          if (tokType !== _name || tokVal !== "of") unexpected();
+          next();
           // `of` property is here for compatibility with Esprima's AST
           // which also supports deprecated [for (... in ...) expr]
           block.of = true;
@@ -2194,7 +2190,12 @@
     expect(_braceL);
     while (!eat(_braceR)) {
       var method = startNode();
-      method.static = !!eat(_static);
+      if (tokType === _name && tokVal === "static") {
+        next();
+        method.static = true;
+      } else {
+        method.static = false;
+      }
       var isGenerator = isStar(true);
       method.key = parseIdent(true);
       if ((method.key.name === "get" || method.key.name === "set") && tokType === _name) {
@@ -2332,10 +2333,11 @@
       node.declaration = null;
       node.default = false;
       node.specifiers = parseExportSpecifiers();
-      if (isBatch || tokType === _from) {
-        expect(_from);
+      if (tokType === _name && tokVal === "from") {
+        next();
         node.source = tokType === _string ? parseExprAtom() : unexpected();
       } else {
+        if (isBatch) unexpected();
         node.source = null;
       }
     }
@@ -2362,7 +2364,12 @@
 
         var node = startNode();
         node.id = parseIdent();
-        node.name = eat(_as) ? parseIdent(true) : null;
+        if (tokType === _name && tokVal === "as") {
+          next();
+          node.name = parseIdent(true);
+        } else {
+          node.name = null;
+        }
         nodes.push(finishNode(node, "ExportSpecifier"));
       }
     }
@@ -2380,7 +2387,8 @@
       node.kind = "";
     } else {
       node.specifiers = parseImportSpecifiers();
-      expect(_from);
+      if (tokType !== _name || tokVal !== "from") unexpected();
+      next();
       node.source = tokType === _string ? parseExprAtom() : unexpected();
       // only for backward compatibility with Esprima's AST
       // (it doesn't support mixed default + named yet)
@@ -2396,7 +2404,8 @@
     if (isStar()) {
       var node = startNode();
       next();
-      expect(_as);
+      if (tokType !== _name || tokVal !== "as") unexpected();
+      next();
       node.name = parseIdent();
       checkLVal(node.name, true);
       nodes.push(finishNode(node, "ImportBatchSpecifier"));
@@ -2421,7 +2430,12 @@
 
       var node = startNode();
       node.id = parseIdent(true);
-      node.name = eat(_as) ? parseIdent() : null;
+      if (tokType === _name && tokVal === "as") {
+        next();
+        node.name = parseIdent();
+      } else {
+        node.name = null;
+      }
       checkLVal(node.name || node.id, true);
       node.default = false;
       nodes.push(finishNode(node, "ImportSpecifier"));
