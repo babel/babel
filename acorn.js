@@ -1922,28 +1922,27 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), kind;
+      var prop = startNode(), kind, isGenerator;
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
+        isGenerator = parseIsGenerator();
       }
       parsePropertyName(prop);
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         kind = prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
-        var func = parseFunction(startNode(), false, true);
         kind = prop.kind = "init";
         prop.method = true;
-        prop.value = func;
+        prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
+        if (isGenerator) unexpected();
         sawGetSet = true;
         kind = prop.kind = prop.key.name;
         parsePropertyName(prop);
-        if (tokType !== _parenL) unexpected();
-        var func = parseFunction(startNode(), false, options.ecmaVersion >= 6);
-        prop.value = func;
+        prop.value = parseMethod(false);
       } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
         kind = prop.kind = "init";
         prop.value = prop.key;
@@ -2002,17 +2001,48 @@
     }
   }
 
+  // Checks if there's generator's sign ('*') and moves on.
+
+  function parseIsGenerator() {
+    if (tokVal === '*') {
+      next();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
   function parseFunction(node, isStatement, allowExpressionBody) {
     initFunction(node);
+    if (options.ecmaVersion >= 6) {
+      node.generator = parseIsGenerator();
+    }
     if (isStatement || tokType === _name) {
       node.id = parseIdent();
     }
     parseFunctionParams(node);
     parseFunctionBody(node, allowExpressionBody);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
+  }
+
+  // Parse object or class method.
+
+  function parseMethod(isGenerator) {
+    var node = startNode();
+    initFunction(node);
+    parseFunctionParams(node);
+    var allowExpressionBody;
+    if (options.ecmaVersion >= 6) {
+      node.generator = isGenerator;
+      allowExpressionBody = true;
+    } else {
+      allowExpressionBody = false;
+    }
+    parseFunctionBody(node, allowExpressionBody);
+    return finishNode(node, "FunctionExpression");
   }
 
   // Parse arrow function expression with given parameters.
@@ -2148,15 +2178,17 @@
     while (!eat(_braceR)) {
       var method = startNode();
       method.static = !!eat(_static);
+      var isGenerator = parseIsGenerator();
       method.key = parseIdent(true);
-      if (method.key.type === "Identifier" && (method.key.name === "get" || method.key.name === "set") && tokType === _name) {
+      if ((method.key.name === "get" || method.key.name === "set") && tokType === _name) {
+        if (isGenerator) unexpected();
         method.kind = method.key.name;
         method.key = parseIdent(true);
         sawGetSet = true;
       } else {
         method.kind = "";
       }
-      method.value = parseFunction(startNode());
+      method.value = parseMethod(isGenerator);
       addProperty(classBody.body, finishNode(method, "MethodDefinition"), sawGetSet, "");
       eat(_semi);
     }

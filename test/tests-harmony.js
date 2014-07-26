@@ -14696,10 +14696,10 @@ test("(function () { yield* 10 })", {
               end: {line: 1, column: 24}
             }
           },
-          range: [15, 25],
+          range: [15, 24],
           loc: {
             start: {line: 1, column: 15},
-            end: {line: 1, column: 25}
+            end: {line: 1, column: 24}
           }
         }],
         range: [13, 26],
