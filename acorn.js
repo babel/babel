@@ -1634,7 +1634,7 @@
     if (tokType.isAssign) {
       var node = startNodeFrom(left);
       node.operator = tokVal;
-      node.left = tokVal === '=' ? toAssignable(left) : left;
+      node.left = tokType === _eq ? toAssignable(left) : left;
       checkLVal(left);
       next();
       node.right = parseMaybeAssign(noIn);
@@ -1939,7 +1939,7 @@
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        isGenerator = parseIsGenerator();
+        isGenerator = isStar(true);
       }
       parsePropertyName(prop);
       if (eat(_colon)) {
@@ -2014,11 +2014,11 @@
     }
   }
 
-  // Checks if there's generator's sign ('*') and moves on.
+  // Checks if there's star sign ('*').
 
-  function parseIsGenerator() {
-    if (tokVal === '*') {
-      next();
+  function isStar(moveOn) {
+    if (tokType === _multiplyModulo && tokVal === '*') {
+      if (moveOn) next();
       return true;
     } else {
       return false;
@@ -2031,7 +2031,7 @@
   function parseFunction(node, isStatement, allowExpressionBody) {
     initFunction(node);
     if (options.ecmaVersion >= 6) {
-      node.generator = parseIsGenerator();
+      node.generator = isStar(true);
     }
     if (isStatement || tokType === _name) {
       node.id = parseIdent();
@@ -2106,7 +2106,7 @@
         break;
       } else {
         node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent());
-        if (options.ecmaVersion >= 6 && tokVal === '=') {
+        if (options.ecmaVersion >= 6 && tokType === _eq) {
           next();
           hasDefaults = true;
           defaults.push(parseExpression(true));
@@ -2191,7 +2191,7 @@
     while (!eat(_braceR)) {
       var method = startNode();
       method.static = !!eat(_static);
-      var isGenerator = parseIsGenerator();
+      var isGenerator = isStar(true);
       method.key = parseIdent(true);
       if ((method.key.name === "get" || method.key.name === "set") && tokType === _name) {
         if (isGenerator) unexpected();
@@ -2324,7 +2324,7 @@
     } else {
       // export * from '...'
       // export { x, y as z } [from '...']
-      var isBatch = tokVal === '*';
+      var isBatch = isStar();
       node.declaration = null;
       node.default = false;
       node.specifiers = parseExportSpecifiers();
@@ -2342,7 +2342,7 @@
 
   function parseExportSpecifiers() {
     var nodes = [], first = true;
-    if (tokVal === "*") {
+    if (isStar()) {
       // export * from '...'
       var node = startNode();
       next();
@@ -2389,7 +2389,7 @@
 
   function parseImportSpecifiers() {
     var nodes = [], first = true;
-    if (tokVal === '*') {
+    if (isStar()) {
       var node = startNode();
       next();
       expect(_as);
@@ -2430,7 +2430,7 @@
   function parseYield() {
     var node = startNode();
     next();
-    node.delegate = parseIsGenerator();
+    node.delegate = isStar(true);
     node.argument = parseExpression(true);
     return finishNode(node, "YieldExpression");
   }
