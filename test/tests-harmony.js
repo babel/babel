@@ -6,6 +6,7 @@
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2011 Arpad Borsos <arpad.borsos@googlemail.com>
+  Copyright (C) 2014 Ingvar Stepanyan <me@rreverser.com>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -14465,9 +14466,9 @@ testFail("\"\\u{FFZ}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6}
 
 testFail("[v] += ary", "Assigning to rvalue (1:0)", {ecmaVersion: 6});
 
-testFail("[2] = 42", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("[2] = 42", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ obj:20 }) = 42", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
 
 testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
 
@@ -14860,7 +14861,7 @@ test("[...a, ] = b", {
   locations: true
 });
 
-testFail("if (b,...a, );", "Unexpected token (1:11)", {ecmaVersion: 6});
+testFail("if (b,...a, );", "Unexpected token (1:12)", {ecmaVersion: 6});
 
 testFail("(b, ...a)", "Unexpected token (1:9)", {ecmaVersion: 6});
 

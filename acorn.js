@@ -32,8 +32,7 @@
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
   // returns an abstract syntax tree as specified by [Mozilla parser
-  // API][api], with the caveat that the SpiderMonkey-specific syntax
-  // (`let`, `yield`, inline XML, etc) is not recognized.
+  // API][api], with the caveat that inline XML is not recognized.
   //
   // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 
@@ -53,7 +52,7 @@
     // `ecmaVersion` indicates the ECMAScript version to parse. Must
     // be either 3, or 5, or 6. This influences support for strict
     // mode, the set of reserved words, support for getters and
-    // setters and other features. ES6 support is only partial.
+    // setters and other features.
     ecmaVersion: 5,
     // Turn on `strictSemicolons` to prevent the parser from doing
     // automatic semicolon insertion.
@@ -1784,19 +1783,28 @@
       return finishNode(node, "Literal");
 
     case _parenL:
-      var node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val;
+      var node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
       var oldParenL = ++metParenL;
       if (tokType !== _parenR) {
         val = parseExpression();
+        exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+      } else {
+        exprList = [];
       }
       expect(_parenR);
       // if '=>' follows '(...)', convert contents to arguments
       if (metParenL === oldParenL && eat(_arrow)) {
-        val = parseArrowExpression(node, !val ? [] : val.type === "SequenceExpression" ? val.expressions : [val]);
+        val = parseArrowExpression(node, exprList);
       } else {
         // forbid '()' before everything but '=>'
         if (!val) unexpected(lastStart);
+        // forbid '...' in sequence expressions
+        if (options.ecmaVersion >= 6) {
+          for (var i = 0; i < exprList.length; i++) {
+            if (exprList[i].type === "SpreadElement") unexpected();
+          }
+        }
       }
       val.start = tokStart1;
       val.end = lastEnd;
@@ -2065,7 +2073,7 @@
         params[i] = param.left;
         defaults.push(param.right);
       } else {
-        toAssignable(param, i === lastI);
+        toAssignable(param, i === lastI, true);
         defaults.push(null);
         if (param.type === "SpreadElement") {
           params.length--;
@@ -2092,12 +2100,12 @@
       if (eat(_parenR)) {
         break;
       } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
-        node.rest = toAssignable(parseExprAtom());
+        node.rest = toAssignable(parseExprAtom(), false, true);
         checkSpreadAssign(node.rest);
         expect(_parenR);
         break;
       } else {
-        node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent());
+        node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent());
         if (options.ecmaVersion >= 6 && tokVal === '=') {
           next();
           hasDefaults = true;
@@ -2249,7 +2257,7 @@
   // Convert existing expression atom to assignable pattern
   // if possible.
 
-  function toAssignable(node, allowSpread) {
+  function toAssignable(node, allowSpread, checkType) {
     if (options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "Identifier":
@@ -2261,26 +2269,28 @@
           for (var i = 0; i < node.properties.length; i++) {
             var prop = node.properties[i];
             if (prop.kind !== "init") unexpected(prop.key.start);
-            toAssignable(prop.value);
+            toAssignable(prop.value, false, checkType);
           }
           break;
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
           for (var i = 0, lastI = node.elements.length - 1; i <= lastI; i++) {
-            toAssignable(node.elements[i], i === lastI);
+            toAssignable(node.elements[i], i === lastI, checkType);
           }
           break;
 
         case "SpreadElement":
           if (allowSpread) {
-            toAssignable(node.argument);
+            toAssignable(node.argument, false, checkType);
             checkSpreadAssign(node.argument);
-            break;
+          } else {
+            unexpected(node.start);
           }
+          break;
 
         default:
-          unexpected(node.start);
+          if (checkType) unexpected(node.start);
       }
     }
     return node;
