@@ -5704,78 +5704,119 @@ test("import { encrypt as enc } from \"crypto\"", {
   locations: true
 });
 
-test("import { decrypt, encrypt as enc } from \"crypto\"", {
+test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
   type: "Program",
+  start: 0,
+  end: 56,
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 56}
+  },
+  range: [0, 56],
   body: [{
     type: "ImportDeclaration",
+    start: 0,
+    end: 56,
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 56}
+    },
+    range: [0, 56],
     specifiers: [
       {
         type: "ImportSpecifier",
+        start: 7,
+        end: 13,
+        loc: {
+          start: {line: 1, column: 7},
+          end: {line: 1, column: 13}
+        },
+        range: [7, 13],
         id: {
           type: "Identifier",
-          name: "decrypt",
-          range: [9, 16],
+          start: 7,
+          end: 13,
           loc: {
-            start: {line: 1, column: 9},
-            end: {line: 1, column: 16}
-          }
+            start: {line: 1, column: 7},
+            end: {line: 1, column: 13}
+          },
+          range: [7, 13],
+          name: "crypto"
         },
         name: null,
-        range: [9, 16],
-        loc: {
-          start: {line: 1, column: 9},
-          end: {line: 1, column: 16}
-        }
+        default: true
       },
       {
         type: "ImportSpecifier",
+        start: 17,
+        end: 24,
+        loc: {
+          start: {line: 1, column: 17},
+          end: {line: 1, column: 24}
+        },
+        range: [17, 24],
         id: {
           type: "Identifier",
-          name: "encrypt",
-          range: [18, 25],
+          start: 17,
+          end: 24,
           loc: {
-            start: {line: 1, column: 18},
-            end: {line: 1, column: 25}
-          }
+            start: {line: 1, column: 17},
+            end: {line: 1, column: 24}
+          },
+          range: [17, 24],
+          name: "decrypt"
+        },
+        name: null,
+        default: false
+      },
+      {
+        type: "ImportSpecifier",
+        start: 26,
+        end: 40,
+        loc: {
+          start: {line: 1, column: 26},
+          end: {line: 1, column: 40}
+        },
+        range: [26, 40],
+        id: {
+          type: "Identifier",
+          start: 26,
+          end: 33,
+          loc: {
+            start: {line: 1, column: 26},
+            end: {line: 1, column: 33}
+          },
+          range: [26, 33],
+          name: "encrypt"
         },
         name: {
           type: "Identifier",
-          name: "enc",
-          range: [29, 32],
+          start: 37,
+          end: 40,
           loc: {
-            start: {line: 1, column: 29},
-            end: {line: 1, column: 32}
-          }
+            start: {line: 1, column: 37},
+            end: {line: 1, column: 40}
+          },
+          range: [37, 40],
+          name: "enc"
         },
-        range: [18, 32],
-        loc: {
-          start: {line: 1, column: 18},
-          end: {line: 1, column: 32}
-        }
+        default: false
       }
     ],
-    kind: "named",
     source: {
       type: "Literal",
-      value: "crypto",
-      raw: "\"crypto\"",
-      range: [40, 48],
+      start: 48,
+      end: 56,
       loc: {
-        start: {line: 1, column: 40},
-        end: {line: 1, column: 48}
-      }
+        start: {line: 1, column: 48},
+        end: {line: 1, column: 56}
+      },
+      range: [48, 56],
+      value: "crypto",
+      raw: "\"crypto\""
     },
-    range: [0, 48],
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 48}
-    }
-  }],
-  range: [0, 48],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 48}
-  }
+    kind: "default"
+  }]
 }, {
   ecmaVersion: 6,
   ranges: true,
