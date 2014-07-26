@@ -975,7 +975,7 @@
         }
       } else {
         ++tokPos;
-        if (ch === 13 || ch === 10 || ch === 8232 || ch === 8233) {
+        if (newline.test(String.fromCharCode(ch))) {
           if (inTemplate) {
             if (ch === 13 && input.charCodeAt(tokPos) === 10) {
               ++tokPos;
