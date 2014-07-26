@@ -1,25 +1,27 @@
-# Acorn (JSX edition)
+# Acorn-JSX
 
 [![Build Status](https://travis-ci.org/RReverser/acorn.svg?branch=master)](https://travis-ci.org/RReverser/acorn)
 
 This is modification of [Acorn][acorn] - a tiny, fast JavaScript parser, written completely in JavaScript.
 
-It was forked to create experimental, alternative, faster [React.js JSX][jsx] parser by integrating pieces
+It was forked to create experimental alternative, faster [React.js JSX][jsx] parser by integrating pieces
 of code from official parser, modified to match Acorn's parsing logic.
 
-According to [benchmarks](http://marijnhaverbeke.nl/acorn/test/bench.html), Acorn is 5x faster than Esprima
-when parsing code with location tracking (call it "source maps enabled mode"), and JSX extensions almost don't
-affect those numbers. However, [esprima-fb](https://github.com/facebook/esprima) is forked&maintained from
-harmony branch of esprima which is being heavily optimized and currently `acorn-jsx` is only 1.5-2x faster than
-`esprima-fb`.
+According to [benchmarks](test/bench.html), Acorn-JSX is 2x faster than official [Esprima-based parser][esprima-fb]
+when location tracking is turned on in both (call it "source maps enabled mode").
+At the same time, it consumes all the ES6+JSX syntax that can be consumed by Esprima-FB
+(this is proved by [official tests](test/tests-jsx.js)).
 
-Currently, it consumes all the ES5+JSX syntax that can be consumed by official [Esprima-based parser][esprima-fb].
-However, official parser can consume ES6 syntax as well, and is maintained by authors of React.js itself, so it's
-preferred to be used in real projects.
+However, Esprima-FB is maintained by authors of React.js itself,
+so it's recommended to be used in production code.
 
 [acorn]: http://marijnhaverbeke.nl/acorn/
 [esprima-fb]: https://github.com/facebook/esprima
 [jsx]: http://facebook.github.io/react/docs/jsx-in-depth.html
+
+## Transpiler
+
+Please note that this tool only parses source code to JSX AST. If you want to convert result to JS AST or directly to JS code and source map, check out [jsx-transpiler](https://github.com/RReverser/jsx-transpiler).
 
 ## Installation
 
