@@ -1893,26 +1893,31 @@
       return finishNode(node, "Literal");
 
     case _parenL:
-      var node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
+      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
-      var oldParenL = ++metParenL;
-      if (tokType !== _parenR) {
-        val = parseExpression();
-        exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+      // check whether this is generator comprehension or regular expression
+      if (options.ecmaVersion >= 6 && tokType === _for) {
+        val = parseComprehension(startNode(), true);
       } else {
-        exprList = [];
-      }
-      expect(_parenR);
-      // if '=>' follows '(...)', convert contents to arguments
-      if (metParenL === oldParenL && eat(_arrow)) {
-        val = parseArrowExpression(node, exprList);
-      } else {
-        // forbid '()' before everything but '=>'
-        if (!val) unexpected(lastStart);
-        // forbid '...' in sequence expressions
-        if (options.ecmaVersion >= 6) {
-          for (var i = 0; i < exprList.length; i++) {
-            if (exprList[i].type === "SpreadElement") unexpected();
+        var oldParenL = ++metParenL;
+        if (tokType !== _parenR) {
+          val = parseExpression();
+          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+        } else {
+          exprList = [];
+        }
+        expect(_parenR);
+        // if '=>' follows '(...)', convert contents to arguments
+        if (metParenL === oldParenL && eat(_arrow)) {
+          val = parseArrowExpression(startNode(), exprList);
+        } else {
+          // forbid '()' before everything but '=>'
+          if (!val) unexpected(lastStart);
+          // forbid '...' in sequence expressions
+          if (options.ecmaVersion >= 6) {
+            for (var i = 0; i < exprList.length; i++) {
+              if (exprList[i].type === "SpreadElement") unexpected();
+            }
           }
         }
       }
@@ -1932,26 +1937,7 @@
       next();
       // check whether this is array comprehension or regular array
       if (options.ecmaVersion >= 6 && tokType === _for) {
-        node.blocks = [];
-        while (tokType === _for) {
-          var block = startNode();
-          next();
-          expect(_parenL);
-          block.left = toAssignable(parseExprAtom());
-          checkLVal(block.left, true);
-          if (tokType !== _name || tokVal !== "of") unexpected();
-          next();
-          // `of` property is here for compatibility with Esprima's AST
-          // which also supports deprecated [for (... in ...) expr]
-          block.of = true;
-          block.right = parseExpression();
-          expect(_parenR);
-          node.blocks.push(finishNode(block, "ComprehensionBlock"));
-        }
-        node.filter = eat(_if) ? parseParenExpression() : null;
-        node.body = parseExpression();
-        expect(_bracketR);
-        return finishNode(node, "ComprehensionExpression");
+        return parseComprehension(node, false);
       }
       node.elements = parseExprList(_bracketR, true, true);
       return finishNode(node, "ArrayExpression");
@@ -2453,6 +2439,32 @@
     node.delegate = eat(_star);
     node.argument = parseExpression(true);
     return finishNode(node, "YieldExpression");
+  }
+
+  // Parses array and generator comprehensions.
+
+  function parseComprehension(node, isGenerator) {
+    node.blocks = [];
+    while (tokType === _for) {
+      var block = startNode();
+      next();
+      expect(_parenL);
+      block.left = toAssignable(parseExprAtom());
+      checkLVal(block.left, true);
+      if (tokType !== _name || tokVal !== "of") unexpected();
+      next();
+      // `of` property is here for compatibility with Esprima's AST
+      // which also supports deprecated [for (... in ...) expr]
+      block.of = true;
+      block.right = parseExpression();
+      expect(_parenR);
+      node.blocks.push(finishNode(block, "ComprehensionBlock"));
+    }
+    node.filter = eat(_if) ? parseParenExpression() : null;
+    node.body = parseExpression();
+    expect(isGenerator ? _parenR : _bracketR);
+    node.generator = isGenerator;
+    return finishNode(node, "ComprehensionExpression");
   }
 
 });

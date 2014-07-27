@@ -3513,7 +3513,7 @@ test("x = { set method(val) v = val }", {
   locations: true
 });
 
-// Array Comprehension
+// Array and Generator Comprehension
 
 test("[for (x of array) x]", {
   type: "Program",
@@ -3558,6 +3558,7 @@ test("[for (x of array) x]", {
           end: {line: 1, column: 19}
         }
       },
+      generator: false,
       range: [0, 20],
       loc: {
         start: {line: 1, column: 0},
@@ -3679,6 +3680,129 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           end: {line: 1, column: 53}
         }
       },
+      generator: false,
+      range: [0, 54],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 54}
+      }
+    },
+    range: [0, 54],
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 54}
+    }
+  }],
+  range: [0, 54],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 54}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("(for (x of array) for (y of array2) if (x === test) x)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ComprehensionExpression",
+      filter: {
+        type: "BinaryExpression",
+        operator: "===",
+        left: {
+          type: "Identifier",
+          name: "x",
+          range: [40, 41],
+          loc: {
+            start: {line: 1, column: 40},
+            end: {line: 1, column: 41}
+          }
+        },
+        right: {
+          type: "Identifier",
+          name: "test",
+          range: [46, 50],
+          loc: {
+            start: {line: 1, column: 46},
+            end: {line: 1, column: 50}
+          }
+        },
+        range: [40, 50],
+        loc: {
+          start: {line: 1, column: 40},
+          end: {line: 1, column: 50}
+        }
+      },
+      blocks: [
+        {
+          type: "ComprehensionBlock",
+          left: {
+            type: "Identifier",
+            name: "x",
+            range: [6, 7],
+            loc: {
+              start: {line: 1, column: 6},
+              end: {line: 1, column: 7}
+            }
+          },
+          right: {
+            type: "Identifier",
+            name: "array",
+            range: [11, 16],
+            loc: {
+              start: {line: 1, column: 11},
+              end: {line: 1, column: 16}
+            }
+          },
+          range: [1, 17],
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 17}
+          },
+          of: true
+        },
+        {
+          type: "ComprehensionBlock",
+          left: {
+            type: "Identifier",
+            name: "y",
+            range: [23, 24],
+            loc: {
+              start: {line: 1, column: 23},
+              end: {line: 1, column: 24}
+            }
+          },
+          right: {
+            type: "Identifier",
+            name: "array2",
+            range: [28, 34],
+            loc: {
+              start: {line: 1, column: 28},
+              end: {line: 1, column: 34}
+            }
+          },
+          range: [18, 35],
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 35}
+          },
+          of: true
+        }
+      ],
+      body: {
+        type: "Identifier",
+        name: "x",
+        range: [52, 53],
+        loc: {
+          start: {line: 1, column: 52},
+          end: {line: 1, column: 53}
+        }
+      },
+      generator: true,
       range: [0, 54],
       loc: {
         start: {line: 1, column: 0},
@@ -3882,6 +4006,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           end: {line: 1, column: 67}
         }
       },
+      generator: false,
       range: [0, 68],
       loc: {
         start: {line: 1, column: 0},
