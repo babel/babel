@@ -2436,8 +2436,13 @@
   function parseYield() {
     var node = startNode();
     next();
-    node.delegate = eat(_star);
-    node.argument = parseExpression(true);
+    if (eat(_semi) || canInsertSemicolon()) {
+      node.delegate = false;
+      node.argument = null;
+    } else {
+      node.delegate = eat(_star);
+      node.argument = parseExpression(true);
+    }
     return finishNode(node, "YieldExpression");
   }
 

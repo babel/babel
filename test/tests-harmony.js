@@ -6138,6 +6138,86 @@ test("(function* () { yield v })", {
   locations: true
 });
 
+test("(function* () { yield\nv })", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "FunctionExpression",
+      id: null,
+      params: [],
+      defaults: [],
+      body: {
+        type: "BlockStatement",
+        body: [
+          {
+            type: "ExpressionStatement",
+            expression: {
+              type: "YieldExpression",
+              argument: null,
+              delegate: false,
+              range: [16, 21],
+              loc: {
+                start: {line: 1, column: 16},
+                end: {line: 1, column: 21}
+              }
+            },
+            range: [16, 21],
+            loc: {
+              start: {line: 1, column: 16},
+              end: {line: 1, column: 21}
+            }
+          },
+          {
+            type: "ExpressionStatement",
+            expression: {
+              type: "Identifier",
+              name: "v",
+              range: [22, 23],
+              loc: {
+                start: {line: 2, column: 0},
+                end: {line: 2, column: 1}
+              }
+            },
+            range: [22, 23],
+            loc: {
+              start: {line: 2, column: 0},
+              end: {line: 2, column: 1}
+            }
+          }
+        ],
+        range: [14, 25],
+        loc: {
+          start: {line: 1, column: 14},
+          end: {line: 2, column: 3}
+        }
+      },
+      rest: null,
+      generator: true,
+      expression: false,
+      range: [0, 26],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 2, column: 4}
+      }
+    },
+    range: [0, 26],
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 2, column: 4}
+    }
+  }],
+  range: [0, 26],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 2, column: 4}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 test("(function* () { yield *v })", {
   type: "Program",
   body: [{
