@@ -7111,6 +7111,7 @@ test("class A {get() {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "get",
@@ -7192,6 +7193,7 @@ test("class A { static get() {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "get",
@@ -7281,6 +7283,7 @@ test("class A extends B {get foo() {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "foo",
@@ -7370,6 +7373,7 @@ test("class A extends B { static get foo() {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "foo",
@@ -7451,6 +7455,7 @@ test("class A {set a(v) {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "a",
@@ -7540,6 +7545,7 @@ test("class A { static set a(v) {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "a",
@@ -7629,6 +7635,7 @@ test("class A {set(v) {};}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "set",
@@ -7718,6 +7725,7 @@ test("class A { static set(v) {};}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "set",
@@ -7807,6 +7815,7 @@ test("class A {*gen(v) { yield v; }}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "gen",
@@ -7921,6 +7930,7 @@ test("class A { static *gen(v) { yield v; }}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "gen",
@@ -8056,6 +8066,7 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
           type: "ClassBody",
           body: [{
             type: "MethodDefinition",
+            computed: false,
             key: {
               type: "Identifier",
               name: "constructor",
@@ -8169,6 +8180,7 @@ test("class A {static foo() {}}", {
       type: "ClassBody",
       body: [{
         type: "MethodDefinition",
+        computed: false,
         key: {
           type: "Identifier",
           name: "foo",
@@ -8251,6 +8263,7 @@ test("class A {foo() {} static bar() {}}", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8293,6 +8306,7 @@ test("class A {foo() {} static bar() {}}", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "bar",
@@ -8396,6 +8410,7 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
           type: "ClassBody",
           body: [{
             type: "MethodDefinition",
+            computed: false,
             key: {
               type: "Identifier",
               name: "constructor",
@@ -8510,6 +8525,7 @@ test("class A { foo() {} bar() {}}", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8552,6 +8568,7 @@ test("class A { foo() {} bar() {}}", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "bar",
@@ -8635,6 +8652,7 @@ test("class A { get foo() {} set foo(v) {}}", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8677,6 +8695,7 @@ test("class A { get foo() {} set foo(v) {}}", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8768,6 +8787,7 @@ test("class A { static get foo() {} get foo() {}}", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8810,6 +8830,7 @@ test("class A { static get foo() {} get foo() {}}", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8893,6 +8914,7 @@ test("class A { static get foo() {} static get bar() {} }", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -8935,6 +8957,7 @@ test("class A { static get foo() {} static get bar() {} }", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "bar",
@@ -9018,6 +9041,7 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -9060,6 +9084,7 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -9110,6 +9135,7 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -9152,6 +9178,7 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -9243,6 +9270,7 @@ test("class A { set foo(v) {} get foo() {} }", {
       body: [
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -9293,6 +9321,7 @@ test("class A { set foo(v) {} get foo() {} }", {
         },
         {
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "foo",
@@ -10180,6 +10209,104 @@ test("var x = {*[test]() { yield *v; }}", {
   locations: true
 });
 
+test("class A {[x]() {}}", {
+  type: "Program",
+  start: 0,
+  end: 18,
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 18}
+  },
+  range: [0, 18],
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 18,
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 18}
+    },
+    range: [0, 18],
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 7,
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 8,
+      end: 18,
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 18}
+      },
+      range: [8, 18],
+      body: [{
+        type: "MethodDefinition",
+        start: 9,
+        end: 17,
+        loc: {
+          start: {line: 1, column: 9},
+          end: {line: 1, column: 17}
+        },
+        range: [9, 17],
+        static: false,
+        computed: true,
+        key: {
+          type: "Identifier",
+          start: 10,
+          end: 11,
+          loc: {
+            start: {line: 1, column: 10},
+            end: {line: 1, column: 11}
+          },
+          range: [10, 11],
+          name: "x"
+        },
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          start: 12,
+          end: 17,
+          loc: {
+            start: {line: 1, column: 12},
+            end: {line: 1, column: 17}
+          },
+          range: [12, 17],
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            start: 15,
+            end: 17,
+            loc: {
+              start: {line: 1, column: 15},
+              end: {line: 1, column: 17}
+            },
+            range: [15, 17],
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 testFail("({[x]})", "Unexpected token (1:5)", {ecmaVersion: 6});
 
 // ES6: Default parameters
@@ -10824,6 +10951,7 @@ test("(class {f({x} = {x: 10}) {}})", {
         type: "ClassBody",
         body: [{
           type: "MethodDefinition",
+          computed: false,
           key: {
             type: "Identifier",
             name: "f",

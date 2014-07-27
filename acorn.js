@@ -1291,6 +1291,7 @@
   // strict mode, init properties are also not allowed to be repeated.
 
   function checkPropClash(prop, propHash) {
+    if (prop.computed) return;
     var key = prop.key, name;
     switch (key.type) {
       case "Identifier": name = key.name; break;
@@ -2234,11 +2235,12 @@
         method.static = false;
       }
       var isGenerator = eat(_star);
-      method.key = parseIdent(true);
-      if ((method.key.name === "get" || method.key.name === "set") && tokType === _name) {
+      parsePropertyName(method);
+      if (tokType === _name && !method.computed && method.key.type === "Identifier" &&
+          (method.key.name === "get" || method.key.name === "set")) {
         if (isGenerator) unexpected();
         method.kind = method.key.name;
-        method.key = parseIdent(true);
+        parsePropertyName(method);
       } else {
         method.kind = "";
       }
