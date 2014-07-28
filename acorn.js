@@ -109,7 +109,7 @@
 
   function setOptions(opts) {
     options = opts || {};
-    for (var opt in defaultOptions) if (!Object.prototype.hasOwnProperty.call(options, opt))
+    for (var opt in defaultOptions) if (!has(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || null;
 
@@ -1205,13 +1205,12 @@
     raise(pos != null ? pos : tokStart, "Unexpected token");
   }
 
-  // Creates an empty hash object.
+  // Checks if hash object has a property.
 
-  function hash() {
-    return Object.create(null);
+  function has(obj, propName) {
+    return Object.prototype.hasOwnProperty.call(obj, propName);
   }
-
-// Convert existing expression atom to assignable pattern
+  // Convert existing expression atom to assignable pattern
   // if possible.
 
   function toAssignable(node, allowSpread, checkType) {
@@ -1268,7 +1267,7 @@
       case "Identifier":
         if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
           raise(param.start, "Defining '" + param.name + "' in strict mode");
-        if (nameHash[param.name])
+        if (has(nameHash, param.name))
           raise(param.start, "Argument name clash in strict mode");
         nameHash[param.name] = true;
         break;
@@ -1298,14 +1297,18 @@
       case "Literal": name = String(key.value); break;
       default: return;
     }
-    var kind = prop.kind || "init", other = propHash[name];
-    if (other) {
+    var kind = prop.kind || "init", other;
+    if (has(propHash, name)) {
+      other = propHash[name];
       var isGetSet = kind !== "init";
       if ((strict || isGetSet) && other[kind] || !(isGetSet ^ other.init))
         raise(key.start, "Redefinition of property");
     } else {
-      other = propHash[name] = hash();
-      other.init = other.get = other.set = false;
+      other = propHash[name] = {
+        init: false,
+        get: false,
+        set: false
+      };
     }
     other[kind] = true;
   }
@@ -2021,7 +2024,7 @@
   // Parse an object literal.
 
   function parseObj() {
-    var node = startNode(), first = true, propHash = hash();
+    var node = startNode(), first = true, propHash = {};
     node.properties = [];
     next();
     while (!eat(_braceR)) {
@@ -2206,7 +2209,7 @@
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
     if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
-      var nameHash = hash();
+      var nameHash = {};
       if (node.id)
         checkFunctionParam(node.id, nameHash);
       for (var i = 0; i < node.params.length; i++)
@@ -2223,16 +2226,16 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
-    var classBody = startNode(), methodHash = hash(), staticMethodHash = hash();
+    var classBody = startNode(), methodHash = {}, staticMethodHash = {};
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
       var method = startNode();
       if (tokType === _name && tokVal === "static") {
         next();
-        method.static = true;
+        method['static'] = true;
       } else {
-        method.static = false;
+        method['static'] = false;
       }
       var isGenerator = eat(_star);
       parsePropertyName(method);
@@ -2245,7 +2248,7 @@
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, method.static ? staticMethodHash : methodHash);
+      checkPropClash(method, method['static'] ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
@@ -2305,14 +2308,14 @@
     // export var|const|let|function|class ...;
     if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
       node.declaration = parseStatement();
-      node.default = false;
+      node['default'] = false;
       node.specifiers = null;
       node.source = null;
     } else
     // export default ...;
     if (eat(_default)) {
       node.declaration = parseExpression(true);
-      node.default = true;
+      node['default'] = true;
       node.specifiers = null;
       node.source = null;
       semicolon();
@@ -2321,7 +2324,7 @@
       // export { x, y as z } [from '...']
       var isBatch = tokType === _star;
       node.declaration = null;
-      node.default = false;
+      node['default'] = false;
       node.specifiers = parseExportSpecifiers();
       if (tokType === _name && tokVal === "from") {
         next();
@@ -2382,7 +2385,7 @@
       node.source = tokType === _string ? parseExprAtom() : unexpected();
       // only for backward compatibility with Esprima's AST
       // (it doesn't support mixed default + named yet)
-      node.kind = node.specifiers[0].default ? "default" : "named";
+      node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
     return finishNode(node, "ImportDeclaration");
   }
@@ -2407,7 +2410,7 @@
       node.id = parseIdent();
       checkLVal(node.id, true);
       node.name = null;
-      node.default = true;
+      node['default'] = true;
       nodes.push(finishNode(node, "ImportSpecifier"));
       if (!eat(_comma)) return nodes;
     }
@@ -2427,7 +2430,7 @@
         node.name = null;
       }
       checkLVal(node.name || node.id, true);
-      node.default = false;
+      node['default'] = false;
       nodes.push(finishNode(node, "ImportSpecifier"));
     }
     return nodes;
