@@ -359,7 +359,7 @@
   var _relational = {binop: 7, beforeExpr: true};
   var _bitShift = {binop: 8, beforeExpr: true};
   var _plusMin = {binop: 9, prefix: true, beforeExpr: true};
-  var _multiplyModulo = {binop: 10, beforeExpr: true};
+  var _modulo = {binop: 10, beforeExpr: true};
 
   // '*' may be multiply or have special meaning in ES6
   var _star = {binop: 10, beforeExpr: true};
@@ -636,7 +636,7 @@
   function readToken_mult_modulo(code) { // '%*'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(code === 42 ? _star : _multiplyModulo, 1);
+    return finishOp(code === 42 ? _star : _modulo, 1);
   }
 
   function readToken_pipe_amp(code) { // '|&'
