@@ -1,6 +1,6 @@
 # Acorn
 
-[![Build Status](https://travis-ci.org/RReverser/acorn.svg?branch=master)](https://travis-ci.org/RReverser/acorn)
+[![Build Status](https://travis-ci.org/marijnh/acorn.svg?branch=master)](https://travis-ci.org/marijnh/acorn)
 
 A tiny, fast JavaScript parser, written completely in JavaScript.
 
