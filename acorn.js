@@ -236,7 +236,7 @@
   // Template String. If it is, it should treat '$' as prefix before
   // '{expression}' and everything else as string literals.
 
-  var inTemplate = false;
+  var inTemplate;
 
   // This function is used to raise exceptions on parse errors. It
   // takes an offset integer (into the current `input`) to indicate
