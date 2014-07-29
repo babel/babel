@@ -1,8 +1,9 @@
 // Acorn is a tiny, fast JavaScript parser written in JavaScript.
 //
-// Acorn was written by Marijn Haverbeke and released under an MIT
-// license. The Unicode regexps (for identifiers and whitespace) were
-// taken from [Esprima](http://esprima.org) by Ariya Hidayat.
+// Acorn was written by Marijn Haverbeke and various contributors and
+// released under an MIT license. The Unicode regexps (for identifiers
+// and whitespace) were taken from [Esprima](http://esprima.org) by
+// Ariya Hidayat.
 //
 // Git repositories for Acorn are available at
 //
