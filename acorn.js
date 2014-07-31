@@ -76,7 +76,7 @@
     locations: false,
     // A function can be passed as `onToken` option, which will
     // cause Acorn to call that function with object in the same
-    // format as is used in tokenize(). Note that you are not
+    // format as tokenize() returns. Note that you are not
     // allowed to call the parser from the callback—that will
     // corrupt its internal state.
     onToken: null,
@@ -141,6 +141,20 @@
     return {line: line, column: offset - cur};
   };
 
+  var getCurrentToken = function () {
+    var token = {
+      type: tokType,
+      value: tokVal,
+      start: tokStart,
+      end: tokEnd
+    };
+    if (options.locations) {
+      token.startLoc = tokStartLoc;
+      token.endLoc = tokEndLoc;
+    }
+    return token;
+  };
+
   // Acorn is organized as a tokenizer and a recursive-descent parser.
   // The `tokenize` export provides an interface to the tokenizer.
   // Because the tokenizer is optimized for being efficiently used by
@@ -153,14 +167,10 @@
     setOptions(opts);
     initTokenState();
 
-    var t = {};
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
       readToken(forceRegexp);
-      t.start = tokStart; t.end = tokEnd;
-      t.startLoc = tokStartLoc; t.endLoc = tokEndLoc;
-      t.type = tokType; t.value = tokVal;
-      return t;
+      return getCurrentToken();
     }
     getToken.jumpTo = function(pos, reAllowed) {
       tokPos = pos;
@@ -533,14 +543,7 @@
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
-      options.onToken({
-        start: tokStart,
-        end: tokEnd,
-        startLoc: tokStartLoc,
-        endLoc: tokEndLoc,
-        type: tokType,
-        value: tokVal
-      });
+      options.onToken(getCurrentToken());
     }
   }
 

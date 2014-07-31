@@ -74,7 +74,7 @@ object referring to that same position.
   form. Default is `false`.
 
 - **onToken**: If a function is passed for this option, each found
-  token will be passed in format that `tokenize()` method provides.
+  token will be passed in same format as `tokenize()` returns.
 
 - **onComment**: If a function is passed for this option, whenever a
   comment is encountered the function will be called with the
@@ -131,6 +131,45 @@ can't count on it staying stable.
 
 **tokTypes** holds an object mapping names to the token type objects
 that end up in the `type` properties of tokens.
+
+#### Note on using with [Escodegen][escodegen]
+
+Escodegen supports generating comments from AST, attached in
+Esprima-specific format. In order to simulate same format in
+Acorn, consider following example (this may be simplified
+in future):
+
+```javascript
+var comments = [], tokens = [];
+
+var ast = acorn.parse('var x = 42; // answer', {
+	// collect ranges for each node
+	ranges: true,
+	// collect comments in Esprima's format
+	onComment: function (block, text, start, end) {
+		comments.push({
+			type: block ? 'Block' : 'Line',
+			value: text,
+			range: [start, end]
+		});
+	},
+	// collect token ranges
+	onToken: function (token) {
+		tokens.push({
+			range: [token.start, token.end]
+		});
+	}
+});
+
+// attach comments using collected information
+escodegen.attachComments(ast, comments, tokens);
+
+// generate code
+console.log(escodegen.generate(ast, {comment: true}));
+// > 'var x = 42;    // answer'
+```
+
+[escodegen]: https://github.com/Constellation/escodegen
 
 ### acorn_loose.js ###
 
