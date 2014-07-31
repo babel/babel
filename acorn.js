@@ -74,6 +74,12 @@
     // line being 1-based and column 0-based) will be attached to the
     // nodes.
     locations: false,
+    // A function can be passed as `onToken` option, which will
+    // cause Acorn to call that function with object in the same
+    // format as is used in tokenize(). Note that you are not
+    // allowed to call the parser from the callback—that will
+    // corrupt its internal state.
+    onToken: null,
     // A function can be passed as `onComment` option, which will
     // cause Acorn to call that function with `(block, text, start,
     // end)` parameters whenever a comment is skipped. `block` is a
@@ -526,6 +532,16 @@
     if (type !== _bquote || inTemplate) skipSpace();
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
+    if (options.onToken) {
+      options.onToken({
+        start: tokStart,
+        end: tokEnd,
+        startLoc: tokStartLoc,
+        endLoc: tokEndLoc,
+        type: tokType,
+        value: tokVal
+      });
+    }
   }
 
   function skipBlockComment() {

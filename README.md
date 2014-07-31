@@ -73,6 +73,9 @@ object referring to that same position.
   one-based line and zero-based column numbers in `{line, column}`
   form. Default is `false`.
 
+- **onToken**: If a function is passed for this option, each found
+  token will be passed in format that `tokenize()` method provides.
+
 - **onComment**: If a function is passed for this option, whenever a
   comment is encountered the function will be called with the
   following parameters:

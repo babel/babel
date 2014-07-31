@@ -5,6 +5,7 @@ if (typeof exports != "undefined") {
   var test = require("./driver.js").test;
   var testFail = require("./driver.js").testFail;
   var testAssert = require("./driver.js").testAssert;
+  var acorn = require("..");
 }
 
 test("this\n", {
@@ -28649,4 +28650,105 @@ testFail("for(const x = 0;;);", "Unexpected token (1:4)", {ecmaVersion: 6});
   testAssert("\nfunction plop() {\n'use strict';\n/* Comment */\n}", function() {
     if (comments != 1) return "Comment after strict counted twice.";
   }, {onComment: function() {++comments;}});
+})();
+
+(function() {
+  var tokTypes = acorn.tokTypes;
+
+  var actualTokens = [],
+      expectedTokens = [
+        {
+          start: 0,
+          end: 3,
+          startLoc: {line: 1, column: 0},
+          endLoc: {line: 1, column: 3},
+          type: tokTypes._var,
+          value: "var"
+        },
+        {
+          start: 4,
+          end: 5,
+          startLoc: {line: 1, column: 4},
+          endLoc: {line: 1, column: 5},
+          type: tokTypes.name,
+          value: "x"
+        },
+        {
+          start: 6,
+          end: 7,
+          startLoc: {line: 1, column: 6},
+          endLoc: {line: 1, column: 7},
+          type: tokTypes.eq,
+          value: "="
+        },
+        {
+          start: 8,
+          end: 9,
+          startLoc: {line: 1, column: 8},
+          endLoc: {line: 1, column: 9},
+          type: tokTypes.parenL,
+          value: undefined
+        },
+        {
+          start: 9,
+          end: 10,
+          startLoc: {line: 1, column: 9},
+          endLoc: {line: 1, column: 10},
+          type: tokTypes.num,
+          value: 1
+        },
+        {
+          start: 11,
+          end: 12,
+          startLoc: {line: 1, column: 11},
+          endLoc: {line: 1, column: 12},
+          type: {
+            binop: 9,
+            prefix: true,
+            beforeExpr: true
+          },
+          value: "+"
+        },
+        {
+          start: 13,
+          end: 14,
+          startLoc: {line: 1, column: 13},
+          endLoc: {line: 1, column: 14},
+          type: tokTypes.num,
+          value: 2
+        },
+        {
+          start: 14,
+          end: 15,
+          startLoc: {line: 1, column: 14},
+          endLoc: {line: 1, column: 15},
+          type: tokTypes.parenR,
+          value: undefined
+        },
+        {
+          start: 15,
+          end: 15,
+          startLoc: {line: 1, column: 15},
+          endLoc: {line: 1, column: 15},
+          type: tokTypes.eof,
+          value: undefined
+        }
+      ];
+  testAssert('var x = (1 + 2)', function assert(ast) {
+    if (actualTokens.length !== expectedTokens.length) {
+      return JSON.stringify(actualTokens) + " !== " + JSON.stringify(expectedTokens);
+    } else {
+      for (var i=0, n=actualTokens.length; i < n; i++) {
+        var actualToken = JSON.stringify(actualTokens[i]);
+        var expectedToken = JSON.stringify(expectedTokens[i]);
+        if (actualToken !== expectedToken)
+          return actualToken + ' !== ' + expectedToken;
+      }
+    }
+  }, {
+    locations: true,
+    onToken: function(token) {
+      actualTokens.push(token);
+    }
+  });
 })();
