@@ -131,22 +131,9 @@
     fetchToken.jumpTo(pos, reAllowed);
   }
 
-  function copyToken(token) {
-    var copy = {start: token.start, end: token.end, type: token.type, value: token.value};
-    if (options.locations) {
-      copy.startLoc = token.startLoc;
-      copy.endLoc = token.endLoc;
-    }
-    return copy;
-  }
-
   function lookAhead(n) {
-    // Copy token objects, because fetchToken will overwrite the one
-    // it returns, and in this case we still need it
-    if (!ahead.length)
-      token = copyToken(token);
     while (n > ahead.length)
-      ahead.push(copyToken(readToken()));
+      ahead.push(readToken());
     return ahead[n-1];
   }
 
