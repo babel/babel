@@ -107,13 +107,14 @@ object referring to that same position.
   parse tree.
 
 - **sourceFile**: When the `locations` option is `true`, you can pass
-  this option to add a `sourceFile` attribute in every node’s `loc`
+  this option to add a `source` attribute in every node’s `loc`
   object. Note that the contents of this option are not examined or
   processed in any way; you are free to use whatever format you
   choose.
 
-- **directSourceFile**: Like `sourceFile`, but the property will be
-  added directly to the nodes, rather than to a `loc` object.
+- **directSourceFile**: Like `sourceFile`, but `sourceFile` property
+  will be added directly to the nodes, rather than `source` in a
+  `loc` object.
 
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
 
