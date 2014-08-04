@@ -535,11 +535,11 @@
   // `tokRegexpAllowed`, and skips the space after the token, so that
   // the next one's `tokStart` will point at the right position.
 
-  function finishToken(type, val) {
+  function finishToken(type, val, shouldSkipSpace) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (type !== _bquote || inTemplate) skipSpace();
+    if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
@@ -720,24 +720,32 @@
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
 
-  function getTokenFromCode(code) {
-    // Special rules work inside ES6 template strings.
-    if (inTemplate) {
-      // '`' and '${' have special meanings, but they should follow string (can be empty)
-      if (tokType === _string) {
-        if (code === 96) { // '`'
-          ++tokPos;
-          return finishToken(_bquote);
-        }
-        if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
-          tokPos += 2;
-          return finishToken(_dollarBraceL);
-        }
+  // Get token inside ES6 template (special rules work there).
+
+  function getTemplateToken(code) {
+    // '`' and '${' have special meanings, but they should follow
+    // string (can be empty)
+    if (tokType === _string) {
+      if (code === 96) { // '`'
+        ++tokPos;
+        return finishToken(_bquote);
+      } else
+      if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
+        tokPos += 2;
+        return finishToken(_dollarBraceL);
       }
-      // anything else is considered string literal
-      return readString();
     }
 
+    if (code === 125) { // '}'
+      ++tokPos;
+      return finishToken(_braceR, undefined, false);
+    }
+
+    // anything else is considered string literal
+    return readTmplString();
+  }
+
+  function getTokenFromCode(code) {
     switch (code) {
     // The interpretation of a dot depends on whether it is followed
     // by a digit or another two dots.
@@ -759,7 +767,7 @@
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
-        return finishToken(_bquote);
+        return finishToken(_bquote, undefined, false);
       }
 
     case 48: // '0'
@@ -819,9 +827,12 @@
     if (tokPos >= inputLen) return finishToken(_eof);
 
     var code = input.charCodeAt(tokPos);
+
+    if (inTemplate) return getTemplateToken(code);
+
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (!inTemplate && (isIdentifierStart(code) || code === 92 /* '\' */)) return readWord();
+    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
 
     var tok = getTokenFromCode(code);
 
@@ -954,65 +965,83 @@
   }
 
   function readString(quote) {
-    if (!inTemplate) tokPos++;
+    ++tokPos;
     var out = "";
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
       var ch = input.charCodeAt(tokPos);
-      if (inTemplate) {
-        if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) // '`', '${'
-          return finishToken(_string, out);
-      } else if (ch === quote) {
+      if (ch === quote) {
         ++tokPos;
         return finishToken(_string, out);
       }
       if (ch === 92) { // '\'
-        ch = input.charCodeAt(++tokPos);
-        var octal = /^[0-7]+/.exec(input.slice(tokPos, tokPos + 3));
-        if (octal) octal = octal[0];
-        while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, -1);
-        if (octal === "0") octal = null;
-        ++tokPos;
-        if (octal) {
-          if (strict) raise(tokPos - 2, "Octal literal in strict mode");
-          out += String.fromCharCode(parseInt(octal, 8));
-          tokPos += octal.length - 1;
-        } else {
-          switch (ch) {
-          case 110: out += "\n"; break; // 'n' -> '\n'
-          case 114: out += "\r"; break; // 'r' -> '\r'
-          case 120: out += String.fromCharCode(readHexChar(2)); break; // 'x'
-          case 117: out += readCodePoint(); break; // 'u'
-          case 85: out += String.fromCharCode(readHexChar(8)); break; // 'U'
-          case 116: out += "\t"; break; // 't' -> '\t'
-          case 98: out += "\b"; break; // 'b' -> '\b'
-          case 118: out += "\u000b"; break; // 'v' -> '\u000b'
-          case 102: out += "\f"; break; // 'f' -> '\f'
-          case 48: out += "\0"; break; // 0 -> '\0'
-          case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
-          case 10: // ' \n'
-            if (options.locations) { tokLineStart = tokPos; ++tokCurLine; }
-            break;
-          default: out += String.fromCharCode(ch); break;
-          }
-        }
+        out += readEscapedChar();
       } else {
         ++tokPos;
         if (newline.test(String.fromCharCode(ch))) {
-          if (inTemplate) {
-            if (ch === 13 && input.charCodeAt(tokPos) === 10) {
-              ++tokPos;
-              ch = 10;
-            }
-            if (options.locations) {
-              ++tokCurLine;
-              tokLineStart = tokPos;
-            }
-          } else {
-            raise(tokStart, "Unterminated string constant");
+          raise(tokStart, "Unterminated string constant");
+        }
+        out += String.fromCharCode(ch); // '\'
+      }
+    }
+  }
+
+  function readTmplString() {
+    var out = "";
+    for (;;) {
+      if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
+      var ch = input.charCodeAt(tokPos);
+      if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) // '`', '${'
+        return finishToken(_string, out);
+      if (ch === 92) { // '\'
+        out += readEscapedChar();
+      } else {
+        ++tokPos;
+        if (newline.test(String.fromCharCode(ch))) {
+          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
+            ++tokPos;
+            ch = 10;
+          }
+          if (options.locations) {
+            ++tokCurLine;
+            tokLineStart = tokPos;
           }
         }
         out += String.fromCharCode(ch); // '\'
+      }
+    }
+  }
+
+  // Used to read escaped characters
+
+  function readEscapedChar() {
+    var ch = input.charCodeAt(++tokPos);
+    var octal = /^[0-7]+/.exec(input.slice(tokPos, tokPos + 3));
+    if (octal) octal = octal[0];
+    while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, -1);
+    if (octal === "0") octal = null;
+    ++tokPos;
+    if (octal) {
+      if (strict) raise(tokPos - 2, "Octal literal in strict mode");
+      tokPos += octal.length - 1;
+      return String.fromCharCode(parseInt(octal, 8));
+    } else {
+      switch (ch) {
+        case 110: return "\n"; // 'n' -> '\n'
+        case 114: return "\r"; // 'r' -> '\r'
+        case 120: return String.fromCharCode(readHexChar(2)); // 'x'
+        case 117: return readCodePoint(); // 'u'
+        case 85: return String.fromCharCode(readHexChar(8)); // 'U'
+        case 116: return "\t"; // 't' -> '\t'
+        case 98: return "\b"; // 'b' -> '\b'
+        case 118: return "\u000b"; // 'v' -> '\u000b'
+        case 102: return "\f"; // 'f' -> '\f'
+        case 48: return "\0"; // 0 -> '\0'
+        case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
+        case 10: // ' \n'
+          if (options.locations) { tokLineStart = tokPos; ++tokCurLine; }
+          return "";
+        default: return String.fromCharCode(ch);
       }
     }
   }
