@@ -693,7 +693,8 @@
     while (!closes(tt.braceR, propIndent, line)) {
       var name = parsePropertyName();
       if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
-      var prop = {key: name}, isGetSet = false, kind;
+      var prop = startNode(), isGetSet = false, kind;
+      prop.key = name;
       if (eat(tt.colon)) {
         prop.value = parseExpression(true);
         kind = prop.kind = "init";
@@ -709,7 +710,7 @@
         continue;
       }
 
-      node.properties.push(prop);
+      node.properties.push(finishNode(prop, "Property"));
       eat(tt.comma);
     }
     popCx();
