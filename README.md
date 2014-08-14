@@ -112,9 +112,8 @@ object referring to that same position.
   processed in any way; you are free to use whatever format you
   choose.
 
-- **directSourceFile**: Like `sourceFile`, but `sourceFile` property
-  will be added directly to the nodes, rather than `source` in a
-  `loc` object.
+- **directSourceFile**: Like `sourceFile`, but a `sourceFile` property
+  will be added directly to the nodes, rather than the `loc` object.
 
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
 
