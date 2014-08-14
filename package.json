@@ -3,7 +3,7 @@
     "description": "ECMAScript parser",
     "homepage": "http://marijnhaverbeke.nl/acorn/",
     "main": "acorn.js",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "engines": {"node": ">=0.4.0"},
     "maintainers": [{"name": "Marijn Haverbeke",
                      "email": "marijnh@gmail.com",
