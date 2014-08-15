@@ -2082,7 +2082,7 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), kind, isGenerator;
+      var prop = startNode(), isGenerator;
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
@@ -2091,19 +2091,19 @@
       parsePropertyName(prop);
       if (eat(_colon)) {
         prop.value = parseExpression(true);
-        kind = prop.kind = "init";
+        prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
-        kind = prop.kind = "init";
+        prop.kind = "init";
         prop.method = true;
         prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         if (isGenerator) unexpected();
-        kind = prop.kind = prop.key.name;
+        prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(false);
       } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
-        kind = prop.kind = "init";
+        prop.kind = "init";
         prop.value = prop.key;
         prop.shorthand = true;
       } else unexpected();

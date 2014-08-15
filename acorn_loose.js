@@ -693,15 +693,14 @@
     while (!closes(tt.braceR, propIndent, line)) {
       var name = parsePropertyName();
       if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
-      var prop = startNode(), isGetSet = false, kind;
+      var prop = startNode();
       prop.key = name;
       if (eat(tt.colon)) {
         prop.value = parseExpression(true);
-        kind = prop.kind = "init";
+        prop.kind = "init";
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
-        isGetSet = true;
-        kind = prop.kind = prop.key.name;
+        prop.kind = prop.key.name;
         prop.key = parsePropertyName() || dummyIdent();
         prop.value = parseFunction(startNode(), false);
       } else {
