@@ -140,6 +140,9 @@
             method = "next";
             arg = undefined;
           }
+
+        } else if (method === "return") {
+          context.abrupt("return", arg);
         }
 
         state = GenStateExecuting;
@@ -182,6 +185,7 @@
 
     generator.next = invoke.bind(generator, "next");
     generator.throw = invoke.bind(generator, "throw");
+    generator.return = invoke.bind(generator, "return");
 
     return generator;
   }
