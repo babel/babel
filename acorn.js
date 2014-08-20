@@ -114,12 +114,40 @@
     directSourceFile: null
   };
 
+  var isArray = function (obj) {
+    return Object.prototype.toString.call(obj) === "[object Array]";
+  };
+
   function setOptions(opts) {
     options = opts || {};
     for (var opt in defaultOptions) if (!has(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || null;
-
+    if (isArray(options.onToken)) {
+      var tokens = options.onToken;
+      options.onToken = function (token) {
+        tokens.push(token);
+      };
+    }
+    if (isArray(options.onComment)) {
+      var comments = options.onComment;
+      options.onComment = function (block, text, start, end, startLoc, endLoc) {
+        var comment = {
+          type: block ? 'Block' : 'Line',
+          value: text,
+          start: start,
+          end: end
+        };
+        if (options.locations) {
+          comment.loc = new SourceLocation();
+          comment.loc.start = startLoc;
+          comment.loc.end = endLoc;
+        }
+        if (options.ranges)
+          comment.range = [start, end];
+        comments.push(comment);
+      };
+    }
     isKeyword = options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
   }
 
@@ -141,19 +169,23 @@
     return {line: line, column: offset - cur};
   };
 
-  var getCurrentToken = function () {
-    var token = {
-      type: tokType,
-      value: tokVal,
-      start: tokStart,
-      end: tokEnd
-    };
+  function Token() {
+    this.type = tokType;
+    this.value = tokVal;
+    this.start = tokStart;
+    this.end = tokEnd;
     if (options.locations) {
-      token.startLoc = tokStartLoc;
-      token.endLoc = tokEndLoc;
+      this.loc = new SourceLocation();
+      this.loc.end = tokEndLoc;
+      // TODO: remove in next major release
+      this.startLoc = tokStartLoc;
+      this.endLoc = tokEndLoc;
     }
-    return token;
-  };
+    if (options.ranges)
+      this.range = [tokStart, tokEnd];
+  }
+
+  exports.Token = Token;
 
   // Acorn is organized as a tokenizer and a recursive-descent parser.
   // The `tokenize` export provides an interface to the tokenizer.
@@ -170,7 +202,7 @@
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
       readToken(forceRegexp);
-      return getCurrentToken();
+      return new Token();
     }
     getToken.jumpTo = function(pos, reAllowed) {
       tokPos = pos;
@@ -543,7 +575,7 @@
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
-      options.onToken(getCurrentToken());
+      options.onToken(new Token());
     }
   }
 

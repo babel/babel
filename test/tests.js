@@ -28699,72 +28699,90 @@ test("<!--\n;", {
           value: "var",
           start: 0,
           end: 3,
-          startLoc: {line: 1, column: 0},
-          endLoc: {line: 1, column: 3}
+          loc: {
+            start: {line: 1, column: 0},
+            end: {line: 1, column: 3}
+          }
         },
         {
           type: tokTypes.name,
           value: "x",
           start: 4,
           end: 5,
-          startLoc: {line: 1, column: 4},
-          endLoc: {line: 1, column: 5}
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 5}
+          }
         },
         {
           type: tokTypes.eq,
           value: "=",
           start: 6,
           end: 7,
-          startLoc: {line: 1, column: 6},
-          endLoc: {line: 1, column: 7}
+          loc: {
+            start: {line: 1, column: 6},
+            end: {line: 1, column: 7}
+          }
         },
         {
           type: tokTypes.parenL,
           value: undefined,
           start: 8,
           end: 9,
-          startLoc: {line: 1, column: 8},
-          endLoc: {line: 1, column: 9}
+          loc: {
+            start: {line: 1, column: 8},
+            end: {line: 1, column: 9}
+          }
         },
         {
           type: tokTypes.num,
           value: 1,
           start: 9,
           end: 10,
-          startLoc: {line: 1, column: 9},
-          endLoc: {line: 1, column: 10}
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 10}
+          }
         },
         {
           type: {binop: 9, prefix: true, beforeExpr: true},
           value: "+",
           start: 11,
           end: 12,
-          startLoc: {line: 1, column: 11},
-          endLoc: {line: 1, column: 12}
+          loc: {
+            start: {line: 1, column: 11},
+            end: {line: 1, column: 12}
+          }
         },
         {
           type: tokTypes.num,
           value: 2,
           start: 13,
           end: 14,
-          startLoc: {line: 1, column: 13},
-          endLoc: {line: 1, column: 14}
+          loc: {
+            start: {line: 1, column: 13},
+            end: {line: 1, column: 14}
+          }
         },
         {
           type: tokTypes.parenR,
           value: undefined,
           start: 14,
           end: 15,
-          startLoc: {line: 1, column: 14},
-          endLoc: {line: 1, column: 15}
+          loc: {
+            start: {line: 1, column: 14},
+            end: {line: 1, column: 15}
+          }
         },
         {
           type: tokTypes.eof,
           value: undefined,
           start: 15,
           end: 15,
-          startLoc: {line: 1, column: 15},
-          endLoc: {line: 1, column: 15}
+          loc: {
+            start: {line: 1, column: 15},
+            end: {line: 1, column: 15}
+          }
         }
       ];
   testAssert('var x = (1 + 2)', function assert(ast) {
@@ -28772,7 +28790,11 @@ test("<!--\n;", {
       return JSON.stringify(actualTokens) + " !== " + JSON.stringify(expectedTokens);
     } else {
       for (var i=0, n=actualTokens.length; i < n; i++) {
-        var actualToken = JSON.stringify(actualTokens[i]);
+        var actualToken = JSON.stringify(
+          actualTokens[i],
+          // just remove this when startLoc/endLoc support is dropped
+          function (key, value) { if (key !== 'startLoc' && key !== 'endLoc') return value; }
+        );
         var expectedToken = JSON.stringify(expectedTokens[i]);
         if (actualToken !== expectedToken)
           return actualToken + ' !== ' + expectedToken;
@@ -28780,9 +28802,7 @@ test("<!--\n;", {
     }
   }, {
     locations: true,
-    onToken: function(token) {
-      actualTokens.push(token);
-    }
+    onToken: actualTokens
   });
 })();
 
