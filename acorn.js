@@ -763,7 +763,7 @@
     case 125: ++tokPos; return finishToken(_braceR);
     case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
-    
+
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
@@ -944,7 +944,7 @@
 
   function readCodePoint() {
     var ch = input.charCodeAt(tokPos), code;
-    
+
     if (ch === 123) {
       if (options.ecmaVersion < 6) unexpected();
       ++tokPos;
@@ -1159,7 +1159,7 @@
     this.start = tokStart;
     this.end = null;
   }
-  
+
   exports.Node = Node;
 
   function SourceLocation() {
@@ -1267,7 +1267,7 @@
       switch (node.type) {
         case "Identifier":
         case "MemberExpression":
-          break;          
+          break;
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
@@ -1374,7 +1374,7 @@
             : "Assigning to " + expr.name + " in strict mode"
           );
         break;
-      
+
       case "MemberExpression":
         if (!isBinding) break;
 
@@ -1474,7 +1474,7 @@
       else return parseExpressionStatement(node, expr);
     }
   }
-  
+
   function parseBreakContinueStatement(node, keyword) {
     var isBreak = keyword == "break";
     next();
@@ -1497,13 +1497,13 @@
     if (i === labels.length) raise(node.start, "Unsyntactic " + keyword);
     return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
   }
-  
+
   function parseDebuggerStatement(node) {
     next();
     semicolon();
     return finishNode(node, "DebuggerStatement");
   }
-  
+
   function parseDoStatement(node) {
     next();
     labels.push(loopLabel);
@@ -1514,7 +1514,7 @@
     semicolon();
     return finishNode(node, "DoWhileStatement");
   }
-  
+
   // Disambiguating between a `for` and a `for`/`in` or `for`/`of`
   // loop is non-trivial. Basically, we have to parse the init `var`
   // statement or expression, disallowing the `in` operator (see
@@ -1522,7 +1522,7 @@
   // whether the next token is `in` or `of`. When there is no init
   // part (semicolon immediately after the opening parenthesis), it
   // is a regular `for` loop.
-  
+
   function parseForStatement(node) {
     next();
     labels.push(loopLabel);
@@ -1545,12 +1545,12 @@
     }
     return parseFor(node, init);
   }
-  
+
   function parseFunctionStatement(node) {
     next();
     return parseFunction(node, true);
   }
-  
+
   function parseIfStatement(node) {
     next();
     node.test = parseParenExpression();
@@ -1558,7 +1558,7 @@
     node.alternate = eat(_else) ? parseStatement() : null;
     return finishNode(node, "IfStatement");
   }
-  
+
   function parseReturnStatement(node) {
     if (!inFunction && !options.allowReturnOutsideFunction)
       raise(tokStart, "'return' outside of function");
@@ -1572,7 +1572,7 @@
     else { node.argument = parseExpression(); semicolon(); }
     return finishNode(node, "ReturnStatement");
   }
-  
+
   function parseSwitchStatement(node) {
     next();
     node.discriminant = parseParenExpression();
@@ -1607,7 +1607,7 @@
     labels.pop();
     return finishNode(node, "SwitchStatement");
   }
-  
+
   function parseThrowStatement(node) {
     next();
     if (newline.test(input.slice(lastEnd, tokStart)))
@@ -1616,7 +1616,7 @@
     semicolon();
     return finishNode(node, "ThrowStatement");
   }
-  
+
   function parseTryStatement(node) {
     next();
     node.block = parseBlock();
@@ -1639,14 +1639,14 @@
       raise(node.start, "Missing catch or finally clause");
     return finishNode(node, "TryStatement");
   }
-  
+
   function parseVarStatement(node, kind) {
     next();
     parseVar(node, false, kind);
     semicolon();
     return finishNode(node, "VariableDeclaration");
   }
-  
+
   function parseWhileStatement(node) {
     next();
     node.test = parseParenExpression();
@@ -1655,7 +1655,7 @@
     labels.pop();
     return finishNode(node, "WhileStatement");
   }
-  
+
   function parseWithStatement(node) {
     if (strict) raise(tokStart, "'with' in strict mode");
     next();
@@ -1663,12 +1663,12 @@
     node.body = parseStatement();
     return finishNode(node, "WithStatement");
   }
-  
+
   function parseEmptyStatement(node) {
     next();
     return finishNode(node, "EmptyStatement");
   }
-  
+
   function parseLabeledStatement(node, maybeName, expr) {
     for (var i = 0; i < labels.length; ++i)
       if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
@@ -1679,7 +1679,7 @@
     node.label = expr;
     return finishNode(node, "LabeledStatement");
   }
-  
+
   function parseExpressionStatement(node, expr) {
     node.expression = expr;
     semicolon();
@@ -1920,7 +1920,7 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
-    
+
     case _yield:
       if (inGenerator) return parseYield();
 
@@ -1930,7 +1930,7 @@
         return parseArrowExpression(startNodeFrom(id), [id]);
       }
       return id;
-      
+
     case _num: case _string: case _regexp:
       var node = startNode();
       node.value = tokVal;
@@ -2179,7 +2179,7 @@
     initFunction(node);
 
     var defaults = node.defaults, hasDefaults = false;
-    
+
     for (var i = 0, lastI = params.length - 1; i <= lastI; i++) {
       var param = params[i];
 
@@ -2209,7 +2209,7 @@
 
   function parseFunctionParams(node) {
     var defaults = [], hasDefaults = false;
-    
+
     expect(_parenL);
     for (;;) {
       if (eat(_parenR)) {
@@ -2240,7 +2240,7 @@
 
   function parseFunctionBody(node, allowExpression) {
     var isExpression = allowExpression && tokType !== _braceL;
-    
+
     if (isExpression) {
       node.body = parseExpression(true);
       node.expression = true;
@@ -2270,7 +2270,7 @@
 
   // Parse a class declaration or literal (depending on the
   // `isStatement` parameter).
-  
+
   function parseClass(node, isStatement) {
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;

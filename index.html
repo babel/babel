@@ -526,7 +526,7 @@ by a digit or another two dots.</p>             </td>             <td class="cod
     <span class="k">case</span> <span class="mi">125</span><span class="o">:</span> <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span> <span class="k">return</span> <span class="nx">finishToken</span><span class="p">(</span><span class="nx">_braceR</span><span class="p">);</span>
     <span class="k">case</span> <span class="mi">58</span><span class="o">:</span> <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span> <span class="k">return</span> <span class="nx">finishToken</span><span class="p">(</span><span class="nx">_colon</span><span class="p">);</span>
     <span class="k">case</span> <span class="mi">63</span><span class="o">:</span> <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span> <span class="k">return</span> <span class="nx">finishToken</span><span class="p">(</span><span class="nx">_question</span><span class="p">);</span>
-    
+
     <span class="k">case</span> <span class="mi">96</span><span class="o">:</span> <span class="c1">// &#39;`&#39;</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">)</span> <span class="p">{</span>
         <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span>
@@ -675,7 +675,7 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
     <span class="k">return</span> <span class="nx">finishToken</span><span class="p">(</span><span class="nx">_num</span><span class="p">,</span> <span class="nx">val</span><span class="p">);</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-80">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-80">&#182;</a>               </div>               <p>Read a string value, interpreting backslash-escapes.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">readCodePoint</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">ch</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">tokPos</span><span class="p">),</span> <span class="nx">code</span><span class="p">;</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nx">ch</span> <span class="o">===</span> <span class="mi">123</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
       <span class="o">++</span><span class="nx">tokPos</span><span class="p">;</span>
@@ -847,7 +847,7 @@ tests ("use strict"; 010; -- should fail).</p>             </td>             <td
     <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">tokStart</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
   <span class="p">}</span>
-  
+
   <span class="nx">exports</span><span class="p">.</span><span class="nx">Node</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span>
 
   <span class="kd">function</span> <span class="nx">SourceLocation</span><span class="p">()</span> <span class="p">{</span>
@@ -916,7 +916,7 @@ if possible.</p>             </td>             <td class="code">               <
       <span class="k">switch</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">case</span> <span class="s2">&quot;Identifier&quot;</span><span class="o">:</span>
         <span class="k">case</span> <span class="s2">&quot;MemberExpression&quot;</span><span class="o">:</span>
-          <span class="k">break</span><span class="p">;</span>          
+          <span class="k">break</span><span class="p">;</span>
 
         <span class="k">case</span> <span class="s2">&quot;ObjectExpression&quot;</span><span class="o">:</span>
           <span class="nx">node</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;ObjectPattern&quot;</span><span class="p">;</span>
@@ -1007,7 +1007,7 @@ to.</p>             </td>             <td class="code">               <div class
             <span class="o">:</span> <span class="s2">&quot;Assigning to &quot;</span> <span class="o">+</span> <span class="nx">expr</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; in strict mode&quot;</span>
           <span class="p">);</span>
         <span class="k">break</span><span class="p">;</span>
-      
+
       <span class="k">case</span> <span class="s2">&quot;MemberExpression&quot;</span><span class="o">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isBinding</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
 
@@ -1090,7 +1090,7 @@ Identifier node, we switch to interpreting it as a label.</p>             </td> 
       <span class="k">else</span> <span class="k">return</span> <span class="nx">parseExpressionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">expr</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseBreakContinueStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">keyword</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">isBreak</span> <span class="o">=</span> <span class="nx">keyword</span> <span class="o">==</span> <span class="s2">&quot;break&quot;</span><span class="p">;</span>
     <span class="nx">next</span><span class="p">();</span>
@@ -1110,13 +1110,13 @@ continue to.</p>             </td>             <td class="code">               <
     <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Unsyntactic &quot;</span> <span class="o">+</span> <span class="nx">keyword</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">isBreak</span> <span class="o">?</span> <span class="s2">&quot;BreakStatement&quot;</span> <span class="o">:</span> <span class="s2">&quot;ContinueStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseDebuggerStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">semicolon</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DebuggerStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseDoStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
@@ -1126,15 +1126,13 @@ continue to.</p>             </td>             <td class="code">               <
     <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
     <span class="nx">semicolon</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;DoWhileStatement&quot;</span><span class="p">);</span>
-  <span class="p">}</span>
-  </pre></div>             </td>           </tr>                               <tr id="section-113">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-113">&#182;</a>               </div>               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> or <code>for</code>/<code>of</code>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-113">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-113">&#182;</a>               </div>               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> or <code>for</code>/<code>of</code>
 loop is non-trivial. Basically, we have to parse the init <code>var</code>
 statement or expression, disallowing the <code>in</code> operator (see
 the second parameter to <code>parseExpression</code>), and then check
 whether the next token is <code>in</code> or <code>of</code>. When there is no init
 part (semicolon immediately after the opening parenthesis), it
-is a regular <code>for</code> loop.</p>             </td>             <td class="code">               <div class="highlight"><pre>  
-  <span class="kd">function</span> <span class="nx">parseForStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+is a regular <code>for</code> loop.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseForStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">labels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">loopLabel</span><span class="p">);</span>
     <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
@@ -1156,12 +1154,12 @@ is a regular <code>for</code> loop.</p>             </td>             <td class=
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">parseFor</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseFunctionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">parseFunction</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseIfStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
@@ -1169,7 +1167,7 @@ is a regular <code>for</code> loop.</p>             </td>             <td class=
     <span class="nx">node</span><span class="p">.</span><span class="nx">alternate</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_else</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseStatement</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;IfStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseReturnStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">inFunction</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowReturnOutsideFunction</span><span class="p">)</span>
       <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;return&#39; outside of function&quot;</span><span class="p">);</span>
@@ -1179,7 +1177,7 @@ possibility to insert one.</p>             </td>             <td class="code">  
     <span class="k">else</span> <span class="p">{</span> <span class="nx">node</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">();</span> <span class="nx">semicolon</span><span class="p">();</span> <span class="p">}</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ReturnStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseSwitchStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">discriminant</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
@@ -1210,7 +1208,7 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;SwitchStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseThrowStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">newline</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">lastEnd</span><span class="p">,</span> <span class="nx">tokStart</span><span class="p">)))</span>
@@ -1219,7 +1217,7 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="nx">semicolon</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThrowStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseTryStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">block</span> <span class="o">=</span> <span class="nx">parseBlock</span><span class="p">();</span>
@@ -1242,14 +1240,14 @@ adding statements to.</p>             </td>             <td class="code">       
       <span class="nx">raise</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Missing catch or finally clause&quot;</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;TryStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseVarStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">kind</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">parseVar</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">kind</span><span class="p">);</span>
     <span class="nx">semicolon</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;VariableDeclaration&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseWhileStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="nx">parseParenExpression</span><span class="p">();</span>
@@ -1258,7 +1256,7 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="nx">labels</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WhileStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseWithStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">tokStart</span><span class="p">,</span> <span class="s2">&quot;&#39;with&#39; in strict mode&quot;</span><span class="p">);</span>
     <span class="nx">next</span><span class="p">();</span>
@@ -1266,12 +1264,12 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseStatement</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;WithStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseEmptyStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;EmptyStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseLabeledStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">maybeName</span><span class="p">,</span> <span class="nx">expr</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">===</span> <span class="nx">maybeName</span><span class="p">)</span> <span class="nx">raise</span><span class="p">(</span><span class="nx">expr</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="s2">&quot;Label &#39;&quot;</span> <span class="o">+</span> <span class="nx">maybeName</span> <span class="o">+</span> <span class="s2">&quot;&#39; is already declared&quot;</span><span class="p">);</span>
@@ -1282,7 +1280,7 @@ adding statements to.</p>             </td>             <td class="code">       
     <span class="nx">node</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;LabeledStatement&quot;</span><span class="p">);</span>
   <span class="p">}</span>
-  
+
   <span class="kd">function</span> <span class="nx">parseExpressionStatement</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">expr</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">expression</span> <span class="o">=</span> <span class="nx">expr</span><span class="p">;</span>
     <span class="nx">semicolon</span><span class="p">();</span>
@@ -1467,7 +1465,7 @@ or <code>{}</code>.</p>             </td>             <td class="code">         
       <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
       <span class="nx">next</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ThisExpression&quot;</span><span class="p">);</span>
-    
+
     <span class="k">case</span> <span class="nx">_yield</span><span class="o">:</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">inGenerator</span><span class="p">)</span> <span class="k">return</span> <span class="nx">parseYield</span><span class="p">();</span>
 
@@ -1477,7 +1475,7 @@ or <code>{}</code>.</p>             </td>             <td class="code">         
         <span class="k">return</span> <span class="nx">parseArrowExpression</span><span class="p">(</span><span class="nx">startNodeFrom</span><span class="p">(</span><span class="nx">id</span><span class="p">),</span> <span class="p">[</span><span class="nx">id</span><span class="p">]);</span>
       <span class="p">}</span>
       <span class="k">return</span> <span class="nx">id</span><span class="p">;</span>
-      
+
     <span class="k">case</span> <span class="nx">_num</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_string</span><span class="o">:</span> <span class="k">case</span> <span class="nx">_regexp</span><span class="o">:</span>
       <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">();</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tokVal</span><span class="p">;</span>
@@ -1603,7 +1601,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>            
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowTrailingCommas</span> <span class="o">&amp;&amp;</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_braceR</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="nx">first</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-      <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">(),</span> <span class="nx">kind</span><span class="p">,</span> <span class="nx">isGenerator</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">startNode</span><span class="p">(),</span> <span class="nx">isGenerator</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">shorthand</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
@@ -1612,19 +1610,19 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>            
       <span class="nx">parsePropertyName</span><span class="p">(</span><span class="nx">prop</span><span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_colon</span><span class="p">))</span> <span class="p">{</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-        <span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&gt;=</span> <span class="mi">6</span> <span class="o">&amp;&amp;</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_parenL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">parseMethod</span><span class="p">(</span><span class="nx">isGenerator</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">prop</span><span class="p">.</span><span class="nx">computed</span> <span class="o">&amp;&amp;</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;Identifier&quot;</span> <span class="o">&amp;&amp;</span>
                  <span class="p">(</span><span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s2">&quot;get&quot;</span> <span class="o">||</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s2">&quot;set&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">isGenerator</span><span class="p">)</span> <span class="nx">unexpected</span><span class="p">();</span>
-        <span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
         <span class="nx">parsePropertyName</span><span class="p">(</span><span class="nx">prop</span><span class="p">);</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">parseMethod</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">ecmaVersion</span> <span class="o">&gt;=</span> <span class="mi">6</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">prop</span><span class="p">.</span><span class="nx">computed</span> <span class="o">&amp;&amp;</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;Identifier&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">kind</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s2">&quot;init&quot;</span><span class="p">;</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
         <span class="nx">prop</span><span class="p">.</span><span class="nx">shorthand</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="nx">unexpected</span><span class="p">();</span>
@@ -1684,7 +1682,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>            
     <span class="nx">initFunction</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
 
     <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">hasDefaults</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    
+
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">lastI</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">lastI</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">param</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 
@@ -1710,7 +1708,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>            
     <span class="k">return</span> <span class="nx">finishNode</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;ArrowFunctionExpression&quot;</span><span class="p">);</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-144">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-144">&#182;</a>               </div>               <p>Parse function parameters.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseFunctionParams</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">hasDefaults</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    
+
     <span class="nx">expect</span><span class="p">(</span><span class="nx">_parenL</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">eat</span><span class="p">(</span><span class="nx">_parenR</span><span class="p">))</span> <span class="p">{</span>
@@ -1737,7 +1735,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>            
     <span class="k">if</span> <span class="p">(</span><span class="nx">hasDefaults</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">defaults</span><span class="p">;</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-145">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-145">&#182;</a>               </div>               <p>Parse function body and check parameters.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseFunctionBody</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">allowExpression</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">isExpression</span> <span class="o">=</span> <span class="nx">allowExpression</span> <span class="o">&amp;&amp;</span> <span class="nx">tokType</span> <span class="o">!==</span> <span class="nx">_braceL</span><span class="p">;</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nx">isExpression</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">parseExpression</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
       <span class="nx">node</span><span class="p">.</span><span class="nx">expression</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
@@ -1759,8 +1757,7 @@ or <code>arguments</code>.</p>             </td>             <td class="code">  
         <span class="nx">checkFunctionParam</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">rest</span><span class="p">,</span> <span class="nx">nameHash</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-148">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-148">&#182;</a>               </div>               <p>Parse a class declaration or literal (depending on the
-<code>isStatement</code> parameter).</p>             </td>             <td class="code">               <div class="highlight"><pre>  
-  <span class="kd">function</span> <span class="nx">parseClass</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">isStatement</span><span class="p">)</span> <span class="p">{</span>
+<code>isStatement</code> parameter).</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">parseClass</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">isStatement</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">next</span><span class="p">();</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">tokType</span> <span class="o">===</span> <span class="nx">_name</span> <span class="o">?</span> <span class="nx">parseIdent</span><span class="p">()</span> <span class="o">:</span> <span class="nx">isStatement</span> <span class="o">?</span> <span class="nx">unexpected</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">superClass</span> <span class="o">=</span> <span class="nx">eat</span><span class="p">(</span><span class="nx">_extends</span><span class="p">)</span> <span class="o">?</span> <span class="nx">parseExpression</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
