@@ -132,6 +132,11 @@ object referring to that same position.
 - **directSourceFile**: Like `sourceFile`, but a `sourceFile` property
   will be added directly to the nodes, rather than the `loc` object.
 
+- **preserveParens**: If this option is `true`, parenthesized expressions
+  are represented by (non-standard) `ParenthesizedExpression` nodes
+  that have a single `expression` property containing the expression
+  inside parentheses.
+
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
 
 **parseExpressionAt**`(input, offset, options)` will parse a single

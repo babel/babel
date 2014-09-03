@@ -112,7 +112,10 @@
     sourceFile: null,
     // This value, if given, is stored in every node, whether
     // `locations` is on or off.
-    directSourceFile: null
+    directSourceFile: null,
+    // When enabled, parenthesized expressions are represented by
+    // (non-standard) ParenthesizedExpression nodes
+    preserveParens: false
   };
 
   // This function tries to parse a single expression at a given
@@ -1459,6 +1462,10 @@
       case "SpreadElement":
         break;
 
+      case "ParenthesizedExpression":
+        checkLVal(expr.expression);
+        break;
+
       default:
         raise(expr.start, "Assigning to rvalue");
     }
@@ -2040,6 +2047,12 @@
             for (var i = 0; i < exprList.length; i++) {
               if (exprList[i].type === "SpreadElement") unexpected();
             }
+          }
+
+          if (options.preserveParens) {
+            var par = startNodeAt(start);
+            par.expression = val;
+            val = finishNode(par, "ParenthesizedExpression");
           }
         }
       }

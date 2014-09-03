@@ -15391,3 +15391,25 @@ test('function normal(x, y = 10) {}', {
 }, {ecmaVersion: 6});
 
 test("'use strict'; function f([x,,z]) {}", {}, {ecmaVersion: 6});
+
+// test preserveParens option with arrow functions
+test("() => 42", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ArrowFunctionExpression"
+    }
+  }]
+}, {ecmaVersion: 6, preserveParens: true});
+
+// test preserveParens with generators
+test("(for (x of array) for (y of array2) if (x === test) x)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ComprehensionExpression"
+    }
+  }]
+}, {ecmaVersion: 6, preserveParens: true});

@@ -234,6 +234,123 @@ test("(1 + 2 ) * 3", {
   }
 });
 
+test("(1 + 2 ) * 3", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "BinaryExpression",
+        left: {
+          type: "ParenthesizedExpression",
+          expression: {
+            type: "BinaryExpression",
+            left: {
+              type: "Literal",
+              value: 1,
+              loc: {
+                start: {
+                  line: 1,
+                  column: 1
+                },
+                end: {
+                  line: 1,
+                  column: 2
+                }
+              }
+            },
+            operator: "+",
+            right: {
+              type: "Literal",
+              value: 2,
+              loc: {
+                start: {
+                  line: 1,
+                  column: 5
+                },
+                end: {
+                  line: 1,
+                  column: 6
+                }
+              }
+            },
+            loc: {
+              start: {
+                line: 1,
+                column: 1
+              },
+              end: {
+                line: 1,
+                column: 6
+              }
+            }
+          },
+          loc: {
+            start: {
+              line: 1,
+              column: 0
+            },
+            end: {
+              line: 1,
+              column: 8
+            }
+          }
+        },
+        operator: "*",
+        right: {
+          type: "Literal",
+          value: 3,
+          loc: {
+            start: {
+              line: 1,
+              column: 11
+            },
+            end: {
+              line: 1,
+              column: 12
+            }
+          }
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 12
+          }
+        }
+      },
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 12
+        }
+      }
+    }
+  ],
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 12
+    }
+  }
+}, {
+  locations: true,
+  preserveParens: true
+});
+
+test("(x) = 23", {}, { preserveParens: true });
+
 test("x = []", {
   type: "Program",
   body: [
