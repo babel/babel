@@ -28645,11 +28645,48 @@ testFail("for(const x = 0;;);", "Unexpected token (1:4)", {ecmaVersion: 6});
   );
 })();
 
+test("<!--\n;", {
+  type: "Program",
+  body: [
+    {
+      type: "EmptyStatement"
+    }
+  ]
+}
+);
+
 (function() {
-  var comments = 0;
-  testAssert("\nfunction plop() {\n'use strict';\n/* Comment */\n}", function() {
-    if (comments != 1) return "Comment after strict counted twice.";
-  }, {onComment: function() {++comments;}});
+  test("\nfunction plop() {\n'use strict';\n/* Comment */\n}", {}, {locations: true},
+  [{
+    block: true,
+    text: " Comment ",
+    startLoc: { line: 4, column: 0 },
+    endLoc: { line: 4, column: 13 }
+  }]);
+
+  test("// line comment", {}, {locations: true},
+  [{
+    block: false,
+    text: " line comment",
+    startLoc: { line: 1, column: 0 },
+    endLoc: { line: 1, column: 15 }
+  }]);
+
+  test("<!-- HTML comment", {}, {locations: true},
+  [{
+    block: false,
+    text: " HTML comment",
+    startLoc: { line: 1, column: 0 },
+    endLoc: { line: 1, column: 17 }
+  }]);
+
+  test(";\n--> HTML comment", {}, {locations: true},
+  [{
+    block: false,
+    text: " HTML comment",
+    startLoc: { line: 2, column: 0 },
+    endLoc: { line: 2, column: 16 }
+  }]);
 })();
 
 (function() {

@@ -565,16 +565,16 @@
                         startLoc, options.locations && new Position);
   }
 
-  function skipLineComment() {
+  function skipLineComment(startSkip) {
     var start = tokPos;
     var startLoc = options.onComment && options.locations && new Position;
-    var ch = input.charCodeAt(tokPos+=2);
+    var ch = input.charCodeAt(tokPos+=startSkip);
     while (tokPos < inputLen && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
       ++tokPos;
       ch = input.charCodeAt(tokPos);
     }
     if (options.onComment)
-      options.onComment(false, input.slice(start + 2, tokPos), start, tokPos,
+      options.onComment(false, input.slice(start + startSkip, tokPos), start, tokPos,
                         startLoc, options.locations && new Position);
   }
 
@@ -609,7 +609,7 @@
         if (next === 42) { // '*'
           skipBlockComment();
         } else if (next === 47) { // '/'
-          skipLineComment();
+          skipLineComment(2);
         } else break;
       } else if (ch === 160) { // '\xa0'
         ++tokPos;
@@ -678,8 +678,7 @@
       if (next == 45 && input.charCodeAt(tokPos + 2) == 62 &&
           newline.test(input.slice(lastEnd, tokPos))) {
         // A `-->` line comment
-        tokPos += 3;
-        skipLineComment();
+        skipLineComment(3);
         skipSpace();
         return readToken();
       }
@@ -700,8 +699,7 @@
     if (next == 33 && code == 60 && input.charCodeAt(tokPos + 2) == 45 &&
         input.charCodeAt(tokPos + 3) == 45) {
       // `<!--`, an XML-style comment that should be interpreted as a line comment
-      tokPos += 4;
-      skipLineComment();
+      skipLineComment(4);
       skipSpace();
       return readToken();
     }

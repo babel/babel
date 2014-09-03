@@ -2,8 +2,8 @@
   var tests = [];
   var acorn = typeof require == "undefined" ? window.acorn : require("../acorn.js");
 
-  exports.test = function(code, ast, options) {
-    tests.push({code: code, ast: ast, options: options});
+  exports.test = function(code, ast, options, comments) {
+    tests.push({code: code, ast: ast, options: options, comments: comments});
   };
   exports.testFail = function(code, message, options) {
     tests.push({code: code, error: message, options: options});
@@ -13,10 +13,26 @@
   };
 
   exports.runTests = function(callback) {
-    var opts = {locations: true};
+    var comments;
+
+    function onComment(block, text, start, end, startLoc, endLoc) {
+        comments.push({
+          block: block,
+          text: text,
+          start: start,
+          end: end,
+          startLoc: { line: startLoc.line, column: startLoc.column },
+          endLoc: { line: endLoc.line, column: endLoc.column }
+        });
+    }
+
+    var opts = {locations: true, onComment: onComment};
+
     for (var i = 0; i < tests.length; ++i) {
       var test = tests[i];
       try {
+        comments = [];
+        if (test.options && !test.options.onComment) test.options.onComment = onComment;
         var ast = acorn.parse(test.code, test.options || opts);
         if (test.error) callback("fail", test.code,
                                  "Expected error message: " + test.error + "\nBut parsing succeeded.");
@@ -27,6 +43,8 @@
           else callback("ok", test.code);
         } else {
           var mis = misMatch(test.ast, ast);
+          if (mis) callback("fail", test.code, mis);
+          if (test.comments) mis = misMatch(test.comments, comments);
           if (!mis) callback("ok", test.code);
           else callback("fail", test.code, mis);
         }
