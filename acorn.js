@@ -883,7 +883,7 @@
     var content = "", escaped, inClass, start = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(start, "Unterminated regular expression");
-      var ch = input.charAt(tokPos);
+      var ch = nextChar();
       if (newline.test(ch)) raise(start, "Unterminated regular expression");
       if (!escaped) {
         if (ch === "[") inClass = true;
@@ -1332,7 +1332,8 @@
     if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
     tokPos++;
     while (tokPos < inputLen && count++ < 10) {
-      ch = input.charAt(tokPos++);
+      ch = nextChar();
+      tokPos++;
       if (ch === ';') {
         break;
       }
@@ -1421,7 +1422,7 @@
     for (;;) {
       var ch = input.charCodeAt(tokPos);
       if (isIdentifierChar(ch) || (inXJSTag && ch === 45)) {
-        if (containsEsc) word += input.charAt(tokPos);
+        if (containsEsc) word += nextChar();
         ++tokPos;
       } else if (ch === 92 && !inXJSTag) { // "\"
         if (!containsEsc) word = input.slice(start, tokPos);
@@ -1595,14 +1596,6 @@
 
   function expect(type) {
     eat(type) || unexpected();
-  }
-
-  // Expect a char. If found, consume it, otherwise,
-  // raise an unexpected token error.
-
-  function expectChar(ch) {
-    if (tokVal === ch) next();
-    else unexpected();
   }
 
   // Get following char.
