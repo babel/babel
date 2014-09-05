@@ -2258,7 +2258,7 @@
     if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
       var nameHash = {};
       if (node.id)
-        checkFunctionParam(node.id, nameHash);
+        checkFunctionParam(node.id, {});
       for (var i = 0; i < node.params.length; i++)
         checkFunctionParam(node.params[i], nameHash);
       if (node.rest)

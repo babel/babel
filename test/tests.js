@@ -28785,3 +28785,5 @@ test("<!--\n;", {
     }
   });
 })();
+
+test("function f(f) { 'use strict'; }", {});
