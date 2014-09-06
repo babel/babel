@@ -56,27 +56,19 @@ describe("wrapGenerator", function() {
 });
 
 (runningInTranslation ? describe : xdescribe)("@@iterator", function() {
-  var Symbol;
-
-  before(function() {
-    Symbol = global.Symbol;
-    global.Symbol = function(){};
-    global.Symbol.iterator = "@@iterator";
-  });
-
-  after(function() {
-    global.Symbol = Symbol;
-  });
+  var iteratorSymbol = typeof Symbol === "function"
+    && Symbol.iterator
+    || "@@iterator";
 
   it("is defined on Generator.prototype and returns this", function() {
     function *gen(){}
     var iterator = gen();
-    assert.ok(!iterator.hasOwnProperty("@@iterator"));
-    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty("@@iterator"));
+    assert.ok(!iterator.hasOwnProperty(iteratorSymbol));
+    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(iteratorSymbol));
     assert.ok(Object.getPrototypeOf(
       Object.getPrototypeOf(iterator)
-    ).hasOwnProperty("@@iterator"));
-    assert.strictEqual(iterator["@@iterator"](), iterator);
+    ).hasOwnProperty(iteratorSymbol));
+    assert.strictEqual(iterator[iteratorSymbol](), iterator);
   });
 });
 
