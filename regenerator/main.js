@@ -11,6 +11,7 @@
 var assert = require("assert");
 var path = require("path");
 var fs = require("fs");
+var through = require("through");
 var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
 var recast = require("recast");
@@ -20,6 +21,13 @@ var blockBindingExp = /\b(let|const)\s+/;
 
 function regenerator(source, options) {
   options = normalizeOptions(options);
+
+  if (isFileName(source)) {
+    // If source is a file name, assume we were invoked as a browserify
+    // transform, and return a stream.
+    // TODO Move the normal behavior into regenerator.compile in v0.6.
+    return createStream(options);
+  }
 
   var runtime = options.includeRuntime ? fs.readFileSync(
     regenerator.runtime.dev, "utf-8"
@@ -44,6 +52,24 @@ function regenerator(source, options) {
   injectRuntime(runtime, programPath.node);
 
   return recast.print(path, recastOptions).code;
+}
+
+function isFileName(str) {
+  return /\.js$/.test(str) && fs.existsSync(str);
+}
+
+function createStream(options) {
+  var data = [];
+  return through(write, end);
+
+  function write(buf) {
+    data.push(buf);
+  }
+
+  function end() {
+    this.queue(regenerator(data.join(""), options));
+    this.queue(null);
+  }
 }
 
 function normalizeOptions(options) {
