@@ -3054,13 +3054,17 @@
   function parseXJSExpressionContainer() {
     var node = startNode();
 
-    var origInXJSTag = inXJSTag;
+    var origInXJSTag = inXJSTag,
+      origInXJSChild = inXJSChild;
+
     inXJSTag = false;
+    inXJSChild = false;
 
     next();
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
     inXJSTag = origInXJSTag;
+    inXJSChild = origInXJSChild;
     
     expect(_braceR);
     return finishNode(node, "XJSExpressionContainer");
