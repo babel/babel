@@ -28,9 +28,10 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <p>Acorn is a tiny, fast JavaScript parser written in JavaScript.</p>
-<p>Acorn was written by Marijn Haverbeke and released under an MIT
-license. The Unicode regexps (for identifiers and whitespace) were
-taken from <a href="http://esprima.org">Esprima</a> by Ariya Hidayat.</p>
+<p>Acorn was written by Marijn Haverbeke and various contributors and
+released under an MIT license. The Unicode regexps (for identifiers
+and whitespace) were taken from <a href="http://esprima.org">Esprima</a> by
+Ariya Hidayat.</p>
 <p>Git repositories for Acorn are available at</p>
 <pre><code>http:<span class="hljs-comment">//marijnhaverbeke.nl/git/acorn</span>
 https:<span class="hljs-comment">//github.com/marijnh/acorn.git</span>
@@ -49,7 +50,7 @@ with a <a href="acorn_loose.js">error-tolerant parser</a> and an
 })(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(exports)</span> </span>{
 <span class="hljs-pi">  "use strict"</span>;
 
-  exports.version = <span class="hljs-string">"0.6.1"</span>;</pre></div></div>
+  exports.version = <span class="hljs-string">"0.7.1"</span>;</pre></div></div>
             
         </li>
         
@@ -205,6 +206,25 @@ nodes.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
+              <p>A function can be passed as <code>onToken</code> option, which will
+cause Acorn to call that function with object in the same
+format as tokenize() returns. Note that you are not
+allowed to call the parser from the callback—that will
+corrupt its internal state.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    onToken: <span class="hljs-literal">null</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
               <p>A function can be passed as <code>onComment</code> option, which will
 cause Acorn to call that function with <code>(block, text, start,
 end)</code> parameters whenever a comment is skipped. <code>block</code> is a
@@ -223,11 +243,11 @@ parser from the callback—that will corrupt its internal state.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Nodes have their start and end characters offsets recorded in
 <code>start</code> and <code>end</code> properties (directly on the node, rather than
@@ -243,11 +263,11 @@ end]</code> array with the same numbers, set the <code>ranges</code> option to
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>It is possible to parse multiple files into a single AST by
 passing the tree produced by parsing the first file as
@@ -262,11 +282,11 @@ of an existing parse tree.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>When <code>locations</code> is on, you can pass this to record the source
 file in every node’s <code>loc</code> object.</p>
@@ -278,11 +298,11 @@ file in every node’s <code>loc</code> object.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>This value, if given, is stored in every node, whether
 <code>locations</code> is on or off.</p>
@@ -292,23 +312,51 @@ file in every node’s <code>loc</code> object.</p>
             <div class="content"><div class='highlight'><pre>    directSourceFile: <span class="hljs-literal">null</span>
   };
 
+  <span class="hljs-keyword">var</span> isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(obj)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.toString.call(obj) === <span class="hljs-string">"[object Array]"</span>;
+  };
+
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setOptions</span><span class="hljs-params">(opts)</span> </span>{
     options = opts || {};
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> opt <span class="hljs-keyword">in</span> defaultOptions) <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Object</span>.prototype.hasOwnProperty.call(options, opt))
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> opt <span class="hljs-keyword">in</span> defaultOptions) <span class="hljs-keyword">if</span> (!has(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || <span class="hljs-literal">null</span>;
-
+    <span class="hljs-keyword">if</span> (isArray(options.onToken)) {
+      <span class="hljs-keyword">var</span> tokens = options.onToken;
+      options.onToken = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(token)</span> </span>{
+        tokens.push(token);
+      };
+    }
+    <span class="hljs-keyword">if</span> (isArray(options.onComment)) {
+      <span class="hljs-keyword">var</span> comments = options.onComment;
+      options.onComment = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(block, text, start, end, startLoc, endLoc)</span> </span>{
+        <span class="hljs-keyword">var</span> comment = {
+          type: block ? <span class="hljs-string">'Block'</span> : <span class="hljs-string">'Line'</span>,
+          value: text,
+          start: start,
+          end: end
+        };
+        <span class="hljs-keyword">if</span> (options.locations) {
+          comment.loc = <span class="hljs-keyword">new</span> SourceLocation();
+          comment.loc.start = startLoc;
+          comment.loc.end = endLoc;
+        }
+        <span class="hljs-keyword">if</span> (options.ranges)
+          comment.range = [start, end];
+        comments.push(comment);
+      };
+    }
     isKeyword = options.ecmaVersion &gt;= <span class="hljs-number">6</span> ? isEcma6Keyword : isEcma5AndLessKeyword;
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>The <code>getLineInfo</code> function is mostly useful when the
 <code>locations</code> option is off (for performance reasons) and you
@@ -329,16 +377,47 @@ into.</p>
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;
     }
     <span class="hljs-keyword">return</span> {line: line, column: offset - cur};
-  };</pre></div></div>
+  };
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Token</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.type = tokType;
+    <span class="hljs-keyword">this</span>.value = tokVal;
+    <span class="hljs-keyword">this</span>.start = tokStart;
+    <span class="hljs-keyword">this</span>.end = tokEnd;
+    <span class="hljs-keyword">if</span> (options.locations) {
+      <span class="hljs-keyword">this</span>.loc = <span class="hljs-keyword">new</span> SourceLocation();
+      <span class="hljs-keyword">this</span>.loc.end = tokEndLoc;</pre></div></div>
             
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>TODO: remove in next major release</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.startLoc = tokStartLoc;
+      <span class="hljs-keyword">this</span>.endLoc = tokEndLoc;
+    }
+    <span class="hljs-keyword">if</span> (options.ranges)
+      <span class="hljs-keyword">this</span>.range = [tokStart, tokEnd];
+  }
+
+  exports.Token = Token;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Acorn is organized as a tokenizer and a recursive-descent parser.
 The <code>tokenize</code> export provides an interface to the tokenizer.
@@ -355,14 +434,10 @@ reset the internal state, and invalidate existing tokenizers.</p>
     setOptions(opts);
     initTokenState();
 
-    <span class="hljs-keyword">var</span> t = {};
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getToken</span><span class="hljs-params">(forceRegexp)</span> </span>{
       lastEnd = tokEnd;
       readToken(forceRegexp);
-      t.start = tokStart; t.end = tokEnd;
-      t.startLoc = tokStartLoc; t.endLoc = tokEndLoc;
-      t.type = tokType; t.value = tokVal;
-      <span class="hljs-keyword">return</span> t;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Token();
     }
     getToken.jumpTo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pos, reAllowed)</span> </span>{
       tokPos = pos;
@@ -384,11 +459,11 @@ reset the internal state, and invalidate existing tokenizers.</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>State is kept in (closure-)global variables. We already saw the
 <code>options</code>, <code>input</code>, and <code>inputLen</code> variables above.</p>
@@ -398,11 +473,11 @@ reset the internal state, and invalidate existing tokenizers.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>The current position of the tokenizer in the input.</p>
 
@@ -414,11 +489,11 @@ reset the internal state, and invalidate existing tokenizers.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>The start and end offsets of the current token.</p>
 
@@ -430,11 +505,11 @@ reset the internal state, and invalidate existing tokenizers.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>When <code>options.locations</code> is true, these hold objects
 containing the tokens start and end line/column pairs.</p>
@@ -447,11 +522,11 @@ containing the tokens start and end line/column pairs.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>The type and value of the current token. Token types are objects,
 named by variables against which they can be compared, and
@@ -469,11 +544,11 @@ for operators, the operator name, and so on.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Internal state for the tokenizer. To distinguish between division
 operators and regular expressions, it remembers whether the last
@@ -490,11 +565,11 @@ caveat.)</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>When <code>options.locations</code> is true, these are used to keep
 track of the current line, and know when a new line has been
@@ -508,11 +583,11 @@ entered.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>These store the position of the previous token, which is useful
 when finishing a node and assigning its <code>end</code> position.</p>
@@ -525,11 +600,11 @@ when finishing a node and assigning its <code>end</code> position.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>This is the parser’s state. <code>inFunction</code> is used to reject
 <code>return</code> statements outside of functions, <code>inGenerator</code> to
@@ -545,11 +620,11 @@ that <code>break</code> and <code>continue</code> have somewhere to jump to, and
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>This counter is used for checking that arrow expressions did
 not contain nested parentheses in argument list.</p>
@@ -562,11 +637,11 @@ not contain nested parentheses in argument list.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>This is used by parser for detecting if it’s inside ES6
 Template String. If it is, it should treat ‘$’ as prefix before
@@ -575,16 +650,16 @@ Template String. If it is, it should treat ‘$’ as prefix before
             </div>
             
             <div class="content"><div class='highlight'><pre>
-  <span class="hljs-keyword">var</span> inTemplate = <span class="hljs-literal">false</span>;</pre></div></div>
+  <span class="hljs-keyword">var</span> inTemplate;</pre></div></div>
             
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>This function is used to raise exceptions on parse errors. It
 takes an offset integer (into the current <code>input</code>) to indicate
@@ -606,11 +681,11 @@ message.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Reused empty array added for node fields that are always empty.</p>
 
@@ -622,42 +697,13 @@ message.</p>
         </li>
         
         
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <h2 id="token-types">Token types</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>The assignment of fine-grained, information-carrying type objects
-allows the tokenizer to store the information it has about a
-token in a way that is very cheap for the parser to look up.</p>
-
-            </div>
-            
-        </li>
-        
-        
         <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>All token type variables start with an underscore, to make them
-easy to recognize.</p>
+              <h2 id="token-types">Token types</h2>
 
             </div>
             
@@ -669,6 +715,35 @@ easy to recognize.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>The assignment of fine-grained, information-carrying type objects
+allows the tokenizer to store the information it has about a
+token in a way that is very cheap for the parser to look up.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>All token type variables start with an underscore, to make them
+easy to recognize.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>These are the general types. The <code>type</code> property is only used to
 make them recognizeable when debugging.</p>
@@ -682,11 +757,11 @@ make them recognizeable when debugging.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>These are JSX-specific token types</p>
 
@@ -698,11 +773,11 @@ make them recognizeable when debugging.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Keyword tokens. The <code>keyword</code> property (also used in keyword-like
 operators) indicates that the token originated from an
@@ -734,11 +809,11 @@ continue jumps to that label.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>The keywords that denote values.</p>
 
@@ -751,11 +826,11 @@ continue jumps to that label.</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Some keywords are treated as regular operators. <code>in</code> sometimes
 (when parsing <code>for</code>) needs to be tested against specifically, so
@@ -769,11 +844,11 @@ we assign a variable name to it for quick comparing.</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Map keyword names to token types.</p>
 
@@ -797,11 +872,11 @@ we assign a variable name to it for quick comparing.</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Punctuation token types. Again, the <code>type</code> property is purely for debugging.</p>
 
@@ -818,11 +893,11 @@ we assign a variable name to it for quick comparing.</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>Operators. These carry several kinds of properties to help the
 parser use them properly (the presence of these properties is
@@ -852,16 +927,16 @@ in AssignmentExpression nodes.</p>
   <span class="hljs-keyword">var</span> _relational = {binop: <span class="hljs-number">7</span>, beforeExpr: <span class="hljs-literal">true</span>};
   <span class="hljs-keyword">var</span> _bitShift = {binop: <span class="hljs-number">8</span>, beforeExpr: <span class="hljs-literal">true</span>};
   <span class="hljs-keyword">var</span> _plusMin = {binop: <span class="hljs-number">9</span>, prefix: <span class="hljs-literal">true</span>, beforeExpr: <span class="hljs-literal">true</span>};
-  <span class="hljs-keyword">var</span> _multiplyModulo = {binop: <span class="hljs-number">10</span>, beforeExpr: <span class="hljs-literal">true</span>};</pre></div></div>
+  <span class="hljs-keyword">var</span> _modulo = {binop: <span class="hljs-number">10</span>, beforeExpr: <span class="hljs-literal">true</span>};</pre></div></div>
             
         </li>
         
         
-        <li id="section-41">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>‘*’ may be multiply or have special meaning in ES6</p>
 
@@ -872,11 +947,11 @@ in AssignmentExpression nodes.</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>‘&lt;’, ‘&gt;’ may be relational or have special meaning in JSX</p>
 
@@ -887,11 +962,11 @@ in AssignmentExpression nodes.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <p>Provide access to the token types for external users of the
 tokenizer.</p>
@@ -910,11 +985,11 @@ tokenizer.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>This is a trick taken from Esprima. It turns out that, on
 non-Chrome browsers, to check whether a string is in a set, a
@@ -948,11 +1023,11 @@ predicate from a space-separated string of words.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-47">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
               <p>When there are more than three length categories, an outer
 switch first dispatches on the lengths, to save on comparisons.</p>
@@ -973,11 +1048,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-48">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-48">&#182;</a>
               </div>
               <p>Otherwise, simply generate a flat <code>switch</code> statement.</p>
 
@@ -993,11 +1068,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-49">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
               <p>The ECMAScript 3 reserved word list.</p>
 
@@ -1009,11 +1084,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-48">
+        <li id="section-50">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
               <p>ECMAScript 5 reserved words.</p>
 
@@ -1025,11 +1100,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-49">
+        <li id="section-51">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
+                <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
               <p>The additional reserved words in strict mode.</p>
 
@@ -1041,11 +1116,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-50">
+        <li id="section-52">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
+                <a class="pilcrow" href="#section-52">&#182;</a>
               </div>
               <p>The forbidden variable names in strict mode.</p>
 
@@ -1057,11 +1132,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-51">
+        <li id="section-53">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
+                <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
               <p>And the keywords.</p>
 
@@ -1079,11 +1154,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-52">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
               <h2 id="character-categories">Character categories</h2>
 
@@ -1092,11 +1167,11 @@ switch first dispatches on the lengths, to save on comparisons.</p>
         </li>
         
         
-        <li id="section-53">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
               <p>Big ugly regular expressions that match characters in the
 whitespace, identifier, and identifier-start categories. These
@@ -1116,11 +1191,11 @@ Generated by <code>tools/generate-identifier-regex.js</code>.</p>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
               <p>Whether a single character denotes a newline.</p>
 
@@ -1132,11 +1207,11 @@ Generated by <code>tools/generate-identifier-regex.js</code>.</p>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-57">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
               <p>Matches a whole line break (where CRLF is considered a single
 line break). Used to count lines.</p>
@@ -1149,11 +1224,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               <p>Test whether a given character code starts an identifier.</p>
 
@@ -1171,11 +1246,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-57">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>Test whether a given character is part of an identifier.</p>
 
@@ -1195,11 +1270,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-60">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-60">&#182;</a>
               </div>
               <h2 id="tokenizer">Tokenizer</h2>
 
@@ -1208,11 +1283,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-59">
+        <li id="section-61">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
+                <a class="pilcrow" href="#section-61">&#182;</a>
               </div>
               <p>These are used when <code>options.locations</code> is on, for the
 <code>tokStartLoc</code> and <code>tokEndLoc</code> properties.</p>
@@ -1228,11 +1303,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-60">
+        <li id="section-62">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+                <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               <p>Reset the token state. Used at the start of a parse.</p>
 
@@ -1251,11 +1326,11 @@ line break). Used to count lines.</p>
         </li>
         
         
-        <li id="section-61">
+        <li id="section-63">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <p>Called at the end of every token. Sets <code>tokEnd</code>, <code>tokVal</code>, and
 <code>tokRegexpAllowed</code>, and skips the space after the token, so that
@@ -1264,15 +1339,18 @@ the next one’s <code>tokStart</code> will point at the right position.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">finishToken</span><span class="hljs-params">(type, val)</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">finishToken</span><span class="hljs-params">(type, val, shouldSkipSpace)</span> </span>{
     tokEnd = tokPos;
     <span class="hljs-keyword">if</span> (options.locations) tokEndLoc = <span class="hljs-keyword">new</span> Position;
     tokType = type;
-    <span class="hljs-keyword">if</span> (inTemplate || type !== _bquote &amp;&amp; !(inXJSTag &amp;&amp; type === _gt) &amp;&amp; !(inXJSChild &amp;&amp; tokType !== _braceL)) {
+    <span class="hljs-keyword">if</span> (shouldSkipSpace !== <span class="hljs-literal">false</span> &amp;&amp; !(inXJSTag &amp;&amp; type === _gt) &amp;&amp; !(inXJSChild &amp;&amp; tokType !== _braceL)) {
       skipSpace();
     }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
+    <span class="hljs-keyword">if</span> (options.onToken) {
+      options.onToken(<span class="hljs-keyword">new</span> Token());
+  }
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">skipBlockComment</span><span class="hljs-params">()</span> </span>{
@@ -1293,27 +1371,27 @@ the next one’s <code>tokStart</code> will point at the right position.</p>
                         startLoc, options.locations &amp;&amp; <span class="hljs-keyword">new</span> Position);
   }
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">skipLineComment</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">skipLineComment</span><span class="hljs-params">(startSkip)</span> </span>{
     <span class="hljs-keyword">var</span> start = tokPos;
     <span class="hljs-keyword">var</span> startLoc = options.onComment &amp;&amp; options.locations &amp;&amp; <span class="hljs-keyword">new</span> Position;
-    <span class="hljs-keyword">var</span> ch = input.charCodeAt(tokPos+=<span class="hljs-number">2</span>);
+    <span class="hljs-keyword">var</span> ch = input.charCodeAt(tokPos+=startSkip);
     <span class="hljs-keyword">while</span> (tokPos &lt; inputLen &amp;&amp; ch !== <span class="hljs-number">10</span> &amp;&amp; ch !== <span class="hljs-number">13</span> &amp;&amp; ch !== <span class="hljs-number">8232</span> &amp;&amp; ch !== <span class="hljs-number">8233</span>) {
       ++tokPos;
       ch = input.charCodeAt(tokPos);
     }
     <span class="hljs-keyword">if</span> (options.onComment)
-      options.onComment(<span class="hljs-literal">false</span>, input.slice(start + <span class="hljs-number">2</span>, tokPos), start, tokPos,
+      options.onComment(<span class="hljs-literal">false</span>, input.slice(start + startSkip, tokPos), start, tokPos,
                         startLoc, options.locations &amp;&amp; <span class="hljs-keyword">new</span> Position);
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-62">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
               <p>Called at the start of the parse and after every token. Skips
 whitespace and comments, and.</p>
@@ -1349,7 +1427,7 @@ whitespace and comments, and.</p>
         <span class="hljs-keyword">if</span> (next === <span class="hljs-number">42</span>) { <span class="hljs-comment">// '*'</span>
           skipBlockComment();
         } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (next === <span class="hljs-number">47</span>) { <span class="hljs-comment">// '/'</span>
-          skipLineComment();
+          skipLineComment(<span class="hljs-number">2</span>);
         } <span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">160</span>) { <span class="hljs-comment">// '\xa0'</span>
         ++tokPos;
@@ -1364,11 +1442,11 @@ whitespace and comments, and.</p>
         </li>
         
         
-        <li id="section-63">
+        <li id="section-65">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-65">&#182;</a>
               </div>
               <h3 id="token-reading">Token reading</h3>
 
@@ -1377,11 +1455,11 @@ whitespace and comments, and.</p>
         </li>
         
         
-        <li id="section-64">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <p>This is the function that is called to fetch the next token. It
 is somewhat obscure, because it works in character codes rather
@@ -1417,7 +1495,7 @@ into it.</p>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readToken_mult_modulo</span><span class="hljs-params">(code)</span> </span>{ <span class="hljs-comment">// '%*'</span>
     <span class="hljs-keyword">var</span> next = input.charCodeAt(tokPos + <span class="hljs-number">1</span>);
     <span class="hljs-keyword">if</span> (next === <span class="hljs-number">61</span>) <span class="hljs-keyword">return</span> finishOp(_assign, <span class="hljs-number">2</span>);
-    <span class="hljs-keyword">return</span> finishOp(code === <span class="hljs-number">42</span> ? _star : _multiplyModulo, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> finishOp(code === <span class="hljs-number">42</span> ? _star : _modulo, <span class="hljs-number">1</span>);
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readToken_pipe_amp</span><span class="hljs-params">(code)</span> </span>{ <span class="hljs-comment">// '|&amp;'</span>
@@ -1442,18 +1520,17 @@ into it.</p>
         </li>
         
         
-        <li id="section-65">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p>A <code>--&gt;</code> line comment</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tokPos += <span class="hljs-number">3</span>;
-        skipLineComment();
+            <div class="content"><div class='highlight'><pre>        skipLineComment(<span class="hljs-number">3</span>);
         skipSpace();
         <span class="hljs-keyword">return</span> readToken();
       }
@@ -1477,18 +1554,17 @@ into it.</p>
         </li>
         
         
-        <li id="section-66">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <p><code>&lt;!--</code>, an XML-style comment that should be interpreted as a line comment</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      tokPos += <span class="hljs-number">4</span>;
-      skipLineComment();
+            <div class="content"><div class='highlight'><pre>      skipLineComment(<span class="hljs-number">4</span>);
       skipSpace();
       <span class="hljs-keyword">return</span> readToken();
     }
@@ -1501,11 +1577,11 @@ into it.</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>‘&lt;/‘, beginning of JSX closing element</p>
 
@@ -1525,48 +1601,7 @@ into it.</p>
       <span class="hljs-keyword">return</span> finishToken(_arrow);
     }
     <span class="hljs-keyword">return</span> finishOp(code === <span class="hljs-number">61</span> ? _eq : _prefix, <span class="hljs-number">1</span>);
-  }
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTokenFromCode</span><span class="hljs-params">(code)</span> </span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-68">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
-              </div>
-              <p>Special rules work inside ES6 template strings.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (inTemplate) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-69">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
-              </div>
-              <p>‘`’ and ‘${‘ have special meanings, but they should follow string (can be empty)</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (tokType === _string) {
-        <span class="hljs-keyword">if</span> (code === <span class="hljs-number">96</span>) { <span class="hljs-comment">// '`'</span>
-          ++tokPos;
-          <span class="hljs-keyword">return</span> finishToken(_bquote);
-        }
-        <span class="hljs-keyword">if</span> (code === <span class="hljs-number">36</span> &amp;&amp; input.charCodeAt(tokPos + <span class="hljs-number">1</span>) === <span class="hljs-number">123</span>) { <span class="hljs-comment">// '${'</span>
-          tokPos += <span class="hljs-number">2</span>;
-          <span class="hljs-keyword">return</span> finishToken(_dollarBraceL);
-        }
-      }</pre></div></div>
+  }</pre></div></div>
             
         </li>
         
@@ -1577,14 +1612,12 @@ into it.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
-              <p>anything else is considered string literal</p>
+              <p>Get token inside ES6 template (special rules work there).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> readString();
-    }
-
-    <span class="hljs-keyword">switch</span>(code) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTemplateToken</span><span class="hljs-params">(code)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -1594,6 +1627,55 @@ into it.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>‘`’ and ‘${‘ have special meanings, but they should follow
+string (can be empty)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (tokType === _string) {
+        <span class="hljs-keyword">if</span> (code === <span class="hljs-number">96</span>) { <span class="hljs-comment">// '`'</span>
+          ++tokPos;
+          <span class="hljs-keyword">return</span> finishToken(_bquote);
+      } <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">if</span> (code === <span class="hljs-number">36</span> &amp;&amp; input.charCodeAt(tokPos + <span class="hljs-number">1</span>) === <span class="hljs-number">123</span>) { <span class="hljs-comment">// '${'</span>
+          tokPos += <span class="hljs-number">2</span>;
+          <span class="hljs-keyword">return</span> finishToken(_dollarBraceL);
+        }
+      }
+
+    <span class="hljs-keyword">if</span> (code === <span class="hljs-number">125</span>) { <span class="hljs-comment">// '}'</span>
+      ++tokPos;
+      <span class="hljs-keyword">return</span> finishToken(_braceR, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">false</span>);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-72">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-72">&#182;</a>
+              </div>
+              <p>anything else is considered string literal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> readTmplString();
+    }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTokenFromCode</span><span class="hljs-params">(code)</span> </span>{
+    <span class="hljs-keyword">switch</span>(code) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-73">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
               <p>The interpretation of a dot depends on whether it is followed
 by a digit or another two dots.</p>
@@ -1606,11 +1688,11 @@ by a digit or another two dots.</p>
         </li>
         
         
-        <li id="section-72">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-72">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
               <p>Punctuation tokens.</p>
 
@@ -1630,7 +1712,7 @@ by a digit or another two dots.</p>
     <span class="hljs-keyword">case</span> <span class="hljs-number">96</span>: <span class="hljs-comment">// '`'</span>
       <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span>) {
         ++tokPos;
-        <span class="hljs-keyword">return</span> finishToken(_bquote);
+        <span class="hljs-keyword">return</span> finishToken(_bquote, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">false</span>);
       }
 
     <span class="hljs-keyword">case</span> <span class="hljs-number">48</span>: <span class="hljs-comment">// '0'</span>
@@ -1644,11 +1726,11 @@ by a digit or another two dots.</p>
         </li>
         
         
-        <li id="section-73">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-73">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
               <p>Anything else beginning with a digit is an integer, octal
 number, or float.</p>
@@ -1661,11 +1743,11 @@ number, or float.</p>
         </li>
         
         
-        <li id="section-74">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>Quotes produce strings.</p>
 
@@ -1677,11 +1759,11 @@ number, or float.</p>
         </li>
         
         
-        <li id="section-75">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-75">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
               <p>Operators are parsed inline in tiny state machines. ‘=’ (61) is
 often referred to. <code>finishOp</code> simply skips the amount of
@@ -1731,11 +1813,11 @@ of the type given by its first argument.</p>
         </li>
         
         
-        <li id="section-76">
+        <li id="section-78">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
+                <a class="pilcrow" href="#section-78">&#182;</a>
               </div>
               <p>JSX content - either simple text, start of <tag> or {expression}</p>
 
@@ -1743,23 +1825,26 @@ of the type given by its first argument.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (inXJSChild &amp;&amp; tokType !== _braceL &amp;&amp; code !== <span class="hljs-number">60</span> &amp;&amp; code !== <span class="hljs-number">123</span> &amp;&amp; code !== <span class="hljs-number">125</span>) {
       <span class="hljs-keyword">return</span> readXJSText([<span class="hljs-string">'&lt;'</span>, <span class="hljs-string">'{'</span>]);
-    }</pre></div></div>
+    }
+
+
+    <span class="hljs-keyword">if</span> (inTemplate) <span class="hljs-keyword">return</span> getTemplateToken(code);</pre></div></div>
             
         </li>
         
         
-        <li id="section-77">
+        <li id="section-79">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
               <p>Identifier or keyword. ‘\uXXXX’ sequences are allowed in
 identifiers, so ‘\’ also dispatches to that.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!inTemplate &amp;&amp; (isIdentifierStart(code) || code === <span class="hljs-number">92</span> <span class="hljs-comment">/* '\' */</span>)) <span class="hljs-keyword">return</span> readWord();
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (isIdentifierStart(code) || code === <span class="hljs-number">92</span> <span class="hljs-comment">/* '\' */</span>) <span class="hljs-keyword">return</span> readWord();
 
     <span class="hljs-keyword">var</span> tok = getTokenFromCode(code);
 
@@ -1768,11 +1853,11 @@ identifiers, so ‘\’ also dispatches to that.</p>
         </li>
         
         
-        <li id="section-78">
+        <li id="section-80">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
+                <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
               <p>If we are here, we either found a non-ASCII identifier
 character, or something that’s entirely disallowed.</p>
@@ -1795,11 +1880,11 @@ character, or something that’s entirely disallowed.</p>
         </li>
         
         
-        <li id="section-79">
+        <li id="section-81">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
+                <a class="pilcrow" href="#section-81">&#182;</a>
               </div>
               <p>Parse a regular expression. Some context-awareness is necessary,
 since a ‘/‘ inside a ‘[]’ set does not end the expression.</p>
@@ -1811,7 +1896,7 @@ since a ‘/‘ inside a ‘[]’ set does not end the expression.</p>
     <span class="hljs-keyword">var</span> content = <span class="hljs-string">""</span>, escaped, inClass, start = tokPos;
     <span class="hljs-keyword">for</span> (;;) {
       <span class="hljs-keyword">if</span> (tokPos &gt;= inputLen) raise(start, <span class="hljs-string">"Unterminated regular expression"</span>);
-      <span class="hljs-keyword">var</span> ch = input.charAt(tokPos);
+      <span class="hljs-keyword">var</span> ch = nextChar();
       <span class="hljs-keyword">if</span> (newline.test(ch)) raise(start, <span class="hljs-string">"Unterminated regular expression"</span>);
       <span class="hljs-keyword">if</span> (!escaped) {
         <span class="hljs-keyword">if</span> (ch === <span class="hljs-string">"["</span>) inClass = <span class="hljs-literal">true</span>;
@@ -1827,11 +1912,11 @@ since a ‘/‘ inside a ‘[]’ set does not end the expression.</p>
         </li>
         
         
-        <li id="section-80">
+        <li id="section-82">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-80">&#182;</a>
+                <a class="pilcrow" href="#section-82">&#182;</a>
               </div>
               <p>Need to use <code>readWord1</code> because ‘\uXXXX’ sequences are allowed
 here (don’t ask).</p>
@@ -1852,11 +1937,11 @@ here (don’t ask).</p>
         </li>
         
         
-        <li id="section-81">
+        <li id="section-83">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-81">&#182;</a>
+                <a class="pilcrow" href="#section-83">&#182;</a>
               </div>
               <p>Read an integer in the given radix. Return null if zero digits
 were read, the integer value otherwise. When <code>len</code> is given, this
@@ -1893,11 +1978,11 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
         </li>
         
         
-        <li id="section-82">
+        <li id="section-84">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-82">&#182;</a>
+                <a class="pilcrow" href="#section-84">&#182;</a>
               </div>
               <p>Read an integer, octal integer, or floating-point number.</p>
 
@@ -1932,11 +2017,11 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
         </li>
         
         
-        <li id="section-83">
+        <li id="section-85">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-83">&#182;</a>
+                <a class="pilcrow" href="#section-85">&#182;</a>
               </div>
               <p>Read a string value, interpreting backslash-escapes.</p>
 
@@ -1959,11 +2044,11 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
         </li>
         
         
-        <li id="section-84">
+        <li id="section-86">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-84">&#182;</a>
+                <a class="pilcrow" href="#section-86">&#182;</a>
               </div>
               <p>UTF-16 Encoding</p>
 
@@ -1978,52 +2063,39 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readString</span><span class="hljs-params">(quote)</span> </span>{
-    <span class="hljs-keyword">if</span> (!inTemplate) tokPos++;
+    ++tokPos;
     <span class="hljs-keyword">var</span> out = <span class="hljs-string">""</span>;
     <span class="hljs-keyword">for</span> (;;) {
       <span class="hljs-keyword">if</span> (tokPos &gt;= inputLen) raise(tokStart, <span class="hljs-string">"Unterminated string constant"</span>);
       <span class="hljs-keyword">var</span> ch = input.charCodeAt(tokPos);
-      <span class="hljs-keyword">if</span> (inTemplate) {
-        <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">96</span> || ch === <span class="hljs-number">36</span> &amp;&amp; input.charCodeAt(tokPos + <span class="hljs-number">1</span>) === <span class="hljs-number">123</span>) <span class="hljs-comment">// '`', '${'</span>
-          <span class="hljs-keyword">return</span> finishToken(_string, out);
-      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ch === quote) {
+      <span class="hljs-keyword">if</span> (ch === quote) {
         ++tokPos;
         <span class="hljs-keyword">return</span> finishToken(_string, out);
       }
       <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">92</span>) { <span class="hljs-comment">// '\'</span>
-        ch = input.charCodeAt(++tokPos);
-        <span class="hljs-keyword">var</span> octal = <span class="hljs-regexp">/^[0-7]+/</span>.exec(input.slice(tokPos, tokPos + <span class="hljs-number">3</span>));
-        <span class="hljs-keyword">if</span> (octal) octal = octal[<span class="hljs-number">0</span>];
-        <span class="hljs-keyword">while</span> (octal &amp;&amp; <span class="hljs-built_in">parseInt</span>(octal, <span class="hljs-number">8</span>) &gt; <span class="hljs-number">255</span>) octal = octal.slice(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>);
-        <span class="hljs-keyword">if</span> (octal === <span class="hljs-string">"0"</span>) octal = <span class="hljs-literal">null</span>;
-        ++tokPos;
-        <span class="hljs-keyword">if</span> (octal) {
-          <span class="hljs-keyword">if</span> (strict) raise(tokPos - <span class="hljs-number">2</span>, <span class="hljs-string">"Octal literal in strict mode"</span>);
-          out += <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-built_in">parseInt</span>(octal, <span class="hljs-number">8</span>));
-          tokPos += octal.length - <span class="hljs-number">1</span>;
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">switch</span> (ch) {
-          <span class="hljs-keyword">case</span> <span class="hljs-number">110</span>: out += <span class="hljs-string">"\n"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'n' -&gt; '\n'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">114</span>: out += <span class="hljs-string">"\r"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'r' -&gt; '\r'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">120</span>: out += <span class="hljs-built_in">String</span>.fromCharCode(readHexChar(<span class="hljs-number">2</span>)); <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'x'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">117</span>: out += readCodePoint(); <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'u'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">85</span>: out += <span class="hljs-built_in">String</span>.fromCharCode(readHexChar(<span class="hljs-number">8</span>)); <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'U'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">116</span>: out += <span class="hljs-string">"\t"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 't' -&gt; '\t'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">98</span>: out += <span class="hljs-string">"\b"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'b' -&gt; '\b'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">118</span>: out += <span class="hljs-string">"\u000b"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'v' -&gt; '\u000b'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">102</span>: out += <span class="hljs-string">"\f"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 'f' -&gt; '\f'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">48</span>: out += <span class="hljs-string">"\0"</span>; <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 0 -&gt; '\0'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">13</span>: <span class="hljs-keyword">if</span> (input.charCodeAt(tokPos) === <span class="hljs-number">10</span>) ++tokPos; <span class="hljs-comment">// '\r\n'</span>
-          <span class="hljs-keyword">case</span> <span class="hljs-number">10</span>: <span class="hljs-comment">// ' \n'</span>
-            <span class="hljs-keyword">if</span> (options.locations) { tokLineStart = tokPos; ++tokCurLine; }
-            <span class="hljs-keyword">break</span>;
-          <span class="hljs-keyword">default</span>: out += <span class="hljs-built_in">String</span>.fromCharCode(ch); <span class="hljs-keyword">break</span>;
-          }
-        }
+        out += readEscapedChar();
       } <span class="hljs-keyword">else</span> {
         ++tokPos;
         <span class="hljs-keyword">if</span> (newline.test(<span class="hljs-built_in">String</span>.fromCharCode(ch))) {
-          <span class="hljs-keyword">if</span> (inTemplate) {
+          raise(tokStart, <span class="hljs-string">"Unterminated string constant"</span>);
+          }
+        out += <span class="hljs-built_in">String</span>.fromCharCode(ch); <span class="hljs-comment">// '\'</span>
+        }
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readTmplString</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> out = <span class="hljs-string">""</span>;
+    <span class="hljs-keyword">for</span> (;;) {
+      <span class="hljs-keyword">if</span> (tokPos &gt;= inputLen) raise(tokStart, <span class="hljs-string">"Unterminated string constant"</span>);
+      <span class="hljs-keyword">var</span> ch = input.charCodeAt(tokPos);
+      <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">96</span> || ch === <span class="hljs-number">36</span> &amp;&amp; input.charCodeAt(tokPos + <span class="hljs-number">1</span>) === <span class="hljs-number">123</span>) <span class="hljs-comment">// '`', '${'</span>
+        <span class="hljs-keyword">return</span> finishToken(_string, out);
+      <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">92</span>) { <span class="hljs-comment">// '\'</span>
+        out += readEscapedChar();
+      } <span class="hljs-keyword">else</span> {
+        ++tokPos;
+        <span class="hljs-keyword">if</span> (newline.test(<span class="hljs-built_in">String</span>.fromCharCode(ch))) {
             <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">13</span> &amp;&amp; input.charCodeAt(tokPos) === <span class="hljs-number">10</span>) {
               ++tokPos;
               ch = <span class="hljs-number">10</span>;
@@ -2032,11 +2104,54 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
               ++tokCurLine;
               tokLineStart = tokPos;
     }
-          } <span class="hljs-keyword">else</span> {
-            raise(tokStart, <span class="hljs-string">"Unterminated string constant"</span>);
   }
-        }
         out += <span class="hljs-built_in">String</span>.fromCharCode(ch); <span class="hljs-comment">// '\'</span>
+      }
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-87">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-87">&#182;</a>
+              </div>
+              <p>Used to read escaped characters</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readEscapedChar</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> ch = input.charCodeAt(++tokPos);
+    <span class="hljs-keyword">var</span> octal = <span class="hljs-regexp">/^[0-7]+/</span>.exec(input.slice(tokPos, tokPos + <span class="hljs-number">3</span>));
+    <span class="hljs-keyword">if</span> (octal) octal = octal[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">while</span> (octal &amp;&amp; <span class="hljs-built_in">parseInt</span>(octal, <span class="hljs-number">8</span>) &gt; <span class="hljs-number">255</span>) octal = octal.slice(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>);
+    <span class="hljs-keyword">if</span> (octal === <span class="hljs-string">"0"</span>) octal = <span class="hljs-literal">null</span>;
+    ++tokPos;
+    <span class="hljs-keyword">if</span> (octal) {
+      <span class="hljs-keyword">if</span> (strict) raise(tokPos - <span class="hljs-number">2</span>, <span class="hljs-string">"Octal literal in strict mode"</span>);
+      tokPos += octal.length - <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-built_in">parseInt</span>(octal, <span class="hljs-number">8</span>));
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">switch</span> (ch) {
+        <span class="hljs-keyword">case</span> <span class="hljs-number">110</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\n"</span>; <span class="hljs-comment">// 'n' -&gt; '\n'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">114</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\r"</span>; <span class="hljs-comment">// 'r' -&gt; '\r'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">120</span>: <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode(readHexChar(<span class="hljs-number">2</span>)); <span class="hljs-comment">// 'x'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">117</span>: <span class="hljs-keyword">return</span> readCodePoint(); <span class="hljs-comment">// 'u'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">85</span>: <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode(readHexChar(<span class="hljs-number">8</span>)); <span class="hljs-comment">// 'U'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">116</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\t"</span>; <span class="hljs-comment">// 't' -&gt; '\t'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">98</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\b"</span>; <span class="hljs-comment">// 'b' -&gt; '\b'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">118</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\u000b"</span>; <span class="hljs-comment">// 'v' -&gt; '\u000b'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">102</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\f"</span>; <span class="hljs-comment">// 'f' -&gt; '\f'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">48</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">"\0"</span>; <span class="hljs-comment">// 0 -&gt; '\0'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">13</span>: <span class="hljs-keyword">if</span> (input.charCodeAt(tokPos) === <span class="hljs-number">10</span>) ++tokPos; <span class="hljs-comment">// '\r\n'</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">10</span>: <span class="hljs-comment">// ' \n'</span>
+          <span class="hljs-keyword">if</span> (options.locations) { tokLineStart = tokPos; ++tokCurLine; }
+          <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+        <span class="hljs-keyword">default</span>: <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode(ch);
       }
     }
   }
@@ -2303,7 +2418,8 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
     <span class="hljs-keyword">if</span> (ch !== <span class="hljs-string">'&amp;'</span>) raise(tokPos, <span class="hljs-string">"Entity must start with an ampersand"</span>);
     tokPos++;
     <span class="hljs-keyword">while</span> (tokPos &lt; inputLen &amp;&amp; count++ <span class="xml"><span class="hljs-tag">&lt; <span class="hljs-attribute">10</span>) {
-      <span class="hljs-attribute">ch</span> = <span class="hljs-attribute">input.charAt</span>(<span class="hljs-attribute">tokPos</span>++);
+      <span class="hljs-attribute">ch</span> = <span class="hljs-attribute">nextChar</span>();
+      <span class="hljs-attribute">tokPos</span>++;
       <span class="hljs-attribute">if</span> (<span class="hljs-attribute">ch</span> =<span class="hljs-value">==</span> ';') {
         <span class="hljs-attribute">break</span>;
       }
@@ -2371,11 +2487,11 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
         </li>
         
         
-        <li id="section-85">
+        <li id="section-88">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-85">&#182;</a>
+                <a class="pilcrow" href="#section-88">&#182;</a>
               </div>
               <p>Used to read character escape sequences (‘\x’, ‘\u’, ‘\U’).</p>
 
@@ -2391,11 +2507,11 @@ will return <code>null</code> unless the integer has exactly <code>len</code> di
         </li>
         
         
-        <li id="section-86">
+        <li id="section-89">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-86">&#182;</a>
+                <a class="pilcrow" href="#section-89">&#182;</a>
               </div>
               <p>Used to signal to callers of <code>readWord1</code> whether the word
 contained any escape sequences. This is needed because words with
@@ -2409,11 +2525,11 @@ escape sequences must not be interpreted as keywords.</p>
         </li>
         
         
-        <li id="section-87">
+        <li id="section-90">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-87">&#182;</a>
+                <a class="pilcrow" href="#section-90">&#182;</a>
               </div>
               <p>Read an identifier, and return it as a string. Sets <code>containsEsc</code>
 to whether the word contained a ‘\u’ escape.</p>
@@ -2429,7 +2545,7 @@ containeds an escape, as a micro-optimization.</p>
     <span class="hljs-keyword">for</span> (;;) {
       <span class="hljs-keyword">var</span> ch = input.charCodeAt(tokPos);
       <span class="hljs-keyword">if</span> (isIdentifierChar(ch) || (inXJSTag &amp;&amp; ch === <span class="hljs-number">45</span>)) {
-        <span class="hljs-keyword">if</span> (containsEsc) word += input.charAt(tokPos);
+        <span class="hljs-keyword">if</span> (containsEsc) word += nextChar();
         ++tokPos;
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ch === <span class="hljs-number">92</span> &amp;&amp; !inXJSTag) { <span class="hljs-comment">// "\"</span>
         <span class="hljs-keyword">if</span> (!containsEsc) word = input.slice(start, tokPos);
@@ -2454,11 +2570,11 @@ containeds an escape, as a micro-optimization.</p>
         </li>
         
         
-        <li id="section-88">
+        <li id="section-91">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-88">&#182;</a>
+                <a class="pilcrow" href="#section-91">&#182;</a>
               </div>
               <p>Read an identifier or keyword token. Will check for reserved
 words when necessary.</p>
@@ -2477,11 +2593,11 @@ words when necessary.</p>
         </li>
         
         
-        <li id="section-89">
+        <li id="section-92">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-89">&#182;</a>
+                <a class="pilcrow" href="#section-92">&#182;</a>
               </div>
               <h2 id="parser">Parser</h2>
 
@@ -2490,11 +2606,11 @@ words when necessary.</p>
         </li>
         
         
-        <li id="section-90">
+        <li id="section-93">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-90">&#182;</a>
+                <a class="pilcrow" href="#section-93">&#182;</a>
               </div>
               <p>A recursive descent parser operates by defining functions for all
 syntactic elements, and recursively calling those, each function
@@ -2516,11 +2632,11 @@ precedence levels that JavaScript defines.</p>
         </li>
         
         
-        <li id="section-91">
+        <li id="section-94">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-91">&#182;</a>
+                <a class="pilcrow" href="#section-94">&#182;</a>
               </div>
               <h3 id="parser-utilities">Parser utilities</h3>
 
@@ -2529,11 +2645,11 @@ precedence levels that JavaScript defines.</p>
         </li>
         
         
-        <li id="section-92">
+        <li id="section-95">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-92">&#182;</a>
+                <a class="pilcrow" href="#section-95">&#182;</a>
               </div>
               <p>Continue to the next token.</p>
 
@@ -2550,11 +2666,11 @@ precedence levels that JavaScript defines.</p>
         </li>
         
         
-        <li id="section-93">
+        <li id="section-96">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-93">&#182;</a>
+                <a class="pilcrow" href="#section-96">&#182;</a>
               </div>
               <p>Enter strict mode. Re-reads the next token to please pedantic
 tests (“use strict”; 010; — should fail).</p>
@@ -2578,11 +2694,11 @@ tests (“use strict”; 010; — should fail).</p>
         </li>
         
         
-        <li id="section-94">
+        <li id="section-97">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-94">&#182;</a>
+                <a class="pilcrow" href="#section-97">&#182;</a>
               </div>
               <p>Start an AST node, attaching a start offset.</p>
 
@@ -2617,11 +2733,11 @@ tests (“use strict”; 010; — should fail).</p>
         </li>
         
         
-        <li id="section-95">
+        <li id="section-98">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-95">&#182;</a>
+                <a class="pilcrow" href="#section-98">&#182;</a>
               </div>
               <p>Start a node whose start offset information should be based on
 the start of another node. For example, a binary operator node is
@@ -2646,11 +2762,11 @@ only started after its left-hand side has already been parsed.</p>
         </li>
         
         
-        <li id="section-96">
+        <li id="section-99">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-96">&#182;</a>
+                <a class="pilcrow" href="#section-99">&#182;</a>
               </div>
               <p>Finish an AST node, adding <code>type</code> and <code>end</code> properties.</p>
 
@@ -2670,11 +2786,11 @@ only started after its left-hand side has already been parsed.</p>
         </li>
         
         
-        <li id="section-97">
+        <li id="section-100">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-97">&#182;</a>
+                <a class="pilcrow" href="#section-100">&#182;</a>
               </div>
               <p>Test whether a statement node is the string literal <code>&quot;use strict&quot;</code>.</p>
 
@@ -2689,11 +2805,11 @@ only started after its left-hand side has already been parsed.</p>
         </li>
         
         
-        <li id="section-98">
+        <li id="section-101">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-98">&#182;</a>
+                <a class="pilcrow" href="#section-101">&#182;</a>
               </div>
               <p>Predicate that tests whether the next token is of the given
 type, and if yes, consumes it as a side effect.</p>
@@ -2713,11 +2829,11 @@ type, and if yes, consumes it as a side effect.</p>
         </li>
         
         
-        <li id="section-99">
+        <li id="section-102">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-99">&#182;</a>
+                <a class="pilcrow" href="#section-102">&#182;</a>
               </div>
               <p>Test whether a semicolon can be inserted at the current position.</p>
 
@@ -2732,11 +2848,11 @@ type, and if yes, consumes it as a side effect.</p>
         </li>
         
         
-        <li id="section-100">
+        <li id="section-103">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-100">&#182;</a>
+                <a class="pilcrow" href="#section-103">&#182;</a>
               </div>
               <p>Consume a semicolon, or, failing that, see if we are allowed to
 pretend that there is a semicolon at this position.</p>
@@ -2751,11 +2867,11 @@ pretend that there is a semicolon at this position.</p>
         </li>
         
         
-        <li id="section-101">
+        <li id="section-104">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-101">&#182;</a>
+                <a class="pilcrow" href="#section-104">&#182;</a>
               </div>
               <p>Expect a token of a given type. If found, consume it, otherwise,
 raise an unexpected token error.</p>
@@ -2770,31 +2886,11 @@ raise an unexpected token error.</p>
         </li>
         
         
-        <li id="section-102">
+        <li id="section-105">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-102">&#182;</a>
-              </div>
-              <p>Expect a char. If found, consume it, otherwise,
-raise an unexpected token error.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">expectChar</span><span class="hljs-params">(ch)</span> </span>{
-    <span class="hljs-keyword">if</span> (tokVal === ch) next();
-    <span class="hljs-keyword">else</span> unexpected();
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-103">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-103">&#182;</a>
+                <a class="pilcrow" href="#section-105">&#182;</a>
               </div>
               <p>Get following char.</p>
 
@@ -2808,11 +2904,11 @@ raise an unexpected token error.</p>
         </li>
         
         
-        <li id="section-104">
+        <li id="section-106">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-104">&#182;</a>
+                <a class="pilcrow" href="#section-106">&#182;</a>
               </div>
               <p>Raise an unexpected token error.</p>
 
@@ -2826,29 +2922,29 @@ raise an unexpected token error.</p>
         </li>
         
         
-        <li id="section-105">
+        <li id="section-107">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-105">&#182;</a>
+                <a class="pilcrow" href="#section-107">&#182;</a>
               </div>
-              <p>Creates an empty hash object.</p>
+              <p>Checks if hash object has a property.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hash</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">has</span><span class="hljs-params">(obj, propName)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.hasOwnProperty.call(obj, propName);
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-106">
+        <li id="section-108">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-106">&#182;</a>
+                <a class="pilcrow" href="#section-108">&#182;</a>
               </div>
               <p>Convert existing expression atom to assignable pattern
 if possible.</p>
@@ -2898,11 +2994,11 @@ if possible.</p>
         </li>
         
         
-        <li id="section-107">
+        <li id="section-109">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-107">&#182;</a>
+                <a class="pilcrow" href="#section-109">&#182;</a>
               </div>
               <p>Checks if node can be assignable spread argument.</p>
 
@@ -2917,11 +3013,11 @@ if possible.</p>
         </li>
         
         
-        <li id="section-108">
+        <li id="section-110">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-108">&#182;</a>
+                <a class="pilcrow" href="#section-110">&#182;</a>
               </div>
               <p>Verify that argument names are not repeated, and it does not
 try to bind the words <code>eval</code> or <code>arguments</code>.</p>
@@ -2934,7 +3030,7 @@ try to bind the words <code>eval</code> or <code>arguments</code>.</p>
       <span class="hljs-keyword">case</span> <span class="hljs-string">"Identifier"</span>:
         <span class="hljs-keyword">if</span> (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
           raise(param.start, <span class="hljs-string">"Defining '"</span> + param.name + <span class="hljs-string">"' in strict mode"</span>);
-        <span class="hljs-keyword">if</span> (nameHash[param.name])
+        <span class="hljs-keyword">if</span> (has(nameHash, param.name))
           raise(param.start, <span class="hljs-string">"Argument name clash in strict mode"</span>);
         nameHash[param.name] = <span class="hljs-literal">true</span>;
         <span class="hljs-keyword">break</span>;
@@ -2954,11 +3050,11 @@ try to bind the words <code>eval</code> or <code>arguments</code>.</p>
         </li>
         
         
-        <li id="section-109">
+        <li id="section-111">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-109">&#182;</a>
+                <a class="pilcrow" href="#section-111">&#182;</a>
               </div>
               <p>Check if property name clashes with already added.
 Object/class getters and setters are not allowed to clash —
@@ -2969,20 +3065,25 @@ strict mode, init properties are also not allowed to be repeated.</p>
             
             <div class="content"><div class='highlight'><pre>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkPropClash</span><span class="hljs-params">(prop, propHash)</span> </span>{
+    <span class="hljs-keyword">if</span> (prop.computed) <span class="hljs-keyword">return</span>;
     <span class="hljs-keyword">var</span> key = prop.key, name;
     <span class="hljs-keyword">switch</span> (key.type) {
       <span class="hljs-keyword">case</span> <span class="hljs-string">"Identifier"</span>: name = key.name; <span class="hljs-keyword">break</span>;
       <span class="hljs-keyword">case</span> <span class="hljs-string">"Literal"</span>: name = <span class="hljs-built_in">String</span>(key.value); <span class="hljs-keyword">break</span>;
       <span class="hljs-keyword">default</span>: <span class="hljs-keyword">return</span>;
     }
-    <span class="hljs-keyword">var</span> kind = prop.kind || <span class="hljs-string">"init"</span>, other = propHash[name];
-    <span class="hljs-keyword">if</span> (other) {
+    <span class="hljs-keyword">var</span> kind = prop.kind || <span class="hljs-string">"init"</span>, other;
+    <span class="hljs-keyword">if</span> (has(propHash, name)) {
+      other = propHash[name];
       <span class="hljs-keyword">var</span> isGetSet = kind !== <span class="hljs-string">"init"</span>;
       <span class="hljs-keyword">if</span> ((strict || isGetSet) &amp;&amp; other[kind] || !(isGetSet ^ other.init))
         raise(key.start, <span class="hljs-string">"Redefinition of property"</span>);
     } <span class="hljs-keyword">else</span> {
-      other = propHash[name] = hash();
-      other.init = other.get = other.set = <span class="hljs-literal">false</span>;
+      other = propHash[name] = {
+        init: <span class="hljs-literal">false</span>,
+        get: <span class="hljs-literal">false</span>,
+        set: <span class="hljs-literal">false</span>
+      };
     }
     other[kind] = <span class="hljs-literal">true</span>;
   }</pre></div></div>
@@ -2990,11 +3091,11 @@ strict mode, init properties are also not allowed to be repeated.</p>
         </li>
         
         
-        <li id="section-110">
+        <li id="section-112">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-110">&#182;</a>
+                <a class="pilcrow" href="#section-112">&#182;</a>
               </div>
               <p>Verify that a node is an lval — something that can be assigned
 to.</p>
@@ -3038,11 +3139,11 @@ to.</p>
         </li>
         
         
-        <li id="section-111">
+        <li id="section-113">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-111">&#182;</a>
+                <a class="pilcrow" href="#section-113">&#182;</a>
               </div>
               <h3 id="statement-parsing">Statement parsing</h3>
 
@@ -3051,11 +3152,11 @@ to.</p>
         </li>
         
         
-        <li id="section-112">
+        <li id="section-114">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-112">&#182;</a>
+                <a class="pilcrow" href="#section-114">&#182;</a>
               </div>
               <p>Parse a program. Initializes the parser, reads any number of
 statements, and wraps them in a Program node.  Optionally takes a
@@ -3088,11 +3189,11 @@ to its body instead of creating a new node.</p>
         </li>
         
         
-        <li id="section-113">
+        <li id="section-115">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-113">&#182;</a>
+                <a class="pilcrow" href="#section-115">&#182;</a>
               </div>
               <p>Parse a single statement.</p>
 <p>If expecting a statement and finding a slash operator, parse a
@@ -3112,11 +3213,11 @@ does not help.</p>
         </li>
         
         
-        <li id="section-114">
+        <li id="section-116">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-114">&#182;</a>
+                <a class="pilcrow" href="#section-116">&#182;</a>
               </div>
               <p>Most types of statements are recognized by the keyword they
 start with. Many are trivial to parse, some require a bit of
@@ -3148,11 +3249,11 @@ complexity.</p>
         </li>
         
         
-        <li id="section-115">
+        <li id="section-117">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-115">&#182;</a>
+                <a class="pilcrow" href="#section-117">&#182;</a>
               </div>
               <p>If the statement does not start with a statement keyword or a
 brace, it’s an ExpressionStatement or LabeledStatement. We
@@ -3183,11 +3284,11 @@ Identifier node, we switch to interpreting it as a label.</p>
         </li>
         
         
-        <li id="section-116">
+        <li id="section-118">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-116">&#182;</a>
+                <a class="pilcrow" href="#section-118">&#182;</a>
               </div>
               <p>Verify that there is an actual destination to break or
 continue to.</p>
@@ -3225,11 +3326,11 @@ continue to.</p>
         </li>
         
         
-        <li id="section-117">
+        <li id="section-119">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-117">&#182;</a>
+                <a class="pilcrow" href="#section-119">&#182;</a>
               </div>
               <p>Disambiguating between a <code>for</code> and a <code>for</code>/<code>in</code> or <code>for</code>/<code>of</code>
 loop is non-trivial. Basically, we have to parse the init <code>var</code>
@@ -3286,11 +3387,11 @@ is a regular <code>for</code> loop.</p>
         </li>
         
         
-        <li id="section-118">
+        <li id="section-120">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-118">&#182;</a>
+                <a class="pilcrow" href="#section-120">&#182;</a>
               </div>
               <p>In <code>return</code> (and <code>break</code>/<code>continue</code>), the keywords with
 optional arguments, we eagerly look for a semicolon or the
@@ -3314,11 +3415,11 @@ possibility to insert one.</p>
         </li>
         
         
-        <li id="section-119">
+        <li id="section-121">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-119">&#182;</a>
+                <a class="pilcrow" href="#section-121">&#182;</a>
               </div>
               <p>Statements under must be grouped (by label) in SwitchCase
 nodes. <code>cur</code> is used to keep the node that we are currently
@@ -3432,11 +3533,11 @@ adding statements to.</p>
         </li>
         
         
-        <li id="section-120">
+        <li id="section-122">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-120">&#182;</a>
+                <a class="pilcrow" href="#section-122">&#182;</a>
               </div>
               <p>Used for constructs like <code>switch</code> and <code>if</code> that insist on
 parentheses around their expression.</p>
@@ -3454,11 +3555,11 @@ parentheses around their expression.</p>
         </li>
         
         
-        <li id="section-121">
+        <li id="section-123">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-121">&#182;</a>
+                <a class="pilcrow" href="#section-123">&#182;</a>
               </div>
               <p>Parse a semicolon-enclosed block of statements, handling <code>&quot;use
 strict&quot;</code> declarations when <code>allowStrict</code> is true (used for
@@ -3487,11 +3588,11 @@ function bodies).</p>
         </li>
         
         
-        <li id="section-122">
+        <li id="section-124">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-122">&#182;</a>
+                <a class="pilcrow" href="#section-124">&#182;</a>
               </div>
               <p>Parse a regular <code>for</code> loop. The disambiguation code in
 <code>parseStatement</code> will already have parsed the init statement or
@@ -3515,11 +3616,11 @@ expression.</p>
         </li>
         
         
-        <li id="section-123">
+        <li id="section-125">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-123">&#182;</a>
+                <a class="pilcrow" href="#section-125">&#182;</a>
               </div>
               <p>Parse a <code>for</code>/<code>in</code> and <code>for</code>/<code>of</code> loop, which are almost
 same from parser’s perspective.</p>
@@ -3541,11 +3642,11 @@ same from parser’s perspective.</p>
         </li>
         
         
-        <li id="section-124">
+        <li id="section-126">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-124">&#182;</a>
+                <a class="pilcrow" href="#section-126">&#182;</a>
               </div>
               <p>Parse a list of variable declarations.</p>
 
@@ -3569,11 +3670,11 @@ same from parser’s perspective.</p>
         </li>
         
         
-        <li id="section-125">
+        <li id="section-127">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-125">&#182;</a>
+                <a class="pilcrow" href="#section-127">&#182;</a>
               </div>
               <h3 id="expression-parsing">Expression parsing</h3>
 
@@ -3582,11 +3683,11 @@ same from parser’s perspective.</p>
         </li>
         
         
-        <li id="section-126">
+        <li id="section-128">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-126">&#182;</a>
+                <a class="pilcrow" href="#section-128">&#182;</a>
               </div>
               <p>These nest, from the most general expression type at the top to
 ‘atomic’, nondivisible expression types at the bottom. Most of
@@ -3599,11 +3700,11 @@ the AST node that the inner parser gave them in another node.</p>
         </li>
         
         
-        <li id="section-127">
+        <li id="section-129">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-127">&#182;</a>
+                <a class="pilcrow" href="#section-129">&#182;</a>
               </div>
               <p>Parse a full expression. The arguments are used to forbid comma
 sequences (in argument lists, array literals, or object literals)
@@ -3626,11 +3727,11 @@ or the <code>in</code> operator (in for loops initalization expressions).</p>
         </li>
         
         
-        <li id="section-128">
+        <li id="section-130">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-128">&#182;</a>
+                <a class="pilcrow" href="#section-130">&#182;</a>
               </div>
               <p>Parse an assignment expression. This includes applications of
 operators like <code>+=</code>.</p>
@@ -3655,11 +3756,11 @@ operators like <code>+=</code>.</p>
         </li>
         
         
-        <li id="section-129">
+        <li id="section-131">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-129">&#182;</a>
+                <a class="pilcrow" href="#section-131">&#182;</a>
               </div>
               <p>Parse a ternary conditional (<code>?:</code>) operator.</p>
 
@@ -3682,11 +3783,11 @@ operators like <code>+=</code>.</p>
         </li>
         
         
-        <li id="section-130">
+        <li id="section-132">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-130">&#182;</a>
+                <a class="pilcrow" href="#section-132">&#182;</a>
               </div>
               <p>Start the precedence parser.</p>
 
@@ -3700,11 +3801,11 @@ operators like <code>+=</code>.</p>
         </li>
         
         
-        <li id="section-131">
+        <li id="section-133">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-131">&#182;</a>
+                <a class="pilcrow" href="#section-133">&#182;</a>
               </div>
               <p>Parse binary operators with the operator precedence parsing
 algorithm. <code>left</code> is the left-hand side of the operator.
@@ -3735,11 +3836,11 @@ operator that has a lower precedence than the set it is parsing.</p>
         </li>
         
         
-        <li id="section-132">
+        <li id="section-134">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-132">&#182;</a>
+                <a class="pilcrow" href="#section-134">&#182;</a>
               </div>
               <p>Parse unary operators, both prefix and postfix.</p>
 
@@ -3776,11 +3877,11 @@ operator that has a lower precedence than the set it is parsing.</p>
         </li>
         
         
-        <li id="section-133">
+        <li id="section-135">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-133">&#182;</a>
+                <a class="pilcrow" href="#section-135">&#182;</a>
               </div>
               <p>Parse call, dot, and <code>[]</code>-subscript expressions.</p>
 
@@ -3821,11 +3922,11 @@ operator that has a lower precedence than the set it is parsing.</p>
         </li>
         
         
-        <li id="section-134">
+        <li id="section-136">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-134">&#182;</a>
+                <a class="pilcrow" href="#section-136">&#182;</a>
               </div>
               <p>Parse an atomic expression — either a single token that is an
 expression, an expression started by a keyword like <code>function</code> or
@@ -3867,8 +3968,25 @@ or <code>{}</code>.</p>
       <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"Literal"</span>);
 
     <span class="hljs-keyword">case</span> _parenL:
-      <span class="hljs-keyword">var</span> node = startNode(), tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
-      next();
+      <span class="hljs-keyword">var</span> tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
+      next();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-137">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-137">&#182;</a>
+              </div>
+              <p>check whether this is generator comprehension or regular expression</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span> &amp;&amp; tokType === _for) {
+        val = parseComprehension(startNode(), <span class="hljs-literal">true</span>);
+      } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">var</span> oldParenL = ++metParenL;
       <span class="hljs-keyword">if</span> (tokType !== _parenR) {
         val = parseExpression();
@@ -3881,28 +3999,28 @@ or <code>{}</code>.</p>
         </li>
         
         
-        <li id="section-135">
+        <li id="section-138">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-135">&#182;</a>
+                <a class="pilcrow" href="#section-138">&#182;</a>
               </div>
               <p>if ‘=&gt;’ follows ‘(…)’, convert contents to arguments</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (metParenL === oldParenL &amp;&amp; eat(_arrow)) {
-        val = parseArrowExpression(node, exprList);
+          val = parseArrowExpression(startNode(), exprList);
       } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
         
-        <li id="section-136">
+        <li id="section-139">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-136">&#182;</a>
+                <a class="pilcrow" href="#section-139">&#182;</a>
               </div>
               <p>forbid ‘()’ before everything but ‘=&gt;’</p>
 
@@ -3913,11 +4031,11 @@ or <code>{}</code>.</p>
         </li>
         
         
-        <li id="section-137">
+        <li id="section-140">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-137">&#182;</a>
+                <a class="pilcrow" href="#section-140">&#182;</a>
               </div>
               <p>forbid ‘…’ in sequence expressions</p>
 
@@ -3928,6 +4046,7 @@ or <code>{}</code>.</p>
             <span class="hljs-keyword">if</span> (exprList[i].type === <span class="hljs-string">"SpreadElement"</span>) unexpected();
           }
         }
+      }
       }
       val.start = tokStart1;
       val.end = lastEnd;
@@ -3947,51 +4066,19 @@ or <code>{}</code>.</p>
         </li>
         
         
-        <li id="section-138">
+        <li id="section-141">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-138">&#182;</a>
+                <a class="pilcrow" href="#section-141">&#182;</a>
               </div>
               <p>check whether this is array comprehension or regular array</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span> &amp;&amp; tokType === _for) {
-        node.blocks = [];
-        <span class="hljs-keyword">while</span> (tokType === _for) {
-          <span class="hljs-keyword">var</span> block = startNode();
-          next();
-          expect(_parenL);
-          block.left = toAssignable(parseExprAtom());
-          checkLVal(block.left, <span class="hljs-literal">true</span>);
-          <span class="hljs-keyword">if</span> (tokType !== _name || tokVal !== <span class="hljs-string">"of"</span>) unexpected();
-          next();</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-139">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-139">&#182;</a>
-              </div>
-              <p><code>of</code> property is here for compatibility with Esprima’s AST
-which also supports deprecated [for (… in …) expr]</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          block.of = <span class="hljs-literal">true</span>;
-          block.right = parseExpression();
-          expect(_parenR);
-          node.blocks.push(finishNode(block, <span class="hljs-string">"ComprehensionBlock"</span>));
+        <span class="hljs-keyword">return</span> parseComprehension(node, <span class="hljs-literal">false</span>);
         }
-        node.filter = eat(_if) ? parseParenExpression() : <span class="hljs-literal">null</span>;
-        node.body = parseExpression();
-        expect(_bracketR);
-        <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"ComprehensionExpression"</span>);
-      }
       node.elements = parseExprList(_bracketR, <span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>);
       <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"ArrayExpression"</span>);
 
@@ -4026,11 +4113,11 @@ which also supports deprecated [for (… in …) expr]</p>
         </li>
         
         
-        <li id="section-140">
+        <li id="section-142">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-140">&#182;</a>
+                <a class="pilcrow" href="#section-142">&#182;</a>
               </div>
               <p>New’s precedence is slightly tricky. It must allow its argument
 to be a <code>[]</code> or dot subscript expression, but not a call — at
@@ -4051,11 +4138,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-141">
+        <li id="section-143">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-141">&#182;</a>
+                <a class="pilcrow" href="#section-143">&#182;</a>
               </div>
               <p>Parse spread element ‘…expr’</p>
 
@@ -4072,11 +4159,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-142">
+        <li id="section-144">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-142">&#182;</a>
+                <a class="pilcrow" href="#section-144">&#182;</a>
               </div>
               <p>Parse template expression.</p>
 
@@ -4112,11 +4199,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-143">
+        <li id="section-145">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-143">&#182;</a>
+                <a class="pilcrow" href="#section-145">&#182;</a>
               </div>
               <p>Parse an object literal.</p>
 
@@ -4124,7 +4211,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
             
             <div class="content"><div class='highlight'><pre>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseObj</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> node = startNode(), first = <span class="hljs-literal">true</span>, propHash = hash();
+    <span class="hljs-keyword">var</span> node = startNode(), first = <span class="hljs-literal">true</span>, propHash = {};
     node.properties = [];
     next();
     <span class="hljs-keyword">while</span> (!eat(_braceR)) {
@@ -4133,7 +4220,7 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         <span class="hljs-keyword">if</span> (options.allowTrailingCommas &amp;&amp; eat(_braceR)) <span class="hljs-keyword">break</span>;
       } <span class="hljs-keyword">else</span> first = <span class="hljs-literal">false</span>;
 
-      <span class="hljs-keyword">var</span> prop = startNode(), kind, isGenerator;
+      <span class="hljs-keyword">var</span> prop = startNode(), isGenerator;
       <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span>) {
         prop.method = <span class="hljs-literal">false</span>;
         prop.shorthand = <span class="hljs-literal">false</span>;
@@ -4142,19 +4229,19 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
       parsePropertyName(prop);
       <span class="hljs-keyword">if</span> (eat(_colon)) {
         prop.value = parseExpression(<span class="hljs-literal">true</span>);
-        kind = prop.kind = <span class="hljs-string">"init"</span>;
+        prop.kind = <span class="hljs-string">"init"</span>;
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span> &amp;&amp; tokType === _parenL) {
-        kind = prop.kind = <span class="hljs-string">"init"</span>;
+        prop.kind = <span class="hljs-string">"init"</span>;
         prop.method = <span class="hljs-literal">true</span>;
         prop.value = parseMethod(isGenerator);
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">5</span> &amp;&amp; !prop.computed &amp;&amp; prop.key.type === <span class="hljs-string">"Identifier"</span> &amp;&amp;
                  (prop.key.name === <span class="hljs-string">"get"</span> || prop.key.name === <span class="hljs-string">"set"</span>)) {
         <span class="hljs-keyword">if</span> (isGenerator) unexpected();
-        kind = prop.kind = prop.key.name;
+        prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(<span class="hljs-literal">false</span>);
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.ecmaVersion &gt;= <span class="hljs-number">6</span> &amp;&amp; !prop.computed &amp;&amp; prop.key.type === <span class="hljs-string">"Identifier"</span>) {
-        kind = prop.kind = <span class="hljs-string">"init"</span>;
+        prop.kind = <span class="hljs-string">"init"</span>;
         prop.value = prop.key;
         prop.shorthand = <span class="hljs-literal">true</span>;
       } <span class="hljs-keyword">else</span> unexpected();
@@ -4182,11 +4269,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-144">
+        <li id="section-146">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-144">&#182;</a>
+                <a class="pilcrow" href="#section-146">&#182;</a>
               </div>
               <p>Initialize empty function node.</p>
 
@@ -4206,11 +4293,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-145">
+        <li id="section-147">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-145">&#182;</a>
+                <a class="pilcrow" href="#section-147">&#182;</a>
               </div>
               <p>Parse a function declaration or literal (depending on the
 <code>isStatement</code> parameter).</p>
@@ -4234,11 +4321,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-146">
+        <li id="section-148">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-146">&#182;</a>
+                <a class="pilcrow" href="#section-148">&#182;</a>
               </div>
               <p>Parse object or class method.</p>
 
@@ -4263,11 +4350,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-147">
+        <li id="section-149">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-147">&#182;</a>
+                <a class="pilcrow" href="#section-149">&#182;</a>
               </div>
               <p>Parse arrow function expression with given parameters.</p>
 
@@ -4307,11 +4394,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-148">
+        <li id="section-150">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-148">&#182;</a>
+                <a class="pilcrow" href="#section-150">&#182;</a>
               </div>
               <p>Parse function parameters.</p>
 
@@ -4350,11 +4437,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-149">
+        <li id="section-151">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-149">&#182;</a>
+                <a class="pilcrow" href="#section-151">&#182;</a>
               </div>
               <p>Parse function body and check parameters.</p>
 
@@ -4372,11 +4459,11 @@ least, not without wrapping it in parentheses. Thus, it uses the</p>
         </li>
         
         
-        <li id="section-150">
+        <li id="section-152">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-150">&#182;</a>
+                <a class="pilcrow" href="#section-152">&#182;</a>
               </div>
               <p>Start a new scope with regard to labels and the <code>inFunction</code>
 flag (restore them to their old value afterwards).</p>
@@ -4393,11 +4480,11 @@ flag (restore them to their old value afterwards).</p>
         </li>
         
         
-        <li id="section-151">
+        <li id="section-153">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-151">&#182;</a>
+                <a class="pilcrow" href="#section-153">&#182;</a>
               </div>
               <p>If this is a strict mode function, verify that argument names
 are not repeated, and it does not try to bind the words <code>eval</code>
@@ -4406,9 +4493,9 @@ or <code>arguments</code>.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (strict || !isExpression &amp;&amp; node.body.body.length &amp;&amp; isUseStrict(node.body.body[<span class="hljs-number">0</span>])) {
-      <span class="hljs-keyword">var</span> nameHash = hash();
+      <span class="hljs-keyword">var</span> nameHash = {};
       <span class="hljs-keyword">if</span> (node.id)
-        checkFunctionParam(node.id, nameHash);
+        checkFunctionParam(node.id, {});
       <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; node.params.length; i++)
         checkFunctionParam(node.params[i], nameHash);
       <span class="hljs-keyword">if</span> (node.rest)
@@ -4419,11 +4506,11 @@ or <code>arguments</code>.</p>
         </li>
         
         
-        <li id="section-152">
+        <li id="section-154">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-152">&#182;</a>
+                <a class="pilcrow" href="#section-154">&#182;</a>
               </div>
               <p>Parse a class declaration or literal (depending on the
 <code>isStatement</code> parameter).</p>
@@ -4435,28 +4522,29 @@ or <code>arguments</code>.</p>
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : <span class="hljs-literal">null</span>;
     node.superClass = eat(_extends) ? parseExpression() : <span class="hljs-literal">null</span>;
-    <span class="hljs-keyword">var</span> classBody = startNode(), methodHash = hash(), staticMethodHash = hash();
+    <span class="hljs-keyword">var</span> classBody = startNode(), methodHash = {}, staticMethodHash = {};
     classBody.body = [];
     expect(_braceL);
     <span class="hljs-keyword">while</span> (!eat(_braceR)) {
       <span class="hljs-keyword">var</span> method = startNode();
       <span class="hljs-keyword">if</span> (tokType === _name &amp;&amp; tokVal === <span class="hljs-string">"static"</span>) {
         next();
-        method.static = <span class="hljs-literal">true</span>;
+        method[<span class="hljs-string">'static'</span>] = <span class="hljs-literal">true</span>;
         } <span class="hljs-keyword">else</span> {
-        method.static = <span class="hljs-literal">false</span>;
+        method[<span class="hljs-string">'static'</span>] = <span class="hljs-literal">false</span>;
         }
       <span class="hljs-keyword">var</span> isGenerator = eat(_star);
-      method.key = parseIdent(<span class="hljs-literal">true</span>);
-      <span class="hljs-keyword">if</span> ((method.key.name === <span class="hljs-string">"get"</span> || method.key.name === <span class="hljs-string">"set"</span>) &amp;&amp; tokType === _name) {
+      parsePropertyName(method);
+      <span class="hljs-keyword">if</span> (tokType === _name &amp;&amp; !method.computed &amp;&amp; method.key.type === <span class="hljs-string">"Identifier"</span> &amp;&amp;
+          (method.key.name === <span class="hljs-string">"get"</span> || method.key.name === <span class="hljs-string">"set"</span>)) {
         <span class="hljs-keyword">if</span> (isGenerator) unexpected();
         method.kind = method.key.name;
-        method.key = parseIdent(<span class="hljs-literal">true</span>);
+        parsePropertyName(method);
       } <span class="hljs-keyword">else</span> {
         method.kind = <span class="hljs-string">""</span>;
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, method.static ? staticMethodHash : methodHash);
+      checkPropClash(method, method[<span class="hljs-string">'static'</span>] ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, <span class="hljs-string">"MethodDefinition"</span>));
       eat(_semi);
     }
@@ -4467,11 +4555,11 @@ or <code>arguments</code>.</p>
         </li>
         
         
-        <li id="section-153">
+        <li id="section-155">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-153">&#182;</a>
+                <a class="pilcrow" href="#section-155">&#182;</a>
               </div>
               <p>Parses a comma-separated list of expressions, and returns them as
 an array. <code>close</code> is the token type that ends the list, and
@@ -4499,11 +4587,11 @@ for array literals).</p>
         </li>
         
         
-        <li id="section-154">
+        <li id="section-156">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-154">&#182;</a>
+                <a class="pilcrow" href="#section-156">&#182;</a>
               </div>
               <p>Parse the next token as an identifier. If <code>liberal</code> is true (used
 when parsing properties), it will also convert keywords into
@@ -4536,11 +4624,11 @@ identifiers.</p>
         </li>
         
         
-        <li id="section-155">
+        <li id="section-157">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-155">&#182;</a>
+                <a class="pilcrow" href="#section-157">&#182;</a>
               </div>
               <p>Parses module export declaration.</p>
 
@@ -4553,11 +4641,11 @@ identifiers.</p>
         </li>
         
         
-        <li id="section-156">
+        <li id="section-158">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-156">&#182;</a>
+                <a class="pilcrow" href="#section-158">&#182;</a>
               </div>
               <p>export var|const|let|function|class …;</p>
 
@@ -4565,7 +4653,7 @@ identifiers.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
       node.declaration = parseStatement();
-      node.default = <span class="hljs-literal">false</span>;
+      node[<span class="hljs-string">'default'</span>] = <span class="hljs-literal">false</span>;
       node.specifiers = <span class="hljs-literal">null</span>;
       node.source = <span class="hljs-literal">null</span>;
     } <span class="hljs-keyword">else</span></pre></div></div>
@@ -4573,11 +4661,11 @@ identifiers.</p>
         </li>
         
         
-        <li id="section-157">
+        <li id="section-159">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-157">&#182;</a>
+                <a class="pilcrow" href="#section-159">&#182;</a>
               </div>
               <p>export default …;</p>
 
@@ -4585,7 +4673,7 @@ identifiers.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (eat(_default)) {
       node.declaration = parseExpression(<span class="hljs-literal">true</span>);
-      node.default = <span class="hljs-literal">true</span>;
+      node[<span class="hljs-string">'default'</span>] = <span class="hljs-literal">true</span>;
       node.specifiers = <span class="hljs-literal">null</span>;
       node.source = <span class="hljs-literal">null</span>;
       semicolon();
@@ -4594,11 +4682,11 @@ identifiers.</p>
         </li>
         
         
-        <li id="section-158">
+        <li id="section-160">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-158">&#182;</a>
+                <a class="pilcrow" href="#section-160">&#182;</a>
               </div>
               <p>export * from ‘…’
 export { x, y as z } [from ‘…’]</p>
@@ -4607,7 +4695,7 @@ export { x, y as z } [from ‘…’]</p>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> isBatch = tokType === _star;
       node.declaration = <span class="hljs-literal">null</span>;
-      node.default = <span class="hljs-literal">false</span>;
+      node[<span class="hljs-string">'default'</span>] = <span class="hljs-literal">false</span>;
       node.specifiers = parseExportSpecifiers();
       <span class="hljs-keyword">if</span> (tokType === _name &amp;&amp; tokVal === <span class="hljs-string">"from"</span>) {
         next();
@@ -4623,11 +4711,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-159">
+        <li id="section-161">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-159">&#182;</a>
+                <a class="pilcrow" href="#section-161">&#182;</a>
               </div>
               <p>Parses a comma-separated list of module exports.</p>
 
@@ -4641,11 +4729,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-160">
+        <li id="section-162">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-160">&#182;</a>
+                <a class="pilcrow" href="#section-162">&#182;</a>
               </div>
               <p>export * from ‘…’</p>
 
@@ -4659,11 +4747,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-161">
+        <li id="section-163">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-161">&#182;</a>
+                <a class="pilcrow" href="#section-163">&#182;</a>
               </div>
               <p>export { x, y as z } [from ‘…’]</p>
 
@@ -4693,11 +4781,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-162">
+        <li id="section-164">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-162">&#182;</a>
+                <a class="pilcrow" href="#section-164">&#182;</a>
               </div>
               <p>Parses import declaration.</p>
 
@@ -4710,11 +4798,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-163">
+        <li id="section-165">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-163">&#182;</a>
+                <a class="pilcrow" href="#section-165">&#182;</a>
               </div>
               <p>import ‘…’;</p>
 
@@ -4733,18 +4821,18 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-164">
+        <li id="section-166">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-164">&#182;</a>
+                <a class="pilcrow" href="#section-166">&#182;</a>
               </div>
               <p>only for backward compatibility with Esprima’s AST
 (it doesn’t support mixed default + named yet)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      node.kind = node.specifiers[<span class="hljs-number">0</span>].default ? <span class="hljs-string">"default"</span> : <span class="hljs-string">"named"</span>;
+            <div class="content"><div class='highlight'><pre>      node.kind = node.specifiers[<span class="hljs-number">0</span>][<span class="hljs-string">'default'</span>] ? <span class="hljs-string">"default"</span> : <span class="hljs-string">"named"</span>;
     }
     <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"ImportDeclaration"</span>);
   }</pre></div></div>
@@ -4752,11 +4840,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-165">
+        <li id="section-167">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-165">&#182;</a>
+                <a class="pilcrow" href="#section-167">&#182;</a>
               </div>
               <p>Parses a comma-separated list of module imports.</p>
 
@@ -4780,11 +4868,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-166">
+        <li id="section-168">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-166">&#182;</a>
+                <a class="pilcrow" href="#section-168">&#182;</a>
               </div>
               <p>import defaultObj, { x, y as z } from ‘…’</p>
 
@@ -4794,7 +4882,7 @@ export { x, y as z } [from ‘…’]</p>
       node.id = parseIdent();
       checkLVal(node.id, <span class="hljs-literal">true</span>);
       node.name = <span class="hljs-literal">null</span>;
-      node.default = <span class="hljs-literal">true</span>;
+      node[<span class="hljs-string">'default'</span>] = <span class="hljs-literal">true</span>;
       nodes.push(finishNode(node, <span class="hljs-string">"ImportSpecifier"</span>));
       <span class="hljs-keyword">if</span> (!eat(_comma)) <span class="hljs-keyword">return</span> nodes;
     }
@@ -4814,7 +4902,7 @@ export { x, y as z } [from ‘…’]</p>
         node.name = <span class="hljs-literal">null</span>;
       }
       checkLVal(node.name || node.id, <span class="hljs-literal">true</span>);
-      node.default = <span class="hljs-literal">false</span>;
+      node[<span class="hljs-string">'default'</span>] = <span class="hljs-literal">false</span>;
       nodes.push(finishNode(node, <span class="hljs-string">"ImportSpecifier"</span>));
     }
     <span class="hljs-keyword">return</span> nodes;
@@ -4823,11 +4911,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-167">
+        <li id="section-169">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-167">&#182;</a>
+                <a class="pilcrow" href="#section-169">&#182;</a>
               </div>
               <p>Parses yield expression inside generator.</p>
 
@@ -4837,19 +4925,75 @@ export { x, y as z } [from ‘…’]</p>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseYield</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> node = startNode();
     next();
+    <span class="hljs-keyword">if</span> (eat(_semi) || canInsertSemicolon()) {
+      node.delegate = <span class="hljs-literal">false</span>;
+      node.argument = <span class="hljs-literal">null</span>;
+    } <span class="hljs-keyword">else</span> {
     node.delegate = eat(_star);
     node.argument = parseExpression(<span class="hljs-literal">true</span>);
+    }
     <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"YieldExpression"</span>);
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-168">
+        <li id="section-170">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-168">&#182;</a>
+                <a class="pilcrow" href="#section-170">&#182;</a>
+              </div>
+              <p>Parses array and generator comprehensions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseComprehension</span><span class="hljs-params">(node, isGenerator)</span> </span>{
+    node.blocks = [];
+    <span class="hljs-keyword">while</span> (tokType === _for) {
+      <span class="hljs-keyword">var</span> block = startNode();
+      next();
+      expect(_parenL);
+      block.left = toAssignable(parseExprAtom());
+      checkLVal(block.left, <span class="hljs-literal">true</span>);
+      <span class="hljs-keyword">if</span> (tokType !== _name || tokVal !== <span class="hljs-string">"of"</span>) unexpected();
+      next();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-171">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-171">&#182;</a>
+              </div>
+              <p><code>of</code> property is here for compatibility with Esprima’s AST
+which also supports deprecated [for (… in …) expr]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      block.of = <span class="hljs-literal">true</span>;
+      block.right = parseExpression();
+      expect(_parenR);
+      node.blocks.push(finishNode(block, <span class="hljs-string">"ComprehensionBlock"</span>));
+    }
+    node.filter = eat(_if) ? parseParenExpression() : <span class="hljs-literal">null</span>;
+    node.body = parseExpression();
+    expect(isGenerator ? _parenR : _bracketR);
+    node.generator = isGenerator;
+    <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"ComprehensionExpression"</span>);
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-172">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-172">&#182;</a>
               </div>
               <p>Transforms JSX element name to string.</p>
 
@@ -4874,11 +5018,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-169">
+        <li id="section-173">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-169">&#182;</a>
+                <a class="pilcrow" href="#section-173">&#182;</a>
               </div>
               <p>Parse next token as JSX identifier</p>
 
@@ -4902,11 +5046,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-170">
+        <li id="section-174">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-170">&#182;</a>
+                <a class="pilcrow" href="#section-174">&#182;</a>
               </div>
               <p>Parse namespaced identifier.</p>
 
@@ -4926,11 +5070,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-171">
+        <li id="section-175">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-171">&#182;</a>
+                <a class="pilcrow" href="#section-175">&#182;</a>
               </div>
               <p>Parse JSX object.</p>
 
@@ -4953,11 +5097,11 @@ export { x, y as z } [from ‘…’]</p>
         </li>
         
         
-        <li id="section-172">
+        <li id="section-176">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-172">&#182;</a>
+                <a class="pilcrow" href="#section-176">&#182;</a>
               </div>
               <p>Parses element name in any form - namespaced, object
 or single identifier.</p>
@@ -4981,11 +5125,11 @@ or single identifier.</p>
         </li>
         
         
-        <li id="section-173">
+        <li id="section-177">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-173">&#182;</a>
+                <a class="pilcrow" href="#section-177">&#182;</a>
               </div>
               <p>Parses attribute name as optionally namespaced identifier.</p>
 
@@ -5003,11 +5147,11 @@ or single identifier.</p>
         </li>
         
         
-        <li id="section-174">
+        <li id="section-178">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-174">&#182;</a>
+                <a class="pilcrow" href="#section-178">&#182;</a>
               </div>
               <p>Parses any type of JSX attribute value.</p>
 
@@ -5041,11 +5185,11 @@ or single identifier.</p>
         </li>
         
         
-        <li id="section-175">
+        <li id="section-179">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-175">&#182;</a>
+                <a class="pilcrow" href="#section-179">&#182;</a>
               </div>
               <p>XJSEmptyExpression is unique type since it doesn’t actually parse anything,
 and so it should start at the end of last read token (left brace) and finish
@@ -5075,11 +5219,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-176">
+        <li id="section-180">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-176">&#182;</a>
+                <a class="pilcrow" href="#section-180">&#182;</a>
               </div>
               <p>Parses JSX expression enclosed into curly brackets.</p>
 
@@ -5104,11 +5248,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-177">
+        <li id="section-181">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-177">&#182;</a>
+                <a class="pilcrow" href="#section-181">&#182;</a>
               </div>
               <p>Parses following JSX attribute name-value pair.</p>
 
@@ -5149,11 +5293,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-178">
+        <li id="section-182">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-178">&#182;</a>
+                <a class="pilcrow" href="#section-182">&#182;</a>
               </div>
               <p>HTML empty attribute</p>
 
@@ -5172,11 +5316,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-179">
+        <li id="section-183">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-179">&#182;</a>
+                <a class="pilcrow" href="#section-183">&#182;</a>
               </div>
               <p>Parses any type of JSX contents (expression, text or another tag).</p>
 
@@ -5199,11 +5343,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-180">
+        <li id="section-184">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-180">&#182;</a>
+                <a class="pilcrow" href="#section-184">&#182;</a>
               </div>
               <p>Parses JSX open tag.</p>
 
@@ -5243,11 +5387,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-181">
+        <li id="section-185">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-181">&#182;</a>
+                <a class="pilcrow" href="#section-185">&#182;</a>
               </div>
               <p>Parses JSX closing tag.</p>
 
@@ -5268,11 +5412,11 @@ at the beginning of the next one (right brace).</p>
         </li>
         
         
-        <li id="section-182">
+        <li id="section-186">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-182">&#182;</a>
+                <a class="pilcrow" href="#section-186">&#182;</a>
               </div>
               <p>A valid token is expected after &gt;, so parser needs to know
 whether to look for a standard JS token or an XJS text node</p>
@@ -5289,11 +5433,11 @@ whether to look for a standard JS token or an XJS text node</p>
         </li>
         
         
-        <li id="section-183">
+        <li id="section-187">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-183">&#182;</a>
+                <a class="pilcrow" href="#section-187">&#182;</a>
               </div>
               <p>Parses entire JSX element, including it’s opening tag,
 attributes, contents and closing tag.</p>
@@ -5327,11 +5471,11 @@ attributes, contents and closing tag.</p>
         </li>
         
         
-        <li id="section-184">
+        <li id="section-188">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-184">&#182;</a>
+                <a class="pilcrow" href="#section-188">&#182;</a>
               </div>
               <p>When (erroneously) writing two adjacent tags like</p>
 <pre><code><span class="hljs-keyword">var</span> x = <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>one<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>two<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
