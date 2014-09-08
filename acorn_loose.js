@@ -86,7 +86,7 @@
         // Try to skip some text, based on the error message, and then continue
         var msg = e.message, pos = e.raisedAt, replace = true;
         if (/unterminated/i.test(msg)) {
-          pos = lineEnd(e.pos);
+          pos = lineEnd(e.pos + 1);
           if (/string/.test(msg)) {
             replace = {start: e.pos, end: pos, type: tt.string, value: input.slice(e.pos + 1, pos)};
           } else if (/regular expr/i.test(msg)) {
@@ -125,10 +125,18 @@
   }
 
   function resetTo(pos) {
-    var ch = input.charAt(pos - 1);
-    var reAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
-      /[enwfd]/.test(ch) && /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(input.slice(pos - 10, pos));
-    fetchToken.jumpTo(pos, reAllowed);
+    for (;;) {
+      try {
+        var ch = input.charAt(pos - 1);
+        var reAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
+          /[enwfd]/.test(ch) && /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(input.slice(pos - 10, pos));
+        return fetchToken.jumpTo(pos, reAllowed);
+      } catch(e) {
+        if (!(e instanceof SyntaxError && /unterminated comment/i.test(e.message))) throw e;
+        pos = lineEnd(e.pos + 1);
+        if (pos >= input.length) return;
+      }
+    }
   }
 
   function lookAhead(n) {

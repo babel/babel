@@ -114,12 +114,40 @@
     directSourceFile: null
   };
 
+  var isArray = function (obj) {
+    return Object.prototype.toString.call(obj) === "[object Array]";
+  };
+
   function setOptions(opts) {
     options = opts || {};
     for (var opt in defaultOptions) if (!has(options, opt))
       options[opt] = defaultOptions[opt];
     sourceFile = options.sourceFile || null;
-
+    if (isArray(options.onToken)) {
+      var tokens = options.onToken;
+      options.onToken = function (token) {
+        tokens.push(token);
+      };
+    }
+    if (isArray(options.onComment)) {
+      var comments = options.onComment;
+      options.onComment = function (block, text, start, end, startLoc, endLoc) {
+        var comment = {
+          type: block ? 'Block' : 'Line',
+          value: text,
+          start: start,
+          end: end
+        };
+        if (options.locations) {
+          comment.loc = new SourceLocation();
+          comment.loc.start = startLoc;
+          comment.loc.end = endLoc;
+        }
+        if (options.ranges)
+          comment.range = [start, end];
+        comments.push(comment);
+      };
+    }
     isKeyword = options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
   }
 
@@ -141,19 +169,23 @@
     return {line: line, column: offset - cur};
   };
 
-  var getCurrentToken = function () {
-    var token = {
-      type: tokType,
-      value: tokVal,
-      start: tokStart,
-      end: tokEnd
-    };
+  function Token() {
+    this.type = tokType;
+    this.value = tokVal;
+    this.start = tokStart;
+    this.end = tokEnd;
     if (options.locations) {
-      token.startLoc = tokStartLoc;
-      token.endLoc = tokEndLoc;
+      this.loc = new SourceLocation();
+      this.loc.end = tokEndLoc;
+      // TODO: remove in next major release
+      this.startLoc = tokStartLoc;
+      this.endLoc = tokEndLoc;
     }
-    return token;
-  };
+    if (options.ranges)
+      this.range = [tokStart, tokEnd];
+  }
+
+  exports.Token = Token;
 
   // Acorn is organized as a tokenizer and a recursive-descent parser.
   // The `tokenize` export provides an interface to the tokenizer.
@@ -170,7 +202,7 @@
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
       readToken(forceRegexp);
-      return getCurrentToken();
+      return new Token();
     }
     getToken.jumpTo = function(pos, reAllowed) {
       tokPos = pos;
@@ -554,7 +586,7 @@
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
-      options.onToken(getCurrentToken());
+      options.onToken(new Token());
   }
   }
 
@@ -576,16 +608,16 @@
                         startLoc, options.locations && new Position);
   }
 
-  function skipLineComment() {
+  function skipLineComment(startSkip) {
     var start = tokPos;
     var startLoc = options.onComment && options.locations && new Position;
-    var ch = input.charCodeAt(tokPos+=2);
+    var ch = input.charCodeAt(tokPos+=startSkip);
     while (tokPos < inputLen && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
       ++tokPos;
       ch = input.charCodeAt(tokPos);
     }
     if (options.onComment)
-      options.onComment(false, input.slice(start + 2, tokPos), start, tokPos,
+      options.onComment(false, input.slice(start + startSkip, tokPos), start, tokPos,
                         startLoc, options.locations && new Position);
   }
 
@@ -620,7 +652,7 @@
         if (next === 42) { // '*'
           skipBlockComment();
         } else if (next === 47) { // '/'
-          skipLineComment();
+          skipLineComment(2);
         } else break;
       } else if (ch === 160) { // '\xa0'
         ++tokPos;
@@ -689,8 +721,7 @@
       if (next == 45 && input.charCodeAt(tokPos + 2) == 62 &&
           newline.test(input.slice(lastEnd, tokPos))) {
         // A `-->` line comment
-        tokPos += 3;
-        skipLineComment();
+        skipLineComment(3);
         skipSpace();
         return readToken();
       }
@@ -711,8 +742,7 @@
     if (next == 33 && code == 60 && input.charCodeAt(tokPos + 2) == 45 &&
         input.charCodeAt(tokPos + 3) == 45) {
       // `<!--`, an XML-style comment that should be interpreted as a line comment
-      tokPos += 4;
-      skipLineComment();
+      skipLineComment(4);
       skipSpace();
       return readToken();
     }
@@ -2619,7 +2649,7 @@
     if (strict || !isExpression && node.body.body.length && isUseStrict(node.body.body[0])) {
       var nameHash = {};
       if (node.id)
-        checkFunctionParam(node.id, nameHash);
+        checkFunctionParam(node.id, {});
       for (var i = 0; i < node.params.length; i++)
         checkFunctionParam(node.params[i], nameHash);
       if (node.rest)

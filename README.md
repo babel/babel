@@ -95,6 +95,11 @@ object referring to that same position.
 - **onToken**: If a function is passed for this option, each found
   token will be passed in same format as `tokenize()` returns.
 
+  If array is passed, each found token is pushed to it.
+
+  Note that you are not allowed to call the parser from the
+  callback—that will corrupt its internal state.
+
 - **onComment**: If a function is passed for this option, whenever a
   comment is encountered the function will be called with the
   following parameters:
@@ -108,6 +113,18 @@ object referring to that same position.
   When the `locations` options is on, the `{line, column}` locations
   of the comment’s start and end are passed as two additional
   parameters.
+
+  If array is passed for this option, each found comment is pushed
+  to it as object in Esprima format:
+  
+  ```javascript
+  {
+    "type": "Line" | "Block",
+    "value": "comment text",
+    "range": ...,
+    "loc": ...
+  }
+  ```
 
   Note that you are not allowed to call the parser from the
   callback—that will corrupt its internal state.
@@ -144,9 +161,8 @@ Acorn's tokenizer. The function takes an input string and options
 similar to `parse` (though only some options are meaningful here), and
 returns a function that can be called repeatedly to read a single
 token, and returns a `{start, end, type, value}` object (with added
-`startLoc` and `endLoc` properties when the `locations` option is
-enabled). This object will be reused (updated) for each token, so you
-can't count on it staying stable.
+`loc` property when the `locations` option is enabled and `range`
+property when the `ranges` option is enabled).
 
 **tokTypes** holds an object mapping names to the token type objects
 that end up in the `type` properties of tokens.
@@ -155,8 +171,7 @@ that end up in the `type` properties of tokens.
 
 Escodegen supports generating comments from AST, attached in
 Esprima-specific format. In order to simulate same format in
-Acorn, consider following example (this may be simplified
-in future):
+Acorn, consider following example:
 
 ```javascript
 var comments = [], tokens = [];
@@ -165,19 +180,9 @@ var ast = acorn.parse('var x = 42; // answer', {
 	// collect ranges for each node
 	ranges: true,
 	// collect comments in Esprima's format
-	onComment: function (block, text, start, end) {
-		comments.push({
-			type: block ? 'Block' : 'Line',
-			value: text,
-			range: [start, end]
-		});
-	},
+	onComment: comments,
 	// collect token ranges
-	onToken: function (token) {
-		tokens.push({
-			range: [token.start, token.end]
-		});
-	}
+	onToken: tokens
 });
 
 // attach comments using collected information
