@@ -273,7 +273,8 @@
   // that `break` and `continue` have somewhere to jump to, and
   // `strict` indicates whether strict mode is on.
 
-  var inFunction, inGenerator, labels, strict, inXJSChild, inXJSTag;
+  var inFunction, inGenerator, labels, strict,
+    inXJSChild, inXJSTag, inXJSChildExpression;
 
   // This counter is used for checking that arrow expressions did
   // not contain nested parentheses in argument list.
@@ -580,7 +581,8 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSTag && type === _gt) && !(inXJSChild && tokType !== _braceL)) {
+    if (shouldSkipSpace !== false && !(inXJSTag && type === _gt) &&
+      !((inXJSChild && tokType !== _braceL) || (inXJSChildExpression && tokType === _braceR))) {
       skipSpace();
     }
     tokVal = val;
@@ -3059,12 +3061,14 @@
 
     inXJSTag = false;
     inXJSChild = false;
+    inXJSChildExpression = origInXJSChild;
 
     next();
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
     inXJSTag = origInXJSTag;
     inXJSChild = origInXJSChild;
+    inXJSChildExpression = false;
     
     expect(_braceR);
     return finishNode(node, "XJSExpressionContainer");
