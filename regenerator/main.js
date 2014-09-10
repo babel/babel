@@ -19,6 +19,8 @@ var types = recast.types;
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
+require("./runtime/dev");
+
 function regenerator(source, options) {
   options = normalizeOptions(options);
 

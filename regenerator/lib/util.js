@@ -8,6 +8,7 @@
  * the same directory.
  */
 
+var b = require("recast").types.builders;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 exports.defaults = function(obj) {
@@ -25,4 +26,12 @@ exports.defaults = function(obj) {
   }
 
   return obj;
+};
+
+exports.runtimeProperty = function(name) {
+  return b.memberExpression(
+    b.identifier("regeneratorRuntime"),
+    b.identifier(name),
+    false
+  );
 };

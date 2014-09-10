@@ -17,6 +17,10 @@ var isObject = types.builtInTypes.object;
 var NodePath = types.NodePath;
 var hoist = require("./hoist").hoist;
 var Emitter = require("./emit").Emitter;
+var runtimeProperty = require("./util").runtimeProperty;
+var runtimeWrapMethod = runtimeProperty("wrap");
+var runtimeMarkMethod = runtimeProperty("mark");
+var runtimeValuesMethod = runtimeProperty("values");
 
 exports.transform = function(node) {
   return types.visit(node, visitor);
@@ -49,7 +53,6 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var innerFnId = b.identifier(node.id.name + "$");
     var contextId = path.scope.declareTemporary("context$");
     var argsId = path.scope.declareTemporary("args$");
-    var wrapGeneratorId = b.identifier("wrapGenerator");
     var shouldAliasArguments = renameArguments(path, argsId);
     var vars = hoist(path);
 
@@ -69,7 +72,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       outerBody.push(vars);
     }
 
-    var wrapGenArgs = [
+    var wrapArgs = [
       emitter.getContextFunction(innerFnId),
       outerFnId,
       b.thisExpression()
@@ -77,20 +80,14 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var tryEntryList = emitter.getTryEntryList();
     if (tryEntryList) {
-      wrapGenArgs.push(tryEntryList);
+      wrapArgs.push(tryEntryList);
     }
 
     outerBody.push(b.returnStatement(
-      b.callExpression(wrapGeneratorId, wrapGenArgs)
+      b.callExpression(runtimeWrapMethod, wrapArgs)
     ));
 
     node.body = b.blockStatement(outerBody);
-
-    var markMethod = b.memberExpression(
-      wrapGeneratorId,
-      b.identifier("mark"),
-      false
-    );
 
     if (n.FunctionDeclaration.check(node)) {
       var pp = path.parent;
@@ -136,7 +133,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       //
       // becomes something like
       //
-      //   var gen = wrapGenerator.mark(function *gen() {
+      //   var gen = runtime.mark(function *gen() {
       //     return gen;
       //   });
       //   gen().next(); // { value: gen, done: true }
@@ -145,7 +142,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       // to gen by name.
 
       // Remove the FunctionDeclaration so that we can add it back as a
-      // FunctionExpression passed to wrapGenerator.mark.
+      // FunctionExpression passed to runtime.mark.
       path.replace();
 
       // Change the type of the function to be an expression instead of a
@@ -155,7 +152,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       var varDecl = b.variableDeclaration("var", [
         b.variableDeclarator(
           node.id,
-          b.callExpression(markMethod, [node])
+          b.callExpression(runtimeMarkMethod, [node])
         )
       ]);
 
@@ -181,7 +178,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     } else {
       n.FunctionExpression.assert(node);
-      return b.callExpression(markMethod, [node]);
+      return b.callExpression(runtimeMarkMethod, [node]);
     }
   },
 
@@ -193,11 +190,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var tempIterDecl = b.variableDeclarator(
       tempIterId,
       b.callExpression(
-        b.memberExpression(
-          b.identifier("wrapGenerator"),
-          b.identifier("values"),
-          false
-        ),
+        runtimeValuesMethod,
         [node.right]
       )
     );
@@ -283,11 +276,8 @@ function shouldNotHoistAbove(stmtPath) {
     for (var i = 0; i < value.declarations.length; ++i) {
       var decl = value.declarations[i];
       if (n.CallExpression.check(decl.init) &&
-          n.MemberExpression.check(decl.init.callee) &&
-          n.Identifier.check(decl.init.callee.object) &&
-          n.Identifier.check(decl.init.callee.property) &&
-          decl.init.callee.object.name === "wrapGenerator" &&
-          decl.init.callee.property.name === "mark") {
+          types.astNodesAreEquivalent(decl.init.callee,
+                                      runtimeMarkMethod)) {
         return true;
       }
     }

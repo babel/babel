@@ -15,6 +15,8 @@ var b = types.builders;
 var n = types.namedTypes;
 var leap = require("./leap");
 var meta = require("./meta");
+var runtimeProperty = require("./util").runtimeProperty;
+var runtimeKeysMethod = runtimeProperty("keys");
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -317,7 +319,7 @@ function isSwitchCaseEnder(stmt) {
 
 Ep.getTryEntryList = function() {
   if (this.tryEntries.length === 0) {
-    // To avoid adding a needless [] to the majority of wrapGenerator
+    // To avoid adding a needless [] to the majority of runtime.wrap
     // argument lists, force the caller to handle this case specially.
     return null;
   }
@@ -525,11 +527,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.emitAssign(
       keyIterNextFn,
       b.callExpression(
-        b.memberExpression(
-          b.identifier("wrapGenerator"),
-          b.identifier("keys"),
-          false
-        ),
+        runtimeKeysMethod,
         [self.explodeExpression(path.get("right"))]
       )
     );

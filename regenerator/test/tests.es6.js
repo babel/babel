@@ -9,7 +9,7 @@
  */
 
 var assert = require("assert");
-var runningInTranslation = /\bwrapGenerator\b/.test(function*(){});
+var runningInTranslation = /\.wrap\(/.test(function*(){});
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
@@ -43,15 +43,26 @@ function assertAlreadyFinished(generator) {
   }
 }
 
-describe("wrapGenerator", function() {
+describe("regeneratorRuntime", function() {
   it("should be defined globally", function() {
     var global = Function("return this")();
-    assert.ok("wrapGenerator" in global);
-    assert.strictEqual(global.wrapGenerator, wrapGenerator);
+    assert.ok("regeneratorRuntime" in global);
+    assert.strictEqual(global.regeneratorRuntime, regeneratorRuntime);
   });
 
-  it("should be a function", function() {
-    assert.strictEqual(typeof wrapGenerator, "function");
+  it("should have a .wrap method", function() {
+    assert.strictEqual(typeof regeneratorRuntime.wrap, "function");
+  });
+
+  it("should have a .mark method", function() {
+    assert.strictEqual(typeof regeneratorRuntime.mark, "function");
+  });
+
+  it("should be the object name returned by util.runtimeProperty", function() {
+    assert.strictEqual(
+      require("../lib/util").runtimeProperty("foo").object.name,
+      "regeneratorRuntime"
+    );
   });
 });
 
@@ -229,7 +240,7 @@ describe("nested generators in try-catch", function() {
 
   it('should get a reference to the caught error', function () {
     var genFun2 = gen().next().value;
-    assert.ok(wrapGenerator.isGeneratorFunction(genFun2));
+    assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
     var gen2 = genFun2();
     var res = gen2.next();
     assert.ok(res.value instanceof ReferenceError);
@@ -912,7 +923,7 @@ describe("function declaration hoisting", function() {
   it("should work for nested generator function declarations", function() {
     function *outer(n) {
       yield 0;
-      assert.ok(wrapGenerator.isGeneratorFunction(inner));
+      assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
       return yield* inner(n);
 
       // Note that this function declaration comes after everything else
@@ -1311,12 +1322,12 @@ describe("isGeneratorFunction", function() {
     // Do the assertions up here to make sure the generator function is
     // marked at the beginning of the block the function is declared in.
     assert.strictEqual(
-      wrapGenerator.isGeneratorFunction(genFun),
+      regeneratorRuntime.isGeneratorFunction(genFun),
       true
     );
 
     assert.strictEqual(
-      wrapGenerator.isGeneratorFunction(normalFun),
+      regeneratorRuntime.isGeneratorFunction(normalFun),
       false
     );
 
@@ -1331,14 +1342,14 @@ describe("isGeneratorFunction", function() {
 
   it("should work for function expressions", function() {
     assert.strictEqual(
-      wrapGenerator.isGeneratorFunction(function *genFun() {
+      regeneratorRuntime.isGeneratorFunction(function *genFun() {
         yield 0;
       }),
       true
     );
 
     assert.strictEqual(
-      wrapGenerator.isGeneratorFunction(function normalFun() {
+      regeneratorRuntime.isGeneratorFunction(function normalFun() {
         return 0;
       }),
       false
