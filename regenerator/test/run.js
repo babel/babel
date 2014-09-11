@@ -21,7 +21,7 @@ function convert(es6File, es5File, callback) {
       return callback(err);
     }
 
-    fs.writeFile(es5File, regenerator(es6), callback);
+    fs.writeFile(es5File, regenerator.compile(es6).code, callback);
   });
 }
 
