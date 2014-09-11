@@ -19,8 +19,6 @@ var types = recast.types;
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
-require("./runtime/dev");
-
 function regenerator(source, options) {
   options = normalizeOptions(options);
 
@@ -32,7 +30,7 @@ function regenerator(source, options) {
   }
 
   var runtime = options.includeRuntime ? fs.readFileSync(
-    regenerator.runtime.dev, "utf-8"
+    regenerator.runtime.path, "utf-8"
   ) + "\n" : "";
 
   if (!genFunExp.test(source)) {
@@ -156,7 +154,7 @@ function injectRuntime(runtime, ast) {
   // strings. This technique will allow for more accurate source mapping.
   if (runtime !== "") {
     var runtimeBody = recast.parse(runtime, {
-      sourceFileName: regenerator.runtime.dev
+      sourceFileName: regenerator.runtime.path
     }).program.body;
 
     var body = ast.body;
@@ -167,11 +165,9 @@ function injectRuntime(runtime, ast) {
 }
 
 function runtime() {
-  require(runtime.dev);
+  require("regenerator/runtime");
 }
-
-runtime.dev = path.join(__dirname, "runtime", "dev.js");
-runtime.min = path.join(__dirname, "runtime", "min.js");
+runtime.path = path.join(__dirname, "runtime.js");
 
 // Convenience for just translating let/const to var declarations.
 regenerator.varify = varify;
