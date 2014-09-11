@@ -16,7 +16,7 @@
     "desugaring",
     "ES6"
   ],
-  "version": "0.6.4",
+  "version": "0.6.5",
   "homepage": "http://github.com/facebook/regenerator",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
   "dependencies": {
     "commander": "~2.1.0",
     "esprima-fb": "~6001.1001.0-dev-harmony-fb",
-    "recast": "~0.7.1",
+    "recast": "~0.7.2",
     "promise": "~5.0.0",
     "private": "~0.1.5",
     "through": "~2.3.4",
