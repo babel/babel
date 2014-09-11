@@ -81,7 +81,7 @@ if (semver.gte(process.version, "0.11.2")) {
   enqueue("mocha", [
     "--harmony",
     "--reporter", "spec",
-    "--require", "regenerator/runtime",
+    "--require", "./runtime",
     "./test/tests.es6.js"
   ]);
 }
@@ -89,6 +89,11 @@ if (semver.gte(process.version, "0.11.2")) {
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
+]);
+
+enqueue(convert, [
+  "./test/async.es6.js",
+  "./test/async.es5.js"
 ]);
 
 enqueue(makeMochaCopyFunction("mocha.js"));
@@ -100,8 +105,9 @@ if (!semver.eq(process.version, "0.11.7")) {
   try {
     require.resolve("browserify"); // Throws if missing.
     enqueue(bundle, [
-      ["regenerator/runtime",
-       "./test/tests.es5.js"],
+      ["./runtime.js",
+       "./test/tests.es5.js",
+       "./test/async.es5.js"],
       "./test/tests.browser.js"
     ]);
   } catch (ignored) {
@@ -111,8 +117,9 @@ if (!semver.eq(process.version, "0.11.7")) {
 
 enqueue("mocha", [
   "--reporter", "spec",
-  "--require", "regenerator/runtime",
-  "./test/tests.es5.js"
+  "--require", "./runtime",
+  "./test/tests.es5.js",
+  "./test/async.es5.js"
 ]);
 
 flush();

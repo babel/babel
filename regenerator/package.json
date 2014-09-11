@@ -29,8 +29,9 @@
   },
   "dependencies": {
     "commander": "~2.1.0",
-    "esprima-fb": "5001.1.0-dev-harmony-fb",
+    "esprima-fb": "~6001.1001.0-dev-harmony-fb",
     "recast": "~0.7.1",
+    "promise": "~5.0.0",
     "private": "~0.1.5",
     "through": "~2.3.4",
     "defs": "~0.6.2"

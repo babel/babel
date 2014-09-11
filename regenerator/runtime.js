@@ -18,6 +18,7 @@
 ) {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
+  var Promise = global.Promise || (global.Promise = require("promise"));
 
   if (global.regeneratorRuntime) {
     return;
@@ -50,6 +51,31 @@
     genFun.__proto__ = GFp;
     genFun.prototype = Object.create(Gp);
     return genFun;
+  };
+
+  runtime.async = function(innerFn, self, tryList) {
+    return new Promise(function(resolve, reject) {
+      var generator = wrap(innerFn, self, tryList);
+      var callNext = step.bind(generator.next);
+      var callThrow = step.bind(generator.throw);
+
+      function step(arg) {
+        try {
+          var info = this(arg);
+          var value = info.value;
+        } catch (error) {
+          return reject(error);
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          Promise.resolve(value).then(callNext, callThrow);
+        }
+      }
+
+      callNext();
+    });
   };
 
   // Ensure isGeneratorFunction works when Function#name not supported.

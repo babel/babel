@@ -16,7 +16,7 @@ var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
 var recast = require("recast");
 var types = recast.types;
-var genFunExp = /\bfunction\s*\*/;
+var genOrAsyncFunExp = /\bfunction\s*\*|\basync\b/;
 var blockBindingExp = /\b(let|const)\s+/;
 var runtimePath = path.join(__dirname, "runtime.js");
 
@@ -45,8 +45,8 @@ function compile(source, options) {
     runtimePath, "utf-8"
   ) + "\n" : "";
 
-  if (!genFunExp.test(source)) {
-    // Shortcut: no generators to transform.
+  if (!genOrAsyncFunExp.test(source)) {
+    // Shortcut: no generators or async functions to transform.
     return { code: runtime + source };
   }
 
@@ -172,5 +172,5 @@ exports.transform = transform;
 // To include the runtime in the current node process, call
 // require("regenerator").runtime().
 exports.runtime = function runtime() {
-  require("regenerator/runtime");
+  require("./runtime");
 };
