@@ -7151,23 +7151,36 @@ var recast = require("recast");
 var types = recast.types;
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
+var runtimePath = path.join(__dirname, "runtime.js");
 
-function regenerator(source, options) {
-  options = normalizeOptions(options);
+function exports(file, options) {
+  var data = [];
+  return through(write, end);
 
-  if (isFileName(source)) {
-    // If source is a file name, assume we were invoked as a browserify
-    // transform, and return a stream.
-    // TODO Move the normal behavior into regenerator.compile in v0.6.
-    return createStream(options);
+  function write(buf) {
+    data.push(buf);
   }
 
+  function end() {
+    this.queue(compile(data.join(""), options).code);
+    this.queue(null);
+  }
+}
+
+// To get a writable stream for use as a browserify transform, call
+// require("regenerator")().
+module.exports = exports;
+
+function compile(source, options) {
+  options = normalizeOptions(options);
+
   var runtime = options.includeRuntime ? fs.readFileSync(
-    regenerator.runtime.path, "utf-8"
+    runtimePath, "utf-8"
   ) + "\n" : "";
 
   if (!genFunExp.test(source)) {
-    return runtime + source; // Shortcut: no generators to transform.
+    // Shortcut: no generators to transform.
+    return { code: runtime + source };
   }
 
   var recastOptions = getRecastOptions(options);
@@ -7184,25 +7197,7 @@ function regenerator(source, options) {
 
   injectRuntime(runtime, programPath.node);
 
-  return recast.print(path, recastOptions).code;
-}
-
-function isFileName(str) {
-  return /\.js$/.test(str) && fs.existsSync(str);
-}
-
-function createStream(options) {
-  var data = [];
-  return through(write, end);
-
-  function write(buf) {
-    data.push(buf);
-  }
-
-  function end() {
-    this.queue(regenerator(data.join(""), options));
-    this.queue(null);
-  }
+  return recast.print(path, recastOptions);
 }
 
 function normalizeOptions(options) {
@@ -7287,7 +7282,7 @@ function injectRuntime(runtime, ast) {
   // strings. This technique will allow for more accurate source mapping.
   if (runtime !== "") {
     var runtimeBody = recast.parse(runtime, {
-      sourceFileName: regenerator.runtime.dev
+      sourceFileName: runtimePath
     }).program.body;
 
     var body = ast.body;
@@ -7297,23 +7292,21 @@ function injectRuntime(runtime, ast) {
   return ast;
 }
 
-function runtime() {
-  require("regenerator/runtime");
-}
-runtime.path = path.join(__dirname, "runtime.js");
-
 // Convenience for just translating let/const to var declarations.
-regenerator.varify = varify;
+exports.varify = varify;
+
+// Transforms a string of source code, returning the { code, map? } result
+// from recast.print.
+exports.compile = compile;
 
 // To modify an AST directly, call require("regenerator").transform(ast).
-regenerator.transform = transform;
+exports.transform = transform;
 
 // To include the runtime in the current node process, call
 // require("regenerator").runtime().
-regenerator.runtime = runtime;
-
-// To transform a string of ES6 code, call require("regenerator")(source);
-module.exports = regenerator;
+exports.runtime = function runtime() {
+  require("regenerator/runtime");
+};
 
 }).call(this,"/")
 },{"./lib/util":30,"./lib/visit":31,"assert":2,"defs":33,"esprima-fb":48,"fs":1,"path":9,"recast":60,"regenerator/runtime":88,"through":87}],33:[function(require,module,exports){

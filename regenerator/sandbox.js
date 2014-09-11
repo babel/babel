@@ -37,7 +37,7 @@ var regeneratorOptions = {
 var output = CodeMirror(function(output) {
   document.getElementById("outputWrapper").appendChild(output);
 }, {
-  value: regenerator(input.getValue(), regeneratorOptions),
+  value: regenerator.compile(input.getValue(), regeneratorOptions).code,
   readOnly: true
 });
 
@@ -50,10 +50,10 @@ CodeMirror.on(input.doc, "change", function(instance) {
   clearTimeout(delayTimer);
   delayTimer = setTimeout(function() {
     try {
-      output.setValue(regenerator(
+      output.setValue(regenerator.compile(
         instance.getValue(),
         regeneratorOptions
-      ));
+      ).code);
     } catch (err) {
       console.log(err);
     }
