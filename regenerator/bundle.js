@@ -7152,8 +7152,6 @@ var types = recast.types;
 var genFunExp = /\bfunction\s*\*/;
 var blockBindingExp = /\b(let|const)\s+/;
 
-require("./runtime/dev");
-
 function regenerator(source, options) {
   options = normalizeOptions(options);
 
@@ -7165,7 +7163,7 @@ function regenerator(source, options) {
   }
 
   var runtime = options.includeRuntime ? fs.readFileSync(
-    regenerator.runtime.dev, "utf-8"
+    regenerator.runtime.path, "utf-8"
   ) + "\n" : "";
 
   if (!genFunExp.test(source)) {
@@ -7300,11 +7298,9 @@ function injectRuntime(runtime, ast) {
 }
 
 function runtime() {
-  require(runtime.dev);
+  require("regenerator/runtime");
 }
-
-runtime.dev = path.join(__dirname, "runtime", "dev.js");
-runtime.min = path.join(__dirname, "runtime", "min.js");
+runtime.path = path.join(__dirname, "runtime.js");
 
 // Convenience for just translating let/const to var declarations.
 regenerator.varify = varify;
@@ -7320,7 +7316,7 @@ regenerator.runtime = runtime;
 module.exports = regenerator;
 
 }).call(this,"/")
-},{"./lib/util":30,"./lib/visit":31,"./runtime/dev":88,"assert":2,"defs":33,"esprima-fb":48,"fs":1,"path":9,"recast":60,"through":87}],33:[function(require,module,exports){
+},{"./lib/util":30,"./lib/visit":31,"assert":2,"defs":33,"esprima-fb":48,"fs":1,"path":9,"recast":60,"regenerator/runtime":88,"through":87}],33:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");

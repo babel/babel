@@ -1,3 +1,6 @@
+// Make sure regeneratorRuntime is defined.
+regenerator.runtime();
+
 var input = CodeMirror(function(input) {
   document.getElementById("inputWrapper").appendChild(input);
 }, {
