@@ -29638,7 +29638,11 @@ function through (write, end, opts) {
 ) {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
-  var Promise = global.Promise || (global.Promise = require("promise"));
+
+  try {
+    // Make a reasonable attempt to provide a Promise polyfill.
+    var Promise = global.Promise || (global.Promise = require("promise"));
+  } catch (ignored) {}
 
   if (global.regeneratorRuntime) {
     return;
