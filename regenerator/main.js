@@ -172,5 +172,5 @@ exports.transform = transform;
 // To include the runtime in the current node process, call
 // require("regenerator").runtime().
 exports.runtime = function runtime() {
-  require("regenerator/runtime");
+  require("./runtime");
 };
