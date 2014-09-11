@@ -29,7 +29,7 @@ exports.transform = function transform(node, options) {
   node = recast.visit(node, visitor);
 
   if (options && options.includeRuntime) {
-    injectRuntime(node);
+    injectRuntime(n.File.check(node) ? node.program : node);
   }
 
   return node;
