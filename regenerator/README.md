@@ -40,8 +40,10 @@ regenerator --include-runtime es6.js > es5.js # Add the runtime too.
 
 Programmatic usage:
 ```js
-var es5Source = require("regenerator")(es6Source);
-var es5SourceWithRuntime = require("regenerator")(es6Source, { includeRuntime: true });
+var es5Source = require("regenerator").compile(es6Source).code;
+var es5SourceWithRuntime = require("regenerator").compile(es6Source, {
+  includeRuntime: true
+}).code;
 ```
 
 AST transformation:
