@@ -18,7 +18,6 @@ var recast = require("recast");
 var types = recast.types;
 var genOrAsyncFunExp = /\bfunction\s*\*|\basync\b/;
 var blockBindingExp = /\b(let|const)\s+/;
-var runtimePath = path.join(__dirname, "runtime.js");
 
 function exports(file, options) {
   var data = [];
@@ -38,16 +37,24 @@ function exports(file, options) {
 // require("regenerator")().
 module.exports = exports;
 
+// To include the runtime globally in the current node process, call
+// require("regenerator").runtime().
+function runtime() {
+  require("./runtime");
+}
+exports.runtime = runtime;
+runtime.path = path.join(__dirname, "runtime.js");
+
 function compile(source, options) {
   options = normalizeOptions(options);
 
-  var runtime = options.includeRuntime ? fs.readFileSync(
-    runtimePath, "utf-8"
-  ) + "\n" : "";
-
   if (!genOrAsyncFunExp.test(source)) {
-    // Shortcut: no generators or async functions to transform.
-    return { code: runtime + source };
+    return {
+      // Shortcut: no generators or async functions to transform.
+      code: (options.includeRuntime ? fs.readFileSync(
+        runtime.path, "utf-8"
+      ) + "\n" : "") + source
+    };
   }
 
   var recastOptions = getRecastOptions(options);
@@ -60,9 +67,7 @@ function compile(source, options) {
     varifyAst(programPath.node);
   }
 
-  transform(programPath);
-
-  injectRuntime(runtime, programPath.node);
+  transform(programPath, options);
 
   return recast.print(path, recastOptions);
 }
@@ -141,24 +146,6 @@ function varifyAst(ast) {
   return ast;
 }
 
-function injectRuntime(runtime, ast) {
-  types.builtInTypes.string.assert(runtime);
-  types.namedTypes.Program.assert(ast);
-
-  // Include the runtime by modifying the AST rather than by concatenating
-  // strings. This technique will allow for more accurate source mapping.
-  if (runtime !== "") {
-    var runtimeBody = recast.parse(runtime, {
-      sourceFileName: runtimePath
-    }).program.body;
-
-    var body = ast.body;
-    body.unshift.apply(body, runtimeBody);
-  }
-
-  return ast;
-}
-
 // Convenience for just translating let/const to var declarations.
 exports.varify = varify;
 
@@ -168,9 +155,3 @@ exports.compile = compile;
 
 // To modify an AST directly, call require("regenerator").transform(ast).
 exports.transform = transform;
-
-// To include the runtime in the current node process, call
-// require("regenerator").runtime().
-exports.runtime = function runtime() {
-  require("./runtime");
-};

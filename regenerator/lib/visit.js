@@ -9,7 +9,9 @@
  */
 
 var assert = require("assert");
-var types = require("recast").types;
+var fs = require("fs");
+var recast = require("recast");
+var types = recast.types;
 var n = types.namedTypes;
 var b = types.builders;
 var isArray = types.builtInTypes.array;
@@ -23,9 +25,30 @@ var runtimeMarkMethod = runtimeProperty("mark");
 var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
 
-exports.transform = function(node) {
-  return types.visit(node, visitor);
+exports.transform = function transform(node, options) {
+  node = recast.visit(node, visitor);
+
+  if (options && options.includeRuntime) {
+    injectRuntime(node);
+  }
+
+  return node;
 };
+
+function injectRuntime(program) {
+  n.Program.assert(program);
+
+  // Include the runtime by modifying the AST rather than by concatenating
+  // strings. This technique will allow for more accurate source mapping.
+  var runtimePath = require("..").runtime.path;
+  var runtime = fs.readFileSync(runtimePath, "utf8");
+  var runtimeBody = recast.parse(runtime, {
+    sourceFileName: runtimePath
+  }).program.body;
+
+  var body = program.body;
+  body.unshift.apply(body, runtimeBody);
+}
 
 var visitor = types.PathVisitor.fromMethodsObject({
   visitFunction: function(path) {
@@ -307,7 +330,7 @@ function renameArguments(funcPath, argsId) {
   var didReplaceArguments = false;
   var hasImplicitArguments = false;
 
-  types.visit(funcPath, {
+  recast.visit(funcPath, {
     visitFunction: function(path) {
       if (path.value === func) {
         hasImplicitArguments = !path.scope.lookup("arguments");
