@@ -188,7 +188,8 @@ in a context with such a
 
 The `bin/without_eval` script can be used to generate a version of
 `acorn.js` that has the generated code inlined, and can thus run
-without evaluating anything.
+without evaluating anything. In versions of this library downloaded
+from NPM, this script will be available as `acorn_csp.js`.
 
 ### acorn_loose.js ###
 

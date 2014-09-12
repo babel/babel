@@ -6,15 +6,12 @@ var acornSrc = fs.readFileSync(require.resolve("../acorn"), "utf8");
 var acorn = require("../acorn"), walk = require("../util/walk");
 
 var ast = acorn.parse(acornSrc);
-var touchups = [];
-var uses = [], declaration;
+var touchups = [], uses = [];
 
 walk.simple(ast, {
   FunctionDeclaration: function(node) {
-    if (node.id.name == "makePredicate") {
+    if (node.id.name == "makePredicate")
       touchups.push({text: "// Removed to create an eval-free library", from: node.start, to: node.end});
-      declaration = node;
-    }
   },
   VariableDeclaration: function(node) {
     node.declarations.forEach(function(decl) {
