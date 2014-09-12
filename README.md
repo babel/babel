@@ -176,6 +176,20 @@ console.log(escodegen.generate(ast, {comment: true}));
 
 [escodegen]: https://github.com/Constellation/escodegen
 
+#### Using Acorn in an environment with a Content Security Policy
+
+Some contexts, such as Chrome Web Apps, disallow run-time code evaluation.
+Acorn uses `new Function` to generate fast functions that test whether
+a word is in a given set, and will trigger a security error when used
+in a context with such a
+[Content Security Policy](http://www.html5rocks.com/en/tutorials/security/content-security-policy/#eval-too)
+(see [#90](https://github.com/marijnh/acorn/issues/90) and
+[#123](https://github.com/marijnh/acorn/issues/123)).
+
+The `bin/without_eval` script can be used to generate a version of
+`acorn.js` that has the generated code inlined, and can thus run
+without evaluating anything.
+
 ### acorn_loose.js ###
 
 This file implements an error-tolerant parser. It exposes a single
