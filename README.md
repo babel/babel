@@ -134,6 +134,10 @@ object referring to that same position.
 
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
 
+**parseExpressionAt**`(input, offset, options)` will parse a single
+expression in a string, and return its AST. It will not complain if
+there is more of the string left after the expression.
+
 **getLineInfo**`(input, offset)` can be used to get a `{line,
 column}` object for a given program string and character offset.
 

@@ -43,6 +43,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    initParserState();
     return parseTopLevel(options.program);
   };
 
@@ -112,6 +113,18 @@
     // This value, if given, is stored in every node, whether
     // `locations` is on or off.
     directSourceFile: null
+  };
+
+  // This function tries to parse a single expression at a given
+  // offset in a string. Useful for parsing mixed-language formats
+  // that embed JavaScript expressions.
+
+  exports.parseExpressionAt = function(inpt, pos, opts) {
+    input = String(inpt); inputLen = input.length;
+    setOptions(opts);
+    initTokenState(pos);
+    initParserState();
+    return parseExpression();
   };
 
   var isArray = function (obj) {
@@ -285,6 +298,14 @@
   // '{expression}' and everything else as string literals.
 
   var inTemplate;
+
+  function initParserState() {
+    lastStart = lastEnd = tokPos;
+    if (options.locations) lastEndLoc = new Position;
+    inFunction = inGenerator = strict = null;
+    labels = [];
+    readToken();
+  }
 
   // This function is used to raise exceptions on parse errors. It
   // takes an offset integer (into the current `input`) to indicate
@@ -554,9 +575,15 @@
 
   // Reset the token state. Used at the start of a parse.
 
-  function initTokenState() {
-    tokCurLine = 1;
-    tokPos = tokLineStart = 0;
+  function initTokenState(pos) {
+    if (pos) {
+      tokPos = pos;
+      tokLineStart = Math.max(0, input.lastIndexOf("\n", pos));
+      tokCurLine = input.slice(0, tokLineStart).split(newline).length;
+    } else {
+      tokCurLine = 1;
+      tokPos = tokLineStart = 0;
+    }
     tokRegexpAllowed = true;
     metParenL = 0;
     inTemplate = false;
@@ -1436,12 +1463,6 @@
   // to its body instead of creating a new node.
 
   function parseTopLevel(program) {
-    lastStart = lastEnd = tokPos;
-    if (options.locations) lastEndLoc = new Position;
-    inFunction = inGenerator = strict = null;
-    labels = [];
-    readToken();
-
     var node = program || startNode(), first = true;
     if (!program) node.body = [];
     while (tokType !== _eof) {
