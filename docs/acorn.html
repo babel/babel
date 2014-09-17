@@ -615,7 +615,8 @@ that <code>break</code> and <code>continue</code> have somewhere to jump to, and
             </div>
             
             <div class="content"><div class='highlight'><pre>
-  <span class="hljs-keyword">var</span> inFunction, inGenerator, labels, strict, inXJSChild, inXJSTag;</pre></div></div>
+  <span class="hljs-keyword">var</span> inFunction, inGenerator, labels, strict,
+    inXJSChild, inXJSTag, inXJSChildExpression;</pre></div></div>
             
         </li>
         
@@ -1343,14 +1344,14 @@ the next one’s <code>tokStart</code> will point at the right position.</p>
     tokEnd = tokPos;
     <span class="hljs-keyword">if</span> (options.locations) tokEndLoc = <span class="hljs-keyword">new</span> Position;
     tokType = type;
-    <span class="hljs-keyword">if</span> (shouldSkipSpace !== <span class="hljs-literal">false</span> &amp;&amp; !(inXJSTag &amp;&amp; type === _gt) &amp;&amp; !(inXJSChild &amp;&amp; tokType !== _braceL)) {
+    <span class="hljs-keyword">if</span> (shouldSkipSpace !== <span class="hljs-literal">false</span> &amp;&amp; !(inXJSChild &amp;&amp; tokType !== _braceL)) {
       skipSpace();
     }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     <span class="hljs-keyword">if</span> (options.onToken) {
       options.onToken(<span class="hljs-keyword">new</span> Token());
-  }
+  	}
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">skipBlockComment</span><span class="hljs-params">()</span> </span>{
@@ -1590,7 +1591,7 @@ into it.</p>
             <div class="content"><div class='highlight'><pre>      size = <span class="hljs-number">2</span>;
       <span class="hljs-keyword">return</span> finishOp(_ltSlash, size);
     }
-    <span class="hljs-keyword">return</span> finishOp(code === <span class="hljs-number">60</span> ? _lt : _gt, size);
+    <span class="hljs-keyword">return</span> code === <span class="hljs-number">60</span> ? finishOp(_lt, size) : finishOp(_gt, size, !inXJSTag);
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readToken_eq_excl</span><span class="hljs-params">(code)</span> </span>{ <span class="hljs-comment">// '=!', '=&gt;'</span>
@@ -1705,7 +1706,7 @@ by a digit or another two dots.</p>
     <span class="hljs-keyword">case</span> <span class="hljs-number">91</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_bracketL);
     <span class="hljs-keyword">case</span> <span class="hljs-number">93</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_bracketR);
     <span class="hljs-keyword">case</span> <span class="hljs-number">123</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_braceL);
-    <span class="hljs-keyword">case</span> <span class="hljs-number">125</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_braceR);
+    <span class="hljs-keyword">case</span> <span class="hljs-number">125</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_braceR, <span class="hljs-literal">undefined</span>, !inXJSChildExpression);
     <span class="hljs-keyword">case</span> <span class="hljs-number">58</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_colon);
     <span class="hljs-keyword">case</span> <span class="hljs-number">63</span>: ++tokPos; <span class="hljs-keyword">return</span> finishToken(_question);
 
@@ -1871,10 +1872,10 @@ character, or something that’s entirely disallowed.</p>
     <span class="hljs-keyword">return</span> tok;
   }
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">finishOp</span><span class="hljs-params">(type, size)</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">finishOp</span><span class="hljs-params">(type, size, shouldSkipSpace)</span> </span>{
     <span class="hljs-keyword">var</span> str = input.slice(tokPos, tokPos + size);
     tokPos += size;
-    finishToken(type, str);
+    finishToken(type, str, shouldSkipSpace);
   }</pre></div></div>
             
         </li>
@@ -5233,13 +5234,19 @@ at the beginning of the next one (right brace).</p>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseXJSExpressionContainer</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> node = startNode();
 
-    <span class="hljs-keyword">var</span> origInXJSTag = inXJSTag;
+    <span class="hljs-keyword">var</span> origInXJSTag = inXJSTag,
+      origInXJSChild = inXJSChild;
+
     inXJSTag = <span class="hljs-literal">false</span>;
+    inXJSChild = <span class="hljs-literal">false</span>;
+    inXJSChildExpression = origInXJSChild;
 
     next();
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
     inXJSTag = origInXJSTag;
+    inXJSChild = origInXJSChild;
+    inXJSChildExpression = <span class="hljs-literal">false</span>;
     
     expect(_braceR);
     <span class="hljs-keyword">return</span> finishNode(node, <span class="hljs-string">"XJSExpressionContainer"</span>);
