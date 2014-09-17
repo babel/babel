@@ -581,15 +581,14 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSTag && type === _gt) &&
-      !((inXJSChild && tokType !== _braceL) || (inXJSChildExpression && tokType === _braceR))) {
+    if (shouldSkipSpace !== false && !(inXJSChild && tokType !== _braceL)) {
       skipSpace();
     }
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
       options.onToken(new Token());
-  }
+  	}
   }
 
   function skipBlockComment() {
@@ -757,7 +756,7 @@
       size = 2;
       return finishOp(_ltSlash, size);
     }
-    return finishOp(code === 60 ? _lt : _gt, size);
+    return code === 60 ? finishOp(_lt, size) : finishOp(_gt, size, !inXJSTag);
   }
 
   function readToken_eq_excl(code) { // '=!', '=>'
@@ -810,7 +809,7 @@
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
     case 123: ++tokPos; return finishToken(_braceL);
-    case 125: ++tokPos; return finishToken(_braceR);
+    case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChildExpression);
     case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
 
@@ -902,10 +901,10 @@
     return tok;
   }
 
-  function finishOp(type, size) {
+  function finishOp(type, size, shouldSkipSpace) {
     var str = input.slice(tokPos, tokPos + size);
     tokPos += size;
-    finishToken(type, str);
+    finishToken(type, str, shouldSkipSpace);
   }
 
   // Parse a regular expression. Some context-awareness is necessary,
