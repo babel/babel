@@ -712,9 +712,7 @@
         prop.key = parsePropertyName() || dummyIdent();
         prop.value = parseFunction(startNode(), false);
       } else {
-        next();
-        eat(tt.comma);
-        continue;
+        prop.value = dummyIdent();
       }
 
       node.properties.push(finishNode(prop, "Property"));
