@@ -698,7 +698,7 @@
     pushCx();
     next();
     var propIndent = curIndent, line = curLineStart;
-    while (!closes(tt.braceR, propIndent, line)) {
+    while (!closes(tt.braceR, propIndent + 1, line)) {
       var name = parsePropertyName();
       if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       var prop = startNode();
