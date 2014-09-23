@@ -2107,7 +2107,7 @@
       elem.tail = false;
       next();
       node.quasis.push(finishNode(elem, "TemplateElement"));
-      if (eat(_bquote)) { // '`', end of template
+      if (tokType === _bquote) { // '`', end of template
         elem.tail = true;
         break;
       }
@@ -2118,6 +2118,7 @@
       expect(_braceR);
     }
     inTemplate = false;
+    next();
     return finishNode(node, "TemplateLiteral");
   }
 
