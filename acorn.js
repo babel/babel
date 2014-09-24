@@ -2115,6 +2115,8 @@
       expect(_dollarBraceL);
       node.expressions.push(parseExpression());
       inTemplate = true;
+      // hack to include previously skipped space
+      tokPos = tokEnd;
       expect(_braceR);
     }
     inTemplate = false;
@@ -2270,13 +2272,17 @@
         node.rest = toAssignable(parseExprAtom(), false, true);
         checkSpreadAssign(node.rest);
         expect(_parenR);
+        defaults.push(null);
         break;
       } else {
         node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent());
-        if (options.ecmaVersion >= 6 && tokType === _eq) {
-          next();
-          hasDefaults = true;
-          defaults.push(parseExpression(true));
+        if (options.ecmaVersion >= 6) {
+          if (eat(_eq)) {
+            hasDefaults = true;
+            defaults.push(parseExpression(true));
+          } else {
+            defaults.push(null);
+          }
         }
         if (!eat(_comma)) {
           expect(_parenR);

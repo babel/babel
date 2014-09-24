@@ -15246,3 +15246,146 @@ testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)"
 testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
 
 testFail("({ get test() { } }) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
+
+/* Regression tests */
+
+// # https://github.com/marijnh/acorn/issues/127
+test('doSmth(`${x} + ${y} = ${x + y}`)', {
+  type: "Program",
+  start: 0,
+  end: 32,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 32,
+    expression: {
+      type: "CallExpression",
+      start: 0,
+      end: 32,
+      callee: {
+        type: "Identifier",
+        start: 0,
+        end: 6,
+        name: "doSmth"
+      },
+      arguments: [{
+        type: "TemplateLiteral",
+        start: 7,
+        end: 31,
+        expressions: [
+          {
+            type: "Identifier",
+            start: 10,
+            end: 11,
+            name: "x"
+          },
+          {
+            type: "Identifier",
+            start: 17,
+            end: 18,
+            name: "y"
+          },
+          {
+            type: "BinaryExpression",
+            start: 24,
+            end: 29,
+            left: {
+              type: "Identifier",
+              start: 24,
+              end: 25,
+              name: "x"
+            },
+            operator: "+",
+            right: {
+              type: "Identifier",
+              start: 28,
+              end: 29,
+              name: "y"
+            }
+          }
+        ],
+        quasis: [
+          {
+            type: "TemplateElement",
+            start: 8,
+            end: 8,
+            value: {cooked: "", raw: ""},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 12,
+            end: 15,
+            value: {cooked: " + ", raw: " + "},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 19,
+            end: 22,
+            value: {cooked: " = ", raw: " = "},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 30,
+            end: 30,
+            value: {cooked: "", raw: ""},
+            tail: true
+          }
+        ]
+      }]
+    }
+  }]
+}, {ecmaVersion: 6});
+
+// # https://github.com/marijnh/acorn/issues/129
+test('function normal(x, y = 10) {}', {
+  type: "Program",
+  start: 0,
+  end: 29,
+  body: [{
+    type: "FunctionDeclaration",
+    start: 0,
+    end: 29,
+    id: {
+      type: "Identifier",
+      start: 9,
+      end: 15,
+      name: "normal"
+    },
+    params: [
+      {
+        type: "Identifier",
+        start: 16,
+        end: 17,
+        name: "x"
+      },
+      {
+        type: "Identifier",
+        start: 19,
+        end: 20,
+        name: "y"
+      }
+    ],
+    defaults: [
+      null,
+      {
+        type: "Literal",
+        start: 23,
+        end: 25,
+        value: 10,
+        raw: "10"
+      }
+    ],
+    rest: null,
+    generator: false,
+    body: {
+      type: "BlockStatement",
+      start: 27,
+      end: 29,
+      body: []
+    },
+    expression: false
+  }]
+}, {ecmaVersion: 6});
