@@ -18,18 +18,18 @@
     "test": "mocha"
   },
   "dependencies": {
-    "chokidar": "^0.8.4",
-    "commander": "^2.3.0",
+    "chokidar": "0.8.4",
+    "commander": "2.3.0",
     "escodegen": "https://github.com/Constellation/escodegen/tarball/master",
     "esprima": "https://github.com/esnext/esprima/tarball/harmony-esnext",
-    "estraverse": "^1.5.1",
+    "estraverse": "1.5.1",
     "fs-readdir-recursive": "0.0.2",
-    "lodash": "^2.4.1",
-    "mkdirp": "^0.5.0",
-    "through": "^2.3.4"
+    "lodash": "2.4.1",
+    "mkdirp": "0.5.0",
+    "through": "2.3.4"
   },
   "devDependencies": {
     "istanbul": "0.3.2",
-    "mocha": "^1.21.4"
+    "mocha": "1.21.4"
   }
 }
