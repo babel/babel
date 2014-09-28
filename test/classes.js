@@ -11,7 +11,7 @@ suite("classes", function () {
         "  }",
         "}"
       ]);
-    }, /cannot access super properties/, "unexpected error");
+    }, /cannot access super properties/);
   });
 
   test("no accessing super properties", function () {
@@ -23,7 +23,7 @@ suite("classes", function () {
         "  }",
         "}"
       ]);
-    }, /cannot access super properties/, "unexpected error");
+    }, /cannot access super properties/);
   });
 
   test("accessing super without having one", function () {
@@ -35,7 +35,7 @@ suite("classes", function () {
         "  }",
         "}"
       ]);
-    }, /cannot access super as this class has none/, "unexpected error");
+    }, /cannot access super as this class has none/);
   });
 
   test("defining constructor as a mutator", function () {
@@ -46,6 +46,6 @@ suite("classes", function () {
         "  }",
         "}"
       ]);
-    }, /unknown kind for constructor method/, "unexpected error");
+    }, /unknown kind for constructor method/);
   });
 });
