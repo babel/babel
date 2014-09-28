@@ -24,9 +24,9 @@
 
  - **Fast** - [10x faster than Traceur](#performance).
  - **Easy** - with Browserify support, Node API, Connect Middleware and a CLI.
+ - **Lossless** - source map support so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime required**.
  - **Concise** - does not pollute scope with unneccesary variables.
- - **Lossless** - source map support so you can debug your compiled code with ease.
 
 ## Features
 
