@@ -1,0 +1,3 @@
+suite("browserify", function () {
+
+});
