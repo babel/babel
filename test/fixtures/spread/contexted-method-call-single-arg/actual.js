@@ -1,0 +1,1 @@
+foob.add(...numbers);

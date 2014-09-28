@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var fs = require("fs");
+var templates = require("../lib/6to5/util").templates;
+fs.writeFileSync("templates.json", JSON.stringify(templates));

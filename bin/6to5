@@ -1,0 +1,134 @@
+#!/usr/bin/env node
+
+var commander = require("commander");
+var chokidar  = require("chokidar");
+var readdir   = require("fs-readdir-recursive");
+var mkdirp    = require("mkdirp");
+var 6to5     = require("../lib/6to5/node");
+var path      = require("path");
+var util      = require("../lib/6to5/util");
+var fs        = require("fs");
+var _         = require("lodash");
+
+commander.option("-m, --source-maps", "Generate source maps alongside the compiled JavaScript files. Adds sourceMappingURL directives to the JavaScript as well.");
+//commander.option("-w, --watch", "Watch, only works with --out-dir");
+
+var list = function (val) {
+  return val ? val.split(",") : [];
+};
+
+commander.option("-w, --whitelist [whitelist]", "Whitelist", list);
+commander.option("-b, --blacklist [blacklist]", "Blacklist", list);
+commander.option("-o, --out-file [out]", "Compile all input files into a single file");
+commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
+
+var pkg = require("../package.json");
+commander.version(pkg.version);
+commander.usage("[options] <files ...>");
+commander.parse(process.argv);
+
+//
+
+var errors = [];
+
+var filenames = commander.args;
+if (!filenames.length) errors.push("no filenames input");
+
+_.each(filenames, function (filename) {
+  if (!fs.existsSync(filename)) {
+    errors.push(filename + " doesn't exist");
+  }
+});
+
+if (commander.outFile && commander.outDir) {
+  errors.push("cannot have --out-file and --out-dir");
+}
+
+if (errors.length) {
+  console.error(errors.join(". "));
+  process.exit(2);
+}
+
+//
+
+var readdirFilter = function (filename) {
+  return readdir(filename).filter(util.canCompile);
+};
+
+var mainOpts = {
+  blacklist: commander.blacklist,
+  whitelist: commander.whitelist,
+  sourceMap: commander.sourceMaps,
+  tolerant:  commander.tolerant
+};
+
+var data = [];
+
+var compile = function (filename) {
+  var opts = _.clone(mainOpts);
+  opts.filename = filename;
+
+  var file = fs.readFileSync(filename);
+  return 6to5.transform(file, opts);
+};
+
+if (commander.outDir) {
+  var write = function (src, relative) {
+    var data = compile(src);
+
+    var dest = path.join(commander.outDir, relative);
+
+    var up = path.normalize(dest + "/..");
+    mkdirp.sync(up);
+
+    fs.writeFileSync(dest, data);
+
+    console.log(src + " -> " + dest);
+  };
+
+  var handle = function (filename) {
+    var stat = fs.statSync(filename);
+
+    if (stat.isDirectory(filename)) {
+      var dirname = filename;
+
+      _.each(readdirFilter(dirname), function (filename) {
+        write(path.join(dirname, filename), filename);
+      });
+    } else {
+      write(filename, filename);
+    }
+  };
+
+  _.each(filenames, handle);
+} else {
+  var data = [];
+
+  var _filenames = filenames;
+  filenames = [];
+
+  _.each(_filenames, function (filename) {
+    var stat = fs.statSync(filename);
+    if (stat.isDirectory()) {
+      var dirname = filename;
+
+      _.each(readdirFilter(filename), function (filename) {
+        filenames.push(path.join(dirname, filename));
+      });
+    } else {
+      filenames.push(filename);
+    }
+  });
+
+  _.each(filenames, function (filename) {
+    data.push(compile(filename) + "\n");
+  });
+
+  data = data.join("");
+
+  if (commander.outFile) {
+    fs.writeFileSync(commander.out, data);
+  } else {
+    console.log(data);
+  }
+}

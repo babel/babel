@@ -1,0 +1,1 @@
+module crypto from "crypto";

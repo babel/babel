@@ -1,0 +1,3 @@
+suite("errors", function () {
+
+});

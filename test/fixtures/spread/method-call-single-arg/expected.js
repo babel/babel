@@ -1,0 +1,1 @@
+add.apply(null, numbers);

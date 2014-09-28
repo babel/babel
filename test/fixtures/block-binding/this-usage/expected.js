@@ -1,0 +1,13 @@
+var arr = [
+  1,
+  2,
+  3
+];
+(function () {
+  for (var i in arr) {
+    (function () {
+      var val = arr[i];
+      console.log(val * this.multiplier);
+    }.call(this));
+  }
+}.call(this));
