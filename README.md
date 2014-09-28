@@ -41,9 +41,11 @@
 | [Rest parameters](FEATURES.md#rest-parameters)                       | ✓           |
 | [Template literals](FEATURES.md#template-literals)                   | ✓           |
 | [Modules](FEATURES.md#modules)                                       | ✓           |
-| [Array comprehension](FEATURES.md#array-comprehension)               |             |
-| [Property name shorthand](FEATURES.md#property-name-shorthand)       |             |
+| [Property name shorthand](FEATURES.md#property-name-shorthand)       | ✓           |
+| [Computed property names](FEATURES.md#computed-property-names)       | ✓           |
+| [Constants](FEATURES.md#constants)                                   |             |
 | [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |
+| [Array comprehension](FEATURES.md#array-comprehension)               |             |
 | [Generators](FEATURES.md#generators)                                 |             |
 
 ## Installation

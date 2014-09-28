@@ -99,6 +99,23 @@ console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 ```javascript
 ```
 
+## Constants
+
+```javascript
+```
+
+## Computed property names
+
+```javascript
+var obj = {
+  ["x" + foo]: "heh",
+  ["y" + bar]: "noo",
+  foo: "foo",
+  bar: "bar"
+};
+
+```
+
 ## Property name shorthand
 
 ```javascript
