@@ -1,4 +1,4 @@
-# 6to6
+# 6to5
 
 <p align="center">
   <a href="https://travis-ci.org/sebmck/6to5">
