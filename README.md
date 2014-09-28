@@ -23,26 +23,28 @@
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
  - **Fast** - [10x faster than Traceur](#performance).
- - **Easy** - with Browserify support, Node API, Connect Middleware and a CLI.
+ - **Extensive** - with Browserify support, Node API, Connect Middleware and a CLI.
  - **Lossless** - source map support so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime required**.
  - **Concise** - does not pollute scope with unneccesary variables.
 
 ## Features
 
-| Name                       | Implemented |
-| -------------------------- | ----------- |
-| Arrow functions            | ✓           |
-| Classes                    | ✓           |
-| Default parameters         | ✓           |
-| Spread                     | ✓           |
-| Block binding              | ✓           |
-| Property method assignment | ✓           |
-| Rest parameters            | ✓           |
-| Template literals          | ✓           |
-| Modules                    | ✓           |
-| Destructuring assignment   |             |
-| Generators                 |             |
+| Name                                                                 | Implemented |
+| -------------------------------------------------------------------- | ----------- |
+| [Arrow functions](FEATURES.md#arrow-functions)                       | ✓           |
+| [Classes](FEATURES.md#classes)                                       | ✓           |
+| [Default parameters](FEATURES.md#default-parameters)                 | ✓           |
+| [Spread](FEATURES.md#spread)                                         | ✓           |
+| [Block binding](FEATURES.md#block-binding)                           | ✓           |
+| [Property method assignment](FEATURES.md#property-method-assignment) | ✓           |
+| [Rest parameters](FEATURES.md#rest-parameters)                       | ✓           |
+| [Template literals](FEATURES.md#template-literals)                   | ✓           |
+| [Modules](FEATURES.md#modules)                                       | ✓           |
+| [Array comprehension](FEATURES.md#array-comprehension)               |             |
+| [Property name shorthand](FEATURES.md#property-name-shorthand)       |             |
+| [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |
+| [Generators](FEATURES.md#generators)                                 |             |
 
 ## Installation
 
@@ -122,7 +124,7 @@ require("6to5/register");
 var to5 = require("6to5");
 
 app.use(to5.middleware({
-  transform: {
+  options: {
     // options to use when transforming files
   },
   src: "assets",
