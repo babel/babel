@@ -1,21 +1,23 @@
 <h1>
   6to5
 
-  <a href="https://travis-ci.org/sebmck/6to5">
-    <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?style=flat&amp;label=travis">
-  </a>
+  <div align="right">
+    <a href="https://travis-ci.org/sebmck/6to5">
+      <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?style=flat&amp;label=travis">
+    </a>
 
-  <a href="https://codeclimate.com/github/sebmck/6to5">
-    <img alt="Code Climate Score" src="http://img.shields.io/codeclimate/github/sebmck/6to5.svg?style=flat">
-  </a>
+    <a href="https://codeclimate.com/github/sebmck/6to5">
+      <img alt="Code Climate Score" src="http://img.shields.io/codeclimate/github/sebmck/6to5.svg?style=flat">
+    </a>
 
-  <a href="https://codeclimate.com/github/sebmck/6to5">
-    <img alt="Coverage" src="http://img.shields.io/codeclimate/coverage/github/sebmck/6to5.svg?style=flat">
-  </a>
+    <a href="https://codeclimate.com/github/sebmck/6to5">
+      <img alt="Coverage" src="http://img.shields.io/codeclimate/coverage/github/sebmck/6to5.svg?style=flat">
+    </a>
 
-  <a href="https://david-dm.org/sebmck/6to5">
-    <img alt="Dependency Status" src="http://img.shields.io/david/sebmck/6to5.svg?style=flat">
-  </a>
+    <a href="https://david-dm.org/sebmck/6to5">
+      <img alt="Dependency Status" src="http://img.shields.io/david/sebmck/6to5.svg?style=flat">
+    </a>
+  </div>
 </h1>
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
