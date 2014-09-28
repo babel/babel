@@ -3,3 +3,11 @@ node_js:
   - 0.8
   - 0.10
   - 0.11
+
+before_script: "npm install -g codeclimate-test-reporter"
+script: "make test-travis"
+
+addons:
+  code_climate:
+    repo_token:
+      secure: "M3qeb0ZYfdBY1CxOQGH2tWz8XhPwp58F/XWvnVX2XjPUcEWI8/CDAZCwf1cr6o8A3HvzTF2/krukbEtqS6T/LKnFX33OfL/VzwIP1a+7rgkxV5FH+eB14nX3JWIv7Bn4xESVcX9aBVh4ESymwkB0g/q1kc6/WauV0Uv7pSfxYS8="
