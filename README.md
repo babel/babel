@@ -1,7 +1,7 @@
 <h1>
   6to5
 
-  <div align="right">
+  <strong align="right">
     <a href="https://travis-ci.org/sebmck/6to5">
       <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?style=flat&amp;label=travis">
     </a>
@@ -17,7 +17,7 @@
     <a href="https://david-dm.org/sebmck/6to5">
       <img alt="Dependency Status" src="http://img.shields.io/david/sebmck/6to5.svg?style=flat">
     </a>
-  </div>
+  </strong>
 </h1>
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
