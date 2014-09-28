@@ -22,10 +22,10 @@
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
- - Fast - [10x faster than Traceur](#comparison-to-traceur).
- - Compact - maps directly to the equivalent ES5.
- - Easy - with Browserify support, Node API, Connect Middleware and a CLI.
- - Concise - does not pollute scope with unneccesary variables.
+ - **Fast** - [10x faster than Traceur](#comparison-to-traceur).
+ - **Easy** - with Browserify support, Node API, Connect Middleware and a CLI.
+ - **Compact** - maps directly to the equivalent ES5.
+ - **Concise** - does not pollute scope with unneccesary variables.
 
 ## Features
 
