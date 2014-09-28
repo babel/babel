@@ -17,7 +17,7 @@ test-cov:
 
 test-travis:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --report lcovonly -- --reporter spec
-	cat ./coverage/lcov.info | codeclimate
+	codeclimate < coverage/lcov.info
 
 publish:
 	make clean
