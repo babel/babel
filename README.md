@@ -24,7 +24,7 @@
 
  - **Fast** - [10x faster than Traceur](#comparison-to-traceur).
  - **Easy** - with Browserify support, Node API, Connect Middleware and a CLI.
- - **Compact** - maps directly to the equivalent ES5.
+ - **Compact** - maps directly to the equivalent ES5 with **no runtime required**.
  - **Concise** - does not pollute scope with unneccesary variables.
 
 ## Features
@@ -87,7 +87,7 @@ to5.transformFile("script.js", function (err, data) {
 to5.transform("code();", {
   // List of transformers to EXCLUDE
   // This is a camelised version of the name found in `features`
-  // eg. "arrow functions" is "arrowFunctions"
+  // eg. "Arrow functions" is "arrowFunctions"
   blacklist: [],
 
   // List of transformers to ONLY use.
@@ -142,10 +142,6 @@ browserify()
   .pipe(fs.createWriteStream("bundle.js"));
 ```
 
-## Caveats
-
-### Generators
-
-### Let
-
 ## Comparison to Traceur
+
+### Performance
