@@ -10,4 +10,4 @@ script: "make test-travis"
 addons:
   code_climate:
     repo_token:
-      secure: "M3qeb0ZYfdBY1CxOQGH2tWz8XhPwp58F/XWvnVX2XjPUcEWI8/CDAZCwf1cr6o8A3HvzTF2/krukbEtqS6T/LKnFX33OfL/VzwIP1a+7rgkxV5FH+eB14nX3JWIv7Bn4xESVcX9aBVh4ESymwkB0g/q1kc6/WauV0Uv7pSfxYS8="
+      secure: "PfP9sDUJzSznDb+ZEPO2cignXabSTXJxEVm5ESRPgEcFr+/4b0pt3hI8R9b+9mLtBEwtw3DLUq48MOeqEKnq29csQmpjPVcN6gT4uR2DdNa1JpVgDuwxT05NB3fBea9U2reM73iV8ylCgPHExr2uGR9/87JzR2beY/56EUL5NjY="
