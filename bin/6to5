@@ -4,7 +4,7 @@ var commander = require("commander");
 var chokidar  = require("chokidar");
 var readdir   = require("fs-readdir-recursive");
 var mkdirp    = require("mkdirp");
-var 6to5     = require("../lib/6to5/node");
+var to5       = require("../lib/6to5/node");
 var path      = require("path");
 var util      = require("../lib/6to5/util");
 var fs        = require("fs");
@@ -32,7 +32,7 @@ commander.parse(process.argv);
 var errors = [];
 
 var filenames = commander.args;
-if (!filenames.length) errors.push("no filenames input");
+if (!filenames.length) commander.help();
 
 _.each(filenames, function (filename) {
   if (!fs.existsSync(filename)) {
@@ -69,7 +69,7 @@ var compile = function (filename) {
   opts.filename = filename;
 
   var file = fs.readFileSync(filename);
-  return 6to5.transform(file, opts);
+  return to5.transform(file, opts);
 };
 
 if (commander.outDir) {
