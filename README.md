@@ -2,12 +2,10 @@
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
-6to5 is:
-
  - Fast - [10x faster than Traceur](#comparison-to-traceur).
  - Compact - maps directly to the equivalent ES5.
  - Easy - with Browserify support, Node API, Connect Middleware and a CLI.
- - Concise - we do not pollute any scope with unneccesary variables or functions declarations.
+ - Concise - does not pollute scope with unneccesary variables.
 
 ## Features
 
@@ -45,6 +43,10 @@ Compile the file `script.js` and output it to stdout.
 
     $ 6to5 script.js
 
+### Browserify
+
+    $ browserify script.js -t 6to5/browserify --outfile bundle.js
+
 ### Node
 
 ```javascript
@@ -64,11 +66,12 @@ to5.transformFile("script.js", function (err, data) {
 ```javascript
 to5.transform("code();", {
   // List of transformers to EXCLUDE
-  // See `features` for valid names.
+  // This is a camelised version of the name found in `features`
+  // eg. "arrow functions" is "arrowFunctions"
   blacklist: [],
 
   // List of transformers to ONLY use.
-  // See `features` for valid names.
+  // See `blacklist` for naming scheme.
   whitelist: [],
 
   // Append source map and comment to bottom of returned output.
@@ -97,7 +100,7 @@ require("6to5/register");
 ```javascript
 var to5 = require("6to5");
 
-app.use(6to5.middleware({
+app.use(to5.middleware({
   transform: {
     // options to use when transforming files
   },
@@ -108,13 +111,7 @@ app.use(6to5.middleware({
 app.use(connect.static("cache"));
 ```
 
-### Browserify
-
-#### CLI
-
-    $ browserify script.js -t 6to5/browserify --outfile bundle.js
-
-#### Node
+#### Browserify
 
 ```javascript
 var to5 = require("6to5");
