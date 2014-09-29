@@ -30,22 +30,22 @@
 
 ## [Features](FEATURES.md)
 
+ - [Array comprehension](FEATURES.md#array-comprehension)
  - [Arrow functions](FEATURES.md#arrow-functions)
- - [Classes](FEATURES.md#classes)
- - [Default parameters](FEATURES.md#default-parameters)
- - [Spread](FEATURES.md#spread)
+ - [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)
  - [Block binding](FEATURES.md#block-binding)
- - [Property method assignment](FEATURES.md#property-method-assignment)
- - [Rest parameters](FEATURES.md#rest-parameters)
- - [Template literals](FEATURES.md#template-literals)
- - [Modules](FEATURES.md#modules)
- - [Property name shorthand](FEATURES.md#property-name-shorthand)
+ - [Classes](FEATURES.md#classes)
  - [Computed property names](FEATURES.md#computed-property-names)
  - [Constants](FEATURES.md#constants)
- - [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)
- - [For-of](FEATURES.md#for-of)
- - [Array comprehension](FEATURES.md#array-comprehension)
+ - [Default parameters](FEATURES.md#default-parameters)
  - [Destructuring](FEATURES.md#destructuring)
+ - [For-of](FEATURES.md#for-of)
+ - [Modules](FEATURES.md#modules)
+ - [Spread](FEATURES.md#spread)
+ - [Property method assignment](FEATURES.md#property-method-assignment)
+ - [Property name shorthand](FEATURES.md#property-name-shorthand)
+ - [Rest parameters](FEATURES.md#rest-parameters)
+ - [Template literals](FEATURES.md#template-literals)
 
 To be implemented:
 
