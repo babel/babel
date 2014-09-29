@@ -7,6 +7,14 @@ var humanise = function (val) {
   return val.replace(/-/g, " ");
 };
 
+var readFile = function (filename) {
+  if (fs.existsSync(filename)) {
+    return fs.readFileSync(filename);
+  } else {
+    return "";
+  }
+};
+
 var fixturesDir = __dirname + "/fixtures";
 
 _.each(fs.readdirSync(fixturesDir), function (suiteName) {
@@ -24,14 +32,26 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
       test(humanise(taskName), function () {
         var actualLoc = taskDir + "/actual.js";
 
-        var actual = fs.readFileSync(actualLoc, "utf8");
-        var expect = fs.readFileSync(taskDir + "/expected.js", "utf8");
+        var actual = readFile(actualLoc);
+        var expect = readFile(taskDir + "/expected.js");
 
         var taskOptsLoc = taskDir + "/options.json";
         var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suiteOpts));
         if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
-        transform.test(actual, expect, taskOpts);
+        var test = function () {
+          transform.test(actual, expect, taskOpts);
+        };
+
+        var throwMsg = taskOpts.throws;
+        if (throwMsg) {
+          // internal api doesn't have this option but it's best not to pollute
+          // the options object with useless options
+          delete taskOpts.throws;
+          assert.throws(test, new RegExp(throwMsg));
+        } else {
+          test();
+        }
       });
     });
   });

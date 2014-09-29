@@ -1,0 +1,4 @@
+class Test {
+  get constructor() {
+  }
+}
