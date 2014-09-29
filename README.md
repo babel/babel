@@ -149,9 +149,19 @@ browserify()
   .pipe(fs.createWriteStream("bundle.js"));
 ```
 
-## Caveats
+## Polyfill
 
-### Polyfill
+```javascript
+require("6to5/polyfill");
+```
+
+```javascript
+require("6to5").polyfill;
+```
+
+    $ 6to5-polyfill
+
+## Caveats
 
 ### Classes
 

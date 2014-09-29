@@ -1,9 +1,3 @@
-var arr = (function () {
-  var _arr = [];
-
-  [1, 2, 3].forEach(function (i) {
-    _arr.push(i * i);
-  });
-
-  return _arr;
-})();
+var arr = [1, 2, 3].map(function (i) {
+  return i * i;
+});
