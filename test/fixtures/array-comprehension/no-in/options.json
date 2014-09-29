@@ -1,0 +1,3 @@
+{
+  "throws": "for-in array comprehension is not supported"
+}

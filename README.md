@@ -45,9 +45,9 @@
 | [Computed property names](FEATURES.md#computed-property-names)       | ✓           |                       |
 | [Constants](FEATURES.md#constants)                                   | ✓           |                       |
 | [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)   | ✓           |                       |
-| [Iterators](FEATURES.md#iterators)                                   |             | ✓                     |
+| [Iterators](FEATURES.md#iterators)                                   | ✓           | ✓                     |
+| [Array comprehension](FEATURES.md#array-comprehension)               | ✓           |                       |
 | [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |                       |
-| [Array comprehension](FEATURES.md#array-comprehension)               |             |                       |
 | [Generators](FEATURES.md#generators)                                 |             |                       |
 
 ## Installation
@@ -156,6 +156,10 @@ browserify()
 ### Classes
 
 Cannot subclass built-ins such as `Date`, `Array`, `DOM` etc.
+
+### Generator comprehension
+
+Not supported.
 
 ## Comparison to Traceur
 
