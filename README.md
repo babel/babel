@@ -151,16 +151,6 @@ browserify()
 
 ## Polyfill
 
-```javascript
-require("6to5/polyfill");
-```
-
-```javascript
-require("6to5").polyfill;
-```
-
-    $ 6to5-polyfill
-
 ## Caveats
 
 ### Classes
