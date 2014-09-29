@@ -91,7 +91,7 @@ console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 ```javascript
 ```
 
-## Binary and Octal Literals
+## Numeric Literals
 
 ```javascript
 0b111110111 === 503; // true

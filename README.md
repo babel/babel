@@ -25,14 +25,17 @@
  - **Fast** - [10x faster than Traceur](#performance).
  - **Extensive** - with Browserify support, Node API, Connect Middleware and a CLI.
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
- - **Compact** - maps directly to the equivalent ES5 with **no runtime required**.
+ - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
  - **Concise** - does not pollute scope with unneccesary variables.
+
+## Installation
+
+    $ npm install -g 6to5
 
 ## [Features](FEATURES.md)
 
  - [Array comprehension](FEATURES.md#array-comprehension)
  - [Arrow functions](FEATURES.md#arrow-functions)
- - [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)
  - [Block binding](FEATURES.md#block-binding)
  - [Classes](FEATURES.md#classes)
  - [Computed property names](FEATURES.md#computed-property-names)
@@ -41,6 +44,7 @@
  - [Destructuring](FEATURES.md#destructuring)
  - [For-of](FEATURES.md#for-of)
  - [Modules](FEATURES.md#modules)
+ - [Numeric Literals](FEATURES.md#numeric-literals)
  - [Spread](FEATURES.md#spread)
  - [Property method assignment](FEATURES.md#property-method-assignment)
  - [Property name shorthand](FEATURES.md#property-name-shorthand)
@@ -50,10 +54,6 @@
 To be implemented:
 
  - [Generators](FEATURES.md#generators)
-
-## Installation
-
-    $ npm install -g 6to5
 
 ## Usage
 
