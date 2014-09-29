@@ -98,7 +98,7 @@ console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 0o767 === 503; // true
 ```
 
-## For Of
+## For-of
 
 ```javascript
 ```
