@@ -10,21 +10,13 @@ arr.map(x => x * x);
 
 ```javascript
 class Foo extends Bar {
-  constructor() {
+  constructor() { }
 
-  }
+  foo() { }
 
-  foo() {
+  get bar() { }
 
-  }
-
-  get bar() {
-
-  }
-
-  set bar() {
-
-  }
+  set bar() { }
 }
 ```
 
@@ -95,6 +87,18 @@ console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 ```
 
 ## Modules
+
+```javascript
+```
+
+## Binary and Octal Literals
+
+```javascript
+0b111110111 === 503; // true
+0o767 === 503; // true
+```
+
+## Iterators
 
 ```javascript
 ```

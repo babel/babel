@@ -24,29 +24,31 @@
 
  - **Fast** - [10x faster than Traceur](#performance).
  - **Extensive** - with Browserify support, Node API, Connect Middleware and a CLI.
- - **Lossless** - source map support so you can debug your compiled code with ease.
+ - **Lossless** - **source map support** so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime required**.
  - **Concise** - does not pollute scope with unneccesary variables.
 
-## Features
+## [Features](FEATURES.md)
 
-| Name                                                                 | Implemented |
-| -------------------------------------------------------------------- | ----------- |
-| [Arrow functions](FEATURES.md#arrow-functions)                       | ✓           |
-| [Classes](FEATURES.md#classes)                                       | ✓           |
-| [Default parameters](FEATURES.md#default-parameters)                 | ✓           |
-| [Spread](FEATURES.md#spread)                                         | ✓           |
-| [Block binding](FEATURES.md#block-binding)                           | ✓           |
-| [Property method assignment](FEATURES.md#property-method-assignment) | ✓           |
-| [Rest parameters](FEATURES.md#rest-parameters)                       | ✓           |
-| [Template literals](FEATURES.md#template-literals)                   | ✓           |
-| [Modules](FEATURES.md#modules)                                       | ✓           |
-| [Property name shorthand](FEATURES.md#property-name-shorthand)       | ✓           |
-| [Computed property names](FEATURES.md#computed-property-names)       | ✓           |
-| [Constants](FEATURES.md#constants)                                   | ✓           |
-| [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |
-| [Array comprehension](FEATURES.md#array-comprehension)               |             |
-| [Generators](FEATURES.md#generators)                                 |             |
+| Name                                                                 | Implemented | [Polyfill](#polyfill) |
+| -------------------------------------------------------------------- | ----------- | --------------------- |
+| [Arrow functions](FEATURES.md#arrow-functions)                       | ✓           |                       |
+| [Classes](FEATURES.md#classes)                                       | ✓           |                       |
+| [Default parameters](FEATURES.md#default-parameters)                 | ✓           |                       |
+| [Spread](FEATURES.md#spread)                                         | ✓           |                       |
+| [Block binding](FEATURES.md#block-binding)                           | ✓           |                       |
+| [Property method assignment](FEATURES.md#property-method-assignment) | ✓           |                       |
+| [Rest parameters](FEATURES.md#rest-parameters)                       | ✓           |                       |
+| [Template literals](FEATURES.md#template-literals)                   | ✓           |                       |
+| [Modules](FEATURES.md#modules)                                       | ✓           |                       |
+| [Property name shorthand](FEATURES.md#property-name-shorthand)       | ✓           |                       |
+| [Computed property names](FEATURES.md#computed-property-names)       | ✓           |                       |
+| [Constants](FEATURES.md#constants)                                   | ✓           |                       |
+| [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)   | ✓           |                       |
+| [Iterators](FEATURES.md#iterators)                                   |             | ✓                     |
+| [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |                       |
+| [Array comprehension](FEATURES.md#array-comprehension)               |             |                       |
+| [Generators](FEATURES.md#generators)                                 |             |                       |
 
 ## Installation
 
@@ -146,6 +148,14 @@ browserify()
   .bundle({ debug: true })
   .pipe(fs.createWriteStream("bundle.js"));
 ```
+
+## Caveats
+
+### Polyfill
+
+### Classes
+
+Cannot subclass built-ins such as `Date`, `Array`, `DOM` etc.
 
 ## Comparison to Traceur
 
