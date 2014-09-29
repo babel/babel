@@ -30,25 +30,26 @@
 
 ## [Features](FEATURES.md)
 
-| Name                                                                 | Implemented |
-| -------------------------------------------------------------------- | ----------- |
-| [Arrow functions](FEATURES.md#arrow-functions)                       | ✓           |
-| [Classes](FEATURES.md#classes)                                       | ✓           |
-| [Default parameters](FEATURES.md#default-parameters)                 | ✓           |
-| [Spread](FEATURES.md#spread)                                         | ✓           |
-| [Block binding](FEATURES.md#block-binding)                           | ✓           |
-| [Property method assignment](FEATURES.md#property-method-assignment) | ✓           |
-| [Rest parameters](FEATURES.md#rest-parameters)                       | ✓           |
-| [Template literals](FEATURES.md#template-literals)                   | ✓           |
-| [Modules](FEATURES.md#modules)                                       | ✓           |
-| [Property name shorthand](FEATURES.md#property-name-shorthand)       | ✓           |
-| [Computed property names](FEATURES.md#computed-property-names)       | ✓           |
-| [Constants](FEATURES.md#constants)                                   | ✓           |
-| [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)   | ✓           |
-| [For-of](FEATURES.md#for-of)                                         | ✓           |
-| [Array comprehension](FEATURES.md#array-comprehension)               | ✓           |
-| [Destructuring](FEATURES.md#destructuring)                           | ✓           |
-| [Generators](FEATURES.md#generators)                                 |             |
+ - [Arrow functions](FEATURES.md#arrow-functions)
+ - [Classes](FEATURES.md#classes)
+ - [Default parameters](FEATURES.md#default-parameters)
+ - [Spread](FEATURES.md#spread)
+ - [Block binding](FEATURES.md#block-binding)
+ - [Property method assignment](FEATURES.md#property-method-assignment)
+ - [Rest parameters](FEATURES.md#rest-parameters)
+ - [Template literals](FEATURES.md#template-literals)
+ - [Modules](FEATURES.md#modules)
+ - [Property name shorthand](FEATURES.md#property-name-shorthand)
+ - [Computed property names](FEATURES.md#computed-property-names)
+ - [Constants](FEATURES.md#constants)
+ - [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)
+ - [For-of](FEATURES.md#for-of)
+ - [Array comprehension](FEATURES.md#array-comprehension)
+ - [Destructuring](FEATURES.md#destructuring)
+
+To be implemented:
+
+ - [Generators](FEATURES.md#generators)
 
 ## Installation
 
