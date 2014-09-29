@@ -28594,6 +28594,10 @@ testFail("const a;", "Unexpected token (1:7)", {ecmaVersion: 6});
 
 testFail("for(const x = 0;;);", "Unexpected token (1:4)", {ecmaVersion: 6});
 
+testFail("for(x of a);", "Unexpected token (1:6)");
+
+testFail("for(var x of a);", "Unexpected token (1:10)");
+
 // Assertion Tests
 (function() {
   var actualComments = [],

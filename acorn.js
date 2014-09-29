@@ -1584,13 +1584,13 @@
       next();
       parseVar(init, true, varKind);
       finishNode(init, "VariableDeclaration");
-      if ((tokType === _in || (tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
+      if ((tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
           !(isLet && init.declarations[0].init))
         return parseForIn(node, init);
       return parseFor(node, init);
     }
     var init = parseExpression(false, true);
-    if (tokType === _in || (tokType === _name && tokVal === "of")) {
+    if (tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) {
       checkLVal(init);
       return parseForIn(node, init);
     }
