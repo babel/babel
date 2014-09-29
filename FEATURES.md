@@ -98,7 +98,7 @@ console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 0o767 === 503; // true
 ```
 
-## Iterators
+## For Of
 
 ```javascript
 ```
@@ -134,7 +134,7 @@ function f(x, y) {
 [for (i of [1, 2, 3]) i * i]; // [1, 4, 9]
 ```
 
-## Destructuring assignment
+## Destructuring
 
 ```javascript
 var [a, [b], c, d] = ["hello", [", ", "junk"], ["world"]];

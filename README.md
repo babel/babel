@@ -45,9 +45,9 @@
 | [Computed property names](FEATURES.md#computed-property-names)       | ✓           |                       |
 | [Constants](FEATURES.md#constants)                                   | ✓           |                       |
 | [Binary and Octal Literals](FEATURES.md#binary-and-octal-literals)   | ✓           |                       |
-| [Iterators](FEATURES.md#iterators)                                   | ✓           | ✓                     |
+| [For of](FEATURES.md#for-of)                                         | ✓           | ✓                     |
 | [Array comprehension](FEATURES.md#array-comprehension)               | ✓           |                       |
-| [Destructuring assignment](FEATURES.md#destructuring-assignment)     |             |                       |
+| [Destructuring](FEATURES.md#destructuring)                           | ✓           |                       |
 | [Generators](FEATURES.md#generators)                                 |             |                       |
 
 ## Installation
