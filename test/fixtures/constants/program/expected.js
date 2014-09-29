@@ -1,6 +1,7 @@
+var i;
 (function () {
   var MULTIPLIER = 5;
-  for (var i in arr) {
+  for (i in arr) {
       console.log(arr[i] * MULTIPLIER);
   }
 }());
