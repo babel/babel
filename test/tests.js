@@ -27285,6 +27285,9 @@ testFail("(function a(eval) { \"use strict\"; })",
 testFail("(function a(package) { \"use strict\"; })",
          "Defining 'package' in strict mode (1:12)");
 
+testFail("\"use strict\";function foo(){\"use strict\";}function bar(){var v = 015}",
+         "Invalid number (1:65)");
+
 testFail("var this = 10;", "Unexpected token (1:4)");
 
 testFail("throw\n10;", "Illegal newline after throw (1:5)");

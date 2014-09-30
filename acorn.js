@@ -302,7 +302,7 @@
   function initParserState() {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = new Position;
-    inFunction = inGenerator = strict = null;
+    inFunction = inGenerator = strict = false;
     labels = [];
     readToken();
   }
@@ -1752,7 +1752,7 @@
   // function bodies).
 
   function parseBlock(allowStrict) {
-    var node = startNode(), first = true, strict = false, oldStrict;
+    var node = startNode(), first = true, oldStrict;
     node.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -1764,7 +1764,7 @@
       }
       first = false;
     }
-    if (strict && !oldStrict) setStrict(false);
+    if (oldStrict === false) setStrict(false);
     return finishNode(node, "BlockStatement");
   }
 
