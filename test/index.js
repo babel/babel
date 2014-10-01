@@ -9,7 +9,7 @@ var humanise = function (val) {
 
 var readFile = function (filename) {
   if (fs.existsSync(filename)) {
-    return fs.readFileSync(filename);
+    return fs.readFileSync(filename, "utf8");
   } else {
     return "";
   }
@@ -29,18 +29,25 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
       var taskDir = suiteDir + "/" + taskName;
       if (fs.statSync(taskDir).isFile()) return;
 
-      test(humanise(taskName), function () {
-        var actualLoc = taskDir + "/actual.js";
+      var actualLoc = taskDir + "/actual.js";
+      var expectLoc = taskDir + "/expected.js";
 
+      var taskOptsLoc = taskDir + "/options.json";
+      var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suiteOpts));
+      if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
+
+      var body = function () {
         var actual = readFile(actualLoc);
-        var expect = readFile(taskDir + "/expected.js");
-
-        var taskOptsLoc = taskDir + "/options.json";
-        var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suiteOpts));
-        if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
+        var expect = readFile(expectLoc);
 
         var test = function () {
-          transform.test(actual, expect, taskOpts);
+          transform.test({
+            filename: actualLoc,
+            code: actual
+          }, {
+            filename: expectLoc,
+            code: expect
+          }, taskOpts);
         };
 
         var throwMsg = taskOpts.throws;
@@ -48,11 +55,16 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
           // internal api doesn't have this option but it's best not to pollute
           // the options object with useless options
           delete taskOpts.throws;
+
           assert.throws(test, new RegExp(throwMsg));
         } else {
           test();
         }
-      });
+      };
+
+      if (taskOpts.ignore) body = null;
+
+      test(humanise(taskName), body);
     });
   });
 });
