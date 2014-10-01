@@ -1,1 +1,1 @@
-require("6to5").register();
+require("./lib/6to5/register");
