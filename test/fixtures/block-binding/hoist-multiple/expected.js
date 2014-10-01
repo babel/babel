@@ -1,5 +1,4 @@
-var foo;
-var bar;
+var foo, bar;
 (function () {
   var MULTIPLIER = 5;
   foo = "bar";

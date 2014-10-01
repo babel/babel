@@ -1,0 +1,2 @@
+const MULTIPLIER = 5;
+MULTIPLIER = 10;
