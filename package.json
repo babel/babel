@@ -12,7 +12,8 @@
   "preferGlobal": true,
   "main": "lib/6to5/node.js",
   "bin": {
-    "6to5": "./bin/6to5"
+    "6to5": "./bin/6to5",
+    "6to5-node": "./bin/6to5-node"
   },
   "scripts": {
     "test": "mocha"

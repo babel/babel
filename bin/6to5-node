@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+var commander = require("commander");
+var path      = require("path");
+var to5       = require("../lib/6to5/node");
+var util      = require("../lib/6to5/util");
+var path      = require("path");
+var repl      = require("repl");
+var vm        = require("vm");
+var _         = require("lodash");
+
+commander.option("-e, --eval [script]", "evaluate script");
+commander.option("-p, --print", "evaluate script and print result");
+
+var pkg = require("../package.json");
+commander.version(pkg.version);
+commander.usage("[options] [ -e script | script.js ] [arguments]");
+commander.parse(process.argv);
+
+to5.register();
+
+if (commander.eval) {
+  var code = to5.transform(commander.eval, { filename: "eval" });
+  var result = eval(code);
+  if (commander.print) console.log(result);
+} else {
+  var filenames = commander.args;
+
+  if (filenames.length) {
+    _.each(filenames, function (filename) {
+      require(require.resolve(path.join(process.cwd(), filename)));
+    });
+  } else {
+    replStart();
+  }
+}
+
+function replStart() {
+  repl.start({
+    prompt: "> ",
+    input: process.stdin,
+    output: process.stdout,
+    eval: replEval
+  });
+}
+
+function replEval(code, context, filename, callback) {
+  var err;
+  var result;
+
+  try {
+    code = code.slice(1, -2); // remove "(" and "\n)"
+    code = to5.transform(code, { filename: filename });
+
+    result = vm.runInContext(code, context, filename, { displayErrors: false });
+  } catch (e) {
+    err = e;
+  }
+
+  callback(err, result);
+}

@@ -71,6 +71,20 @@ Compile the file `script.js` and output it to stdout.
 
     $ 6to5 script.js
 
+#### Node
+
+Launch a repl.
+
+    $ 6to5-node
+
+Evaluate code.
+
+    $ 6to5-node -e "class Test { }"
+
+Compile and run `test.js`.
+
+    $ 6to5-node test
+
 ### Browserify
 
     $ browserify script.js -t 6to5/browserify --outfile bundle.js
@@ -166,3 +180,8 @@ Cannot subclass built-ins such as `Date`, `Array`, `DOM` etc.
 ## Comparison to Traceur
 
 ### Performance
+
+## The future
+
+Implement own parser and generator that preserves whitespace and automatically
+works out generation rules based on code input.
