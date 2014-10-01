@@ -22,7 +22,7 @@
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
- - **Fast** - [10x faster than Traceur](#performance).
+ - **Fast** - no redundant code added so your compiled code is as fast as possible.
  - **Extensive** - with Browserify support, Node API, Connect Middleware and a CLI.
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
@@ -162,10 +162,6 @@ Iterator/Symbol polyfill required.
 ### Classes
 
 Cannot subclass built-ins such as `Date`, `Array`, `DOM` etc.
-
-### Generator comprehension
-
-Not supported.
 
 ## Comparison to Traceur
 
