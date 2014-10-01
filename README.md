@@ -44,11 +44,11 @@
  - [Destructuring](FEATURES.md#destructuring)
  - [For-of](FEATURES.md#for-of)
  - [Modules](FEATURES.md#modules)
- - [Numeric Literals](FEATURES.md#numeric-literals)
- - [Spread](FEATURES.md#spread)
+ - [Numeric literals](FEATURES.md#numeric-literals)
  - [Property method assignment](FEATURES.md#property-method-assignment)
  - [Property name shorthand](FEATURES.md#property-name-shorthand)
  - [Rest parameters](FEATURES.md#rest-parameters)
+ - [Spread](FEATURES.md#spread)
  - [Template literals](FEATURES.md#template-literals)
 
 To be implemented:
@@ -82,9 +82,9 @@ var to5 = require("6to5");
 
 to5.transform("code();");
 
-to5.transformFileSync("script.js");
+to5.transformFileSync("filename.js");
 
-to5.transformFile("script.js", function (err, data) {
+to5.transformFile("filename.js", function (err, data) {
 
 });
 ```
@@ -104,6 +104,9 @@ to5.transform("code();", {
 
   // Append source map and comment to bottom of returned output.
   sourceMap: false,
+
+  // Returns an object `{ code: "", map: {} }` instead of an appended string.
+  sourceMapObject: false,
 
   // Filename for use in errors etc.
   filename: "unknown",
@@ -153,6 +156,8 @@ browserify()
 ## Caveats
 
 ### For-of
+
+Iterator/Symbol polyfill required.
 
 ### Classes
 
