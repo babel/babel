@@ -1,5 +1,5 @@
 var obj = {
   [foobar]() {
-    return "foobar"
+    return "foobar";
   }
 };
