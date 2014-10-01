@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into vanilla ES5 with no runtime required",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/sebmck/6to5.git"
@@ -20,13 +20,14 @@
   "dependencies": {
     "chokidar": "0.8.4",
     "commander": "2.3.0",
-    "escodegen": "https://github.com/Constellation/escodegen/tarball/master",
-    "esprima": "https://github.com/esnext/esprima/tarball/harmony-esnext",
-    "estraverse": "1.5.1",
     "fs-readdir-recursive": "0.0.2",
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
-    "through": "2.3.4"
+    "through": "2.3.4",
+    "escodegen": "https://github.com/Constellation/escodegen/tarball/master",
+    "esprima": "https://github.com/esnext/esprima/tarball/harmony-esnext",
+    "estraverse": "1.5.1",
+    "ast-types": "^0.4.9"
   },
   "devDependencies": {
     "istanbul": "0.3.2",
