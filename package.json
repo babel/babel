@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into vanilla ES5 with no runtime required",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/sebmck/6to5.git"
