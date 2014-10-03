@@ -1,8 +1,3 @@
-var arr = [
-  1,
-  2,
-  3
-];
 (function () {
   for (var i in arr) {
     (function () {
