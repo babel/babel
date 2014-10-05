@@ -17,7 +17,7 @@ test-cov:
 
 test-travis:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --report lcovonly -- --reporter spec
-	codeclimate < coverage/lcov.info
+	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 publish:
 	make clean
