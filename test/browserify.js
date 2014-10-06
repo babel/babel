@@ -1,3 +1,0 @@
-suite("browserify", function () {
-
-});

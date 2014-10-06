@@ -55,6 +55,15 @@ To be implemented:
 
  - [Generators](FEATURES.md#generators)
 
+## Plugins
+
+ - [Browserify](https://github.com/sebmck/6to5-browserify)
+ - [Connect Middleware](https://github.com/sebmck/6to5-connect)
+ - [Gulp](https://github.com/sindresorhus/gulp-6to5)*
+ - [Brunch](https://github.com/es128/6to5-brunch)*
+
+*Community contributed
+
 ## Usage
 
 ### CLI
@@ -84,10 +93,6 @@ Evaluate code.
 Compile and run `test.js`.
 
     $ 6to5-node test
-
-### Browserify
-
-    $ browserify script.js -t 6to5/browserify --outfile bundle.js
 
 ### Node
 
@@ -138,33 +143,6 @@ code.
 
 ```javascript
 require("6to5/register");
-```
-
-#### Connect Middleware
-
-```javascript
-var to5 = require("6to5");
-
-app.use(to5.middleware({
-  options: {
-    // options to use when transforming files
-  },
-  src: "assets",
-  dest: "cache"
-}));
-
-app.use(connect.static("cache"));
-```
-
-#### Browserify
-
-```javascript
-var to5 = require("6to5");
-browserify()
-  .transform(to5.browserify)
-  .require("script.js", { entry: true })
-  .bundle({ debug: true })
-  .pipe(fs.createWriteStream("bundle.js"));
 ```
 
 ## Caveats
