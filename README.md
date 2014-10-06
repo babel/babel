@@ -23,7 +23,7 @@
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
  - **Fast** - no redundant code added so your compiled code is as fast as possible.
- - **Extensive** - with Browserify support, Node API, Connect Middleware and a CLI.
+ - **Extensive** - with a large variety of [plugins](#plugins).
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
  - **Concise** - does not pollute scope with unneccesary variables.
@@ -31,6 +31,16 @@
 ## Installation
 
     $ npm install -g 6to5
+
+## Plugins
+
+ - [Browserify](https://github.com/sebmck/6to5-browserify)
+ - [Connect Middleware](https://github.com/sebmck/6to5-connect)
+
+### Community
+
+ - [Gulp](https://github.com/sindresorhus/gulp-6to5)
+ - [Brunch](https://github.com/es128/6to5-brunch)
 
 ## [Features](FEATURES.md)
 
@@ -54,15 +64,6 @@
 To be implemented:
 
  - [Generators](FEATURES.md#generators)
-
-## Plugins
-
- - [Browserify](https://github.com/sebmck/6to5-browserify)
- - [Connect Middleware](https://github.com/sebmck/6to5-connect)
- - [Gulp](https://github.com/sindresorhus/gulp-6to5)*
- - [Brunch](https://github.com/es128/6to5-brunch)*
-
-*Community contributed
 
 ## Usage
 
