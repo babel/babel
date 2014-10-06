@@ -40,6 +40,7 @@
 ### Community
 
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
+ - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - [Brunch](https://github.com/es128/6to5-brunch)
 
 ## [Features](FEATURES.md)
