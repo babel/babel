@@ -43,6 +43,7 @@
  - [Brunch](https://github.com/es128/6to5-brunch)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
+ - Sprockets
 
 ## [Features](FEATURES.md)
 
@@ -71,6 +72,10 @@ To be implemented:
 
 ### CLI
 
+Compile the file `script.js` and output it to stdout.
+
+    $ 6to5 script.js
+
 Compile the file `script.js` and output it to `script-compiled.js`.
 
     $ 6to5 script.js -o script-compiled.js
@@ -78,10 +83,6 @@ Compile the file `script.js` and output it to `script-compiled.js`.
 Compile the entire `src` directory and output it to the `lib` directory.
 
     $ 6to5 src -d lib
-
-Compile the file `script.js` and output it to stdout.
-
-    $ 6to5 script.js
 
 #### Node
 
@@ -141,9 +142,8 @@ to5.transform("code();", {
 
 #### Require hook
 
-All subsequent files required by node will be transformed into ES5 compatible
-code. An ES6 polyfill is also required negating the
-[polyfill caveat](#polyfill).
+All subsequent files required by node will be transformed by 6to5. An ES6
+polyfill is also required negating the [polyfill caveat](#polyfill).
 
 ```javascript
 require("6to5/register");
