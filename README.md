@@ -39,6 +39,7 @@
 
 ### Community
 
+ - Broccoli
  - [Brunch](https://github.com/es128/6to5-brunch)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
@@ -141,7 +142,8 @@ to5.transform("code();", {
 #### Require hook
 
 All subsequent files required by node will be transformed into ES5 compatible
-code.
+code. An ES6 polyfill is also required negating the
+[polyfill caveat](#polyfill).
 
 ```javascript
 require("6to5/register");
@@ -149,19 +151,49 @@ require("6to5/register");
 
 ## Caveats
 
-### For-of
+### Polyfill
+
+6to5 does not include a runtime nor polyfill and it's up to the developer to
+include one in compiled browser code.
+
+A polyfill is included with 6to5 code that can be included in node like so:
+
+```javascript
+require("6to5/polyfill");
+```
+
+This is simply a wrapper around the
+[es6-shim](https://github.com/paulmillr/es6-shim) and
+[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
+
+When using the [require hook](#require-hook) the aforementioned polyfill is
+required.
+
+If you're planning on using 6to5 output in the browser then it's up to you
+to include polyfills. [es6-symbol](https://github.com/medikoo/es6-symbol#browser)
+and [es6-shim](https://raw.githubusercontent.com/paulmillr/es6-shim/master/es6-shim.js)
+support the vast majority of polyfill concerns.
+
+#### For-of
 
 Iterator/Symbol polyfill required.
 
 ### Classes
 
-Cannot subclass built-ins such as `Date`, `Array`, `DOM` etc.
+Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
+limitations in ES5 implementations.
 
 ## Comparison to Traceur
 
+6to5 is different to Traceur in a few very distinct ways.
+
+### Runtime
+
+Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
+While this can be trimmed down by selectively building the runtime, it's an
+unneccesary step when a runtime can be eliminated entirely.
+
+Instead of mapping to a runtime, 6to5 maps directly to the equivalent ES5. This
+means that your transpiled code will be as simple as possible.
+
 ### Performance
-
-## The future
-
-Implement own parser and generator that preserves whitespace and automatically
-works out generation rules based on code input.
