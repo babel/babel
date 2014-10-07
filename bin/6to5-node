@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
+var Module    = require("module");
 var path      = require("path");
-var to5       = require("../lib/6to5/node");
 var util      = require("../lib/6to5/util");
 var path      = require("path");
 var repl      = require("repl");
+var to5       = require("../lib/6to5/node");
 var vm        = require("vm");
 var _         = require("lodash");
 
@@ -21,7 +22,9 @@ to5.register();
 
 if (commander.eval) {
   var code = to5.transform(commander.eval, { filename: "eval" });
-  var result = eval(code);
+
+  var mod = new Module(".");
+  var result = mod._compile(code, "eval");
   if (commander.print) console.log(result);
 } else {
   var filenames = commander.args;
