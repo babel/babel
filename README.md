@@ -167,16 +167,18 @@ This is simply a wrapper around the
 [es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
 
 When using the [require hook](#require-hook) the aforementioned polyfill is
-required.
+automatically required.
 
 If you're planning on using 6to5 output in the browser then it's up to you
 to include polyfills. [es6-symbol](https://github.com/medikoo/es6-symbol#browser)
 and [es6-shim](https://raw.githubusercontent.com/paulmillr/es6-shim/master/es6-shim.js)
-support the vast majority of polyfill concerns.
+fill the vast majority of polyfill concerns.
 
 #### For-of
 
-Iterator/Symbol polyfill required.
+A polyfill is required for for-of functionality that implements `Symbol` and
+adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
+specified in [polyfill](#polyfill) suffices.
 
 ### Classes
 
@@ -194,6 +196,7 @@ While this can be trimmed down by selectively building the runtime, it's an
 unneccesary step when a runtime can be eliminated entirely.
 
 Instead of mapping to a runtime, 6to5 maps directly to the equivalent ES5. This
-means that your transpiled code will be as simple as possible.
+means that your transpiled code will be as simple as possible and is
+**exactly** the equivalent ES5.
 
 ### Performance
