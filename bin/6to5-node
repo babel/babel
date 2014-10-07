@@ -20,11 +20,15 @@ commander.parse(process.argv);
 
 to5.register();
 
+var _eval = function (code, filename) {
+  var mod = new Module(".");
+  return mod._compile(code, filename);
+};
+
 if (commander.eval) {
   var code = to5.transform(commander.eval, { filename: "eval" });
 
-  var mod = new Module(".");
-  var result = mod._compile(code, "eval");
+  var result = _eval(code, "eval");
   if (commander.print) console.log(result);
 } else {
   var filenames = commander.args;
@@ -43,7 +47,8 @@ function replStart() {
     prompt: "> ",
     input: process.stdin,
     output: process.stdout,
-    eval: replEval
+    eval: replEval,
+    useGlobal: true
   });
 }
 
@@ -55,7 +60,7 @@ function replEval(code, context, filename, callback) {
     code = code.slice(1, -2); // remove "(" and "\n)"
     code = to5.transform(code, { filename: filename });
 
-    result = vm.runInContext(code, context, filename, { displayErrors: false });
+    result = vm.runInThisContext(code, filename);
   } catch (e) {
     err = e;
   }
