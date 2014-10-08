@@ -136,7 +136,7 @@ if (commander.outDir) {
   data = data.join("");
 
   if (commander.outFile) {
-    fs.writeFileSync(commander.out, data);
+    fs.writeFileSync(commander.outFile, data);
   } else {
     console.log(data);
   }
