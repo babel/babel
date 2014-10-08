@@ -133,7 +133,7 @@ to5.transformFile("filename.js", options, function (err, result) {
   whitelist: [],
 
   // If truthy, adds a `map` property to returned output.
-  // If set to "inline", a comment with a sourceMappingURL directive is added to the bottom
+  // If set to "inline", a comment with a sourceMappingURL directive is added to the bottom of the returned code
   sourceMap: false,
 
   // Filename for use in errors etc.
