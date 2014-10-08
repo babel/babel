@@ -26,7 +26,7 @@
  - **Extensible** - with a large range of [plugins](#plugins).
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
- - **Concise** - does not pollute scope with unneccesary variables.
+ - **Concise** - does not pollute scope with unnecessary variables.
 
 ## Installation
 
