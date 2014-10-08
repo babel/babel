@@ -85,7 +85,7 @@ source map to `script-compiled.js.map`.
 Compile the file `script.js` and output it to `script-compiled.js` with a source
 map embedded in a comment at the bottom.
 
-    $ 6to5 script.js --source-maps-comment --out-file script-compiled.js
+    $ 6to5 script.js --source-maps-inline --out-file script-compiled.js
 
 Compile the entire `src` directory and output it to the `lib` directory.
 
@@ -133,7 +133,7 @@ to5.transformFile("filename.js", options, function (err, result) {
   whitelist: [],
 
   // If truthy, adds a `map` property to returned output.
-  // If set to "comment", the sourceMappingURL directive is added at the bottom
+  // If set to "inline", a comment with a sourceMappingURL directive is added to the bottom
   sourceMap: false,
 
   // Filename for use in errors etc.

@@ -9,7 +9,7 @@ var to5       = require("../lib/6to5/node");
 var fs        = require("fs");
 var _         = require("lodash");
 
-commander.option("-t, --source-map-type [type]", "Specify a custom sourcemap type such as `comment`");
+commander.option("-t, --source-maps-inline", "Append sourceMappingURL comment to bottom of code");
 commander.option("-s, --source-maps", "Save source map alongside the compiled code when using --out-file and --out-dir flags");
 //commander.option("-w, --watch", "Watch, only works with --out-dir");
 
@@ -58,9 +58,13 @@ var readdirFilter = function (filename) {
 var mainOpts = {
   blacklist: commander.blacklist,
   whitelist: commander.whitelist,
-  sourceMap: commander.sourceMapType || commander.sourceMaps,
+  sourceMap: commander.sourceMaps,
   tolerant:  commander.tolerant
 };
+
+if (commander.sourceMapsInline) {
+  mainOpts.sourceMap = "inline";
+}
 
 var data = [];
 
@@ -81,7 +85,7 @@ if (commander.outDir) {
     var up = path.normalize(dest + "/..");
     mkdirp.sync(up);
 
-    if (commander.sourceMaps && !commander.sourceMapType) {
+    if (commander.sourceMaps) {
       fs.writeFileSync(dest + ".map", data.map.toJSON());
     }
 
