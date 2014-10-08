@@ -238,13 +238,14 @@ esnext is **slow**, painfully so. See [performance](#performance) for stats.
 
 ### [es6now](https://github.com/zenparsing/es6now)
 
-Doesn't output sourcemaps. This is cited as a positive as line-to-line mapping
-is the goal. This however obviously doesn't retain column mapping resulting in
-the output code not being very pleasant.
+es6now doesn't output sourcemaps. This is cited as a positive as line-to-line
+mapping is the goal. This however obviously doesn't retain column mapping
+resulting in the output code not being very pleasant.
 
 ### [es6-transpiler](https://github.com/termi/es6-transpiler)
 
-es6-transpiler requires shims to compile and pollutes the global scope resulting
-in possible collisions. es6-transpiler maps line-by-line, just like es6now, this
-results in the same issues such as lack of column information and unpleasant
-code output.
+The es6-transpiler compiler requires shims to operate which pollutes the global
+scope resulting in possible collisions.
+
+es6-transpiler maps line-by-line, just like es6now, this results in the same
+issues such as lack of column information and unpleasant code output.
