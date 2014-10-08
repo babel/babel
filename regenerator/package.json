@@ -34,7 +34,7 @@
     "promise": "~6.0.0",
     "private": "~0.1.5",
     "through": "~2.3.6",
-    "defs": "~1.0.0"
+    "defs": "~0.6.2"
   },
   "devDependencies": {
     "mocha": "~1.21.4",
