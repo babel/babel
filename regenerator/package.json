@@ -28,17 +28,17 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "commander": "~2.1.0",
-    "esprima-fb": "~6001.1001.0-dev-harmony-fb",
-    "recast": "~0.7.2",
-    "promise": "~5.0.0",
+    "commander": "~2.3.0",
+    "esprima-fb": "~7001.1.0-dev-harmony-fb",
+    "recast": "~0.8.0",
+    "promise": "~6.0.0",
     "private": "~0.1.5",
-    "through": "~2.3.4",
-    "defs": "~0.6.2"
+    "through": "~2.3.6",
+    "defs": "~1.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
-    "semver": "~2.1.0"
+    "mocha": "~1.21.4",
+    "semver": "~4.0.3"
   },
   "license": "BSD",
   "engines": {
