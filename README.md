@@ -110,12 +110,12 @@ Compile and run `test.js`.
 ```javascript
 var to5 = require("6to5");
 
-to5.transform("code();", options);
+to5.transform("code();", options).code;
 
-to5.transformFileSync("filename.js", options);
+to5.transformFileSync("filename.js", options).code;
 
-to5.transformFile("filename.js", options, function (err, data) {
-
+to5.transformFile("filename.js", options, function (err, result) {
+  result.code;
 });
 ```
 
@@ -132,11 +132,9 @@ to5.transformFile("filename.js", options, function (err, data) {
   // See `blacklist` for naming scheme.
   whitelist: [],
 
-  // Append source map and comment to bottom of returned output.
+  // If truthy, adds a `map` property to returned output.
+  // If set to "comment", the sourceMappingURL directive is added at the bottom
   sourceMap: false,
-
-  // Returns an object `{ code: "", map: {} }` instead of an appended string.
-  sourceMapObject: false,
 
   // Filename for use in errors etc.
   filename: "unknown",

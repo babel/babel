@@ -9,7 +9,7 @@ var to5       = require("../lib/6to5/node");
 var fs        = require("fs");
 var _         = require("lodash");
 
-commander.option("-c, --source-maps-comment", "Generate source map and append it with a sourceMappingURL comment alongside the compiled output");
+commander.option("-t, --source-map-type [type]", "Specify a custom sourcemap type such as `comment`");
 commander.option("-s, --source-maps", "Save source map alongside the compiled code when using --out-file and --out-dir flags");
 //commander.option("-w, --watch", "Watch, only works with --out-dir");
 
@@ -58,7 +58,7 @@ var readdirFilter = function (filename) {
 var mainOpts = {
   blacklist: commander.blacklist,
   whitelist: commander.whitelist,
-  sourceMap: commander.sourceMapsComment || commander.sourceMaps,
+  sourceMap: commander.sourceMapType || commander.sourceMaps,
   tolerant:  commander.tolerant
 };
 
@@ -73,10 +73,6 @@ var compile = function (filename) {
 };
 
 if (commander.outDir) {
-  if (commander.sourceMaps) {
-    mainOpts.sourceMapObject = true;
-  }
-
   var write = function (src, relative) {
     var data = compile(src);
 
@@ -85,12 +81,11 @@ if (commander.outDir) {
     var up = path.normalize(dest + "/..");
     mkdirp.sync(up);
 
-    if (mainOpts.sourceMapObject) {
+    if (commander.sourceMaps && !commander.sourceMapType) {
       fs.writeFileSync(dest + ".map", data.map.toJSON());
-      data = data.code;
     }
 
-    fs.writeFileSync(dest, data);
+    fs.writeFileSync(dest, data.code);
 
     console.log(src + " -> " + dest);
   };
@@ -130,7 +125,7 @@ if (commander.outDir) {
   });
 
   _.each(filenames, function (filename) {
-    data.push(compile(filename) + "\n");
+    data.push(compile(filename).code + "\n");
   });
 
   data = data.join("");

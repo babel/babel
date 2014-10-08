@@ -26,7 +26,7 @@ var _eval = function (code, filename) {
 };
 
 if (commander.eval) {
-  var code = to5.transform(commander.eval, { filename: "eval" });
+  var code = to5.transform(commander.eval, { filename: "eval" }).code;
 
   var result = _eval(code, "eval");
   if (commander.print) console.log(result);
@@ -58,7 +58,7 @@ function replEval(code, context, filename, callback) {
 
   try {
     code = code.slice(1, -2); // remove "(" and "\n)"
-    code = to5.transform(code, { filename: filename });
+    code = to5.transform(code, { filename: filename }).code;
 
     result = vm.runInThisContext(code, filename);
   } catch (e) {
