@@ -1252,6 +1252,8 @@
       start = pos[0];
     }
     node.start = start;
+    if (options.directSourceFile)
+      node.sourceFile = options.directSourceFile;
     if (options.ranges)
       node.range = [start, 0];
 
