@@ -110,11 +110,11 @@ Compile and run `test.js`.
 ```javascript
 var to5 = require("6to5");
 
-to5.transform("code();");
+to5.transform("code();", options);
 
-to5.transformFileSync("filename.js");
+to5.transformFileSync("filename.js", options);
 
-to5.transformFile("filename.js", function (err, data) {
+to5.transformFile("filename.js", options, function (err, data) {
 
 });
 ```
@@ -122,7 +122,7 @@ to5.transformFile("filename.js", function (err, data) {
 ##### Options
 
 ```javascript
-to5.transform("code();", {
+{
   // List of transformers to EXCLUDE
   // This is a camelised version of the name found in `features`
   // eg. "Arrow functions" is "arrowFunctions"
@@ -144,7 +144,7 @@ to5.transform("code();", {
   // Format options
   // See https://github.com/Constellation/escodegen/wiki/API for options.
   format: {}
-});
+}
 ```
 
 #### Require hook
