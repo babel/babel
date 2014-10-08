@@ -30,17 +30,16 @@
 
 ## Installation
 
+It's as easy as:
+
     $ npm install -g 6to5
 
 ## Plugins
 
- - [Browserify](https://github.com/sebmck/6to5-browserify)
- - [Connect Middleware](https://github.com/sebmck/6to5-connect)
-
-### Community
-
  - Broccoli
+ - [Browserify](https://github.com/sebmck/6to5-browserify)
  - [Brunch](https://github.com/es128/6to5-brunch)
+ - [Connect Middleware](https://github.com/sebmck/6to5-connect)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - Sprockets
@@ -78,11 +77,21 @@ Compile the file `script.js` and output it to stdout.
 
 Compile the file `script.js` and output it to `script-compiled.js`.
 
-    $ 6to5 script.js -o script-compiled.js
+    $ 6to5 script.js --out-file script-compiled.js
+
+Compile the file `script.js` and output it to `script-compiled.js` and save a
+source map to `script-compiled.js.map`.
+
+    $ 6to5 script.js --source-maps --out-file script-compiled.js
+
+Compile the file `script.js` and output it to `script-compiled.js` with a source
+map embedded in a comment at the bottom.
+
+    $ 6to5 script.js --source-maps-comment --out-file script-compiled.js
 
 Compile the entire `src` directory and output it to the `lib` directory.
 
-    $ 6to5 src -d lib
+    $ 6to5 src --out-dir lib
 
 #### Node
 
@@ -212,7 +221,12 @@ limitations in ES5 implementations.
 
 #### Performance
 
+To run benchmarks against various transpilers run:
+
     $ make bench
+
+The following graphs are using the
+[full benchmark fixture](https://github.com/sebmck/6to5/blob/master/benchmark/fixtures/all.js).
 
 ##### Output size (including runtime)
 

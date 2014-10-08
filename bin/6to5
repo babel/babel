@@ -9,7 +9,8 @@ var to5       = require("../lib/6to5/node");
 var fs        = require("fs");
 var _         = require("lodash");
 
-commander.option("-m, --source-maps", "Generate source maps alongside the compiled JavaScript files. Adds sourceMappingURL directives to the JavaScript as well.");
+commander.option("-c, --source-maps-comment", "Generate source map and append it with a sourceMappingURL comment alongside the compiled output");
+commander.option("-s, --source-maps", "Save source map alongside the compiled code when using --out-file and --out-dir flags");
 //commander.option("-w, --watch", "Watch, only works with --out-dir");
 
 var list = function (val) {
@@ -57,7 +58,7 @@ var readdirFilter = function (filename) {
 var mainOpts = {
   blacklist: commander.blacklist,
   whitelist: commander.whitelist,
-  sourceMap: commander.sourceMaps,
+  sourceMap: commander.sourceMapsComment || commander.sourceMaps,
   tolerant:  commander.tolerant
 };
 
@@ -72,6 +73,10 @@ var compile = function (filename) {
 };
 
 if (commander.outDir) {
+  if (commander.sourceMapsOut) {
+    mainOpts.sourceMapObject = true;
+  }
+
   var write = function (src, relative) {
     var data = compile(src);
 
@@ -79,6 +84,11 @@ if (commander.outDir) {
 
     var up = path.normalize(dest + "/..");
     mkdirp.sync(up);
+
+    if (mainOpts.sourceMapObject) {
+      fs.writeFileSync(dest + ".map", data.map.toJSON());
+      data = data.code;
+    }
 
     fs.writeFileSync(dest, data);
 
