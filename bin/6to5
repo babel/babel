@@ -73,7 +73,7 @@ var compile = function (filename) {
 };
 
 if (commander.outDir) {
-  if (commander.sourceMapsOut) {
+  if (commander.sourceMaps) {
     mainOpts.sourceMapObject = true;
   }
 
