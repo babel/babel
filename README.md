@@ -36,13 +36,11 @@ It's as easy as:
 
 ## Plugins
 
- - Broccoli
  - [Browserify](https://github.com/sebmck/6to5-browserify)
  - [Brunch](https://github.com/es128/6to5-brunch)
- - [Connect Middleware](https://github.com/sebmck/6to5-connect)
+ - [Connect](https://github.com/sebmck/6to5-connect)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
- - Sprockets
 
 ## [Features](FEATURES.md)
 
