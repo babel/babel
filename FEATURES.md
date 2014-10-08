@@ -99,18 +99,16 @@ for (var i of [1, 2, 3]) {
 
 ```javascript
 var obj = {
-  bar: "foobar",
-
   foo() {
     return "foobar";
   },
 
   get bar() {
-
+    return this._bar;
   },
 
-  set bar() {
-
+  set bar(val) {
+    this._bar = val;
   }
 };
 ```
@@ -131,7 +129,7 @@ function printList(name, ...items) {
   items.forEach(function (item) {
     console.log(item);
   });
-};
+}
 ```
 
 ## Spread

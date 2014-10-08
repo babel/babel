@@ -3,13 +3,16 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-travis publish
+.PHONY: clean test test-cov test-travis publish bench
 
 clean:
 	rm -rf coverage templates.json
 
 test:
 	$(MOCHA_CMD)
+
+bench:
+	node node_modules/matcha/bin/_matcha
 
 test-cov:
 	make clean

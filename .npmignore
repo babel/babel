@@ -3,5 +3,6 @@ node_modules
 *.cache
 lib/6to5/templates
 test
+benchmark
 Makefile
 .*

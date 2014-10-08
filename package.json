@@ -17,8 +17,24 @@
     "6to5": "./bin/6to5",
     "6to5-node": "./bin/6to5-node"
   },
+  "keywords": [
+    "es6-transpiler",
+    "scope",
+    "harmony",
+    "blockscope",
+    "block-scope",
+    "let",
+    "const",
+    "var",
+    "es6",
+    "transpile",
+    "transpiler",
+    "traceur",
+    "6to5"
+  ],
   "scripts": {
-    "test": "mocha"
+    "bench": "make bench",
+    "test": "make test"
   },
   "dependencies": {
     "ast-types": "0.5.0",
@@ -32,7 +48,12 @@
     "es6-shim": "^0.18.0"
   },
   "devDependencies": {
+    "es6-transpiler": "0.7.17",
+    "istanbul": "0.3.2",
+    "matcha": "0.5.0",
     "mocha": "1.21.4",
-    "istanbul": "0.3.2"
+    "traceur": "0.0.66",
+    "esnext": "0.11.1",
+    "es6now": "0.8.11"
   }
 }
