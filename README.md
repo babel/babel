@@ -185,11 +185,31 @@ specified in [polyfill](#polyfill) suffices.
 Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
 limitations in ES5 implementations.
 
-## Comparison to Traceur
+## Comparison to other transpilers
 
-6to5 is different to Traceur in a few very distinct ways.
+|                            | 6to5 | Traceur | esnext | es6now | es6-transpiler |
+| -------------------------- | ---- | ------- | ------ | ------ | -------------- |
+| No runtime required        | ✓    |         |        |        | ✓              |
+| -------------------------- | ---- | ------- | ------ | ------ | -------------- |
+| Array comprehension        | ✓    |         | ✓      |        | ✓              |
+| Arrow functions            | ✓    |         | ✓      | ✓      | ✓              |
+| Block binding              | ✓    |         |        |        | ✓              |
+| Classes                    | ✓    |         | ✓      | ✓      | ✓              |
+| Computed property names    | ✓    |         | ✓      | ✓      | ✓              |
+| Constants                  | ✓    |         |        |        | ✓              |
+| Default parameters         | ✓    |         | ✓      | ✓      | ✓              |
+| Destructuring              | ✓    |         | ✓      | ✓      | ✓              |
+| For-of                     | ✓    |         | ✓      | ✓      | ✓              |
+| Generator comprehension    |      |         | ✓      |        | ✓              |
+| Generators                 |      |         | ✓      |        |                |
+| Modules                    | ✓    |         |        | ✓      |                |
+| Property method assignment | ✓    |         | ✓      | ✓      | ✓              |
+| Property name shorthand    | ✓    |         | ✓      | ✓      | ✓              |
+| Rest parameters            | ✓    |         | ✓      | ✓      | ✓              |
+| Spread                     | ✓    |         | ✓      | ✓      | ✓              |
+| Template literals          | ✓    |         | ✓      | ✓      | ✓              |
 
-### Runtime
+### [Traceur](https://github.com/google/traceur-compiler)
 
 Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
 While this can be trimmed down by selectively building the runtime, it's an
@@ -199,4 +219,23 @@ Instead of mapping to a runtime, 6to5 maps directly to the equivalent ES5. This
 means that your transpiled code will be as simple as possible and is
 **exactly** the equivalent ES5.
 
-### Performance
+### [esnext](https://github.com/esnext/esnext)
+
+esnext is **slow**, painfully so. Runtime required.
+
+### [es6now](https://github.com/zenparsing/es6now)
+
+Doesn't output sourcemaps. This is cited as a positive as line-to-line mapping
+is the goal. This however obviously doesn't retain column mapping resulting in
+the output code not being very pleasant.
+
+Runtime required.
+
+### [es6-transpiler](https://github.com/termi/es6-transpiler)
+
+Requires shims to compile and pollutes the global scope resulting in possible
+collisions.
+
+## Performance
+
+    $ make bench
