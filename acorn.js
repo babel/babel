@@ -1236,19 +1236,24 @@
     return node;
   }
 
-  // Start a node whose start offset information should be based on
-  // the start of another node. For example, a binary operator node is
-  // only started after its left-hand side has already been parsed.
+  // Sometimes, a node is only started *after* the token stream passed
+  // its start position. The functions below help storing a position
+  // and creating a node from a previous position.
 
-  function startNodeFrom(other) {
-    var node = new Node();
-    node.start = other.start;
+  function storeCurrentPos() {
+    return options.locations ? [tokStart, tokStartLoc] : tokStart;
+  }
+
+  function startNodeAt(pos) {
+    var node = new Node(), start = pos;
     if (options.locations) {
       node.loc = new SourceLocation();
-      node.loc.start = other.loc.start;
+      node.loc.start = start[1];
+      start = pos[0];
     }
+    node.start = start;
     if (options.ranges)
-      node.range = [other.range[0], 0];
+      node.range = [start, 0];
 
     return node;
   }
@@ -1827,9 +1832,10 @@
   // or the `in` operator (in for loops initalization expressions).
 
   function parseExpression(noComma, noIn) {
+    var start = storeCurrentPos();
     var expr = parseMaybeAssign(noIn);
     if (!noComma && tokType === _comma) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.expressions = [expr];
       while (eat(_comma)) node.expressions.push(parseMaybeAssign(noIn));
       return finishNode(node, "SequenceExpression");
@@ -1841,9 +1847,10 @@
   // operators like `+=`.
 
   function parseMaybeAssign(noIn) {
+    var start = storeCurrentPos();
     var left = parseMaybeConditional(noIn);
     if (tokType.isAssign) {
-      var node = startNodeFrom(left);
+      var node = startNodeAt(start);
       node.operator = tokVal;
       node.left = tokType === _eq ? toAssignable(left) : left;
       checkLVal(left);
@@ -1857,9 +1864,10 @@
   // Parse a ternary conditional (`?:`) operator.
 
   function parseMaybeConditional(noIn) {
+    var start = storeCurrentPos();
     var expr = parseExprOps(noIn);
     if (eat(_question)) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.test = expr;
       node.consequent = parseExpression(true);
       expect(_colon);
@@ -1872,7 +1880,8 @@
   // Start the precedence parser.
 
   function parseExprOps(noIn) {
-    return parseExprOp(parseMaybeUnary(), -1, noIn);
+    var start = storeCurrentPos();
+    return parseExprOp(parseMaybeUnary(), start, -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -1881,18 +1890,19 @@
   // defer further parser to one of its callers when it encounters an
   // operator that has a lower precedence than the set it is parsing.
 
-  function parseExprOp(left, minPrec, noIn) {
+  function parseExprOp(left, leftStart, minPrec, noIn) {
     var prec = tokType.binop;
     if (prec != null && (!noIn || tokType !== _in)) {
       if (prec > minPrec) {
-        var node = startNodeFrom(left);
+        var node = startNodeAt(leftStart);
         node.left = left;
         node.operator = tokVal;
         var op = tokType;
         next();
-        node.right = parseExprOp(parseMaybeUnary(), prec, noIn);
-        var exprNode = finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(exprNode, minPrec, noIn);
+        var start = storeCurrentPos();
+        node.right = parseExprOp(parseMaybeUnary(), start, prec, noIn);
+        finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
+        return parseExprOp(node, leftStart, minPrec, noIn);
       }
     }
     return left;
@@ -1914,9 +1924,10 @@
         raise(node.start, "Deleting local variable in strict mode");
       return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
     }
+    var start = storeCurrentPos();
     var expr = parseExprSubscripts();
     while (tokType.postfix && !canInsertSemicolon()) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.operator = tokVal;
       node.prefix = false;
       node.argument = expr;
@@ -1930,33 +1941,34 @@
   // Parse call, dot, and `[]`-subscript expressions.
 
   function parseExprSubscripts() {
-    return parseSubscripts(parseExprAtom());
+    var start = storeCurrentPos();
+    return parseSubscripts(parseExprAtom(), start);
   }
 
-  function parseSubscripts(base, noCalls) {
+  function parseSubscripts(base, start, noCalls) {
     if (eat(_dot)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);
       node.computed = false;
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "MemberExpression"), start, noCalls);
     } else if (eat(_bracketL)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.object = base;
       node.property = parseExpression();
       node.computed = true;
       expect(_bracketR);
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "MemberExpression"), start, noCalls);
     } else if (!noCalls && eat(_parenL)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
-      return parseSubscripts(finishNode(node, "CallExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
     } else if (tokType === _bquote) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
-      return parseSubscripts(finishNode(node, "TaggedTemplateExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "TaggedTemplateExpression"), start, noCalls);
     } return base;
   }
 
@@ -1976,9 +1988,10 @@
       if (inGenerator) return parseYield();
 
     case _name:
+      var start = storeCurrentPos();
       var id = parseIdent(tokType !== _name);
       if (eat(_arrow)) {
-        return parseArrowExpression(startNodeFrom(id), [id]);
+        return parseArrowExpression(startNodeAt(start), [id]);
       }
       return id;
 
@@ -1997,11 +2010,12 @@
       return finishNode(node, "Literal");
 
     case _parenL:
+      var start = storeCurrentPos();
       var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
       if (options.ecmaVersion >= 6 && tokType === _for) {
-        val = parseComprehension(startNode(), true);
+        val = parseComprehension(startNodeAt(start), true);
       } else {
         var oldParenL = ++metParenL;
         if (tokType !== _parenR) {
@@ -2013,7 +2027,7 @@
         expect(_parenR);
         // if '=>' follows '(...)', convert contents to arguments
         if (metParenL === oldParenL && eat(_arrow)) {
-          val = parseArrowExpression(startNode(), exprList);
+          val = parseArrowExpression(startNodeAt(start), exprList);
         } else {
           // forbid '()' before everything but '=>'
           if (!val) unexpected(lastStart);
@@ -2024,15 +2038,6 @@
             }
           }
         }
-      }
-      val.start = tokStart1;
-      val.end = lastEnd;
-      if (options.locations) {
-        val.loc.start = tokStartLoc1;
-        val.loc.end = lastEndLoc;
-      }
-      if (options.ranges) {
-        val.range = [tokStart1, lastEnd];
       }
       return val;
 
@@ -2078,7 +2083,8 @@
   function parseNew() {
     var node = startNode();
     next();
-    node.callee = parseSubscripts(parseExprAtom(), true);
+    var start = storeCurrentPos();
+    node.callee = parseSubscripts(parseExprAtom(), start, true);
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
     else node.arguments = empty;
     return finishNode(node, "NewExpression");

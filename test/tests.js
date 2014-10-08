@@ -2,9 +2,8 @@
 // (http://esprima.org/test/)
 
 if (typeof exports != "undefined") {
-  var test = require("./driver.js").test;
-  var testFail = require("./driver.js").testFail;
-  var testAssert = require("./driver.js").testAssert;
+  var driver = require("./driver.js");
+  var test = driver.test, testFail = driver.testFail, testAssert = driver.testAssert, misMatch = driver.misMatch;
   var acorn = require("..");
 }
 
@@ -177,11 +176,11 @@ test("(1 + 2 ) * 3", {
           loc: {
             start: {
               line: 1,
-              column: 0
+              column: 1
             },
             end: {
               line: 1,
-              column: 8
+              column: 6
             }
           }
         },
@@ -8202,11 +8201,11 @@ test("( new foo).bar()", {
             loc: {
               start: {
                 line: 1,
-                column: 0
+                column: 2
               },
               end: {
                 line: 1,
-                column: 10
+                column: 9
               }
             }
           },
@@ -8371,11 +8370,11 @@ test("(    foo  )()", {
           loc: {
             start: {
               line: 1,
-              column: 0
+              column: 5
             },
             end: {
               line: 1,
-              column: 11
+              column: 8
             }
           }
         },
@@ -17217,11 +17216,11 @@ test("if (morning) (function(){})", {
           loc: {
             start: {
               line: 1,
-              column: 13
+              column: 14
             },
             end: {
               line: 1,
-              column: 27
+              column: 26
             }
           }
         },
@@ -20508,11 +20507,11 @@ test("(function(){ return })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 22
+            column: 21
           }
         }
       },
@@ -20581,11 +20580,11 @@ test("(function(){ return; })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 23
+            column: 22
           }
         }
       },
@@ -20667,11 +20666,11 @@ test("(function(){ return x; })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 25
+            column: 24
           }
         }
       },
@@ -20781,11 +20780,11 @@ test("(function(){ return x * y })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 28
+            column: 27
           }
         }
       },
@@ -23194,11 +23193,11 @@ test("(function test(t, t) { })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 25
+            column: 24
           }
         }
       },
@@ -24412,11 +24411,11 @@ test("(function(){})", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 1,
-            column: 14
+            column: 13
           }
         }
       },
@@ -25522,11 +25521,11 @@ test("(function(){ return\nx; })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 2,
-            column: 5
+            column: 4
           }
         }
       },
@@ -25622,11 +25621,11 @@ test("(function(){ return // Comment\nx; })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 2,
-            column: 5
+            column: 4
           }
         }
       },
@@ -25722,11 +25721,11 @@ test("(function(){ return/* Multiline\nComment */x; })", {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 2,
-            column: 15
+            column: 14
           }
         }
       },
@@ -26026,8 +26025,6 @@ test("", {
 
 test("foo: if (true) break foo;", {
   type: "Program",
-  start: 0,
-  end: 25,
   loc: {
     start: {
       line: 1,
@@ -26041,8 +26038,6 @@ test("foo: if (true) break foo;", {
   body: [
     {
       type: "LabeledStatement",
-      start: 0,
-      end: 25,
       loc: {
         start: {
           line: 1,
@@ -26055,8 +26050,6 @@ test("foo: if (true) break foo;", {
       },
       body: {
         type: "IfStatement",
-        start: 5,
-        end: 25,
         loc: {
           start: {
             line: 1,
@@ -26069,8 +26062,6 @@ test("foo: if (true) break foo;", {
         },
         test: {
           type: "Literal",
-          start: 9,
-          end: 13,
           loc: {
             start: {
               line: 1,
@@ -26085,8 +26076,6 @@ test("foo: if (true) break foo;", {
         },
         consequent: {
           type: "BreakStatement",
-          start: 15,
-          end: 25,
           loc: {
             start: {
               line: 1,
@@ -26099,8 +26088,6 @@ test("foo: if (true) break foo;", {
           },
           label: {
             type: "Identifier",
-            start: 21,
-            end: 24,
             loc: {
               start: {
                 line: 1,
@@ -26118,8 +26105,6 @@ test("foo: if (true) break foo;", {
       },
       label: {
         type: "Identifier",
-        start: 0,
-        end: 3,
         loc: {
           start: {
             line: 1,
@@ -26138,8 +26123,6 @@ test("foo: if (true) break foo;", {
 
 test("(function () {\n 'use strict';\n '\0';\n}())", {
   type: "Program",
-  start: 0,
-  end: 40,
   loc: {
     start: {
       line: 1,
@@ -26153,8 +26136,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 40,
       loc: {
         start: {
           line: 1,
@@ -26167,21 +26148,18 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
       },
       expression: {
         type: "CallExpression",
-        start: 0,
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 1
           },
           end: {
             line: 4,
-            column: 4
+            column: 3
           }
         },
         callee: {
           type: "FunctionExpression",
-          start: 1,
-          end: 37,
           loc: {
             start: {
               line: 1,
@@ -26196,8 +26174,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
           params: [],
           body: {
             type: "BlockStatement",
-            start: 13,
-            end: 37,
             loc: {
               start: {
                 line: 1,
@@ -26211,8 +26187,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
             body: [
               {
                 type: "ExpressionStatement",
-                start: 16,
-                end: 29,
                 loc: {
                   start: {
                     line: 2,
@@ -26225,8 +26199,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
                 },
                 expression: {
                   type: "Literal",
-                  start: 16,
-                  end: 28,
                   loc: {
                     start: {
                       line: 2,
@@ -26242,8 +26214,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
               },
               {
                 type: "ExpressionStatement",
-                start: 31,
-                end: 35,
                 loc: {
                   start: {
                     line: 3,
@@ -26256,8 +26226,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
                 },
                 expression: {
                   type: "Literal",
-                  start: 31,
-                  end: 34,
                   loc: {
                     start: {
                       line: 3,
@@ -26275,7 +26243,6 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
           }
         },
         arguments: [],
-        end: 40
       }
     }
   ]
@@ -26283,43 +26250,29 @@ test("(function () {\n 'use strict';\n '\0';\n}())", {
 
 test("123..toString(10)", {
   type: "Program",
-  start: 0,
-  end: 17,
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 17,
       expression: {
         type: "CallExpression",
-        start: 0,
         callee: {
           type: "MemberExpression",
-          start: 0,
           object: {
             type: "Literal",
-            start: 0,
-            end: 4,
             value: 123
           },
           property: {
             type: "Identifier",
-            start: 5,
-            end: 13,
             name: "toString"
           },
           computed: false,
-          end: 13
         },
         arguments: [
           {
             type: "Literal",
-            start: 14,
-            end: 16,
             value: 10
           }
         ],
-        end: 17
       }
     }
   ]
@@ -26327,30 +26280,20 @@ test("123..toString(10)", {
 
 test("123.+2", {
   type: "Program",
-  start: 0,
-  end: 6,
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 6,
       expression: {
         type: "BinaryExpression",
-        start: 0,
         left: {
           type: "Literal",
-          start: 0,
-          end: 4,
           value: 123
         },
         operator: "+",
         right: {
           type: "Literal",
-          start: 5,
-          end: 6,
           value: 2
         },
-        end: 6
       }
     }
   ]
@@ -26358,28 +26301,18 @@ test("123.+2", {
 
 test("a\u2028b", {
   type: "Program",
-  start: 0,
-  end: 3,
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 1,
       expression: {
         type: "Identifier",
-        start: 0,
-        end: 1,
         name: "a"
       }
     },
     {
       type: "ExpressionStatement",
-      start: 2,
-      end: 3,
       expression: {
         type: "Identifier",
-        start: 2,
-        end: 3,
         name: "b"
       }
     }
@@ -26437,28 +26370,18 @@ test("foo: 10; foo: 20;", {
 
 test("if(1)/  foo/", {
   type: "Program",
-  start: 0,
-  end: 12,
   body: [
     {
       type: "IfStatement",
-      start: 0,
-      end: 12,
       test: {
         type: "Literal",
-        start: 3,
-        end: 4,
         value: 1,
         raw: "1"
       },
       consequent: {
         type: "ExpressionStatement",
-        start: 5,
-        end: 12,
         expression: {
           type: "Literal",
-          start: 5,
-          end: 12,
           raw: "/  foo/"
         }
       },
@@ -26475,8 +26398,6 @@ test("price_9̶9̶_89", {
       expression: {
         type: "Identifier",
         name: "price_9̶9̶_89",
-        start: 0,
-        end: 13
       }
     }
   ]
@@ -26486,8 +26407,6 @@ test("price_9̶9̶_89", {
 
 test("var a = 1;", {
   type: "Program",
-  start: 0,
-  end: 10,
   loc: {
     start: {
       line: 1,
@@ -26502,8 +26421,6 @@ test("var a = 1;", {
   body: [
     {
       type: "VariableDeclaration",
-      start: 0,
-      end: 10,
       loc: {
         start: {
           line: 1,
@@ -26518,8 +26435,6 @@ test("var a = 1;", {
       declarations: [
         {
           type: "VariableDeclarator",
-          start: 4,
-          end: 9,
           loc: {
             start: {
               line: 1,
@@ -26533,8 +26448,6 @@ test("var a = 1;", {
           },
           id: {
             type: "Identifier",
-            start: 4,
-            end: 5,
             loc: {
               start: {
                 line: 1,
@@ -26550,8 +26463,6 @@ test("var a = 1;", {
           },
           init: {
             type: "Literal",
-            start: 8,
-            end: 9,
             loc: {
               start: {
                 line: 1,
@@ -26624,28 +26535,18 @@ test("{}/=/", {
 
 test("foo <!--bar\n+baz", {
   type: "Program",
-  start: 0,
-  end: 16,
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 16,
       expression: {
         type: "BinaryExpression",
-        start: 0,
-        end: 16,
         left: {
           type: "Identifier",
-          start: 0,
-          end: 3,
           name: "foo"
         },
         operator: "+",
         right: {
           type: "Identifier",
-          start: 13,
-          end: 16,
           name: "baz"
         }
       }
@@ -26795,7 +26696,7 @@ testFail("func() = 4",
          "Assigning to rvalue (1:0)");
 
 testFail("(1 + 1) = 10",
-         "Assigning to rvalue (1:0)");
+         "Assigning to rvalue (1:1)");
 
 testFail("1++",
          "Assigning to rvalue (1:0)");
@@ -26810,7 +26711,7 @@ testFail("--1",
          "Assigning to rvalue (1:2)");
 
 testFail("for((1 + 1) in list) process(x);",
-         "Assigning to rvalue (1:4)");
+         "Assigning to rvalue (1:5)");
 
 testFail("[",
          "Unexpected token (1:1)");
@@ -27309,8 +27210,6 @@ testFail("for(let x = 0;;);", "Unexpected token (1:8)");
 
 test("let++", {
   type: "Program",
-  start: 0,
-  end: 5,
   loc: {
     start: {
       line: 1,
@@ -27324,8 +27223,6 @@ test("let++", {
   body: [
     {
       type: "ExpressionStatement",
-      start: 0,
-      end: 5,
       loc: {
         start: {
           line: 1,
@@ -27338,8 +27235,6 @@ test("let++", {
       },
       expression: {
         type: "UpdateExpression",
-        start: 0,
-        end: 5,
         loc: {
           start: {
             line: 1,
@@ -27354,8 +27249,6 @@ test("let++", {
         prefix: false,
         argument: {
           type: "Identifier",
-          start: 0,
-          end: 3,
           loc: {
             start: {
               line: 1,
@@ -28704,8 +28597,6 @@ test("<!--\n;", {
         {
           type: tokTypes._var,
           value: "var",
-          start: 0,
-          end: 3,
           loc: {
             start: {line: 1, column: 0},
             end: {line: 1, column: 3}
@@ -28714,8 +28605,6 @@ test("<!--\n;", {
         {
           type: tokTypes.name,
           value: "x",
-          start: 4,
-          end: 5,
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 5}
@@ -28724,8 +28613,6 @@ test("<!--\n;", {
         {
           type: tokTypes.eq,
           value: "=",
-          start: 6,
-          end: 7,
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 7}
@@ -28734,8 +28621,6 @@ test("<!--\n;", {
         {
           type: tokTypes.parenL,
           value: undefined,
-          start: 8,
-          end: 9,
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 9}
@@ -28744,8 +28629,6 @@ test("<!--\n;", {
         {
           type: tokTypes.num,
           value: 1,
-          start: 9,
-          end: 10,
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 10}
@@ -28754,8 +28637,6 @@ test("<!--\n;", {
         {
           type: {binop: 9, prefix: true, beforeExpr: true},
           value: "+",
-          start: 11,
-          end: 12,
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 12}
@@ -28764,8 +28645,6 @@ test("<!--\n;", {
         {
           type: tokTypes.num,
           value: 2,
-          start: 13,
-          end: 14,
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -28774,8 +28653,6 @@ test("<!--\n;", {
         {
           type: tokTypes.parenR,
           value: undefined,
-          start: 14,
-          end: 15,
           loc: {
             start: {line: 1, column: 14},
             end: {line: 1, column: 15}
@@ -28784,8 +28661,6 @@ test("<!--\n;", {
         {
           type: tokTypes.eof,
           value: undefined,
-          start: 15,
-          end: 15,
           loc: {
             start: {line: 1, column: 15},
             end: {line: 1, column: 15}
@@ -28794,17 +28669,11 @@ test("<!--\n;", {
       ];
   testAssert('var x = (1 + 2)', function assert(ast) {
     if (actualTokens.length !== expectedTokens.length) {
-      return JSON.stringify(actualTokens) + " !== " + JSON.stringify(expectedTokens);
+      return "Bad token stream length: expected " + expectedTokens.length + ", got " + actualTokens.length;
     } else {
       for (var i=0, n=actualTokens.length; i < n; i++) {
-        var actualToken = JSON.stringify(
-          actualTokens[i],
-          // just remove this when startLoc/endLoc support is dropped
-          function (key, value) { if (key !== 'startLoc' && key !== 'endLoc') return value; }
-        );
-        var expectedToken = JSON.stringify(expectedTokens[i]);
-        if (actualToken !== expectedToken)
-          return actualToken + ' !== ' + expectedToken;
+        var mis = misMatch(expectedTokens[i], actualTokens[i]);
+        if (mis) return mis;
       }
     }
   }, {
