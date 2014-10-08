@@ -133,7 +133,8 @@ to5.transformFile("filename.js", options, function (err, result) {
   whitelist: [],
 
   // If truthy, adds a `map` property to returned output.
-  // If set to "inline", a comment with a sourceMappingURL directive is added to the bottom of the returned code
+  // If set to "inline", a comment with a sourceMappingURL directive is added to
+  // the bottom of the returned code.
   sourceMap: false,
 
   // Filename for use in errors etc.
@@ -192,28 +193,28 @@ limitations in ES5 implementations.
 
 ## Comparison to other transpilers
 
-|                              | 6to5 | Traceur | esnext | es6now | es6-transpiler |
-| ---------------------------- | ---- | ------- | ------ | ------ | -------------- |
-| No runtime                   | ✓    |         |        |        | ✓              |
-| Source maps                  | ✓    | ✓       | ✓      |        | ✓              |
-| No compiler global pollution | ✓    |         | ✓      |        | ✓              |
-| Array comprehension          | ✓    | ✓       | ✓      |        | ✓              |
-| Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Block binding                | ✓    | ✓       |        |        | ✓              |
-| Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Constants                    | ✓    | ✓       |        |        | ✓              |
-| Default parameters           | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              |
-| For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Generator comprehension      |      | ✓       | ✓      |        | ✓              |
-| Generators                   |      | ✓       | ✓      |        |                |
-| Modules                      | ✓    | ✓       |        | ✓      |                |
-| Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Property name shorthand      | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Rest parameters              | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Spread                       | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              |
+|                              | 6to5 | Traceur | esnext | es6now | es6-transpiler | jstransform |
+| ---------------------------- | ---- | ------- | ------ | ------ | -------------- | ----------- |
+| No runtime                   | ✓    |         |        |        | ✓              | ✓           |
+| Source maps                  | ✓    | ✓       | ✓      |        | ✓              | ✓           |
+| No compiler global pollution | ✓    |         | ✓      |        | ✓              | ✓           |
+| Array comprehension          | ✓    | ✓       | ✓      |        | ✓              |             |
+| Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Block binding                | ✓    | ✓       |        |        | ✓              |             |
+| Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |             |
+| Constants                    | ✓    | ✓       |        |        | ✓              |             |
+| Default parameters           | ✓    | ✓       | ✓      | ✓      | ✓              |             |
+| Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
+| Generator comprehension      |      | ✓       | ✓      |        | ✓              |             |
+| Generators                   |      | ✓       | ✓      |        |                |             |
+| Modules                      | ✓    | ✓       |        | ✓      |                |             |
+| Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Property name shorthand      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Rest parameters              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Spread                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
+| Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 
 #### Performance
 
