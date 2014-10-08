@@ -216,9 +216,17 @@ limitations in ES5 implementations.
 
     $ make bench
 
-![Output size (including runtime) (lower is better)](http://i.imgur.com/hAybrA2.png)
+##### Output size (including runtime)
 
-![Compile speed (higher is better)](http://i.imgur.com/yMwMvhg.png)
+Lower is better.
+
+![Output size graph](http://i.imgur.com/cHMdnM9.png)
+
+##### Compile speed
+
+Higher is better.
+
+![Compile speed graph](http://i.imgur.com/YYx2R8O.png)
 
 ### [Traceur](https://github.com/google/traceur-compiler)
 
