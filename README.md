@@ -187,30 +187,28 @@ limitations in ES5 implementations.
 
 ## Comparison to other transpilers
 
-|                            | 6to5 | Traceur | esnext | es6now | es6-transpiler |
-| -------------------------- | ---- | ------- | ------ | ------ | -------------- |
-| No runtime                 | ✓    |         |        |        | ✓              |
-| Source maps                | ✓    | ✓       | ✓      |        | ✓              |
-| **Compiler usage:**        |      |         |        |        |                |
-| No global pollution        | ✓    |         | ✓      |        | ✓              |
-| **Syntax features:**       |      |         |        |        |                |
-| Array comprehension        | ✓    | ✓       | ✓      |        | ✓              |
-| Arrow functions            | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Block binding              | ✓    | ✓       |        |        | ✓              |
-| Classes                    | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Computed property names    | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Constants                  | ✓    | ✓       |        |        | ✓              |
-| Default parameters         | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Destructuring              | ✓    | ✓       | ✓      | ✓      | ✓              |
-| For-of                     | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Generator comprehension    |      | ✓       | ✓      |        | ✓              |
-| Generators                 |      | ✓       | ✓      |        |                |
-| Modules                    | ✓    | ✓       |        | ✓      |                |
-| Property method assignment | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Property name shorthand    | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Rest parameters            | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Spread                     | ✓    | ✓       | ✓      | ✓      | ✓              |
-| Template literals          | ✓    | ✓       | ✓      | ✓      | ✓              |
+|                              | 6to5 | Traceur | esnext | es6now | es6-transpiler |
+| ---------------------------- | ---- | ------- | ------ | ------ | -------------- |
+| No runtime                   | ✓    |         |        |        | ✓              |
+| Source maps                  | ✓    | ✓       | ✓      |        | ✓              |
+| No compiler global pollution | ✓    |         | ✓      |        | ✓              |
+| Array comprehension          | ✓    | ✓       | ✓      |        | ✓              |
+| Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Block binding                | ✓    | ✓       |        |        | ✓              |
+| Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Constants                    | ✓    | ✓       |        |        | ✓              |
+| Default parameters           | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              |
+| For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Generator comprehension      |      | ✓       | ✓      |        | ✓              |
+| Generators                   |      | ✓       | ✓      |        |                |
+| Modules                      | ✓    | ✓       |        | ✓      |                |
+| Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Property name shorthand      | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Rest parameters              | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Spread                       | ✓    | ✓       | ✓      | ✓      | ✓              |
+| Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              |
 
 #### Performance
 
@@ -236,7 +234,7 @@ unneccesary step when a runtime can be eliminated entirely.
 
 ### [esnext](https://github.com/esnext/esnext)
 
-esnext is **slow**, painfully so. Runtime required.
+esnext is **slow**, painfully so. See [performance](#performance) for stats.
 
 ### [es6now](https://github.com/zenparsing/es6now)
 
