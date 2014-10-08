@@ -23,13 +23,13 @@ class Bar extends Foo {
 
   }
 
-  get foo() {
-    return this._foo;
-  }
-
-  set foo(val) {
-    this._foo = val + " foo!";
-  }
+  // not supported by jstransform
+  //get foo() {
+  //  return this._foo;
+  //}
+  //set foo(val) {
+  //  this._foo = val + " foo!";
+  //}
 }
 
 // arrow functions

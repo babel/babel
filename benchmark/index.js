@@ -1,5 +1,6 @@
 Error.stackTraceLimit = Infinity;
 
+var jsTrans = require("jstransform");
 var traceur = require("traceur");
 var es6tr   = require("es6-transpiler");
 var es6now  = require("es6now");
@@ -17,10 +18,22 @@ var readResolve = function (filename) {
   return fs.readFileSync(require.resolve(filename), "utf8");
 };
 
+var jsTransVisitors = [];
+
+_.each([
+  "arrow-function-visitors", "class-visitors", "destructuring-visitors",
+  "object-concise-method-visitors", "object-short-notation-visitors",
+  "rest-param-visitors", "template-visitors"
+], function (name) {
+  var mod = require("jstransform/visitors/es6-" + name);
+  jsTransVisitors = jsTransVisitors.concat(mod.visitorList);
+});
+
+
 var compilers = {
   "6to5": {
     compile: function (code, filename) {
-      return to5.transform(code, { filename: filename });
+      return to5.transform(code, { filename: filename }).code;
     }
   },
 
@@ -53,6 +66,12 @@ var compilers = {
       var result = es6tr.run({ src: code });
       if (result.errors.length) throw new Error(result.join("; "));
       return result.src;
+    }
+  },
+
+  jstransform: {
+    compile: function (code, filename) {
+      return jsTrans.transform(jsTransVisitors, code).code;
     }
   }
 };
