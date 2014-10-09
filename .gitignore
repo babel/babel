@@ -5,3 +5,4 @@ test/tmp
 *.cache
 /templates.json
 coverage
+dist

@@ -6,3 +6,4 @@ test
 benchmark
 Makefile
 .*
+dist

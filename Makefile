@@ -6,7 +6,7 @@ export NODE_ENV = test
 .PHONY: clean test test-cov test-travis publish bench build
 
 clean:
-	rm -rf coverage templates.json test/tmp build
+	rm -rf coverage templates.json test/tmp dist
 
 test:
 	$(MOCHA_CMD)
@@ -16,7 +16,7 @@ bench:
 	node node_modules/matcha/bin/_matcha
 
 test-cov:
-	make clean
+	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 	rm -rf test/tmp
 
@@ -25,22 +25,26 @@ test-travis:
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 build:
-	mkdir build
-	cd build
-	browserify lib/6to5/transform.js >6to5.js
-	uglifyjs 6to5.js >6to5.min.js
+	rm -rf dist
+	mkdir dist
+
+	node bin/cache-templates
+
+	browserify lib/6to5/transform.js -s to5 >dist/6to5.js
+	uglifyjs dist/6to5.js >dist/6to5.min.js
+
+	rm -rf templates.json
 
 publish:
-	make clean
-
 	rm -rf node_modules
 	npm install
 
 	node bin/cache-templates
 	make test
 
+	test -f templates.json
 	npm publish
 
 	# todo - auto-create tag
 
-	make clean
+	rm -rf templates.json

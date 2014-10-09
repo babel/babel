@@ -156,6 +156,22 @@ polyfill is also required negating the [polyfill caveat](#polyfill).
 require("6to5/register");
 ```
 
+## Browser
+
+You can build a browser version of the compiler by running the following in the
+6to5 directory:
+
+    $ make build
+
+This will output the files `dist/6to5.js` and `dist/6to5.min.js`.
+
+Just include one of those in the browser and access the transform method via the
+global `to5`.
+
+```javascript
+to5("class Test {}").code;
+```
+
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are
