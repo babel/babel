@@ -18,6 +18,8 @@ var readFile = function (filename) {
 var fixturesDir = __dirname + "/fixtures";
 
 _.each(fs.readdirSync(fixturesDir), function (suiteName) {
+  if (suiteName[0] === ".") return;
+
   var suiteDir = fixturesDir + "/" + suiteName;
 
   var suiteOptsLoc = suiteDir + "/options.json";
@@ -26,6 +28,8 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
 
   suite(humanise(suiteName), function () {
     _.each(fs.readdirSync(suiteDir), function (taskName) {
+      if (taskName[0] === ".") return;
+
       var taskDir = suiteDir + "/" + taskName;
       if (fs.statSync(taskDir).isFile()) return;
 
@@ -36,7 +40,7 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
       var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suiteOpts));
       if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
-      var body = function () {
+      test(humanise(taskName), function () {
         var actual = readFile(actualLoc);
         var expect = readFile(expectLoc);
 
@@ -60,11 +64,7 @@ _.each(fs.readdirSync(fixturesDir), function (suiteName) {
         } else {
           test();
         }
-      };
-
-      if (taskOpts.ignore) body = null;
-
-      test(humanise(taskName), body);
+      });
     });
   });
 });
