@@ -190,6 +190,8 @@ To test 6to5 in your browser run:
 
     $ make test-browser
 
+And open `test/browser/index.html` if it doesn't open automatically.
+
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are
