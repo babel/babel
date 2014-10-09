@@ -9,9 +9,7 @@ clean:
 	rm -rf coverage templates.json test/tmp dist
 
 test:
-	rm -rf test/tmp
 	$(MOCHA_CMD)
-	rm -rf test/tmp
 
 bench:
 	node node_modules/matcha/bin/_matcha
@@ -19,7 +17,6 @@ bench:
 test-cov:
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
-	rm -rf test/tmp
 
 test-travis:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --report lcovonly -- --reporter spec
