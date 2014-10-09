@@ -36,6 +36,16 @@
     "bench": "make bench",
     "test": "make test"
   },
+  "testling": {
+    "harness": "mocha-tdd",
+    "preprocess": "make test-browser",
+    "html": "test/browser/index.html",
+    "browsers": [
+      "ie/8..latest",
+      "chrome/latest",
+      "firefox/latest"
+    ]
+  },
   "dependencies": {
     "ast-types": "0.5.0",
     "commander": "2.3.0",

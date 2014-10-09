@@ -28,7 +28,7 @@ test-travis:
 test-browser:
 	make build
 	node bin/generate-browser-test >dist/6to5-test.js
-	open test/browser/index.html
+	test -n "`which open`" && open test/browser/index.html
 
 build:
 	mkdir -p dist
