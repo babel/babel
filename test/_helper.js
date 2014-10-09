@@ -71,7 +71,6 @@ exports.getTests = function () {
       var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suite.options));
       if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
-
       var test = {
         title: humanise(taskName),
         options: taskOpts,
@@ -87,10 +86,10 @@ exports.getTests = function () {
 
       suite.tests.push(test);
 
-      var sourceMapLoc = taskDir + "/source-map.json";
-      if (fs.existsSync(sourceMapLoc)) {
+      var sourceMappingsLoc = taskDir + "/source-mappings.json";
+      if (fs.existsSync(sourceMappingsLoc)) {
         test.options.sourceMap = true;
-        test.sourceMap = require(sourceMapLoc);
+        test.sourceMappings = require(sourceMappingsLoc);
       }
     });
   });

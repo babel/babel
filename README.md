@@ -148,10 +148,16 @@ to5.transformFile("filename.js", options, function (err, result) {
   // If truthy, adds a `map` property to returned output.
   // If set to "inline", a comment with a sourceMappingURL directive is added to
   // the bottom of the returned code.
-  sourceMap: false,
+  // Default: false
+  sourceMap: true,
+
+  // Adds an `ast` property to returned output containing the ast tree used.
+  // Default: false
+  ast: true,
 
   // Filename for use in errors etc.
-  filename: "unknown"
+  // Default: "unknown"
+  filename: "filename"
 }
 ```
 

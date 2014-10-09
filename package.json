@@ -58,6 +58,7 @@
     "jstransform": "^6.3.2",
     "uglify-js": "^2.4.15",
     "browserify": "^6.0.3",
-    "proclaim": "^2.0.0"
+    "proclaim": "^2.0.0",
+    "source-map": "^0.1.40"
   }
 }
