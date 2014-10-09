@@ -34,6 +34,18 @@ It's as easy as:
 
     $ npm install -g 6to5
 
+## Table of Contents
+
+- [Plugins](#plugins)
+- [Features](#features)
+- [Usage](#usage)
+  - [CLI](#cli)
+  - [Node](#node-1)
+  - [Browser](#browser)
+- [Modules](#modules)
+- [Caveats](#caveats)
+- [Comparison to other transpilers](#comparison-to-other-transpilers)
+
 ## Plugins
 
  - [Browserify](https://github.com/sebmck/6to5-browserify)
@@ -156,7 +168,7 @@ polyfill is also required negating the [polyfill caveat](#polyfill).
 require("6to5/register");
 ```
 
-## Browser
+### Browser
 
 You can build a browser version of the compiler by running the following in the
 6to5 directory:
