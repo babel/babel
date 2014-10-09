@@ -6,10 +6,9 @@ export NODE_ENV = test
 .PHONY: clean test test-cov test-travis publish bench build
 
 clean:
-	rm -rf coverage templates.json test/tmp
+	rm -rf coverage templates.json test/tmp build
 
 test:
-	make clean
 	$(MOCHA_CMD)
 	rm -rf test/tmp
 
@@ -26,7 +25,10 @@ test-travis:
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 build:
-	# build for the browser
+	mkdir build
+	cd build
+	browserify lib/6to5/transform.js >6to5.js
+	uglifyjs 6to5.js >6to5.min.js
 
 publish:
 	make clean
