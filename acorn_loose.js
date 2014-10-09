@@ -209,6 +209,8 @@
       node.loc = new SourceLocation();
     if (options.directSourceFile)
       node.sourceFile = options.directSourceFile;
+    if (options.ranges)
+      node.range = [token.start, 0];
     return node;
   }
 
@@ -226,6 +228,8 @@
     }
     if (options.directSourceFile)
       node.sourceFile = options.directSourceFile;
+    if (options.ranges)
+      node.range = [pos[0], 0];
     return node;
   }
 
@@ -234,24 +238,15 @@
     node.end = lastEnd;
     if (options.locations)
       node.loc.end = lastEndLoc;
+    if (options.ranges)
+      node.range[1] = lastEnd;
     return node;
   }
 
-  function getDummyLoc() {
-    if (options.locations) {
-      var loc = new SourceLocation();
-      loc.end = loc.start;
-      return loc;
-    }
-  };
-
   function dummyIdent() {
-    var dummy = new Node(token.start);
-    dummy.type = "Identifier";
-    dummy.end = token.start;
+    var dummy = startNode();
     dummy.name = "✖";
-    dummy.loc = getDummyLoc();
-    return dummy;
+    return finishNode(dummy, "Identifier");
   }
   function isDummy(node) { return node.name == "✖"; }
 
