@@ -39,15 +39,13 @@
   "dependencies": {
     "ast-types": "0.5.0",
     "commander": "2.3.0",
-    "escodegen": "https://github.com/Constellation/escodegen/archive/624550d0d6edf812a661902c6908dedff66005a7.tar.gz",
-    "esprima-fb": "7001.1.0-dev-harmony-fb",
-    "estraverse": "1.5.1",
     "fs-readdir-recursive": "0.0.2",
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
     "es6-shim": "^0.18.0",
     "es6-symbol": "^0.1.1",
-    "regexpu": "^0.2.2"
+    "regexpu": "^0.2.2",
+    "recast": "^0.8.0"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",

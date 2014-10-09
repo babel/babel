@@ -20,8 +20,9 @@ exports.run = function (suites, transform, assert) {
     suite(testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, function () {
+
           var run = function () {
-            transform.test(task.actual, task.expect, task.options);
+            transform.test(task, assert);
           };
 
           var throwMsg = task.options.throws;
@@ -70,7 +71,8 @@ exports.getTests = function () {
       var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suite.options));
       if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
-      suite.tests.push({
+
+      var test = {
         title: humanise(taskName),
         options: taskOpts,
         actual: {
@@ -81,7 +83,15 @@ exports.getTests = function () {
           code: readFile(expectLoc),
           filename: expectLoc
         }
-      });
+      };
+
+      suite.tests.push(test);
+
+      var sourceMapLoc = taskDir + "/source-map.json";
+      if (fs.existsSync(sourceMapLoc)) {
+        test.options.sourceMap = true;
+        test.sourceMap = require(sourceMapLoc);
+      }
     });
   });
 

@@ -3,6 +3,7 @@
   "ArrayPattern":                  ["elements"],
   "ArrowFunctionExpression":       ["params", "defaults", "rest", "body"],
   "AssignmentExpression":          ["left", "right"],
+  "AwaitExpression":               ["argument"],
   "BinaryExpression":              ["left", "right"],
   "BlockStatement":                ["body"],
   "BreakStatement":                ["label"],
@@ -23,6 +24,7 @@
   "ExportBatchSpecifier":          [],
   "ExportSpecifier":               ["id", "name"],
   "ExpressionStatement":           ["expression"],
+  "File":                          ["program"],
   "ForInStatement":                ["left", "right", "body"],
   "ForOfStatement":                ["left", "right", "body"],
   "ForStatement":                  ["init", "test", "update", "body"],
@@ -70,6 +72,5 @@
   "VoidTypeAnnotation":            [],
   "WhileStatement":                ["test", "body"],
   "WithStatement":                 ["object", "body"],
-  "YieldExpression":               ["argument"],
-  "AwaitExpression":               ["argument"]
+  "YieldExpression":               ["argument"]
 }

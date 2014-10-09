@@ -151,11 +151,7 @@ to5.transformFile("filename.js", options, function (err, result) {
   sourceMap: false,
 
   // Filename for use in errors etc.
-  filename: "unknown",
-
-  // Format options
-  // See https://github.com/Constellation/escodegen/wiki/API for options.
-  format: {}
+  filename: "unknown"
 }
 ```
 
