@@ -59,6 +59,7 @@
     "es6now": "0.8.11",
     "jstransform": "^6.3.2",
     "uglify-js": "^2.4.15",
-    "browserify": "^6.0.3"
+    "browserify": "^6.0.3",
+    "proclaim": "^2.0.0"
   }
 }

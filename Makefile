@@ -3,12 +3,13 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-travis publish bench build
+.PHONY: clean test test-cov test-travis test-browser publish bench build
 
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
 test:
+	rm -rf test/tmp
 	$(MOCHA_CMD)
 	rm -rf test/tmp
 
@@ -24,9 +25,13 @@ test-travis:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --report lcovonly -- --reporter spec
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
+test-browser:
+	make build
+	node bin/generate-browser-test >dist/6to5-test.js
+	open test/browser/index.html
+
 build:
-	rm -rf dist
-	mkdir dist
+	mkdir -p dist
 
 	node bin/cache-templates
 

@@ -172,6 +172,10 @@ global `to5`.
 to5("class Test {}").code;
 ```
 
+To test 6to5 in your browser run:
+
+    $ make test-browser
+
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are

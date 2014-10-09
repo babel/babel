@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var helper = require("../test/_helper");
+
+console.log("(" + helper.run + ")(" + JSON.stringify(helper.getTests(), null, "  ") + ", to5, proclaim)");
