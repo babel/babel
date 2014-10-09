@@ -190,8 +190,6 @@ To test 6to5 in your browser run:
 
     $ make test-browser
 
-[![Testling](https://ci.testling.com/sebmck/6to5.png)](https://ci.testling.com/sebmck/6to5)
-
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are
