@@ -39,7 +39,15 @@
   "testling": {
     "harness": "mocha-tdd",
     "preprocess": "make test-browser",
-    "html": "test/browser/index.html",
+    "files": [
+      "test/_blank.js"
+    ],
+    "scripts": [
+      "node_modules/proclaim/lib/proclaim.js",
+      "node_modules/lodash/lodash.js",
+      "dist/6to5.js",
+      "dist/6to5-test.js"
+    ],
     "browsers": [
       "ie/8..latest",
       "chrome/latest",
