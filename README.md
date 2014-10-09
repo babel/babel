@@ -175,7 +175,7 @@ to5("class Test {}").code;
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are
-taken into account to ease their usage.
+taken into account to easen their usage.
 
 ```javascript
 import "foo"; // var foo = require("foo");
