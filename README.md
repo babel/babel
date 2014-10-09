@@ -36,23 +36,15 @@ It's as easy as:
 
 ## Table of Contents
 
-- [Plugins](#plugins)
 - [Features](#features)
 - [Usage](#usage)
+  - [Plugins](#plugins)
   - [CLI](#cli)
   - [Node](#node-1)
   - [Browser](#browser)
 - [Modules](#modules)
 - [Caveats](#caveats)
 - [Comparison to other transpilers](#comparison-to-other-transpilers)
-
-## Plugins
-
- - [Browserify](https://github.com/sebmck/6to5-browserify)
- - [Brunch](https://github.com/es128/6to5-brunch)
- - [Connect](https://github.com/sebmck/6to5-connect)
- - [Gulp](https://github.com/sindresorhus/gulp-6to5)
- - [Grunt](https://github.com/sindresorhus/grunt-6to5)
 
 ## [Features](FEATURES.md)
 
@@ -79,6 +71,14 @@ To be implemented:
  - [Generators](FEATURES.md#generators)
 
 ## Usage
+
+### Plugins
+
+ - [Browserify](https://github.com/sebmck/6to5-browserify)
+ - [Brunch](https://github.com/es128/6to5-brunch)
+ - [Connect](https://github.com/sebmck/6to5-connect)
+ - [Gulp](https://github.com/sindresorhus/gulp-6to5)
+ - [Grunt](https://github.com/sindresorhus/grunt-6to5)
 
 ### CLI
 
