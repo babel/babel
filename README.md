@@ -60,6 +60,7 @@ It's as easy as:
  - [Rest parameters](FEATURES.md#rest-parameters)
  - [Spread](FEATURES.md#spread)
  - [Template literals](FEATURES.md#template-literals)
+ - [Unicode Regex](FEATURES.md#unicode-regex)
 
 To be implemented:
 
@@ -243,6 +244,7 @@ limitations in ES5 implementations.
 | Rest parameters              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Spread                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Unicode regex                | ✓    | ✓       |        | ✓      | ✓              |             |
 
 #### Performance
 
