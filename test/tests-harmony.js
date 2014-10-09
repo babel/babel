@@ -15389,3 +15389,5 @@ test('function normal(x, y = 10) {}', {
     expression: false
   }]
 }, {ecmaVersion: 6});
+
+test("'use strict'; function f([x,,z]) {}", {}, {ecmaVersion: 6});

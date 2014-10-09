@@ -1391,8 +1391,10 @@
         break;
 
       case "ArrayPattern":
-        for (var i = 0; i < param.elements.length; i++)
-          checkFunctionParam(param.elements[i], nameHash);
+        for (var i = 0; i < param.elements.length; i++) {
+          var elem = param.elements[i];
+          if (elem) checkFunctionParam(elem, nameHash);
+        }
         break;
     }
   }
