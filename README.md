@@ -260,7 +260,6 @@ limitations in ES5 implementations.
 | No runtime                   | ✓    |         |        |        | ✓              | ✓           |
 | Source maps                  | ✓    | ✓       | ✓      |        | ✓              | ✓           |
 | No compiler global pollution | ✓    |         | ✓      |        | ✓              | ✓           |
-| Array comprehension          | ✓    | ✓       | ✓      |        | ✓              |             |
 | Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Block binding                | ✓    | ✓       |        |        | ✓              |             |
 | Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
@@ -269,7 +268,6 @@ limitations in ES5 implementations.
 | Default parameters           | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
-| Generator comprehension      |      | ✓       | ✓      |        | ✓              |             |
 | Generators                   |      | ✓       | ✓      |        |                |             |
 | Modules                      | ✓    | ✓       |        | ✓      |                |             |
 | Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
