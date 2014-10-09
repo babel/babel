@@ -155,6 +155,34 @@ polyfill is also required negating the [polyfill caveat](#polyfill).
 require("6to5/register");
 ```
 
+## Modules
+
+6to5 modules compile straight to CommonJS, because of this various liberties are
+taken into account to ease their usage.
+
+```javascript
+import "foo"; // var foo = require("foo");
+import "foo-bar"; // var fooBar = require("foo-bar");
+import "./directory/foo-bar"; // var fooBar = require("./directory/foo-bar");
+import foo from "foo"; // var foo = require("foo");
+import * as foo from "foo"; // var foo = require("foo");
+
+import { bar } from "foo"; // var bar = require("foo").bar;
+import foo as bar from "foo"; // var bar = require("foo").foo;
+
+export { test }; // exports.test = test;
+export var test = 5; // var test = 5; exports.test = test;
+
+export default test; // module.exports = exports = test;
+```
+
+If you'd like to disable this behaviour and use the more ES6-like
+[es6-module-transpiler](https://github.com/esnext/es6-module-transpiler) you can
+use the following:
+
+    $ 6to5 script.js -o script-compiled.js --blacklist modules
+    $ compile-modules convert script-compiled.js -o script-compiled.js
+
 ## Caveats
 
 ### Polyfill
