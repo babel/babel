@@ -285,8 +285,6 @@ unneccesary step when a runtime can be eliminated entirely.
 
 ### [esnext](https://github.com/esnext/esnext)
 
-esnext is **slow**, painfully so. See [performance](#performance) for stats.
-
 ### [es6now](https://github.com/zenparsing/es6now)
 
 es6now doesn't output sourcemaps. This is cited as a positive as line-to-line
