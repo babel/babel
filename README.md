@@ -279,27 +279,6 @@ limitations in ES5 implementations.
 | Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Unicode regex                | ✓    | ✓       |        |        | ✓              |             |
 
-#### Performance
-
-To run benchmarks against various transpilers run:
-
-    $ make bench
-
-The following graphs are using the
-[full benchmark fixture](https://github.com/sebmck/6to5/blob/master/benchmark/fixtures/all.js).
-
-##### Output size (including runtime)
-
-Lower is better.
-
-![Output size graph](http://i.imgur.com/cHMdnM9.png)
-
-##### Compile speed
-
-Higher is better.
-
-![Compile speed graph](http://i.imgur.com/YYx2R8O.png)
-
 ### [Traceur](https://github.com/google/traceur-compiler)
 
 Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
