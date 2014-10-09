@@ -47,8 +47,7 @@
     "mkdirp": "0.5.0",
     "es6-shim": "^0.18.0",
     "es6-symbol": "^0.1.1",
-    "regexpu": "^0.2.2",
-    "gluejs": "^2.3.9"
+    "regexpu": "^0.2.2"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",
@@ -59,6 +58,7 @@
     "esnext": "0.11.1",
     "es6now": "0.8.11",
     "jstransform": "^6.3.2",
-    "uglify-js": "^2.4.15"
+    "uglify-js": "^2.4.15",
+    "browserify": "^6.0.3"
   }
 }
