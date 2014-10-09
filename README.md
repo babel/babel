@@ -195,22 +195,23 @@ And open `test/browser/index.html` if it doesn't open automatically.
 ## Modules
 
 6to5 modules compile straight to CommonJS, because of this various liberties are
-taken into account to easen their usage.
+taken into account to make their usage easier.
 
 ```javascript
-import "foo"; // var foo = require("foo");
-import "foo-bar"; // var fooBar = require("foo-bar");
-import "./directory/foo-bar"; // var fooBar = require("./directory/foo-bar");
-import foo from "foo"; // var foo = require("foo");
+import "foo"; // require("foo");
+import "foo-bar"; // require("foo-bar");
+import "./directory/foo-bar"; // require("./directory/foo-bar");
+
+import foo from "foo"; // var foo = require("foo").default;
 import * as foo from "foo"; // var foo = require("foo");
 
-import { bar } from "foo"; // var bar = require("foo").bar;
-import foo as bar from "foo"; // var bar = require("foo").foo;
+import {bar} from "foo"; // var bar = require("foo").bar;
+import {foo as bar} from "foo"; // var bar = require("foo").foo;
 
-export { test }; // exports.test = test;
+export {test}; // exports.test = test;
 export var test = 5; // var test = 5; exports.test = test;
 
-export default test; // module.exports = exports = test;
+export default test; // exports.default = test;
 ```
 
 If you'd like to disable this behaviour and use the more ES6-like

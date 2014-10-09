@@ -5,7 +5,7 @@ exports.bar = bar;
 
 exports.bar = foo;
 
-module.exports = exports = foo;
+exports.default = foo;
 
-module.exports = exports = foo;
+exports.default = foo;
 exports.bar = bar;

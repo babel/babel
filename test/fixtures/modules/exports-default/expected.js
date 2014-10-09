@@ -1,21 +1,21 @@
-module.exports = exports = 42;
-module.exports = exports = {};
+exports.default = 42;
+exports.default = {};
 
-module.exports = exports = [];
+exports.default = [];
 
-module.exports = exports = foo;
+exports.default = foo;
 
-module.exports = exports = function () {}
+exports.default = function () {}
 
-module.exports = exports = function () {
+exports.default = function () {
   function Anonymous() {
   }
   return Anonymous;
 }();
 
-module.exports = exports = function foo () {}
+exports.default = function foo () {}
 
-module.exports = exports = function () {
+exports.default = function () {
   function foo() {
   }
   return foo;

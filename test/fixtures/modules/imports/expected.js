@@ -1,3 +1,3 @@
-var foo = require("foo");
-var fooBar = require("foo-bar");
-var fooBar = require("./directory/foo-bar");
+require("foo");
+require("foo-bar");
+require("./directory/foo-bar");

@@ -11,12 +11,12 @@ exports.bar = require("foo").bar;
 
 exports.bar = require("foo").foo;
 
-module.exports = exports = require("foo").foo;
+exports.default = require("foo").foo;
 
-module.exports = exports = require("foo").foo;
+exports.default = require("foo").foo;
 exports.bar = require("foo").bar;
 
-module.exports = exports = require("foo");
+exports.default = require("foo").default;
 
-exports.foo = require("foo");
+exports.foo = require("foo").default;
 
