@@ -280,7 +280,7 @@ limitations in ES5 implementations.
 | Rest parameters              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Spread                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Template literals            | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
-| Unicode regex                | ✓    | ✓       |        | ✓      | ✓              |             |
+| Unicode regex                | ✓    | ✓       |        |        | ✓              |             |
 
 #### Performance
 
