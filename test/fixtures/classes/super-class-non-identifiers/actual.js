@@ -1,0 +1,3 @@
+class Q extends function() {} {
+  
+}
