@@ -1,5 +1,6 @@
 for (var _iterator = this.test.expectation.registers[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-  var name = _step.value[0];
-  var before = _step.value[1];
-  var after = _step.value[2];
+  var _ref = _step.value;
+  var name = _ref[0];
+  var before = _ref[1];
+  var after = _ref[2];
 }
