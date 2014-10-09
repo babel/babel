@@ -150,3 +150,11 @@ var x = 5;
 var y = 10;
 console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 ```
+
+## Unicode regex
+
+```javascript
+var string = 'foo💩bar';
+var match = string.match(/foo(.)bar/u);
+console.log(match[1]);
+```
