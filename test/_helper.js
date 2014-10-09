@@ -1,6 +1,5 @@
-var transform = require("../lib/6to5/transform");
-var fs        = require("fs");
-var _         = require("lodash");
+var fs = require("fs");
+var _  = require("lodash");
 
 var fixturesDir = __dirname + "/fixtures";
 
