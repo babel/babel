@@ -21,8 +21,8 @@ commander.parse(process.argv);
 to5.register();
 
 var _eval = function (code, filename) {
-  var mod = new Module(".");
-  return mod._compile(code, filename);
+  code = to5.transform(code, { filename: filename }).code;
+  return vm.runInThisContext(code, filename);
 };
 
 if (commander.eval) {
@@ -58,9 +58,7 @@ function replEval(code, context, filename, callback) {
 
   try {
     code = code.slice(1, -2); // remove "(" and "\n)"
-    code = to5.transform(code, { filename: filename }).code;
-
-    result = vm.runInThisContext(code, filename);
+    result = _eval(code, filename);
   } catch (e) {
     err = e;
   }
