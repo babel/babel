@@ -9,4 +9,8 @@ class Test extends Foo {
   test() {
     super();
   }
+
+  static foo() {
+    super();
+  }
 }

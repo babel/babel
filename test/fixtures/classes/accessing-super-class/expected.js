@@ -17,5 +17,8 @@ var Test = function (Foo) {
   Test.prototype.test = function () {
     Foo.prototype.test.call(this);
   };
+  Test.foo = function () {
+    Foo.foo.call(this);
+  };
   return Test;
 }(Foo);
