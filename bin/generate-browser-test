@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
 var helper = require("../test/_helper");
-var util   = require("../test/_helper");
+var util   = require("../lib/6to5/util");
 
 console.log("(" + helper.run + ")(" + util.formatJSON(helper.getTests()) + ", to5, proclaim)");
