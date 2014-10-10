@@ -41,7 +41,7 @@
     "mkdirp": "0.5.0",
     "es6-shim": "0.18.0",
     "es6-symbol": "0.1.1",
-    "regexpu": "0.2.2",
+    "regexpu": "0.3.0",
     "recast": "0.8.0",
     "source-map": "0.1.40"
   },
