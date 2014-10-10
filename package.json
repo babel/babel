@@ -18,18 +18,15 @@
     "6to5-node": "./bin/6to5-node"
   },
   "keywords": [
-    "es6-transpiler",
-    "scope",
     "harmony",
-    "blockscope",
-    "block-scope",
+    "classes",
+    "modules",
     "let",
     "const",
     "var",
     "es6",
     "transpile",
     "transpiler",
-    "traceur",
     "6to5"
   ],
   "scripts": {
