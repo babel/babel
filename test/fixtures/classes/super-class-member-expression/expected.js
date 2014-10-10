@@ -1,5 +1,6 @@
 var BaseController = function (Chaplin) {
   function BaseController() {
+    Chaplin.Controller.call(this, arguments);
   }
   BaseController.prototype = Object.create(Chaplin.Controller.prototype, {
     constructor: {
@@ -15,6 +16,7 @@ var BaseController = function (Chaplin) {
 
 var BaseController2 = function (Chaplin) {
   function BaseController2() {
+    Chaplin.Controller.Another.call(this, arguments);
   }
   BaseController2.prototype = Object.create(Chaplin.Controller.Another.prototype, {
     constructor: {

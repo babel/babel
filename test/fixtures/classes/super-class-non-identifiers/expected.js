@@ -1,5 +1,7 @@
 var Q = function(_ref) {
-  function Q() {}
+  function Q() {
+    _ref.call(this, arguments);
+  }
 
   Q.prototype = Object.create(_ref.prototype, {
     constructor: {

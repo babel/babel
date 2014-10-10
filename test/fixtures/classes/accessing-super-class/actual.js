@@ -5,4 +5,8 @@ class Test extends Foo {
     super.test();
     foob(super);
   }
+
+  test() {
+    super();
+  }
 }

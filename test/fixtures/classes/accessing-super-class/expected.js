@@ -14,5 +14,8 @@ var Test = function (Foo) {
     }
   });
   Test.__proto__ = Foo;
+  Test.prototype.test = function () {
+    Foo.prototype.test.call(this);
+  };
   return Test;
 }(Foo);
