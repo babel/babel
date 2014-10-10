@@ -258,6 +258,10 @@ specified in [polyfill](#polyfill) suffices.
 Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
 limitations in ES5 implementations.
 
+If you're inheriting from a class then static properties are inherited from it
+via [__proto__](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
+this is widely supported but you may run into problems with much older browsers.
+
 ## Differences
 
 ### Philosophy
