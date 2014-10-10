@@ -4,6 +4,13 @@ var Test = function (Foo) {
     Foo.call(this);
     Foo.prototype.test.call(this);
     foob(Foo);
+    Foo.call.apply(Foo, [this].concat(Array.prototype.slice.call(arguments)));
+    Foo.call.apply(Foo, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+    Foo.prototype.test.call.apply(Foo.prototype, [this].concat(Array.prototype.slice.call(arguments)));
+    Foo.prototype.test.call.apply(
+      Foo.prototype,
+      [this, "test"].concat(Array.prototype.slice.call(arguments))
+    );
   }
   Test.prototype = Object.create(Foo.prototype, {
     constructor: {
@@ -16,9 +23,16 @@ var Test = function (Foo) {
   Test.__proto__ = Foo;
   Test.prototype.test = function () {
     Foo.prototype.test.call(this);
+    Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(Array.prototype.slice.call(arguments)));
+    Foo.prototype.test.call.apply(
+      Foo.prototype.test,
+      [this, "test"].concat(Array.prototype.slice.call(arguments))
+    );
   };
   Test.foo = function () {
     Foo.foo.call(this);
+    Foo.foo.call.apply(Foo.foo, [this].concat(Array.prototype.slice.call(arguments)));
+    Foo.foo.call.apply(Foo.foo, [this, "test"].concat(Array.prototype.slice.call(arguments)));
   };
   return Test;
 }(Foo);
