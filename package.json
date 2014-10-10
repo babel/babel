@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into vanilla ES5 with source maps and no runtime",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/sebmck/6to5",
   "repository": {
@@ -45,7 +45,8 @@
     "es6-shim": "0.18.0",
     "es6-symbol": "0.1.1",
     "regexpu": "0.2.2",
-    "recast": "0.8.0"
+    "recast": "0.8.0",
+    "source-map": "0.1.40"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",
@@ -58,7 +59,6 @@
     "jstransform": "6.3.2",
     "uglify-js": "2.4.15",
     "browserify": "6.0.3",
-    "proclaim": "2.0.0",
-    "source-map": "0.1.40"
+    "proclaim": "2.0.0"
   }
 }
