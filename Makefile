@@ -8,11 +8,11 @@ export NODE_ENV = test
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
-test:
-	$(MOCHA_CMD)
-
 bench:
 	node node_modules/matcha/bin/_matcha
+
+test:
+	$(MOCHA_CMD)
 
 test-cov:
 	rm -rf coverage
@@ -39,6 +39,8 @@ build:
 
 publish:
 	rm -rf node_modules
+
+	git pull --rebase
 	npm install
 
 	node bin/cache-templates
@@ -47,6 +49,7 @@ publish:
 	test -f templates.json
 	npm publish
 
-	# todo - auto-create tag
+	git tag "v`6to5 -V`"
+	git push --tags
 
 	rm -rf templates.json
