@@ -4,3 +4,21 @@ var Test = function () {
   }
   return Test;
 }();
+
+var Foo = function(Bar) {
+  function Foo() {
+    this.state = "test";
+  }
+
+  Foo.prototype = Object.create(Bar.prototype, {
+    constructor: {
+      value: Foo,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+
+  Foo.__proto__ = Bar;
+  return Foo;
+}(Bar);

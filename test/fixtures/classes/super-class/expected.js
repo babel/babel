@@ -1,6 +1,6 @@
 var Test = function (Foo) {
   function Test() {
-    Foo.call(this, arguments);
+    Foo.apply(this, arguments);
   }
   Test.prototype = Object.create(Foo.prototype, {
     constructor: {
