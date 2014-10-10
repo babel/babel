@@ -262,7 +262,8 @@ limitations in ES5 implementations.
 ## Differences
 
 The fundamental concept behind 6to5 is that the generated code must be close as
-possible to the original. Retaining all the same formatting and readability.
+possible to the original, retaining all the same formatting and readability.
+
 Many other transpilers are just concerned with making the code work while 6to5
 is concerned with making sure it works **and** is readable at the same time.
 
@@ -272,7 +273,7 @@ For example, given the following array comprehension:
 var seattlers = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }];
 ```
 
-It's generated to the following with 6to5:
+Which is generated to the following with 6to5:
 
 ```javascript
 var seattlers = customers.filter(function (c) {
@@ -285,8 +286,7 @@ var seattlers = customers.filter(function (c) {
 });
 ```
 
-The following is what Traceur generates with the aforementioned array
-comprehension:
+The following is what Traceur generates:
 
 ```javascript
 var seattlers = (function() {
@@ -310,8 +310,8 @@ As you can tell, it's not very pretty, unreadable even. Instead of mapping
 directly to a runtime, like other transpilers, 6to5 maps directly to the
 equivalent ES5.
 
-I'm not saying 6to5 is for everyone or everything. Traceur is better suited if
-you'd like a full ES6 environment with polyfills and all.
+I'm not saying 6to5 is for everyone or even suited for everything. Traceur is
+better suited if you'd like a full ES6 environment with polyfills and all.
 
 ### Comparison to other transpilers
 
