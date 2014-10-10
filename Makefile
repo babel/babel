@@ -19,8 +19,7 @@ test-cov:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
 test-travis:
-	node $(ISTANBUL_CMD) $(MOCHA_CMD) --report lcovonly -- --reporter spec
-	ls coverage
+	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
