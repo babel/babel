@@ -273,7 +273,7 @@ For example, given the following array comprehension:
 var seattlers = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }];
 ```
 
-Which is generated to the following with 6to5:
+is generated to the following with 6to5:
 
 ```javascript
 var seattlers = customers.filter(function (c) {
