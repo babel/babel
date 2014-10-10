@@ -3,6 +3,8 @@ var foo2;
 var foo3;
 var foo8;
 (function () {
+  exports.foo7 = foo7;
+
   foo = 1;
   exports.foo = foo;
 
@@ -21,7 +23,6 @@ var foo8;
   exports.foo6 = foo6;
 
   function foo7 () {}
-  exports.foo7 = foo7;
 
   foo8 = function () {
     function foo8() {
