@@ -78,6 +78,7 @@ To be implemented:
  - [Connect](https://github.com/sebmck/6to5-connect)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
+ - [webpack](https://github.com/Couto/6to5-loader)
 
 ### CLI
 
