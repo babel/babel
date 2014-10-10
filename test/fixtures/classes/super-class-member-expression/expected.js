@@ -9,6 +9,7 @@ var BaseController = function (Chaplin) {
       configurable: true
     }
   });
+  BaseController.__proto__ = Chaplin.Controller;
   return BaseController;
 }(Chaplin);
 
@@ -23,5 +24,6 @@ var BaseController2 = function (Chaplin) {
       configurable: true
     }
   });
+  BaseController2.__proto__ = Chaplin.Controller.Another;
   return BaseController2;
 }(Chaplin);

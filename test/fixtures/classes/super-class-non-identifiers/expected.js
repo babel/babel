@@ -9,6 +9,7 @@ var Q = function(_ref) {
       configurable: true
     }
   });
+  Q.__proto__ = _ref;
 
   return Q;
 }(function() {});

@@ -13,5 +13,6 @@ var Test = function (Foo) {
       configurable: true
     }
   });
+  Test.__proto__ = Foo;
   return Test;
 }(Foo);
