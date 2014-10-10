@@ -38,6 +38,8 @@ build:
 	rm -rf templates.json
 
 publish:
+	if test -n "`git status -s`"; then echo "uncommitted changes"; exit 1; fi
+
 	rm -rf node_modules
 
 	git pull --rebase
