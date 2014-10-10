@@ -22,11 +22,10 @@
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
- - **Fast** - no redundant code added so your compiled code is as fast as possible.
+ - **Readable** - original formatting is retained if possible so your generated code looks as similar as possible.
  - **Extensible** - with a large range of [plugins](#plugins) and **browser support**.
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
  - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
- - **Concise** - does not pollute scope with unnecessary variables.
 
 ## Installation
 
@@ -260,6 +259,8 @@ Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
 limitations in ES5 implementations.
 
 ## Differences
+
+### Philosophy
 
 The fundamental concept behind 6to5 is that the generated code must be close as
 possible to the original, retaining all the same formatting and readability.
