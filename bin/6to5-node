@@ -35,7 +35,11 @@ if (commander.eval) {
 
   if (filenames.length) {
     _.each(filenames, function (filename) {
-      require(require.resolve(path.join(process.cwd(), filename)));
+      if (!util.isAbsolute(filename)) {
+        filename = path.join(process.cwd(), filename);
+      }
+
+      require(require.resolve(filneame));
     });
   } else {
     replStart();
