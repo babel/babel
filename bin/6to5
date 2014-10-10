@@ -32,13 +32,16 @@ commander.parse(process.argv);
 var errors = [];
 
 var filenames = commander.args;
-if (!filenames.length) commander.help();
 
 _.each(filenames, function (filename) {
   if (!fs.existsSync(filename)) {
     errors.push(filename + " doesn't exist");
   }
 });
+
+if (commander.outDir && !filenames.length) {
+  errors.push("filenames required for --out-dir");
+}
 
 if (commander.outFile && commander.outDir) {
   errors.push("cannot have --out-file and --out-dir");
@@ -58,8 +61,7 @@ var readdirFilter = function (filename) {
 var mainOpts = {
   blacklist: commander.blacklist,
   whitelist: commander.whitelist,
-  sourceMap: commander.sourceMaps,
-  tolerant:  commander.tolerant
+  sourceMap: commander.sourceMaps
 };
 
 if (commander.sourceMapsInline) {
@@ -69,11 +71,7 @@ if (commander.sourceMapsInline) {
 var data = [];
 
 var compile = function (filename) {
-  var opts = _.clone(mainOpts);
-  opts.filename = filename;
-
-  var file = fs.readFileSync(filename);
-  return to5.transform(file, opts);
+  return to5.transformFileSync(filename, _.clone(mainOpts));
 };
 
 if (commander.outDir) {
@@ -110,33 +108,58 @@ if (commander.outDir) {
 
   _.each(filenames, handle);
 } else {
+  if (commander.sourceMaps) {
+    mainOpts.sourceMap = "inline";
+  }
+
   var data = [];
 
-  var _filenames = filenames;
-  filenames = [];
+  var finish = function () {
+    data = data.join("\n");
 
-  _.each(_filenames, function (filename) {
-    var stat = fs.statSync(filename);
-    if (stat.isDirectory()) {
-      var dirname = filename;
-
-      _.each(readdirFilter(filename), function (filename) {
-        filenames.push(path.join(dirname, filename));
-      });
+    if (commander.outFile) {
+      fs.writeFileSync(commander.outFile, data);
     } else {
-      filenames.push(filename);
+      console.log(data);
     }
-  });
+  };
 
-  _.each(filenames, function (filename) {
-    data.push(compile(filename).code + "\n");
-  });
+  if (filenames.length) {
+    var _filenames = filenames;
+    filenames = [];
 
-  data = data.join("");
+    _.each(_filenames, function (filename) {
+      var stat = fs.statSync(filename);
+      if (stat.isDirectory()) {
+        var dirname = filename;
 
-  if (commander.outFile) {
-    fs.writeFileSync(commander.outFile, data);
+        _.each(readdirFilter(filename), function (filename) {
+          filenames.push(path.join(dirname, filename));
+        });
+      } else {
+        filenames.push(filename);
+      }
+    });
+
+    _.each(filenames, function (filename) {
+      data.push(compile(filename).code);
+    });
+
+    finish();
   } else {
-    console.log(data);
+    var code = "";
+
+    process.stdin.setEncoding("utf8");
+
+    process.stdin.on("readable", function () {
+      var chunk = process.stdin.read();
+      if (chunk !== null) code += chunk;
+    });
+
+    process.stdin.on("end", function() {
+      var opts = _.extend({ filename: "stdin" }, mainOpts);
+      data.push(to5.transform(code, opts).code);
+      finish();
+    });
   }
 }

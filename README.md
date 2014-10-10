@@ -103,6 +103,10 @@ Compile the entire `src` directory and output it to the `lib` directory.
 
     $ 6to5 src --out-dir lib
 
+Pipe a file in via stdin and output it to `script-compiled.js`
+
+    $ 6to5 --out-file script-compiled.js < script.js
+
 #### Node
 
 Launch a repl.
@@ -259,7 +263,7 @@ Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
 limitations in ES5 implementations.
 
 If you're inheriting from a class then static properties are inherited from it
-via [__proto__](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
+via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
 this is widely supported but you may run into problems with much older browsers.
 
 ## Differences
