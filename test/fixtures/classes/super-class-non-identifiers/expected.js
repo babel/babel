@@ -1,6 +1,6 @@
 var Q = function(_ref) {
   function Q() {
-    _ref.call(this, arguments);
+    _ref.apply(this, arguments);
   }
 
   Q.prototype = Object.create(_ref.prototype, {

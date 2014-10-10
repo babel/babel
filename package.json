@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into vanilla ES5 with source maps and no runtime",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/sebmck/6to5",
   "repository": {
