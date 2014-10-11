@@ -1,10 +1,10 @@
-var obj = function (obj) {
-  Object.defineProperties(obj, {
+var obj = function (_ref) {
+  Object.defineProperties(_ref, {
     foo: {
       set: function (value) {
         this._foo = value;
       }
     }
   });
-  return obj;
+  return _ref;
 }({});

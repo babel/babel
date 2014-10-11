@@ -1,6 +1,6 @@
-var obj = function (obj) {
-  obj[foobar] = function () {
+var obj = function (_ref) {
+  _ref[foobar] = function () {
     return "foobar";
   };
-  return obj;
+  return _ref;
 }({});

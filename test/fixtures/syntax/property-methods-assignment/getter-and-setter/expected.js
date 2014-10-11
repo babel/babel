@@ -1,5 +1,5 @@
-var obj = function (obj) {
-  Object.defineProperties(obj, {
+var obj = function (_ref) {
+  Object.defineProperties(_ref, {
     foo: {
       get: function () {
         return 5 + 5;
@@ -9,5 +9,5 @@ var obj = function (obj) {
       }
     }
   });
-  return obj;
+  return _ref;
 }({});
