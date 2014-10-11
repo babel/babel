@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
+var sourceMap = require("source-map");
 var readdir   = require("fs-readdir-recursive");
 var mkdirp    = require("mkdirp");
 var path      = require("path");
@@ -11,6 +12,7 @@ var _         = require("lodash");
 
 commander.option("-t, --source-maps-inline", "Append sourceMappingURL comment to bottom of code");
 commander.option("-s, --source-maps", "Save source map alongside the compiled code when using --out-file and --out-dir flags");
+commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be output in source-maps etc [stdin]", "stdin");
 //commander.option("-w, --watch", "Watch, only works with --out-dir");
 
 var list = function (val) {
@@ -59,22 +61,32 @@ var readdirFilter = function (filename) {
 };
 
 var mainOpts = {
-  blacklist: commander.blacklist,
-  whitelist: commander.whitelist,
-  sourceMap: commander.sourceMaps
+  sourceMapName: commander.outFile,
+  blacklist:     commander.blacklist,
+  whitelist:     commander.whitelist,
+  sourceMap:     commander.sourceMaps || commander.sourceMapsInline
 };
-
-if (commander.sourceMapsInline) {
-  mainOpts.sourceMap = "inline";
-}
 
 var data = [];
 
+var transform = function (filename, code) {
+  var opts = _.extend({ filename: filename }, mainOpts);
+  var result = to5.transform(code, opts);
+  result.filename = filename;
+  result.actual = code;
+  return result;
+};
+
 var compile = function (filename) {
-  return to5.transformFileSync(filename, _.clone(mainOpts));
+  var code = fs.readFileSync(filename, "utf8");
+  return transform(filename, code);
 };
 
 if (commander.outDir) {
+  if (commander.sourceMapsInline) {
+    mainOpts.sourceMap = "inline";
+  }
+
   var write = function (src, relative) {
     var data = compile(src);
 
@@ -84,7 +96,7 @@ if (commander.outDir) {
     mkdirp.sync(up);
 
     if (commander.sourceMaps) {
-      fs.writeFileSync(dest + ".map", data.map.toJSON());
+      fs.writeFileSync(dest + ".map", JSON.stringify(data.map));
     }
 
     fs.writeFileSync(dest, data.code);
@@ -108,19 +120,52 @@ if (commander.outDir) {
 
   _.each(filenames, handle);
 } else {
-  if (commander.sourceMaps) {
-    mainOpts.sourceMap = "inline";
-  }
-
-  var data = [];
+  var results = [];
 
   var finish = function () {
-    data = data.join("\n");
+    var map = new sourceMap.SourceMapGenerator({
+      file: commander.outFile || "stdout"
+    });
+
+    var code = "";
+    var offset = 0;
+
+    _.each(results, function (result) {
+      var filename = result.filename;
+      code += result.code + "\n";
+
+      if (result.map) {
+        var consumer = new sourceMap.SourceMapConsumer(result.map);
+
+        map._sources.add(filename);
+        map.setSourceContent(filename, result.actual);
+
+        consumer.eachMapping(function (mapping) {
+          map._mappings.push({
+            generatedLine: mapping.generatedLine + offset,
+            generatedColumn: mapping.generatedColumn,
+            originalLine: mapping.originalLine,
+            originalColumn: mapping.originalColumn,
+            source: filename
+          });
+        });
+
+        offset = code.split("\n").length;
+      }
+    });
+
+    if (commander.sourceMapsInline || (!commander.outFile && commander.sourceMaps)) {
+      code += "\n" + util.sourceMapToComment(map);
+    }
 
     if (commander.outFile) {
-      fs.writeFileSync(commander.outFile, data);
+      if (commander.sourceMaps) {
+        fs.writeFileSync(commander.outFile + ".map", JSON.stringify(map));
+      }
+
+      fs.writeFileSync(commander.outFile, code);
     } else {
-      console.log(data);
+      console.log(code);
     }
   };
 
@@ -142,7 +187,7 @@ if (commander.outDir) {
     });
 
     _.each(filenames, function (filename) {
-      data.push(compile(filename).code);
+      results.push(compile(filename));
     });
 
     finish();
@@ -157,8 +202,7 @@ if (commander.outDir) {
     });
 
     process.stdin.on("end", function() {
-      var opts = _.extend({ filename: "stdin" }, mainOpts);
-      data.push(to5.transform(code, opts).code);
+      results.push(transform(commander.filename, code));
       finish();
     });
   }
