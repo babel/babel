@@ -39,7 +39,7 @@ if (commander.eval) {
         filename = path.join(process.cwd(), filename);
       }
 
-      require(require.resolve(filneame));
+      require(require.resolve(filename));
     });
   } else {
     replStart();
