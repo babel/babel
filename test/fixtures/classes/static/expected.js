@@ -1,9 +1,12 @@
 var A = function() {
   function A() {}
 
-  A.a = function() {};
-
   Object.defineProperties(A, {
+    a: {
+      writeable: true,
+      value: function() {}
+    },
+
     b: {
       get: function() {},
       set: function(b) {}
