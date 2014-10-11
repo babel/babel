@@ -40,7 +40,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(_.contains(stderr, expectStderr), "stderr didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(_.contains(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
     } else {
       assert.equal(stderr, expectStderr, "stderr didn't match");
     }
@@ -53,7 +53,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(_.contains(stdout, expectStdout), "stdout didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(_.contains(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
     } else {
       assert.equal(stdout, expectStdout, "stdout didn't match");
     }
