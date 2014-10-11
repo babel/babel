@@ -127,12 +127,15 @@ Compile and run `test.js`.
 ```javascript
 var to5 = require("6to5");
 
-to5.transform("code();", options).code;
+var result = to5.transform("code();", options);
+result.code;
+result.map;
+result.ast;
 
 to5.transformFileSync("filename.js", options).code;
 
 to5.transformFile("filename.js", options, function (err, result) {
-  result.code;
+
 });
 ```
 
@@ -154,10 +157,6 @@ to5.transformFile("filename.js", options, function (err, result) {
   // the bottom of the returned code.
   // Default: false
   sourceMap: true,
-
-  // Adds an `ast` property to returned output containing the ast tree used.
-  // Default: false
-  ast: true,
 
   // Filename for use in errors etc.
   // Default: "unknown"
