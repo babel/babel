@@ -181,6 +181,8 @@ polyfill is also required negating the [polyfill caveat](#polyfill).
 require("6to5/register");
 ```
 
+**NOTE:** All requires to `node_modules` will be ignored.
+
 ### Browser
 
 You can build a browser version of the compiler by running the following in the
@@ -203,7 +205,8 @@ To test 6to5 in your browser run:
 
     $ make test-browser
 
-And open `test/browser/index.html` if it doesn't open automatically.
+And open `test/browser/index.html` in your browser if it doesn't open
+automatically.
 
 ## Modules
 
@@ -212,8 +215,6 @@ taken into account to make their usage easier.
 
 ```javascript
 import "foo"; // require("foo");
-import "foo-bar"; // require("foo-bar");
-import "./directory/foo-bar"; // require("./directory/foo-bar");
 
 import foo from "foo"; // var foo = require("foo").default;
 import * as foo from "foo"; // var foo = require("foo");
