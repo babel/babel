@@ -143,6 +143,10 @@ to5.transformFile("filename.js", options, function (err, result) {
 
 ```javascript
 {
+  // Filename for use in errors etc.
+  // Default: "unknown"
+  filename: "filename",
+
   // List of transformers to EXCLUDE
   // This is a camelised version of the name found in `features`
   // eg. "Arrow functions" is "arrowFunctions"
@@ -158,9 +162,13 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Default: false
   sourceMap: true,
 
-  // Filename for use in errors etc.
-  // Default: "unknown"
-  filename: "filename"
+  // Set `file` on returned source map.
+  // Default: `filename` option.
+  sourceMapName: "filename",
+
+  // Set `sources[0]` on returned source map.
+  // Default: `filename` option.
+  sourceFileName: "filename"
 }
 ```
 
