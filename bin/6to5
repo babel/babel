@@ -12,7 +12,7 @@ var _         = require("lodash");
 
 commander.option("-t, --source-maps-inline", "Append sourceMappingURL comment to bottom of code");
 commander.option("-s, --source-maps", "Save source map alongside the compiled code when using --out-file and --out-dir flags");
-commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be output in source-maps etc [stdin]", "stdin");
+commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be used in source-maps, errors etc [stdin]", "stdin");
 //commander.option("-w, --watch", "Watch, only works with --out-dir");
 
 var list = function (val) {
