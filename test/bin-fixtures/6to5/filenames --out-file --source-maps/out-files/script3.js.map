@@ -1,0 +1,1 @@
+{"version":3,"sources":["script.js","script2.js"],"names":[],"mappings":"IAAM,CAAC,CAAC,CAAC;WAAH,CAAC,CAAC,CAAC;SAAH,CAAC,CAAC,CAAC;;;ACAT,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,UAAC;SAAK,EAAE,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;CAAC,CAAC","file":"script3.js","sourcesContent":["class Test {\n\n}","arr.map(x => x * MULTIPLIER);"]}

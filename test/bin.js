@@ -1,24 +1,79 @@
-var assert = require("assert");
-var child  = require("child_process");
-var path   = require("path");
-var fs     = require("fs");
-var _      = require("lodash");
+var readdir = require("fs-readdir-recursive");
+var assert  = require("assert");
+var rimraf  = require("rimraf");
+var mkdirp  = require("mkdirp");
+var child   = require("child_process");
+var path    = require("path");
+var fs      = require("fs");
+var _       = require("lodash");
 
 var fixtureLoc = __dirname + "/bin-fixtures";
 var tmpLoc = __dirname + "/tmp";
 
-var build = function (binName, testName, opts) {
-  var testFixtureLoc = fixtureLoc + "/" + binName + "/" + testName;
-  if (fs.existsSync(testFixtureLoc)) {
-    _.each(fs.readdirSync(testFixtureLoc), function (filename) {
-      var key = path.basename(filename, path.extname(filename));
-      var file = fs.readFileSync(testFixtureLoc + "/" + filename, "utf8").trim();
-      opts[key] = file;
+var readFile = function (filename) {
+  return fs.readFileSync(filename, "utf8").trim();
+};
+
+var readDir = function (loc) {
+  var files = {};
+  if (fs.existsSync(loc)) {
+    _.each(readdir(loc), function (filename) {
+      var contents = readFile(loc + "/" + filename);
+      files[filename] = contents;
     });
   }
+  return files;
+};
+
+var saveInFiles = function (files) {
+  _.each(files, function (content, filename) {
+    var up = path.normalize(filename + "/..");
+    mkdirp.sync(up);
+
+    fs.writeFileSync(filename, content);
+  });
+};
+
+var assertTest = function (stdout, stderr, opts) {
+  var expectStderr = opts.stderr.trim();
+  stderr = stderr.trim();
+
+  if (opts.stderr) {
+    if (opts.stderrContains) {
+      assert.ok(_.contains(stderr, expectStderr), "stderr didn't contain " + JSON.stringify(expectStderr));
+    } else {
+      assert.equal(stderr, expectStderr, "stderr didn't match");
+    }
+  } else if (stderr) {
+    throw new Error("stderr: " + JSON.stringify(stderr));
+  }
+
+  var expectStdout = opts.stdout.trim();
+  stdout = stdout.trim();
+
+  if (opts.stdout) {
+    if (opts.stdoutContains) {
+      assert.ok(_.contains(stdout, expectStdout), "stdout didn't contain " + JSON.stringify(expectStdout));
+    } else {
+      assert.equal(stdout, expectStdout, "stdout didn't match");
+    }
+  } else if (stdout) {
+    throw new Error("stdout: " + JSON.stringify(stdout));
+  }
+
+  _.each(opts.outFiles, function (expect, filename) {
+    var actual = readFile(filename);
+    assert.equal(actual, expect, "out-file " + filename);
+  });
+};
+
+var build = function (binName, testName, opts) {
+  var binLoc = path.normalize(__dirname + "/../bin/" + binName);
 
   return function (callback) {
-    var args  = [__dirname + "/../bin/" + binName].concat(opts.args);
+    saveInFiles(opts.inFiles);
+
+    var args  = [binLoc].concat(opts.args);
     var spawn = child.spawn(process.execPath, args);
 
     var stderr = "";
@@ -34,26 +89,17 @@ var build = function (binName, testName, opts) {
 
     spawn.on("close", function () {
       var err;
+
       try {
-        if (opts.stderr) {
-          assert.equal(stderr.trim(), opts.stderr);
-        } else if (stderr) {
-          throw new Error("stderr: " + stderr);
-        }
-
-        if (opts.stdout) {
-          assert.equal(stdout.trim(), opts.stdout);
-        } else if (stdout) {
-          throw new Error("stdout: " + stdout);
-        }
-
-        _.each(opts.files, function (expect, filename) {
-          var actual = fs.readFileSync(filename, "utf8");
-          assert.equal(actual, expect);
-        });
+        assertTest(stdout, stderr, opts);
       } catch (e) {
         err = e;
       }
+
+      if (err) {
+        err.message = args.join(" ") + ": " + err.message;
+      }
+
       callback(err);
     });
 
@@ -65,41 +111,45 @@ var build = function (binName, testName, opts) {
 };
 
 before(function () {
-  if (!fs.existsSync(tmpLoc)) fs.mkdirSync(tmpLoc);
+  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
+  fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
 });
 
-suite("bin/6to5", function () {
-  test("--source-maps-inline");
+_.each(fs.readdirSync(fixtureLoc), function (binName) {
+  if (binName[0] === ".") return;
 
-  test("--source-maps");
+  var suiteLoc = fixtureLoc + "/" + binName;
+  suite("bin/" + binName, function () {
+    _.each(fs.readdirSync(fixtureLoc + "/" + binName), function (testName) {
+      if (testName[0] === ".") return;
 
-  test("--whitelist", build("6to5", "whitelist", {
-    args: ["--whitelist", "arrowFunctions"]
-  }));
+      var testLoc = suiteLoc + "/" + testName;
 
-  test("--blacklist", build("6to5", "blacklist", {
-    args: ["--blacklist", "arrowFunctions"]
-  }));
+      var opts = {
+        args: []
+      };
 
-  test("--out-file", build("6to5", "out-file", {
-    args: ["--out-file", "script.js"],
-    files: {
-      "script.js": "(function() {\n  var MULTIPLER = 5;\n  arr.map(function(x) {\n    return x * MULTIPLIER;\n  });\n})();"
-    }
-  }));
+      var optionsLoc = testLoc + "/options.json"
+      if (fs.existsSync(optionsLoc)) _.merge(opts, require(optionsLoc));
 
-  test("--out-dir");
+      _.each(["stdout", "stdin", "stderr"], function (key) {
+        var loc = testLoc + "/" + key + ".txt";
+        if (fs.existsSync(loc)) {
+          opts[key] = readFile(loc);
+        } else {
+          opts[key] = opts[key] || "";
+        }
+      });
+
+      opts.outFiles = readDir(testLoc + "/out-files");
+      opts.inFiles  = readDir(testLoc + "/in-files");
+
+      test(testName, build(binName, testName, opts));
+    });
+  });
 });
 
-suite("bin/6to5-node", function () {
-  test("--eval", build("6to5-node", "eval", {
-    args: ["--eval", "console.log([1, 2, 3].map(x => x * x));"],
-    stdout: "[ 1, 4, 9 ]"
-  }));
-
-  test("--print", build("6to5-node", "print", {
-    args: ["--print", "--eval", "([1, 2, 3].map(x => x * x))"],
-    stdout: "[ 1, 4, 9 ]"
-  }));
+after(function () {
+  rimraf.sync(tmpLoc);
 });

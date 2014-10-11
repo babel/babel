@@ -69,17 +69,19 @@ var mainOpts = {
 
 var data = [];
 
-var transform = function (filename, code) {
+var transform = function (filename, code, to) {
   var opts = _.extend({ filename: filename }, mainOpts);
+  if (to) opts.sourceMapName = to;
+
   var result = to5.transform(code, opts);
   result.filename = filename;
   result.actual = code;
   return result;
 };
 
-var compile = function (filename) {
+var compile = function (filename, to) {
   var code = fs.readFileSync(filename, "utf8");
-  return transform(filename, code);
+  return transform(filename, code, to);
 };
 
 if (commander.outDir) {
@@ -88,9 +90,9 @@ if (commander.outDir) {
   }
 
   var write = function (src, relative) {
-    var data = compile(src);
-
     var dest = path.join(commander.outDir, relative);
+
+    var data = compile(src, dest);
 
     var up = path.normalize(dest + "/..");
     mkdirp.sync(up);

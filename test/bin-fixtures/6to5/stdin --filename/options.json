@@ -1,0 +1,4 @@
+{
+  "args": ["--filename", "test.js"],
+  "stderrContains": true
+}
