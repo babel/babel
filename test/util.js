@@ -14,7 +14,7 @@ suite("util", function () {
     }, /a get already exists for this property/);
   });
 
-  test("can compile", function () {
+  test("canCompile", function () {
     assert.ok(util.canCompile("test.js"));
     assert.ok(util.canCompile("/test.js"));
     assert.ok(util.canCompile("/scripts/test.js"));
@@ -27,5 +27,19 @@ suite("util", function () {
     assert.ok(!util.canCompile("test.css"));
     assert.ok(!util.canCompile("/test.css"));
     assert.ok(!util.canCompile("/scripts/test.css"));
+  });
+
+  test("isAbsolute", function () {
+    assert.ok(util.isAbsolute("/test.js"));
+    assert.ok(util.isAbsolute("C:\\test.js"));
+
+    assert.ok(!util.isAbsolute("test.js"));
+    assert.ok(!util.isAbsolute("test/test.js"));
+  });
+
+  test("invalid template", function () {
+    assert.throws(function () {
+      util.template("invalid template");
+    }, /unknown template/);
   });
 });
