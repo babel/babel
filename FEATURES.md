@@ -37,9 +37,11 @@ class Foo extends Bar {
 ## Computed property names
 
 ```javascript
+var foo = "foo";
+var bar = "bar";
 var obj = {
-  ["x" + foo]: "heh",
-  ["y" + bar]: "noo",
+  ["foo" + bar]: "heh",
+  ["bar" + foo]: "noo",
   foo: "foo",
   bar: "bar"
 };
