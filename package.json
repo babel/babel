@@ -57,6 +57,6 @@
     "uglify-js": "2.4.15",
     "browserify": "6.0.3",
     "proclaim": "2.0.0",
-    "rimraf": "^2.2.8"
+    "rimraf": "2.2.8"
   }
 }
