@@ -73,12 +73,13 @@ To be implemented:
 
 ### Plugins
 
+ - [Broccoli](https://github.com/very-geek/broccoli-6to5-transpiler)
  - [Browserify](https://github.com/sebmck/6to5-browserify)
  - [Brunch](https://github.com/es128/6to5-brunch)
  - [Connect](https://github.com/sebmck/6to5-connect)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
- - [Broccoli](https://github.com/very-geek/broccoli-6to5-transpiler)
+ - [Jade](https://github.com/Apoxx/jade-6to5)
  - [webpack](https://github.com/Couto/6to5-loader)
 
 ### CLI
