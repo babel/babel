@@ -1,9 +1,11 @@
 var traverse = require("../lib/6to5/traverse");
 var assert   = require("assert");
+var _        = require("lodash");
 
 suite("traverse", function () {
-  test("hasType", function () {
-    assert.ok(traverse.hasType([
+  var ast = {
+    type: "Program",
+    body: [
       {
         "type": "VariableDeclaration",
         "declarations": [
@@ -45,6 +47,57 @@ suite("traverse", function () {
           }
         }
       }
-    ], "ThisExpression"));
+    ]
+  };
+
+  var body = ast.body;
+
+  test("hasType", function () {
+    assert.ok(traverse.hasType(ast, "ThisExpression"));
+    assert.ok(!traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]));
+  });
+
+  test("traverse", function () {
+    var expect = [
+      body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
+      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
+    ];
+
+    var actual = [];
+
+    traverse(ast, function (node) {
+      actual.push(node);
+    });
+
+    assert.deepEqual(actual, expect);
+  });
+
+  test("traverse blacklistTypes", function () {
+    var expect = [
+      body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
+      body[1], body[1].expression, body[1].expression.right
+    ];
+
+    var actual = [];
+
+    traverse(ast, function (node) {
+      actual.push(node);
+    }, ["MemberExpression"]);
+
+    assert.deepEqual(actual, expect);
+  });
+
+  test("traverse replace", function () {
+    var replacement = {
+      type: "Literal",
+      value: "foo"
+    };
+    var ast2 = _.cloneDeep(ast);
+
+    traverse(ast2, function (node) {
+      if (node.type === "ThisExpression") return replacement;
+    });
+
+    assert.equal(ast2.body[1].expression.left.object, replacement);
   });
 });
