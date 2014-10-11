@@ -7,7 +7,7 @@ var path    = require("path");
 var fs      = require("fs");
 var _       = require("lodash");
 
-var fixtureLoc = __dirname + "/bin-fixtures";
+var fixtureLoc = __dirname + "/fixtures/bin";
 var tmpLoc = __dirname + "/tmp";
 
 var readFile = function (filename) {

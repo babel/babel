@@ -1,7 +1,7 @@
 var fs = require("fs");
 var _  = require("lodash");
 
-var fixturesDir = __dirname + "/syntax-fixtures";
+var fixturesDir = __dirname + "/fixtures/syntax";
 
 var humanise = function (val) {
   return val.replace(/-/g, " ");

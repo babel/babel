@@ -205,8 +205,7 @@ To test 6to5 in your browser run:
 
     $ make test-browser
 
-And open `test/browser/index.html` in your browser if it doesn't open
-automatically.
+And open `test/browser.html` in your browser if it doesn't open automatically.
 
 ## Modules
 
