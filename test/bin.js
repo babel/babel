@@ -71,6 +71,7 @@ var build = function (binName, testName, opts) {
   var binLoc = path.normalize(__dirname + "/../bin/" + binName);
 
   return function (callback) {
+    this.timeout(5000);
     saveInFiles(opts.inFiles);
 
     var args  = [binLoc].concat(opts.args);
