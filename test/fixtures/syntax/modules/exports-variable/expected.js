@@ -9,14 +9,14 @@ exports.foo2 = foo2;
 var foo3;
 exports.foo3 = foo3;
 
-let foo4 = 2;
-exports.foo4 = foo4;
+var _foo4 = 2;
+exports.foo4 = _foo4;
 
-let foo5;
-exports.foo5 = foo5;
+var _foo5;
+exports.foo5 = _foo5;
 
-let foo6 = 3;
-exports.foo6 = foo6;
+var _foo6 = 3;
+exports.foo6 = _foo6;
 
 function foo7 () {}
 

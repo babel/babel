@@ -1,4 +1,4 @@
-for (let i in arr) {
-  let MULTIPLIER = 5;
-  console.log(arr[i] * MULTIPLIER);
+for (var _i in arr) {
+  var _MULTIPLIER = 5;
+  console.log(arr[_i] * _MULTIPLIER);
 }
