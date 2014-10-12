@@ -66,8 +66,8 @@ It's as easy as:
 
 To be implemented:
 
- - [Block binding](FEATURES.md#block-binding)
  - [Generators](FEATURES.md#generators)
+ - [Let scoping](FEATURES.md#let-scoping)
 
 ## Usage
 
@@ -340,7 +340,6 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Source maps                  | ✓    | ✓       | ✓      |        | ✓              | ✓           |
 | No compiler global pollution | ✓    |         | ✓      |        | ✓              | ✓           |
 | Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
-| Block binding                |      | ✓       |        |        | ✓              |             |
 | Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Constants                    | ✓    | ✓       |        |        | ✓              |             |
@@ -348,6 +347,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Generators                   |      | ✓       | ✓      |        |                |             |
+| Let scoping                  |      | ✓       |        |        | ✓              |             |
 | Modules                      | ✓    | ✓       |        | ✓      |                |             |
 | Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Property name shorthand      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |

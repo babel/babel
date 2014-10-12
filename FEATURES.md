@@ -12,7 +12,7 @@
 arr.map(x => x * x);
 ```
 
-## Block binding
+## Let scoping
 
 ```javascript
 for (let i in arr) {
