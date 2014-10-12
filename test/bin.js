@@ -67,7 +67,7 @@ var assertTest = function (stdout, stderr, opts) {
   });
 };
 
-var build = function (binName, testName, opts) {
+var buildTest = function (binName, testName, opts) {
   var binLoc = path.normalize(__dirname + "/../bin/" + binName);
 
   return function (callback) {
@@ -146,7 +146,7 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       opts.outFiles = readDir(testLoc + "/out-files");
       opts.inFiles  = readDir(testLoc + "/in-files");
 
-      test(testName, build(binName, testName, opts));
+      test(testName, buildTest(binName, testName, opts));
     });
   });
 });
