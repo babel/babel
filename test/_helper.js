@@ -20,7 +20,6 @@ exports.run = function (suites, transform, assert) {
     suite("syntax/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, function () {
-
           var run = function () {
             transform.test(task, assert);
           };
@@ -64,11 +63,18 @@ exports.getTests = function () {
       var taskDir = suite.filename + "/" + taskName;
       if (fs.statSync(taskDir).isFile()) return;
 
+      var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
+      var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
+
       var actualLoc = taskDir + "/actual.js";
       var expectLoc = taskDir + "/expected.js";
 
+      var taskOpts = _.merge({
+        filename: actualLocAlias,
+        sourceMapName: expectLocAlias
+      }, _.cloneDeep(suite.options));
+
       var taskOptsLoc = taskDir + "/options.json";
-      var taskOpts = _.merge({ filename: actualLoc }, _.cloneDeep(suite.options));
       if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
       var test = {
@@ -76,11 +82,11 @@ exports.getTests = function () {
         options: taskOpts,
         actual: {
           code: readFile(actualLoc),
-          filename: actualLoc,
+          filename: actualLocAlias,
         },
         expect: {
           code: readFile(expectLoc),
-          filename: expectLoc
+          filename: expectLocAlias
         }
       };
 
@@ -90,6 +96,12 @@ exports.getTests = function () {
       if (fs.existsSync(sourceMappingsLoc)) {
         test.options.sourceMap = true;
         test.sourceMappings = require(sourceMappingsLoc);
+      }
+
+      var sourceMap = taskDir + "/source-map.json";
+      if (fs.existsSync(sourceMap)) {
+        test.options.sourceMap = true;
+        test.sourceMap = require(sourceMap);
       }
     });
   });
