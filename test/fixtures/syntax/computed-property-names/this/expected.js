@@ -1,4 +1,4 @@
-var obj = function (_ref) {
-  _ref["x" + this.foo] = "heh";
-  return _ref;
+var obj = function (obj) {
+  obj["x" + this.foo] = "heh";
+  return obj;
 }.call(this, {});
