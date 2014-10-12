@@ -1,11 +1,11 @@
-function outer() {
+function one() {
   var _arguments = arguments;
   var inner = function () { return _arguments; };
   return [].slice.call(inner());
 }
-console.log(outer(1, 2));
+one(1, 2);
 
-function outer() {
+function two() {
   var _arguments2 = arguments;
   var inner = function () { return _arguments2; };
 
@@ -16,4 +16,30 @@ function outer() {
 
   return [].slice.call(inner());
 }
-console.log(outer(1, 2));
+two(1, 2);
+
+function three() {
+  var _arguments4 = arguments;
+  var fn = function () {
+    return _arguments4[0] + "bar";
+  };
+  return fn();
+}
+three("foo");
+
+function four() {
+  var _arguments5 = arguments;
+  var fn = function () {
+    return _arguments5[0].foo + "bar";
+  };
+  return fn();
+}
+four({ foo: "foo" });
+
+function five(obj) {
+  var fn = function () {
+    return obj.arguments[0].foo + "bar";
+  };
+  return fn();
+}
+five({ arguments: ["foo"] });

@@ -1,10 +1,10 @@
-function outer() {
+function one() {
   var inner = () => arguments;
   return [].slice.call(inner());
 }
-console.log(outer(1, 2));
+one(1, 2);
 
-function outer() {
+function two() {
   var inner = () => arguments;
 
   var another = function () {
@@ -13,4 +13,22 @@ function outer() {
 
   return [].slice.call(inner());
 }
-console.log(outer(1, 2));
+two(1, 2);
+
+function three() {
+  var fn = () => arguments[0] + "bar";
+  return fn();
+}
+three("foo");
+
+function four() {
+  var fn = () => arguments[0].foo + "bar";
+  return fn();
+}
+four({ foo: "foo" });
+
+function five(obj) {
+  var fn = () => obj.arguments[0].foo + "bar";
+  return fn();
+}
+five({ arguments: ["foo"] });
