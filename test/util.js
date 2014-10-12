@@ -33,6 +33,8 @@ suite("util", function () {
     assert.ok(util.isAbsolute("/test.js"));
     assert.ok(util.isAbsolute("C:\\test.js"));
 
+    assert.ok(!util.isAbsolute());
+    assert.ok(!util.isAbsolute(""));
     assert.ok(!util.isAbsolute("test.js"));
     assert.ok(!util.isAbsolute("test/test.js"));
   });
