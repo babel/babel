@@ -72,6 +72,20 @@ suite("traverse", function () {
     assert.deepEqual(actual, expect);
   });
 
+  test("traverse falsy parent", function () {
+    traverse(null, function () {
+      throw new Error("should not be ran");
+    });
+  });
+
+  test("traverse unknown type", function () {
+    traverse({
+      type: "FooBar"
+    }, function () {
+      throw new Error("should not be ran");
+    });
+  });
+
   test("traverse blacklistTypes", function () {
     var expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
@@ -99,5 +113,27 @@ suite("traverse", function () {
     });
 
     assert.equal(ast2.body[1].expression.left.object, replacement);
+  });
+
+  test("traverse delete", function () {
+    var ast2 = _.cloneDeep(ast);
+
+    traverse(ast2, function (node) {
+      if (node.type === "VariableDeclaration") return traverse.Delete;
+    });
+
+    assert.deepEqual(ast2, {
+      type: "Program",
+      body: [body[1]]
+    });
+  });
+
+  test("traverse delete required", function () {
+    assert.throws(function () {
+      var ast2 = _.cloneDeep(ast);
+      traverse(ast2, function (node) {
+        if (node.type === "ThisExpression") return traverse.Delete;
+      });
+    }, /trying to delete property object from MemberExpression but can't because it's required/);
   });
 });
