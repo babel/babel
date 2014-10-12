@@ -49,7 +49,6 @@ It's as easy as:
 
  - [Array comprehension](FEATURES.md#array-comprehension)
  - [Arrow functions](FEATURES.md#arrow-functions)
- - [Block binding](FEATURES.md#block-binding)
  - [Classes](FEATURES.md#classes)
  - [Computed property names](FEATURES.md#computed-property-names)
  - [Constants](FEATURES.md#constants)
@@ -67,6 +66,7 @@ It's as easy as:
 
 To be implemented:
 
+ - [Block binding](FEATURES.md#block-binding)
  - [Generators](FEATURES.md#generators)
 
 ## Usage
@@ -340,7 +340,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Source maps                  | ✓    | ✓       | ✓      |        | ✓              | ✓           |
 | No compiler global pollution | ✓    |         | ✓      |        | ✓              | ✓           |
 | Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
-| Block binding                | ✓    | ✓       |        |        | ✓              |             |
+| Block binding                |      | ✓       |        |        | ✓              |             |
 | Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Constants                    | ✓    | ✓       |        |        | ✓              |             |
