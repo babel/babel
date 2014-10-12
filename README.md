@@ -55,6 +55,7 @@ It's as easy as:
  - [Default parameters](FEATURES.md#default-parameters)
  - [Destructuring](FEATURES.md#destructuring)
  - [For-of](FEATURES.md#for-of)
+ - [Let scoping](FEATURES.md#let-scoping)
  - [Modules](FEATURES.md#modules)
  - [Numeric literals](FEATURES.md#numeric-literals)
  - [Property method assignment](FEATURES.md#property-method-assignment)
@@ -67,7 +68,6 @@ It's as easy as:
 To be implemented:
 
  - [Generators](FEATURES.md#generators)
- - [Let scoping](FEATURES.md#let-scoping)
 
 ## Usage
 
@@ -347,7 +347,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Generators                   |      | ✓       | ✓      |        |                |             |
-| Let scoping                  |      | ✓       |        |        | ✓              |             |
+| Let scoping                  | ✓    | ✓       |        |        | ✓              |             |
 | Modules                      | ✓    | ✓       |        | ✓      |                |             |
 | Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Property name shorthand      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
