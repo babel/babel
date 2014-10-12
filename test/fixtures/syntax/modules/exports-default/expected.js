@@ -8,15 +8,13 @@ exports.default = foo;
 exports.default = function () {}
 
 exports.default = function () {
-  function Anonymous() {
-  }
-  return Anonymous;
+  var _class = function() {};
+  return _class;
 }();
 
 exports.default = function foo () {}
 
 exports.default = function () {
-  function foo() {
-  }
+  var foo = function foo() {};
   return foo;
 }();

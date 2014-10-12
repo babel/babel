@@ -1,18 +1,18 @@
 var Test = function(Foo) {
-    function Test() {
-        Foo.prototype.test;
-        Foo.prototype.test.whatever;
+  var Test = function Test() {
+    Foo.prototype.test;
+    Foo.prototype.test.whatever;
+  };
+
+  Test.prototype = Object.create(Foo.prototype, {
+    constructor: {
+      value: Test,
+      enumerable: false,
+      writable: true,
+      configurable: true
     }
+  });
 
-    Test.prototype = Object.create(Foo.prototype, {
-        constructor: {
-            value: Test,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        }
-    });
-
-    Test.__proto__ = Foo;
-    return Test;
+  Test.__proto__ = Foo;
+  return Test;
 }(Foo);

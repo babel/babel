@@ -3,4 +3,8 @@ class Test extends Foo {
     super.test.whatever();
     super.test();
   }
+
+  static test() {
+    return super.wow();
+  }
 }

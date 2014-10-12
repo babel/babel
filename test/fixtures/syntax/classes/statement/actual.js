@@ -4,4 +4,8 @@ var BaseView = class BaseView {
   }
 }
 
-module.exports = BaseView;
+var BaseView = class {
+  constructor() {
+    this.autoRender = true;
+  }
+}

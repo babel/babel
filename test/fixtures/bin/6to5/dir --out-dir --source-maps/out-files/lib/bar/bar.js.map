@@ -1,1 +1,1 @@
-{"version":3,"file":"lib/bar/bar.js","sources":["src/bar/bar.js"],"names":[],"mappings":"IAAM,CAAC,CAAC,CAAC;WAAH,CAAC,CAAC,CAAC;SAAH,CAAC,CAAC,CAAC","sourcesContent":["class Test {\n\n}"]}
+{"version":3,"file":"lib/bar/bar.js","sources":["src/bar/bar.js"],"names":[],"mappings":"IAAM,CAAC,CAAC,CAAC;MAAH,CAAC,CAAC,CAAC,aAAH,CAAC,CAAC,CAAC;SAAH,CAAC,CAAC,CAAC","sourcesContent":["class Test {\n\n}"]}

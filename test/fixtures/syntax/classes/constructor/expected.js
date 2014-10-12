@@ -1,14 +1,14 @@
 var Test = function () {
-  function Test() {
+  var Test = function Test() {
     this.state = "test";
-  }
+  };
   return Test;
 }();
 
 var Foo = function(Bar) {
-  function Foo() {
+  var Foo = function Foo() {
     this.state = "test";
-  }
+  };
 
   Foo.prototype = Object.create(Bar.prototype, {
     constructor: {

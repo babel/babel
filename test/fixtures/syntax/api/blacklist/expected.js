@@ -1,6 +1,6 @@
 var Test = function () {
-  function Test() {
+  var Test = function Test() {
     arr.map(x => x * x);
-  }
+  };
   return Test;
 }();

@@ -1,9 +1,14 @@
 var BaseView = function () {
-  function BaseView() {
+  var BaseView = function BaseView() {
     this.autoRender = true;
-  }
+  };
 
   return BaseView;
 }();
 
-module.exports = BaseView;
+var BaseView = function () {
+  var _class = function () {
+    this.autoRender = true;
+  };
+  return _class;
+}();

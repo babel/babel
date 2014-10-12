@@ -1,4 +1,4 @@
 var Test = function() {
-  function Test() {}
+  var Test = function Test() {};
   return Test;
 }();

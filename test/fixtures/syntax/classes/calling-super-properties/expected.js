@@ -1,16 +1,25 @@
 var Test = function(Foo) {
-    function Test() {
-        Foo.prototype.test.whatever();
-        Foo.prototype.test.call(this);
+  var Test = function Test() {
+    Foo.prototype.test.whatever();
+    Foo.prototype.test.call(this);
+  };
+  Test.prototype = Object.create(Foo.prototype, {
+    constructor: {
+      value: Test,
+      enumerable: false,
+      writable: true,
+      configurable: true
     }
-    Test.prototype = Object.create(Foo.prototype, {
-        constructor: {
-            value: Test,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        }
-    });
-    Test.__proto__ = Foo;
-    return Test;
+  });
+  Test.__proto__ = Foo;
+  Object.defineProperties(Test, {
+    test: {
+      writeable: true,
+
+      value: function() {
+        return Foo.wow.call(this);
+      }
+    }
+  });
+  return Test;
 }(Foo);

@@ -1,5 +1,5 @@
 var A = function() {
-  function A() {}
+  var A = function A() {};
 
   Object.defineProperties(A, {
     a: {

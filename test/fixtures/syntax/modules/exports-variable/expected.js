@@ -25,8 +25,7 @@ var foo8;
   function foo7 () {}
 
   foo8 = function () {
-    function foo8() {
-    }
+    var foo8 = function foo8() {};
     return foo8;
   }();
   exports.foo8 = foo8;

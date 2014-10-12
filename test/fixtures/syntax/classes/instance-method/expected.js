@@ -1,6 +1,5 @@
 var Test = function () {
-  function Test() {
-  }
+  var Test = function Test() { };
   Object.defineProperties(Test.prototype, {
     test: {
       writeable: true,
