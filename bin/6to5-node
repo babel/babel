@@ -6,7 +6,7 @@ var path      = require("path");
 var util      = require("../lib/6to5/util");
 var path      = require("path");
 var repl      = require("repl");
-var to5       = require("../lib/6to5/node");
+var to5       = require("../lib/6to5");
 var vm        = require("vm");
 var _         = require("lodash");
 

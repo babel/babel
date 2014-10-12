@@ -12,7 +12,7 @@
     "url": "https://github.com/sebmck/6to5/issues"
   },
   "preferGlobal": true,
-  "main": "lib/6to5/node.js",
+  "main": "lib/6to5/index.js",
   "bin": {
     "6to5": "./bin/6to5",
     "6to5-node": "./bin/6to5-node"
@@ -57,6 +57,7 @@
     "uglify-js": "2.4.15",
     "browserify": "6.0.3",
     "proclaim": "2.0.0",
-    "rimraf": "2.2.8"
+    "rimraf": "2.2.8",
+    "jshint": "2.5.6"
   }
 }

@@ -6,7 +6,7 @@ var readdir   = require("fs-readdir-recursive");
 var mkdirp    = require("mkdirp");
 var path      = require("path");
 var util      = require("../lib/6to5/util");
-var to5       = require("../lib/6to5/node");
+var to5       = require("../lib/6to5");
 var fs        = require("fs");
 var _         = require("lodash");
 

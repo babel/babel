@@ -5,7 +5,7 @@ var traceur = require("traceur");
 var es6tr   = require("es6-transpiler");
 var es6now  = require("es6now");
 var esnext  = require("esnext");
-var to5     = require("../lib/6to5/node");
+var to5     = require("../lib/6to5");
 
 var matcha  = require("matcha");
 var stream  = require("stream");
