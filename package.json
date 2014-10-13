@@ -34,7 +34,6 @@
     "test": "make test"
   },
   "dependencies": {
-    "ast-types": "0.5.2",
     "commander": "2.3.0",
     "fs-readdir-recursive": "0.0.2",
     "lodash": "2.4.1",
