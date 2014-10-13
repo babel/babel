@@ -1,3 +1,5 @@
 wow;
-// um yeah lol
+/*
+ um yeah lol
+*/
 test.wow();
