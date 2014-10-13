@@ -76,6 +76,10 @@ var compilers = {
   }
 };
 
+_.each(compilers, function (compiler, name) {
+  compiler.title = name + " v" + require(name + "/package.json").version;
+});
+
 _.each(fs.readdirSync(__dirname + "/fixtures"), function (name) {
   var alias = path.basename(name, path.extname(name));
 
@@ -93,13 +97,13 @@ _.each(fs.readdirSync(__dirname + "/fixtures"), function (name) {
         var kilo  = (output.length / 1024).toFixed(2);
         console.log(
           matcha.utils.color(matcha.utils.padBefore(kilo + "KB", 22), "cyan"),
-          matcha.utils.color("» " + name, "gray")
+          matcha.utils.color("» " + compiler.title, "gray")
         );
       });
     });
 
     _.each(compilers, function (compiler, name) {
-      bench(name, function () {
+      bench(compiler.title, function () {
         compiler.compile(code, loc);
       });
     });
