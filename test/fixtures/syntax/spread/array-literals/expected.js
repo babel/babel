@@ -1,5 +1,7 @@
+var _slice = Array.prototype.slice;
+
 var lyrics = [
   "head",
   "and",
   "toes"
-].concat(parts);
+].concat(_slice.call(parts));

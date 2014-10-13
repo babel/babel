@@ -1,4 +1,5 @@
+var _slice = Array.prototype.slice;
 add.apply(null, [
   foo,
   bar
-].concat(numbers));
+].concat(_slice.call(numbers)));
