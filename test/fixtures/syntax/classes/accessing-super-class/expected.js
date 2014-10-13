@@ -27,7 +27,7 @@ var Test = function(Foo) {
 
   Object.defineProperties(Test.prototype, {
     test: {
-      writeable: true,
+      writable: true,
 
       value: function() {
         Foo.prototype.test.call(this);
@@ -43,7 +43,7 @@ var Test = function(Foo) {
 
   Object.defineProperties(Test, {
     foo: {
-      writeable: true,
+      writable: true,
 
       value: function() {
         Foo.foo.call(this);

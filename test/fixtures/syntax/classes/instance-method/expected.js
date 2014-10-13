@@ -2,7 +2,7 @@ var Test = function () {
   var Test = function Test() { };
   Object.defineProperties(Test.prototype, {
     test: {
-      writeable: true,
+      writable: true,
       value: function () {
         return 5 + 5;
       }

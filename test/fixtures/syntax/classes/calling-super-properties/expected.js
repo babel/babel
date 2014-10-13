@@ -14,7 +14,7 @@ var Test = function(Foo) {
   Test.__proto__ = Foo;
   Object.defineProperties(Test, {
     test: {
-      writeable: true,
+      writable: true,
 
       value: function() {
         return Foo.wow.call(this);
