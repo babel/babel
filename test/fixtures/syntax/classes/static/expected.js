@@ -3,7 +3,7 @@ var A = function() {
 
   Object.defineProperties(A, {
     a: {
-      writeable: true,
+      writable: true,
       value: function() {}
     },
 
