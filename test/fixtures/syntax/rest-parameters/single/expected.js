@@ -1,7 +1,9 @@
+var _slice = Array.prototype.slice;
+
 var t = function () {
-  var items = Array.prototype.slice.call(arguments);
+  var items = _slice.call(arguments);
 };
 
 function t() {
-  var items = Array.prototype.slice.call(arguments);
+  var items = _slice.call(arguments);
 }
