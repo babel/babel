@@ -14,6 +14,12 @@ suite("util", function () {
     }, /a get already exists for this property/);
   });
 
+  test("invalid template", function () {
+    assert.throws(function () {
+      util.template("invalid template");
+    }, /unknown template/);
+  });
+
   test("canCompile", function () {
     assert.ok(util.canCompile("test.js"));
     assert.ok(util.canCompile("/test.js"));
@@ -39,12 +45,6 @@ suite("util", function () {
     assert.ok(!util.isAbsolute("test/test.js"));
   });
 
-  test("invalid template", function () {
-    assert.throws(function () {
-      util.template("invalid template");
-    }, /unknown template/);
-  });
-
   test("getIds");
 
   test("isReferenced");
@@ -52,4 +52,6 @@ suite("util", function () {
   test("removeProperties");
 
   test("ensureBlock");
+
+  test("pushMutatorMap");
 });

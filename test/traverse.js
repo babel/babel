@@ -138,4 +138,8 @@ suite("traverse", function () {
   });
 
   test("hasType");
+
+  test("isPattern");
+
+  test("isFunction");
 });
