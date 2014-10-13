@@ -1,16 +1,18 @@
+var _slice = Array.prototype.slice;
+
 var Test = function(Foo) {
   var Test = function Test() {
     woops.super.test();
     Foo.call(this);
     Foo.prototype.test.call(this);
     foob(Foo);
-    Foo.call.apply(Foo, [this].concat(Array.prototype.slice.call(arguments)));
-    Foo.call.apply(Foo, [this, "test"].concat(Array.prototype.slice.call(arguments)));
-    Foo.prototype.test.call.apply(Foo.prototype, [this].concat(Array.prototype.slice.call(arguments)));
+    Foo.call.apply(Foo, [this].concat(_slice.call(arguments)));
+    Foo.call.apply(Foo, [this, "test"].concat(_slice.call(arguments)));
+    Foo.prototype.test.call.apply(Foo.prototype, [this].concat(_slice.call(arguments)));
 
     Foo.prototype.test.call.apply(
       Foo.prototype,
-      [this, "test"].concat(Array.prototype.slice.call(arguments))
+      [this, "test"].concat(_slice.call(arguments))
     );
   };
 
@@ -31,11 +33,11 @@ var Test = function(Foo) {
 
       value: function() {
         Foo.prototype.test.call(this);
-        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(Array.prototype.slice.call(arguments)));
+        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(_slice.call(arguments)));
 
         Foo.prototype.test.call.apply(
           Foo.prototype.test,
-          [this, "test"].concat(Array.prototype.slice.call(arguments))
+          [this, "test"].concat(_slice.call(arguments))
         );
       }
     }
@@ -47,8 +49,8 @@ var Test = function(Foo) {
 
       value: function() {
         Foo.foo.call(this);
-        Foo.foo.call.apply(Foo.foo, [this].concat(Array.prototype.slice.call(arguments)));
-        Foo.foo.call.apply(Foo.foo, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+        Foo.foo.call.apply(Foo.foo, [this].concat(_slice.call(arguments)));
+        Foo.foo.call.apply(Foo.foo, [this, "test"].concat(_slice.call(arguments)));
       }
     }
   });
