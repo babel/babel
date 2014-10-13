@@ -1,7 +1,7 @@
-var obj = function (_ref) {
-  _ref["x" + foo] = "heh";
-  _ref["y" + bar] = "noo";
-  return _ref;
+var obj = function (_obj) {
+  _obj["x" + foo] = "heh";
+  _obj["y" + bar] = "noo";
+  return _obj;
 }({
   foo: "foo",
   bar: "bar"

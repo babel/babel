@@ -1,4 +1,4 @@
-var obj = function (_ref) {
-  _ref["x" + foo] = "heh";
-  return _ref;
+var obj = function (_obj) {
+  _obj["x" + foo] = "heh";
+  return _obj;
 }({});
