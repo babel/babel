@@ -7,3 +7,4 @@ benchmark
 Makefile
 .*
 dist
+!README.md
