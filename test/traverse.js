@@ -136,4 +136,6 @@ suite("traverse", function () {
       });
     }, /trying to delete property object from MemberExpression but can't because it's required/);
   });
+
+  test("hasType");
 });
