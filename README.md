@@ -25,7 +25,7 @@
  - **Readable** - formatting is retained if possible so your generated code is as similar as possible.
  - **Extensible** - with a large range of [plugins](#plugins) and **browser support**.
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
- - **Compact** - maps directly to the equivalent ES5 with **no runtime**.
+ - **Compact** - maps directly to the equivalent ES5 with **no runtime**[\*](#generators).
 
 ## Installation
 
@@ -55,6 +55,7 @@ It's as easy as:
  - [Default parameters](FEATURES.md#default-parameters)
  - [Destructuring](FEATURES.md#destructuring)
  - [For-of](FEATURES.md#for-of)
+ - [Generators](FEATURES.md#generators) via [regenerator](https://github.com/facebook/regenerator)
  - [Let scoping](FEATURES.md#let-scoping)
  - [Modules](FEATURES.md#modules)
  - [Numeric literals](FEATURES.md#numeric-literals)
@@ -64,10 +65,6 @@ It's as easy as:
  - [Spread](FEATURES.md#spread)
  - [Template literals](FEATURES.md#template-literals)
  - [Unicode Regex](FEATURES.md#unicode-regex)
-
-To be implemented:
-
- - [Generators](FEATURES.md#generators)
 
 ## Usage
 
@@ -249,7 +246,8 @@ A polyfill is included with 6to5 code that can be included in node like so:
 require("6to5/polyfill");
 ```
 
-This is simply a wrapper around the
+This is simply a wrapper around the regenerator
+[runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
 [es6-shim](https://github.com/paulmillr/es6-shim) and
 [es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
 
@@ -275,6 +273,11 @@ limitations in ES5 implementations.
 If you're inheriting from a class then static properties are inherited from it
 via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
 this is widely supported but you may run into problems with much older browsers.
+
+### Generators
+
+The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
+and an [ES6 polyfill](#polyfill) are required in order for generators to work.
 
 ## Differences
 
@@ -346,7 +349,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Default parameters           | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
-| Generators                   |      | ✓       | ✓      |        |                |             |
+| Generators                   | ✓    | ✓       | ✓      |        |                |             |
 | Let scoping                  | ✓    | ✓       |        |        | ✓              |             |
 | Modules                      | ✓    | ✓       |        | ✓      |                |             |
 | Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |

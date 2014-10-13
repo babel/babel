@@ -42,7 +42,8 @@
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "recast": "0.8.0",
-    "source-map": "0.1.40"
+    "source-map": "0.1.40",
+    "regenerator": "0.6.7"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",

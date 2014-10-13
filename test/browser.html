@@ -13,6 +13,7 @@
     <script>mocha.setup("tdd");</script>
     <script src="../dist/6to5-test.js"></script>
     <script>
+      mocha.globals(["regeneratorRuntime"]);
       mocha.checkLeaks();
       mocha.run();
     </script>
