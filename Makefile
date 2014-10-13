@@ -1,4 +1,5 @@
 ISTANBUL_CMD = node_modules/istanbul/lib/cli.js cover
+JSHINT_CMD = node_modules/jshint/bin/jshint
 MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
@@ -12,6 +13,7 @@ bench:
 	node node_modules/matcha/bin/_matcha
 
 test:
+	$(JSHINT_CMD) lib
 	$(MOCHA_CMD)
 
 test-cov:
