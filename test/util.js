@@ -44,4 +44,12 @@ suite("util", function () {
       util.template("invalid template");
     }, /unknown template/);
   });
+
+  test("getIds");
+
+  test("isReferenced");
+
+  test("removeProperties");
+
+  test("ensureBlock");
 });
