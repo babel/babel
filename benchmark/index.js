@@ -7,15 +7,21 @@ var es6now  = require("es6now");
 var esnext  = require("esnext");
 var to5     = require("../lib/6to5");
 
+var uglify  = require("uglify-js");
 var matcha  = require("matcha");
 var stream  = require("stream");
 var path    = require("path");
+var zlib    = require("zlib");
 var fs      = require("fs");
 var vm      = require("vm");
 var _       = require("lodash");
 
 var readResolve = function (filename) {
   return fs.readFileSync(require.resolve(filename), "utf8");
+};
+
+var getVersion = function (name) {
+  return require(name + "/package.json").version;
 };
 
 var jsTransVisitors = [];
@@ -76,9 +82,61 @@ var compilers = {
   }
 };
 
+// versions
+
+var uglifyTitle = "uglify v" + getVersion("uglify-js");
+
 _.each(compilers, function (compiler, name) {
-  compiler.title = name + " v" + require(name + "/package.json").version;
+  compiler.title = name + " v" + getVersion(name);
 });
+
+//
+
+var sizeBenchmark = function (code, loc, name, compiler) {
+  var log = function (output, title) {
+    title = [compiler.title].concat(title || []).join(" + ");
+
+    var kilo  = (output.length / 1024).toFixed(2);
+
+    var text;
+    var color;
+    if (output === false) {
+      text = "error";
+      color = "red";
+    } else {
+      text = kilo + "KB";
+      color = "cyan";
+    }
+
+    text = matcha.utils.color(matcha.utils.padBefore(text, 22), color);
+
+    console.log(text, matcha.utils.color("» " + title, "gray"));
+  };
+
+  var go = function (getOutput, title) {
+    var code;
+    try {
+      code = getOutput();
+    } catch (err) {
+      log(false, title);
+      return;
+    }
+
+    log(code, title);
+  };
+
+  var output;
+  go(function () {
+    return output = output || compiler.compile(code, loc);
+  });
+  if (!output) return;
+
+  go(function () {
+    return uglify.minify(output, { fromString: true }).code;
+  }, uglifyTitle);
+};
+
+//
 
 _.each(fs.readdirSync(__dirname + "/fixtures"), function (name) {
   var alias = path.basename(name, path.extname(name));
@@ -91,14 +149,7 @@ _.each(fs.readdirSync(__dirname + "/fixtures"), function (name) {
 
     before(function () {
       _.each(compilers, function (compiler, name) {
-        var output = compiler.compile(code, loc);
-        if (compiler.runtime) output = compiler.runtime + "\n" + output;
-
-        var kilo  = (output.length / 1024).toFixed(2);
-        console.log(
-          matcha.utils.color(matcha.utils.padBefore(kilo + "KB", 22), "cyan"),
-          matcha.utils.color("» " + compiler.title, "gray")
-        );
+        sizeBenchmark(code, loc, name, compiler);
       });
     });
 
