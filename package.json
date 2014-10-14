@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/sebmck/6to5",
   "repository": {
@@ -14,7 +14,7 @@
   "preferGlobal": true,
   "main": "lib/6to5/index.js",
   "bin": {
-    "6to5": "./bin/6to5",
+    "6to5": "./bin/6to5/index.js",
     "6to5-node": "./bin/6to5-node"
   },
   "keywords": [
@@ -43,7 +43,8 @@
     "regexpu": "0.3.0",
     "recast": "0.8.0",
     "source-map": "0.1.40",
-    "regenerator": "0.6.7"
+    "regenerator": "0.6.7",
+    "chokidar": "^0.9.0"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",
