@@ -173,8 +173,8 @@ to5.transformFile("filename.js", options, function (err, result) {
 
 #### Require hook
 
-All subsequent files required by node will be transformed by 6to5. An ES6
-polyfill is also required negating the [polyfill caveat](#polyfill).
+All subsequent files required by node will be transformed by 6to5. The polyfill
+specified in [Polyfill](#polyfill) is also required.
 
 ```javascript
 require("6to5/register");
@@ -240,19 +240,21 @@ use the following:
 6to5 does not include a runtime nor polyfill and it's up to the developer to
 include one in compiled browser code.
 
-A polyfill is included with 6to5 code that can be included in node like so:
+#### Node
+
+A polyfill is included with the 6to5 module that can be included in node like
+so:
 
 ```javascript
 require("6to5/polyfill");
 ```
 
-This is simply a wrapper around the regenerator
-[runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
+This is simply a wrapper around the
+[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
 [es6-shim](https://github.com/paulmillr/es6-shim) and
 [es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
 
-When using the [require hook](#require-hook) the aforementioned polyfill is
-automatically required.
+#### Browser
 
 If you're planning on using 6to5 output in the browser then it's up to you
 to include polyfills. [es6-symbol](https://github.com/medikoo/es6-symbol#browser)
