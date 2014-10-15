@@ -4,5 +4,9 @@ var a = 'var a';
   {
     var c = 'var c';
     let d = 'let d';
+    assert.equal(d, 'let d');
   }
+  assert.throws(function () {
+    d;
+  }, /d is not defined/);
 }

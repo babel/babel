@@ -13,9 +13,9 @@ function letInClosure(n) {
 }
 
 var result = letInClosure(10);
-assert.deepEqual(1, result[0]());
-assert.deepEqual(2, result[1]());
-assert.deepEqual(4, result[2]());
-assert.deepEqual(5, result[3]());
-assert.deepEqual(7, result[4]());
-assert.deepEqual(8, result[5]());
+assert.equal(1, result[0]());
+assert.equal(2, result[1]());
+assert.equal(4, result[2]());
+assert.equal(5, result[3]());
+assert.equal(7, result[4]());
+assert.equal(8, result[5]());
