@@ -2,7 +2,6 @@
 
 var commander = require("commander");
 var Module    = require("module");
-var path      = require("path");
 var util      = require("../lib/6to5/util");
 var path      = require("path");
 var repl      = require("repl");
@@ -12,13 +11,29 @@ var _         = require("lodash");
 
 commander.option("-e, --eval [script]", "evaluate script");
 commander.option("-p, --print", "evaluate script and print result");
+commander.option("-i, --ignore [regex]", "ignore all files that match this regex when using the require hook");
+commander.option("-x, --extensions [extensions]", "list of extensions to hook into [.es6,.js]", util.list);
 
 var pkg = require("../package.json");
 commander.version(pkg.version);
 commander.usage("[options] [ -e script | script.js ] [arguments]");
 commander.parse(process.argv);
 
-to5.register();
+//
+
+var registerOpts = {};
+
+if (commander.ignore) {
+  registerOpts.ignoreRegex = new RegExp(commander.ignore);
+}
+
+if (commander.extensions && commander.extensions.length) {
+  registerOpts.extensions = commander.extensions
+}
+
+to5.register(registerOpts);
+
+//
 
 var _eval = function (code, filename) {
   code = to5.transform(code, { filename: filename }).code;
