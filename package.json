@@ -44,7 +44,8 @@
     "recast": "0.8.0",
     "source-map": "0.1.40",
     "regenerator": "0.6.7",
-    "chokidar": "^0.9.0"
+    "chokidar": "^0.9.0",
+    "source-map-support": "^0.2.7"
   },
   "devDependencies": {
     "es6-transpiler": "0.7.17",
