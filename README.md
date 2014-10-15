@@ -183,7 +183,17 @@ require("6to5/register");
 override this by passing an ignore regex via:
 
 ```javascript
-require("6to5/register")(/regex/)
+require("6to5/register")({ 
+  ignoreRegex: /node_modules/
+})
+```
+
+Customize registered file extensions with `extensions`.  Default values:
+
+```javascript
+require("6to5/register")({ 
+  extensions: ['.js', '.es6']
+})
 ```
 
 ### Browser
