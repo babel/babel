@@ -261,7 +261,7 @@ to include polyfills. [es6-symbol](https://github.com/medikoo/es6-symbol#browser
 and [es6-shim](https://raw.githubusercontent.com/paulmillr/es6-shim/master/es6-shim.js)
 fill the vast majority of polyfill concerns.
 
-#### For-of
+### For-of
 
 A polyfill is required for for-of functionality that implements `Symbol` and
 adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
