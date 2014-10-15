@@ -64,7 +64,7 @@ It's as easy as:
  - [Rest parameters](FEATURES.md#rest-parameters)
  - [Spread](FEATURES.md#spread)
  - [Template literals](FEATURES.md#template-literals)
- - [Unicode Regex](FEATURES.md#unicode-regex)
+ - [Unicode regex](FEATURES.md#unicode-regex)
 
 ## Usage
 
@@ -180,7 +180,8 @@ specified in [Polyfill](#polyfill) is also required.
 require("6to5/register");
 ```
 
-**NOTE:** All requires to `node_modules` will be ignored.
+**NOTE:** By default all requires to `node_modules` will be ignored. You can
+override this by passing an ignore regex via `require("6to5/register")(/regex/)`.
 
 ### Browser
 
