@@ -180,7 +180,11 @@ require("6to5/register");
 ```
 
 **NOTE:** By default all requires to `node_modules` will be ignored. You can
-override this by passing an ignore regex via `require("6to5/register")(/regex/)`.
+override this by passing an ignore regex via:
+
+```javascript
+require("6to5/register")(/regex/)
+```
 
 ### Browser
 
