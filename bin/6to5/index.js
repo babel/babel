@@ -2,8 +2,9 @@
 
 var commander = require("commander");
 var sourceMap = require("source-map");
-var mkdirp    = require("mkdirp");
+var transform = require("../../lib/6to5/transform");
 var chokidar  = require("chokidar");
+var mkdirp    = require("mkdirp");
 var path      = require("path");
 var fs        = require("fs");
 var _         = require("lodash");
@@ -17,10 +18,20 @@ var list = function (val) {
   return val ? val.split(",") : [];
 };
 
-commander.option("-w, --whitelist [whitelist]", "Whitelist", list);
-commander.option("-b, --blacklist [blacklist]", "Blacklist", list);
+commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", list);
+commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
+
+commander.on("--help", function(){
+  console.log("  Transformers:");
+  console.log();
+  _.each(_.keys(transform.transformers).sort(), function (key) {
+    if (key[0] === "_") return;
+    console.log("  - " + key);
+  });
+  console.log();
+});
 
 var pkg = require("../../package.json");
 commander.version(pkg.version);

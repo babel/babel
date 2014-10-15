@@ -146,13 +146,12 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Default: "unknown"
   filename: "filename",
 
-  // List of transformers to EXCLUDE
-  // This is a camelised version of the name found in `features`
-  // eg. "Arrow functions" is "arrowFunctions"
+  // List of transformers to EXCLUDE.
+  // Run `6to5 --help` to see a full list of transformers.
   blacklist: [],
 
   // List of transformers to ONLY use.
-  // See `blacklist` for naming scheme.
+  // Run `6to5 --help` to see a full list of transformers.
   whitelist: [],
 
   // If truthy, adds a `map` property to returned output.
