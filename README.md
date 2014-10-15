@@ -172,8 +172,9 @@ to5.transformFile("filename.js", options, function (err, result) {
 
 #### Require hook
 
-All subsequent files required by node will be transformed by 6to5. The polyfill
-specified in [Polyfill](#polyfill) is also required.
+All subsequent files required by node with the extensions `.es6` and `.js` will
+be transformed by 6to5. The polyfill specified in [Polyfill](#polyfill) is also
+required.
 
 ```javascript
 require("6to5/register");
@@ -183,7 +184,20 @@ require("6to5/register");
 override this by passing an ignore regex via:
 
 ```javascript
-require("6to5/register")(/regex/)
+require("6to5/register")(/regex/);
+```
+
+You can also customise the file extensions that the require hook will use via:
+
+```javascript
+require("6to5/register")({
+  // optional ignore regex
+  ignoreRegex: /regex/,
+
+  // this will remove the currently hooked extensions of .es6 and .js so you'll
+  // have to add them back if you want them to be used again
+  extensions: [".js", ".es6"]
+});
 ```
 
 ### Browser
