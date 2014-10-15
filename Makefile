@@ -48,7 +48,7 @@ publish:
 	test -f templates.json
 
 	read -p "Version: "  version; \
-  npm version $(version) --message "v%s"
+  npm version $$version --message "v%s"
 	npm publish
 
 	git push --follow-tags
