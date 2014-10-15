@@ -47,8 +47,8 @@ publish:
 	node bin/cache-templates
 	test -f templates.json
 
-	read -p "Version: "  version \
-  npm version $$VERSION --message "v%s"
+	read -p "Version: "  version; \
+  npm version $(version) --message "v%s"
 	npm publish
 
 	git push --follow-tags
