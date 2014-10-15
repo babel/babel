@@ -65,9 +65,11 @@ exports.getTests = function () {
 
       var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
+      var execLocAlias   = suiteName + "/" + taskName + "/exec.js";
 
       var actualLoc = taskDir + "/actual.js";
       var expectLoc = taskDir + "/expected.js";
+      var execLoc   = taskDir + "/exec.js";
 
       var taskOpts = _.merge({
         filename: actualLocAlias,
@@ -80,6 +82,10 @@ exports.getTests = function () {
       var test = {
         title: humanise(taskName),
         options: taskOpts,
+        exec: {
+          code: readFile(execLoc),
+          filename: execLocAlias,
+        },
         actual: {
           code: readFile(actualLoc),
           filename: actualLocAlias,
