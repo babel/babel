@@ -40,20 +40,17 @@ build:
 	rm -rf templates.json
 
 publish:
-	if test -n "`git status -s`"; then echo "uncommitted changes"; exit 1; fi
-
-	rm -rf node_modules
-
 	git pull --rebase
-	npm install
 
-	node bin/cache-templates
 	make test
 
+	node bin/cache-templates
 	test -f templates.json
+
+	read -p "Version: "  version \
+  npm version $$VERSION --message "v%s"
 	npm publish
 
-	git tag "v`6to5 -V`"
-	git push --tags
+	git push --follow-tags
 
 	rm -rf templates.json
