@@ -45,6 +45,15 @@ suite("util", function () {
     assert.ok(!util.isAbsolute("test/test.js"));
   });
 
+  test("list", function () {
+    assert.deepEqual(util.list(undefined), []);
+    assert.deepEqual(util.list(false), []);
+    assert.deepEqual(util.list(null), []);
+    assert.deepEqual(util.list(""), []);
+    assert.deepEqual(util.list("foo"), ["foo"]);
+    assert.deepEqual(util.list("foo,bar"), ["foo", "bar"]);
+  });
+
   test("getIds");
 
   test("isReferenced");
