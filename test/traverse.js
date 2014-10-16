@@ -1,5 +1,6 @@
 var traverse = require("../lib/6to5/traverse");
 var assert   = require("assert");
+var b        = require("recast").types.builders;
 var _        = require("lodash");
 
 suite("traverse", function () {
@@ -137,9 +138,21 @@ suite("traverse", function () {
     }, /trying to delete property object from MemberExpression but can't because it's required/);
   });
 
-  test("hasType");
+  test("hasType", function () {
+    assert.ok(traverse.hasType(ast, "ThisExpression"));
+    assert.ok(traverse.hasType(ast, "Program"));
+
+    assert.ok(!traverse.hasType(ast, "ThisExpression", ["MemberExpression"]));
+    assert.ok(!traverse.hasType(ast, "ThisExpression", ["Program"]));
+
+    assert.ok(!traverse.hasType(ast, "ArrowFunctionExpression"));
+  });
 
   test("isPattern");
 
-  test("isFunction");
+  test("isFunction", function () {
+    //assert.ok(traverse.isFunction(b.arrowFunctionExpression());
+    //assert.ok(traverse.isFunction(b.functionExpression()));
+    //assert.ok(traverse.isFunction(b.functionDeclaration()));
+  });
 });
