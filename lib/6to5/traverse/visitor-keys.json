@@ -72,5 +72,15 @@
   "VoidTypeAnnotation":            [],
   "WhileStatement":                ["test", "body"],
   "WithStatement":                 ["object", "body"],
+  "XJSIdentifier":                 [],
+  "XJSNamespacedName":             ["namespace", "name"],
+  "XJSMemberExpression":           ["object", "property"],
+  "XJSEmptyExpression":            [],
+  "XJSExpressionContainer":        ["expression"],
+  "XJSElement":                    ["openingElement", "closingElement", "children"],
+  "XJSClosingElement":             ["name"],
+  "XJSOpeningElement":             ["name", "attributes"],
+  "XJSAttribute":                  ["name", "value"],
+  "XJSText":                       [],
   "YieldExpression":               ["argument"]
 }
