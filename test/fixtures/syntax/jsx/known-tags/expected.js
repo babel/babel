@@ -1,0 +1,1 @@
+React.DOM.a(null);
