@@ -28,7 +28,9 @@ if (commander.ignore) {
 }
 
 if (commander.extensions && commander.extensions.length) {
-  registerOpts.extensions = commander.extensions
+  registerOpts.extensions = commander.extensions;
+} else {
+  registerOpts.extensions = [ ".js", ".es6" ];
 }
 
 to5.register(registerOpts);
