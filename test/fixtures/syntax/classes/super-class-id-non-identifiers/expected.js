@@ -1,3 +1,5 @@
+"use strict";
+
 var Q = function(_ref) {
   var Q = function Q() {
     _ref.apply(this, arguments);
@@ -11,7 +13,7 @@ var Q = function(_ref) {
       configurable: true
     }
   });
-  Q.__proto__ = _ref;
 
+  Q.__proto__ = _ref;
   return Q;
 }(function() {});

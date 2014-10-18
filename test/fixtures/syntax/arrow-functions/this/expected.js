@@ -1,4 +1,6 @@
+"use strict";
 var _this = this;
-var t = function (x) {
+
+var t = function(x) {
   return _this.x + x;
 };

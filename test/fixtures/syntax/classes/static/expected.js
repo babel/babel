@@ -1,3 +1,5 @@
+"use strict";
+
 var A = function() {
   var A = function A() {};
 

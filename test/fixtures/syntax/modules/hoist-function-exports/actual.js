@@ -6,6 +6,6 @@ export function nextOdd(n) {
 
 export var isOdd = (function(isEven) {
   return function(n) {
-    return !isEven(n);
+  return !isEven(n);
   };
 })(isEven);

@@ -1,3 +1,5 @@
-var t = function (i, x) {
+"use strict";
+
+var t = function(i, x) {
   return i * x;
 };

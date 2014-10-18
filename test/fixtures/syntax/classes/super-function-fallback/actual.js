@@ -1,5 +1,5 @@
 class Test {
   constructor() {
-    super.hasOwnProperty("test");
+  super.hasOwnProperty("test");
   }
 }

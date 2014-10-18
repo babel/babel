@@ -1,8 +1,11 @@
+"use strict";
+
 var Test = function(Foo) {
   var Test = function Test() {
     Foo.prototype.test.whatever();
     Foo.prototype.test.call(this);
   };
+
   Test.prototype = Object.create(Foo.prototype, {
     constructor: {
       value: Test,
@@ -11,7 +14,9 @@ var Test = function(Foo) {
       configurable: true
     }
   });
+
   Test.__proto__ = Foo;
+
   Object.defineProperties(Test, {
     test: {
       writable: true,
@@ -21,5 +26,6 @@ var Test = function(Foo) {
       }
     }
   });
+
   return Test;
 }(Foo);

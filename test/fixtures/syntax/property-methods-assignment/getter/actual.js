@@ -1,5 +1,5 @@
 var obj = {
   get foo() {
-    return 5 + 5;
+  return 5 + 5;
   }
 };

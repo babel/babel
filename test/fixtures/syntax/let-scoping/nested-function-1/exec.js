@@ -1,5 +1,5 @@
 function nestedFunction1() {
   return function() {
-    let let_x = 'let x';
+  let let_x = 'let x';
   }
 }

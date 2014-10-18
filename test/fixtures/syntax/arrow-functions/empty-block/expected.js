@@ -1,2 +1,2 @@
-var t = function () {
-};
+"use strict";
+var t = function() {};

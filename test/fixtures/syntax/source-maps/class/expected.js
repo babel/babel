@@ -1,3 +1,5 @@
+"use strict";
+
 var Test = function() {
   var Test = function Test() {};
 
@@ -12,5 +14,5 @@ var Test = function() {
   return Test;
 }();
 
-var test = new Test;
+var test = new Test();
 test.bar;

@@ -1,7 +1,10 @@
-var Test = function () {
+"use strict";
+
+var Test = function() {
   var Test = function Test() {
     this.state = "test";
   };
+
   return Test;
 }();
 

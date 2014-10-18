@@ -1,2 +1,3 @@
-var string = 'foo\uD83D\uDCA9bar';
+"use strict";
+var string = "foo💩bar";
 var match = string.match(/foo(.)bar/);

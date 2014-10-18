@@ -1,3 +1,5 @@
+"use strict";
+
 var Test = function(Foo) {
   var Test = function Test() {
     Foo.prototype.test;

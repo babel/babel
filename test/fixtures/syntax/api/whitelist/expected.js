@@ -1,6 +1,8 @@
+"use strict";
+
 class Test {
   constructor() {
-    arr.map(function (x) {
+    arr.map(function(x) {
       return x * x;
     });
   }

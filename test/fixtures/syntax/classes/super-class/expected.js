@@ -1,7 +1,10 @@
-var Test = function (Foo) {
+"use strict";
+
+var Test = function(Foo) {
   var Test = function Test() {
     Foo.apply(this, arguments);
   };
+
   Test.prototype = Object.create(Foo.prototype, {
     constructor: {
       value: Test,
@@ -10,6 +13,7 @@ var Test = function (Foo) {
       configurable: true
     }
   });
+
   Test.__proto__ = Foo;
   return Test;
 }(Foo);

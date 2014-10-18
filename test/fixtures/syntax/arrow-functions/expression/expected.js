@@ -1,3 +1,5 @@
-arr.map(function (x) {
+"use strict";
+
+arr.map(function(x) {
   return x * x;
 });
