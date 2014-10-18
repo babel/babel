@@ -41,9 +41,7 @@ var _eval = function (code, filename) {
 };
 
 if (commander.eval) {
-  var code = to5.transform(commander.eval, { filename: "eval" }).code;
-
-  var result = _eval(code, "eval");
+  var result = _eval(commander.eval, "eval");
   if (commander.print) console.log(result);
 } else {
   var filenames = commander.args;

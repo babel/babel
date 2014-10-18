@@ -9,9 +9,9 @@ exports.readdirFilter = function (filename) {
   return readdir(filename).filter(util.canCompile);
 };
 
-exports.transform = function (filename, code, to) {
-  var opts = _.extend({ filename: filename }, index.opts);
-  if (to) opts.sourceMapName = to;
+exports.transform = function (filename, code, opts) {
+  opts = _.extend(opts || {}, index.opts);
+  opts.filename = filename;
 
   var result = to5.transform(code, opts);
   result.filename = filename;
@@ -19,7 +19,7 @@ exports.transform = function (filename, code, to) {
   return result;
 };
 
-exports.compile = function (filename, to) {
+exports.compile = function (filename, opts) {
   var code = fs.readFileSync(filename, "utf8");
-  return exports.transform(filename, code, to);
+  return exports.transform(filename, code, opts);
 };

@@ -13,7 +13,7 @@ module.exports = function (commander, filenames, opts) {
   var write = function (src, relative) {
     var dest = path.join(commander.outDir, relative);
 
-    var data = util.compile(src, dest);
+    var data = util.compile(src, { sourceMapName: dest });
 
     var up = path.normalize(dest + "/..");
     mkdirp.sync(up);
