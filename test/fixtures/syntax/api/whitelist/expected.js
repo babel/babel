@@ -1,5 +1,3 @@
-"use strict";
-
 class Test {
   constructor() {
     arr.map(function(x) {
