@@ -154,6 +154,11 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Run `6to5 --help` to see a full list of transformers.
   whitelist: [],
 
+  // Module formatter to use
+  // Run `6to5 --help` to see a full list of module formatters.
+  // Default: "common"
+  modules: "common",
+
   // If truthy, adds a `map` property to returned output.
   // If set to "inline", a comment with a sourceMappingURL directive is added to
   // the bottom of the returned code.
@@ -224,32 +229,10 @@ To test 6to5 in your browser run:
 
 And open `test/browser.html` in your browser if it doesn't open automatically.
 
-## Modules
+## [Modules](MODULES.md)
 
-6to5 modules compile straight to CommonJS, because of this various liberties are
-taken into account to make their usage easier.
-
-```javascript
-import "foo"; // require("foo");
-
-import foo from "foo"; // var foo = require("foo").default;
-import * as foo from "foo"; // var foo = require("foo");
-
-import {bar} from "foo"; // var bar = require("foo").bar;
-import {foo as bar} from "foo"; // var bar = require("foo").foo;
-
-export {test}; // exports.test = test;
-export var test = 5; // var test = 5; exports.test = test;
-
-export default test; // exports.default = test;
-```
-
-If you'd like to disable this behaviour and use the more ES6-like
-[es6-module-transpiler](https://github.com/esnext/es6-module-transpiler) you can
-use the following:
-
-    $ 6to5 script.js -o script-compiled.js --blacklist modules
-    $ compile-modules convert script-compiled.js -o script-compiled.js
+See [Modules - Common](MODULES.md#common) for the default module formatting.
+Alternatively see [Modules](MODULES.md) for all other supported module formatting types.
 
 ## Caveats
 
