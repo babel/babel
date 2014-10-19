@@ -1,1 +1,1 @@
-Error: test.js: Line 2: Unexpected token ILLEGAL
+SyntaxError: test.js: Unexpected character '@'
