@@ -1,12 +1,12 @@
 "use strict";
 
-(function (root, factory) {
+(function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "./evens"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("./evens"));
   }
-})(this, function (exports, _evens) {
+})(function (exports, _evens) {
   exports.nextOdd = nextOdd;
   var isEven = _evens.isEven;
 

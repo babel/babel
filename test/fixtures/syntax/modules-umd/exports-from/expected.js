@@ -1,12 +1,12 @@
 "use strict";
 
-(function (root, factory) {
+(function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "foo"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }
-})(this, function (exports, _foo) {
+})(function (exports, _foo) {
   (function(obj) {
     for (var i in obj) {
       exports[i] = obj[i];
