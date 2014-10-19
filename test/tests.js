@@ -135,6 +135,60 @@ test("\n    42\n\n", {
   }
 });
 
+test("/foobar/", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        value: /foobar/,
+        regex: {
+          pattern: "foobar",
+          flags: ""
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 8
+          }
+        }
+      }
+    }
+  ]
+});
+
+test("/[a-z]/g", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        value: /[a-z]/,
+        regex: {
+          pattern: "[a-z]",
+          flags: "g"
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 8
+          }
+        }
+      }
+    }
+  ]
+});
+
 test("(1 + 2 ) * 3", {
   type: "Program",
   body: [
