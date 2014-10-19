@@ -16,19 +16,27 @@ commander.option("-s, --source-maps", "Save source map alongside the compiled co
 commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be used in source-maps, errors etc [stdin]", "stdin");
 commander.option("-w, --watch", "Recompile files on changes");
 
+commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
 commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util2.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util2.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 
 commander.on("--help", function(){
-  console.log("  Transformers:");
-  console.log();
-  _.each(_.keys(transform.transformers).sort(), function (key) {
-    if (key[0] === "_") return;
-    console.log("  - " + key);
-  });
-  console.log();
+  var outKeys = function (title, obj) {
+    console.log("  " + title + ":");
+    console.log();
+
+    _.each(_.keys(obj).sort(), function (key) {
+      if (key[0] === "_") return;
+      console.log("    - " + key);
+    });
+
+    console.log();
+  };
+
+  outKeys("Transformers", transform.transformers);
+  outKeys("Module formatters", transform.moduleFormatters);
 });
 
 var pkg = require("../../package.json");
@@ -83,7 +91,8 @@ exports.opts = {
   sourceMapName: commander.outFile,
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
-  sourceMap:     commander.sourceMaps || commander.sourceMapsInline
+  sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
+  modules:       commander.modules
 };
 
 var fn;
