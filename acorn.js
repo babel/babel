@@ -934,7 +934,11 @@
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     var mods = readWord1();
-    if (mods && !/^[gmsiy]*$/.test(mods)) raise(start, "Invalid regular expression flag");
+    if (mods) {
+      var validFlags = /^[gmsiy]*$/;
+      if (options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
+      if (!validFlags.test(mods)) raise(start, "Invalid regular expression flag");
+    }
     try {
       var value = new RegExp(content, mods);
     } catch (e) {
