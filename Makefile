@@ -10,6 +10,7 @@ clean:
 	rm -rf coverage templates.json test/tmp dist
 
 bench:
+	npm install es6-transpiler traceur esnext es6now jstransform
 	node node_modules/matcha/bin/_matcha
 
 test:
