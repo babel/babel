@@ -1,7 +1,5 @@
 "use strict";
 
-define(["foo", "foo-bar", "./directory/foo-bar"], function (_foo, _fooBar, _directoryFooBar) {
-  var exports = {};
+define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
 
-  return exports;
 });

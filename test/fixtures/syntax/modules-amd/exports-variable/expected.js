@@ -1,8 +1,6 @@
 "use strict";
 
-define([], function () {
-  var exports = {};
-
+define(["exports"], function (exports) {
   exports.foo7 = foo7;
   var foo = 1;
   exports.foo = foo;
@@ -24,6 +22,4 @@ define([], function () {
   }();
 
   exports.foo8 = foo8;
-
-  return exports;
 });

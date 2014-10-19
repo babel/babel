@@ -66,8 +66,7 @@ export function bar() {
 **Out**
 
 ```javascript
-define(["foo"], function (_foo) {
-  var exports = {};
+define(["exports", "foo"], function (exports, _foo) {
   exports.bar = bar;
 
   var foo = _foo.default;
@@ -75,8 +74,6 @@ define(["foo"], function (_foo) {
   function bar() {
     return foo("foobar");
   }
-
-  return exports;
 });
 ```
 
