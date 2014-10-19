@@ -232,6 +232,7 @@ And open `test/browser.html` in your browser if it doesn't open automatically.
 ## [Modules](MODULES.md)
 
 See [Modules - Common](MODULES.md#common) for the default module formatting.
+
 Alternatively see [Modules](MODULES.md) for all other supported module formatting types.
 
 ## Caveats
