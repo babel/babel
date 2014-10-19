@@ -46,7 +46,7 @@
     "regenerator": "0.6.7",
     "chokidar": "0.10.0",
     "source-map-support": "0.2.7",
-    "acorn": "0.9.1",
+    "acorn": "0.9.0",
     "ast-types": "0.5.3"
   },
   "devDependencies": {
