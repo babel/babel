@@ -17,19 +17,38 @@ to5.transform('import "foo";', { modules: "common" });
 
 ### Common (Default)
 
+**In**
+
 ```javascript
-import "foo"; // require("foo");
+import "foo";
 
-import foo from "foo"; // var foo = require("foo").default;
-import * as foo from "foo"; // var foo = require("foo");
+import foo from "foo";
+import * as foo from "foo";
 
-import {bar} from "foo"; // var bar = require("foo").bar;
-import {foo as bar} from "foo"; // var bar = require("foo").foo;
+import {bar} from "foo";
+import {foo as bar} from "foo";
 
-export {test}; // exports.test = test;
-export var test = 5; // var test = 5; exports.test = test;
+export {test};
+export var test = 5;
 
-export default test; // exports.default = test;
+export default test;
+```
+
+**Out**
+
+```javascript
+require("foo");
+
+var foo = require("foo").default;
+var foo = require("foo");
+
+var bar = require("foo").bar;
+var bar = require("foo").foo;
+
+exports.test = test;
+var test = 5; exports.test = test;
+
+exports.default = test;
 ```
 
 ### AMD
