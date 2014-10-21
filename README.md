@@ -211,7 +211,7 @@ but never raises an error, and will do its best to parse syntactically
 invalid code in as meaningful a way as it can. It'll insert identifier
 nodes with name `"✖"` as placeholders in places where it can't make
 sense of the input. Depends on `acorn.js`, because it uses the same
-tokenizer.
+tokenizer. The loose parser does not support ECMAScript 6 syntax yet.
 
 ### util/walk.js ###
 
