@@ -17,7 +17,12 @@ var vm      = require("vm");
 var _       = require("lodash");
 
 var readResolve = function (filename) {
-  return fs.readFileSync(require.resolve(filename), "utf8");
+  try {
+    filename = require.resolve(filename);
+  } catch (err) {
+    return null;
+  }
+  return fs.readFileSync(filename, "utf8");
 };
 
 var getVersion = function (name) {
@@ -38,6 +43,7 @@ _.each([
 
 var compilers = {
   "6to5": {
+    version: getVersion(".."),
     compile: function (code, filename) {
       return to5.transform(code, { filename: filename }).code;
     }
@@ -54,7 +60,7 @@ var compilers = {
   },
 
   esnext: {
-    runtime: readResolve("esnext/node_modules/regenerator/runtime.js"),
+    runtime: readResolve("esnext/node_modules/regenerator/runtime.js") || readResolve("regenerator/runtime.js"),
     compile: function (code, filename) {
       return esnext.compile(code).code;
     }
@@ -87,7 +93,7 @@ var compilers = {
 var uglifyTitle = "uglify v" + getVersion("uglify-js");
 
 _.each(compilers, function (compiler, name) {
-  compiler.title = name + " v" + getVersion(name);
+  compiler.title = name + " v" + (compiler.version || getVersion(name));
 });
 
 //
@@ -96,14 +102,13 @@ var sizeBenchmark = function (code, loc, name, compiler) {
   var log = function (output, title) {
     title = [compiler.title].concat(title || []).join(" + ");
 
-    var kilo  = (output.length / 1024).toFixed(2);
-
     var text;
     var color;
-    if (output === false) {
+    if (output.stack) {
       text = "error";
       color = "red";
     } else {
+      var kilo  = (output.length / 1024).toFixed(2);
       text = kilo + "KB";
       color = "cyan";
     }
@@ -111,6 +116,10 @@ var sizeBenchmark = function (code, loc, name, compiler) {
     text = matcha.utils.color(matcha.utils.padBefore(text, 22), color);
 
     console.log(text, matcha.utils.color("» " + title, "gray"));
+
+    if (output.stack) {
+      console.error(output.stack);
+    }
   };
 
   var go = function (getOutput, title) {
@@ -118,7 +127,7 @@ var sizeBenchmark = function (code, loc, name, compiler) {
     try {
       code = getOutput();
     } catch (err) {
-      log(false, title);
+      log(err, title);
       return;
     }
 
@@ -127,7 +136,7 @@ var sizeBenchmark = function (code, loc, name, compiler) {
 
   var output;
   go(function () {
-    return output = output || compiler.compile(code, loc);
+    return output = compiler.compile(code, loc);
   });
   if (!output) return;
 
