@@ -1091,7 +1091,6 @@
         case 114: return "\r"; // 'r' -> '\r'
         case 120: return String.fromCharCode(readHexChar(2)); // 'x'
         case 117: return readCodePoint(); // 'u'
-        case 85: return String.fromCharCode(readHexChar(8)); // 'U'
         case 116: return "\t"; // 't' -> '\t'
         case 98: return "\b"; // 'b' -> '\b'
         case 118: return "\u000b"; // 'v' -> '\u000b'
