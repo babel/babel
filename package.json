@@ -47,8 +47,8 @@
     "chokidar": "0.10.0",
     "source-map-support": "0.2.7",
     "ast-types": "0.5.3",
-    "esutils": "^1.1.4",
-    "acorn-jsx": "https://github.com/sebmck/acorn-jsx/archive/master.tar.gz"
+    "esutils": "1.1.4",
+    "acorn-jsx": "0.9.1-1"
   },
   "devDependencies": {
     "istanbul": "0.3.2",
