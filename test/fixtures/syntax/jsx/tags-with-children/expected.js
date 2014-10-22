@@ -6,4 +6,4 @@ X({
 
 X({
   prop: "2"
-}, [Y(null), Z(null)]);
+}, Y(null), Z(null));
