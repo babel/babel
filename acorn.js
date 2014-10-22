@@ -28,7 +28,7 @@
 })(this, function(exports) {
   "use strict";
 
-  exports.version = "0.7.1";
+  exports.version = "0.9.1";
 
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
@@ -43,6 +43,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    initParserState();
     return parseTopLevel(options.program);
   };
 
@@ -111,7 +112,22 @@
     sourceFile: null,
     // This value, if given, is stored in every node, whether
     // `locations` is on or off.
-    directSourceFile: null
+    directSourceFile: null,
+    // When enabled, parenthesized expressions are represented by
+    // (non-standard) ParenthesizedExpression nodes
+    preserveParens: false
+  };
+
+  // This function tries to parse a single expression at a given
+  // offset in a string. Useful for parsing mixed-language formats
+  // that embed JavaScript expressions.
+
+  exports.parseExpressionAt = function(inpt, pos, opts) {
+    input = String(inpt); inputLen = input.length;
+    setOptions(opts);
+    initTokenState(pos);
+    initParserState();
+    return parseExpression();
   };
 
   var isArray = function (obj) {
@@ -286,6 +302,14 @@
   // '{expression}' and everything else as string literals.
 
   var inTemplate;
+
+  function initParserState() {
+    lastStart = lastEnd = tokPos;
+    if (options.locations) lastEndLoc = new Position;
+    inFunction = inGenerator = strict = false;
+    labels = [];
+    readToken();
+  }
 
   // This function is used to raise exceptions on parse errors. It
   // takes an offset integer (into the current `input`) to indicate
@@ -564,9 +588,15 @@
 
   // Reset the token state. Used at the start of a parse.
 
-  function initTokenState() {
-    tokCurLine = 1;
-    tokPos = tokLineStart = 0;
+  function initTokenState(pos) {
+    if (pos) {
+      tokPos = pos;
+      tokLineStart = Math.max(0, input.lastIndexOf("\n", pos));
+      tokCurLine = input.slice(0, tokLineStart).split(newline).length;
+    } else {
+      tokCurLine = 1;
+      tokPos = tokLineStart = 0;
+    }
     tokRegexpAllowed = true;
     metParenL = 0;
     inTemplate = inXJSChild = inXJSTag = false;
@@ -588,7 +618,7 @@
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
       options.onToken(new Token());
-  	}
+    }
   }
 
   function skipBlockComment() {
@@ -1086,7 +1116,6 @@
         case 114: return "\r"; // 'r' -> '\r'
         case 120: return String.fromCharCode(readHexChar(2)); // 'x'
         case 117: return readCodePoint(); // 'u'
-        case 85: return String.fromCharCode(readHexChar(8)); // 'U'
         case 116: return "\t"; // 't' -> '\t'
         case 98: return "\b"; // 'b' -> '\b'
         case 118: return "\u000b"; // 'v' -> '\u000b'
@@ -1560,19 +1589,26 @@
     return node;
   }
 
-  // Start a node whose start offset information should be based on
-  // the start of another node. For example, a binary operator node is
-  // only started after its left-hand side has already been parsed.
+  // Sometimes, a node is only started *after* the token stream passed
+  // its start position. The functions below help storing a position
+  // and creating a node from a previous position.
 
-  function startNodeFrom(other) {
-    var node = new Node();
-    node.start = other.start;
+  function storeCurrentPos() {
+    return options.locations ? [tokStart, tokStartLoc] : tokStart;
+  }
+
+  function startNodeAt(pos) {
+    var node = new Node(), start = pos;
     if (options.locations) {
       node.loc = new SourceLocation();
-      node.loc.start = other.loc.start;
+      node.loc.start = start[1];
+      start = pos[0];
     }
+    node.start = start;
+    if (options.directSourceFile)
+      node.sourceFile = options.directSourceFile;
     if (options.ranges)
-      node.range = [other.range[0], 0];
+      node.range = [start, 0];
 
     return node;
   }
@@ -1714,8 +1750,10 @@
         break;
 
       case "ArrayPattern":
-        for (var i = 0; i < param.elements.length; i++)
-          checkFunctionParam(param.elements[i], nameHash);
+        for (var i = 0; i < param.elements.length; i++) {
+          var elem = param.elements[i];
+          if (elem) checkFunctionParam(elem, nameHash);
+        }
         break;
     }
   }
@@ -1780,6 +1818,10 @@
       case "SpreadElement":
         break;
 
+      case "ParenthesizedExpression":
+        checkLVal(expr.expression);
+        break;
+
       default:
       raise(expr.start, "Assigning to rvalue");
   }
@@ -1793,12 +1835,6 @@
   // to its body instead of creating a new node.
 
   function parseTopLevel(program) {
-    lastStart = lastEnd = tokPos;
-    if (options.locations) lastEndLoc = new Position;
-    inFunction = inGenerator = strict = null;
-    labels = [];
-    readToken();
-
     var node = program || startNode(), first = true;
     if (!program) node.body = [];
     while (tokType !== _eof) {
@@ -1920,13 +1956,13 @@
       next();
       parseVar(init, true, varKind);
       finishNode(init, "VariableDeclaration");
-      if ((tokType === _in || (tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
+      if ((tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
           !(isLet && init.declarations[0].init))
         return parseForIn(node, init);
       return parseFor(node, init);
     }
     var init = parseExpression(false, true);
-    if (tokType === _in || (tokType === _name && tokVal === "of")) {
+    if (tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) {
       checkLVal(init);
       return parseForIn(node, init);
     }
@@ -2088,7 +2124,7 @@
   // function bodies).
 
   function parseBlock(allowStrict) {
-    var node = startNode(), first = true, strict = false, oldStrict;
+    var node = startNode(), first = true, oldStrict;
     node.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -2100,7 +2136,7 @@
       }
       first = false;
     }
-    if (strict && !oldStrict) setStrict(false);
+    if (oldStrict === false) setStrict(false);
     return finishNode(node, "BlockStatement");
   }
 
@@ -2163,9 +2199,10 @@
   // or the `in` operator (in for loops initalization expressions).
 
   function parseExpression(noComma, noIn) {
+    var start = storeCurrentPos();
     var expr = parseMaybeAssign(noIn);
     if (!noComma && tokType === _comma) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.expressions = [expr];
       while (eat(_comma)) node.expressions.push(parseMaybeAssign(noIn));
       return finishNode(node, "SequenceExpression");
@@ -2177,9 +2214,10 @@
   // operators like `+=`.
 
   function parseMaybeAssign(noIn) {
+    var start = storeCurrentPos();
     var left = parseMaybeConditional(noIn);
     if (tokType.isAssign) {
-      var node = startNodeFrom(left);
+      var node = startNodeAt(start);
       node.operator = tokVal;
       node.left = tokType === _eq ? toAssignable(left) : left;
       checkLVal(left);
@@ -2193,9 +2231,10 @@
   // Parse a ternary conditional (`?:`) operator.
 
   function parseMaybeConditional(noIn) {
+    var start = storeCurrentPos();
     var expr = parseExprOps(noIn);
     if (eat(_question)) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.test = expr;
       node.consequent = parseExpression(true);
       expect(_colon);
@@ -2208,7 +2247,8 @@
   // Start the precedence parser.
 
   function parseExprOps(noIn) {
-    return parseExprOp(parseMaybeUnary(), -1, noIn);
+    var start = storeCurrentPos();
+    return parseExprOp(parseMaybeUnary(), start, -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -2217,18 +2257,19 @@
   // defer further parser to one of its callers when it encounters an
   // operator that has a lower precedence than the set it is parsing.
 
-  function parseExprOp(left, minPrec, noIn) {
+  function parseExprOp(left, leftStart, minPrec, noIn) {
     var prec = tokType.binop;
     if (prec != null && (!noIn || tokType !== _in)) {
       if (prec > minPrec) {
-        var node = startNodeFrom(left);
+        var node = startNodeAt(leftStart);
         node.left = left;
         node.operator = tokVal;
         var op = tokType;
         next();
-        node.right = parseExprOp(parseMaybeUnary(), prec, noIn);
-        var exprNode = finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(exprNode, minPrec, noIn);
+        var start = storeCurrentPos();
+        node.right = parseExprOp(parseMaybeUnary(), start, prec, noIn);
+        finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
+        return parseExprOp(node, leftStart, minPrec, noIn);
       }
     }
     return left;
@@ -2250,9 +2291,10 @@
         raise(node.start, "Deleting local variable in strict mode");
       return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
     }
+    var start = storeCurrentPos();
     var expr = parseExprSubscripts();
     while (tokType.postfix && !canInsertSemicolon()) {
-      var node = startNodeFrom(expr);
+      var node = startNodeAt(start);
       node.operator = tokVal;
       node.prefix = false;
       node.argument = expr;
@@ -2266,33 +2308,34 @@
   // Parse call, dot, and `[]`-subscript expressions.
 
   function parseExprSubscripts() {
-    return parseSubscripts(parseExprAtom());
+    var start = storeCurrentPos();
+    return parseSubscripts(parseExprAtom(), start);
   }
 
-  function parseSubscripts(base, noCalls) {
+  function parseSubscripts(base, start, noCalls) {
     if (eat(_dot)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);
       node.computed = false;
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "MemberExpression"), start, noCalls);
     } else if (eat(_bracketL)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.object = base;
       node.property = parseExpression();
       node.computed = true;
       expect(_bracketR);
-      return parseSubscripts(finishNode(node, "MemberExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "MemberExpression"), start, noCalls);
     } else if (!noCalls && eat(_parenL)) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
-      return parseSubscripts(finishNode(node, "CallExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
     } else if (tokType === _bquote) {
-      var node = startNodeFrom(base);
+      var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
-      return parseSubscripts(finishNode(node, "TaggedTemplateExpression"), noCalls);
+      return parseSubscripts(finishNode(node, "TaggedTemplateExpression"), start, noCalls);
     } return base;
   }
 
@@ -2312,9 +2355,10 @@
       if (inGenerator) return parseYield();
 
     case _name:
+      var start = storeCurrentPos();
       var id = parseIdent(tokType !== _name);
       if (eat(_arrow)) {
-        return parseArrowExpression(startNodeFrom(id), [id]);
+        return parseArrowExpression(startNodeAt(start), [id]);
       }
       return id;
       
@@ -2333,42 +2377,40 @@
       return finishNode(node, "Literal");
 
     case _parenL:
+      var start = storeCurrentPos();
       var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
       if (options.ecmaVersion >= 6 && tokType === _for) {
-        val = parseComprehension(startNode(), true);
+        val = parseComprehension(startNodeAt(start), true);
       } else {
-      var oldParenL = ++metParenL;
-      if (tokType !== _parenR) {
-        val = parseExpression();
-        exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-      } else {
-        exprList = [];
-      }
-      expect(_parenR);
-      // if '=>' follows '(...)', convert contents to arguments
-      if (metParenL === oldParenL && eat(_arrow)) {
-          val = parseArrowExpression(startNode(), exprList);
-      } else {
-        // forbid '()' before everything but '=>'
-        if (!val) unexpected(lastStart);
-        // forbid '...' in sequence expressions
-        if (options.ecmaVersion >= 6) {
-          for (var i = 0; i < exprList.length; i++) {
-            if (exprList[i].type === "SpreadElement") unexpected();
+        var oldParenL = ++metParenL;
+        if (tokType !== _parenR) {
+          val = parseExpression();
+          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+        } else {
+          exprList = [];
+        }
+        expect(_parenR);
+        // if '=>' follows '(...)', convert contents to arguments
+        if (metParenL === oldParenL && eat(_arrow)) {
+          val = parseArrowExpression(startNodeAt(start), exprList);
+        } else {
+          // forbid '()' before everything but '=>'
+          if (!val) unexpected(lastStart);
+          // forbid '...' in sequence expressions
+          if (options.ecmaVersion >= 6) {
+            for (var i = 0; i < exprList.length; i++) {
+              if (exprList[i].type === "SpreadElement") unexpected();
+            }
+          }
+
+          if (options.preserveParens) {
+            var par = startNodeAt(start);
+            par.expression = val;
+            val = finishNode(par, "ParenthesizedExpression");
           }
         }
-      }
-      }
-      val.start = tokStart1;
-      val.end = lastEnd;
-      if (options.locations) {
-        val.loc.start = tokStartLoc1;
-        val.loc.end = lastEndLoc;
-      }
-      if (options.ranges) {
-        val.range = [tokStart1, lastEnd];
       }
       return val;
 
@@ -2417,7 +2459,8 @@
   function parseNew() {
     var node = startNode();
     next();
-    node.callee = parseSubscripts(parseExprAtom(), true);
+    var start = storeCurrentPos();
+    node.callee = parseSubscripts(parseExprAtom(), start, true);
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
     else node.arguments = empty;
     return finishNode(node, "NewExpression");
@@ -2446,7 +2489,7 @@
       elem.tail = false;
       next();
       node.quasis.push(finishNode(elem, "TemplateElement"));
-      if (eat(_bquote)) { // '`', end of template
+      if (tokType === _bquote) { // '`', end of template
         elem.tail = true;
         break;
       }
@@ -2454,9 +2497,12 @@
       expect(_dollarBraceL);
       node.expressions.push(parseExpression());
       inTemplate = true;
+      // hack to include previously skipped space
+      tokPos = tokEnd;
       expect(_braceR);
     }
     inTemplate = false;
+    next();
     return finishNode(node, "TemplateLiteral");
   }
 
@@ -2608,13 +2654,17 @@
         node.rest = toAssignable(parseExprAtom(), false, true);
         checkSpreadAssign(node.rest);
         expect(_parenR);
+        defaults.push(null);
         break;
       } else {
         node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent());
-        if (options.ecmaVersion >= 6 && tokType === _eq) {
-          next();
-          hasDefaults = true;
-          defaults.push(parseExpression(true));
+        if (options.ecmaVersion >= 6) {
+          if (eat(_eq)) {
+            hasDefaults = true;
+            defaults.push(parseExpression(true));
+          } else {
+            defaults.push(null);
+          }
         }
         if (!eat(_comma)) {
           expect(_parenR);
@@ -2964,10 +3014,11 @@
   // Parse JSX object.
 
   function parseXJSMemberExpression() {
+    var start = storeCurrentPos();
     var node = parseXJSIdentifier();
 
     while (eat(_dot)) {
-      var newNode = startNodeFrom(node);
+      var newNode = startNodeAt(start);
       newNode.object = node;
       newNode.property = parseXJSIdentifier();
       node = finishNode(newNode, "XJSMemberExpression");
@@ -3190,6 +3241,7 @@
 
   function parseXJSElement() {
     var node = startNode();
+
     var children = [];
 
     var origInXJSChild = inXJSChild;

@@ -151,7 +151,16 @@ object referring to that same position.
 - **directSourceFile**: Like `sourceFile`, but a `sourceFile` property
   will be added directly to the nodes, rather than the `loc` object.
 
+- **preserveParens**: If this option is `true`, parenthesized expressions
+  are represented by (non-standard) `ParenthesizedExpression` nodes
+  that have a single `expression` property containing the expression
+  inside parentheses.
+
 [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
+
+**parseExpressionAt**`(input, offset, options)` will parse a single
+expression in a string, and return its AST. It will not complain if
+there is more of the string left after the expression.
 
 **getLineInfo**`(input, offset)` can be used to get a `{line,
 column}` object for a given program string and character offset.
@@ -195,6 +204,21 @@ console.log(escodegen.generate(ast, {comment: true}));
 
 [escodegen]: https://github.com/Constellation/escodegen
 
+#### Using Acorn in an environment with a Content Security Policy
+
+Some contexts, such as Chrome Web Apps, disallow run-time code evaluation.
+Acorn uses `new Function` to generate fast functions that test whether
+a word is in a given set, and will trigger a security error when used
+in a context with such a
+[Content Security Policy](http://www.html5rocks.com/en/tutorials/security/content-security-policy/#eval-too)
+(see [#90](https://github.com/marijnh/acorn/issues/90) and
+[#123](https://github.com/marijnh/acorn/issues/123)).
+
+The `bin/without_eval` script can be used to generate a version of
+`acorn.js` that has the generated code inlined, and can thus run
+without evaluating anything. In versions of this library downloaded
+from NPM, this script will be available as `acorn_csp.js`.
+
 ### acorn_loose.js ###
 
 This file implements an error-tolerant parser. It exposes a single
@@ -206,7 +230,7 @@ but never raises an error, and will do its best to parse syntactically
 invalid code in as meaningful a way as it can. It'll insert identifier
 nodes with name `"✖"` as placeholders in places where it can't make
 sense of the input. Depends on `acorn.js`, because it uses the same
-tokenizer.
+tokenizer. The loose parser does not support ECMAScript 6 syntax yet.
 
 ### util/walk.js ###
 

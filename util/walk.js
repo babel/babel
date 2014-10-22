@@ -306,6 +306,8 @@
     c(node.body, st, "Expression");
   };
 
+  // NOTE: the stuff below is deprecated, and will be removed when 1.0 is released
+
   // A custom walker that keeps track of the scope chain and the
   // variables defined in it.
   function makeScope(prev, isCatch) {
