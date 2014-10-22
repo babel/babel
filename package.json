@@ -46,9 +46,9 @@
     "regenerator": "0.6.7",
     "chokidar": "0.10.0",
     "source-map-support": "0.2.7",
-    "ast-types": "0.5.3",
     "esutils": "1.1.4",
-    "acorn-jsx": "0.9.1-1"
+    "acorn-recast": "^0.8.0-2",
+    "acorn-ast-types": "^0.5.3-1"
   },
   "devDependencies": {
     "istanbul": "0.3.2",
