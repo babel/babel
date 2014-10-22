@@ -1,5 +1,18 @@
 "use strict";
 
+var _extends = function (child, parent) {
+  child.prototype = Object.create(parent.prototype, {
+    constructor: {
+      value: child,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+
+  child.__proto__ = parent;
+};
+
 var Test = function() {
   var Test = function Test() {
     this.state = "test";
@@ -13,15 +26,7 @@ var Foo = function(Bar) {
     this.state = "test";
   };
 
-  Foo.prototype = Object.create(Bar.prototype, {
-    constructor: {
-      value: Foo,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
+  _extends(Foo, Bar);
 
-  Foo.__proto__ = Bar;
   return Foo;
 }(Bar);

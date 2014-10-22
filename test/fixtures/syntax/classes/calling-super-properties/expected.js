@@ -1,21 +1,26 @@
 "use strict";
 
-var Test = function(Foo) {
-  var Test = function Test() {
-    Foo.prototype.test.whatever();
-    Foo.prototype.test.call(this);
-  };
-
-  Test.prototype = Object.create(Foo.prototype, {
+var _extends = function (child, parent) {
+  child.prototype = Object.create(parent.prototype, {
     constructor: {
-      value: Test,
+      value: child,
       enumerable: false,
       writable: true,
       configurable: true
     }
   });
 
-  Test.__proto__ = Foo;
+  child.__proto__ = parent;
+};
+
+
+var Test = function(Foo) {
+  var Test = function Test() {
+    Foo.prototype.test.whatever();
+    Foo.prototype.test.call(this);
+  };
+
+  _extends(Test, Foo);
 
   Object.defineProperties(Test, {
     test: {

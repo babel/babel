@@ -1,19 +1,24 @@
 "use strict";
 
-var Q = function(_ref) {
-  var Q = function Q() {
-    _ref.apply(this, arguments);
-  };
-
-  Q.prototype = Object.create(_ref.prototype, {
+var _extends = function (child, parent) {
+  child.prototype = Object.create(parent.prototype, {
     constructor: {
-      value: Q,
+      value: child,
       enumerable: false,
       writable: true,
       configurable: true
     }
   });
 
-  Q.__proto__ = _ref;
+  child.__proto__ = parent;
+};
+
+var Q = function(_ref) {
+  var Q = function Q() {
+    _ref.apply(this, arguments);
+  };
+
+  _extends(Q, _ref);
+
   return Q;
 }(function() {});

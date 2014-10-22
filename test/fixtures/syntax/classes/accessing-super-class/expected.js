@@ -1,5 +1,17 @@
 "use strict";
 var _slice = Array.prototype.slice;
+var _extends = function (child, parent) {
+  child.prototype = Object.create(parent.prototype, {
+    constructor: {
+      value: child,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+
+  child.__proto__ = parent;
+};
 
 var Test = function(Foo) {
   var Test = function Test() {
@@ -13,16 +25,7 @@ var Test = function(Foo) {
     Foo.prototype.test.call.apply(Foo.prototype, [this, "test"].concat(_slice.call(arguments)));
   };
 
-  Test.prototype = Object.create(Foo.prototype, {
-    constructor: {
-      value: Test,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-
-  Test.__proto__ = Foo;
+  _extends(Test, Foo);
 
   Object.defineProperties(Test.prototype, {
     test: {
