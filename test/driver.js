@@ -43,10 +43,9 @@
           else callback("ok", test.code);
         } else {
           var mis = misMatch(test.ast, ast);
+          if (!mis && test.comments) mis = misMatch(test.comments, comments);
           if (mis) callback("fail", test.code, mis);
-          if (test.comments) mis = misMatch(test.comments, comments);
-          if (!mis) callback("ok", test.code);
-          else callback("fail", test.code, mis);
+          else callback("ok", test.code);
         }
       } catch(e) {
         if (test.error && e instanceof SyntaxError) {
@@ -67,7 +66,7 @@
     return str + " (" + pt + ")";
   }
 
-  function misMatch(exp, act) {
+  var misMatch = exports.misMatch = function(exp, act) {
     if (!exp || !act || (typeof exp != "object") || (typeof act != "object")) {
       if (exp !== act) return ppJSON(exp) + " !== " + ppJSON(act);
     } else if (exp.splice) {
@@ -83,7 +82,7 @@
         if (mis) return addPath(mis, prop);
       }
     }
-  }
+  };
 
   function mangle(ast) {
     if (typeof ast != "object" || !ast) return;

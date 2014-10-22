@@ -1511,10 +1511,10 @@ test("e => ({ property: 42 })", {
             end: {line: 1, column: 20}
           }
         }],
-        range: [5, 23],
+        range: [6, 22],
         loc: {
-          start: {line: 1, column: 5},
-          end: {line: 1, column: 23}
+          start: {line: 1, column: 6},
+          end: {line: 1, column: 22}
         }
       },
       rest: null,
@@ -2330,10 +2330,10 @@ test("(x => x)", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 8],
+      range: [1, 7],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 8}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 7}
       }
     },
     range: [0, 8],
@@ -2500,19 +2500,19 @@ test("(x) => ((y, z) => (x, y, z))", {
               }
             }
           ],
-          range: [18, 27],
+          range: [19, 26],
           loc: {
-            start: {line: 1, column: 18},
-            end: {line: 1, column: 27}
+            start: {line: 1, column: 19},
+            end: {line: 1, column: 26}
           }
         },
         rest: null,
         generator: false,
         expression: true,
-        range: [7, 28],
+        range: [8, 27],
         loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 28}
+          start: {line: 1, column: 8},
+          end: {line: 1, column: 27}
         }
       },
       rest: null,
@@ -4268,10 +4268,10 @@ test("({ responseText: text }) = res", {
             end: {line: 1, column: 21}
           }
         }],
-        range: [0, 24],
+        range: [1, 23],
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 24}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 23}
         }
       },
       right: {
@@ -6115,10 +6115,10 @@ test("(function* () { yield v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [0, 26],
+      range: [1, 25],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 26}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 25}
       }
     },
     range: [0, 26],
@@ -6195,10 +6195,10 @@ test("(function* () { yield\nv })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [0, 26],
+      range: [1, 25],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 2, column: 4}
+        start: {line: 1, column: 1},
+        end: {line: 2, column: 3}
       }
     },
     range: [0, 26],
@@ -6264,10 +6264,10 @@ test("(function* () { yield *v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [0, 27],
+      range: [1, 26],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 27}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 26}
       }
     },
     range: [0, 27],
@@ -6572,10 +6572,10 @@ test("(function* () { yield yield 10 })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [0, 33],
+      range: [1, 32],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 33}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 32}
       }
     },
     range: [0, 33],
@@ -8138,10 +8138,10 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
             end: {line: 1, column: 50}
           }
         },
-        range: [14, 51],
+        range: [15, 50],
         loc: {
-          start: {line: 1, column: 14},
-          end: {line: 1, column: 51}
+          start: {line: 1, column: 15},
+          end: {line: 1, column: 50}
         }
       },
       range: [14, 51],
@@ -8482,10 +8482,10 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
             end: {line: 1, column: 58}
           }
         },
-        range: [14, 59],
+        range: [15, 58],
         loc: {
-          start: {line: 1, column: 14},
-          end: {line: 1, column: 59}
+          start: {line: 1, column: 15},
+          end: {line: 1, column: 58}
         }
       },
       range: [14, 59],
@@ -9437,10 +9437,10 @@ test("({[x]: 10})", {
           end: {line: 1, column: 9}
         }
       }],
-      range: [0, 11],
+      range: [1, 10],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 11}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 10}
       }
     },
     range: [0, 11],
@@ -9517,10 +9517,10 @@ test("({[\"x\" + \"y\"]: 10})", {
           end: {line: 1, column: 17}
         }
       }],
-      range: [0, 19],
+      range: [1, 18],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 19}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 18}
       }
     },
     range: [0, 19],
@@ -9590,10 +9590,10 @@ test("({[x]: function() {}})", {
           end: {line: 1, column: 20}
         }
       }],
-      range: [0, 22],
+      range: [1, 21],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 22}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 21}
       }
     },
     range: [0, 22],
@@ -9683,10 +9683,10 @@ test("({[x]: 10, y: 20})", {
           }
         }
       ],
-      range: [0, 18],
+      range: [1, 17],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 18}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 17}
       }
     },
     range: [0, 18],
@@ -9810,10 +9810,10 @@ test("({get [x]() {}, set [x](v) {}})", {
           }
         }
       ],
-      range: [0, 31],
+      range: [1, 30],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 31}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 30}
       }
     },
     range: [0, 31],
@@ -9883,10 +9883,10 @@ test("({[x]() {}})", {
           end: {line: 1, column: 10}
         }
       }],
-      range: [0, 12],
+      range: [1, 11],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 12}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 11}
       }
     },
     range: [0, 12],
@@ -10769,10 +10769,10 @@ test("({f: function({x} = {x: 10}) {}})", {
           end: {line: 1, column: 31}
         }
       }],
-      range: [0, 33],
+      range: [1, 32],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 33}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 32}
       }
     },
     range: [0, 33],
@@ -10917,10 +10917,10 @@ test("({f({x} = {x: 10}) {}})", {
           end: {line: 1, column: 21}
         }
       }],
-      range: [0, 23],
+      range: [1, 22],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 23}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 22}
       }
     },
     range: [0, 23],
@@ -11073,10 +11073,10 @@ test("(class {f({x} = {x: 10}) {}})", {
           end: {line: 1, column: 28}
         }
       },
-      range: [0, 29],
+      range: [1, 28],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 29}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 28}
       }
     },
     range: [0, 29],
@@ -11192,10 +11192,10 @@ test("(({x} = {x: 10}) => {})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 23],
+      range: [1, 22],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 23}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 22}
       }
     },
     range: [0, 23],
@@ -12267,10 +12267,10 @@ test("(function x([ a, b ]){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 24],
+      range: [1, 23],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 24}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 23}
       }
     },
     range: [0, 24],
@@ -12388,10 +12388,10 @@ test("(function x({ a, b }){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 24],
+      range: [1, 23],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 24}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 23}
       }
     },
     range: [0, 24],
@@ -12467,10 +12467,10 @@ test("(function x(...[ a, b ]){})", {
       },
       generator: false,
       expression: false,
-      range: [0, 27],
+      range: [1, 26],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 27}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 26}
       }
     },
     range: [0, 27],
@@ -12704,10 +12704,10 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
       },
       generator: false,
       expression: false,
-      range: [0, 56],
+      range: [1, 55],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 56}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 55}
       }
     },
     range: [0, 56],
@@ -12804,10 +12804,10 @@ test("({ x([ a, b ]){} })", {
           end: {line: 1, column: 16}
         }
       }],
-      range: [0, 19],
+      range: [1, 18],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 19}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 18}
       }
     },
     range: [0, 19],
@@ -12904,10 +12904,10 @@ test("({ x(...[ a, b ]){} })", {
           end: {line: 1, column: 19}
         }
       }],
-      range: [0, 22],
+      range: [1, 21],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 22}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 21}
       }
     },
     range: [0, 22],
@@ -13162,10 +13162,10 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
           end: {line: 1, column: 48}
         }
       }],
-      range: [0, 51],
+      range: [1, 50],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 51}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 50}
       }
     },
     range: [0, 51],
@@ -15086,10 +15086,10 @@ test("(function () { yield* 10 })", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 27],
+      range: [1, 26],
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 27}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 26}
       }
     },
     range: [0, 27],
@@ -15246,3 +15246,170 @@ testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)"
 testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
 
 testFail("({ get test() { } }) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
+
+/* Regression tests */
+
+// # https://github.com/marijnh/acorn/issues/127
+test('doSmth(`${x} + ${y} = ${x + y}`)', {
+  type: "Program",
+  start: 0,
+  end: 32,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 32,
+    expression: {
+      type: "CallExpression",
+      start: 0,
+      end: 32,
+      callee: {
+        type: "Identifier",
+        start: 0,
+        end: 6,
+        name: "doSmth"
+      },
+      arguments: [{
+        type: "TemplateLiteral",
+        start: 7,
+        end: 31,
+        expressions: [
+          {
+            type: "Identifier",
+            start: 10,
+            end: 11,
+            name: "x"
+          },
+          {
+            type: "Identifier",
+            start: 17,
+            end: 18,
+            name: "y"
+          },
+          {
+            type: "BinaryExpression",
+            start: 24,
+            end: 29,
+            left: {
+              type: "Identifier",
+              start: 24,
+              end: 25,
+              name: "x"
+            },
+            operator: "+",
+            right: {
+              type: "Identifier",
+              start: 28,
+              end: 29,
+              name: "y"
+            }
+          }
+        ],
+        quasis: [
+          {
+            type: "TemplateElement",
+            start: 8,
+            end: 8,
+            value: {cooked: "", raw: ""},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 12,
+            end: 15,
+            value: {cooked: " + ", raw: " + "},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 19,
+            end: 22,
+            value: {cooked: " = ", raw: " = "},
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            start: 30,
+            end: 30,
+            value: {cooked: "", raw: ""},
+            tail: true
+          }
+        ]
+      }]
+    }
+  }]
+}, {ecmaVersion: 6});
+
+// # https://github.com/marijnh/acorn/issues/129
+test('function normal(x, y = 10) {}', {
+  type: "Program",
+  start: 0,
+  end: 29,
+  body: [{
+    type: "FunctionDeclaration",
+    start: 0,
+    end: 29,
+    id: {
+      type: "Identifier",
+      start: 9,
+      end: 15,
+      name: "normal"
+    },
+    params: [
+      {
+        type: "Identifier",
+        start: 16,
+        end: 17,
+        name: "x"
+      },
+      {
+        type: "Identifier",
+        start: 19,
+        end: 20,
+        name: "y"
+      }
+    ],
+    defaults: [
+      null,
+      {
+        type: "Literal",
+        start: 23,
+        end: 25,
+        value: 10,
+        raw: "10"
+      }
+    ],
+    rest: null,
+    generator: false,
+    body: {
+      type: "BlockStatement",
+      start: 27,
+      end: 29,
+      body: []
+    },
+    expression: false
+  }]
+}, {ecmaVersion: 6});
+
+test("'use strict'; function f([x,,z]) {}", {}, {ecmaVersion: 6});
+
+// test preserveParens option with arrow functions
+test("() => 42", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ArrowFunctionExpression"
+    }
+  }]
+}, {ecmaVersion: 6, preserveParens: true});
+
+// test preserveParens with generators
+test("(for (x of array) for (y of array2) if (x === test) x)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "ComprehensionExpression"
+    }
+  }]
+}, {ecmaVersion: 6, preserveParens: true});

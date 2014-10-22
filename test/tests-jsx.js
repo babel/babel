@@ -2029,10 +2029,10 @@ var fbTestFixture = {
           },
           closingElement: null,
           children: [],
-          range: [0, 9],
+          range: [1, 8],
           loc: {
-            start: { line: 1, column: 0 },
-            end: { line: 1, column: 9 }
+            start: { line: 1, column: 1 },
+            end: { line: 1, column: 8 }
           }
         },
         right: {
