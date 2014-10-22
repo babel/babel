@@ -108,3 +108,31 @@ export function bar() {
   }
 });
 ```
+
+## Custom
+
+```javascript
+module.exports = ModuleFormatter;
+
+function ModuleFormatter() {
+
+}
+
+ModuleFormatter.prototype.import = function (node, nodes) {
+  // node is an ImportDeclaration
+};
+
+ModuleFormatter.prototype.importSpecifier = function (specifier, node, nodes) {
+  // specifier is an ImportSpecifier
+  // node is an ImportDeclaration
+};
+
+ModuleFormatter.prototype.export = function (node, nodes) {
+  // node is an ExportDeclaration
+};
+
+ModuleFormatter.prototype.exportSpecifier = function (specifier, node, nodes) {
+  // specifier is an ExportSpecifier
+  // node is an ExportDeclaration
+};
+```
