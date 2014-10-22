@@ -111,12 +111,19 @@ export function bar() {
 
 ## Custom
 
+You can alternatively specify module names instead of one of the built-in types.
+
 ```javascript
 module.exports = ModuleFormatter;
 
 function ModuleFormatter() {
 
 }
+
+ModuleFormatter.prototype.transform = function (ast) {
+  // this is ran after all transformers have had their turn at modifying the ast
+  // feel free to modify this however
+};
 
 ModuleFormatter.prototype.import = function (node, nodes) {
   // node is an ImportDeclaration
