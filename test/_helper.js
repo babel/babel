@@ -1,7 +1,7 @@
 var fs = require("fs");
 var _  = require("lodash");
 
-var fixturesDir = __dirname + "/fixtures/syntax";
+var fixturesDir = __dirname + "/fixtures/transformation";
 
 var humanise = function (val) {
   return val.replace(/-/g, " ");
@@ -17,7 +17,7 @@ var readFile = function (filename) {
 
 exports.run = function (suites, transform, assert) {
   _.each(suites, function (testSuite) {
-    suite("syntax/" + testSuite.title, function () {
+    suite("transformation/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, function () {
           var run = function () {
