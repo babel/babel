@@ -959,14 +959,36 @@
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     var mods = readWord1();
-    if (mods && !/^[gmsiy]*$/.test(mods)) raise(start, "Invalid regular expression flag");
+    var tmp = content;
+    if (mods) {
+      var validFlags = /^[gmsiy]*$/;
+      if (options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
+      if (!validFlags.test(mods)) raise(start, "Invalid regular expression flag");
+      if (mods.indexOf('u') >= 0) {
+        // Replace each astral symbol and every Unicode code point
+        // escape sequence that represents such a symbol with a single
+        // ASCII symbol to avoid throwing on regular expressions that
+        // are only valid in combination with the `/u` flag.
+        tmp = tmp
+          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, 'x')
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+      }
+    }
+    // Detect invalid regular expressions.
     try {
-      var value = new RegExp(content, mods);
+      new RegExp(tmp);
     } catch (e) {
       if (e instanceof SyntaxError) raise(start, "Error parsing regular expression: " + e.message);
       raise(e);
     }
-    return finishToken(_regexp, value);
+    // Get a regular expression object for this pattern-flag pair, or `null` in
+    // case the current environment doesn't support the flags it uses.
+    try {
+      var value = new RegExp(content, mods);
+    } catch (err) {
+      value = null;
+    }
+    return finishToken(_regexp, {pattern: content, flags: mods, value: value});
   }
 
   // Read an integer in the given radix. Return null if zero digits
@@ -2362,7 +2384,15 @@
       }
       return id;
       
-    case _num: case _string: case _regexp: case _xjsText:
+    case _regexp:
+      var node = startNode();
+      node.regex = {pattern: tokVal.pattern, flags: tokVal.flags};
+      node.value = tokVal.value;
+      node.raw = input.slice(tokStart, tokEnd);
+      next();
+      return finishNode(node, "Literal");
+
+    case _num: case _string: case _xjsText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);

@@ -14792,6 +14792,35 @@ test("func(...a, b)", {
   locations: true
 });
 
+test("/[a-z]/u", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {
+          pattern: "[a-z]",
+          flags: "u"
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 8
+          }
+        }
+      }
+    }
+  ]
+}, {
+  locations: true,
+  ecmaVersion: 6
+});
+
 // Harmony Invalid syntax
 
 testFail("0o", "Expected number in radix 8 (1:2)", {ecmaVersion: 6});
