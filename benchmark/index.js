@@ -140,9 +140,9 @@ var sizeBenchmark = function (code, loc, name, compiler) {
   });
   if (!output) return;
 
-  go(function () {
-    return uglify.minify(output, { fromString: true }).code;
-  }, uglifyTitle);
+  //go(function () {
+  //  return uglify.minify(output, { fromString: true }).code;
+  //}, uglifyTitle);
 };
 
 //
