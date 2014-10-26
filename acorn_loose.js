@@ -498,13 +498,12 @@
   function parseVar(node, noIn) {
     node.declarations = [];
     node.kind = "var";
-    while (token.type === tt.name) {
+    do {
       var decl = startNode();
-      decl.id = parseIdent();
+      decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
       decl.init = eat(tt.eq) ? parseExpression(true, noIn) : null;
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
-      if (!eat(tt.comma)) break;
-    }
+    } while (eat(tt.comma));
     if (!node.declarations.length) {
       var decl = startNode();
       decl.id = dummyIdent();
@@ -541,7 +540,7 @@
     if (token.type.isAssign) {
       var node = startNodeAt(start);
       node.operator = token.value;
-      node.left = checkLVal(left);
+      node.left = token.type === tt.eq ? toAssignable(left) : checkLVal(left);
       next();
       node.right = parseMaybeAssign(noIn);
       return finishNode(node, "AssignmentExpression");
@@ -821,7 +820,7 @@
           break;
       }
     }
-    return node;
+    return checkLVal(node);
   }
 
   function parseFunctionParams(node) {
