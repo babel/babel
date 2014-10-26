@@ -56,7 +56,7 @@
           else callback("fail", test.code,
                         "Expected error message: " + test.error + "\nGot error message: " + e.message);
         } else {
-          callback("error", test.code, e.message || e.toString());
+          callback("error", test.code, !(e instanceof SyntaxError) && e.stack || e.message || e.toString());
         }
       }
     }
