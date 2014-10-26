@@ -1949,11 +1949,14 @@
 
   function parseMaybeUnary() {
     if (tokType.prefix) {
-      var node = startNode(), update = tokType.isUpdate;
-      var nodeType = tokType === _ellipsis ? "SpreadElement" :
-        (update ? "UpdateExpression" : "UnaryExpression");
-      node.operator = tokVal;
-      node.prefix = true;
+      var node = startNode(), update = tokType.isUpdate, nodeType;
+      if (tokType === _ellipsis) {
+        nodeType = "SpreadElement";
+      } else {
+        nodeType = update ? "UpdateExpression" : "UnaryExpression";
+        node.operator = tokVal;
+        node.prefix = true;
+      }
       tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
