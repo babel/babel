@@ -28666,55 +28666,35 @@ testFail("for(x of a);", "Unexpected token (1:6)");
 testFail("for(var x of a);", "Unexpected token (1:10)");
 
 // Assertion Tests
-(function() {
-  var actualComments = [],
-      expectedComments = [
-        " Bear class",
-        " Whatever",
-        [" 1",
-         "         2",
-         "         3"
-        ].join('\n'),
-        "stuff"
-      ];
-  testAssert(
-    function TestComments() {
-      // Bear class
-      function Bear(x,y,z) {
-        this.position = [x||0,y||0,z||0]
-      }
-
-      Bear.prototype.roar = function(message) {
-        return 'RAWWW: ' + message; // Whatever
-      };
-
-      function Cat() {
-      /* 1
-         2
-         3*/
-      }
-
-      Cat.prototype.roar = function(message) {
-        return 'MEOOWW: ' + /*stuff*/ message;
-      };
-    }.toString().replace(/\r\n/g, '\n'),
-    function assert(ast) {
-      if (actualComments.length !== expectedComments.length) {
-        return JSON.stringify(actualComments) + " !== " + JSON.stringify(expectedComments);
-      } else {
-        for (var i=0, n=actualComments.length; i < n; i++) {
-          if (actualComments[i] !== expectedComments[i])
-            return JSON.stringify(actualComments[i]) + ' !== ' + JSON.stringify(expectedComments[i]);
-        }
-      }
-    },
-    {
-      onComment: function(isMultiline, text) {
-        actualComments.push(text);
-      }
+test(function TestComments() {
+    // Bear class
+    function Bear(x,y,z) {
+      this.position = [x||0,y||0,z||0]
     }
-  );
-})();
+
+    Bear.prototype.roar = function(message) {
+      return 'RAWWW: ' + message; // Whatever
+    };
+
+    function Cat() {
+    /* 1
+       2
+       3*/
+    }
+
+    Cat.prototype.roar = function(message) {
+      return 'MEOOWW: ' + /*stuff*/ message;
+    };
+}.toString().replace(/\r\n/g, '\n'), {}, {}, [
+  {block: false, text: " Bear class"},
+  {block: false, text: " Whatever"},
+  {block: true,  text: [
+          " 1",
+    "       2",
+    "       3"
+  ].join('\n')},
+  {block: true, text: "stuff"}
+]);
 
 test("<!--\n;", {
   type: "Program",

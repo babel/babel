@@ -32,10 +32,8 @@
       try {
         comments = [];
         var testOpts = test.options || opts;
-        var oldOnComment = testOpts.onComment;
-        if (!oldOnComment) testOpts.onComment = onComment;
+        testOpts.onComment = onComment;
         var ast = parse(test.code, testOpts);
-        testOpts.onComment = oldOnComment;
         if (test.error) {
           if (config.loose) {
             callback("ok", test.code);
