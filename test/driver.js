@@ -15,14 +15,14 @@
     var comments;
 
     function onComment(block, text, start, end, startLoc, endLoc) {
-        comments.push({
-          block: block,
-          text: text,
-          start: start,
-          end: end,
-          startLoc: { line: startLoc.line, column: startLoc.column },
-          endLoc: { line: endLoc.line, column: endLoc.column }
-        });
+      comments.push({
+        block: block,
+        text: text,
+        start: start,
+        end: end,
+        startLoc: { line: startLoc.line, column: startLoc.column },
+        endLoc: { line: endLoc.line, column: endLoc.column }
+      });
     }
 
     var opts = {locations: true, onComment: onComment};
@@ -32,7 +32,7 @@
       try {
         comments = [];
         if (test.options && !test.options.onComment) test.options.onComment = onComment;
-        var ast = parse(test.code, test.options || opts);
+        var ast = acorn.parse(test.code, test.options || opts);
         if (test.error) callback("fail", test.code,
                                  "Expected error message: " + test.error + "\nBut parsing succeeded.");
         else if (test.assert) {
