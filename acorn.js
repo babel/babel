@@ -137,7 +137,7 @@
   function setOptions(opts) {
     options = {};
     for (var opt in defaultOptions)
-      options[opt] = has(opts, opt) ? opts[opt] : defaultOptions[opt];
+      options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt];
     sourceFile = options.sourceFile || null;
     if (isArray(options.onToken)) {
       var tokens = options.onToken;
