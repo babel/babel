@@ -11,7 +11,8 @@
     tests.push({code: code, assert: assert, options: options});
   };
 
-  exports.runTests = function(parse, callback) {
+  exports.runTests = function(config) {
+    var parse = config.parse, callback = config.callback;
     var comments;
 
     function onComment(block, text, start, end, startLoc, endLoc) {
@@ -32,9 +33,14 @@
       try {
         comments = [];
         if (test.options && !test.options.onComment) test.options.onComment = onComment;
-        var ast = acorn.parse(test.code, test.options || opts);
-        if (test.error) callback("fail", test.code,
-                                 "Expected error message: " + test.error + "\nBut parsing succeeded.");
+        var ast = parse(test.code, test.options || opts);
+        if (test.error) {
+          if (config.loose) {
+            callback("ok", test.code);
+          } else {
+            callback("fail", test.code, "Expected error message: " + test.error + "\nBut parsing succeeded.");
+          }
+        }
         else if (test.assert) {
           var error = test.assert(ast);
           if (error) callback("fail", test.code,

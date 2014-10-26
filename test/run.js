@@ -9,8 +9,12 @@ function report(state, code, message) {
 }
 
 var t0 = +new Date;
-var acorn = typeof require == "undefined" ? window.acorn : require("../acorn.js");
-driver.runTests(acorn.parse, report);
+
+var parse = (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse;
+var parse_dammit = (typeof require === "undefined") ? window.acorn_loose : require("../acorn_loose").parse_dammit;
+
+driver.runTests({parse: parse, callback: report});
+driver.runTests({parse: parse_dammit, loose: true, callback: report});
 console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
 
 if (failed) {
