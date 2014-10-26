@@ -46,8 +46,6 @@
     if (!opts) opts = {};
     input = String(inpt);
     if (/^#!.*/.test(input)) input = "//" + input.slice(2);
-
-    if (!opts.tabSize) opts.tabSize = 4;
     fetchToken = acorn.tokenize(input, opts);
     options = fetchToken.options;
     sourceFile = options.sourceFile || null;
