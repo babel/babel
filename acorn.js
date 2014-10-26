@@ -1433,7 +1433,7 @@
   // strict mode, init properties are also not allowed to be repeated.
 
   function checkPropClash(prop, propHash) {
-    if (prop.computed) return;
+    if (options.ecmaVersion >= 6) return;
     var key = prop.key, name;
     switch (key.type) {
       case "Identifier": name = key.name; break;
@@ -2389,7 +2389,7 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
-    var classBody = startNode(), methodHash = {}, staticMethodHash = {};
+    var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -2411,7 +2411,6 @@
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, method['static'] ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }

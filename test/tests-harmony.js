@@ -9386,17 +9386,156 @@ test("class A { set foo(v) {} get foo() {} }", {
   locations: true
 });
 
-testFail("class A { get foo() {} get foo() {} }", "Redefinition of property (1:27)", {ecmaVersion: 6});
-
-testFail("class A { set foo(v) {} set foo(v) {} }", "Redefinition of property (1:28)", {ecmaVersion: 6});
-
-testFail("class A { get foo() {} foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
-
-testFail("class A { foo() {} get foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
-
-testFail("class A { set foo(v) {} foo() {} }", "Redefinition of property (1:24)", {ecmaVersion: 6});
-
-testFail("class A { foo() {} set foo(v) {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
+test("class A { foo() {} get foo() {} }",{
+  type: "Program",
+  start: 0,
+  end: 33,
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 33}
+  },
+  range: [0, 33],
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 33,
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 33}
+    },
+    range: [0, 33],
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 7,
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 8,
+      end: 33,
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 33}
+      },
+      range: [8, 33],
+      body: [
+        {
+          type: "MethodDefinition",
+          start: 10,
+          end: 18,
+          loc: {
+            start: {line: 1, column: 10},
+            end: {line: 1, column: 18}
+          },
+          range: [10, 18],
+          static: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            start: 10,
+            end: 13,
+            loc: {
+              start: {line: 1, column: 10},
+              end: {line: 1, column: 13}
+            },
+            range: [10, 13],
+            name: "foo"
+          },
+          kind: "",
+          value: {
+            type: "FunctionExpression",
+            start: 13,
+            end: 18,
+            loc: {
+              start: {line: 1, column: 13},
+              end: {line: 1, column: 18}
+            },
+            range: [13, 18],
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            body: {
+              type: "BlockStatement",
+              start: 16,
+              end: 18,
+              loc: {
+                start: {line: 1, column: 16},
+                end: {line: 1, column: 18}
+              },
+              range: [16, 18],
+              body: []
+            },
+            expression: false
+          }
+        },
+        {
+          type: "MethodDefinition",
+          start: 19,
+          end: 31,
+          loc: {
+            start: {line: 1, column: 19},
+            end: {line: 1, column: 31}
+          },
+          range: [19, 31],
+          static: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            start: 23,
+            end: 26,
+            loc: {
+              start: {line: 1, column: 23},
+              end: {line: 1, column: 26}
+            },
+            range: [23, 26],
+            name: "foo"
+          },
+          kind: "get",
+          value: {
+            type: "FunctionExpression",
+            start: 26,
+            end: 31,
+            loc: {
+              start: {line: 1, column: 26},
+              end: {line: 1, column: 31}
+            },
+            range: [26, 31],
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            body: {
+              type: "BlockStatement",
+              start: 29,
+              end: 31,
+              loc: {
+                start: {line: 1, column: 29},
+                end: {line: 1, column: 31}
+              },
+              range: [29, 31],
+              body: []
+            },
+            expression: false
+          }
+        }
+      ]
+    }
+  }]
+},{
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Computed Properties
 
