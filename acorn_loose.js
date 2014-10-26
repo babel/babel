@@ -852,18 +852,20 @@
     pushCx();
     var params = parseExprList(tt.parenR);
     for (var i = 0; i < params.length; i++) {
-      var param = toAssignable(params[i]), defValue = null;
+      var param = params[i], defValue = null;
+      if (param.type === "AssignmentExpression") {
+        defValue = param.right;
+        param = param.left;
+      }
+      param = toAssignable(param);
       if (param.type === "SpreadElement") {
         param = param.argument;
         if (i === params.length - 1) {
           node.rest = param;
           continue;
         }
-      } else if (param.type === "AssignmentExpression") {
-        defValue = param.right;
-        param = param.left;
       }
-      node.params.push(checkLVal(param));
+      node.params.push(param);
       defaults.push(defValue);
       if (defValue) hasDefaults = true;
     }
