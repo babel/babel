@@ -32,8 +32,9 @@
       var test = tests[i];
       try {
         comments = [];
-        if (test.options && !test.options.onComment) test.options.onComment = onComment;
-        var ast = parse(test.code, test.options || opts);
+        var testOpts = JSON.parse(JSON.stringify(test.options || opts));
+        if (!testOpts.onComment) testOpts.onComment = onComment;
+        var ast = parse(test.code, testOpts);
         if (test.error) {
           if (config.loose) {
             callback("ok", test.code);
