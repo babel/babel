@@ -335,10 +335,8 @@
       pushCx();
       expect(tt.parenL);
       if (token.type === tt.semi) return parseFor(node, null);
-      if (token.type === tt._var) {
-        var init = startNode();
-        next();
-        parseVar(init, true);
+      if (token.type === tt._var || token.type === tt._let) {
+        var init = parseVar(true);
         if (init.declarations.length === 1 && eat(tt._in))
           return parseForIn(node, init);
         return parseFor(node, init);
@@ -421,9 +419,9 @@
       return finishNode(node, "TryStatement");
 
     case tt._var:
-      next();
-      node = parseVar(node);
-      return node;
+    case tt._let:
+    case tt._const:
+      return parseVar();
 
     case tt._while:
       next();
@@ -495,9 +493,11 @@
     return finishNode(node, "ForInStatement");
   }
 
-  function parseVar(node, noIn) {
+  function parseVar(noIn) {
+    var node = startNode();
+    node.kind = token.type.keyword;
+    next();
     node.declarations = [];
-    node.kind = "var";
     do {
       var decl = startNode();
       decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
@@ -803,7 +803,7 @@
           node.type = "ObjectPattern";
           var props = node.properties;
           for (var i = 0; i < props.length; i++) {
-            toAssignable(props[i].value);
+            props[i].value = toAssignable(props[i].value);
           }
           break;
 
@@ -811,12 +811,12 @@
           node.type = "ArrayPattern";
           var elms = node.elements;
           for (var i = 0; i < elms.length; i++) {
-            toAssignable(elms[i]);
+            elms[i] = toAssignable(elms[i]);
           }
           break;
 
         case "SpreadElement":
-          toAssignable(node.argument);
+          node.argument = toAssignable(node.argument);
           break;
       }
     }
