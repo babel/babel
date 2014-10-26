@@ -234,6 +234,7 @@
       tokRegexpAllowed = reAllowed;
       skipSpace();
     };
+    getToken.options = options;
     return getToken;
   };
 

@@ -40,14 +40,16 @@
 
   var options, input, fetchToken, context;
 
+  acorn.defaultOptions.tabSize = 4;
+
   exports.parse_dammit = function(inpt, opts) {
     if (!opts) opts = {};
     input = String(inpt);
     if (/^#!.*/.test(input)) input = "//" + input.slice(2);
 
-    options = opts;
     if (!opts.tabSize) opts.tabSize = 4;
     fetchToken = acorn.tokenize(input, opts);
+    options = fetchToken.options;
     sourceFile = options.sourceFile || null;
     context = [];
     nextLineStart = 0;
@@ -750,18 +752,22 @@
         isGenerator = eat(tt.star);
       }
       parsePropertyName(prop);
-      if (!prop.key) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
+      if (isDummy(prop.key)) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       if (eat(tt.colon)) {
-        prop.value = parseExpression(true);
         prop.kind = "init";
+        prop.value = parseExpression(true);
+      } else if (options.ecmaVersion >= 6 && (token.type === tt.parenL || token.type === tt.braceL)) {
+        prop.kind = "init";
+        prop.method = true;
+        prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         prop.kind = prop.key.name;
-        prop.key = parsePropertyName() || dummyIdent();
-        prop.value = parseFunction(startNode(), false);
+        parsePropertyName(prop);
+        prop.value = parseMethod(false);
       } else {
-        prop.value = options.ecmaVersion >= 6 ? prop.key : dummyIdent();
         prop.kind = "init";
+        prop.value = options.ecmaVersion >= 6 ? prop.key : dummyIdent();
         prop.shorthand = true;
       }
 
@@ -784,7 +790,8 @@
         prop.computed = false;
       }
     }
-    prop.key = (token.type === tt.num || token.type === tt.string) ? parseExprAtom() : parseIdent();
+    var key = (token.type === tt.num || token.type === tt.string) ? parseExprAtom() : parseIdent();
+    prop.key = key || dummyIdent();
   }
 
   function parsePropertyAccessor() {
@@ -874,6 +881,16 @@
     parseFunctionParams(node);
     node.body = parseBlock();
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
+  }
+
+  function parseMethod(isGenerator) {
+    var node = startNode();
+    initFunction(node);
+    parseFunctionParams(node);
+    node.generator = isGenerator;
+    node.expression = options.ecmaVersion >= 6 && token.type !== tt.braceL;
+    node.body = node.expression ? parseExpression(true) : parseBlock();
+    return finishNode(node, "FunctionExpression");
   }
 
   function parseExprList(close, allowEmpty) {
