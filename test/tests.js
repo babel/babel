@@ -28685,152 +28685,152 @@ test(function TestComments() {
     Cat.prototype.roar = function(message) {
       return 'MEOOWW: ' + /*stuff*/ message;
     };
-}.toString().replace(/\r\n/g, '\n'), {}, {}, [
-  {block: false, text: " Bear class"},
-  {block: false, text: " Whatever"},
-  {block: true,  text: [
-          " 1",
-    "       2",
-    "       3"
-  ].join('\n')},
-  {block: true, text: "stuff"}
-]);
+}.toString().replace(/\r\n/g, '\n'), {}, {
+  onComment: [
+    {type: "Line", value: " Bear class"},
+    {type: "Line", value: " Whatever"},
+    {type: "Block",  value: [
+            " 1",
+      "       2",
+      "       3"
+    ].join('\n')},
+    {type: "Block", value: "stuff"}
+  ]
+});
 
 test("<!--\n;", {
   type: "Program",
-  body: [
-    {
-      type: "EmptyStatement"
+  body: [{
+    type: "EmptyStatement"
+  }]
+});
+
+test("\nfunction plop() {\n'use strict';\n/* Comment */\n}", {}, {
+  locations: true,
+  onComment: [{
+    type: "Block",
+    value: " Comment ",
+    loc: {
+      start: { line: 4, column: 0 },
+      end: { line: 4, column: 13 }
     }
-  ]
-}
-);
+  }]
+});
 
-(function() {
-  test("\nfunction plop() {\n'use strict';\n/* Comment */\n}", {}, {locations: true},
-  [{
-    block: true,
-    text: " Comment ",
-    startLoc: { line: 4, column: 0 },
-    endLoc: { line: 4, column: 13 }
-  }]);
+test("// line comment", {}, {
+  locations: true,
+  onComment: [{
+    type: "Line",
+    value: " line comment",
+    loc: {
+      start: { line: 1, column: 0 },
+      end: { line: 1, column: 15 }
+    }
+  }]
+});
 
-  test("// line comment", {}, {locations: true},
-  [{
-    block: false,
-    text: " line comment",
-    startLoc: { line: 1, column: 0 },
-    endLoc: { line: 1, column: 15 }
-  }]);
+test("<!-- HTML comment", {}, {
+  locations: true,
+  onComment: [{
+    type: "Line",
+    value: " HTML comment",
+    loc: {
+      start: { line: 1, column: 0 },
+      end: { line: 1, column: 17 }
+    }
+  }]
+});
 
-  test("<!-- HTML comment", {}, {locations: true},
-  [{
-    block: false,
-    text: " HTML comment",
-    startLoc: { line: 1, column: 0 },
-    endLoc: { line: 1, column: 17 }
-  }]);
+test(";\n--> HTML comment", {}, {
+  locations: true,
+  onComment: [{
+    type: "Line",
+    value: " HTML comment",
+    loc: {
+      start: { line: 2, column: 0 },
+      end: { line: 2, column: 16 }
+    }
+  }]
+});
 
-  test(";\n--> HTML comment", {}, {locations: true},
-  [{
-    block: false,
-    text: " HTML comment",
-    startLoc: { line: 2, column: 0 },
-    endLoc: { line: 2, column: 16 }
-  }]);
-})();
+var tokTypes = acorn.tokTypes;
 
-(function() {
-  var tokTypes = acorn.tokTypes;
-
-  var actualTokens = [],
-      expectedTokens = [
-        {
-          type: tokTypes._var,
-          value: "var",
-          loc: {
-            start: {line: 1, column: 0},
-            end: {line: 1, column: 3}
-          }
-        },
-        {
-          type: tokTypes.name,
-          value: "x",
-          loc: {
-            start: {line: 1, column: 4},
-            end: {line: 1, column: 5}
-          }
-        },
-        {
-          type: tokTypes.eq,
-          value: "=",
-          loc: {
-            start: {line: 1, column: 6},
-            end: {line: 1, column: 7}
-          }
-        },
-        {
-          type: tokTypes.parenL,
-          value: undefined,
-          loc: {
-            start: {line: 1, column: 8},
-            end: {line: 1, column: 9}
-          }
-        },
-        {
-          type: tokTypes.num,
-          value: 1,
-          loc: {
-            start: {line: 1, column: 9},
-            end: {line: 1, column: 10}
-          }
-        },
-        {
-          type: {binop: 9, prefix: true, beforeExpr: true},
-          value: "+",
-          loc: {
-            start: {line: 1, column: 11},
-            end: {line: 1, column: 12}
-          }
-        },
-        {
-          type: tokTypes.num,
-          value: 2,
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 14}
-          }
-        },
-        {
-          type: tokTypes.parenR,
-          value: undefined,
-          loc: {
-            start: {line: 1, column: 14},
-            end: {line: 1, column: 15}
-          }
-        },
-        {
-          type: tokTypes.eof,
-          value: undefined,
-          loc: {
-            start: {line: 1, column: 15},
-            end: {line: 1, column: 15}
-          }
-        }
-      ];
-  testAssert('var x = (1 + 2)', function assert(ast) {
-    if (actualTokens.length !== expectedTokens.length) {
-      return "Bad token stream length: expected " + expectedTokens.length + ", got " + actualTokens.length;
-    } else {
-      for (var i=0, n=actualTokens.length; i < n; i++) {
-        var mis = misMatch(expectedTokens[i], actualTokens[i]);
-        if (mis) return mis;
+test('var x = (1 + 2)', {}, {
+  locations: true,
+  onToken: [
+    {
+      type: tokTypes._var,
+      value: "var",
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 3}
+      }
+    },
+    {
+      type: tokTypes.name,
+      value: "x",
+      loc: {
+        start: {line: 1, column: 4},
+        end: {line: 1, column: 5}
+      }
+    },
+    {
+      type: tokTypes.eq,
+      value: "=",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      }
+    },
+    {
+      type: tokTypes.parenL,
+      value: undefined,
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 9}
+      }
+    },
+    {
+      type: tokTypes.num,
+      value: 1,
+      loc: {
+        start: {line: 1, column: 9},
+        end: {line: 1, column: 10}
+      }
+    },
+    {
+      type: {binop: 9, prefix: true, beforeExpr: true},
+      value: "+",
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 12}
+      }
+    },
+    {
+      type: tokTypes.num,
+      value: 2,
+      loc: {
+        start: {line: 1, column: 13},
+        end: {line: 1, column: 14}
+      }
+    },
+    {
+      type: tokTypes.parenR,
+      value: undefined,
+      loc: {
+        start: {line: 1, column: 14},
+        end: {line: 1, column: 15}
+      }
+    },
+    {
+      type: tokTypes.eof,
+      value: undefined,
+      loc: {
+        start: {line: 1, column: 15},
+        end: {line: 1, column: 15}
       }
     }
-  }, {
-    locations: true,
-    onToken: actualTokens
-  });
-})();
+  ]
+});
 
 test("function f(f) { 'use strict'; }", {});

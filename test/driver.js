@@ -1,8 +1,8 @@
 (function(exports) {
   var tests = [];
 
-  exports.test = function(code, ast, options, comments) {
-    tests.push({code: code, ast: ast, options: options, comments: comments});
+  exports.test = function(code, ast, options) {
+    tests.push({code: code, ast: ast, options: options});
   };
   exports.testFail = function(code, message, options) {
     tests.push({code: code, error: message, options: options});
@@ -12,27 +12,19 @@
   };
 
   exports.runTests = function(config, callback) {
-    var parse = config.parse, comments;
-
-    function onComment(block, text, start, end, startLoc, endLoc) {
-      comments.push({
-        block: block,
-        text: text,
-        start: start,
-        end: end,
-        startLoc: { line: startLoc.line, column: startLoc.column },
-        endLoc: { line: endLoc.line, column: endLoc.column }
-      });
-    }
-
-    var opts = {locations: true, onComment: onComment};
+    var parse = config.parse;
 
     for (var i = 0; i < tests.length; ++i) {
       var test = tests[i];
       try {
-        comments = [];
-        var testOpts = test.options || opts;
-        testOpts.onComment = onComment;
+        var testOpts = test.options || {locations: true};
+        var expected = {};
+        if (expected.onComment = testOpts.onComment) {
+          testOpts.onComment = []
+        }
+        if (expected.onToken = testOpts.onToken) {
+          testOpts.onToken = [];
+        }
         var ast = parse(test.code, testOpts);
         if (test.error) {
           if (config.loose) {
@@ -48,7 +40,13 @@
           else callback("ok", test.code);
         } else {
           var mis = misMatch(test.ast, ast);
-          if (!mis && test.comments) mis = misMatch(test.comments, comments);
+          for (var name in expected) {
+            if (mis) break;
+            if (expected[name]) {
+              mis = misMatch(expected[name], testOpts[name]);
+              testOpts[name] = expected[name];
+            }
+          }
           if (mis) callback("fail", test.code, mis);
           else callback("ok", test.code);
         }
