@@ -256,6 +256,8 @@
     if (token.type === type) {
       next();
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -759,19 +761,79 @@
     return finishNode(node, "Identifier");
   }
 
+  function initFunction(node) {
+    node.id = null;
+    node.params = [];
+    if (options.ecmaVersion >= 6) {
+      node.defaults = [];
+      node.rest = null;
+      node.generator = false;
+      node.expression = false;
+    }
+  }
+
+  // Convert existing expression atom to assignable pattern
+  // if possible.
+
+  function toAssignable(node) {
+    if (options.ecmaVersion >= 6 && node) {
+      switch (node.type) {
+        case "ObjectExpression":
+          node.type = "ObjectPattern";
+          var props = node.properties;
+          for (var i = 0; i < props.length; i++) {
+            toAssignable(props[i].value);
+          }
+          break;
+
+        case "ArrayExpression":
+          node.type = "ArrayPattern";
+          var elms = node.elements;
+          for (var i = 0; i < elms.length; i++) {
+            toAssignable(elms[i]);
+          }
+          break;
+
+        case "SpreadElement":
+          toAssignable(node.argument);
+          break;
+      }
+    }
+    return node;
+  }
+
+  function parseFunctionParams(node) {
+    var defaults = [], hasDefaults = false;
+
+    pushCx();
+    var params = parseExprList(tt.parenR);
+    for (var i = 0; i < params.length; i++) {
+      var param = toAssignable(params[i]), defValue = null;
+      if (param.type === "SpreadElement") {
+        if (i === params.length - 1) {
+          params.length--;
+          node.rest = param.argument;
+        }
+      } else if (param.type === "AssignmentExpression") {
+        defValue = param.right;
+        param = param.left;
+      }
+      node.params.push(param);
+      defaults.push(defValue);
+      if (defValue) hasDefaults = true;
+    }
+
+    if (hasDefaults) node.defaults = defaults;
+  }
+
   function parseFunction(node, isStatement) {
+    initFunction(node);
+    if (options.ecmaVersion >= 6) {
+      node.generator = eat(tt.star);
+    }
     if (token.type === tt.name) node.id = parseIdent();
     else if (isStatement) node.id = dummyIdent();
-    else node.id = null;
-    node.params = [];
-    pushCx();
-    expect(tt.parenL);
-    while (token.type == tt.name) {
-      node.params.push(parseIdent());
-      eat(tt.comma);
-    }
-    popCx();
-    eat(tt.parenR);
+    parseFunctionParams(node);
     node.body = parseBlock();
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
