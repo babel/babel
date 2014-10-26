@@ -9,7 +9,8 @@ function report(state, code, message) {
 }
 
 var t0 = +new Date;
-driver.runTests(report);
+var acorn = typeof require == "undefined" ? window.acorn : require("../acorn.js");
+driver.runTests(acorn.parse, report);
 console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
 
 if (failed) {

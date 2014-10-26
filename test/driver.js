@@ -1,6 +1,5 @@
 (function(exports) {
   var tests = [];
-  var acorn = typeof require == "undefined" ? window.acorn : require("../acorn.js");
 
   exports.test = function(code, ast, options, comments) {
     tests.push({code: code, ast: ast, options: options, comments: comments});
@@ -12,7 +11,7 @@
     tests.push({code: code, assert: assert, options: options});
   };
 
-  exports.runTests = function(callback) {
+  exports.runTests = function(parse, callback) {
     var comments;
 
     function onComment(block, text, start, end, startLoc, endLoc) {
@@ -33,7 +32,7 @@
       try {
         comments = [];
         if (test.options && !test.options.onComment) test.options.onComment = onComment;
-        var ast = acorn.parse(test.code, test.options || opts);
+        var ast = parse(test.code, test.options || opts);
         if (test.error) callback("fail", test.code,
                                  "Expected error message: " + test.error + "\nBut parsing succeeded.");
         else if (test.assert) {
