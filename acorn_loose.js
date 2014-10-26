@@ -81,7 +81,13 @@
   function readToken() {
     for (;;) {
       try {
-        return fetchToken();
+        var tok = fetchToken();
+        if (tok.type === tt.dot && input.substr(tok.end, 1) === '.') {
+          tok = fetchToken();
+          tok.start--;
+          tok.type = tt.ellipsis;
+        }
+        return tok;
       } catch(e) {
         if (!(e instanceof SyntaxError)) throw e;
 
@@ -281,8 +287,17 @@
   }
 
   function checkLVal(expr) {
-    if (expr.type === "Identifier" || expr.type === "MemberExpression") return expr;
-    return dummyIdent();
+    switch (expr.type) {
+      case "Identifier":
+      case "MemberExpression":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "SpreadElement":
+        return expr;
+
+      default:
+        return dummyIdent();
+    }
   }
 
   function parseTopLevel() {
@@ -577,13 +592,20 @@
 
   function parseMaybeUnary(noIn) {
     if (token.type.prefix) {
-      var node = startNode(), update = token.type.isUpdate;
+      var node = startNode(), update = token.type.isUpdate, nodeType;
+      if (token.type === tt.ellipsis) {
+        nodeType = "SpreadElement";
+      } else {
+        nodeType = update ? "UpdateExpression" : "UnaryExpression";
+        node.operator = token.value;
+        node.prefix = true;
+      }
       node.operator = token.value;
       node.prefix = true;
       next();
       node.argument = parseMaybeUnary(noIn);
       if (update) node.argument = checkLVal(node.argument);
-      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+      return finishNode(node, nodeType);
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts();
@@ -810,15 +832,16 @@
     for (var i = 0; i < params.length; i++) {
       var param = toAssignable(params[i]), defValue = null;
       if (param.type === "SpreadElement") {
+        param = param.argument;
         if (i === params.length - 1) {
-          params.length--;
-          node.rest = param.argument;
+          node.rest = param;
+          continue;
         }
       } else if (param.type === "AssignmentExpression") {
         defValue = param.right;
         param = param.left;
       }
-      node.params.push(param);
+      node.params.push(checkLVal(param));
       defaults.push(defValue);
       if (defValue) hasDefaults = true;
     }
