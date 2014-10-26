@@ -702,7 +702,7 @@
     case tt.bracketL:
       var node = startNode();
       pushCx();
-      node.elements = parseExprList(tt.bracketR);
+      node.elements = parseExprList(tt.bracketR, true);
       return finishNode(node, "ArrayExpression");
 
     case tt.braceL:
@@ -861,11 +861,15 @@
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
 
-  function parseExprList(close) {
+  function parseExprList(close, allowEmpty) {
     var indent = curIndent, line = curLineStart, elts = [], continuedLine = nextLineStart;
     next(); // Opening bracket
     if (curLineStart > continuedLine) continuedLine = curLineStart;
     while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
+      if (allowEmpty && eat(tt.comma)) {
+        elts.push(null);
+        continue;
+      }
       var elt = parseExpression(true);
       if (isDummy(elt)) {
         if (closes(close, indent, line)) break;
@@ -873,7 +877,7 @@
       } else {
         elts.push(elt);
       }
-      while (eat(tt.comma)) {}
+      eat(tt.comma);
     }
     popCx();
     eat(close);
