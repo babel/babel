@@ -443,6 +443,9 @@
       next();
       return finishNode(node, "EmptyStatement");
 
+    case tt._class:
+      return parseObj(true, true);
+
     default:
       var expr = parseExpression();
       if (isDummy(expr)) {
@@ -708,6 +711,9 @@
     case tt.braceL:
       return parseObj();
 
+    case tt._class:
+      return parseObj(true);
+
     case tt._function:
       var node = startNode();
       next();
@@ -735,46 +741,76 @@
     return finishNode(node, "NewExpression");
   }
 
-  function parseObj() {
+  function parseObj(isClass, isStatement) {
     var node = startNode();
-    node.properties = [];
+    if (isClass) {
+      next();
+      if (token.type === tt.name) node.id = parseIdent();
+      else if (isStatement) node.id = dummyIdent();
+      node.superClass = eat(tt._extends) ? parseExpression() : null;
+      node.body = startNode();
+      node.body.body = [];
+    } else {
+      node.properties = [];
+    }
     pushCx();
     var indent = curIndent + 1, line = curLineStart;
-    next();
+    eat(tt.braceL);
     if (curIndent + 1 < indent) { indent = curIndent; line = curLineStart; }
     while (!closes(tt.braceR, indent, line)) {
       var prop = startNode(), isGenerator;
       if (options.ecmaVersion >= 6) {
-        prop.method = false;
-        prop.shorthand = false;
+        if (isClass) {
+          if (prop['static'] = (token.type === tt.name && token.value === "static")) next();
+        } else {
+          prop.method = false;
+          prop.shorthand = false;
+        }
         isGenerator = eat(tt.star);
       }
       parsePropertyName(prop);
       if (isDummy(prop.key)) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
-      if (eat(tt.colon)) {
+      if (!isClass && eat(tt.colon)) {
         prop.kind = "init";
         prop.value = parseExpression(true);
       } else if (options.ecmaVersion >= 6 && (token.type === tt.parenL || token.type === tt.braceL)) {
-        prop.kind = "init";
-        prop.method = true;
+        if (isClass) {
+          prop.kind = "";
+        } else {
+          prop.kind = "init";
+          prop.method = true;
+        }
         prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
         prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(false);
+      } else if (isClass) {
+        prop.kind = "";
+        prop.value = parseMethod(isGenerator);
       } else {
         prop.kind = "init";
         prop.value = options.ecmaVersion >= 6 ? prop.key : dummyIdent();
         prop.shorthand = true;
       }
 
-      node.properties.push(finishNode(prop, "Property"));
-      eat(tt.comma);
+      if (isClass) {
+        node.body.body.push(finishNode(prop, "MethodDefinition"));
+        semicolon();
+      } else {
+        node.properties.push(finishNode(prop, "Property"));
+        eat(tt.comma);
+      }
     }
     popCx();
     eat(tt.braceR);
-    return finishNode(node, "ObjectExpression");
+    if (isClass) {
+      finishNode(node.body, "ClassBody");
+      return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
+    } else {
+      return finishNode(node, "ObjectExpression");
+    }
   }
 
   function parsePropertyName(prop) {
