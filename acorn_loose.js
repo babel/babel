@@ -664,9 +664,15 @@
       return finishNode(node, "Literal");
 
     case tt.parenL:
+      var start = storeCurrentPos();
       next();
       var val = parseExpression();
       expect(tt.parenR);
+      if (options.preserveParens) {
+        var par = startNodeAt(start);
+        par.expression = val;
+        val = finishNode(par, "ParenthesizedExpression");
+      }
       return val;
 
     case tt.bracketL:
