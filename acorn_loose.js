@@ -287,6 +287,7 @@
   }
 
   function checkLVal(expr) {
+    if (!expr) return expr;
     switch (expr.type) {
       case "Identifier":
       case "MemberExpression":
@@ -742,10 +743,14 @@
     next();
     if (curIndent + 1 < indent) { indent = curIndent; line = curLineStart; }
     while (!closes(tt.braceR, indent, line)) {
-      var name = parsePropertyName();
-      if (!name) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
-      var prop = startNode();
-      prop.key = name;
+      var prop = startNode(), isGenerator;
+      if (options.ecmaVersion >= 6) {
+        prop.method = false;
+        prop.shorthand = false;
+        isGenerator = eat(tt.star);
+      }
+      parsePropertyName(prop);
+      if (!prop.key) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
       if (eat(tt.colon)) {
         prop.value = parseExpression(true);
         prop.kind = "init";
@@ -755,7 +760,9 @@
         prop.key = parsePropertyName() || dummyIdent();
         prop.value = parseFunction(startNode(), false);
       } else {
-        prop.value = dummyIdent();
+        prop.value = options.ecmaVersion >= 6 ? prop.key : dummyIdent();
+        prop.kind = "init";
+        prop.shorthand = true;
       }
 
       node.properties.push(finishNode(prop, "Property"));
@@ -766,9 +773,18 @@
     return finishNode(node, "ObjectExpression");
   }
 
-  function parsePropertyName() {
-    if (token.type === tt.num || token.type === tt.string) return parseExprAtom();
-    if (token.type === tt.name || token.type.keyword) return parseIdent();
+  function parsePropertyName(prop) {
+    if (options.ecmaVersion >= 6) {
+      if (eat(tt.bracketL)) {
+        prop.computed = true;
+        prop.key = parseExpression();
+        expect(tt.bracketR);
+        return;
+      } else {
+        prop.computed = false;
+      }
+    }
+    prop.key = (token.type === tt.num || token.type === tt.string) ? parseExprAtom() : parseIdent();
   }
 
   function parsePropertyAccessor() {
