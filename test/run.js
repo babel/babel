@@ -2,26 +2,50 @@ var driver = require("./driver.js");
 require("./tests.js");
 require("./tests-harmony.js");
 
-var testsRun = 0, failed = 0;
+var stats, modes = {
+  Normal: {
+    config: {
+      parse: (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse
+    }
+  },
+  Loose: {
+    config: {
+      parse: (typeof require === "undefined") ? window.acorn_loose : require("../acorn_loose").parse_dammit,
+      loose: true
+    }
+  }
+};
+
 function report(state, code, message) {
-  if (state != "ok") {++failed; console.log(code, message);}
-  ++testsRun;
+  if (state != "ok") {++stats.failed; console.log(code, message);}
+  ++stats.testsRun;
 }
 
-var t0 = +new Date;
+for (var name in modes) {
+  var mode = modes[name];
+  stats = mode.stats = {testsRun: 0, failed: 0};
+  var t0 = +new Date;
+  driver.runTests(mode.config, report);
+  mode.stats.duration = +new Date - t0;
+}
 
-var parse = (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse;
-var parse_dammit = (typeof require === "undefined") ? window.acorn_loose : require("../acorn_loose").parse_dammit;
+function outputStats(name, stats) {
+  console.log(name + ": " + stats.testsRun + " tests run in " + stats.duration + "ms; " +
+    (stats.failed ? stats.failed + " failures." : "all passed."));
+}
 
-driver.runTests({parse: parse, callback: report});
-driver.runTests({parse: parse_dammit, loose: true, callback: report});
-console.log(testsRun + " tests run in " + (+new Date - t0) + "ms");
+var total = {testsRun: 0, failed: 0, duration: 0};
 
-if (failed) {
-  console.log(failed + " failures.");
+for (var name in modes) {
+  var stats = modes[name].stats;
+  outputStats(name + " parser", stats);
+  for (var key in stats) total[key] += stats[key];
+}
+
+outputStats("Total", total);
+
+if (total.failed) {
   process.stdout.write("", function() {
     process.exit(1);
   });
-} else {
-  console.log("All passed.");
 }

@@ -11,9 +11,8 @@
     tests.push({code: code, assert: assert, options: options});
   };
 
-  exports.runTests = function(config) {
-    var parse = config.parse, callback = config.callback;
-    var comments;
+  exports.runTests = function(config, callback) {
+    var parse = config.parse, comments;
 
     function onComment(block, text, start, end, startLoc, endLoc) {
       comments.push({
@@ -32,9 +31,11 @@
       var test = tests[i];
       try {
         comments = [];
-        var testOpts = JSON.parse(JSON.stringify(test.options || opts));
-        if (!testOpts.onComment) testOpts.onComment = onComment;
+        var testOpts = test.options || opts;
+        var oldOnComment = testOpts.onComment;
+        if (!oldOnComment) testOpts.onComment = onComment;
         var ast = parse(test.code, testOpts);
+        testOpts.onComment = oldOnComment;
         if (test.error) {
           if (config.loose) {
             callback("ok", test.code);
