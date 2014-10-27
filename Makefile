@@ -57,4 +57,4 @@ publish:
 
 	git push --follow-tags
 
-	rm -rf templates.json
+	rm -rf templates.json browser.js
