@@ -674,8 +674,12 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
+
     case tt.name:
-      return parseIdent();
+      var start = storeCurrentPos();
+      var id = parseIdent();
+      return eat(tt.arrow) ? parseArrowExpression(startNodeAt(start), [id]) : id;
+
     case tt.num: case tt.string: case tt.regexp:
       var node = startNode();
       node.value = token.value;
@@ -695,6 +699,9 @@
       next();
       var val = parseExpression();
       expect(tt.parenR);
+      if (eat(tt.arrow)) {
+        return parseArrowExpression(startNodeAt(start), val.expressions || (isDummy(val) ? [] : [val]));
+      }
       if (options.preserveParens) {
         var par = startNodeAt(start);
         par.expression = val;
@@ -880,11 +887,13 @@
     return checkLVal(node);
   }
 
-  function parseFunctionParams(node) {
+  function parseFunctionParams(node, params) {
     var defaults = [], hasDefaults = false;
 
-    pushCx();
-    var params = parseExprList(tt.parenR);
+    if (!params) {
+      pushCx();
+      params = parseExprList(tt.parenR);
+    }
     for (var i = 0; i < params.length; i++) {
       var param = params[i], defValue = null;
       if (param.type === "AssignmentExpression") {
@@ -923,10 +932,18 @@
     var node = startNode();
     initFunction(node);
     parseFunctionParams(node);
-    node.generator = isGenerator;
+    node.generator = isGenerator || false;
     node.expression = options.ecmaVersion >= 6 && token.type !== tt.braceL;
     node.body = node.expression ? parseExpression(true) : parseBlock();
     return finishNode(node, "FunctionExpression");
+  }
+
+  function parseArrowExpression(node, params) {
+    initFunction(node);
+    parseFunctionParams(node, params);
+    node.expression = token.type !== tt.braceL;
+    node.body = node.expression ? parseExpression(true) : parseBlock();
+    return finishNode(node, "ArrowFunctionExpression");
   }
 
   function parseExprList(close, allowEmpty) {
