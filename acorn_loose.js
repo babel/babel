@@ -338,17 +338,15 @@
       if (token.type === tt.semi) return parseFor(node, null);
       if (token.type === tt._var || token.type === tt._let) {
         var init = parseVar(true);
-        if (init.declarations.length === 1) {
-          if (eat(tt._in)) return parseForIn(node, init);
-          if (token.type === tt.name && token.value === "of") {
-            next();
-            return parseForIn(node, init, true);
-          }
+        if (init.declarations.length === 1 && (token.type === tt._in || token.type === tt.name && token.value === "of")) {
+          return parseForIn(node, init);
         }
         return parseFor(node, init);
       }
       var init = parseExpression(false, true);
-      if (eat(tt._in)) return parseForIn(node, checkLVal(init));
+      if (token.type === tt._in || token.type === tt.name && token.value === "of") {
+        return parseForIn(node, checkLVal(init));
+      }
       return parseFor(node, init);
 
     case tt._function:
@@ -493,13 +491,15 @@
     return finishNode(node, "ForStatement");
   }
 
-  function parseForIn(node, init, isOf) {
+  function parseForIn(node, init) {
+    var type = token.type === tt._in ? "ForInStatement" : "ForOfStatement";
+    next();
     node.left = init;
     node.right = parseExpression();
     popCx();
     expect(tt.parenR);
     node.body = parseStatement();
-    return finishNode(node, isOf ? "ForOfStatement" : "ForInStatement");
+    return finishNode(node, type);
   }
 
   function parseVar(noIn) {
