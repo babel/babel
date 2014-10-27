@@ -16,6 +16,7 @@
 
     for (var i = 0; i < tests.length; ++i) {
       var test = tests[i];
+      if (config.filter && !config.filter(test)) continue;
       try {
         var testOpts = test.options || {locations: true};
         var expected = {};
