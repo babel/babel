@@ -338,12 +338,17 @@
       if (token.type === tt.semi) return parseFor(node, null);
       if (token.type === tt._var || token.type === tt._let) {
         var init = parseVar(true);
-        if (init.declarations.length === 1 && eat(tt._in))
-          return parseForIn(node, init);
+        if (init.declarations.length === 1) {
+          if (eat(tt._in)) return parseForIn(node, init);
+          if (token.type === tt.name && token.value === "of") {
+            next();
+            return parseForIn(node, init, true);
+          }
+        }
         return parseFor(node, init);
       }
       var init = parseExpression(false, true);
-      if (eat(tt._in)) {return parseForIn(node, checkLVal(init));}
+      if (eat(tt._in)) return parseForIn(node, checkLVal(init));
       return parseFor(node, init);
 
     case tt._function:
@@ -488,13 +493,13 @@
     return finishNode(node, "ForStatement");
   }
 
-  function parseForIn(node, init) {
+  function parseForIn(node, init, isOf) {
     node.left = init;
     node.right = parseExpression();
     popCx();
     expect(tt.parenR);
     node.body = parseStatement();
-    return finishNode(node, "ForInStatement");
+    return finishNode(node, isOf ? "ForOfStatement" : "ForInStatement");
   }
 
   function parseVar(noIn) {
@@ -680,7 +685,7 @@
       var id = parseIdent();
       return eat(tt.arrow) ? parseArrowExpression(startNodeAt(start), [id]) : id;
 
-    case tt.num: case tt.string: case tt.regexp:
+    case tt.num: case tt.string: case tt.regexp: 
       var node = startNode();
       node.value = token.value;
       node.raw = input.slice(token.start, token.end);
