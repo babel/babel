@@ -3577,7 +3577,7 @@ test("[for (x of array) x]", {
     end: {line: 1, column: 20}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -3699,7 +3699,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
     end: {line: 1, column: 54}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -3821,7 +3821,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
     end: {line: 1, column: 54}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -4025,7 +4025,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
     end: {line: 1, column: 68}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -15127,17 +15127,17 @@ testFail("`hello ${10;test`", "Unexpected token (1:11)", {ecmaVersion: 6});
 
 testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:13)", {ecmaVersion: 6});
 
-testFail("[for (let x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (let x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (const x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (const x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (var x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (var x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (a in []) x] // (a,b) ", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("[for (a in []) x] // (a,b) ", "Unexpected token (1:8)", {ecmaVersion: 7});
 
 testFail("var a = [if (x) x]", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("[for (x of [])]  // no expression", "Unexpected token (1:14)", {ecmaVersion: 6});
+testFail("[for (x of [])]  // no expression", "Unexpected token (1:14)", {ecmaVersion: 7});
 
 testFail("({ \"chance\" }) = obj", "Unexpected token (1:12)", {ecmaVersion: 6});
 
@@ -15412,4 +15412,4 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
       type: "ComprehensionExpression"
     }
   }]
-}, {ecmaVersion: 6, preserveParens: true});
+}, {ecmaVersion: 7, preserveParens: true});

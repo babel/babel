@@ -2024,7 +2024,7 @@
       var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         val = parseComprehension(startNodeAt(start), true);
       } else {
         var oldParenL = ++metParenL;
@@ -2061,7 +2061,7 @@
       var node = startNode();
       next();
       // check whether this is array comprehension or regular array
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         return parseComprehension(node, false);
       }
       node.elements = parseExprList(_bracketR, true, true);
