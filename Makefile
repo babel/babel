@@ -35,7 +35,7 @@ build:
 
 	node bin/cache-templates
 
-	browserify lib/6to5/transform.js -s to5 >dist/6to5.js
+	browserify lib/6to5/browser.js -s to5 >dist/6to5.js
 	uglifyjs dist/6to5.js >dist/6to5.min.js
 
 	rm -rf templates.json
@@ -47,6 +47,9 @@ publish:
 
 	node bin/cache-templates
 	test -f templates.json
+
+	make build
+	cp dist/6to5.js browser.js
 
 	read -p "Version: "  version; \
   npm version $$version --message "v%s"
