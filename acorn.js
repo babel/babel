@@ -912,6 +912,10 @@
     finishToken(type, str);
   }
 
+  var regexpUnicodeSupport = false;
+  try { new RegExp("\uffff", "u"); regexpUnicodeSupport = true; }
+  catch(e) {}
+
   // Parse a regular expression. Some context-awareness is necessary,
   // since a '/' inside a '[]' set does not end the expression.
 
@@ -939,14 +943,14 @@
       var validFlags = /^[gmsiy]*$/;
       if (options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
       if (!validFlags.test(mods)) raise(start, "Invalid regular expression flag");
-      if (mods.indexOf('u') >= 0) {
+      if (mods.indexOf('u') >= 0 && !regexpUnicodeSupport) {
         // Replace each astral symbol and every Unicode code point
         // escape sequence that represents such a symbol with a single
         // ASCII symbol to avoid throwing on regular expressions that
         // are only valid in combination with the `/u` flag.
         tmp = tmp
-          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, 'x')
-          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, "x")
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
       }
     }
     // Detect invalid regular expressions.
