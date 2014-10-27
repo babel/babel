@@ -13,8 +13,9 @@ var stats, modes = {
       parse: (typeof require === "undefined") ? window.acorn_loose : require("../acorn_loose").parse_dammit,
       loose: true,
       filter: function (test) {
-        var ecmaVersion = (test.options || {}).ecmaVersion || 5;
-        return ecmaVersion <= 6;
+        var opts = test.options || {};
+        if (opts.loose === false) return false;
+        return (opts.ecmaVersion || 5) <= 6;
       }
     }
   }

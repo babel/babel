@@ -271,7 +271,7 @@
     return (token.type === tt.eof || token.type === tt.braceR || newline.test(input.slice(lastEnd, token.start)));
   }
   function semicolon() {
-    eat(tt.semi);
+    return eat(tt.semi);
   }
 
   function expect(type) {
@@ -733,6 +733,18 @@
 
     case tt._new:
       return parseNew();
+
+    case tt._yield:
+      var node = startNode();
+      next();
+      if (semicolon() || canInsertSemicolon()) {
+        node.delegate = false;
+        node.argument = null;
+      } else {
+        node.delegate = eat(tt.star);
+        node.argument = parseExpression(true);
+      }
+      return finishNode(node, "YieldExpression");
 
     default:
       return dummyIdent();
