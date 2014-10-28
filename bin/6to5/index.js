@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
-var sourceMap = require("source-map");
 var transform = require("../../lib/6to5/transform");
-var chokidar  = require("chokidar");
-var mkdirp    = require("mkdirp");
 var util2     = require("../../lib/6to5/util");
 var util      = require("./util");
-var path      = require("path");
 var fs        = require("fs");
 var _         = require("lodash");
 
