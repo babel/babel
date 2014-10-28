@@ -4,5 +4,6 @@ test/tmp
 *.log
 *.cache
 /templates.json
+/browser.js
 coverage
 dist
