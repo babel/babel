@@ -315,8 +315,12 @@
     case tt._break: case tt._continue:
       next();
       var isBreak = starttype === tt._break;
-      node.label = token.type === tt.name ? parseIdent() : null;
-      semicolon();
+      if (semicolon() || canInsertSemicolon()) {
+        node.label = null;
+      } else {
+        node.label = token.type === tt.name ? parseIdent() : null;
+        semicolon();
+      }
       return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
 
     case tt._debugger:
@@ -771,6 +775,35 @@
     return finishNode(node, "NewExpression");
   }
 
+  function parseTemplate() {
+    var node = startNode();
+    node.expressions = [];
+    node.quasis = [];
+    inTemplate = true;
+    next();
+    for (;;) {
+      var elem = startNode();
+      elem.value = {cooked: tokVal, raw: input.slice(tokStart, tokEnd)};
+      elem.tail = false;
+      next();
+      node.quasis.push(finishNode(elem, "TemplateElement"));
+      if (tokType === _bquote) { // '`', end of template
+        elem.tail = true;
+        break;
+      }
+      inTemplate = false;
+      expect(_dollarBraceL);
+      node.expressions.push(parseExpression());
+      inTemplate = true;
+      // hack to include previously skipped space
+      tokPos = tokEnd;
+      expect(_braceR);
+    }
+    inTemplate = false;
+    next();
+    return finishNode(node, "TemplateLiteral");
+  }
+
   function parseObj(isClass, isStatement) {
     var node = startNode();
     if (isClass) {
@@ -836,6 +869,7 @@
     popCx();
     eat(tt.braceR);
     if (isClass) {
+      semicolon();
       finishNode(node.body, "ClassBody");
       return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
     } else {
@@ -983,6 +1017,7 @@
       node.declaration = null;
       parseSpecifierList(node, "Export");
     }
+    semicolon();
     return finishNode(node, "ExportDeclaration");
   }
 
@@ -1007,6 +1042,7 @@
       for (var i = 0; i < specs.length; i++) specs[i]['default'] = false;
       if (elt) node.specifiers.unshift(elt);
     }
+    semicolon();
     return finishNode(node, "ImportDeclaration");
   }
 
