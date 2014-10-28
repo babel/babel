@@ -9,11 +9,8 @@ var to5     = require("../lib/6to5");
 
 var uglify  = require("uglify-js");
 var matcha  = require("matcha");
-var stream  = require("stream");
 var path    = require("path");
-var zlib    = require("zlib");
 var fs      = require("fs");
-var vm      = require("vm");
 var _       = require("lodash");
 
 var readResolve = function (filename) {
