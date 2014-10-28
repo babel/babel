@@ -14,7 +14,7 @@ bench:
 	node node_modules/matcha/bin/_matcha
 
 test:
-	$(JSHINT_CMD) lib
+	$(JSHINT_CMD) lib bin benchmark
 	$(MOCHA_CMD)
 
 test-cov:
