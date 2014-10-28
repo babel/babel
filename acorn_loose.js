@@ -968,8 +968,8 @@
     next(); // Opening bracket
     if (curLineStart > continuedLine) continuedLine = curLineStart;
     while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
-      if (allowEmpty && eat(tt.comma)) {
-        elts.push(null);
+      if (eat(tt.comma)) {
+        elts.push(allowEmpty ? null : dummyIdent());
         continue;
       }
       var elt = parseExpression(true);
