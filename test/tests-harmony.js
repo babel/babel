@@ -5113,7 +5113,6 @@ test("import $ from \"jquery\"", {
         end: {line: 1, column: 8}
       }
     }],
-    kind: "default",
     source: {
       type: "Literal",
       value: "jquery",
@@ -5176,7 +5175,6 @@ test("import { encrypt, decrypt } from \"crypto\"", {
         }
       }
     ],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
@@ -5228,7 +5226,6 @@ test("import { encrypt as enc } from \"crypto\"", {
         end: {line: 1, column: 23}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
@@ -5333,8 +5330,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
       },
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "default"
+    }
   }]
 }, {
   ecmaVersion: 6,
@@ -5371,7 +5367,6 @@ test("import { null as nil } from \"bar\"", {
         end: {line: 1, column: 20}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "bar",
@@ -5431,8 +5426,7 @@ test("import * as crypto from \"crypto\"", {
       },
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "named"
+    }
   }]
 }, {
   ecmaVersion: 6,

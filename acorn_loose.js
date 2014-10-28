@@ -449,6 +449,12 @@
     case tt._class:
       return parseObj(true, true);
 
+    case tt._import:
+      return parseImport();
+
+    case tt._export:
+      return parseExport();
+
     default:
       var expr = parseExpression();
       if (isDummy(expr)) {
@@ -961,6 +967,96 @@
     node.expression = token.type !== tt.braceL;
     node.body = node.expression ? parseExpression(true) : parseBlock();
     return finishNode(node, "ArrowFunctionExpression");
+  }
+
+  function parseExport() {
+    var node = startNode();
+    next();
+    node['default'] = eat(tt._default);
+    node.specifiers = node.source = null;
+    if (node['default']) {
+      node.declaration = parseExpression();
+      semicolon();
+    } else if (token.type.keyword) {
+      node.declaration = parseStatement();
+    } else {
+      node.declaration = null;
+      parseSpecifierList(node, "Export");
+    }
+    return finishNode(node, "ExportDeclaration");
+  }
+
+  function parseImport() {
+    var node = startNode();
+    next();
+    if (token.type === tt.string) {
+      node.specifiers = [];
+      node.source = parseExprAtom();
+      node.kind = '';
+    } else {
+      if (token.type === tt.name && token.value !== "from") {
+        var elt = startNode();
+        elt.id = parseIdent();
+        elt.name = null;
+        elt['default'] = true;
+        finishNode(elt, "ImportSpecifier");
+        eat(tt.comma);
+      }
+      parseSpecifierList(node, "Import");
+      var specs = node.specifiers;
+      for (var i = 0; i < specs.length; i++) specs[i]['default'] = false;
+      if (elt) node.specifiers.unshift(elt);
+    }
+    return finishNode(node, "ImportDeclaration");
+  }
+
+  function parseSpecifierList(node, prefix) {
+    var elts = node.specifiers = [];
+    if (token.type === tt.star) {
+      var elt = startNode();
+      next();
+      if (token.type === tt.name && token.value === "as") {
+        next();
+        elt.name = parseIdent();
+      }
+      elts.push(finishNode(elt, prefix + "BatchSpecifier"));
+    } else {
+      var indent = curIndent, line = curLineStart, continuedLine = nextLineStart;
+      pushCx();
+      eat(tt.braceL);
+      if (curLineStart > continuedLine) continuedLine = curLineStart;
+      while (!closes(tt.braceR, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
+        var elt = startNode();
+        if (token.type === tt.star) {
+          next();
+          if (token.type === tt.name && token.value === "as") {
+            next();
+            elt.name = parseIdent();
+          }
+          finishNode(elt, prefix + "BatchSpecifier");
+        } else {
+          if (token.type === tt.name && token.value === "from") break;
+          elt.id = parseIdent();
+          if (token.type === tt.name && token.value === "as") {
+            next();
+            elt.name = parseIdent();
+          } else {
+            elt.name = null;
+          }
+          finishNode(elt, prefix + "Specifier");
+        }
+        elts.push(elt);
+        eat(tt.comma);
+      }
+      eat(tt.braceR);
+      popCx();
+    }
+    if (token.type === tt.name && token.value === "from") {
+      next();
+      node.source = parseExprAtom();
+    } else {
+      node.source = null;
+    }
   }
 
   function parseExprList(close, allowEmpty) {
