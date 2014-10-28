@@ -45,11 +45,11 @@ publish:
 
 	make test
 
-	node bin/cache-templates
-	test -f templates.json
-
 	make build
 	cp dist/6to5.js browser.js
+
+	node bin/cache-templates
+	test -f templates.json
 
 	read -p "Version: "  version; \
   npm version $$version --message "v%s"
