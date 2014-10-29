@@ -937,6 +937,10 @@
     finishToken(type, str, shouldSkipSpace);
   }
 
+  var regexpUnicodeSupport = false;
+  try { new RegExp("\uffff", "u"); regexpUnicodeSupport = true; }
+  catch(e) {}
+
   // Parse a regular expression. Some context-awareness is necessary,
   // since a '/' inside a '[]' set does not end the expression.
 
@@ -959,19 +963,20 @@
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     var mods = readWord1();
+    // Detect invalid regular expressions.
     var tmp = content;
     if (mods) {
       var validFlags = /^[gmsiy]*$/;
       if (options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
       if (!validFlags.test(mods)) raise(start, "Invalid regular expression flag");
-      if (mods.indexOf('u') >= 0) {
+      if (mods.indexOf('u') >= 0 && !regexpUnicodeSupport) {
         // Replace each astral symbol and every Unicode code point
         // escape sequence that represents such a symbol with a single
         // ASCII symbol to avoid throwing on regular expressions that
         // are only valid in combination with the `/u` flag.
         tmp = tmp
-          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, 'x')
-          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, "x")
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
       }
     }
     // Detect invalid regular expressions.
@@ -1786,7 +1791,7 @@
   // strict mode, init properties are also not allowed to be repeated.
 
   function checkPropClash(prop, propHash) {
-    if (prop.computed) return;
+    if (options.ecmaVersion >= 6) return;
     var key = prop.key, name;
     switch (key.type) {
       case "Identifier": name = key.name; break;
@@ -2411,7 +2416,7 @@
       var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         val = parseComprehension(startNodeAt(start), true);
       } else {
         var oldParenL = ++metParenL;
@@ -2448,7 +2453,7 @@
       var node = startNode();
       next();
       // check whether this is array comprehension or regular array
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         return parseComprehension(node, false);
         }
       node.elements = parseExprList(_bracketR, true, true);
@@ -2745,7 +2750,7 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
-    var classBody = startNode(), methodHash = {}, staticMethodHash = {};
+    var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -2767,7 +2772,6 @@
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, method['static'] ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
@@ -2839,8 +2843,8 @@
       node.source = null;
       semicolon();
     } else {
-      // export * from '...'
-      // export { x, y as z } [from '...']
+      // export * from '...';
+      // export { x, y as z } [from '...'];
       var isBatch = tokType === _star;
       node.declaration = null;
       node['default'] = false;
@@ -2852,6 +2856,7 @@
         if (isBatch) unexpected();
         node.source = null;
       }
+      semicolon();
     }
     return finishNode(node, "ExportDeclaration");
   }
@@ -2906,6 +2911,7 @@
       // (it doesn't support mixed default + named yet)
       node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
+    semicolon();
     return finishNode(node, "ImportDeclaration");
   }
 
