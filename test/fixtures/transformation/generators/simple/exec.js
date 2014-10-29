@@ -3,8 +3,8 @@ function *range(max, step) {
   step = step || 1;
 
   for (var i = 0; i < max; i += step) {
-  count++;
-  yield i;
+    count++;
+    yield i;
   }
 
   return count;
