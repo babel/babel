@@ -2482,8 +2482,8 @@
       node.source = null;
       semicolon();
     } else {
-      // export * from '...'
-      // export { x, y as z } [from '...']
+      // export * from '...';
+      // export { x, y as z } [from '...'];
       var isBatch = tokType === _star;
       node.declaration = null;
       node['default'] = false;
@@ -2495,6 +2495,7 @@
         if (isBatch) unexpected();
         node.source = null;
       }
+      semicolon();
     }
     return finishNode(node, "ExportDeclaration");
   }
@@ -2549,6 +2550,7 @@
       // (it doesn't support mixed default + named yet)
       node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
+    semicolon();
     return finishNode(node, "ImportDeclaration");
   }
 
