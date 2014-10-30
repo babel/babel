@@ -695,7 +695,16 @@
       var id = parseIdent();
       return eat(tt.arrow) ? parseArrowExpression(startNodeAt(start), [id]) : id;
 
-    case tt.num: case tt.string: case tt.regexp: 
+    case tt.regexp:
+      var node = startNode();
+      var val = token.value;
+      node.regex = {pattern: val.pattern, flags: val.flags};
+      node.value = val.value;
+      node.raw = input.slice(token.start, token.end);
+      next();
+      return finishNode(node, "Literal");
+
+    case tt.num: case tt.string:
       var node = startNode();
       node.value = token.value;
       node.raw = input.slice(token.start, token.end);
