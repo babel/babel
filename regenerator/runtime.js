@@ -18,6 +18,8 @@
 ) {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
+  var iteratorSymbol =
+    typeof Symbol === 'function' && Symbol.iterator || '@@iterator';
 
   try {
     // Make a reasonable attempt to provide a Promise polyfill.
@@ -217,9 +219,7 @@
     return generator;
   }
 
-  Gp[typeof Symbol === "function"
-     && Symbol.iterator
-     || "@@iterator"] = function() {
+  Gp[iteratorSymbol] = function() {
     return this;
   };
 
@@ -286,9 +286,8 @@
 
   function values(iterable) {
     var iterator = iterable;
-    var Symbol = global.Symbol;
-    if (Symbol && Symbol.iterator in iterable) {
-      iterator = iterable[Symbol.iterator]();
+    if (iteratorSymbol in iterable) {
+      iterator = iterable[iteratorSymbol]();
     } else if (!isNaN(iterable.length)) {
       var i = -1;
       iterator = function next() {
