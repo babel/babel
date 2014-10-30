@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
-var Module    = require("module");
 var util      = require("../lib/6to5/util");
 var path      = require("path");
 var repl      = require("repl");

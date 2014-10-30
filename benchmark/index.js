@@ -7,13 +7,10 @@ var es6now  = require("es6now");
 var esnext  = require("esnext");
 var to5     = require("../lib/6to5");
 
-var uglify  = require("uglify-js");
+//var uglify  = require("uglify-js");
 var matcha  = require("matcha");
-var stream  = require("stream");
 var path    = require("path");
-var zlib    = require("zlib");
 var fs      = require("fs");
-var vm      = require("vm");
 var _       = require("lodash");
 
 var readResolve = function (filename) {
@@ -51,7 +48,7 @@ var compilers = {
 
   traceur: {
     runtime: readResolve("traceur/bin/traceur-runtime.js"),
-    compile: function (code, filename) {
+    compile: function (code) {
       return traceur.compile(code, {
         modules: "commonjs",
         experimental: true
@@ -61,20 +58,20 @@ var compilers = {
 
   esnext: {
     runtime: readResolve("esnext/node_modules/regenerator/runtime.js") || readResolve("regenerator/runtime.js"),
-    compile: function (code, filename) {
+    compile: function (code) {
       return esnext.compile(code).code;
     }
   },
 
   es6now: {
     runtime: readResolve("es6now/runtime/ES6.js"),
-    compile: function (code, filename) {
+    compile: function (code) {
       return es6now.translate(code);
     }
   },
 
   "es6-transpiler": {
-    compile: function (code, filename) {
+    compile: function (code) {
       var result = es6tr.run({ src: code });
       if (result.errors.length) throw new Error(result.join("; "));
       return result.src;
@@ -82,7 +79,7 @@ var compilers = {
   },
 
   jstransform: {
-    compile: function (code, filename) {
+    compile: function (code) {
       return jsTrans.transform(jsTransVisitors, code).code;
     }
   }
@@ -90,7 +87,7 @@ var compilers = {
 
 // versions
 
-var uglifyTitle = "uglify v" + getVersion("uglify-js");
+//var uglifyTitle = "uglify v" + getVersion("uglify-js");
 
 _.each(compilers, function (compiler, name) {
   compiler.title = name + " v" + (compiler.version || getVersion(name));
@@ -162,7 +159,7 @@ _.each(fs.readdirSync(__dirname + "/fixtures"), function (name) {
       });
     });
 
-    _.each(compilers, function (compiler, name) {
+    _.each(compilers, function (compiler) {
       bench(compiler.title, function () {
         compiler.compile(code, loc);
       });
