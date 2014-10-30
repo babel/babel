@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
-var sourceMap = require("source-map");
 var transform = require("../../lib/6to5/transform");
-var chokidar  = require("chokidar");
-var mkdirp    = require("mkdirp");
-var util2     = require("../../lib/6to5/util");
-var util      = require("./util");
-var path      = require("path");
+var util      = require("../../lib/6to5/util");
 var fs        = require("fs");
 var _         = require("lodash");
 
@@ -17,8 +12,8 @@ commander.option("-f, --filename [filename]", "Filename to use when reading from
 commander.option("-w, --watch", "Recompile files on changes");
 
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
-commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util2.list);
-commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util2.list);
+commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
+commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 

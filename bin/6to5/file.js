@@ -6,7 +6,7 @@ var util      = require("./util");
 var fs        = require("fs");
 var _         = require("lodash");
 
-module.exports = function (commander, filenames, opts) {
+module.exports = function (commander, filenames) {
   var results = [];
 
   var buildResult = function () {
@@ -48,7 +48,7 @@ module.exports = function (commander, filenames, opts) {
     return {
       map: map,
       code: code
-    }
+    };
   };
 
   var output = function () {
@@ -101,7 +101,7 @@ module.exports = function (commander, filenames, opts) {
     });
 
     _.each(_filenames, function (filename, i) {
-      results.push(util.compile(filename, { _noStrict: i != 0 }));
+      results.push(util.compile(filename, { _noStrict: +i !== 0 }));
     });
 
     output();
