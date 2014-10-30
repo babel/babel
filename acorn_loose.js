@@ -59,15 +59,14 @@
   var lastEnd, token = {start: 0, end: 0}, ahead = [];
   var curLineStart, nextLineStart, curIndent, lastEndLoc, sourceFile;
 
-  function next() {
+  function next(forceRegexp) {
     lastEnd = token.end;
     if (options.locations)
       lastEndLoc = token.endLoc;
+    if (forceRegexp)
+      ahead.length = 0;
 
-    if (ahead.length)
-      token = ahead.shift();
-    else
-      token = readToken();
+    token = ahead.shift() || readToken(forceRegexp);
 
     if (token.start >= nextLineStart) {
       while (token.start >= nextLineStart) {
@@ -78,10 +77,10 @@
     }
   }
 
-  function readToken() {
+  function readToken(forceRegexp) {
     for (;;) {
       try {
-        var tok = fetchToken();
+        var tok = fetchToken(forceRegexp);
         if (tok.type === tt.dot && input.substr(tok.end, 1) === '.') {
           tok = fetchToken();
           tok.start--;
@@ -309,6 +308,9 @@
   }
 
   function parseStatement() {
+    if (token.type === tt.slash || token.type === tt.assign && token.value === "/=")
+      next(true);
+
     var starttype = token.type, node = startNode();
 
     switch (starttype) {
