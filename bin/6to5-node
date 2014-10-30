@@ -35,9 +35,11 @@ to5.register(registerOpts);
 
 //
 
+var context = vm.createContext({});
+
 var _eval = function (code, filename) {
-  code = to5.transform(code, { filename: filename }).code;
-  return vm.runInThisContext(code, filename);
+  code = to5.transform(code, { filename: filename, blacklist: ["useStrict"] }).code;
+  return vm.runInContext(code, context, filename);
 };
 
 if (commander.eval) {
