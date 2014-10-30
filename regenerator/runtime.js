@@ -19,7 +19,7 @@
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
   var iteratorSymbol =
-    typeof Symbol === 'function' && Symbol.iterator || '@@iterator';
+    typeof Symbol === "function" && Symbol.iterator || "@@iterator";
 
   try {
     // Make a reasonable attempt to provide a Promise polyfill.
