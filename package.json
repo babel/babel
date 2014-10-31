@@ -48,7 +48,8 @@
     "source-map-support": "0.2.7",
     "esutils": "1.1.4",
     "acorn-jsx": "https://github.com/sebmck/acorn-jsx/archive/master.tar.gz",
-    "acorn-ast-types": "0.5.3-1"
+    "acorn-ast-types": "0.5.3-1",
+    "estraverse": "^1.7.0"
   },
   "devDependencies": {
     "istanbul": "0.3.2",
