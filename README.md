@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://travis-ci.org/sebmck/6to5">
-    <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?style=flat&amp;label=travis">
+    <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?branch=master&style=flat&amp;label=travis">
   </a>
 
   <a href="https://codeclimate.com/github/sebmck/6to5">
