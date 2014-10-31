@@ -15,7 +15,7 @@ var readFile = function (filename) {
   }
 };
 
-exports.run = function (suites, transform, assert) {
+exports.runTransformationTests = function (suites, transform, assert) {
   _.each(suites, function (testSuite) {
     suite("transformation/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
@@ -40,7 +40,7 @@ exports.run = function (suites, transform, assert) {
   });
 };
 
-exports.getTests = function () {
+exports.getTransformationTests = function () {
   var suites = [];
 
   _.each(fs.readdirSync(fixturesDir), function (suiteName) {
