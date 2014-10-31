@@ -2,6 +2,7 @@ var generate = require("../lib/6to5/generator");
 var traverse = require("../lib/6to5/traverse");
 var assert   = require("assert");
 var util     = require("../lib/6to5/util");
+var chai     = require("chai");
 var fs       = require("fs");
 var _        = require("lodash");
 
@@ -43,7 +44,7 @@ suite("generation", function () {
 
           var expectedAst = util.parseNoProperties(expectedLoc, expected);
 
-          assert.deepEqual(actualAst, expectedAst);
+          chai.expect(actualAst).to.deep.equal(expectedAst);
         });
       });
     });
