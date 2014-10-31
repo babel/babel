@@ -38,7 +38,7 @@ suite("generation", function () {
           var actual   = fs.readFileSync(actualLoc, "utf8");
 
           var actualAst = util.parseNoProperties(actualLoc, actual);
-          actual        = generate(actualAst).code;
+          actual        = generate(actual, actualAst).code;
           actualAst     = util.parseNoProperties(actualLoc, actual);
 
           var expectedAst = util.parseNoProperties(expectedLoc, expected);
