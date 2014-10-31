@@ -1,4 +1,4 @@
 // Leading to block
 {
-  print('hello');
+  print("hello");
 }

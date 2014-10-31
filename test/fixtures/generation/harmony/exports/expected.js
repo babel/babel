@@ -1,11 +1,11 @@
-export * from 'OK';
+export * from "OK";
 export {
     name
-} from 'OK';
+} from "OK";
 export {
     a as b,
     c as d
-} from 'hello';
+} from "hello";
 export {
     a as b,
     c as d

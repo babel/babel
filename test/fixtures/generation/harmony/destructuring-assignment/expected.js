@@ -24,5 +24,5 @@ var [
 ] = prop;
 var [
     obj.hello,
-    ...obj['hello']
+    ...obj["hello"]
 ] = prop;

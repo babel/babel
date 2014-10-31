@@ -2,27 +2,27 @@ var test = {
     /**
      * Before bracket init
      */
-    ['a']:'1',
+    ["a"]:"1",
 
     [/*
      * Inside bracket init
      */
-    'b']:'2',
+    "b"]:"2",
 
-    ['c'
+    ["c"
      /*
       * After bracket key
-      */]:'3',
+      */]:"3",
 
     // Before bracket, line comment
     [
-        'd']:'4',
+        "d"]:"4",
 
     [
         // Inside bracket, line comment
-        'e']:'5',
+        "e"]:"5",
 
-    ['f'
+    ["f"
       // After bracket, line comment
-        ]:'6'
+        ]:"6"
 };

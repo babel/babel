@@ -16,4 +16,4 @@ var {
 } = obj;
 var [obj.hello] = prop;
 var [obj.hello, ...obj.ok] = prop;
-var [obj.hello, ...obj['hello']] = prop;
+var [obj.hello, ...obj["hello"]] = prop;

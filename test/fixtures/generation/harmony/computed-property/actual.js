@@ -11,6 +11,6 @@ var object3 = {
 };
 var object4 = {
     // Normal Property
-    [Symbol.xxx]: 'hello',
+    [Symbol.xxx]: "hello",
     [ok()]: 42,
 };

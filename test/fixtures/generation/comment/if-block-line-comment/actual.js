@@ -1,5 +1,5 @@
 if (cond)
     // Leading to if-block
 {
-    print('hello');
+    print("hello");
 }    // Trailing to if-block

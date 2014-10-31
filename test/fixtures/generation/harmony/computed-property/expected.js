@@ -13,6 +13,6 @@ var object3 = {
     }
 };
 var object4 = {
-    [Symbol.xxx]: 'hello',
+    [Symbol.xxx]: "hello",
     [ok()]: 42
 };
