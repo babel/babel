@@ -13,13 +13,9 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
-var Test = function() {
-  var Test = function Test() {
-    this.state = "test";
-  };
-
-  return Test;
-}();
+var Test = function Test() {
+  this.state = "test";
+};
 
 var Foo = function(Bar) {
   var Foo = function Foo() {

@@ -14,9 +14,6 @@ var _foo6 = 3;
 exports.foo6 = _foo6;
 function foo7() {}
 
-var foo8 = function() {
-  var foo8 = function foo8() {};
-  return foo8;
-}();
+var foo8 = function foo8() {};
 
 exports.foo8 = foo8;

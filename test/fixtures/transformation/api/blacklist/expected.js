@@ -1,9 +1,5 @@
 "use strict";
 
-var Test = function() {
-  var Test = function Test() {
-    arr.map(x => x * x);
-  };
-
-  return Test;
-}();
+var Test = function Test() {
+  arr.map(x => x * x);
+};
