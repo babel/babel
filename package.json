@@ -47,7 +47,7 @@
     "chokidar": "0.10.0",
     "source-map-support": "0.2.7",
     "esutils": "1.1.4",
-    "acorn-jsx": "https://github.com/sebmck/acorn-jsx/archive/master.tar.gz",
+    "acorn-6to5": "https://github.com/sebmck/acorn-6to5/archive/master.tar.gz",
     "acorn-ast-types": "0.5.3-1",
     "estraverse": "^1.7.0"
   },
