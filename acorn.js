@@ -164,7 +164,7 @@
         comments.push(comment);
       };
     }
-    if (opts.strictMode) {
+    if (options.strictMode) {
       strict = true;
     }
     isKeyword = options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
