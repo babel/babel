@@ -3,6 +3,10 @@ node_js:
   - "0.10"
   - "0.11"
 
+branches:
+  except:
+   - experimental
+
 before_script: "npm install -g codeclimate-test-reporter"
 script: "make test-travis"
 
