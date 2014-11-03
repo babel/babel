@@ -1,9 +1,14 @@
 "use strict";
 
+var _classProps = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
 var A = function() {
   var A = function A() {};
 
-  Object.defineProperties(A, {
+  _classProps(A, {
     a: {
       writable: true,
       value: function() {}
@@ -13,7 +18,7 @@ var A = function() {
       get: function() {},
       set: function(b) {}
     }
-  });
+  }, null);
 
   return A;
 }();

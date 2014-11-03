@@ -1,5 +1,12 @@
 "use strict";
+
 var _slice = Array.prototype.slice;
+
+var _classProps = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
 var _extends = function (child, parent) {
   child.prototype = Object.create(parent.prototype, {
     constructor: {
@@ -27,19 +34,7 @@ var Test = function(Foo) {
 
   _extends(Test, Foo);
 
-  Object.defineProperties(Test.prototype, {
-    test: {
-      writable: true,
-
-      value: function() {
-        Foo.prototype.test.call(this);
-        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(_slice.call(arguments)));
-        Foo.prototype.test.call.apply(Foo.prototype.test, [this, "test"].concat(_slice.call(arguments)));
-      }
-    }
-  });
-
-  Object.defineProperties(Test, {
+  _classProps(Test, {
     foo: {
       writable: true,
 
@@ -47,6 +42,16 @@ var Test = function(Foo) {
         Foo.foo.call(this);
         Foo.foo.call.apply(Foo.foo, [this].concat(_slice.call(arguments)));
         Foo.foo.call.apply(Foo.foo, [this, "test"].concat(_slice.call(arguments)));
+      }
+    }
+  }, {
+    test: {
+      writable: true,
+
+      value: function() {
+        Foo.prototype.test.call(this);
+        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(_slice.call(arguments)));
+        Foo.prototype.test.call.apply(Foo.prototype.test, [this, "test"].concat(_slice.call(arguments)));
       }
     }
   });

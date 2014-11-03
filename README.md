@@ -102,9 +102,9 @@ map embedded in a comment at the bottom.
 Compile the entire `src` directory and output it to the `lib` directory.
 
     $ 6to5 src --out-dir lib
-    
+
 Compile the entire `src` directory and output it to the one concatenated file.
-    
+
     $ 6to5 src --out-file script-compiled.js
 
 Pipe a file in via stdin and output it to `script-compiled.js`
@@ -282,6 +282,23 @@ limitations in ES5 implementations.
 If you're inheriting from a class then static properties are inherited from it
 via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
 this is widely supported but you may run into problems with much older browsers.
+
+**NOTE:** `__proto__` is not supported on IE <= 9 so static properties
+**will not** be inherited. A possible workaround is to use `super();`:
+
+```javascript
+class Foo {
+  static foo() {
+
+  }
+}
+
+class Bar extends Foo {
+  static foo() {
+    super();
+  }
+}
+```
 
 ### Generators
 
