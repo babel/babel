@@ -1,0 +1,22 @@
+{
+  "ArrowFunctionExpression": ["Function"],
+  "FunctionDeclaration":     ["Function"],
+  "FunctionExpression":      ["Function"],
+
+  "LogicalExpression": ["Binary"],
+  "BinaryExpression":  ["Binary"],
+
+  "UnaryExpression": ["UnaryLike"],
+  "SpreadProperty":  ["UnaryLike"],
+  "SpreadElement":   ["UnaryLike"],
+
+  "ClassDeclaration": ["Class"],
+  "ClassExpression":  ["Class"],
+
+  "ForOfStatement": ["For"],
+  "ForInStatement": ["For"],
+  "ForStatement":   ["For"],
+
+  "ObjectPattern": ["Pattern"],
+  "ArrayPattern":  ["Pattern"]
+}
