@@ -1,5 +1,4 @@
 var object1 = {
-    // MethodDefinition
     get [Symbol.create]() { },
     set [set()](value) { },
 };
@@ -10,7 +9,6 @@ var object3 = {
     *[generator()]() { }
 };
 var object4 = {
-    // Normal Property
     [Symbol.xxx]: "hello",
     [ok()]: 42,
 };
