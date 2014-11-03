@@ -1,5 +1,7 @@
-({t: t} = obj);
+({ t: t }) = obj;
+({ t: { C: C } }) = obj;
 ({
-    t: {C: C}
-} = obj);
-({a, b, c} = obj);
+  a,
+  b,
+  c
+}) = obj;

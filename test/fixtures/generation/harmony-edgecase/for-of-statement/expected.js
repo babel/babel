@@ -1,6 +1,4 @@
 function test() {
-    for (var i of array) {
-    }
-    for (let i of array) {
-    }
+  for (var i of array) {}
+  for (let i of array) {}
 }

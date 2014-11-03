@@ -1,3 +1,3 @@
 dejavu.Class.declare({
-    method2: function () {}
+  method2: function () {}
 });

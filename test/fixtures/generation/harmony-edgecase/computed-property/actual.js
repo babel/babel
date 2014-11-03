@@ -1,14 +1,14 @@
 var object1 = {
-    get [Symbol.create]() { },
-    set [set()](value) { },
+  get [Symbol.create]() { },
+  set [set()](value) { },
 };
 var object2 = {
-    *[generator()]() { }
+  *[generator()]() { }
 };
 var object3 = {
-    *[generator()]() { }
+  *[generator()]() { }
 };
 var object4 = {
-    [Symbol.xxx]: "hello",
-    [ok()]: 42,
+  [Symbol.xxx]: "hello",
+  [ok()]: 42,
 };
