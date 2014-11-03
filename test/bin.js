@@ -4,6 +4,7 @@ var rimraf  = require("rimraf");
 var mkdirp  = require("mkdirp");
 var child   = require("child_process");
 var path    = require("path");
+var chai    = require("chai");
 var fs      = require("fs");
 var _       = require("lodash");
 
@@ -42,7 +43,7 @@ var assertTest = function (stdout, stderr, opts) {
     if (opts.stderrContains) {
       assert.ok(_.contains(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
     } else {
-      assert.equal(stderr, expectStderr, "stderr didn't match");
+      chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
   } else if (stderr) {
     throw new Error("stderr: " + JSON.stringify(stderr));
@@ -55,7 +56,7 @@ var assertTest = function (stdout, stderr, opts) {
     if (opts.stdoutContains) {
       assert.ok(_.contains(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
     } else {
-      assert.equal(stdout, expectStdout, "stdout didn't match");
+      chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
   } else if (stdout) {
     throw new Error("stdout: " + JSON.stringify(stdout));
@@ -63,7 +64,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   _.each(opts.outFiles, function (expect, filename) {
     var actual = readFile(filename);
-    assert.equal(actual, expect, "out-file " + filename);
+    chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
 };
 
