@@ -48,7 +48,6 @@
     "source-map-support": "0.2.7",
     "esutils": "1.1.4",
     "acorn-6to5": "https://github.com/sebmck/acorn-6to5/archive/master.tar.gz",
-    "acorn-ast-types": "0.5.3-1",
     "estraverse": "^1.7.0"
   },
   "devDependencies": {
@@ -57,7 +56,6 @@
     "mocha": "1.21.5",
     "uglify-js": "2.4.15",
     "browserify": "6.1.0",
-    "proclaim": "2.0.0",
     "rimraf": "2.2.8",
     "jshint": "2.5.6",
     "chai": "^1.9.2"

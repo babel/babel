@@ -222,7 +222,7 @@ Just include one of those in the browser and access the transform method via the
 global `to5`.
 
 ```javascript
-to5("class Test {}").code;
+to5.transform("class Test {}").code;
 ```
 
 #### Test

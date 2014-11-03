@@ -1,56 +1,32 @@
 var fs = require("fs");
 var _  = require("lodash");
 
-var fixturesDir = __dirname + "/fixtures/transformation";
-
 var humanise = function (val) {
   return val.replace(/-/g, " ");
 };
 
 var readFile = function (filename) {
   if (fs.existsSync(filename)) {
-    return fs.readFileSync(filename, "utf8");
+    return fs.readFileSync(filename, "utf8").trim();
   } else {
     return "";
   }
 };
 
-exports.runTransformationTests = function (suites, transform, assert) {
-  _.each(suites, function (testSuite) {
-    suite("transformation/" + testSuite.title, function () {
-      _.each(testSuite.tests, function (task) {
-        test(task.title, function () {
-          var run = function () {
-            transform.test(task, assert);
-          };
+exports.get = function (entryName) {
+  if (exports.cache[entryName]) return exports.cache[entryName];
 
-          var throwMsg = task.options.throws;
-          if (throwMsg) {
-            // internal api doesn't have this option but it's best not to pollute
-            // the options object with useless options
-            delete task.options.throws;
-
-            assert.throws(run, new RegExp(throwMsg));
-          } else {
-            run();
-          }
-        });
-      });
-    });
-  });
-};
-
-exports.getTransformationTests = function () {
   var suites = [];
+  var entryLoc = __dirname + "/fixtures/" + entryName;
 
-  _.each(fs.readdirSync(fixturesDir), function (suiteName) {
+  _.each(fs.readdirSync(entryLoc), function (suiteName) {
     if (suiteName[0] === ".") return;
 
     var suite = {
       options: {},
       tests: [],
       title: humanise(suiteName),
-      filename: fixturesDir + "/" + suiteName
+      filename: entryLoc + "/" + suiteName
     };
     suites.push(suite);
 
@@ -87,10 +63,12 @@ exports.getTransformationTests = function () {
           filename: execLocAlias,
         },
         actual: {
+          loc: actualLoc,
           code: readFile(actualLoc),
           filename: actualLocAlias,
         },
         expect: {
+          loc: expectLoc,
           code: readFile(expectLoc),
           filename: expectLocAlias
         }
@@ -112,5 +90,15 @@ exports.getTransformationTests = function () {
     });
   });
 
-  return suites;
+  return exports.cache[entryName] = suites;
 };
+
+try {
+  exports.cache = require("../tests.json");
+} catch (err) {
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
+
+  var cache = exports.cache = {};
+  cache.transformation = exports.get("transformation");
+  cache.generation     = exports.get("generation");
+}

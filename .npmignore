@@ -7,4 +7,5 @@ benchmark
 Makefile
 .*
 dist
+tests.json
 !README.md

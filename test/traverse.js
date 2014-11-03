@@ -116,28 +116,6 @@ suite("traverse", function () {
     assert.equal(ast2.body[1].expression.left.object, replacement);
   });
 
-  test("traverse delete", function () {
-    var ast2 = _.cloneDeep(ast);
-
-    traverse(ast2, function (node) {
-      if (node.type === "VariableDeclaration") return traverse.Delete;
-    });
-
-    assert.deepEqual(ast2, {
-      type: "Program",
-      body: [body[1]]
-    });
-  });
-
-  test("traverse delete required", function () {
-    assert.throws(function () {
-      var ast2 = _.cloneDeep(ast);
-      traverse(ast2, function (node) {
-        if (node.type === "ThisExpression") return traverse.Delete;
-      });
-    }, /trying to delete property object from MemberExpression but can't because it's required/);
-  });
-
   test("hasType", function () {
     assert.ok(traverse.hasType(ast, "ThisExpression"));
     assert.ok(traverse.hasType(ast, "Program"));
@@ -146,13 +124,5 @@ suite("traverse", function () {
     assert.ok(!traverse.hasType(ast, "ThisExpression", ["Program"]));
 
     assert.ok(!traverse.hasType(ast, "ArrowFunctionExpression"));
-  });
-
-  test("isPattern");
-
-  test("isFunction", function () {
-    //assert.ok(traverse.isFunction(b.arrowFunctionExpression());
-    //assert.ok(traverse.isFunction(b.functionExpression()));
-    //assert.ok(traverse.isFunction(b.functionDeclaration()));
   });
 });
