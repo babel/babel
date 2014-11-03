@@ -1,10 +1,10 @@
 "use strict";
 
-var obj = function(_obj) {
+var obj = (function (_obj) {
   _obj["x" + foo] = "heh";
   _obj["y" + bar] = "noo";
   return _obj;
-}({
+})({
   foo: "foo",
   bar: "bar"
 });

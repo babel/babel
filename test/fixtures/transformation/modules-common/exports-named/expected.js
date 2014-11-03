@@ -1,4 +1,5 @@
 "use strict";
+
 exports.foo = foo;
 exports.foo = foo;
 exports.bar = bar;

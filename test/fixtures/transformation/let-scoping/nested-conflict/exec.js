@@ -1,4 +1,4 @@
-(function() {
+(function () {
   var x = 1;
   function f() {
   assert.equal(x, 1);

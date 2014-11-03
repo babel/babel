@@ -1,6 +1,6 @@
 "use strict";
-var _slice = Array.prototype.slice;
 
+var _slice = Array.prototype.slice;
 function foo() {
   return bar.apply(null, ["test"].concat(_slice.call(arguments)));
 }

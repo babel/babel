@@ -7,7 +7,7 @@
 })(function (exports, _foo) {
   "use strict";
 
-  (function(obj) {
+  (function (obj) {
     for (var i in obj) {
       exports[i] = obj[i];
     }

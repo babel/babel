@@ -1,10 +1,9 @@
 "use strict";
-var Component;
 
+var Component;
 Component = React.createClass({
   displayName: "Component",
-
-  render: function() {
+  render: function () {
     return null;
   }
 });

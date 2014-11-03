@@ -1,5 +1,5 @@
 "use strict";
 
-arr.map(function(i) {
+arr.map(function (i) {
   return i + 1;
 });

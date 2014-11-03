@@ -5,20 +5,19 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var A = function() {
+var A = (function () {
   var A = function A() {};
 
   _classProps(A, {
     a: {
       writable: true,
-      value: function() {}
+      value: function () {}
     },
-
     b: {
-      get: function() {},
-      set: function(b) {}
+      get: function () {},
+      set: function (b) {}
     }
-  }, null);
+  });
 
   return A;
-}();
+})();

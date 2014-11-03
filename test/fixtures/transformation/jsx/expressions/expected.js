@@ -1,5 +1,7 @@
 "use strict";
+
 X(null, a);
+
 X(null, a, " ", b);
 
 X({

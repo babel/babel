@@ -11,11 +11,11 @@
   exports.default = {};
   exports.default = [];
   exports.default = foo;
-  exports.default = function() {};
+  exports.default = function () {};
+  exports.default = function () {};
+  function foo() {}
+  exports.default = foo;
+  function Foo() {}
 
-  exports.default = function() {};
-
-  exports.default = function foo() {};
-
-  exports.default = function foo() {};
+  exports.default = Foo;
 });

@@ -1,10 +1,9 @@
 "use strict";
 
-var seattlers = function() {
+var seattlers = (function () {
   var _arr = [];
-
-  countries.forEach(function(customers) {
-    customers.forEach(function(c) {
+  countries.forEach(function (customers) {
+    customers.forEach(function (c) {
       if (c.city == "Seattle") {
         _arr.push({
           name: c.name,
@@ -15,4 +14,4 @@ var seattlers = function() {
   });
 
   return _arr;
-}();
+})();

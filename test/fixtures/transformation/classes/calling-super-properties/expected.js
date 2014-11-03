@@ -6,19 +6,16 @@ var _classProps = function (child, staticProps, instanceProps) {
 };
 
 var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
-    constructor: {
-      value: child,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-
+  child.prototype = Object.create(parent.prototype, { constructor: {
+    value: child,
+    enumerable: false,
+    writable: true,
+    configurable: true
+  } });
   child.__proto__ = parent;
 };
 
-var Test = function(Foo) {
+var Test = (function (Foo) {
   var Test = function Test() {
     Foo.prototype.test.whatever();
     Foo.prototype.test.call(this);
@@ -26,15 +23,12 @@ var Test = function(Foo) {
 
   _extends(Test, Foo);
 
-  _classProps(Test, {
-    test: {
-      writable: true,
-
-      value: function() {
-        return Foo.wow.call(this);
-      }
+  _classProps(Test, { test: {
+    writable: true,
+    value: function () {
+      return Foo.wow.call(this);
     }
-  }, null);
+  } });
 
   return Test;
-}(Foo);
+})(Foo);

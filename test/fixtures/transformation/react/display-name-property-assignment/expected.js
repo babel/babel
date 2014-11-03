@@ -2,8 +2,7 @@
 
 exports.Component = React.createClass({
   displayName: "Component",
-
-  render: function() {
+  render: function () {
     return null;
   }
 });

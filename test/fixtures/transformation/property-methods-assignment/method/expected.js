@@ -1,7 +1,5 @@
 "use strict";
 
-var obj = {
-  method: function() {
-    return 5 + 5;
-  }
-};
+var obj = { method: function () {
+  return 5 + 5;
+} };

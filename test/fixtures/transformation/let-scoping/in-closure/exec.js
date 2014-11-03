@@ -5,7 +5,7 @@ function letInClosure(n) {
   if (i % 3 == 0) {
     continue;
   }
-  l.push(function() {
+  l.push(function () {
     return let_i;
   });
   }

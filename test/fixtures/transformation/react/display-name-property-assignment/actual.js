@@ -1,5 +1,5 @@
 exports.Component = React.createClass({
-  render: function() {
+  render: function () {
   return null;
   }
 });

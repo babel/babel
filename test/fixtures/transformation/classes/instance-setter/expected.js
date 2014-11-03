@@ -5,16 +5,12 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var Test = function() {
+var Test = (function () {
   var Test = function Test() {};
 
-  _classProps(Test, null, {
-    test: {
-      set: function(val) {
-        this._test = val;
-      }
-    }
-  });
+  _classProps(Test, null, { test: { set: function (val) {
+    this._test = val;
+  } } });
 
   return Test;
-}();
+})();

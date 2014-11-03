@@ -5,7 +5,7 @@ var result;
   for (var index in let_array) {
   let let_index = index;
   let let_value = let_array[let_index];
-  let_result.push(function() {
+  let_result.push(function () {
     return [let_index, let_value];
   });
   }

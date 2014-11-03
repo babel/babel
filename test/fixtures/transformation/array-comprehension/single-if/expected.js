@@ -1,8 +1,8 @@
 "use strict";
 
-var seattlers = customers.filter(function(c) {
+var seattlers = customers.filter(function (c) {
   return c.city == "Seattle";
-}).map(function(c) {
+}).map(function (c) {
   return {
     name: c.name,
     age: c.age

@@ -1,3 +1,3 @@
-class Q extends function() {} {
-  
+class Q extends function () {} {
+
 }

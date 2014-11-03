@@ -18,7 +18,7 @@ console.log(unpackObject({
   author: "author"
 }));
 
-var unpackArray = function(_ref3, _ref4) {
+var unpackArray = function (_ref3, _ref4) {
   var a = _ref3[0];
   var b = _ref3[1];
   var c = _ref3[2];
