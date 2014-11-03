@@ -109,6 +109,27 @@ export function bar() {
 });
 ```
 
+### Ignore
+
+
+**In**
+
+```javascript
+import foo from "foo";
+
+export function bar() {
+  return foo("foobar");
+}
+```
+
+**Out**
+
+```javascript
+function bar() {
+  return foo("foobar");
+}
+```
+
 ## Custom
 
 You can alternatively specify module names instead of one of the built-in types.
