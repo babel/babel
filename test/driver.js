@@ -52,12 +52,15 @@
           else callback("ok", test.code);
         }
       } catch(e) {
-        if (test.error && e instanceof SyntaxError) {
+        if (!(e instanceof SyntaxError)) {
+          throw e;
+        }
+        if (test.error) {
           if (e.message == test.error) callback("ok", test.code);
           else callback("fail", test.code,
                         "Expected error message: " + test.error + "\nGot error message: " + e.message);
         } else {
-          callback("error", test.code, !(e instanceof SyntaxError) && e.stack || e.message || e.toString());
+          callback("error", test.code, e.message || e.toString());
         }
       }
     }

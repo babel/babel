@@ -786,35 +786,6 @@
     return finishNode(node, "NewExpression");
   }
 
-  function parseTemplate() {
-    var node = startNode();
-    node.expressions = [];
-    node.quasis = [];
-    inTemplate = true;
-    next();
-    for (;;) {
-      var elem = startNode();
-      elem.value = {cooked: tokVal, raw: input.slice(tokStart, tokEnd)};
-      elem.tail = false;
-      next();
-      node.quasis.push(finishNode(elem, "TemplateElement"));
-      if (tokType === _bquote) { // '`', end of template
-        elem.tail = true;
-        break;
-      }
-      inTemplate = false;
-      expect(_dollarBraceL);
-      node.expressions.push(parseExpression());
-      inTemplate = true;
-      // hack to include previously skipped space
-      tokPos = tokEnd;
-      expect(_braceR);
-    }
-    inTemplate = false;
-    next();
-    return finishNode(node, "TemplateLiteral");
-  }
-
   function parseObj(isClass, isStatement) {
     var node = startNode();
     if (isClass) {

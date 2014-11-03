@@ -3,23 +3,12 @@
   <meta charset="utf-8">
   <title>Acorn test suite</title>
   <script src="../acorn.js"></script>
+  <script src="../acorn_loose.js"></script>
   <script src="driver.js"></script>
   <script src="tests.js" charset="utf-8"></script>
   <script src="tests-harmony.js" charset="utf-8"></script>
 </head>
-
-<script>
-  var testsRun = 0, failed = 0;
-  function report(state, code, message) {
-    if (state != "ok") {++failed; console.log(code, message);}
-    ++testsRun;
-  }
-  window.onload = function(){
-    var t0 = +new Date;
-    runTests(report);
-    var out = testsRun + " tests run in " + (+new Date - t0) + "ms\n";
-    if (failed) out += failed + " failures.\n";
-    else out += "All passed.\n";
-    document.body.appendChild(document.createElement("pre")).appendChild(document.createTextNode(out));
-  };
-</script>
+<body>
+  <ul id="log"></ul>
+  <script src="run.js"></script>
+</body>
