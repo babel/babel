@@ -134,6 +134,10 @@ function bar() {
 
 You can alternatively specify module names instead of one of the built-in types.
 
+    $ 6to5 --modules custom-module-formatter
+
+**node_modules/custom-module-formatter/index.js**
+
 ```javascript
 module.exports = ModuleFormatter;
 
