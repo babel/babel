@@ -9,6 +9,7 @@ define(["exports"], function (exports) {
   exports.default = function () {};
   function foo() {}
   exports.default = foo;
+
   function Foo() {}
 
   exports.default = Foo;
