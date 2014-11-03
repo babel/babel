@@ -102,6 +102,10 @@ map embedded in a comment at the bottom.
 Compile the entire `src` directory and output it to the `lib` directory.
 
     $ 6to5 src --out-dir lib
+    
+Compile the entire `src` directory and output it to the one concatenated file.
+    
+    $ 6to5 src --out-file script-compiled.js
 
 Pipe a file in via stdin and output it to `script-compiled.js`
 

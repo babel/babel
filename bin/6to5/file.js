@@ -100,8 +100,8 @@ module.exports = function (commander, filenames) {
       }
     });
 
-    _.each(_filenames, function (filename, i) {
-      results.push(util.compile(filename, { _noStrict: +i !== 0 }));
+    _.each(_filenames, function (filename) {
+      results.push(util.compile(filename));
     });
 
     output();
