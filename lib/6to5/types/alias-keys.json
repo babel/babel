@@ -1,7 +1,10 @@
 {
-  "ArrowFunctionExpression": ["Function"],
-  "FunctionDeclaration":     ["Function"],
-  "FunctionExpression":      ["Function"],
+  "ArrowFunctionExpression": ["Scope", "Function"],
+  "FunctionDeclaration":     ["Scope", "Function"],
+  "FunctionExpression":      ["Scope", "Function"],
+
+  "BlockStatement": ["Scope"],
+  "Program":        ["Scope"],
 
   "LogicalExpression": ["Binary"],
   "BinaryExpression":  ["Binary"],
