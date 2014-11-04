@@ -19,6 +19,7 @@ var BaseController = (function (Chaplin) {
 
   return BaseController;
 })(Chaplin);
+
 var BaseController2 = (function (Chaplin) {
   var BaseController2 = function BaseController2() {
     Chaplin.Controller.Another.apply(this, arguments);
