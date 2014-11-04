@@ -1,3 +1,0 @@
-{
-  "throws": "`FunctionDeclaration`s that use `let` and `constant` references aren't allowed outside of the root scope"
-}

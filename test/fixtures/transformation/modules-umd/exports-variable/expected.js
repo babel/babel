@@ -14,12 +14,12 @@
   exports.foo2 = foo2;
   var foo3;
   exports.foo3 = foo3;
-  var _foo4 = 2;
-  exports.foo4 = _foo4;
-  var _foo5;
-  exports.foo5 = _foo5;
-  var _foo6 = 3;
-  exports.foo6 = _foo6;
+  var foo4 = 2;
+  exports.foo4 = foo4;
+  var foo5;
+  exports.foo5 = foo5;
+  var foo6 = 3;
+  exports.foo6 = foo6;
   function foo7() {}
 
   var foo8 = function foo8() {};
