@@ -11,7 +11,7 @@
   "Literal":              ["value"],
   "MemberExpression":     ["object", "property", "computed"],
   "ObjectExpression":     ["properties"],
-  "Property":             ["kind", "key", "value"],
+  "Property":             ["kind", "key", "value", "computed"],
   "ReturnStatement":      ["argument"],
   "SequenceExpression":   ["expressions"],
   "UnaryExpression":      ["operator", "argument", "prefix"],
