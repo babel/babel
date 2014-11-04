@@ -3,6 +3,7 @@ var sourceMap = require("source-map");
 var helper    = require("./_helper");
 var assert    = require("assert");
 var chai      = require("chai");
+var util      = require("../lib/6to5/util");
 var _         = require("lodash");
 
 var run = function (task) {
