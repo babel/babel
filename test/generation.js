@@ -27,7 +27,7 @@ _.each(helper.get("generation"), function (testSuite) {
         var actual = task.actual;
 
         var actualAst  = util.parseNoProperties(actual.loc, actual.code);
-        var actualCode = generate(actual, actualAst).code;
+        var actualCode = generate(actual.code, actualAst).code;
 
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
       });
