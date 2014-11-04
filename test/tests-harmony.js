@@ -8304,6 +8304,159 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
   locations: true
 });
 
+
+test("class A { static [foo]() {} }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 29}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 29}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 29}
+      },
+      body: [{
+        type: "MethodDefinition",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 27}
+        },
+        static: true,
+        computed: true,
+        key: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 21}
+          },
+          name: "foo"
+        },
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          loc: {
+            start: {line: 1, column: 22},
+            end: {line: 1, column: 27}
+          },
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            loc: {
+              start: {line: 1, column: 25},
+              end: {line: 1, column: 27}
+            },
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class A { static get [foo]() {} }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 33}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 33}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      range: [
+        6,
+        7
+      ],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 33}
+      },
+      body: [{
+        type: "MethodDefinition",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 31}
+        },
+        static: true,
+        computed: true,
+        key: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 22},
+            end: {line: 1, column: 25}
+          },
+          name: "foo"
+        },
+        kind: "get",
+        value: {
+          type: "FunctionExpression",
+          loc: {
+            start: {line: 1, column: 26},
+            end: {line: 1, column: 31}
+          },
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            loc: {
+              start: {line: 1, column: 29},
+              end: {line: 1, column: 31}
+            },
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 test("class A { set foo(v) {} get foo() {} }", {
   type: "Program",
   body: [{
