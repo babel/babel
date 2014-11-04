@@ -10,15 +10,16 @@
   }
 
   var htmlLog = typeof document === "object" && document.getElementById('log');
-  var htmlGroup;
+  var htmlGroup = htmlLog;
 
   function group(name) {
-    if (htmlLog) {
+    if (htmlGroup) {
+      var parentGroup = htmlGroup;
       htmlGroup = document.createElement("ul");
       var item = document.createElement("li");
       item.textContent = name;
       item.appendChild(htmlGroup);
-      htmlLog.appendChild(item);
+      parentGroup.appendChild(item);
     }
     if (typeof console === "object" && console.group) {
       console.group(name);
@@ -26,7 +27,9 @@
   }
 
   function groupEnd() {
-    htmlGroup = null;
+    if (htmlGroup) {
+      htmlGroup = htmlGroup.parentElement.parentElement;
+    }
     if (typeof console === "object" && console.groupEnd) {
       console.groupEnd(name);
     }
@@ -68,11 +71,13 @@
   group("Errors");
 
   for (var name in modes) {
+    group(name);
     var mode = modes[name];
     stats = mode.stats = {testsRun: 0, failed: 0};
     var t0 = +new Date;
     driver.runTests(mode.config, report);
     mode.stats.duration = +new Date - t0;
+    groupEnd();
   }
 
   groupEnd();
