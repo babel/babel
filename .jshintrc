@@ -20,6 +20,7 @@
   "maxdepth": 4,
 
   "globals": {
+    "window": true,
     "suite": true,
     "set": true,
     "before": true,
