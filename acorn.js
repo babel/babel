@@ -2766,7 +2766,7 @@
         }
       var isGenerator = eat(_star);
       parsePropertyName(method);
-      if (tokType === _name && !method.computed && method.key.type === "Identifier" &&
+      if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set")) {
         if (isGenerator) unexpected();
         method.kind = method.key.name;
