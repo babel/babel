@@ -13,6 +13,8 @@
   "ObjectExpression":     ["properties"],
   "Property":             ["kind", "key", "value"],
   "ReturnStatement":      ["argument"],
+  "SequenceExpression":   ["expressions"],
+  "UnaryExpression":      ["operator", "argument", "prefix"],
   "VariableDeclaration":  ["kind", "declarations"],
   "VariableDeclarator":   ["id", "init"]
 }
