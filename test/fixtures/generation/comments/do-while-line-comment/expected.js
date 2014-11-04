@@ -1,3 +1,3 @@
 do {
-}    // LINE
+}  // LINE
 while (true);
