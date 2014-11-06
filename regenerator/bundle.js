@@ -7030,7 +7030,7 @@ exports.compile = compile;
 exports.transform = transform;
 
 }).call(this,"/")
-},{"./lib/util":26,"./lib/visit":27,"./runtime":92,"assert":2,"defs":29,"esprima-fb":44,"fs":1,"path":11,"recast":61,"through":91}],29:[function(_dereq_,module,exports){
+},{"./lib/util":26,"./lib/visit":27,"./runtime":87,"assert":2,"defs":29,"esprima-fb":44,"fs":1,"path":11,"recast":61,"through":86}],29:[function(_dereq_,module,exports){
 "use strict";
 
 var assert = _dereq_("assert");
@@ -23160,7 +23160,7 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":54,"./options":55,"./types":59,"./util":60,"assert":2,"private":45,"source-map":81}],54:[function(_dereq_,module,exports){
+},{"./mapping":54,"./options":55,"./types":59,"./util":60,"assert":2,"private":45,"source-map":76}],54:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var isString = types.builtInTypes.string;
@@ -25232,7 +25232,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":52,"./lines":53,"./options":55,"./patcher":57,"./types":59,"./util":60,"assert":2,"source-map":81}],59:[function(_dereq_,module,exports){
+},{"./comments":52,"./lines":53,"./options":55,"./patcher":57,"./types":59,"./util":60,"assert":2,"source-map":76}],59:[function(_dereq_,module,exports){
 var types = _dereq_("ast-types");
 var def = types.Type.def;
 
@@ -25245,7 +25245,7 @@ types.finalize();
 
 module.exports = types;
 
-},{"ast-types":76}],60:[function(_dereq_,module,exports){
+},{"ast-types":75}],60:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var getFieldValue = _dereq_("./types").getFieldValue;
 var sourceMap = _dereq_("source-map");
@@ -25324,7 +25324,7 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
     return smg.toJSON();
 };
 
-},{"./types":59,"assert":2,"source-map":81}],61:[function(_dereq_,module,exports){
+},{"./types":59,"assert":2,"source-map":76}],61:[function(_dereq_,module,exports){
 (function (process){
 var types = _dereq_("./lib/types");
 var parse = _dereq_("./lib/parser").parse;
@@ -25775,7 +25775,7 @@ def("Literal")
         isRegExp
     ));
 
-},{"../lib/shared":73,"../lib/types":75}],63:[function(_dereq_,module,exports){
+},{"../lib/shared":73,"../lib/types":74}],63:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -25864,7 +25864,7 @@ def("XMLProcessingInstruction")
     .field("target", isString)
     .field("contents", or(isString, null));
 
-},{"../lib/types":75,"./core":62}],64:[function(_dereq_,module,exports){
+},{"../lib/types":74,"./core":62}],64:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -26081,7 +26081,7 @@ def("TemplateElement")
     .field("value", {"cooked": isString, "raw": isString})
     .field("tail", isBoolean);
 
-},{"../lib/shared":73,"../lib/types":75,"./core":62}],65:[function(_dereq_,module,exports){
+},{"../lib/shared":73,"../lib/types":74,"./core":62}],65:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -26118,7 +26118,7 @@ def("AwaitExpression")
     .field("argument", or(def("Expression"), null))
     .field("all", isBoolean, defaults["false"]);
 
-},{"../lib/shared":73,"../lib/types":75,"./core":62}],66:[function(_dereq_,module,exports){
+},{"../lib/shared":73,"../lib/types":74,"./core":62}],66:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -26248,7 +26248,7 @@ def("Function")
 def("ClassProperty")
     .field("id", or(def("Identifier"), def("TypeAnnotatedIdentifier")));
 
-},{"../lib/shared":73,"../lib/types":75,"./core":62}],67:[function(_dereq_,module,exports){
+},{"../lib/shared":73,"../lib/types":74,"./core":62}],67:[function(_dereq_,module,exports){
 _dereq_("./core");
 var types = _dereq_("../lib/types");
 var def = types.Type.def;
@@ -26289,7 +26289,7 @@ def("GraphIndexExpression")
     .build("index")
     .field("index", geq(0));
 
-},{"../lib/shared":73,"../lib/types":75,"./core":62}],68:[function(_dereq_,module,exports){
+},{"../lib/shared":73,"../lib/types":74,"./core":62}],68:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("../main");
 var getFieldNames = types.getFieldNames;
@@ -26469,7 +26469,7 @@ function objectsAreEquivalent(a, b, problemPath) {
 
 module.exports = astNodesAreEquivalent;
 
-},{"../main":76,"assert":2}],69:[function(_dereq_,module,exports){
+},{"../main":75,"assert":2}],69:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var n = types.namedTypes;
@@ -26867,7 +26867,7 @@ function firstInStatement(path) {
 
 module.exports = NodePath;
 
-},{"./path":71,"./scope":72,"./types":75,"assert":2,"util":21}],70:[function(_dereq_,module,exports){
+},{"./path":71,"./scope":72,"./types":74,"assert":2,"util":21}],70:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var NodePath = _dereq_("./node-path");
@@ -27122,7 +27122,7 @@ function traverse(path, newVisitor) {
 
 module.exports = PathVisitor;
 
-},{"./node-path":69,"./types":75,"assert":2}],71:[function(_dereq_,module,exports){
+},{"./node-path":69,"./types":74,"assert":2}],71:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;
@@ -27472,7 +27472,7 @@ Pp.replace = function replace(replacement) {
 
 module.exports = Path;
 
-},{"./types":75,"assert":2}],72:[function(_dereq_,module,exports){
+},{"./types":74,"assert":2}],72:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var Type = types.Type;
@@ -27722,7 +27722,7 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./node-path":69,"./types":75,"assert":2}],73:[function(_dereq_,module,exports){
+},{"./node-path":69,"./types":74,"assert":2}],73:[function(_dereq_,module,exports){
 var types = _dereq_("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
@@ -27765,32 +27765,7 @@ exports.isPrimitive = new Type(function(value) {
              type === "function");
 }, naiveIsPrimitive.toString());
 
-},{"../lib/types":75}],74:[function(_dereq_,module,exports){
-var visit = _dereq_("./path-visitor").visit;
-var deprecate = _dereq_("depd")('require("ast-types").traverse');
-
-function traverseWithFullPathInfo(node, callback) {
-    return visit(node, {
-        visitNode: function(path) {
-            if (callback.call(path, path.value) !== false) {
-                this.traverse(path);
-            }
-
-            return false;
-        }
-    });
-}
-
-var deprecatedWrapper = deprecate.function(
-    traverseWithFullPathInfo,
-    'Please use require("ast-types").visit instead of .traverse for ' +
-        'syntax tree manipulation'
-);
-
-deprecatedWrapper.fast = deprecatedWrapper;
-module.exports = deprecatedWrapper;
-
-},{"./path-visitor":70,"depd":77}],75:[function(_dereq_,module,exports){
+},{"../lib/types":74}],74:[function(_dereq_,module,exports){
 var assert = _dereq_("assert");
 var Ap = Array.prototype;
 var slice = Ap.slice;
@@ -28516,7 +28491,7 @@ exports.finalize = function() {
     });
 };
 
-},{"assert":2}],76:[function(_dereq_,module,exports){
+},{"assert":2}],75:[function(_dereq_,module,exports){
 var types = _dereq_("./lib/types");
 
 // This core module of AST types captures ES5 as it is parsed today by
@@ -28544,752 +28519,12 @@ exports.eachField = types.eachField;
 exports.someField = types.someField;
 exports.getSupertypeNames = types.getSupertypeNames;
 exports.astNodesAreEquivalent = _dereq_("./lib/equiv");
-exports.traverse = _dereq_("./lib/traverse");
 exports.finalize = types.finalize;
 exports.NodePath = _dereq_("./lib/node-path");
 exports.PathVisitor = _dereq_("./lib/path-visitor");
 exports.visit = exports.PathVisitor.visit;
 
-},{"./def/core":62,"./def/e4x":63,"./def/es6":64,"./def/es7":65,"./def/fb-harmony":66,"./def/mozilla":67,"./lib/equiv":68,"./lib/node-path":69,"./lib/path-visitor":70,"./lib/traverse":74,"./lib/types":75}],77:[function(_dereq_,module,exports){
-(function (process){
-/*!
- * depd
- * Copyright(c) 2014 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var callSiteToString = _dereq_('./lib/compat').callSiteToString
-var EventEmitter = _dereq_('events').EventEmitter
-var relative = _dereq_('path').relative
-
-/**
- * Module exports.
- */
-
-module.exports = depd
-
-/**
- * Get the path to base files on.
- */
-
-var basePath = process.cwd()
-
-/**
- * Get listener count on event emitter.
- */
-
-/*istanbul ignore next*/
-var eventListenerCount = EventEmitter.listenerCount
-  || function (emitter, type) { return emitter.listeners(type).length }
-
-/**
- * Determine if namespace is contained in the string.
- */
-
-function containsNamespace(str, namespace) {
-  var val = str.split(/[ ,]+/)
-
-  namespace = String(namespace).toLowerCase()
-
-  for (var i = 0 ; i < val.length; i++) {
-    if (!(str = val[i])) continue;
-
-    // namespace contained
-    if (str === '*' || str.toLowerCase() === namespace) {
-      return true
-    }
-  }
-
-  return false
-}
-
-/**
- * Convert a data descriptor to accessor descriptor.
- */
-
-function convertDataDescriptorToAccessor(obj, prop, message) {
-  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
-  var value = descriptor.value
-
-  descriptor.get = function getter() { return value }
-
-  if (descriptor.writable) {
-    descriptor.set = function setter(val) { return value = val }
-  }
-
-  delete descriptor.value
-  delete descriptor.writable
-
-  Object.defineProperty(obj, prop, descriptor)
-
-  return descriptor
-}
-
-/**
- * Create arguments string to keep arity.
- */
-
-function createArgumentsString(arity) {
-  var str = ''
-
-  for (var i = 0; i < arity; i++) {
-    str += ', arg' + i
-  }
-
-  return str.substr(2)
-}
-
-/**
- * Create stack string from stack.
- */
-
-function createStackString(stack) {
-  var str = this.name + ': ' + this.namespace
-
-  if (this.message) {
-    str += ' deprecated ' + this.message
-  }
-
-  for (var i = 0; i < stack.length; i++) {
-    str += '\n    at ' + callSiteToString(stack[i])
-  }
-
-  return str
-}
-
-/**
- * Create deprecate for namespace in caller.
- */
-
-function depd(namespace) {
-  if (!namespace) {
-    throw new TypeError('argument namespace is required')
-  }
-
-  var stack = getStack()
-  var site = callSiteLocation(stack[1])
-  var file = site[0]
-
-  function deprecate(message) {
-    // call to self as log
-    log.call(deprecate, message)
-  }
-
-  deprecate._file = file
-  deprecate._ignored = isignored(namespace)
-  deprecate._namespace = namespace
-  deprecate._traced = istraced(namespace)
-  deprecate._warned = Object.create(null)
-
-  deprecate.function = wrapfunction
-  deprecate.property = wrapproperty
-
-  return deprecate
-}
-
-/**
- * Determine if namespace is ignored.
- */
-
-function isignored(namespace) {
-  /* istanbul ignore next: tested in a child processs */
-  if (process.noDeprecation) {
-    // --no-deprecation support
-    return true
-  }
-
-  var str = process.env.NO_DEPRECATION || ''
-
-  // namespace ignored
-  return containsNamespace(str, namespace)
-}
-
-/**
- * Determine if namespace is traced.
- */
-
-function istraced(namespace) {
-  /* istanbul ignore next: tested in a child processs */
-  if (process.traceDeprecation) {
-    // --trace-deprecation support
-    return true
-  }
-
-  var str = process.env.TRACE_DEPRECATION || ''
-
-  // namespace traced
-  return containsNamespace(str, namespace)
-}
-
-/**
- * Display deprecation message.
- */
-
-function log(message, site) {
-  var haslisteners = eventListenerCount(process, 'deprecation') !== 0
-
-  // abort early if no destination
-  if (!haslisteners && this._ignored) {
-    return
-  }
-
-  var caller
-  var callFile
-  var callSite
-  var i = 0
-  var seen = false
-  var stack = getStack()
-  var file = this._file
-
-  if (site) {
-    // provided site
-    callSite = callSiteLocation(stack[1])
-    callSite.name = site.name
-    file = callSite[0]
-  } else {
-    // get call site
-    i = 2
-    site = callSiteLocation(stack[i])
-    callSite = site
-  }
-
-  // get caller of deprecated thing in relation to file
-  for (; i < stack.length; i++) {
-    caller = callSiteLocation(stack[i])
-    callFile = caller[0]
-
-    if (callFile === file) {
-      seen = true
-    } else if (callFile === this._file) {
-      file = this._file
-    } else if (seen) {
-      break
-    }
-  }
-
-  var key = caller
-    ? site.join(':') + '__' + caller.join(':')
-    : undefined
-
-  if (key !== undefined && key in this._warned) {
-    // already warned
-    return
-  }
-
-  this._warned[key] = true
-
-  // generate automatic message from call site
-  if (!message) {
-    message = callSite === site || !callSite.name
-      ? defaultMessage(site)
-      : defaultMessage(callSite)
-  }
-
-  // emit deprecation if listeners exist
-  if (haslisteners) {
-    var err = DeprecationError(this._namespace, message, stack.slice(i))
-    process.emit('deprecation', err)
-    return
-  }
-
-  // format and write message
-  var format = process.stderr.isTTY
-    ? formatColor
-    : formatPlain
-  var msg = format.call(this, message, caller, stack.slice(i))
-  process.stderr.write(msg + '\n', 'utf8')
-
-  return
-}
-
-/**
- * Get call site location as array.
- */
-
-function callSiteLocation(callSite) {
-  var file = callSite.getFileName() || '<anonymous>'
-  var line = callSite.getLineNumber()
-  var colm = callSite.getColumnNumber()
-
-  if (callSite.isEval()) {
-    file = callSite.getEvalOrigin() + ', ' + file
-  }
-
-  var site = [file, line, colm]
-
-  site.callSite = callSite
-  site.name = callSite.getFunctionName()
-
-  return site
-}
-
-/**
- * Generate a default message from the site.
- */
-
-function defaultMessage(site) {
-  var callSite = site.callSite
-  var funcName = site.name
-  var typeName = callSite.getTypeName()
-
-  // make useful anonymous name
-  if (!funcName) {
-    funcName = '<anonymous@' + formatLocation(site) + '>'
-  }
-
-  // make useful type name
-  if (typeName === 'Function') {
-    typeName = callSite.getThis().name || typeName
-  }
-
-  return callSite.getMethodName()
-    ? typeName + '.' + funcName
-    : funcName
-}
-
-/**
- * Format deprecation message without color.
- */
-
-function formatPlain(msg, caller, stack) {
-  var timestamp = new Date().toUTCString()
-
-  var formatted = timestamp
-    + ' ' + this._namespace
-    + ' deprecated ' + msg
-
-  // add stack trace
-  if (this._traced) {
-    for (var i = 0; i < stack.length; i++) {
-      formatted += '\n    at ' + callSiteToString(stack[i])
-    }
-
-    return formatted
-  }
-
-  if (caller) {
-    formatted += ' at ' + formatLocation(caller)
-  }
-
-  return formatted
-}
-
-/**
- * Format deprecation message with color.
- */
-
-function formatColor(msg, caller, stack) {
-  var formatted = '\x1b[36;1m' + this._namespace + '\x1b[22;39m' // bold cyan
-    + ' \x1b[33;1mdeprecated\x1b[22;39m' // bold yellow
-    + ' \x1b[0m' + msg + '\x1b[39m' // reset
-
-  // add stack trace
-  if (this._traced) {
-    for (var i = 0; i < stack.length; i++) {
-      formatted += '\n    \x1b[36mat ' + callSiteToString(stack[i]) + '\x1b[39m' // cyan
-    }
-
-    return formatted
-  }
-
-  if (caller) {
-    formatted += ' \x1b[36m' + formatLocation(caller) + '\x1b[39m' // cyan
-  }
-
-  return formatted
-}
-
-/**
- * Format call site location.
- */
-
-function formatLocation(callSite) {
-  return relative(basePath, callSite[0])
-    + ':' + callSite[1]
-    + ':' + callSite[2]
-}
-
-/**
- * Get the stack as array of call sites.
- */
-
-function getStack() {
-  var limit = Error.stackTraceLimit
-  var obj = {}
-  var prep = Error.prepareStackTrace
-
-  Error.prepareStackTrace = prepareObjectStackTrace
-  Error.stackTraceLimit = Math.max(10, limit)
-
-  // capture the stack
-  Error.captureStackTrace(obj)
-
-  // slice this function off the top
-  var stack = obj.stack.slice(1)
-
-  Error.prepareStackTrace = prep
-  Error.stackTraceLimit = limit
-
-  return stack
-}
-
-/**
- * Capture call site stack from v8.
- */
-
-function prepareObjectStackTrace(obj, stack) {
-  return stack
-}
-
-/**
- * Return a wrapped function in a deprecation message.
- */
-
-function wrapfunction(fn, message) {
-  if (typeof fn !== 'function') {
-    throw new TypeError('argument fn must be a function')
-  }
-
-  var args = createArgumentsString(fn.length)
-  var deprecate = this
-  var stack = getStack()
-  var site = callSiteLocation(stack[1])
-
-  site.name = fn.name
-
-  var deprecatedfn = eval('(function (' + args + ') {\n'
-    + '"use strict"\n'
-    + 'log.call(deprecate, message, site)\n'
-    + 'return fn.apply(this, arguments)\n'
-    + '})')
-
-  return deprecatedfn
-}
-
-/**
- * Wrap property in a deprecation message.
- */
-
-function wrapproperty(obj, prop, message) {
-  if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) {
-    throw new TypeError('argument obj must be object')
-  }
-
-  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
-
-  if (!descriptor) {
-    throw new TypeError('must call property on owner object')
-  }
-
-  if (!descriptor.configurable) {
-    throw new TypeError('property must be configurable')
-  }
-
-  var deprecate = this
-  var stack = getStack()
-  var site = callSiteLocation(stack[1])
-
-  // set site name
-  site.name = prop
-
-  // convert data descriptor
-  if ('value' in descriptor) {
-    descriptor = convertDataDescriptorToAccessor(obj, prop, message)
-  }
-
-  var get = descriptor.get
-  var set = descriptor.set
-
-  // wrap getter
-  if (typeof get === 'function') {
-    descriptor.get = function getter() {
-      log.call(deprecate, message, site)
-      return get.apply(this, arguments)
-    }
-  }
-
-  // wrap setter
-  if (typeof set === 'function') {
-    descriptor.set = function setter() {
-      log.call(deprecate, message, site)
-      return set.apply(this, arguments)
-    }
-  }
-
-  Object.defineProperty(obj, prop, descriptor)
-}
-
-/**
- * Create DeprecationError for deprecation
- */
-
-function DeprecationError(namespace, message, stack) {
-  var error = new Error()
-  var stackString
-
-  Object.defineProperty(error, 'constructor', {
-    value: DeprecationError
-  })
-
-  Object.defineProperty(error, 'message', {
-    configurable: true,
-    enumerable: false,
-    value: message,
-    writable: true
-  })
-
-  Object.defineProperty(error, 'name', {
-    enumerable: false,
-    configurable: true,
-    value: 'DeprecationError',
-    writable: true
-  })
-
-  Object.defineProperty(error, 'namespace', {
-    configurable: true,
-    enumerable: false,
-    value: namespace,
-    writable: true
-  })
-
-  Object.defineProperty(error, 'stack', {
-    configurable: true,
-    enumerable: false,
-    get: function () {
-      if (stackString !== undefined) {
-        return stackString
-      }
-
-      // prepare stack trace
-      return stackString = createStackString.call(this, stack)
-    },
-    set: function setter(val) {
-      stackString = val
-    }
-  })
-
-  return error
-}
-
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/compat":80,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"events":8,"path":11}],78:[function(_dereq_,module,exports){
-(function (Buffer){
-/*!
- * depd
- * Copyright(c) 2014 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/**
- * Module exports.
- */
-
-module.exports = bufferConcat
-
-/**
- * Concatenate an array of Buffers.
- */
-
-function bufferConcat(bufs) {
-  var length = 0
-
-  for (var i = 0, len = bufs.length; i < len; i++) {
-    length += bufs[i].length
-  }
-
-  var buf = new Buffer(length)
-  var pos = 0
-
-  for (var i = 0, len = bufs.length; i < len; i++) {
-    bufs[i].copy(buf, pos)
-    pos += bufs[i].length
-  }
-
-  return buf
-}
-
-}).call(this,_dereq_("buffer").Buffer)
-},{"buffer":5}],79:[function(_dereq_,module,exports){
-/*!
- * depd
- * Copyright(c) 2014 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/**
- * Module exports.
- */
-
-module.exports = callSiteToString
-
-/**
- * Format a CallSite file location to a string.
- */
-
-function callSiteFileLocation(callSite) {
-  var fileName
-  var fileLocation = ''
-
-  if (callSite.isNative()) {
-    fileLocation = 'native'
-  } else if (callSite.isEval()) {
-    fileName = callSite.getScriptNameOrSourceURL()
-    if (!fileName) {
-      fileLocation = callSite.getEvalOrigin()
-    }
-  } else {
-    fileName = callSite.getFileName()
-  }
-
-  if (fileName) {
-    fileLocation += fileName
-
-    var lineNumber = callSite.getLineNumber()
-    if (lineNumber != null) {
-      fileLocation += ':' + lineNumber
-
-      var columnNumber = callSite.getColumnNumber()
-      if (columnNumber) {
-        fileLocation += ':' + columnNumber
-      }
-    }
-  }
-
-  return fileLocation || 'unknown source'
-}
-
-/**
- * Format a CallSite to a string.
- */
-
-function callSiteToString(callSite) {
-  var addSuffix = true
-  var fileLocation = callSiteFileLocation(callSite)
-  var functionName = callSite.getFunctionName()
-  var isConstructor = callSite.isConstructor()
-  var isMethodCall = !(callSite.isToplevel() || isConstructor)
-  var line = ''
-
-  if (isMethodCall) {
-    var methodName = callSite.getMethodName()
-    var typeName = getConstructorName(callSite)
-
-    if (functionName) {
-      if (typeName && functionName.indexOf(typeName) !== 0) {
-        line += typeName + '.'
-      }
-
-      line += functionName
-
-      if (methodName && functionName.lastIndexOf('.' + methodName) !== functionName.length - methodName.length - 1) {
-        line += ' [as ' + methodName + ']'
-      }
-    } else {
-      line += typeName + '.' + (methodName || '<anonymous>')
-    }
-  } else if (isConstructor) {
-    line += 'new ' + (functionName || '<anonymous>')
-  } else if (functionName) {
-    line += functionName
-  } else {
-    addSuffix = false
-    line += fileLocation
-  }
-
-  if (addSuffix) {
-    line += ' (' + fileLocation + ')'
-  }
-
-  return line
-}
-
-/**
- * Get constructor name of reviver.
- */
-
-function getConstructorName(obj) {
-  var receiver = obj.receiver
-  return (receiver.constructor && receiver.constructor.name) || null
-}
-
-},{}],80:[function(_dereq_,module,exports){
-(function (Buffer){
-/*!
- * depd
- * Copyright(c) 2014 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/**
- * Module exports.
- */
-
-lazyProperty(module.exports, 'bufferConcat', function bufferConcat() {
-  return Buffer.concat || _dereq_('./buffer-concat')
-})
-
-lazyProperty(module.exports, 'callSiteToString', function callSiteToString() {
-  var limit = Error.stackTraceLimit
-  var obj = {}
-  var prep = Error.prepareStackTrace
-
-  function prepareObjectStackTrace(obj, stack) {
-    return stack
-  }
-
-  Error.prepareStackTrace = prepareObjectStackTrace
-  Error.stackTraceLimit = 2
-
-  // capture the stack
-  Error.captureStackTrace(obj)
-
-  // slice the stack
-  var stack = obj.stack.slice()
-
-  Error.prepareStackTrace = prep
-  Error.stackTraceLimit = limit
-
-  return stack[0].toString ? toString : _dereq_('./callsite-tostring')
-})
-
-/**
- * Define a lazy property.
- */
-
-function lazyProperty(obj, prop, getter) {
-  function get() {
-    var val = getter()
-
-    Object.defineProperty(obj, prop, {
-      configurable: true,
-      enumerable: true,
-      value: val
-    })
-
-    return val
-  }
-
-  Object.defineProperty(obj, prop, {
-    configurable: true,
-    enumerable: true,
-    get: get
-  })
-}
-
-/**
- * Call toString() on the obj
- */
-
-function toString(obj) {
-  return obj.toString()
-}
-
-}).call(this,_dereq_("buffer").Buffer)
-},{"./buffer-concat":78,"./callsite-tostring":79,"buffer":5}],81:[function(_dereq_,module,exports){
+},{"./def/core":62,"./def/e4x":63,"./def/es6":64,"./def/es7":65,"./def/fb-harmony":66,"./def/mozilla":67,"./lib/equiv":68,"./lib/node-path":69,"./lib/path-visitor":70,"./lib/types":74}],76:[function(_dereq_,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -29299,7 +28534,7 @@ exports.SourceMapGenerator = _dereq_('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = _dereq_('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = _dereq_('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":86,"./source-map/source-map-generator":87,"./source-map/source-node":88}],82:[function(_dereq_,module,exports){
+},{"./source-map/source-map-consumer":81,"./source-map/source-map-generator":82,"./source-map/source-node":83}],77:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -29398,7 +28633,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./util":89,"amdefine":90}],83:[function(_dereq_,module,exports){
+},{"./util":84,"amdefine":85}],78:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -29544,7 +28779,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./base64":84,"amdefine":90}],84:[function(_dereq_,module,exports){
+},{"./base64":79,"amdefine":85}],79:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -29588,7 +28823,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":90}],85:[function(_dereq_,module,exports){
+},{"amdefine":85}],80:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -29671,7 +28906,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":90}],86:[function(_dereq_,module,exports){
+},{"amdefine":85}],81:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -30151,7 +29386,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./array-set":82,"./base64-vlq":83,"./binary-search":85,"./util":89,"amdefine":90}],87:[function(_dereq_,module,exports){
+},{"./array-set":77,"./base64-vlq":78,"./binary-search":80,"./util":84,"amdefine":85}],82:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -30533,7 +29768,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./array-set":82,"./base64-vlq":83,"./util":89,"amdefine":90}],88:[function(_dereq_,module,exports){
+},{"./array-set":77,"./base64-vlq":78,"./util":84,"amdefine":85}],83:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -30906,7 +30141,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./source-map-generator":87,"./util":89,"amdefine":90}],89:[function(_dereq_,module,exports){
+},{"./source-map-generator":82,"./util":84,"amdefine":85}],84:[function(_dereq_,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -31113,7 +30348,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":90}],90:[function(_dereq_,module,exports){
+},{"amdefine":85}],85:[function(_dereq_,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
@@ -31416,7 +30651,7 @@ function amdefine(module, requireFn) {
 module.exports = amdefine;
 
 }).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
-},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"path":11}],91:[function(_dereq_,module,exports){
+},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"path":11}],86:[function(_dereq_,module,exports){
 (function (process){
 var Stream = _dereq_('stream')
 
@@ -31528,7 +30763,7 @@ function through (write, end, opts) {
 
 
 }).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"stream":13}],92:[function(_dereq_,module,exports){
+},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"stream":13}],87:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -31539,29 +30774,22 @@ function through (write, end, opts) {
  * the same directory.
  */
 
-(function(
-  // Reliable reference to the global object (i.e. window in browsers).
-  global,
-
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  GeneratorFunction
-) {
+!(function() {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
   var iteratorSymbol =
     typeof Symbol === "function" && Symbol.iterator || "@@iterator";
 
-  try {
-    // Make a reasonable attempt to provide a Promise polyfill.
-    var Promise = global.Promise || (global.Promise = _dereq_("promise"));
+  // Make a reasonable attempt to provide a Promise polyfill.
+  if (typeof Promise === "undefined") try {
+    Promise = _dereq_("promise");
   } catch (ignored) {}
 
-  if (global.regeneratorRuntime) {
+  if (typeof regeneratorRuntime === "object") {
     return;
   }
 
-  var runtime = global.regeneratorRuntime =
+  var runtime = regeneratorRuntime =
     typeof exports === "undefined" ? {} : exports;
 
   function wrap(innerFn, outerFn, self, tryList) {
@@ -31578,11 +30806,29 @@ function through (write, end, opts) {
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
+  // Dummy constructor that we use as the .constructor property for
+  // functions that return Generator objects.
+  function GeneratorFunction() {}
+
   var Gp = Generator.prototype;
   var GFp = GeneratorFunction.prototype = Object.create(Function.prototype);
   GFp.constructor = GeneratorFunction;
   GFp.prototype = Gp;
   Gp.constructor = GFp;
+
+  // Ensure isGeneratorFunction works when Function#name not supported.
+  if (GeneratorFunction.name !== "GeneratorFunction") {
+    GeneratorFunction.name = "GeneratorFunction";
+  }
+
+  if (GeneratorFunction.name !== "GeneratorFunction") {
+    throw new Error("GeneratorFunction renamed?");
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = genFun && genFun.constructor;
+    return ctor ? GeneratorFunction.name === ctor.name : false;
+  };
 
   runtime.mark = function(genFun) {
     genFun.__proto__ = GFp;
@@ -31613,16 +30859,6 @@ function through (write, end, opts) {
 
       callNext();
     });
-  };
-
-  // Ensure isGeneratorFunction works when Function#name not supported.
-  if (GeneratorFunction.name !== "GeneratorFunction") {
-    GeneratorFunction.name = "GeneratorFunction";
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = genFun && genFun.constructor;
-    return ctor ? GeneratorFunction.name === ctor.name : false;
   };
 
   function Generator(innerFn, outerFn, self, tryList) {
@@ -32000,7 +31236,7 @@ function through (write, end, opts) {
       return ContinueSentinel;
     }
   };
-}).apply(this, Function("return [this, function GeneratorFunction(){}]")());
+})();
 
 },{"promise":46}]},{},[28])
 (28)
