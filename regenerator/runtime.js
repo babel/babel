@@ -59,9 +59,9 @@
     return genFun;
   };
 
-  runtime.async = function(innerFn, self, tryList) {
+  runtime.async = function(innerFn, outerFn, self, tryList) {
     return new Promise(function(resolve, reject) {
-      var generator = wrap(innerFn, self, tryList);
+      var generator = wrap(innerFn, outerFn, self, tryList);
       var callNext = step.bind(generator.next);
       var callThrow = step.bind(generator.throw);
 
