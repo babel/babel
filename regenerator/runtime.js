@@ -8,29 +8,22 @@
  * the same directory.
  */
 
-(function(
-  // Reliable reference to the global object (i.e. window in browsers).
-  global,
-
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  GeneratorFunction
-) {
+!(function() {
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
   var iteratorSymbol =
     typeof Symbol === "function" && Symbol.iterator || "@@iterator";
 
-  try {
-    // Make a reasonable attempt to provide a Promise polyfill.
-    var Promise = global.Promise || (global.Promise = require("promise"));
+  // Make a reasonable attempt to provide a Promise polyfill.
+  if (typeof Promise === "undefined") try {
+    Promise = require("promise");
   } catch (ignored) {}
 
-  if (global.regeneratorRuntime) {
+  if (typeof regeneratorRuntime === "object") {
     return;
   }
 
-  var runtime = global.regeneratorRuntime =
+  var runtime = regeneratorRuntime =
     typeof exports === "undefined" ? {} : exports;
 
   function wrap(innerFn, outerFn, self, tryList) {
@@ -47,11 +40,29 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
+  // Dummy constructor that we use as the .constructor property for
+  // functions that return Generator objects.
+  function GeneratorFunction() {}
+
   var Gp = Generator.prototype;
   var GFp = GeneratorFunction.prototype = Object.create(Function.prototype);
   GFp.constructor = GeneratorFunction;
   GFp.prototype = Gp;
   Gp.constructor = GFp;
+
+  // Ensure isGeneratorFunction works when Function#name not supported.
+  if (GeneratorFunction.name !== "GeneratorFunction") {
+    GeneratorFunction.name = "GeneratorFunction";
+  }
+
+  if (GeneratorFunction.name !== "GeneratorFunction") {
+    throw new Error("GeneratorFunction renamed?");
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = genFun && genFun.constructor;
+    return ctor ? GeneratorFunction.name === ctor.name : false;
+  };
 
   runtime.mark = function(genFun) {
     genFun.__proto__ = GFp;
@@ -82,16 +93,6 @@
 
       callNext();
     });
-  };
-
-  // Ensure isGeneratorFunction works when Function#name not supported.
-  if (GeneratorFunction.name !== "GeneratorFunction") {
-    GeneratorFunction.name = "GeneratorFunction";
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = genFun && genFun.constructor;
-    return ctor ? GeneratorFunction.name === ctor.name : false;
   };
 
   function Generator(innerFn, outerFn, self, tryList) {
@@ -469,4 +470,4 @@
       return ContinueSentinel;
     }
   };
-}).apply(this, Function("return [this, function GeneratorFunction(){}]")());
+})();
