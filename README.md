@@ -192,21 +192,26 @@ require("6to5/register");
 ```
 
 **NOTE:** By default all requires to `node_modules` will be ignored. You can
-override this by passing an ignore regex via:
+override this by passing an ignore regex with`.
 
-```javascript
-require("6to5/register")(/regex/);
-```
-
-You can also customise the file extensions that the require hook will use via:
+##### Options
 
 ```javascript
 require("6to5/register")({
-  // optional ignore regex
-  ignoreRegex: /regex/,
+  // Optional ignore regex - if any filenames **do** match this regex then they
+  // aren't compiled
+  ignore: /regex/,
 
-  // this will remove the currently hooked extensions of .es6 and .js so you'll
-  // have to add them back if you want them to be used again
+  // Optional only regex - if any filenames **don't** match this regex then they
+  // aren't compiled
+  only: /my_es6_folder/,
+
+  // See options above for usage
+  whitelist: [],
+  blacklist: [],
+
+  // This will remove the currently hooked extensions of .es6 and .js so you'll
+  // have to add them back if you want them to be used again.
   extensions: [".js", ".es6"]
 });
 ```
