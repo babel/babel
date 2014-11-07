@@ -36,6 +36,7 @@ Simplest usage:
 ```sh
 regenerator es6.js > es5.js # Just the transform.
 regenerator --include-runtime es6.js > es5.js # Add the runtime too.
+regenerator src lib # Transform every .js file in src and output to lib.
 ```
 
 Programmatic usage:
