@@ -21,5 +21,7 @@
   "ForStatement":   ["For"],
 
   "ObjectPattern": ["Pattern"],
-  "ArrayPattern":  ["Pattern"]
+  "ArrayPattern":  ["Pattern"],
+
+  "Property": ["UserWhitespacable"]
 }
