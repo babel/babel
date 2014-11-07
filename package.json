@@ -48,7 +48,8 @@
     "source-map-support": "0.2.7",
     "esutils": "1.1.4",
     "acorn-6to5": "https://github.com/sebmck/acorn-6to5/archive/master.tar.gz",
-    "estraverse": "^1.7.0"
+    "estraverse": "^1.7.0",
+    "v8-argv": "^0.2.0"
   },
   "devDependencies": {
     "istanbul": "0.3.2",

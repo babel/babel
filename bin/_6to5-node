@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+var commander = require("commander");
+var util      = require("../lib/6to5/util");
+var path      = require("path");
+var repl      = require("repl");
+var to5       = require("../lib/6to5");
+var vm        = require("vm");
+var _         = require("lodash");
+
+commander.option("-e, --eval [script]", "evaluate script");
+commander.option("-p, --print", "evaluate script and print result");
+commander.option("-i, --ignore [regex]", "ignore all files that match this regex when using the require hook");
+commander.option("-x, --extensions [extensions]", "list of extensions to hook into [.es6,.js]", util.list);
+
+var pkg = require("../package.json");
+commander.version(pkg.version);
+commander.usage("[options] [ -e script | script.js ] [arguments]");
+commander.parse(process.argv);
+
+//
+
+var registerOpts = {};
+
+if (commander.ignore) {
+  registerOpts.ignoreRegex = new RegExp(commander.ignore);
+}
+
+if (commander.extensions && commander.extensions.length) {
+  registerOpts.extensions = commander.extensions;
+}
+
+to5.register(registerOpts);
+
+//
+
+var _eval = function (code, filename) {
+  code = to5.transform(code, { filename: filename, blacklist: ["useStrict"] }).code;
+  return vm.runInThisContext(code, filename);
+};
+
+if (commander.eval) {
+  var result = _eval(commander.eval, "eval");
+  if (commander.print) console.log(result);
+} else {
+  var filenames = commander.args;
+
+  if (filenames.length) {
+    _.each(filenames, function (filename) {
+      if (!util.isAbsolute(filename)) {
+        filename = path.join(process.cwd(), filename);
+      }
+
+      require(require.resolve(filename));
+    });
+  } else {
+    replStart();
+  }
+}
+
+function replStart() {
+  repl.start({
+    prompt: "> ",
+    input: process.stdin,
+    output: process.stdout,
+    eval: replEval,
+    useGlobal: true
+  });
+}
+
+function replEval(code, context, filename, callback) {
+  var err;
+  var result;
+
+  try {
+    if (/^\((.*?)\n\)$/.test(code)) {
+      code = code.slice(1, -2); // remove "(" and "\n)"
+    }
+
+    result = _eval(code, filename);
+  } catch (e) {
+    err = e;
+  }
+
+  callback(err, result);
+}
