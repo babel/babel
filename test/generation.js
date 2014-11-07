@@ -1,4 +1,4 @@
-var generate = require("../lib/6to5/generator");
+var generate = require("../lib/6to5/generation/generator");
 var assert   = require("assert");
 var helper   = require("./_helper");
 var util     = require("../lib/6to5/util");

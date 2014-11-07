@@ -1,4 +1,4 @@
-var transform = require("../lib/6to5/transform");
+var transform = require("../lib/6to5/transformation/transform");
 var sourceMap = require("source-map");
 var helper    = require("./_helper");
 var assert    = require("assert");
