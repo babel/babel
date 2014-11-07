@@ -1,56 +1,18 @@
 #!/usr/bin/env node
 // -*- mode: js -*-
 
-var options = require("commander")
-  .version(require("../package.json").version)
-  .usage("[options] [file]")
-  .option("-r, --include-runtime", "Prepend the runtime to the output.")
-  .parse(process.argv);
+var compile = require('../main').compile;
 
-var file = options.args[0];
-
-if (typeof file === "string" &&
-    file !== "-" &&
-    file !== "/dev/stdin") {
-  compileAndPrint(require("fs").readFileSync(file, "utf8"));
-
-} else {
-  try {
-    // On Windows, just accessing process.stdin throws an exception when
-    // no standard input has been provided. For consistency with other
-    // platforms, log the error but continue waiting (until killed) for
-    // the nonexistent input.
-    var stdin = process.stdin;
-  } catch (err) {
-    console.error(err.stack);
-  }
-
-  if (!stdin) {
-    options.outputHelp();
-    process.exit(-1);
-  }
-
-  var chunks = [];
-  var timeout = setTimeout(function() {
-    console.warn(
-      "\033[33m" + // yellow
-      "Warning: still waiting for STDIN" +
-      "\033[0m" // reset
-    );
-  }, 1000);
-
-  stdin.resume();
-  stdin.setEncoding("utf8");
-  stdin.on("data", function(data) {
-    clearTimeout(timeout);
-    chunks.push(data);
-  }).on("end", function() {
-    compileAndPrint(chunks.join(""));
-  });
-}
-
-function compileAndPrint(source) {
-  process.stdout.write(
-    require("../main").compile(source, options).code
-  );
-}
+require('commoner').version(
+  require('../package.json').version
+).resolve(function(id) {
+  return this.readModuleP(id);
+}).option(
+  '-r, --include-runtime',
+  'Prepend the runtime to the output.'
+).process(function(id, source) {
+  var options = {
+    includeRuntime: this.options.includeRuntime,
+  };
+  return compile(source, options).code;
+});
