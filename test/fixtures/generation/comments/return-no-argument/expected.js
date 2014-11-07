@@ -1,3 +1,3 @@
 (function () {
-  return;  // comment
-}());
+  return; // comment
+})();

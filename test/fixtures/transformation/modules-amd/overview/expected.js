@@ -6,8 +6,7 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
   var bar = _foo.bar;
   var bar = _foo.foo;
   exports.test = test;
-  var test = 5;
+  var test = exports.test = 5;
 
-  exports.test = test;
   exports.default = test;
 });

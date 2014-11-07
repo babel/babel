@@ -11,7 +11,6 @@ var foo = require("foo");
 var bar = require("foo").bar;
 var bar = require("foo").foo;
 exports.test = test;
-var test = 5;
+var test = exports.test = 5;
 
-exports.test = test;
 exports.default = test;

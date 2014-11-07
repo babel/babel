@@ -10,13 +10,11 @@ function somethingAdvanced(_ref) {
 function unpackObject(_ref2) {
   var title = _ref2.title;
   var author = _ref2.author;
+
   return title + " " + author;
 }
 
-console.log(unpackObject({
-  title: "title",
-  author: "author"
-}));
+console.log(unpackObject({ title: "title", author: "author" }));
 
 var unpackArray = function (_ref3, _ref4) {
   var a = _ref3[0];
@@ -25,6 +23,7 @@ var unpackArray = function (_ref3, _ref4) {
   var x = _ref4[0];
   var y = _ref4[1];
   var z = _ref4[2];
+
   return a + b + c;
 };
 

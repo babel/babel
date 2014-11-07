@@ -10,10 +10,7 @@ var seattlers = (function () {
       var c = _step2.value;
 
       if (c.city == "Seattle") {
-        _arr.push({
-          name: c.name,
-          age: c.age
-        });
+        _arr.push({ name: c.name, age: c.age });
       }
     }
   }

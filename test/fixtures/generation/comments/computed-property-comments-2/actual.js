@@ -4,7 +4,7 @@ var test = {
      */
     ["a"]:"1",
     [/*
-     * Inside bracket init
-     */
+      * Inside bracket init
+      */
     "b"]:"2"
   }, ok = 42;

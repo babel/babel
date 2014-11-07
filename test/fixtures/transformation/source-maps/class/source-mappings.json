@@ -1,10 +1,10 @@
 [{
   "original": {
     "line": 3,
-    "column": 11
+    "column": 10
   },
   "generated": {
-    "line": 12,
-    "column": 11
+    "line": 15,
+    "column": 15
   }
 }]

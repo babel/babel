@@ -2,4 +2,3 @@
 --ui tdd
 --check-leaks
 --globals regeneratorRuntime,i
---inline-diffs

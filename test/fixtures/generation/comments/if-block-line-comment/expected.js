@@ -2,4 +2,4 @@ if (cond)
   // Leading to if-block
   {
     print("hello");
-  }  // Trailing to if-block
+  } // Trailing to if-block

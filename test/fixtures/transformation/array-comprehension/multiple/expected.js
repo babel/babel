@@ -8,7 +8,6 @@ var arr = (function () {
 
     for (var _iterator2 = "12345678".split("")[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
       var y = _step2.value;
-
       _arr.push(x + y);
     }
   }

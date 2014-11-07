@@ -2,6 +2,7 @@
 
 function add() {
   var _this = this;
+
   return [1, 2, 3].map(function (i) {
     return i * _this.multiplier;
   });

@@ -1,1 +1,1 @@
-;  // Trailing
+; // Trailing

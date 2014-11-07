@@ -1,6 +1,3 @@
 "use strict";
 
-var coords = {
-  x: x,
-  y: y
-};
+var coords = { x: x, y: y };
