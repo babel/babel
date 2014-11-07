@@ -1,9 +1,27 @@
 {
+  "ExpressionStatement": ["Statement"],
+  "BreakStatement":      ["Statement"],
+  "ContinueStatement":   ["Statement"],
+  "DebuggerStatement":   ["Statement"],
+  "DoWhileStatement":    ["Statement"],
+  "IfStatement":         ["Statement"],
+  "ReturnStatement":     ["Statement"],
+  "SwitchStatement":     ["Statement"],
+  "ThrowStatement":      ["Statement"],
+  "TryStatement":        ["Statement"],
+  "WhileStatement":      ["Statement"],
+  "WithStatement":       ["Statement"],
+  "EmptyStatement":      ["Statement"],
+  "LabeledStatement":    ["Statement"],
+  "VariableDeclaration": ["Statement", "Declaration"],
+  "ExportDeclaration":   ["Statement", "Declaration"],
+  "ImportDeclaration":   ["Statement", "Declaration"],
+
   "ArrowFunctionExpression": ["Scope", "Function"],
-  "FunctionDeclaration":     ["Scope", "Function"],
+  "FunctionDeclaration":     ["Statement", "Declaration", "Scope", "Function"],
   "FunctionExpression":      ["Scope", "Function"],
 
-  "BlockStatement": ["Scope"],
+  "BlockStatement": ["Statement", "Scope"],
   "Program":        ["Scope"],
 
   "LogicalExpression": ["Binary"],
@@ -13,12 +31,12 @@
   "SpreadProperty":  ["UnaryLike"],
   "SpreadElement":   ["UnaryLike"],
 
-  "ClassDeclaration": ["Class"],
+  "ClassDeclaration": ["Statement", "Declaration", "Class"],
   "ClassExpression":  ["Class"],
 
-  "ForOfStatement": ["For"],
-  "ForInStatement": ["For"],
-  "ForStatement":   ["For"],
+  "ForOfStatement": ["Statement", "For"],
+  "ForInStatement": ["Statement", "For"],
+  "ForStatement":   ["Statement", "For"],
 
   "ObjectPattern": ["Pattern"],
   "ArrayPattern":  ["Pattern"],
