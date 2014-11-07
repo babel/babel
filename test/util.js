@@ -2,17 +2,7 @@ var assert = require("assert");
 var util   = require("../lib/6to5/util");
 
 suite("util", function () {
-  test("duplicate mutator map", function () {
-    var map = {
-      test: {
-        get: {}
-      }
-    };
-
-    assert.throws(function () {
-      util.pushMutatorMap(map, "test", "get", {});
-    }, /a get already exists for this property/);
-  });
+  test("duplicate mutator map");
 
   test("invalid template", function () {
     assert.throws(function () {
