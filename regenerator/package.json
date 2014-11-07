@@ -28,7 +28,7 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "commoner": "^0.10.0",
+    "commoner": "~0.10.0",
     "esprima-fb": "~7001.1.0-dev-harmony-fb",
     "recast": "~0.9.2",
     "promise": "~6.0.0",
