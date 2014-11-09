@@ -1,10 +1,10 @@
 "use strict";
 
-X(null, a);
+(X(null, a));
 
-X(null, a, " ", b);
+(X(null, a, " ", b));
 
-X({
+(X({
   prop: a,
   yes: true
-});
+}));

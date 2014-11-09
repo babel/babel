@@ -11,7 +11,6 @@
   var foo = _foo;
   var bar = _foo.bar;
   var bar = _foo.foo;
-
   exports.test = test;
   var test = exports.test = 5;
 

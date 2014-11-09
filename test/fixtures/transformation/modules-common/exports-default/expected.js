@@ -8,7 +8,6 @@ exports.default = function () {};
 exports.default = function () {};
 function foo() {}
 exports.default = foo;
-
-function Foo() {}
+var Foo = function Foo() {};
 
 exports.default = Foo;

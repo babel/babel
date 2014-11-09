@@ -1,7 +1,7 @@
 "use strict";
 
-X(null);
+(X(null));
 
-X({
+(X({
   prop: "1"
-});
+}));
