@@ -43,6 +43,7 @@ It's as easy as:
   - [Browser](#browser)
 - [Modules](#modules)
 - [Caveats](#caveats)
+- [Runtime](#runtime)
 - [Differences](#differences)
 
 ## [Features](FEATURES.md)
@@ -177,7 +178,12 @@ to5.transformFile("filename.js", options, function (err, result) {
 
   // Set `sources[0]` on returned source map.
   // Default: `filename` option.
-  sourceFileName: "filename"
+  sourceFileName: "filename",
+
+  // Optionally replace all 6to5 helper declarations with a referenece to this
+  // variable. If set to `true` then the default namespace is used "to5Runtime".
+  // Default: false
+  runtime: true
 }
 ```
 
@@ -226,6 +232,33 @@ require("6to5/register")({
 
 ### Browser
 
+A browser version of 6to5 is available from `browser.js` inside the 6to5
+directory in an npm release.
+
+#### Scripts
+
+While it's not recommended for serious use, when the browser version is included
+all scripts with the type `text/ecmascript-6` and `text/6to5` are automatically
+compiled and ran.
+
+For example:
+
+```html
+<script src="node_modules/6to5/browser.js"></script>
+<script type="text/6to5">
+class Test {
+  test() {
+    return "test";
+  }
+}
+
+var test = new Test;
+test.test();
+</script>
+```
+
+#### Build
+
 You can build a browser version of the compiler by running the following in the
 6to5 directory:
 
@@ -233,8 +266,7 @@ You can build a browser version of the compiler by running the following in the
 
 This will output the files `dist/6to5.js` and `dist/6to5.min.js`.
 
-Just include one of those in the browser and access the transform method via the
-global `to5`.
+#### API
 
 ```javascript
 to5.transform("class Test {}").code;
@@ -319,6 +351,58 @@ class Bar extends Foo {
 
 The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
 and an [ES6 polyfill](#polyfill) are required in order for generators to work.
+
+## Runtime
+
+6to5 has a few helper functions that'll be placed at the top of the generated
+code so it's not inlined multiple times throughout that file. This may become an
+issue if you have multiple files, especially when you're sending them to the
+browser. gzip alleviates most of this concern but it's still not ideal.
+
+You can tell 6to5 to not place any declarations at the top of your files and
+instead just point them to a reference contained within the runtime.
+
+Simply use the following option if you're using the [Node API](#node-1):
+
+```javascript
+{
+  runtime: true
+}
+```
+
+or the following flag if you're using the [CLI](#cli):
+
+    $ 6to5 --runtime
+
+Then just include the runtime before your generated code.
+
+### Getting the runtime
+
+You can get the runtime via either:
+
+    $ 6to5-runtime
+
+or
+
+```javascript
+require("6to5").runtime();
+```
+
+or from an npm release in `runtime.js` from the 6to5 directory.
+
+### Customising namespace
+
+You can also customise the runtime namespace by passing an optional namespace
+argument:
+
+```javascript
+require("6to5").runtime("myCustomNamespace");
+```
+
+    $ 6to5-runtime myCustomNamespace
+
+See [Options - runtime](#options) for documentation on changing the reference in
+generated code.
 
 ## Differences
 

@@ -55,6 +55,8 @@ publish:
 	make build
 	cp dist/6to5.js browser.js
 
+	node bin/6to5-runtime >runtime.js
+
 	node bin/cache-templates
 	test -f templates.json
 
@@ -64,4 +66,4 @@ publish:
 
 	git push --follow-tags
 
-	rm -rf templates.json browser.js
+	rm -rf templates.json browser.js runtime.js

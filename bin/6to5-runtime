@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var runtime = require("../lib/6to5/runtime");
+console.log(runtime(process.argv[2]));
