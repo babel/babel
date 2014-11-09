@@ -778,11 +778,12 @@ Ep.explodeStatement = function(path, labelId) {
 };
 
 Ep.emitAbruptCompletion = function(record) {
-  assert.ok(
-    isValidCompletion(record),
-    "invalid completion record: " +
-      JSON.stringify(record)
-  );
+  try {
+    assert.ok(isValidCompletion(record));
+  } catch (err) {
+    err.message = "invalid completion record: " + JSON.stringify(record);
+    throw err;
+  }
 
   assert.notStrictEqual(
     record.type, "normal",
