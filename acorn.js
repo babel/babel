@@ -1848,10 +1848,6 @@
       case "SpreadElement":
         break;
 
-      case "ParenthesizedExpression":
-        checkLVal(expr.expression);
-        break;
-
       default:
       raise(expr.start, "Assigning to rvalue");
   }
