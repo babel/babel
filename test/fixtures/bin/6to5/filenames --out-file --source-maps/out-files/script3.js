@@ -1,10 +1,8 @@
 "use strict";
 
-var Test = function() {
-  var Test = function Test() {};
-  return Test;
-}();
+var Test = function Test() {};
 "use strict";
-arr.map(function(x) {
+
+arr.map(function (x) {
   return x * MULTIPLIER;
 });

@@ -1,2 +1,3 @@
 "use strict";
+
 arr.map(x => x * MULTIPLIER);

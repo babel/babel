@@ -6,7 +6,4 @@ var a = 'var a';
     let d = 'let d';
     assert.equal(d, 'let d');
   }
-  assert.throws(function () {
-    d;
-  }, /d is not defined/);
 }
