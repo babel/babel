@@ -4448,6 +4448,112 @@ test("var {a:b} = {}", {
   locations: true
 });
 
+
+test("({ x }) = { x: 5 }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 18}
+  },
+  body: [{
+    type: "ExpressionStatement",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 18}
+    },
+    expression: {
+      type: "AssignmentExpression",
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 18}
+      },
+      operator: "=",
+      left: {
+        type: "ParenthesizedExpression",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 7}
+        },
+        expression: {
+          type: "ObjectPattern",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 6}
+          },
+          properties: [
+            {
+              type: "Property",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              },
+              method: false,
+              shorthand: true,
+              computed: false,
+              key: {
+                type: "Identifier",
+                loc: {
+                  start: {line: 1, column: 3},
+                  end: {line: 1, column: 4}
+                },
+                name: "x"
+              },
+              kind: "init",
+              value: {
+                type: "Identifier",
+                loc: {
+                  start: {line: 1, column: 3},
+                  end: {line: 1, column: 4}
+                },
+                name: "x"
+              }
+            }
+          ]
+        }
+      },
+      right: {
+        type: "ObjectExpression",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 18}
+        },
+        properties: [{
+          type: "Property",
+          loc: {
+            start: {line: 1, column: 12},
+            end: {line: 1, column: 16}
+          },
+          method: false,
+          shorthand: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            loc: {
+              start: {line: 1, column: 12},
+              end: {line: 1, column: 13}
+            },
+            name: "x"
+          },
+          value: {
+            type: "Literal",
+            loc: {
+              start: {line: 1, column: 15},
+              end: {line: 1, column: 16}
+            },
+            value: 5,
+            raw: "5"
+          },
+          kind: "init"
+        }]
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  locations: true,
+  preserveParens: true
+});
+
 // Harmony: Modules
 
 test("export var document", {

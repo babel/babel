@@ -1386,6 +1386,10 @@
           }
           break;
 
+        case "ParenthesizedExpression":
+          toAssignable(node.expression, allowSpread, checkType);
+          break;
+
         default:
           if (checkType) unexpected(node.start);
       }
