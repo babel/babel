@@ -23,6 +23,7 @@
 
   "BlockStatement": ["Statement", "Scope"],
   "Program":        ["Scope"],
+  "CatchClause":    ["Scope"],
 
   "LogicalExpression": ["Binary"],
   "BinaryExpression":  ["Binary"],
