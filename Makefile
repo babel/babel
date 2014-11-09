@@ -48,6 +48,9 @@ build:
 	node $(BROWSERIFY_CMD) lib/6to5/browser.js -s to5 >dist/6to5.js
 	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
 
+	node bin/6to5-runtime >dist/runtime.js
+	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
+
 	rm -rf templates.json
 
 publish:
@@ -58,8 +61,7 @@ publish:
 	make build
 	cp dist/6to5.min.js browser.js
 	cp dist/polyfill.min.js polyfill.js
-
-	node bin/6to5-runtime >runtime.js
+	cp dist/runtime.min.js runtime.js
 
 	node bin/cache-templates
 	test -f templates.json
