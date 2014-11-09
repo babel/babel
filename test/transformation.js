@@ -26,7 +26,7 @@ var run = function (task) {
     result = transform(execCode, getOpts(exec.filename));
     execCode = result.code;
 
-    require("../polyfill");
+    require("../lib/6to5/polyfill");
 
     try {
       var fn = new Function("assert", execCode);
