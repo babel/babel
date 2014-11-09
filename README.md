@@ -43,7 +43,7 @@ It's as easy as:
   - [Browser](#browser)
 - [Modules](#modules)
 - [Caveats](#caveats)
-- [Runtime](#runtime)
+- [Optional runtime](#optional-runtime)
 - [Differences](#differences)
 
 ## [Features](FEATURES.md)
@@ -352,7 +352,7 @@ class Bar extends Foo {
 The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
 and an [ES6 polyfill](#polyfill) are required in order for generators to work.
 
-## Runtime
+## Optional runtime
 
 6to5 has a few helper functions that'll be placed at the top of the generated
 code if needed so it's not inlined multiple times throughout that file. This may
