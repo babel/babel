@@ -35,7 +35,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "ast-types": "~0.5.0",
+    "ast-types": "~0.6.0",
     "commander": "2.4.0",
     "fs-readdir-recursive": "0.0.2",
     "lodash": "2.4.1",
@@ -44,7 +44,7 @@
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "source-map": "0.1.40",
-    "regenerator": "0.6.7",
+    "regenerator-6to5": "https://github.com/sebmck/regenerator-6to5/archive/master.tar.gz",
     "chokidar": "0.10.0",
     "source-map-support": "0.2.7",
     "esutils": "1.1.4",
