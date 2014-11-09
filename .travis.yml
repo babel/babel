@@ -9,8 +9,3 @@ branches:
 
 before_script: "npm install -g codeclimate-test-reporter"
 script: "make test-travis"
-
-addons:
-  code_climate:
-    repo_token:
-      secure: "PfP9sDUJzSznDb+ZEPO2cignXabSTXJxEVm5ESRPgEcFr+/4b0pt3hI8R9b+9mLtBEwtw3DLUq48MOeqEKnq29csQmpjPVcN6gT4uR2DdNa1JpVgDuwxT05NB3fBea9U2reM73iV8ylCgPHExr2uGR9/87JzR2beY/56EUL5NjY="
