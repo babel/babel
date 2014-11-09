@@ -3,20 +3,20 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.org/sebmck/6to5">
-    <img alt="Travis Status" src="http://img.shields.io/travis/sebmck/6to5.svg?branch=master&amp;style=flat&amp;label=travis">
+  <a href="https://travis-ci.org/6to5/6to5">
+    <img alt="Travis Status" src="http://img.shields.io/travis/6to5/6to5.svg?branch=master&amp;style=flat&amp;label=travis">
   </a>
 
-  <a href="https://codeclimate.com/github/sebmck/6to5">
-    <img alt="Code Climate Score" src="http://img.shields.io/codeclimate/github/sebmck/6to5.svg?style=flat">
+  <a href="https://codeclimate.com/github/6to5/6to5">
+    <img alt="Code Climate Score" src="http://img.shields.io/codeclimate/github/6to5/6to5.svg?style=flat">
   </a>
 
-  <a href="https://codeclimate.com/github/sebmck/6to5">
-    <img alt="Coverage" src="http://img.shields.io/codeclimate/coverage/github/sebmck/6to5.svg?style=flat">
+  <a href="https://codeclimate.com/github/6to5/6to5">
+    <img alt="Coverage" src="http://img.shields.io/codeclimate/coverage/github/6to5/6to5.svg?style=flat">
   </a>
 
-  <a href="https://david-dm.org/sebmck/6to5">
-    <img alt="Dependency Status" src="http://img.shields.io/david/sebmck/6to5.svg?style=flat">
+  <a href="https://david-dm.org/6to5/6to5">
+    <img alt="Dependency Status" src="http://img.shields.io/david/6to5/6to5.svg?style=flat">
   </a>
 </p>
 
@@ -73,10 +73,10 @@ It's as easy as:
 ### Plugins
 
  - [Broccoli](https://github.com/very-geek/broccoli-6to5-transpiler)
- - [Browserify](https://github.com/sebmck/6to5-browserify)
+ - [Browserify](https://github.com/6to5/6to5-browserify)
  - [Brunch](https://github.com/es128/6to5-brunch)
  - [Duo](https://github.com/bdo-labs/duo6to5)
- - [Connect](https://github.com/sebmck/6to5-connect)
+ - [Connect](https://github.com/6to5/6to5-connect)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - [Jade](https://github.com/Apoxx/jade-6to5)
