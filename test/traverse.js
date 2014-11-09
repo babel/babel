@@ -1,6 +1,5 @@
 var traverse = require("../lib/6to5/traverse");
 var assert   = require("assert");
-var b        = require("recast").types.builders;
 var _        = require("lodash");
 
 suite("traverse", function () {
