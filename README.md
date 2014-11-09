@@ -43,6 +43,7 @@ It's as easy as:
   - [Browser](#browser)
 - [Modules](#modules)
 - [Caveats](#caveats)
+- [Polyfill](#polyfill)
 - [Optional runtime](#optional-runtime)
 - [Differences](#differences)
 
@@ -289,23 +290,6 @@ Alternatively see [Modules](MODULES.md) for all other supported module formattin
 
 ## Caveats
 
-### Polyfill
-
-6to5 includes a polyfill that includes the
-[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
-[es6-shim](https://github.com/paulmillr/es6-shim) and
-[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
-
-#### Node
-
-```javascript
-require("6to5/polyfill");
-```
-
-#### Browser
-
-Available from the `polyfill.js` within the 6to5 directory of an npm release.
-
 ### For-of
 
 A polyfill is required for for-of functionality that implements `Symbol` and
@@ -342,6 +326,23 @@ class Bar extends Foo {
 
 The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
 and an [ES6 polyfill](#polyfill) are required in order for generators to work.
+
+## Polyfill
+
+6to5 includes a polyfill that includes the
+[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
+[es6-shim](https://github.com/paulmillr/es6-shim) and
+[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
+
+### Node
+
+```javascript
+require("6to5/polyfill");
+```
+
+### Browser
+
+Available from the `polyfill.js` within the 6to5 directory of an npm release.
 
 ## Optional runtime
 
