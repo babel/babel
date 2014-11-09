@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="6to5" src="http://i.imgur.com/hVl9KRw.png">
+  <img alt="6to5" src="https://raw.githubusercontent.com/6to5/logo/master/logo.png" width="546">
 </p>
 
 <p align="center">
