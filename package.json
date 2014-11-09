@@ -36,17 +36,17 @@
   },
   "dependencies": {
     "ast-types": "~0.6.0",
-    "commander": "2.4.0",
+    "commander": "2.5.0",
     "fs-readdir-recursive": "0.0.2",
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
-    "es6-shim": "0.18.0",
+    "es6-shim": "0.20.2",
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "source-map": "0.1.40",
     "regenerator-6to5": "https://github.com/6to5/regenerator-6to5/archive/b7bc53e1a655879974aad53a8ceb93a70efaa08d.tar.gz",
-    "chokidar": "0.10.0",
-    "source-map-support": "0.2.7",
+    "chokidar": "0.10.5",
+    "source-map-support": "0.2.8",
     "esutils": "1.1.4",
     "acorn-6to5": "https://github.com/6to5/acorn-6to5/archive/f5110383517eef0bea78c2da2a1fb01fbed74e4e.tar.gz",
     "estraverse": "^1.7.0"
@@ -54,11 +54,11 @@
   "devDependencies": {
     "istanbul": "0.3.2",
     "matcha": "0.5.0",
-    "mocha": "1.21.5",
+    "mocha": "2.0.1",
     "uglify-js": "2.4.15",
-    "browserify": "6.1.0",
+    "browserify": "6.2.0",
     "rimraf": "2.2.8",
-    "jshint": "2.5.6",
+    "jshint": "2.5.10",
     "chai": "^1.9.2"
   }
 }
