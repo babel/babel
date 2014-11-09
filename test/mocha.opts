@@ -1,4 +1,4 @@
 --reporter dot
 --ui tdd
 --check-leaks
---globals regeneratorRuntime,i
+--globals regeneratorRuntime
