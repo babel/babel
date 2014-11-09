@@ -28,6 +28,7 @@
  - **Compact** - maps directly to the equivalent ES5 with **no runtime**[\*](#generators).
 
 ## Installation
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/6to5/6to5?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 It's as easy as:
 
