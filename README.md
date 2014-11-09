@@ -291,29 +291,20 @@ Alternatively see [Modules](MODULES.md) for all other supported module formattin
 
 ### Polyfill
 
-6to5 does not include a runtime nor polyfill and it's up to the developer to
-include one in compiled browser code.
+6to5 includes a polyfill that includes the
+[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
+[es6-shim](https://github.com/paulmillr/es6-shim) and
+[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
 
 #### Node
-
-A polyfill is included with the 6to5 module that can be included in node like
-so:
 
 ```javascript
 require("6to5/polyfill");
 ```
 
-This is simply a wrapper around the
-[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
-[es6-shim](https://github.com/paulmillr/es6-shim) and
-[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
-
 #### Browser
 
-If you're planning on using 6to5 output in the browser then it's up to you
-to include polyfills. [es6-symbol](https://github.com/medikoo/es6-symbol#browser)
-and [es6-shim](https://raw.githubusercontent.com/paulmillr/es6-shim/master/es6-shim.js)
-fill the vast majority of polyfill concerns.
+Available from the `polyfill.js` within the 6to5 directory of an npm release.
 
 ### For-of
 
