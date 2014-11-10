@@ -13405,6 +13405,771 @@ test("/[a-z]/u", {
   ecmaVersion: 6
 });
 
+// ES7: Async Functions
+
+test('async function foo(promise) { await promise; }', {
+  type: "Program",
+  body: [{
+    type: "FunctionDeclaration",
+    id: {
+      type: "Identifier",
+      name: "foo",
+      loc: {
+        start: {line: 1, column: 15},
+        end: {line: 1, column: 18}
+      }
+    },
+    params: [{
+      type: "Identifier",
+      name: "promise",
+      loc: {
+        start: {line: 1, column: 19},
+        end: {line: 1, column: 26}
+      }
+    }],
+    defaults: [],
+    body: {
+      type: "BlockStatement",
+      body: [{
+        type: "ExpressionStatement",
+        expression: {
+          type: "AwaitExpression",
+          argument: {
+            type: "Identifier",
+            name: "promise",
+            loc: {
+              start: {line: 1, column: 36},
+              end: {line: 1, column: 43}
+            }
+          },
+          loc: {
+            start: {line: 1, column: 30},
+            end: {line: 1, column: 43}
+          }
+        },
+        loc: {
+          start: {line: 1, column: 30},
+          end: {line: 1, column: 44}
+        }
+      }],
+      loc: {
+        start: {line: 1, column: 28},
+        end: {line: 1, column: 46}
+      }
+    },
+    rest: null,
+    generator: false,
+    expression: false,
+    async: true,
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 46}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('(function(x) { async function inner() { await x } })', {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "FunctionExpression",
+      id: null,
+      params: [
+        {
+          type: "Identifier",
+          name: "x",
+          loc: {
+            start: {line: 1, column: 10},
+            end: {line: 1, column: 11}
+          }
+        }
+      ],
+      defaults: [],
+      body: {
+        type: "BlockStatement",
+        body: [
+          {
+            type: "FunctionDeclaration",
+            id: {
+              type: "Identifier",
+              name: "inner",
+              loc: {
+                start: {line: 1, column: 30},
+                end: {line: 1, column: 35}
+              }
+            },
+            params: [],
+            defaults: [],
+            body: {
+              type: "BlockStatement",
+              body: [
+                {
+                  type: "ExpressionStatement",
+                  expression: {
+                    type: "AwaitExpression",
+                    argument: {
+                      type: "Identifier",
+                      name: "x",
+                      loc: {
+                        start: {line: 1, column: 46},
+                        end: {line: 1, column: 47}
+                      }
+                    },
+                    loc: {
+                      start: {line: 1, column: 40},
+                      end: {line: 1, column: 47}
+                    }
+                  },
+                  loc: {
+                    start: {line: 1, column: 40},
+                    end: {line: 1, column: 47}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 38},
+                end: {line: 1, column: 49}
+              }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            async: true,
+            loc: {
+              start: {line: 1, column: 15},
+              end: {line: 1, column: 49}
+            }
+          }
+        ],
+        loc: {
+          start: {line: 1, column: 13},
+          end: {line: 1, column: 51}
+        }
+      },
+      rest: null,
+      generator: false,
+      expression: false,
+      loc: {
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 51}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 52}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('var foo = async function(promise) { await promise; }', {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "foo",
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 7}
+          }
+        },
+        init: {
+          type: "FunctionExpression",
+          id: null,
+          params: [
+            {
+              type: "Identifier",
+              name: "promise",
+              loc: {
+                start: {line: 1, column: 25},
+                end: {line: 1, column: 32}
+              }
+            }
+          ],
+          defaults: [],
+          body: {
+            type: "BlockStatement",
+            body: [
+              {
+                type: "ExpressionStatement",
+                expression: {
+                  type: "AwaitExpression",
+                  argument: {
+                    type: "Identifier",
+                    name: "promise",
+                    loc: {
+                      start: {line: 1, column: 42},
+                      end: {line: 1, column: 49}
+                    }
+                  },
+                  loc: {
+                    start: {line: 1, column: 36},
+                    end: {line: 1, column: 49}
+                  }
+                },
+                loc: {
+                  start: {line: 1, column: 36},
+                  end: {line: 1, column: 50}
+                }
+              }
+            ],
+            loc: {
+              start: {line: 1, column: 34},
+              end: {line: 1, column: 52}
+            }
+          },
+          rest: null,
+          generator: false,
+          expression: false,
+          async: true,
+          loc: {
+            start: {line: 1, column: 10},
+            end: {line: 1, column: 52}
+          }
+        },
+        loc: {
+          start: {line: 1, column: 4},
+          end: {line: 1, column: 52}
+        }
+      }
+    ],
+    kind: "var",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 52}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('var o = { a: 1, async foo(promise) { await promise } }', {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "o",
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 5}
+          }
+        },
+        init: {
+          type: "ObjectExpression",
+          properties: [
+            {
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "a",
+                loc: {
+                  start: {line: 1, column: 10},
+                  end: {line: 1, column: 11}
+                }
+              },
+              value: {
+                type: "Literal",
+                value: 1,
+                loc: {
+                  start: {line: 1, column: 13},
+                  end: {line: 1, column: 14}
+                }
+              },
+              kind: "init",
+              method: false,
+              shorthand: false,
+              computed: false,
+              loc: {
+                start: {line: 1, column: 10},
+                end: {line: 1, column: 14}
+              }
+            },
+            {
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "foo",
+                loc: {
+                  start: {line: 1, column: 22},
+                  end: {line: 1, column: 25}
+                }
+              },
+              value: {
+                type: "FunctionExpression",
+                id: null,
+                params: [
+                  {
+                    type: "Identifier",
+                    name: "promise",
+                    loc: {
+                      start: {line: 1, column: 26},
+                      end: {line: 1, column: 33}
+                    }
+                  }
+                ],
+                defaults: [],
+                body: {
+                  type: "BlockStatement",
+                  body: [
+                    {
+                      type: "ExpressionStatement",
+                      expression: {
+                        type: "AwaitExpression",
+                        argument: {
+                          type: "Identifier",
+                          name: "promise",
+                          loc: {
+                            start: {line: 1, column: 43},
+                            end: {line: 1, column: 50}
+                          }
+                        },
+                        loc: {
+                          start: {line: 1, column: 37},
+                          end: {line: 1, column: 50}
+                        }
+                      },
+                      loc: {
+                        start: {line: 1, column: 37},
+                        end: {line: 1, column: 50}
+                      }
+                    }
+                  ],
+                  loc: {
+                    start: {line: 1, column: 35},
+                    end: {line: 1, column: 52}
+                  }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                async: true,
+                loc: {
+                  start: {line: 1, column: 25},
+                  end: {line: 1, column: 52}
+                }
+              },
+              kind: "init",
+              method: true,
+              shorthand: false,
+              computed: false,
+              loc: {
+                start: {line: 1, column: 16},
+                end: {line: 1, column: 52}
+              }
+            }
+          ],
+          loc: {
+            start: {line: 1, column: 8},
+            end: {line: 1, column: 54}
+          }
+        },
+        loc: {
+          start: {line: 1, column: 4},
+          end: {line: 1, column: 54}
+        }
+      }
+    ],
+    kind: "var",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 54}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('class Foo { async bar(promise) { await promise } }', {
+  type: "Program",
+  body: [{
+    type: "ClassDeclaration",
+    id: {
+      type: "Identifier",
+      name: "Foo",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 9}
+      }
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      body: [
+        {
+          type: "MethodDefinition",
+          key: {
+            type: "Identifier",
+            name: "bar",
+            loc: {
+              start: {line: 1, column: 18},
+              end: {line: 1, column: 21}
+            }
+          },
+          value: {
+            type: "FunctionExpression",
+            id: null,
+            params: [
+              {
+                type: "Identifier",
+                name: "promise",
+                loc: {
+                  start: {line: 1, column: 22},
+                  end: {line: 1, column: 29}
+                }
+              }
+            ],
+            defaults: [],
+            body: {
+              type: "BlockStatement",
+              body: [
+                {
+                  type: "ExpressionStatement",
+                  expression: {
+                    type: "AwaitExpression",
+                    argument: {
+                      type: "Identifier",
+                      name: "promise",
+                      loc: {
+                        start: {line: 1, column: 39},
+                        end: {line: 1, column: 46}
+                      }
+                    },
+                    loc: {
+                      start: {line: 1, column: 33},
+                      end: {line: 1, column: 46}
+                    }
+                  },
+                  loc: {
+                    start: {line: 1, column: 33},
+                    end: {line: 1, column: 46}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 31},
+                end: {line: 1, column: 48}
+              }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            async: true,
+            loc: {
+              start: {line: 1, column: 21},
+              end: {line: 1, column: 48}
+            }
+          },
+          kind: "",
+          static: false,
+          loc: {
+            start: {line: 1, column: 12},
+            end: {line: 1, column: 48}
+          }
+        }
+      ],
+      loc: {
+        start: {line: 1, column: 10},
+        end: {line: 1, column: 50}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 50}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('f(a, async promise => await promise)', {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "f",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 1}
+        }
+      },
+      arguments: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 2},
+            end: {line: 1, column: 3}
+          }
+        },
+        {
+          type: "ArrowFunctionExpression",
+          id: null,
+          params: [
+            {
+              type: "Identifier",
+              name: "promise",
+              loc: {
+                start: {line: 1, column: 11},
+                end: {line: 1, column: 18}
+              }
+            }
+          ],
+          defaults: [],
+          body: {
+            type: "AwaitExpression",
+            argument: {
+              type: "Identifier",
+              name: "promise",
+              loc: {
+                start: {line: 1, column: 28},
+                end: {line: 1, column: 35}
+              }
+            },
+            loc: {
+              start: {line: 1, column: 22},
+              end: {line: 1, column: 35}
+            }
+          },
+          rest: null,
+          generator: false,
+          expression: true,
+          async: true,
+          loc: {
+            start: {line: 1, column: 5},
+            end: {line: 1, column: 35}
+          }
+        }
+      ],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 36}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 36}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('f(a, async(x, y) => await [x, y], b)', {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "f",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 1}
+        }
+      },
+      arguments: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 2},
+            end: {line: 1, column: 3}
+          }
+        },
+        {
+          type: "ArrowFunctionExpression",
+          id: null,
+          params: [
+            {
+              type: "Identifier",
+              name: "x",
+              loc: {
+                start: {line: 1, column: 11},
+                end: {line: 1, column: 12}
+              }
+            },
+            {
+              type: "Identifier",
+              name: "y",
+              loc: {
+                start: {line: 1, column: 14},
+                end: {line: 1, column: 15}
+              }
+            }
+          ],
+          defaults: [],
+          body: {
+            type: "AwaitExpression",
+            argument: {
+              type: "ArrayExpression",
+              elements: [
+                {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 27},
+                    end: {line: 1, column: 28}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "y",
+                  loc: {
+                    start: {line: 1, column: 30},
+                    end: {line: 1, column: 31}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 26},
+                end: {line: 1, column: 32}
+              }
+            },
+            loc: {
+              start: {line: 1, column: 20},
+              end: {line: 1, column: 32}
+            }
+          },
+          rest: null,
+          generator: false,
+          expression: true,
+          async: true,
+          loc: {
+            start: {line: 1, column: 5},
+            end: {line: 1, column: 32}
+          }
+        },
+        {
+          type: "Identifier",
+          name: "b",
+          loc: {
+            start: {line: 1, column: 34},
+            end: {line: 1, column: 35}
+          }
+        }
+      ],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 36}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 36}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test('f(async function(promise) { await promise })', {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "f",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 1}
+        }
+      },
+      arguments: [
+        {
+          type: "FunctionExpression",
+          id: null,
+          params: [
+            {
+              type: "Identifier",
+              name: "promise",
+              loc: {
+                start: {line: 1, column: 17},
+                end: {line: 1, column: 24}
+              }
+            }
+          ],
+          defaults: [],
+          body: {
+            type: "BlockStatement",
+            body: [
+              {
+                type: "ExpressionStatement",
+                expression: {
+                  type: "AwaitExpression",
+                  argument: {
+                    type: "Identifier",
+                    name: "promise",
+                    loc: {
+                      start: {line: 1, column: 34},
+                      end: {line: 1, column: 41}
+                    }
+                  },
+                  loc: {
+                    start: {line: 1, column: 28},
+                    end: {line: 1, column: 41}
+                  }
+                },
+                loc: {
+                  start: {line: 1, column: 28},
+                  end: {line: 1, column: 41}
+                }
+              }
+            ],
+            loc: {
+              start: {line: 1, column: 26},
+              end: {line: 1, column: 43}
+            }
+          },
+          rest: null,
+          generator: false,
+          expression: false,
+          async: true,
+          loc: {
+            start: {line: 1, column: 2},
+            end: {line: 1, column: 43}
+          }
+        }
+      ],
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 44}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 44}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
 // Harmony Invalid syntax
 
 testFail("0o", "Expected number in radix 8 (1:2)", {ecmaVersion: 6});
@@ -13516,6 +14281,10 @@ testFail("() <= 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 testFail("(10) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
 
 testFail("(10, 20) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
+
+testFail("function foo(promise) { await promise; }", "Unexpected token (1:30)", {ecmaVersion: 7});
+
+testFail("async function* foo(promise) { await promise; }", "Unexpected token (1:14)", {ecmaVersion: 7});
 
 testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 
