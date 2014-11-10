@@ -1,0 +1,17 @@
+environment:
+  matrix:
+    - nodejs_version: "0.10"
+    - nodejs_version: "0.11"
+
+install:
+ - "npm install"
+ - "cinst make"
+
+test_script:
+ - "node --version"
+ - "npm --version"
+ - "make test"
+
+build: "off"
+
+version: "{build}"
