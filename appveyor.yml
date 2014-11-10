@@ -10,7 +10,7 @@ install:
 test_script:
  - "node --version"
  - "npm --version"
- - "make test"
+ - "make test-appveyor"
 
 build: "off"
 

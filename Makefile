@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-travis test-browser publish bench build
+.PHONY: clean test test-cov tlint est-travis test-appveyor test-browser publish bench build
 
 clean:
 	rm -rf coverage templates.json test/tmp dist
@@ -15,16 +15,22 @@ bench:
 	npm install es6-transpiler traceur esnext es6now jstransform
 	node node_modules/matcha/bin/_matcha
 
-test:
+lint:
 	$(JSHINT_CMD) lib bin benchmark/index.js
+
+test:
+	make lint
 	$(MOCHA_CMD)
 
 test-cov:
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-travis:
+test-appveyor:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
+
+test-travis:
+	make test-appveyor
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
