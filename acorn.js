@@ -167,13 +167,7 @@
     if (options.strictMode) {
       strict = true;
     }
-    if (options.ecmaVersion >= 7) {
-      isKeyword = isEcma7Keyword;
-    } else if (options.ecmaVersion === 6) {
-      isKeyword = isEcma6Keyword;
-    } else {
-      isKeyword = isEcma5AndLessKeyword;
-    }
+    isKeyword = options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
   }
 
   // The `getLineInfo` function is mostly useful when the
@@ -298,7 +292,7 @@
   // that `break` and `continue` have somewhere to jump to, and
   // `strict` indicates whether strict mode is on.
 
-  var inFunction, inGenerator, inAsync, labels, strict,
+  var inFunction, inGenerator, labels, strict,
     inXJSChild, inXJSTag, inXJSChildExpression;
 
   // This counter is used for checking that arrow expressions did
@@ -315,7 +309,7 @@
   function initParserState() {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = new Position;
-    inFunction = inGenerator = inAsync = strict = false;
+    inFunction = inGenerator = strict = false;
     labels = [];
     readToken();
   }
@@ -382,7 +376,6 @@
   var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true};
   var _export = {keyword: "export"}, _import = {keyword: "import"};
   var _yield = {keyword: "yield", beforeExpr: true};
-  var _async = {keyword: "async"}, _await = {keyword: "await", beforeExpr: true};
 
   // The keywords that denote values.
 
@@ -409,8 +402,7 @@
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
                       "class": _class, "extends": _extends,
-                      "export": _export, "import": _import, "yield": _yield,
-                      "await": _await, "async": _async};
+                      "export": _export, "import": _import, "yield": _yield};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -538,11 +530,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var ecma6AndLessKeywords = ecma5AndLessKeywords + " let const class extends export import yield";
-
-  var isEcma6Keyword = makePredicate(ecma6AndLessKeywords);
-
-  var isEcma7Keyword = makePredicate(ecma6AndLessKeywords + " async await");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1908,7 +1896,6 @@
     case _debugger: return parseDebuggerStatement(node);
     case _do: return parseDoStatement(node);
     case _for: return parseForStatement(node);
-    case _async: return parseAsync(node, true);
     case _function: return parseFunctionStatement(node);
     case _class: return parseClass(node, true);
     case _if: return parseIfStatement(node);
@@ -2010,46 +1997,7 @@
   
   function parseFunctionStatement(node) {
     next();
-    return parseFunction(node, true, false);
-  }
-
-  function parseAsync(node, isStatement) {
-    if (options.ecmaVersion < 7) {
-      unexpected();
-    }
-
-    next();
-
-    switch (tokType) {
-      case _function:
-        next();
-        return parseFunction(node, isStatement, true);
-
-      if (!isStatement) unexpected();
-
-      case _name:
-        var id = parseIdent(tokType !== _name);
-        if (eat(_arrow)) {
-          return parseArrowExpression(node, [id], true);
-        }
-
-      case _parenL:
-        var oldParenL = ++metParenL;
-        var exprList = [];
-        next();
-        if (tokType !== _parenR) {
-          var val = parseExpression();
-          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-        }
-        expect(_parenR);
-        // if '=>' follows '(...)', convert contents to arguments
-        if (metParenL === oldParenL && eat(_arrow)) {
-          return parseArrowExpression(node, exprList, true);
-        }
-
-      default:
-        unexpected();
-    }
+    return parseFunction(node, true);
   }
   
   function parseIfStatement(node) {
@@ -2432,9 +2380,6 @@
     case _yield:
       if (inGenerator) return parseYield();
 
-    case _await:
-      if (inAsync) return parseAwait();
-
     case _name:
       var start = storeCurrentPos();
       var id = parseIdent(tokType !== _name);
@@ -2516,13 +2461,10 @@
     case _braceL:
       return parseObj();
 
-    case _async:
-      return parseAsync(startNode(), false);
-
     case _function:
       var node = startNode();
       next();
-      return parseFunction(node, false, false);
+      return parseFunction(node, false);
 
     case _class:
       return parseClass(startNode(), false);
@@ -2610,11 +2552,7 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), isGenerator, isAsync;
-      if (options.ecmaVersion >= 7) {
-        isAsync = eat(_async);
-        if (tokType === _star) unexpected();
-      }
+      var prop = startNode(), isGenerator;
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
@@ -2627,13 +2565,13 @@
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         prop.kind = "init";
         prop.method = true;
-        prop.value = parseMethod(isGenerator, isAsync);
+        prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set")) {
-        if (isGenerator || isAsync) unexpected();
+        if (isGenerator) unexpected();
         prop.kind = prop.key.name;
         parsePropertyName(prop);
-        prop.value = parseMethod(false, false);
+        prop.value = parseMethod(false);
       } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
         prop.kind = "init";
         prop.value = prop.key;
@@ -2662,26 +2600,22 @@
 
   // Initialize empty function node.
 
-  function initFunction(node, isAsync) {
+  function initFunction(node) {
     node.id = null;
     node.params = [];
     if (options.ecmaVersion >= 6) {
       node.defaults = [];
       node.rest = null;
       node.generator = false;
-    }
-    if (options.ecmaVersion >= 7) {
-      node.async = isAsync;
-    }
+  }
   }
 
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
-  function parseFunction(node, isStatement, isAsync, allowExpressionBody) {
-    initFunction(node, isAsync);
+  function parseFunction(node, isStatement, allowExpressionBody) {
+    initFunction(node);
     if (options.ecmaVersion >= 6) {
-      if (node.async && tokType === _star) unexpected();
       node.generator = eat(_star);
     }
     if (isStatement || tokType === _name) {
@@ -2694,9 +2628,9 @@
 
   // Parse object or class method.
 
-  function parseMethod(isGenerator, isAsync) {
+  function parseMethod(isGenerator) {
     var node = startNode();
-    initFunction(node, isAsync);
+    initFunction(node);
     parseFunctionParams(node);
     var allowExpressionBody;
     if (options.ecmaVersion >= 6) {
@@ -2711,8 +2645,8 @@
 
   // Parse arrow function expression with given parameters.
 
-  function parseArrowExpression(node, params, isAsync) {
-    initFunction(node, isAsync);
+  function parseArrowExpression(node, params) {
+    initFunction(node);
 
     var defaults = node.defaults, hasDefaults = false;
     
@@ -2780,9 +2714,7 @@
 
   function parseFunctionBody(node, allowExpression) {
     var isExpression = allowExpression && tokType !== _braceL;
-
-    var oldInAsync = inAsync;
-    inAsync = node.async;
+    
     if (isExpression) {
       node.body = parseExpression(true);
       node.expression = true;
@@ -2795,7 +2727,6 @@
       node.expression = false;
       inFunction = oldInFunc; inGenerator = oldInGen; labels = oldLabels;
     }
-    inAsync = oldInAsync;
 
     // If this is a strict mode function, verify that argument names
     // are not repeated, and it does not try to bind the words `eval`
@@ -2829,22 +2760,17 @@
         } else {
         method['static'] = false;
         }
-      var isAsync = false;
-      if (options.ecmaVersion >= 7) {
-        isAsync = eat(_async);
-        if (tokType === _star) unexpected();
-      }
       var isGenerator = eat(_star);
       parsePropertyName(method);
       if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set")) {
-        if (isGenerator || isAsync) unexpected();
+        if (isGenerator) unexpected();
         method.kind = method.key.name;
         parsePropertyName(method);
       } else {
         method.kind = "";
       }
-      method.value = parseMethod(isGenerator, isAsync);
+      method.value = parseMethod(isGenerator);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
@@ -3047,19 +2973,6 @@
     node.argument = parseExpression(true);
     }
     return finishNode(node, "YieldExpression");
-  }
-
-  // Parses await expression inside async function.
-
-  function parseAwait() {
-    var node = startNode();
-    next();
-    if (eat(_semi) || canInsertSemicolon()) {
-      unexpected();
-    }
-    node.delegate = eat(_star);
-    node.argument = parseExpression(true);
-    return finishNode(node, "AwaitExpression");
   }
 
   // Parses array and generator comprehensions.
