@@ -6,7 +6,9 @@ var fs      = require("fs");
 var _       = require("lodash");
 
 exports.readdirFilter = function (filename) {
-  return readdir(filename).filter(util.canCompile);
+  return readdir(filename).filter(function (filename) {
+    return util.canCompile(filename);
+  });
 };
 
 exports.transform = function (filename, code, opts) {
