@@ -85,6 +85,7 @@ It's as easy as:
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - [Jade](https://github.com/Apoxx/jade-6to5)
+ - [Jest](https://github.com/6to5/6to5-jest)
  - [Karma](https://github.com/shuhei/karma-6to5-preprocessor)
  - [webpack](https://github.com/Couto/6to5-loader)
 
