@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov tlint est-travis test-appveyor test-browser publish bench build
+.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish bench build
 
 clean:
 	rm -rf coverage templates.json test/tmp dist
@@ -18,19 +18,23 @@ bench:
 lint:
 	$(JSHINT_CMD) lib bin benchmark/index.js
 
+test-clean:
+	rm -rf test/tmp
+
 test:
 	make lint
 	$(MOCHA_CMD)
+	make test-clean
 
 test-cov:
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-appveyor:
+test-spec:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
 
 test-travis:
-	make test-appveyor
+	make test-spec
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:

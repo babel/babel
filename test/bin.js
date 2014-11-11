@@ -149,7 +149,3 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
     });
   });
 });
-
-after(function () {
-  rimraf.sync(tmpLoc);
-});
