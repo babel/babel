@@ -1,0 +1,1 @@
+<hasOwnProperty>testing</hasOwnProperty>;

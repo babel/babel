@@ -71,6 +71,6 @@
   "XJSMemberExpression":      ["object", "property"],
   "XJSNamespacedName":        ["namespace", "name"],
   "XJSOpeningElement":        ["name", "attributes"],
-  "XJSSpreadAttribute":       [],
+  "XJSSpreadAttribute":       ["argument"],
   "YieldExpression":          ["argument"]
 }
