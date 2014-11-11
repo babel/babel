@@ -1,3 +1,8 @@
+# 1.12.0
+
+ * Combine `jsx` and `react` transformers to `react`.
+ * Update `react` syntax output to React v0.12.
+
 # 1.11.15
 
  * Fix JSX literal whitespace generation.
