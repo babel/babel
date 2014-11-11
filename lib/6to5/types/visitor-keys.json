@@ -3,6 +3,7 @@
   "ArrayPattern":             ["elements"],
   "ArrowFunctionExpression":  ["params", "defaults", "rest", "body"],
   "AssignmentExpression":     ["left", "right"],
+  "AwaitExpression":          ["argument"],
   "BinaryExpression":         ["left", "right"],
   "BlockStatement":           ["body"],
   "BreakStatement":           ["label"],
