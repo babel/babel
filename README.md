@@ -49,6 +49,7 @@ It's as easy as:
 - [Caveats](#caveats)
 - [Polyfill](#polyfill)
 - [Optional runtime](#optional-runtime)
+- [React/JSX](#reactjsx)
 - [Differences](#differences)
 
 ## [Features](FEATURES.md)
@@ -400,6 +401,14 @@ require("6to5").runtime("myCustomNamespace");
 
 See [Options - runtime](#options) for documentation on changing the reference in
 generated code.
+
+## React/JSX
+
+6to5 has built-in support for React v0.12. Tags are automatically transformed to
+their equivalent `React.createElement(...)` and `displayName` is automatically
+inferred and added to all `React.createClass` calls.
+
+To disable this behaviour add `react` to your blacklist.
 
 ## Differences
 
