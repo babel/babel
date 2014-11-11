@@ -6,6 +6,16 @@
 [for (i of [1, 2, 3]) i * i]; // [1, 4, 9]
 ```
 
+## Async functions
+
+```javascript
+async function chainAnimationsAsync(elem, animations) {
+  for (var anim of animations) {
+    await anim(elem);
+  }
+}
+```
+
 ## Arrow functions
 
 ```javascript

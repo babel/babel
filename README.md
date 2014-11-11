@@ -55,6 +55,7 @@ It's as easy as:
 ## [Features](FEATURES.md)
 
  - [Array comprehension](FEATURES.md#array-comprehension)
+ - [Async functions](FEATURES.md#async-functions) via [regenerator](https://github.com/facebook/regenerator)
  - [Arrow functions](FEATURES.md#arrow-functions)
  - [Classes](FEATURES.md#classes)
  - [Computed property names](FEATURES.md#computed-property-names)
