@@ -78,4 +78,4 @@ publish:
 
 	git push --follow-tags
 
-	rm -rf templates.json browser.js runtime.js polyfill.js
+	rm -rf templates.json browser.js runtime.js browser-polyfill.js
