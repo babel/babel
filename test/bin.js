@@ -48,6 +48,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   var expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
+  stdout = stdout.replace(/\\/g, "/");
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
