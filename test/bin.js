@@ -1,4 +1,5 @@
 var readdir = require("fs-readdir-recursive");
+var helper  = require("./_helper");
 var assert  = require("assert");
 var rimraf  = require("rimraf");
 var mkdirp  = require("mkdirp");
@@ -11,15 +12,11 @@ var _       = require("lodash");
 var fixtureLoc = __dirname + "/fixtures/bin";
 var tmpLoc = __dirname + "/tmp";
 
-var readFile = function (filename) {
-  return fs.readFileSync(filename, "utf8").trim();
-};
-
 var readDir = function (loc) {
   var files = {};
   if (fs.existsSync(loc)) {
     _.each(readdir(loc), function (filename) {
-      var contents = readFile(loc + "/" + filename);
+      var contents = helper.readFile(loc + "/" + filename);
       files[filename] = contents;
     });
   }
@@ -63,7 +60,7 @@ var assertTest = function (stdout, stderr, opts) {
   }
 
   _.each(opts.outFiles, function (expect, filename) {
-    var actual = readFile(filename);
+    var actual = helper.readFile(filename);
     chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
 };
@@ -138,7 +135,7 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       _.each(["stdout", "stdin", "stderr"], function (key) {
         var loc = testLoc + "/" + key + ".txt";
         if (fs.existsSync(loc)) {
-          opts[key] = readFile(loc);
+          opts[key] = helper.readFile(loc);
         } else {
           opts[key] = opts[key] || "";
         }

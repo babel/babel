@@ -5,9 +5,11 @@ var humanise = function (val) {
   return val.replace(/-/g, " ");
 };
 
-var readFile = function (filename) {
+var readFile = exports.readFile = function (filename) {
   if (fs.existsSync(filename)) {
-    return fs.readFileSync(filename, "utf8").trim();
+    var file = fs.readFileSync(filename, "utf8").trim();
+    file = file.replace(/\r\n/g, "\n");
+    return file;
   } else {
     return "";
   }
