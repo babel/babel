@@ -66,7 +66,7 @@ publish:
 
 	make build
 	cp dist/6to5.min.js browser.js
-	cp dist/polyfill.min.js polyfill.js
+	cp dist/polyfill.min.js browser-polyfill.js
 	cp dist/runtime.min.js runtime.js
 
 	node bin/cache-templates

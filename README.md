@@ -346,8 +346,8 @@ require("6to5/polyfill");
 
 ### Browser
 
-Available from the `polyfill.js` file within the 6to5 directory of an npm
-release.
+Available from the `browser-polyfill.js` file within the 6to5 directory of an
+npm release.
 
 ## Optional runtime
 

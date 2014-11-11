@@ -6,7 +6,7 @@ test/tmp
 /templates.json
 /tests.json
 /browser.js
-/polyfill.js
+/browser-polyfill.js
 /runtime.js
 coverage
 dist
