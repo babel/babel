@@ -1,9 +1,9 @@
 "use strict";
 
-(X(null, "   "));
+(X(null));
 
-(X(null, "\n"));
+(X(null));
 
-(X(null, "\n  string\n"));
+(X(null, "string"));
 
-(X(null, "\n  string\n  string\n  "));
+(X(null, "string string"));
