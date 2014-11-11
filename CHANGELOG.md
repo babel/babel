@@ -1,3 +1,7 @@
+# 1.12.1
+
+ * Fix `this` and `arguments` mapping in the `_aliasFunctions` transformer.
+
 # 1.12.0
 
  * Combine `jsx` and `react` transformers to `react`.
