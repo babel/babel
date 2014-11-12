@@ -1,3 +1,9 @@
+# 1.12.3
+
+ * Support generator comprehensions.
+ * Use `Array.from` instead of `Array.prototype.slice` in spread transformer.
+ * Support spread in `NewExpression`s.
+
 # 1.12.2
 
  * Upgrade `matcha` to `0.6.0` and `browserify` to `6.3.2`.
