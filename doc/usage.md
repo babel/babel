@@ -1,0 +1,149 @@
+# Usage
+
+## CLI
+
+Compile the file `script.js` and output it to stdout.
+
+    $ 6to5 script.js
+
+Compile the file `script.js` and output it to `script-compiled.js`.
+
+    $ 6to5 script.js --out-file script-compiled.js
+
+Compile the file `script.js` and output it to `script-compiled.js` and save a
+source map to `script-compiled.js.map`.
+
+    $ 6to5 script.js --source-maps --out-file script-compiled.js
+
+Compile the file `script.js` and output it to `script-compiled.js` with a source
+map embedded in a comment at the bottom.
+
+    $ 6to5 script.js --source-maps-inline --out-file script-compiled.js
+
+Compile the entire `src` directory and output it to the `lib` directory.
+
+    $ 6to5 src --out-dir lib
+
+Compile the entire `src` directory and output it to the one concatenated file.
+
+    $ 6to5 src --out-file script-compiled.js
+
+Pipe a file in via stdin and output it to `script-compiled.js`
+
+    $ 6to5 --out-file script-compiled.js < script.js
+
+### Node
+
+Launch a repl.
+
+    $ 6to5-node
+
+Evaluate code.
+
+    $ 6to5-node -e "class Test { }"
+
+Compile and run `test.js`.
+
+    $ 6to5-node test
+
+## Node
+
+```javascript
+var to5 = require("6to5");
+
+var result = to5.transform("code();", options);
+result.code;
+result.map;
+result.ast;
+
+to5.transformFileSync("filename.js", options).code;
+
+to5.transformFile("filename.js", options, function (err, result) {
+
+});
+```
+
+#### Options
+
+```javascript
+{
+  // Filename for use in errors etc.
+  // Default: "unknown"
+  filename: "filename",
+
+  // List of transformers to EXCLUDE.
+  // Run `6to5 --help` to see a full list of transformers.
+  blacklist: [],
+
+  // List of transformers to ONLY use.
+  // Run `6to5 --help` to see a full list of transformers.
+  whitelist: [],
+
+  // Module formatter to use
+  // Run `6to5 --help` to see a full list of module formatters.
+  // Default: "common"
+  modules: "common",
+
+  // If truthy, adds a `map` property to returned output.
+  // If set to "inline", a comment with a sourceMappingURL directive is added to
+  // the bottom of the returned code.
+  // Default: false
+  sourceMap: true,
+
+  // Set `file` on returned source map.
+  // Default: `filename` option.
+  sourceMapName: "filename",
+
+  // Set `sources[0]` on returned source map.
+  // Default: `filename` option.
+  sourceFileName: "filename",
+
+  // Optionally replace all 6to5 helper declarations with a referenece to this
+  // variable. If set to `true` then the default namespace is used "to5Runtime".
+  // Default: false
+  runtime: true
+}
+```
+
+### Require hook
+
+All subsequent files required by node with the extensions `.es6` and `.js` will
+be transformed by 6to5. The polyfill specified in [Polyfill](polyfill.md) is
+also required.
+
+```javascript
+require("6to5/register");
+```
+
+**NOTE:** By default all requires to `node_modules` will be ignored. You can
+override this by passing an ignore regex via:
+
+```javascript
+require("6to5/register")({
+  // This will override `node_modules` ignoring - you can alternatively pass
+  // a regex
+  ignore: false
+});
+```
+
+#### Options
+
+```javascript
+require("6to5/register")({
+  // Optional ignore regex - if any filenames **do** match this regex then they
+  // aren't compiled
+  ignore: /regex/,
+
+  // Optional only regex - if any filenames **don't** match this regex then they
+  // aren't compiled
+  only: /my_es6_folder/,
+
+  // See options above for usage
+  whitelist: [],
+  blacklist: [],
+
+  // This will remove the currently hooked extensions of .es6 and .js so you'll
+  // have to add them back if you want them to be used again.
+  extensions: [".js", ".es6"]
+});
+```

@@ -8,4 +8,4 @@ Makefile
 .*
 dist
 tests.json
-!README.md
+CHANGELOG.md
