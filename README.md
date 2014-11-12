@@ -26,4 +26,4 @@
 
 **6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
 
-For more information view the [documentation](https://github.com/6to5/6to5/tree/master/doc).
+For more information view the [documentation](https://6to5.github.io).
