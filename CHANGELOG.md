@@ -1,3 +1,9 @@
+# 1.12.2
+
+ * Upgrade `matcha` to `0.6.0` and `browserify` to `6.3.2`.
+ * Add own `trimRight` helper instead of relying on the string instance method.
+ * Support JSX spreads that aren't the first.
+
 # 1.12.1
 
  * Fix `this` and `arguments` mapping in the `_aliasFunctions` transformer.
