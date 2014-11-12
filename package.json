@@ -53,10 +53,10 @@
   },
   "devDependencies": {
     "istanbul": "0.3.2",
-    "matcha": "0.5.0",
+    "matcha": "0.6.0",
     "mocha": "2.0.1",
     "uglify-js": "2.4.15",
-    "browserify": "6.2.0",
+    "browserify": "6.3.2",
     "rimraf": "2.2.8",
     "jshint": "2.5.10",
     "chai": "^1.9.2"
