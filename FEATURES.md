@@ -95,6 +95,11 @@ for (var i of [1, 2, 3]) {
 ```javascript
 ```
 
+## Generator comprehension
+
+```javascript
+```
+
 ## Modules
 
 ```javascript
