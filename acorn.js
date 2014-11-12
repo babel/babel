@@ -43,8 +43,9 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    var startPos = options.locations ? [tokStart, new Position] : tokStart;
     initParserState();
-    return parseTopLevel(options.program);
+    return parseTopLevel(options.program || startNodeAt(startPos));
   };
 
   // A second optional argument can be given to further configure
@@ -214,6 +215,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    skipSpace();
 
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
@@ -233,6 +235,9 @@
       }
       tokRegexpAllowed = reAllowed;
       skipSpace();
+    };
+    getToken.noRegexp = function() {
+      tokRegexpAllowed = false;
     };
     getToken.options = options;
     return getToken;
@@ -308,6 +313,7 @@
     if (options.locations) lastEndLoc = new Position;
     inFunction = inGenerator = strict = false;
     labels = [];
+    skipSpace();
     readToken();
   }
 
@@ -446,7 +452,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star};
+                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
+                     assign: _assign};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -592,7 +599,6 @@
     tokRegexpAllowed = true;
     metParenL = 0;
     inTemplate = false;
-    skipSpace();
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -1505,15 +1511,19 @@
   // `program` argument.  If present, the statements will be appended
   // to its body instead of creating a new node.
 
-  function parseTopLevel(program) {
-    var node = program || startNode(), first = true;
-    if (!program) node.body = [];
+  function parseTopLevel(node) {
+    var first = true;
+    if (!node.body) node.body = [];
     while (tokType !== _eof) {
       var stmt = parseStatement();
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
     }
+
+    lastStart = tokStart;
+    lastEnd = tokEnd;
+    lastEndLoc = tokEndLoc;
     return finishNode(node, "Program");
   }
 
@@ -2062,7 +2072,7 @@
 
     case _parenL:
       var start = storeCurrentPos();
-      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
+      var val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
       if (options.ecmaVersion >= 7 && tokType === _for) {

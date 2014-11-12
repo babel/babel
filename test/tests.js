@@ -43,8 +43,8 @@ test("this\n", {
       column: 0
     },
     end: {
-      line: 1,
-      column: 4
+      line: 2,
+      column: 0
     }
   }
 });
@@ -86,8 +86,8 @@ test("null\n", {
       column: 0
     },
     end: {
-      line: 1,
-      column: 4
+      line: 2,
+      column: 0
     }
   }
 });
@@ -125,12 +125,12 @@ test("\n    42\n\n", {
   ],
   loc: {
     start: {
-      line: 2,
-      column: 4
+      line: 1,
+      column: 0
     },
     end: {
-      line: 2,
-      column: 6
+      line: 4,
+      column: 0
     }
   }
 });
@@ -4916,7 +4916,7 @@ test("/* block comment */ 42", {
   loc: {
     start: {
       line: 1,
-      column: 20
+      column: 0
     },
     end: {
       line: 1,
@@ -4963,7 +4963,7 @@ test("42 /*The*/ /*Answer*/", {
     },
     end: {
       line: 1,
-      column: 2
+      column: 21
     }
   }
 });
@@ -5006,7 +5006,7 @@ test("42 /*the*/ /*answer*/", {
     },
     end: {
       line: 1,
-      column: 2
+      column: 21
     }
   }
 });
@@ -5044,8 +5044,8 @@ test("/* multiline\ncomment\nshould\nbe\nignored */ 42", {
   ],
   loc: {
     start: {
-      line: 5,
-      column: 11
+      line: 1,
+      column: 0
     },
     end: {
       line: 5,
@@ -5087,8 +5087,8 @@ test("/*a\r\nb*/ 42", {
   ],
   loc: {
     start: {
-      line: 2,
-      column: 4
+      line: 1,
+      column: 0
     },
     end: {
       line: 2,
@@ -5130,8 +5130,8 @@ test("/*a\rb*/ 42", {
   ],
   loc: {
     start: {
-      line: 2,
-      column: 4
+      line: 1,
+      column: 0
     },
     end: {
       line: 2,
@@ -5173,8 +5173,8 @@ test("/*a\nb*/ 42", {
   ],
   loc: {
     start: {
-      line: 2,
-      column: 4
+      line: 1,
+      column: 0
     },
     end: {
       line: 2,
@@ -5216,8 +5216,8 @@ test("/*a\nc*/ 42", {
   ],
   loc: {
     start: {
-      line: 2,
-      column: 4
+      line: 1,
+      column: 0
     },
     end: {
       line: 2,
@@ -5259,7 +5259,7 @@ test("// line comment\n42", {
   ],
   loc: {
     start: {
-      line: 2,
+      line: 1,
       column: 0
     },
     end: {
@@ -5307,7 +5307,7 @@ test("42 // line comment", {
     },
     end: {
       line: 1,
-      column: 2
+      column: 18
     }
   }
 });
@@ -5345,7 +5345,7 @@ test("// Hello, world!\n42", {
   ],
   loc: {
     start: {
-      line: 2,
+      line: 1,
       column: 0
     },
     end: {
@@ -5360,7 +5360,7 @@ test("// Hello, world!\n", {
   body: [],
   loc: {
     start: {
-      line: 2,
+      line: 1,
       column: 0
     },
     end: {
@@ -5375,7 +5375,7 @@ test("// Hallo, world!\n", {
   body: [],
   loc: {
     start: {
-      line: 2,
+      line: 1,
       column: 0
     },
     end: {
@@ -5418,7 +5418,7 @@ test("//\n42", {
   ],
   loc: {
     start: {
-      line: 2,
+      line: 1,
       column: 0
     },
     end: {
@@ -5434,7 +5434,7 @@ test("//", {
   loc: {
     start: {
       line: 1,
-      column: 2
+      column: 0
     },
     end: {
       line: 1,
@@ -5449,7 +5449,7 @@ test("// ", {
   loc: {
     start: {
       line: 1,
-      column: 3
+      column: 0
     },
     end: {
       line: 1,
@@ -5492,7 +5492,7 @@ test("/**/42", {
   loc: {
     start: {
       line: 1,
-      column: 4
+      column: 0
     },
     end: {
       line: 1,
@@ -5534,7 +5534,7 @@ test("// Hello, world!\n\n//   Another hello\n42", {
   ],
   loc: {
     start: {
-      line: 4,
+      line: 1,
       column: 0
     },
     end: {

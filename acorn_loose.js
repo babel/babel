@@ -301,9 +301,11 @@
   }
 
   function parseTopLevel() {
-    var node = startNode();
+    var node = startNodeAt(options.locations ? [0, acorn.getLineInfo(input, 0)] : 0);
     node.body = [];
     while (token.type !== tt.eof) node.body.push(parseStatement());
+    lastEnd = token.end;
+    lastEndLoc = token.endLoc;
     return finishNode(node, "Program");
   }
 
@@ -881,6 +883,7 @@
   function parseIdent() {
     var node = startNode();
     node.name = token.type === tt.name ? token.value : token.type.keyword;
+    fetchToken.noRegexp();
     next();
     return finishNode(node, "Identifier");
   }
