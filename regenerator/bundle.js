@@ -27531,6 +27531,7 @@ var types = _dereq_("./types");
 var Type = types.Type;
 var namedTypes = types.namedTypes;
 var Node = namedTypes.Node;
+var Expression = namedTypes.Expression;
 var isArray = types.builtInTypes.array;
 var hasOwn = Object.prototype.hasOwnProperty;
 var b = types.builders;
@@ -27696,7 +27697,7 @@ function recursiveScanScope(path, bindings) {
             bindings
         );
 
-    } else if (Node.check(node)) {
+    } else if (Node.check(node) && !Expression.check(node)) {
         types.eachField(node, function(name, child) {
             var childPath = path.get(name);
             assert.strictEqual(childPath.value, child);
@@ -27708,8 +27709,8 @@ function recursiveScanScope(path, bindings) {
 function recursiveScanChild(path, bindings) {
     var node = path.value;
 
-    if (!node) {
-        // None of the remaining cases matter if node is falsy.
+    if (!node || Expression.check(node)) {
+        // Ignore falsy values and Expressions.
 
     } else if (namedTypes.FunctionDeclaration.check(node)) {
         addPattern(path.get("id"), bindings);
@@ -27718,7 +27719,7 @@ function recursiveScanChild(path, bindings) {
                namedTypes.ClassDeclaration.check(node)) {
         addPattern(path.get("id"), bindings);
 
-    } else if (Scope.isEstablishedBy(node)) {
+    } else if (ScopeType.check(node)) {
         if (namedTypes.CatchClause.check(node)) {
             var catchParamName = node.param.name;
             var hadBinding = hasOwn.call(bindings, catchParamName);
