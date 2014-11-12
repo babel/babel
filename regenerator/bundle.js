@@ -23533,7 +23533,6 @@ var Patcher = _dereq_("./patcher").Patcher;
 var normalizeOptions = _dereq_("./options").normalize;
 var fromString = _dereq_("./lines").fromString;
 var addComments = _dereq_("./comments").add;
-var hasOwn = Object.prototype.hasOwnProperty;
 
 exports.parse = function parse(source, options) {
     options = normalizeOptions(options);
@@ -23628,16 +23627,18 @@ TCp.copy = function(node) {
         loc.indent = newIndent;
     }
 
-    for (var key in node) {
-        if (hasOwn.call(node, key)) {
-            if (key === "loc") {
-                copy[key] = node[key];
-            } else if (key === "comments") {
-                // Handled below.
-            } else {
-                copy[key] = this.copy(node[key]);
-            }
+    var keys = Object.keys(node);
+    var keyCount = keys.length;
+    for (var i = 0; i < keyCount; ++i) {
+        var key = keys[i];
+        if (key === "loc") {
+            copy[key] = node[key];
+        } else if (key === "comments") {
+            // Handled below.
+        } else {
+            copy[key] = this.copy(node[key]);
         }
+
     }
 
     this.indent = oldIndent;
@@ -28340,11 +28341,14 @@ Dp.build = function(/* param1, param2, ... */) {
                     assert.ok(false, message);
                 }
 
-                assert.ok(
-                    type.check(value),
-                    shallowStringify(value) +
-                        " does not match field " + field +
-                        " of type " + self.typeName);
+                if (!type.check(value)) {
+                    assert.ok(
+                        false,
+                        shallowStringify(value) +
+                            " does not match field " + field +
+                            " of type " + self.typeName
+                    );
+                }
 
                 // TODO Could attach getters and setters here to enforce
                 // dynamic type safety.
@@ -28407,11 +28411,13 @@ function getFieldNames(object) {
         return d.fieldNames.slice(0);
     }
 
-    assert.strictEqual(
-        "type" in object, false,
-        "did not recognize object of type " +
-            JSON.stringify(object.type)
-    );
+    if ("type" in object) {
+        assert.ok(
+            false,
+            "did not recognize object of type " +
+                JSON.stringify(object.type)
+        );
+    }
 
     return Object.keys(object);
 }
