@@ -1,8 +1,7 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
 function foo() {
-  return bar.apply(null, ["test"].concat(_slice.call(arguments)));
+  return bar.apply(null, ["test"].concat(Array.from(arguments)));
 }
 
 function bar(one, two, three) {

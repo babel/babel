@@ -12,6 +12,7 @@
   "IfStatement":             ["test", "consequent", "alternate"],
   "Literal":                 ["value"],
   "MemberExpression":        ["object", "property", "computed"],
+  "NewExpression":           ["callee", "arguments"],
   "ObjectExpression":        ["properties"],
   "ParenthesizedExpression": ["expression"],
   "Program":                 ["body"],

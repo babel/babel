@@ -1,4 +1,3 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
-var a = [b].concat(_slice.call(c), [d]);
+var a = [b].concat(Array.from(c), [d]);

@@ -1,4 +1,3 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
-add.apply(null, [foo].concat(_slice.call(numbers), [bar, what], _slice.call(test)));
+add.apply(null, [foo].concat(Array.from(numbers), [bar, what], Array.from(test)));

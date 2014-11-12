@@ -1,4 +1,3 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
-obj[method].apply(obj, _slice.call(args));
+obj[method].apply(obj, Array.from(args));
