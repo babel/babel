@@ -1,3 +1,7 @@
+# 1.12.4
+
+ * Add `doc` folder for documentation.
+
 # 1.12.3
 
  * Support generator comprehensions.
