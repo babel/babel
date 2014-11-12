@@ -4976,11 +4976,11 @@ Ep.assign = function(lhs, rhs) {
 
 // Convenience function for generating expressions like context.next,
 // context.sent, and context.rval.
-Ep.contextProperty = function(name) {
+Ep.contextProperty = function(name, computed) {
   return b.memberExpression(
     this.contextId,
-    b.identifier(name),
-    false
+    computed ? b.literal(name) : b.identifier(name),
+    !!computed
   );
 };
 
@@ -5036,7 +5036,7 @@ Ep.clearPendingException = function(tryLoc, assignee) {
   n.Literal.assert(tryLoc);
 
   var catchCall = b.callExpression(
-    this.contextProperty("catch"),
+    this.contextProperty("catch", true),
     [tryLoc]
   );
 
@@ -5647,11 +5647,13 @@ Ep.explodeStatement = function(path, labelId) {
 };
 
 Ep.emitAbruptCompletion = function(record) {
-  assert.ok(
-    isValidCompletion(record),
-    "invalid completion record: " +
-      JSON.stringify(record)
-  );
+  if (!isValidCompletion(record)) {
+    assert.ok(
+      false,
+      "invalid completion record: " +
+        JSON.stringify(record)
+    );
+  }
 
   assert.notStrictEqual(
     record.type, "normal",
@@ -23723,10 +23725,11 @@ exports.getReprinter = function(path) {
 
     // Make sure that this path refers specifically to a Node, rather than
     // some non-Node subproperty of a Node.
-    if (path.node !== path.value)
+    var node = path.value;
+    if (!Node.check(node))
         return;
 
-    var orig = path.node.original;
+    var orig = node.original;
     var origLoc = orig && orig.loc;
     var lines = origLoc && origLoc.lines;
     var reprints = [];
@@ -23751,7 +23754,7 @@ exports.getReprinter = function(path) {
 };
 
 function findReprints(newPath, reprints) {
-    var newNode = newPath.node;
+    var newNode = newPath.value;
     Node.assert(newNode);
 
     var oldNode = newNode.original;
@@ -23873,22 +23876,37 @@ function findObjectReprints(newPath, oldPath, reprints) {
     return findChildReprints(newPath, oldPath, reprints);
 }
 
+// This object is reused in hasOpeningParen and hasClosingParen to avoid
+// having to allocate a temporary object.
+var reusablePos = { line: 1, column: 0 };
+
 function hasOpeningParen(oldPath) {
-    assert.ok(oldPath instanceof NodePath);
     var oldNode = oldPath.value;
     var loc = oldNode.loc;
     var lines = loc && loc.lines;
 
     if (lines) {
-        var pos = lines.skipSpaces(loc.start, true);
-        if (pos && lines.prevPos(pos) && lines.charAt(pos) === "(") {
-            var rootPath = oldPath;
-            while (rootPath.parent)
-                rootPath = rootPath.parent;
-            // If we found an opening parenthesis but it occurred before
-            // the start of the original subtree for this reprinting, then
-            // we must not return true for hasOpeningParen(oldPath).
-            return comparePos(rootPath.value.loc.start, pos) <= 0;
+        var pos = reusablePos;
+        pos.line = loc.start.line;
+        pos.column = loc.start.column;
+
+        while (lines.prevPos(pos)) {
+            var ch = lines.charAt(pos);
+
+            if (ch === "(") {
+                var rootPath = oldPath;
+                while (rootPath.parentPath)
+                    rootPath = rootPath.parentPath;
+
+                // If we found an opening parenthesis but it occurred before
+                // the start of the original subtree for this reprinting, then
+                // we must not return true for hasOpeningParen(oldPath).
+                return comparePos(rootPath.value.loc.start, pos) <= 0;
+            }
+
+            if (ch !== " ") {
+                return false;
+            }
         }
     }
 
@@ -23896,22 +23914,34 @@ function hasOpeningParen(oldPath) {
 }
 
 function hasClosingParen(oldPath) {
-    assert.ok(oldPath instanceof NodePath);
     var oldNode = oldPath.value;
     var loc = oldNode.loc;
     var lines = loc && loc.lines;
 
     if (lines) {
-        var pos = lines.skipSpaces(loc.end);
-        if (pos && lines.charAt(pos) === ")") {
-            var rootPath = oldPath;
-            while (rootPath.parent)
-                rootPath = rootPath.parent;
-            // If we found a closing parenthesis but it occurred after
-            // the end of the original subtree for this reprinting, then
-            // we must not return true for hasClosingParen(oldPath).
-            return comparePos(pos, rootPath.value.loc.end) <= 0;
-        }
+        var pos = reusablePos;
+        pos.line = loc.end.line;
+        pos.column = loc.end.column;
+
+        do {
+            var ch = lines.charAt(pos);
+
+            if (ch === ")") {
+                var rootPath = oldPath;
+                while (rootPath.parentPath)
+                    rootPath = rootPath.parentPath;
+
+                // If we found a closing parenthesis but it occurred after the
+                // end of the original subtree for this reprinting, then we
+                // must not return true for hasClosingParen(oldPath).
+                return comparePos(pos, rootPath.value.loc.end) <= 0;
+            }
+
+            if (ch !== " ") {
+                return false;
+            }
+
+        } while (lines.nextPos(pos));
     }
 
     return false;
@@ -23957,8 +23987,9 @@ function findChildReprints(newPath, oldPath, reprints) {
     // If this node needs parentheses and will not be wrapped with
     // parentheses when reprinted, then return false to skip reprinting
     // and let it be printed generically.
-    if (newPath.needsParens(true) && !hasParens(oldPath))
+    if (newPath.needsParens(true) && !hasParens(oldPath)) {
         return false;
+    }
 
     for (var k in util.getUnionOfKeys(newNode, oldNode)) {
         if (k === "loc")
@@ -26612,46 +26643,58 @@ NPp.getValueProperty = function(name) {
  * as a FunctionDeclaration with a missing name.
  */
 NPp.needsParens = function(assumeExpressionContext) {
-    if (!this.parent)
+    var pp = this.parentPath;
+    if (!pp) {
         return false;
+    }
 
-    var node = this.node;
+    var node = this.value;
 
-    // If this NodePath object is not the direct owner of this.node, then
-    // we do not need parentheses here, though the direct owner might need
-    // parentheses.
-    if (node !== this.value)
+    // Only expressions need parentheses.
+    if (!n.Expression.check(node)) {
         return false;
+    }
 
-    var parent = this.parent.node;
-
-    assert.notStrictEqual(node, parent);
-
-    if (!n.Expression.check(node))
+    // Identifiers never need parentheses.
+    if (node.type === "Identifier") {
         return false;
+    }
 
-    if (isUnaryLike(node))
-        return n.MemberExpression.check(parent)
+    while (!n.Node.check(pp.value)) {
+        pp = pp.parentPath;
+        if (!pp) {
+            return false;
+        }
+    }
+
+    var parent = pp.value;
+
+    switch (node.type) {
+    case "UnaryExpression":
+    case "SpreadElement":
+    case "SpreadProperty":
+        return parent.type === "MemberExpression"
             && this.name === "object"
             && parent.object === node;
 
-    if (isBinary(node)) {
-        if (n.CallExpression.check(parent) &&
-            this.name === "callee") {
-            assert.strictEqual(parent.callee, node);
-            return true;
-        }
+    case "BinaryExpression":
+    case "LogicalExpression":
+        switch (parent.type) {
+        case "CallExpression":
+            return this.name === "callee"
+                && parent.callee === node;
 
-        if (isUnaryLike(parent))
+        case "UnaryExpression":
+        case "SpreadElement":
+        case "SpreadProperty":
             return true;
 
-        if (n.MemberExpression.check(parent) &&
-            this.name === "object") {
-            assert.strictEqual(parent.object, node);
-            return true;
-        }
+        case "MemberExpression":
+            return this.name === "object"
+                && parent.object === node;
 
-        if (isBinary(parent)) {
+        case "BinaryExpression":
+        case "LogicalExpression":
             var po = parent.operator;
             var pp = PRECEDENCE[po];
             var no = node.operator;
@@ -26665,75 +26708,84 @@ NPp.needsParens = function(assumeExpressionContext) {
                 assert.strictEqual(parent.right, node);
                 return true;
             }
-        }
-    }
 
-    if (n.SequenceExpression.check(node)) {
-        if (n.ForStatement.check(parent)) {
+        default:
+            return false;
+        }
+
+    case "SequenceExpression":
+        switch (parent.type) {
+        case "ForStatement":
             // Although parentheses wouldn't hurt around sequence
             // expressions in the head of for loops, traditional style
             // dictates that e.g. i++, j++ should not be wrapped with
             // parentheses.
             return false;
+
+        case "ExpressionStatement":
+            return this.name !== "expression";
+
+        default:
+            // Otherwise err on the side of overparenthesization, adding
+            // explicit exceptions above if this proves overzealous.
+            return true;
         }
 
-        if (n.ExpressionStatement.check(parent) &&
-            this.name === "expression") {
+    case "YieldExpression":
+        switch (parent.type) {
+        case "BinaryExpression":
+        case "LogicalExpression":
+        case "UnaryExpression":
+        case "SpreadElement":
+        case "SpreadProperty":
+        case "CallExpression":
+        case "MemberExpression":
+        case "NewExpression":
+        case "ConditionalExpression":
+        case "YieldExpression":
+            return true;
+
+        default:
             return false;
         }
 
-        // Otherwise err on the side of overparenthesization, adding
-        // explicit exceptions above if this proves overzealous.
-        return true;
-    }
+    case "Literal":
+        return parent.type === "MemberExpression"
+            && isNumber.check(node.value)
+            && this.name === "object"
+            && parent.object === node;
 
-    if (n.YieldExpression.check(node))
-        return isBinary(parent)
-            || n.CallExpression.check(parent)
-            || n.MemberExpression.check(parent)
-            || n.NewExpression.check(parent)
-            || n.ConditionalExpression.check(parent)
-            || isUnaryLike(parent)
-            || n.YieldExpression.check(parent);
-
-    if (n.NewExpression.check(parent) &&
-        this.name === "callee") {
-        assert.strictEqual(parent.callee, node);
-        return containsCallExpression(node);
-    }
-
-    if (n.Literal.check(node) &&
-        isNumber.check(node.value) &&
-        n.MemberExpression.check(parent) &&
-        this.name === "object") {
-        assert.strictEqual(parent.object, node);
-        return true;
-    }
-
-    if (n.AssignmentExpression.check(node) ||
-        n.ConditionalExpression.check(node)) {
-        if (isUnaryLike(parent))
+    case "AssignmentExpression":
+    case "ConditionalExpression":
+        switch (parent.type) {
+        case "UnaryExpression":
+        case "SpreadElement":
+        case "SpreadProperty":
+        case "BinaryExpression":
+        case "LogicalExpression":
             return true;
 
-        if (isBinary(parent))
-            return true;
+        case "CallExpression":
+            return this.name === "callee"
+                && parent.callee === node;
 
-        if (n.CallExpression.check(parent) &&
-            this.name === "callee") {
-            assert.strictEqual(parent.callee, node);
-            return true;
+        case "ConditionalExpression":
+            return this.name === "test"
+                && parent.test === node;
+
+        case "MemberExpression":
+            return this.name === "object"
+                && parent.object === node;
+
+        default:
+            return false;
         }
 
-        if (n.ConditionalExpression.check(parent) &&
-            this.name === "test") {
-            assert.strictEqual(parent.test, node);
-            return true;
-        }
-
-        if (n.MemberExpression.check(parent) &&
-            this.name === "object") {
-            assert.strictEqual(parent.object, node);
-            return true;
+    default:
+        if (parent.type === "NewExpression" &&
+            this.name === "callee" &&
+            parent.callee === node) {
+            return containsCallExpression(node);
         }
     }
 
@@ -30811,7 +30863,7 @@ function through (write, end, opts) {
   function GeneratorFunction() {}
 
   var Gp = Generator.prototype;
-  var GFp = GeneratorFunction.prototype = Object.create(Function.prototype);
+  var GFp = GeneratorFunction.prototype = new Function;
   GFp.constructor = GeneratorFunction;
   GFp.prototype = Gp;
   Gp.constructor = GFp;
@@ -30840,7 +30892,7 @@ function through (write, end, opts) {
     return new Promise(function(resolve, reject) {
       var generator = wrap(innerFn, outerFn, self, tryList);
       var callNext = step.bind(generator.next);
-      var callThrow = step.bind(generator.throw);
+      var callThrow = step.bind(generator["throw"]);
 
       function step(arg) {
         try {
@@ -30980,8 +31032,8 @@ function through (write, end, opts) {
     }
 
     generator.next = invoke.bind(generator, "next");
-    generator.throw = invoke.bind(generator, "throw");
-    generator.return = invoke.bind(generator, "return");
+    generator["throw"] = invoke.bind(generator, "throw");
+    generator["return"] = invoke.bind(generator, "return");
 
     return generator;
   }
