@@ -1,0 +1,3 @@
+java_script:
+  enabled: true
+  config_file: .jshintrc
