@@ -61,7 +61,10 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | No runtime                   | ✓    |         |        |        | ✓              | ✓           |
 | Source maps                  | ✓    | ✓       | ✓      |        | ✓              | ✓           |
 | No compiler global pollution | ✓    |         | ✓      |        | ✓              | ✓           |
+| Browser support              | ✓    | ✓       | ✓      |        |                |             |
+| Array comprehension          | ✓    | ✓       |        |        | ✓              |             |
 | Arrow functions              | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
+| Async functions              | ✓    |         | ✓      |        |                |             |
 | Classes                      | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | Computed property names      | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Constants                    | ✓    | ✓       |        |        | ✓              |             |
@@ -69,6 +72,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Destructuring                | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
 | For-of                       | ✓    | ✓       | ✓      | ✓      | ✓              |             |
 | Generators                   | ✓    | ✓       | ✓      |        |                |             |
+| Generator comprehension      | ✓    | ✓       |        |        |                |             |
 | Let scoping                  | ✓    | ✓       |        |        | ✓              |             |
 | Modules                      | ✓    | ✓       |        | ✓      |                |             |
 | Property method assignment   | ✓    | ✓       | ✓      | ✓      | ✓              | ✓           |
