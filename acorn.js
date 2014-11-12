@@ -43,7 +43,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
-    var startPos = options.locations ? [tokStart, new Position] : tokStart;
+    var startPos = options.locations ? [tokPos, new Position] : tokPos;
     initParserState();
     return parseTopLevel(options.program || startNodeAt(startPos));
   };
