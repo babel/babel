@@ -45,7 +45,7 @@
   function GeneratorFunction() {}
 
   var Gp = Generator.prototype;
-  var GFp = GeneratorFunction.prototype = Object.create(Function.prototype);
+  var GFp = GeneratorFunction.prototype = new Function;
   GFp.constructor = GeneratorFunction;
   GFp.prototype = Gp;
   Gp.constructor = GFp;
