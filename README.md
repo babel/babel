@@ -64,11 +64,13 @@ It's as easy as:
  - [Destructuring](FEATURES.md#destructuring)
  - [For-of](FEATURES.md#for-of)
  - [Generators](FEATURES.md#generators) via [regenerator](https://github.com/facebook/regenerator)
+ - [Generator comprehension](FEATURES.md#generator-comprehension)
  - [Let scoping](FEATURES.md#let-scoping)
  - [Modules](FEATURES.md#modules)
  - [Numeric literals](FEATURES.md#numeric-literals)
  - [Property method assignment](FEATURES.md#property-method-assignment)
  - [Property name shorthand](FEATURES.md#property-name-shorthand)
+ - [React/JSX](#reactjsx)
  - [Rest parameters](FEATURES.md#rest-parameters)
  - [Spread](FEATURES.md#spread)
  - [Template literals](FEATURES.md#template-literals)
@@ -330,6 +332,11 @@ class Bar extends Foo {
   }
 }
 ```
+
+### Spread
+
+An [ES6 polyfill](#polyfill) is required in order for spread to work. More
+specifically a polyfill for `Array.from`.
 
 ### Generators
 
