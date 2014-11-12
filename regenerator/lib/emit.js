@@ -107,11 +107,11 @@ Ep.assign = function(lhs, rhs) {
 
 // Convenience function for generating expressions like context.next,
 // context.sent, and context.rval.
-Ep.contextProperty = function(name) {
+Ep.contextProperty = function(name, computed) {
   return b.memberExpression(
     this.contextId,
-    b.identifier(name),
-    false
+    computed ? b.literal(name) : b.identifier(name),
+    !!computed
   );
 };
 
@@ -167,7 +167,7 @@ Ep.clearPendingException = function(tryLoc, assignee) {
   n.Literal.assert(tryLoc);
 
   var catchCall = b.callExpression(
-    this.contextProperty("catch"),
+    this.contextProperty("catch", true),
     [tryLoc]
   );
 
