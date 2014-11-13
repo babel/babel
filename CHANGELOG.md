@@ -1,3 +1,7 @@
+# 1.12.7
+
+ * Update to latest `acorn-6to5`.
+
 # 1.12.6
 
  * Update to latest `acorn-6to5`.
