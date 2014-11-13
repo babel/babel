@@ -3,7 +3,32 @@
 ## Array comprehension
 
 ```javascript
-[for (i of [1, 2, 3]) i * i]; // [1, 4, 9]
+var results = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }]
+```
+
+## Arrow functions
+
+```javascript
+// Expression bodies
+var odds = evens.map(v => v + 1);
+var nums = evens.map((v, i) => v + i);
+
+// Statement bodies
+nums.forEach(v => {
+  if (v % 5 === 0)
+    fives.push(v);
+});
+
+// Lexical this
+var bob = {
+  _name: "Bob",
+  _friends: [],
+  printFriends() {
+    this._friends.forEach(f => {
+      console.log(this._name + " knows " + f);
+    });
+  }
+};
 ```
 
 ## Async functions
@@ -16,31 +41,27 @@ async function chainAnimationsAsync(elem, animations) {
 }
 ```
 
-## Arrow functions
-
-```javascript
-arr.map(x => x * x);
-```
-
-## Let scoping
-
-```javascript
-for (let i in arr) {
-  let v = arr[i];
-}
-```
-
 ## Classes
 
 ```javascript
-class Foo extends Bar {
-  constructor() { }
+class SkinnedMesh extends THREE.Mesh {
+  constructor(geometry, materials) {
+    super(geometry, materials);
 
-  foo() { }
+    this.idMatrix = SkinnedMesh.defaultMatrix();
+    this.bones = [];
+    this.boneMatrices = [];
+    //...
+  }
 
-  get bar() { }
+  update(camera) {
+    //...
+    super.update();
+  }
 
-  set bar() { }
+  static defaultMatrix() {
+    return new THREE.Matrix4();
+  }
 }
 ```
 
@@ -70,16 +91,35 @@ var MULTIPLIER; // error
 ## Default parameters
 
 ```javascript
-function foo(bar = "foo") {
-  return bar + "bar";
+function f(x, y = 12) {
+  // y is 12 if not passed (or passed as undefined)
+  return x + y;
 }
+f(3) == 15
 ```
 
 ## Destructuring
 
 ```javascript
-var [a, [b], c, d] = ["hello", [", ", "junk"], ["world"]];
-console.log(a + b + c); // hello, world
+// list matching
+var [a, , b] = [1,2,3];
+
+// object matching
+var { op: a, lhs: { op: b }, rhs: c } = getASTNode();
+
+// object matching shorthand
+// binds `op`, `lhs` and `rhs` in scope
+var { op, lhs, rhs } = getASTNode();
+
+// Can be used in parameter position
+function g({ name: x }) {
+  console.log(x);
+}
+g({ name: 5 });
+
+// Fail-soft destructuring
+var [a] = [];
+a === undefined;
 ```
 
 ## For-of
@@ -98,6 +138,14 @@ for (var i of [1, 2, 3]) {
 ## Generator comprehension
 
 ```javascript
+```
+
+## Let scoping
+
+```javascript
+for (let i in arr) {
+  let v = arr[i];
+}
 ```
 
 ## Modules
@@ -141,23 +189,21 @@ function f(x, y) {
 ## Rest parameters
 
 ```javascript
-function printList(name, ...items) {
-  console.log("list %s has the following items", name);
-  items.forEach(function (item) {
-    console.log(item);
-  });
+function f(x, ...y) {
+  // y is an Array
+  return x * y.length;
 }
+f(3, "hello", true) == 6
 ```
 
 ## Spread
 
 ```javascript
-function add(x, y) {
-  return x + y;
+function f(x, y, z) {
+  return x + y + z;
 }
-
-var numbers = [5, 10];
-add(...numbers); // 15
+// Pass each elem of array as argument
+f(...[1,2,3]) == 6
 ```
 
 ## Template literals
