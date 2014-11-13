@@ -5064,6 +5064,59 @@ test("export { encrypt, decrypt as dec }", {
   locations: true
 });
 
+test("export { default } from \"other\"", {
+  type: "Program",
+  body: [{
+    type: "ExportDeclaration",
+    declaration: null,
+    specifiers: [
+      {
+        type: "ExportSpecifier",
+        id: {
+          type: "Identifier",
+          name: "default",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
+        name: null,
+        loc: {
+          start: {line: 1, column: 9},
+          end: {line: 1, column: 16}
+        }
+      }
+    ],
+    source: {
+      type: "Literal",
+      loc: {
+        start: {
+          line: 1,
+          column: 24
+        },
+        end: {
+          line: 1,
+          column: 31
+        }
+      },
+      value: "other",
+      raw: "\"other\""
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 31}
+    }
+  }],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 31}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 test("import \"jquery\"", {
   type: "Program",
   body: [{
@@ -5113,7 +5166,6 @@ test("import $ from \"jquery\"", {
         end: {line: 1, column: 8}
       }
     }],
-    kind: "default",
     source: {
       type: "Literal",
       value: "jquery",
@@ -5176,7 +5228,6 @@ test("import { encrypt, decrypt } from \"crypto\"", {
         }
       }
     ],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
@@ -5228,7 +5279,6 @@ test("import { encrypt as enc } from \"crypto\"", {
         end: {line: 1, column: 23}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
@@ -5333,8 +5383,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
       },
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "default"
+    }
   }]
 }, {
   ecmaVersion: 6,
@@ -5371,7 +5420,6 @@ test("import { null as nil } from \"bar\"", {
         end: {line: 1, column: 20}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "bar",
@@ -5431,8 +5479,7 @@ test("import * as crypto from \"crypto\"", {
       },
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "named"
+    }
   }]
 }, {
   ecmaVersion: 6,
@@ -14483,6 +14530,7 @@ test("yield* 10", {
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });
@@ -14547,6 +14595,7 @@ test("e => yield* 10", {
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });
@@ -14620,6 +14669,7 @@ test("(function () { yield* 10 })", {
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });

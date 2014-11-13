@@ -43,8 +43,9 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    var startPos = options.locations ? [tokPos, new Position] : tokPos;
     initParserState();
-    return parseTopLevel(options.program);
+    return parseTopLevel(options.program || startNodeAt(startPos));
   };
 
   // A second optional argument can be given to further configure
@@ -135,9 +136,9 @@
   };
 
   function setOptions(opts) {
-    options = opts || {};
-    for (var opt in defaultOptions) if (!has(options, opt))
-      options[opt] = defaultOptions[opt];
+    options = {};
+    for (var opt in defaultOptions)
+      options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt];
     sourceFile = options.sourceFile || null;
     if (isArray(options.onToken)) {
       var tokens = options.onToken;
@@ -223,6 +224,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    skipSpace();
 
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
@@ -243,6 +245,10 @@
       tokRegexpAllowed = reAllowed;
       skipSpace();
     };
+    getToken.noRegexp = function() {
+      tokRegexpAllowed = false;
+    };
+    getToken.options = options;
     return getToken;
   };
 
@@ -317,6 +323,7 @@
     if (options.locations) lastEndLoc = new Position;
     inFunction = inGenerator = inAsync = strict = false;
     labels = [];
+    skipSpace();
     readToken();
   }
 
@@ -417,9 +424,10 @@
   var _bracketL = {type: "[", beforeExpr: true}, _bracketR = {type: "]"}, _braceL = {type: "{", beforeExpr: true};
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
-  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _ellipsis = {type: "..."}, _question = {type: "?", beforeExpr: true};
+  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _ltSlash = {type: "</"};
+  var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -465,7 +473,8 @@
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL,
-                      xjsName: _xjsName, xjsText: _xjsText};
+                      xjsName: _xjsName, xjsText: _xjsText,
+                      star: _star, assign: _assign};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -615,7 +624,6 @@
     tokRegexpAllowed = true;
     metParenL = 0;
     inTemplate = inXJSChild = inXJSTag = false;
-    skipSpace();
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -1872,15 +1880,19 @@
   // `program` argument.  If present, the statements will be appended
   // to its body instead of creating a new node.
 
-  function parseTopLevel(program) {
-    var node = program || startNode(), first = true;
-    if (!program) node.body = [];
+  function parseTopLevel(node) {
+    var first = true;
+    if (!node.body) node.body = [];
     while (tokType !== _eof) {
       var stmt = parseStatement();
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
     }
+
+    lastStart = tokStart;
+    lastEnd = tokEnd;
+    lastEndLoc = tokEndLoc;
     return finishNode(node, "Program");
   }
 
@@ -2357,9 +2369,14 @@
 
   function parseMaybeUnary() {
     if (tokType.prefix) {
-      var node = startNode(), update = tokType.isUpdate;
-      node.operator = tokVal;
-      node.prefix = true;
+      var node = startNode(), update = tokType.isUpdate, nodeType;
+      if (tokType === _ellipsis) {
+        nodeType = "SpreadElement";
+      } else {
+        nodeType = update ? "UpdateExpression" : "UnaryExpression";
+        node.operator = tokVal;
+        node.prefix = true;
+      }
       tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
@@ -2367,7 +2384,7 @@
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
         raise(node.start, "Deleting local variable in strict mode");
-      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+      return finishNode(node, nodeType);
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts();
@@ -2467,7 +2484,7 @@
 
     case _parenL:
       var start = storeCurrentPos();
-      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
+      var val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
       if (options.ecmaVersion >= 7 && tokType === _for) {
@@ -2530,9 +2547,6 @@
     case _new:
       return parseNew();
 
-    case _ellipsis:
-      return parseSpread();
-
     case _bquote:
       return parseTemplate();
 
@@ -2556,15 +2570,6 @@
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
     else node.arguments = empty;
     return finishNode(node, "NewExpression");
-  }
-
-  // Parse spread element '...expr'
-
-  function parseSpread() {
-    var node = startNode();
-    next();
-    node.argument = parseExpression(true);
-    return finishNode(node, "SpreadElement");
   }
 
   // Parse template expression.
@@ -2953,7 +2958,7 @@
         } else first = false;
 
         var node = startNode();
-        node.id = parseIdent();
+        node.id = parseIdent(tokType === _default);
         if (tokType === _name && tokVal === "as") {
           next();
           node.name = parseIdent(true);
@@ -3256,7 +3261,7 @@
       inXJSTag = false;
 
       next();
-      var node = parseSpread();
+      var node = parseMaybeUnary();
 
       inXJSTag = origInXJSTag;
 

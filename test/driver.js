@@ -1,9 +1,8 @@
 (function(exports) {
   var tests = [];
-  var acorn = typeof require == "undefined" ? window.acorn : require("../acorn.js");
 
-  exports.test = function(code, ast, options, comments) {
-    tests.push({code: code, ast: ast, options: options, comments: comments});
+  exports.test = function(code, ast, options) {
+    tests.push({code: code, ast: ast, options: options});
   };
   exports.testFail = function(code, message, options) {
     tests.push({code: code, error: message, options: options});
@@ -12,30 +11,29 @@
     tests.push({code: code, assert: assert, options: options});
   };
 
-  exports.runTests = function(callback) {
-    var comments;
-
-    function onComment(block, text, start, end, startLoc, endLoc) {
-        comments.push({
-          block: block,
-          text: text,
-          start: start,
-          end: end,
-          startLoc: { line: startLoc.line, column: startLoc.column },
-          endLoc: { line: endLoc.line, column: endLoc.column }
-        });
-    }
-
-    var opts = {locations: true, onComment: onComment};
+  exports.runTests = function(config, callback) {
+    var parse = config.parse;
 
     for (var i = 0; i < tests.length; ++i) {
       var test = tests[i];
+      if (config.filter && !config.filter(test)) continue;
       try {
-        comments = [];
-        if (test.options && !test.options.onComment) test.options.onComment = onComment;
-        var ast = acorn.parse(test.code, test.options || opts);
-        if (test.error) callback("fail", test.code,
-                                 "Expected error message: " + test.error + "\nBut parsing succeeded.");
+        var testOpts = test.options || {locations: true};
+        var expected = {};
+        if (expected.onComment = testOpts.onComment) {
+          testOpts.onComment = []
+        }
+        if (expected.onToken = testOpts.onToken) {
+          testOpts.onToken = [];
+        }
+        var ast = parse(test.code, testOpts);
+        if (test.error) {
+          if (config.loose) {
+            callback("ok", test.code);
+          } else {
+            callback("fail", test.code, "Expected error message: " + test.error + "\nBut parsing succeeded.");
+          }
+        }
         else if (test.assert) {
           var error = test.assert(ast);
           if (error) callback("fail", test.code,
@@ -43,12 +41,21 @@
           else callback("ok", test.code);
         } else {
           var mis = misMatch(test.ast, ast);
-          if (!mis && test.comments) mis = misMatch(test.comments, comments);
+          for (var name in expected) {
+            if (mis) break;
+            if (expected[name]) {
+              mis = misMatch(expected[name], testOpts[name]);
+              testOpts[name] = expected[name];
+            }
+          }
           if (mis) callback("fail", test.code, mis);
           else callback("ok", test.code);
         }
       } catch(e) {
-        if (test.error && e instanceof SyntaxError) {
+        if (!(e instanceof SyntaxError)) {
+          throw e;
+        }
+        if (test.error) {
           if (e.message == test.error) callback("ok", test.code);
           else callback("fail", test.code,
                         "Expected error message: " + test.error + "\nGot error message: " + e.message);
