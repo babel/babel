@@ -42,5 +42,6 @@
   "ObjectPattern": ["Pattern"],
   "ArrayPattern":  ["Pattern"],
 
-  "Property": ["UserWhitespacable"]
+  "Property": ["UserWhitespacable"],
+  "XJSElement": ["UserWhitespacable"]
 }
