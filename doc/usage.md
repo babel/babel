@@ -50,16 +50,28 @@ Compile and run `test.js`.
 
 ```javascript
 var to5 = require("6to5");
+```
 
+### to5.transform(code, [opts]);
+
+```javascript
 var result = to5.transform("code();", options);
 result.code;
 result.map;
 result.ast;
+```
 
+### to5.transformFileSync(filename, [opts])
+
+```javascript
 to5.transformFileSync("filename.js", options).code;
+```
 
+### to5.transformFile(filename, [opts], callback)
+
+```javascript
 to5.transformFile("filename.js", options, function (err, result) {
-
+  result.code;
 });
 ```
 

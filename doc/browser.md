@@ -3,12 +3,6 @@
 A browser version of 6to5 is available from `browser.js` inside the 6to5
 directory in an npm release.
 
-## API
-
-```javascript
-to5.transform("class Test {}").code;
-```
-
 ## Scripts
 
 While it's not recommended for serious use, when the browser version is included
@@ -47,3 +41,21 @@ To test 6to5 in your browser run:
     $ make test-browser
 
 And open `test/browser.html` in your browser if it doesn't open automatically.
+
+## API
+
+### to5.transform(code, [opts])
+
+See [options](usage.md#options) for additional documentation.
+
+```javascript
+to5.transform("class Test {}").code;
+```
+
+### to5.run(code, [opts])
+
+See [options](usage.md#options) for additional documentation.
+
+```javascript
+to5.run("class Test {}");
+```
