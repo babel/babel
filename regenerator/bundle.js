@@ -21456,9 +21456,15 @@ var uniqueKeys = create(null);
 function makeUniqueKey() {
   // Collisions are highly unlikely, but this module is in the business of
   // making guarantees rather than safe bets.
-  do var uniqueKey = strSlice.call(numToStr.call(rand(), 36), 2);
+  do var uniqueKey = internString(strSlice.call(numToStr.call(rand(), 36), 2));
   while (hasOwn.call(uniqueKeys, uniqueKey));
   return uniqueKeys[uniqueKey] = uniqueKey;
+}
+
+function internString(str) {
+  var obj = {};
+  obj[str] = true;
+  return Object.keys(obj)[0];
 }
 
 // External users might find this function useful, but it is not necessary
@@ -24080,11 +24086,9 @@ function Printer(originalOptions) {
             var origLines = origLoc && origLoc.lines;
             if (origLines) {
                 options.tabWidth = origLines.guessTabWidth();
-                try {
-                    return maybeReprint(path);
-                } finally {
-                    options.tabWidth = oldTabWidth;
-                }
+                var lines = maybeReprint(path);
+                options.tabWidth = oldTabWidth;
+                return lines;
             }
         }
 
@@ -24140,12 +24144,9 @@ function Printer(originalOptions) {
         // Do not reuse whitespace (or anything else, for that matter)
         // when printing generically.
         options.reuseWhitespace = false;
-
-        try {
-            return new PrintResult(printGenerically(path).toString(options));
-        } finally {
-            options.reuseWhitespace = oldReuseWhitespace;
-        }
+        var pr = new PrintResult(printGenerically(path).toString(options));
+        options.reuseWhitespace = oldReuseWhitespace;
+        return pr;
     };
 }
 
@@ -25285,18 +25286,15 @@ var SourceMapConsumer = sourceMap.SourceMapConsumer;
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var hasOwn = Object.prototype.hasOwnProperty;
 
-function getUnionOfKeys(obj) {
-    for (var i = 0, key,
-             result = {},
-             objs = arguments,
-             argc = objs.length;
-         i < argc;
-         i += 1)
-    {
-        obj = objs[i];
-        for (key in obj)
-            if (hasOwn.call(obj, key))
-                result[key] = true;
+function getUnionOfKeys() {
+    var result = {};
+    var argc = arguments.length;
+    for (var i = 0; i < argc; ++i) {
+        var keys = Object.keys(arguments[i]);
+        var keyCount = keys.length;
+        for (var j = 0; j < keyCount; ++j) {
+            result[keys[j]] = true;
+        }
     }
     return result;
 }
@@ -26950,12 +26948,13 @@ function computeMethodNameTable(visitor) {
     var supertypeTable = types.computeSupertypeLookupTable(typeNames);
     var methodNameTable = Object.create(null);
 
-    for (var typeName in supertypeTable) {
-        if (hasOwn.call(supertypeTable, typeName)) {
-            methodName = "visit" + supertypeTable[typeName];
-            if (isFunction.check(visitor[methodName])) {
-                methodNameTable[typeName] = methodName;
-            }
+    var typeNames = Object.keys(supertypeTable);
+    var typeNameCount = typeNames.length;
+    for (var i = 0; i < typeNameCount; ++i) {
+        var typeName = typeNames[i];
+        methodName = "visit" + supertypeTable[typeName];
+        if (isFunction.check(visitor[methodName])) {
+            methodNameTable[typeName] = methodName;
         }
     }
 
@@ -28140,17 +28139,18 @@ exports.getSupertypeNames = function(typeName) {
 // object.
 exports.computeSupertypeLookupTable = function(candidates) {
     var table = {};
+    var typeNames = Object.keys(defCache);
+    var typeNameCount = typeNames.length;
 
-    for (var typeName in defCache) {
-        if (hasOwn.call(defCache, typeName)) {
-            var d = defCache[typeName];
-            assert.strictEqual(d.finalized, true);
-            for (var i = 0; i < d.supertypeList.length; ++i) {
-                var superTypeName = d.supertypeList[i];
-                if (hasOwn.call(candidates, superTypeName)) {
-                    table[typeName] = superTypeName;
-                    break;
-                }
+    for (var i = 0; i < typeNameCount; ++i) {
+        var typeName = typeNames[i];
+        var d = defCache[typeName];
+        assert.strictEqual(d.finalized, true);
+        for (var j = 0; j < d.supertypeList.length; ++j) {
+            var superTypeName = d.supertypeList[j];
+            if (hasOwn.call(candidates, superTypeName)) {
+                table[typeName] = superTypeName;
+                break;
             }
         }
     }
