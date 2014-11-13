@@ -14370,6 +14370,236 @@ test('f(async function(promise) { await promise })', {
   locations: true
 });
 
+test("f(a, async(1, 2), b);", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "f",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 1}
+        }
+      },
+      arguments: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 2},
+            end: {line: 1, column: 3}
+          }
+        },
+        {
+          type: "CallExpression",
+          callee: {
+            type: "Identifier",
+            name: "async",
+            loc: {
+              start: {line: 1, column: 5},
+              end: {line: 1, column: 10}
+            }
+          },
+          arguments: [
+            {
+              type: "Literal",
+              value: 1,
+              loc: {
+                start: {line: 1,column: 11},
+                end: {line: 1,column: 12}
+              }
+            },
+            {
+              type: "Literal",
+              value: 2,
+              loc: {
+                start: {line: 1,column: 14},
+                end: {line: 1,column: 15}
+              }
+            }
+          ],
+          loc: {
+            start: {line: 1,column: 5},
+            end: {line: 1,column: 16}
+          }
+        },
+        {
+          type: "Identifier",
+          name: "b",
+          loc: {
+            start: {line: 1,column: 18},
+            end: {line: 1,column: 19}
+          }
+        }
+      ],
+      loc: {
+        start: {line: 1,column: 0},
+        end: {line: 1,column: 20}
+      }
+    },
+    loc: {
+      start: {line: 1,column: 0},
+      end: {line: 1,column: 20}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test("var ok = async(x);", {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "ok",
+          loc: {
+            start: {line: 1,column: 4},
+            end: {line: 1,column: 6}
+          }
+        },
+        init: {
+          type: "CallExpression",
+          callee: {
+            type: "Identifier",
+            name: "async",
+            loc: {
+              start: {line: 1,column: 9},
+              end: {line: 1,column: 14}
+            }
+          },
+          arguments: [
+            {
+              type: "Identifier",
+              name: "x",
+              loc: {
+                start: {line: 1,column: 15},
+                end: {line: 1,column: 16}
+              }
+            }
+          ],
+          loc: {
+            start: {line: 1,column: 9},
+            end: {line: 1,column: 17}
+          }
+        },
+        loc: {
+          start: {line: 1,column: 4},
+          end: {line: 1,column: 17}
+        }
+      }
+    ],
+    kind: "var",
+    loc: {
+      start: {line: 1,column: 0},
+      end: {line: 1,column: 17}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test("var async; async = 10;", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "FunctionExpression",
+      id: null,
+      params: [],
+      defaults: [],
+      body: {
+        type: "BlockStatement",
+        body: [
+          {
+            type: "VariableDeclaration",
+            declarations: [
+              {
+                type: "VariableDeclarator",
+                id: {
+                  type: "Identifier",
+                  name: "async",
+                  loc: {
+                    start: {line: 1,column: 18},
+                    end: {line: 1,column: 23}
+                  }
+                },
+                init: null,
+                loc: {
+                  start: {line: 1,column: 18},
+                  end: {line: 1,column: 23}
+                }
+              }
+            ],
+            kind: "var",
+            loc: {
+              start: {line: 1,column: 14},
+              end: {line: 1,column: 24}
+            }
+          },
+          {
+            type: "ExpressionStatement",
+            expression: {
+              type: "AssignmentExpression",
+              operator: "=",
+              left: {
+                type: "Identifier",
+                name: "async",
+                loc: {
+                  start: {line: 1,column: 25},
+                  end: {line: 1,column: 30}
+                }
+              },
+              right: {
+                type: "Literal",
+                value: 10,
+                loc: {
+                  start: {line: 1,column: 33},
+                  end: {line: 1,column: 35}
+                }
+              },
+              loc: {
+                start: {line: 1,column: 25},
+                end: {line: 1,column: 35}
+              }
+            },
+            loc: {
+              start: {line: 1,column: 25},
+              end: {line: 1,column: 36}
+            }
+          }
+        ],
+        loc: {
+          start: {line: 1,column: 12},
+          end: {line: 1,column: 37}
+        }
+      },
+      rest: null,
+      generator: false,
+      expression: false,
+      loc: {
+        start: {line: 1,column: 1},
+        end: {line: 1,column: 37}
+      }
+    },
+    loc: {
+      start: {line: 1,column: 0},
+      end: {line: 1,column: 38}
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
 // Harmony Invalid syntax
 
 testFail("0o", "Expected number in radix 8 (1:2)", {ecmaVersion: 6});
