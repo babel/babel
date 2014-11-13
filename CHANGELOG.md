@@ -1,3 +1,7 @@
+# 1.12.8
+
+ * Temporarily forbid `AssignmentExpression` destructuring outside of `ExpressionStatement`.
+
 # 1.12.7
 
  * Update to latest `acorn-6to5`.
