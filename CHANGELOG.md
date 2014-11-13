@@ -2,8 +2,7 @@
 
  * Escape unicode characters when generating string `Literal`s.
  * Fix semicolons being output for statements in `ExportDeclaration`.
- * Make it illegal to use destructuring outside of an `ExpressionStatement`.
- * Fix `WithStatement` missing parentheses.
+ * Fix `WithStatement` missing parenthesis.
 
 # 1.12.8
 
