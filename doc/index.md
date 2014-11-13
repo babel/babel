@@ -1,4 +1,4 @@
-**6to5** turns ES6 code into vanilla ES5, so you can use ES6 features **today.**
+**6to5** turns ES6+ code into vanilla ES5, so you can use ES6 features **today.**
 
  - **Readable** - formatting is retained if possible so your generated code is as similar as possible.
  - **Extensible** - with a large range of [plugins](plugins.md) and **browser support**.
