@@ -24,6 +24,6 @@
   </a>
 </p>
 
-**6to5** turns ES6+ code into vanilla ES5, so you can use ES6 features **today.**
+**6to5** turns ES6+ code into vanilla ES5, so you can use next generation features **today.**
 
 For more information view the [documentation](https://6to5.github.io).
