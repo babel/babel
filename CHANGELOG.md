@@ -1,3 +1,7 @@
+# 1.12.5
+
+ * Fix excessive whitespace trimming resulting in innaccurate sourcemap line.
+
 # 1.12.4
 
  * Add `doc` folder for documentation.
