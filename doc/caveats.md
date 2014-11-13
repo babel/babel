@@ -1,5 +1,10 @@
 # Caveats
 
+## Async/Generators
+
+The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
+and an [ES6 polyfill](polyfill.md) are required in order for generators to work.
+
 ## Classes
 
 Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
@@ -31,11 +36,6 @@ class Bar extends Foo {
 A polyfill is required for for-of functionality that implements `Symbol` and
 adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
 specified in [polyfill](polyfill.md) suffices.
-
-## Generators
-
-The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
-and an [ES6 polyfill](polyfill.md) are required in order for generators to work.
 
 ## Spread
 
