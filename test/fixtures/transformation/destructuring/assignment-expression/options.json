@@ -1,3 +1,3 @@
 {
-  "throws": "AssignmentExpression destructuring outside of a ExpressionStatement is forbidden due to current limitations"
+  "throws": "AssignmentExpression destructuring outside of a ExpressionStatement is forbidden due to current 6to5 limitations"
 }
