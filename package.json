@@ -48,7 +48,7 @@
     "chokidar": "0.10.5",
     "source-map-support": "0.2.8",
     "esutils": "1.1.4",
-    "acorn-6to5": "https://github.com/6to5/acorn-6to5/archive/0384a0d51f630f66ed591769c1765581a17d2124.tar.gz",
+    "acorn-6to5": "https://github.com/6to5/acorn-6to5/archive/90db0ad3c6219015a36fc3c87b85231b117cf3ea.tar.gz",
     "estraverse": "^1.7.0"
   },
   "devDependencies": {
