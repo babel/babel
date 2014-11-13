@@ -1,5 +1,6 @@
 var assert = require("assert");
 var util   = require("../lib/6to5/util");
+var t      = require("../lib/6to5/types");
 
 suite("util", function () {
   test("duplicate mutator map");
@@ -45,6 +46,15 @@ suite("util", function () {
   });
 
   test("getIds");
+
+  test("toStatement");
+
+  test("toBlock");
+
+  test("toIdentifier", function () {
+    assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
+    assert.equal(t.toIdentifier("swag-lord"), "swagLord");
+  });
 
   test("isReferenced");
 
