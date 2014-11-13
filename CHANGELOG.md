@@ -1,3 +1,7 @@
+# 1.12.10
+
+ * Fix let scoping var hoisting.
+
 # 1.12.9
 
  * Escape unicode characters when generating string `Literal`s.
