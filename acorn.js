@@ -43,8 +43,9 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    var startPos = options.locations ? [tokPos, new Position] : tokPos;
     initParserState();
-    return parseTopLevel(options.program);
+    return parseTopLevel(options.program || startNodeAt(startPos));
   };
 
   // A second optional argument can be given to further configure
@@ -135,9 +136,9 @@
   };
 
   function setOptions(opts) {
-    options = opts || {};
-    for (var opt in defaultOptions) if (!has(options, opt))
-      options[opt] = defaultOptions[opt];
+    options = {};
+    for (var opt in defaultOptions)
+      options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt];
     sourceFile = options.sourceFile || null;
     if (isArray(options.onToken)) {
       var tokens = options.onToken;
@@ -214,6 +215,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
+    skipSpace();
 
     function getToken(forceRegexp) {
       lastEnd = tokEnd;
@@ -234,6 +236,10 @@
       tokRegexpAllowed = reAllowed;
       skipSpace();
     };
+    getToken.noRegexp = function() {
+      tokRegexpAllowed = false;
+    };
+    getToken.options = options;
     return getToken;
   };
 
@@ -308,6 +314,7 @@
     if (options.locations) lastEndLoc = new Position;
     inFunction = inGenerator = strict = false;
     labels = [];
+    skipSpace();
     readToken();
   }
 
@@ -406,8 +413,9 @@
   var _bracketL = {type: "[", beforeExpr: true}, _bracketR = {type: "]"}, _braceL = {type: "{", beforeExpr: true};
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
-  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _ellipsis = {type: "..."}, _question = {type: "?", beforeExpr: true};
+  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
+  var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
   var _ltSlash = {type: "</"};
 
   // Operators. These carry several kinds of properties to help the
@@ -453,8 +461,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL,
-                      xjsName: _xjsName, xjsText: _xjsText};
+                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
+                      assign: _assign, xjsName: _xjsName, xjsText: _xjsText};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -600,7 +608,6 @@
     tokRegexpAllowed = true;
     metParenL = 0;
     inTemplate = inXJSChild = inXJSTag = false;
-    skipSpace();
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -937,6 +944,10 @@
     finishToken(type, str, shouldSkipSpace);
   }
 
+  var regexpUnicodeSupport = false;
+  try { new RegExp("\uffff", "u"); regexpUnicodeSupport = true; }
+  catch(e) {}
+
   // Parse a regular expression. Some context-awareness is necessary,
   // since a '/' inside a '[]' set does not end the expression.
 
@@ -959,14 +970,36 @@
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     var mods = readWord1();
-    if (mods && !/^[gmsiy]*$/.test(mods)) raise(start, "Invalid regular expression flag");
+    var tmp = content;
+    if (mods) {
+      var validFlags = /^[gmsiy]*$/;
+      if (options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
+      if (!validFlags.test(mods)) raise(start, "Invalid regular expression flag");
+      if (mods.indexOf('u') >= 0 && !regexpUnicodeSupport) {
+        // Replace each astral symbol and every Unicode code point
+        // escape sequence that represents such a symbol with a single
+        // ASCII symbol to avoid throwing on regular expressions that
+        // are only valid in combination with the `/u` flag.
+        tmp = tmp
+          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, "x")
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
+      }
+    }
+    // Detect invalid regular expressions.
     try {
-      var value = new RegExp(content, mods);
+      new RegExp(tmp);
     } catch (e) {
       if (e instanceof SyntaxError) raise(start, "Error parsing regular expression: " + e.message);
       raise(e);
     }
-    return finishToken(_regexp, value);
+    // Get a regular expression object for this pattern-flag pair, or `null` in
+    // case the current environment doesn't support the flags it uses.
+    try {
+      var value = new RegExp(content, mods);
+    } catch (err) {
+      value = null;
+  }
+    return finishToken(_regexp, {pattern: content, flags: mods, value: value});
   }
 
   // Read an integer in the given radix. Return null if zero digits
@@ -1764,7 +1797,7 @@
   // strict mode, init properties are also not allowed to be repeated.
 
   function checkPropClash(prop, propHash) {
-    if (prop.computed) return;
+    if (options.ecmaVersion >= 6) return;
     var key = prop.key, name;
     switch (key.type) {
       case "Identifier": name = key.name; break;
@@ -1834,15 +1867,19 @@
   // `program` argument.  If present, the statements will be appended
   // to its body instead of creating a new node.
 
-  function parseTopLevel(program) {
-    var node = program || startNode(), first = true;
-    if (!program) node.body = [];
+  function parseTopLevel(node) {
+    var first = true;
+    if (!node.body) node.body = [];
     while (tokType !== _eof) {
       var stmt = parseStatement();
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
     }
+
+    lastStart = tokStart;
+    lastEnd = tokEnd;
+    lastEndLoc = tokEndLoc;
     return finishNode(node, "Program");
   }
 
@@ -2279,9 +2316,14 @@
 
   function parseMaybeUnary() {
     if (tokType.prefix) {
-      var node = startNode(), update = tokType.isUpdate;
+      var node = startNode(), update = tokType.isUpdate, nodeType;
+      if (tokType === _ellipsis) {
+        nodeType = "SpreadElement";
+      } else {
+        nodeType = update ? "UpdateExpression" : "UnaryExpression";
       node.operator = tokVal;
       node.prefix = true;
+      }
       tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
@@ -2289,7 +2331,7 @@
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
         raise(node.start, "Deleting local variable in strict mode");
-      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+      return finishNode(node, nodeType);
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts();
@@ -2362,7 +2404,15 @@
       }
       return id;
       
-    case _num: case _string: case _regexp: case _xjsText:
+    case _regexp:
+      var node = startNode();
+      node.regex = {pattern: tokVal.pattern, flags: tokVal.flags};
+      node.value = tokVal.value;
+      node.raw = input.slice(tokStart, tokEnd);
+      next();
+      return finishNode(node, "Literal");
+
+    case _num: case _string: case _xjsText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);
@@ -2378,10 +2428,10 @@
 
     case _parenL:
       var start = storeCurrentPos();
-      var tokStartLoc1 = tokStartLoc, tokStart1 = tokStart, val, exprList;
+      var val, exprList;
       next();
       // check whether this is generator comprehension or regular expression
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         val = parseComprehension(startNodeAt(start), true);
       } else {
         var oldParenL = ++metParenL;
@@ -2418,7 +2468,7 @@
       var node = startNode();
       next();
       // check whether this is array comprehension or regular array
-      if (options.ecmaVersion >= 6 && tokType === _for) {
+      if (options.ecmaVersion >= 7 && tokType === _for) {
         return parseComprehension(node, false);
         }
       node.elements = parseExprList(_bracketR, true, true);
@@ -2437,9 +2487,6 @@
 
     case _new:
       return parseNew();
-
-    case _ellipsis:
-      return parseSpread();
 
     case _bquote:
       return parseTemplate();
@@ -2464,15 +2511,6 @@
     if (eat(_parenL)) node.arguments = parseExprList(_parenR, false);
     else node.arguments = empty;
     return finishNode(node, "NewExpression");
-  }
-
-  // Parse spread element '...expr'
-
-  function parseSpread() {
-    var node = startNode();
-    next();
-    node.argument = parseExpression(true);
-    return finishNode(node, "SpreadElement");
   }
 
   // Parse template expression.
@@ -2715,7 +2753,7 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
-    var classBody = startNode(), methodHash = {}, staticMethodHash = {};
+    var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
@@ -2728,7 +2766,7 @@
         }
       var isGenerator = eat(_star);
       parsePropertyName(method);
-      if (tokType === _name && !method.computed && method.key.type === "Identifier" &&
+      if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set")) {
         if (isGenerator) unexpected();
         method.kind = method.key.name;
@@ -2737,7 +2775,6 @@
         method.kind = "";
       }
       method.value = parseMethod(isGenerator);
-      checkPropClash(method, method['static'] ? staticMethodHash : methodHash);
       classBody.body.push(finishNode(method, "MethodDefinition"));
       eat(_semi);
     }
@@ -2809,8 +2846,8 @@
       node.source = null;
       semicolon();
     } else {
-      // export * from '...'
-      // export { x, y as z } [from '...']
+      // export * from '...';
+      // export { x, y as z } [from '...'];
       var isBatch = tokType === _star;
       node.declaration = null;
       node['default'] = false;
@@ -2822,6 +2859,7 @@
         if (isBatch) unexpected();
         node.source = null;
       }
+      semicolon();
     }
     return finishNode(node, "ExportDeclaration");
   }
@@ -2845,7 +2883,7 @@
         } else first = false;
 
         var node = startNode();
-        node.id = parseIdent();
+        node.id = parseIdent(tokType === _default);
         if (tokType === _name && tokVal === "as") {
           next();
           node.name = parseIdent(true);
@@ -2876,6 +2914,7 @@
       // (it doesn't support mixed default + named yet)
       node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
+    semicolon();
     return finishNode(node, "ImportDeclaration");
   }
 
@@ -3134,7 +3173,8 @@
       inXJSTag = false;
 
       next();
-      var node = parseSpread();
+      if (tokType !== _ellipsis) unexpected();
+      var node = parseMaybeUnary();
 
       inXJSTag = origInXJSTag;
 

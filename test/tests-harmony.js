@@ -55,19 +55,16 @@ test("\"\\u{714E}\\u{8336}\"", {
       type: "Literal",
       value: "煎茶",
       raw: "\"\\u{714E}\\u{8336}\"",
-      range: [0, 18],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -86,19 +83,16 @@ test("\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"", {
       type: "Literal",
       value: "𠮷野家",
       raw: "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
-      range: [0, 27],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 27}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -119,19 +113,16 @@ test("00", {
       type: "Literal",
       value: 0,
       raw: "00",
-      range: [0, 2],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 2}
       }
     },
-    range: [0, 2],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 2}
     }
   }],
-  range: [0, 2],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 2}
@@ -150,19 +141,16 @@ test("0o0", {
       type: "Literal",
       value: 0,
       raw: "0o0",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -180,7 +168,6 @@ test("function test() {'use strict'; 0o0; }", {
     id: {
       type: "Identifier",
       name: "test",
-      range: [9, 13],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 13}
@@ -197,13 +184,11 @@ test("function test() {'use strict'; 0o0; }", {
             type: "Literal",
             value: "use strict",
             raw: "'use strict'",
-            range: [17, 29],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 29}
             }
           },
-          range: [17, 30],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 30}
@@ -215,20 +200,17 @@ test("function test() {'use strict'; 0o0; }", {
             type: "Literal",
             value: 0,
             raw: "0o0",
-            range: [31, 34],
             loc: {
               start: {line: 1, column: 31},
               end: {line: 1, column: 34}
             }
           },
-          range: [31, 35],
           loc: {
             start: {line: 1, column: 31},
             end: {line: 1, column: 35}
           }
         }
       ],
-      range: [16, 37],
       loc: {
         start: {line: 1, column: 16},
         end: {line: 1, column: 37}
@@ -237,13 +219,11 @@ test("function test() {'use strict'; 0o0; }", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 37],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 37}
     }
   }],
-  range: [0, 37],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
@@ -262,19 +242,16 @@ test("0o2", {
       type: "Literal",
       value: 2,
       raw: "0o2",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -293,19 +270,16 @@ test("0o12", {
       type: "Literal",
       value: 10,
       raw: "0o12",
-      range: [0, 4],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 4}
       }
     },
-    range: [0, 4],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 4}
     }
   }],
-  range: [0, 4],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
@@ -324,19 +298,16 @@ test("0O0", {
       type: "Literal",
       value: 0,
       raw: "0O0",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -354,7 +325,6 @@ test("function test() {'use strict'; 0O0; }", {
     id: {
       type: "Identifier",
       name: "test",
-      range: [9, 13],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 13}
@@ -371,13 +341,11 @@ test("function test() {'use strict'; 0O0; }", {
             type: "Literal",
             value: "use strict",
             raw: "'use strict'",
-            range: [17, 29],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 29}
             }
           },
-          range: [17, 30],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 30}
@@ -389,20 +357,17 @@ test("function test() {'use strict'; 0O0; }", {
             type: "Literal",
             value: 0,
             raw: "0O0",
-            range: [31, 34],
             loc: {
               start: {line: 1, column: 31},
               end: {line: 1, column: 34}
             }
           },
-          range: [31, 35],
           loc: {
             start: {line: 1, column: 31},
             end: {line: 1, column: 35}
           }
         }
       ],
-      range: [16, 37],
       loc: {
         start: {line: 1, column: 16},
         end: {line: 1, column: 37}
@@ -411,13 +376,11 @@ test("function test() {'use strict'; 0O0; }", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 37],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 37}
     }
   }],
-  range: [0, 37],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
@@ -436,19 +399,16 @@ test("0O2", {
       type: "Literal",
       value: 2,
       raw: "0O2",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -467,19 +427,16 @@ test("0O12", {
       type: "Literal",
       value: 10,
       raw: "0O12",
-      range: [0, 4],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 4}
       }
     },
-    range: [0, 4],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 4}
     }
   }],
-  range: [0, 4],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
@@ -498,19 +455,16 @@ test("0b0", {
       type: "Literal",
       value: 0,
       raw: "0b0",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -529,19 +483,16 @@ test("0b1", {
       type: "Literal",
       value: 1,
       raw: "0b1",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -560,19 +511,16 @@ test("0b10", {
       type: "Literal",
       value: 2,
       raw: "0b10",
-      range: [0, 4],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 4}
       }
     },
-    range: [0, 4],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 4}
     }
   }],
-  range: [0, 4],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
@@ -591,19 +539,16 @@ test("0B0", {
       type: "Literal",
       value: 0,
       raw: "0B0",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -622,19 +567,16 @@ test("0B1", {
       type: "Literal",
       value: 1,
       raw: "0B1",
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -653,19 +595,16 @@ test("0B10", {
       type: "Literal",
       value: 2,
       raw: "0B10",
-      range: [0, 4],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 4}
       }
     },
-    range: [0, 4],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 4}
     }
   }],
-  range: [0, 4],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
@@ -688,26 +627,22 @@ test("`42`", {
         type: "TemplateElement",
         value: {raw: "42", cooked: "42"},
         tail: true,
-        range: [1, 3],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 3}
         }
       }],
       expressions: [],
-      range: [0, 4],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 4}
       }
     },
-    range: [0, 4],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 4}
     }
   }],
-  range: [0, 4],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 4}
@@ -727,7 +662,6 @@ test("raw`42`", {
       tag: {
         type: "Identifier",
         name: "raw",
-        range: [0, 3],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 3}
@@ -739,32 +673,27 @@ test("raw`42`", {
           type: "TemplateElement",
           value: {raw: "42", cooked: "42"},
           tail: true,
-          range: [4, 6],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 6}
           }
         }],
         expressions: [],
-        range: [3, 7],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 7}
         }
       },
-      range: [0, 7],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 7}
       }
     },
-    range: [0, 7],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 7}
     }
   }],
-  range: [0, 7],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 7}
@@ -784,7 +713,6 @@ test("raw`hello ${name}`", {
       tag: {
         type: "Identifier",
         name: "raw",
-        range: [0, 3],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 3}
@@ -797,7 +725,6 @@ test("raw`hello ${name}`", {
             type: "TemplateElement",
             value: {raw: "hello ", cooked: "hello "},
             tail: false,
-            range: [4, 10],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 10}
@@ -807,7 +734,6 @@ test("raw`hello ${name}`", {
             type: "TemplateElement",
             value: {raw: "", cooked: ""},
             tail: true,
-            range: [17, 17],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 17}
@@ -817,31 +743,26 @@ test("raw`hello ${name}`", {
         expressions: [{
           type: "Identifier",
           name: "name",
-          range: [12, 16],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 16}
           }
         }],
-        range: [3, 18],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 18}
         }
       },
-      range: [0, 18],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -862,26 +783,22 @@ test("`$`", {
         type: "TemplateElement",
         value: {raw: "$", cooked: "$"},
         tail: true,
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
         }
       }],
       expressions: [],
-      range: [0, 3],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 3}
       }
     },
-    range: [0, 3],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 3}
     }
   }],
-  range: [0, 3],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 3}
@@ -902,26 +819,22 @@ test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
         type: "TemplateElement",
         value: {raw: "\\n\\r\\b\\v\\t\\f\\\n\\\r\n", cooked: "\n\r\b\u000b\t\f"},
         tail: true,
-        range: [1, 18],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 3, column: 0}
         }
       }],
       expressions: [],
-      range: [0, 19],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 3, column: 1}
       }
     },
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 3, column: 1}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 3, column: 1}
@@ -942,26 +855,22 @@ test("`\n\r\n`", {
         type: "TemplateElement",
         value: {raw: "\n\r\n", cooked: "\n\n"},
         tail: true,
-        range: [1, 4],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 3, column: 0}
         }
       }],
       expressions: [],
-      range: [0, 5],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 3, column: 1}
       }
     },
-    range: [0, 5],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 3, column: 1}
     }
   }],
-  range: [0, 5],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 3, column: 1}
@@ -982,26 +891,22 @@ test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
         type: "TemplateElement",
         value: {raw: "\\u{000042}\\u0042\\x42u0\\102\\A", cooked: "BBBu0BA"},
         tail: true,
-        range: [1, 29],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 29}
         }
       }],
       expressions: [],
-      range: [0, 30],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 30}
       }
     },
-    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 30}
     }
   }],
-  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
@@ -1023,7 +928,6 @@ test("new raw`42`", {
         tag: {
           type: "Identifier",
           name: "raw",
-          range: [4, 7],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 7}
@@ -1035,39 +939,33 @@ test("new raw`42`", {
             type: "TemplateElement",
             value: {raw: "42", cooked: "42"},
             tail: true,
-            range: [8, 10],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 10}
             }
           }],
           expressions: [],
-          range: [7, 11],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 11}
           }
         },
-        range: [4, 11],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 11}
         }
       },
       arguments: [],
-      range: [0, 11],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 11}
       }
     },
-    range: [0, 11],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 11}
     }
   }],
-  range: [0, 11],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
@@ -1087,7 +985,6 @@ test("switch (answer) { case 42: let t = 42; break; }", {
     discriminant: {
       type: "Identifier",
       name: "answer",
-      range: [8, 14],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 14}
@@ -1099,7 +996,6 @@ test("switch (answer) { case 42: let t = 42; break; }", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [23, 25],
         loc: {
           start: {line: 1, column: 23},
           end: {line: 1, column: 25}
@@ -1113,7 +1009,6 @@ test("switch (answer) { case 42: let t = 42; break; }", {
             id: {
               type: "Identifier",
               name: "t",
-              range: [31, 32],
               loc: {
                 start: {line: 1, column: 31},
                 end: {line: 1, column: 32}
@@ -1123,20 +1018,17 @@ test("switch (answer) { case 42: let t = 42; break; }", {
               type: "Literal",
               value: 42,
               raw: "42",
-              range: [35, 37],
               loc: {
                 start: {line: 1, column: 35},
                 end: {line: 1, column: 37}
               }
             },
-            range: [31, 37],
             loc: {
               start: {line: 1, column: 31},
               end: {line: 1, column: 37}
             }
           }],
           kind: "let",
-          range: [27, 38],
           loc: {
             start: {line: 1, column: 27},
             end: {line: 1, column: 38}
@@ -1145,26 +1037,22 @@ test("switch (answer) { case 42: let t = 42; break; }", {
         {
           type: "BreakStatement",
           label: null,
-          range: [39, 45],
           loc: {
             start: {line: 1, column: 39},
             end: {line: 1, column: 45}
           }
         }
       ],
-      range: [18, 45],
       loc: {
         start: {line: 1, column: 18},
         end: {line: 1, column: 45}
       }
     }],
-    range: [0, 47],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 47}
     }
   }],
-  range: [0, 47],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 47}
@@ -1190,7 +1078,6 @@ test("() => \"test\"", {
         type: "Literal",
         value: "test",
         raw: "\"test\"",
-        range: [6, 12],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 12}
@@ -1199,19 +1086,16 @@ test("() => \"test\"", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 12],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -1232,7 +1116,6 @@ test("e => \"test\"", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -1243,7 +1126,6 @@ test("e => \"test\"", {
         type: "Literal",
         value: "test",
         raw: "\"test\"",
-        range: [5, 11],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 11}
@@ -1252,19 +1134,16 @@ test("e => \"test\"", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 11],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 11}
       }
     },
-    range: [0, 11],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 11}
     }
   }],
-  range: [0, 11],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
@@ -1285,7 +1164,6 @@ test("(e) => \"test\"", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -1296,7 +1174,6 @@ test("(e) => \"test\"", {
         type: "Literal",
         value: "test",
         raw: "\"test\"",
-        range: [7, 13],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 13}
@@ -1305,19 +1182,16 @@ test("(e) => \"test\"", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -1339,7 +1213,6 @@ test("(a, b) => \"test\"", {
         {
           type: "Identifier",
           name: "a",
-          range: [1, 2],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 2}
@@ -1348,7 +1221,6 @@ test("(a, b) => \"test\"", {
         {
           type: "Identifier",
           name: "b",
-          range: [4, 5],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 5}
@@ -1360,7 +1232,6 @@ test("(a, b) => \"test\"", {
         type: "Literal",
         value: "test",
         raw: "\"test\"",
-        range: [10, 16],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 16}
@@ -1369,19 +1240,16 @@ test("(a, b) => \"test\"", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 16],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 16}
       }
     },
-    range: [0, 16],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 16}
     }
   }],
-  range: [0, 16],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
@@ -1402,7 +1270,6 @@ test("e => { 42; }", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -1417,19 +1284,16 @@ test("e => { 42; }", {
             type: "Literal",
             value: 42,
             raw: "42",
-            range: [7, 9],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 9}
             }
           },
-          range: [7, 10],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 10}
           }
         }],
-        range: [5, 12],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 12}
@@ -1438,19 +1302,16 @@ test("e => { 42; }", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 12],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -1471,7 +1332,6 @@ test("e => ({ property: 42 })", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -1485,7 +1345,6 @@ test("e => ({ property: 42 })", {
           key: {
             type: "Identifier",
             name: "property",
-            range: [8, 16],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 16}
@@ -1495,7 +1354,6 @@ test("e => ({ property: 42 })", {
             type: "Literal",
             value: 42,
             raw: "42",
-            range: [18, 20],
             loc: {
               start: {line: 1, column: 18},
               end: {line: 1, column: 20}
@@ -1505,13 +1363,11 @@ test("e => ({ property: 42 })", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [8, 20],
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 20}
           }
         }],
-        range: [6, 22],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 22}
@@ -1520,19 +1376,16 @@ test("e => ({ property: 42 })", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 23],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 23}
       }
     },
-    range: [0, 23],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 23}
     }
   }],
-  range: [0, 23],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
@@ -1553,7 +1406,6 @@ test("e => { label: 42 }", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -1567,7 +1419,6 @@ test("e => { label: 42 }", {
           label: {
             type: "Identifier",
             name: "label",
-            range: [7, 12],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 12}
@@ -1579,25 +1430,21 @@ test("e => { label: 42 }", {
               type: "Literal",
               value: 42,
               raw: "42",
-              range: [14, 16],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 16}
               }
             },
-            range: [14, 16],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 16}
             }
           },
-          range: [7, 16],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 16}
           }
         }],
-        range: [5, 18],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 18}
@@ -1606,19 +1453,16 @@ test("e => { label: 42 }", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 18],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -1640,7 +1484,6 @@ test("(a, b) => { 42; }", {
         {
           type: "Identifier",
           name: "a",
-          range: [1, 2],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 2}
@@ -1649,7 +1492,6 @@ test("(a, b) => { 42; }", {
         {
           type: "Identifier",
           name: "b",
-          range: [4, 5],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 5}
@@ -1665,19 +1507,16 @@ test("(a, b) => { 42; }", {
             type: "Literal",
             value: 42,
             raw: "42",
-            range: [12, 14],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 14}
             }
           },
-          range: [12, 15],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 15}
           }
         }],
-        range: [10, 17],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 17}
@@ -1686,19 +1525,16 @@ test("(a, b) => { 42; }", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -1722,7 +1558,6 @@ test("([a, , b]) => 42", {
           {
             type: "Identifier",
             name: "a",
-            range: [2, 3],
             loc: {
               start: {line: 1, column: 2},
               end: {line: 1, column: 3}
@@ -1732,14 +1567,12 @@ test("([a, , b]) => 42", {
           {
             type: "Identifier",
             name: "b",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
             }
           }
         ],
-        range: [1, 9],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 9}
@@ -1750,7 +1583,6 @@ test("([a, , b]) => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [14, 16],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 16}
@@ -1759,19 +1591,16 @@ test("([a, , b]) => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 16],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 16}
       }
     },
-    range: [0, 16],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 16}
     }
   }],
-  range: [0, 16],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
@@ -1797,7 +1626,6 @@ test("([a.a]) => 42", {
           object: {
             type: "Identifier",
             name: "a",
-            range: [2, 3],
             loc: {
               start: {line: 1, column: 2},
               end: {line: 1, column: 3}
@@ -1806,19 +1634,16 @@ test("([a.a]) => 42", {
           property: {
             type: "Identifier",
             name: "a",
-            range: [4, 5],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 5}
             }
           },
-          range: [2, 5],
           loc: {
             start: {line: 1, column: 2},
             end: {line: 1, column: 5}
           }
         }],
-        range: [1, 6],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 6}
@@ -1829,7 +1654,6 @@ test("([a.a]) => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [11, 13],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 13}
@@ -1838,19 +1662,16 @@ test("([a.a]) => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -1871,7 +1692,6 @@ test("(x=1) => x * x", {
       params: [{
         type: "Identifier",
         name: "x",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -1881,7 +1701,6 @@ test("(x=1) => x * x", {
         type: "Literal",
         value: 1,
         raw: "1",
-        range: [3, 4],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 4}
@@ -1893,7 +1712,6 @@ test("(x=1) => x * x", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [9, 10],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 10}
@@ -1902,13 +1720,11 @@ test("(x=1) => x * x", {
         right: {
           type: "Identifier",
           name: "x",
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
           }
         },
-        range: [9, 14],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 14}
@@ -1917,19 +1733,16 @@ test("(x=1) => x * x", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 14],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 14}
       }
     },
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -1950,7 +1763,6 @@ test("eval => 42", {
       params: [{
         type: "Identifier",
         name: "eval",
-        range: [0, 4],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 4}
@@ -1961,7 +1773,6 @@ test("eval => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [8, 10],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 10}
@@ -1970,19 +1781,16 @@ test("eval => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 10],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 10}
       }
     },
-    range: [0, 10],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 10}
     }
   }],
-  range: [0, 10],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
@@ -2003,7 +1811,6 @@ test("arguments => 42", {
       params: [{
         type: "Identifier",
         name: "arguments",
-        range: [0, 9],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 9}
@@ -2014,7 +1821,6 @@ test("arguments => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [13, 15],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 15}
@@ -2023,19 +1829,16 @@ test("arguments => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 15],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 15}
       }
     },
-    range: [0, 15],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 15}
     }
   }],
-  range: [0, 15],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
@@ -2056,7 +1859,6 @@ test("(a) => 00", {
       params: [{
         type: "Identifier",
         name: "a",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -2067,7 +1869,6 @@ test("(a) => 00", {
         type: "Literal",
         value: 0,
         raw: "00",
-        range: [7, 9],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 9}
@@ -2076,19 +1877,16 @@ test("(a) => 00", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 9],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 9}
       }
     },
-    range: [0, 9],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 9}
     }
   }],
-  range: [0, 9],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 9}
@@ -2110,7 +1908,6 @@ test("(eval, a) => 42", {
         {
           type: "Identifier",
           name: "eval",
-          range: [1, 5],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 5}
@@ -2119,7 +1916,6 @@ test("(eval, a) => 42", {
         {
           type: "Identifier",
           name: "a",
-          range: [7, 8],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 8}
@@ -2131,7 +1927,6 @@ test("(eval, a) => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [13, 15],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 15}
@@ -2140,19 +1935,16 @@ test("(eval, a) => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 15],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 15}
       }
     },
-    range: [0, 15],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 15}
     }
   }],
-  range: [0, 15],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
@@ -2173,7 +1965,6 @@ test("(eval = 10) => 42", {
       params: [{
         type: "Identifier",
         name: "eval",
-        range: [1, 5],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 5}
@@ -2183,7 +1974,6 @@ test("(eval = 10) => 42", {
         type: "Literal",
         value: 10,
         raw: "10",
-        range: [8, 10],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 10}
@@ -2193,7 +1983,6 @@ test("(eval = 10) => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [15, 17],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 17}
@@ -2202,19 +1991,16 @@ test("(eval = 10) => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -2236,7 +2022,6 @@ test("(eval, a = 10) => 42", {
         {
           type: "Identifier",
           name: "eval",
-          range: [1, 5],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 5}
@@ -2245,7 +2030,6 @@ test("(eval, a = 10) => 42", {
         {
           type: "Identifier",
           name: "a",
-          range: [7, 8],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 8}
@@ -2258,7 +2042,6 @@ test("(eval, a = 10) => 42", {
           type: "Literal",
           value: 10,
           raw: "10",
-          range: [11, 13],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 13}
@@ -2269,7 +2052,6 @@ test("(eval, a = 10) => 42", {
         type: "Literal",
         value: 42,
         raw: "42",
-        range: [18, 20],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 20}
@@ -2278,19 +2060,16 @@ test("(eval, a = 10) => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 20],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 20}
       }
     },
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
@@ -2311,7 +2090,6 @@ test("(x => x)", {
       params: [{
         type: "Identifier",
         name: "x",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -2321,7 +2099,6 @@ test("(x => x)", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [6, 7],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 7}
@@ -2330,19 +2107,16 @@ test("(x => x)", {
       rest: null,
       generator: false,
       expression: true,
-      range: [1, 7],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 7}
       }
     },
-    range: [0, 8],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 8}
     }
   }],
-  range: [0, 8],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 8}
@@ -2363,7 +2137,6 @@ test("x => y => 42", {
       params: [{
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -2376,7 +2149,6 @@ test("x => y => 42", {
         params: [{
           type: "Identifier",
           name: "y",
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
@@ -2387,7 +2159,6 @@ test("x => y => 42", {
           type: "Literal",
           value: 42,
           raw: "42",
-          range: [10, 12],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 12}
@@ -2396,7 +2167,6 @@ test("x => y => 42", {
         rest: null,
         generator: false,
         expression: true,
-        range: [5, 12],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 12}
@@ -2405,19 +2175,16 @@ test("x => y => 42", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 12],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -2438,7 +2205,6 @@ test("(x) => ((y, z) => (x, y, z))", {
       params: [{
         type: "Identifier",
         name: "x",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -2452,7 +2218,6 @@ test("(x) => ((y, z) => (x, y, z))", {
           {
             type: "Identifier",
             name: "y",
-            range: [9, 10],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 10}
@@ -2461,7 +2226,6 @@ test("(x) => ((y, z) => (x, y, z))", {
           {
             type: "Identifier",
             name: "z",
-            range: [12, 13],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 13}
@@ -2475,7 +2239,6 @@ test("(x) => ((y, z) => (x, y, z))", {
             {
               type: "Identifier",
               name: "x",
-              range: [19, 20],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 20}
@@ -2484,7 +2247,6 @@ test("(x) => ((y, z) => (x, y, z))", {
             {
               type: "Identifier",
               name: "y",
-              range: [22, 23],
               loc: {
                 start: {line: 1, column: 22},
                 end: {line: 1, column: 23}
@@ -2493,14 +2255,12 @@ test("(x) => ((y, z) => (x, y, z))", {
             {
               type: "Identifier",
               name: "z",
-              range: [25, 26],
               loc: {
                 start: {line: 1, column: 25},
                 end: {line: 1, column: 26}
               }
             }
           ],
-          range: [19, 26],
           loc: {
             start: {line: 1, column: 19},
             end: {line: 1, column: 26}
@@ -2509,7 +2269,6 @@ test("(x) => ((y, z) => (x, y, z))", {
         rest: null,
         generator: false,
         expression: true,
-        range: [8, 27],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 27}
@@ -2518,19 +2277,16 @@ test("(x) => ((y, z) => (x, y, z))", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 28],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 28}
       }
     },
-    range: [0, 28],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 28}
     }
   }],
-  range: [0, 28],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
@@ -2550,7 +2306,6 @@ test("foo(() => {})", {
       callee: {
         type: "Identifier",
         name: "foo",
-        range: [0, 3],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 3}
@@ -2564,7 +2319,6 @@ test("foo(() => {})", {
         body: {
           type: "BlockStatement",
           body: [],
-          range: [10, 12],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 12}
@@ -2573,25 +2327,21 @@ test("foo(() => {})", {
         rest: null,
         generator: false,
         expression: false,
-        range: [4, 12],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 12}
         }
       }],
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -2611,7 +2361,6 @@ test("foo((x, y) => {})", {
       callee: {
         type: "Identifier",
         name: "foo",
-        range: [0, 3],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 3}
@@ -2624,7 +2373,6 @@ test("foo((x, y) => {})", {
           {
             type: "Identifier",
             name: "x",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -2633,7 +2381,6 @@ test("foo((x, y) => {})", {
           {
             type: "Identifier",
             name: "y",
-            range: [8, 9],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 9}
@@ -2644,7 +2391,6 @@ test("foo((x, y) => {})", {
         body: {
           type: "BlockStatement",
           body: [],
-          range: [14, 16],
           loc: {
             start: {line: 1, column: 14},
             end: {line: 1, column: 16}
@@ -2653,25 +2399,21 @@ test("foo((x, y) => {})", {
         rest: null,
         generator: false,
         expression: false,
-        range: [4, 16],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 16}
         }
       }],
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -2688,21 +2430,18 @@ test("(a, a) => 42", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   },
-  range: [0, 12],
   body: [{
     type: "ExpressionStatement",
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     },
-    range: [0, 12],
     expression: {
       type: "ArrowFunctionExpression",
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       },
-      range: [0, 12],
       id: null,
       params: [
         {
@@ -2711,7 +2450,6 @@ test("(a, a) => 42", {
             start: {line: 1, column: 1},
             end: {line: 1, column: 2}
           },
-          range: [1, 2],
           name: "a"
         },
         {
@@ -2720,7 +2458,6 @@ test("(a, a) => 42", {
             start: {line: 1, column: 4},
             end: {line: 1, column: 5}
           },
-          range: [4, 5],
           name: "a"
         }
       ],
@@ -2733,7 +2470,6 @@ test("(a, a) => 42", {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
         },
-        range: [10, 12],
         value: 42,
         raw: "42"
       },
@@ -2758,7 +2494,6 @@ test("x = { method() { } }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -2771,7 +2506,6 @@ test("x = { method() { } }", {
           key: {
             type: "Identifier",
             name: "method",
-            range: [6, 12],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 12}
@@ -2785,7 +2519,6 @@ test("x = { method() { } }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [15, 18],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 18}
@@ -2794,7 +2527,6 @@ test("x = { method() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 18],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 18}
@@ -2804,31 +2536,26 @@ test("x = { method() { } }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 18],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 18}
           }
         }],
-        range: [4, 20],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 20}
         }
       },
-      range: [0, 20],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 20}
       }
     },
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
@@ -2849,7 +2576,6 @@ test("x = { method(test) { } }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -2862,7 +2588,6 @@ test("x = { method(test) { } }", {
           key: {
             type: "Identifier",
             name: "method",
-            range: [6, 12],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 12}
@@ -2874,7 +2599,6 @@ test("x = { method(test) { } }", {
             params: [{
               type: "Identifier",
               name: "test",
-              range: [13, 17],
               loc: {
                 start: {line: 1, column: 13},
                 end: {line: 1, column: 17}
@@ -2884,7 +2608,6 @@ test("x = { method(test) { } }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [19, 22],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 22}
@@ -2893,7 +2616,6 @@ test("x = { method(test) { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 22],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 22}
@@ -2903,31 +2625,26 @@ test("x = { method(test) { } }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 22],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 22}
           }
         }],
-        range: [4, 24],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 24}
         }
       },
-      range: [0, 24],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 24}
       }
     },
-    range: [0, 24],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 24}
     }
   }],
-  range: [0, 24],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
@@ -2948,7 +2665,6 @@ test("x = { 'method'() { } }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -2962,7 +2678,6 @@ test("x = { 'method'() { } }", {
             type: "Literal",
             value: "method",
             raw: "'method'",
-            range: [6, 14],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 14}
@@ -2976,7 +2691,6 @@ test("x = { 'method'() { } }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [17, 20],
               loc: {
                 start: {line: 1, column: 17},
                 end: {line: 1, column: 20}
@@ -2985,7 +2699,6 @@ test("x = { 'method'() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [14, 20],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 20}
@@ -2995,31 +2708,26 @@ test("x = { 'method'() { } }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 20],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 20}
           }
         }],
-        range: [4, 22],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 22}
         }
       },
-      range: [0, 22],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -3040,7 +2748,6 @@ test("x = { get() { } }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -3053,7 +2760,6 @@ test("x = { get() { } }", {
           key: {
             type: "Identifier",
             name: "get",
-            range: [6, 9],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 9}
@@ -3067,7 +2773,6 @@ test("x = { get() { } }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [12, 15],
               loc: {
                 start: {line: 1, column: 12},
                 end: {line: 1, column: 15}
@@ -3076,7 +2781,6 @@ test("x = { get() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [9, 15],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 15}
@@ -3086,31 +2790,26 @@ test("x = { get() { } }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 15],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 15}
           }
         }],
-        range: [4, 17],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 17}
         }
       },
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -3131,7 +2830,6 @@ test("x = { set() { } }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -3144,7 +2842,6 @@ test("x = { set() { } }", {
           key: {
             type: "Identifier",
             name: "set",
-            range: [6, 9],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 9}
@@ -3158,7 +2855,6 @@ test("x = { set() { } }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [12, 15],
               loc: {
                 start: {line: 1, column: 12},
                 end: {line: 1, column: 15}
@@ -3167,7 +2863,6 @@ test("x = { set() { } }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [9, 15],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 15}
@@ -3177,31 +2872,26 @@ test("x = { set() { } }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 15],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 15}
           }
         }],
-        range: [4, 17],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 17}
         }
       },
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -3222,7 +2912,6 @@ test("x = { method() 42 }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -3235,7 +2924,6 @@ test("x = { method() 42 }", {
           key: {
             type: "Identifier",
             name: "method",
-            range: [6, 12],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 12}
@@ -3250,7 +2938,6 @@ test("x = { method() 42 }", {
               type: "Literal",
               value: 42,
               raw: "42",
-              range: [15, 17],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 17}
@@ -3259,7 +2946,6 @@ test("x = { method() 42 }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [12, 17],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 17}
@@ -3269,31 +2955,26 @@ test("x = { method() 42 }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 17],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 17}
           }
         }],
-        range: [4, 19],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 19}
         }
       },
-      range: [0, 19],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 19}
       }
     },
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -3314,7 +2995,6 @@ test("x = { get method() 42 }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -3327,7 +3007,6 @@ test("x = { get method() 42 }", {
           key: {
             type: "Identifier",
             name: "method",
-            range: [10, 16],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 16}
@@ -3342,7 +3021,6 @@ test("x = { get method() 42 }", {
               type: "Literal",
               value: 42,
               raw: "42",
-              range: [19, 21],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 21}
@@ -3351,7 +3029,6 @@ test("x = { get method() 42 }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [16, 21],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 21}
@@ -3361,31 +3038,26 @@ test("x = { get method() 42 }", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [6, 21],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 21}
           }
         }],
-        range: [4, 23],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 23}
         }
       },
-      range: [0, 23],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 23}
       }
     },
-    range: [0, 23],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 23}
     }
   }],
-  range: [0, 23],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
@@ -3406,7 +3078,6 @@ test("x = { set method(val) v = val }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -3419,7 +3090,6 @@ test("x = { set method(val) v = val }", {
           key: {
             type: "Identifier",
             name: "method",
-            range: [10, 16],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 16}
@@ -3431,7 +3101,6 @@ test("x = { set method(val) v = val }", {
             params: [{
               type: "Identifier",
               name: "val",
-              range: [17, 20],
               loc: {
                 start: {line: 1, column: 17},
                 end: {line: 1, column: 20}
@@ -3444,7 +3113,6 @@ test("x = { set method(val) v = val }", {
               left: {
                 type: "Identifier",
                 name: "v",
-                range: [22, 23],
                 loc: {
                   start: {line: 1, column: 22},
                   end: {line: 1, column: 23}
@@ -3453,13 +3121,11 @@ test("x = { set method(val) v = val }", {
               right: {
                 type: "Identifier",
                 name: "val",
-                range: [26, 29],
                 loc: {
                   start: {line: 1, column: 26},
                   end: {line: 1, column: 29}
                 }
               },
-              range: [22, 29],
               loc: {
                 start: {line: 1, column: 22},
                 end: {line: 1, column: 29}
@@ -3468,7 +3134,6 @@ test("x = { set method(val) v = val }", {
             rest: null,
             generator: false,
             expression: true,
-            range: [16, 29],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 29}
@@ -3478,31 +3143,26 @@ test("x = { set method(val) v = val }", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [6, 29],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 29}
           }
         }],
-        range: [4, 31],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 31}
         }
       },
-      range: [0, 31],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 31}
       }
     },
-    range: [0, 31],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 31}
     }
   }],
-  range: [0, 31],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
@@ -3527,7 +3187,6 @@ test("[for (x of array) x]", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [6, 7],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 7}
@@ -3536,13 +3195,11 @@ test("[for (x of array) x]", {
         right: {
           type: "Identifier",
           name: "array",
-          range: [11, 16],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 16}
           }
         },
-        range: [1, 17],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 17}
@@ -3552,32 +3209,28 @@ test("[for (x of array) x]", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [18, 19],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 19}
         }
       },
       generator: false,
-      range: [0, 20],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 20}
       }
     },
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -3594,7 +3247,6 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [40, 41],
           loc: {
             start: {line: 1, column: 40},
             end: {line: 1, column: 41}
@@ -3603,13 +3255,11 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
         right: {
           type: "Identifier",
           name: "test",
-          range: [46, 50],
           loc: {
             start: {line: 1, column: 46},
             end: {line: 1, column: 50}
           }
         },
-        range: [40, 50],
         loc: {
           start: {line: 1, column: 40},
           end: {line: 1, column: 50}
@@ -3621,7 +3271,6 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           left: {
             type: "Identifier",
             name: "x",
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -3630,13 +3279,11 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           right: {
             type: "Identifier",
             name: "array",
-            range: [11, 16],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 16}
             }
           },
-          range: [1, 17],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
@@ -3648,7 +3295,6 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           left: {
             type: "Identifier",
             name: "y",
-            range: [23, 24],
             loc: {
               start: {line: 1, column: 23},
               end: {line: 1, column: 24}
@@ -3657,13 +3303,11 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           right: {
             type: "Identifier",
             name: "array2",
-            range: [28, 34],
             loc: {
               start: {line: 1, column: 28},
               end: {line: 1, column: 34}
             }
           },
-          range: [18, 35],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
@@ -3674,32 +3318,28 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [52, 53],
         loc: {
           start: {line: 1, column: 52},
           end: {line: 1, column: 53}
         }
       },
       generator: false,
-      range: [0, 54],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 54}
       }
     },
-    range: [0, 54],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 54}
     }
   }],
-  range: [0, 54],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -3716,7 +3356,6 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
         left: {
           type: "Identifier",
           name: "x",
-          range: [40, 41],
           loc: {
             start: {line: 1, column: 40},
             end: {line: 1, column: 41}
@@ -3725,13 +3364,11 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
         right: {
           type: "Identifier",
           name: "test",
-          range: [46, 50],
           loc: {
             start: {line: 1, column: 46},
             end: {line: 1, column: 50}
           }
         },
-        range: [40, 50],
         loc: {
           start: {line: 1, column: 40},
           end: {line: 1, column: 50}
@@ -3743,7 +3380,6 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           left: {
             type: "Identifier",
             name: "x",
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -3752,13 +3388,11 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           right: {
             type: "Identifier",
             name: "array",
-            range: [11, 16],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 16}
             }
           },
-          range: [1, 17],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
@@ -3770,7 +3404,6 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           left: {
             type: "Identifier",
             name: "y",
-            range: [23, 24],
             loc: {
               start: {line: 1, column: 23},
               end: {line: 1, column: 24}
@@ -3779,13 +3412,11 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           right: {
             type: "Identifier",
             name: "array2",
-            range: [28, 34],
             loc: {
               start: {line: 1, column: 28},
               end: {line: 1, column: 34}
             }
           },
-          range: [18, 35],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
@@ -3796,32 +3427,28 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [52, 53],
         loc: {
           start: {line: 1, column: 52},
           end: {line: 1, column: 53}
         }
       },
       generator: true,
-      range: [0, 54],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 54}
       }
     },
-    range: [0, 54],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 54}
     }
   }],
-  range: [0, 54],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -3843,14 +3470,12 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
               {
                 type: "Identifier",
                 name: "x",
-                range: [8, 9],
                 loc: {
                   start: {line: 1, column: 8},
                   end: {line: 1, column: 9}
                 }
               }
             ],
-            range: [6, 10],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 10}
@@ -3859,13 +3484,11 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           right: {
             type: "Identifier",
             name: "array",
-            range: [14, 19],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 19}
             }
           },
-          range: [1, 20],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 20}
@@ -3885,7 +3508,6 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                   object: {
                     type: "Identifier",
                     name: "start",
-                    range: [28, 33],
                     loc: {
                       start: {line: 1, column: 28},
                       end: {line: 1, column: 33}
@@ -3894,13 +3516,11 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                   property: {
                     type: "Identifier",
                     name: "x",
-                    range: [34, 35],
                     loc: {
                       start: {line: 1, column: 34},
                       end: {line: 1, column: 35}
                     }
                   },
-                  range: [28, 35],
                   loc: {
                     start: {line: 1, column: 28},
                     end: {line: 1, column: 35}
@@ -3909,7 +3529,6 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                 value: {
                   type: "Identifier",
                   name: "x",
-                  range: [38, 39],
                   loc: {
                     start: {line: 1, column: 38},
                     end: {line: 1, column: 39}
@@ -3919,7 +3538,6 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                 method: false,
                 shorthand: false,
                 computed: true,
-                range: [27, 39],
                 loc: {
                   start: {line: 1, column: 27},
                   end: {line: 1, column: 39}
@@ -3933,7 +3551,6 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                   object: {
                     type: "Identifier",
                     name: "start",
-                    range: [42, 47],
                     loc: {
                       start: {line: 1, column: 42},
                       end: {line: 1, column: 47}
@@ -3942,13 +3559,11 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                   property: {
                     type: "Identifier",
                     name: "y",
-                    range: [48, 49],
                     loc: {
                       start: {line: 1, column: 48},
                       end: {line: 1, column: 49}
                     }
                   },
-                  range: [42, 49],
                   loc: {
                     start: {line: 1, column: 42},
                     end: {line: 1, column: 49}
@@ -3957,7 +3572,6 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                 value: {
                   type: "Identifier",
                   name: "y",
-                  range: [52, 53],
                   loc: {
                     start: {line: 1, column: 52},
                     end: {line: 1, column: 53}
@@ -3967,14 +3581,12 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
                 method: false,
                 shorthand: false,
                 computed: true,
-                range: [41, 53],
                 loc: {
                   start: {line: 1, column: 41},
                   end: {line: 1, column: 53}
                 }
               }
             ],
-            range: [26, 54],
             loc: {
               start: {line: 1, column: 26},
               end: {line: 1, column: 54}
@@ -3983,13 +3595,11 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           right: {
             type: "Identifier",
             name: "array2",
-            range: [58, 64],
             loc: {
               start: {line: 1, column: 58},
               end: {line: 1, column: 64}
             }
           },
-          range: [21, 65],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 65}
@@ -4000,32 +3610,28 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
       body: {
         type: "Identifier",
         name: "x",
-        range: [66, 67],
         loc: {
           start: {line: 1, column: 66},
           end: {line: 1, column: 67}
         }
       },
       generator: false,
-      range: [0, 68],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 68}
       }
     },
-    range: [0, 68],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 68}
     }
   }],
-  range: [0, 68],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 68}
   }
 }, {
-  ecmaVersion: 6,
+  ecmaVersion: 7,
   ranges: true,
   locations: true
 });
@@ -4042,7 +3648,6 @@ test("x = { y, z }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -4056,7 +3661,6 @@ test("x = { y, z }", {
             key: {
               type: "Identifier",
               name: "y",
-              range: [6, 7],
               loc: {
                 start: {line: 1, column: 6},
                 end: {line: 1, column: 7}
@@ -4065,7 +3669,6 @@ test("x = { y, z }", {
             value: {
               type: "Identifier",
               name: "y",
-              range: [6, 7],
               loc: {
                 start: {line: 1, column: 6},
                 end: {line: 1, column: 7}
@@ -4075,7 +3678,6 @@ test("x = { y, z }", {
             method: false,
             shorthand: true,
             computed: false,
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -4086,7 +3688,6 @@ test("x = { y, z }", {
             key: {
               type: "Identifier",
               name: "z",
-              range: [9, 10],
               loc: {
                 start: {line: 1, column: 9},
                 end: {line: 1, column: 10}
@@ -4095,7 +3696,6 @@ test("x = { y, z }", {
             value: {
               type: "Identifier",
               name: "z",
-              range: [9, 10],
               loc: {
                 start: {line: 1, column: 9},
                 end: {line: 1, column: 10}
@@ -4105,32 +3705,27 @@ test("x = { y, z }", {
             method: false,
             shorthand: true,
             computed: false,
-            range: [9, 10],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 10}
             }
           }
         ],
-        range: [4, 12],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 12}
         }
       },
-      range: [0, 12],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -4156,7 +3751,6 @@ test("[a, b] = [b, a]", {
           {
             type: "Identifier",
             name: "a",
-            range: [1, 2],
             loc: {
               start: {line: 1, column: 1},
               end: {line: 1, column: 2}
@@ -4165,14 +3759,12 @@ test("[a, b] = [b, a]", {
           {
             type: "Identifier",
             name: "b",
-            range: [4, 5],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 5}
             }
           }
         ],
-        range: [0, 6],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 6}
@@ -4184,7 +3776,6 @@ test("[a, b] = [b, a]", {
           {
             type: "Identifier",
             name: "b",
-            range: [10, 11],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 11}
@@ -4193,32 +3784,27 @@ test("[a, b] = [b, a]", {
           {
             type: "Identifier",
             name: "a",
-            range: [13, 14],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 14}
             }
           }
         ],
-        range: [9, 15],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 15}
         }
       },
-      range: [0, 15],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 15}
       }
     },
-    range: [0, 15],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 15}
     }
   }],
-  range: [0, 15],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
@@ -4243,7 +3829,6 @@ test("({ responseText: text }) = res", {
           key: {
             type: "Identifier",
             name: "responseText",
-            range: [3, 15],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 15}
@@ -4252,7 +3837,6 @@ test("({ responseText: text }) = res", {
           value: {
             type: "Identifier",
             name: "text",
-            range: [17, 21],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 21}
@@ -4262,13 +3846,11 @@ test("({ responseText: text }) = res", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [3, 21],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 21}
           }
         }],
-        range: [1, 23],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 23}
@@ -4277,25 +3859,21 @@ test("({ responseText: text }) = res", {
       right: {
         type: "Identifier",
         name: "res",
-        range: [27, 30],
         loc: {
           start: {line: 1, column: 27},
           end: {line: 1, column: 30}
         }
       },
-      range: [0, 30],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 30}
       }
     },
-    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 30}
     }
   }],
-  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
@@ -4319,7 +3897,6 @@ test("const {a} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -4328,7 +3905,6 @@ test("const {a} = {}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -4338,13 +3914,11 @@ test("const {a} = {}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [7, 8],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 8}
           }
         }],
-        range: [6, 9],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 9}
@@ -4353,26 +3927,22 @@ test("const {a} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [12, 14],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 14}
         }
       },
-      range: [6, 14],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 14}
       }
     }],
     kind: "const",
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -4394,13 +3964,11 @@ test("const [a] = []", {
         elements: [{
           type: "Identifier",
           name: "a",
-          range: [7, 8],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 8}
           }
         }],
-        range: [6, 9],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 9}
@@ -4409,26 +3977,22 @@ test("const [a] = []", {
       init: {
         type: "ArrayExpression",
         elements: [],
-        range: [12, 14],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 14}
         }
       },
-      range: [6, 14],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 14}
       }
     }],
     kind: "const",
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -4452,7 +4016,6 @@ test("let {a} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4461,7 +4024,6 @@ test("let {a} = {}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4471,13 +4033,11 @@ test("let {a} = {}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
           }
         }],
-        range: [4, 7],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 7}
@@ -4486,26 +4046,22 @@ test("let {a} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [10, 12],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
         }
       },
-      range: [4, 12],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 12}
       }
     }],
     kind: "let",
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -4527,13 +4083,11 @@ test("let [a] = []", {
         elements: [{
           type: "Identifier",
           name: "a",
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
           }
         }],
-        range: [4, 7],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 7}
@@ -4542,26 +4096,22 @@ test("let [a] = []", {
       init: {
         type: "ArrayExpression",
         elements: [],
-        range: [10, 12],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
         }
       },
-      range: [4, 12],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 12}
       }
     }],
     kind: "let",
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -4585,7 +4135,6 @@ test("var {a} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4594,7 +4143,6 @@ test("var {a} = {}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4604,13 +4152,11 @@ test("var {a} = {}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
           }
         }],
-        range: [4, 7],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 7}
@@ -4619,26 +4165,22 @@ test("var {a} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [10, 12],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
         }
       },
-      range: [4, 12],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 12}
       }
     }],
     kind: "var",
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -4660,13 +4202,11 @@ test("var [a] = []", {
         elements: [{
           type: "Identifier",
           name: "a",
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
           }
         }],
-        range: [4, 7],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 7}
@@ -4675,26 +4215,22 @@ test("var [a] = []", {
       init: {
         type: "ArrayExpression",
         elements: [],
-        range: [10, 12],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
         }
       },
-      range: [4, 12],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 12}
       }
     }],
     kind: "var",
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -4718,7 +4254,6 @@ test("const {a:b} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -4727,7 +4262,6 @@ test("const {a:b} = {}", {
           value: {
             type: "Identifier",
             name: "b",
-            range: [9, 10],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 10}
@@ -4737,13 +4271,11 @@ test("const {a:b} = {}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [7, 10],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 10}
           }
         }],
-        range: [6, 11],
         loc: {
           start: {line: 1, column: 6},
           end: {line: 1, column: 11}
@@ -4752,26 +4284,22 @@ test("const {a:b} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [14, 16],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 16}
         }
       },
-      range: [6, 16],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 16}
       }
     }],
     kind: "const",
-    range: [0, 16],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 16}
     }
   }],
-  range: [0, 16],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
@@ -4795,7 +4323,6 @@ test("let {a:b} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4804,7 +4331,6 @@ test("let {a:b} = {}", {
           value: {
             type: "Identifier",
             name: "b",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -4814,13 +4340,11 @@ test("let {a:b} = {}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [5, 8],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 8}
           }
         }],
-        range: [4, 9],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 9}
@@ -4829,26 +4353,22 @@ test("let {a:b} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [12, 14],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 14}
         }
       },
-      range: [4, 14],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 14}
       }
     }],
     kind: "let",
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -4872,7 +4392,6 @@ test("var {a:b} = {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -4881,7 +4400,6 @@ test("var {a:b} = {}", {
           value: {
             type: "Identifier",
             name: "b",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -4891,13 +4409,11 @@ test("var {a:b} = {}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [5, 8],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 8}
           }
         }],
-        range: [4, 9],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 9}
@@ -4906,26 +4422,22 @@ test("var {a:b} = {}", {
       init: {
         type: "ObjectExpression",
         properties: [],
-        range: [12, 14],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 14}
         }
       },
-      range: [4, 14],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 14}
       }
     }],
     kind: "var",
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -4949,21 +4461,18 @@ test("export var document", {
         id: {
           type: "Identifier",
           name: "document",
-          range: [11, 19],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 19}
           }
         },
         init: null,
-        range: [11, 19],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 19}
         }
       }],
       kind: "var",
-      range: [7, 19],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 19}
@@ -4972,13 +4481,11 @@ test("export var document", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -5000,7 +4507,6 @@ test("export var document = { }", {
         id: {
           type: "Identifier",
           name: "document",
-          range: [11, 19],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 19}
@@ -5009,20 +4515,17 @@ test("export var document = { }", {
         init: {
           type: "ObjectExpression",
           properties: [],
-          range: [22, 25],
           loc: {
             start: {line: 1, column: 22},
             end: {line: 1, column: 25}
           }
         },
-        range: [11, 25],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 25}
         }
       }],
       kind: "var",
-      range: [7, 25],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 25}
@@ -5031,13 +4534,11 @@ test("export var document = { }", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 25],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 25}
     }
   }],
-  range: [0, 25],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
@@ -5059,21 +4560,18 @@ test("export let document", {
         id: {
           type: "Identifier",
           name: "document",
-          range: [11, 19],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 19}
           }
         },
         init: null,
-        range: [11, 19],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 19}
         }
       }],
       kind: "let",
-      range: [7, 19],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 19}
@@ -5082,13 +4580,11 @@ test("export let document", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -5110,7 +4606,6 @@ test("export let document = { }", {
         id: {
           type: "Identifier",
           name: "document",
-          range: [11, 19],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 19}
@@ -5119,20 +4614,17 @@ test("export let document = { }", {
         init: {
           type: "ObjectExpression",
           properties: [],
-          range: [22, 25],
           loc: {
             start: {line: 1, column: 22},
             end: {line: 1, column: 25}
           }
         },
-        range: [11, 25],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 25}
         }
       }],
       kind: "let",
-      range: [7, 25],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 25}
@@ -5141,13 +4633,11 @@ test("export let document = { }", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 25],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 25}
     }
   }],
-  range: [0, 25],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
@@ -5169,7 +4659,6 @@ test("export const document = { }", {
         id: {
           type: "Identifier",
           name: "document",
-          range: [13, 21],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 21}
@@ -5178,20 +4667,17 @@ test("export const document = { }", {
         init: {
           type: "ObjectExpression",
           properties: [],
-          range: [24, 27],
           loc: {
             start: {line: 1, column: 24},
             end: {line: 1, column: 27}
           }
         },
-        range: [13, 27],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 27}
         }
       }],
       kind: "const",
-      range: [7, 27],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 27}
@@ -5200,13 +4686,11 @@ test("export const document = { }", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -5226,7 +4710,6 @@ test("export function parse() { }", {
       id: {
         type: "Identifier",
         name: "parse",
-        range: [16, 21],
         loc: {
           start: {line: 1, column: 16},
           end: {line: 1, column: 21}
@@ -5237,7 +4720,6 @@ test("export function parse() { }", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [24, 27],
         loc: {
           start: {line: 1, column: 24},
           end: {line: 1, column: 27}
@@ -5246,7 +4728,6 @@ test("export function parse() { }", {
       rest: null,
       generator: false,
       expression: false,
-      range: [7, 27],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 27}
@@ -5255,13 +4736,11 @@ test("export function parse() { }", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -5281,7 +4760,6 @@ test("export class Class {}", {
       id: {
         type: "Identifier",
         name: "Class",
-        range: [13, 18],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 18}
@@ -5291,13 +4769,11 @@ test("export class Class {}", {
       body: {
         type: "ClassBody",
         body: [],
-        range: [19, 21],
         loc: {
           start: {line: 1, column: 19},
           end: {line: 1, column: 21}
         }
       },
-      range: [7, 21],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 21}
@@ -5306,13 +4782,11 @@ test("export class Class {}", {
     default: false,
     specifiers: null,
     source: null,
-    range: [0, 21],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 21}
     }
   }],
-  range: [0, 21],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 21}
@@ -5331,7 +4805,6 @@ test("export default 42", {
       type: "Literal",
       value: 42,
       raw: "42",
-      range: [15, 17],
       loc: {
         start: {line: 1, column: 15},
         end: {line: 1, column: 17}
@@ -5340,13 +4813,11 @@ test("export default 42", {
     default: true,
     specifiers: null,
     source: null,
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -5366,7 +4837,6 @@ test("export * from \"crypto\"", {
     declaration: null,
     specifiers: [{
       type: "ExportBatchSpecifier",
-      range: [7, 8],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
@@ -5376,19 +4846,16 @@ test("export * from \"crypto\"", {
       type: "Literal",
       value: "crypto",
       raw: "\"crypto\"",
-      range: [14, 22],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -5409,27 +4876,23 @@ test("export { encrypt }", {
       id: {
         type: "Identifier",
         name: "encrypt",
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
         }
       },
       name: null,
-      range: [9, 16],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 16}
       }
     }],
     source: null,
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -5451,14 +4914,12 @@ test("export { encrypt, decrypt }", {
         id: {
           type: "Identifier",
           name: "encrypt",
-          range: [9, 16],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 16}
           }
         },
         name: null,
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5469,14 +4930,12 @@ test("export { encrypt, decrypt }", {
         id: {
           type: "Identifier",
           name: "decrypt",
-          range: [18, 25],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 25}
           }
         },
         name: null,
-        range: [18, 25],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 25}
@@ -5484,13 +4943,11 @@ test("export { encrypt, decrypt }", {
       }
     ],
     source: null,
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -5511,7 +4968,6 @@ test("export { encrypt as default }", {
       id: {
         type: "Identifier",
         name: "encrypt",
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5520,26 +4976,22 @@ test("export { encrypt as default }", {
       name: {
         type: "Identifier",
         name: "default",
-        range: [20, 27],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 27}
         }
       },
-      range: [9, 27],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 27}
       }
     }],
     source: null,
-    range: [0, 29],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 29}
     }
   }],
-  range: [0, 29],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
@@ -5561,14 +5013,12 @@ test("export { encrypt, decrypt as dec }", {
         id: {
           type: "Identifier",
           name: "encrypt",
-          range: [9, 16],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 16}
           }
         },
         name: null,
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5579,7 +5029,6 @@ test("export { encrypt, decrypt as dec }", {
         id: {
           type: "Identifier",
           name: "decrypt",
-          range: [18, 25],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 25}
@@ -5588,13 +5037,11 @@ test("export { encrypt, decrypt as dec }", {
         name: {
           type: "Identifier",
           name: "dec",
-          range: [29, 32],
           loc: {
             start: {line: 1, column: 29},
             end: {line: 1, column: 32}
           }
         },
-        range: [18, 32],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 32}
@@ -5602,16 +5049,67 @@ test("export { encrypt, decrypt as dec }", {
       }
     ],
     source: null,
-    range: [0, 34],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 34}
     }
   }],
-  range: [0, 34],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("export { default } from \"other\"", {
+  type: "Program",
+  body: [{
+    type: "ExportDeclaration",
+    declaration: null,
+    specifiers: [
+      {
+        type: "ExportSpecifier",
+        id: {
+          type: "Identifier",
+          name: "default",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
+        name: null,
+        loc: {
+          start: {line: 1, column: 9},
+          end: {line: 1, column: 16}
+        }
+      }
+    ],
+    source: {
+      type: "Literal",
+      loc: {
+        start: {
+          line: 1,
+          column: 24
+        },
+        end: {
+          line: 1,
+          column: 31
+        }
+      },
+      value: "other",
+      raw: "\"other\""
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 31}
+    }
+  }],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 31}
   }
 }, {
   ecmaVersion: 6,
@@ -5628,19 +5126,16 @@ test("import \"jquery\"", {
       type: "Literal",
       value: "jquery",
       raw: "\"jquery\"",
-      range: [7, 15],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 15}
       }
     },
-    range: [0, 15],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 15}
     }
   }],
-  range: [0, 15],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
@@ -5660,37 +5155,31 @@ test("import $ from \"jquery\"", {
       id: {
         type: "Identifier",
         name: "$",
-        range: [7, 8],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 8}
         }
       },
       name: null,
-      range: [7, 8],
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
       }
     }],
-    kind: "default",
     source: {
       type: "Literal",
       value: "jquery",
       raw: "\"jquery\"",
-      range: [14, 22],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -5711,14 +5200,12 @@ test("import { encrypt, decrypt } from \"crypto\"", {
         id: {
           type: "Identifier",
           name: "encrypt",
-          range: [9, 16],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 16}
           }
         },
         name: null,
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5729,38 +5216,32 @@ test("import { encrypt, decrypt } from \"crypto\"", {
         id: {
           type: "Identifier",
           name: "decrypt",
-          range: [18, 25],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 25}
           }
         },
         name: null,
-        range: [18, 25],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 25}
         }
       }
     ],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
       raw: "\"crypto\"",
-      range: [33, 41],
       loc: {
         start: {line: 1, column: 33},
         end: {line: 1, column: 41}
       }
     },
-    range: [0, 41],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 41}
     }
   }],
-  range: [0, 41],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 41}
@@ -5780,7 +5261,6 @@ test("import { encrypt as enc } from \"crypto\"", {
       id: {
         type: "Identifier",
         name: "encrypt",
-        range: [9, 16],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5789,36 +5269,30 @@ test("import { encrypt as enc } from \"crypto\"", {
       name: {
         type: "Identifier",
         name: "enc",
-        range: [20, 23],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 23}
         }
       },
-      range: [9, 23],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 23}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "crypto",
       raw: "\"crypto\"",
-      range: [31, 39],
       loc: {
         start: {line: 1, column: 31},
         end: {line: 1, column: 39}
       }
     },
-    range: [0, 39],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 39}
     }
   }],
-  range: [0, 39],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 39}
@@ -5831,41 +5305,29 @@ test("import { encrypt as enc } from \"crypto\"", {
 
 test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
   type: "Program",
-  start: 0,
-  end: 56,
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 56}
   },
-  range: [0, 56],
   body: [{
     type: "ImportDeclaration",
-    start: 0,
-    end: 56,
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 56}
     },
-    range: [0, 56],
     specifiers: [
       {
         type: "ImportSpecifier",
-        start: 7,
-        end: 13,
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 13}
         },
-        range: [7, 13],
         id: {
           type: "Identifier",
-          start: 7,
-          end: 13,
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 13}
           },
-          range: [7, 13],
           name: "crypto"
         },
         name: null,
@@ -5873,22 +5335,16 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
       },
       {
         type: "ImportSpecifier",
-        start: 17,
-        end: 24,
         loc: {
           start: {line: 1, column: 17},
           end: {line: 1, column: 24}
         },
-        range: [17, 24],
         id: {
           type: "Identifier",
-          start: 17,
-          end: 24,
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 24}
           },
-          range: [17, 24],
           name: "decrypt"
         },
         name: null,
@@ -5896,33 +5352,24 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
       },
       {
         type: "ImportSpecifier",
-        start: 26,
-        end: 40,
         loc: {
           start: {line: 1, column: 26},
           end: {line: 1, column: 40}
         },
-        range: [26, 40],
         id: {
           type: "Identifier",
-          start: 26,
-          end: 33,
           loc: {
             start: {line: 1, column: 26},
             end: {line: 1, column: 33}
           },
-          range: [26, 33],
           name: "encrypt"
         },
         name: {
           type: "Identifier",
-          start: 37,
-          end: 40,
           loc: {
             start: {line: 1, column: 37},
             end: {line: 1, column: 40}
           },
-          range: [37, 40],
           name: "enc"
         },
         default: false
@@ -5930,17 +5377,13 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
     ],
     source: {
       type: "Literal",
-      start: 48,
-      end: 56,
       loc: {
         start: {line: 1, column: 48},
         end: {line: 1, column: 56}
       },
-      range: [48, 56],
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "default"
+    }
   }]
 }, {
   ecmaVersion: 6,
@@ -5959,7 +5402,6 @@ test("import { null as nil } from \"bar\"", {
       id: {
         type: "Identifier",
         name: "null",
-        range: [9, 13],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 13}
@@ -5968,36 +5410,30 @@ test("import { null as nil } from \"bar\"", {
       name: {
         type: "Identifier",
         name: "nil",
-        range: [17, 20],
         loc: {
           start: {line: 1, column: 17},
           end: {line: 1, column: 20}
         }
       },
-      range: [9, 20],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 20}
       }
     }],
-    kind: "named",
     source: {
       type: "Literal",
       value: "bar",
       raw: "\"bar\"",
-      range: [28, 33],
       loc: {
         start: {line: 1, column: 28},
         end: {line: 1, column: 33}
       }
     },
-    range: [0, 33],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 33}
     }
   }],
-  range: [0, 33],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
@@ -6010,56 +5446,40 @@ test("import { null as nil } from \"bar\"", {
 
 test("import * as crypto from \"crypto\"", {
   type: "Program",
-  start: 0,
-  end: 32,
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 32}
   },
-  range: [0, 32],
   body: [{
     type: "ImportDeclaration",
-    start: 0,
-    end: 32,
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 32}
     },
-    range: [0, 32],
     specifiers: [{
       type: "ImportBatchSpecifier",
-      start: 7,
-      end: 18,
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 18}
       },
-      range: [7, 18],
       name: {
         type: "Identifier",
-        start: 12,
-        end: 18,
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 18}
         },
-        range: [12, 18],
         name: "crypto"
       }
     }],
     source: {
       type: "Literal",
-      start: 24,
-      end: 32,
       loc: {
         start: {line: 1, column: 24},
         end: {line: 1, column: 32}
       },
-      range: [24, 32],
       value: "crypto",
       raw: "\"crypto\""
-    },
-    kind: "named"
+    }
   }]
 }, {
   ecmaVersion: 6,
@@ -6087,26 +5507,22 @@ test("(function* () { yield v })", {
             argument: {
               type: "Identifier",
               name: "v",
-              range: [22, 23],
               loc: {
                 start: {line: 1, column: 22},
                 end: {line: 1, column: 23}
               }
             },
             delegate: false,
-            range: [16, 23],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 23}
             }
           },
-          range: [16, 23],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 23}
           }
         }],
-        range: [14, 25],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 25}
@@ -6115,19 +5531,16 @@ test("(function* () { yield v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 25],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 25}
       }
     },
-    range: [0, 26],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 26}
     }
   }],
-  range: [0, 26],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
@@ -6156,13 +5569,11 @@ test("(function* () { yield\nv })", {
               type: "YieldExpression",
               argument: null,
               delegate: false,
-              range: [16, 21],
               loc: {
                 start: {line: 1, column: 16},
                 end: {line: 1, column: 21}
               }
             },
-            range: [16, 21],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 21}
@@ -6173,20 +5584,17 @@ test("(function* () { yield\nv })", {
             expression: {
               type: "Identifier",
               name: "v",
-              range: [22, 23],
               loc: {
                 start: {line: 2, column: 0},
                 end: {line: 2, column: 1}
               }
             },
-            range: [22, 23],
             loc: {
               start: {line: 2, column: 0},
               end: {line: 2, column: 1}
             }
           }
         ],
-        range: [14, 25],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 2, column: 3}
@@ -6195,19 +5603,16 @@ test("(function* () { yield\nv })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 25],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 2, column: 3}
       }
     },
-    range: [0, 26],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 2, column: 4}
     }
   }],
-  range: [0, 26],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 2, column: 4}
@@ -6236,26 +5641,22 @@ test("(function* () { yield *v })", {
             argument: {
               type: "Identifier",
               name: "v",
-              range: [23, 24],
               loc: {
                 start: {line: 1, column: 23},
                 end: {line: 1, column: 24}
               }
             },
             delegate: true,
-            range: [16, 24],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 24}
             }
           },
-          range: [16, 24],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 24}
           }
         }],
-        range: [14, 26],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 26}
@@ -6264,19 +5665,16 @@ test("(function* () { yield *v })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 26],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 26}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -6294,7 +5692,6 @@ test("function* test () { yield *v }", {
     id: {
       type: "Identifier",
       name: "test",
-      range: [10, 14],
       loc: {
         start: {line: 1, column: 10},
         end: {line: 1, column: 14}
@@ -6311,26 +5708,22 @@ test("function* test () { yield *v }", {
           argument: {
             type: "Identifier",
             name: "v",
-            range: [27, 28],
             loc: {
               start: {line: 1, column: 27},
               end: {line: 1, column: 28}
             }
           },
           delegate: true,
-          range: [20, 28],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 28}
           }
         },
-        range: [20, 28],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 28}
         }
       }],
-      range: [18, 30],
       loc: {
         start: {line: 1, column: 18},
         end: {line: 1, column: 30}
@@ -6339,13 +5732,11 @@ test("function* test () { yield *v }", {
     rest: null,
     generator: true,
     expression: false,
-    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 30}
     }
   }],
-  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
@@ -6365,7 +5756,6 @@ test("var x = { *test () { yield *v } };", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [4, 5],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 5}
@@ -6378,7 +5768,6 @@ test("var x = { *test () { yield *v } };", {
           key: {
             type: "Identifier",
             name: "test",
-            range: [11, 15],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 15}
@@ -6398,26 +5787,22 @@ test("var x = { *test () { yield *v } };", {
                   argument: {
                     type: "Identifier",
                     name: "v",
-                    range: [28, 29],
                     loc: {
                       start: {line: 1, column: 28},
                       end: {line: 1, column: 29}
                     }
                   },
                   delegate: true,
-                  range: [21, 29],
                   loc: {
                     start: {line: 1, column: 21},
                     end: {line: 1, column: 29}
                   }
                 },
-                range: [21, 29],
                 loc: {
                   start: {line: 1, column: 21},
                   end: {line: 1, column: 29}
                 }
               }],
-              range: [19, 31],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 31}
@@ -6426,7 +5811,6 @@ test("var x = { *test () { yield *v } };", {
             rest: null,
             generator: true,
             expression: false,
-            range: [16, 31],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 31}
@@ -6436,32 +5820,27 @@ test("var x = { *test () { yield *v } };", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [10, 31],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 31}
           }
         }],
-        range: [8, 33],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 33}
         }
       },
-      range: [4, 33],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 33}
       }
     }],
     kind: "var",
-    range: [0, 34],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 34}
     }
   }],
-  range: [0, 34],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
@@ -6479,7 +5858,6 @@ test("function* t() {}", {
     id: {
       type: "Identifier",
       name: "t",
-      range: [10, 11],
       loc: {
         start: {line: 1, column: 10},
         end: {line: 1, column: 11}
@@ -6490,7 +5868,6 @@ test("function* t() {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [14, 16],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 16}
@@ -6499,13 +5876,11 @@ test("function* t() {}", {
     rest: null,
     generator: true,
     expression: false,
-    range: [0, 16],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 16}
     }
   }],
-  range: [0, 16],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 16}
@@ -6537,33 +5912,28 @@ test("(function* () { yield yield 10 })", {
                 type: "Literal",
                 value: 10,
                 raw: "10",
-                range: [28, 30],
                 loc: {
                   start: {line: 1, column: 28},
                   end: {line: 1, column: 30}
                 }
               },
               delegate: false,
-              range: [22, 30],
               loc: {
                 start: {line: 1, column: 22},
                 end: {line: 1, column: 30}
               }
             },
             delegate: false,
-            range: [16, 30],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 30}
             }
           },
-          range: [16, 30],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 30}
           }
         }],
-        range: [14, 32],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 32}
@@ -6572,19 +5942,16 @@ test("(function* () { yield yield 10 })", {
       rest: null,
       generator: true,
       expression: false,
-      range: [1, 32],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 32}
       }
     },
-    range: [0, 33],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 33}
     }
   }],
-  range: [0, 33],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
@@ -6604,7 +5971,6 @@ test("for(x of list) process(x);", {
     left: {
       type: "Identifier",
       name: "x",
-      range: [4, 5],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 5}
@@ -6613,7 +5979,6 @@ test("for(x of list) process(x);", {
     right: {
       type: "Identifier",
       name: "list",
-      range: [9, 13],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 13}
@@ -6626,7 +5991,6 @@ test("for(x of list) process(x);", {
         callee: {
           type: "Identifier",
           name: "process",
-          range: [15, 22],
           loc: {
             start: {line: 1, column: 15},
             end: {line: 1, column: 22}
@@ -6635,31 +5999,26 @@ test("for(x of list) process(x);", {
         arguments: [{
           type: "Identifier",
           name: "x",
-          range: [23, 24],
           loc: {
             start: {line: 1, column: 23},
             end: {line: 1, column: 24}
           }
         }],
-        range: [15, 25],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 25}
         }
       },
-      range: [15, 26],
       loc: {
         start: {line: 1, column: 15},
         end: {line: 1, column: 26}
       }
     },
-    range: [0, 26],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 26}
     }
   }],
-  range: [0, 26],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
@@ -6681,21 +6040,18 @@ test("for (var x of list) process(x);", {
         id: {
           type: "Identifier",
           name: "x",
-          range: [9, 10],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 10}
           }
         },
         init: null,
-        range: [9, 10],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 10}
         }
       }],
       kind: "var",
-      range: [5, 10],
       loc: {
         start: {line: 1, column: 5},
         end: {line: 1, column: 10}
@@ -6704,7 +6060,6 @@ test("for (var x of list) process(x);", {
     right: {
       type: "Identifier",
       name: "list",
-      range: [14, 18],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 18}
@@ -6717,7 +6072,6 @@ test("for (var x of list) process(x);", {
         callee: {
           type: "Identifier",
           name: "process",
-          range: [20, 27],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 27}
@@ -6726,31 +6080,26 @@ test("for (var x of list) process(x);", {
         arguments: [{
           type: "Identifier",
           name: "x",
-          range: [28, 29],
           loc: {
             start: {line: 1, column: 28},
             end: {line: 1, column: 29}
           }
         }],
-        range: [20, 30],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 30}
         }
       },
-      range: [20, 31],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 31}
       }
     },
-    range: [0, 31],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 31}
     }
   }],
-  range: [0, 31],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
@@ -6772,7 +6121,6 @@ test("for (var x = 42 of list) process(x);", {
         id: {
           type: "Identifier",
           name: "x",
-          range: [9, 10],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 10}
@@ -6782,20 +6130,17 @@ test("for (var x = 42 of list) process(x);", {
           type: "Literal",
           value: 42,
           raw: "42",
-          range: [13, 15],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 15}
           }
         },
-        range: [9, 15],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 15}
         }
       }],
       kind: "var",
-      range: [5, 15],
       loc: {
         start: {line: 1, column: 5},
         end: {line: 1, column: 15}
@@ -6804,7 +6149,6 @@ test("for (var x = 42 of list) process(x);", {
     right: {
       type: "Identifier",
       name: "list",
-      range: [19, 23],
       loc: {
         start: {line: 1, column: 19},
         end: {line: 1, column: 23}
@@ -6817,7 +6161,6 @@ test("for (var x = 42 of list) process(x);", {
         callee: {
           type: "Identifier",
           name: "process",
-          range: [25, 32],
           loc: {
             start: {line: 1, column: 25},
             end: {line: 1, column: 32}
@@ -6826,31 +6169,26 @@ test("for (var x = 42 of list) process(x);", {
         arguments: [{
           type: "Identifier",
           name: "x",
-          range: [33, 34],
           loc: {
             start: {line: 1, column: 33},
             end: {line: 1, column: 34}
           }
         }],
-        range: [25, 35],
         loc: {
           start: {line: 1, column: 25},
           end: {line: 1, column: 35}
         }
       },
-      range: [25, 36],
       loc: {
         start: {line: 1, column: 25},
         end: {line: 1, column: 36}
       }
     },
-    range: [0, 36],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 36}
     }
   }],
-  range: [0, 36],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 36}
@@ -6872,21 +6210,18 @@ test("for (let x of list) process(x);", {
         id: {
           type: "Identifier",
           name: "x",
-          range: [9, 10],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 10}
           }
         },
         init: null,
-        range: [9, 10],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 10}
         }
       }],
       kind: "let",
-      range: [5, 10],
       loc: {
         start: {line: 1, column: 5},
         end: {line: 1, column: 10}
@@ -6895,7 +6230,6 @@ test("for (let x of list) process(x);", {
     right: {
       type: "Identifier",
       name: "list",
-      range: [14, 18],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 18}
@@ -6908,7 +6242,6 @@ test("for (let x of list) process(x);", {
         callee: {
           type: "Identifier",
           name: "process",
-          range: [20, 27],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 27}
@@ -6917,31 +6250,26 @@ test("for (let x of list) process(x);", {
         arguments: [{
           type: "Identifier",
           name: "x",
-          range: [28, 29],
           loc: {
             start: {line: 1, column: 28},
             end: {line: 1, column: 29}
           }
         }],
-        range: [20, 30],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 30}
         }
       },
-      range: [20, 31],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 31}
       }
     },
-    range: [0, 31],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 31}
     }
   }],
-  range: [0, 31],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
@@ -6963,7 +6291,6 @@ test("var A = class extends B {}", {
       id: {
         type: "Identifier",
         name: "A",
-        range: [4, 5],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 5}
@@ -6974,7 +6301,6 @@ test("var A = class extends B {}", {
         superClass: {
           type: "Identifier",
           name: "B",
-          range: [22, 23],
           loc: {
             start: {line: 1, column: 22},
             end: {line: 1, column: 23}
@@ -6983,32 +6309,27 @@ test("var A = class extends B {}", {
         body: {
           type: "ClassBody",
           body: [],
-          range: [24, 26],
           loc: {
             start: {line: 1, column: 24},
             end: {line: 1, column: 26}
           }
         },
-        range: [8, 26],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 26}
         }
       },
-      range: [4, 26],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 26}
       }
     }],
     kind: "var",
-    range: [0, 26],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 26}
     }
   }],
-  range: [0, 26],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
@@ -7026,7 +6347,6 @@ test("class A extends class B extends C {} {}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7037,7 +6357,6 @@ test("class A extends class B extends C {} {}", {
       id: {
         type: "Identifier",
         name: "B",
-        range: [22, 23],
         loc: {
           start: {line: 1, column: 22},
           end: {line: 1, column: 23}
@@ -7046,7 +6365,6 @@ test("class A extends class B extends C {} {}", {
       superClass: {
         type: "Identifier",
         name: "C",
-        range: [32, 33],
         loc: {
           start: {line: 1, column: 32},
           end: {line: 1, column: 33}
@@ -7055,13 +6373,11 @@ test("class A extends class B extends C {} {}", {
       body: {
         type: "ClassBody",
         body: [],
-        range: [34, 36],
         loc: {
           start: {line: 1, column: 34},
           end: {line: 1, column: 36}
         }
       },
-      range: [16, 36],
       loc: {
         start: {line: 1, column: 16},
         end: {line: 1, column: 36}
@@ -7070,19 +6386,16 @@ test("class A extends class B extends C {} {}", {
     body: {
       type: "ClassBody",
       body: [],
-      range: [37, 39],
       loc: {
         start: {line: 1, column: 37},
         end: {line: 1, column: 39}
       }
     },
-    range: [0, 39],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 39}
     }
   }],
-  range: [0, 39],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 39}
@@ -7100,7 +6413,6 @@ test("class A {get() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7115,7 +6427,6 @@ test("class A {get() {}}", {
         key: {
           type: "Identifier",
           name: "get",
-          range: [9, 12],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 12}
@@ -7129,7 +6440,6 @@ test("class A {get() {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [15, 17],
             loc: {
               start: {line: 1, column: 15},
               end: {line: 1, column: 17}
@@ -7138,7 +6448,6 @@ test("class A {get() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [12, 17],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 17}
@@ -7146,25 +6455,21 @@ test("class A {get() {}}", {
         },
         kind: "",
         static: false,
-        range: [9, 17],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 17}
         }
       }],
-      range: [8, 18],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -7182,7 +6487,6 @@ test("class A { static get() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7197,7 +6501,6 @@ test("class A { static get() {}}", {
         key: {
           type: "Identifier",
           name: "get",
-          range: [17, 20],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 20}
@@ -7211,7 +6514,6 @@ test("class A { static get() {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [23, 25],
             loc: {
               start: {line: 1, column: 23},
               end: {line: 1, column: 25}
@@ -7220,7 +6522,6 @@ test("class A { static get() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [20, 25],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 25}
@@ -7228,25 +6529,21 @@ test("class A { static get() {}}", {
         },
         kind: "",
         static: true,
-        range: [10, 25],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 25}
         }
       }],
-      range: [8, 26],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 26}
       }
     },
-    range: [0, 26],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 26}
     }
   }],
-  range: [0, 26],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
@@ -7264,7 +6561,6 @@ test("class A extends B {get foo() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7273,7 +6569,6 @@ test("class A extends B {get foo() {}}", {
     superClass: {
       type: "Identifier",
       name: "B",
-      range: [16, 17],
       loc: {
         start: {line: 1, column: 16},
         end: {line: 1, column: 17}
@@ -7287,7 +6582,6 @@ test("class A extends B {get foo() {}}", {
         key: {
           type: "Identifier",
           name: "foo",
-          range: [23, 26],
           loc: {
             start: {line: 1, column: 23},
             end: {line: 1, column: 26}
@@ -7301,7 +6595,6 @@ test("class A extends B {get foo() {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [29, 31],
             loc: {
               start: {line: 1, column: 29},
               end: {line: 1, column: 31}
@@ -7310,7 +6603,6 @@ test("class A extends B {get foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [26, 31],
           loc: {
             start: {line: 1, column: 26},
             end: {line: 1, column: 31}
@@ -7318,25 +6610,21 @@ test("class A extends B {get foo() {}}", {
         },
         kind: "get",
         static: false,
-        range: [19, 31],
         loc: {
           start: {line: 1, column: 19},
           end: {line: 1, column: 31}
         }
       }],
-      range: [18, 32],
       loc: {
         start: {line: 1, column: 18},
         end: {line: 1, column: 32}
       }
     },
-    range: [0, 32],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 32}
     }
   }],
-  range: [0, 32],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 32}
@@ -7354,7 +6642,6 @@ test("class A extends B { static get foo() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7363,7 +6650,6 @@ test("class A extends B { static get foo() {}}", {
     superClass: {
       type: "Identifier",
       name: "B",
-      range: [16, 17],
       loc: {
         start: {line: 1, column: 16},
         end: {line: 1, column: 17}
@@ -7377,7 +6663,6 @@ test("class A extends B { static get foo() {}}", {
         key: {
           type: "Identifier",
           name: "foo",
-          range: [31, 34],
           loc: {
             start: {line: 1, column: 31},
             end: {line: 1, column: 34}
@@ -7391,7 +6676,6 @@ test("class A extends B { static get foo() {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [37, 39],
             loc: {
               start: {line: 1, column: 37},
               end: {line: 1, column: 39}
@@ -7400,7 +6684,6 @@ test("class A extends B { static get foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [34, 39],
           loc: {
             start: {line: 1, column: 34},
             end: {line: 1, column: 39}
@@ -7408,25 +6691,21 @@ test("class A extends B { static get foo() {}}", {
         },
         kind: "get",
         static: true,
-        range: [20, 39],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 39}
         }
       }],
-      range: [18, 40],
       loc: {
         start: {line: 1, column: 18},
         end: {line: 1, column: 40}
       }
     },
-    range: [0, 40],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 40}
     }
   }],
-  range: [0, 40],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 40}
@@ -7444,7 +6723,6 @@ test("class A {set a(v) {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7459,7 +6737,6 @@ test("class A {set a(v) {}}", {
         key: {
           type: "Identifier",
           name: "a",
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -7471,7 +6748,6 @@ test("class A {set a(v) {}}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [15, 16],
             loc: {
               start: {line: 1, column: 15},
               end: {line: 1, column: 16}
@@ -7481,7 +6757,6 @@ test("class A {set a(v) {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [18, 20],
             loc: {
               start: {line: 1, column: 18},
               end: {line: 1, column: 20}
@@ -7490,7 +6765,6 @@ test("class A {set a(v) {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [14, 20],
           loc: {
             start: {line: 1, column: 14},
             end: {line: 1, column: 20}
@@ -7498,25 +6772,21 @@ test("class A {set a(v) {}}", {
         },
         kind: "set",
         static: false,
-        range: [9, 20],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 20}
         }
       }],
-      range: [8, 21],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 21}
       }
     },
-    range: [0, 21],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 21}
     }
   }],
-  range: [0, 21],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 21}
@@ -7534,7 +6804,6 @@ test("class A { static set a(v) {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7549,7 +6818,6 @@ test("class A { static set a(v) {}}", {
         key: {
           type: "Identifier",
           name: "a",
-          range: [21, 22],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 22}
@@ -7561,7 +6829,6 @@ test("class A { static set a(v) {}}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [23, 24],
             loc: {
               start: {line: 1, column: 23},
               end: {line: 1, column: 24}
@@ -7571,7 +6838,6 @@ test("class A { static set a(v) {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [26, 28],
             loc: {
               start: {line: 1, column: 26},
               end: {line: 1, column: 28}
@@ -7580,7 +6846,6 @@ test("class A { static set a(v) {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [22, 28],
           loc: {
             start: {line: 1, column: 22},
             end: {line: 1, column: 28}
@@ -7588,25 +6853,21 @@ test("class A { static set a(v) {}}", {
         },
         kind: "set",
         static: true,
-        range: [10, 28],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 28}
         }
       }],
-      range: [8, 29],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 29}
       }
     },
-    range: [0, 29],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 29}
     }
   }],
-  range: [0, 29],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
@@ -7624,7 +6885,6 @@ test("class A {set(v) {};}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7639,7 +6899,6 @@ test("class A {set(v) {};}", {
         key: {
           type: "Identifier",
           name: "set",
-          range: [9, 12],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 12}
@@ -7651,7 +6910,6 @@ test("class A {set(v) {};}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [13, 14],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 14}
@@ -7661,7 +6919,6 @@ test("class A {set(v) {};}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [16, 18],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 18}
@@ -7670,7 +6927,6 @@ test("class A {set(v) {};}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [12, 18],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 18}
@@ -7678,25 +6934,21 @@ test("class A {set(v) {};}", {
         },
         kind: "",
         static: false,
-        range: [9, 18],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 18}
         }
       }],
-      range: [8, 20],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 20}
       }
     },
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
@@ -7714,7 +6966,6 @@ test("class A { static set(v) {};}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7729,7 +6980,6 @@ test("class A { static set(v) {};}", {
         key: {
           type: "Identifier",
           name: "set",
-          range: [17, 20],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 20}
@@ -7741,7 +6991,6 @@ test("class A { static set(v) {};}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [21, 22],
             loc: {
               start: {line: 1, column: 21},
               end: {line: 1, column: 22}
@@ -7751,7 +7000,6 @@ test("class A { static set(v) {};}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [24, 26],
             loc: {
               start: {line: 1, column: 24},
               end: {line: 1, column: 26}
@@ -7760,7 +7008,6 @@ test("class A { static set(v) {};}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [20, 26],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 26}
@@ -7768,25 +7015,21 @@ test("class A { static set(v) {};}", {
         },
         kind: "",
         static: true,
-        range: [10, 26],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 26}
         }
       }],
-      range: [8, 28],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 28}
       }
     },
-    range: [0, 28],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 28}
     }
   }],
-  range: [0, 28],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
@@ -7804,7 +7047,6 @@ test("class A {*gen(v) { yield v; }}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7819,7 +7061,6 @@ test("class A {*gen(v) { yield v; }}", {
         key: {
           type: "Identifier",
           name: "gen",
-          range: [10, 13],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 13}
@@ -7831,7 +7072,6 @@ test("class A {*gen(v) { yield v; }}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [14, 15],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 15}
@@ -7847,26 +7087,22 @@ test("class A {*gen(v) { yield v; }}", {
                 argument: {
                   type: "Identifier",
                   name: "v",
-                  range: [25, 26],
                   loc: {
                     start: {line: 1, column: 25},
                     end: {line: 1, column: 26}
                   }
                 },
                 delegate: false,
-                range: [19, 26],
                 loc: {
                   start: {line: 1, column: 19},
                   end: {line: 1, column: 26}
                 }
               },
-              range: [19, 27],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 27}
               }
             }],
-            range: [17, 29],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 29}
@@ -7875,7 +7111,6 @@ test("class A {*gen(v) { yield v; }}", {
           rest: null,
           generator: true,
           expression: false,
-          range: [13, 29],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 29}
@@ -7883,25 +7118,21 @@ test("class A {*gen(v) { yield v; }}", {
         },
         kind: "",
         static: false,
-        range: [9, 29],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 29}
         }
       }],
-      range: [8, 30],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 30}
       }
     },
-    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 30}
     }
   }],
-  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
@@ -7919,7 +7150,6 @@ test("class A { static *gen(v) { yield v; }}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -7934,7 +7164,6 @@ test("class A { static *gen(v) { yield v; }}", {
         key: {
           type: "Identifier",
           name: "gen",
-          range: [18, 21],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 21}
@@ -7946,7 +7175,6 @@ test("class A { static *gen(v) { yield v; }}", {
           params: [{
             type: "Identifier",
             name: "v",
-            range: [22, 23],
             loc: {
               start: {line: 1, column: 22},
               end: {line: 1, column: 23}
@@ -7962,26 +7190,22 @@ test("class A { static *gen(v) { yield v; }}", {
                 argument: {
                   type: "Identifier",
                   name: "v",
-                  range: [33, 34],
                   loc: {
                     start: {line: 1, column: 33},
                     end: {line: 1, column: 34}
                   }
                 },
                 delegate: false,
-                range: [27, 34],
                 loc: {
                   start: {line: 1, column: 27},
                   end: {line: 1, column: 34}
                 }
               },
-              range: [27, 35],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 35}
               }
             }],
-            range: [25, 37],
             loc: {
               start: {line: 1, column: 25},
               end: {line: 1, column: 37}
@@ -7990,7 +7214,6 @@ test("class A { static *gen(v) { yield v; }}", {
           rest: null,
           generator: true,
           expression: false,
-          range: [21, 37],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 37}
@@ -7998,25 +7221,21 @@ test("class A { static *gen(v) { yield v; }}", {
         },
         kind: "",
         static: true,
-        range: [10, 37],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 37}
         }
       }],
-      range: [8, 38],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 38}
       }
     },
-    range: [0, 38],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 38}
     }
   }],
-  range: [0, 38],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
@@ -8036,13 +7255,11 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
         type: "Literal",
         value: "use strict",
         raw: "\"use strict\"",
-        range: [0, 12],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 12}
         }
       },
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
@@ -8055,7 +7272,6 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
         id: {
           type: "Identifier",
           name: "A",
-          range: [21, 22],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 22}
@@ -8070,7 +7286,6 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
             key: {
               type: "Identifier",
               name: "constructor",
-              range: [24, 35],
               loc: {
                 start: {line: 1, column: 24},
                 end: {line: 1, column: 35}
@@ -8090,26 +7305,22 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                     callee: {
                       type: "Identifier",
                       name: "super",
-                      range: [40, 45],
                       loc: {
                         start: {line: 1, column: 40},
                         end: {line: 1, column: 45}
                       }
                     },
                     arguments: [],
-                    range: [40, 47],
                     loc: {
                       start: {line: 1, column: 40},
                       end: {line: 1, column: 47}
                     }
                   },
-                  range: [40, 47],
                   loc: {
                     start: {line: 1, column: 40},
                     end: {line: 1, column: 47}
                   }
                 }],
-                range: [38, 49],
                 loc: {
                   start: {line: 1, column: 38},
                   end: {line: 1, column: 49}
@@ -8118,7 +7329,6 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
               rest: null,
               generator: false,
               expression: false,
-              range: [35, 49],
               loc: {
                 start: {line: 1, column: 35},
                 end: {line: 1, column: 49}
@@ -8126,32 +7336,27 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
             },
             kind: "",
             static: false,
-            range: [24, 49],
             loc: {
               start: {line: 1, column: 24},
               end: {line: 1, column: 49}
             }
           }],
-          range: [23, 50],
           loc: {
             start: {line: 1, column: 23},
             end: {line: 1, column: 50}
           }
         },
-        range: [15, 50],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 50}
         }
       },
-      range: [14, 51],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 51}
       }
     }
   ],
-  range: [0, 51],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
@@ -8169,7 +7374,6 @@ test("class A {static foo() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8184,7 +7388,6 @@ test("class A {static foo() {}}", {
         key: {
           type: "Identifier",
           name: "foo",
-          range: [16, 19],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 19}
@@ -8198,7 +7401,6 @@ test("class A {static foo() {}}", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [22, 24],
             loc: {
               start: {line: 1, column: 22},
               end: {line: 1, column: 24}
@@ -8207,7 +7409,6 @@ test("class A {static foo() {}}", {
           rest: null,
           generator: false,
           expression: false,
-          range: [19, 24],
           loc: {
             start: {line: 1, column: 19},
             end: {line: 1, column: 24}
@@ -8215,25 +7416,21 @@ test("class A {static foo() {}}", {
         },
         kind: "",
         static: true,
-        range: [9, 24],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 24}
         }
       }],
-      range: [8, 25],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 25}
       }
     },
-    range: [0, 25],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 25}
     }
   }],
-  range: [0, 25],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
@@ -8251,7 +7448,6 @@ test("class A {foo() {} static bar() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8267,7 +7463,6 @@ test("class A {foo() {} static bar() {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [9, 12],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 12}
@@ -8281,7 +7476,6 @@ test("class A {foo() {} static bar() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [15, 17],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 17}
@@ -8290,7 +7484,6 @@ test("class A {foo() {} static bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [12, 17],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 17}
@@ -8298,7 +7491,6 @@ test("class A {foo() {} static bar() {}}", {
           },
           kind: "",
           static: false,
-          range: [9, 17],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 17}
@@ -8310,7 +7502,6 @@ test("class A {foo() {} static bar() {}}", {
           key: {
             type: "Identifier",
             name: "bar",
-            range: [25, 28],
             loc: {
               start: {line: 1, column: 25},
               end: {line: 1, column: 28}
@@ -8324,7 +7515,6 @@ test("class A {foo() {} static bar() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [31, 33],
               loc: {
                 start: {line: 1, column: 31},
                 end: {line: 1, column: 33}
@@ -8333,7 +7523,6 @@ test("class A {foo() {} static bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [28, 33],
             loc: {
               start: {line: 1, column: 28},
               end: {line: 1, column: 33}
@@ -8341,26 +7530,22 @@ test("class A {foo() {} static bar() {}}", {
           },
           kind: "",
           static: true,
-          range: [18, 33],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 33}
           }
         }
       ],
-      range: [8, 34],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 34}
       }
     },
-    range: [0, 34],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 34}
     }
   }],
-  range: [0, 34],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 34}
@@ -8380,13 +7565,11 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
         type: "Literal",
         value: "use strict",
         raw: "\"use strict\"",
-        range: [0, 12],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 12}
         }
       },
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
@@ -8399,7 +7582,6 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
         id: {
           type: "Identifier",
           name: "A",
-          range: [21, 22],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 22}
@@ -8414,7 +7596,6 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
             key: {
               type: "Identifier",
               name: "constructor",
-              range: [32, 43],
               loc: {
                 start: {line: 1, column: 32},
                 end: {line: 1, column: 43}
@@ -8434,26 +7615,22 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                     callee: {
                       type: "Identifier",
                       name: "super",
-                      range: [48, 53],
                       loc: {
                         start: {line: 1, column: 48},
                         end: {line: 1, column: 53}
                       }
                     },
                     arguments: [],
-                    range: [48, 55],
                     loc: {
                       start: {line: 1, column: 48},
                       end: {line: 1, column: 55}
                     }
                   },
-                  range: [48, 55],
                   loc: {
                     start: {line: 1, column: 48},
                     end: {line: 1, column: 55}
                   }
                 }],
-                range: [46, 57],
                 loc: {
                   start: {line: 1, column: 46},
                   end: {line: 1, column: 57}
@@ -8462,7 +7639,6 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
               rest: null,
               generator: false,
               expression: false,
-              range: [43, 57],
               loc: {
                 start: {line: 1, column: 43},
                 end: {line: 1, column: 57}
@@ -8470,32 +7646,27 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
             },
             kind: "",
             static: true,
-            range: [25, 57],
             loc: {
               start: {line: 1, column: 25},
               end: {line: 1, column: 57}
             }
           }],
-          range: [23, 58],
           loc: {
             start: {line: 1, column: 23},
             end: {line: 1, column: 58}
           }
         },
-        range: [15, 58],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 58}
         }
       },
-      range: [14, 59],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 59}
       }
     }
   ],
-  range: [0, 59],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 59}
@@ -8513,7 +7684,6 @@ test("class A { foo() {} bar() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8529,7 +7699,6 @@ test("class A { foo() {} bar() {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [10, 13],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 13}
@@ -8543,7 +7712,6 @@ test("class A { foo() {} bar() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [16, 18],
               loc: {
                 start: {line: 1, column: 16},
                 end: {line: 1, column: 18}
@@ -8552,7 +7720,6 @@ test("class A { foo() {} bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [13, 18],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 18}
@@ -8560,7 +7727,6 @@ test("class A { foo() {} bar() {}}", {
           },
           kind: "",
           static: false,
-          range: [10, 18],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 18}
@@ -8572,7 +7738,6 @@ test("class A { foo() {} bar() {}}", {
           key: {
             type: "Identifier",
             name: "bar",
-            range: [19, 22],
             loc: {
               start: {line: 1, column: 19},
               end: {line: 1, column: 22}
@@ -8586,7 +7751,6 @@ test("class A { foo() {} bar() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [25, 27],
               loc: {
                 start: {line: 1, column: 25},
                 end: {line: 1, column: 27}
@@ -8595,7 +7759,6 @@ test("class A { foo() {} bar() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [22, 27],
             loc: {
               start: {line: 1, column: 22},
               end: {line: 1, column: 27}
@@ -8603,26 +7766,22 @@ test("class A { foo() {} bar() {}}", {
           },
           kind: "",
           static: false,
-          range: [19, 27],
           loc: {
             start: {line: 1, column: 19},
             end: {line: 1, column: 27}
           }
         }
       ],
-      range: [8, 28],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 28}
       }
     },
-    range: [0, 28],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 28}
     }
   }],
-  range: [0, 28],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
@@ -8640,7 +7799,6 @@ test("class A { get foo() {} set foo(v) {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8656,7 +7814,6 @@ test("class A { get foo() {} set foo(v) {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [14, 17],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 17}
@@ -8670,7 +7827,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [20, 22],
               loc: {
                 start: {line: 1, column: 20},
                 end: {line: 1, column: 22}
@@ -8679,7 +7835,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [17, 22],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 22}
@@ -8687,7 +7842,6 @@ test("class A { get foo() {} set foo(v) {}}", {
           },
           kind: "get",
           static: false,
-          range: [10, 22],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 22}
@@ -8699,7 +7853,6 @@ test("class A { get foo() {} set foo(v) {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [27, 30],
             loc: {
               start: {line: 1, column: 27},
               end: {line: 1, column: 30}
@@ -8711,7 +7864,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             params: [{
               type: "Identifier",
               name: "v",
-              range: [31, 32],
               loc: {
                 start: {line: 1, column: 31},
                 end: {line: 1, column: 32}
@@ -8721,7 +7873,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [34, 36],
               loc: {
                 start: {line: 1, column: 34},
                 end: {line: 1, column: 36}
@@ -8730,7 +7881,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [30, 36],
             loc: {
               start: {line: 1, column: 30},
               end: {line: 1, column: 36}
@@ -8738,26 +7888,22 @@ test("class A { get foo() {} set foo(v) {}}", {
           },
           kind: "set",
           static: false,
-          range: [23, 36],
           loc: {
             start: {line: 1, column: 23},
             end: {line: 1, column: 36}
           }
         }
       ],
-      range: [8, 37],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 37}
       }
     },
-    range: [0, 37],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 37}
     }
   }],
-  range: [0, 37],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 37}
@@ -8775,7 +7921,6 @@ test("class A { static get foo() {} get foo() {}}", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8791,7 +7936,6 @@ test("class A { static get foo() {} get foo() {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [21, 24],
             loc: {
               start: {line: 1, column: 21},
               end: {line: 1, column: 24}
@@ -8805,7 +7949,6 @@ test("class A { static get foo() {} get foo() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [27, 29],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 29}
@@ -8814,7 +7957,6 @@ test("class A { static get foo() {} get foo() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [24, 29],
             loc: {
               start: {line: 1, column: 24},
               end: {line: 1, column: 29}
@@ -8822,7 +7964,6 @@ test("class A { static get foo() {} get foo() {}}", {
           },
           kind: "get",
           static: true,
-          range: [10, 29],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 29}
@@ -8834,7 +7975,6 @@ test("class A { static get foo() {} get foo() {}}", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [34, 37],
             loc: {
               start: {line: 1, column: 34},
               end: {line: 1, column: 37}
@@ -8848,7 +7988,6 @@ test("class A { static get foo() {} get foo() {}}", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [40, 42],
               loc: {
                 start: {line: 1, column: 40},
                 end: {line: 1, column: 42}
@@ -8857,7 +7996,6 @@ test("class A { static get foo() {} get foo() {}}", {
             rest: null,
             generator: false,
             expression: false,
-            range: [37, 42],
             loc: {
               start: {line: 1, column: 37},
               end: {line: 1, column: 42}
@@ -8865,26 +8003,22 @@ test("class A { static get foo() {} get foo() {}}", {
           },
           kind: "get",
           static: false,
-          range: [30, 42],
           loc: {
             start: {line: 1, column: 30},
             end: {line: 1, column: 42}
           }
         }
       ],
-      range: [8, 43],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 43}
       }
     },
-    range: [0, 43],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 43}
     }
   }],
-  range: [0, 43],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 43}
@@ -8902,7 +8036,6 @@ test("class A { static get foo() {} static get bar() {} }", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -8918,7 +8051,6 @@ test("class A { static get foo() {} static get bar() {} }", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [21, 24],
             loc: {
               start: {line: 1, column: 21},
               end: {line: 1, column: 24}
@@ -8932,7 +8064,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [27, 29],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 29}
@@ -8941,7 +8072,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [24, 29],
             loc: {
               start: {line: 1, column: 24},
               end: {line: 1, column: 29}
@@ -8949,7 +8079,6 @@ test("class A { static get foo() {} static get bar() {} }", {
           },
           kind: "get",
           static: true,
-          range: [10, 29],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 29}
@@ -8961,7 +8090,6 @@ test("class A { static get foo() {} static get bar() {} }", {
           key: {
             type: "Identifier",
             name: "bar",
-            range: [41, 44],
             loc: {
               start: {line: 1, column: 41},
               end: {line: 1, column: 44}
@@ -8975,7 +8103,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [47, 49],
               loc: {
                 start: {line: 1, column: 47},
                 end: {line: 1, column: 49}
@@ -8984,7 +8111,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [44, 49],
             loc: {
               start: {line: 1, column: 44},
               end: {line: 1, column: 49}
@@ -8992,26 +8118,22 @@ test("class A { static get foo() {} static get bar() {} }", {
           },
           kind: "get",
           static: true,
-          range: [30, 49],
           loc: {
             start: {line: 1, column: 30},
             end: {line: 1, column: 49}
           }
         }
       ],
-      range: [8, 51],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 51}
       }
     },
-    range: [0, 51],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 51}
     }
   }],
-  range: [0, 51],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
@@ -9029,7 +8151,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -9045,7 +8166,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           key: {
             type: "Identifier",
             name: "foo",
-            range: [21, 24],
             loc: {
               start: {line: 1, column: 21},
               end: {line: 1, column: 24}
@@ -9059,7 +8179,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             body: {
               type: "BlockStatement",
               body: [],
-              range: [27, 29],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 29}
@@ -9068,7 +8187,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [24, 29],
             loc: {
               start: {line: 1, column: 24},
               end: {line: 1, column: 29}
@@ -9076,7 +8194,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           },
           kind: "get",
           static: true,
-          range: [10, 29],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 29}
@@ -9088,7 +8205,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           key: {
             type: "Identifier",
             name: "foo",
-            range: [41, 44],
             loc: {
               start: {line: 1, column: 41},
               end: {line: 1, column: 44}
@@ -9100,7 +8216,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             params: [{
               type: "Identifier",
               name: "v",
-              range: [45, 46],
               loc: {
                 start: {line: 1, column: 45},
                 end: {line: 1, column: 46}
@@ -9110,7 +8225,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             body: {
               type: "BlockStatement",
               body: [],
-              range: [48, 50],
               loc: {
                 start: {line: 1, column: 48},
                 end: {line: 1, column: 50}
@@ -9119,7 +8233,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [44, 50],
             loc: {
               start: {line: 1, column: 44},
               end: {line: 1, column: 50}
@@ -9127,7 +8240,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           },
           kind: "set",
           static: true,
-          range: [30, 50],
           loc: {
             start: {line: 1, column: 30},
             end: {line: 1, column: 50}
@@ -9139,7 +8251,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           key: {
             type: "Identifier",
             name: "foo",
-            range: [55, 58],
             loc: {
               start: {line: 1, column: 55},
               end: {line: 1, column: 58}
@@ -9153,7 +8264,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             body: {
               type: "BlockStatement",
               body: [],
-              range: [61, 63],
               loc: {
                 start: {line: 1, column: 61},
                 end: {line: 1, column: 63}
@@ -9162,7 +8272,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [58, 63],
             loc: {
               start: {line: 1, column: 58},
               end: {line: 1, column: 63}
@@ -9170,7 +8279,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           },
           kind: "get",
           static: false,
-          range: [51, 63],
           loc: {
             start: {line: 1, column: 51},
             end: {line: 1, column: 63}
@@ -9182,7 +8290,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           key: {
             type: "Identifier",
             name: "foo",
-            range: [68, 71],
             loc: {
               start: {line: 1, column: 68},
               end: {line: 1, column: 71}
@@ -9194,7 +8301,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             params: [{
               type: "Identifier",
               name: "v",
-              range: [72, 73],
               loc: {
                 start: {line: 1, column: 72},
                 end: {line: 1, column: 73}
@@ -9204,7 +8310,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             body: {
               type: "BlockStatement",
               body: [],
-              range: [75, 77],
               loc: {
                 start: {line: 1, column: 75},
                 end: {line: 1, column: 77}
@@ -9213,7 +8318,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             rest: null,
             generator: false,
             expression: false,
-            range: [71, 77],
             loc: {
               start: {line: 1, column: 71},
               end: {line: 1, column: 77}
@@ -9221,30 +8325,179 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
           },
           kind: "set",
           static: false,
-          range: [64, 77],
           loc: {
             start: {line: 1, column: 64},
             end: {line: 1, column: 77}
           }
         }
       ],
-      range: [8, 78],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 78}
       }
     },
-    range: [0, 78],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 78}
     }
   }],
-  range: [0, 78],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 78}
   }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+
+test("class A { static [foo]() {} }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 29}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 29}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 29}
+      },
+      body: [{
+        type: "MethodDefinition",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 27}
+        },
+        static: true,
+        computed: true,
+        key: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 21}
+          },
+          name: "foo"
+        },
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          loc: {
+            start: {line: 1, column: 22},
+            end: {line: 1, column: 27}
+          },
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            loc: {
+              start: {line: 1, column: 25},
+              end: {line: 1, column: 27}
+            },
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class A { static get [foo]() {} }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 33}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 33}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      range: [
+        6,
+        7
+      ],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 33}
+      },
+      body: [{
+        type: "MethodDefinition",
+        loc: {
+          start: {line: 1, column: 10},
+          end: {line: 1, column: 31}
+        },
+        static: true,
+        computed: true,
+        key: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 22},
+            end: {line: 1, column: 25}
+          },
+          name: "foo"
+        },
+        kind: "get",
+        value: {
+          type: "FunctionExpression",
+          loc: {
+            start: {line: 1, column: 26},
+            end: {line: 1, column: 31}
+          },
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            loc: {
+              start: {line: 1, column: 29},
+              end: {line: 1, column: 31}
+            },
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
 }, {
   ecmaVersion: 6,
   ranges: true,
@@ -9258,7 +8511,6 @@ test("class A { set foo(v) {} get foo() {} }", {
     id: {
       type: "Identifier",
       name: "A",
-      range: [6, 7],
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
@@ -9274,7 +8526,6 @@ test("class A { set foo(v) {} get foo() {} }", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [14, 17],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 17}
@@ -9286,7 +8537,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             params: [{
               type: "Identifier",
               name: "v",
-              range: [18, 19],
               loc: {
                 start: {line: 1, column: 18},
                 end: {line: 1, column: 19}
@@ -9296,7 +8546,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [21, 23],
               loc: {
                 start: {line: 1, column: 21},
                 end: {line: 1, column: 23}
@@ -9305,7 +8554,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [17, 23],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 23}
@@ -9313,7 +8561,6 @@ test("class A { set foo(v) {} get foo() {} }", {
           },
           kind: "set",
           static: false,
-          range: [10, 23],
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 23}
@@ -9325,7 +8572,6 @@ test("class A { set foo(v) {} get foo() {} }", {
           key: {
             type: "Identifier",
             name: "foo",
-            range: [28, 31],
             loc: {
               start: {line: 1, column: 28},
               end: {line: 1, column: 31}
@@ -9339,7 +8585,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [34, 36],
               loc: {
                 start: {line: 1, column: 34},
                 end: {line: 1, column: 36}
@@ -9348,7 +8593,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [31, 36],
             loc: {
               start: {line: 1, column: 31},
               end: {line: 1, column: 36}
@@ -9356,26 +8600,22 @@ test("class A { set foo(v) {} get foo() {} }", {
           },
           kind: "get",
           static: false,
-          range: [24, 36],
           loc: {
             start: {line: 1, column: 24},
             end: {line: 1, column: 36}
           }
         }
       ],
-      range: [8, 38],
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 38}
       }
     },
-    range: [0, 38],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 38}
     }
   }],
-  range: [0, 38],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 38}
@@ -9386,17 +8626,120 @@ test("class A { set foo(v) {} get foo() {} }", {
   locations: true
 });
 
-testFail("class A { get foo() {} get foo() {} }", "Redefinition of property (1:27)", {ecmaVersion: 6});
-
-testFail("class A { set foo(v) {} set foo(v) {} }", "Redefinition of property (1:28)", {ecmaVersion: 6});
-
-testFail("class A { get foo() {} foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
-
-testFail("class A { foo() {} get foo() {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
-
-testFail("class A { set foo(v) {} foo() {} }", "Redefinition of property (1:24)", {ecmaVersion: 6});
-
-testFail("class A { foo() {} set foo(v) {} }", "Redefinition of property (1:23)", {ecmaVersion: 6});
+test("class A { foo() {} get foo() {} }",{
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 33}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 33}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      },
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 8},
+        end: {line: 1, column: 33}
+      },
+      body: [
+        {
+          type: "MethodDefinition",
+          loc: {
+            start: {line: 1, column: 10},
+            end: {line: 1, column: 18}
+          },
+          static: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            loc: {
+              start: {line: 1, column: 10},
+              end: {line: 1, column: 13}
+            },
+            name: "foo"
+          },
+          kind: "",
+          value: {
+            type: "FunctionExpression",
+            loc: {
+              start: {line: 1, column: 13},
+              end: {line: 1, column: 18}
+            },
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            body: {
+              type: "BlockStatement",
+              loc: {
+                start: {line: 1, column: 16},
+                end: {line: 1, column: 18}
+              },
+              body: []
+            },
+            expression: false
+          }
+        },
+        {
+          type: "MethodDefinition",
+          loc: {
+            start: {line: 1, column: 19},
+            end: {line: 1, column: 31}
+          },
+          static: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            loc: {
+              start: {line: 1, column: 23},
+              end: {line: 1, column: 26}
+            },
+            name: "foo"
+          },
+          kind: "get",
+          value: {
+            type: "FunctionExpression",
+            loc: {
+              start: {line: 1, column: 26},
+              end: {line: 1, column: 31}
+            },
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            body: {
+              type: "BlockStatement",
+              loc: {
+                start: {line: 1, column: 29},
+                end: {line: 1, column: 31}
+              },
+              body: []
+            },
+            expression: false
+          }
+        }
+      ]
+    }
+  }]
+},{
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
 
 // ES6: Computed Properties
 
@@ -9411,7 +8754,6 @@ test("({[x]: 10})", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -9421,7 +8763,6 @@ test("({[x]: 10})", {
           type: "Literal",
           value: 10,
           raw: "10",
-          range: [7, 9],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 9}
@@ -9431,25 +8772,21 @@ test("({[x]: 10})", {
         method: false,
         shorthand: false,
         computed: true,
-        range: [2, 9],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 9}
         }
       }],
-      range: [1, 10],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 10}
       }
     },
-    range: [0, 11],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 11}
     }
   }],
-  range: [0, 11],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 11}
@@ -9475,7 +8812,6 @@ test("({[\"x\" + \"y\"]: 10})", {
             type: "Literal",
             value: "x",
             raw: "\"x\"",
-            range: [3, 6],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 6}
@@ -9485,13 +8821,11 @@ test("({[\"x\" + \"y\"]: 10})", {
             type: "Literal",
             value: "y",
             raw: "\"y\"",
-            range: [9, 12],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 12}
             }
           },
-          range: [3, 12],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 12}
@@ -9501,7 +8835,6 @@ test("({[\"x\" + \"y\"]: 10})", {
           type: "Literal",
           value: 10,
           raw: "10",
-          range: [15, 17],
           loc: {
             start: {line: 1, column: 15},
             end: {line: 1, column: 17}
@@ -9511,25 +8844,21 @@ test("({[\"x\" + \"y\"]: 10})", {
         method: false,
         shorthand: false,
         computed: true,
-        range: [2, 17],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 17}
         }
       }],
-      range: [1, 18],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -9551,7 +8880,6 @@ test("({[x]: function() {}})", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -9565,7 +8893,6 @@ test("({[x]: function() {}})", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [18, 20],
             loc: {
               start: {line: 1, column: 18},
               end: {line: 1, column: 20}
@@ -9574,7 +8901,6 @@ test("({[x]: function() {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [7, 20],
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 20}
@@ -9584,25 +8910,21 @@ test("({[x]: function() {}})", {
         method: false,
         shorthand: false,
         computed: true,
-        range: [2, 20],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 20}
         }
       }],
-      range: [1, 21],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 21}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -9625,7 +8947,6 @@ test("({[x]: 10, y: 20})", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -9635,7 +8956,6 @@ test("({[x]: 10, y: 20})", {
             type: "Literal",
             value: 10,
             raw: "10",
-            range: [7, 9],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 9}
@@ -9645,7 +8965,6 @@ test("({[x]: 10, y: 20})", {
           method: false,
           shorthand: false,
           computed: true,
-          range: [2, 9],
           loc: {
             start: {line: 1, column: 2},
             end: {line: 1, column: 9}
@@ -9656,7 +8975,6 @@ test("({[x]: 10, y: 20})", {
           key: {
             type: "Identifier",
             name: "y",
-            range: [11, 12],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 12}
@@ -9666,7 +8984,6 @@ test("({[x]: 10, y: 20})", {
             type: "Literal",
             value: 20,
             raw: "20",
-            range: [14, 16],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 16}
@@ -9676,26 +8993,22 @@ test("({[x]: 10, y: 20})", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [11, 16],
           loc: {
             start: {line: 1, column: 11},
             end: {line: 1, column: 16}
           }
         }
       ],
-      range: [1, 17],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -9718,7 +9031,6 @@ test("({get [x]() {}, set [x](v) {}})", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [7, 8],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 8}
@@ -9732,7 +9044,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [12, 14],
               loc: {
                 start: {line: 1, column: 12},
                 end: {line: 1, column: 14}
@@ -9741,7 +9052,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [9, 14],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 14}
@@ -9751,7 +9061,6 @@ test("({get [x]() {}, set [x](v) {}})", {
           method: false,
           shorthand: false,
           computed: true,
-          range: [2, 14],
           loc: {
             start: {line: 1, column: 2},
             end: {line: 1, column: 14}
@@ -9762,7 +9071,6 @@ test("({get [x]() {}, set [x](v) {}})", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [21, 22],
             loc: {
               start: {line: 1, column: 21},
               end: {line: 1, column: 22}
@@ -9774,7 +9082,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             params: [{
               type: "Identifier",
               name: "v",
-              range: [24, 25],
               loc: {
                 start: {line: 1, column: 24},
                 end: {line: 1, column: 25}
@@ -9784,7 +9091,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [27, 29],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 29}
@@ -9793,7 +9099,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [23, 29],
             loc: {
               start: {line: 1, column: 23},
               end: {line: 1, column: 29}
@@ -9803,26 +9108,22 @@ test("({get [x]() {}, set [x](v) {}})", {
           method: false,
           shorthand: false,
           computed: true,
-          range: [16, 29],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 29}
           }
         }
       ],
-      range: [1, 30],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 30}
       }
     },
-    range: [0, 31],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 31}
     }
   }],
-  range: [0, 31],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 31}
@@ -9844,7 +9145,6 @@ test("({[x]() {}})", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -9858,7 +9158,6 @@ test("({[x]() {}})", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [8, 10],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 10}
@@ -9867,7 +9166,6 @@ test("({[x]() {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [5, 10],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 10}
@@ -9877,25 +9175,21 @@ test("({[x]() {}})", {
         method: true,
         shorthand: false,
         computed: true,
-        range: [2, 10],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 10}
         }
       }],
-      range: [1, 11],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 11}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -9919,7 +9213,6 @@ test("var {[x]: y} = {y}", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -9928,7 +9221,6 @@ test("var {[x]: y} = {y}", {
           value: {
             type: "Identifier",
             name: "y",
-            range: [10, 11],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 11}
@@ -9938,13 +9230,11 @@ test("var {[x]: y} = {y}", {
           method: false,
           shorthand: false,
           computed: true,
-          range: [5, 11],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 11}
           }
         }],
-        range: [4, 12],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 12}
@@ -9957,7 +9247,6 @@ test("var {[x]: y} = {y}", {
           key: {
             type: "Identifier",
             name: "y",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -9966,7 +9255,6 @@ test("var {[x]: y} = {y}", {
           value: {
             type: "Identifier",
             name: "y",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -9976,32 +9264,27 @@ test("var {[x]: y} = {y}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [16, 17],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 17}
           }
         }],
-        range: [15, 18],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 18}
         }
       },
-      range: [4, 18],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 18}
       }
     }],
     kind: "var",
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -10019,7 +9302,6 @@ test("function f({[x]: y}) {}", {
     id: {
       type: "Identifier",
       name: "f",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -10032,7 +9314,6 @@ test("function f({[x]: y}) {}", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -10041,7 +9322,6 @@ test("function f({[x]: y}) {}", {
         value: {
           type: "Identifier",
           name: "y",
-          range: [17, 18],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 18}
@@ -10051,13 +9331,11 @@ test("function f({[x]: y}) {}", {
         method: false,
         shorthand: false,
         computed: true,
-        range: [12, 18],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 18}
         }
       }],
-      range: [11, 19],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 19}
@@ -10067,7 +9345,6 @@ test("function f({[x]: y}) {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [21, 23],
       loc: {
         start: {line: 1, column: 21},
         end: {line: 1, column: 23}
@@ -10076,13 +9353,11 @@ test("function f({[x]: y}) {}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 23],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 23}
     }
   }],
-  range: [0, 23],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
@@ -10102,7 +9377,6 @@ test("var x = {*[test]() { yield *v; }}", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [4, 5],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 5}
@@ -10115,7 +9389,6 @@ test("var x = {*[test]() { yield *v; }}", {
           key: {
             type: "Identifier",
             name: "test",
-            range: [11, 15],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 15}
@@ -10135,26 +9408,22 @@ test("var x = {*[test]() { yield *v; }}", {
                   argument: {
                     type: "Identifier",
                     name: "v",
-                    range: [28, 29],
                     loc: {
                       start: {line: 1, column: 28},
                       end: {line: 1, column: 29}
                     }
                   },
                   delegate: true,
-                  range: [21, 29],
                   loc: {
                     start: {line: 1, column: 21},
                     end: {line: 1, column: 29}
                   }
                 },
-                range: [21, 30],
                 loc: {
                   start: {line: 1, column: 21},
                   end: {line: 1, column: 30}
                 }
               }],
-              range: [19, 32],
               loc: {
                 start: {line: 1, column: 19},
                 end: {line: 1, column: 32}
@@ -10163,7 +9432,6 @@ test("var x = {*[test]() { yield *v; }}", {
             rest: null,
             generator: true,
             expression: false,
-            range: [16, 32],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 32}
@@ -10173,32 +9441,27 @@ test("var x = {*[test]() { yield *v; }}", {
           method: true,
           shorthand: false,
           computed: true,
-          range: [9, 32],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 32}
           }
         }],
-        range: [8, 33],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 33}
         }
       },
-      range: [4, 33],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 33}
       }
     }],
     kind: "var",
-    range: [0, 33],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 33}
     }
   }],
-  range: [0, 33],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
@@ -10211,75 +9474,54 @@ test("var x = {*[test]() { yield *v; }}", {
 
 test("class A {[x]() {}}", {
   type: "Program",
-  start: 0,
-  end: 18,
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
   },
-  range: [0, 18],
   body: [{
     type: "ClassDeclaration",
-    start: 0,
-    end: 18,
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     },
-    range: [0, 18],
     id: {
       type: "Identifier",
-      start: 6,
-      end: 7,
       loc: {
         start: {line: 1, column: 6},
         end: {line: 1, column: 7}
       },
-      range: [6, 7],
       name: "A"
     },
     superClass: null,
     body: {
       type: "ClassBody",
-      start: 8,
-      end: 18,
       loc: {
         start: {line: 1, column: 8},
         end: {line: 1, column: 18}
       },
-      range: [8, 18],
       body: [{
         type: "MethodDefinition",
-        start: 9,
-        end: 17,
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 17}
         },
-        range: [9, 17],
         static: false,
         computed: true,
         key: {
           type: "Identifier",
-          start: 10,
-          end: 11,
           loc: {
             start: {line: 1, column: 10},
             end: {line: 1, column: 11}
           },
-          range: [10, 11],
           name: "x"
         },
         kind: "",
         value: {
           type: "FunctionExpression",
-          start: 12,
-          end: 17,
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 17}
           },
-          range: [12, 17],
           id: null,
           params: [],
           defaults: [],
@@ -10287,13 +9529,10 @@ test("class A {[x]() {}}", {
           generator: false,
           body: {
             type: "BlockStatement",
-            start: 15,
-            end: 17,
             loc: {
               start: {line: 1, column: 15},
               end: {line: 1, column: 17}
             },
-            range: [15, 17],
             body: []
           },
           expression: false
@@ -10318,7 +9557,6 @@ test("function f([x] = [1]) {}", {
     id: {
       type: "Identifier",
       name: "f",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -10329,13 +9567,11 @@ test("function f([x] = [1]) {}", {
       elements: [{
         type: "Identifier",
         name: "x",
-        range: [12, 13],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 13}
         }
       }],
-      range: [11, 14],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 14}
@@ -10347,13 +9583,11 @@ test("function f([x] = [1]) {}", {
         type: "Literal",
         value: 1,
         raw: "1",
-        range: [18, 19],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 19}
         }
       }],
-      range: [17, 20],
       loc: {
         start: {line: 1, column: 17},
         end: {line: 1, column: 20}
@@ -10362,7 +9596,6 @@ test("function f([x] = [1]) {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [22, 24],
       loc: {
         start: {line: 1, column: 22},
         end: {line: 1, column: 24}
@@ -10371,13 +9604,11 @@ test("function f([x] = [1]) {}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 24],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 24}
     }
   }],
-  range: [0, 24],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
@@ -10395,7 +9626,6 @@ test("function f({x} = {x: 10}) {}", {
     id: {
       type: "Identifier",
       name: "f",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -10408,7 +9638,6 @@ test("function f({x} = {x: 10}) {}", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [12, 13],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 13}
@@ -10417,7 +9646,6 @@ test("function f({x} = {x: 10}) {}", {
         value: {
           type: "Identifier",
           name: "x",
-          range: [12, 13],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 13}
@@ -10427,13 +9655,11 @@ test("function f({x} = {x: 10}) {}", {
         method: false,
         shorthand: true,
         computed: false,
-        range: [12, 13],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 13}
         }
       }],
-      range: [11, 14],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 14}
@@ -10446,7 +9672,6 @@ test("function f({x} = {x: 10}) {}", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [18, 19],
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 19}
@@ -10456,7 +9681,6 @@ test("function f({x} = {x: 10}) {}", {
           type: "Literal",
           value: 10,
           raw: "10",
-          range: [21, 23],
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 23}
@@ -10466,13 +9690,11 @@ test("function f({x} = {x: 10}) {}", {
         method: false,
         shorthand: false,
         computed: false,
-        range: [18, 23],
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 23}
         }
       }],
-      range: [17, 24],
       loc: {
         start: {line: 1, column: 17},
         end: {line: 1, column: 24}
@@ -10481,7 +9703,6 @@ test("function f({x} = {x: 10}) {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [26, 28],
       loc: {
         start: {line: 1, column: 26},
         end: {line: 1, column: 28}
@@ -10490,13 +9711,11 @@ test("function f({x} = {x: 10}) {}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 28],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 28}
     }
   }],
-  range: [0, 28],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 28}
@@ -10517,7 +9736,6 @@ test("f = function({x} = {x: 10}) {}", {
       left: {
         type: "Identifier",
         name: "f",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -10533,7 +9751,6 @@ test("f = function({x} = {x: 10}) {}", {
             key: {
               type: "Identifier",
               name: "x",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
@@ -10542,7 +9759,6 @@ test("f = function({x} = {x: 10}) {}", {
             value: {
               type: "Identifier",
               name: "x",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
@@ -10552,13 +9768,11 @@ test("f = function({x} = {x: 10}) {}", {
             method: false,
             shorthand: true,
             computed: false,
-            range: [14, 15],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 15}
             }
           }],
-          range: [13, 16],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 16}
@@ -10571,7 +9785,6 @@ test("f = function({x} = {x: 10}) {}", {
             key: {
               type: "Identifier",
               name: "x",
-              range: [20, 21],
               loc: {
                 start: {line: 1, column: 20},
                 end: {line: 1, column: 21}
@@ -10581,7 +9794,6 @@ test("f = function({x} = {x: 10}) {}", {
               type: "Literal",
               value: 10,
               raw: "10",
-              range: [23, 25],
               loc: {
                 start: {line: 1, column: 23},
                 end: {line: 1, column: 25}
@@ -10591,13 +9803,11 @@ test("f = function({x} = {x: 10}) {}", {
             method: false,
             shorthand: false,
             computed: false,
-            range: [20, 25],
             loc: {
               start: {line: 1, column: 20},
               end: {line: 1, column: 25}
             }
           }],
-          range: [19, 26],
           loc: {
             start: {line: 1, column: 19},
             end: {line: 1, column: 26}
@@ -10606,7 +9816,6 @@ test("f = function({x} = {x: 10}) {}", {
         body: {
           type: "BlockStatement",
           body: [],
-          range: [28, 30],
           loc: {
             start: {line: 1, column: 28},
             end: {line: 1, column: 30}
@@ -10615,25 +9824,21 @@ test("f = function({x} = {x: 10}) {}", {
         rest: null,
         generator: false,
         expression: false,
-        range: [4, 30],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 30}
         }
       },
-      range: [0, 30],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 30}
       }
     },
-    range: [0, 30],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 30}
     }
   }],
-  range: [0, 30],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 30}
@@ -10655,7 +9860,6 @@ test("({f: function({x} = {x: 10}) {}})", {
         key: {
           type: "Identifier",
           name: "f",
-          range: [2, 3],
           loc: {
             start: {line: 1, column: 2},
             end: {line: 1, column: 3}
@@ -10671,7 +9875,6 @@ test("({f: function({x} = {x: 10}) {}})", {
               key: {
                 type: "Identifier",
                 name: "x",
-                range: [15, 16],
                 loc: {
                   start: {line: 1, column: 15},
                   end: {line: 1, column: 16}
@@ -10680,7 +9883,6 @@ test("({f: function({x} = {x: 10}) {}})", {
               value: {
                 type: "Identifier",
                 name: "x",
-                range: [15, 16],
                 loc: {
                   start: {line: 1, column: 15},
                   end: {line: 1, column: 16}
@@ -10690,13 +9892,11 @@ test("({f: function({x} = {x: 10}) {}})", {
               method: false,
               shorthand: true,
               computed: false,
-              range: [15, 16],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 16}
               }
             }],
-            range: [14, 17],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 17}
@@ -10709,7 +9909,6 @@ test("({f: function({x} = {x: 10}) {}})", {
               key: {
                 type: "Identifier",
                 name: "x",
-                range: [21, 22],
                 loc: {
                   start: {line: 1, column: 21},
                   end: {line: 1, column: 22}
@@ -10719,7 +9918,6 @@ test("({f: function({x} = {x: 10}) {}})", {
                 type: "Literal",
                 value: 10,
                 raw: "10",
-                range: [24, 26],
                 loc: {
                   start: {line: 1, column: 24},
                   end: {line: 1, column: 26}
@@ -10729,13 +9927,11 @@ test("({f: function({x} = {x: 10}) {}})", {
               method: false,
               shorthand: false,
               computed: false,
-              range: [21, 26],
               loc: {
                 start: {line: 1, column: 21},
                 end: {line: 1, column: 26}
               }
             }],
-            range: [20, 27],
             loc: {
               start: {line: 1, column: 20},
               end: {line: 1, column: 27}
@@ -10744,7 +9940,6 @@ test("({f: function({x} = {x: 10}) {}})", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [29, 31],
             loc: {
               start: {line: 1, column: 29},
               end: {line: 1, column: 31}
@@ -10753,7 +9948,6 @@ test("({f: function({x} = {x: 10}) {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [5, 31],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 31}
@@ -10763,25 +9957,21 @@ test("({f: function({x} = {x: 10}) {}})", {
         method: false,
         shorthand: false,
         computed: false,
-        range: [2, 31],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 31}
         }
       }],
-      range: [1, 32],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 32}
       }
     },
-    range: [0, 33],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 33}
     }
   }],
-  range: [0, 33],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
@@ -10803,7 +9993,6 @@ test("({f({x} = {x: 10}) {}})", {
         key: {
           type: "Identifier",
           name: "f",
-          range: [2, 3],
           loc: {
             start: {line: 1, column: 2},
             end: {line: 1, column: 3}
@@ -10819,7 +10008,6 @@ test("({f({x} = {x: 10}) {}})", {
               key: {
                 type: "Identifier",
                 name: "x",
-                range: [5, 6],
                 loc: {
                   start: {line: 1, column: 5},
                   end: {line: 1, column: 6}
@@ -10828,7 +10016,6 @@ test("({f({x} = {x: 10}) {}})", {
               value: {
                 type: "Identifier",
                 name: "x",
-                range: [5, 6],
                 loc: {
                   start: {line: 1, column: 5},
                   end: {line: 1, column: 6}
@@ -10838,13 +10025,11 @@ test("({f({x} = {x: 10}) {}})", {
               method: false,
               shorthand: true,
               computed: false,
-              range: [5, 6],
               loc: {
                 start: {line: 1, column: 5},
                 end: {line: 1, column: 6}
               }
             }],
-            range: [4, 7],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 7}
@@ -10857,7 +10042,6 @@ test("({f({x} = {x: 10}) {}})", {
               key: {
                 type: "Identifier",
                 name: "x",
-                range: [11, 12],
                 loc: {
                   start: {line: 1, column: 11},
                   end: {line: 1, column: 12}
@@ -10867,7 +10051,6 @@ test("({f({x} = {x: 10}) {}})", {
                 type: "Literal",
                 value: 10,
                 raw: "10",
-                range: [14, 16],
                 loc: {
                   start: {line: 1, column: 14},
                   end: {line: 1, column: 16}
@@ -10877,13 +10060,11 @@ test("({f({x} = {x: 10}) {}})", {
               method: false,
               shorthand: false,
               computed: false,
-              range: [11, 16],
               loc: {
                 start: {line: 1, column: 11},
                 end: {line: 1, column: 16}
               }
             }],
-            range: [10, 17],
             loc: {
               start: {line: 1, column: 10},
               end: {line: 1, column: 17}
@@ -10892,7 +10073,6 @@ test("({f({x} = {x: 10}) {}})", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [19, 21],
             loc: {
               start: {line: 1, column: 19},
               end: {line: 1, column: 21}
@@ -10901,7 +10081,6 @@ test("({f({x} = {x: 10}) {}})", {
           rest: null,
           generator: false,
           expression: false,
-          range: [3, 21],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 21}
@@ -10911,25 +10090,21 @@ test("({f({x} = {x: 10}) {}})", {
         method: true,
         shorthand: false,
         computed: false,
-        range: [2, 21],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 21}
         }
       }],
-      range: [1, 22],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 23],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 23}
     }
   }],
-  range: [0, 23],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
@@ -10955,7 +10130,6 @@ test("(class {f({x} = {x: 10}) {}})", {
           key: {
             type: "Identifier",
             name: "f",
-            range: [8, 9],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 9}
@@ -10971,7 +10145,6 @@ test("(class {f({x} = {x: 10}) {}})", {
                 key: {
                   type: "Identifier",
                   name: "x",
-                  range: [11, 12],
                   loc: {
                     start: {line: 1, column: 11},
                     end: {line: 1, column: 12}
@@ -10980,7 +10153,6 @@ test("(class {f({x} = {x: 10}) {}})", {
                 value: {
                   type: "Identifier",
                   name: "x",
-                  range: [11, 12],
                   loc: {
                     start: {line: 1, column: 11},
                     end: {line: 1, column: 12}
@@ -10990,13 +10162,11 @@ test("(class {f({x} = {x: 10}) {}})", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [11, 12],
                 loc: {
                   start: {line: 1, column: 11},
                   end: {line: 1, column: 12}
                 }
               }],
-              range: [10, 13],
               loc: {
                 start: {line: 1, column: 10},
                 end: {line: 1, column: 13}
@@ -11009,7 +10179,6 @@ test("(class {f({x} = {x: 10}) {}})", {
                 key: {
                   type: "Identifier",
                   name: "x",
-                  range: [17, 18],
                   loc: {
                     start: {line: 1, column: 17},
                     end: {line: 1, column: 18}
@@ -11019,7 +10188,6 @@ test("(class {f({x} = {x: 10}) {}})", {
                   type: "Literal",
                   value: 10,
                   raw: "10",
-                  range: [20, 22],
                   loc: {
                     start: {line: 1, column: 20},
                     end: {line: 1, column: 22}
@@ -11029,13 +10197,11 @@ test("(class {f({x} = {x: 10}) {}})", {
                 method: false,
                 shorthand: false,
                 computed: false,
-                range: [17, 22],
                 loc: {
                   start: {line: 1, column: 17},
                   end: {line: 1, column: 22}
                 }
               }],
-              range: [16, 23],
               loc: {
                 start: {line: 1, column: 16},
                 end: {line: 1, column: 23}
@@ -11044,7 +10210,6 @@ test("(class {f({x} = {x: 10}) {}})", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [25, 27],
               loc: {
                 start: {line: 1, column: 25},
                 end: {line: 1, column: 27}
@@ -11053,7 +10218,6 @@ test("(class {f({x} = {x: 10}) {}})", {
             rest: null,
             generator: false,
             expression: false,
-            range: [9, 27],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 27}
@@ -11061,31 +10225,26 @@ test("(class {f({x} = {x: 10}) {}})", {
           },
           kind: "",
           static: false,
-          range: [8, 27],
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 27}
           }
         }],
-        range: [7, 28],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 28}
         }
       },
-      range: [1, 28],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 28}
       }
     },
-    range: [0, 29],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 29}
     }
   }],
-  range: [0, 29],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 29}
@@ -11110,7 +10269,6 @@ test("(({x} = {x: 10}) => {})", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -11119,7 +10277,6 @@ test("(({x} = {x: 10}) => {})", {
           value: {
             type: "Identifier",
             name: "x",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -11129,13 +10286,11 @@ test("(({x} = {x: 10}) => {})", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
           }
         }],
-        range: [2, 5],
         loc: {
           start: {line: 1, column: 2},
           end: {line: 1, column: 5}
@@ -11148,7 +10303,6 @@ test("(({x} = {x: 10}) => {})", {
           key: {
             type: "Identifier",
             name: "x",
-            range: [9, 10],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 10}
@@ -11158,7 +10312,6 @@ test("(({x} = {x: 10}) => {})", {
             type: "Literal",
             value: 10,
             raw: "10",
-            range: [12, 14],
             loc: {
               start: {line: 1, column: 12},
               end: {line: 1, column: 14}
@@ -11168,13 +10321,11 @@ test("(({x} = {x: 10}) => {})", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [9, 14],
           loc: {
             start: {line: 1, column: 9},
             end: {line: 1, column: 14}
           }
         }],
-        range: [8, 15],
         loc: {
           start: {line: 1, column: 8},
           end: {line: 1, column: 15}
@@ -11183,7 +10334,6 @@ test("(({x} = {x: 10}) => {})", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [20, 22],
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 22}
@@ -11192,19 +10342,16 @@ test("(({x} = {x: 10}) => {})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 22],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 23],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 23}
     }
   }],
-  range: [0, 23],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 23}
@@ -11225,7 +10372,6 @@ test("x = function(y = 1) {}", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -11237,7 +10383,6 @@ test("x = function(y = 1) {}", {
         params: [{
           type: "Identifier",
           name: "y",
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -11247,7 +10392,6 @@ test("x = function(y = 1) {}", {
           type: "Literal",
           value: 1,
           raw: "1",
-          range: [17, 18],
           loc: {
             start: {line: 1, column: 17},
             end: {line: 1, column: 18}
@@ -11256,7 +10400,6 @@ test("x = function(y = 1) {}", {
         body: {
           type: "BlockStatement",
           body: [],
-          range: [20, 22],
           loc: {
             start: {line: 1, column: 20},
             end: {line: 1, column: 22}
@@ -11265,25 +10408,21 @@ test("x = function(y = 1) {}", {
         rest: null,
         generator: false,
         expression: false,
-        range: [4, 22],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 22}
         }
       },
-      range: [0, 22],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 22}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -11301,7 +10440,6 @@ test("function f(a = 1) {}", {
     id: {
       type: "Identifier",
       name: "f",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11310,7 +10448,6 @@ test("function f(a = 1) {}", {
     params: [{
       type: "Identifier",
       name: "a",
-      range: [11, 12],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 12}
@@ -11320,7 +10457,6 @@ test("function f(a = 1) {}", {
       type: "Literal",
       value: 1,
       raw: "1",
-      range: [15, 16],
       loc: {
         start: {line: 1, column: 15},
         end: {line: 1, column: 16}
@@ -11329,7 +10465,6 @@ test("function f(a = 1) {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [18, 20],
       loc: {
         start: {line: 1, column: 18},
         end: {line: 1, column: 20}
@@ -11338,13 +10473,11 @@ test("function f(a = 1) {}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
@@ -11365,7 +10498,6 @@ test("x = { f: function(a=1) {} }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -11378,7 +10510,6 @@ test("x = { f: function(a=1) {} }", {
           key: {
             type: "Identifier",
             name: "f",
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -11390,7 +10521,6 @@ test("x = { f: function(a=1) {} }", {
             params: [{
               type: "Identifier",
               name: "a",
-              range: [18, 19],
               loc: {
                 start: {line: 1, column: 18},
                 end: {line: 1, column: 19}
@@ -11400,7 +10530,6 @@ test("x = { f: function(a=1) {} }", {
               type: "Literal",
               value: 1,
               raw: "1",
-              range: [20, 21],
               loc: {
                 start: {line: 1, column: 20},
                 end: {line: 1, column: 21}
@@ -11409,7 +10538,6 @@ test("x = { f: function(a=1) {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [23, 25],
               loc: {
                 start: {line: 1, column: 23},
                 end: {line: 1, column: 25}
@@ -11418,7 +10546,6 @@ test("x = { f: function(a=1) {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [9, 25],
             loc: {
               start: {line: 1, column: 9},
               end: {line: 1, column: 25}
@@ -11428,31 +10555,26 @@ test("x = { f: function(a=1) {} }", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [6, 25],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 25}
           }
         }],
-        range: [4, 27],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 27}
         }
       },
-      range: [0, 27],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 27}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -11473,7 +10595,6 @@ test("x = { f(a=1) {} }", {
       left: {
         type: "Identifier",
         name: "x",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -11486,7 +10607,6 @@ test("x = { f(a=1) {} }", {
           key: {
             type: "Identifier",
             name: "f",
-            range: [6, 7],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 7}
@@ -11498,7 +10618,6 @@ test("x = { f(a=1) {} }", {
             params: [{
               type: "Identifier",
               name: "a",
-              range: [8, 9],
               loc: {
                 start: {line: 1, column: 8},
                 end: {line: 1, column: 9}
@@ -11508,7 +10627,6 @@ test("x = { f(a=1) {} }", {
               type: "Literal",
               value: 1,
               raw: "1",
-              range: [10, 11],
               loc: {
                 start: {line: 1, column: 10},
                 end: {line: 1, column: 11}
@@ -11517,7 +10635,6 @@ test("x = { f(a=1) {} }", {
             body: {
               type: "BlockStatement",
               body: [],
-              range: [13, 15],
               loc: {
                 start: {line: 1, column: 13},
                 end: {line: 1, column: 15}
@@ -11526,7 +10643,6 @@ test("x = { f(a=1) {} }", {
             rest: null,
             generator: false,
             expression: false,
-            range: [7, 15],
             loc: {
               start: {line: 1, column: 7},
               end: {line: 1, column: 15}
@@ -11536,31 +10652,26 @@ test("x = { f(a=1) {} }", {
           method: true,
           shorthand: false,
           computed: false,
-          range: [6, 15],
           loc: {
             start: {line: 1, column: 6},
             end: {line: 1, column: 15}
           }
         }],
-        range: [4, 17],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 17}
         }
       },
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -11580,7 +10691,6 @@ test("function f(a, ...b) {}", {
     id: {
       type: "Identifier",
       name: "f",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11589,7 +10699,6 @@ test("function f(a, ...b) {}", {
     params: [{
       type: "Identifier",
       name: "a",
-      range: [11, 12],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 12}
@@ -11599,7 +10708,6 @@ test("function f(a, ...b) {}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [20, 22],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 22}
@@ -11608,7 +10716,6 @@ test("function f(a, ...b) {}", {
     rest: {
       type: "Identifier",
       name: "b",
-      range: [17, 18],
       loc: {
         start: {line: 1, column: 17},
         end: {line: 1, column: 18}
@@ -11616,13 +10723,11 @@ test("function f(a, ...b) {}", {
     },
     generator: false,
     expression: false,
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -11642,7 +10747,6 @@ test("function x([ a, b ]){}", {
     id: {
       type: "Identifier",
       name: "x",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11654,7 +10758,6 @@ test("function x([ a, b ]){}", {
         {
           type: "Identifier",
           name: "a",
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -11663,14 +10766,12 @@ test("function x([ a, b ]){}", {
         {
           type: "Identifier",
           name: "b",
-          range: [16, 17],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 17}
           }
         }
       ],
-      range: [11, 19],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 19}
@@ -11680,7 +10781,6 @@ test("function x([ a, b ]){}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [20, 22],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 22}
@@ -11689,13 +10789,11 @@ test("function x([ a, b ]){}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -11713,7 +10811,6 @@ test("function x({ a, b }){}", {
     id: {
       type: "Identifier",
       name: "x",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11727,7 +10824,6 @@ test("function x({ a, b }){}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [13, 14],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 14}
@@ -11736,7 +10832,6 @@ test("function x({ a, b }){}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [13, 14],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 14}
@@ -11746,7 +10841,6 @@ test("function x({ a, b }){}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [13, 14],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 14}
@@ -11757,7 +10851,6 @@ test("function x({ a, b }){}", {
           key: {
             type: "Identifier",
             name: "b",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -11766,7 +10859,6 @@ test("function x({ a, b }){}", {
           value: {
             type: "Identifier",
             name: "b",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -11776,14 +10868,12 @@ test("function x({ a, b }){}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [16, 17],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 17}
           }
         }
       ],
-      range: [11, 19],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 19}
@@ -11793,7 +10883,6 @@ test("function x({ a, b }){}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [20, 22],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 22}
@@ -11802,13 +10891,11 @@ test("function x({ a, b }){}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -11826,7 +10913,6 @@ test("function x(a, { a }){}", {
     id: {
       type: "Identifier",
       name: "x",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11836,7 +10922,6 @@ test("function x(a, { a }){}", {
       {
         type: "Identifier",
         name: "a",
-        range: [11, 12],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 12}
@@ -11849,7 +10934,6 @@ test("function x(a, { a }){}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -11858,7 +10942,6 @@ test("function x(a, { a }){}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [16, 17],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 17}
@@ -11868,13 +10951,11 @@ test("function x(a, { a }){}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [16, 17],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 17}
           }
         }],
-        range: [14, 19],
         loc: {
           start: {line: 1, column: 14},
           end: {line: 1, column: 19}
@@ -11885,7 +10966,6 @@ test("function x(a, { a }){}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [20, 22],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 22}
@@ -11894,13 +10974,11 @@ test("function x(a, { a }){}", {
     rest: null,
     generator: false,
     expression: false,
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -11918,7 +10996,6 @@ test("function x(...[ a, b ]){}", {
     id: {
       type: "Identifier",
       name: "x",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -11929,7 +11006,6 @@ test("function x(...[ a, b ]){}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [23, 25],
       loc: {
         start: {line: 1, column: 23},
         end: {line: 1, column: 25}
@@ -11941,7 +11017,6 @@ test("function x(...[ a, b ]){}", {
         {
           type: "Identifier",
           name: "a",
-          range: [16, 17],
           loc: {
             start: {line: 1, column: 16},
             end: {line: 1, column: 17}
@@ -11950,14 +11025,12 @@ test("function x(...[ a, b ]){}", {
         {
           type: "Identifier",
           name: "b",
-          range: [19, 20],
           loc: {
             start: {line: 1, column: 19},
             end: {line: 1, column: 20}
           }
         }
       ],
-      range: [14, 22],
       loc: {
         start: {line: 1, column: 14},
         end: {line: 1, column: 22}
@@ -11965,13 +11038,11 @@ test("function x(...[ a, b ]){}", {
     },
     generator: false,
     expression: false,
-    range: [0, 25],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 25}
     }
   }],
-  range: [0, 25],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 25}
@@ -11989,7 +11060,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
     id: {
       type: "Identifier",
       name: "x",
-      range: [9, 10],
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 10}
@@ -12003,7 +11073,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [13, 14],
             loc: {
               start: {line: 1, column: 13},
               end: {line: 1, column: 14}
@@ -12017,7 +11086,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 key: {
                   type: "Identifier",
                   name: "w",
-                  range: [18, 19],
                   loc: {
                     start: {line: 1, column: 18},
                     end: {line: 1, column: 19}
@@ -12026,7 +11094,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 value: {
                   type: "Identifier",
                   name: "w",
-                  range: [18, 19],
                   loc: {
                     start: {line: 1, column: 18},
                     end: {line: 1, column: 19}
@@ -12036,7 +11103,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [18, 19],
                 loc: {
                   start: {line: 1, column: 18},
                   end: {line: 1, column: 19}
@@ -12047,7 +11113,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 key: {
                   type: "Identifier",
                   name: "x",
-                  range: [21, 22],
                   loc: {
                     start: {line: 1, column: 21},
                     end: {line: 1, column: 22}
@@ -12056,7 +11121,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 value: {
                   type: "Identifier",
                   name: "x",
-                  range: [21, 22],
                   loc: {
                     start: {line: 1, column: 21},
                     end: {line: 1, column: 22}
@@ -12066,14 +11130,12 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [21, 22],
                 loc: {
                   start: {line: 1, column: 21},
                   end: {line: 1, column: 22}
                 }
               }
             ],
-            range: [16, 24],
             loc: {
               start: {line: 1, column: 16},
               end: {line: 1, column: 24}
@@ -12083,7 +11145,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [13, 24],
           loc: {
             start: {line: 1, column: 13},
             end: {line: 1, column: 24}
@@ -12094,7 +11155,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
           key: {
             type: "Identifier",
             name: "b",
-            range: [26, 27],
             loc: {
               start: {line: 1, column: 26},
               end: {line: 1, column: 27}
@@ -12106,7 +11166,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
               {
                 type: "Identifier",
                 name: "y",
-                range: [30, 31],
                 loc: {
                   start: {line: 1, column: 30},
                   end: {line: 1, column: 31}
@@ -12115,14 +11174,12 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
               {
                 type: "Identifier",
                 name: "z",
-                range: [33, 34],
                 loc: {
                   start: {line: 1, column: 33},
                   end: {line: 1, column: 34}
                 }
               }
             ],
-            range: [29, 35],
             loc: {
               start: {line: 1, column: 29},
               end: {line: 1, column: 35}
@@ -12132,14 +11189,12 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [26, 35],
           loc: {
             start: {line: 1, column: 26},
             end: {line: 1, column: 35}
           }
         }
       ],
-      range: [11, 37],
       loc: {
         start: {line: 1, column: 11},
         end: {line: 1, column: 37}
@@ -12149,7 +11204,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
     body: {
       type: "BlockStatement",
       body: [],
-      range: [52, 54],
       loc: {
         start: {line: 1, column: 52},
         end: {line: 1, column: 54}
@@ -12161,7 +11215,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
         {
           type: "Identifier",
           name: "a",
-          range: [43, 44],
           loc: {
             start: {line: 1, column: 43},
             end: {line: 1, column: 44}
@@ -12170,7 +11223,6 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
         {
           type: "Identifier",
           name: "b",
-          range: [46, 47],
           loc: {
             start: {line: 1, column: 46},
             end: {line: 1, column: 47}
@@ -12179,14 +11231,12 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
         {
           type: "Identifier",
           name: "c",
-          range: [49, 50],
           loc: {
             start: {line: 1, column: 49},
             end: {line: 1, column: 50}
           }
         }
       ],
-      range: [42, 51],
       loc: {
         start: {line: 1, column: 42},
         end: {line: 1, column: 51}
@@ -12194,13 +11244,11 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
     },
     generator: false,
     expression: false,
-    range: [0, 54],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 54}
     }
   }],
-  range: [0, 54],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 54}
@@ -12220,7 +11268,6 @@ test("(function x([ a, b ]){})", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [10, 11],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 11}
@@ -12232,7 +11279,6 @@ test("(function x([ a, b ]){})", {
           {
             type: "Identifier",
             name: "a",
-            range: [14, 15],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 15}
@@ -12241,14 +11287,12 @@ test("(function x([ a, b ]){})", {
           {
             type: "Identifier",
             name: "b",
-            range: [17, 18],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 18}
             }
           }
         ],
-        range: [12, 20],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 20}
@@ -12258,7 +11302,6 @@ test("(function x([ a, b ]){})", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [21, 23],
         loc: {
           start: {line: 1, column: 21},
           end: {line: 1, column: 23}
@@ -12267,19 +11310,16 @@ test("(function x([ a, b ]){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 23],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 23}
       }
     },
-    range: [0, 24],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 24}
     }
   }],
-  range: [0, 24],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
@@ -12299,7 +11339,6 @@ test("(function x({ a, b }){})", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [10, 11],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 11}
@@ -12313,7 +11352,6 @@ test("(function x({ a, b }){})", {
             key: {
               type: "Identifier",
               name: "a",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
@@ -12322,7 +11360,6 @@ test("(function x({ a, b }){})", {
             value: {
               type: "Identifier",
               name: "a",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
@@ -12332,7 +11369,6 @@ test("(function x({ a, b }){})", {
             method: false,
             shorthand: true,
             computed: false,
-            range: [14, 15],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 15}
@@ -12343,7 +11379,6 @@ test("(function x({ a, b }){})", {
             key: {
               type: "Identifier",
               name: "b",
-              range: [17, 18],
               loc: {
                 start: {line: 1, column: 17},
                 end: {line: 1, column: 18}
@@ -12352,7 +11387,6 @@ test("(function x({ a, b }){})", {
             value: {
               type: "Identifier",
               name: "b",
-              range: [17, 18],
               loc: {
                 start: {line: 1, column: 17},
                 end: {line: 1, column: 18}
@@ -12362,14 +11396,12 @@ test("(function x({ a, b }){})", {
             method: false,
             shorthand: true,
             computed: false,
-            range: [17, 18],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 18}
             }
           }
         ],
-        range: [12, 20],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 20}
@@ -12379,7 +11411,6 @@ test("(function x({ a, b }){})", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [21, 23],
         loc: {
           start: {line: 1, column: 21},
           end: {line: 1, column: 23}
@@ -12388,19 +11419,16 @@ test("(function x({ a, b }){})", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 23],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 23}
       }
     },
-    range: [0, 24],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 24}
     }
   }],
-  range: [0, 24],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
@@ -12420,7 +11448,6 @@ test("(function x(...[ a, b ]){})", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [10, 11],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 11}
@@ -12431,7 +11458,6 @@ test("(function x(...[ a, b ]){})", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [24, 26],
         loc: {
           start: {line: 1, column: 24},
           end: {line: 1, column: 26}
@@ -12443,7 +11469,6 @@ test("(function x(...[ a, b ]){})", {
           {
             type: "Identifier",
             name: "a",
-            range: [17, 18],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 18}
@@ -12452,14 +11477,12 @@ test("(function x(...[ a, b ]){})", {
           {
             type: "Identifier",
             name: "b",
-            range: [20, 21],
             loc: {
               start: {line: 1, column: 20},
               end: {line: 1, column: 21}
             }
           }
         ],
-        range: [15, 23],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 23}
@@ -12467,19 +11490,16 @@ test("(function x(...[ a, b ]){})", {
       },
       generator: false,
       expression: false,
-      range: [1, 26],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 26}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -12499,7 +11519,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
       id: {
         type: "Identifier",
         name: "x",
-        range: [10, 11],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 11}
@@ -12513,7 +11532,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
             key: {
               type: "Identifier",
               name: "a",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
@@ -12527,7 +11545,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   key: {
                     type: "Identifier",
                     name: "w",
-                    range: [19, 20],
                     loc: {
                       start: {line: 1, column: 19},
                       end: {line: 1, column: 20}
@@ -12536,7 +11553,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   value: {
                     type: "Identifier",
                     name: "w",
-                    range: [19, 20],
                     loc: {
                       start: {line: 1, column: 19},
                       end: {line: 1, column: 20}
@@ -12546,7 +11562,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   method: false,
                   shorthand: true,
                   computed: false,
-                  range: [19, 20],
                   loc: {
                     start: {line: 1, column: 19},
                     end: {line: 1, column: 20}
@@ -12557,7 +11572,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   key: {
                     type: "Identifier",
                     name: "x",
-                    range: [22, 23],
                     loc: {
                       start: {line: 1, column: 22},
                       end: {line: 1, column: 23}
@@ -12566,7 +11580,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   value: {
                     type: "Identifier",
                     name: "x",
-                    range: [22, 23],
                     loc: {
                       start: {line: 1, column: 22},
                       end: {line: 1, column: 23}
@@ -12576,14 +11589,12 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                   method: false,
                   shorthand: true,
                   computed: false,
-                  range: [22, 23],
                   loc: {
                     start: {line: 1, column: 22},
                     end: {line: 1, column: 23}
                   }
                 }
               ],
-              range: [17, 25],
               loc: {
                 start: {line: 1, column: 17},
                 end: {line: 1, column: 25}
@@ -12593,7 +11604,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
             method: false,
             shorthand: false,
             computed: false,
-            range: [14, 25],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 25}
@@ -12604,7 +11614,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
             key: {
               type: "Identifier",
               name: "b",
-              range: [27, 28],
               loc: {
                 start: {line: 1, column: 27},
                 end: {line: 1, column: 28}
@@ -12616,7 +11625,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                 {
                   type: "Identifier",
                   name: "y",
-                  range: [31, 32],
                   loc: {
                     start: {line: 1, column: 31},
                     end: {line: 1, column: 32}
@@ -12625,14 +11633,12 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
                 {
                   type: "Identifier",
                   name: "z",
-                  range: [34, 35],
                   loc: {
                     start: {line: 1, column: 34},
                     end: {line: 1, column: 35}
                   }
                 }
               ],
-              range: [30, 36],
               loc: {
                 start: {line: 1, column: 30},
                 end: {line: 1, column: 36}
@@ -12642,14 +11648,12 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
             method: false,
             shorthand: false,
             computed: false,
-            range: [27, 36],
             loc: {
               start: {line: 1, column: 27},
               end: {line: 1, column: 36}
             }
           }
         ],
-        range: [12, 38],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 38}
@@ -12659,7 +11663,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [53, 55],
         loc: {
           start: {line: 1, column: 53},
           end: {line: 1, column: 55}
@@ -12671,7 +11674,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
           {
             type: "Identifier",
             name: "a",
-            range: [44, 45],
             loc: {
               start: {line: 1, column: 44},
               end: {line: 1, column: 45}
@@ -12680,7 +11682,6 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
           {
             type: "Identifier",
             name: "b",
-            range: [47, 48],
             loc: {
               start: {line: 1, column: 47},
               end: {line: 1, column: 48}
@@ -12689,14 +11690,12 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
           {
             type: "Identifier",
             name: "c",
-            range: [50, 51],
             loc: {
               start: {line: 1, column: 50},
               end: {line: 1, column: 51}
             }
           }
         ],
-        range: [43, 52],
         loc: {
           start: {line: 1, column: 43},
           end: {line: 1, column: 52}
@@ -12704,19 +11703,16 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
       },
       generator: false,
       expression: false,
-      range: [1, 55],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 55}
       }
     },
-    range: [0, 56],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 56}
     }
   }],
-  range: [0, 56],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 56}
@@ -12738,7 +11734,6 @@ test("({ x([ a, b ]){} })", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -12753,7 +11748,6 @@ test("({ x([ a, b ]){} })", {
               {
                 type: "Identifier",
                 name: "a",
-                range: [7, 8],
                 loc: {
                   start: {line: 1, column: 7},
                   end: {line: 1, column: 8}
@@ -12762,14 +11756,12 @@ test("({ x([ a, b ]){} })", {
               {
                 type: "Identifier",
                 name: "b",
-                range: [10, 11],
                 loc: {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
                 }
               }
             ],
-            range: [5, 13],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 13}
@@ -12779,7 +11771,6 @@ test("({ x([ a, b ]){} })", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [14, 16],
             loc: {
               start: {line: 1, column: 14},
               end: {line: 1, column: 16}
@@ -12788,7 +11779,6 @@ test("({ x([ a, b ]){} })", {
           rest: null,
           generator: false,
           expression: false,
-          range: [4, 16],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 16}
@@ -12798,25 +11788,21 @@ test("({ x([ a, b ]){} })", {
         method: true,
         shorthand: false,
         computed: false,
-        range: [3, 16],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 16}
         }
       }],
-      range: [1, 18],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -12838,7 +11824,6 @@ test("({ x(...[ a, b ]){} })", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -12852,7 +11837,6 @@ test("({ x(...[ a, b ]){} })", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [17, 19],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 19}
@@ -12864,7 +11848,6 @@ test("({ x(...[ a, b ]){} })", {
               {
                 type: "Identifier",
                 name: "a",
-                range: [10, 11],
                 loc: {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
@@ -12873,14 +11856,12 @@ test("({ x(...[ a, b ]){} })", {
               {
                 type: "Identifier",
                 name: "b",
-                range: [13, 14],
                 loc: {
                   start: {line: 1, column: 13},
                   end: {line: 1, column: 14}
                 }
               }
             ],
-            range: [8, 16],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 16}
@@ -12888,7 +11869,6 @@ test("({ x(...[ a, b ]){} })", {
           },
           generator: false,
           expression: false,
-          range: [4, 19],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 19}
@@ -12898,25 +11878,21 @@ test("({ x(...[ a, b ]){} })", {
         method: true,
         shorthand: false,
         computed: false,
-        range: [3, 19],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 19}
         }
       }],
-      range: [1, 21],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 21}
       }
     },
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -12938,7 +11914,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
         key: {
           type: "Identifier",
           name: "x",
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
@@ -12955,7 +11930,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                 key: {
                   type: "Identifier",
                   name: "a",
-                  range: [7, 8],
                   loc: {
                     start: {line: 1, column: 7},
                     end: {line: 1, column: 8}
@@ -12969,7 +11943,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       key: {
                         type: "Identifier",
                         name: "w",
-                        range: [12, 13],
                         loc: {
                           start: {line: 1, column: 12},
                           end: {line: 1, column: 13}
@@ -12978,7 +11951,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       value: {
                         type: "Identifier",
                         name: "w",
-                        range: [12, 13],
                         loc: {
                           start: {line: 1, column: 12},
                           end: {line: 1, column: 13}
@@ -12988,7 +11960,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       method: false,
                       shorthand: true,
                       computed: false,
-                      range: [12, 13],
                       loc: {
                         start: {line: 1, column: 12},
                         end: {line: 1, column: 13}
@@ -12999,7 +11970,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       key: {
                         type: "Identifier",
                         name: "x",
-                        range: [15, 16],
                         loc: {
                           start: {line: 1, column: 15},
                           end: {line: 1, column: 16}
@@ -13008,7 +11978,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       value: {
                         type: "Identifier",
                         name: "x",
-                        range: [15, 16],
                         loc: {
                           start: {line: 1, column: 15},
                           end: {line: 1, column: 16}
@@ -13018,14 +11987,12 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                       method: false,
                       shorthand: true,
                       computed: false,
-                      range: [15, 16],
                       loc: {
                         start: {line: 1, column: 15},
                         end: {line: 1, column: 16}
                       }
                     }
                   ],
-                  range: [10, 18],
                   loc: {
                     start: {line: 1, column: 10},
                     end: {line: 1, column: 18}
@@ -13035,7 +12002,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                 method: false,
                 shorthand: false,
                 computed: false,
-                range: [7, 18],
                 loc: {
                   start: {line: 1, column: 7},
                   end: {line: 1, column: 18}
@@ -13046,7 +12012,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                 key: {
                   type: "Identifier",
                   name: "b",
-                  range: [20, 21],
                   loc: {
                     start: {line: 1, column: 20},
                     end: {line: 1, column: 21}
@@ -13058,7 +12023,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                     {
                       type: "Identifier",
                       name: "y",
-                      range: [24, 25],
                       loc: {
                         start: {line: 1, column: 24},
                         end: {line: 1, column: 25}
@@ -13067,14 +12031,12 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                     {
                       type: "Identifier",
                       name: "z",
-                      range: [27, 28],
                       loc: {
                         start: {line: 1, column: 27},
                         end: {line: 1, column: 28}
                       }
                     }
                   ],
-                  range: [23, 29],
                   loc: {
                     start: {line: 1, column: 23},
                     end: {line: 1, column: 29}
@@ -13084,14 +12046,12 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
                 method: false,
                 shorthand: false,
                 computed: false,
-                range: [20, 29],
                 loc: {
                   start: {line: 1, column: 20},
                   end: {line: 1, column: 29}
                 }
               }
             ],
-            range: [5, 31],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 31}
@@ -13101,7 +12061,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
           body: {
             type: "BlockStatement",
             body: [],
-            range: [46, 48],
             loc: {
               start: {line: 1, column: 46},
               end: {line: 1, column: 48}
@@ -13113,7 +12072,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
               {
                 type: "Identifier",
                 name: "a",
-                range: [37, 38],
                 loc: {
                   start: {line: 1, column: 37},
                   end: {line: 1, column: 38}
@@ -13122,7 +12080,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
               {
                 type: "Identifier",
                 name: "b",
-                range: [40, 41],
                 loc: {
                   start: {line: 1, column: 40},
                   end: {line: 1, column: 41}
@@ -13131,14 +12088,12 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
               {
                 type: "Identifier",
                 name: "c",
-                range: [43, 44],
                 loc: {
                   start: {line: 1, column: 43},
                   end: {line: 1, column: 44}
                 }
               }
             ],
-            range: [36, 45],
             loc: {
               start: {line: 1, column: 36},
               end: {line: 1, column: 45}
@@ -13146,7 +12101,6 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
           },
           generator: false,
           expression: false,
-          range: [4, 48],
           loc: {
             start: {line: 1, column: 4},
             end: {line: 1, column: 48}
@@ -13156,25 +12110,21 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
         method: true,
         shorthand: false,
         computed: false,
-        range: [3, 48],
         loc: {
           start: {line: 1, column: 3},
           end: {line: 1, column: 48}
         }
       }],
-      range: [1, 50],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 50}
       }
     },
-    range: [0, 51],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 51}
     }
   }],
-  range: [0, 51],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 51}
@@ -13197,7 +12147,6 @@ test("(...a) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [10, 12],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
@@ -13206,7 +12155,6 @@ test("(...a) => {}", {
       rest: {
         type: "Identifier",
         name: "a",
-        range: [4, 5],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 5}
@@ -13214,19 +12162,16 @@ test("(...a) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 12],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       }
     },
-    range: [0, 12],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     }
   }],
-  range: [0, 12],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
@@ -13247,7 +12192,6 @@ test("(a, ...b) => {}", {
       params: [{
         type: "Identifier",
         name: "a",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -13257,7 +12201,6 @@ test("(a, ...b) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [13, 15],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 15}
@@ -13266,7 +12209,6 @@ test("(a, ...b) => {}", {
       rest: {
         type: "Identifier",
         name: "b",
-        range: [7, 8],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 8}
@@ -13274,19 +12216,16 @@ test("(a, ...b) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 15],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 15}
       }
     },
-    range: [0, 15],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 15}
     }
   }],
-  range: [0, 15],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 15}
@@ -13311,7 +12250,6 @@ test("({ a }) => {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -13320,7 +12258,6 @@ test("({ a }) => {}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -13330,13 +12267,11 @@ test("({ a }) => {}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
           }
         }],
-        range: [1, 6],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 6}
@@ -13346,7 +12281,6 @@ test("({ a }) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [11, 13],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 13}
@@ -13355,19 +12289,16 @@ test("({ a }) => {}", {
       rest: null,
       generator: false,
       expression: false,
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -13392,7 +12323,6 @@ test("({ a }, ...b) => {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -13401,7 +12331,6 @@ test("({ a }, ...b) => {}", {
           value: {
             type: "Identifier",
             name: "a",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -13411,13 +12340,11 @@ test("({ a }, ...b) => {}", {
           method: false,
           shorthand: true,
           computed: false,
-          range: [3, 4],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
           }
         }],
-        range: [1, 6],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 6}
@@ -13427,7 +12354,6 @@ test("({ a }, ...b) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [17, 19],
         loc: {
           start: {line: 1, column: 17},
           end: {line: 1, column: 19}
@@ -13436,7 +12362,6 @@ test("({ a }, ...b) => {}", {
       rest: {
         type: "Identifier",
         name: "b",
-        range: [11, 12],
         loc: {
           start: {line: 1, column: 11},
           end: {line: 1, column: 12}
@@ -13444,19 +12369,16 @@ test("({ a }, ...b) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 19],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 19}
       }
     },
-    range: [0, 19],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 19}
     }
   }],
-  range: [0, 19],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 19}
@@ -13479,7 +12401,6 @@ test("(...[a, b]) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [15, 17],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 17}
@@ -13491,7 +12412,6 @@ test("(...[a, b]) => {}", {
           {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -13500,14 +12420,12 @@ test("(...[a, b]) => {}", {
           {
             type: "Identifier",
             name: "b",
-            range: [8, 9],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 9}
             }
           }
         ],
-        range: [4, 10],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 10}
@@ -13515,19 +12433,16 @@ test("(...[a, b]) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -13548,7 +12463,6 @@ test("(a, ...[b]) => {}", {
       params: [{
         type: "Identifier",
         name: "a",
-        range: [1, 2],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 2}
@@ -13558,7 +12472,6 @@ test("(a, ...[b]) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [15, 17],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 17}
@@ -13569,13 +12482,11 @@ test("(a, ...[b]) => {}", {
         elements: [{
           type: "Identifier",
           name: "b",
-          range: [8, 9],
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 9}
           }
         }],
-        range: [7, 10],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 10}
@@ -13583,19 +12494,16 @@ test("(a, ...[b]) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 17],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 17}
       }
     },
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -13620,7 +12528,6 @@ test("({ a: [a, b] }, ...c) => {}", {
           key: {
             type: "Identifier",
             name: "a",
-            range: [3, 4],
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
@@ -13632,7 +12539,6 @@ test("({ a: [a, b] }, ...c) => {}", {
               {
                 type: "Identifier",
                 name: "a",
-                range: [7, 8],
                 loc: {
                   start: {line: 1, column: 7},
                   end: {line: 1, column: 8}
@@ -13641,14 +12547,12 @@ test("({ a: [a, b] }, ...c) => {}", {
               {
                 type: "Identifier",
                 name: "b",
-                range: [10, 11],
                 loc: {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
                 }
               }
             ],
-            range: [6, 12],
             loc: {
               start: {line: 1, column: 6},
               end: {line: 1, column: 12}
@@ -13658,13 +12562,11 @@ test("({ a: [a, b] }, ...c) => {}", {
           method: false,
           shorthand: false,
           computed: false,
-          range: [3, 12],
           loc: {
             start: {line: 1, column: 3},
             end: {line: 1, column: 12}
           }
         }],
-        range: [1, 14],
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 14}
@@ -13674,7 +12576,6 @@ test("({ a: [a, b] }, ...c) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [25, 27],
         loc: {
           start: {line: 1, column: 25},
           end: {line: 1, column: 27}
@@ -13683,7 +12584,6 @@ test("({ a: [a, b] }, ...c) => {}", {
       rest: {
         type: "Identifier",
         name: "c",
-        range: [19, 20],
         loc: {
           start: {line: 1, column: 19},
           end: {line: 1, column: 20}
@@ -13691,19 +12591,16 @@ test("({ a: [a, b] }, ...c) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 27],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 27}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
@@ -13730,7 +12627,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               key: {
                 type: "Identifier",
                 name: "a",
-                range: [3, 4],
                 loc: {
                   start: {line: 1, column: 3},
                   end: {line: 1, column: 4}
@@ -13739,7 +12635,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               value: {
                 type: "Identifier",
                 name: "b",
-                range: [6, 7],
                 loc: {
                   start: {line: 1, column: 6},
                   end: {line: 1, column: 7}
@@ -13749,7 +12644,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               method: false,
               shorthand: false,
               computed: false,
-              range: [3, 7],
               loc: {
                 start: {line: 1, column: 3},
                 end: {line: 1, column: 7}
@@ -13760,7 +12654,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               key: {
                 type: "Identifier",
                 name: "c",
-                range: [9, 10],
                 loc: {
                   start: {line: 1, column: 9},
                   end: {line: 1, column: 10}
@@ -13769,7 +12662,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               value: {
                 type: "Identifier",
                 name: "c",
-                range: [9, 10],
                 loc: {
                   start: {line: 1, column: 9},
                   end: {line: 1, column: 10}
@@ -13779,14 +12671,12 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
               method: false,
               shorthand: true,
               computed: false,
-              range: [9, 10],
               loc: {
                 start: {line: 1, column: 9},
                 end: {line: 1, column: 10}
               }
             }
           ],
-          range: [1, 12],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 12}
@@ -13798,7 +12688,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
             {
               type: "Identifier",
               name: "d",
-              range: [15, 16],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 16}
@@ -13807,14 +12696,12 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
             {
               type: "Identifier",
               name: "e",
-              range: [18, 19],
               loc: {
                 start: {line: 1, column: 18},
                 end: {line: 1, column: 19}
               }
             }
           ],
-          range: [14, 20],
           loc: {
             start: {line: 1, column: 14},
             end: {line: 1, column: 20}
@@ -13825,7 +12712,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
       body: {
         type: "BlockStatement",
         body: [],
-        range: [31, 33],
         loc: {
           start: {line: 1, column: 31},
           end: {line: 1, column: 33}
@@ -13834,7 +12720,6 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
       rest: {
         type: "Identifier",
         name: "f",
-        range: [25, 26],
         loc: {
           start: {line: 1, column: 25},
           end: {line: 1, column: 26}
@@ -13842,19 +12727,16 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
       },
       generator: false,
       expression: false,
-      range: [0, 33],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 33}
       }
     },
-    range: [0, 33],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 33}
     }
   }],
-  range: [0, 33],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 33}
@@ -13881,19 +12763,16 @@ test("[...a] = b", {
           argument: {
             type: "Identifier",
             name: "a",
-            range: [4, 5],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 5}
             }
           },
-          range: [1, 5],
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 5}
           }
         }],
-        range: [0, 6],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 6}
@@ -13902,25 +12781,21 @@ test("[...a] = b", {
       right: {
         type: "Identifier",
         name: "b",
-        range: [9, 10],
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 10}
         }
       },
-      range: [0, 10],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 10}
       }
     },
-    range: [0, 10],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 10}
     }
   }],
-  range: [0, 10],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
@@ -13944,7 +12819,6 @@ test("[a, ...b] = c", {
           {
             type: "Identifier",
             name: "a",
-            range: [1, 2],
             loc: {
               start: {line: 1, column: 1},
               end: {line: 1, column: 2}
@@ -13955,20 +12829,17 @@ test("[a, ...b] = c", {
             argument: {
               type: "Identifier",
               name: "b",
-              range: [7, 8],
               loc: {
                 start: {line: 1, column: 7},
                 end: {line: 1, column: 8}
               }
             },
-            range: [4, 8],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 8}
             }
           }
         ],
-        range: [0, 9],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 9}
@@ -13977,25 +12848,21 @@ test("[a, ...b] = c", {
       right: {
         type: "Identifier",
         name: "c",
-        range: [12, 13],
         loc: {
           start: {line: 1, column: 12},
           end: {line: 1, column: 13}
         }
       },
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -14024,7 +12891,6 @@ test("[{ a, b }, ...c] = d", {
                 key: {
                   type: "Identifier",
                   name: "a",
-                  range: [3, 4],
                   loc: {
                     start: {line: 1, column: 3},
                     end: {line: 1, column: 4}
@@ -14033,7 +12899,6 @@ test("[{ a, b }, ...c] = d", {
                 value: {
                   type: "Identifier",
                   name: "a",
-                  range: [3, 4],
                   loc: {
                     start: {line: 1, column: 3},
                     end: {line: 1, column: 4}
@@ -14043,7 +12908,6 @@ test("[{ a, b }, ...c] = d", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [3, 4],
                 loc: {
                   start: {line: 1, column: 3},
                   end: {line: 1, column: 4}
@@ -14054,7 +12918,6 @@ test("[{ a, b }, ...c] = d", {
                 key: {
                   type: "Identifier",
                   name: "b",
-                  range: [6, 7],
                   loc: {
                     start: {line: 1, column: 6},
                     end: {line: 1, column: 7}
@@ -14063,7 +12926,6 @@ test("[{ a, b }, ...c] = d", {
                 value: {
                   type: "Identifier",
                   name: "b",
-                  range: [6, 7],
                   loc: {
                     start: {line: 1, column: 6},
                     end: {line: 1, column: 7}
@@ -14073,14 +12935,12 @@ test("[{ a, b }, ...c] = d", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [6, 7],
                 loc: {
                   start: {line: 1, column: 6},
                   end: {line: 1, column: 7}
                 }
               }
             ],
-            range: [1, 9],
             loc: {
               start: {line: 1, column: 1},
               end: {line: 1, column: 9}
@@ -14091,20 +12951,17 @@ test("[{ a, b }, ...c] = d", {
             argument: {
               type: "Identifier",
               name: "c",
-              range: [14, 15],
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
               }
             },
-            range: [11, 15],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 15}
             }
           }
         ],
-        range: [0, 16],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 16}
@@ -14113,25 +12970,21 @@ test("[{ a, b }, ...c] = d", {
       right: {
         type: "Identifier",
         name: "d",
-        range: [19, 20],
         loc: {
           start: {line: 1, column: 19},
           end: {line: 1, column: 20}
         }
       },
-      range: [0, 20],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 20}
       }
     },
-    range: [0, 20],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 20}
     }
   }],
-  range: [0, 20],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 20}
@@ -14155,7 +13008,6 @@ test("[a, ...[b, c]] = d", {
           {
             type: "Identifier",
             name: "a",
-            range: [1, 2],
             loc: {
               start: {line: 1, column: 1},
               end: {line: 1, column: 2}
@@ -14169,7 +13021,6 @@ test("[a, ...[b, c]] = d", {
                 {
                   type: "Identifier",
                   name: "b",
-                  range: [8, 9],
                   loc: {
                     start: {line: 1, column: 8},
                     end: {line: 1, column: 9}
@@ -14178,27 +13029,23 @@ test("[a, ...[b, c]] = d", {
                 {
                   type: "Identifier",
                   name: "c",
-                  range: [11, 12],
                   loc: {
                     start: {line: 1, column: 11},
                     end: {line: 1, column: 12}
                   }
                 }
               ],
-              range: [7, 13],
               loc: {
                 start: {line: 1, column: 7},
                 end: {line: 1, column: 13}
               }
             },
-            range: [4, 13],
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 13}
             }
           }
         ],
-        range: [0, 14],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 14}
@@ -14207,25 +13054,21 @@ test("[a, ...[b, c]] = d", {
       right: {
         type: "Identifier",
         name: "d",
-        range: [17, 18],
         loc: {
           start: {line: 1, column: 17},
           end: {line: 1, column: 18}
         }
       },
-      range: [0, 18],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 18}
       }
     },
-    range: [0, 18],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 18}
     }
   }],
-  range: [0, 18],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 18}
@@ -14249,19 +13092,16 @@ test("var [...a] = b", {
           argument: {
             type: "Identifier",
             name: "a",
-            range: [8, 9],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 9}
             }
           },
-          range: [5, 9],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 9}
           }
         }],
-        range: [4, 10],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 10}
@@ -14270,26 +13110,22 @@ test("var [...a] = b", {
       init: {
         type: "Identifier",
         name: "b",
-        range: [13, 14],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 14}
         }
       },
-      range: [4, 14],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 14}
       }
     }],
     kind: "var",
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
@@ -14312,7 +13148,6 @@ test("var [a, ...b] = c", {
           {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -14323,20 +13158,17 @@ test("var [a, ...b] = c", {
             argument: {
               type: "Identifier",
               name: "b",
-              range: [11, 12],
               loc: {
                 start: {line: 1, column: 11},
                 end: {line: 1, column: 12}
               }
             },
-            range: [8, 12],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 12}
             }
           }
         ],
-        range: [4, 13],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 13}
@@ -14345,26 +13177,22 @@ test("var [a, ...b] = c", {
       init: {
         type: "Identifier",
         name: "c",
-        range: [16, 17],
         loc: {
           start: {line: 1, column: 16},
           end: {line: 1, column: 17}
         }
       },
-      range: [4, 17],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 17}
       }
     }],
     kind: "var",
-    range: [0, 17],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
     }
   }],
-  range: [0, 17],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 17}
@@ -14392,7 +13220,6 @@ test("var [{ a, b }, ...c] = d", {
                 key: {
                   type: "Identifier",
                   name: "a",
-                  range: [7, 8],
                   loc: {
                     start: {line: 1, column: 7},
                     end: {line: 1, column: 8}
@@ -14401,7 +13228,6 @@ test("var [{ a, b }, ...c] = d", {
                 value: {
                   type: "Identifier",
                   name: "a",
-                  range: [7, 8],
                   loc: {
                     start: {line: 1, column: 7},
                     end: {line: 1, column: 8}
@@ -14411,7 +13237,6 @@ test("var [{ a, b }, ...c] = d", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [7, 8],
                 loc: {
                   start: {line: 1, column: 7},
                   end: {line: 1, column: 8}
@@ -14422,7 +13247,6 @@ test("var [{ a, b }, ...c] = d", {
                 key: {
                   type: "Identifier",
                   name: "b",
-                  range: [10, 11],
                   loc: {
                     start: {line: 1, column: 10},
                     end: {line: 1, column: 11}
@@ -14431,7 +13255,6 @@ test("var [{ a, b }, ...c] = d", {
                 value: {
                   type: "Identifier",
                   name: "b",
-                  range: [10, 11],
                   loc: {
                     start: {line: 1, column: 10},
                     end: {line: 1, column: 11}
@@ -14441,14 +13264,12 @@ test("var [{ a, b }, ...c] = d", {
                 method: false,
                 shorthand: true,
                 computed: false,
-                range: [10, 11],
                 loc: {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
                 }
               }
             ],
-            range: [5, 13],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 13}
@@ -14459,20 +13280,17 @@ test("var [{ a, b }, ...c] = d", {
             argument: {
               type: "Identifier",
               name: "c",
-              range: [18, 19],
               loc: {
                 start: {line: 1, column: 18},
                 end: {line: 1, column: 19}
               }
             },
-            range: [15, 19],
             loc: {
               start: {line: 1, column: 15},
               end: {line: 1, column: 19}
             }
           }
         ],
-        range: [4, 20],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 20}
@@ -14481,26 +13299,22 @@ test("var [{ a, b }, ...c] = d", {
       init: {
         type: "Identifier",
         name: "d",
-        range: [23, 24],
         loc: {
           start: {line: 1, column: 23},
           end: {line: 1, column: 24}
         }
       },
-      range: [4, 24],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 24}
       }
     }],
     kind: "var",
-    range: [0, 24],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 24}
     }
   }],
-  range: [0, 24],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 24}
@@ -14523,7 +13337,6 @@ test("var [a, ...[b, c]] = d", {
           {
             type: "Identifier",
             name: "a",
-            range: [5, 6],
             loc: {
               start: {line: 1, column: 5},
               end: {line: 1, column: 6}
@@ -14537,7 +13350,6 @@ test("var [a, ...[b, c]] = d", {
                 {
                   type: "Identifier",
                   name: "b",
-                  range: [12, 13],
                   loc: {
                     start: {line: 1, column: 12},
                     end: {line: 1, column: 13}
@@ -14546,27 +13358,23 @@ test("var [a, ...[b, c]] = d", {
                 {
                   type: "Identifier",
                   name: "c",
-                  range: [15, 16],
                   loc: {
                     start: {line: 1, column: 15},
                     end: {line: 1, column: 16}
                   }
                 }
               ],
-              range: [11, 17],
               loc: {
                 start: {line: 1, column: 11},
                 end: {line: 1, column: 17}
               }
             },
-            range: [8, 17],
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 17}
             }
           }
         ],
-        range: [4, 18],
         loc: {
           start: {line: 1, column: 4},
           end: {line: 1, column: 18}
@@ -14575,26 +13383,22 @@ test("var [a, ...[b, c]] = d", {
       init: {
         type: "Identifier",
         name: "d",
-        range: [21, 22],
         loc: {
           start: {line: 1, column: 21},
           end: {line: 1, column: 22}
         }
       },
-      range: [4, 22],
       loc: {
         start: {line: 1, column: 4},
         end: {line: 1, column: 22}
       }
     }],
     kind: "var",
-    range: [0, 22],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 22}
     }
   }],
-  range: [0, 22],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 22}
@@ -14614,7 +13418,6 @@ test("func(...a)", {
       callee: {
         type: "Identifier",
         name: "func",
-        range: [0, 4],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 4}
@@ -14625,31 +13428,26 @@ test("func(...a)", {
         argument: {
           type: "Identifier",
           name: "a",
-          range: [8, 9],
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 9}
           }
         },
-        range: [5, 9],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 9}
         }
       }],
-      range: [0, 10],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 10}
       }
     },
-    range: [0, 10],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 10}
     }
   }],
-  range: [0, 10],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 10}
@@ -14669,7 +13467,6 @@ test("func(a, ...b)", {
       callee: {
         type: "Identifier",
         name: "func",
-        range: [0, 4],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 4}
@@ -14679,7 +13476,6 @@ test("func(a, ...b)", {
         {
           type: "Identifier",
           name: "a",
-          range: [5, 6],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 6}
@@ -14690,32 +13486,27 @@ test("func(a, ...b)", {
           argument: {
             type: "Identifier",
             name: "b",
-            range: [11, 12],
             loc: {
               start: {line: 1, column: 11},
               end: {line: 1, column: 12}
             }
           },
-          range: [8, 12],
           loc: {
             start: {line: 1, column: 8},
             end: {line: 1, column: 12}
           }
         }
       ],
-      range: [0, 13],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       }
     },
-    range: [0, 13],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     }
   }],
-  range: [0, 13],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
@@ -14732,28 +13523,24 @@ test("func(...a, b)", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 13}
   },
-  range: [0, 13],
   body: [{
     type: "ExpressionStatement",
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 13}
     },
-    range: [0, 13],
     expression: {
       type: "CallExpression",
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 13}
       },
-      range: [0, 13],
       callee: {
         type: "Identifier",
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 4}
         },
-        range: [0, 4],
         name: "func"
       },
       arguments: [
@@ -14763,14 +13550,12 @@ test("func(...a, b)", {
             start: {line: 1, column: 5},
             end: {line: 1, column: 9}
           },
-          range: [5, 9],
           argument: {
             type: "Identifier",
             loc: {
               start: {line: 1, column: 8},
               end: {line: 1, column: 9}
             },
-            range: [8, 9],
             name: "a"
           }
         },
@@ -14780,7 +13565,6 @@ test("func(...a, b)", {
             start: {line: 1, column: 11},
             end: {line: 1, column: 12}
           },
-          range: [11, 12],
           name: "b"
         }
       ]
@@ -14790,6 +13574,35 @@ test("func(...a, b)", {
   ecmaVersion: 6,
   ranges: true,
   locations: true
+});
+
+test("/[a-z]/u", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {
+          pattern: "[a-z]",
+          flags: "u"
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 8
+          }
+        }
+      }
+    }
+  ]
+}, {
+  locations: true,
+  ecmaVersion: 6
 });
 
 // Harmony Invalid syntax
@@ -14918,7 +13731,6 @@ test("yield* 10", {
       left: {
         type: "Identifier",
         name: "yield",
-        range: [0, 5],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 5}
@@ -14928,31 +13740,28 @@ test("yield* 10", {
         type: "Literal",
         value: 10,
         raw: "10",
-        range: [7, 9],
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 9}
         }
       },
-      range: [0, 9],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 9}
       }
     },
-    range: [0, 9],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 9}
     }
   }],
-  range: [0, 9],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 9}
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });
@@ -14967,7 +13776,6 @@ test("e => yield* 10", {
       params: [{
         type: "Identifier",
         name: "e",
-        range: [0, 1],
         loc: {
           start: {line: 1, column: 0},
           end: {line: 1, column: 1}
@@ -14980,7 +13788,6 @@ test("e => yield* 10", {
         left: {
           type: "Identifier",
           name: "yield",
-          range: [5, 10],
           loc: {
             start: {line: 1, column: 5},
             end: {line: 1, column: 10}
@@ -14990,13 +13797,11 @@ test("e => yield* 10", {
           type: "Literal",
           value: 10,
           raw: "10",
-          range: [12, 14],
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 14}
           }
         },
-        range: [5, 14],
         loc: {
           start: {line: 1, column: 5},
           end: {line: 1, column: 14}
@@ -15005,25 +13810,23 @@ test("e => yield* 10", {
       rest: null,
       generator: false,
       expression: true,
-      range: [0, 14],
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 14}
       }
     },
-    range: [0, 14],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 14}
     }
   }],
-  range: [0, 14],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 14}
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });
@@ -15049,7 +13852,6 @@ test("(function () { yield* 10 })", {
             left: {
               type: "Identifier",
               name: "yield",
-              range: [15, 20],
               loc: {
                 start: {line: 1, column: 15},
                 end: {line: 1, column: 20}
@@ -15059,25 +13861,21 @@ test("(function () { yield* 10 })", {
               type: "Literal",
               value: 10,
               raw: "10",
-              range: [22, 24],
               loc: {
                 start: {line: 1, column: 22},
                 end: {line: 1, column: 24}
               }
             },
-            range: [15, 24],
             loc: {
               start: {line: 1, column: 15},
               end: {line: 1, column: 24}
             }
           },
-          range: [15, 24],
           loc: {
             start: {line: 1, column: 15},
             end: {line: 1, column: 24}
           }
         }],
-        range: [13, 26],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 26}
@@ -15086,25 +13884,23 @@ test("(function () { yield* 10 })", {
       rest: null,
       generator: false,
       expression: false,
-      range: [1, 26],
       loc: {
         start: {line: 1, column: 1},
         end: {line: 1, column: 26}
       }
     },
-    range: [0, 27],
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 27}
     }
   }],
-  range: [0, 27],
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 27}
   }
 }, {
   ecmaVersion: 6,
+  loose: false,
   ranges: true,
   locations: true
 });
@@ -15127,17 +13923,17 @@ testFail("`hello ${10;test`", "Unexpected token (1:11)", {ecmaVersion: 6});
 
 testFail("function a() 1 // expression closure is not supported", "Unexpected token (1:13)", {ecmaVersion: 6});
 
-testFail("[for (let x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (let x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (const x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (const x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (var x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("[for (var x of []) x]", "Unexpected token (1:6)", {ecmaVersion: 7});
 
-testFail("[for (a in []) x] // (a,b) ", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("[for (a in []) x] // (a,b) ", "Unexpected token (1:8)", {ecmaVersion: 7});
 
 testFail("var a = [if (x) x]", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("[for (x of [])]  // no expression", "Unexpected token (1:14)", {ecmaVersion: 6});
+testFail("[for (x of [])]  // no expression", "Unexpected token (1:14)", {ecmaVersion: 7});
 
 testFail("({ \"chance\" }) = obj", "Unexpected token (1:12)", {ecmaVersion: 6});
 
@@ -15177,21 +13973,18 @@ test("[...a, ] = b", {
     start: {line: 1, column: 0},
     end: {line: 1, column: 12}
   },
-  range: [0, 12],
   body: [{
     type: "ExpressionStatement",
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 12}
     },
-    range: [0, 12],
     expression: {
       type: "AssignmentExpression",
       loc: {
         start: {line: 1, column: 0},
         end: {line: 1, column: 12}
       },
-      range: [0, 12],
       operator: "=",
       left: {
         type: "ArrayPattern",
@@ -15199,21 +13992,18 @@ test("[...a, ] = b", {
           start: {line: 1, column: 0},
           end: {line: 1, column: 8}
         },
-        range: [0, 8],
         elements: [{
           type: "SpreadElement",
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 5}
           },
-          range: [1, 5],
           argument: {
             type: "Identifier",
             loc: {
               start: {line: 1, column: 4},
               end: {line: 1, column: 5}
             },
-            range: [4, 5],
             name: "a"
           }
         }]
@@ -15224,7 +14014,6 @@ test("[...a, ] = b", {
           start: {line: 1, column: 11},
           end: {line: 1, column: 12}
         },
-        range: [11, 12],
         name: "b"
       }
     }
@@ -15252,54 +14041,34 @@ testFail("({ get test() { } }) => 42", "Unexpected token (1:7)", {ecmaVersion: 6
 // # https://github.com/marijnh/acorn/issues/127
 test('doSmth(`${x} + ${y} = ${x + y}`)', {
   type: "Program",
-  start: 0,
-  end: 32,
   body: [{
     type: "ExpressionStatement",
-    start: 0,
-    end: 32,
     expression: {
       type: "CallExpression",
-      start: 0,
-      end: 32,
       callee: {
         type: "Identifier",
-        start: 0,
-        end: 6,
         name: "doSmth"
       },
       arguments: [{
         type: "TemplateLiteral",
-        start: 7,
-        end: 31,
         expressions: [
           {
             type: "Identifier",
-            start: 10,
-            end: 11,
             name: "x"
           },
           {
             type: "Identifier",
-            start: 17,
-            end: 18,
             name: "y"
           },
           {
             type: "BinaryExpression",
-            start: 24,
-            end: 29,
             left: {
               type: "Identifier",
-              start: 24,
-              end: 25,
               name: "x"
             },
             operator: "+",
             right: {
               type: "Identifier",
-              start: 28,
-              end: 29,
               name: "y"
             }
           }
@@ -15307,29 +14076,21 @@ test('doSmth(`${x} + ${y} = ${x + y}`)', {
         quasis: [
           {
             type: "TemplateElement",
-            start: 8,
-            end: 8,
             value: {cooked: "", raw: ""},
             tail: false
           },
           {
             type: "TemplateElement",
-            start: 12,
-            end: 15,
             value: {cooked: " + ", raw: " + "},
             tail: false
           },
           {
             type: "TemplateElement",
-            start: 19,
-            end: 22,
             value: {cooked: " = ", raw: " = "},
             tail: false
           },
           {
             type: "TemplateElement",
-            start: 30,
-            end: 30,
             value: {cooked: "", raw: ""},
             tail: true
           }
@@ -15342,29 +14103,19 @@ test('doSmth(`${x} + ${y} = ${x + y}`)', {
 // # https://github.com/marijnh/acorn/issues/129
 test('function normal(x, y = 10) {}', {
   type: "Program",
-  start: 0,
-  end: 29,
   body: [{
     type: "FunctionDeclaration",
-    start: 0,
-    end: 29,
     id: {
       type: "Identifier",
-      start: 9,
-      end: 15,
       name: "normal"
     },
     params: [
       {
         type: "Identifier",
-        start: 16,
-        end: 17,
         name: "x"
       },
       {
         type: "Identifier",
-        start: 19,
-        end: 20,
         name: "y"
       }
     ],
@@ -15372,8 +14123,6 @@ test('function normal(x, y = 10) {}', {
       null,
       {
         type: "Literal",
-        start: 23,
-        end: 25,
         value: 10,
         raw: "10"
       }
@@ -15382,8 +14131,6 @@ test('function normal(x, y = 10) {}', {
     generator: false,
     body: {
       type: "BlockStatement",
-      start: 27,
-      end: 29,
       body: []
     },
     expression: false
@@ -15412,4 +14159,4 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
       type: "ComprehensionExpression"
     }
   }]
-}, {ecmaVersion: 6, preserveParens: true});
+}, {ecmaVersion: 7, preserveParens: true});
