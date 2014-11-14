@@ -1,1 +1,1 @@
-var foo = bar`a${ 42 }b ${_.foobar()}`;
+var foo = bar`wow\na${ 42 }b ${_.foobar()}`;
