@@ -35,9 +35,9 @@
   "ClassDeclaration": ["Statement", "Declaration", "Class"],
   "ClassExpression":  ["Class"],
 
-  "ForOfStatement": ["Statement", "For"],
-  "ForInStatement": ["Statement", "For"],
-  "ForStatement":   ["Statement", "For"],
+  "ForOfStatement": ["Statement", "For", "Scope"],
+  "ForInStatement": ["Statement", "For", "Scope"],
+  "ForStatement":   ["Statement", "For", "Scope"],
 
   "ObjectPattern": ["Pattern"],
   "ArrayPattern":  ["Pattern"],

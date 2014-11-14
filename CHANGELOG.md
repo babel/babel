@@ -1,3 +1,7 @@
+# 1.12.12
+
+ * Make scope tracker more reliable to handle all edgecases.
+
 # 1.12.11
 
  * Block scope classes.
