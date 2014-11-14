@@ -1,7 +1,7 @@
 # 1.12.11
 
  * Block scope classes.
- * Add `moduleName` option.
+ * Fix generation of integer `Literal`s in `MemberExpression`.
 
 # 1.12.10
 
