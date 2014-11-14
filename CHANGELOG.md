@@ -1,3 +1,7 @@
+# 1.12.4
+
+ * Fix duplicate let scoping in functions.
+
 # 1.12.13
 
  * Support duplicate constants within different block scopes.
