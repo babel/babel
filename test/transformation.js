@@ -64,7 +64,7 @@ var run = function (task) {
 _.each(helper.get("transformation"), function (testSuite) {
   suite("transformation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, function () {
+      test(task.title, !task.disabled && function () {
         var runTask = function () {
           run(task);
         };

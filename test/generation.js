@@ -22,7 +22,7 @@ suite("generation", function () {
 _.each(helper.get("generation"), function (testSuite) {
   suite("generation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, function () {
+      test(task.title, !task.disabled && function () {
         var expect = task.expect;
         var actual = task.actual;
 

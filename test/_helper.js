@@ -36,8 +36,6 @@ exports.get = function (entryName) {
     if (fs.existsSync(suiteOptsLoc)) suite.options = require(suiteOptsLoc);
 
     _.each(fs.readdirSync(suite.filename), function (taskName) {
-      if (taskName[0] === ".") return;
-
       var taskDir = suite.filename + "/" + taskName;
       if (fs.statSync(taskDir).isFile()) return;
 
@@ -59,6 +57,7 @@ exports.get = function (entryName) {
 
       var test = {
         title: humanise(taskName),
+        disabled: taskName[0] === ".",
         options: taskOpts,
         exec: {
           code: readFile(execLoc),
