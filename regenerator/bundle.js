@@ -30936,25 +30936,20 @@ function through (write, end, opts) {
 
   // Dummy constructor that we use as the .constructor property for
   // functions that return Generator objects.
-  function GeneratorFunction() {}
-
-  function GFp(){}
+  var GF = function GeneratorFunction() {};
+  var GFp = function GeneratorFunctionPrototype() {};
   var Gp = GFp.prototype = Generator.prototype;
-  (GFp.constructor = GeneratorFunction).prototype =
+  (GFp.constructor = GF).prototype =
     Gp.constructor = GFp;
 
   // Ensure isGeneratorFunction works when Function#name not supported.
-  if (GeneratorFunction.name !== "GeneratorFunction") {
-    GeneratorFunction.name = "GeneratorFunction";
-  }
-
-  if (GeneratorFunction.name !== "GeneratorFunction") {
-    throw new Error("GeneratorFunction renamed?");
-  }
+  var GFName = "GeneratorFunction";
+  if (GF.name !== GFName) GF.name = GFName;
+  if (GF.name !== GFName) throw new Error(GFName + " renamed?");
 
   runtime.isGeneratorFunction = function(genFun) {
     var ctor = genFun && genFun.constructor;
-    return ctor ? GeneratorFunction.name === ctor.name : false;
+    return ctor ? GF.name === ctor.name : false;
   };
 
   runtime.mark = function(genFun) {
