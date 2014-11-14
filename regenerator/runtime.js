@@ -44,10 +44,16 @@
   // functions that return Generator objects.
   function GeneratorFunction() {}
 
-  var Gp = Generator.prototype;
-  var GFp = GeneratorFunction.prototype = new Function;
-  GFp.constructor = GeneratorFunction;
-  GFp.prototype = Gp;
+  // GeneratorFunction.prototype is supposed to be created by
+  // Object.create(Function.prototype), but that doesn't work in some
+  // older Android JS engines (#140).
+  function Surrogate(ctor) {
+    ctor.prototype = this;
+    this.constructor = ctor;
+  }
+  Surrogate.prototype = Function.prototype;
+  var GFp = new Surrogate(GeneratorFunction);
+  var Gp = GFp.prototype = Generator.prototype;
   Gp.constructor = GFp;
 
   // Ensure isGeneratorFunction works when Function#name not supported.
