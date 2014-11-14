@@ -26269,14 +26269,51 @@ def("TypeAnnotation")
     .field("unionType", or(def("TypeAnnotation"), null))
     .field("nullable", isBoolean);
 
+def("ObjectTypeAnnotation")
+    .bases("Pattern")
+    .build("properties", "nullable")
+    .field("properties", [def("Property")])
+    .field("nullable", isBoolean);
+
+def("VoidTypeAnnotation")
+    .bases("Pattern");
+
+def("ParametricTypeAnnotation")
+    .bases("Pattern")
+    .build("params")
+    .field("params", [def("Identifier")]);
+
+def("OptionalParameter")
+    .bases("Pattern")
+    .build("identifier")
+    .field("identifier", def("Identifier"));
+
 def("Identifier")
-    .field("annotation", or(def("TypeAnnotation"), null), defaults['null']);
+    .field("annotation",
+        or(def("TypeAnnotation"),
+            def("VoidTypeAnnotation"),
+            def("ObjectTypeAnnotation"),
+            null),
+        defaults['null']);
 
 def("Function")
-    .field("returnType", or(def("TypeAnnotation"), null), defaults['null']);
+    .field("returnType",
+        or(def("TypeAnnotation"),
+            def("VoidTypeAnnotation"),
+            def("ObjectTypeAnnotation"),
+            null),
+        defaults['null'])
+    .field("parametricType",
+        or(def("ParametricTypeAnnotation"), null),
+        defaults['null']);
 
 def("ClassProperty")
     .field("id", or(def("Identifier"), def("TypeAnnotatedIdentifier")));
+
+def("ClassDeclaration")
+    .field("parametricType",
+        or(def("ParametricTypeAnnotation"), null),
+        defaults['null']);
 
 },{"../lib/shared":73,"../lib/types":74,"./core":62}],67:[function(_dereq_,module,exports){
 _dereq_("./core");
@@ -26503,6 +26540,7 @@ module.exports = astNodesAreEquivalent;
 var assert = _dereq_("assert");
 var types = _dereq_("./types");
 var n = types.namedTypes;
+var b = types.builders;
 var isNumber = types.builtInTypes.number;
 var isArray = types.builtInTypes.array;
 var Path = _dereq_("./path");
@@ -26563,18 +26601,7 @@ NPp.prune = function() {
 
     this.replace();
 
-    if (n.VariableDeclaration.check(remainingNodePath.node)) {
-        var declarations = remainingNodePath.get('declarations').value;
-        if (!declarations || declarations.length === 0) {
-            return remainingNodePath.prune();
-        }
-    } else if (n.ExpressionStatement.check(remainingNodePath.node)) {
-        if (!remainingNodePath.get('expression').value) {
-            return remainingNodePath.prune();
-        }
-    }
-
-    return remainingNodePath;
+    return cleanUpNodesAfterPrune(remainingNodePath);
 };
 
 // The value of the first ancestor Path whose value is a Node.
@@ -26914,6 +26941,48 @@ function firstInStatement(path) {
     }
 
     return true;
+}
+
+/**
+ * Pruning certain nodes will result in empty or incomplete nodes, here we clean those nodes up.
+ */
+function cleanUpNodesAfterPrune(remainingNodePath) {
+    if (n.VariableDeclaration.check(remainingNodePath.node)) {
+        var declarations = remainingNodePath.get('declarations').value;
+        if (!declarations || declarations.length === 0) {
+            return remainingNodePath.prune();
+        }
+    } else if (n.ExpressionStatement.check(remainingNodePath.node)) {
+        if (!remainingNodePath.get('expression').value) {
+            return remainingNodePath.prune();
+        }
+    } else if (n.IfStatement.check(remainingNodePath.node)) {
+        cleanUpIfStatementAfterPrune(remainingNodePath);
+    }
+
+    return remainingNodePath;
+}
+
+function cleanUpIfStatementAfterPrune(ifStatement) {
+    var testExpression = ifStatement.get('test').value;
+    var alternate = ifStatement.get('alternate').value;
+    var consequent = ifStatement.get('consequent').value;
+
+    if (!consequent && !alternate) {
+        var testExpressionStatement = b.expressionStatement(testExpression);
+
+        ifStatement.replace(testExpressionStatement);
+    } else if (!consequent && alternate) {
+        var negatedTestExpression = b.unaryExpression('!', testExpression, true);
+
+        if (n.UnaryExpression.check(testExpression) && testExpression.operator === '!') {
+            negatedTestExpression = testExpression.argument;
+        }
+
+        ifStatement.get("test").replace(negatedTestExpression);
+        ifStatement.get("consequent").replace(alternate);
+        ifStatement.get("alternate").replace();
+    }
 }
 
 module.exports = NodePath;
@@ -30869,11 +30938,10 @@ function through (write, end, opts) {
   // functions that return Generator objects.
   function GeneratorFunction() {}
 
-  var Gp = Generator.prototype;
-  var GFp = GeneratorFunction.prototype = new Function;
-  GFp.constructor = GeneratorFunction;
-  GFp.prototype = Gp;
-  Gp.constructor = GFp;
+  function GFp(){}
+  var Gp = GFp.prototype = Generator.prototype;
+  (GFp.constructor = GeneratorFunction).prototype =
+    Gp.constructor = GFp;
 
   // Ensure isGeneratorFunction works when Function#name not supported.
   if (GeneratorFunction.name !== "GeneratorFunction") {
