@@ -1,3 +1,8 @@
+# 1.12.11
+
+ * Block scope classes.
+ * Add `moduleName` option.
+
 # 1.12.10
 
  * Fix let scoping var hoisting.
