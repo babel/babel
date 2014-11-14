@@ -1693,6 +1693,10 @@ describe("generator function prototype", function() {
     assert.strictEqual(GeneratorFunctionPrototype.__proto__,
                        Function.prototype);
 
+    assert.strictEqual(typeof f2, "function");
+    assert.strictEqual(f2.constructor, GeneratorFunction);
+    assert.ok(f2 instanceof GeneratorFunction);
+
     var g = f();
     assert.ok(g instanceof f);
     assert.strictEqual(g.__proto__, f.prototype);
