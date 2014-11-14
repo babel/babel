@@ -1,3 +1,9 @@
+# 1.12.13
+
+ * Support duplicate constants within different block scopes.
+ * Fix for-head duplication testing and replacement.
+ * Support `raw` property on tagged template literals.
+
 # 1.12.12
 
  * Make scope tracker more reliable to handle all edgecases.
