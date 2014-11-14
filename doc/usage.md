@@ -113,13 +113,7 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Optionally replace all 6to5 helper declarations with a referenece to this
   // variable. If set to `true` then the default namespace is used "to5Runtime".
   // Default: false
-  runtime: true,
-
-  // Optionally declare a function that all import filenames will be piped
-  // through
-  moduleName: function (name) {
-
-  }
+  runtime: true
 }
 ```
 
