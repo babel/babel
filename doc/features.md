@@ -133,11 +133,13 @@ for (var i of [1, 2, 3]) {
 ## Generators
 
 ```javascript
+
 ```
 
 ## Generator comprehension
 
 ```javascript
+
 ```
 
 ## Let scoping
@@ -151,6 +153,7 @@ for (let i in arr) {
 ## Modules
 
 ```javascript
+
 ```
 
 ## Numeric literals
