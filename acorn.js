@@ -2551,9 +2551,6 @@
       if (tokType !== _name || tokVal !== "from") unexpected();
       next();
       node.source = tokType === _string ? parseExprAtom() : unexpected();
-      // only for backward compatibility with Esprima's AST
-      // (it doesn't support mixed default + named yet)
-      node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
     semicolon();
     return finishNode(node, "ImportDeclaration");
@@ -2563,16 +2560,6 @@
 
   function parseImportSpecifiers() {
     var nodes = [], first = true;
-    if (tokType === _star) {
-      var node = startNode();
-      next();
-      if (tokType !== _name || tokVal !== "as") unexpected();
-      next();
-      node.name = parseIdent();
-      checkLVal(node.name, true);
-      nodes.push(finishNode(node, "ImportBatchSpecifier"));
-      return nodes;
-    }
     if (tokType === _name) {
       // import defaultObj, { x, y as z } from '...'
       var node = startNode();
@@ -2582,6 +2569,16 @@
       node['default'] = true;
       nodes.push(finishNode(node, "ImportSpecifier"));
       if (!eat(_comma)) return nodes;
+    }
+    if (tokType === _star) {
+      var node = startNode();
+      next();
+      if (tokType !== _name || tokVal !== "as") unexpected();
+      next();
+      node.name = parseIdent();
+      checkLVal(node.name, true);
+      nodes.push(finishNode(node, "ImportBatchSpecifier"));
+      return nodes;
     }
     expect(_braceL);
     while (!eat(_braceR)) {

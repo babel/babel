@@ -14160,3 +14160,34 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
     }
   }]
 }, {ecmaVersion: 7, preserveParens: true});
+
+// https://github.com/marijnh/acorn/issues/161
+test("import foo, * as bar from 'baz';", {
+  type: "Program",
+  body: [{
+    type: "ImportDeclaration",
+    specifiers: [
+      {
+        type: "ImportSpecifier",
+        id: {
+          type: "Identifier",
+          name: "foo"
+        },
+        name: null,
+        default: true
+      },
+      {
+        type: "ImportBatchSpecifier",
+        name: {
+          type: "Identifier",
+          name: "bar"
+        }
+      }
+    ],
+    source: {
+      type: "Literal",
+      value: "baz",
+      raw: "'baz'"
+    }
+  }]
+}, {ecmaVersion: 6});
