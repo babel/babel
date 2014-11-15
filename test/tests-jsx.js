@@ -3199,6 +3199,111 @@ var fbTestFixture = {
         ]
       }
     }
+  },
+  'Regression': {
+    '<p>foo <a href="test"> bar</a> baz</p> ;': {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 40,
+      expression: {
+        type: "XJSElement",
+        start: 0,
+        end: 38,
+        openingElement: {
+          type: "XJSOpeningElement",
+          start: 0,
+          end: 3,
+          attributes: [],
+          name: {
+            type: "XJSIdentifier",
+            start: 1,
+            end: 2,
+            name: "p"
+          },
+          selfClosing: false
+        },
+        closingElement: {
+          type: "XJSClosingElement",
+          start: 34,
+          end: 38,
+          name: {
+            type: "XJSIdentifier",
+            start: 36,
+            end: 37,
+            name: "p"
+          }
+        },
+        children: [
+          {
+            type: "Literal",
+            start: 3,
+            end: 7,
+            value: "foo ",
+            raw: "foo "
+          },
+          {
+            type: "XJSElement",
+            start: 7,
+            end: 30,
+            openingElement: {
+              type: "XJSOpeningElement",
+              start: 7,
+              end: 22,
+              attributes: [{
+                type: "XJSAttribute",
+                start: 10,
+                end: 21,
+                name: {
+                  type: "XJSIdentifier",
+                  start: 10,
+                  end: 14,
+                  name: "href"
+                },
+                value: {
+                  type: "Literal",
+                  start: 15,
+                  end: 21,
+                  value: "test",
+                  raw: "\"test\""
+                }
+              }],
+              name: {
+                type: "XJSIdentifier",
+                start: 8,
+                end: 9,
+                name: "a"
+              },
+              selfClosing: false
+            },
+            closingElement: {
+              type: "XJSClosingElement",
+              start: 26,
+              end: 30,
+              name: {
+                type: "XJSIdentifier",
+                start: 28,
+                end: 29,
+                name: "a"
+              }
+            },
+            children: [{
+              type: "Literal",
+              start: 22,
+              end: 26,
+              value: " bar",
+              raw: " bar"
+            }]
+          },
+          {
+            type: "Literal",
+            start: 30,
+            end: 34,
+            value: " baz",
+            raw: " baz"
+          }
+        ]
+      }
+    }
   }
 };
 
@@ -3206,13 +3311,16 @@ if (typeof exports !== "undefined") {
   var test = require("./driver.js").test;
 }
 
-for (var code in fbTestFixture.XJS) {
-  test(code, {
-    type: 'Program',
-    body: [fbTestFixture.XJS[code]]
-  }, {
-    ecmaVersion: 6,
-    locations: true,
-    ranges: true
-  });
+for (var ns in fbTestFixture) {
+  ns = fbTestFixture[ns];
+  for (var code in ns) {
+    test(code, {
+      type: 'Program',
+      body: [ns[code]]
+    }, {
+      ecmaVersion: 6,
+      locations: true,
+      ranges: true
+    });
+  }
 }

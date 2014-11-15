@@ -65,10 +65,10 @@
     }
   };
 
-  function report(state, code, message) {
+function report(state, code, message) {
     if (state != "ok") {++stats.failed; log(code, message);}
     ++stats.testsRun;
-  }
+}
 
   group("Errors");
 
@@ -76,7 +76,7 @@
     group(name);
     var mode = modes[name];
     stats = mode.stats = {testsRun: 0, failed: 0};
-    var t0 = +new Date;
+var t0 = +new Date;
     driver.runTests(mode.config, report);
     mode.stats.duration = +new Date - t0;
     groupEnd();
@@ -104,8 +104,8 @@
   groupEnd();
 
   if (total.failed && typeof process === "object") {
-    process.stdout.write("", function() {
-      process.exit(1);
-    });
+  process.stdout.write("", function() {
+    process.exit(1);
+  });
   }
 })();

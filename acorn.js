@@ -472,9 +472,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL,
-                      xjsName: _xjsName, xjsText: _xjsText,
-                      star: _star, assign: _assign};
+                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
+                      assign: _assign, xjsName: _xjsName, xjsText: _xjsText};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -1015,7 +1014,7 @@
       var value = new RegExp(content, mods);
     } catch (err) {
       value = null;
-    }
+  }
     return finishToken(_regexp, {pattern: content, flags: mods, value: value});
   }
 
@@ -2374,8 +2373,8 @@
         nodeType = "SpreadElement";
       } else {
         nodeType = update ? "UpdateExpression" : "UnaryExpression";
-        node.operator = tokVal;
-        node.prefix = true;
+      node.operator = tokVal;
+      node.prefix = true;
       }
       tokRegexpAllowed = true;
       next();
@@ -3261,6 +3260,7 @@
       inXJSTag = false;
 
       next();
+      if (tokType !== _ellipsis) unexpected();
       var node = parseMaybeUnary();
 
       inXJSTag = origInXJSTag;
@@ -3359,6 +3359,9 @@
     inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
     tokRegexpAllowed = false;
+    if (inXJSChild) {
+      tokPos = tokEnd;
+    }
     expect(_gt);
     return finishNode(node, "XJSClosingElement");
   }
