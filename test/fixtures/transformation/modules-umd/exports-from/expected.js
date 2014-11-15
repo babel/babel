@@ -17,7 +17,7 @@
   exports.foo = _foo.foo;
   exports.bar = _foo.bar;
   exports.bar = _foo.foo;
-  exports.default = _foo.foo;
-  exports.default = _foo.foo;
+  exports["default"] = _foo.foo;
+  exports["default"] = _foo.foo;
   exports.bar = _foo.bar;
 });

@@ -19,7 +19,7 @@ var _extends = function (child, parent) {
 
 var Test = (function (Foo) {
   var Test = function Test() {
-    woops.super.test();
+    woops["super"].test();
     Foo.call(this);
     Foo.prototype.test.call(this);
     foob(Foo);
