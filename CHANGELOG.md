@@ -1,3 +1,7 @@
+# 1.12.15
+
+ * Update `acorn-6to5`.
+
 # 1.12.14
 
  * Fix duplicate let scoping in functions.
