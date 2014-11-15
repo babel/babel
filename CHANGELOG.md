@@ -1,4 +1,4 @@
-# 1.12.4
+# 1.12.14
 
  * Fix duplicate let scoping in functions.
  * Make JSX whitespace more React-compliant.
