@@ -1,6 +1,8 @@
 # 1.12.4
 
  * Fix duplicate let scoping in functions.
+ * Make JSX whitespace more React-compliant.
+ * Add `_memberExpressionKeywords` transformer that turns keyword identifiers to computed literals.
 
 # 1.12.13
 
