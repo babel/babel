@@ -3,6 +3,7 @@
  * Fix duplicate let scoping in functions.
  * Make JSX whitespace more React-compliant.
  * Add `_memberExpressionKeywords` transformer that turns keyword identifiers to computed literals.
+ * Upgrade `regenerator-6to5`.
 
 # 1.12.13
 

@@ -44,7 +44,7 @@
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "source-map": "0.1.40",
-    "regenerator-6to5": "https://github.com/6to5/regenerator-6to5/archive/75925940a7bb67d1ee8afec36b6d6eec072fb47c.tar.gz",
+    "regenerator-6to5": "https://github.com/6to5/regenerator-6to5/archive/a9c53518af063ffef410f826225f8ee250131932.tar.gz",
     "chokidar": "0.10.5",
     "source-map-support": "0.2.8",
     "esutils": "1.1.4",
