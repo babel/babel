@@ -2,7 +2,7 @@
     "name": "acorn-jsx",
     "description": "Alternative React JSX parser",
     "main": "acorn.js",
-    "version": "0.9.1-2",
+    "version": "0.9.1-3",
     "maintainers": [
       {
         "name": "Marijn Haverbeke",

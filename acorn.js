@@ -3272,6 +3272,9 @@
     inXJSChild = origInXJSChild;
     inXJSTag = origInXJSTag;
     tokRegexpAllowed = false;
+    if (inXJSChild) {
+      tokPos = tokEnd;
+    }
     expect(_gt);
     return finishNode(node, "XJSClosingElement");
   }
