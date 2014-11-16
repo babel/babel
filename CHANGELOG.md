@@ -1,3 +1,7 @@
+# 1.12.18
+
+ * Use `global` reference instead of `window`.
+
 # 1.12.17
 
  * Add `moduleName`, `sourceRoot` and `filenameRelative` options - thanks @darvelo!
