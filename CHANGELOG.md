@@ -1,6 +1,6 @@
 # 1.12.17
 
- * Add `moduleName` option - thanks @darvelo!
+ * Add `moduleName`, `sourceRoot` and `filenameRelative` options - thanks @darvelo!
  * Traversal optimisations.
 
 # 1.12.16
