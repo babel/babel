@@ -5,6 +5,7 @@
  - [Brunch](https://github.com/es128/6to5-brunch)
  - [Duo](https://github.com/bdo-labs/duo6to5)
  - [Connect](https://github.com/6to5/6to5-connect)
+ - [Gobble](https://github.com/gobblejs/gobble-6to5)
  - [Gulp](https://github.com/sindresorhus/gulp-6to5)
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - [Jade](https://github.com/Apoxx/jade-6to5)
