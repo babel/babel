@@ -1,6 +1,7 @@
 # 1.12.16
 
- * Fix missing comments not being retained from `MethodDefinition` in classes.
+ * Fix comments not being retained from `MethodDefinition` in classes.
+ * Add temporal dead zone in default parameters.
 
 # 1.12.15
 
