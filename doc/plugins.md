@@ -11,5 +11,5 @@
  - [Jest](https://github.com/6to5/6to5-jest)
  - [Karma](https://github.com/shuhei/karma-6to5-preprocessor)
  - [Mocha](https://github.com/6to5/6to5-mocha)
- - [Rails](https://github.com/6to5/6to5-rails)
+ - [Rails](https://github.com/josh/sprockets-es6) or via [browserify-rails](https://github.com/6to5/6to5-rails)
  - [webpack](https://github.com/Couto/6to5-loader)
