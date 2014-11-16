@@ -24,6 +24,5 @@ exports.transform = function (filename, code, opts) {
 
 exports.compile = function (filename, opts) {
   var code = fs.readFileSync(filename, "utf8");
-  opts.filenameRelative = path.relative(process.cwd(), filename);
   return exports.transform(filename, code, opts);
 };
