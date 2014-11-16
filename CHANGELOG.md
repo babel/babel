@@ -1,3 +1,7 @@
+# 1.12.16
+
+ * Fix missing comments not being retained from `MethodDefinition` in classes.
+
 # 1.12.15
 
  * Update `acorn-6to5`.
