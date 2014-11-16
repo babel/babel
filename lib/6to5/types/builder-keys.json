@@ -21,5 +21,6 @@
   "SequenceExpression":      ["expressions"],
   "UnaryExpression":         ["operator", "argument", "prefix"],
   "VariableDeclaration":     ["kind", "declarations"],
-  "VariableDeclarator":      ["id", "init"]
+  "VariableDeclarator":      ["id", "init"],
+  "YieldExpression":         ["argument", "delegate"]
 }
