@@ -66,7 +66,7 @@ export function bar() {
 **Out**
 
 ```javascript
-define(["exports", "foo"], function (exports, _foo) {
+define("filename", ["exports", "foo"], function (exports, _foo) {
   exports.bar = bar;
 
   var foo = _foo.default;
@@ -94,7 +94,7 @@ export function bar() {
 ```javascript
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "foo"], factory);
+    define("filename", ["exports", "foo"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }
@@ -110,7 +110,6 @@ export function bar() {
 ```
 
 ### Ignore
-
 
 **In**
 
