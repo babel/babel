@@ -60,6 +60,7 @@ exports.get = function (entryName) {
         disabled: taskName[0] === ".",
         options: taskOpts,
         exec: {
+          loc: execLoc,
           code: readFile(execLoc),
           filename: execLocAlias,
         },
