@@ -48,8 +48,9 @@ exports.get = function (entryName) {
       var execLoc   = taskDir + "/exec.js";
 
       var taskOpts = _.merge({
-        sourceFileName: actualLocAlias,
-        sourceMapName:  expectLocAlias
+        filenameRelative: expectLocAlias,
+        sourceFileName:   actualLocAlias,
+        sourceMapName:    expectLocAlias
       }, _.cloneDeep(suite.options));
 
       var taskOptsLoc = taskDir + "/options.json";
