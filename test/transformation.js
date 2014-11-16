@@ -9,21 +9,20 @@ var _         = require("lodash");
 var run = function (task) {
   var actual = task.actual;
   var expect = task.expect;
-  var opts   = task.options;
   var exec   = task.exec;
 
-  var getOpts = function (filename) {
+  var getOpts = function (self) {
     return _.merge({
       whtiespace: true,
-      filename: filename
-    }, opts);
+      filename:   self.loc
+    }, task.options);
   };
 
   var execCode = exec.code;
   var result;
 
   if (execCode) {
-    result = transform(execCode, getOpts(exec.filename));
+    result = transform(execCode, getOpts(exec));
     execCode = result.code;
 
     require("../lib/6to5/polyfill");
@@ -39,7 +38,7 @@ var run = function (task) {
     var actualCode = actual.code;
     var expectCode = expect.code;
 
-    result     = transform(actualCode, getOpts(actual.filename));
+    result     = transform(actualCode, getOpts(actual));
     actualCode = result.code;
 
     chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
