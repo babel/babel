@@ -1,4 +1,4 @@
-define(["exports", "foo"], function (exports, _foo) {
+define("modules-amd/imports-named/expected", ["exports", "foo"], function (exports, _foo) {
   "use strict";
 
   var bar = _foo.bar;
