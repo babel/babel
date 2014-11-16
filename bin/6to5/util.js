@@ -1,6 +1,7 @@
 var readdir = require("fs-readdir-recursive");
 var index   = require("./index");
 var util    = require("../../lib/6to5/util");
+var path    = require("path");
 var to5     = require("../../lib/6to5");
 var fs      = require("fs");
 var _       = require("lodash");
@@ -23,5 +24,6 @@ exports.transform = function (filename, code, opts) {
 
 exports.compile = function (filename, opts) {
   var code = fs.readFileSync(filename, "utf8");
+  opts.filenameRelative = path.relative(process.cwd(), filename);
   return exports.transform(filename, code, opts);
 };
