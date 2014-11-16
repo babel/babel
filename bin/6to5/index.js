@@ -17,6 +17,7 @@ commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ON
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
+commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -89,7 +90,8 @@ exports.opts = {
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
   runtime:       commander.runtime,
-  modules:       commander.modules
+  modules:       commander.modules,
+  comments:      !commander.removeComments
 };
 
 var fn;
