@@ -83,6 +83,10 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Default: "unknown"
   filename: "filename",
 
+  // Filename relative to `sourceRoot`
+  // Default: `filename` option.
+  filenameRelative: "",
+
   // List of transformers to EXCLUDE.
   // Run `6to5 --help` to see a full list of transformers.
   blacklist: [],
@@ -103,12 +107,19 @@ to5.transformFile("filename.js", options, function (err, result) {
   sourceMap: true,
 
   // Set `file` on returned source map.
-  // Default: `filename` option.
+  // Default: `filenameRelative` option.
   sourceMapName: "filename",
 
   // Set `sources[0]` on returned source map.
-  // Default: `filename` option.
+  // Default: `filenameRelative` option.
   sourceFileName: "filename",
+
+  // The root from which all sources are relative
+  sourceRoot: "assets/scripts",
+
+  // Optional prefix for the AMD module formatter that will be prepend to the
+  // filename on module definitions
+  moduleRoot: "my-app",
 
   // Optionally replace all 6to5 helper declarations with a referenece to this
   // variable. If set to `true` then the default namespace is used "to5Runtime".
