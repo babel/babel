@@ -1,3 +1,8 @@
+# 1.12.17
+
+ * Add `moduleName` option - thanks @darvelo!
+ * Traversal optimisations.
+
 # 1.12.16
 
  * Fix comments not being retained from `MethodDefinition` in classes.
