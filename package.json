@@ -44,12 +44,12 @@
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "source-map": "0.1.40",
-    "regenerator-6to5": "https://github.com/6to5/regenerator-6to5/archive/a9c53518af063ffef410f826225f8ee250131932.tar.gz",
     "chokidar": "0.10.5",
     "source-map-support": "0.2.8",
     "esutils": "1.1.4",
     "acorn-6to5": "https://github.com/6to5/acorn-6to5/archive/74d8e9bed20ba302d3504f53d0b1c649968959e1.tar.gz",
-    "estraverse": "^1.7.0"
+    "estraverse": "^1.7.0",
+    "private": "^0.1.6"
   },
   "devDependencies": {
     "istanbul": "0.3.2",

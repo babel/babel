@@ -1,21 +1,23 @@
-var transform = require("../lib/6to5/transformation/transform");
-var sourceMap = require("source-map");
-var helper    = require("./_helper");
-var assert    = require("assert");
-var chai      = require("chai");
-var util      = require("../lib/6to5/util");
-var _         = require("lodash");
+var genHelpers = require("./_generator-helpers");
+var transform  = require("../lib/6to5/transformation/transform");
+var sourceMap  = require("source-map");
+var helper     = require("./_helper");
+var assert     = require("assert");
+var chai       = require("chai");
+var util       = require("../lib/6to5/util");
+var _          = require("lodash");
 
-var run = function (task) {
+var run = function (task, done) {
   var actual = task.actual;
   var expect = task.expect;
   var exec   = task.exec;
+  var opts   = task.options;
 
   var getOpts = function (self) {
     return _.merge({
       whtiespace: true,
       filename:   self.loc
-    }, task.options);
+    }, opts);
   };
 
   var execCode = exec.code;
@@ -28,9 +30,10 @@ var run = function (task) {
     require("../lib/6to5/polyfill");
 
     try {
-      var fn = new Function("assert", execCode);
-      fn(assert);
+      var fn = new Function("assert", "done", "genHelpers", execCode);
+      fn(assert, done, genHelpers);
     } catch (err) {
+      err.message = exec.loc + ": " + err.message;
       err.message += util.codeFrame(execCode);
       throw err;
     }
@@ -63,9 +66,9 @@ var run = function (task) {
 _.each(helper.get("transformation"), function (testSuite) {
   suite("transformation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, !task.disabled && function () {
+      var runTest = function (done) {
         var runTask = function () {
-          run(task);
+          run(task, done);
         };
 
         var throwMsg = task.options.throws;
@@ -78,7 +81,18 @@ _.each(helper.get("transformation"), function (testSuite) {
         } else {
           runTask();
         }
-      });
+      };
+
+      var callback;
+      if (task.options.asyncExec) {
+        callback = runTest;
+      } else {
+        callback = function () {
+          return runTest();
+        };
+      }
+
+      test(task.title, !task.disabled && callback);
     });
   });
 });
