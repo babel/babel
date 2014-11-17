@@ -19,6 +19,7 @@
   "Property":                ["kind", "key", "value", "computed"],
   "ReturnStatement":         ["argument"],
   "SequenceExpression":      ["expressions"],
+  "ThrowExpression":         ["argument"],
   "UnaryExpression":         ["operator", "argument", "prefix"],
   "VariableDeclaration":     ["kind", "declarations"],
   "VariableDeclarator":      ["id", "init"],
