@@ -10,6 +10,7 @@
  - [Grunt](https://github.com/sindresorhus/grunt-6to5)
  - [Jade](https://github.com/Apoxx/jade-6to5)
  - [Jest](https://github.com/6to5/6to5-jest)
+ - [JSXHint](https://github.com/STRML/JSXHint) (A wrapper around JSHint to allow linting of JSX files)
  - [Karma](https://github.com/shuhei/karma-6to5-preprocessor)
  - [Mocha](https://github.com/6to5/6to5-mocha)
  - [Rails](https://github.com/josh/sprockets-es6) or via [browserify-rails](https://github.com/6to5/6to5-rails)
