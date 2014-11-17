@@ -1,10 +1,15 @@
+# 1.12.19
+
+ * Add `comments` option and `--remove-comments` flag. Thanks @[webpro](htps://github.com/webpro)!
+ * Embed `regenerator`.
+
 # 1.12.18
 
  * Use `global` reference instead of `window`.
 
 # 1.12.17
 
- * Add `moduleName`, `sourceRoot` and `filenameRelative` options - thanks @darvelo!
+ * Add `moduleName`, `sourceRoot` and `filenameRelative` options - thanks @[darvelo](https://github.com/darvelo)!
  * Traversal optimisations.
 
 # 1.12.16
