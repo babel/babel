@@ -1,6 +1,7 @@
 var readdir = require("fs-readdir-recursive");
 var index   = require("./index");
 var util    = require("../../lib/6to5/util");
+var path    = require("path");
 var to5     = require("../../lib/6to5");
 var fs      = require("fs");
 var _       = require("lodash");
@@ -9,6 +10,10 @@ exports.readdirFilter = function (filename) {
   return readdir(filename).filter(function (filename) {
     return util.canCompile(filename);
   });
+};
+
+exports.addSourceMappingUrl = function (code, loc) {
+  return code + "\n//# sourceMappingURL=" + path.basename(loc);
 };
 
 exports.transform = function (filename, code, opts) {

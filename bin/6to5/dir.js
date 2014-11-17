@@ -19,7 +19,9 @@ module.exports = function (commander, filenames, opts) {
     mkdirp.sync(up);
 
     if (commander.sourceMaps) {
-      fs.writeFileSync(dest + ".map", JSON.stringify(data.map));
+      var mapLoc = dest + ".map";
+      data.code = util.addSourceMappingUrl(data.code, mapLoc);
+      fs.writeFileSync(mapLoc, JSON.stringify(data.map));
     }
 
     fs.writeFileSync(dest, data.code);

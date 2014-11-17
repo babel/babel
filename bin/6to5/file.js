@@ -56,7 +56,9 @@ module.exports = function (commander, filenames) {
 
     if (commander.outFile) {
       if (commander.sourceMaps) {
-        fs.writeFileSync(commander.outFile + ".map", JSON.stringify(result.map));
+        var mapLoc = commander.outFile + ".map";
+        result.code = util.addSourceMappingUrl(result.code, mapLoc);
+        fs.writeFileSync(mapLoc, JSON.stringify(result.map));
       }
 
       fs.writeFileSync(commander.outFile, result.code);

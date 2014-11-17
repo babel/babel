@@ -1,3 +1,7 @@
+# 1.12.20
+
+ * Append `sourceMappingURL` when using `bin/6to5` and output sourcemaps.
+
 # 1.12.19
 
  * Add `comments` option and `--remove-comments` flag. Thanks @[webpro](htps://github.com/webpro)!
