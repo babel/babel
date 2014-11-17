@@ -89,9 +89,9 @@ exports.opts = {
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
+  comments:      !commander.removeComments,
   runtime:       commander.runtime,
-  modules:       commander.modules,
-  comments:      !commander.removeComments
+  modules:       commander.modules
 };
 
 var fn;
