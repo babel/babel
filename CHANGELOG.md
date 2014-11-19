@@ -1,3 +1,8 @@
+# 1.12.22
+
+ * Update `fs-readdir-recursive` and `chokidar`.
+ * Support array destructuring on iterables.
+
 # 1.12.21
 
  * Fix unneccesary let scoping replacement.
