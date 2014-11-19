@@ -66,7 +66,7 @@ export function bar() {
 **Out**
 
 ```javascript
-define("filename", ["exports", "foo"], function (exports, _foo) {
+define(["exports", "foo"], function (exports, _foo) {
   exports.bar = bar;
 
   var foo = _foo.default;
@@ -75,6 +75,12 @@ define("filename", ["exports", "foo"], function (exports, _foo) {
     return foo("foobar");
   }
 });
+```
+
+You can optionally specify to include the module id (using the `--amd-module-id` argument):
+
+```javascript
+define("filename", ["exports", "foo"], function (exports, _foo) {})
 ```
 
 ### UMD
@@ -94,7 +100,7 @@ export function bar() {
 ```javascript
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define("filename", ["exports", "foo"], factory);
+    define(["exports", "foo"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }
