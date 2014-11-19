@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "1.12.20",
+  "version": "1.12.21",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/6to5/6to5",
   "repository": {
@@ -37,17 +37,17 @@
   "dependencies": {
     "ast-types": "~0.6.0",
     "commander": "2.5.0",
-    "fs-readdir-recursive": "0.0.2",
+    "fs-readdir-recursive": "0.1.0",
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
     "es6-shim": "0.20.2",
     "es6-symbol": "0.1.1",
     "regexpu": "0.3.0",
     "source-map": "0.1.40",
-    "chokidar": "0.10.5",
+    "chokidar": "0.11.0",
     "source-map-support": "0.2.8",
     "esutils": "1.1.4",
-    "acorn-6to5": "https://github.com/6to5/acorn-6to5/archive/74d8e9bed20ba302d3504f53d0b1c649968959e1.tar.gz",
+    "acorn-6to5": "0.9.1-2",
     "estraverse": "^1.7.0",
     "private": "^0.1.6"
   },

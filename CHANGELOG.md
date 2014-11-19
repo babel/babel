@@ -1,10 +1,17 @@
+# 1.12.21
+
+ * Fix unneccesary let scoping replacement.
+ * Add `commonInterop` module formatter. Thanks [@Naddiseo](https://github.com/Naddiseo).
+ * Fix `return` outside of function body bug. Thanks [@brentburg](https://github.com/brentburg).
+ * Add more flexible option types.
+
 # 1.12.20
 
  * Append `sourceMappingURL` when using `bin/6to5` and output sourcemaps.
 
 # 1.12.19
 
- * Add `comments` option and `--remove-comments` flag. Thanks @[webpro](htps://github.com/webpro)!
+ * Add `comments` option and `--remove-comments` flag. Thanks [@webpro](htps://github.com/webpro).
  * Embed `regenerator`.
 
 # 1.12.18
@@ -13,7 +20,7 @@
 
 # 1.12.17
 
- * Add `moduleName`, `sourceRoot` and `filenameRelative` options - thanks @[darvelo](https://github.com/darvelo)!
+ * Add `moduleName`, `sourceRoot` and `filenameRelative` options. Thanks [@darvelo](https://github.com/darvelo).
  * Traversal optimisations.
 
 # 1.12.16

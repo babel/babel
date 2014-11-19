@@ -115,10 +115,12 @@ to5.transformFile("filename.js", options, function (err, result) {
   sourceFileName: "filename",
 
   // The root from which all sources are relative
+  // Default: `moduleRoot` option.
   sourceRoot: "assets/scripts",
 
   // Optional prefix for the AMD module formatter that will be prepend to the
   // filename on module definitions
+  // Default: `sourceRoot` option.
   moduleRoot: "my-app",
 
   // Optionally replace all 6to5 helper declarations with a referenece to this
