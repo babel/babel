@@ -2,6 +2,7 @@
 
  * Update `fs-readdir-recursive` and `chokidar`.
  * Support array destructuring on iterables.
+ * Make amd module id optional. Thanks [@webpro](https://github.com/webpro).
 
 # 1.12.21
 
