@@ -47,7 +47,7 @@
     "chokidar": "0.10.5",
     "source-map-support": "0.2.8",
     "esutils": "1.1.4",
-    "acorn-6to5": "0.9.1-1",
+    "acorn-6to5": "0.9.1-2",
     "estraverse": "^1.7.0",
     "private": "^0.1.6"
   },
