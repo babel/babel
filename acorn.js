@@ -2075,7 +2075,7 @@
               retNode = finishNode(retNode, "AssignmentExpression");
             }
             else {
-              unexpected();
+              unexpected
             }
             semicolon();
           }
@@ -2649,8 +2649,6 @@
       }
       if (options.ecmaVersion >= 6) {
         isGenerator = eat(_star);
-        prop.method = false;
-        prop.shorthand = false;
       }
       
       if (tokType === _name || tokType.keyword) {
@@ -2661,9 +2659,18 @@
         if (isAsync && isGenerator) {
           unexpected();
         }
+        if (options.ecmaVersion >= 6) {
+          prop.method = false;
+          prop.shorthand = false;
+        }
         parsePropertyName(prop);
       }
       else if (tokType === _colon) {
+        // key could be "async"
+        if (options.ecmaVersion >= 6) {
+          prop.method = false;
+          prop.shorthand = false;
+        }
         isAsync = false;
       }
       else if (tokType === _bracketL) {
