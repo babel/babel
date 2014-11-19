@@ -126,7 +126,7 @@ to5.transformFile("filename.js", options, function (err, result) {
   // If truthy, insert an explicit id for each defined AMD module.
   // By default, AMD modules are anonymous.
   // Default: false
-  amdModuleId: true,
+  amdModuleIds: true,
 
   // Optionally replace all 6to5 helper declarations with a referenece to this
   // variable. If set to `true` then the default namespace is used "to5Runtime".

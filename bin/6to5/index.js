@@ -18,7 +18,7 @@ commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NO
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
-commander.option("-a, --amd-module-id", "Insert module id in AMD modules", false);
+commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -91,7 +91,7 @@ exports.opts = {
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
   comments:      !commander.removeComments,
-  amdModuleId:   commander.amdModuleId,
+  amdModuleIds:   commander.amdModuleIds,
   runtime:       commander.runtime,
   modules:       commander.modules
 };
