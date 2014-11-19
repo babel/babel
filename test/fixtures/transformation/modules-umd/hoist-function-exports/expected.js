@@ -1,6 +1,6 @@
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define("modules-umd/hoist-function-exports/expected", ["exports", "./evens"], factory);
+    define(["exports", "./evens"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("./evens"));
   }

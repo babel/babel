@@ -1,4 +1,4 @@
-define("modules-amd/hoist-function-exports/expected", ["exports", "./evens"], function (exports, _evens) {
+define(["exports", "./evens"], function (exports, _evens) {
   "use strict";
 
   exports.nextOdd = nextOdd;
