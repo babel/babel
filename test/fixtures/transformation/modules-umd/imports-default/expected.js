@@ -1,6 +1,6 @@
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define("modules-umd/imports-default/expected", ["exports", "foo"], factory);
+    define(["exports", "foo"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }

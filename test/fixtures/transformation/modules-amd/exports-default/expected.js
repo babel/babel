@@ -1,4 +1,4 @@
-define("modules-amd/exports-default/expected", ["exports"], function (exports) {
+define(["exports"], function (exports) {
   "use strict";
 
   exports["default"] = 42;
