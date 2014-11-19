@@ -50,7 +50,7 @@
       config: {
         parse: (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse
       }
-    },
+    }/*,
     Loose: {
       config: {
         parse: (typeof require === "undefined" ? window.acorn : require("../acorn_loose")).parse_dammit,
@@ -62,7 +62,7 @@
           return (opts.ecmaVersion || 5) <= 6;
         }
       }
-    }
+    }*/
   };
 
 function report(state, code, message) {
