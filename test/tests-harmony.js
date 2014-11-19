@@ -14371,81 +14371,170 @@ test('f(async function(promise) { await promise })', {
 });
 
 test("f(a, async(1, 2), b);", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "CallExpression",
-      callee: {
-        type: "Identifier",
-        name: "f",
-        loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 1}
+  "type": "Program",
+  "start": 0,
+  "end": 21,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 21
+    }
+  },
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 21,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 21
         }
       },
-      arguments: [
-        {
-          type: "Identifier",
-          name: "a",
-          loc: {
-            start: {line: 1, column: 2},
-            end: {line: 1, column: 3}
+      "expression": {
+        "type": "CallExpression",
+        "start": 0,
+        "end": 20,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
           }
         },
-        {
-          type: "CallExpression",
-          callee: {
-            type: "Identifier",
-            name: "async",
-            loc: {
-              start: {line: 1, column: 5},
-              end: {line: 1, column: 10}
+        "callee": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 1,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 1
             }
           },
-          arguments: [
-            {
-              type: "Literal",
-              value: 1,
-              loc: {
-                start: {line: 1,column: 11},
-                end: {line: 1,column: 12}
+          "name": "f"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "start": 2,
+            "end": 3,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 2
+              },
+              "end": {
+                "line": 1,
+                "column": 3
               }
             },
-            {
-              type: "Literal",
-              value: 2,
-              loc: {
-                start: {line: 1,column: 14},
-                end: {line: 1,column: 15}
+            "name": "a"
+          },
+          {
+            "type": "CallExpression",
+            "start": 5,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 5
+              },
+              "end": {
+                "line": 1,
+                "column": 16
               }
-            }
-          ],
-          loc: {
-            start: {line: 1,column: 5},
-            end: {line: 1,column: 16}
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 5,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "name": "async"
+            },
+            "arguments": [
+              {
+                "type": "Literal",
+                "start": 11,
+                "end": 12,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  }
+                },
+                "value": 1,
+                "raw": "1"
+              },
+              {
+                "type": "Literal",
+                "start": 14,
+                "end": 15,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                },
+                "value": 2,
+                "raw": "2"
+              }
+            ]
+          },
+          {
+            "type": "Identifier",
+            "start": 18,
+            "end": 19,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              }
+            },
+            "name": "b"
           }
-        },
-        {
-          type: "Identifier",
-          name: "b",
-          loc: {
-            start: {line: 1,column: 18},
-            end: {line: 1,column: 19}
-          }
-        }
-      ],
-      loc: {
-        start: {line: 1,column: 0},
-        end: {line: 1,column: 20}
+        ]
       }
-    },
-    loc: {
-      start: {line: 1,column: 0},
-      end: {line: 1,column: 20}
     }
-  }]
-}, {
+  ]
+}
+, {
   ecmaVersion: 7,
   locations: true
 });
@@ -14499,7 +14588,7 @@ test("var ok = async(x);", {
     kind: "var",
     loc: {
       start: {line: 1,column: 0},
-      end: {line: 1,column: 17}
+      end: {line: 1,column: 18}
     }
   }]
 }, {
@@ -14508,98 +14597,448 @@ test("var ok = async(x);", {
 });
 
 test("var async; async = 10;", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "FunctionExpression",
-      id: null,
-      params: [],
-      defaults: [],
-      body: {
-        type: "BlockStatement",
-        body: [
-          {
-            type: "VariableDeclaration",
-            declarations: [
-              {
-                type: "VariableDeclarator",
-                id: {
-                  type: "Identifier",
-                  name: "async",
-                  loc: {
-                    start: {line: 1,column: 18},
-                    end: {line: 1,column: 23}
-                  }
-                },
-                init: null,
-                loc: {
-                  start: {line: 1,column: 18},
-                  end: {line: 1,column: 23}
-                }
-              }
-            ],
-            kind: "var",
-            loc: {
-              start: {line: 1,column: 14},
-              end: {line: 1,column: 24}
-            }
-          },
-          {
-            type: "ExpressionStatement",
-            expression: {
-              type: "AssignmentExpression",
-              operator: "=",
-              left: {
-                type: "Identifier",
-                name: "async",
-                loc: {
-                  start: {line: 1,column: 25},
-                  end: {line: 1,column: 30}
-                }
-              },
-              right: {
-                type: "Literal",
-                value: 10,
-                loc: {
-                  start: {line: 1,column: 33},
-                  end: {line: 1,column: 35}
-                }
-              },
-              loc: {
-                start: {line: 1,column: 25},
-                end: {line: 1,column: 35}
-              }
-            },
-            loc: {
-              start: {line: 1,column: 25},
-              end: {line: 1,column: 36}
-            }
-          }
-        ],
-        loc: {
-          start: {line: 1,column: 12},
-          end: {line: 1,column: 37}
+  "type": "Program",
+  "start": 0,
+  "end": 22,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 22
+    }
+  },
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 10,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
         }
       },
-      rest: null,
-      generator: false,
-      expression: false,
-      loc: {
-        start: {line: 1,column: 1},
-        end: {line: 1,column: 37}
-      }
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              }
+            },
+            "name": "async"
+          },
+          "init": null
+        }
+      ],
+      "kind": "var"
     },
-    loc: {
-      start: {line: 1,column: 0},
-      end: {line: 1,column: 38}
+    {
+      "type": "AssignmentExpression",
+      "start": 11,
+      "end": 21,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 11
+        },
+        "end": {
+          "line": 1,
+          "column": 21
+        }
+      },
+      "operator": "=",
+      "left": {
+        "type": "Identifier",
+        "start": 11,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 11
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "name": "async"
+      },
+      "right": {
+        "type": "Literal",
+        "start": 19,
+        "end": 21,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 19
+          },
+          "end": {
+            "line": 1,
+            "column": 21
+          }
+        },
+        "value": 10,
+        "raw": "10"
+      }
     }
-  }]
+  ]
 }, {
   ecmaVersion: 7,
   locations: true
 });
 
+test("var {a, async} = b;" {
+  "type": "Program",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 19
+    }
+  },
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 19,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 19
+        }
+      },
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            }
+          },
+          "id": {
+            "type": "ObjectPattern",
+            "start": 4,
+            "end": 14,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              }
+            },
+            "properties": [
+              {
+                "type": "Property",
+                "start": 5,
+                "end": 6,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 6
+                  }
+                },
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 5,
+                  "end": 6,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 6
+                    }
+                  },
+                  "name": "a"
+                },
+                "kind": "init",
+                "value": {
+                  "type": "Identifier",
+                  "start": 5,
+                  "end": 6,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 6
+                    }
+                  },
+                  "name": "a"
+                }
+              },
+              {
+                "type": "Property",
+                "start": 8,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  }
+                },
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
+                  "name": "async"
+                },
+                "kind": "init",
+                "value": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
+                  "name": "async"
+                },
+                "shorthand": true
+              }
+            ]
+          },
+          "init": {
+            "type": "Identifier",
+            "start": 17,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 17
+              },
+              "end": {
+                "line": 1,
+                "column": 18
+              }
+            },
+            "name": "b"
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+}, {
+  ecmaVersion: 7,
+  locations: true
+});
+
+test("var x = { async: true };", {
+  "type": "Program",
+  "start": 0,
+  "end": 24,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 24
+    }
+  },
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 24,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 24
+        }
+      },
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 5,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 5
+              }
+            },
+            "name": "x"
+          },
+          "init": {
+            "type": "ObjectExpression",
+            "start": 8,
+            "end": 23,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            },
+            "properties": [
+              {
+                "type": "Property",
+                "start": 10,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 21
+                  }
+                },
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 15,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    }
+                  },
+                  "name": "async"
+                },
+                "method": false,
+                "shorthand": false,
+                "value": {
+                  "type": "Literal",
+                  "start": 17,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 21
+                    }
+                  },
+                  "value": true,
+                  "raw": "true"
+                },
+                "kind": "init"
+              }
+            ]
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+}, {ecmaVersion: 7, locations: true});
 // Harmony Invalid syntax
 
 testFail("0o", "Expected number in radix 8 (1:2)", {ecmaVersion: 6});
@@ -14715,6 +15154,9 @@ testFail("(10, 20) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
 testFail("function foo(promise) { await promise; }", "Unexpected token (1:30)", {ecmaVersion: 7});
 
 testFail("async function* foo(promise) { await promise; }", "Unexpected token (1:14)", {ecmaVersion: 7});
+
+testFail("var a = { async ['a']: true }", "Unexpected token (1:28)", {ecmaVersion: 7});
+testFail("var a = { async *['a'](){} }", "Unexpected token (1:17)", {ecmaVersion: 7});
 
 testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 

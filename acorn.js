@@ -2028,9 +2028,10 @@
     if (options.ecmaVersion < 7) {
       unexpected();
     }
-
-    next();
-
+    var start = storeCurrentPos();
+    var retNode = startNodeAt(start);
+    var finishedAsync = parseIdent(true);
+    
     switch (tokType) {
       case _function:
         next();
@@ -2057,10 +2058,36 @@
         if (metParenL === oldParenL && eat(_arrow)) {
           return parseArrowExpression(node, exprList, true);
         }
-
+        retNode.callee = finishedAsync;
+        retNode.arguments = exprList;
+        retNode = parseSubscripts(finishNode(retNode, "CallExpression"), start);
+        break;
       default:
-        unexpected();
+        if (isStatement) {
+          if (tokType.beforeExpr) {
+            // Probably using async as an ident
+            if (tokType.isAssign) {
+              retNode.operator = tokVal;
+              retNode.left = tokType === _eq ? toAssignable(finishedAsync) : finishedAsync;
+              checkLVal(finishedAsync);
+              next();
+              retNode.right = parseMaybeAssign();
+              retNode = finishNode(retNode, "AssignmentExpression");
+            }
+            else {
+              unexpected
+            }
+            semicolon();
+          }
+          else {
+            unexpected();
+          }
+        }
+        else {
+          retNode = finishedAsync;
+        }
     }
+    return retNode;
   }
   
   function parseIfStatement(node) {
@@ -2615,19 +2642,65 @@
       } else first = false;
 
       var prop = startNode(), isGenerator, isAsync;
-      if (options.ecmaVersion >= 7) {
-        isAsync = eat(_async);
-        if (isAsync && tokType === _star) unexpected();
+      if (tokType == _async) { // "async" is a valid key
+        prop.computed = false;
+        prop.key = parseIdent(true);
+        isAsync = true;
       }
       if (options.ecmaVersion >= 6) {
-        prop.method = false;
-        prop.shorthand = false;
         isGenerator = eat(_star);
       }
-      parsePropertyName(prop);
+      
+      if (tokType === _name || tokType.keyword) {
+        // possibly an async function
+        if (isAsync && options.ecmaVersion < 7) {
+          unexpected();
+        }
+        if (isAsync && isGenerator) {
+          unexpected();
+        }
+        if (options.ecmaVersion >= 6) {
+          prop.method = false;
+          prop.shorthand = false;
+        }
+        parsePropertyName(prop);
+      }
+      else if (tokType === _colon) {
+        // key could be "async"
+        if (options.ecmaVersion >= 6) {
+          prop.method = false;
+          prop.shorthand = false;
+        }
+        isAsync = false;
+      }
+      else if (tokType === _bracketL) {
+        // could be async computed
+        if (isAsync && isGenerator) {
+          unexpected();
+        }
+        parsePropertyName(prop);
+      }
+      else if (tokType === _braceR) {
+        // object unpack, and key could be == "async"
+        if (isAsync) {
+          isAsync = false;
+          prop.computed = false;
+        }
+        else {
+          parsePropertyName(prop);
+        }
+      }
+      else {
+        //unexpected();
+        isAsync = false;
+        parsePropertyName(prop);
+      }
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         prop.kind = "init";
+        if (isAsync) {
+          unexpected();
+        }
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         prop.kind = "init";
         prop.method = true;
