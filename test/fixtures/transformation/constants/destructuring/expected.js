@@ -2,15 +2,19 @@
 
 var _ref = [1, 2];
 
-var a = _ref[0];
-var b = _ref[1];
-var _ref2 = [3, 4];
+var _ref2 = Array.from(_ref);
 
-var c = _ref2[0];
-var d = _ref2[1];
-var _ref3 = { e: 5, f: 6 };
-var e = _ref3.e;
-var f = _ref3.f;
-var _ref4 = { a: 7, b: 8 };
-var g = _ref4.a;
-var h = _ref4.b;
+var a = _ref2[0];
+var b = _ref2[1];
+var _ref3 = [3, 4];
+
+var _ref4 = Array.from(_ref3);
+
+var c = _ref4[0];
+var d = _ref4[1];
+var _ref5 = { e: 5, f: 6 };
+var e = _ref5.e;
+var f = _ref5.f;
+var _ref6 = { a: 7, b: 8 };
+var g = _ref6.a;
+var h = _ref6.b;

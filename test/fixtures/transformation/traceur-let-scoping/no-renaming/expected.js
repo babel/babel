@@ -6,4 +6,3 @@ function foo(n) {
 }
 
 foo(42);
-
