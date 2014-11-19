@@ -14716,7 +14716,7 @@ test("var async; async = 10;", {
   locations: true
 });
 
-test("var {a, async} = b;" {
+test("var {a, async} = b;", {
   "type": "Program",
   "start": 0,
   "end": 19,
