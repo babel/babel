@@ -2,5 +2,7 @@
 
 var _ref = f();
 
-a = _ref[0];
-b = _ref[1];
+var _ref2 = Array.from(_ref);
+
+a = _ref2[0];
+b = _ref2[1];

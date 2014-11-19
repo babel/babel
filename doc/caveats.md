@@ -37,7 +37,7 @@ A polyfill is required for for-of functionality that implements `Symbol` and
 adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
 specified in [polyfill](polyfill.md) suffices.
 
-## Spread
+### Array destructuring / Spread
 
-An [ES6 polyfill](polyfill.md) is required in order for spread to work. More
-specifically a polyfill for `Array.from`.
+An [ES6 polyfill](polyfill.md) is required for spread and array destructuring.
+More specifically a polyfill for `Array.from`.

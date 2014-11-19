@@ -2,5 +2,7 @@
 
 var _ref = [1, 2];
 
-this.foo = _ref[0];
-this.bar = _ref[1];
+var _ref2 = Array.from(_ref);
+
+this.foo = _ref2[0];
+this.bar = _ref2[1];

@@ -15,13 +15,17 @@ function unpackObject(_ref2) {
 
 console.log(unpackObject({ title: "title", author: "author" }));
 
-var unpackArray = function (_ref3, _ref4) {
-  var a = _ref3[0];
-  var b = _ref3[1];
-  var c = _ref3[2];
-  var x = _ref4[0];
-  var y = _ref4[1];
-  var z = _ref4[2];
+var unpackArray = function (_ref3, _ref5) {
+  var _ref4 = Array.from(_ref3);
+
+  var a = _ref4[0];
+  var b = _ref4[1];
+  var c = _ref4[2];
+  var _ref6 = Array.from(_ref5);
+
+  var x = _ref6[0];
+  var y = _ref6[1];
+  var z = _ref6[2];
   return a + b + c;
 };
 

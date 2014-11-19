@@ -1,6 +1,10 @@
 "use strict";
 
-var x1 = rect.topLeft[0];
-var y1 = rect.topLeft[1];
-var x2 = rect.bottomRight[0];
-var y2 = rect.bottomRight[1];
+var _ref = Array.from(rect.topLeft);
+
+var x1 = _ref[0];
+var y1 = _ref[1];
+var _ref2 = Array.from(rect.bottomRight);
+
+var x2 = _ref2[0];
+var y2 = _ref2[1];
