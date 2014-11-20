@@ -3306,80 +3306,75 @@ var fbTestFixture = {
     },
 
     '<div>{<div {...test} />}</div>': {
-      type: 'Program',
+      type: 'ExpressionStatement',
       start: 0,
       end: 30,
-      body: [{
-        type: 'ExpressionStatement',
+      expression: {
+        type: 'XJSElement',
         start: 0,
         end: 30,
-        expression: {
-          type: 'XJSElement',
+        openingElement: {
+          type: 'XJSOpeningElement',
           start: 0,
+          end: 5,
+          attributes: [],
+          name: {
+            type: 'XJSIdentifier',
+            start: 1,
+            end: 4,
+            name: 'div'
+          },
+          selfClosing: false
+        },
+        closingElement: {
+          type: 'XJSClosingElement',
+          start: 24,
           end: 30,
-          openingElement: {
-            type: 'XJSOpeningElement',
-            start: 0,
-            end: 5,
-            attributes: [],
-            name: {
-              type: 'XJSIdentifier',
-              start: 1,
-              end: 4,
-              name: 'div'
-            },
-            selfClosing: false
-          },
-          closingElement: {
-            type: 'XJSClosingElement',
-            start: 24,
-            end: 30,
-            name: {
-              type: 'XJSIdentifier',
-              start: 26,
-              end: 29,
-              name: 'div'
-            }
-          },
-          children: [{
-            type: 'XJSExpressionContainer',
-            start: 5,
-            end: 24,
-            expression: {
-              type: 'XJSElement',
+          name: {
+            type: 'XJSIdentifier',
+            start: 26,
+            end: 29,
+            name: 'div'
+          }
+        },
+        children: [{
+          type: 'XJSExpressionContainer',
+          start: 5,
+          end: 24,
+          expression: {
+            type: 'XJSElement',
+            start: 6,
+            end: 23,
+            openingElement: {
+              type: 'XJSOpeningElement',
               start: 6,
               end: 23,
-              openingElement: {
-                type: 'XJSOpeningElement',
-                start: 6,
-                end: 23,
-                attributes: [
-                  {
-                    type: 'XJSSpreadAttribute',
-                    start: 11,
-                    end: 20,
-                    argument: {
-                      type: 'Identifier',
-                      start: 15,
-                      end: 19,
-                      name: 'test'
-                    }
+              attributes: [
+                {
+                  type: 'XJSSpreadAttribute',
+                  start: 11,
+                  end: 20,
+                  argument: {
+                    type: 'Identifier',
+                    start: 15,
+                    end: 19,
+                    name: 'test'
                   }
-                ],
-                name: {
-                  type: 'XJSIdentifier',
-                  start: 7,
-                  end: 10,
-                  name: 'div'
-                },
-                selfClosing: true
+                }
+              ],
+              name: {
+                type: 'XJSIdentifier',
+                start: 7,
+                end: 10,
+                name: 'div'
               },
-              closingElement: null,
-              children: []
-            }
-          }]
-        }
-      }]
+              selfClosing: true
+            },
+            closingElement: null,
+            children: []
+          }
+        }]
+      }
     }
   }
 };
