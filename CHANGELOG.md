@@ -1,3 +1,7 @@
+# 1.12.25
+
+ * Update `ast-types`, `es6-shim`, `chokidar`, `estraverse` and `private`.
+
 # 1.12.24
 
  * Collect references that haven't been declared in scope.
