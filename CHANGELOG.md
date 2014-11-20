@@ -1,3 +1,7 @@
+# 1.12.23
+
+ * Fix generator function export hoisting.
+
 # 1.12.22
 
  * Update `fs-readdir-recursive` and `chokidar`.
