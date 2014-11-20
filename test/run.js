@@ -50,7 +50,19 @@
       config: {
         parse: (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse
       }
-    }
+    }/*,
+    Loose: {
+      config: {
+        parse: (typeof require === "undefined" ? window.acorn : require("../acorn_loose")).parse_dammit,
+        loose: true,
+        filter: function (test) {
+          if (/`/.test(test.code)) return false; // FIXME remove this when the loose parse supports template strings
+          var opts = test.options || {};
+          if (opts.loose === false) return false;
+          return (opts.ecmaVersion || 5) <= 6;
+        }
+      }
+    }*/
   };
 
 function report(state, code, message) {
