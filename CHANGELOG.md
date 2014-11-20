@@ -1,3 +1,7 @@
+# 1.12.24
+
+ * Collect references that haven't been declared in scope.
+
 # 1.12.23
 
  * Fix generator function export hoisting.
