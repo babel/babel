@@ -133,13 +133,31 @@ for (var i of [1, 2, 3]) {
 ## Generators
 
 ```javascript
+function* fibonacci() {
+  var pre = 0, cur = 1;
+  for (;;) {
+    var temp = pre;
+    pre = cur;
+    cur += temp;
+    yield cur;
+  }
+}
 
+for (var n of fibonacci()) {
+  // truncate the sequence at 1000
+  if (n > 1000) break;
+  console.log(n);
+}
 ```
 
 ## Generator comprehension
 
 ```javascript
-
+var nums = [1, 2, 3, 4, 5, 6];
+var multiples = (for (i of nums) if (i % 2) i * i);
+assert.equal(multiples.next().value, 1);
+assert.equal(multiples.next().value, 9);
+assert.equal(multiples.next().value, 25);
 ```
 
 ## Let scoping
@@ -153,7 +171,17 @@ for (let i in arr) {
 ## Modules
 
 ```javascript
+import "foo";
+import foo from "foo";
+import * as foo from "foo";
+import {bar} from "foo";
+import {foo as bar} from "foo";
 
+export { test };
+export var test = 5;
+export function test() {}
+
+export default test;
 ```
 
 ## Numeric literals
