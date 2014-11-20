@@ -32,7 +32,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
 ## [Features](features.md)
 
  - [Array comprehension](features.md#array-comprehension)
- - [Async functions](features.md#async-functions) via [regenerator](https://github.com/facebook/regenerator)
+ - [Async functions](features.md#async-functions)
  - [Arrow functions](features.md#arrow-functions)
  - [Classes](features.md#classes)
  - [Computed property names](features.md#computed-property-names)
@@ -40,7 +40,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Default parameters](features.md#default-parameters)
  - [Destructuring](features.md#destructuring)
  - [For-of](features.md#for-of)
- - [Generators](features.md#generators) via [regenerator](https://github.com/facebook/regenerator)
+ - [Generators](features.md#generators)
  - [Generator comprehension](features.md#generator-comprehension)
  - [Let scoping](features.md#let-scoping)
  - [Modules](features.md#modules)
