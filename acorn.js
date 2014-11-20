@@ -3169,13 +3169,14 @@
     if (tokType === _braceL) {
       var tokStart1 = tokStart, tokStartLoc1 = tokStartLoc;
 
-      var origInXJSTag = inXJSTag;
-      inXJSTag = false;
+      var origInXJSTag = inXJSTag, origInXJSChildExpression = inXJSChildExpression;
+      inXJSTag = inXJSChildExpression = false;
 
       next();
       if (tokType !== _ellipsis) unexpected();
       var node = parseMaybeUnary();
 
+      inXJSChildExpression = origInXJSChildExpression;
       inXJSTag = origInXJSTag;
 
       expect(_braceR);
