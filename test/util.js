@@ -3,8 +3,6 @@ var util   = require("../lib/6to5/util");
 var t      = require("../lib/6to5/types");
 
 suite("util", function () {
-  test("duplicate mutator map");
-
   test("invalid template", function () {
     assert.throws(function () {
       util.template("invalid template");
@@ -43,6 +41,34 @@ suite("util", function () {
     assert.deepEqual(util.list(""), []);
     assert.deepEqual(util.list("foo"), ["foo"]);
     assert.deepEqual(util.list("foo,bar"), ["foo", "bar"]);
+  });
+
+  test("arrayify", function () {
+    assert.deepEqual(util.arrayify(undefined), []);
+    assert.deepEqual(util.arrayify(false), []);
+    assert.deepEqual(util.arrayify(null), []);
+    assert.deepEqual(util.arrayify(""), []);
+    assert.deepEqual(util.arrayify("foo"), ["foo"]);
+    assert.deepEqual(util.arrayify("foo,bar"), ["foo", "bar"]);
+    assert.deepEqual(util.arrayify(["foo", "bar"]), ["foo", "bar"]);
+
+    assert.throws(function () {
+      util.arrayify({});
+    }, /illegal type for arrayify/);
+  });
+
+  test("regexify", function () {
+    assert.deepEqual(util.regexify(undefined), /(?:)/);
+    assert.deepEqual(util.regexify(false), /(?:)/);
+    assert.deepEqual(util.regexify(null), /(?:)/);
+    assert.deepEqual(util.regexify(""), /(?:)/);
+    assert.deepEqual(util.regexify(["foo", "bar"]), /foo|bar/);
+    assert.deepEqual(util.regexify("foobar"), /foobar/);
+    assert.deepEqual(util.regexify(/foobar/), /foobar/);
+
+    assert.throws(function () {
+      util.regexify({});
+    }, /illegal type for regexify/);
   });
 
   test("getIds");
