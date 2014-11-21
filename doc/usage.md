@@ -135,7 +135,11 @@ to5.transformFile("filename.js", options, function (err, result) {
 
   // Output comments in generated output
   // Default: true
-  comments: false
+  comments: false,
+
+  // Enable support for experimental ES7 features
+  // Default: false
+  experimental: true
 }
 ```
 
@@ -181,3 +185,9 @@ require("6to5/register")({
   extensions: [".js", ".es6"]
 });
 ```
+
+## Experimental
+
+6to5 also has experimental support for ES7 proposals. You can enable this with
+the `experimental: true` option when using the [Node API](#node) or
+`--experimental` when using the [CLI](#cli).

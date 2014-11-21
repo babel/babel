@@ -1,6 +1,6 @@
 # Features
 
-## Array comprehension
+## Array comprehension ([experimental](usage.md#experimental))
 
 ```javascript
 var results = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }]
@@ -31,7 +31,7 @@ var bob = {
 };
 ```
 
-## Async functions
+## Async functions ([experimental](usage.md#experimental))
 
 ```javascript
 async function chainAnimationsAsync(elem, animations) {
@@ -150,7 +150,7 @@ for (var n of fibonacci()) {
 }
 ```
 
-## Generator comprehension
+## Generator comprehension ([experimental](usage.md#experimental))
 
 ```javascript
 var nums = [1, 2, 3, 4, 5, 6];

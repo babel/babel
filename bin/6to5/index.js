@@ -11,6 +11,7 @@ commander.option("-s, --source-maps", "Save source map alongside the compiled co
 commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be used in source-maps, errors etc [stdin]", "stdin");
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("-r, --runtime", "Replace 6to5 declarations with references to a runtime");
+commander.option("-e, --experimental", "Enable experimental support for proposed ES7 features");
 
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
 commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
@@ -87,11 +88,12 @@ if (errors.length) {
 
 exports.opts = {
   sourceMapName: commander.outFile,
+  amdModuleIds:  commander.amdModuleIds,
+  experimental:  commander.experimental,
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
   comments:      !commander.removeComments,
-  amdModuleIds:   commander.amdModuleIds,
   runtime:       commander.runtime,
   modules:       commander.modules
 };

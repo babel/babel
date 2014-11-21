@@ -31,8 +31,8 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
 
 ## [Features](features.md)
 
- - [Array comprehension](features.md#array-comprehension)
- - [Async functions](features.md#async-functions)
+ - [Array comprehension](features.md#array-comprehension) ([experimental](usage.md#experimental))
+ - [Async functions](features.md#async-functions) ([experimental](usage.md#experimental))
  - [Arrow functions](features.md#arrow-functions)
  - [Classes](features.md#classes)
  - [Computed property names](features.md#computed-property-names)
@@ -41,7 +41,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Destructuring](features.md#destructuring)
  - [For-of](features.md#for-of)
  - [Generators](features.md#generators)
- - [Generator comprehension](features.md#generator-comprehension)
+ - [Generator comprehension](features.md#generator-comprehension) ([experimental](usage.md#experimental))
  - [Let scoping](features.md#let-scoping)
  - [Modules](features.md#modules)
  - [Numeric literals](features.md#numeric-literals)

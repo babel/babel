@@ -1,3 +1,7 @@
+# 1.12.27
+
+ * Put experimental ES7 features behind a flag `--experimental` and `experimental` option.
+
 # 1.12.26
 
  * Support computed property destructuring.

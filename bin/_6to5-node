@@ -8,10 +8,11 @@ var util      = require("../lib/6to5/util");
 var vm        = require("vm");
 var _         = require("lodash");
 
-commander.option("-e, --eval [script]", "evaluate script");
-commander.option("-p, --print", "evaluate script and print result");
-commander.option("-i, --ignore [regex]", "ignore all files that match this regex when using the require hook");
-commander.option("-x, --extensions [extensions]", "list of extensions to hook into [.es6,.js]", util.list);
+commander.option("-e, --eval [script]", "Evaluate script");
+commander.option("-p, --print", "Evaluate script and print result");
+commander.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
+commander.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js]");
+commander.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
 
 var pkg = require("../package.json");
 commander.version(pkg.version);
@@ -20,17 +21,11 @@ commander.parse(process.argv);
 
 //
 
-var registerOpts = {};
-
-if (commander.ignore) {
-  registerOpts.ignoreRegex = new RegExp(commander.ignore);
-}
-
-if (commander.extensions && commander.extensions.length) {
-  registerOpts.extensions = commander.extensions;
-}
-
-to5.register(registerOpts);
+to5.register({
+  experimental: commander.experimental,
+  extensions:   commander.extensions,
+  ignore:       commander.ignore
+});
 
 //
 
