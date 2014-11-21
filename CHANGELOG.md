@@ -1,3 +1,7 @@
+# 1.12.26
+
+ * Support computed property destructuring.
+
 # 1.12.25
 
  * Update `acorn-6to5`, `ast-types`, `es6-shim`, `chokidar`, `estraverse` and `private`.
