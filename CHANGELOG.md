@@ -1,7 +1,11 @@
+# 1.13.1
+
+ * Fix constructor spread optimisation. Thanks [@zloirock](https://github.com/zloirock).
+
 # 1.13.0
 
  * Put experimental ES7 features behind a flag `--experimental` and `experimental` option.
- * Constructor speed performance increase. Thanks [@RReverser](https://github.com/RReverser).
+ * Constructor spread performance increase. Thanks [@RReverser](https://github.com/RReverser).
  * Use `self` instead of `window` in the optional 6to5 runtime. Thanks [@RReverser](https://github.com/RReverser).
 
 # 1.12.26

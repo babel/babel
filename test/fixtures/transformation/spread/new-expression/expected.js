@@ -3,9 +3,9 @@
 var _applyConstructor = function (Constructor, args) {
   var instance = Object.create(Constructor.prototype);
 
-  Constructor.apply(instance, args);
+  var result = Constructor.apply(instance, args);
 
-  return instance;
+  return result != null && (typeof result == "object" || typeof result == "function") ? result : instance;
 };
 
 _applyConstructor(Numbers, Array.from(nums));
