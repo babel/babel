@@ -3,7 +3,7 @@
  - **Readable** - formatting is retained if possible so your generated code is as similar as possible.
  - **Extensible** - with a large range of [plugins](plugins.md) and **browser support**.
  - **Lossless** - **source map support** so you can debug your compiled code with ease.
- - **Compact** - maps directly to the equivalent ES5 with **no runtime**[\*](caveats.md#generators).
+ - **Compact** - maps directly to the equivalent ES5 with **no runtime**[\*](caveats.md).
 
 ## Installation
 
