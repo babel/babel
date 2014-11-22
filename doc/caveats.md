@@ -5,6 +5,16 @@
 The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
 and an [ES6 polyfill](polyfill.md) are required in order for generators to work.
 
+### Async/Comprehensions
+
+[Experimental support](usage.md#experimental) must be enabled for these proposed
+ES7 features to work.
+
+### Array comprehension/Array destructuring/Spread
+
+An [ES6 polyfill](polyfill.md) is required. More specifically a polyfill for
+`Array.from`.
+
 ## Classes
 
 Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
@@ -31,13 +41,13 @@ class Bar extends Foo {
 }
 ```
 
+## Constructor spread
+
+Constructor spreads do not currently support built-ins. ie.
+`new Array(...items)`.
+
 ## For-of
 
 A polyfill is required for for-of functionality that implements `Symbol` and
 adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
 specified in [polyfill](polyfill.md) suffices.
-
-### Array destructuring / Spread
-
-An [ES6 polyfill](polyfill.md) is required for spread and array destructuring.
-More specifically a polyfill for `Array.from`.
