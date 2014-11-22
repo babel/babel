@@ -1,11 +1,11 @@
 "use strict";
 
 var _applyConstructor = function (Constructor, args) {
-  var bindArgs = [null].concat(args);
+  var instance = Object.create(Constructor.prototype);
 
-  var Factory = Constructor.bind.apply(Constructor, bindArgs);
+  Constructor.apply(instance, args);
 
-  return new Factory();
+  return instance;
 };
 
 _applyConstructor(Numbers, Array.from(nums));
