@@ -191,3 +191,5 @@ require("6to5/register")({
 6to5 also has experimental support for ES7 proposals. You can enable this with
 the `experimental: true` option when using the [Node API](#node) or
 `--experimental` when using the [CLI](#cli).
+
+**NOTE:** That these are subject to change as their proposal status progresses.
