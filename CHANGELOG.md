@@ -1,4 +1,4 @@
-# 1.12.27
+# 1.13.0
 
  * Put experimental ES7 features behind a flag `--experimental` and `experimental` option.
 
