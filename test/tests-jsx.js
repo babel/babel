@@ -3375,6 +3375,72 @@ var fbTestFixture = {
           }
         }]
       }
+    },
+
+    '<div>{ {a} }</div>': {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 18,
+      expression: {
+        type: "XJSElement",
+        start: 0,
+        end: 18,
+        openingElement: {
+          type: "XJSOpeningElement",
+          start: 0,
+          end: 5,
+          attributes: [],
+          name: {
+            type: "XJSIdentifier",
+            start: 1,
+            end: 4,
+            name: "div"
+          },
+          selfClosing: false
+        },
+        closingElement: {
+          type: "XJSClosingElement",
+          start: 12,
+          end: 18,
+          name: {
+            type: "XJSIdentifier",
+            start: 14,
+            end: 17,
+            name: "div"
+          }
+        },
+        children: [{
+          type: "XJSExpressionContainer",
+          start: 5,
+          end: 12,
+          expression: {
+            type: "ObjectExpression",
+            start: 7,
+            end: 10,
+            properties: [{
+              type: "Property",
+              start: 8,
+              end: 9,
+              method: false,
+              shorthand: true,
+              computed: false,
+              key: {
+                type: "Identifier",
+                start: 8,
+                end: 9,
+                name: "a"
+              },
+              kind: "init",
+              value: {
+                type: "Identifier",
+                start: 8,
+                end: 9,
+                name: "a"
+              }
+            }]
+          }
+        }]
+      }
     }
   }
 };

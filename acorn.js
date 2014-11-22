@@ -2549,6 +2549,8 @@
   function parseObj() {
     var node = startNode(), first = true, propHash = {};
     node.properties = [];
+    var origInXJSChildExpression = inXJSChildExpression;
+    inXJSChildExpression = false;
     next();
     while (!eat(_braceR)) {
       if (!first) {
@@ -2584,9 +2586,10 @@
 
       checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
-          }
+    }
+    inXJSChildExpression = origInXJSChildExpression;
     return finishNode(node, "ObjectExpression");
-        }
+  }
 
   function parsePropertyName(prop) {
     if (options.ecmaVersion >= 6) {
@@ -3158,7 +3161,7 @@
     inXJSTag = origInXJSTag;
     inXJSChild = origInXJSChild;
     inXJSChildExpression = false;
-    
+
     expect(_braceR);
     return finishNode(node, "XJSExpressionContainer");
   }
