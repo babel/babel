@@ -428,6 +428,7 @@
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _ltSlash = {type: "</"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
+  var _doubleColon = { type: "::", beforeExpr: true };
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -473,7 +474,8 @@
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
-                      assign: _assign, xjsName: _xjsName, xjsText: _xjsText};
+                      assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
+                      doubleColon: _doubleColon};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -862,8 +864,18 @@
     case 93: ++tokPos; return finishToken(_bracketR);
     case 123: ++tokPos; return finishToken(_braceL);
     case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChildExpression);
-    case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
+
+    case 58:
+      ++tokPos;
+      if (options.ecmaVersion >= 7) {
+        var next = input.charCodeAt(tokPos);
+        if (next === 58) {
+          ++tokPos;
+          return finishToken(_doubleColon);
+        }
+      }
+      return finishToken(_colon);
 
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
@@ -1865,6 +1877,7 @@
         break;
 
       case "SpreadElement":
+      case "VirtualPropertyExpression":
         break;
 
       default:
@@ -2407,7 +2420,12 @@
   }
 
   function parseSubscripts(base, start, noCalls) {
-    if (eat(_dot)) {
+    if (eat(_doubleColon)) {
+      var node = startNodeAt(start);
+      node.object = base;
+      node.property = parseIdent(true);
+      return parseSubscripts(finishNode(node, "VirtualPropertyExpression"), start, noCalls);
+    } else if (eat(_dot)) {
       var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);

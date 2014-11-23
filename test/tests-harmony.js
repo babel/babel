@@ -13605,6 +13605,194 @@ test("/[a-z]/u", {
   ecmaVersion: 6
 });
 
+// ES7: Abstract references
+
+test('foo::bar;', {
+  type: "Program",
+  start: 0,
+  end: 9,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 9,
+    expression: {
+      type: "VirtualPropertyExpression",
+      start: 0,
+      end: 8,
+      object: {
+        type: "Identifier",
+        start: 0,
+        end: 3,
+        name: "foo"
+      },
+      property: {
+        type: "Identifier",
+        start: 5,
+        end: 8,
+        name: "bar"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('foo::bar::baz;', {
+  type: "Program",
+  start: 0,
+  end: 14,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 14,
+    expression: {
+      type: "VirtualPropertyExpression",
+      start: 0,
+      end: 13,
+      object: {
+        type: "VirtualPropertyExpression",
+        start: 0,
+        end: 8,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "foo"
+        },
+        property: {
+          type: "Identifier",
+          start: 5,
+          end: 8,
+          name: "bar"
+        }
+      },
+      property: {
+        type: "Identifier",
+        start: 10,
+        end: 13,
+        name: "baz"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('foo::baz();', {
+  type: "Program",
+  start: 0,
+  end: 11,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 11,
+    expression: {
+      type: "CallExpression",
+      start: 0,
+      end: 10,
+      callee: {
+        type: "VirtualPropertyExpression",
+        start: 0,
+        end: 8,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "foo"
+        },
+        property: {
+          type: "Identifier",
+          start: 5,
+          end: 8,
+          name: "baz"
+        }
+      },
+      arguments: []
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('foo::bar = "baz";', {
+  type: "Program",
+  start: 0,
+  end: 17,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 17,
+    expression: {
+      type: "AssignmentExpression",
+      start: 0,
+      end: 16,
+      operator: "=",
+      left: {
+        type: "VirtualPropertyExpression",
+        start: 0,
+        end: 8,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "foo"
+        },
+        property: {
+          type: "Identifier",
+          start: 5,
+          end: 8,
+          name: "bar"
+        }
+      },
+      right: {
+        type: "Literal",
+        start: 11,
+        end: 16,
+        value: "baz"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('delete foo::bar;', {
+  type: "Program",
+  start: 0,
+  end: 16,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 16,
+    expression: {
+      type: "UnaryExpression",
+      start: 0,
+      end: 15,
+      operator: "delete",
+      prefix: true,
+      argument: {
+        type: "VirtualPropertyExpression",
+        start: 7,
+        end: 15,
+        object: {
+          type: "Identifier",
+          start: 7,
+          end: 10,
+          name: "foo"
+        },
+        property: {
+          type: "Identifier",
+          start: 12,
+          end: 15,
+          name: "bar"
+        }
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Async Functions
 
 test('async function foo(promise) { await promise; }', {
