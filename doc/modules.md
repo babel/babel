@@ -135,6 +135,43 @@ function bar() {
 }
 ```
 
+### Register
+
+**In**
+
+```javascript
+import foo from "foo";
+
+export function bar() {
+  return foo("foobar");
+}
+```
+
+**Out**
+
+```javascript
+System.register("bar", ["foo"], function ($__export) {
+  "use strict";
+
+  var __moduleName = "bar";
+
+  var foo;
+  function bar() {
+    return foo("foobar");
+  }
+  return {
+    setters: [function (m) {
+      foo = m.default;
+    }],
+    execute: function () {
+      $__export("bar", bar);
+    }
+  };
+});
+
+
+```
+
 ## Custom
 
 You can alternatively specify module names instead of one of the built-in types.
