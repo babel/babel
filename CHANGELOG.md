@@ -1,3 +1,7 @@
+# 1.13.9
+
+ * Fix `VirtualPropertyExpression` visitor keys.
+
 # 1.13.8
 
  * Only use a single reference in abstract references.

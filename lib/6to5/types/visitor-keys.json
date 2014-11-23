@@ -61,7 +61,7 @@
   "UpdateExpression":          ["argument"],
   "VariableDeclaration":       ["declarations"],
   "VariableDeclarator":        ["id", "init"],
-  "VirtualPropertyExpression": ["left", "right"],
+  "VirtualPropertyExpression": ["object", "property"],
   "WhileStatement":            ["test", "body"],
   "WithStatement":             ["object", "body"],
   "XJSAttribute":              ["name", "value"],
