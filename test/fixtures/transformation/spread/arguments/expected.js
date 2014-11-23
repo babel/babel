@@ -1,11 +1,8 @@
 "use strict";
 
-var _toArray = function (arr) {
-  return Array.isArray(arr) ? arr : Array.from(arr);
-};
-
+var _slice = Array.prototype.slice;
 function foo() {
-  return bar.apply(null, ["test"].concat(_toArray(arguments)));
+  return bar.apply(null, ["test"].concat(_slice.call(arguments)));
 }
 
 function bar(one, two, three) {
