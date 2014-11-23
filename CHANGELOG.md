@@ -1,3 +1,9 @@
+# 1.13.5
+
+ * Upgrade `acorn-6to5`.
+ * Add experimental support for object spread/rest.
+ * Change `arguments` to array to an additional helper method.
+
 # 1.13.4
 
  * Fix single spread element returning itself.
