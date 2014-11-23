@@ -15,6 +15,13 @@ to5.transform('import "foo";', { modules: "common" });
 
 ## Formats
 
+ * [AMD](#amd)
+ * [Common (Default)](#common-default)
+ * [Common](#common)
+ * [Ignore](#ignore)
+ * [System](#system)
+ * [UMD](#umd)
+
 ### Common (Default)
 
 **In**
@@ -198,7 +205,7 @@ function bar() {
 }
 ```
 
-### Register
+### System
 
 **In**
 
@@ -213,7 +220,7 @@ export function bar() {
 **Out**
 
 ```javascript
-System.register("bar", ["foo"], function ($__export) {
+System.register("bar", ["foo"], function (_export) {
   "use strict";
 
   var __moduleName = "bar";
@@ -227,12 +234,10 @@ System.register("bar", ["foo"], function ($__export) {
       foo = m.default;
     }],
     execute: function () {
-      $__export("bar", bar);
+      _export("bar", bar);
     }
   };
 });
-
-
 ```
 
 ## Custom
