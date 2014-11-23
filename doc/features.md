@@ -1,6 +1,6 @@
 # Features
 
-## Abstract references ([experimental](usage.md#experimental))
+## Abstract references ([experimental](usage.md#experimental)) ([spec](https://github.com/zenparsing/es-abstract-refs))
 
 ```javascript
 foo::bar;
@@ -39,7 +39,7 @@ var bob = {
 };
 ```
 
-## Async functions ([experimental](usage.md#experimental))
+## Async functions ([experimental](usage.md#experimental)) ([spec](https://github.com/lukehoban/ecmascript-asyncawait))
 
 ```javascript
 async function chainAnimationsAsync(elem, animations) {
