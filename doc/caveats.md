@@ -1,19 +1,15 @@
 # Caveats
 
-## Async/Generators
+In order for certain features to work they require certain polyfills. You can
+satisfy **all** 6to5 feature requirements by using the included
+[polyfill](polyfill.md). You may alternatively selectively include what you need:
 
-The [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js)
-and an [ES6 polyfill](polyfill.md) are required in order for generators to work.
-
-### Async/Comprehensions
-
-[Experimental support](usage.md#experimental) must be enabled for these proposed
-ES7 features to work.
-
-### Array comprehension/Array destructuring/Spread
-
-An [ES6 polyfill](polyfill.md) is required. More specifically a polyfill for
-`Array.isArray` and `Array.from`.
+| Feature                     | Requirements                                                                                                                        |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Array destructuring         | `Array.isArray`, `Array.from`                                                                                                       |
+| Async functions, Generators | [experimental option](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
+| Comprehensions              | [experimental option](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
+| Spread                      | `Array.isArray`, `Array.from`                                                                                                       |
 
 ## Classes
 
