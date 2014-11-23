@@ -1,3 +1,8 @@
+# 1.13.3
+
+ * Upgrade `acorn-6to5`.
+ * Add experimental support for abstract references.
+
 # 1.13.2
 
  * Optimise `Array.from` usage by adding a helper method.
