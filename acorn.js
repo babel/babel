@@ -462,6 +462,7 @@
 
   // '*' may be multiply or have special meaning in ES6
   var _star = {binop: 10, beforeExpr: true};
+  var _exponent = {binop: 10, beforeExpr: true};
 
   // '<', '>' may be relational or have special meaning in JSX
   var _lt = {binop: 7, beforeExpr: true}, _gt = {binop: 7, beforeExpr: true};
@@ -475,7 +476,7 @@
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
                       assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
-                      doubleColon: _doubleColon};
+                      doubleColon: _doubleColon, exponent: _exponent};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -751,10 +752,29 @@
     return finishOp(_slash, 1);
   }
 
-  function readToken_mult_modulo(code) { // '%*'
+  function readToken_modulo() { // '%'
     var next = input.charCodeAt(tokPos + 1);
     if (next === 61) return finishOp(_assign, 2);
-    return finishOp(code === 42 ? _star : _modulo, 1);
+    return finishOp(_modulo, 1);
+  }
+
+  function readToken_mult() { // '*'
+    var type = _star;
+    var width = 1;
+    var next = input.charCodeAt(tokPos + 1);
+
+    if (options.ecmaVersion >= 7 && next === 42) { // '*'
+      width++;
+      next = input.charCodeAt(tokPos + 2);
+      type = _exponent;
+    }
+
+    if (next === 61) { // '='
+      width++;
+      type = _assign;
+    }
+    
+    return finishOp(type, width);
   }
 
   function readToken_pipe_amp(code) { // '|&'
@@ -907,8 +927,11 @@
     case 47: // '/'
       return readToken_slash();
 
-    case 37: case 42: // '%*'
-      return readToken_mult_modulo(code);
+    case 37: // '%'
+      return readToken_modulo();
+
+    case 42: // '*'
+      return readToken_mult();
 
     case 124: case 38: // '|&'
       return readToken_pipe_amp(code);

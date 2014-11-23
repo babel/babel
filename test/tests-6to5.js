@@ -4,6 +4,82 @@ if (typeof exports != "undefined") {
   var testAssert = require("./driver.js").testAssert;
 }
 
+// ES7: Exponentiation Operator
+
+test('a **= 2;', {
+  type: "Program",
+  start: 0,
+  end: 8,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 8,
+    expression: {
+      type: "AssignmentExpression",
+      start: 0,
+      end: 7,
+      operator: "**=",
+      left: {
+        type: "Identifier",
+        start: 0,
+        end: 1,
+        name: "a"
+      },
+      right: {
+        type: "Literal",
+        start: 6,
+        end: 7,
+        value: 2
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('var squared = 2 ** 2;', {
+  type: "Program",
+  start: 0,
+  end: 21,
+  body: [{
+    type: "VariableDeclaration",
+    start: 0,
+    end: 21,
+    declarations: [{
+      type: "VariableDeclarator",
+      start: 4,
+      end: 20,
+      id: {
+        type: "Identifier",
+        start: 4,
+        end: 11,
+        name: "squared"
+      },
+      init: {
+        type: "BinaryExpression",
+        start: 14,
+        end: 20,
+        left: {
+          type: "Literal",
+          start: 14,
+          end: 15,
+          value: 2
+        },
+        operator: "**",
+        right: {
+          type: "Literal",
+          start: 19,
+          end: 20,
+          value: 2
+        }
+      }
+    }],
+    kind: "var"
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Object Rest/Spread
 
 test('let {...x} = z', {
