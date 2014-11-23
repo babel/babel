@@ -1,11 +1,11 @@
 "use strict";
 
-var _objectSpread = function (target, keys) {
+var _objectSpread = function (obj, keys) {
   var target = {};
-  for (var i in target) {
+  for (var i in obj) {
     if (keys.indexOf(i) >= 0) continue;
-    if (!Object.prototype.hasOwn.call(target)) continue;
-    target[i] = target[i];
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
   }
 
   return target;

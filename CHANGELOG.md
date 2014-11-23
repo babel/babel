@@ -1,3 +1,7 @@
+# 1.13.6
+
+ * Fix experimental object spread/rest helper.
+
 # 1.13.5
 
  * Upgrade `acorn-6to5`.
