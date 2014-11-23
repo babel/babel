@@ -1,3 +1,7 @@
+# 1.13.8
+
+ * Only use a single reference in abstract references.
+
 # 1.13.7
 
  * Upgrade `acorn-6to5`.
