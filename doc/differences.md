@@ -78,6 +78,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Constants                    | ✓     | ✓       | ✓              |        |        |             |
 | Default parameters           | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Destructuring                | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Exponentiation operator      | ✓     | ✓       |                |        |        |             |
 | For-of                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Generators                   | ✓     | ✓       |                | ✓      |        |             |
 | Generator comprehension      | ✓     | ✓       |                |        |        |             |

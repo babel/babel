@@ -130,6 +130,15 @@ var [a] = [];
 a === undefined;
 ```
 
+## Exponentiation operator ([experimental](usage.md#experimental)) ([spec](https://github.com/rwaldron/exponentiation-operator))
+
+```javascript
+var a = 2;
+a **= 2;
+
+var squared = 2 ** 2;
+```
+
 ## For-of
 
 ```javascript

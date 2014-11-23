@@ -40,6 +40,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Constants](features.md#constants)
  - [Default parameters](features.md#default-parameters)
  - [Destructuring](features.md#destructuring)
+ - [Exponentiation operator](features.md#exponentiation-operator) ([experimental](usage.md#experimental))
  - [For-of](features.md#for-of)
  - [Generators](features.md#generators)
  - [Generator comprehension](features.md#generator-comprehension) ([experimental](usage.md#experimental))
