@@ -1,3 +1,10 @@
+# 1.13.11
+
+ * Fix `util.regexify` on falsy values.
+ * Fix `_aliasFunction` with rest parameters.
+ * Export as `module.exports` instead of `exports.default` if there are no other `ExportDeclaration`s in `commonInterop` module formatter.
+ * Add `system` module formatter. Thanks [@douglasduteil](https://github.com/douglasduteil).
+
 # 1.13.10
 
  * Add support for `AssignmentExpression` destructuring outside of `ExpressionStatement`.
