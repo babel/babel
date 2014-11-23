@@ -51,6 +51,69 @@ var test = 5; exports.test = test;
 exports.default = test;
 ```
 
+### Common interop
+
+**In**
+
+```javascript
+import "foo";
+
+import foo from "foo";
+import * as foo from "foo";
+
+import {bar} from "foo";
+import {foo as bar} from "foo";
+
+export {test};
+export var test = 5;
+
+export default test;
+```
+
+**Out**
+
+```javascript
+var _interopRequire = function (obj) {
+  return obj && (obj["default"] || obj);
+};
+
+require("foo");
+
+var foo = _interopRequire(require("foo"));
+var foo = require("foo");
+
+var bar = require("foo").bar;
+var bar = require("foo").foo;
+
+exports.test = test;
+var test = exports.test = 5;
+
+exports["default"] = test;
+```
+
+#### module.exports behaviour
+
+If there exist no other non-default `export`s then `default exports` are
+exported as `module.exports` instead of `exports.default`.
+
+**In**
+
+```javascript
+export default function foo() {
+
+}
+```
+
+**Out**
+
+```javascript
+module.exports = foo;
+
+function foo() {
+
+}
+```
+
 ### AMD
 
 **In**
