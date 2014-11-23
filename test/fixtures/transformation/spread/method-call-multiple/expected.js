@@ -1,3 +1,7 @@
 "use strict";
 
-add.apply(null, [foo].concat(Array.from(numbers), [bar, what], Array.from(test)));
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
+};
+
+add.apply(null, [foo].concat(_toArray(numbers), [bar, what], _toArray(test)));

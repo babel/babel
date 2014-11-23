@@ -1,5 +1,9 @@
 "use strict";
 
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
+};
+
 function somethingAdvanced(_ref) {
   var x1 = _ref.topLeft.x;
   var y1 = _ref.topLeft.y;
@@ -16,12 +20,12 @@ function unpackObject(_ref2) {
 console.log(unpackObject({ title: "title", author: "author" }));
 
 var unpackArray = function (_ref3, _ref5) {
-  var _ref4 = Array.from(_ref3);
+  var _ref4 = _toArray(_ref3);
 
   var a = _ref4[0];
   var b = _ref4[1];
   var c = _ref4[2];
-  var _ref6 = Array.from(_ref5);
+  var _ref6 = _toArray(_ref5);
 
   var x = _ref6[0];
   var y = _ref6[1];

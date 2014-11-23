@@ -1,3 +1,7 @@
 "use strict";
 
-var lyrics = ["head", "and", "toes"].concat(Array.from(parts));
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
+};
+
+var lyrics = ["head", "and", "toes"].concat(_toArray(parts));

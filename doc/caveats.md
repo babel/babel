@@ -13,7 +13,7 @@ ES7 features to work.
 ### Array comprehension/Array destructuring/Spread
 
 An [ES6 polyfill](polyfill.md) is required. More specifically a polyfill for
-`Array.from`.
+`Array.isArray` and `Array.from`.
 
 ## Classes
 

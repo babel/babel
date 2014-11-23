@@ -1,14 +1,18 @@
 "use strict";
 
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
+};
+
 var _ref = [1, 2];
 
-var _ref2 = Array.from(_ref);
+var _ref2 = _toArray(_ref);
 
 var a = _ref2[0];
 var b = _ref2[1];
 var _ref3 = [3, 4];
 
-var _ref4 = Array.from(_ref3);
+var _ref4 = _toArray(_ref3);
 
 var c = _ref4[0];
 var d = _ref4[1];

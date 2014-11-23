@@ -1,3 +1,7 @@
 "use strict";
 
-obj[method].apply(obj, [foo, bar].concat(Array.from(args)));
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
+};
+
+obj[method].apply(obj, [foo, bar].concat(_toArray(args)));

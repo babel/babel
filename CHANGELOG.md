@@ -1,3 +1,7 @@
+# 1.13.2
+
+ * Optimise `Array.from` usage by adding a helper method.
+
 # 1.13.1
 
  * Fix constructor spread optimisation. Thanks [@zloirock](https://github.com/zloirock).
