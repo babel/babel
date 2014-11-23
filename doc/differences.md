@@ -62,7 +62,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | ---------------------------- | ---- | ------- | -------------- | ------ | ------ | ----------- |
 | Source maps                  | ✓    | ✓       | ✓              | ✓      |        | ✓           |
 | No compiler global pollution | ✓    |         | ✓              | ✓      |        | ✓           |
-| No runtime                   | ✓    |         | ✓              |        |        | ✓           |
+| Optional runtime             | ✓    |         | ✓              |        |        | ✓           |
 | Browser support              | ✓    | ✓       |                | ✓      |        |             |
 
 ### Language Support
@@ -88,10 +88,6 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Spread                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Template literals            | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Unicode regex                | ✓     | ✓       | ✓              |        |        |             |
-
-
-
-
 
 ### [Traceur](https://github.com/google/traceur-compiler)
 
