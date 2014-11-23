@@ -1016,9 +1016,10 @@
     } else {
       if (token.type === tt.name && token.value !== "from") {
         var elt = startNode();
-        elt.id = parseIdent();
-        elt.name = null;
-        elt['default'] = true;
+        elt.id = startNode();
+        elt.name = parseIdent();
+        elt.id.name = "default";
+        finishNode(elt.id, "Identifier");
         finishNode(elt, "ImportSpecifier");
         eat(tt.comma);
       }
