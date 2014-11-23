@@ -1,5 +1,13 @@
 # Features
 
+## Abstract references ([experimental](usage.md#experimental)) ([spec](https://github.com/zenparsing/es-abstract-refs))
+
+```javascript
+foo::bar;
+foo::bar = baz;
+delete foo::bar;
+```
+
 ## Array comprehension ([experimental](usage.md#experimental))
 
 ```javascript
@@ -31,7 +39,7 @@ var bob = {
 };
 ```
 
-## Async functions ([experimental](usage.md#experimental))
+## Async functions ([experimental](usage.md#experimental)) ([spec](https://github.com/lukehoban/ecmascript-asyncawait))
 
 ```javascript
 async function chainAnimationsAsync(elem, animations) {
