@@ -1,4 +1,4 @@
-System.register("actual", ["foo"], function ($__export) {
+System.register("actual", ["foo"], function (_export) {
   "use strict";
 
   var __moduleName = "actual";

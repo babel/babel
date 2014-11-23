@@ -1,4 +1,4 @@
-System.register("actual", ["./evens"], function ($__export) {
+System.register("actual", ["./evens"], function (_export) {
   "use strict";
 
   var __moduleName = "actual";
@@ -17,9 +17,9 @@ System.register("actual", ["./evens"], function ($__export) {
       isEven = m.isEven;
     }],
     execute: function () {
-      $__export("nextOdd", nextOdd);
+      _export("nextOdd", nextOdd);
 
-      $__export("isOdd", isOdd);
+      _export("isOdd", isOdd);
     }
   };
 });

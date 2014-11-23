@@ -1,13 +1,13 @@
-System.register("actual", ["foo"], function ($__export) {
+System.register("actual", ["foo"], function (_export) {
   "use strict";
 
   var __moduleName = "actual";
 
-  var foo, xyz;
+  var foo;
   return {
     setters: [function (m) {
       foo = m.default;
-      xyz = m.baz;
+      foo = m.default;
     }],
     execute: function () {}
   };
