@@ -4,14 +4,15 @@ In order for certain features to work they require certain polyfills. You can
 satisfy **all** 6to5 feature requirements by using the included
 [polyfill](polyfill.md). You may alternatively selectively include what you need:
 
-| Feature                     | Requirements                                                                                                                        |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Abstract References         | `Symbol`                                                                                                                            |
-| Array destructuring         | `Array.isArray`, `Array.from`                                                                                                       |
-| Async functions, Generators | [experimental option](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
-| Comprehensions              | [experimental option](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
-| For..Of                     | `Symbol`, `prototype[Symbol.iterator]`                                                                                              |
-| Spread                      | `Array.isArray`, `Array.from`                                                                                                       |
+| Feature                     | Requirements                                                                                                                 |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Abstract References         | [experimental](usage.md#experimental), `Symbol`                                                                              |
+| Array destructuring         | `Array.isArray`, `Array.from`                                                                                                |
+| Async functions, Generators | [experimental](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
+| Comprehensions              | [experimental](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
+| For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                       |
+| Spread                      | `Array.isArray`, `Array.from`                                                                                                |
+| Object spread/rest          | [experimental](usage.md#experimental), `Object.assign`                                                                       |
 
 ## Classes
 

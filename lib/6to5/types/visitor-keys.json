@@ -48,6 +48,7 @@
   "ReturnStatement":           ["argument"],
   "SequenceExpression":        ["expressions"],
   "SpreadElement":             ["argument"],
+  "SpreadProperty":            ["argument"],
   "SwitchCase":                ["test", "consequent"],
   "SwitchStatement":           ["discriminant", "cases"],
   "TaggedTemplateExpression":  ["tag", "quasi"],

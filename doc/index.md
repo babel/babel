@@ -52,4 +52,5 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Rest parameters](features.md#rest-parameters)
  - [Spread](features.md#spread)
  - [Template literals](features.md#template-literals)
+ - [Object Rest/Spread](features.md#object-rest-spread) ([experimental](usage.md#experimental))
  - [Unicode regex](features.md#unicode-regex)

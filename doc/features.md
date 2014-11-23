@@ -8,7 +8,7 @@ foo::bar = baz;
 delete foo::bar;
 ```
 
-## Array comprehension ([experimental](usage.md#experimental))
+## Array comprehensions ([experimental](usage.md#experimental))
 
 ```javascript
 var results = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }]
@@ -158,7 +158,7 @@ for (var n of fibonacci()) {
 }
 ```
 
-## Generator comprehension ([experimental](usage.md#experimental))
+## Generator comprehensions ([experimental](usage.md#experimental))
 
 ```javascript
 var nums = [1, 2, 3, 4, 5, 6];
@@ -251,6 +251,13 @@ f(...[1,2,3]) == 6
 var x = 5;
 var y = 10;
 console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
+```
+
+## Object spread/rest ([experimental](usage.md#experimental)) ([spec](https://github.com/sebmarkbage/ecmascript-rest-spread))
+
+```javascript
+var n = { x, y, ...z };
+var { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
 ```
 
 ## Unicode regex

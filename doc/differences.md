@@ -88,13 +88,14 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Rest parameters              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Spread                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Template literals            | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Object rest/spread           | ✓     |         |                |        |        | ✓           |
 | Unicode regex                | ✓     | ✓       | ✓              |        |        |             |
 
 ### [Traceur](https://github.com/google/traceur-compiler)
 
 Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
 While this can be trimmed down by selectively building the runtime, it's an
-unneccesary step when a runtime can be eliminated entirely.
+unneccesary step when a large runtime can be eliminated entirely.
 
 ### [es6now](https://github.com/zenparsing/es6now)
 
