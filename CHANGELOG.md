@@ -1,3 +1,7 @@
+# 1.13.10
+
+ * Add support for `AssignmentExpression` destructuring outside of `ExpressionStatement`.
+
 # 1.13.9
 
  * Fix `VirtualPropertyExpression` visitor keys.
