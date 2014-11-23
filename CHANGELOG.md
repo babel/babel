@@ -1,3 +1,7 @@
+# 1.13.4
+
+ * Fix single spread element returning itself.
+
 # 1.13.3
 
  * Upgrade `acorn-6to5`.
