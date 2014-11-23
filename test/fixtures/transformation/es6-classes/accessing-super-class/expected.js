@@ -1,6 +1,14 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
+var _argumentsToArray = function (args) {
+  var target = new Array(args.length);
+  for (var i = 0; i < args.length; i++) {
+    target[i] = args[i];
+  }
+
+  return target;
+};
+
 var _classProps = function (child, staticProps, instanceProps) {
   if (staticProps) Object.defineProperties(child, staticProps);
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
@@ -25,11 +33,11 @@ var Test = (function (Foo) {
     Foo.prototype.test.call(this);
     foob(Foo);
 
-    Foo.call.apply(Foo, [this].concat(_slice.call(arguments)));
-    Foo.call.apply(Foo, [this, "test"].concat(_slice.call(arguments)));
+    Foo.call.apply(Foo, [this].concat(_argumentsToArray(arguments)));
+    Foo.call.apply(Foo, [this, "test"].concat(_argumentsToArray(arguments)));
 
-    Foo.prototype.test.call.apply(Foo.prototype, [this].concat(_slice.call(arguments)));
-    Foo.prototype.test.call.apply(Foo.prototype, [this, "test"].concat(_slice.call(arguments)));
+    Foo.prototype.test.call.apply(Foo.prototype, [this].concat(_argumentsToArray(arguments)));
+    Foo.prototype.test.call.apply(Foo.prototype, [this, "test"].concat(_argumentsToArray(arguments)));
   };
 
   _extends(Test, Foo);
@@ -39,8 +47,8 @@ var Test = (function (Foo) {
       writable: true,
       value: function () {
         Foo.foo.call(this);
-        Foo.foo.call.apply(Foo.foo, [this].concat(_slice.call(arguments)));
-        Foo.foo.call.apply(Foo.foo, [this, "test"].concat(_slice.call(arguments)));
+        Foo.foo.call.apply(Foo.foo, [this].concat(_argumentsToArray(arguments)));
+        Foo.foo.call.apply(Foo.foo, [this, "test"].concat(_argumentsToArray(arguments)));
       }
     }
   }, {
@@ -48,8 +56,8 @@ var Test = (function (Foo) {
       writable: true,
       value: function () {
         Foo.prototype.test.call(this);
-        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(_slice.call(arguments)));
-        Foo.prototype.test.call.apply(Foo.prototype.test, [this, "test"].concat(_slice.call(arguments)));
+        Foo.prototype.test.call.apply(Foo.prototype.test, [this].concat(_argumentsToArray(arguments)));
+        Foo.prototype.test.call.apply(Foo.prototype.test, [this, "test"].concat(_argumentsToArray(arguments)));
       }
     }
   });

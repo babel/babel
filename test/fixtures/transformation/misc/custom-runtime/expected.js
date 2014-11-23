@@ -1,5 +1,5 @@
 "use strict";
 
 function foo() {
-  var test = customNamespace.slice.call(arguments);
+  var test = customNamespace.argumentsToArray(arguments);
 }
