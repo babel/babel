@@ -1,3 +1,8 @@
+# 1.13.7
+
+ * Upgrade `acorn-6to5`.
+ * Add experimental exponentiation operator support.
+
 # 1.13.6
 
  * Fix experimental object spread/rest helper.
