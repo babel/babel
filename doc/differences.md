@@ -69,6 +69,7 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 
 |                              | 6to5  | Traceur | es6-transpiler | esnext | es6now | jstransform |
 | ---------------------------- | ----- | ------- | -------------- | ------ | ------ | ----------- |
+| Abstract references          | ✓     |         |                |        |        |             |
 | Array comprehension          | ✓     | ✓       | ✓              |        |        |             |
 | Arrow functions              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Async functions              | ✓     | ✓       |                | ✓      |        |             |

@@ -1,5 +1,13 @@
 # Features
 
+## Abstract references ([experimental](usage.md#experimental))
+
+```javascript
+foo::bar;
+foo::bar = baz;
+delete foo::bar;
+```
+
 ## Array comprehension ([experimental](usage.md#experimental))
 
 ```javascript

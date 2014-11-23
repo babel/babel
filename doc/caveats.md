@@ -6,9 +6,11 @@ satisfy **all** 6to5 feature requirements by using the included
 
 | Feature                     | Requirements                                                                                                                        |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Abstract References         | `Symbol`                                                                                                                            |
 | Array destructuring         | `Array.isArray`, `Array.from`                                                                                                       |
 | Async functions, Generators | [experimental option](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
 | Comprehensions              | [experimental option](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
+| For..Of                     | `Symbol`, `prototype[Symbol.iterator]`                                                                                              |
 | Spread                      | `Array.isArray`, `Array.from`                                                                                                       |
 
 ## Classes
@@ -36,14 +38,3 @@ class Bar extends Foo {
   }
 }
 ```
-
-## Constructor spread
-
-Constructor spreads do not currently support built-ins. ie.
-`new Array(...items)`.
-
-## For-of
-
-A polyfill is required for for-of functionality that implements `Symbol` and
-adds `prototype[Symbol.iterator]` behaviour to built-ins. Using the polyfills
-specified in [polyfill](polyfill.md) suffices.

@@ -31,6 +31,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
 
 ## [Features](features.md)
 
+ - [Abstract references](features.md#abstract-references) ([experimental](usage.md#experimental))
  - [Array comprehension](features.md#array-comprehension) ([experimental](usage.md#experimental))
  - [Async functions](features.md#async-functions) ([experimental](usage.md#experimental))
  - [Arrow functions](features.md#arrow-functions)
