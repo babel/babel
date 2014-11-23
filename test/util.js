@@ -58,10 +58,10 @@ suite("util", function () {
   });
 
   test("regexify", function () {
-    assert.deepEqual(util.regexify(undefined), /(?:)/);
-    assert.deepEqual(util.regexify(false), /(?:)/);
-    assert.deepEqual(util.regexify(null), /(?:)/);
-    assert.deepEqual(util.regexify(""), /(?:)/);
+    assert.deepEqual(util.regexify(undefined), /.^/);
+    assert.deepEqual(util.regexify(false), /.^/);
+    assert.deepEqual(util.regexify(null), /.^/);
+    assert.deepEqual(util.regexify(""), /.^/);
     assert.deepEqual(util.regexify(["foo", "bar"]), /foo|bar/);
     assert.deepEqual(util.regexify("foobar"), /foobar/);
     assert.deepEqual(util.regexify(/foobar/), /foobar/);
