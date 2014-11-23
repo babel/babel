@@ -11,8 +11,8 @@ satisfy **all** 6to5 feature requirements by using the included
 | Async functions, Generators | [experimental](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
 | Comprehensions              | [experimental](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
 | For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                       |
-| Spread                      | `Array.isArray`, `Array.from`                                                                                                |
 | Object spread/rest          | [experimental](usage.md#experimental), `Object.assign`                                                                       |
+| Spread                      | `Array.isArray`, `Array.from`                                                                                                |
 
 ## Classes
 

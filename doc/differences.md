@@ -84,12 +84,12 @@ better suited if you'd like a full ES6 environment with polyfills and all.
 | Generator comprehension      | ✓     | ✓       |                |        |        |             |
 | Let scoping                  | ✓     | ✓       | ✓              |        |        |             |
 | Modules                      | ✓     | ✓       |                |        | ✓      |             |
+| Object rest/spread           | ✓     |         |                |        |        | ✓           |
 | Property method assignment   | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Property name shorthand      | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Rest parameters              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Spread                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Template literals            | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Object rest/spread           | ✓     |         |                |        |        | ✓           |
 | Unicode regex                | ✓     | ✓       | ✓              |        |        |             |
 
 ### [Traceur](https://github.com/google/traceur-compiler)

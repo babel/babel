@@ -208,6 +208,13 @@ export default test;
 0o767 === 503; // true
 ```
 
+## Object spread/rest ([experimental](usage.md#experimental)) ([spec](https://github.com/sebmarkbage/ecmascript-rest-spread))
+
+```javascript
+var n = { x, y, ...z };
+var { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+```
+
 ## Property method assignment
 
 ```javascript
@@ -261,14 +268,6 @@ var x = 5;
 var y = 10;
 console.log(`${x} + ${y} = ${x + y}`); // "5 + 10 = 15"
 ```
-
-## Object spread/rest ([experimental](usage.md#experimental)) ([spec](https://github.com/sebmarkbage/ecmascript-rest-spread))
-
-```javascript
-var n = { x, y, ...z };
-var { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
-```
-
 ## Unicode regex
 
 ```javascript
