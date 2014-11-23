@@ -1757,7 +1757,7 @@
           node.type = "ObjectPattern";
           for (var i = 0; i < node.properties.length; i++) {
             var prop = node.properties[i];
-            if (prop.kind !== "init") unexpected(prop.key.start);
+            if (prop.type === "Property" && prop.kind !== "init") unexpected(prop.key.start);
             toAssignable(prop.value, false, checkType);
           }
           break;
@@ -1865,8 +1865,11 @@
         if (!isBinding) break;
 
       case "ObjectPattern":
-        for (var i = 0; i < expr.properties.length; i++)
-          checkLVal(expr.properties[i].value, isBinding);
+        for (var i = 0; i < expr.properties.length; i++) {
+          var prop = expr.properties[i];
+          if (prop.type === "Property") prop = prop.value;
+          checkLVal(prop, isBinding);
+        }
         break;
 
       case "ArrayPattern":
@@ -1876,6 +1879,7 @@
         }
         break;
 
+      case "SpreadProperty":
       case "SpreadElement":
       case "VirtualPropertyExpression":
         break;
@@ -2643,6 +2647,13 @@
         prop.method = false;
         prop.shorthand = false;
         isGenerator = eat(_star);
+      }
+      if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
+        if (isAsync || isGenerator) unexpected();
+        prop = parseMaybeUnary();
+        prop.type = "SpreadProperty";
+        node.properties.push(prop);
+        continue;
       }
       parsePropertyName(prop);
       if (eat(_colon)) {

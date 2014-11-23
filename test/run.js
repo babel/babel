@@ -6,6 +6,7 @@
     require("./tests.js");
     require("./tests-harmony.js");
     require("./tests-jsx.js");
+    require("./tests-6to5.js");
   } else {
     driver = window;
   }
@@ -76,7 +77,7 @@ function report(state, code, message) {
     group(name);
     var mode = modes[name];
     stats = mode.stats = {testsRun: 0, failed: 0};
-var t0 = +new Date;
+    var t0 = +new Date;
     driver.runTests(mode.config, report);
     mode.stats.duration = +new Date - t0;
     groupEnd();
