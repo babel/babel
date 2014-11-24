@@ -292,7 +292,8 @@
             next.done = false;
             return next;
           }
-        };
+        }
+        next.value = undefined;
         next.done = true;
         return next;
       };

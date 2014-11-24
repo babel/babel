@@ -882,6 +882,33 @@ describe("delegated yield", function() {
 
     check(gen(), [0, "one", "two", "three", 2, 3, 4, 5]);
   });
+
+  it("should evaluate to the return value of the delegate", function() {
+    function *inner() {
+      yield 1;
+      return 2;
+    }
+
+    function *outer(delegate) {
+      return yield* delegate;
+    }
+
+    check(outer(inner()), [1], 2);
+
+    var arrayDelegate = [3, 4];
+    if (!runningInTranslation) {
+      // Node v0.11 doesn't know how to turn arrays into iterators over
+      // their elements without a little help.
+      arrayDelegate = regeneratorRuntime.values(arrayDelegate);
+    }
+    check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
+
+    check(outer({
+      next: function() {
+        return { value: "oyez", done: true };
+      }
+    }), [], "oyez");
+  });
 });
 
 describe("function declaration hoisting", function() {
