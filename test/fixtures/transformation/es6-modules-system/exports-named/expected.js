@@ -4,21 +4,23 @@ System.register("actual", [], function (_export) {
   var __moduleName = "actual";
 
   return {
-    setters: [],
+    setters: [
+    function(m) {
+      _export("foo", m.foo);
+
+      _export("foo", m.foo);
+
+      _export("bar", m.bar);
+
+      _export("bar", m.foo);
+
+      _export("default", m.foo);
+
+      _export("default", m.foo);
+
+      _export("bar", m.bar);
+    }],
     execute: function () {
-      _export("foo", foo);
-
-      _export("foo", foo);
-
-      _export("bar", bar);
-
-      _export("bar", foo);
-
-      _export("default", foo);
-
-      _export("default", foo);
-
-      _export("bar", bar);
     }
   };
 });
