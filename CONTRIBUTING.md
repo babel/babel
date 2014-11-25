@@ -9,7 +9,6 @@
    * CamelCase all class names
    * camelBack all variable names
  * **Spacing**
-   * 80 character line max
    * Spaces after all keywords
    * Spaces before all left curly braces
  * **Comments**
