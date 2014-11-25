@@ -1,3 +1,7 @@
+# 1.13.12
+
+ * Ignore `XJSEmptyExpression`s in `react` transformer output.
+
 # 1.13.11
 
  * Fix `util.regexify` on falsy values.
