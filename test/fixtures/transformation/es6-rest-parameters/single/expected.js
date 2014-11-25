@@ -1,18 +1,10 @@
 "use strict";
 
-var _argumentsToArray = function (args) {
-  var target = new Array(args.length);
-  for (var i = 0; i < args.length; i++) {
-    target[i] = args[i];
-  }
-
-  return target;
-};
-
+var _slice = Array.prototype.slice;
 var t = function () {
-  var items = _argumentsToArray(arguments);
+  var items = _slice.call(arguments);
 };
 
 function t() {
-  var items = _argumentsToArray(arguments);
+  var items = _slice.call(arguments);
 }
