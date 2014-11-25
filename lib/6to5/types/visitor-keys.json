@@ -5,6 +5,7 @@
   "AssignmentExpression":      ["left", "right"],
   "AwaitExpression":           ["argument"],
   "BinaryExpression":          ["left", "right"],
+  "BindMemberExpression":      ["object", "property", "arguments"],
   "BlockStatement":            ["body"],
   "BreakStatement":            ["label"],
   "CallExpression":            ["callee", "arguments"],

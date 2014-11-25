@@ -12,6 +12,7 @@ commander.option("-f, --filename [filename]", "Filename to use when reading from
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("-r, --runtime", "Replace 6to5 declarations with references to a runtime");
 commander.option("-e, --experimental", "Enable experimental support for proposed ES7 features");
+commander.option("-p, --playground", "Enable playground support");
 
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
 commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
@@ -90,6 +91,7 @@ exports.opts = {
   sourceMapName: commander.outFile,
   amdModuleIds:  commander.amdModuleIds,
   experimental:  commander.experimental,
+  playground:    commander.playground,
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,

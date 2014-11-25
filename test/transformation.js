@@ -37,10 +37,11 @@ var run = function (task, done) {
       err.message += util.codeFrame(execCode);
       throw err;
     }
-  } else {
-    var actualCode = actual.code;
-    var expectCode = expect.code;
+  }
 
+  var actualCode = actual.code;
+  var expectCode = expect.code;
+  if (!execCode || actualCode) {
     result     = transform(actualCode, getOpts(actual));
     actualCode = result.code;
 

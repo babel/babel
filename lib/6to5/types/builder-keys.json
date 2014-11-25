@@ -11,6 +11,7 @@
   "Identifier":              ["name"],
   "IfStatement":             ["test", "consequent", "alternate"],
   "Literal":                 ["value"],
+  "LogicalExpression":       ["operator", "left", "right"],
   "MemberExpression":        ["object", "property", "computed"],
   "NewExpression":           ["callee", "arguments"],
   "ObjectExpression":        ["properties"],
