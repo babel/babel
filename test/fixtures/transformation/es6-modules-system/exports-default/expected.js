@@ -4,10 +4,10 @@ System.register("actual", [], function (_export) {
   var __moduleName = "actual";
 
   function _anonymous() {}
-  var _anonymous2 = function _anonymous2() {};
+  var _anonymous2;
 
   function foo() {}
-  var Foo = function Foo() {};
+  var Foo;
 
   return {
     setters: [],
@@ -22,11 +22,11 @@ System.register("actual", [], function (_export) {
 
       _export("default", _anonymous);
 
-      _export("default", _anonymous2);
+      _export("default", _anonymous2 = function _anonymous2() {});
 
       _export("default", foo);
 
-      _export("default", Foo);
+      _export("default", Foo = function Foo() {});
     }
   };
 });
