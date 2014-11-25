@@ -1,3 +1,7 @@
+# 1.13.13
+
+ * Fix `--debug` in `bin/6to5-node`. Thanks [@timoxley](https://github.com/timoxley).
+
 # 1.13.12
 
  * Ignore `XJSEmptyExpression`s in `react` transformer output.
