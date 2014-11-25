@@ -47,7 +47,7 @@ var obj = {};
 if (Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
 ```
 
-### Method binding expression.
+### Method binding expression
 
 ```javascript
 var fn = obj:method;
