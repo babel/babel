@@ -1,3 +1,8 @@
+# 1.14.2
+
+ * Fix `commonInterop` default export handling.
+ * Fix keyworded property key identifiers being turned into computed property key literals.
+
 # 1.14.1
 
  * Inherit comments from `ClassDeclaration`.
