@@ -44,7 +44,7 @@ equivalent to:
 
 ```javascript
 var obj = {};
-if (Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
+if (!Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
 ```
 
 ### Method binding expression
