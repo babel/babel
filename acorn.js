@@ -52,6 +52,7 @@
   // the parser process. These options are recognized:
 
   var defaultOptions = exports.defaultOptions = {
+    playground: false,
     // `ecmaVersion` indicates the ECMAScript version to parse. Must
     // be either 3, or 5, or 6. This influences support for strict
     // mode, the set of reserved words, support for getters and
@@ -2364,6 +2365,13 @@
     var expr = parseExprOps(noIn);
     if (eat(_question)) {
       var node = startNodeAt(start);
+      if (eat(_eq)) {
+        var left = node.left = toAssignable(expr);
+        if (left.type !== "MemberExpression") raise(left.start, "You can only use member expressions in memoization assignment");
+        node.right = parseMaybeAssign(noIn);
+        node.operator = "?=";
+        return finishNode(node, "AssignmentExpression");
+      }
       node.test = expr;
       node.consequent = parseExpression(true);
       expect(_colon);
@@ -2447,7 +2455,17 @@
   }
 
   function parseSubscripts(base, start, noCalls) {
-    if (eat(_doubleColon)) {
+    if (options.playground && eat(_colon)) {
+      var node = startNodeAt(start);
+      node.object = base;
+      node.property = parseIdent(true);
+      if (eat(_parenL)) {
+        node.arguments = parseExprList(_parenR, false);
+      } else {
+        node.arguments = [];
+      }
+      return parseSubscripts(finishNode(node, "BindMemberExpression"), start, noCalls);
+    } else if (eat(_doubleColon)) {
       var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);
