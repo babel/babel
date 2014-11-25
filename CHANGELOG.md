@@ -1,3 +1,7 @@
+# 1.14.1
+
+ * Inherit comments from `ClassDeclaration`.
+
 # 1.14.0
 
  * Add [playground](https://6to5.github.io/playground.html).
