@@ -82,6 +82,8 @@ suite("util", function () {
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
   });
 
+  test("isDynamic");
+
   test("isReferenced");
 
   test("removeProperties");
