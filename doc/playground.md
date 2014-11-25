@@ -1,8 +1,8 @@
 # Playground
 
-**Playground** is a  proving ground for possible ES7 proposals.
+Playground is a proving ground for **possible** ES7 proposals.
 
-**NOTE: These features are in no way endrosed by Ecma International and are not currently being proposed for any version of ECMAScript.** This may change in the future.
+**NOTE: These features are in no way endorsed by Ecma International and are not a part of ES6. They might become a part of ECMAScript in the future.**
 
 ## Usage
 
