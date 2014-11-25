@@ -14,13 +14,11 @@ process.argv.slice(2).forEach(function(arg){
   switch (flag) {
     case "-d":
       args.unshift("--debug");
-      args.push("--no-timeouts");
       break;
     case "debug":
     case "--debug":
     case "--debug-brk":
       args.unshift(arg);
-      args.push("--no-timeouts");
       break;
     case "-gc":
     case "--expose-gc":
