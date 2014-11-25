@@ -1,3 +1,7 @@
+# 1.14.0
+
+ * Add [playground](https://6to5.github.io/playground.html).
+
 # 1.13.13
 
  * Fix `--debug` in `bin/6to5-node`. Thanks [@timoxley](https://github.com/timoxley).
