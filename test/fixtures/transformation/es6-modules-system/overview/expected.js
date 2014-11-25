@@ -4,7 +4,7 @@ System.register("actual", ["foo", "foo-bar", "./directory/foo-bar"], function (_
   var __moduleName = "actual";
 
   var foo, bar;
-  var test = 5;
+  var test;
 
   return {
     setters: [function (m) {
@@ -16,7 +16,7 @@ System.register("actual", ["foo", "foo-bar", "./directory/foo-bar"], function (_
     execute: function () {
       _export("test", test);
 
-      _export("test", test);
+      _export("test", test = 5);
 
       _export("default", test);
     }
