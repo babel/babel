@@ -1,3 +1,7 @@
+# 1.14.4
+
+ * Merge pretzel maps and method binding.
+
 # 1.14.3
 
  * Add playground pretzel maps.

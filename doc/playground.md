@@ -53,18 +53,7 @@ if (!Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
 ```javascript
 var fn = obj:method;
 var fn = obj:method("foob");
-```
 
-equivalent to:
-
-```javascript
-var fn = obj.method.bind(obj);
-var fn = obj.method.bind(obj, "foob");
-```
-
-### Pretzel map
-
-```javascript
 ["foo", "bar"].map(:toUpperCase); // ["FOO", "BAR"]
 [1.1234, 23.53245, 3].map(:toFixed(2)); // ["1.12", "23.53", "3.00"]
 ```
@@ -72,6 +61,9 @@ var fn = obj.method.bind(obj, "foob");
 equivalent to:
 
 ```javascript
+var fn = obj.method.bind(obj);
+var fn = obj.method.bind(obj, "foob");
+
 ["foo", "bar"].map(function (val) { return val.toUpperCase(); });
 [1.1234, 23.53245, 3].map(function (val) { return val.toFixed(2); });
 ```
