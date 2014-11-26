@@ -44,6 +44,7 @@
   "ObjectExpression":          ["properties"],
   "ObjectPattern":             ["properties"],
   "ParenthesizedExpression":   ["expression"],
+  "PretzelMapExpression":      ["callee", "arguments"],
   "Program":                   ["body"],
   "Property":                  ["key", "value"],
   "ReturnStatement":           ["argument"],

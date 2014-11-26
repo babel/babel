@@ -18,6 +18,7 @@ to5.transform("code", { playground: true });
 
  * [Memoization operator](#memoization-operator)
  * [Method binding](#method-binding)
+ * [Pretzel map](#pretzel-map)
 
 ### Memoization assignment operator
 
@@ -61,5 +62,16 @@ var fn = obj.method.bind(obj);
 var fn = obj.method.bind(obj, "foob");
 ```
 
-**NOTE:** Method binding can **only** be used as an **expression** and not as
-statement.
+### Pretzel map
+
+```javascript
+["foo", "bar"].map(:toUpperCase); // ["FOO", "BAR"]
+[1.1234, 23.53245, 3].map(:toFixed(2)); // ["1.12", "23.53", "3.00"]
+```
+
+equivalent to:
+
+```javascript
+["foo", "bar"].map(function (val) { return val.toUpperCase(); });
+[1.1234, 23.53245, 3].map(function (val) { return val.toFixed(2); });
+```
