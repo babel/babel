@@ -18,7 +18,6 @@ to5.transform("code", { playground: true });
 
  * [Memoization operator](#memoization-operator)
  * [Method binding](#method-binding)
- * [Pretzel map](#pretzel-map)
 
 ### Memoization assignment operator
 
@@ -48,7 +47,7 @@ var obj = {};
 if (!Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
 ```
 
-### Method binding expression
+### Method binding
 
 ```javascript
 var fn = obj:method;
