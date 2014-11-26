@@ -2616,14 +2616,14 @@
       return parseXJSElement();
 
     case _colon:
-      return parsePretzelMap();
+      return parseBindFunctionExpression();
 
     default:
       unexpected();
     }
   }
 
-  function parsePretzelMap() {
+  function parseBindFunctionExpression() {
     var node = startNode();
     next();
 
@@ -2636,7 +2636,7 @@
       node.arguments = [];
     }
 
-    return finishNode(node, "PretzelMapExpression");
+    return finishNode(node, "BindFunctionExpression");
   }
 
   // New's precedence is slightly tricky. It must allow its argument

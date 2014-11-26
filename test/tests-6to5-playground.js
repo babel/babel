@@ -4,110 +4,6 @@ if (typeof exports != "undefined") {
   var testAssert = require("./driver.js").testAssert;
 }
 
-// Pretzel map
-
-test("arr.map(:toUpperCase)", {
-  type: "Program",
-  start: 0,
-  end: 21,
-  body: [{
-    type: "ExpressionStatement",
-    start: 0,
-    end: 21,
-    expression: {
-      type: "CallExpression",
-      start: 0,
-      end: 21,
-      callee: {
-        type: "MemberExpression",
-        start: 0,
-        end: 7,
-        object: {
-          type: "Identifier",
-          start: 0,
-          end: 3,
-          name: "arr"
-        },
-        property: {
-          type: "Identifier",
-          start: 4,
-          end: 7,
-          name: "map"
-        },
-        computed: false
-      },
-      arguments: [{
-        type: "PretzelMapExpression",
-        start: 8,
-        end: 20,
-        callee: {
-          type: "Identifier",
-          start: 9,
-          end: 20,
-          name: "toUpperCase"
-        },
-        arguments: []
-      }]
-    }
-  }]
-}, {
-  playground: true
-});
-
-test("arr.map(:toFixed(2))", {
-  type: "Program",
-  start: 0,
-  end: 20,
-  body: [{
-    type: "ExpressionStatement",
-    start: 0,
-    end: 20,
-    expression: {
-      type: "CallExpression",
-      start: 0,
-      end: 20,
-      callee: {
-        type: "MemberExpression",
-        start: 0,
-        end: 7,
-        object: {
-          type: "Identifier",
-          start: 0,
-          end: 3,
-          name: "arr"
-        },
-        property: {
-          type: "Identifier",
-          start: 4,
-          end: 7,
-          name: "map"
-        },
-        computed: false
-      },
-      arguments: [{
-        type: "PretzelMapExpression",
-        start: 8,
-        end: 19,
-        callee: {
-          type: "Identifier",
-          start: 9,
-          end: 16,
-          name: "toFixed"
-        },
-        arguments: [{
-          type: "Literal",
-          start: 17,
-          end: 18,
-          value: 2,
-          raw: "2"
-        }]
-      }]
-    }
-  }]
-}, {
-  playground: true
-});
-
 // Memoization assignment operator
 
 testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)");
@@ -408,6 +304,109 @@ test("var fn = obj[foob].test:method('foo', 5)", {
       }
     ],
     kind: "var"
+  }]
+}, {
+  playground: true
+});
+
+
+test("arr.map(:toUpperCase)", {
+  type: "Program",
+  start: 0,
+  end: 21,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 21,
+    expression: {
+      type: "CallExpression",
+      start: 0,
+      end: 21,
+      callee: {
+        type: "MemberExpression",
+        start: 0,
+        end: 7,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "arr"
+        },
+        property: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "map"
+        },
+        computed: false
+      },
+      arguments: [{
+        type: "BindFunctionExpression",
+        start: 8,
+        end: 20,
+        callee: {
+          type: "Identifier",
+          start: 9,
+          end: 20,
+          name: "toUpperCase"
+        },
+        arguments: []
+      }]
+    }
+  }]
+}, {
+  playground: true
+});
+
+test("arr.map(:toFixed(2))", {
+  type: "Program",
+  start: 0,
+  end: 20,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 20,
+    expression: {
+      type: "CallExpression",
+      start: 0,
+      end: 20,
+      callee: {
+        type: "MemberExpression",
+        start: 0,
+        end: 7,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "arr"
+        },
+        property: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "map"
+        },
+        computed: false
+      },
+      arguments: [{
+        type: "BindFunctionExpression",
+        start: 8,
+        end: 19,
+        callee: {
+          type: "Identifier",
+          start: 9,
+          end: 16,
+          name: "toFixed"
+        },
+        arguments: [{
+          type: "Literal",
+          start: 17,
+          end: 18,
+          value: 2,
+          raw: "2"
+        }]
+      }]
+    }
   }]
 }, {
   playground: true
