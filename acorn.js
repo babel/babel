@@ -2615,9 +2615,28 @@
     case _lt:
       return parseXJSElement();
 
+    case _colon:
+      return parsePretzelMap();
+
     default:
       unexpected();
     }
+  }
+
+  function parsePretzelMap() {
+    var node = startNode();
+    next();
+
+    var start = storeCurrentPos();
+    node.callee = parseSubscripts(parseExprAtom(), start, true);
+
+    if (eat(_parenL)) {
+      node.arguments = parseExprList(_parenR, false);
+    } else {
+      node.arguments = [];
+    }
+
+    return finishNode(node, "PretzelMapExpression");
   }
 
   // New's precedence is slightly tricky. It must allow its argument
