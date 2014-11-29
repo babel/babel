@@ -4,7 +4,9 @@
 
 ### CLI
 
-    $ 6to5 --modules common script.js
+```sh
+$ 6to5 --modules common script.js
+```
 
 ### Node
 
@@ -17,12 +19,16 @@ to5.transform('import "foo";', { modules: "common" });
 
  * [AMD](#amd)
  * [Common (Default)](#common-default)
- * [Common](#common)
+ * [Common Interop](#common-interop)
  * [Ignore](#ignore)
  * [System](#system)
  * [UMD](#umd)
 
 ### Common (Default)
+
+```sh
+$ 6to5 --modules common
+```
 
 **In**
 
@@ -59,6 +65,10 @@ exports.default = test;
 ```
 
 ### Common interop
+
+```sh
+$ 6to5 --modules commonInterop
+```
 
 **In**
 
@@ -123,6 +133,10 @@ function foo() {
 
 ### AMD
 
+```sh
+$ 6to5 --modules amd
+```
+
 **In**
 
 ```javascript
@@ -154,6 +168,10 @@ define("filename", ["exports", "foo"], function (exports, _foo) {})
 ```
 
 ### UMD
+
+```sh
+$ 6to5 --modules umd
+```
 
 **In**
 
@@ -187,6 +205,10 @@ export function bar() {
 
 ### Ignore
 
+```sh
+$ 6to5 --modules ignore
+```
+
 **In**
 
 ```javascript
@@ -206,6 +228,10 @@ function bar() {
 ```
 
 ### System
+
+```sh
+$ 6to5 --modules system
+```
 
 **In**
 
@@ -244,7 +270,9 @@ System.register("bar", ["foo"], function (_export) {
 
 You can alternatively specify module names instead of one of the built-in types.
 
-    $ 6to5 --modules custom-module-formatter
+```sh
+$ 6to5 --modules custom-module-formatter
+```
 
 **node_modules/custom-module-formatter/index.js**
 
