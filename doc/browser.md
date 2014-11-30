@@ -30,7 +30,9 @@ test.test();
 You can build a browser version of the compiler by running the following in the
 6to5 directory:
 
-    $ make build
+```sh
+$ make build
+```
 
 This will output the files `dist/6to5.js` and `dist/6to5.min.js`.
 
@@ -38,7 +40,9 @@ This will output the files `dist/6to5.js` and `dist/6to5.min.js`.
 
 To test 6to5 in your browser run:
 
-    $ make test-browser
+```sh
+$ make test-browser
+```
 
 And open `test/browser.html` in your browser if it doesn't open automatically.
 

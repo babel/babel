@@ -12,5 +12,6 @@ To disable this behaviour add `react` to your blacklist:
 to5.transform("code", { blacklist: ["react"] });
 ```
 
-
-    $ 6to5 --blacklist react
+```sh
+$ 6to5 --blacklist react
+```

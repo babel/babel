@@ -18,7 +18,9 @@ Simply use the following option if you're using the [Node API](usage.md#node):
 
 or the following flag if you're using the [CLI](usage.md#cli):
 
-    $ 6to5 --runtime
+```ssh
+$ 6to5 --runtime
+```
 
 Then just include the runtime before your generated code.
 
@@ -26,7 +28,9 @@ Then just include the runtime before your generated code.
 
 You can get the runtime via either:
 
-    $ 6to5-runtime
+```sh
+$ 6to5-runtime
+```
 
 or
 
@@ -45,7 +49,9 @@ argument:
 require("6to5").runtime("myCustomNamespace");
 ```
 
-    $ 6to5-runtime myCustomNamespace
+```sh
+$ 6to5-runtime myCustomNamespace
+```
 
 See [Options - runtime](usage.md#options) for documentation on changing the
 reference in generated code.

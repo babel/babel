@@ -19,12 +19,16 @@ how you want to use it.
 6to5 will simply compile your ES6+ script to ES5 if you pass it as an argument
 to the command-line tool `6to5`:
 
-    $ 6to5 script.js
+```sh
+$ 6to5 script.js
+```
 
 If you have a file written using ES6+ and you just want to run it, `6to5-node`
 has you covered:
 
-    $ 6to5-node script.js
+```sh
+$ 6to5-node script.js
+```
 
 And it doesn't end here! To see all the ways you can use 6to5, check out the
 [Usage](http://6to5.github.io/usage.html) page.

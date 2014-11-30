@@ -4,47 +4,67 @@
 
 Compile the file `script.js` and output it to stdout.
 
-    $ 6to5 script.js
+```sh
+$ 6to5 script.js
+```
 
 Compile the file `script.js` and output it to `script-compiled.js`.
 
-    $ 6to5 script.js --out-file script-compiled.js
+```sh
+$ 6to5 script.js --out-file script-compiled.js
+```
 
 Compile the file `script.js` and output it to `script-compiled.js` and save a
 source map to `script-compiled.js.map`.
 
-    $ 6to5 script.js --source-maps --out-file script-compiled.js
+```sh
+$ 6to5 script.js --source-maps --out-file script-compiled.js
+```
 
 Compile the file `script.js` and output it to `script-compiled.js` with a source
 map embedded in a comment at the bottom.
 
-    $ 6to5 script.js --source-maps-inline --out-file script-compiled.js
+```sh
+$ 6to5 script.js --source-maps-inline --out-file script-compiled.js
+```
 
 Compile the entire `src` directory and output it to the `lib` directory.
 
-    $ 6to5 src --out-dir lib
+```sh
+$ 6to5 src --out-dir lib
+```
 
 Compile the entire `src` directory and output it to the one concatenated file.
 
-    $ 6to5 src --out-file script-compiled.js
+```sh
+$ 6to5 src --out-file script-compiled.js
+```
 
 Pipe a file in via stdin and output it to `script-compiled.js`
 
-    $ 6to5 --out-file script-compiled.js < script.js
+```sh
+$ 6to5 --out-file script-compiled.js < script.js
+```
 
 ### Node
 
 Launch a repl.
 
-    $ 6to5-node
+```sh
+$ 6to5-node
+```
 
 Evaluate code.
 
-    $ 6to5-node -e "class Test { }"
+```sh
+$ 6to5-node -e "class Test { }"
+```
 
 Compile and run `test.js`.
 
-    $ 6to5-node test
+```sh
+$ 6to5-node test
+```
 
 ## Node
 
