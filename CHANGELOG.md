@@ -1,3 +1,7 @@
+# 1.14.5
+
+ * Upgrade `acorn-6to5`.
+
 # 1.14.4
 
  * Merge pretzel maps and method binding.
