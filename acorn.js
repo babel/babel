@@ -637,9 +637,7 @@
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = new Position;
     tokType = type;
-    if (shouldSkipSpace !== false && !(inXJSChild && tokType !== _braceL)) {
-      skipSpace();
-    }
+    if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
     if (options.onToken) {
@@ -884,7 +882,7 @@
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
     case 123: ++tokPos; return finishToken(_braceL);
-    case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChildExpression);
+    case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChild);
     case 63: ++tokPos; return finishToken(_question);
 
     case 58:
@@ -2689,8 +2687,6 @@
   function parseObj() {
     var node = startNode(), first = true, propHash = {};
     node.properties = [];
-    var origInXJSChildExpression = inXJSChildExpression;
-    inXJSChildExpression = false;
     next();
     while (!eat(_braceR)) {
       if (!first) {
@@ -2738,7 +2734,6 @@
       checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
     }
-    inXJSChildExpression = origInXJSChildExpression;
     return finishNode(node, "ObjectExpression");
   }
 
@@ -3329,15 +3324,16 @@
 
     inXJSTag = false;
     inXJSChild = false;
-    inXJSChildExpression = origInXJSChild;
 
     next();
     node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
 
     inXJSTag = origInXJSTag;
     inXJSChild = origInXJSChild;
-    inXJSChildExpression = false;
 
+    if (inXJSChild) {
+      tokPos = tokEnd;
+    }
     expect(_braceR);
     return finishNode(node, "XJSExpressionContainer");
   }
@@ -3348,14 +3344,13 @@
     if (tokType === _braceL) {
       var tokStart1 = tokStart, tokStartLoc1 = tokStartLoc;
 
-      var origInXJSTag = inXJSTag, origInXJSChildExpression = inXJSChildExpression;
-      inXJSTag = inXJSChildExpression = false;
+      var origInXJSTag = inXJSTag;
+      inXJSTag = false;
 
       next();
       if (tokType !== _ellipsis) unexpected();
       var node = parseMaybeUnary();
 
-      inXJSChildExpression = origInXJSChildExpression;
       inXJSTag = origInXJSTag;
 
       expect(_braceR);
