@@ -1,6 +1,8 @@
 # 1.14.5
 
  * Upgrade `acorn-6to5`.
+ * Fix JSON recursion error for unknown code generator node types.
+ * Ensure that a statement is a block on block/statement types when replacing them with multiple nodes.
 
 # 1.14.4
 
