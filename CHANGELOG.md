@@ -1,3 +1,7 @@
+# 1.14.6
+
+ * Avoid ensuring a block on non-array node replacements.
+
 # 1.14.5
 
  * Upgrade `acorn-6to5`.
