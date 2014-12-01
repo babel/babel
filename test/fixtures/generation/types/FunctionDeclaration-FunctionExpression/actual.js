@@ -20,4 +20,8 @@ var foo = function* () {};
 
 var foo = function () {};
 
+var foo = function() {};
+
 var foo = async function () {};
+
+var foo = async function() {};
