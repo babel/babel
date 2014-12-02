@@ -14,11 +14,6 @@
   var iteratorSymbol =
     typeof Symbol === "function" && Symbol.iterator || "@@iterator";
 
-  // Make a reasonable attempt to provide a Promise polyfill.
-  if (typeof Promise === "undefined") try {
-    Promise = require("promise");
-  } catch (ignored) {}
-
   if (typeof regeneratorRuntime === "object") {
     return;
   }

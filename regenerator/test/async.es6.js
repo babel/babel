@@ -10,6 +10,7 @@
 
 describe("async functions and await expressions", function() {
   var assert = require("assert");
+  Promise = require("promise");
 
   describe("regeneratorRuntime", function() {
     it("should be defined globally", function() {

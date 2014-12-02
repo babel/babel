@@ -31,13 +31,13 @@
     "commoner": "~0.10.0",
     "esprima-fb": "~8001.1001.0-dev-harmony-fb",
     "recast": "~0.9.7",
-    "promise": "~6.0.0",
     "private": "~0.1.5",
     "through": "~2.3.6",
     "defs": "~1.1.0"
   },
   "devDependencies": {
     "mocha": "~1.21.4",
+    "promise": "~6.0.1",
     "semver": "~4.0.3"
   },
   "license": "BSD",
