@@ -1,5 +1,5 @@
 function foo() {
-  return bar(...arguments);
+  return bar("test", ...arguments);
 }
 
 function bar(one, two, three) {
