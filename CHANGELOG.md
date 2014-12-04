@@ -1,3 +1,7 @@
+# 1.14.11
+
+ * Fix duplicate dynamic expressions in call spread.
+
 # 1.14.10
 
  * Fix let scoping unneccesary override.
