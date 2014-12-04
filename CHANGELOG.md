@@ -1,3 +1,7 @@
+# 1.14.1
+
+ * Fix let scoping unneccesary override.
+
 # 1.14.6
 
  * Avoid ensuring a block on non-array node replacements.
