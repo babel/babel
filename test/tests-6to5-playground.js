@@ -6,6 +6,94 @@ if (typeof exports != "undefined") {
 
 // Memoization assignment operator
 
+// Make sure conditionals still work
+
+test("y ? 1 : 2", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "ConditionalExpression",
+        test: {
+          type: "Identifier",
+          name: "y",
+          loc: {
+            start: {
+              line: 1,
+              column: 0
+            },
+            end: {
+              line: 1,
+              column: 1
+            }
+          }
+        },
+        consequent: {
+          type: "Literal",
+          value: 1,
+          loc: {
+            start: {
+              line: 1,
+              column: 4
+            },
+            end: {
+              line: 1,
+              column: 5
+            }
+          }
+        },
+        alternate: {
+          type: "Literal",
+          value: 2,
+          loc: {
+            start: {
+              line: 1,
+              column: 8
+            },
+            end: {
+              line: 1,
+              column: 9
+            }
+          }
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 9
+          }
+        }
+      },
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 9
+        }
+      }
+    }
+  ],
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 9
+    }
+  }
+}, {
+  playground: true
+});
+
 testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)");
 
 test("obj.x ?= 2;", {
