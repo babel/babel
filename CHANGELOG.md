@@ -1,3 +1,8 @@
+# 1.14.13
+
+ * Fix let scoping of `while` loops.
+ * Make class methods enumerable.
+
 # 1.14.12
 
  * Fix duplicate dynamic expressions in call spread.
