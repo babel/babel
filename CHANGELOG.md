@@ -1,3 +1,7 @@
+# 1.14.14
+
+ * Fix template literals escaping.
+
 # 1.14.13
 
  * Fix let scoping of `while` loops.
