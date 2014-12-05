@@ -1,3 +1,3 @@
 arr.map(function () {
-  return $@!@#;
+  return $#!;
 });

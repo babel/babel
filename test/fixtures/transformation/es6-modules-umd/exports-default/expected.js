@@ -12,7 +12,9 @@
   exports["default"] = [];
   exports["default"] = foo;
   exports["default"] = function () {};
+
   exports["default"] = function () {};
+
   function foo() {}
   exports["default"] = foo;
   var Foo = function Foo() {};

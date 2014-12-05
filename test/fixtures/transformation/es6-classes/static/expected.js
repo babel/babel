@@ -8,11 +8,9 @@ var _classProps = function (child, staticProps, instanceProps) {
 var A = (function () {
   var A = function A() {};
 
+  A.a = function () {};
+
   _classProps(A, {
-    a: {
-      writable: true,
-      value: function () {}
-    },
     b: {
       get: function () {},
       set: function (b) {}

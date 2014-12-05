@@ -1,10 +1,5 @@
 "use strict";
 
-var _classProps = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
 var _extends = function (child, parent) {
   child.prototype = Object.create(parent.prototype, {
     constructor: {
@@ -25,14 +20,9 @@ var Test = (function (Foo) {
 
   _extends(Test, Foo);
 
-  _classProps(Test, {
-    test: {
-      writable: true,
-      value: function () {
-        return Foo.wow.call(this);
-      }
-    }
-  });
+  Test.test = function () {
+    return Foo.wow.call(this);
+  };
 
   return Test;
 })(Foo);
