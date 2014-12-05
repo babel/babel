@@ -1,1 +1,1 @@
-SyntaxError: test.js: Unexpected character '@'
+SyntaxError: test.js: Unexpected character '#'
