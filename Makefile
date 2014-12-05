@@ -16,7 +16,7 @@ bench:
 	node node_modules/matcha/bin/_matcha
 
 lint:
-	$(JSHINT_CMD) lib bin benchmark/index.js
+	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js lib bin benchmark/index.js
 
 test-clean:
 	rm -rf test/tmp
