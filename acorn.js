@@ -430,6 +430,7 @@
   var _ltSlash = {type: "</"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
   var _doubleColon = { type: "::", beforeExpr: true };
+  var _at = { type: '@' };
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -477,7 +478,7 @@
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
                       assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
-                      doubleColon: _doubleColon, exponent: _exponent};
+                      doubleColon: _doubleColon, exponent: _exponent, at: _at};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -884,6 +885,7 @@
     case 123: ++tokPos; return finishToken(_braceL);
     case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChild);
     case 63: ++tokPos; return finishToken(_question);
+    case 64: ++tokPos; return finishToken(_at);
 
     case 58:
       ++tokPos;
@@ -1705,6 +1707,7 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
+    console.log(node);
     return node;
   }
 
@@ -2505,6 +2508,9 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
+
+    case _at:
+      unexpected(); // todo: @foo -> this.foo
     
     case _yield:
       if (inGenerator) return parseYield();
