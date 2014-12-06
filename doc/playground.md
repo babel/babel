@@ -18,6 +18,8 @@ to5.transform("code", { playground: true });
 
  * [Memoization operator](#memoization-operator)
  * [Method binding](#method-binding)
+ * [Object getter memoisation](#object-getter-memoisation)
+ * [This shorthand](#this-shorthand)
 
 ### Memoization assignment operator
 
@@ -65,4 +67,54 @@ var fn = obj.method.bind(obj, "foob");
 
 ["foo", "bar"].map(function (val) { return val.toUpperCase(); });
 [1.1234, 23.53245, 3].map(function (val) { return val.toFixed(2); });
+```
+
+### Object getter memoisation
+
+```javascript
+var foo = {
+  memo bar() {
+    return complex();
+  }
+};
+
+class Foo {
+  memo bar() {
+    return complex();
+  }
+}
+```
+
+equivalent to
+
+```javascript
+var foo = {
+  get bar() {
+    if (this._barRan) return this._bar;
+    this._barRan = true;
+    return this._bar = complex();
+  }
+};
+
+class Foo {
+  get bar() {
+    if (this._barRan) return this._bar;
+    this._barRan = true;
+    return this._bar = complex();
+  }
+}
+```
+
+**NOTE:** Memoised functions will return the result of the **first** execution, regardless of arguments.
+
+### This shorthand
+
+```javascript
+@foo
+```
+
+equivalent to
+
+```javascirpt
+this.foo
 ```
