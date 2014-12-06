@@ -1,3 +1,9 @@
+# 1.14.15
+
+ * Add object getter memos and this shorthand to playground.
+ * Fix while loops in let scoping.
+ * Upgrade `acorn-6to5`.
+
 # 1.14.14
 
  * Fix template literals escaping.
