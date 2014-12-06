@@ -24,7 +24,11 @@
   </a>
 </p>
 
-**6to5** turns ES6+ code into vanilla ES5, so you can use next generation features **today.**
+<p align="center">
+  <strong>6to5</strong> turns ES6+ code into vanilla ES5, so you can use next generation features <strong>today.</strong>
+</p>
 
-For more information view the [documentation](https://6to5.github.io). For
-support visit the [gitter room](https://gitter.im/6to5/6to5).
+<p align="center">
+  For more information view the <a href="https://6to5.github.io">documentation</a>. For
+  support visit the <a href="https://gitter.im/6to5/6to5">gitter room</a>.
+</p>
