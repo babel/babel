@@ -17,7 +17,7 @@ var seattlers = [for (c of customers) if (c.city == "Seattle") { name: c.name, a
 is generated to the following with 6to5:
 
 ```javascript
-var seattlers = customers.filter(function (c) {
+var seattlers = Array.from(customers).filter(function (c) {
   return c.city == "Seattle";
 }).map(function (c) {
   return {
@@ -51,8 +51,7 @@ As you can tell, it's not very pretty, unreadable even. Instead of mapping
 directly to a runtime, like other transpilers, 6to5 maps directly to the
 equivalent ES5.
 
-I'm not saying 6to5 is for everyone or even suited for everything. Traceur is
-better suited if you'd like a full ES6 environment with polyfills and all.
+Sometimes there are little things that 6to5 needs
 
 ## Comparison to other transpilers
 
