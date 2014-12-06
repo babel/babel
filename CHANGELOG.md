@@ -1,3 +1,8 @@
+# 1.14.17
+
+ * Add default initializer to let variables within loop bodies.
+ * Fix excessive `break` replacement inside of switches in let scoping.
+
 # 1.14.16
 
  * Add object getter memos and this shorthand to playground.
