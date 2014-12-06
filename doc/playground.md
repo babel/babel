@@ -18,7 +18,7 @@ to5.transform("code", { playground: true });
 
  * [Memoization operator](#memoization-operator)
  * [Method binding](#method-binding)
- * [Object getter memoisation](#object-getter-memoisation)
+ * [Object getter memoization](#object-getter-memoization)
  * [This shorthand](#this-shorthand)
 
 ### Memoization assignment operator
@@ -69,7 +69,7 @@ var fn = obj.method.bind(obj, "foob");
 [1.1234, 23.53245, 3].map(function (val) { return val.toFixed(2); });
 ```
 
-### Object getter memoisation
+### Object getter memoization
 
 ```javascript
 var foo = {
