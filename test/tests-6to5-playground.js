@@ -4,9 +4,202 @@ if (typeof exports != "undefined") {
   var testAssert = require("./driver.js").testAssert;
 }
 
+// This shorthand
+
+test("@foo", {
+  "type": "Program",
+  "start": 0,
+  "end": 4,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 4,
+      "expression": {
+        "type": "MemberExpression",
+        "start": 0,
+        "end": 4,
+        "object": {
+          "type": "ThisExpression"
+        },
+        "property": {
+          "type": "Identifier",
+          "start": 1,
+          "end": 4,
+          "name": "foo"
+        },
+        "computed": false
+      }
+    }
+  ]
+}, {
+  playground: true
+});
+
+test("@foo();", {
+  "type": "Program",
+  "start": 0,
+  "end": 7,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 7,
+      "expression": {
+        "type": "MemberExpression",
+        "start": 0,
+        "end": 6,
+        "object": {
+          "type": "ThisExpression"
+        },
+        "property": {
+          "type": "CallExpression",
+          "start": 1,
+          "end": 6,
+          "callee": {
+            "type": "Identifier",
+            "start": 1,
+            "end": 4,
+            "name": "foo"
+          },
+          "arguments": []
+        },
+        "computed": false
+      }
+    }
+  ]
+}, {
+  playground: true
+});
+
+// Object getter memoisation
+
+test("class Foo { memo bar() {} }", {
+  type: "Program",
+  start: 0,
+  end: 27,
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 27,
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 9,
+      name: "Foo"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 10,
+      end: 27,
+      body: [{
+        type: "MethodDefinition",
+        start: 12,
+        end: 25,
+        static: false,
+        computed: false,
+        key: {
+          type: "Identifier",
+          start: 17,
+          end: 20,
+          name: "bar"
+        },
+        kind: "memo",
+        value: {
+          type: "FunctionExpression",
+          start: 20,
+          end: 25,
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          async: false,
+          body: {
+            type: "BlockStatement",
+            start: 23,
+            end: 25,
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  playground: true,
+  ecmaVersion: 6
+});
+
+test("var foo = { memo bar() {} };", 
+{
+  type: "Program",
+  start: 0,
+  end: 28,
+  body: [{
+    type: "VariableDeclaration",
+    start: 0,
+    end: 28,
+    declarations: [{
+      type: "VariableDeclarator",
+      start: 4,
+      end: 27,
+      id: {
+        type: "Identifier",
+        start: 4,
+        end: 7,
+        name: "foo"
+      },
+      init: {
+        type: "ObjectExpression",
+        start: 10,
+        end: 27,
+        properties: [{
+          type: "Property",
+          start: 12,
+          end: 25,
+          method: false,
+          shorthand: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            start: 17,
+            end: 20,
+            name: "bar"
+          },
+          kind: "memo",
+          value: {
+            type: "FunctionExpression",
+            start: 20,
+            end: 25,
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            async: false,
+            body: {
+              type: "BlockStatement",
+              start: 23,
+              end: 25,
+              body: []
+            },
+            expression: false
+          }
+        }]
+      }
+    }],
+    kind: "var"
+  }]
+}, {
+  playground: true,
+  ecmaVersion: 6
+});
+
 // Memoization assignment operator
 
-// Make sure conditionals still work
+//- Make sure conditionals still work
 
 test("y ? 1 : 2", {
   type: "Program",

@@ -885,7 +885,12 @@
     case 123: ++tokPos; return finishToken(_braceL);
     case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChild);
     case 63: ++tokPos; return finishToken(_question);
-    case 64: ++tokPos; return finishToken(_at);
+
+    case 64:
+      if (options.playground) {
+        ++tokPos;
+        return finishToken(_at);
+      }
 
     case 58:
       ++tokPos;
@@ -1707,7 +1712,6 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
-    console.log(node);
     return node;
   }
 
@@ -2374,9 +2378,23 @@
         return finishNode(node, "AssignmentExpression");
       }
       node.test = expr;
-      node.consequent = parseExpression(true);
-      expect(_colon);
-      node.alternate = parseExpression(true, noIn);
+      var consequent = node.consequent = parseExpression(true);
+      if (consequent.type === "BindMemberExpression" && tokType !== _colon) {
+        // this is a hack to make, revisit at a later date
+        if (consequent.arguments.length) {
+          node.alternate = {
+            type: "CallExpression",
+            arguments: consequent.arguments,
+            callee: consequent.property
+          };
+        } else {
+          node.alternate = consequent.property;
+        }
+        node.consequent = consequent.object;
+      } else {
+        expect(_colon);
+        node.alternate = parseExpression(true, noIn);
+      }
       return finishNode(node, "ConditionalExpression");
     }
     return expr;
@@ -2510,7 +2528,12 @@
       return finishNode(node, "ThisExpression");
 
     case _at:
-      unexpected(); // todo: @foo -> this.foo
+      var node = startNode();
+      next();
+      node.object = { type: "ThisExpression" }
+      node.property = parseExprSubscripts();
+      node.computed = false;
+      return finishNode(node, "MemberExpression");
     
     case _yield:
       if (inGenerator) return parseYield();
@@ -2726,7 +2749,7 @@
         prop.method = true;
         prop.value = parseMethod(isGenerator, isAsync);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set")) {
+                 (prop.key.name === "get" || prop.key.name === "set" || (options.playground && prop.key.name === "memo"))) {
         if (isGenerator || isAsync) unexpected();
         prop.kind = prop.key.name;
         parsePropertyName(prop);
@@ -2934,7 +2957,7 @@
       var isGenerator = eat(_star);
       parsePropertyName(method);
       if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
-          (method.key.name === "get" || method.key.name === "set")) {
+          (method.key.name === "get" || method.key.name === "set" || (options.playground && method.key.name === "memo"))) {
         if (isGenerator || isAsync) unexpected();
         method.kind = method.key.name;
         parsePropertyName(method);
