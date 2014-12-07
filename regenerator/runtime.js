@@ -25,6 +25,16 @@
     return new Generator(innerFn, outerFn, self || null, tryList || []);
   }
   runtime.wrap = wrap;
+  
+  // Try/catch helper to minemize deoptimizations
+  var _try = function(block) {
+    try {
+      block();
+      return undefined;
+    } catch (err) {
+      return err;
+    }
+  };
 
   var GenStateSuspendedStart = "suspendedStart";
   var GenStateSuspendedYield = "suspendedYield";
@@ -70,10 +80,12 @@
       var callThrow = step.bind(generator["throw"]);
 
       function step(arg) {
-        try {
-          var info = this(arg);
-          var value = info.value;
-        } catch (error) {
+        var info, value, self = this, error = _try(function() {
+          info = self(arg);
+          value = info.value;
+        });
+        
+        if (error) {
           return reject(error);
         }
 
@@ -107,8 +119,8 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
-          try {
-            var info = delegate.iterator[method](arg);
+          var info, uncaught = _try(function() {
+            info = delegate.iterator[method](arg);
 
             // Delegate generator ran and handled its own exceptions so
             // regardless of what the method was, we continue as if it is
@@ -116,7 +128,9 @@
             method = "next";
             arg = undefined;
 
-          } catch (uncaught) {
+          })
+          
+          if (uncaught) {
             context.delegate = null;
 
             // Like returning generator.throw(uncaught), but without the
@@ -172,9 +186,11 @@
 
         state = GenStateExecuting;
 
-        try {
-          var value = innerFn.call(self, context);
+        var value, thrown = _try(function() {
+          value = innerFn.call(self, context);
+        })
 
+        if (!thrown) {
           // If an exception is thrown from innerFn, we leave state ===
           // GenStateExecuting and loop back for another invocation.
           state = context.done
@@ -196,7 +212,7 @@
             return info;
           }
 
-        } catch (thrown) {
+        } else {
           state = GenStateCompleted;
 
           if (method === "next") {
