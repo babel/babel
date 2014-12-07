@@ -803,12 +803,6 @@
         return finishToken(_dollarBraceL);
       }
     }
-
-    if (code === 125) { // '}'
-      ++tokPos;
-      return finishToken(_braceR, undefined, false);
-    }
-
     // anything else is considered string literal
     return readTmplString();
   }
@@ -2153,10 +2147,11 @@
   // Parse template expression.
 
   function parseTemplate() {
+    var oldInTemplate = inTemplate;
+    inTemplate = true;
     var node = startNode();
     node.expressions = [];
     node.quasis = [];
-    inTemplate = true;
     next();
     for (;;) {
       var elem = startNode();
@@ -2176,7 +2171,7 @@
       tokPos = tokEnd;
       expect(_braceR);
     }
-    inTemplate = false;
+    inTemplate = oldInTemplate;
     next();
     return finishNode(node, "TemplateLiteral");
   }

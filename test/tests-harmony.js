@@ -14191,3 +14191,44 @@ test("import foo, * as bar from 'baz';", {
     }
   }]
 }, {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/173
+test("`{${x}}`, `}`", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "SequenceExpression",
+      expressions: [
+        {
+          type: "TemplateLiteral",
+          expressions: [{
+            type: "Identifier",
+            name: "x"
+          }],
+          quasis: [
+            {
+              type: "TemplateElement",
+              value: {cooked: "{", raw: "{"},
+              tail: false
+            },
+            {
+              type: "TemplateElement",
+              value: {cooked: "}", raw: "}"},
+              tail: true
+            }
+          ]
+        },
+        {
+          type: "TemplateLiteral",
+          expressions: [],
+          quasis: [{
+            type: "TemplateElement",
+            value: {cooked: "}", raw: "}"},
+            tail: true
+          }]
+        }
+      ]
+    }
+  }]
+}, {ecmaVersion: 6});
