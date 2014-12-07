@@ -159,7 +159,17 @@ to5.transformFile("filename.js", options, function (err, result) {
 
   // Enable support for experimental ES7 features
   // Default: false
-  experimental: true
+  experimental: true,
+
+  // Set this to `false` if you don't want the transformed AST in the returned
+  // result
+  // Default: true
+  ast: true,
+
+  // Set this to `false` if you don't want the transformed code in the returned
+  // result
+  // Default: true
+  code: true
 }
 ```
 
