@@ -1,6 +1,6 @@
+"use strict";
+
 // from #23
 /**/
 /*
 */
-
-test

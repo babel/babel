@@ -1,3 +1,7 @@
+# 1.14.18
+
+ * Fix files only containg comments not being output.
+
 # 1.14.17
 
  * Add default initializer to let variables within loop bodies.
