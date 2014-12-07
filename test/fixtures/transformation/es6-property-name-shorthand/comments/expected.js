@@ -1,4 +1,6 @@
-const A = 'a';
-const o = {
+"use strict";
+
+var A = "a";
+var o = {
   A: A // comment
 };
