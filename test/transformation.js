@@ -15,8 +15,7 @@ var run = function (task, done) {
 
   var getOpts = function (self) {
     return _.merge({
-      whtiespace: true,
-      filename:   self.loc
+      filename: self.loc
     }, opts);
   };
 
