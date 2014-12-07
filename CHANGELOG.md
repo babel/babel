@@ -1,6 +1,7 @@
 # 1.14.18
 
  * Fix files only containg comments not being output.
+ * Fix duplicate comments on property key shorthands.
 
 # 1.14.17
 
