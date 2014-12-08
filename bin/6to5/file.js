@@ -116,13 +116,9 @@ module.exports = function (commander, filenames) {
       var watcher = chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true
-      });
-
-      _.each(["add", "change", "unlink"], function (type) {
-        watcher.on(type, function (filename) {
-          console.log(type, filename);
-          walk();
-        });
+      }).on("all", function (type, filename) {
+        console.log(type, filename);
+        walk();
       });
     }
   };
