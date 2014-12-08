@@ -117,8 +117,10 @@ module.exports = function (commander, filenames) {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename) {
-        console.log(type, filename);
-        walk();
+        if (type === "add" || type === "change" || type === "unlink" ) {
+          console.log(type, filename);
+          walk();
+        }
       });
     }
   };
