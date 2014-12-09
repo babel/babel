@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
+var Module    = require("module");
 var path      = require("path");
 var repl      = require("repl");
 var to5       = require("../lib/6to5");
@@ -44,16 +45,15 @@ if (commander.eval) {
   var result = _eval(commander.eval, "eval");
   if (commander.print) console.log(result);
 } else {
-  var filenames = commander.args;
+  if (commander.args.length) {
+    process.argv.splice(0, 1); // remove 6to5-node directive
 
-  if (filenames.length) {
-    _.each(filenames, function (filename) {
-      if (!util.isAbsolute(filename)) {
-        filename = path.join(process.cwd(), filename);
-      }
+    var filename = process.argv[1];
+    if (!util.isAbsolute(filename)) {
+      process.argv[1] = path.join(process.cwd(), filename);
+    }
 
-      require(require.resolve(filename));
-    });
+    Module.runMain();
   } else {
     replStart();
   }
