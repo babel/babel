@@ -17911,6 +17911,49 @@ test("do keep(); while (true);", {
   }
 });
 
+test("do {} while (false) foo();", {
+  type: "Program",
+  start: 0,
+  end: 26,
+  body: [
+    {
+      type: "DoWhileStatement",
+      start: 0,
+      end: 19,
+      body: {
+        type: "BlockStatement",
+        start: 3,
+        end: 5,
+        body: []
+      },
+      test: {
+        type: "Literal",
+        start: 13,
+        end: 18,
+        value: false,
+        raw: "false"
+      }
+    },
+    {
+      type: "ExpressionStatement",
+      start: 20,
+      end: 26,
+      expression: {
+        type: "CallExpression",
+        start: 20,
+        end: 25,
+        callee: {
+          type: "Identifier",
+          start: 20,
+          end: 23,
+          name: "foo"
+        },
+        arguments: []
+      }
+    }
+  ]
+});
+
 test("do { x++; y--; } while (x < 10)", {
   type: "Program",
   body: [
