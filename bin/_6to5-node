@@ -46,12 +46,24 @@ if (commander.eval) {
   if (commander.print) console.log(result);
 } else {
   if (commander.args.length) {
-    process.argv.splice(0, 1); // remove 6to5-node directive
+    // slice all arguments up to the first filename since they're 6to5 args that we handle
+    var args = process.argv.slice(2);
 
-    var filename = process.argv[1];
-    if (!util.isAbsolute(filename)) {
-      process.argv[1] = path.join(process.cwd(), filename);
-    }
+    var i = 0;
+    _.each(args, function (arg, i2) {
+      if (arg[0] !== "-") {
+        i = i2;
+        return false;
+      }
+    });
+    args = args.slice(i);
+
+    // make the filename absolute
+    var filename = args[0]
+    if (!util.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+
+    // add back on node and concat the sliced args
+    process.argv = ["node"].concat(args);
 
     Module.runMain();
   } else {
