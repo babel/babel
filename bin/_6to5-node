@@ -26,6 +26,7 @@ commander.parse(process.argv);
 to5.register({
   experimental: commander.experimental,
   extensions:   commander.extensions,
+  playground:   commander.playground,
   ignore:       commander.ignore
 });
 
@@ -35,7 +36,8 @@ var _eval = function (code, filename) {
   code = to5.transform(code, {
     filename: filename,
     blacklist: ["useStrict"],
-    experimental: commander.experimental
+    experimental: commander.experimental,
+    playground: commander.playground
   }).code;
   return vm.runInThisContext(code, filename);
 };
