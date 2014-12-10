@@ -852,25 +852,18 @@
   function getTemplateToken(code) {
     // '`' and '${' have special meanings, but they should follow
     // string (can be empty)
-      if (tokType === _string) {
-        if (code === 96) { // '`'
-          ++tokPos;
-          return finishToken(_bquote);
-      } else
-        if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
-          tokPos += 2;
-          return finishToken(_dollarBraceL);
-        }
+    if (tokType === _string) {
+      if (code === 96) { // '`'
+        ++tokPos;
+        return finishToken(_bquote);
+      } else if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
+        tokPos += 2;
+        return finishToken(_dollarBraceL);
       }
-
-    if (code === 125) { // '}'
-      ++tokPos;
-      return finishToken(_braceR, undefined, false);
     }
-
-      // anything else is considered string literal
+    // anything else is considered string literal
     return readTmplString();
-    }
+  }
 
   function getTokenFromCode(code) {
     switch(code) {
@@ -2687,10 +2680,11 @@
   // Parse template expression.
 
   function parseTemplate() {
+    var oldInTemplate = inTemplate;
+    inTemplate = true;
     var node = startNode();
     node.expressions = [];
     node.quasis = [];
-    inTemplate = true;
     next();
     for (;;) {
       var elem = startNode();
@@ -2710,7 +2704,7 @@
       tokPos = tokEnd;
       expect(_braceR);
     }
-    inTemplate = false;
+    inTemplate = oldInTemplate;
     next();
     return finishNode(node, "TemplateLiteral");
   }
@@ -3104,9 +3098,6 @@
       if (tokType !== _name || tokVal !== "from") unexpected();
       next();
       node.source = tokType === _string ? parseExprAtom() : unexpected();
-      // only for backward compatibility with Esprima's AST
-      // (it doesn't support mixed default + named yet)
-      node.kind = node.specifiers[0]['default'] ? "default" : "named";
     }
     semicolon();
     return finishNode(node, "ImportDeclaration");
@@ -3116,16 +3107,6 @@
 
   function parseImportSpecifiers() {
     var nodes = [], first = true;
-    if (tokType === _star) {
-      var node = startNode();
-      next();
-      if (tokType !== _name || tokVal !== "as") unexpected();
-      next();
-      node.name = parseIdent();
-      checkLVal(node.name, true);
-      nodes.push(finishNode(node, "ImportBatchSpecifier"));
-      return nodes;
-    }
     if (tokType === _name) {
       // import defaultObj, { x, y as z } from '...'
       var node = startNode();
@@ -3135,6 +3116,16 @@
       node['default'] = true;
       nodes.push(finishNode(node, "ImportSpecifier"));
       if (!eat(_comma)) return nodes;
+    }
+    if (tokType === _star) {
+      var node = startNode();
+      next();
+      if (tokType !== _name || tokVal !== "as") unexpected();
+      next();
+      node.name = parseIdent();
+      checkLVal(node.name, true);
+      nodes.push(finishNode(node, "ImportBatchSpecifier"));
+      return nodes;
     }
     expect(_braceL);
     while (!eat(_braceR)) {

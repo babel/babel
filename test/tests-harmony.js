@@ -14160,3 +14160,75 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
     }
   }]
 }, {ecmaVersion: 7, preserveParens: true});
+
+// https://github.com/marijnh/acorn/issues/161
+test("import foo, * as bar from 'baz';", {
+  type: "Program",
+  body: [{
+    type: "ImportDeclaration",
+    specifiers: [
+      {
+        type: "ImportSpecifier",
+        id: {
+          type: "Identifier",
+          name: "foo"
+        },
+        name: null,
+        default: true
+      },
+      {
+        type: "ImportBatchSpecifier",
+        name: {
+          type: "Identifier",
+          name: "bar"
+        }
+      }
+    ],
+    source: {
+      type: "Literal",
+      value: "baz",
+      raw: "'baz'"
+    }
+  }]
+}, {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/173
+test("`{${x}}`, `}`", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "SequenceExpression",
+      expressions: [
+        {
+          type: "TemplateLiteral",
+          expressions: [{
+            type: "Identifier",
+            name: "x"
+          }],
+          quasis: [
+            {
+              type: "TemplateElement",
+              value: {cooked: "{", raw: "{"},
+              tail: false
+            },
+            {
+              type: "TemplateElement",
+              value: {cooked: "}", raw: "}"},
+              tail: true
+            }
+          ]
+        },
+        {
+          type: "TemplateLiteral",
+          expressions: [],
+          quasis: [{
+            type: "TemplateElement",
+            value: {cooked: "}", raw: "}"},
+            tail: true
+          }]
+        }
+      ]
+    }
+  }]
+}, {ecmaVersion: 6});
