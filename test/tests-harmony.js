@@ -5154,13 +5154,20 @@ test("import $ from \"jquery\"", {
       type: "ImportSpecifier",
       id: {
         type: "Identifier",
+        name: "default",
+        loc: {
+          start: {line: 1, column: 7},
+          end: {line: 1, column: 8}
+        }
+      },
+      name: {
+        type: "Identifier",
         name: "$",
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 8}
         }
       },
-      name: null,
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
@@ -5328,10 +5335,16 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
             start: {line: 1, column: 7},
             end: {line: 1, column: 13}
           },
-          name: "crypto"
+          name: "default"
         },
-        name: null,
-        default: true
+        name: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 7},
+            end: {line: 1, column: 13}
+          },
+          name: "crypto"
+        }
       },
       {
         type: "ImportSpecifier",
@@ -14217,10 +14230,12 @@ test("import foo, * as bar from 'baz';", {
         type: "ImportSpecifier",
         id: {
           type: "Identifier",
-          name: "foo"
+          name: "default"
         },
-        name: null,
-        default: true
+        name: {
+          type: "Identifier",
+          name: "foo"
+        }
       },
       {
         type: "ImportBatchSpecifier",
