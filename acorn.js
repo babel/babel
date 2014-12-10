@@ -431,6 +431,7 @@
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
   var _doubleColon = { type: "::", beforeExpr: true };
   var _at = { type: '@' };
+  var _dotQuestion = { type: '.?' };
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -736,7 +737,10 @@
     var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
     var next2 = input.charCodeAt(tokPos + 2);
-    if (options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+    if (options.playground && next === 63) { // 63
+      tokPos += 2;
+      return finishToken(_dotQuestion);
+    } else if (options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
       tokPos += 3;
       return finishToken(_ellipsis);
     } else {
@@ -2380,7 +2384,7 @@
       node.test = expr;
       var consequent = node.consequent = parseExpression(true);
       if (consequent.type === "BindMemberExpression" && tokType !== _colon) {
-        // this is a hack to make, revisit at a later date
+        // this is a hack, revisit at a later date
         if (consequent.arguments.length) {
           node.alternate = {
             type: "CallExpression",
