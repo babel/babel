@@ -20,14 +20,6 @@ exports.raise = function raise(argument) {
 };
 
 exports.assertAlreadyFinished = function assertAlreadyFinished(generator) {
-  try {
-    generator.next();
-    assert.ok(false, "should have thrown an exception");
-  } catch (err) {
-    assert.ok(err instanceof Error);
-    assert.strictEqual(
-      err.message,
-      "Generator has already finished"
-    );
-  }
+  var item = generator.next();
+  assert.ok(item.done && item.value === undefined, "not finished");
 };
