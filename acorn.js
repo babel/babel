@@ -2027,7 +2027,7 @@
     labels.pop();
     expect(_while);
     node.test = parseParenExpression();
-    eat(_semi);
+    semicolon();
     return finishNode(node, "DoWhileStatement");
   }
   
