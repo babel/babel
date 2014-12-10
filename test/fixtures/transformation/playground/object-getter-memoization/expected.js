@@ -14,7 +14,8 @@ var Foo = (function () {
         if (this._memoDone) return this._memo;
         this._memoDone = true;
         return this._memo = complex();
-      }
+      },
+      enumerable: true
     };
     return _ref;
   })({
@@ -23,7 +24,8 @@ var Foo = (function () {
         if (this._barDone) return this._bar;
         this._barDone = true;
         return this._bar = complex();
-      }
+      },
+      enumerable: true
     }
   }));
 
@@ -45,7 +47,8 @@ var foo = (function (_foo) {
         if (this._barDone) return this._bar;
         this._barDone = true;
         return this._bar = complex();
-      }
+      },
+      enumerable: true
     }
   });
 

@@ -12,7 +12,8 @@ var Test = (function () {
     test: {
       get: function () {
         return 5 + 5;
-      }
+      },
+      enumerable: true
     }
   });
 

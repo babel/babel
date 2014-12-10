@@ -12,7 +12,8 @@ var Test = (function () {
     test: {
       set: function (val) {
         this._test = val;
-      }
+      },
+      enumerable: true
     }
   });
 

@@ -13,7 +13,8 @@ var A = (function () {
   _classProps(A, {
     b: {
       get: function () {},
-      set: function (b) {}
+      set: function (b) {},
+      enumerable: true
     }
   });
 

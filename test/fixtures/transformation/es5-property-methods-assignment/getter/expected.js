@@ -5,7 +5,8 @@ var obj = (function (_obj) {
     foo: {
       get: function () {
         return 5 + 5;
-      }
+      },
+      enumerable: true
     }
   });
 

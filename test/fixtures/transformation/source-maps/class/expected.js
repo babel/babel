@@ -12,7 +12,8 @@ var Test = (function () {
     bar: {
       get: function () {
         throw new Error("wow");
-      }
+      },
+      enumerable: true
     }
   });
 
