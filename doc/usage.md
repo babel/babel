@@ -98,7 +98,7 @@ to5.transformFile("filename.js", options, function (err, result) {
 ### to5.transform.fromAst(ast, [code], [opts])
 
 ```javascript
-var result = to5.transform(ast, "var a = 2;", opts);
+var result = to5.transform.fromAst(ast, "var a = 2;", opts);
 result.code;
 result.map;
 result.ast;
