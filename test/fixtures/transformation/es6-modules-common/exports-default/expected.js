@@ -1,15 +1,15 @@
 "use strict";
 
-exports["default"] = 42;
-exports["default"] = {};
-exports["default"] = [];
-exports["default"] = foo;
-exports["default"] = function () {};
+module.exports = foo;
+module.exports = 42;
+module.exports = {};
+module.exports = [];
+module.exports = foo;
+module.exports = function () {};
 
-exports["default"] = function () {};
+module.exports = function () {};
 
 function foo() {}
-exports["default"] = foo;
 var Foo = function Foo() {};
 
-exports["default"] = Foo;
+module.exports = Foo;

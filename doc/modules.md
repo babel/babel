@@ -19,15 +19,62 @@ to5.transform('import "foo";', { modules: "common" });
 
  * [AMD](#amd)
  * [Common (Default)](#common-default)
- * [Common Interop](#common-interop)
+ * [Common Strict](#common-strict)
  * [Ignore](#ignore)
  * [System](#system)
  * [UMD](#umd)
 
-### Common (Default)
+### Common
 
 ```sh
 $ 6to5 --modules common
+```
+
+**In**
+
+```javascript
+export default test;
+
+export {test};
+export var test = 5;
+
+import "foo";
+
+import foo from "foo";
+import * as foo from "foo";
+
+import {bar} from "foo";
+import {foo as bar} from "foo";
+```
+
+**Out**
+
+```javascript
+"use strict";
+
+var _interopRequire = function (obj) {
+  return obj && (obj["default"] || obj);
+};
+
+exports = module.exports = test;
+
+exports.test = test;
+var test = exports.test = 5;
+
+require("foo");
+
+var foo = _interopRequire(require("foo"));
+
+var foo = require("foo");
+
+var bar = require("foo").bar;
+var bar = require("foo").foo;
+```
+
+### Common Strict
+
+```sh
+$ 6to5 --modules commonStrict
 ```
 
 **In**
@@ -62,73 +109,6 @@ exports.test = test;
 var test = 5; exports.test = test;
 
 exports.default = test;
-```
-
-### Common interop
-
-```sh
-$ 6to5 --modules commonInterop
-```
-
-**In**
-
-```javascript
-import "foo";
-
-import foo from "foo";
-import * as foo from "foo";
-
-import {bar} from "foo";
-import {foo as bar} from "foo";
-
-export {test};
-export var test = 5;
-
-export default test;
-```
-
-**Out**
-
-```javascript
-var _interopRequire = function (obj) {
-  return obj && (obj["default"] || obj);
-};
-
-require("foo");
-
-var foo = _interopRequire(require("foo"));
-var foo = require("foo");
-
-var bar = require("foo").bar;
-var bar = require("foo").foo;
-
-exports.test = test;
-var test = exports.test = 5;
-
-exports["default"] = test;
-```
-
-#### module.exports behaviour
-
-If there exist no other non-default `export`s then `default exports` are
-exported as `module.exports` instead of `exports.default`.
-
-**In**
-
-```javascript
-export default function foo() {
-
-}
-```
-
-**Out**
-
-```javascript
-module.exports = foo;
-
-function foo() {
-
-}
 ```
 
 ### AMD
