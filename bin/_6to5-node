@@ -33,7 +33,6 @@ to5.register({
 
 var _eval = function (code, filename) {
   code = to5.transform(code, {
-    modules: "commonInterop",
     filename: filename,
     blacklist: ["useStrict"],
     experimental: commander.experimental
