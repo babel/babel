@@ -1,6 +1,6 @@
 # Features
 
-## Abstract references ([experimental](usage.md#experimental)) ([spec](https://github.com/zenparsing/es-abstract-refs))
+## Abstract references ([experimental](experimental.md)) ([spec](https://github.com/zenparsing/es-abstract-refs))
 
 ```javascript
 foo::bar;
@@ -8,7 +8,7 @@ foo::bar = baz;
 delete foo::bar;
 ```
 
-## Array comprehensions ([experimental](usage.md#experimental))
+## Array comprehensions ([experimental](experimental.md))
 
 ```javascript
 var results = [for (c of customers) if (c.city == "Seattle") { name: c.name, age: c.age }]
@@ -39,7 +39,7 @@ var bob = {
 };
 ```
 
-## Async functions ([experimental](usage.md#experimental)) ([spec](https://github.com/lukehoban/ecmascript-asyncawait))
+## Async functions ([experimental](experimental.md)) ([spec](https://github.com/lukehoban/ecmascript-asyncawait))
 
 ```javascript
 async function chainAnimationsAsync(elem, animations) {
@@ -130,7 +130,7 @@ var [a] = [];
 a === undefined;
 ```
 
-## Exponentiation operator ([experimental](usage.md#experimental)) ([spec](https://github.com/rwaldron/exponentiation-operator))
+## Exponentiation operator ([experimental](experimental.md)) ([spec](https://github.com/rwaldron/exponentiation-operator))
 
 ```javascript
 var a = 2;
@@ -167,7 +167,7 @@ for (var n of fibonacci()) {
 }
 ```
 
-## Generator comprehensions ([experimental](usage.md#experimental))
+## Generator comprehensions ([experimental](experimental.md))
 
 ```javascript
 var nums = [1, 2, 3, 4, 5, 6];
@@ -208,7 +208,7 @@ export default test;
 0o767 === 503; // true
 ```
 
-## Object spread/rest ([experimental](usage.md#experimental)) ([spec](https://github.com/sebmarkbage/ecmascript-rest-spread))
+## Object spread/rest ([experimental](experimental.md)) ([spec](https://github.com/sebmarkbage/ecmascript-rest-spread))
 
 ```javascript
 var n = { x, y, ...z };

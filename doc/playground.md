@@ -12,7 +12,7 @@ Playground is a proving ground for **possible** ES7 proposals.
 to5.transform("code", { playground: true });
 ```
 
-**NOTE:** Enabling `playground` also enables [experimental support](usage.md#experimental).
+**NOTE:** Enabling `playground` also enables [experimental support](experimental.md).
 
 ## Features
 
