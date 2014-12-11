@@ -4,7 +4,7 @@ var jsTrans = require("jstransform");
 var traceur = require("traceur");
 var es6tr   = require("es6-transpiler");
 var es6now  = require("es6now");
-var esnext  = require("esnext");
+//var esnext  = require("esnext");
 var to5     = require("../lib/6to5");
 
 //var uglify  = require("uglify-js");
@@ -56,12 +56,12 @@ var compilers = {
     }
   },
 
-  esnext: {
+  /*esnext: {
     runtime: readResolve("esnext/node_modules/regenerator/runtime.js") || readResolve("regenerator/runtime.js"),
     compile: function (code) {
       return esnext.compile(code).code;
     }
-  },
+  },*/
 
   es6now: {
     runtime: readResolve("es6now/runtime/ES6.js"),
