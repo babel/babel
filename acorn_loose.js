@@ -100,6 +100,10 @@
             var re = input.slice(e.pos, pos);
             try { re = new RegExp(re); } catch(e) {}
             replace = {start: e.pos, end: pos, type: tt.regexp, value: re};
+          } else if (/template/.test(msg)) {
+            replace = {start: e.pos, end: pos,
+                       type: input.charAt(e.pos) == "`" ? tt.template : tt.templateContinued,
+                       value: input.slice(e.pos + 1, pos)};
           } else {
             replace = false;
           }
@@ -681,6 +685,11 @@
         node.callee = base;
         node.arguments = parseExprList(tt.parenR);
         base = finishNode(node, "CallExpression");
+      } else if (token.type == tt.template) {
+        var node = startNodeAt(start);
+        node.tag = base;
+        node.quasi = parseTemplate();
+        base = finishNode(node, "TaggedTemplateExpression");
       } else {
         return base;
       }
@@ -769,6 +778,9 @@
       }
       return finishNode(node, "YieldExpression");
 
+    case tt.template:
+      return parseTemplate();
+
     default:
       return dummyIdent();
     }
@@ -786,6 +798,38 @@
       node.arguments = [];
     }
     return finishNode(node, "NewExpression");
+  }
+
+  function parseTemplateElement() {
+    var elem = startNode();
+    elem.value = token.value;
+    elem.tail = input.charCodeAt(token.end - 1) !== 123; // '{'
+    next();
+    return finishNode(elem, "TemplateElement");
+  }
+
+  function parseTemplate() {
+    var node = startNode();
+    node.expressions = [];
+    var curElt = parseTemplateElement();
+    node.quasis = [curElt];
+    while (!curElt.tail) {
+      var next = parseExpression();
+      if (isDummy(next)) {
+        node.quasis[node.quasis.length - 1].tail = true;
+        break;
+      }
+      node.expressions.push(next);
+      if (token.type === tt.templateContinued) {
+        node.quasis.push(curElt = parseTemplateElement());
+      } else {
+        curElt = startNode();
+        curElt.value = {cooked: "", raw: ""};
+        curElt.tail = true;
+        node.quasis.push(curElt);
+      }
+    }
+    return finishNode(node, "TemplateLiteral");
   }
 
   function parseObj(isClass, isStatement) {
