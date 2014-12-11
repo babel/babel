@@ -628,8 +628,8 @@ test("`42`", {
         value: {raw: "42", cooked: "42"},
         tail: true,
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 3}
+          start: {line: 1, column: 0},
+          end: {line: 1, column:4}
         }
       }],
       expressions: [],
@@ -674,8 +674,8 @@ test("raw`42`", {
           value: {raw: "42", cooked: "42"},
           tail: true,
           loc: {
-            start: {line: 1, column: 4},
-            end: {line: 1, column: 6}
+            start: {line: 1, column: 3},
+            end: {line: 1, column: 7}
           }
         }],
         expressions: [],
@@ -726,8 +726,8 @@ test("raw`hello ${name}`", {
             value: {raw: "hello ", cooked: "hello "},
             tail: false,
             loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 10}
+              start: {line: 1, column: 3},
+              end: {line: 1, column: 12}
             }
           },
           {
@@ -735,8 +735,8 @@ test("raw`hello ${name}`", {
             value: {raw: "", cooked: ""},
             tail: true,
             loc: {
-              start: {line: 1, column: 17},
-              end: {line: 1, column: 17}
+              start: {line: 1, column: 16},
+              end: {line: 1, column: 18}
             }
           }
         ],
@@ -784,8 +784,8 @@ test("`$`", {
         value: {raw: "$", cooked: "$"},
         tail: true,
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 3}
         }
       }],
       expressions: [],
@@ -820,8 +820,8 @@ test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
         value: {raw: "\\n\\r\\b\\v\\t\\f\\\n\\\r\n", cooked: "\n\r\b\u000b\t\f"},
         tail: true,
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 3, column: 0}
+          start: {line: 1, column: 0},
+          end: {line: 3, column: 1}
         }
       }],
       expressions: [],
@@ -856,8 +856,8 @@ test("`\n\r\n`", {
         value: {raw: "\n\r\n", cooked: "\n\n"},
         tail: true,
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 3, column: 0}
+          start: {line: 1, column: 0},
+          end: {line: 3, column: 1}
         }
       }],
       expressions: [],
@@ -892,8 +892,8 @@ test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
         value: {raw: "\\u{000042}\\u0042\\x42u0\\102\\A", cooked: "BBBu0BA"},
         tail: true,
         loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 29}
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 30}
         }
       }],
       expressions: [],
@@ -940,8 +940,8 @@ test("new raw`42`", {
             value: {raw: "42", cooked: "42"},
             tail: true,
             loc: {
-              start: {line: 1, column: 8},
-              end: {line: 1, column: 10}
+              start: {line: 1, column: 7},
+              end: {line: 1, column: 11}
             }
           }],
           expressions: [],
@@ -975,6 +975,131 @@ test("new raw`42`", {
   ranges: true,
   locations: true
 });
+
+test("`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`",{
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "TemplateLiteral",
+        expressions: [
+          {
+            type: "ObjectExpression",
+            properties: [
+              {
+                type: "Property",
+                method: false,
+                shorthand: false,
+                computed: false,
+                key: {
+                  type: "Identifier",
+                  name: "x"
+                },
+                value: {
+                  type: "ObjectExpression",
+                  properties: [
+                    {
+                      type: "Property",
+                      method: false,
+                      shorthand: false,
+                      computed: false,
+                      key: {
+                        type: "Identifier",
+                        name: "y"
+                      },
+                      value: {
+                        type: "Literal",
+                        value: 10,
+                        raw: "10"
+                      },
+                      kind: "init"
+                    }
+                  ]
+                },
+                kind: "init"
+              }
+            ]
+          },
+          {
+            type: "TemplateLiteral",
+            expressions: [
+              {
+                type: "FunctionExpression",
+                id: null,
+                params: [],
+                defaults: [],
+                rest: null,
+                generator: false,
+                body: {
+                  type: "BlockStatement",
+                  body: [
+                    {
+                      type: "ReturnStatement",
+                      argument: {
+                        type: "Literal",
+                        value: 1,
+                        raw: "1"
+                      }
+                    }
+                  ]
+                },
+                expression: false
+              }
+            ],
+            quasis: [
+              {
+                type: "TemplateElement",
+                value: {
+                  cooked: "nested",
+                  raw: "nested"
+                },
+                tail: false
+              },
+              {
+                type: "TemplateElement",
+                value: {
+                  cooked: "endnest",
+                  raw: "endnest"
+                },
+                tail: true
+              }
+            ]
+          }
+        ],
+        quasis: [
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "outer",
+              raw: "outer"
+            },
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "bar",
+              raw: "bar"
+            },
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "end",
+              raw: "end"
+            },
+            tail: true
+          }
+        ]
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 6
+});
+
 
 // ES6: Switch Case Declaration
 
@@ -13959,7 +14084,7 @@ testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unterminated string constant (1:1)", {ecmaVersion: 6});
+testFail("`test", "Unterminated template (1:0)", {ecmaVersion: 6});
 
 testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 

@@ -302,11 +302,12 @@
 
   var metParenL;
 
-  // This is used by parser for detecting if it's inside ES6
-  // Template String. If it is, it should treat '$' as prefix before
-  // '{expression}' and everything else as string literals.
+  // This is used by the tokenizer to track the template strings it is
+  // inside, and count the amount of open braces seen inside them, to
+  // be able to switch back to a template token when the } to match ${
+  // is encountered. It will hold an array of integers.
 
-  var inTemplate;
+  var templates;
 
   function initParserState() {
     lastStart = lastEnd = tokPos;
@@ -409,7 +410,7 @@
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
-  var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
+  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
@@ -452,8 +453,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
-                     assign: _assign};
+                      arrow: _arrow, template: _template, templateContinued: _templateContinued, star: _star,
+                      assign: _assign};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -548,6 +549,10 @@
 
   var newline = /[\n\r\u2028\u2029]/;
 
+  function isNewLine(code) {
+    return code === 10 || code === 13 || code === 0x2028 || code == 0x2029;
+  }
+
   // Matches a whole line break (where CRLF is considered a single
   // line break). Used to count lines.
 
@@ -598,7 +603,7 @@
     }
     tokRegexpAllowed = true;
     metParenL = 0;
-    inTemplate = false;
+    templates = [];
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -788,25 +793,6 @@
     return finishOp(code === 61 ? _eq : _prefix, 1);
   }
 
-  // Get token inside ES6 template (special rules work there).
-
-  function getTemplateToken(code) {
-    // '`' and '${' have special meanings, but they should follow
-    // string (can be empty)
-    if (tokType === _string) {
-      if (code === 96) { // '`'
-        ++tokPos;
-        return finishToken(_bquote);
-      } else
-      if (code === 36 && input.charCodeAt(tokPos + 1) === 123) { // '${'
-        tokPos += 2;
-        return finishToken(_dollarBraceL);
-      }
-    }
-    // anything else is considered string literal
-    return readTmplString();
-  }
-
   function getTokenFromCode(code) {
     switch (code) {
     // The interpretation of a dot depends on whether it is followed
@@ -821,15 +807,23 @@
     case 44: ++tokPos; return finishToken(_comma);
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
-    case 123: ++tokPos; return finishToken(_braceL);
-    case 125: ++tokPos; return finishToken(_braceR);
+    case 123:
+      ++tokPos;
+      if (templates.length) ++templates[templates.length - 1];
+      return finishToken(_braceL);
+    case 125:
+      ++tokPos;
+      if (templates.length && --templates[templates.length - 1] === 0)
+        return readTemplateString(_templateContinued);
+      else
+        return finishToken(_braceR);
     case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
 
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
-        return finishToken(_bquote, undefined, false);
+        return readTemplateString(_template);
       }
 
     case 48: // '0'
@@ -889,8 +883,6 @@
     if (tokPos >= inputLen) return finishToken(_eof);
 
     var code = input.charCodeAt(tokPos);
-
-    if (inTemplate) return getTemplateToken(code);
 
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
@@ -1074,28 +1066,34 @@
     }
   }
 
-  function readTmplString() {
-    var out = "";
+  function readTemplateString(type) {
+    if (type == _templateContinued) templates.pop();
+    var out = "", start = tokPos;;
     for (;;) {
-      if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
-      var ch = input.charCodeAt(tokPos);
-      if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) // '`', '${'
-        return finishToken(_string, out);
-      if (ch === 92) { // '\'
+      if (tokPos >= inputLen) raise(tokStart, "Unterminated template");
+      var ch = input.charAt(tokPos);
+      if (ch === "`" || ch === "$" && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
+        var raw = input.slice(start, tokPos);
+        ++tokPos;
+        if (ch == "$") { ++tokPos; templates.push(1); }
+        return finishToken(type, {cooked: out, raw: raw});
+      }
+
+      if (ch === "\\") { // '\'
         out += readEscapedChar();
       } else {
         ++tokPos;
-        if (newline.test(String.fromCharCode(ch))) {
-          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
+        if (newline.test(ch)) {
+          if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
             ++tokPos;
-            ch = 10;
+            ch = "\n";
           }
           if (options.locations) {
             ++tokCurLine;
             tokLineStart = tokPos;
           }
         }
-        out += String.fromCharCode(ch); // '\'
+        out += ch;
       }
     }
   }
@@ -2010,7 +2008,7 @@
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
       return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
-    } else if (tokType === _bquote) {
+    } else if (tokType === _template) {
       var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
@@ -2125,7 +2123,7 @@
     case _new:
       return parseNew();
 
-    case _bquote:
+    case _template:
       return parseTemplate();
 
     default:
@@ -2149,33 +2147,24 @@
 
   // Parse template expression.
 
+  function parseTemplateElement() {
+    var elem = startNode();
+    elem.value = tokVal;
+    elem.tail = input.charCodeAt(tokEnd - 1) !== 123; // '{'
+    next();
+    return finishNode(elem, "TemplateElement");
+  }
+
   function parseTemplate() {
-    var oldInTemplate = inTemplate;
-    inTemplate = true;
     var node = startNode();
     node.expressions = [];
-    node.quasis = [];
-    next();
-    for (;;) {
-      var elem = startNode();
-      elem.value = {cooked: tokVal, raw: input.slice(tokStart, tokEnd)};
-      elem.tail = false;
-      next();
-      node.quasis.push(finishNode(elem, "TemplateElement"));
-      if (tokType === _bquote) { // '`', end of template
-        elem.tail = true;
-        break;
-      }
-      inTemplate = false;
-      expect(_dollarBraceL);
+    var curElt = parseTemplateElement();
+    node.quasis = [curElt];
+    while (!curElt.tail) {
       node.expressions.push(parseExpression());
-      inTemplate = true;
-      // hack to include previously skipped space
-      tokPos = tokEnd;
-      expect(_braceR);
+      if (tokType !== _templateContinued) unexpected();
+      node.quasis.push(curElt = parseTemplateElement());
     }
-    inTemplate = oldInTemplate;
-    next();
     return finishNode(node, "TemplateLiteral");
   }
 
