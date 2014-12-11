@@ -43,7 +43,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
-    var startPos = options.locations ? [tokPos, new Position] : tokPos;
+    var startPos = options.locations ? [tokPos, curPosition()] : tokPos;
     initParserState();
     return parseTopLevel(options.program || startNodeAt(startPos));
   };
@@ -314,7 +314,7 @@
 
   function initParserState() {
     lastStart = lastEnd = tokPos;
-    if (options.locations) lastEndLoc = new Position;
+    if (options.locations) lastEndLoc = curPosition();
     inFunction = inGenerator = strict = false;
     labels = [];
     skipSpace();
@@ -588,9 +588,17 @@
   // These are used when `options.locations` is on, for the
   // `tokStartLoc` and `tokEndLoc` properties.
 
-  function Position() {
-    this.line = tokCurLine;
-    this.column = tokPos - tokLineStart;
+  function Position(line, col) {
+    this.line = line;
+    this.column = col;
+  }
+
+  Position.prototype.offset = function(n) {
+    return new Position(this.line, this.column + n);
+  }
+
+  function curPosition() {
+    return new Position(tokCurLine, tokPos - tokLineStart);
   }
 
   // Reset the token state. Used at the start of a parse.
@@ -615,7 +623,7 @@
 
   function finishToken(type, val, shouldSkipSpace) {
     tokEnd = tokPos;
-    if (options.locations) tokEndLoc = new Position;
+    if (options.locations) tokEndLoc = curPosition();
     tokType = type;
     if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
@@ -626,7 +634,7 @@
   }
 
   function skipBlockComment() {
-    var startLoc = options.onComment && options.locations && new Position;
+    var startLoc = options.onComment && options.locations && curPosition();
     var start = tokPos, end = input.indexOf("*/", tokPos += 2);
     if (end === -1) raise(tokPos - 2, "Unterminated comment");
     tokPos = end + 2;
@@ -640,12 +648,12 @@
     }
     if (options.onComment)
       options.onComment(true, input.slice(start + 2, end), start, tokPos,
-                        startLoc, options.locations && new Position);
+                        startLoc, options.locations && curPosition());
   }
 
   function skipLineComment(startSkip) {
     var start = tokPos;
-    var startLoc = options.onComment && options.locations && new Position;
+    var startLoc = options.onComment && options.locations && curPosition();
     var ch = input.charCodeAt(tokPos+=startSkip);
     while (tokPos < inputLen && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
       ++tokPos;
@@ -653,7 +661,7 @@
     }
     if (options.onComment)
       options.onComment(false, input.slice(start + startSkip, tokPos), start, tokPos,
-                        startLoc, options.locations && new Position);
+                        startLoc, options.locations && curPosition());
   }
 
   // Called at the start of the parse and after every token. Skips
@@ -881,7 +889,7 @@
   function readToken(forceRegexp) {
     if (!forceRegexp) tokStart = tokPos;
     else tokPos = tokStart + 1;
-    if (options.locations) tokStartLoc = new Position;
+    if (options.locations) tokStartLoc = curPosition();
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
 
@@ -1300,6 +1308,15 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
+    return node;
+  }
+
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges)
+      node.range[1] = pos;
     return node;
   }
 
@@ -2154,11 +2171,12 @@
   // Parse template expression.
 
   function parseTemplateElement() {
-    var elem = startNode();
+    var elem = startNodeAt(options.locations ? [tokStart + 1, tokStartLoc.offset(1)] : tokStart + 1);
     elem.value = tokVal;
     elem.tail = input.charCodeAt(tokEnd - 1) !== 123; // '{'
     next();
-    return finishNode(elem, "TemplateElement");
+    var endOff = elem.tail ? 1 : 2;
+    return finishNodeAt(elem, "TemplateElement", options.locations ? [lastEnd - endOff, lastEndLoc.offset(-endOff)] : lastEnd - endOff);
   }
 
   function parseTemplate() {

@@ -254,6 +254,14 @@
     return node;
   }
 
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges) node.range[1] = pos;
+    return node;
+  }
+
   function dummyIdent() {
     var dummy = startNode();
     dummy.name = "✖";
@@ -801,11 +809,13 @@
   }
 
   function parseTemplateElement() {
-    var elem = startNode();
+    var elem = startNodeAt(options.locations ? [token.start + 1, token.startLoc.offset(1)] : token.start + 1);
     elem.value = token.value;
     elem.tail = input.charCodeAt(token.end - 1) !== 123; // '{'
+    var endOff = elem.tail ? 1 : 2;
+    var endPos = options.locations ? [token.end - endOff, token.endLoc.offset(-endOff)] : token.end - endOff;
     next();
-    return finishNode(elem, "TemplateElement");
+    return finishNodeAt(elem, "TemplateElement", endPos);
   }
 
   function parseTemplate() {

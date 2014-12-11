@@ -628,8 +628,8 @@ test("`42`", {
         value: {raw: "42", cooked: "42"},
         tail: true,
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column:4}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 3}
         }
       }],
       expressions: [],
@@ -674,8 +674,8 @@ test("raw`42`", {
           value: {raw: "42", cooked: "42"},
           tail: true,
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 7}
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 6}
           }
         }],
         expressions: [],
@@ -726,8 +726,8 @@ test("raw`hello ${name}`", {
             value: {raw: "hello ", cooked: "hello "},
             tail: false,
             loc: {
-              start: {line: 1, column: 3},
-              end: {line: 1, column: 12}
+              start: {line: 1, column: 4},
+              end: {line: 1, column: 10}
             }
           },
           {
@@ -735,8 +735,8 @@ test("raw`hello ${name}`", {
             value: {raw: "", cooked: ""},
             tail: true,
             loc: {
-              start: {line: 1, column: 16},
-              end: {line: 1, column: 18}
+              start: {line: 1, column: 17},
+              end: {line: 1, column: 17}
             }
           }
         ],
@@ -784,8 +784,8 @@ test("`$`", {
         value: {raw: "$", cooked: "$"},
         tail: true,
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 3}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 2}
         }
       }],
       expressions: [],
@@ -820,8 +820,8 @@ test("`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`", {
         value: {raw: "\\n\\r\\b\\v\\t\\f\\\n\\\r\n", cooked: "\n\r\b\u000b\t\f"},
         tail: true,
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 3, column: 1}
+          start: {line: 1, column: 1},
+          end: {line: 3, column: 0}
         }
       }],
       expressions: [],
@@ -856,8 +856,8 @@ test("`\n\r\n`", {
         value: {raw: "\n\r\n", cooked: "\n\n"},
         tail: true,
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 3, column: 1}
+          start: {line: 1, column: 1},
+          end: {line: 3, column: 0}
         }
       }],
       expressions: [],
@@ -892,8 +892,8 @@ test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
         value: {raw: "\\u{000042}\\u0042\\x42u0\\102\\A", cooked: "BBBu0BA"},
         tail: true,
         loc: {
-          start: {line: 1, column: 0},
-          end: {line: 1, column: 30}
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 29}
         }
       }],
       expressions: [],
@@ -940,8 +940,8 @@ test("new raw`42`", {
             value: {raw: "42", cooked: "42"},
             tail: true,
             loc: {
-              start: {line: 1, column: 7},
-              end: {line: 1, column: 11}
+              start: {line: 1, column: 8},
+              end: {line: 1, column: 10}
             }
           }],
           expressions: [],
