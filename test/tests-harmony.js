@@ -14138,6 +14138,8 @@ testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (
 
 testFail("\"use strict\"; `${test}\\02`;", "Octal literal in strict mode (1:22)", {ecmaVersion: 6});
 
+testFail("if (1) import \"acorn\";", "'import' and 'export' may only appear at the top level (1:7)", {ecmaVersion: 6});
+
 test("[...a, ] = b", {
   type: "Program",
   loc: {

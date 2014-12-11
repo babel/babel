@@ -68,6 +68,10 @@ object referring to that same position.
   the top level raises an error. Set this to `true` to accept such
   code.
 
+- **allowImportExportEverywhere**: By default, `import` and `export`
+  declarations can only appear at a program's top level. Setting this
+  option to `true` allows them anywhere where a statement is allowed.
+
 - **locations**: When `true`, each node has a `loc` object attached
   with `start` and `end` subobjects, each of which contains the
   one-based line and zero-based column numbers in `{line, column}`

@@ -71,6 +71,9 @@
     // When enabled, a return at the top level is not considered an
     // error.
     allowReturnOutsideFunction: false,
+    // When enabled, import/export statements are not constrained to
+    // appearing at the top of the program.
+    allowImportExportEverywhere: false,
     // When `locations` is on, `loc` properties holding objects with
     // `start` and `end` properties in `{line, column}` form (with
     // line being 1-based and column 0-based) will be attached to the
@@ -1503,7 +1506,7 @@
     var first = true;
     if (!node.body) node.body = [];
     while (tokType !== _eof) {
-      var stmt = parseStatement();
+      var stmt = parseStatement(true);
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
@@ -1524,7 +1527,7 @@
   // `if (foo) /blah/.exec(foo);`, where looking at the previous token
   // does not help.
 
-  function parseStatement() {
+  function parseStatement(topLevel) {
     if (tokType === _slash || tokType === _assign && tokVal == "/=")
       readToken(true);
 
@@ -1551,8 +1554,11 @@
     case _with: return parseWithStatement(node);
     case _braceL: return parseBlock(); // no point creating a function for this
     case _semi: return parseEmptyStatement(node);
-    case _export: return parseExport(node);
-    case _import: return parseImport(node);
+    case _export:
+    case _import:
+      if (!topLevel && !options.allowImportExportEverywhere)
+        raise(tokStart, "'import' and 'export' may only appear at the top level");
+      return starttype === _import ? parseImport(node) : parseExport(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
