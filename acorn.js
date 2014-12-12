@@ -425,9 +425,9 @@
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _ltSlash = {type: "</"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
-  var _doubleColon = { type: "::", beforeExpr: true };
+  var _paamayimNekudotayim = { type: "::", beforeExpr: true };
   var _at = { type: '@' };
-  var _dotQuestion = { type: '.?' };
+  var _hash = { type: '#' };
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -475,7 +475,8 @@
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
                       assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
-                      doubleColon: _doubleColon, exponent: _exponent, at: _at};
+                      paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, at: _at,
+                      hash: _hash};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -883,13 +884,19 @@
         return finishToken(_at);
       }
 
+    case 35:
+      if (options.playground) {
+        ++tokPos;
+        return finishToken(_hash);
+      }
+
     case 58:
       ++tokPos;
       if (options.ecmaVersion >= 7) {
         var next = input.charCodeAt(tokPos);
         if (next === 58) {
           ++tokPos;
-          return finishToken(_doubleColon);
+          return finishToken(_paamayimNekudotayim);
         }
       }
       return finishToken(_colon);
@@ -2351,23 +2358,9 @@
         return finishNode(node, "AssignmentExpression");
       }
       node.test = expr;
-      var consequent = node.consequent = parseExpression(true);
-      if (consequent.type === "BindMemberExpression" && tokType !== _colon) {
-        // this is a hack, revisit at a later date
-        if (consequent.arguments.length) {
-          node.alternate = {
-            type: "CallExpression",
-            arguments: consequent.arguments,
-            callee: consequent.property
-          };
-        } else {
-          node.alternate = consequent.property;
-        }
-        node.consequent = consequent.object;
-      } else {
-        expect(_colon);
-        node.alternate = parseExpression(true, noIn);
-      }
+      node.consequent = parseExpression(true);
+      expect(_colon);
+      node.alternate = parseExpression(true, noIn);
       return finishNode(node, "ConditionalExpression");
     }
     return expr;
@@ -2447,7 +2440,7 @@
   }
 
   function parseSubscripts(base, start, noCalls) {
-    if (options.playground && eat(_colon)) {
+    if (options.playground && eat(_hash)) {
       var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);
@@ -2457,7 +2450,7 @@
         node.arguments = [];
       }
       return parseSubscripts(finishNode(node, "BindMemberExpression"), start, noCalls);
-    } else if (eat(_doubleColon)) {
+    } else if (eat(_paamayimNekudotayim)) {
       var node = startNodeAt(start);
       node.object = base;
       node.property = parseIdent(true);
@@ -2651,7 +2644,7 @@
     case _lt:
       return parseXJSElement();
 
-    case _colon:
+    case _hash:
       return parseBindFunctionExpression();
 
     default:

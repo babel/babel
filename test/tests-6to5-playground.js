@@ -245,95 +245,7 @@ test("obj.x ?= 2;", {
 
 // Method binding
 
-//- Make sure conditionals still work
-
-test("y ? 1 : 2", {
-  type: "Program",
-  body: [
-    {
-      type: "ExpressionStatement",
-      expression: {
-        type: "ConditionalExpression",
-        test: {
-          type: "Identifier",
-          name: "y",
-          loc: {
-            start: {
-              line: 1,
-              column: 0
-            },
-            end: {
-              line: 1,
-              column: 1
-            }
-          }
-        },
-        consequent: {
-          type: "Literal",
-          value: 1,
-          loc: {
-            start: {
-              line: 1,
-              column: 4
-            },
-            end: {
-              line: 1,
-              column: 5
-            }
-          }
-        },
-        alternate: {
-          type: "Literal",
-          value: 2,
-          loc: {
-            start: {
-              line: 1,
-              column: 8
-            },
-            end: {
-              line: 1,
-              column: 9
-            }
-          }
-        },
-        loc: {
-          start: {
-            line: 1,
-            column: 0
-          },
-          end: {
-            line: 1,
-            column: 9
-          }
-        }
-      },
-      loc: {
-        start: {
-          line: 1,
-          column: 0
-        },
-        end: {
-          line: 1,
-          column: 9
-        }
-      }
-    }
-  ],
-  loc: {
-    start: {
-      line: 1,
-      column: 0
-    },
-    end: {
-      line: 1,
-      column: 9
-    }
-  }
-}, {
-  playground: true
-});
-
-test("var fn = obj:method", {
+test("var fn = obj#method", {
   type: "Program",
   start: 0,
   end: 19,
@@ -376,7 +288,7 @@ test("var fn = obj:method", {
   playground: true
 });
 
-test("var fn = obj:method('foo', 5)", {
+test("var fn = obj#method('foo', 5)", {
   type: "Program",
   start: 0,
   end: 29,
@@ -434,7 +346,7 @@ test("var fn = obj:method('foo', 5)", {
   playground: true
 });
 
-test("var fn = obj[foob]:method('foo', 5)", {
+test("var fn = obj[foob]#method('foo', 5)", {
   type: "Program",
   start: 0,
   end: 35,
@@ -504,7 +416,7 @@ test("var fn = obj[foob]:method('foo', 5)", {
   playground: true
 });
 
-test("var fn = obj[foob].test:method('foo', 5)", {
+test("var fn = obj[foob].test#method('foo', 5)", {
   type: "Program",
   start: 0,
   end: 40,
@@ -589,7 +501,7 @@ test("var fn = obj[foob].test:method('foo', 5)", {
 });
 
 
-test("arr.map(:toUpperCase)", {
+test("arr.map(#toUpperCase)", {
   type: "Program",
   start: 0,
   end: 21,
@@ -637,7 +549,7 @@ test("arr.map(:toUpperCase)", {
   playground: true
 });
 
-test("arr.map(:toFixed(2))", {
+test("arr.map(#toFixed(2))", {
   type: "Program",
   start: 0,
   end: 20,
