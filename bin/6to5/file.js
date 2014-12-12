@@ -113,7 +113,7 @@ module.exports = function (commander, filenames) {
     walk();
 
     if (commander.watch) {
-      var watcher = chokidar.watch(filenames, {
+      chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename) {
