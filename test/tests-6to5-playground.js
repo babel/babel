@@ -115,7 +115,6 @@ test("class Foo { memo bar() {} }", {
           defaults: [],
           rest: null,
           generator: false,
-          async: false,
           body: {
             type: "BlockStatement",
             start: 23,
@@ -178,7 +177,6 @@ test("var foo = { memo bar() {} };",
             defaults: [],
             rest: null,
             generator: false,
-            async: false,
             body: {
               type: "BlockStatement",
               start: 23,
@@ -198,6 +196,54 @@ test("var foo = { memo bar() {} };",
 });
 
 // Memoization assignment operator
+
+testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)");
+
+test("obj.x ?= 2;", {
+  type: "Program",
+  start: 0,
+  end: 11,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 11,
+    expression: {
+      type: "AssignmentExpression",
+      start: 0,
+      end: 10,
+      left: {
+        type: "MemberExpression",
+        start: 0,
+        end: 5,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "obj"
+        },
+        property: {
+          type: "Identifier",
+          start: 4,
+          end: 5,
+          name: "x"
+        },
+        computed: false
+      },
+      right: {
+        type: "Literal",
+        start: 9,
+        end: 10,
+        value: 2,
+        raw: "2"
+      },
+      operator: "?="
+    }
+  }]
+}, {
+  playground: true
+});
+
+// Method binding
 
 //- Make sure conditionals still work
 
@@ -286,54 +332,6 @@ test("y ? 1 : 2", {
 }, {
   playground: true
 });
-
-testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)");
-
-test("obj.x ?= 2;", {
-  type: "Program",
-  start: 0,
-  end: 11,
-  body: [{
-    type: "ExpressionStatement",
-    start: 0,
-    end: 11,
-    expression: {
-      type: "AssignmentExpression",
-      start: 0,
-      end: 10,
-      left: {
-        type: "MemberExpression",
-        start: 0,
-        end: 5,
-        object: {
-          type: "Identifier",
-          start: 0,
-          end: 3,
-          name: "obj"
-        },
-        property: {
-          type: "Identifier",
-          start: 4,
-          end: 5,
-          name: "x"
-        },
-        computed: false
-      },
-      right: {
-        type: "Literal",
-        start: 9,
-        end: 10,
-        value: 2,
-        raw: "2"
-      },
-      operator: "?="
-    }
-  }]
-}, {
-  playground: true
-});
-
-// Method binding
 
 test("var fn = obj:method", {
   type: "Program",

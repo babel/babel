@@ -169,9 +169,7 @@
     if (options.strictMode) {
       strict = true;
     }
-    if (options.ecmaVersion >= 7) {
-      isKeyword = isEcma7Keyword;
-    } else if (options.ecmaVersion === 6) {
+    if (options.ecmaVersion >= 6) {
       isKeyword = isEcma6Keyword;
     } else {
       isKeyword = isEcma5AndLessKeyword;
@@ -390,7 +388,6 @@
   var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true};
   var _export = {keyword: "export"}, _import = {keyword: "import"};
   var _yield = {keyword: "yield", beforeExpr: true};
-  var _async = {keyword: "async"}, _await = {keyword: "await", beforeExpr: true};
 
   // The keywords that denote values.
 
@@ -417,8 +414,7 @@
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
                       "delete": {keyword: "delete", prefix: true, beforeExpr: true},
                       "class": _class, "extends": _extends,
-                      "export": _export, "import": _import, "yield": _yield,
-                      "await": _await, "async": _async};
+                      "export": _export, "import": _import, "yield": _yield};
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -555,8 +551,6 @@
   var ecma6AndLessKeywords = ecma5AndLessKeywords + " let const class extends export import yield";
 
   var isEcma6Keyword = makePredicate(ecma6AndLessKeywords);
-
-  var isEcma7Keyword = makePredicate(ecma6AndLessKeywords + " async await");
 
   var isKeyword = isEcma5AndLessKeyword;
 
@@ -1962,7 +1956,6 @@
     case _debugger: return parseDebuggerStatement(node);
     case _do: return parseDoStatement(node);
     case _for: return parseForStatement(node);
-    case _async: return parseAsync(node, true);
     case _function: return parseFunctionStatement(node);
     case _class: return parseClass(node, true);
     case _if: return parseIfStatement(node);
@@ -1985,9 +1978,18 @@
       // Identifier node, we switch to interpreting it as a label.
     default:
       var maybeName = tokVal, expr = parseExpression();
-      if (starttype === _name && expr.type === "Identifier" && eat(_colon))
-        return parseLabeledStatement(node, maybeName, expr);
-      else return parseExpressionStatement(node, expr);
+      if (starttype === _name) {
+        if (expr.type === "FunctionExpression" && expr.async) {
+          expr.type = "FunctionDeclaration";
+          return expr;
+        } else if (expr.type === "Identifier") {
+          if (eat(_colon)) {
+            return parseLabeledStatement(node, maybeName, expr);
+          }
+        }
+      }
+
+      return parseExpressionStatement(node, expr);
     }
   }
   
@@ -2071,42 +2073,12 @@
     return parseFunction(node, true, false);
   }
 
-  function parseAsync(node, isStatement) {
-    if (options.ecmaVersion < 7) {
-      unexpected();
-    }
-
-    next();
-
-    switch (tokType) {
-      case _function:
-        next();
-        return parseFunction(node, isStatement, true);
-
-      if (!isStatement) unexpected();
-
-      case _name:
-        var id = parseIdent(tokType !== _name);
-        if (eat(_arrow)) {
-          return parseArrowExpression(node, [id], true);
-        }
-
-      case _parenL:
-        var oldParenL = ++metParenL;
-        var exprList = [];
-        next();
-        if (tokType !== _parenR) {
-          var val = parseExpression();
-          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-        }
-        expect(_parenR);
-        // if '=>' follows '(...)', convert contents to arguments
-        if (metParenL === oldParenL && eat(_arrow)) {
-          return parseArrowExpression(node, exprList, true);
-        }
-
-      default:
-        unexpected();
+  function eatAsync() {
+    if (tokType === _name && tokVal === "async") {
+      next();
+      return true;
+    } else {
+      return false;
     }
   }
   
@@ -2539,14 +2511,53 @@
     case _yield:
       if (inGenerator) return parseYield();
 
-    case _await:
-      if (inAsync) return parseAwait();
-
     case _name:
       var start = storeCurrentPos();
+      var node = startNode();
       var id = parseIdent(tokType !== _name);
+
+      if (options.ecmaVersion >= 7) {
+        // async functions!
+        if (id.name === "async") {
+          // arrow functions
+          if (tokType === _parenL) {
+            next();
+            var oldParenL = ++metParenL;
+            if (tokType !== _parenR) {
+              val = parseExpression();
+              exprList = val.type === "SequenceExpression" ? val.expressions : [val];
+            } else {
+              exprList = [];
+            }
+            expect(_parenR);
+            // if '=>' follows '(...)', convert contents to arguments
+            if (metParenL === oldParenL && eat(_arrow)) {
+              return parseArrowExpression(node, exprList, true);
+            } else {
+              node.callee = id;
+              node.arguments = exprList;
+              return parseSubscripts(finishNode(node, "CallExpression"), start);
+            }
+          } else if (tokType === _name) {
+            id = parseIdent();
+            if (eat(_arrow)) {
+              return parseArrowExpression(node, [id], true);
+            }
+            return id;
+          }
+
+          // normal functions
+          if (tokType === _function) {
+            next();
+            return parseFunction(node, false, true);
+          }
+        } else if (id.name === "await") {
+          if (inAsync) return parseAwait(node);
+        }
+      }
+
       if (eat(_arrow)) {
-        return parseArrowExpression(startNodeAt(start), [id]);
+        return parseArrowExpression(node, [id]);
       }
       return id;
       
@@ -2622,9 +2633,6 @@
 
     case _braceL:
       return parseObj();
-
-    case _async:
-      return parseAsync(startNode(), false);
 
     case _function:
       var node = startNode();
@@ -2727,7 +2735,7 @@
 
       var prop = startNode(), isGenerator, isAsync;
       if (options.ecmaVersion >= 7) {
-        isAsync = eat(_async);
+        isAsync = eatAsync();
         if (isAsync && tokType === _star) unexpected();
       }
       if (options.ecmaVersion >= 6) {
@@ -2953,7 +2961,7 @@
         }
       var isAsync = false;
       if (options.ecmaVersion >= 7) {
-        isAsync = eat(_async);
+        isAsync = eatAsync();
         if (isAsync && tokType === _star) unexpected();
       }
       var isGenerator = eat(_star);
@@ -3024,7 +3032,7 @@
   function parseExport(node) {
     next();
     // export var|const|let|function|class ...;
-    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || tokType === _async) {
+    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
       node.declaration = parseStatement();
       node['default'] = false;
       node.specifiers = null;
@@ -3170,9 +3178,7 @@
 
   // Parses await expression inside async function.
 
-  function parseAwait() {
-    var node = startNode();
-    next();
+  function parseAwait(node) {
     if (eat(_semi) || canInsertSemicolon()) {
       unexpected();
     }
