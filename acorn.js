@@ -553,6 +553,9 @@
   var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
   var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
 
+  var decimalNumber = /^\d+$/;
+  var hexNumber = /^[\da-fA-F]+$/;
+
   // Whether a single character denotes a newline.
 
   var newline = /[\n\r\u2028\u2029]/;
@@ -1421,22 +1424,33 @@
     var str = '', count = 0, entity;
     var ch = nextChar();
     if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
-    tokPos++;
+    var startPos = ++tokPos;
     while (tokPos < inputLen && count++ < 10) {
       ch = nextChar();
       tokPos++;
       if (ch === ';') {
+        if (str[0] === '#') {
+          if (str[1] === 'x') {
+            str = str.substr(2);
+            if (hexNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 16));
+            }
+          } else {
+            str = str.substr(1);
+            if (decimalNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 10));
+            }
+          }
+        } else {
+          entity = XHTMLEntities[str];
+        }
         break;
       }
       str += ch;
     }
-
-    if (str[0] === '#' && str[1] === 'x') {
-      entity = String.fromCharCode(parseInt(str.substr(2), 16));
-    } else if (str[0] === '#') {
-      entity = String.fromCharCode(parseInt(str.substr(1), 10));
-    } else {
-      entity = XHTMLEntities[str];
+    if (!entity) {
+      tokPos = startPos;
+      return '&';
     }
     return entity;
   }

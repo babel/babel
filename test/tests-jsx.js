@@ -330,7 +330,7 @@ var fbTestFixture = {
         end: { line: 1, column: 40 }
       }
     },
-    '<a b={" "} c=" " d="&amp;" />': {
+    '<a b={" "} c=" " d="&amp;" e="&ampr;" />': {
       type: "ExpressionStatement",
       expression: {
         type: "XJSElement",
@@ -339,11 +339,7 @@ var fbTestFixture = {
           name: {
             type: "XJSIdentifier",
             name: "a",
-            range: [1, 2],
-            loc: {
-              start: { line: 1, column: 1 },
-              end: { line: 1, column: 2 }
-            }
+            range: [1, 2]
           },
           selfClosing: true,
           attributes: [
@@ -352,11 +348,7 @@ var fbTestFixture = {
               name: {
                 type: "XJSIdentifier",
                 name: "b",
-                range: [3, 4],
-                loc: {
-                  start: { line: 1, column: 3 },
-                  end: { line: 1, column: 4 }
-                }
+                range: [3, 4]
               },
               value: {
                 type: "XJSExpressionContainer",
@@ -364,98 +356,65 @@ var fbTestFixture = {
                   type: "Literal",
                   value: " ",
                   raw: "\" \"",
-                  range: [6, 9],
-                  loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 9 }
-                  }
+                  range: [6, 9]
                 },
-                range: [5, 10],
-                loc: {
-                  start: { line: 1, column: 5 },
-                  end: { line: 1, column: 10 }
-                }
+                range: [5, 10]
               },
-              range: [3, 10],
-              loc: {
-                start: { line: 1, column: 3 },
-                end: { line: 1, column: 10 }
-              }
+              range: [3, 10]
             },
             {
               type: "XJSAttribute",
               name: {
                 type: "XJSIdentifier",
                 name: "c",
-                range: [11, 12],
-                loc: {
-                  start: { line: 1, column: 11 },
-                  end: { line: 1, column: 12 }
-                }
+                range: [11, 12]
               },
               value: {
                 type: "Literal",
                 value: " ",
                 raw: "\" \"",
-                range: [13, 16],
-                loc: {
-                  start: { line: 1, column: 13 },
-                  end: { line: 1, column: 16 }
-                }
+                range: [13, 16]
               },
-              range: [11, 16],
-              loc: {
-                start: { line: 1, column: 11 },
-                end: { line: 1, column: 16 }
-              }
+              range: [11, 16]
             },
             {
               type: "XJSAttribute",
               name: {
                 type: "XJSIdentifier",
                 name: "d",
-                range: [17, 18],
-                loc: {
-                  start: { line: 1, column: 17 },
-                  end: { line: 1, column: 18 }
-                }
+                range: [17, 18]
               },
               value: {
                 type: "Literal",
                 value: "&",
                 raw: "\"&amp;\"",
-                range: [19, 26],
-                loc: {
-                  start: { line: 1, column: 19 },
-                  end: { line: 1, column: 26 }
-                }
+                range: [19, 26]
               },
-              range: [17, 26],
-              loc: {
-                start: { line: 1, column: 17 },
-                end: { line: 1, column: 26 }
-              }
+              range: [17, 26]
+            },
+            {
+              type: "XJSAttribute",
+              name: {
+                type: "XJSIdentifier",
+                name: "e",
+                range: [27, 28]
+              },
+              value: {
+                type: "Literal",
+                value: "&ampr;",
+                raw: "\"&ampr;\"",
+                range: [29, 37]
+              },
+              range: [27, 37]
             }
           ],
-          range: [0, 29],
-          loc: {
-            start: { line: 1, column: 0 },
-            end: { line: 1, column: 29 }
-          }
+          range: [0, 40]
         },
         closingElement: null,
         children: [],
-        range: [0, 29],
-        loc: {
-          start: { line: 1, column: 0 },
-          end: { line: 1, column: 29 }
-        }
+        range: [0, 40]
       },
-      range: [0, 29],
-      loc: {
-        start: { line: 1, column: 0 },
-        end: { line: 1, column: 29 }
-      }
+      range: [0, 40]
     },
     '<a\n/>': {
       type: "ExpressionStatement",
