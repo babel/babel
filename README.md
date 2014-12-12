@@ -3,6 +3,10 @@
 </p>
 
 <p align="center">
+  <a href="https://gratipay.com/sebmck">
+    <img alt="Gratipay" src="https://img.shields.io/gratipay/sebmck.svg?style=flat">
+  </a>
+
   <a href="https://travis-ci.org/6to5/6to5">
     <img alt="Travis Status" src="http://img.shields.io/travis/6to5/6to5/master.svg?style=flat&amp;label=travis">
   </a>
