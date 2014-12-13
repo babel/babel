@@ -26,11 +26,15 @@ var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
 
 exports.transform = function transform(node, options) {
+  var visitor = types.PathVisitor.fromMethodsObject(visitorMethods);
+
   node = recast.visit(node, visitor);
 
-  if (options && options.includeRuntime) {
+  if (options && options.includeRuntime && visitor.wasChangeReported()) {
     injectRuntime(n.File.check(node) ? node.program : node);
   }
+
+  options.madeChanges = visitor.wasChangeReported();
 
   return node;
 };
@@ -50,7 +54,7 @@ function injectRuntime(program) {
   body.unshift.apply(body, runtimeBody);
 }
 
-var visitor = types.PathVisitor.fromMethodsObject({
+var visitorMethods = {
   visitFunction: function(path) {
     // Calling this.traverse(path) first makes for a post-order traversal.
     this.traverse(path);
@@ -60,6 +64,8 @@ var visitor = types.PathVisitor.fromMethodsObject({
     if (!node.generator && !node.async) {
       return;
     }
+
+    this.reportChanged();
 
     node.generator = false;
 
@@ -296,7 +302,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       node.body
     );
   }
-});
+};
 
 function shouldNotHoistAbove(stmtPath) {
   var value = stmtPath.value;
