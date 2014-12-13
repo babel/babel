@@ -2717,7 +2717,7 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), isGenerator, isAsync;
+      var prop = startNode(), isGenerator = false, isAsync = false;
       if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
         prop = parseMaybeUnary();
         prop.type = "SpreadProperty";
