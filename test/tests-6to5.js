@@ -1733,6 +1733,174 @@ test('(function() { var async; async = 10 })', {
   ranges: true
 });
 
+test('class Test { async() {} }', {
+  type: "Program",
+  start: 0,
+  end: 25,
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 25,
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 10,
+      name: "Test"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 11,
+      end: 25,
+      body: [{
+        type: "MethodDefinition",
+        start: 13,
+        end: 23,
+        static: false,
+        key: {
+          type: "Identifier",
+          start: 13,
+          end: 18,
+          name: "async"
+        },
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          start: 18,
+          end: 23,
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          async: false,
+          body: {
+            type: "BlockStatement",
+            start: 21,
+            end: 23,
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('var obj = { async: "test" };', {
+  type: "Program",
+  start: 0,
+  end: 28,
+  body: [{
+    type: "VariableDeclaration",
+    start: 0,
+    end: 28,
+    declarations: [{
+      type: "VariableDeclarator",
+      start: 4,
+      end: 27,
+      id: {
+        type: "Identifier",
+        start: 4,
+        end: 7,
+        name: "obj"
+      },
+      init: {
+        type: "ObjectExpression",
+        start: 10,
+        end: 27,
+        properties: [{
+          type: "Property",
+          start: 12,
+          end: 25,
+          method: false,
+          shorthand: false,
+          key: {
+            type: "Identifier",
+            start: 12,
+            end: 17,
+            name: "async"
+          },
+          value: {
+            type: "Literal",
+            start: 19,
+            end: 25,
+            value: "test",
+            raw: "\"test\""
+          },
+          kind: "init"
+        }]
+      }
+    }],
+    kind: "var"
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test('var obj = { async() {} };', {
+  type: "Program",
+  start: 0,
+  end: 25,
+  body: [{
+    type: "VariableDeclaration",
+    start: 0,
+    end: 25,
+    declarations: [{
+      type: "VariableDeclarator",
+      start: 4,
+      end: 24,
+      id: {
+        type: "Identifier",
+        start: 4,
+        end: 7,
+        name: "obj"
+      },
+      init: {
+        type: "ObjectExpression",
+        start: 10,
+        end: 24,
+        properties: [{
+          type: "Property",
+          start: 12,
+          end: 22,
+          method: true,
+          shorthand: false,
+          key: {
+            type: "Identifier",
+            start: 12,
+            end: 17,
+            name: "async"
+          },
+          kind: "init",
+          value: {
+            type: "FunctionExpression",
+            start: 17,
+            end: 22,
+            id: null,
+            params: [],
+            defaults: [],
+            rest: null,
+            generator: false,
+            body: {
+              type: "BlockStatement",
+              start: 20,
+              end: 22,
+              body: []
+            },
+            expression: false
+          }
+        }]
+      }
+    }],
+    kind: "var"
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Abstract references
 
 test('foo::bar;', {

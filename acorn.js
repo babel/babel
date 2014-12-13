@@ -2079,15 +2079,6 @@
     next();
     return parseFunction(node, true, false);
   }
-
-  function eatAsync() {
-    if (tokType === _name && tokVal === "async") {
-      next();
-      return true;
-    } else {
-      return false;
-    }
-  }
   
   function parseIfStatement(node) {
     next();
@@ -2727,23 +2718,28 @@
       } else first = false;
 
       var prop = startNode(), isGenerator, isAsync;
-      if (options.ecmaVersion >= 7) {
-        isAsync = eatAsync();
-        if (isAsync && tokType === _star) unexpected();
+      if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
+        prop = parseMaybeUnary();
+        prop.type = "SpreadProperty";
+        node.properties.push(prop);
+        continue;
       }
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
         isGenerator = eat(_star);
       }
-      if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
-        if (isAsync || isGenerator) unexpected();
-        prop = parseMaybeUnary();
-        prop.type = "SpreadProperty";
-        node.properties.push(prop);
-        continue;
+      if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
+        var asyncId = parseIdent();
+        if (tokType === _colon || tokType === _parenL) {
+          prop.key = asyncId;
+        } else {
+          isAsync = true;
+          parsePropertyName(prop);
+        }
+      } else {
+        parsePropertyName(prop);
       }
-      parsePropertyName(prop);
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         prop.kind = "init";
@@ -2953,12 +2949,18 @@
         method['static'] = false;
         }
       var isAsync = false;
-      if (options.ecmaVersion >= 7) {
-        isAsync = eatAsync();
-        if (isAsync && tokType === _star) unexpected();
-      }
       var isGenerator = eat(_star);
-      parsePropertyName(method);
+       if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
+        var asyncId = parseIdent();
+        if (tokType === _colon || tokType === _parenL) {
+          method.key = asyncId;
+        } else {
+          isAsync = true;
+          parsePropertyName(method);
+        }
+      } else {
+        parsePropertyName(method);
+      }
       if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set" || (options.playground && method.key.name === "memo"))) {
         if (isGenerator || isAsync) unexpected();
