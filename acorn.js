@@ -304,7 +304,7 @@
   // `strict` indicates whether strict mode is on.
 
   var inFunction, inGenerator, inAsync, labels, strict,
-    inXJSChild, inXJSTag, inXJSChildExpression;
+    inXJSChild, inXJSTag, inType;
 
   // This counter is used for checking that arrow expressions did
   // not contain nested parentheses in argument list.
@@ -569,6 +569,9 @@
   var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
   var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
 
+  var decimalNumber = /^\d+$/;
+  var hexNumber = /^[\da-fA-F]+$/;
+
   // Whether a single character denotes a newline.
 
   var newline = /[\n\r\u2028\u2029]/;
@@ -623,7 +626,7 @@
     }
     tokRegexpAllowed = true;
     metParenL = 0;
-    inTemplate = inXJSChild = inXJSTag = false;
+    inTemplate = inType = inXJSChild = inXJSTag = false;
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -808,7 +811,7 @@
   function readToken_lt_gt(code) { // '<>'
     var next = input.charCodeAt(tokPos + 1);
     var size = 1;
-    if (next === code) {
+    if (!inType && next === code) {
       size = code === 62 && input.charCodeAt(tokPos + 2) === 62 ? 3 : 2;
       if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
       return finishOp(_bitShift, size);
@@ -1478,22 +1481,33 @@
     var str = '', count = 0, entity;
     var ch = nextChar();
     if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
-    tokPos++;
+    var startPos = ++tokPos;
     while (tokPos < inputLen && count++ < 10) {
       ch = nextChar();
       tokPos++;
       if (ch === ';') {
+        if (str[0] === '#') {
+          if (str[1] === 'x') {
+            str = str.substr(2);
+            if (hexNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 16));
+            }
+          } else {
+            str = str.substr(1);
+            if (decimalNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 10));
+            }
+          }
+        } else {
+          entity = XHTMLEntities[str];
+        }
         break;
       }
       str += ch;
     }
-
-    if (str[0] === '#' && str[1] === 'x') {
-      entity = String.fromCharCode(parseInt(str.substr(2), 16));
-    } else if (str[0] === '#') {
-      entity = String.fromCharCode(parseInt(str.substr(1), 10));
-    } else {
-      entity = XHTMLEntities[str];
+    if (!entity) {
+      tokPos = startPos;
+      return '&';
     }
     return entity;
   }
@@ -1989,9 +2003,21 @@
         if (expr.type === "FunctionExpression" && expr.async) {
           expr.type = "FunctionDeclaration";
           return expr;
-        } else if (expr.type === "Identifier") {
+        } else  if (expr.type === "Identifier") {
           if (eat(_colon)) {
             return parseLabeledStatement(node, maybeName, expr);
+          }
+
+          if (expr.name === "declare") {
+            if (tokType === _class || tokType === _name || tokType === _function || tokType === _var) {
+              return parseDeclare(node);
+            }
+          } else if (tokType === _name) {
+            if (expr.name === "interface") {
+              return parseInterface(node);
+            } else if (expr.name === "type") {
+              return parseTypeAlias(node);
+            }
           }
         }
       }
@@ -2285,6 +2311,12 @@
       var decl = startNode();
       decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
       checkLVal(decl.id, true);
+
+      if (tokType === _colon) {
+        decl.id.typeAnnotation = parseTypeAnnotation();
+        finishNode(decl.id, decl.id.type);
+      }
+
       decl.init = eat(_eq) ? parseExpression(true, noIn) : (kind === _const.keyword ? unexpected() : null);
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
@@ -2319,9 +2351,9 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  function parseMaybeAssign(noIn) {
+  function parseMaybeAssign(noIn, noLess) {
     var start = storeCurrentPos();
-    var left = parseMaybeConditional(noIn);
+    var left = parseMaybeConditional(noIn, noLess);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -2336,9 +2368,9 @@
 
   // Parse a ternary conditional (`?:`) operator.
 
-  function parseMaybeConditional(noIn) {
+  function parseMaybeConditional(noIn, noLess) {
     var start = storeCurrentPos();
-    var expr = parseExprOps(noIn);
+    var expr = parseExprOps(noIn, noLess);
     if (eat(_question)) {
       var node = startNodeAt(start);
       if (eat(_eq)) {
@@ -2359,9 +2391,9 @@
 
   // Start the precedence parser.
 
-  function parseExprOps(noIn) {
+  function parseExprOps(noIn, noLess) {
     var start = storeCurrentPos();
-    return parseExprOp(parseMaybeUnary(), start, -1, noIn);
+    return parseExprOp(parseMaybeUnary(), start, -1, noIn, noLess);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -2370,9 +2402,9 @@
   // defer further parser to one of its callers when it encounters an
   // operator that has a lower precedence than the set it is parsing.
 
-  function parseExprOp(left, leftStart, minPrec, noIn) {
+  function parseExprOp(left, leftStart, minPrec, noIn, noLess) {
     var prec = tokType.binop;
-    if (prec != null && (!noIn || tokType !== _in)) {
+    if (prec != null && (!noIn || tokType !== _in) && (!noLess || tokType !== _lt)) {
       if (prec > minPrec) {
         var node = startNodeAt(leftStart);
         node.left = left;
@@ -2740,6 +2772,11 @@
       } else {
         parsePropertyName(prop);
       }
+      var typeParameters
+      if (tokType === _lt) {
+        typeParameters = parseTypeParameterDeclaration();
+        if (tokType !== _parenL) unexpected();
+      }
       if (eat(_colon)) {
         prop.value = parseExpression(true);
         prop.kind = "init";
@@ -2759,6 +2796,7 @@
         prop.shorthand = true;
       } else unexpected();
 
+      prop.value.typeParameters = typeParameters;
       checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
     }
@@ -2805,6 +2843,9 @@
     }
     if (isStatement || tokType === _name) {
       node.id = parseIdent();
+    }
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterDeclaration();
     }
     parseFunctionParams(node);
     parseFunctionBody(node, allowExpressionBody);
@@ -2864,7 +2905,7 @@
 
   function parseFunctionParams(node) {
     var defaults = [], hasDefaults = false;
-    
+
     expect(_parenL);
     for (;;) {
       if (eat(_parenR)) {
@@ -2872,11 +2913,15 @@
       } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
         node.rest = toAssignable(parseExprAtom(), false, true);
         checkSpreadAssign(node.rest);
+        parseFunctionParam(node.rest);
         expect(_parenR);
         defaults.push(null);
         break;
       } else {
-        node.params.push(options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent());
+        var param = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent();
+        parseFunctionParam(param);
+        node.params.push(param);
+
         if (options.ecmaVersion >= 6) {
           if (eat(_eq)) {
             hasDefaults = true;
@@ -2893,6 +2938,19 @@
     }
 
     if (hasDefaults) node.defaults = defaults;
+
+    if (tokType === _colon) {
+      node.returnType = parseTypeAnnotation();
+    }
+  }
+
+  function parseFunctionParam(param) {
+    if (tokType === _colon) {
+      param.typeAnnotation = parseTypeAnnotation();
+    } else if (eat(_question)) {
+      param.optional = true;
+    }
+    finishNode(param, param.type);
   }
 
   // Parse function body and check parameters.
@@ -2910,7 +2968,7 @@
     // flag (restore them to their old value afterwards).
       var oldInFunc = inFunction, oldInGen = inGenerator, oldLabels = labels;
       inFunction = true; inGenerator = node.generator; labels = [];
-    node.body = parseBlock(true);
+      node.body = parseBlock(true);
       node.expression = false;
       inFunction = oldInFunc; inGenerator = oldInGen; labels = oldLabels;
     }
@@ -2936,7 +2994,17 @@
   function parseClass(node, isStatement) {
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
-    node.superClass = eat(_extends) ? parseExpression() : null;
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterDeclaration();
+    }
+    node.superClass = eat(_extends) ? parseMaybeAssign(false, true) : null;
+    if (node.superClass && tokType === _lt) {
+      node.superTypeParameters = parseTypeParameterInstantiation();
+    }
+    if (tokType === _name && tokVal === "implements") {
+      next();
+      node.implements = parseClassImplements();
+    }
     var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
@@ -2969,12 +3037,41 @@
       } else {
         method.kind = "";
       }
-      method.value = parseMethod(isGenerator, isAsync);
-      classBody.body.push(finishNode(method, "MethodDefinition"));
-      eat(_semi);
+      if (tokType === _colon) {
+        if (isGenerator || isAsync) unexpected();
+        method.typeAnnotation = parseTypeAnnotation();
+        semicolon();
+        classBody.body.push(finishNode(method, "ClassProperty"));
+      } else {
+        var typeParameters;
+        if (tokType === _lt) {
+          typeParameters = parseTypeParameterDeclaration();
+        }
+        method.value = parseMethod(isGenerator, isAsync);
+        method.value.typeParameters = typeParameters;
+        classBody.body.push(finishNode(method, "MethodDefinition"));
+        eat(_semi);
+      }
     }
     node.body = finishNode(classBody, "ClassBody");
     return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
+  }
+
+  function parseClassImplements() {
+      var implemented = [];
+
+      do {
+        var node = startNode();
+        node.id = parseIdent();
+        if (tokType === _lt) {
+            node.typeParameters = parseTypeParameterInstantiation();
+        } else {
+            node.typeParameters = null;
+        }
+        implemented.push(finishNode(node, "ClassImplements"));
+      } while(eat(_comma));
+
+      return implemented;
   }
 
   // Parses a comma-separated list of expressions, and returns them as
@@ -3529,4 +3626,599 @@
     return finishNode(node, "XJSElement");
   }
 
+  // Declare
+  
+  function parseDeclareClass(node) {
+    next();
+    parseInterfaceish(node, true);
+    return finishNode(node, "DeclareClass");
+  }
+
+  function parseDeclareFunction(node) {
+    next();
+
+    var id = node.id = parseIdent();
+
+    var typeNode = startNode();
+    var typeContainer = startNode();
+
+    if (tokType === _lt) {
+      typeNode.typeParameters = parseTypeParameterDeclaration();
+    } else {
+      typeNode.typeParameters = null;
+    }
+
+    expect(_parenL);
+    var tmp = parseFunctionTypeParams();
+    typeNode.params = tmp.params;
+    typeNode.rest = tmp.rest;
+    expect(_parenR);
+
+    expect(_colon);
+    typeNode.returnType = parseType();
+
+    typeContainer.typeAnnotation = finishNode(typeNode, "FunctionTypeAnnotation");
+    id.typeAnnotation = finishNode(typeContainer, "TypeAnnotation");
+
+    finishNode(id, id.type);
+
+    semicolon();
+
+    return finishNode(node, "DeclareFunction");
+  }
+
+  function parseDeclare(node) {
+    if (tokType === _class) {
+      return parseDeclareClass(node);
+    } else if (tokType === _function) {
+      return parseDeclareFunction(node);
+    } else if (tokType === _var) {
+      return parseDeclareVariable(node);
+    } else if (tokType === _name && tokVal === "module") {
+      return parseDeclareModule(node);
+    } else {
+      unexpected();
+    }
+  }
+
+  function parseDeclareVariable(node) {
+    next();
+    node.id = parseTypeAnnotatableIdentifier();
+    semicolon();
+    return finishNode(node, "DeclareVariable");
+  }
+
+  function parseDeclareModule(node) {
+    next();
+
+    if (tokType === _string) {
+      node.id = parseExprAtom();
+    } else {
+      node.id = parseIdent();
+    }
+
+    var bodyNode = node.body = startNode();
+    var body = bodyNode.body = [];
+    expect(_braceL);
+    while (tokType !== _braceR) {
+      var node2 = startNode();
+
+      // todo: declare check
+      next();
+
+      body.push(parseDeclare(node2));
+    }
+    expect(_braceR);
+
+    finishNode(bodyNode, "BlockStatement");
+    return finishNode(node, "DeclareModule");
+  }
+
+
+  // Interfaces
+
+  function parseInterfaceish(node, allowStatic) {
+    node.id = parseIdent();
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterDeclaration();
+    } else {
+      node.typeParameters = null;
+    }
+
+    node.extends = [];
+
+    if (eat(_extends)) {
+      do {
+        node.extends.push(parseInterfaceExtends());
+      } while(eat(_comma));
+    }
+
+    node.body = parseObjectType(allowStatic);
+  }
+
+  function parseInterfaceExtends() {
+    var node = startNode();
+
+    node.id = parseIdent();
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterInstantiation();
+    } else {
+      node.typeParameters = null;
+    }
+
+    return finishNode(node, "InterfaceExtends");
+  }
+
+  function parseInterface(node) {
+    parseInterfaceish(node, false);
+    return finishNode(node, "InterfaceDeclaration");
+  }
+
+  // Type aliases
+  
+  function parseTypeAlias(node) {
+    node.id = parseIdent();
+
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterDeclaration();
+    } else {
+      node.typeParameters = null;
+    }
+
+    expect(_eq);
+
+    node.right = parseType();
+
+    semicolon();
+
+    return finishNode(node, "TypeAlias");
+  }
+
+  // Type annotations
+
+  function parseTypeParameterDeclaration() {
+    var node = startNode();
+    node.params = [];
+
+    expect(_lt);
+    while (tokType !== _gt) {
+      node.params.push(parseIdent());
+      if (tokType !== _gt) {
+        expect(_comma);
+      }
+    }
+    expect(_gt);
+
+    return finishNode(node, "TypeParameterDeclaration");
+  }
+
+  function parseTypeParameterInstantiation() {
+    var node = startNode(), oldInType = inType;
+    node.params = [];
+
+    inType = true;
+
+    expect(_lt);
+    while (tokType !== _gt) {
+      node.params.push(parseType());
+      if (tokType !== _gt) {
+        expect(_comma);
+      }
+    }
+    expect(_gt);
+
+    inType = oldInType;
+
+    return finishNode(node, "TypeParameterInstantiation");
+  }
+
+  function parseObjectPropertyKey() {
+    return (tokType === _num || tokType === _string) ? parseExprAtom() : parseIdent(true);;
+  }
+
+  function parseObjectTypeIndexer(node, isStatic) {
+    node.static = isStatic;
+
+    expect(_bracketL);
+    node.id = parseObjectPropertyKey();
+    expect(_colon);
+    node.key = parseType();
+    expect(_bracketR);
+    expect(_colon);
+    node.value = parseType();
+
+    return finishNode(node, "ObjectTypeIndexer");
+  }
+
+  function parseObjectTypeMethodish(node) {
+    node.params = [];
+    node.rest = null;
+    node.typeParameters = null;
+
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterDeclaration();
+    }
+
+    expect(_parenL);
+    while (tokType === _name) {
+      node.params.push(parseFunctionTypeParam());
+      if (tokType !== _parenR) {
+        expect(_comma);
+      }
+    }
+
+    if (eat(_ellipsis)) {
+      node.rest = parseFunctionTypeParam();
+    }
+    expect(_parenR);
+    expect(_colon);
+    node.returnType = parseType();
+
+    return finishNode(node, "FunctionTypeAnnotation");
+  }
+
+  function parseObjectTypeMethod(start, isStatic, key) {
+    var node = startNodeAt(start);
+    node.value = parseObjectTypeMethodish(startNodeAt(start));
+    node.static = isStatic;
+    node.key = key;
+    node.optional = false;
+    return finishNode(node, "ObjectTypeProperty");
+  }
+
+  function parseObjectTypeCallProperty(node, isStatic) {
+    var valueNode = startNode();
+    node.static = isStatic;
+    node.value = parseObjectTypeMethodish(valueNode);
+    return finishNode(node, "ObjectTypeCallProperty");
+  }
+
+  function parseObjectType(allowStatic) {
+    var nodeStart = startNode();
+    var node;
+    var optional = false;
+    var property;
+    var propertyKey;
+    var propertyTypeAnnotation;
+    var token;
+    var isStatic;
+
+    nodeStart.callProperties = [];
+    nodeStart.properties = [];
+    nodeStart.indexers = [];
+
+    expect(_braceL);
+
+    while (tokType !== _braceR) {
+      var start = storeCurrentPos();
+      node = startNode();
+      if (allowStatic && tokType === _name && tokVal === "static") {
+        next();
+        isStatic = true;
+      }
+
+      if (tokType === _bracketL) {
+        nodeStart.indexers.push(parseObjectTypeIndexer(node, isStatic));
+      } else if (tokType === _parenL || tokType === _lt) {
+        nodeStart.callProperties.push(parseObjectTypeCallProperty(node, allowStatic));
+      } else {
+        if (isStatic && tokType === _colon) {
+          propertyKey = parseIdent();
+        } else {
+          propertyKey = parseObjectPropertyKey();
+        }
+        if (tokType === _lt || tokType === _parenL) {
+          // This is a method property
+          nodeStart.properties.push(parseObjectTypeMethod(start, isStatic, propertyKey));
+        } else {
+          if (eat(_question)) {
+            optional = true;
+          }
+          expect(_colon);
+          node.key = propertyKey;
+          node.value = parseType();
+          node.optional = optional;
+          node.static = isStatic;
+          nodeStart.properties.push(finishNode(node, "ObjectTypeProperty"));
+        }
+      }
+
+      if (!eat(_semi) && tokType !== _braceR) {
+        unexpected();
+      }
+    }
+
+    expect(_braceR);
+
+    return finishNode(nodeStart, "ObjectTypeAnnotation")
+  }
+
+  function parseGenericType(start, id) {
+    var node = startNodeAt(start);
+
+    node.typeParameters = null;
+    node.id = id;
+
+    while (eat(_dot)) {
+      var node2 = startNodeAt(start);
+      node2.qualification = node.id;
+      node2.id = parseIdent();
+      node.id = finishNode(node2, "QualifiedTypeIdentifier");
+    }
+
+    if (tokType === _lt) {
+      node.typeParameters = parseTypeParameterInstantiation();
+    }
+
+    return finishNode(node, "GenericTypeAnnotation");
+  }
+
+  function parseVoidType() {
+    var node = startNode();
+    expect(keywordTypes["void"]);
+    return finishNode(node, "VoidTypeAnnotation");
+  }
+
+  function parseTypeofType() {
+    var node = startNode();
+    expect(keywordTypes["typeof"]);
+    node.argument = parsePrimaryType();
+    return finishNode(node, "TypeofTypeAnnotation");
+  }
+
+  function parseTupleType() {
+    var node = startNode();
+    node.types = [];
+    expect(_bracketL);
+    // We allow trailing commas
+    while (tokPos < inputLen && tokType !== _bracketR) {
+      node.types.push(parseType());
+      if (tokType === _bracketR) break;
+      expect(_comma);
+    }
+    expect(_bracketR);
+    return finishNode(node, "TupleTypeAnnotation");
+  }
+
+  function parseFunctionTypeParam() {
+    var optional = false;
+    var node = startNode();
+    node.name = parseIdent();
+    if (eat(_question)) {
+      optional = true;
+    }
+    expect(_colon);
+    node.optional = optional;
+    node.typeAnnotation = parseType();
+    return finishNode(node, "FunctionTypeParam");
+  }
+
+  function parseFunctionTypeParams() {
+    var ret = { params: [], rest: null };
+    while (tokType === _name) {
+      ret.params.push(parseFunctionTypeParam());
+      if (tokType !== _parenR) {
+        expect(_comma);
+      }
+    }
+
+    if (eat(_ellipsis)) {
+      ret.rest = parseFunctionTypeParam();
+    }
+    return ret;
+  }
+
+  function identToTypeAnnotation(start, node, id) {
+    switch (id.name) {
+      case 'any':
+        return finishNode(node, "AnyTypeAnnotation");
+
+      case 'bool':
+      case 'boolean':
+        return finishNode(node, "BooleanTypeAnnotation");
+
+      case 'number':
+        return finishNode(node, "NumberTypeAnnotation");
+
+      case 'string':
+        return finishNode(node, "StringTypeAnnotation");
+
+      default:
+        return parseGenericType(start, id);
+    }
+  }
+
+  // The parsing of types roughly parallels the parsing of expressions, and
+  // primary types are kind of like primary expressions...they're the
+  // primitives with which other types are constructed.
+  function parsePrimaryType() {
+    var typeIdentifier = null;
+    var params = null;
+    var returnType = null;
+    var start = storeCurrentPos();
+    var node = startNode();
+    var rest = null;
+    var tmp;
+    var typeParameters;
+    var token;
+    var type;
+    var isGroupedType = false;
+
+    switch (tokType) {
+      case _name:
+        return identToTypeAnnotation(start, node, parseIdent());
+
+      case _braceL:
+        return parseObjectType();
+
+      case _bracketL:
+        return parseTupleType();
+
+      case _lt:
+        node.typeParameters = parseTypeParameterDeclaration();
+        expect(_parenL);
+        tmp = parseFunctionTypeParams();
+        node.params = tmp.params;
+        node.rest = tmp.rest;
+        expect(_parenR);
+
+        expect(_arrow);
+
+        node.returnType = parseType();
+
+        return finishNode(node, "FunctionTypeAnnotation");
+
+      case _parenL:
+        next();
+
+        var tmpId;
+
+        // Check to see if this is actually a grouped type
+        if (tokType !== _parenR && tokType !== _ellipsis) {
+          if (tokType === _name) {
+            //tmpId = identToTypeAnnotation(start, node, parseIdent());
+            //next();
+            //isGroupedType = tokType !== _question && tokType !== _colon;
+          } else {
+            isGroupedType = true;
+          }
+        }
+
+        if (isGroupedType) {
+          if (tmpId && _parenR) {
+            type = tmpId;
+          } else {
+            type = parseType();
+            expect(_parenR);
+          }
+
+          // If we see a => next then someone was probably confused about
+          // function types, so we can provide a better error message
+          if (eat(_arrow)) {
+            raise(node,
+              'Unexpected token =>. It looks like ' +
+              'you are trying to write a function type, but you ended up ' +
+              'writing a grouped type followed by an =>, which is a syntax ' +
+              'error. Remember, function type parameters are named so function ' +
+              'types look like (name1: type1, name2: type2) => returnType. You ' +
+              'probably wrote (type1) => returnType'
+            );
+          }
+
+          return type;
+        }
+
+        tmp = parseFunctionTypeParams();
+        node.params = tmp.params;
+        node.rest = tmp.rest;
+
+        expect(_parenR);
+
+        expect(_arrow);
+
+        node.returnType = parseType();
+        node.typeParameters = null;
+
+        return finishNode(node, "FunctionTypeAnnotation");
+
+      case _string:
+        node.value = tokVal;
+        node.raw = input.slice(tokStart, tokEnd);
+        next();
+        return finishNode(node, "StringLiteralTypeAnnotation");
+
+      default:
+        if (tokType.keyword) {
+          switch (tokType.keyword) {
+            case 'void':
+              return parseVoidType();
+
+            case 'typeof':
+              return parseTypeofType();
+          }
+        }
+    }
+
+    unexpected();
+  }
+
+  function parsePostfixType() {
+    var node = startNode();
+    var type = node.elementType = parsePrimaryType();
+    if (tokType === _bracketL) {
+      expect(_bracketL);
+      expect(_bracketR);
+      return finishNode(node, "ArrayTypeAnnotation");
+    }
+    return type;
+  }
+
+  function parsePrefixType() {
+    var node = startNode();
+    if (eat(_question)) {
+      node.typeAnnotation = parsePrefixType();
+      return finishNode(node, "NullableTypeAnnotation");
+    }
+    return parsePostfixType();
+  }
+
+  function parseIntersectionType() {
+    var node = startNode();
+    var type = parsePrefixType();
+    node.types = [type];
+    while (eat(_bitwiseAND)) {
+      node.types.push(parsePrefixType());
+    }
+    return node.types.length === 1 ? type : finishNode(node, "IntersectionTypeAnnotation");
+  }
+
+  function parseUnionType() {
+    var node = startNode();
+    var type = parseIntersectionType();
+    node.types = [type];
+    while (eat(_bitwiseOR)) {
+      node.types.push(parseIntersectionType());
+    }
+    return node.types.length === 1 ? type : finishNode(node, "UnionTypeAnnotation");
+  }
+
+  function parseType() {
+    var oldInType = inType;
+    inType = true;
+    var type = parseUnionType();
+    inType = oldInType;
+    return type;
+  }
+
+  function parseTypeAnnotation() {
+    var node = startNode();
+
+    expect(_colon);
+    node.typeAnnotation = parseType();
+
+    return finishNode(node, "TypeAnnotation");
+  }
+
+  function parseTypeAnnotatableIdentifier(requireTypeAnnotation, canBeOptionalParam) {
+    var node = startNode();
+    var ident = parseIdent();
+    var isOptionalParam = false;
+
+    if (canBeOptionalParam && eat(_question)) {
+      expect(_question);
+      isOptionalParam = true;
+    }
+
+    if (requireTypeAnnotation || tokType === _colon) {
+      ident.typeAnnotation = parseTypeAnnotation();
+      finishNode(ident, ident.type);
+    }
+
+    if (isOptionalParam) {
+      ident.optional = true;
+      finishNode(ident, ident.type);
+    }
+
+    return ident;
+  }
 });
