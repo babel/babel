@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 1.15.0
+
+ * Don't alias `GeneratorFunction` and check the name which causes minifiers to remove the name and throw an error later on when we check if it's set.
+
 ## 1.14.18
 
  * Fix files only containg comments not being output.
