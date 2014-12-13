@@ -12,12 +12,10 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
-var Q = (function (_ref) {
-  var Q = function Q() {
-    _ref.apply(this, arguments);
-  };
+var _QSuper = function () {};
 
-  _extends(Q, _ref);
+var Q = function Q() {
+  _QSuper.apply(this, arguments);
+};
 
-  return Q;
-})(function () {});
+_extends(Q, _QSuper);

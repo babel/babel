@@ -12,12 +12,8 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
-var Test = (function (Foo) {
-  var Test = function Test() {
-    Foo.apply(this, arguments);
-  };
+var Test = function Test() {
+  Foo.apply(this, arguments);
+};
 
-  _extends(Test, Foo);
-
-  return Test;
-})(Foo);
+_extends(Test, Foo);

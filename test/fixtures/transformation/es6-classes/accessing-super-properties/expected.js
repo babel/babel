@@ -12,13 +12,9 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
-var Test = (function (Foo) {
-  var Test = function Test() {
-    Foo.prototype.test;
-    Foo.prototype.test.whatever;
-  };
+var Test = function Test() {
+  Foo.prototype.test;
+  Foo.prototype.test.whatever;
+};
 
-  _extends(Test, Foo);
-
-  return Test;
-})(Foo);
+_extends(Test, Foo);

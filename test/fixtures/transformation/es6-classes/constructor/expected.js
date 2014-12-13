@@ -16,12 +16,8 @@ var Test = function Test() {
   this.state = "test";
 };
 
-var Foo = (function (Bar) {
-  var Foo = function Foo() {
-    this.state = "test";
-  };
+var Foo = function Foo() {
+  this.state = "test";
+};
 
-  _extends(Foo, Bar);
-
-  return Foo;
-})(Bar);
+_extends(Foo, Bar);

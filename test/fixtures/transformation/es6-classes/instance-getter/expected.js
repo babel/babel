@@ -5,17 +5,13 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var Test = (function () {
-  var Test = function Test() {};
+var Test = function Test() {};
 
-  _classProps(Test, null, {
-    test: {
-      get: function () {
-        return 5 + 5;
-      },
-      enumerable: true
-    }
-  });
-
-  return Test;
-})();
+_classProps(Test, null, {
+  test: {
+    get: function () {
+      return 5 + 5;
+    },
+    enumerable: true
+  }
+});
