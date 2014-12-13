@@ -162,10 +162,6 @@ result.ast;
   // Default: false
   runtime: true,
 
-  // Output comments in generated output
-  // Default: true
-  comments: false,
-
   // Enable support for experimental ES7 features
   // Default: false
   experimental: true,
@@ -178,7 +174,31 @@ result.ast;
   // Set this to `false` if you don't want the transformed code in the returned
   // result
   // Default: true
-  code: true
+  code: true,
+
+  format: {
+    // Output comments in generated output
+    // Default: true
+    comments: true,
+
+    // Do not include superfluous whitespace characters and line terminators
+    // Default: false
+    compact: false,
+
+    indent: {
+      // Adjust the indentation of multiline comments to keep asterisks vertically aligned
+      // Default: true
+      adjustMultilineComment: true,
+
+      // Indent string
+      // Default: "  "
+      style: "  ",
+
+      // Base indent level
+      // Default: 0
+      base: 0
+    }
+  }
 }
 ```
 
