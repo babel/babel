@@ -77,7 +77,9 @@ _.each(helper.get("transformation"), function (testSuite) {
           // the options object with useless options
           delete task.options.throws;
 
-          assert.throws(runTask, new RegExp(throwMsg));
+          assert.throws(runTask, function (err) {
+            return err.message.indexOf(throwMsg) >= 0;
+          });
         } else {
           runTask();
         }
