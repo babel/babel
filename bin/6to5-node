@@ -51,9 +51,9 @@ process.argv.slice(2).forEach(function(arg){
 try {
   var kexec = require("kexec");
   kexec(process.argv[0], args);
-} catch(e) {
-  if (e.code !== "MODULE_NOT_FOUND") throw err;
-  
+} catch (err) {
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
+
   var child_process = require("child_process");
   var proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
   proc.on("exit", function (code, signal) {
