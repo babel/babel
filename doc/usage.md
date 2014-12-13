@@ -186,6 +186,10 @@ result.ast;
     compact: false,
 
     indent: {
+      // Preserve parentheses in new expressions that have no arguments
+      // Default: true
+      parentheses: true,
+
       // Adjust the indentation of multiline comments to keep asterisks vertically aligned
       // Default: true
       adjustMultilineComment: true,
