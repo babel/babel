@@ -2,7 +2,7 @@
   "name": "acorn-6to5",
   "description": "Acorn fork used by 6to5",
   "main": "acorn.js",
-  "version": "0.9.1-13",
+  "version": "0.9.1-14",
   "maintainers": [
     {
       "name": "Marijn Haverbeke",
