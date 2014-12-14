@@ -2763,7 +2763,7 @@
         prop.shorthand = false;
         isGenerator = eat(_star);
       }
-      if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
+      if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "async") {
         var asyncId = parseIdent();
         if (tokType === _colon || tokType === _parenL) {
           prop.key = asyncId;
@@ -2840,7 +2840,6 @@
   function parseFunction(node, isStatement, isAsync, allowExpressionBody) {
     initFunction(node, isAsync);
     if (options.ecmaVersion >= 6) {
-      if (isAsync && tokType === _star) unexpected();
       node.generator = eat(_star);
     }
     if (isStatement || tokType === _name) {
