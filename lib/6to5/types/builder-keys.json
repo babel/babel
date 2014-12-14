@@ -24,5 +24,6 @@
   "UnaryExpression":         ["operator", "argument", "prefix"],
   "VariableDeclaration":     ["kind", "declarations"],
   "VariableDeclarator":      ["id", "init"],
+  "WithStatement":           ["object", "body"],
   "YieldExpression":         ["argument", "delegate"]
 }
