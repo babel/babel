@@ -1,7 +1,7 @@
 "use strict";
 
 var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
+  child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
       enumerable: false,
@@ -9,7 +9,7 @@ var _extends = function (child, parent) {
       configurable: true
     }
   });
-  child.__proto__ = parent;
+  if (parent) child.__proto__ = parent;
 };
 
 var BaseController = function BaseController() {
