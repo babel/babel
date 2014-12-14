@@ -3,7 +3,7 @@
 ## Build systems
 
  - [Broccoli](https://github.com/6to5/broccoli-6to5-transpiler)
- - [Browserify](https://github.com/6to5/6to5-browserify)
+ - [Browserify](https://github.com/6to5/6to5ify)
  - [Brunch](https://github.com/6to5/6to5-brunch)
  - [Duo](https://github.com/6to5/duo6to5)
  - [Gobble](https://github.com/6to5/gobble-6to5)
