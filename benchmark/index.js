@@ -2,7 +2,7 @@ Error.stackTraceLimit = Infinity;
 
 var jsTrans = require("jstransform");
 var traceur = require("traceur");
-var es6tr   = require("es6-transpiler");
+//var es6tr   = require("es6-transpiler");
 var es6now  = require("es6now");
 //var esnext  = require("esnext");
 var to5     = require("../lib/6to5");
@@ -70,13 +70,13 @@ var compilers = {
     }
   },
 
-  "es6-transpiler": {
+  /*"es6-transpiler": {
     compile: function (code) {
       var result = es6tr.run({ src: code });
       if (result.errors.length) throw new Error(result.join("; "));
       return result.src;
     }
-  },
+  },*/
 
   jstransform: {
     compile: function (code) {
