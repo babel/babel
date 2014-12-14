@@ -2008,7 +2008,9 @@
             return parseLabeledStatement(node, maybeName, expr);
           }
 
-          if (expr.name === "declare") {
+          if (options.ecmaVersion >= 7 && expr.name === "private" && tokType === _name) {
+            return parsePrivate(node);
+          } else if (expr.name === "declare") {
             if (tokType === _class || tokType === _name || tokType === _function || tokType === _var) {
               return parseDeclare(node);
             }
@@ -2988,6 +2990,15 @@
     }
   }
 
+  function parsePrivate(node) {
+    node.declarations = [];
+    do {
+      node.declarations.push(parseIdent());
+    } while (eat(_comma));
+    semicolon();
+    return finishNode(node, "PrivateDeclaration");
+  }
+
   // Parse a class declaration or literal (depending on the
   // `isStatement` parameter).
   
@@ -3010,15 +3021,20 @@
     expect(_braceL);
     while (!eat(_braceR)) {
       var method = startNode();
+      if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "private") {
+        next();
+        classBody.body.push(parsePrivate(method));
+        continue;
+      }
       if (tokType === _name && tokVal === "static") {
         next();
         method['static'] = true;
-        } else {
+      } else {
         method['static'] = false;
-        }
+      }
       var isAsync = false;
       var isGenerator = eat(_star);
-       if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
+      if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
         var asyncId = parseIdent();
         if (tokType === _colon || tokType === _parenL) {
           method.key = asyncId;

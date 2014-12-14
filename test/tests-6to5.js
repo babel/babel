@@ -2088,3 +2088,131 @@ test('delete foo::bar;', {
 }, {
   ecmaVersion: 7
 });
+
+test("private A;", {
+  type: "Program",
+  start: 0,
+  end: 10,
+  body: [{
+    type: "PrivateDeclaration",
+    start: 0,
+    end: 10,
+    declarations: [{
+      type: "Identifier",
+      start: 8,
+      end: 9,
+      name: "A"
+    }]
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test("private A, B;", {
+  type: "Program",
+  start: 0,
+  end: 13,
+  body: [{
+    type: "PrivateDeclaration",
+    start: 0,
+    end: 13,
+    declarations: [
+      {
+        type: "Identifier",
+        start: 8,
+        end: 9,
+        name: "A"
+      },
+      {
+        type: "Identifier",
+        start: 11,
+        end: 12,
+        name: "B"
+      }
+    ]
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test("class A { private A; }", {
+  type: "Program",
+  start: 0,
+  end: 22,
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 22,
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 7,
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 8,
+      end: 22,
+      body: [{
+        type: "PrivateDeclaration",
+        start: 10,
+        end: 20,
+        declarations: [
+          {
+            type: "Identifier",
+            start: 18,
+            end: 19,
+            name: "A"
+          }
+        ]
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test("class A { private A, B; }", {
+  type: "Program",
+  start: 0,
+  end: 25,
+  body: [{
+    type: "ClassDeclaration",
+    start: 0,
+    end: 25,
+    id: {
+      type: "Identifier",
+      start: 6,
+      end: 7,
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      start: 8,
+      end: 25,
+      body: [{
+        type: "PrivateDeclaration",
+        start: 10,
+        end: 23,
+        declarations: [
+          {
+            type: "Identifier",
+            start: 18,
+            end: 19,
+            name: "A"
+          },
+          {
+            type: "Identifier",
+            start: 21,
+            end: 22,
+            name: "B"
+          }
+        ]
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
