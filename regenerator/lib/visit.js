@@ -26,8 +26,6 @@ var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
 
 exports.transform = function transform(node, options) {
-  var visitor = types.PathVisitor.fromMethodsObject(visitorMethods);
-
   node = recast.visit(node, visitor);
 
   if (options && options.includeRuntime && visitor.wasChangeReported()) {
@@ -54,7 +52,7 @@ function injectRuntime(program) {
   body.unshift.apply(body, runtimeBody);
 }
 
-var visitorMethods = {
+var visitor = types.PathVisitor.fromMethodsObject({
   visitFunction: function(path) {
     // Calling this.traverse(path) first makes for a post-order traversal.
     this.traverse(path);
@@ -302,7 +300,7 @@ var visitorMethods = {
       node.body
     );
   }
-};
+});
 
 function shouldNotHoistAbove(stmtPath) {
   var value = stmtPath.value;
