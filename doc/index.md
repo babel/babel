@@ -38,6 +38,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Abstract references](features.md#abstract-references) ([experimental](experimental.md))
  - [Array comprehension](features.md#array-comprehension) ([experimental](experimental.md))
  - [Async functions](features.md#async-functions) ([experimental](experimental.md))
+ - [Async generator functions](features.md#async-generator-functions) ([experimental](experimental.md))
  - [Arrow functions](features.md#arrow-functions)
  - [Classes](features.md#classes)
  - [Computed property names](features.md#computed-property-names)
