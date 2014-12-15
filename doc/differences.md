@@ -76,21 +76,25 @@ always be used as little as possible.
 | Array comprehension          | ✓     | ✓       | ✓              |        |        |             |
 | Arrow functions              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Async functions              | ✓     | ✓       |                | ✓      |        |             |
+| Async generator functions    | ✓     | ✓       |                |        |        |             |
 | Classes                      | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Computed property names      | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Constants                    | ✓     | ✓       | ✓              |        |        |             |
 | Default parameters           | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Destructuring                | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Exponentiation operator      | ✓     | ✓       |                |        |        |             |
+| Flow types                   | ✓     |         |                |        |        |             |
 | For-of                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Generators                   | ✓     | ✓       |                | ✓      |        |             |
 | Generator comprehension      | ✓     | ✓       |                |        |        |             |
+| JSX                          | ✓     |         |                |        |        |             |
 | Let scoping                  | ✓     | ✓       | ✓              |        |        |             |
 | Modules                      | ✓     | ✓       |                |        | ✓      |             |
 | Object rest/spread           | ✓     |         |                |        |        | ✓           |
 | Property method assignment   | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Property name shorthand      | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Rest parameters              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
+| React                        | ✓     |         |                |        |        |             |
 | Spread                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
 | Template literals            | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
 | Unicode regex                | ✓     | ✓       | ✓              |        |        |             |

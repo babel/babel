@@ -49,6 +49,12 @@ async function chainAnimationsAsync(elem, animations) {
 }
 ```
 
+## Async generator functions ([experimental](experimental.md)) ([spec](https://github.com/jhusain/asyncgenerator))
+
+```javascript
+
+```
+
 ## Classes
 
 ```javascript
