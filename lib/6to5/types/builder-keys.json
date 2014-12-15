@@ -1,5 +1,6 @@
 {
   "ArrayExpression":         ["elements"],
+  "ArrowFunctionExpression": ["params", "body"],
   "AssignmentExpression":    ["operator", "left", "right"],
   "BinaryExpression":        ["operator", "left", "right"],
   "BlockStatement":          ["body"],
