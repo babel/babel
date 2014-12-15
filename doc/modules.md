@@ -19,7 +19,6 @@ to5.transform('import "foo";', { modules: "common" });
 
  * [AMD](#amd)
  * [Common (Default)](#common-default)
- * [Common Strict](#common-strict)
  * [Ignore](#ignore)
  * [System](#system)
  * [UMD](#umd)
@@ -71,46 +70,6 @@ var bar = require("foo").bar;
 var bar = require("foo").foo;
 ```
 
-### Common Strict
-
-```sh
-$ 6to5 --modules commonStrict
-```
-
-**In**
-
-```javascript
-import "foo";
-
-import foo from "foo";
-import * as foo from "foo";
-
-import {bar} from "foo";
-import {foo as bar} from "foo";
-
-export {test};
-export var test = 5;
-
-export default test;
-```
-
-**Out**
-
-```javascript
-require("foo");
-
-var foo = require("foo").default;
-var foo = require("foo");
-
-var bar = require("foo").bar;
-var bar = require("foo").foo;
-
-exports.test = test;
-var test = 5; exports.test = test;
-
-exports.default = test;
-```
-
 ### AMD
 
 ```sh
@@ -131,9 +90,14 @@ export function bar() {
 
 ```javascript
 define(["exports", "foo"], function (exports, _foo) {
-  exports.bar = bar;
+  "use strict";
 
-  var foo = _foo.default;
+  var _interopRequire = function (obj) {
+    return obj && (obj["default"] || obj);
+  };
+
+  exports.bar = bar;
+  var foo = _interopRequire(_foo);
 
   function bar() {
     return foo("foobar");
@@ -172,10 +136,15 @@ export function bar() {
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }
-})(function (exports) {
-  exports.bar = bar;
+})(function (exports, _foo) {
+  "use strict";
 
-  var foo = _foo.default;
+  var _interopRequire = function (obj) {
+    return obj && (obj["default"] || obj);
+  };
+
+  exports.bar = bar;
+  var foo = _interopRequire(_foo);
 
   function bar() {
     return foo("foobar");
