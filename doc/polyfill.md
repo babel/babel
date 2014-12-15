@@ -19,6 +19,12 @@ application.
 require("6to5/polyfill");
 ```
 
+Fortunately, this is automatically loaded when using:
+
+```javascript
+require("6to5/register");
+```
+
 ### Browser
 
 Available from the `browser-polyfill.js` file within the 6to5 directory of an
