@@ -7,7 +7,12 @@
 })(function (exports, _foo, _fooBar, _directoryFooBar) {
   "use strict";
 
-  var foo = _foo["default"];
+  var _interopRequire = function (obj) {
+    return obj && (obj["default"] || obj);
+  };
+
+  var foo = _interopRequire(_foo);
+
   var foo = _foo;
   var bar = _foo.bar;
   var bar = _foo.foo;

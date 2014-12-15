@@ -39,3 +39,10 @@ class Bar extends Foo {
   }
 }
 ```
+
+## 6to5-node
+
+It is necessary to manually install `kexec` package on Unix-like OSes for
+`6to5-node` to correctly handle signals.
+
+**It is not recommended to use `6to5-node` with a process manager (`supervisord`, `upstart`, `systemd`, ...) without first installing `kexec`!**
