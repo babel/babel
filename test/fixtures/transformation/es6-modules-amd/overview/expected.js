@@ -5,7 +5,7 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
     return obj && (obj["default"] || obj);
   };
 
-  var foo = _interopRequire(_foo["default"]);
+  var foo = _interopRequire(_foo);
 
   var foo = _foo;
   var bar = _foo.bar;

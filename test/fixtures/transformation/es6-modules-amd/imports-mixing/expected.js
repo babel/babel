@@ -5,7 +5,7 @@ define(["exports", "foo"], function (exports, _foo) {
     return obj && (obj["default"] || obj);
   };
 
-  var foo = _interopRequire(_foo["default"]);
+  var foo = _interopRequire(_foo);
 
   var xyz = _foo.baz;
 });
