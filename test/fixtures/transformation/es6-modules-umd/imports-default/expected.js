@@ -13,5 +13,5 @@
 
   var foo = _interopRequire(_foo);
 
-  var foo = _foo["default"];
+  var foo = _interopRequire(_foo);
 });
