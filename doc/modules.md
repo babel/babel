@@ -237,7 +237,7 @@ ModuleFormatter.prototype.transform = function (ast) {
   // feel free to modify this however
 };
 
-ModuleFormatter.prototype.import = function (node, nodes) {
+ModuleFormatter.prototype.importDeclaration = function (node, nodes) {
   // node is an ImportDeclaration
 };
 
@@ -246,7 +246,7 @@ ModuleFormatter.prototype.importSpecifier = function (specifier, node, nodes) {
   // node is an ImportDeclaration
 };
 
-ModuleFormatter.prototype.export = function (node, nodes) {
+ModuleFormatter.prototype.exportDeclaration = function (node, nodes) {
   // node is an ExportDeclaration
 };
 
