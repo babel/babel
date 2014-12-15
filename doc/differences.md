@@ -121,7 +121,7 @@ that when you turn it off and use your code in a full ES6 environment
 
 Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
 While this can be trimmed down by selectively building the runtime, it's an
-unneccesary step when a large runtime can be eliminated entirely.
+unnecessary step when a large runtime can be eliminated entirely.
 
 ### [es6now](https://github.com/zenparsing/es6now)
 
