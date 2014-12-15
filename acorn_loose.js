@@ -1135,10 +1135,9 @@
   }
 
   function parseExprList(close, allowEmpty) {
-    var indent = curIndent, line = curLineStart, elts = [], continuedLine = nextLineStart;
+    var indent = curIndent, line = curLineStart, elts = [];
     next(); // Opening bracket
-    if (curLineStart > continuedLine) continuedLine = curLineStart;
-    while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
+    while (!closes(close, indent + 1, line)) {
       if (eat(tt.comma)) {
         elts.push(allowEmpty ? null : dummyIdent());
         continue;
