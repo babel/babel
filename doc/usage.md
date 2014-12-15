@@ -167,7 +167,7 @@ to5.transformFile("filename.js", options, function (err, result) {
 
 All subsequent files required by node with the extensions `.es6` and `.js` will
 be transformed by 6to5. The polyfill specified in [Polyfill](polyfill.md) is
-also required.
+also required; but this is automatically loaded when using:
 
 ```javascript
 require("6to5/register");
