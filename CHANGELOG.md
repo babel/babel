@@ -32,6 +32,8 @@ Gaps between patch versions are faulty/broken releases.
  * Switched to [core-js](https://github.com/zloirock/core-js) over [es6-symbol](https://github.com/medikoo/es6-symbol) and [es6-shim](https://github.com/paulmillr/es6-shim/).
  * `amd` and `umd` module formatters now behave the same as `common` with `interopRequire`.
  * Micro-optimizations to boost performance by 200%.
+ * Rename module formatter methods `import` to `importDeclaration` and `export` to `exportDeclaration`.
+ * Support multiple declarators in export variable declarations.
 
 ## 1.15.0
 
