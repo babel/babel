@@ -28,9 +28,11 @@ var runtimeAsyncMethod = runtimeProperty("async");
 exports.transform = function transform(node, options) {
   node = recast.visit(node, visitor);
 
-  if (options && options.includeRuntime) {
+  if (options && options.includeRuntime && visitor.wasChangeReported()) {
     injectRuntime(n.File.check(node) ? node.program : node);
   }
+
+  options.madeChanges = visitor.wasChangeReported();
 
   return node;
 };
@@ -60,6 +62,8 @@ var visitor = types.PathVisitor.fromMethodsObject({
     if (!node.generator && !node.async) {
       return;
     }
+
+    this.reportChanged();
 
     node.generator = false;
 
