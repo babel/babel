@@ -1901,6 +1901,45 @@ test('var obj = { async() {} };', {
   ecmaVersion: 7
 });
 
+test('export async function foo(){}', {
+  "type": "Program",
+  "start": 0,
+  "end": 29,
+  "body": [{
+    "type": "ExportDeclaration",
+    "start": 0,
+    "end": 29,
+    "declaration": {
+      "type": "FunctionDeclaration",
+      "start": 7,
+      "end": 29,
+      "id": {
+        "type": "Identifier",
+        "start": 22,
+        "end": 25,
+        "name": "foo"
+      },
+      "params": [],
+      "defaults": [],
+      "rest": null,
+      "generator": false,
+      "async": true,
+      "body": {
+        "type": "BlockStatement",
+        "start": 27,
+        "end": 29,
+        "body": []
+      },
+      "expression": false
+    },
+    "default": false,
+    "specifiers": null,
+    "source": null
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Abstract references
 
 test('foo::bar;', {
