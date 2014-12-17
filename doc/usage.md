@@ -184,7 +184,7 @@ require("6to5/register")({
 });
 ```
 
-**NOTE:** Be aware that if you use node.js with the `--harmony` flag, 6to5 will not automatically check and disable features that are natively supported. You will need to use the `blacklist` option.
+**NOTE:** Be aware that if you use node.js with the `--harmony` flag, 6to5 will transform code regardless of whether or not a feature is natively supported. If a feature is natively supported, you may want 6to5 to skip transformation for this feature via the `blacklist` option.
 
 #### Options
 
