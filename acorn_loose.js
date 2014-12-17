@@ -905,7 +905,12 @@
       }
     }
     popCx();
-    eat(tt.braceR);
+    if (!eat(tt.braceR)) {
+      // If there is no closing brace, make the node span to the start
+      // of the next token (this is useful for Tern)
+      lastEnd = token.start;
+      if (options.locations) lastEndLoc = token.startLoc;
+    }
     if (isClass) {
       semicolon();
       finishNode(node.body, "ClassBody");
@@ -1152,7 +1157,12 @@
       eat(tt.comma);
     }
     popCx();
-    eat(close);
+    if (!eat(close)) {
+      // If there is no closing brace, make the node span to the start
+      // of the next token (this is useful for Tern)
+      lastEnd = token.start;
+      if (options.locations) lastEndLoc = token.startLoc;
+    }
     return elts;
   }
 });
