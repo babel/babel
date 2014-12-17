@@ -15,7 +15,9 @@ var _extends = function (child, parent) {
 var _QSuper = function () {};
 
 var Q = function Q() {
-  _QSuper.apply(this, arguments);
+  if (_QSuper) {
+    _QSuper.apply(this, arguments);
+  }
 };
 
 _extends(Q, _QSuper);

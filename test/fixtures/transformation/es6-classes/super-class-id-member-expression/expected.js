@@ -13,13 +13,17 @@ var _extends = function (child, parent) {
 };
 
 var BaseController = function BaseController() {
-  Chaplin.Controller.apply(this, arguments);
+  if (Chaplin.Controller) {
+    Chaplin.Controller.apply(this, arguments);
+  }
 };
 
 _extends(BaseController, Chaplin.Controller);
 
 var BaseController2 = function BaseController2() {
-  Chaplin.Controller.Another.apply(this, arguments);
+  if (Chaplin.Controller.Another) {
+    Chaplin.Controller.Another.apply(this, arguments);
+  }
 };
 
 _extends(BaseController2, Chaplin.Controller.Another);

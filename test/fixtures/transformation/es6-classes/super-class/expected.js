@@ -13,7 +13,9 @@ var _extends = function (child, parent) {
 };
 
 var Test = function Test() {
-  Foo.apply(this, arguments);
+  if (Foo) {
+    Foo.apply(this, arguments);
+  }
 };
 
 _extends(Test, Foo);
