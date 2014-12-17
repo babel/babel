@@ -3,11 +3,14 @@ System.register("actual", ["foo"], function (_export) {
 
   var __moduleName = "actual";
 
-  var _localExports = ['foo', 'bar', 'default'];
-
   return {
-    setters: [
-    function(m) {
+    setters: [function (m) {
+      (function (obj) {
+        for (var i in obj) {
+          _export(i, obj[i]);
+        }
+      })(m);
+
       _export("foo", m.foo);
 
       _export("foo", m.foo);
@@ -21,14 +24,7 @@ System.register("actual", ["foo"], function (_export) {
       _export("default", m.foo);
 
       _export("bar", m.bar);
-
-      for (var p in m) {
-        if (_localExports.indexOf(i) == -1)
-          _export(p, m[p]);
-      }
-    }
-    ],
-    execute: function () {
-    }
+    }],
+    execute: function () {}
   };
 });
