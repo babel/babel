@@ -45,7 +45,6 @@
   exports.parse_dammit = function(inpt, opts) {
     if (!opts) opts = {};
     input = String(inpt);
-    if (/^#!.*/.test(input)) input = "//" + input.slice(2);
     fetchToken = acorn.tokenize(input, opts);
     options = fetchToken.options;
     sourceFile = options.sourceFile || null;

@@ -74,6 +74,9 @@
     // When enabled, import/export statements are not constrained to
     // appearing at the top of the program.
     allowImportExportEverywhere: false,
+    // When enabled, hashbang directive in the beginning of file
+    // is allowed and treated as a line comment.
+    allowHashBang: false,
     // When `locations` is on, `loc` properties holding objects with
     // `start` and `end` properties in `{line, column}` form (with
     // line being 1-based and column 0-based) will be attached to the
@@ -615,6 +618,9 @@
     tokRegexpAllowed = true;
     metParenL = 0;
     templates = [];
+    if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
+      skipLineComment(2);
+    }
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
