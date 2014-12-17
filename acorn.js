@@ -1489,14 +1489,12 @@
     switch (expr.type) {
       case "Identifier":
         if (strict && (isStrictBadIdWord(expr.name) || isStrictReservedWord(expr.name)))
-          raise(expr.start, isBinding
-            ? "Binding " + expr.name + " in strict mode"
-            : "Assigning to " + expr.name + " in strict mode"
-          );
+          raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
         break;
 
       case "MemberExpression":
-        if (!isBinding) break;
+        if (isBinding) raise(expr.start, "Binding to member expression");
+        break;
 
       case "ObjectPattern":
         for (var i = 0; i < expr.properties.length; i++)
