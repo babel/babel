@@ -51,7 +51,7 @@ function compile(source, options) {
   if (!genOrAsyncFunExp.test(source)) {
     return {
       // Shortcut: no generators or async functions to transform.
-      code: (options.includeRuntime ? fs.readFileSync(
+      code: (options.includeRuntime === true ? fs.readFileSync(
         runtime.path, "utf-8"
       ) + "\n" : "") + source
     };

@@ -26,9 +26,12 @@ var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
 
 exports.transform = function transform(node, options) {
+  options = options || {};
+
   node = recast.visit(node, visitor);
 
-  if (options && options.includeRuntime && visitor.wasChangeReported()) {
+  if (options.includeRuntime === true ||
+      (options.includeRuntime === 'if used' && visitor.wasChangeReported())) {
     injectRuntime(n.File.check(node) ? node.program : node);
   }
 
