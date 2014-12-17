@@ -184,6 +184,8 @@ require("6to5/register")({
 });
 ```
 
+**NOTE:** Using 6to5-node or `require("6to5/register")`, 6to5 will check what features are available in the current environment and blacklists them if they're supported.
+
 #### Options
 
 ```javascript
