@@ -212,6 +212,9 @@ All subsequent files required by node with the extensions `.es6` and `.js` will
 be transformed by 6to5. The polyfill specified in [Polyfill](polyfill.md) is
 also required.
 
+Source maps are automatically configured so if any errors a thrown then line
+number info is mapped and you'll get the correct source location.
+
 ```javascript
 require("6to5/register");
 ```
