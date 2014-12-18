@@ -72,6 +72,10 @@ object referring to that same position.
   declarations can only appear at a program's top level. Setting this
   option to `true` allows them anywhere where a statement is allowed.
 
+- **allowHashBang**: When this is enabled (off by default), if the
+  code starts with the characters `#!` (as in a shellscript), the
+  first line will be treated as a comment.
+
 - **locations**: When `true`, each node has a `loc` object attached
   with `start` and `end` subobjects, each of which contains the
   one-based line and zero-based column numbers in `{line, column}`
