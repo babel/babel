@@ -4,15 +4,15 @@ In order for certain features to work they require certain polyfills. You can
 satisfy **all** 6to5 feature requirements by using the included
 [polyfill](polyfill.md). You may alternatively selectively include what you need:
 
-| Feature                     | Requirements                                                   |
-| --------------------------- | -------------------------------------------------------------- |
-| Abstract References         | [experimental](experimental.md), `Symbol`                      |
-| Array destructuring         | `Array.isArray`, `Array.from`                                  |
-| Async functions, Generators | [experimental](experimental.md), [polyfill](polyfill.md)       |
-| Comprehensions              | [experimental](experimental.md), `Array.isArray`, `Array.from` |
-| For Of                      | `Symbol`, `prototype[Symbol.iterator]`                         |
-| Object spread/rest          | [experimental](experimental.md), `Object.assign`               |
-| Spread                      | `Array.isArray`, `Array.from`                                  |
+| Feature                     | Requirements                                                                                                           |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Abstract References         | [experimental](experimental.md), `Symbol`                                                                              |
+| Array destructuring         | `Array.isArray`, `Array.from`                                                                                          |
+| Async functions, Generators | [experimental](experimental.md), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
+| Comprehensions              | [experimental](experimental.md), `Array.isArray`, `Array.from`                                                         |
+| For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                 |
+| Object spread/rest          | [experimental](experimental.md), `Object.assign`                                                                       |
+| Spread                      | `Array.isArray`, `Array.from`                                                                                          |
 
 ## Classes
 
