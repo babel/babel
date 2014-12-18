@@ -881,6 +881,12 @@ describe("delegated yield", function() {
     }
 
     check(gen(), [0, "one", "two", "three", 2, 3, 4, 5]);
+
+    function *string() {
+      return yield* "asdf";
+    }
+
+    check(string(), ["a", "s", "d", "f"]);
   });
 
   it("should evaluate to the return value of the delegate", function() {

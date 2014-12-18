@@ -275,28 +275,46 @@
   };
 
   function values(iterable) {
-    var iterator = iterable;
-    if (iteratorSymbol in iterable) {
-      iterator = iterable[iteratorSymbol]();
-    } else if (!isNaN(iterable.length)) {
-      var i = -1;
-      iterator = function next() {
-        while (++i < iterable.length) {
-          if (i in iterable) {
-            next.value = iterable[i];
-            next.done = false;
-            return next;
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1;
+
+        function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
           }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
         }
-        next.value = undefined;
-        next.done = true;
-        return next;
-      };
-      iterator.next = iterator;
+
+        return next.next = next;
+      }
     }
-    return iterator;
+
+    // Return an iterator with no values.
+    return { next: doneResult };
   }
   runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
 
   Context.prototype = {
     constructor: Context,
