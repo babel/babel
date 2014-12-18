@@ -95,7 +95,9 @@
       }
 
       if (state === GenStateCompleted) {
-        throw new Error("Generator has already finished");
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
       }
 
       while (true) {

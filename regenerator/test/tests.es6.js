@@ -31,16 +31,10 @@ function raise(argument) {
 }
 
 function assertAlreadyFinished(generator) {
-  try {
-    generator.next();
-    assert.ok(false, "should have thrown an exception");
-  } catch (err) {
-    assert.ok(err instanceof Error);
-    assert.strictEqual(
-      err.message,
-      "Generator has already finished"
-    );
-  }
+  assert.deepEqual(generator.next(), {
+    value: void 0,
+    done: true
+  });
 }
 
 describe("regeneratorRuntime", function() {
