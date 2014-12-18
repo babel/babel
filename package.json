@@ -49,6 +49,7 @@
     "mkdirp": "0.5.0",
     "private": "0.1.6",
     "regexpu": "0.3.0",
+    "roadrunner": "^1.0.4",
     "source-map": "0.1.40",
     "source-map-support": "0.2.8"
   },
