@@ -52,9 +52,6 @@ build:
 
 	node bin/cache-templates
 
-	node $(BROWSERIFY_CMD) -e lib/6to5/transformation/transformers/es6-generators/runtime.js >dist/regenerator-runtime.js
-	node $(UGLIFY_CMD) dist/regenerator-runtime.js >dist/regenerator-runtime.min.js
-
 	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
@@ -75,7 +72,6 @@ publish:
 	cp dist/6to5.min.js browser.js
 	cp dist/polyfill.min.js browser-polyfill.js
 	cp dist/runtime.min.js runtime.js
-	cp dist/regenerator-runtime.min.js regenerator-runtime.js
 
 	node bin/cache-templates
 	test -f templates.json
