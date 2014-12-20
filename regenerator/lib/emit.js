@@ -15,8 +15,8 @@ var b = types.builders;
 var n = types.namedTypes;
 var leap = require("./leap");
 var meta = require("./meta");
-var runtimeProperty = require("./util").runtimeProperty;
-var runtimeKeysMethod = runtimeProperty("keys");
+var util = require("./util");
+var runtimeKeysMethod = util.runtimeProperty("keys");
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -732,10 +732,23 @@ Ep.explodeStatement = function(path, labelId) {
 
         types.visit(bodyPath, {
           visitIdentifier: function(path) {
-            if (path.value.name === catchParamName &&
+            if (util.isReference(path, catchParamName) &&
                 path.scope.lookup(catchParamName) === catchScope) {
               return safeParam;
             }
+
+            this.traverse(path);
+          },
+
+          visitFunction: function(path) {
+            if (path.scope.declares(catchParamName)) {
+              // Don't descend into nested scopes that shadow the catch
+              // parameter with their own declarations. This isn't
+              // logically necessary because of the path.scope.lookup we
+              // do in visitIdentifier, but it saves time.
+              return false;
+            }
+
             this.traverse(path);
           }
         });

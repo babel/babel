@@ -1147,6 +1147,39 @@ describe("catch parameter shadowing", function() {
 
     check(gen(), ["e1", "e2", "e1"]);
   });
+
+  it("should not interfere with non-referential identifiers", function() {
+    function *gen() {
+      try {
+        yield 1;
+        raise(new Error("oyez"));
+        yield 2;
+      } catch (e) {
+        yield 3;
+        e.e = "e.e";
+        e[e.message] = "e.oyez";
+        return {
+          e: e,
+          identity: function(x) {
+            var e = x;
+            return e;
+          }
+        };
+      }
+      yield 4;
+    }
+
+    var g = gen();
+    assert.deepEqual(g.next(), { value: 1, done: false });
+    assert.deepEqual(g.next(), { value: 3, done: false });
+
+    var info = g.next();
+    assert.strictEqual(info.done, true);
+    assert.strictEqual(info.value.e.message, "oyez");
+    assert.strictEqual(info.value.e.e, "e.e");
+    assert.strictEqual(info.value.e.oyez, "e.oyez");
+    assert.strictEqual(info.value.identity("same"), "same");
+  });
 });
 
 describe("empty while loops", function() {
