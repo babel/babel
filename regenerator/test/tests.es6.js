@@ -915,6 +915,25 @@ describe("delegated yield", function() {
       }
     }), [], "oyez");
   });
+
+  it("should work as a subexpression", function() {
+    function *inner(arg) {
+      return arg;
+    }
+
+    function *gen(delegate) {
+      // Unfortunately these parentheses appear to be necessary.
+      return 1 + (yield* delegate);
+    }
+
+    check(gen(inner(2)), [], 3);
+    check(gen(inner(3)), [], 4);
+    check(gen({
+      next: function() {
+        return { value: "foo", done: true };
+      }
+    }), [], "1foo");
+  });
 });
 
 describe("function declaration hoisting", function() {
