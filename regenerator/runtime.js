@@ -35,26 +35,30 @@
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  var GF = function GeneratorFunction() {};
-  var GFp = function GeneratorFunctionPrototype() {};
-  var Gp = GFp.prototype = Generator.prototype;
-  (GFp.constructor = GF).prototype =
-    Gp.constructor = GFp;
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
 
-  // Ensure isGeneratorFunction works when Function#name not supported.
-  var GFName = "GeneratorFunction";
-  if (GF.name !== GFName) GF.name = GFName;
-  if (GF.name !== GFName) throw new Error(GFName + " renamed?");
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.displayName = "GeneratorFunction";
 
   runtime.isGeneratorFunction = function(genFun) {
-    var ctor = genFun && genFun.constructor;
-    return ctor ? GF.name === ctor.name : false;
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
   };
 
   runtime.mark = function(genFun) {
-    genFun.__proto__ = GFp;
+    genFun.__proto__ = GeneratorFunctionPrototype;
     genFun.prototype = Object.create(Gp);
     return genFun;
   };
