@@ -3,7 +3,7 @@
 var _taggedTemplateLiteral = function (strings, raw) {
   return Object.freeze(Object.defineProperties(strings, {
     raw: {
-      value: raw
+      value: Object.freeze(raw)
     }
   }));
 };
