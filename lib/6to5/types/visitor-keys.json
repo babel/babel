@@ -45,7 +45,6 @@
   "NewExpression":             ["callee", "arguments"],
   "ObjectExpression":          ["properties"],
   "ObjectPattern":             ["properties"],
-  "ParenthesizedExpression":   ["expression"],
   "PrivateDeclaration":        ["declarations"],
   "Program":                   ["body"],
   "Property":                  ["key", "value"],

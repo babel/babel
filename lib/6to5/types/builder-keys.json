@@ -16,7 +16,6 @@
   "MemberExpression":        ["object", "property", "computed"],
   "NewExpression":           ["callee", "arguments"],
   "ObjectExpression":        ["properties"],
-  "ParenthesizedExpression": ["expression"],
   "Program":                 ["body"],
   "Property":                ["kind", "key", "value", "computed"],
   "ReturnStatement":         ["argument"],
