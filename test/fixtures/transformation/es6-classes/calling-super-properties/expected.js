@@ -1,6 +1,6 @@
 "use strict";
 
-var _extends = function (child, parent) {
+var _inherits = function (child, parent) {
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -17,7 +17,7 @@ var Test = function Test() {
   Foo.prototype.test.call(this);
 };
 
-_extends(Test, Foo);
+_inherits(Test, Foo);
 
 Test.test = function () {
   return Foo.wow.call(this);

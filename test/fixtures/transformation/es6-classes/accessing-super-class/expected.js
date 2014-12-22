@@ -1,7 +1,7 @@
 "use strict";
 
 var _slice = Array.prototype.slice;
-var _extends = function (child, parent) {
+var _inherits = function (child, parent) {
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -26,7 +26,7 @@ var Test = function Test() {
   Foo.prototype.test.call.apply(Foo.prototype, [this, "test"].concat(_slice.call(arguments)));
 };
 
-_extends(Test, Foo);
+_inherits(Test, Foo);
 
 Test.prototype.test = function () {
   Foo.prototype.test.call(this);

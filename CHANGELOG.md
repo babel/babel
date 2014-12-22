@@ -37,6 +37,9 @@ Gaps between patch versions are faulty/broken releases.
  * Freeze tagged template literal object.
  * Remove inlined `regenerator` fork.
  * Remove `ParenthesizedExpression`.
+ * Rename `object-spread` helper to `object-without-properties`.
+ * Rename `class-props` helper to `prototype-properties`.
+ * Rename `extends` helper to `inherits`.
 
 ## 1.15.0
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var _extends = function (child, parent) {
+var _inherits = function (child, parent) {
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -20,4 +20,4 @@ var Q = function Q() {
   }
 };
 
-_extends(Q, _QSuper);
+_inherits(Q, _QSuper);

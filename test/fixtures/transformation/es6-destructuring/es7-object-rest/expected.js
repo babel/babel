@@ -1,6 +1,6 @@
 "use strict";
 
-var _objectSpread = function (obj, keys) {
+var _objectWithoutProperties = function (obj, keys) {
   var target = {};
   for (var i in obj) {
     if (keys.indexOf(i) >= 0) continue;
@@ -11,12 +11,12 @@ var _objectSpread = function (obj, keys) {
   return target;
 };
 
-var x = _objectSpread(z, []);
+var x = _objectWithoutProperties(z, []);
 
 var x = z.x;
-var y = _objectSpread(z, ["x"]);
+var y = _objectWithoutProperties(z, ["x"]);
 
 (function (_ref) {
   var x = _ref.x;
-  var y = _objectSpread(_ref, ["x"]);
+  var y = _objectWithoutProperties(_ref, ["x"]);
 });

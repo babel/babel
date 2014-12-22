@@ -1,6 +1,6 @@
 "use strict";
 
-var _extends = function (child, parent) {
+var _inherits = function (child, parent) {
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -18,7 +18,7 @@ var BaseController = function BaseController() {
   }
 };
 
-_extends(BaseController, Chaplin.Controller);
+_inherits(BaseController, Chaplin.Controller);
 
 var BaseController2 = function BaseController2() {
   if (Chaplin.Controller.Another) {
@@ -26,4 +26,4 @@ var BaseController2 = function BaseController2() {
   }
 };
 
-_extends(BaseController2, Chaplin.Controller.Another);
+_inherits(BaseController2, Chaplin.Controller.Another);

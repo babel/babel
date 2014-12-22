@@ -1,13 +1,13 @@
 "use strict";
 
-var _classProps = function (child, staticProps, instanceProps) {
+var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (staticProps) Object.defineProperties(child, staticProps);
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
 var Foo = function Foo() {};
 
-_classProps(Foo, null, (function (_ref) {
+_prototypeProperties(Foo, null, (function (_ref) {
   _ref[bar] = {
     get: function () {
       if (this._memoDone) return this._memo;
