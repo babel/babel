@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "acorn-6to5": "0.9.1-14",
-    "ast-types": "0.6.5",
+    "ast-types": "~0.6.1",
     "chokidar": "0.11.1",
     "commander": "2.5.0",
     "es6-shim": "0.21.0",
@@ -48,6 +48,7 @@
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
     "private": "0.1.6",
+    "regenerator": "^0.8.2",
     "regexpu": "0.3.0",
     "roadrunner": "^1.0.4",
     "source-map": "0.1.40",
