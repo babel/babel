@@ -34,6 +34,9 @@ Gaps between patch versions are faulty/broken releases.
  * Micro-optimizations to boost performance by 200%.
  * Rename module formatter methods `import` to `importDeclaration` and `export` to `exportDeclaration`.
  * Support multiple declarators in export variable declarations.
+ * Freeze tagged template literal object.
+ * Remove inlined `regenerator` fork.
+ * Remove `ParenthesizedExpression`.
 
 ## 1.15.0
 
