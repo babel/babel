@@ -1,12 +1,11 @@
 # Polyfill
 
-6to5 includes a polyfill that includes the
-[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and the
-[es6-shim](https://github.com/paulmillr/es6-shim) and
-[es6-symbol](https://github.com/medikoo/es6-symbol) polyfills.
+6to5 includes a polyfill that includes a custom
+[regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) and
+[core.js](https://github.com/zloirock/core-js).
 
 This will emulate a full ES6 environment. This polyfill is automatically loaded
-when using [6to5-node](usage.md#node).
+when using [6to5-node](usage.md#node) and [6to5/register](usage.md#register-hook).
 
 ## Usage
 

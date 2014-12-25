@@ -7,6 +7,8 @@ var chai       = require("chai");
 var util       = require("../lib/6to5/util");
 var _          = require("lodash");
 
+require("../lib/6to5/polyfill");
+
 var run = function (task, done) {
   var actual = task.actual;
   var expect = task.expect;
@@ -25,8 +27,6 @@ var run = function (task, done) {
   if (execCode) {
     result = transform(execCode, getOpts(exec));
     execCode = result.code;
-
-    require("../lib/6to5/polyfill");
 
     try {
       var fn = new Function("assert", "done", "genHelpers", execCode);
