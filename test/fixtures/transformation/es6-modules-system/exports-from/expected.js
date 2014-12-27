@@ -1,15 +1,13 @@
-System.register("actual", ["foo"], function (_export) {
+System.register("es6-modules-system/exports-from/expected", ["foo"], function (_export) {
   "use strict";
 
-  var __moduleName = "actual";
+  var __moduleName = "es6-modules-system/exports-from/expected";
 
   return {
     setters: [function (m) {
-      (function (obj) {
-        for (var i in obj) {
-          _export(i, obj[i]);
-        }
-      })(m);
+      for (var i in m) {
+        _export(i, m[i]);
+      }
 
       _export("foo", m.foo);
 

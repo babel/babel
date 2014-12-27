@@ -1,7 +1,7 @@
-System.register("actual", [], function (_export) {
+System.register("es6-modules-system/exports-named/expected", [], function (_export) {
   "use strict";
 
-  var __moduleName = "actual";
+  var __moduleName = "es6-modules-system/exports-named/expected";
 
   return {
     setters: [],

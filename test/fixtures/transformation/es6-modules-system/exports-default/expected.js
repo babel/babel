@@ -1,12 +1,14 @@
-System.register("actual", [], function (_export) {
+System.register("es6-modules-system/exports-default/expected", [], function (_export) {
   "use strict";
 
-  var __moduleName = "actual";
+  var __moduleName = "es6-modules-system/exports-default/expected";
 
   function _anonymous() {}
-  var _anonymous2;
+  function _anonymous2() {}
+
   function foo() {}
-  var Foo;
+  function Foo() {}
+
   return {
     setters: [],
     execute: function () {
@@ -20,11 +22,11 @@ System.register("actual", [], function (_export) {
 
       _export("default", _anonymous);
 
-      _export("default", _anonymous2 = function _anonymous2() {});
+      _export("default", _anonymous2);
 
       _export("default", foo);
 
-      _export("default", Foo = function Foo() {});
+      _export("default", Foo);
     }
   };
 });

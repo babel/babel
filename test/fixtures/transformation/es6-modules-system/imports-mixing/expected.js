@@ -1,7 +1,7 @@
-System.register("actual", ["foo"], function (_export) {
+System.register("es6-modules-system/imports-mixing/expected", ["foo"], function (_export) {
   "use strict";
 
-  var __moduleName = "actual";
+  var __moduleName = "es6-modules-system/imports-mixing/expected";
 
   var foo, xyz;
   return {

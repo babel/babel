@@ -1,7 +1,7 @@
-System.register("actual", [], function (_export) {
+System.register("es6-modules-system/exports-variable/expected", [], function (_export) {
   "use strict";
 
-  var __moduleName = "actual";
+  var __moduleName = "es6-modules-system/exports-variable/expected";
 
   var foo;
   var foo2;
@@ -10,8 +10,6 @@ System.register("actual", [], function (_export) {
   var foo5;
   var foo6;
   function foo7() {}
-  _export("foo7", foo7);
-
   var foo8;
   return {
     setters: [],
@@ -20,11 +18,11 @@ System.register("actual", [], function (_export) {
 
       _export("foo2", foo2 = function () {});
 
-      _export("foo3", foo3);
+      _export("foo3", foo3 = undefined);
 
       _export("foo4", foo4 = 2);
 
-      _export("foo5", foo5);
+      _export("foo5", foo5 = undefined);
 
       _export("foo6", foo6 = 3);
 
