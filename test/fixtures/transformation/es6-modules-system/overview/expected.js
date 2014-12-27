@@ -11,7 +11,8 @@ System.register("es6-modules-system/overview/expected", ["foo", "foo-bar", "./di
     execute: function () {
       "use strict";
 
-      var foo = _foo.default;
+      var foo = _foo["default"];
+      var foo = _foo;
       var bar = _foo.bar;
       var bar = _foo.foo;
       _export("test", test);

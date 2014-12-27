@@ -5,6 +5,7 @@ Gaps between patch versions are faulty/broken releases.
 ## 2.0.2
 
  * Inherit comments in `for-of` transformer.
+ * Remove `interopRequire` from `system` module formatter.
 
 ## 2.0.1
 

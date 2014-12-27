@@ -7,8 +7,7 @@ System.register("es6-modules-system/imports-mixing/expected", ["foo"], function 
     execute: function () {
       "use strict";
 
-      var foo = _foo.default;
-
+      var foo = _foo["default"];
       var xyz = _foo.baz;
     }
   };
