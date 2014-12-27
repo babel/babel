@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.0.2
+
+ * Inherit comments in `for-of` transformer.
+
 ## 2.0.1
 
  * Remap `UpdateExpression` module export binding.
