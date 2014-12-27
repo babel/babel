@@ -11,13 +11,7 @@ System.register("es6-modules-system/overview/expected", ["foo", "foo-bar", "./di
     execute: function () {
       "use strict";
 
-      var _interopRequire = function (obj) {
-        return obj && (obj["default"] || obj);
-      };
-
-      var foo = _interopRequire(_foo);
-
-      var foo = _foo;
+      var foo = _foo.default;
       var bar = _foo.bar;
       var bar = _foo.foo;
       _export("test", test);
