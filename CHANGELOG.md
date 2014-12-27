@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.0.1
+
+ * Remap `UpdateExpression` module export binding.
+ * Fix automatic closure on `PrivateDeclaration` in classes.
+
 ## 2.0.0
 
  * Make string literal generation only escapes unicode that it has to.
