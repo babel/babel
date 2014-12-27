@@ -3183,10 +3183,13 @@
     } else
     // export default ...;
     if (eat(_default)) {
-      if (tokType === _function || tokType === _class) {
-        node.declaration = parseStatement();
-      } else {
-        node.declaration = parseExpression(true);
+      var declar = node.declaration = parseExpression(true);
+      if (declar.id) {
+        if (declar.type === "FunctionExpression") {
+          declar.type = "FunctionDeclaration";
+        } else if (declar.type === "ClassExpression") {
+          declar.type = "ClassDeclaration";
+        }
       }
       node['default'] = true;
       node.specifiers = null;
