@@ -1,13 +1,13 @@
 System.register("es6-modules-system/imports-glob/expected", ["foo"], function (_export) {
-  "use strict";
-
-  var __moduleName = "es6-modules-system/imports-glob/expected";
-
-  var foo;
+  var _foo;
   return {
     setters: [function (m) {
-      foo = m;
+      _foo = m
     }],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+
+      var foo = _foo;
+    }
   };
 });

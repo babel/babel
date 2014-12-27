@@ -1,11 +1,9 @@
 System.register("es6-modules-system/exports-named/expected", [], function (_export) {
-  "use strict";
-
-  var __moduleName = "es6-modules-system/exports-named/expected";
-
   return {
     setters: [],
     execute: function () {
+      "use strict";
+
       _export("foo", foo);
 
       _export("foo", foo);

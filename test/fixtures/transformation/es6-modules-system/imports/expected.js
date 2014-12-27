@@ -1,10 +1,15 @@
 System.register("es6-modules-system/imports/expected", ["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
-  "use strict";
-
-  var __moduleName = "es6-modules-system/imports/expected";
-
+  var _foo, _fooBar, _directoryFooBar;
   return {
-    setters: [null, null, null],
-    execute: function () {}
+    setters: [function (m) {
+      _foo = m
+    }, function (m) {
+      _fooBar = m
+    }, function (m) {
+      _directoryFooBar = m
+    }],
+    execute: function () {
+      "use strict";
+    }
   };
 });

@@ -1,18 +1,18 @@
 System.register("es6-modules-system/imports-named/expected", ["foo"], function (_export) {
-  "use strict";
-
-  var __moduleName = "es6-modules-system/imports-named/expected";
-
-  var bar, baz, xyz;
+  var _foo;
   return {
     setters: [function (m) {
-      bar = m.bar;
-      bar = m.bar;
-      baz = m.baz;
-      baz = m.bar;
-      baz = m.bar;
-      xyz = m.xyz;
+      _foo = m
     }],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+
+      var bar = _foo.bar;
+      var bar = _foo.bar;
+      var baz = _foo.baz;
+      var baz = _foo.bar;
+      var baz = _foo.bar;
+      var xyz = _foo.xyz;
+    }
   };
 });

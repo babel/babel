@@ -1,14 +1,19 @@
 System.register("es6-modules-system/imports-mixing/expected", ["foo"], function (_export) {
-  "use strict";
-
-  var __moduleName = "es6-modules-system/imports-mixing/expected";
-
-  var foo, xyz;
+  var _foo;
   return {
     setters: [function (m) {
-      foo = m.default;
-      xyz = m.baz;
+      _foo = m
     }],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+
+      var _interopRequire = function (obj) {
+        return obj && (obj["default"] || obj);
+      };
+
+      var foo = _interopRequire(_foo);
+
+      var xyz = _foo.baz;
+    }
   };
 });
