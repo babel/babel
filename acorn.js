@@ -3175,7 +3175,7 @@
   function parseExport(node) {
     next();
     // export var|const|let|function|class ...;
-    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
+    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || tokType === _name && tokVal === 'async') {
       node.declaration = parseStatement();
       node['default'] = false;
       node.specifiers = null;
