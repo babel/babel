@@ -7,13 +7,9 @@ System.register("es6-modules-system/imports-default/expected", ["foo"], function
     execute: function () {
       "use strict";
 
-      var _interopRequire = function (obj) {
-        return obj && (obj["default"] || obj);
-      };
+      var foo = _foo.default;
 
-      var foo = _interopRequire(_foo);
-
-      var foo = _interopRequire(_foo);
+      var foo = _foo.default;
     }
   };
 });
