@@ -95,6 +95,15 @@ to5.transformFile("filename.js", options, function (err, result) {
 });
 ```
 
+### to5.transform.fromAst(ast, [code], [opts])
+
+```javascript
+var result = to5.transform.fromAst(ast, "var a = 2;", opts);
+result.code;
+result.map;
+result.ast;
+```
+
 #### Options
 
 ```javascript
@@ -153,13 +162,47 @@ to5.transformFile("filename.js", options, function (err, result) {
   // Default: false
   runtime: true,
 
-  // Output comments in generated output
-  // Default: true
-  comments: false,
-
   // Enable support for experimental ES7 features
   // Default: false
-  experimental: true
+  experimental: true,
+
+  // Set this to `false` if you don't want the transformed AST in the returned
+  // result
+  // Default: true
+  ast: true,
+
+  // Set this to `false` if you don't want the transformed code in the returned
+  // result
+  // Default: true
+  code: true,
+
+  format: {
+    // Output comments in generated output
+    // Default: true
+    comments: true,
+
+    // Do not include superfluous whitespace characters and line terminators
+    // Default: false
+    compact: false,
+
+    indent: {
+      // Preserve parentheses in new expressions that have no arguments
+      // Default: true
+      parentheses: true,
+
+      // Adjust the indentation of multiline comments to keep asterisks vertically aligned
+      // Default: true
+      adjustMultilineComment: true,
+
+      // Indent string
+      // Default: "  "
+      style: "  ",
+
+      // Base indent level
+      // Default: 0
+      base: 0
+    }
+  }
 }
 ```
 
@@ -168,6 +211,9 @@ to5.transformFile("filename.js", options, function (err, result) {
 All subsequent files required by node with the extensions `.es6` and `.js` will
 be transformed by 6to5. The polyfill specified in [Polyfill](polyfill.md) is
 also required; but this is automatically loaded when using:
+
+Source maps are automatically configured so if any errors a thrown then line
+number info is mapped and you'll get the correct source location.
 
 ```javascript
 require("6to5/register");
@@ -207,12 +253,3 @@ require("6to5/register")({
   extensions: [".js", ".es6"]
 });
 ```
-
-## Experimental
-
-6to5 also has experimental support for ES7 proposals. You can enable this with
-the `experimental: true` option when using the [Node API](#node) or
-`--experimental` when using the [CLI](#cli).
-
-**WARNING:** These proposals are subject to change so use with
-**extreme caution**.

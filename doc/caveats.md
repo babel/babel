@@ -2,22 +2,31 @@
 
 In order for certain features to work they require certain polyfills. You can
 satisfy **all** 6to5 feature requirements by using the included
-[polyfill](polyfill.md). You may alternatively selectively include what you need:
+[polyfill](polyfill.md).
 
-| Feature                     | Requirements                                                                                                                 |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Abstract References         | [experimental](usage.md#experimental), `Symbol`                                                                              |
-| Array destructuring         | `Array.isArray`, `Array.from`                                                                                                |
-| Async functions, Generators | [experimental](usage.md#experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
-| Comprehensions              | [experimental](usage.md#experimental), `Array.isArray`, `Array.from`                                                         |
-| For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                       |
-| Object spread/rest          | [experimental](usage.md#experimental), `Object.assign`                                                                       |
-| Spread                      | `Array.isArray`, `Array.from`                                                                                                |
+You may alternatively selectively include what you need:
 
-## Classes
+| Feature                     | Requirements                                                                                                           |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Abstract References         | [experimental](experimental.md), `Symbol`                                                                              |
+| Array destructuring         | `Array.isArray`, `Array.from`                                                                                          |
+| Async functions, Generators | [experimental](experimental.md), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
+| Comprehensions              | [experimental](experimental.md), `Array.isArray`, `Array.from`                                                         |
+| For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                 |
+| Object spread/rest          | [experimental](experimental.md), `Object.assign`                                                                       |
+| Spread                      | `Array.isArray`, `Array.from`                                                                                          |
 
-Built-in classes such as `Date`, `Array` and `DOM` cannot be subclassed due to
-limitations in ES5 implementations.
+## ES5
+
+Since 6to5 assumes that your code will be ran in an ES5 environment it uses ES5
+functions. So if you're using an environment that has limited or no support for
+ES5 such as lower versions of IE then using the
+[es5-shim](https://github.com/es-shims/es5-shim) along with the
+[6to5 polyfill](polyfill.md) will add support for these methods.
+
+## Internet Explorer
+
+### Classes (9 and below)
 
 If you're inheriting from a class then static properties are inherited from it
 via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
@@ -40,9 +49,11 @@ class Bar extends Foo {
 }
 ```
 
-## 6to5-node
+## Getters/setters (8 and below)
 
-It is necessary to manually install `kexec` package on Unix-like OSes for
-`6to5-node` to correctly handle signals.
+In IE8 `Object.defineProperty` can only be used on DOM objects. This is
+unfortunate as it's required to set getters and setters. Due to this if
+you plan on supporting IE8 or below then the user of getters and setters
+isn't recommended.
 
-**It is not recommended to use `6to5-node` with a process manager (`supervisord`, `upstart`, `systemd`, ...) without first installing `kexec`!**
+Reference: [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Internet_Explorer_8_specific_notes).

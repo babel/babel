@@ -2,6 +2,46 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.0.0
+
+ * Make string literal generation only escapes unicode that it has to.
+ * Internal code generation format options have been exposed.
+ * Change playground method binding operator from `:` to `#` removing ambiguous syntax with terns.
+ * Fix rest parameters in async and generator functions.
+ * Export/import declarations replace by the modules transformer now inherit comments.
+ * Added playground flag to `6to5-node`.
+ * `6to5-node` now behaves the same as `node`.
+ * `6to5-node` now uses `kexec` to become the forked process to correctly propagate signals on unix.
+ * Constants are now block scoped.
+ * Exposed ast transformer.
+ * Merged `commonInterop` and `common` module formatters.
+ * Fix generator comprehensions not inheriting `arguments`, `this` etc.
+ * Object and class mutator shorthand are now enumerable.
+ * Remove regenerator `Generator has already finished` error which isn't spec-compliant.
+ * Expose internal `spec` transformers that nicen up code output.
+ * Add export variable declaration default initializers.
+ * Propagate export declaration reassignments.
+ * Add initializer default to block scoped variable declarations within a loop.
+ * Flow type support.
+ * Make async/await contextual keywords.
+ * Allow `yield`ing of non-objects.
+ * Class declarations now lack an IIFE.
+ * Support falsy and `null` super classes.
+ * Add support for experimental abstract references `private` declarations.
+ * Leave out IIFE for class declarations.
+ * Switched to [core-js](https://github.com/zloirock/core-js) from [es6-symbol](https://github.com/medikoo/es6-symbol) and [es6-shim](https://github.com/paulmillr/es6-shim/) for built-in polyfill.
+ * `amd` and `umd` module formatters now behave the same as `common` with `interopRequire`.
+ * Micro-optimizations to boost performance by 200%.
+ * Rename module formatter methods `import` to `importDeclaration` and `export` to `exportDeclaration`.
+ * Support multiple declarators in export variable declarations.
+ * Freeze tagged template literal object.
+ * Remove inlined `regenerator` fork.
+ * Remove `ParenthesizedExpression`.
+ * Rename `object-spread` helper to `object-without-properties`.
+ * Rename `class-props` helper to `prototype-properties`.
+ * Rename `extends` helper to `inherits`.
+ * Completely rewritten `system` module formatter.
+
 ## 1.15.0
 
  * Don't alias `GeneratorFunction` and check the name which causes minifiers to remove the name and throw an error later on when we check if it's set.

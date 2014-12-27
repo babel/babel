@@ -1,6 +1,8 @@
 # Differences
 
-## Philosophy
+There are three main points that separate 6to5 from all other transpilers.
+
+### Readable code
 
 The fundamental concept behind 6to5 is that the generated code must be close as
 possible to the original, retaining all the same formatting and readability.
@@ -51,7 +53,27 @@ As you can tell, it's not very pretty, unreadable even. Instead of mapping
 directly to a runtime, like other transpilers, 6to5 maps directly to the
 equivalent ES5.
 
-Sometimes there are little things that 6to5 needs
+Sometimes there are little inline functions that 6to5 needs. These are
+placed at the top of your file much like coffee-script does. If these
+are bother you then you can use the [optional runtime](optional-runtime.md).
+We promise that these inline functions will never be significant and will
+always be used as little as possible.
+
+### Static analysis
+
+6to5 uses a lot of static analysis to simplify code as much as possible.
+Not many other transpilers do this, and those that do don't do it nearly
+as much as 6to5. This process is pretty intensive but it leads to higher
+quality code.
+
+### Spec compliancy
+
+6to5 prides itself on
+[spec compliancy](https://kangax.github.io/compat-table/es6/). We have
+excellent support for edgecases, something that many other transpilers
+suffer from, including Traceur. When you use 6to5 you can be confident
+that when you turn it off and use your code in a full ES6 environment
+**it'll just work**.
 
 ## Comparison to other transpilers
 
@@ -62,40 +84,44 @@ Sometimes there are little things that 6to5 needs
 | Source maps                  | ✓    | ✓       | ✓              | ✓      |        | ✓           |
 | No compiler global pollution | ✓    |         | ✓              | ✓      |        | ✓           |
 | Optional runtime             | ✓    |         | ✓              |        |        | ✓           |
-| Browser support              | ✓    | ✓       |                | ✓      |        |             |
+| Browser compiler             | ✓    | ✓       |                | ✓      |        |             |
 
 ### Language Support
 
-|                              | 6to5  | Traceur | es6-transpiler | esnext | es6now | jstransform |
-| ---------------------------- | ----- | ------- | -------------- | ------ | ------ | ----------- |
-| Abstract references          | ✓     |         |                |        |        |             |
-| Array comprehension          | ✓     | ✓       | ✓              |        |        |             |
-| Arrow functions              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Async functions              | ✓     | ✓       |                | ✓      |        |             |
-| Classes                      | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Computed property names      | ✓     | ✓       | ✓              | ✓      | ✓      |             |
-| Constants                    | ✓     | ✓       | ✓              |        |        |             |
-| Default parameters           | ✓     | ✓       | ✓              | ✓      | ✓      |             |
-| Destructuring                | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Exponentiation operator      | ✓     | ✓       |                |        |        |             |
-| For-of                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
-| Generators                   | ✓     | ✓       |                | ✓      |        |             |
-| Generator comprehension      | ✓     | ✓       |                |        |        |             |
-| Let scoping                  | ✓     | ✓       | ✓              |        |        |             |
-| Modules                      | ✓     | ✓       |                |        | ✓      |             |
-| Object rest/spread           | ✓     |         |                |        |        | ✓           |
-| Property method assignment   | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Property name shorthand      | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Rest parameters              | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Spread                       | ✓     | ✓       | ✓              | ✓      | ✓      |             |
-| Template literals            | ✓     | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Unicode regex                | ✓     | ✓       | ✓              |        |        |             |
+|                              | 6to5 | Traceur | es6-transpiler | esnext | es6now | jstransform |
+| ---------------------------- | ---- | ------- | -------------- | ------ | ------ | ----------- |
+| Abstract references          | ✓    |         |                |        |        |             |
+| Array comprehension          | ✓    | ✓       | ✓              |        |        |             |
+| Arrow functions              | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Async functions              | ✓    | ✓       |                | ✓      |        |             |
+| Async generator functions    | ✓    | ✓       |                |        |        |             |
+| Classes                      | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Computed property names      | ✓    | ✓       | ✓              | ✓      | ✓      |             |
+| Constants                    | ✓    | ✓       | ✓              |        |        |             |
+| Default parameters           | ✓    | ✓       | ✓              | ✓      | ✓      |             |
+| Destructuring                | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Exponentiation operator      | ✓    | ✓       |                |        |        |             |
+| Flow types                   | ✓    |         |                |        |        | ✓           |
+| For-of                       | ✓    | ✓       | ✓              | ✓      | ✓      |             |
+| Generators                   | ✓    | ✓       |                | ✓      |        |             |
+| Generator comprehension      | ✓    | ✓       |                |        |        |             |
+| JSX                          | ✓    |         |                |        |        |             |
+| Let scoping                  | ✓    | ✓       | ✓              |        |        |             |
+| Modules                      | ✓    | ✓       |                |        | ✓      |             |
+| Object rest/spread           | ✓    |         |                |        |        | ✓           |
+| Property method assignment   | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Property name shorthand      | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Rest parameters              | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| React                        | ✓    |         |                |        |        |             |
+| Spread                       | ✓    | ✓       | ✓              | ✓      | ✓      |             |
+| Template literals            | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
+| Unicode regex                | ✓    | ✓       | ✓              |        |        |             |
 
 ### [Traceur](https://github.com/google/traceur-compiler)
 
 Traceur requires quite a bulky runtime (~75KB) and produces quite verbose code.
 While this can be trimmed down by selectively building the runtime, it's an
-unneccesary step when a large runtime can be eliminated entirely.
+unnecessary step when a large runtime can be eliminated entirely.
 
 ### [es6now](https://github.com/zenparsing/es6now)
 

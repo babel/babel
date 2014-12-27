@@ -1,7 +1,7 @@
 "use strict";
 
-var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
+var _inherits = function (child, parent) {
+  child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
       enumerable: false,
@@ -9,19 +9,15 @@ var _extends = function (child, parent) {
       configurable: true
     }
   });
-  child.__proto__ = parent;
+  if (parent) child.__proto__ = parent;
 };
 
 var Test = function Test() {
   this.state = "test";
 };
 
-var Foo = (function (Bar) {
-  var Foo = function Foo() {
-    this.state = "test";
-  };
+var Foo = function Foo() {
+  this.state = "test";
+};
 
-  _extends(Foo, Bar);
-
-  return Foo;
-})(Bar);
+_inherits(Foo, Bar);

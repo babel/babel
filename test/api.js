@@ -8,6 +8,11 @@ suite("api", function () {
     assert.ok(!result.code);
   });
 
+  test("{ ast: false }", function () {
+    var result = transform("foo('bar');", { ast: false });
+    assert.ok(!result.ast);
+  });
+
   test("addDeclaration unknown", function () {
     var file = new File;
     assert.throws(function () {

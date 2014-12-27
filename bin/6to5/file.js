@@ -113,16 +113,14 @@ module.exports = function (commander, filenames) {
     walk();
 
     if (commander.watch) {
-      var watcher = chokidar.watch(filenames, {
+      chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true
-      });
-
-      _.each(["add", "change", "unlink"], function (type) {
-        watcher.on(type, function (filename) {
+      }).on("all", function (type, filename) {
+        if (type === "add" || type === "change" || type === "unlink" ) {
           console.log(type, filename);
           walk();
-        });
+        }
       });
     }
   };

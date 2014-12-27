@@ -1,4 +1,5 @@
 export var foo = 1;
+export var foo = 1, bar = 2;
 export var foo2 = function () {};
 export var foo3;
 export let foo4 = 2;

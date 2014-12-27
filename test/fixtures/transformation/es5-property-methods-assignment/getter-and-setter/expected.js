@@ -8,7 +8,8 @@ var obj = (function (_obj) {
       },
       set: function (value) {
         this._foo = value;
-      }
+      },
+      enumerable: true
     }
   });
 

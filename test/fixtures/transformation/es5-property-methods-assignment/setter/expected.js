@@ -5,7 +5,8 @@ var obj = (function (_obj) {
     foo: {
       set: function (value) {
         this._foo = value;
-      }
+      },
+      enumerable: true
     }
   });
 

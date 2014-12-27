@@ -12,19 +12,19 @@ var obj = {
   }
 };
 
-var foo = obj:getFoo;
+var foo = obj#getFoo;
 assert.equal(foo(), "foo");
 
-var bar = obj:getBar("foo");
+var bar = obj#getBar("foo");
 assert.equal(bar(), "foo bar");
 
-var zoo = obj:getZoo("foo");
+var zoo = obj#getZoo("foo");
 assert.equal(zoo("bar"), "foo bar foo bar");
 
-assert.deepEqual(["foo", "bar"].map(:toUpperCase), ["FOO", "BAR"]);
-assert.deepEqual([1.1234, 23.53245, 3].map(:toFixed(2)), ["1.12", "23.53", "3.00"]);
+assert.deepEqual(["foo", "bar"].map(#toUpperCase), ["FOO", "BAR"]);
+assert.deepEqual([1.1234, 23.53245, 3].map(#toFixed(2)), ["1.12", "23.53", "3.00"]);
 
 var get = function () {
   return 2;
 }
-assert.deepEqual([1.1234, 23.53245, 3].map(:toFixed(get())), ["1.12", "23.53", "3.00"]);
+assert.deepEqual([1.1234, 23.53245, 3].map(#toFixed(get())), ["1.12", "23.53", "3.00"]);

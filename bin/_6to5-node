@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-var commander = require("commander");
-var path      = require("path");
-var repl      = require("repl");
-var to5       = require("../lib/6to5");
-var util      = require("../lib/6to5/util");
-var vm        = require("vm");
-var _         = require("lodash");
+var roadrunner = require("roadrunner");
+var commander  = require("commander");
+var Module     = require("module");
+var path       = require("path");
+var repl       = require("repl");
+var to5        = require("../lib/6to5");
+var util       = require("../lib/6to5/util");
+var vm         = require("vm");
+var _          = require("lodash");
 
 commander.option("-e, --eval [script]", "Evaluate script");
 commander.option("-p, --print", "Evaluate script and print result");
@@ -14,28 +16,33 @@ commander.option("-i, --ignore [regex]", "Ignore all files that match this regex
 commander.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js]");
 commander.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
 commander.option("-g, --playground", "Enable playground support");
+commander.option("-c, --cache", "Cache compiled files and require paths");
 
 var pkg = require("../package.json");
 commander.version(pkg.version);
 commander.usage("[options] [ -e script | script.js ] [arguments]");
 commander.parse(process.argv);
 
+if (commander.cache) roadrunner.load();
+
 //
 
 to5.register({
   experimental: commander.experimental,
   extensions:   commander.extensions,
-  ignore:       commander.ignore
+  playground:   commander.playground,
+  ignore:       commander.ignore,
+  cache:        commander.cache && roadrunner.get("6to5")
 });
 
 //
 
 var _eval = function (code, filename) {
   code = to5.transform(code, {
-    modules: "commonInterop",
     filename: filename,
     blacklist: ["useStrict"],
-    experimental: commander.experimental
+    experimental: commander.experimental,
+    playground: commander.playground
   }).code;
   return vm.runInThisContext(code, filename);
 };
@@ -44,20 +51,33 @@ if (commander.eval) {
   var result = _eval(commander.eval, "eval");
   if (commander.print) console.log(result);
 } else {
-  var filenames = commander.args;
+  if (commander.args.length) {
+    // slice all arguments up to the first filename since they're 6to5 args that we handle
+    var args = process.argv.slice(2);
 
-  if (filenames.length) {
-    _.each(filenames, function (filename) {
-      if (!util.isAbsolute(filename)) {
-        filename = path.join(process.cwd(), filename);
+    var i = 0;
+    _.each(args, function (arg, i2) {
+      if (arg[0] !== "-") {
+        i = i2;
+        return false;
       }
-
-      require(require.resolve(filename));
     });
+    args = args.slice(i);
+
+    // make the filename absolute
+    var filename = args[0]
+    if (!util.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+
+    // add back on node and concat the sliced args
+    process.argv = ["node"].concat(args);
+
+    Module.runMain();
   } else {
     replStart();
   }
 }
+
+if (commander.cache) roadrunner.save();
 
 function replStart() {
   repl.start({

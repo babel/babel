@@ -12,7 +12,7 @@ Playground is a proving ground for **possible** ES7 proposals.
 to5.transform("code", { playground: true });
 ```
 
-**NOTE:** Enabling `playground` also enables [experimental support](usage.md#experimental).
+**NOTE:** Enabling `playground` also enables [experimental support](experimental.md).
 
 ## Features
 
@@ -52,11 +52,11 @@ if (!Object.prototype.hasOwnProperty.call(obj, "x")) obj.x = 2;
 ### Method binding
 
 ```javascript
-var fn = obj:method;
-var fn = obj:method("foob");
+var fn = obj#method;
+var fn = obj#method("foob");
 
-["foo", "bar"].map(:toUpperCase); // ["FOO", "BAR"]
-[1.1234, 23.53245, 3].map(:toFixed(2)); // ["1.12", "23.53", "3.00"]
+["foo", "bar"].map(#toUpperCase); // ["FOO", "BAR"]
+[1.1234, 23.53245, 3].map(#toFixed(2)); // ["1.12", "23.53", "3.00"]
 ```
 
 equivalent to:

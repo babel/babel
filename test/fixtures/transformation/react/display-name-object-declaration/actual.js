@@ -1,7 +1,7 @@
 exports = {
   Component: React.createClass({
-  render: function () {
-    return null;
-  }
+    render: function () {
+      return null;
+    }
   })
 };

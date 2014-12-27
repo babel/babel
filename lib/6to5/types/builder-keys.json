@@ -1,5 +1,6 @@
 {
   "ArrayExpression":         ["elements"],
+  "ArrowFunctionExpression": ["params", "body"],
   "AssignmentExpression":    ["operator", "left", "right"],
   "BinaryExpression":        ["operator", "left", "right"],
   "BlockStatement":          ["body"],
@@ -15,7 +16,6 @@
   "MemberExpression":        ["object", "property", "computed"],
   "NewExpression":           ["callee", "arguments"],
   "ObjectExpression":        ["properties"],
-  "ParenthesizedExpression": ["expression"],
   "Program":                 ["body"],
   "Property":                ["kind", "key", "value", "computed"],
   "ReturnStatement":         ["argument"],
@@ -24,5 +24,6 @@
   "UnaryExpression":         ["operator", "argument", "prefix"],
   "VariableDeclaration":     ["kind", "declarations"],
   "VariableDeclarator":      ["id", "init"],
+  "WithStatement":           ["object", "body"],
   "YieldExpression":         ["argument", "delegate"]
 }

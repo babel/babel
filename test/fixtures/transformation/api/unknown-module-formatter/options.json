@@ -1,0 +1,4 @@
+{
+  "modules": "foobar",
+  "throws": "Unknown module formatter type \"foobar\""
+}

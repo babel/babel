@@ -19,12 +19,11 @@ to5.transform('import "foo";', { modules: "common" });
 
  * [AMD](#amd)
  * [Common (Default)](#common-default)
- * [Common Interop](#common-interop)
  * [Ignore](#ignore)
  * [System](#system)
  * [UMD](#umd)
 
-### Common (Default)
+### Common
 
 ```sh
 $ 6to5 --modules common
@@ -33,6 +32,11 @@ $ 6to5 --modules common
 **In**
 
 ```javascript
+export default test;
+
+export {test};
+export var test = 5;
+
 import "foo";
 
 import foo from "foo";
@@ -40,95 +44,30 @@ import * as foo from "foo";
 
 import {bar} from "foo";
 import {foo as bar} from "foo";
-
-export {test};
-export var test = 5;
-
-export default test;
 ```
 
 **Out**
 
 ```javascript
-require("foo");
+"use strict";
 
-var foo = require("foo").default;
-var foo = require("foo");
-
-var bar = require("foo").bar;
-var bar = require("foo").foo;
-
-exports.test = test;
-var test = 5; exports.test = test;
-
-exports.default = test;
-```
-
-### Common interop
-
-```sh
-$ 6to5 --modules commonInterop
-```
-
-**In**
-
-```javascript
-import "foo";
-
-import foo from "foo";
-import * as foo from "foo";
-
-import {bar} from "foo";
-import {foo as bar} from "foo";
-
-export {test};
-export var test = 5;
-
-export default test;
-```
-
-**Out**
-
-```javascript
 var _interopRequire = function (obj) {
   return obj && (obj["default"] || obj);
 };
 
-require("foo");
-
-var foo = _interopRequire(require("foo"));
-var foo = require("foo");
-
-var bar = require("foo").bar;
-var bar = require("foo").foo;
+exports = module.exports = test;
 
 exports.test = test;
 var test = exports.test = 5;
 
-exports["default"] = test;
-```
+require("foo");
 
-#### module.exports behaviour
+var foo = _interopRequire(require("foo"));
 
-If there exist no other non-default `export`s then `default exports` are
-exported as `module.exports` instead of `exports.default`.
+var foo = require("foo");
 
-**In**
-
-```javascript
-export default function foo() {
-
-}
-```
-
-**Out**
-
-```javascript
-module.exports = foo;
-
-function foo() {
-
-}
+var bar = require("foo").bar;
+var bar = require("foo").foo;
 ```
 
 ### AMD
@@ -151,9 +90,14 @@ export function bar() {
 
 ```javascript
 define(["exports", "foo"], function (exports, _foo) {
-  exports.bar = bar;
+  "use strict";
 
-  var foo = _foo.default;
+  var _interopRequire = function (obj) {
+    return obj && (obj["default"] || obj);
+  };
+
+  exports.bar = bar;
+  var foo = _interopRequire(_foo);
 
   function bar() {
     return foo("foobar");
@@ -192,10 +136,15 @@ export function bar() {
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   }
-})(function (exports) {
-  exports.bar = bar;
+})(function (exports, _foo) {
+  "use strict";
 
-  var foo = _foo.default;
+  var _interopRequire = function (obj) {
+    return obj && (obj["default"] || obj);
+  };
+
+  exports.bar = bar;
+  var foo = _interopRequire(_foo);
 
   function bar() {
     return foo("foobar");
@@ -288,7 +237,7 @@ ModuleFormatter.prototype.transform = function (ast) {
   // feel free to modify this however
 };
 
-ModuleFormatter.prototype.import = function (node, nodes) {
+ModuleFormatter.prototype.importDeclaration = function (node, nodes) {
   // node is an ImportDeclaration
 };
 
@@ -297,7 +246,7 @@ ModuleFormatter.prototype.importSpecifier = function (specifier, node, nodes) {
   // node is an ImportDeclaration
 };
 
-ModuleFormatter.prototype.export = function (node, nodes) {
+ModuleFormatter.prototype.exportDeclaration = function (node, nodes) {
   // node is an ExportDeclaration
 };
 

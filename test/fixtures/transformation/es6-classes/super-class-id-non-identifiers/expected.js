@@ -1,7 +1,7 @@
 "use strict";
 
-var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
+var _inherits = function (child, parent) {
+  child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
       enumerable: false,
@@ -9,15 +9,15 @@ var _extends = function (child, parent) {
       configurable: true
     }
   });
-  child.__proto__ = parent;
+  if (parent) child.__proto__ = parent;
 };
 
-var Q = (function (_ref) {
-  var Q = function Q() {
-    _ref.apply(this, arguments);
-  };
+var _QSuper = function () {};
 
-  _extends(Q, _ref);
+var Q = function Q() {
+  if (_QSuper) {
+    _QSuper.apply(this, arguments);
+  }
+};
 
-  return Q;
-})(function () {});
+_inherits(Q, _QSuper);

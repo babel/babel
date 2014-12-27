@@ -1,7 +1,7 @@
 "use strict";
 
-var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
+var _inherits = function (child, parent) {
+  child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
       enumerable: false,
@@ -9,25 +9,21 @@ var _extends = function (child, parent) {
       configurable: true
     }
   });
-  child.__proto__ = parent;
+  if (parent) child.__proto__ = parent;
 };
 
-var BaseController = (function (Chaplin) {
-  var BaseController = function BaseController() {
+var BaseController = function BaseController() {
+  if (Chaplin.Controller) {
     Chaplin.Controller.apply(this, arguments);
-  };
+  }
+};
 
-  _extends(BaseController, Chaplin.Controller);
+_inherits(BaseController, Chaplin.Controller);
 
-  return BaseController;
-})(Chaplin);
-
-var BaseController2 = (function (Chaplin) {
-  var BaseController2 = function BaseController2() {
+var BaseController2 = function BaseController2() {
+  if (Chaplin.Controller.Another) {
     Chaplin.Controller.Another.apply(this, arguments);
-  };
+  }
+};
 
-  _extends(BaseController2, Chaplin.Controller.Another);
-
-  return BaseController2;
-})(Chaplin);
+_inherits(BaseController2, Chaplin.Controller.Another);
