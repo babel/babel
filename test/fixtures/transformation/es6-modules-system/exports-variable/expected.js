@@ -13,7 +13,6 @@ System.register("actual", [], function (_export) {
   _export("foo7", foo7);
 
   var foo8;
-
   return {
     setters: [],
     execute: function () {

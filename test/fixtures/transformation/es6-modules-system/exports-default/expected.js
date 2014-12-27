@@ -5,10 +5,8 @@ System.register("actual", [], function (_export) {
 
   function _anonymous() {}
   var _anonymous2;
-
   function foo() {}
   var Foo;
-
   return {
     setters: [],
     execute: function () {
