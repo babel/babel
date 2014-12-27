@@ -2476,7 +2476,11 @@
     } else
     // export default ...;
     if (eat(_default)) {
-      node.declaration = parseExpression(true);
+      if (tokType === _function || tokType === _class) {
+        node.declaration = parseStatement();
+      } else {
+        node.declaration = parseExpression(true);
+      }
       node['default'] = true;
       node.specifiers = null;
       node.source = null;
