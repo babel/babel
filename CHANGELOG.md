@@ -29,7 +29,7 @@ Gaps between patch versions are faulty/broken releases.
  * Support falsy and `null` super classes.
  * Add support for experimental abstract references `private` declarations.
  * Leave out IIFE for class declarations.
- * Switched to [core-js](https://github.com/zloirock/core-js) over [es6-symbol](https://github.com/medikoo/es6-symbol) and [es6-shim](https://github.com/paulmillr/es6-shim/).
+ * Switched to [core-js](https://github.com/zloirock/core-js) from [es6-symbol](https://github.com/medikoo/es6-symbol) and [es6-shim](https://github.com/paulmillr/es6-shim/) for built-in polyfill.
  * `amd` and `umd` module formatters now behave the same as `common` with `interopRequire`.
  * Micro-optimizations to boost performance by 200%.
  * Rename module formatter methods `import` to `importDeclaration` and `export` to `exportDeclaration`.
@@ -40,6 +40,7 @@ Gaps between patch versions are faulty/broken releases.
  * Rename `object-spread` helper to `object-without-properties`.
  * Rename `class-props` helper to `prototype-properties`.
  * Rename `extends` helper to `inherits`.
+ * Completely rewritten `system` module formatter.
 
 ## 1.15.0
 
