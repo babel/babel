@@ -1,3 +1,6 @@
+// skip these tests under instanbul since they're useless
+if (process.env.running_under_istanbul === '1') return;
+
 var readdir = require("fs-readdir-recursive");
 var helper  = require("./_helper");
 var assert  = require("assert");
