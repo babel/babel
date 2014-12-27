@@ -65,24 +65,30 @@ suite("traverse", function () {
 
     var actual = [];
 
-    traverse(ast, function (node) {
-      actual.push(node);
+    traverse(ast, {
+      enter: function (node) {
+        actual.push(node);
+      }
     });
 
     assert.deepEqual(actual, expect);
   });
 
   test("traverse falsy parent", function () {
-    traverse(null, function () {
-      throw new Error("should not be ran");
+    traverse(null, {
+      enter: function () {
+        throw new Error("should not be ran");
+      }
     });
   });
 
   test("traverse unknown type", function () {
     traverse({
       type: "FooBar"
-    }, function () {
-      throw new Error("should not be ran");
+    }, {
+      enter: function () {
+        throw new Error("should not be ran");
+      }
     });
   });
 
@@ -94,8 +100,10 @@ suite("traverse", function () {
 
     var actual = [];
 
-    traverse(ast, function (node) {
-      actual.push(node);
+    traverse(ast, {
+      enter: function (node) {
+        actual.push(node);
+      }
     }, ["MemberExpression"]);
 
     assert.deepEqual(actual, expect);
@@ -108,8 +116,10 @@ suite("traverse", function () {
     };
     var ast2 = _.cloneDeep(ast);
 
-    traverse(ast2, function (node) {
-      if (node.type === "ThisExpression") return replacement;
+    traverse(ast2, {
+      enter: function (node) {
+        if (node.type === "ThisExpression") return replacement;
+      }
     });
 
     assert.equal(ast2.body[1].expression.left.object, replacement);
