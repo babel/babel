@@ -101,10 +101,11 @@ suite("traverse", function () {
     var actual = [];
 
     traverse(ast, {
+      blacklist: ["MemberExpression"],
       enter: function (node) {
         actual.push(node);
       }
-    }, ["MemberExpression"]);
+    });
 
     assert.deepEqual(actual, expect);
   });
