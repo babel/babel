@@ -45,7 +45,6 @@
   exports.parse_dammit = function(inpt, opts) {
     if (!opts) opts = {};
     input = String(inpt);
-    if (/^#!.*/.test(input)) input = "//" + input.slice(2);
     fetchToken = acorn.tokenize(input, opts);
     options = fetchToken.options;
     sourceFile = options.sourceFile || null;
@@ -100,6 +99,10 @@
             var re = input.slice(e.pos, pos);
             try { re = new RegExp(re); } catch(e) {}
             replace = {start: e.pos, end: pos, type: tt.regexp, value: re};
+          } else if (/template/.test(msg)) {
+            replace = {start: e.pos, end: pos,
+                       type: input.charAt(e.pos) == "`" ? tt.template : tt.templateContinued,
+                       value: input.slice(e.pos + 1, pos)};
           } else {
             replace = false;
           }
@@ -247,6 +250,14 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
+    return node;
+  }
+
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges) node.range[1] = pos;
     return node;
   }
 
@@ -681,6 +692,11 @@
         node.callee = base;
         node.arguments = parseExprList(tt.parenR);
         base = finishNode(node, "CallExpression");
+      } else if (token.type == tt.template) {
+        var node = startNodeAt(start);
+        node.tag = base;
+        node.quasi = parseTemplate();
+        base = finishNode(node, "TaggedTemplateExpression");
       } else {
         return base;
       }
@@ -769,6 +785,9 @@
       }
       return finishNode(node, "YieldExpression");
 
+    case tt.template:
+      return parseTemplate();
+
     default:
       return dummyIdent();
     }
@@ -786,6 +805,40 @@
       node.arguments = [];
     }
     return finishNode(node, "NewExpression");
+  }
+
+  function parseTemplateElement() {
+    var elem = startNodeAt(options.locations ? [token.start + 1, token.startLoc.offset(1)] : token.start + 1);
+    elem.value = token.value;
+    elem.tail = input.charCodeAt(token.end - 1) !== 123; // '{'
+    var endOff = elem.tail ? 1 : 2;
+    var endPos = options.locations ? [token.end - endOff, token.endLoc.offset(-endOff)] : token.end - endOff;
+    next();
+    return finishNodeAt(elem, "TemplateElement", endPos);
+  }
+
+  function parseTemplate() {
+    var node = startNode();
+    node.expressions = [];
+    var curElt = parseTemplateElement();
+    node.quasis = [curElt];
+    while (!curElt.tail) {
+      var next = parseExpression();
+      if (isDummy(next)) {
+        node.quasis[node.quasis.length - 1].tail = true;
+        break;
+      }
+      node.expressions.push(next);
+      if (token.type === tt.templateContinued) {
+        node.quasis.push(curElt = parseTemplateElement());
+      } else {
+        curElt = startNode();
+        curElt.value = {cooked: "", raw: ""};
+        curElt.tail = true;
+        node.quasis.push(curElt);
+      }
+    }
+    return finishNode(node, "TemplateLiteral");
   }
 
   function parseObj(isClass, isStatement) {
@@ -851,7 +904,12 @@
       }
     }
     popCx();
-    eat(tt.braceR);
+    if (!eat(tt.braceR)) {
+      // If there is no closing brace, make the node span to the start
+      // of the next token (this is useful for Tern)
+      lastEnd = token.start;
+      if (options.locations) lastEndLoc = token.startLoc;
+    }
     if (isClass) {
       semicolon();
       finishNode(node.body, "ClassBody");
@@ -1082,10 +1140,9 @@
   }
 
   function parseExprList(close, allowEmpty) {
-    var indent = curIndent, line = curLineStart, elts = [], continuedLine = nextLineStart;
+    var indent = curIndent, line = curLineStart, elts = [];
     next(); // Opening bracket
-    if (curLineStart > continuedLine) continuedLine = curLineStart;
-    while (!closes(close, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
+    while (!closes(close, indent + 1, line)) {
       if (eat(tt.comma)) {
         elts.push(allowEmpty ? null : dummyIdent());
         continue;
@@ -1100,7 +1157,12 @@
       eat(tt.comma);
     }
     popCx();
-    eat(close);
+    if (!eat(close)) {
+      // If there is no closing brace, make the node span to the start
+      // of the next token (this is useful for Tern)
+      lastEnd = token.start;
+      if (options.locations) lastEndLoc = token.startLoc;
+    }
     return elts;
   }
 });

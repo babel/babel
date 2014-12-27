@@ -482,8 +482,6 @@ test('({x, ...y, a, ...b, c})', {
 
 testFail("function foo(promise) { await promise; }", "Unexpected token (1:30)", {ecmaVersion: 7});
 
-testFail("async function* foo(promise) { await promise; }", "Unexpected token (1:14)", {ecmaVersion: 7});
-
 test('async function foo(promise) { await promise; }', {
   type: "Program",
   body: [{

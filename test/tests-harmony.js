@@ -976,6 +976,131 @@ test("new raw`42`", {
   locations: true
 });
 
+test("`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`",{
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "TemplateLiteral",
+        expressions: [
+          {
+            type: "ObjectExpression",
+            properties: [
+              {
+                type: "Property",
+                method: false,
+                shorthand: false,
+                computed: false,
+                key: {
+                  type: "Identifier",
+                  name: "x"
+                },
+                value: {
+                  type: "ObjectExpression",
+                  properties: [
+                    {
+                      type: "Property",
+                      method: false,
+                      shorthand: false,
+                      computed: false,
+                      key: {
+                        type: "Identifier",
+                        name: "y"
+                      },
+                      value: {
+                        type: "Literal",
+                        value: 10,
+                        raw: "10"
+                      },
+                      kind: "init"
+                    }
+                  ]
+                },
+                kind: "init"
+              }
+            ]
+          },
+          {
+            type: "TemplateLiteral",
+            expressions: [
+              {
+                type: "FunctionExpression",
+                id: null,
+                params: [],
+                defaults: [],
+                rest: null,
+                generator: false,
+                body: {
+                  type: "BlockStatement",
+                  body: [
+                    {
+                      type: "ReturnStatement",
+                      argument: {
+                        type: "Literal",
+                        value: 1,
+                        raw: "1"
+                      }
+                    }
+                  ]
+                },
+                expression: false
+              }
+            ],
+            quasis: [
+              {
+                type: "TemplateElement",
+                value: {
+                  cooked: "nested",
+                  raw: "nested"
+                },
+                tail: false
+              },
+              {
+                type: "TemplateElement",
+                value: {
+                  cooked: "endnest",
+                  raw: "endnest"
+                },
+                tail: true
+              }
+            ]
+          }
+        ],
+        quasis: [
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "outer",
+              raw: "outer"
+            },
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "bar",
+              raw: "bar"
+            },
+            tail: false
+          },
+          {
+            type: "TemplateElement",
+            value: {
+              cooked: "end",
+              raw: "end"
+            },
+            tail: true
+          }
+        ]
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 6
+});
+
+
 // ES6: Switch Case Declaration
 
 test("switch (answer) { case 42: let t = 42; break; }", {
@@ -13972,7 +14097,7 @@ testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unterminated string constant (1:1)", {ecmaVersion: 6});
+testFail("`test", "Unterminated template (1:0)", {ecmaVersion: 6});
 
 testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 
@@ -14025,6 +14150,8 @@ testFail("[...a, b] = c", "Unexpected token (1:1)", {ecmaVersion: 6});
 testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; `${test}\\02`;", "Octal literal in strict mode (1:22)", {ecmaVersion: 6});
+
+testFail("if (1) import \"acorn\";", "'import' and 'export' may only appear at the top level (1:7)", {ecmaVersion: 6});
 
 test("[...a, ] = b", {
   type: "Program",

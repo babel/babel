@@ -28834,3 +28834,14 @@ test('var x = (1 + 2)', {}, {
 });
 
 test("function f(f) { 'use strict'; }", {});
+
+// https://github.com/marijnh/acorn/issues/180
+test("#!/usr/bin/node\n;", {}, {
+  allowHashBang: true,
+  onComment: [{
+    type: "Line",
+    value: "/usr/bin/node",
+    start: 0,
+    end: 15
+  }]
+});

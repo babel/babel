@@ -28,7 +28,7 @@
 })(this, function(exports) {
   "use strict";
 
-  exports.version = "0.9.1";
+  exports.version = "0.11.1";
 
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
@@ -43,7 +43,7 @@
     input = String(inpt); inputLen = input.length;
     setOptions(opts);
     initTokenState();
-    var startPos = options.locations ? [tokPos, new Position] : tokPos;
+    var startPos = options.locations ? [tokPos, curPosition()] : tokPos;
     initParserState();
     return parseTopLevel(options.program || startNodeAt(startPos));
   };
@@ -72,6 +72,12 @@
     // When enabled, a return at the top level is not considered an
     // error.
     allowReturnOutsideFunction: false,
+    // When enabled, import/export statements are not constrained to
+    // appearing at the top of the program.
+    allowImportExportEverywhere: false,
+    // When enabled, hashbang directive in the beginning of file
+    // is allowed and treated as a line comment.
+    allowHashBang: false,
     // When `locations` is on, `loc` properties holding objects with
     // `start` and `end` properties in `{line, column}` form (with
     // line being 1-based and column 0-based) will be attached to the
@@ -311,11 +317,12 @@
 
   var metParenL;
 
-  // This is used by parser for detecting if it's inside ES6
-  // Template String. If it is, it should treat '$' as prefix before
-  // '{expression}' and everything else as string literals.
+  // This is used by the tokenizer to track the template strings it is
+  // inside, and count the amount of open braces seen inside them, to
+  // be able to switch back to a template token when the } to match ${
+  // is encountered. It will hold an array of integers.
 
-  var inTemplate;
+  var templates;
 
   function initParserState() {
     lastStart = lastEnd = tokPos;
@@ -424,6 +431,7 @@
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
   var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _ltSlash = {type: "</"};
+  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
   var _paamayimNekudotayim = { type: "::", beforeExpr: true };
   var _at = { type: '@' };
@@ -475,8 +483,8 @@
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
                       assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
-                      paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, at: _at,
-                      hash: _hash};
+                      paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, at: _at, hash: _hash,
+                      template: _template, templateContinued: _templateContinued};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -576,6 +584,10 @@
 
   var newline = /[\n\r\u2028\u2029]/;
 
+  function isNewLine(code) {
+    return code === 10 || code === 13 || code === 0x2028 || code == 0x2029;
+  }
+
   // Matches a whole line break (where CRLF is considered a single
   // line break). Used to count lines.
 
@@ -608,9 +620,17 @@
   // These are used when `options.locations` is on, for the
   // `tokStartLoc` and `tokEndLoc` properties.
 
-  function Position() {
-    this.line = tokCurLine;
-    this.column = tokPos - tokLineStart;
+  function Position(line, col) {
+    this.line = line;
+    this.column = col;
+  }
+
+  Position.prototype.offset = function(n) {
+    return new Position(this.line, this.column + n);
+  }
+
+  function curPosition() {
+    return new Position(tokCurLine, tokPos - tokLineStart);
   }
 
   // Reset the token state. Used at the start of a parse.
@@ -626,7 +646,11 @@
     }
     tokRegexpAllowed = true;
     metParenL = 0;
-    inTemplate = inType = inXJSChild = inXJSTag = false;
+    inType = inXJSChild = inXJSTag = false;
+    templates = [];
+    if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
+      skipLineComment(2);
+    }
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -635,7 +659,7 @@
 
   function finishToken(type, val, shouldSkipSpace) {
     tokEnd = tokPos;
-    if (options.locations) tokEndLoc = new Position;
+    if (options.locations) tokEndLoc = curPosition();
     tokType = type;
     if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
@@ -646,7 +670,7 @@
   }
 
   function skipBlockComment() {
-    var startLoc = options.onComment && options.locations && new Position;
+    var startLoc = options.onComment && options.locations && curPosition();
     var start = tokPos, end = input.indexOf("*/", tokPos += 2);
     if (end === -1) raise(tokPos - 2, "Unterminated comment");
     tokPos = end + 2;
@@ -660,12 +684,12 @@
     }
     if (options.onComment)
       options.onComment(true, input.slice(start + 2, end), start, tokPos,
-                        startLoc, options.locations && new Position);
+                        startLoc, options.locations && curPosition());
   }
 
   function skipLineComment(startSkip) {
     var start = tokPos;
-    var startLoc = options.onComment && options.locations && new Position;
+    var startLoc = options.onComment && options.locations && curPosition();
     var ch = input.charCodeAt(tokPos+=startSkip);
     while (tokPos < inputLen && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
       ++tokPos;
@@ -673,7 +697,7 @@
     }
     if (options.onComment)
       options.onComment(false, input.slice(start + startSkip, tokPos), start, tokPos,
-                        startLoc, options.locations && new Position);
+                        startLoc, options.locations && curPosition());
   }
 
   // Called at the start of the parse and after every token. Skips
@@ -877,8 +901,16 @@
     case 44: ++tokPos; return finishToken(_comma);
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
-    case 123: ++tokPos; return finishToken(_braceL);
-    case 125: ++tokPos; return finishToken(_braceR, undefined, !inXJSChild);
+    case 123:
+      ++tokPos;
+      if (templates.length) ++templates[templates.length - 1];
+      return finishToken(_braceL);
+    case 125:
+      ++tokPos;
+      if (templates.length && --templates[templates.length - 1] === 0)
+        return readTemplateString(_templateContinued);
+      else
+        return finishToken(_braceR);
     case 63: ++tokPos; return finishToken(_question);
 
     case 64:
@@ -907,7 +939,7 @@
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
-        return finishToken(_bquote, undefined, false);
+        return readTemplateString(_template);
       }
 
     case 48: // '0'
@@ -965,7 +997,7 @@
   function readToken(forceRegexp) {
     if (!forceRegexp) tokStart = tokPos;
     else tokPos = tokStart + 1;
-    if (options.locations) tokStartLoc = new Position;
+    if (options.locations) tokStartLoc = curPosition();
     if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
 
@@ -975,9 +1007,6 @@
     if (inXJSChild && tokType !== _braceL && code !== 60 && code !== 123 && code !== 125) {
       return readXJSText(['<', '{']);
     }
-
-
-    if (inTemplate) return getTemplateToken(code);
 
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
@@ -1162,28 +1191,34 @@
     }
   }
 
-  function readTmplString() {
-    var out = "";
+  function readTemplateString(type) {
+    if (type == _templateContinued) templates.pop();
+    var out = "", start = tokPos;;
     for (;;) {
-      if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
-      var ch = input.charCodeAt(tokPos);
-      if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) // '`', '${'
-        return finishToken(_string, out);
-      if (ch === 92) { // '\'
+      if (tokPos >= inputLen) raise(tokStart, "Unterminated template");
+      var ch = input.charAt(tokPos);
+      if (ch === "`" || ch === "$" && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
+        var raw = input.slice(start, tokPos);
+        ++tokPos;
+        if (ch == "$") { ++tokPos; templates.push(1); }
+        return finishToken(type, {cooked: out, raw: raw});
+      }
+
+      if (ch === "\\") { // '\'
         out += readEscapedChar();
       } else {
         ++tokPos;
-        if (newline.test(String.fromCharCode(ch))) {
-            if (ch === 13 && input.charCodeAt(tokPos) === 10) {
-              ++tokPos;
-              ch = 10;
-      }
-            if (options.locations) {
-              ++tokCurLine;
-              tokLineStart = tokPos;
-    }
-  }
-        out += String.fromCharCode(ch); // '\'
+        if (newline.test(ch)) {
+          if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
+            ++tokPos;
+            ch = "\n";
+          }
+          if (options.locations) {
+            ++tokCurLine;
+            tokLineStart = tokPos;
+          }
+        }
+        out += ch;
       }
     }
   }
@@ -1727,6 +1762,15 @@
     return node;
   }
 
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges)
+      node.range[1] = pos;
+    return node;
+  }
+
   // Test whether a statement node is the string literal `"use strict"`.
 
   function isUseStrict(stmt) {
@@ -1896,14 +1940,12 @@
     switch (expr.type) {
       case "Identifier":
         if (strict && (isStrictBadIdWord(expr.name) || isStrictReservedWord(expr.name)))
-          raise(expr.start, isBinding
-            ? "Binding " + expr.name + " in strict mode"
-            : "Assigning to " + expr.name + " in strict mode"
-          );
+          raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
         break;
       
       case "MemberExpression":
-        if (!isBinding) break;
+        if (isBinding) raise(expr.start, "Binding to member expression");
+        break;
 
       case "ObjectPattern":
         for (var i = 0; i < expr.properties.length; i++) {
@@ -1941,7 +1983,7 @@
     var first = true;
     if (!node.body) node.body = [];
     while (tokType !== _eof) {
-      var stmt = parseStatement();
+      var stmt = parseStatement(true);
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
@@ -1962,7 +2004,7 @@
   // `if (foo) /blah/.exec(foo);`, where looking at the previous token
   // does not help.
 
-  function parseStatement() {
+  function parseStatement(topLevel) {
     if (tokType === _slash || tokType === _assign && tokVal == "/=")
       readToken(true);
 
@@ -1989,8 +2031,11 @@
     case _with: return parseWithStatement(node);
     case _braceL: return parseBlock(); // no point creating a function for this
     case _semi: return parseEmptyStatement(node);
-    case _export: return parseExport(node);
-    case _import: return parseImport(node);
+    case _export:
+    case _import:
+      if (!topLevel && !options.allowImportExportEverywhere)
+        raise(tokStart, "'import' and 'export' may only appear at the top level");
+      return starttype === _import ? parseImport(node) : parseExport(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -2064,11 +2109,10 @@
     labels.pop();
     expect(_while);
     node.test = parseParenExpression();
-    if (options.ecmaVersion >= 6) {
+    if (options.ecmaVersion >= 6)
       eat(_semi);
-    } else {
+    else
       semicolon();
-    }
     return finishNode(node, "DoWhileStatement");
   }
   
@@ -2498,7 +2542,7 @@
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
       return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
-    } else if (tokType === _bquote) {
+    } else if (tokType === _template) {
       var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
@@ -2663,7 +2707,7 @@
     case _new:
       return parseNew();
 
-    case _bquote:
+    case _template:
       return parseTemplate();
 
     case _lt:
@@ -2709,33 +2753,25 @@
 
   // Parse template expression.
 
+  function parseTemplateElement() {
+    var elem = startNodeAt(options.locations ? [tokStart + 1, tokStartLoc.offset(1)] : tokStart + 1);
+    elem.value = tokVal;
+    elem.tail = input.charCodeAt(tokEnd - 1) !== 123; // '{'
+    next();
+    var endOff = elem.tail ? 1 : 2;
+    return finishNodeAt(elem, "TemplateElement", options.locations ? [lastEnd - endOff, lastEndLoc.offset(-endOff)] : lastEnd - endOff);
+  }
+
   function parseTemplate() {
-    var oldInTemplate = inTemplate;
-    inTemplate = true;
     var node = startNode();
     node.expressions = [];
-    node.quasis = [];
-    next();
-    for (;;) {
-      var elem = startNode();
-      elem.value = {cooked: tokVal, raw: input.slice(tokStart, tokEnd)};
-      elem.tail = false;
-      next();
-      node.quasis.push(finishNode(elem, "TemplateElement"));
-      if (tokType === _bquote) { // '`', end of template
-        elem.tail = true;
-        break;
-      }
-      inTemplate = false;
-      expect(_dollarBraceL);
+    var curElt = parseTemplateElement();
+    node.quasis = [curElt];
+    while (!curElt.tail) {
       node.expressions.push(parseExpression());
-      inTemplate = true;
-      // hack to include previously skipped space
-      tokPos = tokEnd;
-      expect(_braceR);
+      if (tokType !== _templateContinued) unexpected();
+      node.quasis.push(curElt = parseTemplateElement());
     }
-    inTemplate = oldInTemplate;
-    next();
     return finishNode(node, "TemplateLiteral");
   }
 
