@@ -1,6 +1,7 @@
 define(["exports"], function (exports) {
   "use strict";
 
+  exports["default"] = foo;
   exports["default"] = 42;
   exports["default"] = {};
   exports["default"] = [];
@@ -10,7 +11,6 @@ define(["exports"], function (exports) {
   exports["default"] = function () {};
 
   function foo() {}
-  exports["default"] = foo;
   var Foo = function Foo() {};
 
   exports["default"] = Foo;

@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.0.3
+
+ * Hoist function declarations in system module formatter for circular references.
+ * Hoist default function declarations in umd and amd module formatters for circular references.
+
 ## 2.0.2
 
  * Inherit comments in `for-of` transformer.

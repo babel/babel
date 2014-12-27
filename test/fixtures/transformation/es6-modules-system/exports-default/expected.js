@@ -1,4 +1,7 @@
 System.register("es6-modules-system/exports-default/expected", [], function (_export) {
+  _export("default", foo);
+
+  function foo() {}
   return {
     setters: [],
     execute: function () {
@@ -15,9 +18,6 @@ System.register("es6-modules-system/exports-default/expected", [], function (_ex
       _export("default", function () {});
 
       _export("default", function () {});
-
-      function foo() {}
-      _export("default", foo);
 
       var Foo = function Foo() {};
 
