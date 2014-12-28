@@ -1,4 +1,4 @@
-System.register("es6-modules-system/imports/expected", ["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
+System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
   var _foo, _fooBar, _directoryFooBar;
   return {
     setters: [function (m) {

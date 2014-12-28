@@ -1,8 +1,10 @@
-System.register("es6-modules-system/hoist-function-exports/expected", ["./evens"], function (_export) {
+System.register(["./evens"], function (_export) {
+  var p;
+
   _export("nextOdd", nextOdd);
 
   function nextOdd(n) {
-    return isEven(n) ? n + 1 : n + 2;
+    return _export("p", p = isEven(n) ? n + 1 : n + 2);
   }
 
   var _evens;
@@ -14,6 +16,8 @@ System.register("es6-modules-system/hoist-function-exports/expected", ["./evens"
       "use strict";
 
       var isEven = _evens.isEven;
+      _export("p", p = 5);
+
       var isOdd = _export("isOdd", (function (isEven) {
         return function (n) {
           return !isEven(n);
