@@ -1,4 +1,4 @@
-var runtime = require("../lib/6to5/runtime");
+var runtime = require("../lib/6to5/runtime-generator");
 var assert  = require("assert");
 
 suite("runtime", function () {
