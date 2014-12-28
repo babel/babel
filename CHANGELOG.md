@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.0.4
+
+ * Avoid being greedy when destructuring array iterables.
+
 ## 2.0.3
 
  * Hoist function declarations in system module formatter for circular references.

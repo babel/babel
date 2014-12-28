@@ -1,7 +1,18 @@
 "use strict";
 
-var _toArray = function (arr) {
-  return Array.isArray(arr) ? arr : Array.from(arr);
+var _slicedToArray = function (arr, i) {
+  if (Array.isArray(arr)) {
+    return arr;
+  } else {
+    var _arr = [];
+    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+      _arr.push(_step.value);
+
+      if (i && _arr.length === i) break;
+    }
+
+    return _arr;
+  }
 };
 
 function somethingAdvanced(_ref) {
@@ -20,12 +31,12 @@ function unpackObject(_ref2) {
 console.log(unpackObject({ title: "title", author: "author" }));
 
 var unpackArray = function (_ref3, _ref5) {
-  var _ref4 = _toArray(_ref3);
+  var _ref4 = _slicedToArray(_ref3, 3);
 
   var a = _ref4[0];
   var b = _ref4[1];
   var c = _ref4[2];
-  var _ref6 = _toArray(_ref5);
+  var _ref6 = _slicedToArray(_ref5, 3);
 
   var x = _ref6[0];
   var y = _ref6[1];
