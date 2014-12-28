@@ -250,6 +250,10 @@ require("6to5/register")({
 
   // This will remove the currently hooked extensions of .es6 and .js so you'll
   // have to add them back if you want them to be used again.
-  extensions: [".js", ".es6"]
+  extensions: [".js", ".es6"],
+
+  // Enables `roadrunner` cache that will save to a `.roadrunner.json` file in your cwd
+  // Do not check this into git as it's user-specific
+  cache: true
 });
 ```
