@@ -1,4 +1,4 @@
-System.register("es6-modules-system/imports-default/expected", ["foo"], function (_export) {
+System.register([], function (_export) {
   var _foo;
   return {
     setters: [function (m) {

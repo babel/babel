@@ -1,4 +1,4 @@
-System.register("es6-modules-system/hoist-function-exports/expected", ["./evens"], function (_export) {
+System.register(["./evens"], function (_export) {
   _export("nextOdd", nextOdd);
 
   function nextOdd(n) {

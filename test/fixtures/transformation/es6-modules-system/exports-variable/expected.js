@@ -1,4 +1,4 @@
-System.register("es6-modules-system/exports-variable/expected", [], function (_export) {
+System.register([], function (_export) {
   _export("foo7", foo7);
 
   function foo7() {}

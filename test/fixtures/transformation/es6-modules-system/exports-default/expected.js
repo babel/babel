@@ -1,4 +1,4 @@
-System.register("es6-modules-system/exports-default/expected", [], function (_export) {
+System.register([], function (_export) {
   _export("default", foo);
 
   function foo() {}
