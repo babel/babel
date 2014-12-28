@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.2.0
+
+ * Make `system` module formatter modules anonymous by default.
+
 ## 2.1.0
 
  * Add `cache` option to register hook.

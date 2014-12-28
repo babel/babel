@@ -152,10 +152,10 @@ result.ast;
   // Default: `sourceRoot` option.
   moduleRoot: "my-app",
 
-  // If truthy, insert an explicit id for each defined AMD module.
-  // By default, AMD modules are anonymous.
+  // If truthy, insert an explicit id for each defined AMD/System module.
+  // By default, AMD/System modules are anonymous.
   // Default: false
-  amdModuleIds: true,
+  moduleIds: true,
 
   // Optionally replace all 6to5 helper declarations with a referenece to this
   // variable. If set to `true` then the default namespace is used "to5Runtime".

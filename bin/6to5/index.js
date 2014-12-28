@@ -20,7 +20,8 @@ commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NO
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
-commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false);
+commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false); // todo: remove in 3.0.0
+commander.option("-m, --module-ids", "Insert module id in modules", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -89,9 +90,9 @@ if (errors.length) {
 
 exports.opts = {
   sourceMapName: commander.outFile,
-  amdModuleIds:  commander.amdModuleIds,
   experimental:  commander.experimental,
   playground:    commander.playground,
+  moduleIds:     commander.amdModuleIds || commander.moduleIds,
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
