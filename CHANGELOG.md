@@ -2,6 +2,13 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.1.0
+
+ * Add `cache` option to register hook.
+ * Update `core-js`.
+ * Fix starting newline not being added on case statements.
+ * Fix destructuring `VariableDeclaration`s not inside `BlockStatement`s and `Program`.
+
 ## 2.0.4
 
  * Avoid being greedy when destructuring array iterables.
