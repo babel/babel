@@ -5,6 +5,7 @@ Gaps between patch versions are faulty/broken releases.
 ## 2.2.0
 
  * Make `system` module formatter modules anonymous by default.
+ * Fix duplicate comments being output, breaking code.
 
 ## 2.1.0
 
