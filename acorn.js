@@ -2406,6 +2406,7 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExpression() : null;
+    if (node.superClass) checkLVal(node.superClass);
     var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
