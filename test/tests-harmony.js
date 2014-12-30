@@ -14405,3 +14405,37 @@ test("`{${x}}`, `}`", {
     }
   }]
 }, {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/186
+test('var {get} = obj;', {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [{
+      type: "VariableDeclarator",
+      id: {
+        type: "ObjectPattern",
+        properties: [{
+          type: "Property",
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            name: "get"
+          },
+          kind: "init",
+          value: {
+            type: "Identifier",
+            name: "get"
+          }
+        }]
+      },
+      init: {
+        type: "Identifier",
+        name: "obj"
+      }
+    }],
+    kind: "var"
+  }]
+}, {ecmaVersion: 6});

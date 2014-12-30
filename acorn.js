@@ -2223,7 +2223,8 @@
         prop.method = true;
         prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set")) {
+                 (prop.key.name === "get" || prop.key.name === "set") &&
+                 (tokType != _comma && tokType != _braceR)) {
         if (isGenerator) unexpected();
         prop.kind = prop.key.name;
         parsePropertyName(prop);
