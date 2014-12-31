@@ -2563,10 +2563,11 @@
       return finishNode(node, "ThisExpression");
 
     case _at:
+      var start = storeCurrentPos();
       var node = startNode();
       next();
       node.object = { type: "ThisExpression" }
-      node.property = parseExprSubscripts();
+      node.property = parseSubscripts(parseIdent(), start);
       node.computed = false;
       return finishNode(node, "MemberExpression");
     
