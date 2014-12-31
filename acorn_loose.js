@@ -882,7 +882,8 @@
         }
         prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set")) {
+                 (prop.key.name === "get" || prop.key.name === "set") &&
+                 (token.type != tt.comma && token.type != tt.braceR)) {
         prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(false);

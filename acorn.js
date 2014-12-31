@@ -2824,7 +2824,8 @@
         prop.method = true;
         prop.value = parseMethod(isGenerator, isAsync);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set" || (options.playground && prop.key.name === "memo"))) {
+                 (prop.key.name === "get" || prop.key.name === "set"|| (options.playground && prop.key.name === "memo")) &&
+                 (tokType != _comma && tokType != _braceR)) {
         if (isGenerator || isAsync) unexpected();
         prop.kind = prop.key.name;
         parsePropertyName(prop);
@@ -3045,6 +3046,7 @@
       node.typeParameters = parseTypeParameterDeclaration();
     }
     node.superClass = eat(_extends) ? parseMaybeAssign(false, true) : null;
+    if (node.superClass) checkLVal(node.superClass);
     if (node.superClass && tokType === _lt) {
       node.superTypeParameters = parseTypeParameterInstantiation();
     }
