@@ -10,9 +10,12 @@ var Foo = function Foo() {};
 _prototypeProperties(Foo, null, (function (_ref) {
   _ref[bar] = {
     get: function () {
-      if (this._memoDone) return this._memo;
-      this._memoDone = true;
-      return this._memo = complex();
+      return Object.defineProperty(this, bar, {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: complex()
+      })[bar];
     },
     enumerable: true
   };
@@ -20,9 +23,12 @@ _prototypeProperties(Foo, null, (function (_ref) {
 })({
   bar: {
     get: function () {
-      if (this._barDone) return this._bar;
-      this._barDone = true;
-      return this._bar = complex();
+      return Object.defineProperty(this, "bar", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: complex()
+      }).bar;
     },
     enumerable: true
   }
@@ -30,9 +36,12 @@ _prototypeProperties(Foo, null, (function (_ref) {
 
 var foo = (function (_foo) {
   _foo[bar] = function () {
-    if (this._memo2Done) return this._memo2;
-    this._memo2Done = true;
-    return this._memo2 = complex();
+    return Object.defineProperty(this, bar, {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: complex()
+    })[bar];
   };
 
   return _foo;
@@ -40,9 +49,12 @@ var foo = (function (_foo) {
   Object.defineProperties(_ref2, {
     bar: {
       get: function () {
-        if (this._barDone) return this._bar;
-        this._barDone = true;
-        return this._bar = complex();
+        return Object.defineProperty(this, "bar", {
+          enumerable: true,
+          configurable: true,
+          writable: true,
+          value: complex()
+        }).bar;
       },
       enumerable: true
     }
