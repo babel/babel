@@ -6,6 +6,7 @@ var _slicedToArray = function (arr, i) {
     return arr;
   } else {
     var _arr = [];
+
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
 

@@ -5,6 +5,7 @@ var _slicedToArray = function (arr, i) {
     return arr;
   } else {
     var _arr = [];
+
     for (var _iterator = _core.$for.getIterator(arr), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
 
