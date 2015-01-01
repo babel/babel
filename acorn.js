@@ -2043,7 +2043,7 @@
       // next token is a colon and the expression was a simple
       // Identifier node, we switch to interpreting it as a label.
     default:
-      if (tokType === _name && tokVal === "async") {
+      if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "async") {
         var id = parseIdent();
         if (tokType === _function) {
           next();
