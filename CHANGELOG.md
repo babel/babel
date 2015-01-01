@@ -2,6 +2,12 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.2
+
+ * Upgrade `acorn-6to5`.
+ * Better uids generated for various transformers based on parent node.
+ * Alias flat references in `coreAliasing` transformer.
+
 ## 2.4.1
 
  * Better whitespace handling of parenthesized expressions due to trailing comments.
