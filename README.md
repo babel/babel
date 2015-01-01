@@ -11,10 +11,6 @@
     <img alt="Travis Status" src="http://img.shields.io/travis/6to5/6to5/master.svg?style=flat&amp;label=travis">
   </a>
 
-  <a href="https://ci.appveyor.com/project/sebmck/6to5">
-    <img alt="Appveyor Status" src="http://img.shields.io/appveyor/ci/sebmck/6to5.svg?style=flat&amp;label=appveyor">
-  </a>
-
   <a href="https://codeclimate.com/github/6to5/6to5">
     <img alt="Code Climate Score" src="http://img.shields.io/codeclimate/github/6to5/6to5.svg?style=flat">
   </a>
