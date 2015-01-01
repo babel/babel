@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.3.1
+
+ * Add `undefinedToVoid` optional transformer.
+ * Use `Object.defineProperty` for computed properties.
+
 ## 2.3.0
 
  * Upgrade `acorn-6to5`.
