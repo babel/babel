@@ -16,11 +16,11 @@ var _slicedToArray = function (arr, i) {
   }
 };
 
-var _ref = _slicedToArray(rect.topLeft, 2);
+var _rect$topLeft = _slicedToArray(rect.topLeft, 2);
 
-var x1 = _ref[0];
-var y1 = _ref[1];
-var _ref2 = _slicedToArray(rect.bottomRight, 2);
+var x1 = _rect$topLeft[0];
+var y1 = _rect$topLeft[1];
+var _rect$bottomRight = _slicedToArray(rect.bottomRight, 2);
 
-var x2 = _ref2[0];
-var y2 = _ref2[1];
+var x2 = _rect$bottomRight[0];
+var y2 = _rect$bottomRight[1];

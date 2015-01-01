@@ -17,12 +17,12 @@ var Test = function Test() {
 };
 
 var Foo = (function () {
-  var _FooSuper = Bar;
+  var _Bar = Bar;
   var Foo = function Foo() {
     this.state = "test";
   };
 
-  _inherits(Foo, _FooSuper);
+  _inherits(Foo, _Bar);
 
   return Foo;
 })();

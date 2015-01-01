@@ -13,27 +13,27 @@ var _inherits = function (child, parent) {
 };
 
 var BaseController = (function () {
-  var _BaseControllerSuper = Chaplin.Controller;
+  var _Chaplin$Controller = Chaplin.Controller;
   var BaseController = function BaseController() {
-    if (_BaseControllerSuper) {
-      _BaseControllerSuper.apply(this, arguments);
+    if (_Chaplin$Controller) {
+      _Chaplin$Controller.apply(this, arguments);
     }
   };
 
-  _inherits(BaseController, _BaseControllerSuper);
+  _inherits(BaseController, _Chaplin$Controller);
 
   return BaseController;
 })();
 
 var BaseController2 = (function () {
-  var _BaseController2Super = Chaplin.Controller.Another;
+  var _Chaplin$Controller$Another = Chaplin.Controller.Another;
   var BaseController2 = function BaseController2() {
-    if (_BaseController2Super) {
-      _BaseController2Super.apply(this, arguments);
+    if (_Chaplin$Controller$Another) {
+      _Chaplin$Controller$Another.apply(this, arguments);
     }
   };
 
-  _inherits(BaseController2, _BaseController2Super);
+  _inherits(BaseController2, _Chaplin$Controller$Another);
 
   return BaseController2;
 })();

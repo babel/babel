@@ -27,10 +27,10 @@ var _ref = ["hello", [", ", "junk"], ["world"]];
 var _ref2 = _slicedToArray(_ref, 4);
 
 var a = _ref2[0];
-var _ref3 = _slicedToArray(_ref2[1], 1);
+var _ref2$1 = _slicedToArray(_ref2[1], 1);
 
-var b = _ref3[0];
-var _ref4 = _slicedToArray(_ref2[2], 1);
+var b = _ref2$1[0];
+var _ref2$2 = _slicedToArray(_ref2[2], 1);
 
-var c = _ref4[0];
+var c = _ref2$2[0];
 var d = _ref2[3];

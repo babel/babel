@@ -13,13 +13,13 @@ var _inherits = function (child, parent) {
 };
 
 var Test = (function () {
-  var _TestSuper = Foo;
+  var _Foo = Foo;
   var Test = function Test() {
-    _TestSuper.prototype.test;
-    _TestSuper.prototype.test.whatever;
+    _Foo.prototype.test;
+    _Foo.prototype.test.whatever;
   };
 
-  _inherits(Test, _TestSuper);
+  _inherits(Test, _Foo);
 
   return Test;
 })();

@@ -3,14 +3,14 @@
 function add() {
   var _this = this;
   return (function () {
-    var _arr = [];
+    var _ref = [];
 
     for (var _iterator = [1, 2, 3][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
       var i = _step.value;
-      _arr.push(i * _this.multiplier);
+      _ref.push(i * _this.multiplier);
     }
 
-    return _arr;
+    return _ref;
   })();
 }
 

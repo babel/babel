@@ -14,32 +14,32 @@ var _inherits = function (child, parent) {
 };
 
 var Test = (function () {
-  var _TestSuper = Foo;
+  var _Foo = Foo;
   var Test = function Test() {
     woops["super"].test();
-    _TestSuper.call(this);
-    _TestSuper.prototype.test.call(this);
-    foob(_TestSuper);
+    _Foo.call(this);
+    _Foo.prototype.test.call(this);
+    foob(_Foo);
 
-    _TestSuper.call.apply(_TestSuper, [this].concat(_slice.call(arguments)));
-    _TestSuper.call.apply(_TestSuper, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.call.apply(_Foo, [this].concat(_slice.call(arguments)));
+    _Foo.call.apply(_Foo, [this, "test"].concat(_slice.call(arguments)));
 
-    _TestSuper.prototype.test.call.apply(_TestSuper.prototype, [this].concat(_slice.call(arguments)));
-    _TestSuper.prototype.test.call.apply(_TestSuper.prototype, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call.apply(_Foo.prototype, [this].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call.apply(_Foo.prototype, [this, "test"].concat(_slice.call(arguments)));
   };
 
-  _inherits(Test, _TestSuper);
+  _inherits(Test, _Foo);
 
   Test.prototype.test = function () {
-    _TestSuper.prototype.test.call(this);
-    _TestSuper.prototype.test.call.apply(_TestSuper.prototype.test, [this].concat(_slice.call(arguments)));
-    _TestSuper.prototype.test.call.apply(_TestSuper.prototype.test, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call(this);
+    _Foo.prototype.test.call.apply(_Foo.prototype.test, [this].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call.apply(_Foo.prototype.test, [this, "test"].concat(_slice.call(arguments)));
   };
 
   Test.foo = function () {
-    _TestSuper.foo.call(this);
-    _TestSuper.foo.call.apply(_TestSuper.foo, [this].concat(_slice.call(arguments)));
-    _TestSuper.foo.call.apply(_TestSuper.foo, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.foo.call(this);
+    _Foo.foo.call.apply(_Foo.foo, [this].concat(_slice.call(arguments)));
+    _Foo.foo.call.apply(_Foo.foo, [this, "test"].concat(_slice.call(arguments)));
   };
 
   return Test;

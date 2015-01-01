@@ -13,16 +13,16 @@ var _inherits = function (child, parent) {
 };
 
 var Test = (function () {
-  var _TestSuper = Foo;
+  var _Foo = Foo;
   var Test = function Test() {
-    _TestSuper.prototype.test.whatever();
-    _TestSuper.prototype.test.call(this);
+    _Foo.prototype.test.whatever();
+    _Foo.prototype.test.call(this);
   };
 
-  _inherits(Test, _TestSuper);
+  _inherits(Test, _Foo);
 
   Test.test = function () {
-    return _TestSuper.wow.call(this);
+    return _Foo.wow.call(this);
   };
 
   return Test;

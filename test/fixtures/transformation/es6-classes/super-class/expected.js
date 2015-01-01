@@ -13,14 +13,14 @@ var _inherits = function (child, parent) {
 };
 
 var Test = (function () {
-  var _TestSuper = Foo;
+  var _Foo = Foo;
   var Test = function Test() {
-    if (_TestSuper) {
-      _TestSuper.apply(this, arguments);
+    if (_Foo) {
+      _Foo.apply(this, arguments);
     }
   };
 
-  _inherits(Test, _TestSuper);
+  _inherits(Test, _Foo);
 
   return Test;
 })();
