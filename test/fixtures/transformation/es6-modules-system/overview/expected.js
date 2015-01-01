@@ -1,3 +1,5 @@
+"use strict";
+
 System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
   var foo, foo, bar, bar, test;
   return {
@@ -8,8 +10,6 @@ System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
       bar = _foo.foo;
     }, function (_fooBar) {}, function (_directoryFooBar) {}],
     execute: function () {
-      "use strict";
-
       _export("test", test);
 
       test = _export("test", 5);

@@ -1,6 +1,6 @@
-define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
-  "use strict";
+"use strict";
 
+define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
   var _interopRequire = function (obj) {
     return obj && (obj["default"] || obj);
   };

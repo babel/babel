@@ -1,6 +1,6 @@
-define(["exports", "foo"], function (exports, _foo) {
-  "use strict";
+"use strict";
 
+define(["exports", "foo"], function (exports, _foo) {
   (function (obj) {
     for (var i in obj) {
       exports[i] = obj[i];
