@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.1
+
+ * Better whitespace handling of parenthesized expressions due to trailing comments.
+ * Fix `yield` inside of comprehensions.
+
 ## 2.4.0
 
  * Use a closure always for classes with a super.
