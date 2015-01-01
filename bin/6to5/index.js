@@ -17,6 +17,7 @@ commander.option("-p, --playground", "Enable playground support");
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
 commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
+commander.option("-i, --optional [list]", "List of optional transformers to enable", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
@@ -28,8 +29,16 @@ commander.on("--help", function(){
     console.log("  " + title + ":");
     console.log();
 
+    var hasOptional = true;
+
     _.each(_.keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
+
+      if (obj[key].optional) {
+        hasOptional = true;
+        key = "[" + key + "]";
+      }
+
       console.log("    - " + key);
     });
 
@@ -96,6 +105,7 @@ exports.opts = {
   blacklist:     commander.blacklist,
   whitelist:     commander.whitelist,
   sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
+  optional:      commander.optional,
   comments:      !commander.removeComments,
   runtime:       commander.runtime,
   modules:       commander.modules
