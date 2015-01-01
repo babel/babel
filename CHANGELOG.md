@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.3.2
+
+ * Add parens on expressions with trailing comments.
+
 ## 2.3.1
 
  * Add `undefinedToVoid` optional transformer.
