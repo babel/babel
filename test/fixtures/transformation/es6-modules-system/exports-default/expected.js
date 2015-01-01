@@ -1,4 +1,5 @@
 System.register([], function (_export) {
+  var Foo;
   _export("default", foo);
 
   function foo() {}
@@ -19,7 +20,7 @@ System.register([], function (_export) {
 
       _export("default", function () {});
 
-      var Foo = function Foo() {};
+      Foo = function Foo() {};
 
       _export("default", Foo);
     }

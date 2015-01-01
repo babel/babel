@@ -1,10 +1,11 @@
 System.register([], function (_export) {
+  var test;
   return {
     setters: [],
     execute: function () {
       "use strict";
 
-      var test = _export("test", 2);
+      test = _export("test", 2);
       _export("test", test = 5);
       _export("test", test += 1);
 
