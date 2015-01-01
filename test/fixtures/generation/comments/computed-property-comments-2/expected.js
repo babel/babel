@@ -6,5 +6,6 @@ var test = {
   [( /*
       * Inside bracket init
       */
-  "b")]: "2"
+    "b"
+  )]: "2"
 }, ok = 42;

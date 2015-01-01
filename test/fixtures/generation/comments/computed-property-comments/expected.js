@@ -7,7 +7,8 @@ var test = {
   [( /*
       * Inside bracket init
       */
-  "b")]: "2",
+    "b"
+  )]: "2",
 
   ["c"
   /*
@@ -18,8 +19,9 @@ var test = {
   ["d"]: "4",
 
   [(
-  // Inside bracket, line comment
-  "e")]: "5",
+    // Inside bracket, line comment
+    "e"
+  )]: "5",
 
   ["f"
   // After bracket, line comment
