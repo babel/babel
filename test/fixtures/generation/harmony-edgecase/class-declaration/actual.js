@@ -2,8 +2,6 @@ class Test {
 }
 class Derived extends Super {
 }
-class Derived2 extends Super() {
-}
 class StaticMethods {
   static n1() {
   }
