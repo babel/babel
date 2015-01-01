@@ -2,6 +2,12 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.3.0
+
+ * Upgrade `acorn-6to5`.
+ * Support circular references and hoist variable declarations in `system` module formatter.
+ * Add optional transformers, including a new `coreAliasing` transformer that aliases native ES6 static properties to their `core-js` equivalent.
+
 ## 2.2.0
 
  * Make `system` module formatter modules anonymous by default.
