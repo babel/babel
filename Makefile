@@ -21,8 +21,7 @@ lint:
 test-clean:
 	rm -rf test/tmp
 
-test:
-	make lint
+test: lint
 	$(MOCHA_CMD)
 	make test-clean
 
@@ -33,8 +32,7 @@ test-cov:
 test-spec:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
 
-test-travis:
-	make test-spec
+test-travis: test-spec
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
