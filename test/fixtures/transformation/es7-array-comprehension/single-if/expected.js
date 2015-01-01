@@ -1,11 +1,14 @@
 "use strict";
 
-var _toArray = function (arr) {
-  return Array.isArray(arr) ? arr : Array.from(arr);
-};
+var arr = (function () {
+  var _arr = [];
 
-var arr = _toArray(nums).filter(function (i) {
-  return i > 1;
-}).map(function (i) {
-  return i * i;
-});
+  for (var _iterator = nums[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    var i = _step.value;
+    if (i > 1) {
+      _arr.push(i * i);
+    }
+  }
+
+  return _arr;
+})();
