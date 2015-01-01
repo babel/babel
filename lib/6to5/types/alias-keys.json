@@ -17,23 +17,23 @@
   "ExportDeclaration":   ["Statement", "Declaration"],
   "ImportDeclaration":   ["Statement", "Declaration"],
 
-  "ArrowFunctionExpression": ["Scope", "Function"],
+  "ArrowFunctionExpression": ["Scope", "Function", "Expression"],
   "FunctionDeclaration":     ["Statement", "Declaration", "Scope", "Function"],
-  "FunctionExpression":      ["Scope", "Function"],
+  "FunctionExpression":      ["Scope", "Function", "Expression"],
 
   "BlockStatement": ["Statement", "Scope"],
   "Program":        ["Scope"],
   "CatchClause":    ["Scope"],
 
-  "LogicalExpression": ["Binary"],
-  "BinaryExpression":  ["Binary"],
+  "LogicalExpression": ["Binary", "Expression"],
+  "BinaryExpression":  ["Binary", "Expression"],
 
-  "UnaryExpression": ["UnaryLike"],
+  "UnaryExpression": ["UnaryLike", "Expression"],
   "SpreadProperty":  ["UnaryLike"],
   "SpreadElement":   ["UnaryLike"],
 
   "ClassDeclaration": ["Statement", "Declaration", "Class"],
-  "ClassExpression":  ["Class"],
+  "ClassExpression":  ["Class", "Expression"],
 
   "ForOfStatement": ["Statement", "For", "Scope", "Loop"],
   "ForInStatement": ["Statement", "For", "Scope", "Loop"],
@@ -43,5 +43,27 @@
   "ArrayPattern":  ["Pattern"],
 
   "Property": ["UserWhitespacable"],
-  "XJSElement": ["UserWhitespacable"]
+  "XJSElement": ["UserWhitespacable", "Expression"],
+
+  "ArrayExpression": ["Expression"],
+  "AssignmentExpression": ["Expression"],
+  "AwaitExpression": ["Expression"],
+  "BindFunctionExpression": ["Expression"],
+  "BindMemberExpression": ["Expression"],
+  "CallExpression": ["Expression"],
+  "ComprehensionExpression": ["Expression"],
+  "ConditionalExpression": ["Expression"],
+  "Identifier": ["Expression"],
+  "Literal": ["Expression"],
+  "MemberExpression": ["Expression"],
+  "NewExpression": ["Expression"],
+  "ObjectExpression": ["Expression"],
+  "SequenceExpression": ["Expression"],
+  "TaggedTemplateExpression": ["Expression"],
+  "ThisExpression": ["Expression"],
+  "UpdateExpression": ["Expression"],
+  "VirtualPropertyExpression": ["Expression"],
+  "XJSEmptyExpression": ["Expression"],
+  "XJSMemberExpression": ["Expression"],
+  "YieldExpression": ["Expression"]
 }
