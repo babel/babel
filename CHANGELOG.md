@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.3
+
+ * Upgrade `acorn-6to5`.
+ * Add support for `FunctionDeclaration`s in `bluebirdCoroutines` and `asyncToGenerators` transformers.
+
 ## 2.4.2
 
  * Upgrade `acorn-6to5`.
