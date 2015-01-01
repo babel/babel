@@ -90,22 +90,26 @@ equivalent to
 ```javascript
 var foo = {
   get bar() {
-    if (this._barRan) return this._bar;
-    this._barRan = true;
-    return this._bar = complex();
+    return Object.defineProperty(this, "bar", {
+      value: complex(),
+      enumerable: true,
+      configurable: true,
+      writable: true
+    }).bar;
   }
 };
 
 class Foo {
   get bar() {
-    if (this._barRan) return this._bar;
-    this._barRan = true;
-    return this._bar = complex();
+    return Object.defineProperty(this, "bar", {
+      value: complex(),
+      enumerable: true,
+      configurable: true,
+      writable: true
+    }).bar;
   }
 }
 ```
-
-**NOTE:** Memoised functions will return the result of the **first** execution, regardless of arguments.
 
 ### This shorthand
 
