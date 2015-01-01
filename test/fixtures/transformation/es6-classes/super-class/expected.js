@@ -12,10 +12,15 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var Test = function Test() {
-  if (Foo) {
-    Foo.apply(this, arguments);
-  }
-};
+var Test = (function () {
+  var _TestSuper = Foo;
+  var Test = function Test() {
+    if (_TestSuper) {
+      _TestSuper.apply(this, arguments);
+    }
+  };
 
-_inherits(Test, Foo);
+  _inherits(Test, _TestSuper);
+
+  return Test;
+})();

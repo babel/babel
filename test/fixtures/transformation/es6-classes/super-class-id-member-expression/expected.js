@@ -12,18 +12,28 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var BaseController = function BaseController() {
-  if (Chaplin.Controller) {
-    Chaplin.Controller.apply(this, arguments);
-  }
-};
+var BaseController = (function () {
+  var _BaseControllerSuper = Chaplin.Controller;
+  var BaseController = function BaseController() {
+    if (_BaseControllerSuper) {
+      _BaseControllerSuper.apply(this, arguments);
+    }
+  };
 
-_inherits(BaseController, Chaplin.Controller);
+  _inherits(BaseController, _BaseControllerSuper);
 
-var BaseController2 = function BaseController2() {
-  if (Chaplin.Controller.Another) {
-    Chaplin.Controller.Another.apply(this, arguments);
-  }
-};
+  return BaseController;
+})();
 
-_inherits(BaseController2, Chaplin.Controller.Another);
+var BaseController2 = (function () {
+  var _BaseController2Super = Chaplin.Controller.Another;
+  var BaseController2 = function BaseController2() {
+    if (_BaseController2Super) {
+      _BaseController2Super.apply(this, arguments);
+    }
+  };
+
+  _inherits(BaseController2, _BaseController2Super);
+
+  return BaseController2;
+})();

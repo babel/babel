@@ -12,13 +12,18 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var Test = function Test() {
-  Foo.prototype.test.whatever();
-  Foo.prototype.test.call(this);
-};
+var Test = (function () {
+  var _TestSuper = Foo;
+  var Test = function Test() {
+    _TestSuper.prototype.test.whatever();
+    _TestSuper.prototype.test.call(this);
+  };
 
-_inherits(Test, Foo);
+  _inherits(Test, _TestSuper);
 
-Test.test = function () {
-  return Foo.wow.call(this);
-};
+  Test.test = function () {
+    return _TestSuper.wow.call(this);
+  };
+
+  return Test;
+})();

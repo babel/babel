@@ -16,8 +16,13 @@ var Test = function Test() {
   this.state = "test";
 };
 
-var Foo = function Foo() {
-  this.state = "test";
-};
+var Foo = (function () {
+  var _FooSuper = Bar;
+  var Foo = function Foo() {
+    this.state = "test";
+  };
 
-_inherits(Foo, Bar);
+  _inherits(Foo, _FooSuper);
+
+  return Foo;
+})();

@@ -12,9 +12,14 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var Test = function Test() {
-  Foo.prototype.test;
-  Foo.prototype.test.whatever;
-};
+var Test = (function () {
+  var _TestSuper = Foo;
+  var Test = function Test() {
+    _TestSuper.prototype.test;
+    _TestSuper.prototype.test.whatever;
+  };
 
-_inherits(Test, Foo);
+  _inherits(Test, _TestSuper);
+
+  return Test;
+})();
