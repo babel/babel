@@ -8,5 +8,3 @@ import {foo as bar} from "foo";
 
 export {test};
 export var test = 5;
-
-export default test;
