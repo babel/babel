@@ -11,6 +11,8 @@
   "FunctionExpression":      ["id", "params", "body", "generator"],
   "Identifier":              ["name"],
   "IfStatement":             ["test", "consequent", "alternate"],
+  "ImportDeclaration":       ["specifiers", "source"],
+  "ImportSpecifier":         ["id", "name"],
   "Literal":                 ["value"],
   "LogicalExpression":       ["operator", "left", "right"],
   "MemberExpression":        ["object", "property", "computed"],

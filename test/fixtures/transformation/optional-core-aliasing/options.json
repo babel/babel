@@ -1,0 +1,4 @@
+{
+  "optional": ["coreAliasing"],
+  "experimental": true
+}
