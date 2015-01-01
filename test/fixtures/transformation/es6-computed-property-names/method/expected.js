@@ -1,9 +1,14 @@
 "use strict";
 
-var obj = (function (_obj) {
-  _obj[foobar] = function () {
-    return "foobar";
-  };
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
 
-  return _obj;
-})({});
+var obj = _defineProperty({}, foobar, function () {
+  return "foobar";
+});
