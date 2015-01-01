@@ -2008,7 +2008,7 @@
     if (tokType === _slash || tokType === _assign && tokVal == "/=")
       readToken(true);
 
-    var starttype = tokType, node = startNode();
+    var starttype = tokType, node = startNode(), start = storeCurrentPos();
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -2043,28 +2043,33 @@
       // next token is a colon and the expression was a simple
       // Identifier node, we switch to interpreting it as a label.
     default:
-      var maybeName = tokVal, expr = parseExpression();
-      if (starttype === _name) {
-        if (expr.type === "FunctionExpression" && expr.async) {
-          expr.type = "FunctionDeclaration";
-          return expr;
-        } else  if (expr.type === "Identifier") {
-          if (eat(_colon)) {
-            return parseLabeledStatement(node, maybeName, expr);
-          }
+      if (tokType === _name && tokVal === "async") {
+        var id = parseIdent();
+        if (tokType === _function) {
+          next();
+          return parseFunction(node, true, true);
+        } else {
+          return parseSubscripts(id, start);
+        }
+      }
 
-          if (options.ecmaVersion >= 7 && expr.name === "private" && tokType === _name) {
-            return parsePrivate(node);
-          } else if (expr.name === "declare") {
-            if (tokType === _class || tokType === _name || tokType === _function || tokType === _var) {
-              return parseDeclare(node);
-            }
-          } else if (tokType === _name) {
-            if (expr.name === "interface") {
-              return parseInterface(node);
-            } else if (expr.name === "type") {
-              return parseTypeAlias(node);
-            }
+      var maybeName = tokVal, expr = parseExpression();
+      if (starttype === _name && expr.type === "Identifier") {
+        if (eat(_colon)) {
+          return parseLabeledStatement(node, maybeName, expr);
+        }
+
+        if (options.ecmaVersion >= 7 && expr.name === "private" && tokType === _name) {
+          return parsePrivate(node);
+        } else if (expr.name === "declare") {
+          if (tokType === _class || tokType === _name || tokType === _function || tokType === _var) {
+            return parseDeclare(node);
+          }
+        } else if (tokType === _name) {
+          if (expr.name === "interface") {
+            return parseInterface(node);
+          } else if (expr.name === "type") {
+            return parseTypeAlias(node);
           }
         }
       }
