@@ -2,6 +2,15 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.0
+
+ * Use a closure always for classes with a super.
+ * Always use native loops for array comprehensions.
+ * Allow `yield` inside of comprehensions.
+ * Add optional `bluebirdCoroutine` transformer.
+ * Add optional `asyncToGenerator` transformer.
+ * Move `useStrict` transformer to before `_moduleFormatter` causing `"use strict";` to always be placed the very top.
+
 ## 2.3.2
 
  * Add parens on expressions with trailing comments.
