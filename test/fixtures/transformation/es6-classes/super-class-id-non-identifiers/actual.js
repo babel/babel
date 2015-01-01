@@ -1,3 +1,0 @@
-class Q extends function () {} {
-
-}
