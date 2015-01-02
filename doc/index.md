@@ -52,7 +52,7 @@ And it doesn't end here! To see all the ways you can use 6to5, check out the
  - [Let scoping](features.md#let-scoping)
  - [Modules](features.md#modules)
  - [Numeric literals](features.md#numeric-literals)
- - [Object Rest/Spread](features.md#object-rest-spread) ([experimental](experimental.md))
+ - [Object rest/spread](features.md#object-rest-spread) ([experimental](experimental.md))
  - [Property method assignment](features.md#property-method-assignment)
  - [Property name shorthand](features.md#property-name-shorthand)
  - [React/JSX](react.md)
