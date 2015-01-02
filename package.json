@@ -18,6 +18,9 @@
     "6to5-node": "./bin/6to5-node",
     "6to5-runtime": "./bin/6to5-runtime"
   },
+  "browser": {
+    "./lib/6to5/register.js": "./lib/6to5/register-browser.js"
+  },
   "keywords": [
     "harmony",
     "classes",
