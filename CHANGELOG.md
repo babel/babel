@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.5
+
+ * Avoid printing comments if they've already been output.
+
 ## 2.4.4
 
  * Add `module` type to browser build `<script>` handler.
