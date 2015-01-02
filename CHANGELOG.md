@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.6
+
+ * Move `coreAliasing` and `undefinedToVoid` transformers down to catch `moduleFormatter` transforms.
+
 ## 2.4.5
 
  * Avoid printing comments if they've already been output.
