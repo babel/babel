@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.8
+
+ * Make `require("6to5/register")` work with browserify - [#370](https://github.com/6to5/6to5/pull/370). Thanks [@hughsk](https://github.com/hughsk)!
+
 ## 2.4.7
 
  * Upgrade `acorn-6to5`.
