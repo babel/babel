@@ -1,3 +1,3 @@
-require('../../../register')({
-  ignoreRegex: false
+require("../../../register")({
+  ignore: false
 });
