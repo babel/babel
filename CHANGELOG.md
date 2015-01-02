@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.7
+
+ * Upgrade `acorn-6to5`.
+
 ## 2.4.6
 
  * Move `coreAliasing` and `undefinedToVoid` transformers down to catch `moduleFormatter` transforms.
