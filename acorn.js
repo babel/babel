@@ -2570,8 +2570,9 @@
     case _at:
       var start = storeCurrentPos();
       var node = startNode();
+      var thisNode = startNode();
       next();
-      node.object = { type: "ThisExpression" }
+      node.object = finishNode(thisNode, "ThisExpression");
       node.property = parseSubscripts(parseIdent(), start);
       node.computed = false;
       return finishNode(node, "MemberExpression");
