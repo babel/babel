@@ -2,6 +2,11 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.4
+
+ * Add `module` type to browser build `<script>` handler.
+ * Fix some `MemberExpression` modifying incorrectly setting `property` to a `MemberExpression`.
+
 ## 2.4.3
 
  * Upgrade `acorn-6to5`.
