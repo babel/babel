@@ -13,8 +13,11 @@ You may alternatively selectively include what you need:
 | Async functions, Generators | [experimental](experimental.md), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
 | Comprehensions              | [experimental](experimental.md), `Array.from`                                                                          |
 | For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                 |
+| Modules                     | `Object.assign`*                                                                                                       |
 | Object spread/rest          | [experimental](experimental.md), `Object.assign`                                                                       |
 | Spread                      | `Array.from`                                                                                                           |
+
+*Only required for exporting a non-function `default` with additional `export`s.
 
 ## ES5
 
