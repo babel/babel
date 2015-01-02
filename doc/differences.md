@@ -49,13 +49,12 @@ var seattlers = (function() {
 }());
 ```
 
-As you can tell, it's not very pretty, unreadable even. Instead of mapping
-directly to a runtime, like other transpilers, 6to5 maps directly to the
-equivalent ES5.
+As you can tell, it's not very pretty. Instead of mapping directly to a
+runtime, like other transpilers, 6to5 maps directly to the equivalent ES5.
 
 Sometimes there are little inline functions that 6to5 needs. These are
 placed at the top of your file much like coffee-script does. If these
-are bother you then you can use the [optional runtime](optional-runtime.md).
+bother you then you can use the [optional runtime](optional-runtime.md).
 We promise that these inline functions will never be significant and will
 always be used as little as possible.
 
