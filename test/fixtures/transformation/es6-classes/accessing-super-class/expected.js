@@ -24,8 +24,8 @@ var Test = (function () {
     _Foo.call.apply(_Foo, [this].concat(_slice.call(arguments)));
     _Foo.call.apply(_Foo, [this, "test"].concat(_slice.call(arguments)));
 
-    _Foo.prototype.test.call.apply(_Foo.prototype, [this].concat(_slice.call(arguments)));
-    _Foo.prototype.test.call.apply(_Foo.prototype, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call.apply(_Foo.prototype.test, [this].concat(_slice.call(arguments)));
+    _Foo.prototype.test.call.apply(_Foo.prototype.test, [this, "test"].concat(_slice.call(arguments)));
   };
 
   _inherits(Test, _Foo);
