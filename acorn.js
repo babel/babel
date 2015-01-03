@@ -3052,7 +3052,6 @@
       node.typeParameters = parseTypeParameterDeclaration();
     }
     node.superClass = eat(_extends) ? parseMaybeAssign(false, true) : null;
-    if (node.superClass) checkLVal(node.superClass);
     if (node.superClass && tokType === _lt) {
       node.superTypeParameters = parseTypeParameterInstantiation();
     }
