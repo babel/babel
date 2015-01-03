@@ -14,6 +14,6 @@ var bar = {
 var foobar = 123;
 var foobar2 = {
   foobar() {
-    return foobar;
+    console.log(foobar);
   }
 };

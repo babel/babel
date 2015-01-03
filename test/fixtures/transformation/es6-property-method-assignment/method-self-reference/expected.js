@@ -39,4 +39,3 @@ var foobar2 = {
     console.log(foobar);
   })
 };
-
