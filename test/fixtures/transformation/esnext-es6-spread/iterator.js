@@ -1,8 +1,5 @@
-function Symbol() {}
-Symbol.iterator = '@@iterator';
-
 var obj = {
-  '@@iterator': function() {
+  [Symbol.iterator]: function() {
     var ttl = 3;
     return {
       next: function() {
