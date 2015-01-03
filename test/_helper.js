@@ -49,7 +49,7 @@ exports.get = function (entryName) {
 
       if (fs.statSync(taskDir).isFile()) {
         var ext = path.extname(taskDir);
-        if (ext === ".json") return;
+        if (ext !== ".js") return;
 
         execLoc = taskDir;
       }
