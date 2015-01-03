@@ -7,6 +7,7 @@ class Base {
 class OtherBase {
   p() { log += '[OtherBase]'; }
 }
+
 class Derived extends Base {
   p() {
     log += '[Derived]';
