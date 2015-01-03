@@ -1,4 +1,5 @@
 # Contributing
+  Before contributing, please read the [code of conduct](https://github.com/6to5/6to5/blob/master/CODE_OF_CONDUCT.md).
 
  * **General**
    * No ES6 syntax features or methods, exclusively ES5.
