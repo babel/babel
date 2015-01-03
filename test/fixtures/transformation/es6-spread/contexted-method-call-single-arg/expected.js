@@ -1,8 +1,9 @@
 "use strict";
 
+var _foob, _foob$test;
 var _toArray = function (arr) {
   return Array.isArray(arr) ? arr : Array.from(arr);
 };
 
-foob.add.apply(foob, _toArray(numbers));
-foob.test.add.apply(foob.test, _toArray(numbers));
+(_foob = foob).add.apply(_foob, _toArray(numbers));
+(_foob$test = foob.test).add.apply(_foob$test, _toArray(numbers));
