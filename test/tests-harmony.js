@@ -14373,3 +14373,81 @@ test('var {get} = obj;', {
     kind: "var"
   }]
 }, {ecmaVersion: 6});
+
+// Destructuring defaults (https://github.com/marijnh/acorn/issues/181)
+
+test("var {propName: localVar = defaultValue} = obj", {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [{
+      type: "VariableDeclarator",
+      id: {
+        type: "ObjectPattern",
+        properties: [{
+          type: "Property",
+          method: false,
+          shorthand: false,
+          computed: false,
+          key: {
+            type: "Identifier",
+            name: "propName"
+          },
+          value: {
+            type: "AssignmentPattern",
+            operator: "=",
+            left: {
+              type: "Identifier",
+              name: "localVar"
+            },
+            right: {
+              type: "Identifier",
+              name: "defaultValue"
+            }
+          },
+          kind: "init"
+        }]
+      },
+      init: {
+        type: "Identifier",
+        name: "obj"
+      }
+    }],
+    kind: "var"
+  }]
+}, {ecmaVersion: 6});
+
+test("var [a = 1, b = 2] = arr", {
+  type: "Program",
+  body: [{
+    type: "VariableDeclaration",
+    declarations: [{
+      type: "VariableDeclarator",
+      id: {
+        type: "ArrayPattern",
+        elements: [
+          {
+            type: "AssignmentPattern",
+            operator: "=",
+            left: {type: "Identifier", name: "a"},
+            right: {
+              type: "Literal",
+              value: 1
+            }
+          },
+          {
+            type: "AssignmentPattern",
+            operator: "=",
+            left: {type: "Identifier", name: "b"},
+            right: {
+              type: "Literal",
+              value: 2
+            }
+          }
+        ]
+      },
+      init: {type: "Identifier", name: "arr"}
+    }],
+    kind: "var"
+  }]
+}, {ecmaVersion: 6});

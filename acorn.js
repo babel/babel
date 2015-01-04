@@ -1412,6 +1412,14 @@
           }
           break;
 
+        case "AssignmentExpression":
+          if (node.operator === "=") {
+            node.type = "AssignmentPattern";
+          } else {
+            unexpected(node.left.end);
+          }
+          break;
+
         default:
           if (checkType) unexpected(node.start);
       }
@@ -1508,6 +1516,7 @@
         }
         break;
 
+      case "AssignmentPattern":
       case "SpreadElement":
         break;
 
