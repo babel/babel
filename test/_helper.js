@@ -3,7 +3,7 @@ var fs   = require("fs");
 var _    = require("lodash");
 
 var humanise = function (val) {
-  return val.replace(/-/g, " ");
+  return path.basename(val, path.extname(val)).replace(/-/g, " ");
 };
 
 var readFile = exports.readFile = function (filename) {
@@ -36,8 +36,18 @@ exports.get = function (entryName) {
     var suiteOptsLoc = suite.filename + "/options.json";
     if (fs.existsSync(suiteOptsLoc)) suite.options = require(suiteOptsLoc);
 
-    _.each(fs.readdirSync(suite.filename), function (taskName) {
-      var taskDir = suite.filename + "/" + taskName;
+    if (fs.statSync(suite.filename).isFile()) {
+      push(suiteName, suite.filename);
+    } else {
+      _.each(fs.readdirSync(suite.filename), function (taskName) {
+        var taskDir = suite.filename + "/" + taskName;
+        push(taskName, taskDir);
+      });
+    }
+
+    function push(taskName, taskDir) {
+      // tracuer error tests
+      if (taskName.indexOf("Error_") === 0) return;
 
       var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
@@ -49,7 +59,7 @@ exports.get = function (entryName) {
 
       if (fs.statSync(taskDir).isFile()) {
         var ext = path.extname(taskDir);
-        if (ext !== ".js") return;
+        if (ext !== ".js" && ext !== ".module.js") return;
 
         execLoc = taskDir;
       }
@@ -84,6 +94,18 @@ exports.get = function (entryName) {
         }
       };
 
+      // traceur checks
+
+      var shouldSkip = function (code) {
+        return code.indexOf("// Error:") === 0 || code.indexOf("// Skip.") === 0;
+      };
+
+      if (shouldSkip(test.actual.code) || shouldSkip(test.exec.code)) {
+        return;
+      } else if (test.exec.code.indexOf("// Async.")) {
+        //test.options.asyncExec = true;
+      }
+
       suite.tests.push(test);
 
       var sourceMappingsLoc = taskDir + "/source-mappings.json";
@@ -97,7 +119,7 @@ exports.get = function (entryName) {
         test.options.sourceMap = true;
         test.sourceMap = require(sourceMap);
       }
-    });
+    }
   });
 
   return exports.cache[entryName] = suites;

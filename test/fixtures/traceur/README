@@ -1,0 +1,23 @@
+This directory contains the "feature" tests. Each script here is a Traceur
+script that uses a feature and then validates its behavior. These scripts can
+be executed by running "/test/alltests.html" or "node testfeature.js"
+
+If any of the first lines of a feature script starts with "// Should not
+compile." then that script intentionally contains an error that should *not*
+successfully compile. The test harness will validate that attempting to compile
+it generates an error. By convention, feature scripts like this are named
+starting with "Error_".
+
+If any of the first lines of a feature script starts with "// Skip." we ignore
+the test.
+
+If any of the first lines of a feature script starts with "// Async." there
+will be a global function called 'done' that is expected to be called when the
+test is done.
+
+If any of the first lines of a feature script starts with "// Only in browser."
+we ignore the test if it is run using the Node.js test runner.
+
+If any of the first lines of a feature script starts with "// Options: " the
+rest of that line is treated as a command line. The options is set as if passed
+on the command line.
