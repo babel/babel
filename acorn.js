@@ -2412,7 +2412,7 @@
   function parseClass(node, isStatement) {
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
-    node.superClass = eat(_extends) ? parseExpression() : null;
+    node.superClass = eat(_extends) ? parseExprSubscripts() : null;
     var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
