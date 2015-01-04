@@ -3063,6 +3063,10 @@
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
+      if (eat(_semi)) {
+        continue;
+      }
+
       var method = startNode();
       if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "private") {
         next();
