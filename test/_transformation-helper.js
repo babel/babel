@@ -20,6 +20,19 @@ global.assert = chai.assert;
 global.chai = chai;
 global.genHelpers = genHelpers;
 
+// Different Traceur generator message
+chai.assert._throw = chai.assert.throw;
+chai.assert.throw = function (fn, msg) {
+  if (msg === '"throw" on executing generator' ||
+      msg === '"next" on executing generator') {
+    msg = "Generator is already running";
+  } else if (msg === "Sent value to newborn generator") {
+    msg = /^attempt to send (.*?) to newborn generator$/;
+  }
+
+  return chai.assert._throw(fn, msg);
+};
+
 var run = function (task, done) {
   var actual = task.actual;
   var expect = task.expect;
@@ -84,20 +97,30 @@ var run = function (task, done) {
   }
 };
 
-module.exports = function (name, opts) {
-  if (opts && opts.requireHook) {
-    require("6to5/register")(opts);
-  }
+module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
+  taskOpts = taskOpts || {};
 
-  _.each(helper.get(name), function (testSuite) {
-    suite(name + "/" + testSuite.title, function () {
+  require("6to5/register")(taskOpts);
+
+  _.each(helper.get(suiteOpts.name, suiteOpts.loc), function (testSuite) {
+    if (_.contains(suiteOpts.ignoreSuites, testSuite.title)) return;
+
+    suite(suiteOpts.name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
+        if (_.contains(suiteOpts.ignoreTasks, task.title) || _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) return;
+
         var runTest = function (done) {
           var runTask = function () {
-            run(task, done);
+            try {
+              run(task, done);
+            } catch (err) {
+              if (task.options.after) task.options.after();
+              throw err;
+            }
           };
 
-          _.defaults(task.options, opts);
+          _.extend(task.options, taskOpts);
+          if (dynamicOpts) dynamicOpts(task.options, task);
 
           var throwMsg = task.options.throws;
           if (throwMsg) {

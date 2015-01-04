@@ -16,11 +16,11 @@ var readFile = exports.readFile = function (filename) {
   }
 };
 
-exports.get = function (entryName) {
+exports.get = function (entryName, entryLoc) {
   if (exports.cache[entryName]) return exports.cache[entryName];
 
   var suites = [];
-  var entryLoc = __dirname + "/fixtures/" + entryName;
+  var entryLoc = entryLoc || __dirname + "/fixtures/" + entryName;
 
   _.each(fs.readdirSync(entryLoc), function (suiteName) {
     if (suiteName[0] === ".") return;
@@ -133,4 +133,5 @@ try {
   var cache = exports.cache = {};
   cache.transformation = exports.get("transformation");
   cache.generation     = exports.get("generation");
+  cache.esnext         = exports.get("esnext");
 }

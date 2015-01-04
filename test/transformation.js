@@ -1,1 +1,3 @@
-require("./_transformation-helper")("transformation");
+require("./_transformation-helper")({
+  name: "transformation"
+});
