@@ -78,43 +78,43 @@ that when you turn it off and use your code in a full ES6 environment
 
 ### Features
 
-|                              | 6to5 | Traceur | es6-transpiler | esnext | es6now | jstransform |
-| ---------------------------- | ---- | ------- | -------------- | ------ | ------ | ----------- |
-| Source maps                  | ✓    | ✓       | ✓              | ✓      |        | ✓           |
-| No compiler global pollution | ✓    |         | ✓              | ✓      |        | ✓           |
-| Optional runtime             | ✓    |         | ✓              |        |        | ✓           |
-| Browser compiler             | ✓    | ✓       |                | ✓      |        |             |
+|                              | 6to5 | Traceur | es6-transpiler | es6now | jstransform |
+| ---------------------------- | ---- | ------- | -------------- | ------ | ----------- |
+| Source maps                  | ✓    | ✓       | ✓              |        | ✓           |
+| No compiler global pollution | ✓    |         | ✓              |        | ✓           |
+| Optional runtime             | ✓    |         | ✓              |        | ✓           |
+| Browser compiler             | ✓    | ✓       |                |        |             |
 
 ### Language Support
 
-|                              | 6to5 | Traceur | es6-transpiler | esnext | es6now | jstransform |
-| ---------------------------- | ---- | ------- | -------------- | ------ | ------ | ----------- |
-| Abstract references          | ✓    |         |                |        |        |             |
-| Array comprehension          | ✓    | ✓       | ✓              |        |        |             |
-| Arrow functions              | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Async functions              | ✓    | ✓       |                | ✓      |        |             |
-| Async generator functions    | ✓    | ✓       |                |        |        |             |
-| Classes                      | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Computed property names      | ✓    | ✓       | ✓              | ✓      | ✓      |             |
-| Constants                    | ✓    | ✓       | ✓              |        |        |             |
-| Default parameters           | ✓    | ✓       | ✓              | ✓      | ✓      |             |
-| Destructuring                | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Exponentiation operator      | ✓    | ✓       |                |        |        |             |
-| Flow types                   | ✓    |         |                |        |        | ✓           |
-| For-of                       | ✓    | ✓       | ✓              | ✓      | ✓      |             |
-| Generators                   | ✓    | ✓       |                | ✓      |        |             |
-| Generator comprehension      | ✓    | ✓       |                |        |        |             |
-| JSX                          | ✓    |         |                |        |        |             |
-| Let scoping                  | ✓    | ✓       | ✓              |        |        |             |
-| Modules                      | ✓    | ✓       |                |        | ✓      |             |
-| Object rest/spread           | ✓    |         |                |        |        | ✓           |
-| Property method assignment   | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Property name shorthand      | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Rest parameters              | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| React                        | ✓    |         |                |        |        |             |
-| Spread                       | ✓    | ✓       | ✓              | ✓      | ✓      |             |
-| Template literals            | ✓    | ✓       | ✓              | ✓      | ✓      | ✓           |
-| Unicode regex                | ✓    | ✓       | ✓              |        |        |             |
+|                              | 6to5 | Traceur | es6-transpiler | es6now | jstransform |
+| ---------------------------- | ---- | ------- | -------------- | ------ | ----------- |
+| Abstract references          | ✓    |         |                |        |             |
+| Array comprehension          | ✓    | ✓       | ✓              |        |             |
+| Arrow functions              | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Async functions              | ✓    | ✓       |                |        |             |
+| Async generator functions    | ✓    | ✓       |                |        |             |
+| Classes                      | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Computed property names      | ✓    | ✓       | ✓              | ✓      |             |
+| Constants                    | ✓    | ✓       | ✓              |        |             |
+| Default parameters           | ✓    | ✓       | ✓              | ✓      |             |
+| Destructuring                | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Exponentiation operator      | ✓    | ✓       |                |        |             |
+| Flow types                   | ✓    |         |                |        | ✓           |
+| For-of                       | ✓    | ✓       | ✓              | ✓      |             |
+| Generators                   | ✓    | ✓       |                |        |             |
+| Generator comprehension      | ✓    | ✓       |                |        |             |
+| JSX                          | ✓    |         |                |        |             |
+| Let scoping                  | ✓    | ✓       | ✓              |        |             |
+| Modules                      | ✓    | ✓       |                | ✓      |             |
+| Object rest/spread           | ✓    |         |                |        | ✓           |
+| Property method assignment   | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Property name shorthand      | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Rest parameters              | ✓    | ✓       | ✓              | ✓      | ✓           |
+| React                        | ✓    |         |                |        |             |
+| Spread                       | ✓    | ✓       | ✓              | ✓      |             |
+| Template literals            | ✓    | ✓       | ✓              | ✓      | ✓           |
+| Unicode regex                | ✓    | ✓       | ✓              |        |             |
 
 ### [Traceur](https://github.com/google/traceur-compiler)
 
