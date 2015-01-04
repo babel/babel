@@ -2609,6 +2609,13 @@
 
           // normal functions
           if (tokType === _function) {
+            if (isStatement) {
+              // no line terminator after `async` contextual keyword
+              if (tokType === _semi || canInsertSemicolon()) {
+                return id;
+              }
+            }
+
             next();
             return parseFunction(node, isStatement, true);
           }
