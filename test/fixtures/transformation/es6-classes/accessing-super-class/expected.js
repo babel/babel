@@ -22,8 +22,8 @@ var Test = (function () {
     _Foo.prototype.test.call(this);
     foob(_Foo);
 
-    _Foo.call.apply(null, [this].concat(_slice.call(arguments)));
-    _Foo.call.apply(null, [this, "test"].concat(_slice.call(arguments)));
+    _Foo.call.apply(_Foo, [this].concat(_slice.call(arguments)));
+    _Foo.call.apply(_Foo, [this, "test"].concat(_slice.call(arguments)));
 
     (_Foo$prototype$test = _Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(_slice.call(arguments)));
     (_Foo$prototype$test2 = _Foo.prototype.test).call.apply(_Foo$prototype$test2, [this, "test"].concat(_slice.call(arguments)));

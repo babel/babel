@@ -1,7 +1,7 @@
 "use strict";
 
-var some = function (count) {
-  if (count === undefined) count = "30";
+var some = function () {
+  var count = arguments[0] === undefined ? "30" : arguments[0];
   console.log("count", count);
 };
 

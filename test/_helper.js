@@ -1,5 +1,6 @@
-var fs = require("fs");
-var _  = require("lodash");
+var path = require("path");
+var fs   = require("fs");
+var _    = require("lodash");
 
 var humanise = function (val) {
   return val.replace(/-/g, " ");
@@ -37,7 +38,6 @@ exports.get = function (entryName) {
 
     _.each(fs.readdirSync(suite.filename), function (taskName) {
       var taskDir = suite.filename + "/" + taskName;
-      if (fs.statSync(taskDir).isFile()) return;
 
       var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
@@ -46,6 +46,13 @@ exports.get = function (entryName) {
       var actualLoc = taskDir + "/actual.js";
       var expectLoc = taskDir + "/expected.js";
       var execLoc   = taskDir + "/exec.js";
+
+      if (fs.statSync(taskDir).isFile()) {
+        var ext = path.extname(taskDir);
+        if (ext !== ".js") return;
+
+        execLoc = taskDir;
+      }
 
       var taskOpts = _.merge({
         filenameRelative: expectLocAlias,
