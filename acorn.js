@@ -634,9 +634,6 @@
     if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
     tokRegexpAllowed = type.beforeExpr;
-    if (options.onToken) {
-      options.onToken(new Token());
-    }
   }
 
   function skipBlockComment() {
@@ -1232,6 +1229,9 @@
   // Continue to the next token.
 
   function next() {
+    if (options.onToken)
+      options.onToken(new Token());
+
     lastStart = tokStart;
     lastEnd = tokEnd;
     lastEndLoc = tokEndLoc;
@@ -1542,9 +1542,7 @@
       first = false;
     }
 
-    lastStart = tokStart;
-    lastEnd = tokEnd;
-    lastEndLoc = tokEndLoc;
+    next();
     return finishNode(node, "Program");
   }
 
@@ -2664,5 +2662,4 @@
     node.generator = isGenerator;
     return finishNode(node, "ComprehensionExpression");
   }
-
 });

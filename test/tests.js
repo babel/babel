@@ -28757,6 +28757,7 @@ var tokTypes = acorn.tokTypes;
 
 test('var x = (1 + 2)', {}, {
   locations: true,
+  loose: false,
   onToken: [
     {
       type: tokTypes._var,
