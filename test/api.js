@@ -13,10 +13,10 @@ suite("api", function () {
     assert.ok(!result.ast);
   });
 
-  test("addDeclaration unknown", function () {
+  test("addHelper unknown", function () {
     var file = new File;
     assert.throws(function () {
-      file.addDeclaration("foob");
+      file.addHelper("foob");
     }, /unknown declaration foob/);
   });
 });
