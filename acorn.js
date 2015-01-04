@@ -2043,17 +2043,9 @@
       // next token is a colon and the expression was a simple
       // Identifier node, we switch to interpreting it as a label.
     default:
-      if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "async") {
-        var id = parseIdent();
-        if (tokType === _function) {
-          next();
-          return parseFunction(node, true, true);
-        } else {
-          return parseSubscripts(id, start);
-        }
-      }
+      var maybeName = tokVal, expr = parseExpression(false, false, true);
+      if (expr.type === "FunctionDeclaration") return expr;
 
-      var maybeName = tokVal, expr = parseExpression();
       if (starttype === _name && expr.type === "Identifier") {
         if (eat(_colon)) {
           return parseLabeledStatement(node, maybeName, expr);
@@ -2387,9 +2379,9 @@
   // sequences (in argument lists, array literals, or object literals)
   // or the `in` operator (in for loops initalization expressions).
 
-  function parseExpression(noComma, noIn) {
+  function parseExpression(noComma, noIn, isStatement) {
     var start = storeCurrentPos();
-    var expr = parseMaybeAssign(noIn);
+    var expr = parseMaybeAssign(noIn, false, isStatement);
     if (!noComma && tokType === _comma) {
       var node = startNodeAt(start);
       node.expressions = [expr];
@@ -2402,9 +2394,9 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  function parseMaybeAssign(noIn, noLess) {
+  function parseMaybeAssign(noIn, noLess, isStatement) {
     var start = storeCurrentPos();
-    var left = parseMaybeConditional(noIn, noLess);
+    var left = parseMaybeConditional(noIn, noLess, isStatement);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -2419,9 +2411,9 @@
 
   // Parse a ternary conditional (`?:`) operator.
 
-  function parseMaybeConditional(noIn, noLess) {
+  function parseMaybeConditional(noIn, noLess, isStatement) {
     var start = storeCurrentPos();
-    var expr = parseExprOps(noIn, noLess);
+    var expr = parseExprOps(noIn, noLess, isStatement);
     if (eat(_question)) {
       var node = startNodeAt(start);
       if (eat(_eq)) {
@@ -2442,9 +2434,9 @@
 
   // Start the precedence parser.
 
-  function parseExprOps(noIn, noLess) {
+  function parseExprOps(noIn, noLess, isStatement) {
     var start = storeCurrentPos();
-    return parseExprOp(parseMaybeUnary(), start, -1, noIn, noLess);
+    return parseExprOp(parseMaybeUnary(isStatement), start, -1, noIn, noLess);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -2473,7 +2465,7 @@
 
   // Parse unary operators, both prefix and postfix.
 
-  function parseMaybeUnary() {
+  function parseMaybeUnary(isStatement) {
     if (tokType.prefix) {
       var node = startNode(), update = tokType.isUpdate, nodeType;
       if (tokType === _ellipsis) {
@@ -2493,7 +2485,7 @@
       return finishNode(node, nodeType);
     }
     var start = storeCurrentPos();
-    var expr = parseExprSubscripts();
+    var expr = parseExprSubscripts(isStatement);
     while (tokType.postfix && !canInsertSemicolon()) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -2508,9 +2500,9 @@
 
   // Parse call, dot, and `[]`-subscript expressions.
 
-  function parseExprSubscripts() {
+  function parseExprSubscripts(isStatement) {
     var start = storeCurrentPos();
-    return parseSubscripts(parseExprAtom(), start);
+    return parseSubscripts(parseExprAtom(isStatement), start);
   }
 
   function parseSubscripts(base, start, noCalls) {
@@ -2560,7 +2552,7 @@
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,
   // or `{}`.
 
-  function parseExprAtom() {
+  function parseExprAtom(isStatement) {
     switch (tokType) {
     case _this:
       var node = startNode();
@@ -2618,7 +2610,8 @@
           // normal functions
           if (tokType === _function) {
             next();
-            return parseFunction(node, false, true);
+            console.trace();
+            return parseFunction(node, isStatement, true);
           }
         } else if (id.name === "await") {
           if (inAsync) return parseAwait(node);
