@@ -47,7 +47,7 @@ exports.get = function (entryName) {
 
     function push(taskName, taskDir) {
       // tracuer error tests
-      if (taskName.indexOf("Error_") === 0) return;
+      if (taskName.indexOf("Error_") >= 0) return;
 
       var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
@@ -97,12 +97,12 @@ exports.get = function (entryName) {
       // traceur checks
 
       var shouldSkip = function (code) {
-        return code.indexOf("// Error:") === 0 || code.indexOf("// Skip.") === 0;
+        return code.indexOf("// Error:") >= 0 || code.indexOf("// Skip.") >= 0;
       };
 
       if (shouldSkip(test.actual.code) || shouldSkip(test.exec.code)) {
         return;
-      } else if (test.exec.code.indexOf("// Async.")) {
+      } else if (test.exec.code.indexOf("// Async.") >= 0) {
         //test.options.asyncExec = true;
       }
 

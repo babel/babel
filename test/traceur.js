@@ -1,5 +1,5 @@
 require("./_transformation-helper")("traceur", {
   blacklist: ["useStrict"],
-  emulateNodeModule: true,
+  requireHook: true,
   experimental: true
 });

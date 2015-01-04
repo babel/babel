@@ -40,16 +40,18 @@ var run = function (task, done) {
     execCode = result.code;
 
     try {
-      var requireRelative;
-      if (opts.emulateNodeModule) {
-        var mod = new Module(exec.loc);
-        requireRelative = function (loc) {
-          return mod.require(loc);
-        };
-      }
+      var fakeRequire = function (loc) {
+        if (loc === "../../../src/runtime/polyfills/Number.js") {
+          return Number;
+        } else if (loc === "../../../src/runtime/polyfills/Math.js") {
+          return Math;
+        } else {
+          return require(path.resolve(exec.loc, "..", loc));
+        }
+      };
 
       var fn = new Function("require", "done", execCode);
-      fn(requireRelative, chai.assert, done);
+      fn.call(global, fakeRequire, chai.assert, done);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += util.codeFrame(execCode);
@@ -83,6 +85,10 @@ var run = function (task, done) {
 };
 
 module.exports = function (name, opts) {
+  if (opts && opts.requireHook) {
+    require("6to5/register")(opts);
+  }
+
   _.each(helper.get(name), function (testSuite) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
