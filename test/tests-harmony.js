@@ -8859,6 +8859,42 @@ test("class A { foo() {} get foo() {} }",{
   locations: true
 });
 
+test("class Semicolon { ; }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 21}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 21}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 15}
+      },
+      name: "Semicolon"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 16},
+        end: {line: 1, column: 21}
+      },
+      body: []
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 // ES6: Computed Properties
 
 test("({[x]: 10})", {
