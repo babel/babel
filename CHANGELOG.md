@@ -1,6 +1,13 @@
 # Changelog
 
-Gaps between patch versions are faulty/broken releases.
+> **Tags:**
+> - [New Feature]
+> - [Bug Fix]
+> - [Spec Compliancy]
+> - [Breaking Change]
+> - [Documentation]
+
+_Note: Gaps between patch versions are faulty/broken releases._
 
 ## 2.5.0
 

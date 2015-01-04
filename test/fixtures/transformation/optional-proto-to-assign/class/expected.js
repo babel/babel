@@ -25,7 +25,7 @@ var _inherits = function (child, parent) {
 var Foo = (function () {
   var _Bar = Bar;
   var Foo = function Foo() {
-    if (_Bar) {
+    if (_Bar !== null) {
       _Bar.apply(this, arguments);
     }
   };

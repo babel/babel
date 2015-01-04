@@ -8,6 +8,22 @@ export NODE_ENV = test
 
 .PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish bench build
 
+build:
+	mkdir -p dist
+
+	node bin/cache-templates
+
+	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
+	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
+
+	node $(BROWSERIFY_CMD) lib/6to5/browser.js -s to5 >dist/6to5.js
+	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
+
+	node bin/6to5-runtime >dist/runtime.js
+	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
+
+	rm -rf templates.json
+	
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
@@ -44,22 +60,6 @@ test-browser:
 	rm -rf templates.json tests.json
 
 	test -n "`which open`" && open test/browser.html
-
-build:
-	mkdir -p dist
-
-	node bin/cache-templates
-
-	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
-	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
-
-	node $(BROWSERIFY_CMD) lib/6to5/browser.js -s to5 >dist/6to5.js
-	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
-
-	node bin/6to5-runtime >dist/runtime.js
-	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
-
-	rm -rf templates.json
 
 publish:
 	git pull --rebase
