@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "2.4.10",
+  "version": "2.5.0",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/6to5/6to5",
   "repository": {
@@ -39,7 +39,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-8",
+    "acorn-6to5": "0.11.1-10",
     "ast-types": "~0.6.1",
     "chokidar": "0.11.1",
     "commander": "2.5.0",

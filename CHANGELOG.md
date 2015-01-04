@@ -2,6 +2,12 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.5.0
+
+ * Remove `noDuplicateProperties` transformer.
+ * Better generated UIDs based on nodes.
+ * Default parameters now use `arguments[i]`, conditionals and variable declarations instead of using long-form if statements.
+
 ## 2.4.10
 
  * Upgrade `acorn-6to5`.
