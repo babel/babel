@@ -3062,10 +3062,8 @@
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
-      if (eat(_semi)) {
-        continue;
-      }
-
+      while (eat(_semi));
+      if (tokType === _braceR) continue;
       var method = startNode();
       if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "private") {
         next();
@@ -3112,7 +3110,6 @@
         method.value = parseMethod(isGenerator, isAsync);
         method.value.typeParameters = typeParameters;
         classBody.body.push(finishNode(method, "MethodDefinition"));
-        eat(_semi);
       }
     }
     node.body = finishNode(classBody, "ClassBody");
