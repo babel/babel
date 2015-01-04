@@ -2610,7 +2610,6 @@
           // normal functions
           if (tokType === _function) {
             next();
-            console.trace();
             return parseFunction(node, isStatement, true);
           }
         } else if (id.name === "await") {
