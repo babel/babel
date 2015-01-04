@@ -2,22 +2,22 @@
 
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports"], factory);
+    define(["exports", "module"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports);
+    factory(exports, module);
   }
-})(function (exports) {
-  exports = foo;
-  exports = 42;
-  exports = {};
-  exports = [];
-  exports = foo;
-  exports = function () {};
+})(function (exports, module) {
+  module.exports = foo;
+  module.exports = 42;
+  module.exports = {};
+  module.exports = [];
+  module.exports = foo;
+  module.exports = function () {};
 
-  exports = function () {};
+  module.exports = function () {};
 
   function foo() {}
   var Foo = function Foo() {};
 
-  exports = Foo;
+  module.exports = Foo;
 });
