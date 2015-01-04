@@ -170,7 +170,7 @@ describe("throw", function() {
     function *gen(x) {
       throw 1;
     }
-  
+
     var u = gen();
 
     try {
@@ -1742,6 +1742,46 @@ describe("labeled break and continue statements", function() {
     } catch (err) {
       assert.strictEqual(err, e4);
     }
+  });
+
+  it("should allow breaking from any labeled statement", function() {
+    function* gen(limit) {
+      yield 0;
+
+      for (var i = 0; i < limit; ++i) {
+        yield 1;
+
+        label1: {
+          yield 2;
+          break label1;
+          yield 3;
+        }
+
+        label2:
+        if (limit === 3) label3: {
+          yield 4;
+          if (i === 0) break label2;
+          yield 5;
+          if (i === 1) break label3;
+          label4: yield 6;
+          // This should break from the for-loop.
+          if (i === 2) xxx: break;
+          yield 7;
+        }
+
+        // This should be a no-op.
+        xxx: break xxx;
+
+        yield 8
+      }
+
+      yield 9;
+    }
+
+    check(gen(0), [0, 9]);
+    check(gen(1), [0, 1, 2, 8, 9]);
+    check(gen(2), [0, 1, 2, 8, 1, 2, 8, 9]);
+    check(gen(3), [0, 1, 2, 4, 8, 1, 2, 4, 5, 8, 1, 2, 4, 5, 6, 9]);
   });
 });
 

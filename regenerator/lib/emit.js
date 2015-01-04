@@ -445,7 +445,40 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "LabeledStatement":
-    self.explodeStatement(path.get("body"), stmt.label);
+    var after = loc();
+
+    // Did you know you can break from any labeled block statement or
+    // control structure? Well, you can! Note: when a labeled loop is
+    // encountered, the leap.LabeledEntry created here will immediately
+    // enclose a leap.LoopEntry on the leap manager's stack, and both
+    // entries will have the same label. Though this works just fine, it
+    // may seem a bit redundant. In theory, we could check here to
+    // determine if stmt knows how to handle its own label; for example,
+    // stmt happens to be a WhileStatement and so we know it's going to
+    // establish its own LoopEntry when we explode it (below). Then this
+    // LabeledEntry would be unnecessary. Alternatively, we might be
+    // tempted not to pass stmt.label down into self.explodeStatement,
+    // because we've handled the label here, but that's a mistake because
+    // labeled loops may contain labeled continue statements, which is not
+    // something we can handle in this generic case. All in all, I think a
+    // little redundancy greatly simplifies the logic of this case, since
+    // it's clear that we handle all possible LabeledStatements correctly
+    // here, regardless of whether they interact with the leap manager
+    // themselves. Also remember that labels and break/continue-to-label
+    // statements are rare, and all of this logic happens at transform
+    // time, so it has no additional runtime cost.
+    if (stmt.label.name === "xxx") {
+      debugger;
+    }
+    self.leapManager.withEntry(
+      new leap.LabeledEntry(after, stmt.label),
+      function() {
+        self.explodeStatement(path.get("body"), stmt.label);
+      }
+    );
+
+    self.mark(after);
+
     break;
 
   case "WhileStatement":

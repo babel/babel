@@ -125,6 +125,21 @@ function FinallyEntry(firstLoc) {
 inherits(FinallyEntry, Entry);
 exports.FinallyEntry = FinallyEntry;
 
+function LabeledEntry(breakLoc, label) {
+  Entry.call(this);
+
+  n.Literal.assert(breakLoc);
+  n.Identifier.assert(label);
+
+  Object.defineProperties(this, {
+    breakLoc: { value: breakLoc },
+    label: { value: label }
+  });
+}
+
+inherits(LabeledEntry, Entry);
+exports.LabeledEntry = LabeledEntry;
+
 function LeapManager(emitter) {
   assert.ok(this instanceof LeapManager);
 
@@ -163,6 +178,9 @@ LMp._findLeapLocation = function(property, label) {
             entry.label.name === label.name) {
           return loc;
         }
+      } else if (entry instanceof LabeledEntry) {
+        // Ignore LabeledEntry entries unless we are actually breaking to
+        // a label.
       } else {
         return loc;
       }
