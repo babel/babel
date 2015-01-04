@@ -4884,8 +4884,8 @@ var b = types.builders;
 var n = types.namedTypes;
 var leap = _dereq_("./leap");
 var meta = _dereq_("./meta");
-var runtimeProperty = _dereq_("./util").runtimeProperty;
-var runtimeKeysMethod = runtimeProperty("keys");
+var util = _dereq_("./util");
+var runtimeKeysMethod = util.runtimeProperty("keys");
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -5601,10 +5601,23 @@ Ep.explodeStatement = function(path, labelId) {
 
         types.visit(bodyPath, {
           visitIdentifier: function(path) {
-            if (path.value.name === catchParamName &&
+            if (util.isReference(path, catchParamName) &&
                 path.scope.lookup(catchParamName) === catchScope) {
               return safeParam;
             }
+
+            this.traverse(path);
+          },
+
+          visitFunction: function(path) {
+            if (path.scope.declares(catchParamName)) {
+              // Don't descend into nested scopes that shadow the catch
+              // parameter with their own declarations. This isn't
+              // logically necessary because of the path.scope.lookup we
+              // do in visitIdentifier, but it saves time.
+              return false;
+            }
+
             this.traverse(path);
           }
         });
@@ -6465,7 +6478,10 @@ exports.containsLeap = makePredicate("containsLeap", leapTypes);
  * the same directory.
  */
 
-var b = _dereq_("recast").types.builders;
+var assert = _dereq_("assert");
+var types = _dereq_("recast").types;
+var n = types.namedTypes;
+var b = types.builders;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 exports.defaults = function(obj) {
@@ -6493,7 +6509,67 @@ exports.runtimeProperty = function(name) {
   );
 };
 
-},{"recast":54}],27:[function(_dereq_,module,exports){
+// Inspired by the isReference function from ast-util:
+// https://github.com/eventualbuddha/ast-util/blob/9bf91c5ce8/lib/index.js#L466-L506
+exports.isReference = function(path, name) {
+  var node = path.value;
+
+  if (!n.Identifier.check(node)) {
+    return false;
+  }
+
+  if (name && node.name !== name) {
+    return false;
+  }
+
+  var parent = path.parent.value;
+
+  switch (parent.type) {
+  case "VariableDeclarator":
+    return path.name === "init";
+
+  case "MemberExpression":
+    return path.name === "object" || (
+      parent.computed && path.name === "property"
+    );
+
+  case "FunctionExpression":
+  case "FunctionDeclaration":
+  case "ArrowFunctionExpression":
+    if (path.name === "id") {
+      return false;
+    }
+
+    if (parent.params === path.parentPath &&
+        parent.params[path.name] === node) {
+      return false;
+    }
+
+    return true;
+
+  case "ClassDeclaration":
+  case "ClassExpression":
+    return path.name !== "id";
+
+  case "CatchClause":
+    return path.name !== "param";
+
+  case "Property":
+  case "MethodDefinition":
+    return path.name !== "key";
+
+  case "ImportSpecifier":
+  case "ImportDefaultSpecifier":
+  case "ImportNamespaceSpecifier":
+  case "LabeledStatement":
+    return false;
+
+  default:
+    return true;
+  }
+};
+
+},{"assert":2,"recast":54}],27:[function(_dereq_,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6522,11 +6598,16 @@ var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
 
 exports.transform = function transform(node, options) {
+  options = options || {};
+
   node = recast.visit(node, visitor);
 
-  if (options && options.includeRuntime) {
+  if (options.includeRuntime === true ||
+      (options.includeRuntime === 'if used' && visitor.wasChangeReported())) {
     injectRuntime(n.File.check(node) ? node.program : node);
   }
+
+  options.madeChanges = visitor.wasChangeReported();
 
   return node;
 };
@@ -6556,6 +6637,8 @@ var visitor = types.PathVisitor.fromMethodsObject({
     if (!node.generator && !node.async) {
       return;
     }
+
+    this.reportChanged();
 
     node.generator = false;
 
@@ -6926,7 +7009,7 @@ function compile(source, options) {
   if (!genOrAsyncFunExp.test(source)) {
     return {
       // Shortcut: no generators or async functions to transform.
-      code: (options.includeRuntime ? fs.readFileSync(
+      code: (options.includeRuntime === true ? fs.readFileSync(
         runtime.path, "utf-8"
       ) + "\n" : "") + source
     };
@@ -16968,7 +17051,8 @@ function getSortedChildNodes(node, resultArray) {
     }
 
     if (resultArray) {
-        if (n.Node.check(node)) {
+        if (n.Node.check(node) &&
+            n.SourceLocation.check(node.loc)) {
             // This reverse insertion sort almost always takes constant
             // time because we almost always (maybe always?) append the
             // nodes in order anyway.
@@ -17059,12 +17143,10 @@ function decorateComment(node, comment) {
     }
 }
 
-exports.add = function(ast, lines) {
-    var comments = ast.comments;
+exports.attach = function(comments, ast, lines) {
     if (!isArray.check(comments)) {
         return;
     }
-    delete ast.comments;
 
     var tiesToBreak = [];
 
@@ -18532,7 +18614,7 @@ var isFunction = types.builtInTypes.function;
 var Patcher = _dereq_("./patcher").Patcher;
 var normalizeOptions = _dereq_("./options").normalize;
 var fromString = _dereq_("./lines").fromString;
-var addComments = _dereq_("./comments").add;
+var attachComments = _dereq_("./comments").attach;
 
 exports.parse = function parse(source, options) {
     options = normalizeOptions(options);
@@ -18545,19 +18627,20 @@ exports.parse = function parse(source, options) {
         useTabs: false
     });
 
-    var pure = options.esprima.parse(sourceWithoutTabs, {
+    var program = options.esprima.parse(sourceWithoutTabs, {
         loc: true,
         range: options.range,
         comment: true,
         tolerant: options.tolerant
     });
 
-    addComments(pure, lines);
+    var comments = program.comments;
+    delete program.comments;
 
     // In order to ensure we reprint leading and trailing program
     // comments, wrap the original Program node with a File node.
-    pure = b.file(pure);
-    pure.loc = {
+    var file = b.file(program);
+    file.loc = {
         lines: lines,
         indent: 0,
         start: lines.firstPos(),
@@ -18566,7 +18649,12 @@ exports.parse = function parse(source, options) {
 
     // Return a copy of the original AST so that any changes made may be
     // compared to the original.
-    return new TreeCopier(lines).copy(pure);
+    var copy = new TreeCopier(lines).copy(file);
+
+    // Attach comments to the copy rather than the original.
+    attachComments(comments, copy.program, lines);
+
+    return copy;
 };
 
 function TreeCopier(lines) {
@@ -18595,6 +18683,12 @@ TCp.copy = function(node) {
         // properties), so we null out that information to prevent
         // accidental reuse of bogus source code during reprinting.
         node.value.loc = null;
+
+        if (n.FunctionExpression.check(node.value)) {
+            // FunctionExpression method values should be anonymous,
+            // because their .id fields are ignored anyway.
+            node.value.id = null;
+        }
     }
 
     var copy = Object.create(Object.getPrototypeOf(node), {
@@ -18638,7 +18732,6 @@ TCp.copy = function(node) {
         } else {
             copy[key] = this.copy(node[key]);
         }
-
     }
 
     this.indent = oldIndent;
@@ -19075,11 +19168,9 @@ function Printer(originalOptions) {
 
         if (!explicitTabWidth) {
             var oldTabWidth = options.tabWidth;
-            var orig = path.node.original;
-            var origLoc = orig && orig.loc;
-            var origLines = origLoc && origLoc.lines;
-            if (origLines) {
-                options.tabWidth = origLines.guessTabWidth();
+            var loc = path.node.loc;
+            if (loc && loc.lines && loc.lines.guessTabWidth) {
+                options.tabWidth = loc.lines.guessTabWidth();
                 var lines = maybeReprint(path);
                 options.tabWidth = oldTabWidth;
                 return lines;
@@ -20094,8 +20185,7 @@ function printStatementSequence(path, options, print) {
             printed = maybeAddSemicolon(printed);
         }
 
-        var orig = options.reuseWhitespace && stmt.original;
-        var trueLoc = orig && getTrueLoc(orig);
+        var trueLoc = options.reuseWhitespace && getTrueLoc(stmt);
         var lines = trueLoc && trueLoc.lines;
 
         if (notFirst) {
@@ -20140,6 +20230,14 @@ function printStatementSequence(path, options, print) {
 }
 
 function getTrueLoc(node) {
+    // It's possible that node is newly-created (not parsed by Esprima),
+    // in which case it probably won't have a .loc property (or an
+    // .original property for that matter). That's fine; we'll just
+    // pretty-print it as usual.
+    if (!node.loc) {
+        return null;
+    }
+
     if (!node.comments) {
         // If the node has no comments, regard node.loc as true.
         return node.loc;
@@ -22188,9 +22286,15 @@ var undefined;
 
 function PathVisitor() {
     assert.ok(this instanceof PathVisitor);
+
+    // Permanent state.
     this._reusableContextStack = [];
     this._methodNameTable = computeMethodNameTable(this);
     this.Context = makeContextConstructor(this);
+
+    // State reset every time PathVisitor.prototype.visit is called.
+    this._visiting = false;
+    this._changeReported = false;
 }
 
 function computeMethodNameTable(visitor) {
@@ -22270,11 +22374,38 @@ PathVisitor.visit = function visit(node, methods) {
 
 var PVp = PathVisitor.prototype;
 
+var recursiveVisitWarning = [
+    "Recursively calling visitor.visit(path) resets visitor state.",
+    "Try this.visit(path) or this.traverse(path) instead."
+].join(" ");
+
 PVp.visit = function(path) {
+    assert.ok(!this._visiting, recursiveVisitWarning);
+
+    // Private state that needs to be reset before every traversal.
+    this._visiting = true;
+    this._changeReported = false;
+
+    // Called with the same arguments as .visit.
+    this.reset.apply(this, arguments);
+
+    try {
+        return this.visitWithoutReset(path);
+    } finally {
+        this._visiting = false;
+    }
+};
+
+PVp.reset = function(path/*, additional arguments */) {
+    // Empty stub; may be reassigned or overridden by subclasses.
+};
+
+PVp.visitWithoutReset = function(path) {
     if (this instanceof this.Context) {
-        // If we somehow end up calling context.visit, then we need to
-        // re-invoke the .visit method against context.visitor.
-        return this.visitor.visit(path);
+        // Since this.Context.prototype === this, there's a chance we
+        // might accidentally call context.visitWithoutReset. If that
+        // happens, re-invoke the method against context.visitor.
+        return this.visitor.visitWithoutReset(path);
     }
 
     assert.ok(path instanceof NodePath);
@@ -22303,7 +22434,7 @@ function visitChildren(path, visitor) {
     var value = path.value;
 
     if (isArray.check(value)) {
-        path.each(visitor.visit, visitor);
+        path.each(visitor.visitWithoutReset, visitor);
     } else if (!isObject.check(value)) {
         // No children to visit.
     } else {
@@ -22320,7 +22451,7 @@ function visitChildren(path, visitor) {
         }
 
         for (var i = 0; i < childCount; ++i) {
-            visitor.visit(childPaths[i]);
+            visitor.visitWithoutReset(childPaths[i]);
         }
     }
 }
@@ -22336,6 +22467,14 @@ PVp.releaseContext = function(context) {
     assert.ok(context instanceof this.Context);
     this._reusableContextStack.push(context);
     context.currentPath = null;
+};
+
+PVp.reportChanged = function() {
+    this._changeReported = true;
+};
+
+PVp.wasChangeReported = function() {
+    return this._changeReported;
 };
 
 function makeContextConstructor(visitor) {
@@ -22427,6 +22566,23 @@ function traverse(path, newVisitor) {
     visitChildren(path, PathVisitor.fromMethodsObject(
         newVisitor || this.visitor
     ));
+};
+
+sharedContextProtoMethods.visit =
+function visit(path, newVisitor) {
+    assert.ok(this instanceof this.Context);
+    assert.ok(path instanceof NodePath);
+    assert.ok(this.currentPath instanceof NodePath);
+
+    this.needToCallTraverse = false;
+
+    PathVisitor.fromMethodsObject(
+        newVisitor || this.visitor
+    ).visitWithoutReset(path);
+};
+
+sharedContextProtoMethods.reportChanged = function reportChanged() {
+    this.visitor.reportChanged();
 };
 
 module.exports = PathVisitor;
@@ -24018,7 +24174,7 @@ define(function (_dereq_, exports, module) {
 
   /**
    * Converts from a two-complement value to a value where the sign bit is
-   * is placed in the least significant bit.  For example, as decimals:
+   * placed in the least significant bit.  For example, as decimals:
    *   1 becomes 2 (10 binary), -1 becomes 3 (11 binary)
    *   2 becomes 4 (100 binary), -2 becomes 5 (101 binary)
    */
@@ -24030,7 +24186,7 @@ define(function (_dereq_, exports, module) {
 
   /**
    * Converts to a two-complement value from a value where the sign bit is
-   * is placed in the least significant bit.  For example, as decimals:
+   * placed in the least significant bit.  For example, as decimals:
    *   2 (10 binary) becomes 1, 3 (11 binary) becomes -1
    *   4 (100 binary) becomes 2, 5 (101 binary) becomes -2
    */
@@ -24163,17 +24319,17 @@ define(function (_dereq_, exports, module) {
     //
     //   1. We find the exact element we are looking for.
     //
-    //   2. We did not find the exact element, but we can return the next
-    //      closest element that is less than that element.
+    //   2. We did not find the exact element, but we can return the index of
+    //      the next closest element that is less than that element.
     //
     //   3. We did not find the exact element, and there is no next-closest
     //      element which is less than the one we are searching for, so we
-    //      return null.
+    //      return -1.
     var mid = Math.floor((aHigh - aLow) / 2) + aLow;
     var cmp = aCompare(aNeedle, aHaystack[mid], true);
     if (cmp === 0) {
       // Found the element we are looking for.
-      return aHaystack[mid];
+      return mid;
     }
     else if (cmp > 0) {
       // aHaystack[mid] is greater than our needle.
@@ -24183,7 +24339,7 @@ define(function (_dereq_, exports, module) {
       }
       // We did not find an exact match, return the next closest one
       // (termination case 2).
-      return aHaystack[mid];
+      return mid;
     }
     else {
       // aHaystack[mid] is less than our needle.
@@ -24193,18 +24349,16 @@ define(function (_dereq_, exports, module) {
       }
       // The exact needle element was not found in this haystack. Determine if
       // we are in termination case (2) or (3) and return the appropriate thing.
-      return aLow < 0
-        ? null
-        : aHaystack[aLow];
+      return aLow < 0 ? -1 : aLow;
     }
   }
 
   /**
    * This is an implementation of binary search which will always try and return
-   * the next lowest value checked if there is no exact hit. This is because
-   * mappings between original and generated line/col pairs are single points,
-   * and there is an implicit region between each of them, so a miss just means
-   * that you aren't on the very start of a region.
+   * the index of next lowest value checked if there is no exact hit. This is
+   * because mappings between original and generated line/col pairs are single
+   * points, and there is an implicit region between each of them, so a miss
+   * just means that you aren't on the very start of a region.
    *
    * @param aNeedle The element you are looking for.
    * @param aHaystack The array that is being searched.
@@ -24213,9 +24367,10 @@ define(function (_dereq_, exports, module) {
    *     than, equal to, or greater than the element, respectively.
    */
   exports.search = function search(aNeedle, aHaystack, aCompare) {
-    return aHaystack.length > 0
-      ? recursiveSearch(-1, aHaystack.length, aNeedle, aHaystack, aCompare)
-      : null;
+    if (aHaystack.length === 0) {
+      return -1;
+    }
+    return recursiveSearch(-1, aHaystack.length, aNeedle, aHaystack, aCompare)
   };
 
 });
@@ -24288,6 +24443,11 @@ define(function (_dereq_, exports, module) {
     if (version != this._version) {
       throw new Error('Unsupported version: ' + version);
     }
+
+    // Some source maps produce relative source paths like "./foo.js" instead of
+    // "foo.js".  Normalize these first so that future comparisons will succeed.
+    // See bugzil.la/1090768.
+    sources = sources.map(util.normalize);
 
     // Pass `true` below to allow duplicate names and sources. While source maps
     // are intended to be compressed and deduplicated, the TypeScript compiler
@@ -24514,6 +24674,33 @@ define(function (_dereq_, exports, module) {
     };
 
   /**
+   * Compute the last column for each generated mapping. The last column is
+   * inclusive.
+   */
+  SourceMapConsumer.prototype.computeColumnSpans =
+    function SourceMapConsumer_computeColumnSpans() {
+      for (var index = 0; index < this._generatedMappings.length; ++index) {
+        var mapping = this._generatedMappings[index];
+
+        // Mappings do not contain a field for the last generated columnt. We
+        // can come up with an optimistic estimate, however, by assuming that
+        // mappings are contiguous (i.e. given two consecutive mappings, the
+        // first mapping ends where the second one starts).
+        if (index + 1 < this._generatedMappings.length) {
+          var nextMapping = this._generatedMappings[index + 1];
+
+          if (mapping.generatedLine === nextMapping.generatedLine) {
+            mapping.lastGeneratedColumn = nextMapping.generatedColumn - 1;
+            continue;
+          }
+        }
+
+        // The last mapping for each line spans the entire line.
+        mapping.lastGeneratedColumn = Infinity;
+      }
+    };
+
+  /**
    * Returns the original source, line, and column information for the generated
    * source's line and column positions provided. The only argument is an object
    * with the following properties:
@@ -24535,23 +24722,27 @@ define(function (_dereq_, exports, module) {
         generatedColumn: util.getArg(aArgs, 'column')
       };
 
-      var mapping = this._findMapping(needle,
-                                      this._generatedMappings,
-                                      "generatedLine",
-                                      "generatedColumn",
-                                      util.compareByGeneratedPositions);
+      var index = this._findMapping(needle,
+                                    this._generatedMappings,
+                                    "generatedLine",
+                                    "generatedColumn",
+                                    util.compareByGeneratedPositions);
 
-      if (mapping && mapping.generatedLine === needle.generatedLine) {
-        var source = util.getArg(mapping, 'source', null);
-        if (source != null && this.sourceRoot != null) {
-          source = util.join(this.sourceRoot, source);
+      if (index >= 0) {
+        var mapping = this._generatedMappings[index];
+
+        if (mapping.generatedLine === needle.generatedLine) {
+          var source = util.getArg(mapping, 'source', null);
+          if (source != null && this.sourceRoot != null) {
+            source = util.join(this.sourceRoot, source);
+          }
+          return {
+            source: source,
+            line: util.getArg(mapping, 'originalLine', null),
+            column: util.getArg(mapping, 'originalColumn', null),
+            name: util.getArg(mapping, 'name', null)
+          };
         }
-        return {
-          source: source,
-          line: util.getArg(mapping, 'originalLine', null),
-          column: util.getArg(mapping, 'originalColumn', null),
-          name: util.getArg(mapping, 'name', null)
-        };
       }
 
       return {
@@ -24629,23 +24820,80 @@ define(function (_dereq_, exports, module) {
         needle.source = util.relative(this.sourceRoot, needle.source);
       }
 
-      var mapping = this._findMapping(needle,
-                                      this._originalMappings,
-                                      "originalLine",
-                                      "originalColumn",
-                                      util.compareByOriginalPositions);
+      var index = this._findMapping(needle,
+                                    this._originalMappings,
+                                    "originalLine",
+                                    "originalColumn",
+                                    util.compareByOriginalPositions);
 
-      if (mapping) {
+      if (index >= 0) {
+        var mapping = this._originalMappings[index];
+
         return {
           line: util.getArg(mapping, 'generatedLine', null),
-          column: util.getArg(mapping, 'generatedColumn', null)
+          column: util.getArg(mapping, 'generatedColumn', null),
+          lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
         };
       }
 
       return {
         line: null,
-        column: null
+        column: null,
+        lastColumn: null
       };
+    };
+
+  /**
+   * Returns all generated line and column information for the original source
+   * and line provided. The only argument is an object with the following
+   * properties:
+   *
+   *   - source: The filename of the original source.
+   *   - line: The line number in the original source.
+   *
+   * and an array of objects is returned, each with the following properties:
+   *
+   *   - line: The line number in the generated source, or null.
+   *   - column: The column number in the generated source, or null.
+   */
+  SourceMapConsumer.prototype.allGeneratedPositionsFor =
+    function SourceMapConsumer_allGeneratedPositionsFor(aArgs) {
+      // When there is no exact match, SourceMapConsumer.prototype._findMapping
+      // returns the index of the closest mapping less than the needle. By
+      // setting needle.originalColumn to Infinity, we thus find the last
+      // mapping for the given line, provided such a mapping exists.
+      var needle = {
+        source: util.getArg(aArgs, 'source'),
+        originalLine: util.getArg(aArgs, 'line'),
+        originalColumn: Infinity
+      };
+
+      if (this.sourceRoot != null) {
+        needle.source = util.relative(this.sourceRoot, needle.source);
+      }
+
+      var mappings = [];
+
+      var index = this._findMapping(needle,
+                                    this._originalMappings,
+                                    "originalLine",
+                                    "originalColumn",
+                                    util.compareByOriginalPositions);
+      if (index >= 0) {
+        var mapping = this._originalMappings[index];
+
+        while (mapping && mapping.originalLine === needle.originalLine) {
+          mappings.push({
+            line: util.getArg(mapping, 'generatedLine', null),
+            column: util.getArg(mapping, 'generatedColumn', null),
+            lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
+          });
+
+          mapping = this._originalMappings[--index];
+        }
+      }
+
+      return mappings.reverse();
     };
 
   SourceMapConsumer.GENERATED_ORDER = 1;
@@ -25130,6 +25378,11 @@ define(function (_dereq_, exports, module) {
   // Matches a Windows-style newline, or any character.
   var REGEX_CHARACTER = /\r\n|[\s\S]/g;
 
+  // Private symbol for identifying `SourceNode`s when multiple versions of
+  // the source-map library are loaded. This MUST NOT CHANGE across
+  // versions!
+  var isSourceNode = "$$$isSourceNode$$$";
+
   /**
    * SourceNodes provide a way to abstract over interpolating/concatenating
    * snippets of generated JavaScript source code while maintaining the line and
@@ -25149,6 +25402,7 @@ define(function (_dereq_, exports, module) {
     this.column = aColumn == null ? null : aColumn;
     this.source = aSource == null ? null : aSource;
     this.name = aName == null ? null : aName;
+    this[isSourceNode] = true;
     if (aChunks != null) this.add(aChunks);
   }
 
@@ -25279,7 +25533,7 @@ define(function (_dereq_, exports, module) {
         this.add(chunk);
       }, this);
     }
-    else if (aChunk instanceof SourceNode || typeof aChunk === "string") {
+    else if (aChunk[isSourceNode] || typeof aChunk === "string") {
       if (aChunk) {
         this.children.push(aChunk);
       }
@@ -25304,7 +25558,7 @@ define(function (_dereq_, exports, module) {
         this.prepend(aChunk[i]);
       }
     }
-    else if (aChunk instanceof SourceNode || typeof aChunk === "string") {
+    else if (aChunk[isSourceNode] || typeof aChunk === "string") {
       this.children.unshift(aChunk);
     }
     else {
@@ -25326,7 +25580,7 @@ define(function (_dereq_, exports, module) {
     var chunk;
     for (var i = 0, len = this.children.length; i < len; i++) {
       chunk = this.children[i];
-      if (chunk instanceof SourceNode) {
+      if (chunk[isSourceNode]) {
         chunk.walk(aFn);
       }
       else {
@@ -25371,7 +25625,7 @@ define(function (_dereq_, exports, module) {
    */
   SourceNode.prototype.replaceRight = function SourceNode_replaceRight(aPattern, aReplacement) {
     var lastChild = this.children[this.children.length - 1];
-    if (lastChild instanceof SourceNode) {
+    if (lastChild[isSourceNode]) {
       lastChild.replaceRight(aPattern, aReplacement);
     }
     else if (typeof lastChild === 'string') {
@@ -25404,7 +25658,7 @@ define(function (_dereq_, exports, module) {
   SourceNode.prototype.walkSourceContents =
     function SourceNode_walkSourceContents(aFn) {
       for (var i = 0, len = this.children.length; i < len; i++) {
-        if (this.children[i] instanceof SourceNode) {
+        if (this.children[i][isSourceNode]) {
           this.children[i].walkSourceContents(aFn);
         }
       }
@@ -26292,26 +26546,30 @@ function through (write, end, opts) {
   // breaking out of the dispatch switch statement.
   var ContinueSentinel = {};
 
-  // Dummy constructor that we use as the .constructor property for
-  // functions that return Generator objects.
-  var GF = function GeneratorFunction() {};
-  var GFp = function GeneratorFunctionPrototype() {};
-  var Gp = GFp.prototype = Generator.prototype;
-  (GFp.constructor = GF).prototype =
-    Gp.constructor = GFp;
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
 
-  // Ensure isGeneratorFunction works when Function#name not supported.
-  var GFName = "GeneratorFunction";
-  if (GF.name !== GFName) GF.name = GFName;
-  if (GF.name !== GFName) throw new Error(GFName + " renamed?");
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.displayName = "GeneratorFunction";
 
   runtime.isGeneratorFunction = function(genFun) {
-    var ctor = genFun && genFun.constructor;
-    return ctor ? GF.name === ctor.name : false;
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
   };
 
   runtime.mark = function(genFun) {
-    genFun.__proto__ = GFp;
+    genFun.__proto__ = GeneratorFunctionPrototype;
     genFun.prototype = Object.create(Gp);
     return genFun;
   };
@@ -26352,7 +26610,9 @@ function through (write, end, opts) {
       }
 
       if (state === GenStateCompleted) {
-        throw new Error("Generator has already finished");
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
       }
 
       while (true) {
@@ -26532,28 +26792,46 @@ function through (write, end, opts) {
   };
 
   function values(iterable) {
-    var iterator = iterable;
-    if (iteratorSymbol in iterable) {
-      iterator = iterable[iteratorSymbol]();
-    } else if (!isNaN(iterable.length)) {
-      var i = -1;
-      iterator = function next() {
-        while (++i < iterable.length) {
-          if (i in iterable) {
-            next.value = iterable[i];
-            next.done = false;
-            return next;
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1;
+
+        function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
           }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
         }
-        next.value = undefined;
-        next.done = true;
-        return next;
-      };
-      iterator.next = iterator;
+
+        return next.next = next;
+      }
     }
-    return iterator;
+
+    // Return an iterator with no values.
+    return { next: doneResult };
   }
   runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
 
   Context.prototype = {
     constructor: Context,
