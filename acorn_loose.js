@@ -304,6 +304,7 @@
       case "ObjectPattern":
       case "ArrayPattern":
       case "SpreadElement":
+      case "AssignmentPattern":
         return expr;
 
       default:
@@ -982,6 +983,13 @@
 
         case "SpreadElement":
           node.argument = toAssignable(node.argument);
+          break;
+
+        case "AssignmentExpression":
+          if (node.operator === "=")
+            node.type = "AssignmentPattern";
+          else
+            unexpected(node.left.end);
           break;
       }
     }
