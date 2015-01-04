@@ -21,12 +21,8 @@ function Entry() {
 
 function FunctionEntry(returnLoc) {
   Entry.call(this);
-
   n.Literal.assert(returnLoc);
-
-  Object.defineProperties(this, {
-    returnLoc: { value: returnLoc }
-  });
+  this.returnLoc = returnLoc;
 }
 
 inherits(FunctionEntry, Entry);
@@ -44,11 +40,9 @@ function LoopEntry(breakLoc, continueLoc, label) {
     label = null;
   }
 
-  Object.defineProperties(this, {
-    breakLoc: { value: breakLoc },
-    continueLoc: { value: continueLoc },
-    label: { value: label }
-  });
+  this.breakLoc = breakLoc;
+  this.continueLoc = continueLoc;
+  this.label = label;
 }
 
 inherits(LoopEntry, Entry);
@@ -56,12 +50,8 @@ exports.LoopEntry = LoopEntry;
 
 function SwitchEntry(breakLoc) {
   Entry.call(this);
-
   n.Literal.assert(breakLoc);
-
-  Object.defineProperties(this, {
-    breakLoc: { value: breakLoc }
-  });
+  this.breakLoc = breakLoc;
 }
 
 inherits(SwitchEntry, Entry);
@@ -87,11 +77,9 @@ function TryEntry(firstLoc, catchEntry, finallyEntry) {
   // Have to have one or the other (or both).
   assert.ok(catchEntry || finallyEntry);
 
-  Object.defineProperties(this, {
-    firstLoc: { value: firstLoc },
-    catchEntry: { value: catchEntry },
-    finallyEntry: { value: finallyEntry }
-  });
+  this.firstLoc = firstLoc;
+  this.catchEntry = catchEntry;
+  this.finallyEntry = finallyEntry;
 }
 
 inherits(TryEntry, Entry);
@@ -103,10 +91,8 @@ function CatchEntry(firstLoc, paramId) {
   n.Literal.assert(firstLoc);
   n.Identifier.assert(paramId);
 
-  Object.defineProperties(this, {
-    firstLoc: { value: firstLoc },
-    paramId: { value: paramId }
-  });
+  this.firstLoc = firstLoc;
+  this.paramId = paramId;
 }
 
 inherits(CatchEntry, Entry);
@@ -114,12 +100,8 @@ exports.CatchEntry = CatchEntry;
 
 function FinallyEntry(firstLoc) {
   Entry.call(this);
-
   n.Literal.assert(firstLoc);
-
-  Object.defineProperties(this, {
-    firstLoc: { value: firstLoc }
-  });
+  this.firstLoc = firstLoc;
 }
 
 inherits(FinallyEntry, Entry);
@@ -131,10 +113,8 @@ function LabeledEntry(breakLoc, label) {
   n.Literal.assert(breakLoc);
   n.Identifier.assert(label);
 
-  Object.defineProperties(this, {
-    breakLoc: { value: breakLoc },
-    label: { value: label }
-  });
+  this.breakLoc = breakLoc;
+  this.label = label;
 }
 
 inherits(LabeledEntry, Entry);
@@ -146,12 +126,8 @@ function LeapManager(emitter) {
   var Emitter = require("./emit").Emitter;
   assert.ok(emitter instanceof Emitter);
 
-  Object.defineProperties(this, {
-    emitter: { value: emitter },
-    entryStack: {
-      value: [new FunctionEntry(emitter.finalLoc)]
-    }
-  });
+  this.emitter = emitter;
+  this.entryStack = [new FunctionEntry(emitter.finalLoc)];
 }
 
 var LMp = LeapManager.prototype;
