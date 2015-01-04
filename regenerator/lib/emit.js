@@ -467,9 +467,6 @@ Ep.explodeStatement = function(path, labelId) {
     // themselves. Also remember that labels and break/continue-to-label
     // statements are rare, and all of this logic happens at transform
     // time, so it has no additional runtime cost.
-    if (stmt.label.name === "xxx") {
-      debugger;
-    }
     self.leapManager.withEntry(
       new leap.LabeledEntry(after, stmt.label),
       function() {
