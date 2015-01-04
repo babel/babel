@@ -1863,6 +1863,14 @@
           }
           break;
 
+        case "AssignmentExpression":
+          if (node.operator === "=") {
+            node.type = "AssignmentPattern";
+          } else {
+            unexpected(node.left.end);
+          }
+          break;
+
         default:
           if (checkType) unexpected(node.start);
       }
@@ -1963,6 +1971,7 @@
         break;
 
       case "SpreadProperty":
+      case "AssignmentPattern":
       case "SpreadElement":
       case "VirtualPropertyExpression":
         break;
