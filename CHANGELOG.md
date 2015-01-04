@@ -2,6 +2,10 @@
 
 Gaps between patch versions are faulty/broken releases.
 
+## 2.4.10
+
+ * Upgrade `acorn-6to5`.
+
 ## 2.4.9
 
  * Upgrade `acorn-6to5`.
