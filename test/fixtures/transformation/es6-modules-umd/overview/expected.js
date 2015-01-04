@@ -19,5 +19,5 @@
   exports.test = test;
   var test = exports.test = 5;
 
-  exports["default"] = test;
+  exports = test;
 });

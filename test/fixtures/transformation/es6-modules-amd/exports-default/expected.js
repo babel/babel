@@ -1,17 +1,17 @@
 "use strict";
 
 define(["exports"], function (exports) {
-  exports["default"] = foo;
-  exports["default"] = 42;
-  exports["default"] = {};
-  exports["default"] = [];
-  exports["default"] = foo;
-  exports["default"] = function () {};
+  exports = foo;
+  exports = 42;
+  exports = {};
+  exports = [];
+  exports = foo;
+  exports = function () {};
 
-  exports["default"] = function () {};
+  exports = function () {};
 
   function foo() {}
   var Foo = function Foo() {};
 
-  exports["default"] = Foo;
+  exports = Foo;
 });

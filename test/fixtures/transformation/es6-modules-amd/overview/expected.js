@@ -13,5 +13,5 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
   exports.test = test;
   var test = exports.test = 5;
 
-  exports["default"] = test;
+  exports = test;
 });
