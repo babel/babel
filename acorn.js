@@ -223,12 +223,12 @@
     initTokenState();
     skipSpace();
 
-    function getToken(forceRegexp) {
+    function getToken() {
       lastEnd = tokEnd;
-      readToken(forceRegexp);
+      readToken();
       return new Token();
     }
-    getToken.jumpTo = function(pos, reAllowed) {
+    getToken.jumpTo = function(pos, exprAllowed) {
       tokPos = pos;
       if (options.locations) {
         tokCurLine = 1;
@@ -239,11 +239,8 @@
           tokLineStart = match.index + match[0].length;
         }
       }
-      tokRegexpAllowed = reAllowed;
+      tokExprAllowed = !!exprAllowed;
       skipSpace();
-    };
-    getToken.noRegexp = function() {
-      tokRegexpAllowed = false;
     };
     getToken.options = options;
     return getToken;
@@ -277,12 +274,13 @@
 
   // Internal state for the tokenizer. To distinguish between division
   // operators and regular expressions, it remembers whether the last
-  // token was one that is allowed to be followed by an expression.
-  // (If it is, a slash is probably a regexp, if it isn't it's a
-  // division operator. See the `parseStatement` function for a
-  // caveat.)
+  // token was one that is allowed to be followed by an expression. In
+  // some cases, notably after ')' or '}' tokens, the situation
+  // depends on the context before the matching opening bracket, so
+  // tokContext keeps a stack of information about current bracketed
+  // forms.
 
-  var tokRegexpAllowed;
+  var tokContext, tokExprAllowed;
 
   // When `options.locations` is true, these are used to keep
   // track of the current line, and know when a new line has been
@@ -615,7 +613,8 @@
       tokCurLine = 1;
       tokPos = tokLineStart = 0;
     }
-    tokRegexpAllowed = true;
+    tokContext = [];
+    tokExprAllowed = true;
     metParenL = 0;
     templates = [];
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
@@ -624,16 +623,39 @@
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
-  // `tokRegexpAllowed`, and skips the space after the token, so that
-  // the next one's `tokStart` will point at the right position.
+  // maintains `tokContext` and `tokExprAllowed`, and skips the space
+  // after the token, so that the next one's `tokStart` will point at
+  // the right position.
 
   function finishToken(type, val, shouldSkipSpace) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = curPosition();
+    var prevType = tokType;
     tokType = type;
     if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
-    tokRegexpAllowed = type.beforeExpr;
+
+    // Update context info
+    if (type == _parenR || type == _braceR) {
+      tokExprAllowed = tokContext.pop();
+    } else if (type == _braceL) {
+      var ctx = tokExprAllowed === false;
+      if (prevType == _return && newline.test(input.slice(lastEnd, tokStart))) {
+        console.log("fired");
+        ctx = false;
+      }
+      tokContext.push(ctx);
+    } else if (type == _parenL) {
+      tokContext.push(prevType == _if || prevType == _for || prevType == _with || prevType == _while);
+    } else if (type == _incDec) {
+      // tokExprAllowed stays unchanged
+    } else if (type.keyword && prevType == _dot) {
+      tokExprAllowed = false;
+    } else if (tokExprAllowed && type == _function) {
+      tokExprAllowed = null;
+    } else {
+      tokExprAllowed = type.beforeExpr;
+    }
   }
 
   function skipBlockComment() {
@@ -719,9 +741,6 @@
   //
   // All in the name of speed.
   //
-  // The `forceRegexp` parameter is used in the one case where the
-  // `tokRegexpAllowed` trick does not work. See `parseStatement`.
-
   function readToken_dot() {
     var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
@@ -737,7 +756,7 @@
 
   function readToken_slash() { // '/'
     var next = input.charCodeAt(tokPos + 1);
-    if (tokRegexpAllowed) {++tokPos; return readRegexp();}
+    if (tokExprAllowed) {++tokPos; return readRegexp();}
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_slash, 1);
   }
@@ -889,11 +908,9 @@
     return false;
   }
 
-  function readToken(forceRegexp) {
-    if (!forceRegexp) tokStart = tokPos;
-    else tokPos = tokStart + 1;
+  function readToken() {
+    tokStart = tokPos;
     if (options.locations) tokStartLoc = curPosition();
-    if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
 
     var code = input.charCodeAt(tokPos);
@@ -1556,9 +1573,6 @@
   // does not help.
 
   function parseStatement(topLevel) {
-    if (tokType === _slash || tokType === _assign && tokVal == "/=")
-      readToken(true);
-
     var starttype = tokType, node = startNode();
 
     // Most types of statements are recognized by the keyword they
@@ -1993,7 +2007,6 @@
         node.operator = tokVal;
         node.prefix = true;
       }
-      tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
       if (update) checkLVal(node.argument);
@@ -2482,7 +2495,6 @@
     } else {
       unexpected();
     }
-    tokRegexpAllowed = false;
     next();
     return finishNode(node, "Identifier");
   }

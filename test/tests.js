@@ -26687,6 +26687,8 @@ test("a.in / b", {
   ]
 });
 
+test("return {}\n/foo/", {}, {allowReturnOutsideFunction: true});
+
 test("{}/=/", {
   type: "Program",
   body: [

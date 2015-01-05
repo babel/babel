@@ -943,7 +943,6 @@
   function parseIdent() {
     var node = startNode();
     node.name = token.type === tt.name ? token.value : token.type.keyword;
-    fetchToken.noRegexp();
     next();
     return finishNode(node, "Identifier");
   }
