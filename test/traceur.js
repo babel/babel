@@ -1,8 +1,17 @@
-var _ = require("lodash");
+if (!process.env.ALL_6TO5_TESTS) return;
+
+var fs = require("fs");
+var _  = require("lodash");
+
+var traceurLoc = __dirname + "/../vendor/traceur";
+if (!fs.existsSync(traceurLoc)) {
+  console.error("No vendor/traceur - run `git submodule update --init`");
+  process.exit(1);
+}
 
 require("./_transformation-helper")({
   name: "traceur",
-  loc: __dirname + "/../vendor/traceur/test/feature",
+  loc: traceurLoc + "/test/feature",
 
   ignoreSuites: [
     "ObjectMixin",
