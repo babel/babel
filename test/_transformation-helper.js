@@ -100,7 +100,7 @@ var run = function (task, done) {
 module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
   taskOpts = taskOpts || {};
 
-  require("6to5/register")(taskOpts);
+  require("../register")(taskOpts);
 
   _.each(helper.get(suiteOpts.name, suiteOpts.loc), function (testSuite) {
     if (_.contains(suiteOpts.ignoreSuites, testSuite.title)) return;
