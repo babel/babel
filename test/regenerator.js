@@ -1,3 +1,5 @@
+if (!process.env.ALL_6TO5_TESTS) return;
+
 require("../register")({
   blacklist: ["useStrict"],
   experimental: true
