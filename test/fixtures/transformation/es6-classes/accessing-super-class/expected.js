@@ -2,6 +2,9 @@
 
 var _slice = Array.prototype.slice;
 var _inherits = function (child, parent) {
+  if (typeof parent !== "function" && parent !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+  }
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,

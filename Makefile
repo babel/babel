@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish bench build
+.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish bench build bootstrap
 
 build:
 	mkdir -p dist
@@ -23,7 +23,7 @@ build:
 	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
 
 	rm -rf templates.json
-	
+
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
@@ -81,3 +81,7 @@ publish:
 	git push --follow-tags
 
 	rm -rf templates.json browser.js runtime.js browser-polyfill.js
+
+bootstrap:
+	git submodule update --init
+	cd vendor/regenerator; npm install

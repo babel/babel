@@ -1,5 +1,11 @@
 "use strict";
 
+var _interopRequireWildcard = function (obj) {
+  return obj && obj.constructor === Object ? obj : {
+    "default": obj
+  };
+};
+
 var _interopRequire = function (obj) {
   return obj && (obj["default"] || obj);
 };
@@ -12,7 +18,7 @@ require("./directory/foo-bar");
 
 var foo = _interopRequire(require("foo"));
 
-var foo = require("foo");
+var foo = _interopRequireWildcard(require("foo"));
 
 var bar = require("foo").bar;
 var bar = require("foo").foo;
