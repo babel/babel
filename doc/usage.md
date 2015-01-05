@@ -208,7 +208,7 @@ result.ast;
 
 ### Require hook
 
-All subsequent files required by node with the extensions `.es6` and `.js` will
+All subsequent files required by node with the extensions `.es6`, `.es` and `.js` will
 be transformed by 6to5. The polyfill specified in [Polyfill](polyfill.md) is
 also required; but this is automatically loaded when using:
 
