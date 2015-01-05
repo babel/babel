@@ -1,5 +1,6 @@
 {
   "ExpressionStatement": ["Statement"],
+  "TypeOfExpression":    ["Statement"],
   "BreakStatement":      ["Statement"],
   "ContinueStatement":   ["Statement"],
   "DebuggerStatement":   ["Statement"],
