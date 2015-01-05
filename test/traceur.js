@@ -23,30 +23,27 @@ require("./_transformation-helper")({
     "FreeVariableChecker",
     "TypeAssertions",
     "MemberVariables",
-    "Types",
-
-    // REENABLE THESE
-    "Destructuring",
-    "Syntax",
-    "StringExtras",
-    "Symbol",
-    "Yield",
-    "Modules",
-    "Spread",
-    "Scope",
-    "GeneratorComprehension"
+    "Types"
   ],
 
   ignoreTasks: [
-    "Strict",
-
     // core.js doesn't support due to a perf hit and having to override a lot
     // of native methods
     "Symbol/GetOwnPropertySymbols",
 
-    // Traceur doesn't name methods and has an incorrect test asserting that
+    // traceur doesn't name methods and has an incorrect test asserting that
     // they have no names
-    "PropertyMethodAssignment/PropertyMethodAssignment"
+    "PropertyMethodAssignment/PropertyMethodAssignment",
+
+    // 6to5 assumes that all code transformed is a module
+    "Strict",
+    "Syntax/UseStrictEscapeSequence",
+    "Syntax/UseStrictLineContinuation",
+
+    // the spec for these doesn't define syntax (as far as i could tell)
+    // these both fail because of filter between blocks
+    "ArrayComprehension/Simple",
+    "GeneratorComprehension/Simple"
   ]
 }, {
   optional: ["typeofSymbol"],
