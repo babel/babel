@@ -129,7 +129,7 @@ module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
             delete task.options.throws;
 
             assert.throws(runTask, function (err) {
-              return err.message.indexOf(throwMsg) >= 0;
+              return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
             });
           } else {
             runTask();
