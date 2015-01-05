@@ -18,6 +18,10 @@ suite("util", function () {
     assert.ok(util.canCompile("/test.es6"));
     assert.ok(util.canCompile("/scripts/test.es6"));
 
+    assert.ok(util.canCompile("test.es"));
+    assert.ok(util.canCompile("/test.es"));
+    assert.ok(util.canCompile("/scripts/test.es"));
+
     assert.ok(!util.canCompile("test"));
     assert.ok(!util.canCompile("test.css"));
     assert.ok(!util.canCompile("/test.css"));
