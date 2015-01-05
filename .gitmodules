@@ -1,3 +1,6 @@
 [submodule "vendor/traceur"]
 	path = vendor/traceur
 	url = https://github.com/google/traceur-compiler
+[submodule "vendor/regenerator"]
+	path = vendor/regenerator
+	url = https://github.com/facebook/regenerator
