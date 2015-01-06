@@ -987,8 +987,6 @@
         case "AssignmentExpression":
           if (node.operator === "=")
             node.type = "AssignmentPattern";
-          else
-            unexpected(node.left.end);
           break;
       }
     }

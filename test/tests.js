@@ -26687,7 +26687,21 @@ test("a.in / b", {
   ]
 });
 
-test("return {}\n/foo/", {}, {allowReturnOutsideFunction: true});
+// A number of slash-disambiguation corner cases
+test("return {} / 2", {}, {allowReturnOutsideFunction: true});
+test("return\n{}\n/foo/", {}, {allowReturnOutsideFunction: true});
+test("+{} / 2", {});
+test("{}\n/foo/", {});
+test("x++\n{}\n/foo/", {});
+test("{{}\n/foo/}", {});
+test("while (1) /foo/", {});
+test("(1) / 2", {});
+test("({a: [1]}+[]) / 2", {});
+test("{[1]}\n/foo/", {});
+test("switch(a) { case 1: {}\n/foo/ }", {});
+test("({1: {} / 2})", {});
+test("+x++ / 2", {});
+test("foo.in\n{}\n/foo/", {});
 
 test("{}/=/", {
   type: "Program",

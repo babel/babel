@@ -596,7 +596,7 @@
 
   Position.prototype.offset = function(n) {
     return new Position(this.line, this.column + n);
-  }
+  };
 
   function curPosition() {
     return new Position(tokCurLine, tokPos - tokLineStart);
@@ -613,6 +613,7 @@
       tokCurLine = 1;
       tokPos = tokLineStart = 0;
     }
+    tokType = _eof;
     tokContext = [];
     tokExprAllowed = true;
     metParenL = 0;
@@ -620,6 +621,26 @@
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
     }
+  }
+
+  // The algorithm used to determine whether a regexp can appear at a
+  // given point in the program is loosely based on sweet.js' approach.
+  // See https://github.com/mozilla/sweet.js/wiki/design
+
+  var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true};
+  var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
+
+  function braceIsBlock(prevType) {
+    var parent;
+    if (prevType === _colon && (parent = tokContext[tokContext.length - 1]).token == "{")
+      return !parent.isExpr;
+    if (prevType === _return)
+      return newline.test(input.slice(lastEnd, tokStart));
+    if (prevType === _else || prevType === _semi || prevType === _eof)
+      return true;
+    if (prevType == _braceL)
+      return tokContext[tokContext.length - 1] === b_stat;
+    return !tokExprAllowed;
   }
 
   // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
@@ -636,17 +657,16 @@
     tokVal = val;
 
     // Update context info
-    if (type == _parenR || type == _braceR) {
-      tokExprAllowed = tokContext.pop();
-    } else if (type == _braceL) {
-      var ctx = tokExprAllowed === false;
-      if (prevType == _return && newline.test(input.slice(lastEnd, tokStart))) {
-        console.log("fired");
-        ctx = false;
-      }
-      tokContext.push(ctx);
+    if (type === _parenR || type === _braceR) {
+      var out = tokContext.pop();
+      tokExprAllowed = !(out && out.isExpr);
+    } else if (type === _braceL) {
+      tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      tokExprAllowed = true;
     } else if (type == _parenL) {
-      tokContext.push(prevType == _if || prevType == _for || prevType == _with || prevType == _while);
+      var statementParens = prevType === _if || prevType === _for || prevType === _with || prevType === _while;
+      tokContext.push(statementParens ? p_stat : p_expr);
+      tokExprAllowed = true;
     } else if (type == _incDec) {
       // tokExprAllowed stays unchanged
     } else if (type.keyword && prevType == _dot) {
@@ -1089,7 +1109,7 @@
         out += readEscapedChar();
       } else {
         ++tokPos;
-        if (newline.test(String.fromCharCode(ch))) {
+        if (isNewLine(ch)) {
           raise(tokStart, "Unterminated string constant");
         }
         out += String.fromCharCode(ch); // '\'
