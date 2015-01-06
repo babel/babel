@@ -1,3 +1,3 @@
-function foo(...test) {
-
+function foo() {
+  test("bar", ...arguments);
 }

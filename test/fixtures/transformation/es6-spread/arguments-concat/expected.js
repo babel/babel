@@ -2,7 +2,7 @@
 
 var _slice = Array.prototype.slice;
 function foo() {
-  return bar.apply(null, ["test"].concat(_slice.call(arguments)));
+  return bar.apply(undefined, ["test"].concat(_slice.call(arguments)));
 }
 
 function bar(one, two, three) {

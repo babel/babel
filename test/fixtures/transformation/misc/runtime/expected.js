@@ -1,5 +1,5 @@
 "use strict";
 
 function foo() {
-  var test = to5Runtime.slice.call(arguments);
+  test.apply(undefined, ["bar"].concat(to5Runtime.slice.call(arguments)));
 }

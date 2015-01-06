@@ -1,7 +1,7 @@
 "use strict";
 
 function foo() {
-  return bar.apply(null, arguments);
+  return bar.apply(undefined, arguments);
 }
 
 function bar(one, two, three) {

@@ -1,3 +1,3 @@
 "use strict";
 
-f.apply(null, [1, 2, 3]);
+f.apply(undefined, [1, 2, 3]);
