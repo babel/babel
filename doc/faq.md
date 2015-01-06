@@ -14,7 +14,7 @@ wont break! You see, ES6 features such as [iterators](/docs/tour#iterators) and
 it would mean **a lot** of boilerplate smoshed into your codebase. This is the approach taken
 by other transpilers but 6to5 approaches it quite differently.
 
-You have two options, depending on your use-case:
+You have two options, depending on your use case:
 
- - Use the wonderful [coreAliasing optional transformer](/docs/usage/transformers#core-aliasing). This is recommended if you're writing a library.
- - Use the bundled 6to5 [polyfill](/docs/usage/polyfill). This is recommended if you're writing an entire application.
+ - Use the wonderful [core aliasing optional transformer](/docs/usage/transformers#core-aliasing). This is recommended if you're writing a library.
+ - Or use the bundled 6to5 [polyfill](/docs/usage/polyfill). This is recommended if you're writing an entire application.
