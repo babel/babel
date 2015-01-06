@@ -10,19 +10,19 @@ redirect_from: /caveats.html
 
 In order for certain features to work they require certain polyfills. You can
 satisfy **all** 6to5 feature requirements by using the included
-[polyfill](polyfill.md).
+[polyfill](/docs/usage/polyfill).
 
 You may alternatively selectively include what you need:
 
 | Feature                     | Requirements                                                                                                           |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Abstract References         | [experimental](experimental.md), `Symbol`                                                                              |
+| Abstract References         | [experimental](/docs/usage/experimental), `Symbol`                                                                              |
 | Array destructuring         | `Array.from`                                                                                                           |
-| Async functions, Generators | [experimental](experimental.md), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
-| Comprehensions              | [experimental](experimental.md), `Array.from`                                                                          |
+| Async functions, Generators | [experimental](/docs/usage/experimental), [regenerator runtime](https://github.com/facebook/regenerator/blob/master/runtime.js) |
+| Comprehensions              | [experimental](/docs/usage/experimental), `Array.from`                                                                          |
 | For Of                      | `Symbol`, `prototype[Symbol.iterator]`                                                                                 |
 | Modules                     | `Object.assign`*                                                                                                       |
-| Object spread/rest          | [experimental](experimental.md), `Object.assign`                                                                       |
+| Object spread/rest          | [experimental](/docs/usage/experimental), `Object.assign`                                                                       |
 | Spread                      | `Array.from`                                                                                                           |
 
 *Only required for exporting a non-function `default` with additional `export`s.
@@ -33,7 +33,7 @@ Since 6to5 assumes that your code will be ran in an ES5 environment it uses ES5
 functions. So if you're using an environment that has limited or no support for
 ES5 such as lower versions of IE then using the
 [es5-shim](https://github.com/es-shims/es5-shim) along with the
-[6to5 polyfill](polyfill.md) will add support for these methods.
+[6to5 polyfill](/docs/usage/polyfill) will add support for these methods.
 
 ## Internet Explorer
 
@@ -44,40 +44,8 @@ via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 this is widely supported but you may run into problems with much older browsers.
 
 **NOTE:** `__proto__` is not supported on IE <= 10 so static properties
-**will not** be inherited.
-
-You can use the `protoToAssign` optional transformer that will transform all
-`__proto__` assignments to a method that will shallowly copy it over all
-properties.
-
-```javascript
-require("6to5").transform("code", { optional: ["protoToAssign"] });
-```
-
-```sh
-$ 6to5 --optional protoToAssign script.js
-```
-
-This means that the following **will** work:
-
-```javascript
-var foo = { a: 1 };
-var bar = { b: 2 };
-bar.__proto__ = foo;
-bar.a; // 1
-bar.b; // 2
-```
-
-however the following **will not**:
-
-```javascript
-var foo = { a: 1 };
-var bar = { b: 2 };
-bar.__proto__ = foo;
-bar.a; // 1
-foo.a = 2;
-bar.a; // 1 - should be 2 but remember that nothing is bound and it's a straight copy
-```
+**will not** be inherited. See the
+[protoToAssign](/docs/usage/transformers#proto-to-assign) for a possible work around.
 
 ### Getters/setters (8 and below)
 

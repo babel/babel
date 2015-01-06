@@ -60,7 +60,7 @@ like other transpilers, 6to5 maps directly to the equivalent ES5.
 
 Sometimes there are little inline functions that 6to5 needs. These are
 placed at the top of your file much like coffee-script does. If these
-bother you then you can use the [optional runtime](optional-runtime.md).
+bother you then you can use the [optional runtime](/docs/usage/runtime).
 We promise that these inline functions will never be significant and will
 always be used as little as possible.
 
