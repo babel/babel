@@ -1,6 +1,7 @@
 var genHelpers = require("./_generator-helpers");
 var transform  = require("../lib/6to5/transformation/transform");
 var sourceMap  = require("source-map");
+var esvalid    = require("esvalid");
 var Module     = require("module");
 var helper     = require("./_helper");
 var assert     = require("assert");
@@ -48,8 +49,22 @@ var run = function (task, done) {
   var execCode = exec.code;
   var result;
 
+  var checkAst = function (result) {
+    if (opts.noCheckAst) return;
+
+    var errors = esvalid.errors(result.ast.program);
+    if (errors.length) {
+      var msg = [];
+      _.each(errors, function (err) {
+        msg.push(err.message + " - " + JSON.stringify(err.node));
+      });
+      throw new Error(msg.join(". "));
+    }
+  };
+
   if (execCode) {
     result = transform(execCode, getOpts(exec));
+    checkAst(result);
     execCode = result.code;
 
     try {
@@ -76,6 +91,7 @@ var run = function (task, done) {
   var expectCode = expect.code;
   if (!execCode || actualCode) {
     result     = transform(actualCode, getOpts(actual));
+    checkAst(result);
     actualCode = result.code;
 
     chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);

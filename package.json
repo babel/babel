@@ -46,6 +46,7 @@
     "core-js": "^0.4.0",
     "estraverse": "1.8.0",
     "esutils": "1.1.6",
+    "esvalid": "^1.1.0",
     "fs-readdir-recursive": "0.1.0",
     "jshint": "^2.5.10",
     "lodash": "2.4.1",
