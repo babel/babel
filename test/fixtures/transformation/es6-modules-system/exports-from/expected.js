@@ -4,7 +4,7 @@ System.register(["foo"], function (_export) {
   return {
     setters: [function (_foo) {
       for (var _key in _foo) {
-        _export(_key, _foo[_key])
+        _export(_key, _foo[_key]);
       }
 
       _export("foo", _foo.foo);
