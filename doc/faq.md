@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: FAQ
-description: Frequently asked questions and answers
+description: Frequently Asked Questions and Answers
 permalink: /docs/faq/
 ---
 
