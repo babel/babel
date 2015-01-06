@@ -6,8 +6,26 @@
 > - [Spec Compliancy]
 > - [Breaking Change]
 > - [Documentation]
+> - [Internal]
+> - [Misc]
 
 _Note: Gaps between patch versions are faulty/broken releases._
+
+## 2.6.0
+
+ * [Internal] Fix incorrect AST node `identifier("this")`.
+ * [Spec Compliancy] Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
+ * [Internal] Upgrade `acorn-6to5`.
+ * [New Feature] Basic destructuring defaults
+ * [New Feature] Add `.es` to list of supported extensions.
+ * [New Feature] Add optional `typeofSymbol` transformer.
+ * [Bug Fix] Better handling of number literal property keys.
+ * [Bug Fix] [Internal] Better `toIdentifier` method that handles reserved words.
+ * [Internal] Upgrade to `core-js` 4.0.0.
+ * [Internal] Upgrade to `regenerator` 0.8.3.
+ * [Bug Fix] Handle `NewExpression` paren insertion edegcases better.
+ * [Spec Compliancy] Class inheritance now has a `function` or `null` type check.
+ * [Misc] Move `"use strict";` to inside module bodies instead of at the top of the file.
 
 ## 2.5.0
 
