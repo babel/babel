@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.6.1
+
+ * **Bug Fix**
+  * Fix rest parameter arguments key.
+
 ## 2.6.0
 
  * **Bug Fix**
