@@ -1,5 +1,5 @@
 "use strict";
 
 function foo() {
-  var test = customNamespace.slice.call(arguments);
+  test.apply(undefined, ["bar"].concat(customNamespace.slice.call(arguments)));
 }

@@ -1,6 +1,6 @@
-"use strict";
-
 define(["exports", "module", "foo", "foo-bar", "./directory/foo-bar"], function (exports, module, _foo, _fooBar, _directoryFooBar) {
+  "use strict";
+
   var _interopRequire = function (obj) {
     return obj && (obj["default"] || obj);
   };

@@ -1,6 +1,63 @@
 # Changelog
 
-Gaps between patch versions are faulty/broken releases.
+> **Tags:**
+> - [New Feature]
+> - [Bug Fix]
+> - [Spec Compliancy]
+> - [Breaking Change]
+> - [Documentation]
+> - [Internal]
+> - [Polish]
+
+_Note: Gaps between patch versions are faulty/broken releases._
+
+## 2.6.3
+
+ * **Bug Fix**
+  * Fix 2.6.0 regression caused by faulty export default from a source handling.
+
+## 2.6.2
+
+ * **Bug Fix**
+  * Fix rest parameter keys when on functions with params.
+
+## 2.6.1
+
+ * **Bug Fix**
+  * Fix rest parameter arguments key.
+
+## 2.6.0
+
+ * **Bug Fix**
+  * Better handling of number literal property keys.
+  * Handle `NewExpression` paren insertion edegcases better.
+ * **Internal**
+  * Fix incorrect AST node `identifier("this")`.
+  * Better `toIdentifier` method that handles reserved words.
+  * Upgrade `acorn-6to5`.
+    * Fix exponentiation operator precedence.
+    * Fix line terminators after async contextual keywords.
+    * Add semicolons as class elements inside of a class body.
+  * Upgrade to `core-js` 4.0.0.
+  * Upgrade to `regenerator` 0.8.3.
+    * Fix non-loop labeled statements.
+ * **New Feature**
+  * Basic destructuring defaults
+  * Add `.es` to list of supported extensions.
+  * Add optional `typeofSymbol` transformer.
+  * Use a `for` loop for rest parameters instead of `Array.prototype.slice`.
+ * **Polish**
+  * Move `"use strict";` to inside module bodies instead of at the top of the file.
+  * Better handling of dynamic imports.
+ * **Spec Compliancy**
+  * Class inheritance now has a `function` or `null` type check.
+  * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
+
+## 2.5.0
+
+ * Remove `noDuplicateProperties` transformer.
+ * Better generated UIDs based on nodes.
+ * Default parameters now use `arguments[i]`, conditionals and variable declarations instead of using long-form if statements.
 
 ## 2.4.10
 

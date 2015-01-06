@@ -1,3 +1,4 @@
 {
-  "optional": ["bluebirdCoroutines"]
+  "optional": ["bluebirdCoroutines"],
+  "noCheckAst": true
 }

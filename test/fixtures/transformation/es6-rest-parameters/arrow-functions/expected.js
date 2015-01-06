@@ -1,6 +1,9 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
 var concat = function () {
-  var arrs = _slice.call(arguments);
+  var arrs = [];
+
+  for (var _key = 0; _key < arguments.length; _key++) {
+    arrs[_key] = arguments[_key];
+  }
 };

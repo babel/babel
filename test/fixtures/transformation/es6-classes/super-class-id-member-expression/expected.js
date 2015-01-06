@@ -1,6 +1,9 @@
 "use strict";
 
 var _inherits = function (child, parent) {
+  if (typeof parent !== "function" && parent !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+  }
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -15,7 +18,7 @@ var _inherits = function (child, parent) {
 var BaseController = (function () {
   var _Chaplin$Controller = Chaplin.Controller;
   var BaseController = function BaseController() {
-    if (_Chaplin$Controller) {
+    if (_Chaplin$Controller !== null) {
       _Chaplin$Controller.apply(this, arguments);
     }
   };
@@ -28,7 +31,7 @@ var BaseController = (function () {
 var BaseController2 = (function () {
   var _Chaplin$Controller$Another = Chaplin.Controller.Another;
   var BaseController2 = function BaseController2() {
-    if (_Chaplin$Controller$Another) {
+    if (_Chaplin$Controller$Another !== null) {
       _Chaplin$Controller$Another.apply(this, arguments);
     }
   };

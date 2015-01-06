@@ -1,8 +1,9 @@
-var fs = require("fs");
-var _  = require("lodash");
+var path = require("path");
+var fs   = require("fs");
+var _    = require("lodash");
 
 var humanise = function (val) {
-  return val.replace(/-/g, " ");
+  return path.basename(val, path.extname(val)).replace(/-/g, " ");
 };
 
 var readFile = exports.readFile = function (filename) {
@@ -15,11 +16,11 @@ var readFile = exports.readFile = function (filename) {
   }
 };
 
-exports.get = function (entryName) {
+exports.get = function (entryName, entryLoc) {
   if (exports.cache[entryName]) return exports.cache[entryName];
 
   var suites = [];
-  var entryLoc = __dirname + "/fixtures/" + entryName;
+  var entryLoc = entryLoc || __dirname + "/fixtures/" + entryName;
 
   _.each(fs.readdirSync(entryLoc), function (suiteName) {
     if (suiteName[0] === ".") return;
@@ -35,9 +36,18 @@ exports.get = function (entryName) {
     var suiteOptsLoc = suite.filename + "/options.json";
     if (fs.existsSync(suiteOptsLoc)) suite.options = require(suiteOptsLoc);
 
-    _.each(fs.readdirSync(suite.filename), function (taskName) {
-      var taskDir = suite.filename + "/" + taskName;
-      if (fs.statSync(taskDir).isFile()) return;
+    if (fs.statSync(suite.filename).isFile()) {
+      push(suiteName, suite.filename);
+    } else {
+      _.each(fs.readdirSync(suite.filename), function (taskName) {
+        var taskDir = suite.filename + "/" + taskName;
+        push(taskName, taskDir);
+      });
+    }
+
+    function push(taskName, taskDir) {
+      // tracuer error tests
+      if (taskName.indexOf("Error_") >= 0) return;
 
       var actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       var expectLocAlias = suiteName + "/" + taskName + "/expected.js";
@@ -46,6 +56,13 @@ exports.get = function (entryName) {
       var actualLoc = taskDir + "/actual.js";
       var expectLoc = taskDir + "/expected.js";
       var execLoc   = taskDir + "/exec.js";
+
+      if (fs.statSync(taskDir).isFile()) {
+        var ext = path.extname(taskDir);
+        if (ext !== ".js" && ext !== ".module.js") return;
+
+        execLoc = taskDir;
+      }
 
       var taskOpts = _.merge({
         filenameRelative: expectLocAlias,
@@ -77,6 +94,18 @@ exports.get = function (entryName) {
         }
       };
 
+      // traceur checks
+
+      var shouldSkip = function (code) {
+        return code.indexOf("// Error:") >= 0 || code.indexOf("// Skip.") >= 0;
+      };
+
+      if (shouldSkip(test.actual.code) || shouldSkip(test.exec.code)) {
+        return;
+      } else if (test.exec.code.indexOf("// Async.") >= 0) {
+        //test.options.asyncExec = true;
+      }
+
       suite.tests.push(test);
 
       var sourceMappingsLoc = taskDir + "/source-mappings.json";
@@ -90,7 +119,7 @@ exports.get = function (entryName) {
         test.options.sourceMap = true;
         test.sourceMap = require(sourceMap);
       }
-    });
+    }
   });
 
   return exports.cache[entryName] = suites;
@@ -104,4 +133,5 @@ try {
   var cache = exports.cache = {};
   cache.transformation = exports.get("transformation");
   cache.generation     = exports.get("generation");
+  cache.esnext         = exports.get("esnext");
 }

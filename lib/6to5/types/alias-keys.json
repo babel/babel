@@ -39,8 +39,9 @@
   "ForInStatement": ["Statement", "For", "Scope", "Loop"],
   "ForStatement":   ["Statement", "For", "Scope", "Loop"],
 
-  "ObjectPattern": ["Pattern"],
-  "ArrayPattern":  ["Pattern"],
+  "ObjectPattern":     ["Pattern"],
+  "ArrayPattern":      ["Pattern"],
+  "AssignmentPattern": ["Pattern"],
 
   "Property": ["UserWhitespacable"],
   "XJSElement": ["UserWhitespacable", "Expression"],

@@ -1,6 +1,6 @@
-"use strict";
-
 System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
+  "use strict";
+
   var foo, foo, bar, bar, test;
   return {
     setters: [function (_foo) {

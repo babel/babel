@@ -11,6 +11,9 @@ var _defaults = function (obj, defaults) {
 };
 
 var _inherits = function (child, parent) {
+  if (typeof parent !== "function" && parent !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+  }
   child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
@@ -25,7 +28,7 @@ var _inherits = function (child, parent) {
 var Foo = (function () {
   var _Bar = Bar;
   var Foo = function Foo() {
-    if (_Bar) {
+    if (_Bar !== null) {
       _Bar.apply(this, arguments);
     }
   };
