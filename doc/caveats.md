@@ -1,4 +1,12 @@
-# Caveats
+---
+layout: docs
+title: Caveats
+description: Just some things to keep in mind when using 6to5.
+permalink: /docs/caveats/
+redirect_from: /caveats.html
+---
+
+## Polyfills
 
 In order for certain features to work they require certain polyfills. You can
 satisfy **all** 6to5 feature requirements by using the included
@@ -35,10 +43,10 @@ If you're inheriting from a class then static properties are inherited from it
 via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto),
 this is widely supported but you may run into problems with much older browsers.
 
-**NOTE:** `__proto__` is not supported in IE <= 10 so static properties
+**NOTE:** `__proto__` is not supported on IE <= 10 so static properties
 **will not** be inherited. A possible workaround is to use `super();`:
 
-```javascript
+```js
 class Foo {
   static foo() {
 
@@ -52,7 +60,7 @@ class Bar extends Foo {
 }
 ```
 
-## Getters/setters (8 and below)
+### Getters/setters (8 and below)
 
 In IE8 `Object.defineProperty` can only be used on DOM objects. This is
 unfortunate as it's required to set getters and setters. Due to this if
