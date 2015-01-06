@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 2.6.0
 
+ * **Bug Fix**
+  * Better handling of number literal property keys.
+  * [Internal] Better `toIdentifier` method that handles reserved words.
+  * Handle `NewExpression` paren insertion edegcases better.
  * **Internal**
   * Fix incorrect AST node `identifier("this")`.
   * Upgrade `acorn-6to5`.
@@ -22,22 +26,17 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Upgrade to `core-js` 4.0.0.
   * Upgrade to `regenerator` 0.8.3.
     * Fix non-loop labeled statements.
- * **Spec Compliancy**
-  * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
  * **New Feature**
   * Basic destructuring defaults
   * Add `.es` to list of supported extensions.
   * Add optional `typeofSymbol` transformer.
   * Use a `for` loop for rest parameters instead of `Array.prototype.slice`.
- * **Bug Fix**
-  * Better handling of number literal property keys.
-  * [Internal] Better `toIdentifier` method that handles reserved words.
-  * Handle `NewExpression` paren insertion edegcases better.
- * **Spec Compliancy**
-  * Class inheritance now has a `function` or `null` type check.
  * **Polish**
   * Move `"use strict";` to inside module bodies instead of at the top of the file.
   * Better handling of dynamic imports.
+ * **Spec Compliancy**
+  * Class inheritance now has a `function` or `null` type check.
+  * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
 
 ## 2.5.0
 
