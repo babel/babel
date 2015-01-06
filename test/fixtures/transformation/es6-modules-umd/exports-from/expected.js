@@ -7,10 +7,6 @@
 })(function (exports, _foo) {
   "use strict";
 
-  var _interopRequire = function (obj) {
-    return obj && (obj["default"] || obj);
-  };
-
   var _interopRequireWildcard = function (obj) {
     return obj && obj.constructor === Object ? obj : {
       "default": obj
@@ -27,11 +23,11 @@
 
   _exportsWildcard(_interopRequireWildcard(_foo));
 
-  exports.foo = _interopRequire(_foo);
-  exports.foo = _interopRequire(_foo);
-  exports.bar = _interopRequire(_foo);
-  exports.bar = _interopRequire(_foo);
-  exports["default"] = _interopRequire(_foo);
-  exports["default"] = _interopRequire(_foo);
-  exports.bar = _interopRequire(_foo);
+  exports.foo = _foo.foo;
+  exports.foo = _foo.foo;
+  exports.bar = _foo.bar;
+  exports.bar = _foo.foo;
+  exports["default"] = _foo.foo;
+  exports["default"] = _foo.foo;
+  exports.bar = _foo.bar;
 });
