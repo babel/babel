@@ -1,18 +1,18 @@
 System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
   "use strict";
 
-  var foo, foo, bar, bar, test;
+  var foo, foo2, bar, bar2, test2;
   return {
     setters: [function (_foo) {
       foo = _foo["default"];
-      foo = _foo;
+      foo2 = _foo;
       bar = _foo.bar;
-      bar = _foo.foo;
+      bar2 = _foo.foo;
     }, function (_fooBar) {}, function (_directoryFooBar) {}],
     execute: function () {
       _export("test", test);
 
-      test = _export("test", 5);
+      test2 = _export("test2", 5);
       _export("default", test);
     }
   };

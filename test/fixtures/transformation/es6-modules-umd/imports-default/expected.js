@@ -13,5 +13,5 @@
 
   var foo = _interopRequire(_foo);
 
-  var foo = _interopRequire(_foo);
+  var foo2 = _interopRequire(_foo);
 });

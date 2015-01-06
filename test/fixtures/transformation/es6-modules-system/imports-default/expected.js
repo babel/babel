@@ -1,11 +1,11 @@
 System.register(["foo"], function (_export) {
   "use strict";
 
-  var foo, foo;
+  var foo, foo2;
   return {
     setters: [function (_foo) {
       foo = _foo["default"];
-      foo = _foo["default"];
+      foo2 = _foo["default"];
     }],
     execute: function () {}
   };

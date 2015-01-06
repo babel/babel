@@ -13,11 +13,11 @@
 
   var foo = _interopRequire(_foo);
 
-  var foo = _foo;
+  var foo2 = _foo;
   var bar = _foo.bar;
-  var bar = _foo.foo;
+  var bar2 = _foo.foo;
   exports.test = test;
-  var test = exports.test = 5;
+  var test2 = exports.test2 = 5;
 
   module.exports = test;
 });

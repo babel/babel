@@ -6,4 +6,4 @@ var _interopRequire = function (obj) {
 
 var foo = _interopRequire(require("foo"));
 
-var foo = _interopRequire(require("foo"));
+var foo2 = _interopRequire(require("foo"));

@@ -18,9 +18,9 @@ require("./directory/foo-bar");
 
 var foo = _interopRequire(require("foo"));
 
-var foo = _interopRequireWildcard(require("foo"));
+var foo2 = _interopRequireWildcard(require("foo"));
 
 var bar = require("foo").bar;
-var bar = require("foo").foo;
+var bar2 = require("foo").foo;
 exports.test = test;
 var test = exports.test = 5;
