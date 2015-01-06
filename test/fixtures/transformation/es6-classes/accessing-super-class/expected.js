@@ -1,6 +1,28 @@
 "use strict";
 
 var _slice = Array.prototype.slice;
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === void 0) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return void 0;
+    } else {
+      return get(parent);
+    }
+  } else if ("value" in desc && "writable" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === void 0) {
+      return void 0;
+    }
+    return getter.call(receiver);
+  }
+};
+
 var _inherits = function (child, parent) {
   if (typeof parent !== "function" && parent !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
@@ -19,34 +41,35 @@ var _inherits = function (child, parent) {
 var Test = (function () {
   var _Foo = Foo;
   var Test = function Test() {
-    var _Foo$prototype$test, _Foo$prototype$test2;
+    var _get2, _get3, _get4, _get5;
     woops["super"].test();
-    _Foo.call(this);
-    _Foo.prototype.test.call(this);
+    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
     foob(_Foo);
 
-    _Foo.call.apply(_Foo, [this].concat(_slice.call(arguments)));
-    _Foo.call.apply(_Foo, [this, "test"].concat(_slice.call(arguments)));
+    (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this].concat(_slice.call(arguments)));
+    (_get3 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
 
-    (_Foo$prototype$test = _Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(_slice.call(arguments)));
-    (_Foo$prototype$test2 = _Foo.prototype.test).call.apply(_Foo$prototype$test2, [this, "test"].concat(_slice.call(arguments)));
+    (_get4 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get4, [this].concat(_slice.call(arguments)));
+    (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
   };
 
   _inherits(Test, _Foo);
 
   Test.prototype.test = function () {
-    var _Foo$prototype$test3, _Foo$prototype$test4;
-    _Foo.prototype.test.call(this);
-    (_Foo$prototype$test3 = _Foo.prototype.test).call.apply(_Foo$prototype$test3, [this].concat(_slice.call(arguments)));
-    (_Foo$prototype$test4 = _Foo.prototype.test).call.apply(_Foo$prototype$test4, [this, "test"].concat(_slice.call(arguments)));
+    var _get6, _get7;
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
+    (_get6 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get6, [this].concat(_slice.call(arguments)));
+    (_get7 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get7, [this, "test"].concat(_slice.call(arguments)));
   };
 
   Test.foo = function () {
-    var _Foo$foo, _Foo$foo2;
-    _Foo.foo.call(this);
-    (_Foo$foo = _Foo.foo).call.apply(_Foo$foo, [this].concat(_slice.call(arguments)));
-    (_Foo$foo2 = _Foo.foo).call.apply(_Foo$foo2, [this, "test"].concat(_slice.call(arguments)));
+    var _get8, _get9;
+    _get(Object.getPrototypeOf(Test), "foo", this).call(this);
+    (_get8 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get8, [this].concat(_slice.call(arguments)));
+    (_get9 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get9, [this, "test"].concat(_slice.call(arguments)));
   };
 
   return Test;
 })();
+
