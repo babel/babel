@@ -44,20 +44,39 @@ via [\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 this is widely supported but you may run into problems with much older browsers.
 
 **NOTE:** `__proto__` is not supported on IE <= 10 so static properties
-**will not** be inherited. A possible workaround is to use `super();`:
+**will not** be inherited.
 
-```js
-class Foo {
-  static foo() {
+You can use the `protoToAssign` optional transformer that will transform all
+`__proto__` assignments to a method that will shallowly copy it over all
+properties.
 
-  }
-}
+```javascript
+require("6to5").transform("code", { optional: ["protoToAssign"] });
+```
 
-class Bar extends Foo {
-  static foo() {
-    super();
-  }
-}
+```sh
+$ 6to5 --optional protoToAssign script.js
+```
+
+This means that the following **will** work:
+
+```javascript
+var foo = { a: 1 };
+var bar = { b: 2 };
+bar.__proto__ = foo;
+bar.a; // 1
+bar.b; // 2
+```
+
+however the following **will not**:
+
+```javascript
+var foo = { a: 1 };
+var bar = { b: 2 };
+bar.__proto__ = foo;
+bar.a; // 1
+foo.a = 2;
+bar.a; // 1 - should be 2 but remember that nothing is bound and it's a straight copy
 ```
 
 ### Getters/setters (8 and below)
