@@ -159,15 +159,3 @@ class Foo {
   }
 }
 ```
-
-### This shorthand
-
-```js
-@foo
-```
-
-is equivalent to
-
-```
-this.foo
-```
