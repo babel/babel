@@ -13,21 +13,31 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 2.6.0
 
- * [Internal] Fix incorrect AST node `identifier("this")`.
- * [Spec Compliancy] Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
- * [Internal] Upgrade `acorn-6to5`.
- * [New Feature] Basic destructuring defaults
- * [New Feature] Add `.es` to list of supported extensions.
- * [New Feature] Add optional `typeofSymbol` transformer.
- * [Bug Fix] Better handling of number literal property keys.
- * [Bug Fix] [Internal] Better `toIdentifier` method that handles reserved words.
- * [Internal] Upgrade to `core-js` 4.0.0.
- * [Internal] Upgrade to `regenerator` 0.8.3.
- * [Bug Fix] Handle `NewExpression` paren insertion edegcases better.
- * [Spec Compliancy] Class inheritance now has a `function` or `null` type check.
- * [Polish] Move `"use strict";` to inside module bodies instead of at the top of the file.
- * [Polish] Better handling of dynamic imports.
- * [New Feature] Use a `for` loop for rest parameters instead of `Array.prototype.slice`.
+ * **Internal**
+  * Fix incorrect AST node `identifier("this")`.
+  * Upgrade `acorn-6to5`.
+    * Fix exponentiation operator precedence.
+    * Fix line terminators after async contextual keywords.
+    * Add semicolons as class elements inside of a class body.
+  * Upgrade to `core-js` 4.0.0.
+  * Upgrade to `regenerator` 0.8.3.
+    * Fix non-loop labeled statements.
+ * **Spec Compliancy**
+  * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
+ * **New Feature**
+  * Basic destructuring defaults
+  * Add `.es` to list of supported extensions.
+  * Add optional `typeofSymbol` transformer.
+  * Use a `for` loop for rest parameters instead of `Array.prototype.slice`.
+ * **Bug Fix**
+  * Better handling of number literal property keys.
+  * [Internal] Better `toIdentifier` method that handles reserved words.
+  * Handle `NewExpression` paren insertion edegcases better.
+ * **Spec Compliancy**
+  * Class inheritance now has a `function` or `null` type check.
+ * **Polish**
+  * Move `"use strict";` to inside module bodies instead of at the top of the file.
+  * Better handling of dynamic imports.
 
 ## 2.5.0
 
