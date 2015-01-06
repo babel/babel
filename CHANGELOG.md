@@ -7,7 +7,7 @@
 > - [Breaking Change]
 > - [Documentation]
 > - [Internal]
-> - [Misc]
+> - [Polish]
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
@@ -25,7 +25,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * [Internal] Upgrade to `regenerator` 0.8.3.
  * [Bug Fix] Handle `NewExpression` paren insertion edegcases better.
  * [Spec Compliancy] Class inheritance now has a `function` or `null` type check.
- * [Misc] Move `"use strict";` to inside module bodies instead of at the top of the file.
+ * [Polish] Move `"use strict";` to inside module bodies instead of at the top of the file.
+ * [Polish] Better handling of dynamic imports.
 
 ## 2.5.0
 
