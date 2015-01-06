@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.6.3
+
+ * **Bug Fix**
+  * Fix 2.6.0 regression caused by faulty export default from a source handling.
+
 ## 2.6.2
 
  * **Bug Fix**
