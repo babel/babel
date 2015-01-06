@@ -1,37 +1,39 @@
-# Modules
+---
+layout: docs
+title: Modules
+description: How to use module formatters.
+permalink: /docs/usage/modules/
+redirect_from: /modules.html
+---
+
+<p class="lead">
+  6to5 has the ability to transpile ES6 modules to the module system of your
+  choice. You can even easily create your own.
+</p>
 
 ## Usage
-
-### CLI
 
 ```sh
 $ 6to5 --modules common script.js
 ```
 
-### Node
-
-```javascript
-var to5 = require("6to5");
+```js
 to5.transform('import "foo";', { modules: "common" });
 ```
 
 ## Formats
 
- * [AMD](#amd)
- * [Common (Default)](#common-default)
- * [Ignore](#ignore)
- * [System](#system)
- * [UMD](#umd)
+### Common (Default)
 
-### Common
+**Usage**
 
 ```sh
 $ 6to5 --modules common
 ```
 
-**In**
+**Example**
 
-```javascript
+```js
 export default test;
 
 export {test};
@@ -46,9 +48,7 @@ import {bar} from "foo";
 import {foo as bar} from "foo";
 ```
 
-**Out**
-
-```javascript
+```js
 "use strict";
 
 var _interopRequire = function (obj) {
@@ -72,13 +72,15 @@ var bar = require("foo").foo;
 
 ### AMD
 
+**Usage**
+
 ```sh
 $ 6to5 --modules amd
 ```
 
-**In**
+**Example**
 
-```javascript
+```js
 import foo from "foo";
 
 export function bar() {
@@ -86,9 +88,7 @@ export function bar() {
 }
 ```
 
-**Out**
-
-```javascript
+```js
 define(["exports", "foo"], function (exports, _foo) {
   "use strict";
 
@@ -105,21 +105,24 @@ define(["exports", "foo"], function (exports, _foo) {
 });
 ```
 
-You can optionally specify to include the module id (using the `--amd-module-id` argument):
+You can optionally specify to include the module id (using the `--amd-module-id`
+argument):
 
-```javascript
+```js
 define("filename", ["exports", "foo"], function (exports, _foo) {})
 ```
 
-### UMD
+### System
+
+**Usage**
 
 ```sh
-$ 6to5 --modules umd
+$ 6to5 --modules system
 ```
 
-**In**
+**Example**
 
-```javascript
+```js
 import foo from "foo";
 
 export function bar() {
@@ -127,9 +130,46 @@ export function bar() {
 }
 ```
 
-**Out**
+```js
+System.register("bar", ["foo"], function (_export) {
+  "use strict";
 
-```javascript
+  var __moduleName = "bar";
+
+  var foo;
+  function bar() {
+    return foo("foobar");
+  }
+  return {
+    setters: [function (m) {
+      foo = m.default;
+    }],
+    execute: function () {
+      _export("bar", bar);
+    }
+  };
+});
+```
+
+### UMD
+
+**Usage**
+
+```sh
+$ 6to5 --modules umd
+```
+
+**Example**
+
+```js
+import foo from "foo";
+
+export function bar() {
+  return foo("foobar");
+}
+```
+
+```js
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "foo"], factory);
@@ -154,13 +194,15 @@ export function bar() {
 
 ### Ignore
 
+**Usage**
+
 ```sh
 $ 6to5 --modules ignore
 ```
 
-**In**
+**Example**
 
-```javascript
+```js
 import foo from "foo";
 
 export function bar() {
@@ -168,69 +210,30 @@ export function bar() {
 }
 ```
 
-**Out**
-
-```javascript
+```js
 function bar() {
   return foo("foobar");
 }
 ```
 
-### System
-
-```sh
-$ 6to5 --modules system
-```
-
-**In**
-
-```javascript
-import foo from "foo";
-
-export function bar() {
-  return foo("foobar");
-}
-```
-
-**Out**
-
-```javascript
-System.register("bar", ["foo"], function (_export) {
-  "use strict";
-
-  var __moduleName = "bar";
-
-  var foo;
-  function bar() {
-    return foo("foobar");
-  }
-  return {
-    setters: [function (m) {
-      foo = m.default;
-    }],
-    execute: function () {
-      _export("bar", bar);
-    }
-  };
-});
-```
-
-## Custom
+### Custom
 
 You can alternatively specify module names instead of one of the built-in types.
 
-```sh
+**Usage**
+
+```js
 $ 6to5 --modules custom-module-formatter
 ```
 
-**node_modules/custom-module-formatter/index.js**
+**Example**
 
-```javascript
+**`node_modules/custom-module-formatter/index.js`**
+
+```js
 module.exports = ModuleFormatter;
 
-function ModuleFormatter() {
-
-}
+function ModuleFormatter() {}
 
 ModuleFormatter.prototype.transform = function (ast) {
   // this is ran after all transformers have had their turn at modifying the ast
