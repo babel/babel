@@ -11,7 +11,7 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
-## 2.6.1
+## 2.6.2
 
  * **Bug Fix**
   * Fix rest parameter keys when on functions with params.
