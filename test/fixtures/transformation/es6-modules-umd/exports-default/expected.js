@@ -1,23 +1,23 @@
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports"], factory);
-  } else if (typeof exports !== "undefined") {
-    factory(exports);
+    define(["exports", "module"], factory);
+  } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
+    factory(exports, module);
   }
-})(function (exports) {
+})(function (exports, module) {
   "use strict";
 
-  exports["default"] = foo;
-  exports["default"] = 42;
-  exports["default"] = {};
-  exports["default"] = [];
-  exports["default"] = foo;
-  exports["default"] = function () {};
+  module.exports = foo;
+  module.exports = 42;
+  module.exports = {};
+  module.exports = [];
+  module.exports = foo;
+  module.exports = function () {};
 
-  exports["default"] = function () {};
+  module.exports = function () {};
 
   function foo() {}
   var Foo = function Foo() {};
 
-  exports["default"] = Foo;
+  module.exports = Foo;
 });
