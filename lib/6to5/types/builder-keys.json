@@ -7,7 +7,6 @@
   "CallExpression":          ["callee", "arguments"],
   "ConditionalExpression":   ["test", "consequent", "alternate"],
   "ExpressionStatement":     ["expression"],
-  "TypeOfExpression":        ["expression"],
   "File":                    ["program", "comments", "tokens"],
   "FunctionExpression":      ["id", "params", "body", "generator"],
   "Identifier":              ["name"],

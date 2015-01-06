@@ -26,7 +26,6 @@
   "ExportDeclaration":         ["declaration", "specifiers", "source"],
   "ExportSpecifier":           ["id", "name"],
   "ExpressionStatement":       ["expression"],
-  "TypeOfExpression":          ["expression"],
   "File":                      ["program"],
   "ForInStatement":            ["left", "right", "body"],
   "ForOfStatement":            ["left", "right", "body"],
