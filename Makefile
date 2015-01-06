@@ -83,5 +83,6 @@ publish:
 	rm -rf templates.json browser.js runtime.js browser-polyfill.js
 
 bootstrap:
+	npm install
 	git submodule update --init
 	cd vendor/regenerator; npm install
