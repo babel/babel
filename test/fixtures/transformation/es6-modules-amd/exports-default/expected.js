@@ -1,6 +1,6 @@
-"use strict";
-
 define(["exports"], function (exports) {
+  "use strict";
+
   exports["default"] = foo;
   exports["default"] = 42;
   exports["default"] = {};

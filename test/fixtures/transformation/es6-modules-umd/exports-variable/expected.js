@@ -1,5 +1,3 @@
-"use strict";
-
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports"], factory);
@@ -7,6 +5,8 @@
     factory(exports);
   }
 })(function (exports) {
+  "use strict";
+
   exports.foo7 = foo7;
   var foo = exports.foo = 1;
   var foo = exports.foo = 1;
