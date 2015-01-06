@@ -27,6 +27,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * [Spec Compliancy] Class inheritance now has a `function` or `null` type check.
  * [Polish] Move `"use strict";` to inside module bodies instead of at the top of the file.
  * [Polish] Better handling of dynamic imports.
+ * [New Feature] Use a `for` loop for rest parameters instead of `Array.prototype.slice`.
 
 ## 2.5.0
 
