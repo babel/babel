@@ -86,7 +86,7 @@ that when you turn it off and use your code in a full ES6 environment
 
 |                              | 6to5 | Traceur | es6-transpiler | es6now | jstransform |
 | ---------------------------- | ---- | ------- | -------------- | ------ | ----------- |
-| Source maps                  | ✓    | ✓       | ✓              |        | ✓           |
+| Source maps                  | ✓    | ✓       |                |        | ✓           |
 | No compiler global pollution | ✓    |         | ✓              |        | ✓           |
 | Optional runtime             | ✓    |         | ✓              |        | ✓           |
 | Browser compiler             | ✓    | ✓       |                |        |             |
