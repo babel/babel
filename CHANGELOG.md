@@ -15,10 +15,10 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
  * **Bug Fix**
   * Better handling of number literal property keys.
-  * [Internal] Better `toIdentifier` method that handles reserved words.
   * Handle `NewExpression` paren insertion edegcases better.
  * **Internal**
   * Fix incorrect AST node `identifier("this")`.
+  * Better `toIdentifier` method that handles reserved words.
   * Upgrade `acorn-6to5`.
     * Fix exponentiation operator precedence.
     * Fix line terminators after async contextual keywords.
