@@ -4,3 +4,6 @@
 [submodule "vendor/regenerator"]
 	path = vendor/regenerator
 	url = https://github.com/facebook/regenerator
+[submodule "vendor/test262"]
+	path = vendor/test262
+	url = https://github.com/tc39/test262

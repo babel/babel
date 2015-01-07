@@ -37,6 +37,11 @@ test: lint
 	$(MOCHA_CMD)
 	make test-clean
 
+test-simple:
+	# excludes test262
+	export SIMPLE_6TO5_TESTS=1
+	make test
+
 test-cov:
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --

@@ -1,0 +1,55 @@
+if (process.env.SIMPLE_6TO5_TESTS) return;
+
+var transform = require("../lib/6to5/transformation/transform");
+var readdir   = require("fs-readdir-recursive");
+var path      = require("path");
+var fs        = require("fs");
+var _         = require("lodash");
+
+var test262Loc = __dirname + "/../vendor/test262";
+if (!fs.existsSync(traceurLoc)) {
+  console.error("No vendor/test262 - run `make bootstrap`");
+  process.exit(1);
+}
+
+var read = function (loc) {
+  return readdir(loc).map(function (filename) {
+    return path.join(loc, filename);
+  });
+};
+
+var exec = function (loc) {
+  try {
+    var file = fs.readFileSync(loc, "utf8");
+
+    // this normalises syntax and early runtime reference errors
+    // SyntaxError: var null;
+    // ReferenceError: 1++; (runtime)
+    var lazyError = /negative: (\S+)/.test(file);
+
+    var compiled = transform(file, {
+      filename: loc,
+      blacklist: ["useStrict"]
+    });
+
+    global.eval(compiled);
+  } catch (err) {
+    if (err && lazyError && err instanceof SyntaxError) {
+      return;
+    } else {
+      throw err;
+    }
+  }
+};
+
+// harness
+var harness = read(test262Loc + "/harness");
+_.each(harness, exec);
+
+// tests!
+var tests = read(test262Loc + "/test");
+_.each(tests, function (loc) {
+  test(loc, function () {
+    exec(loc);
+  });
+});
