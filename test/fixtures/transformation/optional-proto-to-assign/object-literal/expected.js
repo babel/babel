@@ -1,10 +1,21 @@
 "use strict";
 
-var foo = Object.assign({}, bar);
+var _extends = function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      target[key] = source[key];
+    }
+  }
 
-var foo = Object.assign({}, bar, {
+  return target;
+};
+
+var foo = _extends({}, bar);
+
+var foo = _extends({}, bar, {
   bar: "foo" });
 
-var foo = Object.assign({}, bar, {
+var foo = _extends({}, bar, {
   bar: "foo"
 });
