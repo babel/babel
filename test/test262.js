@@ -22,7 +22,8 @@ var exec = function (loc) {
   try {
     var file = fs.readFileSync(loc, "utf8");
 
-    // this normalises syntax and early runtime reference errors
+    // this normalises syntax and early runtime reference errors since they're
+    // both thrown as SyntaxErrors in acorn
     // SyntaxError: var null;
     // ReferenceError: 1++; (runtime)
     var lazyError = /negative: (\S+)/.test(file);
