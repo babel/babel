@@ -12,7 +12,7 @@ var _         = require("lodash");
 var regeneratorLoc = __dirname + "/../vendor/regenerator";
 
 if (!fs.existsSync(regeneratorLoc)) {
-  console.error("No vendor/regenerator - run `git submodule update --init && cd vendor/regenerator && npm install`");
+  console.error("No vendor/regenerator - run `make bootstrap`");
   process.exit(1);
 }
 

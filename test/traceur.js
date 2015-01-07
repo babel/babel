@@ -5,7 +5,7 @@ var _  = require("lodash");
 
 var traceurLoc = __dirname + "/../vendor/traceur";
 if (!fs.existsSync(traceurLoc)) {
-  console.error("No vendor/traceur - run `git submodule update --init`");
+  console.error("No vendor/traceur - run `make bootstrap`");
   process.exit(1);
 }
 
