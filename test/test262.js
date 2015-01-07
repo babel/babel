@@ -53,6 +53,7 @@ _.each(tests, function (loc) {
   var alias = path.relative(test262Loc + "/test", loc);
   alias = alias.replace(/\.([^\.]+)$/g, "");
   test(alias, function () {
+    this.timeout(0);
     exec(loc);
   });
 });
