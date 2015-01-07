@@ -1,1 +1,5 @@
-React.createElement("hasOwnProperty", null, "testing");
+React.createElement(
+  "hasOwnProperty",
+  null,
+  "testing"
+);
