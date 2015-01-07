@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.7.2
+
+ * **Polish**
+  * Indent and add newlines to `React.createElement` calls in `react` transformer.
+  * Remove `Object.assign` calls and replace it with an `extends` helper.
+
 ## 2.7.1
 
  * **New Feature**
