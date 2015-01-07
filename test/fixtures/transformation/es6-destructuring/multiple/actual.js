@@ -1,1 +1,2 @@
-var { x, y } = coords, foo = "bar";
+var { x, y } = coords,
+    foo = "bar";
