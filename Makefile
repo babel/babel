@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-spec test-simple test-all test-browser publish build bootstrap
+.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap
 
 build:
 	mkdir -p dist
@@ -48,13 +48,11 @@ test-all:
 	make test
 
 test-cov:
+	export SIMPLE_6TO5_TESTS=1
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-spec:
-	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
-
-test-travis: bootstrap test-spec
+test-travis: bootstrap test-simple
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
