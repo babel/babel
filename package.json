@@ -43,7 +43,7 @@
     "ast-types": "~0.6.1",
     "chokidar": "0.11.1",
     "commander": "2.5.0",
-    "core-js": "^0.4.0",
+    "core-js": "^0.4.1",
     "estraverse": "1.8.0",
     "esutils": "1.1.6",
     "esvalid": "^1.1.0",

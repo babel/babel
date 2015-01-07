@@ -11,12 +11,19 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.7.1
+
+ * **New Feature**
+  * Expose `version` on browser and node API.
+ * **Internal**
+  * Upgrade `core-js` to 0.4.1
+
 ## 2.7.0
 
  * **Spec Compliancy**
   * Disallow reassignments of imports.
  * **New Feature**
-  * `reactCompat` to enable pre-v0.12 react components.
+  * `reactCompat` option to enable pre-v0.12 react components.
 
 ## 2.6.3
 
