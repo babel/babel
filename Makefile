@@ -52,7 +52,8 @@ test-cov:
 	rm -rf coverage
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-travis: bootstrap test-simple
+test-travis: bootstrap
+	$(MOCHA_CMD)
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
