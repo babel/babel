@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish build bootstrap
+.PHONY: clean test test-cov test-clean lint test-travis test-spec test-simple test-all test-browser publish build bootstrap
 
 build:
 	mkdir -p dist
@@ -40,6 +40,11 @@ test: lint
 test-simple:
 	# excludes test262
 	export SIMPLE_6TO5_TESTS=1
+	make test
+
+test-all:
+	# includes traceur, esnext, regenerator
+	export ALL_6TO5_TESTS=1
 	make test
 
 test-cov:
