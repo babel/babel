@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish bench build bootstrap
+.PHONY: clean test test-cov test-clean lint test-travis test-spec test-browser publish build bootstrap
 
 build:
 	mkdir -p dist
@@ -27,12 +27,8 @@ build:
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
-bench:
-	npm install es6-transpiler traceur esnext es6now jstransform
-	node node_modules/matcha/bin/_matcha
-
 lint:
-	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js lib bin benchmark/index.js
+	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js lib bin
 
 test-clean:
 	rm -rf test/tmp
