@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.7.4
+
+ * **Polish**
+  * Inherit assignments from their declaration in destructuring.
+  * Properly align multi-declarator variable declarations.
+
 ## 2.7.3
 
  * **Polish**
