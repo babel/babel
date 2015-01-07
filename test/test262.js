@@ -7,7 +7,7 @@ var fs        = require("fs");
 var _         = require("lodash");
 
 var test262Loc = __dirname + "/../vendor/test262";
-if (!fs.existsSync(traceurLoc)) {
+if (!fs.existsSync(test262Loc)) {
   console.error("No vendor/test262 - run `make bootstrap`");
   process.exit(1);
 }
