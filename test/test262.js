@@ -49,7 +49,9 @@ _.each(harness, exec);
 // tests!
 var tests = read(test262Loc + "/test");
 _.each(tests, function (loc) {
-  test(loc, function () {
+  var alias = path.relative(test262Loc + "/test", loc);
+  alias = alias.replace(/\.([^\.]+)$/g, "");
+  test(alias, function () {
     exec(loc);
   });
 });
