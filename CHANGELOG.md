@@ -11,7 +11,7 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
-## 2.7.2
+## 2.7.3
 
  * **Polish**
   * Indent and add newlines to `React.createElement` calls in `react` transformer.
