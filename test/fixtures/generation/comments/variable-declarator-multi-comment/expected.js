@@ -5,6 +5,7 @@ function test() {
    * Leading to VariableDeclarator
    */
   i = 20,
+
   /*
    * Leading to VariableDeclarator
    * Leading to VariableDeclarator
