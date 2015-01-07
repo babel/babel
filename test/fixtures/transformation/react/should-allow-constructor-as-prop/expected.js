@@ -1,3 +1,1 @@
-React.createElement(Component, {
-  constructor: "foo"
-});
+React.createElement(Component, { constructor: "foo" });
