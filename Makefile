@@ -54,7 +54,7 @@ test-cov:
 test-spec:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- --reporter spec
 
-test-travis: test-spec
+test-travis: bootstrap test-spec
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
 test-browser:
