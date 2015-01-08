@@ -12,7 +12,7 @@ var _get = function get(object, property, receiver) {
     } else {
       return get(parent);
     }
-  } else if ("value" in desc && "writable" in desc) {
+  } else if ("value" in desc && desc.writable) {
     return desc.value;
   } else {
     var getter = desc.get;
