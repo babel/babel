@@ -3940,7 +3940,7 @@ test("[a, b] = [b, a]", {
   locations: true
 });
 
-test("({ responseText: text }) = res", {
+test("({ responseText: text } = res)", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -3985,13 +3985,13 @@ test("({ responseText: text }) = res", {
         type: "Identifier",
         name: "res",
         loc: {
-          start: {line: 1, column: 27},
-          end: {line: 1, column: 30}
+          start: {line: 1, column: 26},
+          end: {line: 1, column: 29}
         }
       },
       loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 30}
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 29}
       }
     },
     loc: {
@@ -13826,9 +13826,11 @@ testFail("[v] += ary", "Assigning to rvalue (1:0)", {ecmaVersion: 6});
 
 testFail("[2] = 42", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
+testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:13)", {ecmaVersion: 6});
 
-testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("({ obj:20 } = 42)", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
+
+testFail("( { get x() {} } = 0 )", "Unexpected token (1:8)", {ecmaVersion: 6});
 
 testFail("x \n is y", "Unexpected token (2:4)", {ecmaVersion: 6});
 
@@ -13848,9 +13850,9 @@ testFail("let default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("const default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: eval } = obj)", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: arguments } = obj)", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
 testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 

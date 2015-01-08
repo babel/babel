@@ -2003,14 +2003,18 @@
 
   function parseMaybeAssign(noIn) {
     var start = storeCurrentPos();
+    var oldParenL = metParenL;
     var left = parseMaybeConditional(noIn);
     if (tokType.isAssign) {
+      if (metParenL !== oldParenL) raise(tokStart, "Assigning to rvalue");
       var node = startNodeAt(start);
       node.operator = tokVal;
       node.left = tokType === _eq ? toAssignable(left) : left;
       checkLVal(left);
       next();
       node.right = parseMaybeAssign(noIn);
+      // restore count of '(' so they are allowed in lvalue's defaults
+      metParenL = oldParenL;
       return finishNode(node, "AssignmentExpression");
     }
     return left;
@@ -2338,7 +2342,10 @@
     if (options.ecmaVersion >= 6) {
       if (eat(_bracketL)) {
         prop.computed = true;
+        // save & restore count of '(' so they are allowed in lvalue's computed props
+        var oldParenL = metParenL;
         prop.key = parseExpression();
+        metParenL = oldParenL;
         expect(_bracketR);
         return;
       } else {

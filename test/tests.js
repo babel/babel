@@ -403,7 +403,7 @@ test("(1 + 2 ) * 3", {
   preserveParens: true
 });
 
-testFail("(x) = 23", "Assigning to rvalue (1:0)", { preserveParens: true });
+testFail("(x) = 23", "Assigning to rvalue (1:4)");
 
 test("x = []", {
   type: "Program",
@@ -26883,7 +26883,7 @@ testFail("func() = 4",
          "Assigning to rvalue (1:0)");
 
 testFail("(1 + 1) = 10",
-         "Assigning to rvalue (1:1)");
+         "Assigning to rvalue (1:8)");
 
 testFail("1++",
          "Assigning to rvalue (1:0)");
