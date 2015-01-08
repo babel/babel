@@ -18,8 +18,8 @@ var _inherits = function (child, parent) {
 var Test = (function () {
   var _Foo = Foo;
   var Test = function Test() {
-    if (_Foo !== null) {
-      _Foo.apply(this, arguments);
+    if (Object.getPrototypeOf(Test) !== null) {
+      Object.getPrototypeOf(Test).apply(this, arguments);
     }
   };
 
