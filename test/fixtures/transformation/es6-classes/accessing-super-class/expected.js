@@ -10,7 +10,7 @@ var _get = function get(object, property, receiver) {
     if (parent === null) {
       return undefined;
     } else {
-      return get(parent);
+      return get(parent, property, receiver);
     }
   } else if ("value" in desc && desc.writable) {
     return desc.value;

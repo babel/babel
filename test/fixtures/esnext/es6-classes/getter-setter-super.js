@@ -1,8 +1,10 @@
-class Animal {
+class Base {
   get sound() {
     return 'I am a ' + this.type + '.';
   }
 }
+
+class Animal extends Base {}
 
 class Cat extends Animal {
   get type() { return 'cat'; }
