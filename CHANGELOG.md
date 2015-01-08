@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.8.1
+
+ * **Bug Fix**
+  * Fix computed accessors on object literals.
+
 ## 2.8.0
 
  * **New Feature**
