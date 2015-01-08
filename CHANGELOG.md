@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.8.0
+
+ * **New Feature**
+  * Add `commonStrict`, `amdStrict` and `umdStrict` module formatters that remove `module.exports` interop assignment.
+  * Add `--indent` option to the 6to5 CLI.
+
 ## 2.7.4
 
  * **Polish**
