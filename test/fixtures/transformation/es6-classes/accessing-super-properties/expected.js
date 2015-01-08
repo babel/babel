@@ -1,5 +1,27 @@
 "use strict";
 
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
 var _inherits = function (child, parent) {
   if (typeof parent !== "function" && parent !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
@@ -18,11 +40,12 @@ var _inherits = function (child, parent) {
 var Test = (function () {
   var _Foo = Foo;
   var Test = function Test() {
-    _Foo.prototype.test;
-    _Foo.prototype.test.whatever;
+    _get(Object.getPrototypeOf(Test.prototype), "test", this);
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).whatever;
   };
 
   _inherits(Test, _Foo);
 
   return Test;
 })();
+

@@ -3,7 +3,6 @@ class Test extends Foo {
     woops.super.test();
     super();
     super.test();
-    foob(super);
 
     super(...arguments);
     super("test", ...arguments);
