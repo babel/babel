@@ -983,6 +983,10 @@
         case "SpreadElement":
           node.argument = toAssignable(node.argument);
           break;
+
+        case "AssignmentExpression":
+          node.type = "AssignmentPattern";
+          break;
       }
     }
     return checkLVal(node);

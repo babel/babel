@@ -1828,7 +1828,8 @@
   function has(obj, propName) {
     return Object.prototype.hasOwnProperty.call(obj, propName);
   }
-// Convert existing expression atom to assignable pattern
+
+  // Convert existing expression atom to assignable pattern
   // if possible.
 
   function toAssignable(node, allowSpread, checkType) {
@@ -1876,6 +1877,53 @@
       }
     }
     return node;
+  }
+
+  // Parses lvalue (assignable) atom.
+
+  function parseAssignableAtom() {
+    if (options.ecmaVersion < 6) return parseIdent();
+    switch (tokType) {
+      case _name:
+        return parseIdent();
+
+      case _bracketL:
+        var node = startNode();
+        next();
+        var elts = node.elements = [], first = true;
+        while (!eat(_bracketR)) {
+          first ? first = false : expect(_comma);
+          if (tokType === _ellipsis) {
+            var spread = startNode();
+            next();
+            spread.argument = parseAssignableAtom();
+            checkSpreadAssign(spread.argument);
+            elts.push(finishNode(spread, "SpreadElement"));
+            expect(_bracketR);
+            break;
+          }
+          elts.push(tokType === _comma ? null : parseMaybeDefault());
+        }
+        return finishNode(node, "ArrayPattern");
+
+      case _braceL:
+        return parseObj(true);
+
+      default:
+        unexpected();
+    }
+  }
+
+  // Parses assignment pattern around given atom if possible.
+
+  function parseMaybeDefault(startPos, left) {
+    left = left || parseAssignableAtom();
+    if (!eat(_eq)) return left;
+    var node = startPos ? startNodeAt(startPos) : startNode();
+    node.operator = "=";
+    node.left = left;
+    node.right = parseMaybeAssign();
+    return finishNode(node, "AssignmentPattern");
   }
 
   // Checks if node can be assignable spread argument.
@@ -2361,7 +2409,7 @@
     node.kind = kind;
     for (;;) {
       var decl = startNode();
-      decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
+      decl.id = parseAssignableAtom();
       checkLVal(decl.id, true);
 
       if (tokType === _colon) {
@@ -2788,7 +2836,7 @@
 
   // Parse an object literal.
 
-  function parseObj() {
+  function parseObj(isPattern) {
     var node = startNode(), first = true, propHash = {};
     node.properties = [];
     next();
@@ -2798,7 +2846,7 @@
         if (options.allowTrailingCommas && eat(_braceR)) break;
       } else first = false;
 
-      var prop = startNode(), isGenerator = false, isAsync = false;
+      var prop = startNode(), start, isGenerator = false, isAsync = false;
       if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
         prop = parseMaybeUnary();
         prop.type = "SpreadProperty";
@@ -2808,7 +2856,11 @@
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        isGenerator = eat(_star);
+        if (isPattern) {
+          start = storeCurrentPos();
+        } else {
+          isGenerator = eat(_star);
+        }
       }
       if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "async") {
         var asyncId = parseIdent();
@@ -2827,22 +2879,23 @@
         if (tokType !== _parenL) unexpected();
       }
       if (eat(_colon)) {
-        prop.value = parseExpression(true);
+        prop.value = isPattern ? parseMaybeDefault(start) : parseMaybeAssign();
         prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
+        if (isPattern) unexpected();
         prop.kind = "init";
         prop.method = true;
         prop.value = parseMethod(isGenerator, isAsync);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set"|| (options.playground && prop.key.name === "memo")) &&
                  (tokType != _comma && tokType != _braceR)) {
-        if (isGenerator || isAsync) unexpected();
+        if (isGenerator || isAsync || isPattern) unexpected();
         prop.kind = prop.key.name;
         parsePropertyName(prop);
         prop.value = parseMethod(false, false);
       } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
         prop.kind = "init";
-        prop.value = prop.key;
+        prop.value = isPattern ? parseMaybeDefault(start, prop.key) : prop.key;
         prop.shorthand = true;
       } else unexpected();
 
@@ -2850,7 +2903,7 @@
       checkPropClash(prop, propHash);
       node.properties.push(finishNode(prop, "Property"));
     }
-    return finishNode(node, "ObjectExpression");
+    return finishNode(node, isPattern ? "ObjectPattern" : "ObjectExpression");
   }
 
   function parsePropertyName(prop) {
@@ -2960,7 +3013,7 @@
       if (eat(_parenR)) {
         break;
       } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
-        node.rest = toAssignable(parseExprAtom(), false, true);
+        node.rest = parseAssignableAtom();
         checkSpreadAssign(node.rest);
         parseFunctionParam(node.rest);
         expect(_parenR);
@@ -3358,7 +3411,7 @@
       var block = startNode();
       next();
       expect(_parenL);
-      block.left = toAssignable(parseExprAtom());
+      block.left = parseAssignableAtom();
       checkLVal(block.left, true);
       if (tokType !== _name || tokVal !== "of") unexpected();
       next();

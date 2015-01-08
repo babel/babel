@@ -14393,30 +14393,39 @@ test('var {get} = obj;', {
 
 test("var {propName: localVar = defaultValue} = obj", {
   type: "Program",
+  range: [0, 45],
   body: [{
     type: "VariableDeclaration",
+    range: [0, 45],
     declarations: [{
       type: "VariableDeclarator",
+      range: [4, 45],
       id: {
         type: "ObjectPattern",
+        range: [4, 39],
         properties: [{
           type: "Property",
+          range: [5, 38],
           method: false,
           shorthand: false,
           computed: false,
           key: {
             type: "Identifier",
+            range: [5, 13],
             name: "propName"
           },
           value: {
             type: "AssignmentPattern",
+            range: [5, 38],
             operator: "=",
             left: {
               type: "Identifier",
+              range: [15, 23],
               name: "localVar"
             },
             right: {
               type: "Identifier",
+              range: [26, 38],
               name: "defaultValue"
             }
           },
@@ -14425,44 +14434,114 @@ test("var {propName: localVar = defaultValue} = obj", {
       },
       init: {
         type: "Identifier",
+        range: [42, 45],
         name: "obj"
       }
     }],
     kind: "var"
   }]
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true,
+  loose: false
+});
 
-test("var [a = 1, b = 2] = arr", {
+test("var {propName = defaultValue} = obj", {
   type: "Program",
+  range: [0, 35],
   body: [{
     type: "VariableDeclaration",
+    range: [0, 35],
     declarations: [{
       type: "VariableDeclarator",
+      range: [4, 35],
       id: {
-        type: "ArrayPattern",
-        elements: [
-          {
-            type: "AssignmentPattern",
-            operator: "=",
-            left: {type: "Identifier", name: "a"},
-            right: {
-              type: "Literal",
-              value: 1
-            }
+        type: "ObjectPattern",
+        range: [4, 29],
+        properties: [{
+          type: "Property",
+          range: [5, 28],
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            range: [5, 13],
+            name: "propName"
           },
-          {
+          kind: "init",
+          value: {
             type: "AssignmentPattern",
+            range: [5, 28],
             operator: "=",
-            left: {type: "Identifier", name: "b"},
+            left: {
+              type: "Identifier",
+              range: [5, 13],
+              name: "propName"
+            },
             right: {
-              type: "Literal",
-              value: 2
+              type: "Identifier",
+              range: [16, 28],
+              name: "defaultValue"
             }
           }
-        ]
+        }]
       },
-      init: {type: "Identifier", name: "arr"}
+      init: {
+        type: "Identifier",
+        range: [32, 35],
+        name: "obj"
+      }
     }],
     kind: "var"
   }]
-}, {ecmaVersion: 6});
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true,
+  loose: false
+});
+
+test("var [localVar = defaultValue] = obj", {
+  type: "Program",
+  range: [0, 35],
+  body: [{
+    type: "VariableDeclaration",
+    range: [0, 35],
+    declarations: [{
+      type: "VariableDeclarator",
+      range: [4, 35],
+      id: {
+        type: "ArrayPattern",
+        range: [4, 29],
+        elements: [{
+          type: "AssignmentPattern",
+          range: [16, 28],
+          operator: "=",
+          left: {
+            type: "Identifier",
+            range: [5, 13],
+            name: "localVar"
+          },
+          right: {
+            type: "Identifier",
+            range: [16, 28],
+            name: "defaultValue"
+          }
+        }]
+      },
+      init: {
+        type: "Identifier",
+        range: [32, 35],
+        name: "obj"
+      }
+    }],
+    kind: "var"
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true,
+  loose: false
+});
