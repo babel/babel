@@ -6,7 +6,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap
+.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core
 
 build:
 	mkdir -p dist
@@ -66,6 +66,18 @@ test-browser:
 
 	test -n "`which open`" && open test/browser.html
 
+publish-core:
+	# generate
+	bin/generate-core-package-json >package2.json
+	mv package.json .package.json
+	mv package2.json package.json
+
+	npm publish
+
+	# restore
+	rm -rf package.json
+	mv .package.json package.json
+
 publish:
 	git pull --rebase
 
@@ -84,6 +96,8 @@ publish:
 	npm publish
 
 	git push --follow-tags
+
+	make publish-core
 
 	rm -rf templates.json browser.js runtime.js browser-polyfill.js
 

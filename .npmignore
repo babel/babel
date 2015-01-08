@@ -9,3 +9,4 @@ Makefile
 dist
 tests.json
 CHANGELOG.md
+.package.json
