@@ -45,7 +45,6 @@ var Test = (function () {
     woops["super"].test();
     _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
     _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
-    foob(_Foo);
 
     (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this].concat(_slice.call(arguments)));
     (_get3 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
