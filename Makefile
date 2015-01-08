@@ -66,18 +66,6 @@ test-browser:
 
 	test -n "`which open`" && open test/browser.html
 
-publish-core:
-	# generate
-	bin/generate-core-package-json >package2.json
-	mv package.json .package.json
-	mv package2.json package.json
-
-	npm publish
-
-	# restore
-	rm -rf package.json
-	mv .package.json package.json
-
 publish:
 	git pull --rebase
 
@@ -97,7 +85,16 @@ publish:
 
 	git push --follow-tags
 
-	make publish-core
+	# generate
+	bin/generate-core-package-json >package2.json
+	mv package.json .package.json
+	mv package2.json package.json
+
+	npm publish
+
+	# restore
+	rm -rf package.json
+	mv .package.json package.json
 
 	rm -rf templates.json browser.js runtime.js browser-polyfill.js
 
