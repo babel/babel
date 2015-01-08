@@ -3020,7 +3020,7 @@
         defaults.push(null);
         break;
       } else {
-        var param = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom(), false, true) : parseIdent();
+        var param = parseAssignableAtom();
         parseFunctionParam(param);
         node.params.push(param);
 
