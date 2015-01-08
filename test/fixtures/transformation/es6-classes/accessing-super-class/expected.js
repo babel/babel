@@ -4,11 +4,11 @@ var _slice = Array.prototype.slice;
 var _get = function get(object, property, receiver) {
   var desc = Object.getOwnPropertyDescriptor(object, property);
 
-  if (desc === void 0) {
+  if (desc === undefined) {
     var parent = Object.getPrototypeOf(object);
 
     if (parent === null) {
-      return void 0;
+      return undefined;
     } else {
       return get(parent);
     }
@@ -16,8 +16,8 @@ var _get = function get(object, property, receiver) {
     return desc.value;
   } else {
     var getter = desc.get;
-    if (getter === void 0) {
-      return void 0;
+    if (getter === undefined) {
+      return undefined;
     }
     return getter.call(receiver);
   }
