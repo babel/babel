@@ -30,13 +30,16 @@ _prototypeProperties(Foo, null, _defineProperty({
   enumerable: true
 }));
 
-var foo = _defineProperty(Object.defineProperties({}, {
+var foo = Object.defineProperties({}, _defineProperty({
   bar: {
     get: function () {
       return _defineProperty(this, "bar", complex()).bar;
     },
     enumerable: true
   }
-}), bar, function () {
-  return _defineProperty(this, bar, complex())[bar];
-});
+}, bar, {
+  get: function () {
+    return _defineProperty(this, bar, complex())[bar];
+  },
+  enumerable: true
+}));
