@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.9.0
+
+ * **Internal**
+  * Upgrade `acorn-6to5`.
+    * Now supports destructuring shorthand properties.
+
 ## 2.8.1
 
  * **Bug Fix**
