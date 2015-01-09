@@ -71,6 +71,9 @@ publish:
 
 	make test
 
+	read -p "Version: "  version; \
+	npm version $$version --message "v%s"
+
 	make build
 	cp dist/6to5.min.js browser.js
 	cp dist/polyfill.min.js browser-polyfill.js
@@ -79,8 +82,6 @@ publish:
 	node bin/cache-templates
 	test -f templates.json
 
-	read -p "Version: "  version; \
-  npm version $$version --message "v%s"
 	npm publish
 
 	git push --follow-tags
