@@ -13,7 +13,7 @@
     };
   };
 
-  var _exportsWildcard = function (obj) {
+  var _exportsWildcard = function (obj, exports) {
     for (var i in obj) {
       if (exports[i] !== undefined) {
         exports[i] = obj[i];
@@ -21,7 +21,7 @@
     }
   };
 
-  _exportsWildcard(_interopRequireWildcard(_foo));
+  _exportsWildcard(_interopRequireWildcard(_foo), exports);
 
   exports.foo = _foo.foo;
   exports.foo = _foo.foo;
