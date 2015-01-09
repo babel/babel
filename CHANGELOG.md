@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.9.1
+
+ * **Internal**
+  * Fix runtime generator breaking the helper inclusion loop.
+
 ## 2.9.0
 
  * **Internal**
