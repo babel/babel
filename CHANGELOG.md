@@ -11,9 +11,14 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.9.2
+
+ * **Bug Fix**
+  * Pass `exports` to `exportWildcard` helper to allow for use inside the optional runtime.
+
 ## 2.9.1
 
- * **Internal**
+ * **Bug Fix**
   * Fix runtime generator breaking the helper inclusion loop.
 
 ## 2.9.0
