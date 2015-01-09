@@ -6,15 +6,17 @@ var _interopRequireWildcard = function (obj) {
   };
 };
 
-var _exportsWildcard = function (obj, exports) {
-  for (var i in obj) {
-    if (exports[i] !== undefined) {
-      exports[i] = obj[i];
+var _defaults = function (obj, defaults) {
+  for (var key in defaults) {
+    if (obj[key] === undefined) {
+      obj[key] = defaults[key];
     }
   }
+
+  return obj;
 };
 
-_exportsWildcard(_interopRequireWildcard(require("foo")), exports);
+_defaults(exports, _interopRequireWildcard(require("foo")));
 
 exports.foo = require("foo").foo;
 exports.foo = require("foo").foo;

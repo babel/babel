@@ -7,15 +7,17 @@ define(["exports", "foo"], function (exports, _foo) {
     };
   };
 
-  var _exportsWildcard = function (obj, exports) {
-    for (var i in obj) {
-      if (exports[i] !== undefined) {
-        exports[i] = obj[i];
+  var _defaults = function (obj, defaults) {
+    for (var key in defaults) {
+      if (obj[key] === undefined) {
+        obj[key] = defaults[key];
       }
     }
+
+    return obj;
   };
 
-  _exportsWildcard(_interopRequireWildcard(_foo), exports);
+  _defaults(exports, _interopRequireWildcard(_foo));
 
   exports.foo = _foo.foo;
   exports.foo = _foo.foo;

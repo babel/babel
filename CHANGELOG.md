@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.9.3
+
+ * **Bug Fix**
+  * Remove `exportsWildcard` helper in favor of `defaults`.
+
 ## 2.9.2
 
  * **Bug Fix**
