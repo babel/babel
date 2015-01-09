@@ -862,7 +862,7 @@
       var prop = startNode(), isGenerator;
       if (options.ecmaVersion >= 6) {
         if (isClass) {
-          if (prop['static'] = (token.type === tt.name && token.value === "static")) next();
+          prop['static'] = false;
         } else {
           prop.method = false;
           prop.shorthand = false;
@@ -871,6 +871,16 @@
       }
       parsePropertyName(prop);
       if (isDummy(prop.key)) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
+      if (isClass) {
+        if (prop.key.type === "Identifier" && !prop.computed && prop.key.name === "static" &&
+            (token.type != tt.parenL && token.type != tt.braceL)) {
+          prop['static'] = true;
+          isGenerator = eat(tt.star);
+          parsePropertyName(prop);
+        } else {
+          prop['static'] = false;
+        }
+      }
       if (!isClass && eat(tt.colon)) {
         prop.kind = "init";
         prop.value = parseExpression(true);
@@ -883,7 +893,7 @@
         }
         prop.value = parseMethod(isGenerator);
       } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set") &&
+                 !prop.computed && (prop.key.name === "get" || prop.key.name === "set") &&
                  (token.type != tt.comma && token.type != tt.braceR)) {
         prop.kind = prop.key.name;
         parsePropertyName(prop);

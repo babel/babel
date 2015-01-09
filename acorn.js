@@ -2510,14 +2510,17 @@
     expect(_braceL);
     while (!eat(_braceR)) {
       var method = startNode();
-      if (tokType === _name && tokVal === "static") {
-        next();
+      var isGenerator = eat(_star);
+      parsePropertyName(method);
+      if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
+          method.key.name === "static") {
+        if (isGenerator) unexpected();
         method['static'] = true;
+        isGenerator = eat(_star);
+        parsePropertyName(method);
       } else {
         method['static'] = false;
       }
-      var isGenerator = eat(_star);
-      parsePropertyName(method);
       if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set")) {
         if (isGenerator) unexpected();

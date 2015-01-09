@@ -14598,3 +14598,160 @@ test("var [localVar = defaultValue] = obj", {
   locations: true,
   loose: false
 });
+
+// https://github.com/marijnh/acorn/issues/191
+
+test("try {} catch ({message}) {}", {
+  type: "Program",
+  range: [0, 27],
+  body: [{
+    type: "TryStatement",
+    range: [0, 27],
+    block: {
+      type: "BlockStatement",
+      range: [4, 6],
+      body: []
+    },
+    handler: {
+      type: "CatchClause",
+      range: [7, 27],
+      param: {
+        type: "ObjectPattern",
+        range: [14, 23],
+        properties: [{
+          type: "Property",
+          range: [15, 22],
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            range: [15, 22],
+            name: "message"
+          },
+          kind: "init",
+          value: {
+            type: "Identifier",
+            range: [15, 22],
+            name: "message"
+          }
+        }]
+      },
+      guard: null,
+      body: {
+        type: "BlockStatement",
+        range: [25, 27],
+        body: []
+      }
+    },
+    guardedHandlers: [],
+    finalizer: null
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true,
+  loose: false
+});
+
+// https://github.com/marijnh/acorn/issues/192
+
+test("class A { static() {} }", {
+  type: "Program",
+  range: [0, 23],
+  body: [{
+    type: "ClassDeclaration",
+    range: [0, 23],
+    id: {
+      type: "Identifier",
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      range: [8, 23],
+      body: [{
+        type: "MethodDefinition",
+        range: [10, 21],
+        computed: false,
+        key: {
+          type: "Identifier",
+          range: [10, 16],
+          name: "static"
+        },
+        static: false,
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          range: [16, 21],
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            range: [19, 21],
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class A { *static() {} }", {
+  type: "Program",
+  range: [0, 24],
+  body: [{
+    type: "ClassDeclaration",
+    range: [0, 24],
+    id: {
+      type: "Identifier",
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      range: [8, 24],
+      body: [{
+        type: "MethodDefinition",
+        range: [10, 22],
+        computed: false,
+        key: {
+          type: "Identifier",
+          range: [11, 17],
+          name: "static"
+        },
+        static: false,
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          range: [17, 22],
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: true,
+          body: {
+            type: "BlockStatement",
+            range: [20, 22],
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
