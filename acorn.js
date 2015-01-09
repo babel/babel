@@ -1836,9 +1836,8 @@
       var clause = startNode();
       next();
       expect(_parenL);
-      clause.param = parseIdent();
-      if (strict && isStrictBadIdWord(clause.param.name))
-        raise(clause.param.start, "Binding " + clause.param.name + " in strict mode");
+      clause.param = parseAssignableAtom();
+      checkLVal(clause.param, true);
       expect(_parenR);
       clause.guard = null;
       clause.body = parseBlock();
