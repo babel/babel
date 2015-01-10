@@ -22,13 +22,17 @@ var Foo = (function () {
       get: function () {
         return _defineProperty(this, "bar", complex()).bar;
       },
-      enumerable: true
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   }, bar, {
     get: function () {
       return _defineProperty(this, bar, complex())[bar];
     },
-    enumerable: true
+    writable: true,
+    enumerable: true,
+    configurable: true
   }));
 
   return Foo;
@@ -39,11 +43,13 @@ var foo = Object.defineProperties({}, _defineProperty({
     get: function () {
       return _defineProperty(this, "bar", complex()).bar;
     },
-    enumerable: true
+    enumerable: true,
+    configurable: true
   }
 }, bar, {
   get: function () {
     return _defineProperty(this, bar, complex())[bar];
   },
-  enumerable: true
+  enumerable: true,
+  configurable: true
 }));

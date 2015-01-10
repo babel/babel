@@ -16,7 +16,9 @@ var Test = (function () {
       set: function (val) {
         this._test = val;
       },
-      enumerable: true
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   });
 

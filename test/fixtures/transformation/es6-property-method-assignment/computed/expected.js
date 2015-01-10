@@ -18,7 +18,8 @@ var obj = Object.defineProperties({}, _defineProperty({}, x, {
   set: function (value) {
     valueSet = value;
   },
-  enumerable: true
+  enumerable: true,
+  configurable: true
 }));
 obj.y = "foo";
 obj.y === 1 && valueSet === "foo";

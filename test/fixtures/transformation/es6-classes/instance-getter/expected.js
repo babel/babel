@@ -13,7 +13,9 @@ var Test = (function () {
       get: function () {
         return 5 + 5;
       },
-      enumerable: true
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   });
 

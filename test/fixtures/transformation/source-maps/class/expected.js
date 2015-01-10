@@ -13,7 +13,9 @@ var Test = (function () {
       get: function () {
         throw new Error("wow");
       },
-      enumerable: true
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   });
 

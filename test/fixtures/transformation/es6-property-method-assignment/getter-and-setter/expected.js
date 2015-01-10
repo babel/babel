@@ -8,6 +8,7 @@ var obj = Object.defineProperties({}, {
     set: function (value) {
       this._foo = value;
     },
-    enumerable: true
+    enumerable: true,
+    configurable: true
   }
 });
