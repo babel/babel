@@ -6,3 +6,6 @@ foo.bar["foo"];
 
 foo["foo"]["bar"];
 foo[test()][bar()];
+
+(foo++).test();
+(+foo).test();
