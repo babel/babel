@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.9.4
+
+ * **Bug Fix**
+  * Support `UpdateExpression`s as `MemberExpression` objects.
+
 ## 2.9.3
 
  * **Bug Fix**
