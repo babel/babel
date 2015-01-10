@@ -25,15 +25,14 @@ var _inherits = function (child, parent) {
   if (parent) _defaults(child, parent);
 };
 
-var Foo = (function () {
-  var _Bar = Bar;
+var Foo = (function (Bar) {
   var Foo = function Foo() {
     if (Object.getPrototypeOf(Foo) !== null) {
       Object.getPrototypeOf(Foo).apply(this, arguments);
     }
   };
 
-  _inherits(Foo, _Bar);
+  _inherits(Foo, Bar);
 
   return Foo;
-})();
+})(Bar);

@@ -19,13 +19,12 @@ var Test = function Test() {
   this.state = "test";
 };
 
-var Foo = (function () {
-  var _Bar = Bar;
+var Foo = (function (Bar) {
   var Foo = function Foo() {
     this.state = "test";
   };
 
-  _inherits(Foo, _Bar);
+  _inherits(Foo, Bar);
 
   return Foo;
-})();
+})(Bar);

@@ -38,8 +38,7 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var Test = (function () {
-  var _Foo = Foo;
+var Test = (function (Foo) {
   var Test = function Test() {
     var _get2, _get3, _get4, _get5;
     woops["super"].test();
@@ -53,7 +52,7 @@ var Test = (function () {
     (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
   };
 
-  _inherits(Test, _Foo);
+  _inherits(Test, Foo);
 
   Test.prototype.test = function () {
     var _get6, _get7;
@@ -70,5 +69,4 @@ var Test = (function () {
   };
 
   return Test;
-})();
-
+})(Foo);

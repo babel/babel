@@ -37,19 +37,17 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var Test = (function () {
-  var _Foo = Foo;
+var Test = (function (Foo) {
   var Test = function Test() {
     _get(Object.getPrototypeOf(Test.prototype), "test", this).whatever();
     _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
   };
 
-  _inherits(Test, _Foo);
+  _inherits(Test, Foo);
 
   Test.test = function () {
     return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
   };
 
   return Test;
-})();
-
+})(Foo);

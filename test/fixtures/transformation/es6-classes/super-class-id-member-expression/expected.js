@@ -15,7 +15,7 @@ var _inherits = function (child, parent) {
   if (parent) child.__proto__ = parent;
 };
 
-var BaseController = (function () {
+var BaseController = (function (_Chaplin$Controller) {
   var _Chaplin$Controller = Chaplin.Controller;
   var BaseController = function BaseController() {
     if (Object.getPrototypeOf(BaseController) !== null) {
@@ -26,9 +26,9 @@ var BaseController = (function () {
   _inherits(BaseController, _Chaplin$Controller);
 
   return BaseController;
-})();
+})(Chaplin.Controller);
 
-var BaseController2 = (function () {
+var BaseController2 = (function (_Chaplin$Controller$Another) {
   var _Chaplin$Controller$Another = Chaplin.Controller.Another;
   var BaseController2 = function BaseController2() {
     if (Object.getPrototypeOf(BaseController2) !== null) {
@@ -39,4 +39,4 @@ var BaseController2 = (function () {
   _inherits(BaseController2, _Chaplin$Controller$Another);
 
   return BaseController2;
-})();
+})(Chaplin.Controller.Another);
