@@ -13,7 +13,6 @@ var Test = (function () {
       get: function () {
         throw new Error("wow");
       },
-      writable: true,
       enumerable: true,
       configurable: true
     }

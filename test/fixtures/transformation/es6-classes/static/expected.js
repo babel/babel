@@ -14,7 +14,6 @@ var A = (function () {
     b: {
       get: function () {},
       set: function (b) {},
-      writable: true,
       enumerable: true,
       configurable: true
     }

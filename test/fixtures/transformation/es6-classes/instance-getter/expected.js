@@ -13,7 +13,6 @@ var Test = (function () {
       get: function () {
         return 5 + 5;
       },
-      writable: true,
       enumerable: true,
       configurable: true
     }

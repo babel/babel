@@ -22,7 +22,6 @@ var Foo = (function () {
       get: function () {
         return _defineProperty(this, "bar", complex()).bar;
       },
-      writable: true,
       enumerable: true,
       configurable: true
     }
@@ -30,7 +29,6 @@ var Foo = (function () {
     get: function () {
       return _defineProperty(this, bar, complex())[bar];
     },
-    writable: true,
     enumerable: true,
     configurable: true
   }));
