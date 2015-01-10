@@ -8,3 +8,4 @@
  * Remove this shorthand from playground.
  * Remove `super()` inside non-constructors - add descriptive error message.
  * Split up ES5 getter/setter transforming and ES6 property methods into separate transformers.
+ * Add autoindentation.
