@@ -14,21 +14,25 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-var Foo = function Foo() {};
+var Foo = (function () {
+  var Foo = function Foo() {};
 
-_prototypeProperties(Foo, null, _defineProperty({
-  bar: {
+  _prototypeProperties(Foo, null, _defineProperty({
+    bar: {
+      get: function () {
+        return _defineProperty(this, "bar", complex()).bar;
+      },
+      enumerable: true
+    }
+  }, bar, {
     get: function () {
-      return _defineProperty(this, "bar", complex()).bar;
+      return _defineProperty(this, bar, complex())[bar];
     },
     enumerable: true
-  }
-}, bar, {
-  get: function () {
-    return _defineProperty(this, bar, complex())[bar];
-  },
-  enumerable: true
-}));
+  }));
+
+  return Foo;
+})();
 
 var foo = Object.defineProperties({}, _defineProperty({
   bar: {

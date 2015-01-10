@@ -5,14 +5,18 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var A = function A() {};
+var A = (function () {
+  var A = function A() {};
 
-A.a = function () {};
+  A.a = function () {};
 
-_prototypeProperties(A, {
-  b: {
-    get: function () {},
-    set: function (b) {},
-    enumerable: true
-  }
-});
+  _prototypeProperties(A, {
+    b: {
+      get: function () {},
+      set: function (b) {},
+      enumerable: true
+    }
+  });
+
+  return A;
+})();
