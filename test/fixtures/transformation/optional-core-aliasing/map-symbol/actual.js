@@ -1,0 +1,2 @@
+Symbol("test");
+Symbol();
