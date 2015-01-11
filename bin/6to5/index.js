@@ -15,7 +15,7 @@ commander.option("-e, --experimental", "Enable experimental support for proposed
 commander.option("-p, --playground", "Enable playground support");
 
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
-commander.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
+commander.option("-l, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 commander.option("-i, --optional [list]", "List of optional transformers to enable", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
