@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var roadrunner = require("roadrunner");
-var commander  = require("commander");
+var commander  = new (require("commander").Command)('6to5-node');
 var Module     = require("module");
 var path       = require("path");
 var repl       = require("repl");
