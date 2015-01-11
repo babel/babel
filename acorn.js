@@ -851,7 +851,7 @@
       size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
       return finishOp(_relational, size);
     }
-    if (next === 47) {
+    if (code === 60 && next === 47) {
       // '</', beginning of JSX closing element
       size = 2;
       return finishOp(_ltSlash, size);
