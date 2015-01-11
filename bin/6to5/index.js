@@ -24,6 +24,7 @@ commander.option("-c, --remove-comments", "Remove comments from the compiled cod
 commander.option("-I, --indent [width]", "Indent width [2]", 2);
 commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false); // todo: remove in 3.0.0
 commander.option("-m, --module-ids", "Insert module id in modules", false);
+commander.option("--reactCompat", "Makes the react transformer produce pre-v0.12 code");
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -110,6 +111,7 @@ exports.opts = {
   comments:      !commander.removeComments,
   runtime:       commander.runtime,
   modules:       commander.modules,
+  reactCompat:   commander.reactCompat,
   format: {
     indent: {
       style:     util.repeat(parseInt(commander.indent))
