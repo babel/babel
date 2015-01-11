@@ -10,6 +10,9 @@ var util       = require("../lib/6to5/util");
 var vm         = require("vm");
 var _          = require("lodash");
 
+// Correct executed script name from /absolute/path/to/_6to5-node
+process.argv[1] = path.resolve(process.argv[1], "..", "6to5-node");
+
 commander.option("-e, --eval [script]", "Evaluate script");
 commander.option("-p, --print", "Evaluate script and print result");
 commander.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
