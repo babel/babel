@@ -10,32 +10,31 @@ var util       = require("../lib/6to5/util");
 var vm         = require("vm");
 var _          = require("lodash");
 
-// Correct executed script name from /absolute/path/to/_6to5-node
-process.argv[1] = path.resolve(process.argv[1], "..", "6to5-node");
+var program = new commander.Command("6to5-node");
 
-commander.option("-e, --eval [script]", "Evaluate script");
-commander.option("-p, --print", "Evaluate script and print result");
-commander.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
-commander.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js]");
-commander.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
-commander.option("-g, --playground", "Enable playground support");
-commander.option("-c, --cache", "Cache compiled files and require paths");
+program.option("-e, --eval [script]", "Evaluate script");
+program.option("-p, --print", "Evaluate script and print result");
+program.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
+program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js]");
+program.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
+program.option("-g, --playground", "Enable playground support");
+program.option("-c, --cache", "Cache compiled files and require paths");
 
 var pkg = require("../package.json");
-commander.version(pkg.version);
-commander.usage("[options] [ -e script | script.js ] [arguments]");
-commander.parse(process.argv);
+program.version(pkg.version);
+program.usage("[options] [ -e script | script.js ] [arguments]");
+program.parse(process.argv);
 
-if (commander.cache) roadrunner.load();
+if (program.cache) roadrunner.load();
 
 //
 
 to5.register({
-  experimental: commander.experimental,
-  extensions:   commander.extensions,
-  playground:   commander.playground,
-  ignore:       commander.ignore,
-  cache:        commander.cache && roadrunner.get("6to5")
+  experimental: program.experimental,
+  extensions:   program.extensions,
+  playground:   program.playground,
+  ignore:       program.ignore,
+  cache:        program.cache && roadrunner.get("6to5")
 });
 
 //
@@ -44,17 +43,17 @@ var _eval = function (code, filename) {
   code = to5.transform(code, {
     filename: filename,
     blacklist: ["useStrict"],
-    experimental: commander.experimental,
-    playground: commander.playground
+    experimental: program.experimental,
+    playground: program.playground
   }).code;
   return vm.runInThisContext(code, filename);
 };
 
-if (commander.eval) {
-  var result = _eval(commander.eval, "eval");
-  if (commander.print) console.log(result);
+if (program.eval) {
+  var result = _eval(program.eval, "eval");
+  if (program.print) console.log(result);
 } else {
-  if (commander.args.length) {
+  if (program.args.length) {
     // slice all arguments up to the first filename since they're 6to5 args that we handle
     var args = process.argv.slice(2);
 
@@ -80,7 +79,7 @@ if (commander.eval) {
   }
 }
 
-if (commander.cache) roadrunner.save();
+if (program.cache) roadrunner.save();
 
 function replStart() {
   repl.start({
