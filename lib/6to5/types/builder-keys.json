@@ -16,6 +16,7 @@
   "Literal":                 ["value"],
   "LogicalExpression":       ["operator", "left", "right"],
   "MemberExpression":        ["object", "property", "computed"],
+  "MethodDefinition":        ["key", "value", "computed", "kind"],
   "NewExpression":           ["callee", "arguments"],
   "ObjectExpression":        ["properties"],
   "Program":                 ["body"],
