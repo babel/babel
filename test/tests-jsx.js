@@ -3400,6 +3400,48 @@ var fbTestFixture = {
           }
         }]
       }
+    },
+
+    '<div>/text</div>': {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 16,
+      expression: {
+        type: "XJSElement",
+        start: 0,
+        end: 16,
+        openingElement: {
+          type: "XJSOpeningElement",
+          start: 0,
+          end: 5,
+          attributes: [],
+          name: {
+            type: "XJSIdentifier",
+            start: 1,
+            end: 4,
+            name: "div"
+          },
+          selfClosing: false
+        },
+        closingElement: {
+          type: "XJSClosingElement",
+          start: 10,
+          end: 16,
+          name: {
+            type: "XJSIdentifier",
+            start: 12,
+            end: 15,
+            name: "div"
+          }
+        },
+        children: [{
+          type: "Literal",
+          start: 5,
+          end: 10,
+          value: "/text",
+          raw: "/text"
+        }]
+      }
     }
   }
 };
