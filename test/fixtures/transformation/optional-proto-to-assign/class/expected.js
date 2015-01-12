@@ -26,11 +26,11 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Foo = (function (Bar) {
-  var Foo = function Foo() {
+  function Foo() {
     if (Object.getPrototypeOf(Foo) !== null) {
       Object.getPrototypeOf(Foo).apply(this, arguments);
     }
-  };
+  }
 
   _inherits(Foo, Bar);
 

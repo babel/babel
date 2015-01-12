@@ -22,7 +22,7 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     var _Foo$prototype$test, _Foo$prototype$test2;
     woops["super"].test();
     Foo.call(this);
@@ -33,7 +33,7 @@ var Test = (function (Foo) {
 
     (_Foo$prototype$test = Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(_slice.call(arguments)));
     (_Foo$prototype$test2 = Foo.prototype.test).call.apply(_Foo$prototype$test2, [this, "test"].concat(_slice.call(arguments)));
-  };
+  }
 
   _inherits(Test, Foo);
 

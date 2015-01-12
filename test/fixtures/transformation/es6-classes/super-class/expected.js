@@ -16,11 +16,11 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     if (Object.getPrototypeOf(Test) !== null) {
       Object.getPrototypeOf(Test).apply(this, arguments);
     }
-  };
+  }
 
   _inherits(Test, Foo);
 

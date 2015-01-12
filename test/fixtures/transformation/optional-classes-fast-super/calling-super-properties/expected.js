@@ -21,10 +21,10 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     Foo.prototype.test.whatever();
     Foo.prototype.test.call(this);
-  };
+  }
 
   _inherits(Test, Foo);
 

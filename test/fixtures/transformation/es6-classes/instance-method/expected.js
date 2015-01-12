@@ -6,7 +6,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
 };
 
 var Test = (function () {
-  var Test = function Test() {};
+  function Test() {}
 
   _prototypeProperties(Test, null, {
     test: {

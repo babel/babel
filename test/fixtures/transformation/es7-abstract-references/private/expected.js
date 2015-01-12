@@ -7,7 +7,7 @@ var D = (function () {
   var F = new WeakMap(),
       G = new WeakMap();
   var E = new WeakMap();
-  var D = function D() {};
+  function D() {}
 
   return D;
 })();

@@ -16,11 +16,11 @@ var _inherits = function (subClass, superClass) {
 };
 
 var BaseController = (function (_Chaplin$Controller) {
-  var BaseController = function BaseController() {
+  function BaseController() {
     if (Object.getPrototypeOf(BaseController) !== null) {
       Object.getPrototypeOf(BaseController).apply(this, arguments);
     }
-  };
+  }
 
   _inherits(BaseController, _Chaplin$Controller);
 
@@ -28,11 +28,11 @@ var BaseController = (function (_Chaplin$Controller) {
 })(Chaplin.Controller);
 
 var BaseController2 = (function (_Chaplin$Controller$Another) {
-  var BaseController2 = function BaseController2() {
+  function BaseController2() {
     if (Object.getPrototypeOf(BaseController2) !== null) {
       Object.getPrototypeOf(BaseController2).apply(this, arguments);
     }
-  };
+  }
 
   _inherits(BaseController2, _Chaplin$Controller$Another);
 

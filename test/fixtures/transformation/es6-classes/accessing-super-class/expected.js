@@ -44,7 +44,7 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     var _get2, _get3, _get4, _get5;
     woops["super"].test();
     _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
@@ -55,7 +55,7 @@ var Test = (function (Foo) {
 
     (_get4 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get4, [this].concat(_slice.call(arguments)));
     (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
-  };
+  }
 
   _inherits(Test, Foo);
 

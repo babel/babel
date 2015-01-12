@@ -16,11 +16,11 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     if (Foo != null) {
       Foo.apply(this, arguments);
     }
-  };
+  }
 
   _inherits(Test, Foo);
 

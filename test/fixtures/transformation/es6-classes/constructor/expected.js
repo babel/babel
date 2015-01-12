@@ -20,9 +20,9 @@ var Test = function Test() {
 };
 
 var Foo = (function (Bar) {
-  var Foo = function Foo() {
+  function Foo() {
     this.state = "test";
-  };
+  }
 
   _inherits(Foo, Bar);
 

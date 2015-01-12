@@ -15,7 +15,7 @@ var _defineProperty = function (obj, key, value) {
 };
 
 var Foo = (function () {
-  var Foo = function Foo() {};
+  function Foo() {}
 
   _prototypeProperties(Foo, null, _defineProperty({
     bar: {

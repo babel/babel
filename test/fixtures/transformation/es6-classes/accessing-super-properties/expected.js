@@ -38,10 +38,10 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     _get(Object.getPrototypeOf(Test.prototype), "test", this);
     _get(Object.getPrototypeOf(Test.prototype), "test", this).whatever;
-  };
+  }
 
   _inherits(Test, Foo);
 

@@ -16,10 +16,10 @@ var _inherits = function (subClass, superClass) {
 };
 
 var Test = (function (Foo) {
-  var Test = function Test() {
+  function Test() {
     Foo.prototype.test;
     Foo.prototype.test.whatever;
-  };
+  }
 
   _inherits(Test, Foo);
 
