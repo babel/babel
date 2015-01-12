@@ -12,7 +12,7 @@ suite("browserify", function() {
       assert.ok(bundle.length, "bundle output code");
 
       // ensure that the code runs without throwing an exception
-      vm.runInNewContext(bundle, {});
+      vm.runInNewContext("var global = this;\n" + bundle, {});
       done();
     })
   })
