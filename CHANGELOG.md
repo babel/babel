@@ -13,6 +13,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 2.10.11
 
+ * **Internal**
+  * Upgrade `core-js` to `0.4.4`.
  * **New Feature**
   * Added `--include-regenerator` option to CLI and `includeRegenerator` option to API that includes the regenerator runtime if necessary.
 
