@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.11.1
+
+ * **Bug Fix**
+  * Remove stray `console.log` outputting debug code.
+  * Remove `Dict` from `coreAliasing`.
+
 ## 2.11.0
 
  * **Bug Fix**
