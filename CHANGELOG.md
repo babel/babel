@@ -11,7 +11,7 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
-## 2.10.11
+## 2.10.1
 
  * **Internal**
   * Upgrade `core-js` to `0.4.4`.
