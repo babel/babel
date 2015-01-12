@@ -1,5 +1,10 @@
 "use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
 var _get = function get(object, property, receiver) {
   var desc = Object.getOwnPropertyDescriptor(object, property);
 
@@ -45,9 +50,16 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  Test.test = function () {
-    return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
-  };
+  _prototypeProperties(Test, {
+    test: {
+      value: function () {
+        return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  });
 
   return Test;
 })(Foo);

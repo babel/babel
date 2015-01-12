@@ -1,6 +1,11 @@
 "use strict";
 
 var _slice = Array.prototype.slice;
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
 var _get = function get(object, property, receiver) {
   var desc = Object.getOwnPropertyDescriptor(object, property);
 
@@ -54,19 +59,31 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  Test.prototype.test = function () {
-    var _get6, _get7;
-    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
-    (_get6 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get6, [this].concat(_slice.call(arguments)));
-    (_get7 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get7, [this, "test"].concat(_slice.call(arguments)));
-  };
-
-  Test.foo = function () {
-    var _get8, _get9;
-    _get(Object.getPrototypeOf(Test), "foo", this).call(this);
-    (_get8 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get8, [this].concat(_slice.call(arguments)));
-    (_get9 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get9, [this, "test"].concat(_slice.call(arguments)));
-  };
+  _prototypeProperties(Test, {
+    foo: {
+      value: function () {
+        var _get6, _get7;
+        _get(Object.getPrototypeOf(Test), "foo", this).call(this);
+        (_get6 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get6, [this].concat(_slice.call(arguments)));
+        (_get7 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get7, [this, "test"].concat(_slice.call(arguments)));
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  }, {
+    test: {
+      value: function () {
+        var _get8, _get9;
+        _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
+        (_get8 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get8, [this].concat(_slice.call(arguments)));
+        (_get9 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get9, [this, "test"].concat(_slice.call(arguments)));
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  });
 
   return Test;
 })(Foo);
