@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.0
+
+ * **Breaking Change**
+  * `allowImportExportEverywhere` acorn option has been disabled for spec compliancy so imports and exports can **only** be present at the top level.
+
 ## 2.10.1
 
  * **Internal**
