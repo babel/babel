@@ -1,3 +1,4 @@
 {
+  "noCheckAst": true,
   "includeRegenerator": true
 }
