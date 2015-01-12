@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.10.11
+
+ * **New Feature**
+  * Added `--include-regenerator` option to CLI and `includeRegenerator` option to API that includes the regenerator runtime if necessary.
+
 ## 2.10.0
 
  * **New Feature**
