@@ -1,2 +1,0 @@
-Symbol("test");
-Symbol();
