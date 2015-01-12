@@ -20,7 +20,17 @@ exports.transform = function (filename, code, opts) {
   opts = _.extend(opts || {}, index.opts);
   opts.filename = filename;
 
-  var result = to5.transform(code, opts);
+  var result;
+  try {
+    result = to5.transform(code, opts);
+  } catch(e) {
+    if (e.name === "SyntaxError") {
+      console.error("SyntaxError:", e.message);
+      process.exit(1);
+    } else {
+      throw e;
+    }
+  }
   result.filename = filename;
   result.actual = code;
   return result;
