@@ -11,6 +11,22 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.10.0
+
+ * **New Feature**
+  * Add `classesFastSuper` optional transformer that doesn't support parent getters and prototype changing.
+  * Add `forOfFast` transformer that speeds up `for...of` on arrays but produces more code.
+  * Add `--react-compat` to `bin/6to5`.
+ * **Spec Compliancy**
+  * Disallow setters without a single parameter.
+  * Add `configurable` and `writable` to defined properties.
+  * Use define instead of assignment for class methods.
+ * **Polish**
+  * Fix bin name in `6to5-node --help`.
+  * Fix shorthand `--whitelist` name in `bin/6to5`.
+ * **Internal**
+  * Hot code optimisation of traversal etc thanks to [gaearon](https://github.com/gaearon).
+
 ## 2.9.4
 
  * **Bug Fix**
