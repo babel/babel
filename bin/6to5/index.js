@@ -25,6 +25,7 @@ commander.option("-I, --indent [width]", "Indent width [2]", 2);
 commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false); // todo: remove in 3.0.0
 commander.option("-m, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
+commander.option("-E, --include-regenerator", "Include the regenerator runtime if necessary", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -100,18 +101,19 @@ if (errors.length) {
 //
 
 exports.opts = {
-  sourceMapName: commander.outFile,
-  experimental:  commander.experimental,
-  playground:    commander.playground,
-  moduleIds:     commander.amdModuleIds || commander.moduleIds,
-  blacklist:     commander.blacklist,
-  whitelist:     commander.whitelist,
-  sourceMap:     commander.sourceMaps || commander.sourceMapsInline,
-  optional:      commander.optional,
-  comments:      !commander.removeComments,
-  runtime:       commander.runtime,
-  modules:       commander.modules,
-  reactCompat:   commander.reactCompat,
+  includeRegenerator: commander.includeRegenerator,
+  sourceMapName:      commander.outFile,
+  experimental:       commander.experimental,
+  reactCompat:        commander.reactCompat,
+  playground:         commander.playground,
+  moduleIds:          commander.amdModuleIds || commander.moduleIds,
+  blacklist:          commander.blacklist,
+  whitelist:          commander.whitelist,
+  sourceMap:          commander.sourceMaps || commander.sourceMapsInline,
+  optional:           commander.optional,
+  comments:           !commander.removeComments,
+  runtime:            commander.runtime,
+  modules:            commander.modules,
   format: {
     indent: {
       style:     util.repeat(parseInt(commander.indent))
