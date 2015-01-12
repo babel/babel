@@ -28,19 +28,19 @@ var _get = function get(object, property, receiver) {
   }
 };
 
-var _inherits = function (child, parent) {
-  if (typeof parent !== "function" && parent !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
   }
-  child.prototype = Object.create(parent && parent.prototype, {
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
     constructor: {
-      value: child,
+      value: subClass,
       enumerable: false,
       writable: true,
       configurable: true
     }
   });
-  if (parent) child.__proto__ = parent;
+  if (superClass) subClass.__proto__ = superClass;
 };
 
 var Test = (function (Foo) {
