@@ -11,6 +11,19 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.11.0
+
+ * **Bug Fix**
+  * Fix unnecessary IIFE in default parameters on method calls.
+  * Add support for supers inside of closures.
+ * **New Feature**
+  * Add `--keep-module-id-extensions`/`keepModuleIdExtensions` option to keep extensions in module ids.
+ * **Polish**
+  * Special case single argument spread properties in `super` inside classes.
+  * Don't use a variable declaration for class declaration IFFE.
+  * Rename `inherits` helper parameters.
+  * `coreAliasing` transformer now aliases `Promise`, `Set`, `Map` and more. Thanks [@AluisioASG](https://github.com/AluisioASG).
+
 ## 2.10.1
 
  * **Internal**
