@@ -26,6 +26,7 @@ commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", fals
 commander.option("-m, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
 commander.option("-E, --include-regenerator", "Include the regenerator runtime if necessary", false);
+commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -101,19 +102,20 @@ if (errors.length) {
 //
 
 exports.opts = {
-  includeRegenerator: commander.includeRegenerator,
-  sourceMapName:      commander.outFile,
-  experimental:       commander.experimental,
-  reactCompat:        commander.reactCompat,
-  playground:         commander.playground,
-  moduleIds:          commander.amdModuleIds || commander.moduleIds,
-  blacklist:          commander.blacklist,
-  whitelist:          commander.whitelist,
-  sourceMap:          commander.sourceMaps || commander.sourceMapsInline,
-  optional:           commander.optional,
-  comments:           !commander.removeComments,
-  runtime:            commander.runtime,
-  modules:            commander.modules,
+  keepModuleIdExtensions: commander.keepModuleIdExtensions,
+  includeRegenerator:     commander.includeRegenerator,
+  sourceMapName:          commander.outFile,
+  experimental:           commander.experimental,
+  reactCompat:            commander.reactCompat,
+  playground:             commander.playground,
+  moduleIds:              commander.amdModuleIds || commander.moduleIds,
+  blacklist:              commander.blacklist,
+  whitelist:              commander.whitelist,
+  sourceMap:              commander.sourceMaps || commander.sourceMapsInline,
+  optional:               commander.optional,
+  comments:               !commander.removeComments,
+  runtime:                commander.runtime,
+  modules:                commander.modules,
   format: {
     indent: {
       style:     util.repeat(parseInt(commander.indent))
