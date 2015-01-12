@@ -23,8 +23,8 @@ exports.transform = function (filename, code, opts) {
   var result;
   try {
     result = to5.transform(code, opts);
-  } catch(e) {
-    if (e.name === "SyntaxError") {
+  } catch (e) {
+    if (e instanceof SyntaxError) {
       console.error("SyntaxError:", e.message);
       process.exit(1);
     } else {
