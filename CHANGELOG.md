@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.11.4
+
+ * **Internal**
+  * Make all dependency versions fixed.
+
 ## 2.11.3
 
  * **Bug Fix**
