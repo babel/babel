@@ -71,7 +71,7 @@ publish:
 
 	make test
 
-	read -p "Version: "  version; \
+	read -p "Version: " version; \
 	npm version $$version --message "v%s"
 
 	make build
