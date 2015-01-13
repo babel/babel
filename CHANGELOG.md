@@ -11,6 +11,15 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.0
+
+ * **Bug Fix**
+  * Support non-string JSX literals.
+ * **New Feature**
+  * Loose mode for some transformers that enables non-spec behaviour.
+ * **Internal**
+  * Uglify `--mangle sort` has been added to the build script, cutting minified scripts in half.
+
 ## 2.11.4
 
  * **Internal**
