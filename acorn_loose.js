@@ -66,6 +66,8 @@
       ahead.length = 0;
 
     token = ahead.shift() || readToken(forceRegexp);
+    if (options.onToken)
+      options.onToken(token);
 
     if (token.start >= nextLineStart) {
       while (token.start >= nextLineStart) {
