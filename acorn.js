@@ -242,6 +242,7 @@
       tokExprAllowed = !!exprAllowed;
       skipSpace();
     };
+    getToken.current = function() { return new Token(); };
     getToken.options = options;
     return getToken;
   };

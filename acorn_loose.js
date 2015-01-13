@@ -105,6 +105,8 @@
             replace = {start: e.pos, end: pos,
                        type: input.charAt(e.pos) == "`" ? tt.template : tt.templateContinued,
                        value: input.slice(e.pos + 1, pos)};
+          } else if (/comment/.test(msg)) {
+            replace = fetchToken.current();
           } else {
             replace = false;
           }
