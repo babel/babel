@@ -28,7 +28,7 @@ var runtimeAsyncMethod = runtimeProperty("async");
 exports.transform = function transform(node, options) {
   options = options || {};
 
-  node = recast.visit(node, visitor);
+  node = visitor.visit(node, options);
 
   if (options.includeRuntime === true ||
       (options.includeRuntime === 'if used' && visitor.wasChangeReported())) {
@@ -56,13 +56,18 @@ function injectRuntime(program) {
 }
 
 var visitor = types.PathVisitor.fromMethodsObject({
+  reset: function(node, options) {
+    this.options = options;
+  },
+
   visitFunction: function(path) {
     // Calling this.traverse(path) first makes for a post-order traversal.
     this.traverse(path);
 
     var node = path.value;
+    var shouldTransformAsync = node.async && !this.options.disableAsync;
 
-    if (!node.generator && !node.async) {
+    if (!node.generator && !shouldTransformAsync) {
       return;
     }
 
@@ -78,7 +83,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       ]);
     }
 
-    if (node.async) {
+    if (shouldTransformAsync) {
       awaitVisitor.visit(path.get("body"));
     }
 
@@ -112,7 +117,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       emitter.getContextFunction(innerFnId),
       // Async functions don't care about the outer function because they
       // don't need it to be marked and don't inherit from its .prototype.
-      node.async ? b.literal(null) : outerFnId,
+      shouldTransformAsync ? b.literal(null) : outerFnId,
       b.thisExpression()
     ];
 
@@ -122,14 +127,14 @@ var visitor = types.PathVisitor.fromMethodsObject({
     }
 
     var wrapCall = b.callExpression(
-      node.async ? runtimeAsyncMethod : runtimeWrapMethod,
+      shouldTransformAsync ? runtimeAsyncMethod : runtimeWrapMethod,
       wrapArgs
     );
 
     outerBody.push(b.returnStatement(wrapCall));
     node.body = b.blockStatement(outerBody);
 
-    if (node.async) {
+    if (shouldTransformAsync) {
       node.async = false;
       return;
     }
