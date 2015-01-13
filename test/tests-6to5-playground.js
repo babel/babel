@@ -54,7 +54,7 @@ test("@foo();", {
         },
         "property": {
           "type": "CallExpression",
-          "start": 1,
+          "start": 0,
           "end": 6,
           "callee": {
             "type": "Identifier",
