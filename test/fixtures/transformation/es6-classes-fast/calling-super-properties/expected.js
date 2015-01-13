@@ -28,16 +28,11 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  _prototypeProperties(Test, {
-    test: {
-      value: function () {
-        return Foo.wow.call(this);
-      },
-      writable: true,
-      enumerable: true,
-      configurable: true
-    }
-  });
+  Test.test = function () {
+    return Foo.wow.call(this);
+  };
+
+  _prototypeProperties(Test, {});
 
   return Test;
 })(Foo);
