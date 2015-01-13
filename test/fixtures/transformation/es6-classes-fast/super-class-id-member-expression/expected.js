@@ -17,8 +17,8 @@ var _inherits = function (subClass, superClass) {
 
 var BaseController = (function (_Chaplin$Controller) {
   function BaseController() {
-    if (Chaplin.Controller != null) {
-      Chaplin.Controller.apply(this, arguments);
+    if (_Chaplin$Controller != null) {
+      _Chaplin$Controller.apply(this, arguments);
     }
   }
 
@@ -29,8 +29,8 @@ var BaseController = (function (_Chaplin$Controller) {
 
 var BaseController2 = (function (_Chaplin$Controller$Another) {
   function BaseController2() {
-    if (Chaplin.Controller.Another != null) {
-      Chaplin.Controller.Another.apply(this, arguments);
+    if (_Chaplin$Controller$Another != null) {
+      _Chaplin$Controller$Another.apply(this, arguments);
     }
   }
 
