@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.11.3
+
+ * **Bug Fix**
+  * Allow a string to be passed as the `optional` option.
+
 ## 2.11.2
 
  * **Bug Fix**
