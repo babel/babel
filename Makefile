@@ -1,10 +1,10 @@
 .PHONY: publish
 
 publish:
-  read -p "Version: "  version; \
-  npm version $$version --message "v%s"
+	read -p "Version: " version; \
+	npm version $$version --message "v%s"
 
-  bin/without_eval >acorn_csp.js
-  npm publish
+	node bin/without_eval >acorn_csp.js
+	npm publish
 
-  git push --follow-tags
+	git push --follow-tags
