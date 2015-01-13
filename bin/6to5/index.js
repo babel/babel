@@ -18,7 +18,7 @@ commander.option("-m, --modules [modules]", "Module formatter type to use [commo
 commander.option("-l, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 commander.option("-i, --optional [list]", "List of optional transformers to enable", util.list);
-commander.option("--fast [list]", "List of transformers to enable their fast mode", util.list);
+commander.option("--loose [list]", "List of transformers to enable their loose mode", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
@@ -117,7 +117,7 @@ exports.opts = {
   comments:               !commander.removeComments,
   runtime:                commander.runtime,
   modules:                commander.modules,
-  fast:                   commander.fast,
+  loose:                  commander.loose,
   format: {
     indent: {
       style:     util.repeat(parseInt(commander.indent))
