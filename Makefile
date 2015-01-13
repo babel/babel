@@ -1,6 +1,6 @@
 BROWSERIFY_CMD = node_modules/browserify/bin/cmd.js
 ISTANBUL_CMD = node_modules/istanbul/lib/cli.js cover
-UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
+UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs --mangle sort
 JSHINT_CMD = node_modules/jshint/bin/jshint
 MOCHA_CMD = node_modules/mocha/bin/_mocha
 
