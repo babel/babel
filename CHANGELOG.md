@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.11.2
+
+ * **Bug Fix**
+  * Support esprima-style catch clause handlers.
+ * **Polish**
+  * Don't print a stacktrace for syntax errors in the CLI.
+
 ## 2.11.1
 
  * **Bug Fix**
