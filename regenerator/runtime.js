@@ -25,16 +25,24 @@
     return new Generator(innerFn, outerFn, self || null, tryList || []);
   }
   runtime.wrap = wrap;
-  
-  // Try/catch helper to minemize deoptimizations
-  var _try = function(block) {
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
     try {
-      block();
-      return undefined;
+      return { type: "normal", arg: fn.call(obj, arg) };
     } catch (err) {
-      return err;
+      return { type: "throw", arg: err };
     }
-  };
+  }
 
   var GenStateSuspendedStart = "suspendedStart";
   var GenStateSuspendedYield = "suspendedYield";
@@ -80,19 +88,17 @@
       var callThrow = step.bind(generator["throw"]);
 
       function step(arg) {
-        var info, value, self = this, error = _try(function() {
-          info = self(arg);
-          value = info.value;
-        });
-        
-        if (error) {
-          return reject(error);
+        var record = tryCatch(this, null, arg);
+        if (record.type === "throw") {
+          reject(record.arg);
+          return;
         }
 
+        var info = record.arg;
         if (info.done) {
-          resolve(value);
+          resolve(info.value);
         } else {
-          Promise.resolve(value).then(callNext, callThrow);
+          Promise.resolve(info.value).then(callNext, callThrow);
         }
       }
 
@@ -119,28 +125,30 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
-          var info, uncaught = _try(function() {
-            info = delegate.iterator[method](arg);
+          var record = tryCatch(
+            delegate.iterator[method],
+            delegate.iterator,
+            arg
+          );
 
-            // Delegate generator ran and handled its own exceptions so
-            // regardless of what the method was, we continue as if it is
-            // "next" with an undefined arg.
-            method = "next";
-            arg = undefined;
-
-          })
-          
-          if (uncaught) {
+          if (record.type === "throw") {
             context.delegate = null;
 
             // Like returning generator.throw(uncaught), but without the
             // overhead of an extra function call.
             method = "throw";
-            arg = uncaught;
+            arg = record.arg;
 
             continue;
           }
 
+          // Delegate generator ran and handled its own exceptions so
+          // regardless of what the method was, we continue as if it is
+          // "next" with an undefined arg.
+          method = "next";
+          arg = undefined;
+
+          var info = record.arg;
           if (info.done) {
             context[delegate.resultName] = info.value;
             context.next = delegate.nextLoc;
@@ -186,11 +194,8 @@
 
         state = GenStateExecuting;
 
-        var value, thrown = _try(function() {
-          value = innerFn.call(self, context);
-        })
-
-        if (!thrown) {
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
           // If an exception is thrown from innerFn, we leave state ===
           // GenStateExecuting and loop back for another invocation.
           state = context.done
@@ -198,11 +203,11 @@
             : GenStateSuspendedYield;
 
           var info = {
-            value: value,
+            value: record.arg,
             done: context.done
           };
 
-          if (value === ContinueSentinel) {
+          if (record.arg === ContinueSentinel) {
             if (context.delegate && method === "next") {
               // Deliberately forget the last sent value so that we don't
               // accidentally pass it on to the delegate.
@@ -212,13 +217,13 @@
             return info;
           }
 
-        } else {
+        } else if (record.type === "throw") {
           state = GenStateCompleted;
 
           if (method === "next") {
-            context.dispatchException(thrown);
+            context.dispatchException(record.arg);
           } else {
-            arg = thrown;
+            arg = record.arg;
           }
         }
       }
