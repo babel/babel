@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.1
+
+ * **Internal**
+  * Add `.jsx` to list of allowed extensions.
+
 ## 2.12.0
 
  * **Bug Fix**
