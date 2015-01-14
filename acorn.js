@@ -243,6 +243,19 @@
       skipSpace();
     };
     getToken.current = function() { return new Token(); };
+    if (typeof Symbol !== 'undefined') {
+      getToken[Symbol.iterator] = function () {
+        return {
+          next: function () {
+            var token = getToken();
+            return {
+              done: token.type === _eof,
+              value: token
+            };
+          }
+        };
+      };
+    }
     getToken.options = options;
     return getToken;
   };

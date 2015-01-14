@@ -162,6 +162,17 @@ token, and returns a `{start, end, type, value}` object (with added
 `loc` property when the `locations` option is enabled and `range`
 property when the `ranges` option is enabled).
 
+In ES6 environment, returned result can be used as any other protocol-compliant iterable:
+
+```javascript
+for (let token of acorn.tokenize(str)) {
+  // iterate over the tokens
+}
+
+// transform code to array of tokens:
+var tokens = [...acorn.tokenize(str)];
+```
+
 **tokTypes** holds an object mapping names to the token type objects
 that end up in the `type` properties of tokens.
 
