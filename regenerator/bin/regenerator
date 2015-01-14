@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 // -*- mode: js -*-
 
-var compile = require('../main').compile;
+var compile = require("../main").compile;
 
-require('commoner').version(
-  require('../package.json').version
+require("commoner").version(
+  require("../package.json").version
 ).resolve(function(id) {
   return this.readModuleP(id);
 }).option(
-  '-r, --include-runtime',
-  'Prepend the runtime to the output.'
+  "-r, --include-runtime",
+  "Prepend the runtime to the output."
+).option(
+  "--disable-async",
+  "Disable transformation of async functions."
 ).process(function(id, source) {
-  var options = {
+  return compile(source, {
     includeRuntime: this.options.includeRuntime,
-  };
-  return compile(source, options).code;
+    disableAsync: this.options.disableAsync
+  }).code;
 });

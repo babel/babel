@@ -37,10 +37,11 @@ function bundle(es5Files, browserFile, callback) {
 }
 
 var queue = [];
-function enqueue(cmd, args) {
+function enqueue(cmd, args, quiet) {
   queue.push({
     cmd: cmd,
-    args: args || []
+    args: args || [],
+    quiet: !!quiet
   });
 }
 
@@ -52,7 +53,11 @@ function flush() {
       cmd.apply(null, entry.args.concat(asyncCallback));
     } else {
       spawn(cmd, entry.args, {
-        stdio: "inherit"
+        stdio: [
+          process.stdin,
+          entry.quiet ? "ignore" : process.stdout,
+          process.stderr
+        ]
       }).on("exit", asyncCallback);
     }
   }
@@ -121,5 +126,17 @@ enqueue("mocha", [
   "./test/tests.es5.js",
   "./test/async.es5.js"
 ]);
+
+// Run command-line tool with available options to make sure it works.
+
+enqueue("./bin/regenerator", [
+  "--include-runtime",
+  "./test/async.es5.js"
+], true);
+
+enqueue("./bin/regenerator", [
+  "--disable-async",
+  "./test/async.es5.js"
+], true);
 
 flush();
