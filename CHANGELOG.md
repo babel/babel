@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.2
+
+ * **Internal**
+  * Exclude nodes in function parameters and catch clauses from `isReferenced` check.
+
 ## 2.12.1
 
  * **Internal**
