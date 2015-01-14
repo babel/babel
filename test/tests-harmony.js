@@ -3328,8 +3328,7 @@ test("[for (x of array) x]", {
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 17}
-        },
-        of: true
+        }
       }],
       body: {
         type: "Identifier",
@@ -3412,8 +3411,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3436,8 +3434,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3521,8 +3518,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3545,8 +3541,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3617,8 +3612,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 20}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3728,8 +3722,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 65}
-          },
-          of: true
+          }
         }
       ],
       body: {
