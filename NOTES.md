@@ -10,4 +10,4 @@
  * Split up ES5 getter/setter transforming and ES6 property methods into separate transformers.
  * Add autoindentation.
  * Move `super` transformation from classes into a separate transformer that also supports object expressions.
- * Prefix all fast transformers with `fast`, make them declare that they're a fast transformer similar to optional transformers and add a `--fast` flag to enable them all.
+ * Remove fast transformer backwards compatibility.
