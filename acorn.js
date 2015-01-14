@@ -2473,7 +2473,7 @@
     var expr = parseExprOps(noIn, noLess, isStatement);
     if (eat(_question)) {
       var node = startNodeAt(start);
-      if (eat(_eq)) {
+      if (options.playground && eat(_eq)) {
         var left = node.left = toAssignable(expr);
         if (left.type !== "MemberExpression") raise(left.start, "You can only use member expressions in memoization assignment");
         node.right = parseMaybeAssign(noIn);
