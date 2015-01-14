@@ -96,8 +96,8 @@ function replEval(code, context, filename, callback) {
   var result;
 
   try {
-    if (/^\((.*?)\n\)$/.test(code)) {
-      code = code.slice(1, -2); // remove "(" and "\n)"
+    if (code[0] === "(" && code[code.length - 1] === ")") {
+      code = code.slice(1, -1); // remove "(" and ")"
     }
 
     result = _eval(code, filename);
