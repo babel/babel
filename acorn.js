@@ -242,6 +242,19 @@
       tokExprAllowed = !!exprAllowed;
       skipSpace();
     };
+    if (typeof Symbol !== 'undefined') {
+      getToken[Symbol.iterator] = function () {
+        return {
+          next: function () {
+            var token = getToken();
+            return {
+              done: token.type === _eof,
+              value: token
+            };
+          }
+        };
+      };
+    }
     getToken.options = options;
     return getToken;
   };
@@ -354,6 +367,7 @@
 
   var _num = {type: "num"}, _regexp = {type: "regexp"}, _string = {type: "string"};
   var _name = {type: "name"}, _eof = {type: "eof"};
+  var _xjsName = {type: "xjsName"};
 
   // Keyword tokens. The `keyword` property (also used in keyword-like
   // operators) indicates that the token originated from an
@@ -414,7 +428,9 @@
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
-  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
+  var _arrow = {type: "=>", beforeExpr: true};
+  var _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
+  var _xjsText = {type: "xjsText"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
@@ -449,6 +465,9 @@
 
   // '*' may be multiply or have special meaning in ES6
   var _star = {binop: 10, beforeExpr: true};
+
+  // JSX tag boundaries
+  var _xjsTagStart = {type: "xjsTagStart"}, _xjsTagEnd = {type: "xjsTagEnd"};
 
   // Provide access to the token types for external users of the
   // tokenizer.
@@ -549,6 +568,9 @@
   var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
   var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
 
+  var decimalNumber = /^\d+$/;
+  var hexNumber = /^[\da-fA-F]+$/;
+
   // Whether a single character denotes a newline.
 
   var newline = /[\n\r\u2028\u2029]/;
@@ -629,17 +651,26 @@
 
   var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true};
   var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
+  var j_oTag = {token: "<tag", isExpr: false}, j_cTag = {token: "</tag", isExpr: false}, j_expr = {token: "<tag>...</tag>", isExpr: true};
+
+  function curTokContext() {
+    return tokContext[tokContext.length - 1];
+  }
 
   function braceIsBlock(prevType) {
     var parent;
-    if (prevType === _colon && (parent = tokContext[tokContext.length - 1]).token == "{")
+    if (prevType === _colon && (parent = curTokContext()).token == "{")
       return !parent.isExpr;
     if (prevType === _return)
       return newline.test(input.slice(lastEnd, tokStart));
     if (prevType === _else || prevType === _semi || prevType === _eof)
       return true;
     if (prevType == _braceL)
-      return tokContext[tokContext.length - 1] === b_stat;
+      return curTokContext() === b_stat;
+    if (prevType === _xjsTagEnd || prevType === _xjsText)
+      return true;
+    if (prevType === _xjsName)
+      return false;
     return !tokExprAllowed;
   }
 
@@ -648,12 +679,11 @@
   // after the token, so that the next one's `tokStart` will point at
   // the right position.
 
-  function finishToken(type, val, shouldSkipSpace) {
+  function finishToken(type, val) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = curPosition();
     var prevType = tokType;
     tokType = type;
-    if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
 
     // Update context info
@@ -672,10 +702,30 @@
     } else if (type.keyword && prevType == _dot) {
       tokExprAllowed = false;
     } else if (tokExprAllowed && type == _function) {
-      tokExprAllowed = null;
+      tokExprAllowed = false;
+    } else if (type === _xjsTagStart) {
+      tokContext.push(j_expr); // treat as beginning of JSX expression
+      tokContext.push(j_oTag); // start opening tag context
+      tokExprAllowed = false;
+    } else if (type === _xjsTagEnd) {
+      var out = tokContext.pop();
+      if (out === j_oTag && prevType === _slash || out === j_cTag) {
+        tokContext.pop();
+        tokExprAllowed = curTokContext() === j_expr;
+      } else {
+        tokExprAllowed = true;
+      }
+    } else if (type === _xjsText) {
+      tokExprAllowed = true;
+    } else if (type === _slash && prevType === _xjsTagStart) {
+      tokContext.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
+      tokContext.push(j_cTag); // reconsider as closing tag context
+      tokExprAllowed = false;
     } else {
       tokExprAllowed = type.beforeExpr;
     }
+
+    if (curTokContext() !== j_expr) skipSpace();
   }
 
   function skipBlockComment() {
@@ -833,6 +883,17 @@
     }
     if (next === 61)
       size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
+    if (tokExprAllowed && code === 60) {
+      ++tokPos;
+      return finishToken(_xjsTagStart);
+    }
+    if (code === 62) {
+      var context = curTokContext();
+      if (context === j_oTag || context === j_cTag) {
+        ++tokPos;
+        return finishToken(_xjsTagEnd);
+      }
+    }
     return finishOp(_relational, size);
   }
 
@@ -860,11 +921,11 @@
     case 44: ++tokPos; return finishToken(_comma);
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
-    case 123:
+    case 123: // '{'
       ++tokPos;
       if (templates.length) ++templates[templates.length - 1];
       return finishToken(_braceL);
-    case 125:
+    case 125: // '}'
       ++tokPos;
       if (templates.length && --templates[templates.length - 1] === 0)
         return readTemplateString(_templateContinued);
@@ -934,10 +995,18 @@
     if (tokPos >= inputLen) return finishToken(_eof);
 
     var code = input.charCodeAt(tokPos);
+    var context = curTokContext();
 
-    // Identifier or keyword. '\uXXXX' sequences are allowed in
-    // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    if (context === j_oTag || context === j_cTag) {
+      // JSX identifier
+      if (isIdentifierStart(code)) return readJSXWord();
+    } else if (context === j_expr) {
+      return readXJSToken();
+    } else {
+      // Identifier or keyword. '\uXXXX' sequences are allowed in
+      // identifiers, so '\' also dispatches to that.
+      if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    }
 
     var tok = getTokenFromCode(code);
 
@@ -1096,6 +1165,7 @@
   }
 
   function readString(quote) {
+    var isJSX = curTokContext() === j_oTag;
     ++tokPos;
     var out = "";
     for (;;) {
@@ -1105,8 +1175,10 @@
         ++tokPos;
         return finishToken(_string, out);
       }
-      if (ch === 92) { // '\'
+      if (ch === 92 && !isJSX) { // '\'
         out += readEscapedChar();
+      } else if (ch === 38 && isJSX) { // '&'
+        out += readXJSEntity();
       } else {
         ++tokPos;
         if (isNewLine(ch)) {
@@ -1145,6 +1217,332 @@
           }
         }
         out += ch;
+      }
+    }
+  }
+
+  var XHTMLEntities = {
+    quot: '\u0022',
+    amp: '&',
+    apos: '\u0027',
+    lt: '<',
+    gt: '>',
+    nbsp: '\u00A0',
+    iexcl: '\u00A1',
+    cent: '\u00A2',
+    pound: '\u00A3',
+    curren: '\u00A4',
+    yen: '\u00A5',
+    brvbar: '\u00A6',
+    sect: '\u00A7',
+    uml: '\u00A8',
+    copy: '\u00A9',
+    ordf: '\u00AA',
+    laquo: '\u00AB',
+    not: '\u00AC',
+    shy: '\u00AD',
+    reg: '\u00AE',
+    macr: '\u00AF',
+    deg: '\u00B0',
+    plusmn: '\u00B1',
+    sup2: '\u00B2',
+    sup3: '\u00B3',
+    acute: '\u00B4',
+    micro: '\u00B5',
+    para: '\u00B6',
+    middot: '\u00B7',
+    cedil: '\u00B8',
+    sup1: '\u00B9',
+    ordm: '\u00BA',
+    raquo: '\u00BB',
+    frac14: '\u00BC',
+    frac12: '\u00BD',
+    frac34: '\u00BE',
+    iquest: '\u00BF',
+    Agrave: '\u00C0',
+    Aacute: '\u00C1',
+    Acirc: '\u00C2',
+    Atilde: '\u00C3',
+    Auml: '\u00C4',
+    Aring: '\u00C5',
+    AElig: '\u00C6',
+    Ccedil: '\u00C7',
+    Egrave: '\u00C8',
+    Eacute: '\u00C9',
+    Ecirc: '\u00CA',
+    Euml: '\u00CB',
+    Igrave: '\u00CC',
+    Iacute: '\u00CD',
+    Icirc: '\u00CE',
+    Iuml: '\u00CF',
+    ETH: '\u00D0',
+    Ntilde: '\u00D1',
+    Ograve: '\u00D2',
+    Oacute: '\u00D3',
+    Ocirc: '\u00D4',
+    Otilde: '\u00D5',
+    Ouml: '\u00D6',
+    times: '\u00D7',
+    Oslash: '\u00D8',
+    Ugrave: '\u00D9',
+    Uacute: '\u00DA',
+    Ucirc: '\u00DB',
+    Uuml: '\u00DC',
+    Yacute: '\u00DD',
+    THORN: '\u00DE',
+    szlig: '\u00DF',
+    agrave: '\u00E0',
+    aacute: '\u00E1',
+    acirc: '\u00E2',
+    atilde: '\u00E3',
+    auml: '\u00E4',
+    aring: '\u00E5',
+    aelig: '\u00E6',
+    ccedil: '\u00E7',
+    egrave: '\u00E8',
+    eacute: '\u00E9',
+    ecirc: '\u00EA',
+    euml: '\u00EB',
+    igrave: '\u00EC',
+    iacute: '\u00ED',
+    icirc: '\u00EE',
+    iuml: '\u00EF',
+    eth: '\u00F0',
+    ntilde: '\u00F1',
+    ograve: '\u00F2',
+    oacute: '\u00F3',
+    ocirc: '\u00F4',
+    otilde: '\u00F5',
+    ouml: '\u00F6',
+    divide: '\u00F7',
+    oslash: '\u00F8',
+    ugrave: '\u00F9',
+    uacute: '\u00FA',
+    ucirc: '\u00FB',
+    uuml: '\u00FC',
+    yacute: '\u00FD',
+    thorn: '\u00FE',
+    yuml: '\u00FF',
+    OElig: '\u0152',
+    oelig: '\u0153',
+    Scaron: '\u0160',
+    scaron: '\u0161',
+    Yuml: '\u0178',
+    fnof: '\u0192',
+    circ: '\u02C6',
+    tilde: '\u02DC',
+    Alpha: '\u0391',
+    Beta: '\u0392',
+    Gamma: '\u0393',
+    Delta: '\u0394',
+    Epsilon: '\u0395',
+    Zeta: '\u0396',
+    Eta: '\u0397',
+    Theta: '\u0398',
+    Iota: '\u0399',
+    Kappa: '\u039A',
+    Lambda: '\u039B',
+    Mu: '\u039C',
+    Nu: '\u039D',
+    Xi: '\u039E',
+    Omicron: '\u039F',
+    Pi: '\u03A0',
+    Rho: '\u03A1',
+    Sigma: '\u03A3',
+    Tau: '\u03A4',
+    Upsilon: '\u03A5',
+    Phi: '\u03A6',
+    Chi: '\u03A7',
+    Psi: '\u03A8',
+    Omega: '\u03A9',
+    alpha: '\u03B1',
+    beta: '\u03B2',
+    gamma: '\u03B3',
+    delta: '\u03B4',
+    epsilon: '\u03B5',
+    zeta: '\u03B6',
+    eta: '\u03B7',
+    theta: '\u03B8',
+    iota: '\u03B9',
+    kappa: '\u03BA',
+    lambda: '\u03BB',
+    mu: '\u03BC',
+    nu: '\u03BD',
+    xi: '\u03BE',
+    omicron: '\u03BF',
+    pi: '\u03C0',
+    rho: '\u03C1',
+    sigmaf: '\u03C2',
+    sigma: '\u03C3',
+    tau: '\u03C4',
+    upsilon: '\u03C5',
+    phi: '\u03C6',
+    chi: '\u03C7',
+    psi: '\u03C8',
+    omega: '\u03C9',
+    thetasym: '\u03D1',
+    upsih: '\u03D2',
+    piv: '\u03D6',
+    ensp: '\u2002',
+    emsp: '\u2003',
+    thinsp: '\u2009',
+    zwnj: '\u200C',
+    zwj: '\u200D',
+    lrm: '\u200E',
+    rlm: '\u200F',
+    ndash: '\u2013',
+    mdash: '\u2014',
+    lsquo: '\u2018',
+    rsquo: '\u2019',
+    sbquo: '\u201A',
+    ldquo: '\u201C',
+    rdquo: '\u201D',
+    bdquo: '\u201E',
+    dagger: '\u2020',
+    Dagger: '\u2021',
+    bull: '\u2022',
+    hellip: '\u2026',
+    permil: '\u2030',
+    prime: '\u2032',
+    Prime: '\u2033',
+    lsaquo: '\u2039',
+    rsaquo: '\u203A',
+    oline: '\u203E',
+    frasl: '\u2044',
+    euro: '\u20AC',
+    image: '\u2111',
+    weierp: '\u2118',
+    real: '\u211C',
+    trade: '\u2122',
+    alefsym: '\u2135',
+    larr: '\u2190',
+    uarr: '\u2191',
+    rarr: '\u2192',
+    darr: '\u2193',
+    harr: '\u2194',
+    crarr: '\u21B5',
+    lArr: '\u21D0',
+    uArr: '\u21D1',
+    rArr: '\u21D2',
+    dArr: '\u21D3',
+    hArr: '\u21D4',
+    forall: '\u2200',
+    part: '\u2202',
+    exist: '\u2203',
+    empty: '\u2205',
+    nabla: '\u2207',
+    isin: '\u2208',
+    notin: '\u2209',
+    ni: '\u220B',
+    prod: '\u220F',
+    sum: '\u2211',
+    minus: '\u2212',
+    lowast: '\u2217',
+    radic: '\u221A',
+    prop: '\u221D',
+    infin: '\u221E',
+    ang: '\u2220',
+    and: '\u2227',
+    or: '\u2228',
+    cap: '\u2229',
+    cup: '\u222A',
+    'int': '\u222B',
+    there4: '\u2234',
+    sim: '\u223C',
+    cong: '\u2245',
+    asymp: '\u2248',
+    ne: '\u2260',
+    equiv: '\u2261',
+    le: '\u2264',
+    ge: '\u2265',
+    sub: '\u2282',
+    sup: '\u2283',
+    nsub: '\u2284',
+    sube: '\u2286',
+    supe: '\u2287',
+    oplus: '\u2295',
+    otimes: '\u2297',
+    perp: '\u22A5',
+    sdot: '\u22C5',
+    lceil: '\u2308',
+    rceil: '\u2309',
+    lfloor: '\u230A',
+    rfloor: '\u230B',
+    lang: '\u2329',
+    rang: '\u232A',
+    loz: '\u25CA',
+    spades: '\u2660',
+    clubs: '\u2663',
+    hearts: '\u2665',
+    diams: '\u2666'
+  };
+
+  function readXJSEntity() {
+    var str = '', count = 0, entity;
+    var ch = input[tokPos];
+    if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
+    var startPos = ++tokPos;
+    while (tokPos < inputLen && count++ < 10) {
+      ch = input[tokPos++];
+      if (ch === ';') {
+        if (str[0] === '#') {
+          if (str[1] === 'x') {
+            str = str.substr(2);
+            if (hexNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 16));
+            }
+          } else {
+            str = str.substr(1);
+            if (decimalNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 10));
+            }
+          }
+        } else {
+          entity = XHTMLEntities[str];
+        }
+        break;
+      }
+      str += ch;
+    }
+    if (!entity) {
+      tokPos = startPos;
+      return '&';
+    }
+    return entity;
+  }
+
+  // Reads inline JSX contents token.
+
+  function readXJSToken() {
+    var out = "", start = tokPos;
+    for (;;) {
+      if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
+      var ch = input.charAt(tokPos);
+      switch (ch) {
+        case "{":
+        case "<":
+          if (tokPos === start) {
+            return getTokenFromCode(ch.charCodeAt(0));
+          }
+          return finishToken(_xjsText, out);
+
+        case "&":
+          out += readXJSEntity();
+          break;
+
+        default:
+          ++tokPos;
+          if (newline.test(ch)) {
+            if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
+              ++tokPos;
+              ch = "\n";
+            }
+            if (options.locations) {
+              ++tokCurLine;
+              tokLineStart = tokPos;
+            }
+          }
+          out += ch;
       }
     }
   }
@@ -1239,6 +1637,21 @@
     if (!containsEsc && isKeyword(word))
       type = keywordTypes[word];
     return finishToken(type, word);
+  }
+
+  // Read a JSX identifier (valid tag or attribute name).
+  //
+  // Optimized version since JSX identifiers can't contain
+  // escape characters and so can be read as single slice.
+  // Also assumes that first character was already checked
+  // by isIdentifierStart in readToken.
+
+  function readJSXWord() {
+    var ch, start = tokPos;
+    do {
+      ch = input.charCodeAt(++tokPos);
+    } while (isIdentifierChar(ch) || ch === 45); // '-'
+    return finishToken(_xjsName, input.slice(start, tokPos));
   }
 
   // ## Parser
@@ -2165,7 +2578,7 @@
       next();
       return finishNode(node, "Literal");
 
-    case _num: case _string:
+    case _num: case _string: case _xjsText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);
@@ -2243,6 +2656,9 @@
 
     case _template:
       return parseTemplate();
+
+    case _xjsTagStart:
+      return parseXJSElement();
 
     default:
       unexpected();
@@ -2754,5 +3170,217 @@
     expect(isGenerator ? _parenR : _bracketR);
     node.generator = isGenerator;
     return finishNode(node, "ComprehensionExpression");
+  }
+
+  // Transforms JSX element name to string.
+
+  function getQualifiedXJSName(object) {
+    if (object.type === "XJSIdentifier") {
+      return object.name;
+    }
+    if (object.type === "XJSNamespacedName") {
+      return object.namespace.name + ':' + object.name.name;
+    }
+    if (object.type === "XJSMemberExpression") {
+      return (
+        getQualifiedXJSName(object.object) + '.' +
+        getQualifiedXJSName(object.property)
+      );
+    }
+  }
+
+  // Parse next token as JSX identifier
+
+  function parseXJSIdentifier() {
+    var node = startNode();
+    if (tokType === _xjsName) {
+      node.name = tokVal;
+    } else if (tokType.keyword) {
+      node.name = tokType.keyword;
+    } else {
+      unexpected();
+    }
+    next();
+    return finishNode(node, "XJSIdentifier");
+  }
+
+  // Parse namespaced identifier.
+
+  function parseXJSNamespacedName() {
+    var start = storeCurrentPos();
+    var name = parseXJSIdentifier();
+    if (!eat(_colon)) return name;
+    var node = startNodeAt(start);
+    node.namespace = name;
+    node.name = parseXJSIdentifier();
+    return finishNode(node, "XJSNamespacedName");
+  }
+
+  // Parses element name in any form - namespaced, member
+  // or single identifier.
+
+  function parseXJSElementName() {
+    var start = storeCurrentPos();
+    var node = parseXJSNamespacedName();
+    while (eat(_dot)) {
+      var newNode = startNodeAt(start);
+      newNode.object = node;
+      newNode.property = parseXJSIdentifier();
+      node = finishNode(newNode, "XJSMemberExpression");
+    }
+    return node;
+  }
+
+  // Parses any type of JSX attribute value.
+
+  function parseXJSAttributeValue() {
+    switch (tokType) {
+      case _braceL:
+        var node = parseXJSExpressionContainer();
+        if (node.expression.type === "XJSEmptyExpression") {
+          raise(
+            node.start,
+              'XJS attributes must only be assigned a non-empty ' +
+              'expression'
+          );
+        }
+        return node;
+
+      case _xjsTagStart:
+        return parseXJSElement();
+
+      case _xjsText:
+      case _string:
+        return parseExprAtom();
+
+      default:
+        raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
+    }
+  }
+
+  // XJSEmptyExpression is unique type since it doesn't actually parse anything,
+  // and so it should start at the end of last read token (left brace) and finish
+  // at the beginning of the next one (right brace).
+
+  function parseXJSEmptyExpression() {
+    if (tokType !== _braceR) {
+      unexpected();
+    }
+
+    var tmp;
+
+    tmp = tokStart;
+    tokStart = lastEnd;
+    lastEnd = tmp;
+
+    tmp = tokStartLoc;
+    tokStartLoc = lastEndLoc;
+    lastEndLoc = tmp;
+
+    return finishNode(startNode(), "XJSEmptyExpression");
+  }
+
+  // Parses JSX expression enclosed into curly brackets.
+
+  function parseXJSExpressionContainer() {
+    var node = startNode();
+    next();
+    node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
+    expect(_braceR);
+    return finishNode(node, "XJSExpressionContainer");
+  }
+
+  // Parses following JSX attribute name-value pair.
+
+  function parseXJSAttribute() {
+    var node = startNode();
+    if (eat(_braceL)) {
+      if (tokType !== _ellipsis) unexpected();
+      node.argument = parseMaybeUnary().argument;
+      expect(_braceR);
+      return finishNode(node, "XJSSpreadAttribute");
+    }
+    node.name = parseXJSNamespacedName();
+    node.value = eat(_eq) ? parseXJSAttributeValue() : null;
+    return finishNode(node, "XJSAttribute");
+  }
+
+  // Parses JSX opening tag starting after '<'.
+
+  function parseXJSOpeningElementAt(start) {
+    var node = startNodeAt(start);
+    node.attributes = [];
+    node.name = parseXJSElementName();
+    while (tokType !== _slash && tokType !== _xjsTagEnd) {
+      node.attributes.push(parseXJSAttribute());
+    }
+    node.selfClosing = eat(_slash);
+    expect(_xjsTagEnd);
+    return finishNode(node, "XJSOpeningElement");
+  }
+
+  // Parses JSX closing tag starting after '</'.
+
+  function parseXJSClosingElementAt(start) {
+    var node = startNodeAt(start);
+    node.name = parseXJSElementName();
+    expect(_xjsTagEnd);
+    return finishNode(node, "XJSClosingElement");
+  }
+
+  // Parses entire JSX element, including it's opening tag
+  // (starting after '<'), attributes, contents and closing tag.
+
+  function parseXJSElementAt(start) {
+    var node = startNodeAt(start);
+    var children = [];
+    var openingElement = parseXJSOpeningElementAt(start);
+    var closingElement = null;
+
+    if (!openingElement.selfClosing) {
+      contents:for (;;) {
+        switch (tokType) {
+          case _xjsTagStart:
+            start = storeCurrentPos();
+            next();
+            if (eat(_slash)) {
+              closingElement = parseXJSClosingElementAt(start);
+              break contents;
+            }
+            children.push(parseXJSElementAt(start));
+            break;
+
+          case _xjsText:
+            children.push(parseExprAtom());
+            break;
+
+          case _braceL:
+            children.push(parseXJSExpressionContainer());
+            break;
+
+          default:
+            unexpected();
+        }
+      }
+      if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
+        raise(
+          closingElement.start,
+          "Expected corresponding XJS closing tag for <" + getQualifiedXJSName(openingElement.name) + ">"
+        );
+      }
+    }
+
+    node.openingElement = openingElement;
+    node.closingElement = closingElement;
+    node.children = children;
+    return finishNode(node, "XJSElement");
+  }
+
+  // Parses entire JSX element from current position.
+
+  function parseXJSElement() {
+    var start = storeCurrentPos();
+    next();
+    return parseXJSElementAt(start);
   }
 });
