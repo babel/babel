@@ -8,8 +8,10 @@ Contributions are always welcome, no matter how large or small. Before contribut
 
 * Fork the repository
 * Clone your fork and change directory to it (`git clone git@github.com:yourUserName/6to5.git && cd 6to5`)
+* Install the project dependencies (`npm install`)
 * Link your forked clone (`npm link`)
-* Develop your changes ensuring you're fetching changes from upstream often
+* Develop your changes ensuring you're fetching updates from upstream often
+* Ensure the test are passing (`make test`)
 * Create new pull request explaining your proposed change or reference an issue in your commit message
 
 #### Code Standards
