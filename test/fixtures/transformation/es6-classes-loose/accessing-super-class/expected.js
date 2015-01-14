@@ -1,11 +1,6 @@
 "use strict";
 
 var _slice = Array.prototype.slice;
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
 var _inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -50,8 +45,6 @@ var Test = (function (Foo) {
     (_Foo$foo = Foo.foo).call.apply(_Foo$foo, [this].concat(_slice.call(arguments)));
     (_Foo$foo2 = Foo.foo).call.apply(_Foo$foo2, [this, "test"].concat(_slice.call(arguments)));
   };
-
-  _prototypeProperties(Test, {}, {});
 
   return Test;
 })(Foo);

@@ -1,10 +1,5 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
 var _inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -31,8 +26,6 @@ var Test = (function (Foo) {
   Test.test = function () {
     return Foo.wow.call(this);
   };
-
-  _prototypeProperties(Test, {});
 
   return Test;
 })(Foo);
