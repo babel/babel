@@ -28,7 +28,9 @@ var runtimeAsyncMethod = runtimeProperty("async");
 exports.transform = function transform(node, options) {
   options = options || {};
 
-  node = visitor.visit(node, options);
+  var path = node instanceof NodePath ? node : new NodePath(node);
+  visitor.visit(path, options);
+  node = path.value;
 
   if (options.includeRuntime === true ||
       (options.includeRuntime === 'if used' && visitor.wasChangeReported())) {
