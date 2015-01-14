@@ -10,7 +10,7 @@ var A = (function () {
 
   _prototypeProperties(A, {
     a: {
-      value: function () {},
+      value: function a() {},
       writable: true,
       enumerable: true,
       configurable: true

@@ -16,7 +16,7 @@ var H = (function () {
   var J = new WeakMap(),
       K = new WeakMap();
   var I = new WeakMap();
-  var _class = function () {};
+  function H() {}
 
-  return _class;
+  return H;
 })();

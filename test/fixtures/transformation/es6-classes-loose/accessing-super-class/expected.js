@@ -32,14 +32,14 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  Test.prototype.test = function () {
+  Test.prototype.test = function test() {
     var _Foo$prototype$test3, _Foo$prototype$test4;
     Foo.prototype.test.call(this);
     (_Foo$prototype$test3 = Foo.prototype.test).call.apply(_Foo$prototype$test3, [this].concat(_slice.call(arguments)));
     (_Foo$prototype$test4 = Foo.prototype.test).call.apply(_Foo$prototype$test4, [this, "test"].concat(_slice.call(arguments)));
   };
 
-  Test.foo = function () {
+  Test.foo = function foo() {
     var _Foo$foo, _Foo$foo2;
     Foo.foo.call(this);
     (_Foo$foo = Foo.foo).call.apply(_Foo$foo, [this].concat(_slice.call(arguments)));

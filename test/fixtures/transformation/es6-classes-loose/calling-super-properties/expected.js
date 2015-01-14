@@ -23,7 +23,7 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  Test.test = function () {
+  Test.test = function test() {
     return Foo.wow.call(this);
   };
 
