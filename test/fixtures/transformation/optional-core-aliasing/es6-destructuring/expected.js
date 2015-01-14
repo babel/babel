@@ -16,11 +16,7 @@ var _slicedToArray = function (arr, i) {
   }
 };
 
-var _interopRequire = function (obj) {
-  return obj && (obj["default"] || obj);
-};
-
-var _core = _interopRequire(require("core-js/library"));
+var _core = require("core-js/library");
 
 var _ref = ["hello", [", ", "junk"], ["world"]];
 
