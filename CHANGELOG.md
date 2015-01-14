@@ -14,7 +14,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 ## 3.0.0
 
  * **Breaking Change**
-  * `allowImportExportEverywhere` acorn option has been disabled for spec compliancy so imports and exports can **only** be present at the top level.
+  * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
