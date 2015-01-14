@@ -2749,9 +2749,6 @@
       checkLVal(block.left, true);
       if (tokType !== _name || tokVal !== "of") unexpected();
       next();
-      // `of` property is here for compatibility with Esprima's AST
-      // which also supports deprecated [for (... in ...) expr]
-      block.of = true;
       block.right = parseExpression();
       expect(_parenR);
       node.blocks.push(finishNode(block, "ComprehensionBlock"));
