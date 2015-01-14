@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
-var roadrunner = require("roadrunner");
-var commander  = require("commander");
-var Module     = require("module");
-var path       = require("path");
-var repl       = require("repl");
-var to5        = require("../lib/6to5");
-var util       = require("../lib/6to5/util");
-var vm         = require("vm");
-var _          = require("lodash");
+var commander = require("commander");
+var Module    = require("module");
+var path      = require("path");
+var repl      = require("repl");
+var to5       = require("../lib/6to5");
+var util      = require("../lib/6to5/util");
+var vm        = require("vm");
+var _         = require("lodash");
 
 var program = new commander.Command("6to5-node");
 
@@ -18,14 +17,11 @@ program.option("-i, --ignore [regex]", "Ignore all files that match this regex w
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js]");
 program.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
 program.option("-g, --playground", "Enable playground support");
-program.option("-c, --cache", "Cache compiled files and require paths");
 
 var pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
-
-if (program.cache) roadrunner.load();
 
 //
 
@@ -33,8 +29,7 @@ to5.register({
   experimental: program.experimental,
   extensions:   program.extensions,
   playground:   program.playground,
-  ignore:       program.ignore,
-  cache:        program.cache && roadrunner.get("6to5")
+  ignore:       program.ignore
 });
 
 //
@@ -79,8 +74,6 @@ if (program.eval) {
   }
 }
 
-if (program.cache) roadrunner.save();
-
 function replStart() {
   repl.start({
     prompt: "> ",
@@ -99,6 +92,8 @@ function replEval(code, context, filename, callback) {
     if (/^\((.*?)\n\)$/.test(code)) {
       code = code.slice(1, -2); // remove "(" and "\n)"
     }
+
+    console.log(JSON.stringify(code));
 
     result = _eval(code, filename);
   } catch (e) {
