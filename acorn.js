@@ -662,12 +662,12 @@
   // after the token, so that the next one's `tokStart` will point at
   // the right position.
 
-  function finishToken(type, val, shouldSkipSpace) {
+  function finishToken(type, val) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = curPosition();
     var prevType = tokType;
     tokType = type;
-    if (shouldSkipSpace !== false) skipSpace();
+    skipSpace();
     tokVal = val;
 
     // Update context info
@@ -686,7 +686,7 @@
     } else if (type.keyword && prevType == _dot) {
       tokExprAllowed = false;
     } else if (tokExprAllowed && type == _function) {
-      tokExprAllowed = null;
+      tokExprAllowed = false;
     } else {
       tokExprAllowed = type.beforeExpr;
     }
