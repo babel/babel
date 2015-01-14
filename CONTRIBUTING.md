@@ -8,6 +8,7 @@ Contributions are always welcome, no matter how large or small. Before contribut
 
 * Fork the repository
 * Clone your fork and change directory to it (`git clone git@github.com:yourUserName/6to5.git && cd 6to5`)
+* Install git submodules (`git submodule init && git submodule update`)
 * Install the project dependencies (`npm install`)
 * Link your forked clone (`npm link`)
 * Develop your changes ensuring you're fetching updates from upstream often
