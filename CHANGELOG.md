@@ -15,6 +15,52 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
  * **Breaking Change**
   * `allowImportExportEverywhere` acorn option has been disabled for spec compliancy so imports and exports can **only** be present at the top level.
+  * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
+
+## 2.12.0
+
+ * **Bug Fix**
+  * Support non-string JSX literals.
+ * **New Feature**
+  * Loose mode for some transformers that enables non-spec behaviour.
+ * **Internal**
+  * Uglify `--mangle sort` has been added to the build script, cutting minified scripts in half.
+
+## 2.11.4
+
+ * **Internal**
+  * Make all dependency versions fixed.
+
+## 2.11.3
+
+ * **Bug Fix**
+  * Allow a string to be passed as the `optional` option.
+
+## 2.11.2
+
+ * **Bug Fix**
+  * Support esprima-style catch clause handlers.
+ * **Polish**
+  * Don't print a stacktrace for syntax errors in the CLI.
+
+## 2.11.1
+
+ * **Bug Fix**
+  * Remove stray `console.log` outputting debug code.
+  * Remove `Dict` from `coreAliasing`.
+
+## 2.11.0
+
+ * **Bug Fix**
+  * Fix unnecessary IIFE in default parameters on method calls.
+  * Add support for supers inside of closures.
+ * **New Feature**
+  * Add `--keep-module-id-extensions`/`keepModuleIdExtensions` option to keep extensions in module ids.
+ * **Polish**
+  * Special case single argument spread properties in `super` inside classes.
+  * Don't use a variable declaration for class declaration IFFE.
+  * Rename `inherits` helper parameters.
+  * `coreAliasing` transformer now aliases `Promise`, `Set`, `Map` and more. Thanks [@AluisioASG](https://github.com/AluisioASG).
 
 ## 2.10.1
 

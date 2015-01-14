@@ -18,6 +18,7 @@ commander.option("-m, --modules [modules]", "Module formatter type to use [commo
 commander.option("-l, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 commander.option("-i, --optional [list]", "List of optional transformers to enable", util.list);
+commander.option("--loose [list]", "List of transformers to enable their loose mode", util.list);
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
@@ -26,6 +27,7 @@ commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", fals
 commander.option("-m, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
 commander.option("-E, --include-regenerator", "Include the regenerator runtime if necessary", false);
+commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 
 commander.on("--help", function(){
   var outKeys = function (title, obj) {
@@ -101,19 +103,21 @@ if (errors.length) {
 //
 
 exports.opts = {
-  includeRegenerator: commander.includeRegenerator,
-  sourceMapName:      commander.outFile,
-  experimental:       commander.experimental,
-  reactCompat:        commander.reactCompat,
-  playground:         commander.playground,
-  moduleIds:          commander.amdModuleIds || commander.moduleIds,
-  blacklist:          commander.blacklist,
-  whitelist:          commander.whitelist,
-  sourceMap:          commander.sourceMaps || commander.sourceMapsInline,
-  optional:           commander.optional,
-  comments:           !commander.removeComments,
-  runtime:            commander.runtime,
-  modules:            commander.modules,
+  keepModuleIdExtensions: commander.keepModuleIdExtensions,
+  includeRegenerator:     commander.includeRegenerator,
+  sourceMapName:          commander.outFile,
+  experimental:           commander.experimental,
+  reactCompat:            commander.reactCompat,
+  playground:             commander.playground,
+  moduleIds:              commander.amdModuleIds || commander.moduleIds,
+  blacklist:              commander.blacklist,
+  whitelist:              commander.whitelist,
+  sourceMap:              commander.sourceMaps || commander.sourceMapsInline,
+  optional:               commander.optional,
+  comments:               !commander.removeComments,
+  runtime:                commander.runtime,
+  modules:                commander.modules,
+  loose:                  commander.loose,
   format: {
     indent: {
       style:     util.repeat(parseInt(commander.indent))

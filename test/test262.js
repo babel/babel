@@ -1,4 +1,4 @@
-if (process.env.SIMPLE_6TO5_TESTS) return;
+if (process.env.SIMPLE_6TO5_TESTS || process.env.running_under_istanbul) return;
 
 var transform = require("../lib/6to5/transformation/transform");
 var readdir   = require("fs-readdir-recursive");

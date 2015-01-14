@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "2.10.1",
+  "version": "2.12.0",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://github.com/6to5/6to5",
   "repository": {
@@ -39,35 +39,36 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-13",
+    "acorn-6to5": "0.11.1-14",
     "ast-types": "~0.6.1",
     "chokidar": "0.11.1",
     "commander": "2.5.0",
-    "core-js": "^0.4.4",
+    "core-js": "0.4.4",
     "estraverse": "1.8.0",
     "esutils": "1.1.6",
-    "esvalid": "^1.1.0",
+    "esvalid": "1.1.0",
     "fs-readdir-recursive": "0.1.0",
-    "jshint": "^2.5.10",
+    "jshint": "2.5.10",
     "lodash": "2.4.1",
     "mkdirp": "0.5.0",
     "private": "0.1.6",
-    "regenerator": "^0.8.3",
+    "regenerator": "0.8.3",
     "regexpu": "0.3.0",
+    "roadrunner": "1.0.4",
     "source-map": "0.1.40",
     "source-map-support": "0.2.8"
   },
   "devDependencies": {
     "browserify": "6.3.2",
-    "chai": "^1.9.2",
+    "chai": "1.9.2",
     "istanbul": "0.3.2",
-    "jshint-stylish": "^1.0.0",
+    "jshint-stylish": "1.0.0",
     "matcha": "0.6.0",
     "mocha": "1.21.4",
     "rimraf": "2.2.8",
     "uglify-js": "2.4.15"
   },
   "optionalDependencies": {
-    "kexec": "^0.2.0"
+    "kexec": "0.2.0"
   }
 }

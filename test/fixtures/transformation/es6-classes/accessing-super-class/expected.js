@@ -45,16 +45,16 @@ var _inherits = function (subClass, superClass) {
 
 var Test = (function (Foo) {
   function Test() {
-    var _get2, _get3, _get4, _get5;
+    var _get2, _get3;
     woops["super"].test();
     _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
     _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
 
-    (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this].concat(_slice.call(arguments)));
-    (_get3 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
+    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).apply(this, arguments);
+    (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
 
-    (_get4 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get4, [this].concat(_slice.call(arguments)));
-    (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+    (_get3 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
   }
 
   _inherits(Test, Foo);
@@ -62,10 +62,10 @@ var Test = (function (Foo) {
   _prototypeProperties(Test, {
     foo: {
       value: function () {
-        var _get6, _get7;
+        var _get4;
         _get(Object.getPrototypeOf(Test), "foo", this).call(this);
-        (_get6 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get6, [this].concat(_slice.call(arguments)));
-        (_get7 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get7, [this, "test"].concat(_slice.call(arguments)));
+        _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
+        (_get4 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get4, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       enumerable: true,
@@ -74,10 +74,10 @@ var Test = (function (Foo) {
   }, {
     test: {
       value: function () {
-        var _get8, _get9;
+        var _get5;
         _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
-        (_get8 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get8, [this].concat(_slice.call(arguments)));
-        (_get9 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get9, [this, "test"].concat(_slice.call(arguments)));
+        _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+        (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       enumerable: true,
