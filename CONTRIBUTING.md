@@ -1,6 +1,18 @@
 # Contributing
 
-Before contributing, please read the [code of conduct](https://github.com/6to5/6to5/blob/master/CODE_OF_CONDUCT.md).
+Contributions are always welcome, no matter how large or small. Before contributing, please read the [code of conduct](https://github.com/6to5/6to5/blob/master/CODE_OF_CONDUCT.md).
+
+## Developing
+
+#### Workflow
+
+* Fork the repository
+* Clone your fork and change directory to it (`git clone git@github.com:yourUserName/6to5.git && cd 6to5`)
+* Link your forked clone (`npm link`)
+* Develop your changes ensuring you're fetching changes from upstream often
+* Create new pull request explaining your proposed change or reference an issue in your commit message
+
+#### Code Standards
 
  * **General**
    * No ES6 syntax features or methods, exclusively ES5.
