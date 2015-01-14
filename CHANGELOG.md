@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.3
+
+ * **Spec Compliancy**
+  * Optional `typeof` transformer checks for `undefined` before passing it to the helper.
+  * Class methods are now named.
+
 ## 2.12.2
 
  * **Internal**
