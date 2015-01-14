@@ -8,18 +8,30 @@
  * the same directory.
  */
 
-!(function() {
+!(function(global) {
+  "use strict";
+
   var hasOwn = Object.prototype.hasOwnProperty;
   var undefined; // More compressible than void 0.
   var iteratorSymbol =
     typeof Symbol === "function" && Symbol.iterator || "@@iterator";
 
-  if (typeof regeneratorRuntime === "object") {
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
+    }
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
     return;
   }
 
-  var runtime = regeneratorRuntime =
-    typeof exports === "undefined" ? {} : exports;
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
   function wrap(innerFn, outerFn, self, tryList) {
     return new Generator(innerFn, outerFn, self || null, tryList || []);
@@ -313,9 +325,7 @@
       }
 
       if (!isNaN(iterable.length)) {
-        var i = -1;
-
-        function next() {
+        var i = -1, next = function next() {
           while (++i < iterable.length) {
             if (hasOwn.call(iterable, i)) {
               next.value = iterable[i];
@@ -328,7 +338,7 @@
           next.done = true;
 
           return next;
-        }
+        };
 
         return next.next = next;
       }
@@ -505,4 +515,10 @@
       return ContinueSentinel;
     }
   };
-})();
+})(
+  // Among the various tricks for obtaining a reference to the global
+  // object, this seems to be the most reliable technique that does not
+  // use indirect eval (which violates Content Security Policy).
+  typeof global === "object" ? global :
+  typeof window === "object" ? window : this
+);
