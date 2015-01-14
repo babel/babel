@@ -1289,11 +1289,12 @@
     readToken();
   }
 
-  // Enter strict mode. Re-reads the next token to please pedantic
-  // tests ("use strict"; 010; -- should fail).
+  // Enter strict mode. Re-reads the next number or string to
+  // please pedantic tests ("use strict"; 010; -- should fail).
 
   function setStrict(strct) {
     strict = strct;
+    if (tokType !== _num && tokType !== _string) return;
     tokPos = tokStart;
     if (options.locations) {
       while (tokPos < tokLineStart) {
