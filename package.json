@@ -3,14 +3,8 @@
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
   "version": "2.12.3",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://github.com/6to5/6to5",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/6to5/6to5.git"
-  },
-  "bugs": {
-    "url": "https://github.com/6to5/6to5/issues"
-  },
+  "homepage": "https://6to5.org/",
+  "repository": "6to5/6to5",
   "preferGlobal": true,
   "main": "lib/6to5/index.js",
   "bin": {
