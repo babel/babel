@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.5
+
+ * **Internal**
+  * Fix incorrect `for...in` loop still causing `ember-script` issues.
+
 ## 2.12.4
 
  * **Polish**
