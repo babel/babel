@@ -320,13 +320,6 @@
 
   var metParenL;
 
-  // This is used by the tokenizer to track the template strings it is
-  // inside, and count the amount of open braces seen inside them, to
-  // be able to switch back to a template token when the } to match ${
-  // is encountered. It will hold an array of integers.
-
-  var templates;
-
   function initParserState() {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = curPosition();
@@ -428,8 +421,9 @@
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
-  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
+  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
+  var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -471,8 +465,8 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, template: _template, templateContinued: _templateContinued, star: _star,
-                      assign: _assign};
+                      arrow: _arrow, template: _template, star: _star, assign: _assign,
+                      backQuote: _backQuote, dollarBraceL: _dollarBraceL};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -631,7 +625,6 @@
     tokContext = [];
     tokExprAllowed = true;
     metParenL = 0;
-    templates = [];
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
     }
@@ -641,8 +634,9 @@
   // given point in the program is loosely based on sweet.js' approach.
   // See https://github.com/mozilla/sweet.js/wiki/design
 
-  var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true};
+  var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true}, b_tmpl = {token: "${", isExpr: true};
   var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
+  var q_tmpl = {token: "`", isExpr: true};
 
   function braceIsBlock(prevType) {
     var parent;
@@ -665,17 +659,20 @@
   function finishToken(type, val) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = curPosition();
-    var prevType = tokType;
+    var prevType = tokType, preserveSpace = false;
     tokType = type;
-    skipSpace();
     tokVal = val;
 
     // Update context info
     if (type === _parenR || type === _braceR) {
       var out = tokContext.pop();
       tokExprAllowed = !(out && out.isExpr);
+      preserveSpace = out === b_tmpl;
     } else if (type === _braceL) {
       tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      tokExprAllowed = true;
+    } else if (type === _dollarBraceL) {
+      tokContext.push(b_tmpl);
       tokExprAllowed = true;
     } else if (type == _parenL) {
       var statementParens = prevType === _if || prevType === _for || prevType === _with || prevType === _while;
@@ -687,9 +684,19 @@
       tokExprAllowed = false;
     } else if (tokExprAllowed && type == _function) {
       tokExprAllowed = false;
+    } else if (type === _backQuote) {
+      if (tokContext[tokContext.length - 1] === q_tmpl) {
+        tokContext.pop();
+      } else {
+        tokContext.push(q_tmpl);
+        preserveSpace = true;
+      }
+      tokExprAllowed = false;
     } else {
       tokExprAllowed = type.beforeExpr;
     }
+
+    if (!preserveSpace) skipSpace();
   }
 
   function skipBlockComment() {
@@ -874,23 +881,17 @@
     case 44: ++tokPos; return finishToken(_comma);
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
-    case 123:
-      ++tokPos;
-      if (templates.length) ++templates[templates.length - 1];
-      return finishToken(_braceL);
-    case 125:
-      ++tokPos;
-      if (templates.length && --templates[templates.length - 1] === 0)
-        return readTemplateString(_templateContinued);
-      else
-        return finishToken(_braceR);
+    case 123: ++tokPos; return finishToken(_braceL);
+    case 125: ++tokPos; return finishToken(_braceR);
     case 58: ++tokPos; return finishToken(_colon);
     case 63: ++tokPos; return finishToken(_question);
 
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
-        return readTemplateString(_template);
+        return finishToken(_backQuote);
+      } else {
+        return false;
       }
 
     case 48: // '0'
@@ -946,6 +947,10 @@
     tokStart = tokPos;
     if (options.locations) tokStartLoc = curPosition();
     if (tokPos >= inputLen) return finishToken(_eof);
+
+    if (tokContext[tokContext.length - 1] === q_tmpl) {
+      return readTmplToken();
+    }
 
     var code = input.charCodeAt(tokPos);
 
@@ -1131,34 +1136,40 @@
     }
   }
 
-  function readTemplateString(type) {
-    if (type == _templateContinued) templates.pop();
-    var out = "", start = tokPos;;
+  // Reads template string tokens.
+
+  function readTmplToken() {
+    var out = "", start = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated template");
-      var ch = input.charAt(tokPos);
-      if (ch === "`" || ch === "$" && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
-        var raw = input.slice(start, tokPos);
-        ++tokPos;
-        if (ch == "$") { ++tokPos; templates.push(1); }
-        return finishToken(type, {cooked: out, raw: raw});
+      var ch = input.charCodeAt(tokPos);
+      if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
+        if (tokPos === start && tokType === _template) {
+          if (ch === 36) {
+            tokPos += 2;
+            return finishToken(_dollarBraceL);
+          } else {
+            ++tokPos;
+            return finishToken(_backQuote);
+          }
+        }
+        return finishToken(_template, out);
       }
-
-      if (ch === "\\") { // '\'
+      if (ch === 92) { // '\'
         out += readEscapedChar();
       } else {
         ++tokPos;
-        if (newline.test(ch)) {
-          if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
+        if (isNewLine(ch)) {
+          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
             ++tokPos;
-            ch = "\n";
+            ch = 10;
           }
           if (options.locations) {
             ++tokCurLine;
             tokLineStart = tokPos;
           }
         }
-        out += ch;
+        out += String.fromCharCode(ch);
       }
     }
   }
@@ -1366,15 +1377,6 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
-    return node;
-  }
-
-  function finishNodeAt(node, type, pos) {
-    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
-    node.type = type;
-    node.end = pos;
-    if (options.ranges)
-      node.range[1] = pos;
     return node;
   }
 
@@ -2137,7 +2139,7 @@
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
       return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
-    } else if (tokType === _template) {
+    } else if (tokType === _backQuote) {
       var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
@@ -2252,7 +2254,7 @@
     case _new:
       return parseNew();
 
-    case _template:
+    case _backQuote:
       return parseTemplate();
 
     default:
@@ -2277,24 +2279,29 @@
   // Parse template expression.
 
   function parseTemplateElement() {
-    var elem = startNodeAt(options.locations ? [tokStart + 1, tokStartLoc.offset(1)] : tokStart + 1);
-    elem.value = tokVal;
-    elem.tail = input.charCodeAt(tokEnd - 1) !== 123; // '{'
+    var elem = startNode();
+    elem.value = {
+      raw: input.slice(tokStart, tokEnd),
+      cooked: tokVal
+    };
     next();
-    var endOff = elem.tail ? 1 : 2;
-    return finishNodeAt(elem, "TemplateElement", options.locations ? [lastEnd - endOff, lastEndLoc.offset(-endOff)] : lastEnd - endOff);
+    elem.tail = tokType === _backQuote;
+    return finishNode(elem, "TemplateElement");
   }
 
   function parseTemplate() {
     var node = startNode();
+    next();
     node.expressions = [];
     var curElt = parseTemplateElement();
     node.quasis = [curElt];
     while (!curElt.tail) {
+      expect(_dollarBraceL);
       node.expressions.push(parseExpression());
-      if (tokType !== _templateContinued) unexpected();
+      expect(_braceR);
       node.quasis.push(curElt = parseTemplateElement());
     }
+    next();
     return finishNode(node, "TemplateLiteral");
   }
 

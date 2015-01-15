@@ -14077,7 +14077,7 @@ testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unterminated template (1:0)", {ecmaVersion: 6});
+testFail("`test", "Unterminated template (1:1)", {ecmaVersion: 6});
 
 testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 
