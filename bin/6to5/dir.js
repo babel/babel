@@ -1,5 +1,5 @@
-var chokidar       = require("chokidar");
 var outputFileSync = require("output-file-sync");
+var chokidar       = require("chokidar");
 var path           = require("path");
 var util           = require("./util");
 var fs             = require("fs");
