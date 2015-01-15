@@ -1,15 +1,15 @@
 if (process.env.running_under_istanbul) return;
 
-var readdir = require("fs-readdir-recursive");
-var helper  = require("./_helper");
-var assert  = require("assert");
-var rimraf  = require("rimraf");
-var mkdirp  = require("mkdirp");
-var child   = require("child_process");
-var path    = require("path");
-var chai    = require("chai");
-var fs      = require("fs");
-var _       = require("lodash");
+var readdir        = require("fs-readdir-recursive");
+var helper         = require("./_helper");
+var assert         = require("assert");
+var rimraf         = require("rimraf");
+var outputFileSync = require("output-file-sync");
+var child          = require("child_process");
+var path           = require("path");
+var chai           = require("chai");
+var fs             = require("fs");
+var _              = require("lodash");
 
 var fixtureLoc = __dirname + "/fixtures/bin";
 var tmpLoc = __dirname + "/tmp";
@@ -27,10 +27,7 @@ var readDir = function (loc) {
 
 var saveInFiles = function (files) {
   _.each(files, function (content, filename) {
-    var up = path.normalize(filename + "/..");
-    mkdirp.sync(up);
-
-    fs.writeFileSync(filename, content);
+    outputFileSync(filename, content);
   });
 };
 

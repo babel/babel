@@ -44,7 +44,7 @@
     "fs-readdir-recursive": "0.1.0",
     "jshint": "2.5.10",
     "lodash": "2.4.1",
-    "mkdirp": "0.5.0",
+    "output-file-sync": "^1.1.0",
     "private": "0.1.6",
     "regenerator": "0.8.3",
     "regexpu": "0.3.0",
