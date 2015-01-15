@@ -14,6 +14,7 @@ require("./_transformation-helper")({
   loc: traceurLoc + "/test/feature",
 
   ignoreSuites: [
+    // these are all internal traceur tests or non-standard features
     "ObjectMixin",
     "Annotations",
     "TestRunner",
@@ -40,10 +41,13 @@ require("./_transformation-helper")({
     "Syntax/UseStrictEscapeSequence",
     "Syntax/UseStrictLineContinuation",
 
-    // the spec for these doesn't define syntax (as far as i could tell)
+    // experimental es7 - the spec hasn't been finalised yet
     // these both fail because of filter between blocks
     "ArrayComprehension/Simple",
-    "GeneratorComprehension/Simple"
+    "GeneratorComprehension/Simple",
+
+    // yield has been added as a keyword in ES6 so this test is actually incorrect
+    "Yield/YieldIdentifier"
   ]
 }, {
   optional: ["typeofSymbol"],
