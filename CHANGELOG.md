@@ -11,6 +11,14 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.4
+
+ * **Polish**
+  * Rest parameters now allocate the array before populating.
+ * **Internal**
+  * `for...in` loops have been changed to optimised `for` loops - better performance and no enumeration of protoype keys.
+  * Parts of the code generator have now been optimised thanks to [gaearon](https://github.com/gaearon).
+
 ## 2.12.3
 
  * **Spec Compliancy**
