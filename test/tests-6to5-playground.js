@@ -245,6 +245,83 @@ test("obj.x ?= 2;", {
   playground: true
 });
 
+
+
+test("x ||= 2;", {
+  type: "Program",
+  start: 0,
+  end: 8,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 8,
+    expression: {
+      type: "AssignmentExpression",
+      start: 0,
+      end: 7,
+      left: {
+        type: "Identifier",
+        start: 0,
+        end: 1
+      },
+      right: {
+        type: "Literal",
+        start: 6,
+        end: 7,
+        value: 2,
+        raw: "2"
+      },
+      operator: "||="
+    }
+  }]
+}, {
+  playground: true
+});
+
+test("obj.x ||= 2;", {
+  type: "Program",
+  start: 0,
+  end: 12,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 12,
+    expression: {
+      type: "AssignmentExpression",
+      start: 0,
+      end: 11,
+      left: {
+        type: "MemberExpression",
+        start: 0,
+        end: 5,
+        object: {
+          type: "Identifier",
+          start: 0,
+          end: 3,
+          name: "obj"
+        },
+        property: {
+          type: "Identifier",
+          start: 4,
+          end: 5,
+          name: "x"
+        },
+        computed: false
+      },
+      right: {
+        type: "Literal",
+        start: 10,
+        end: 11,
+        value: 2,
+        raw: "2"
+      },
+      operator: "||="
+    }
+  }]
+}, {
+  playground: true
+});
+
 // Method binding
 
 test("var fn = obj#method", {
