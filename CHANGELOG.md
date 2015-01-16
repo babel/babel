@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.12.6
+
+ * **Bug Fix**
+  * Add missing flow type traversal keys.
+
 ## 2.12.5
 
  * **Internal**
