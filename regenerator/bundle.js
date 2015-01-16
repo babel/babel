@@ -6624,7 +6624,9 @@ var runtimeAsyncMethod = runtimeProperty("async");
 exports.transform = function transform(node, options) {
   options = options || {};
 
-  node = visitor.visit(node, options);
+  var path = node instanceof NodePath ? node : new NodePath(node);
+  visitor.visit(path, options);
+  node = path.value;
 
   if (options.includeRuntime === true ||
       (options.includeRuntime === 'if used' && visitor.wasChangeReported())) {
@@ -16963,6 +16965,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
+throwErrorTolerant: true,
 throwError: true, generateStatement: true, peek: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
@@ -17233,6 +17236,8 @@ parseYieldExpression: true, parseAwaitExpression: true
         MissingFromClause: 'Missing from clause',
         NoAsAfterImportNamespace: 'Missing as after import *',
         InvalidModuleSpecifier: 'Invalid module specifier',
+        IllegalImportDeclaration: 'Illegal import declaration',
+        IllegalExportDeclaration: 'Illegal export declaration',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
         ComprehensionError:  'Comprehension Error',
@@ -18346,6 +18351,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                         flags += 'u';
                         str += '\\u';
                     }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 } else {
                     str += '\\';
                 }
@@ -18390,8 +18396,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         } catch (exception) {
             value = null;
         }
-
-        peek();
 
         if (extra.tokenize) {
             return {
@@ -20362,7 +20366,9 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         if (match('/') || match('/=')) {
             marker = markerCreate();
-            return markerApply(marker, delegate.createLiteral(scanRegExp()));
+            expr = delegate.createLiteral(scanRegExp());
+            peek();
+            return markerApply(marker, expr);
         }
 
         if (type === Token.Template) {
@@ -23194,6 +23200,12 @@ parseYieldExpression: true, parseAwaitExpression: true
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
                 return parseFunctionDeclaration();
+            case 'export':
+                throwErrorTolerant({}, Messages.IllegalExportDeclaration);
+                return parseExportDeclaration();
+            case 'import':
+                throwErrorTolerant({}, Messages.IllegalImportDeclaration);
+                return parseImportDeclaration();
             default:
                 return parseStatement();
             }
@@ -24633,7 +24645,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '9001.1.0-dev-harmony-fb';
+    exports.version = '10001.1.0-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 
