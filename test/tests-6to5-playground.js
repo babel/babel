@@ -197,7 +197,9 @@ test("var foo = { memo bar() {} };",
 
 // Memoization assignment operator
 
-testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)");
+testFail("obj ?= 2;", "You can only use member expressions in memoization assignment (1:0)", {
+  playground: true
+});
 
 test("obj.x ?= 2;", {
   type: "Program",
