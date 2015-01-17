@@ -138,6 +138,40 @@ test("2 ** 3 ** 2", {
   ecmaVersion: 7
 });
 
+test("2 ** -1 * 2", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "Literal",
+        value: 2
+      },
+      operator: "**",
+      right: {
+        type: "BinaryExpression",
+        left: {
+          type: "UnaryExpression",
+          operator: "-",
+          prefix: true,
+          argument: {
+            type: "Literal",
+            value: 1
+          }
+        },
+        operator: "*",
+        right: {
+          type: "Literal",
+          value: 2
+        }
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Object Rest/Spread
 
 test('let {...x} = z', {
