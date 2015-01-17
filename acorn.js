@@ -469,7 +469,7 @@
 
   // '*' may be multiply or have special meaning in ES6
   var _star = {binop: 10, beforeExpr: true};
-  var _exponent = {binop: 11, beforeExpr: true};
+  var _exponent = {binop: 11, beforeExpr: true, rightAssociative: true};
 
   // '<', '>' may be relational or have special meaning in JSX
   var _lt = {binop: 7, beforeExpr: true}, _gt = {binop: 7, beforeExpr: true};
