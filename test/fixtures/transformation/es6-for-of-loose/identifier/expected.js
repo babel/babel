@@ -1,9 +1,6 @@
 "use strict";
 
-for (var _iterator = arr,
-    _isArray = Array.isArray(_iterator),
-    _i = 0,
-    _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+for (var _iterator = arr, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
   if (_isArray) {
     if (_i >= _iterator.length) break;
     i = _iterator[_i++];
