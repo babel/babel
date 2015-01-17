@@ -257,14 +257,6 @@
     return node;
   }
 
-  function finishNodeAt(node, type, pos) {
-    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
-    node.type = type;
-    node.end = pos;
-    if (options.ranges) node.range[1] = pos;
-    return node;
-  }
-
   function dummyIdent() {
     var dummy = startNode();
     dummy.name = "✖";
