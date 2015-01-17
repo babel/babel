@@ -14746,3 +14746,97 @@ test("class A { *static() {} }", {
   ranges: true,
   locations: true
 });
+
+test("`${/\d/.exec('1')[0]}`", {
+  "type": "Program",
+  "start": 0,
+  "end": 21,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 21,
+      "expression": {
+        "type": "TemplateLiteral",
+        "start": 0,
+        "end": 21,
+        "expressions": [
+          {
+            "type": "MemberExpression",
+            "start": 3,
+            "end": 19,
+            "object": {
+              "type": "CallExpression",
+              "start": 3,
+              "end": 16,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 3,
+                "end": 11,
+                "object": {
+                  "type": "Literal",
+                  "start": 3,
+                  "end": 6,
+                  "regex": {
+                    "pattern": "d",
+                    "flags": ""
+                  },
+                  "value": {},
+                  "raw": "/d/"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 7,
+                  "end": 11,
+                  "name": "exec"
+                },
+                "computed": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 12,
+                  "end": 15,
+                  "value": "1",
+                  "raw": "'1'"
+                }
+              ]
+            },
+            "property": {
+              "type": "Literal",
+              "start": 17,
+              "end": 18,
+              "value": 0,
+              "raw": "0"
+            },
+            "computed": true
+          }
+        ],
+        "quasis": [
+          {
+            "type": "TemplateElement",
+            "start": 1,
+            "end": 1,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "start": 20,
+            "end": 20,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": true
+          }
+        ]
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 6
+});
