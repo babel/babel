@@ -28,10 +28,24 @@ assert.equal(obj.x ||= 2, 2);
 
 obj = { x: false }
 obj.x ||= 2;
-assert.equal(obj.x, false);
+assert.equal(obj.x, 2);
 
 obj = { x: false }
-assert.equal(obj.x ||= 2, false);
+assert.equal(obj.x ||= 2, 2);
+
+obj = { x: '' }
+obj.x ||= 2;
+assert.equal(obj.x, 2);
+
+obj = { x: '' }
+assert.equal(obj.x ||= 2, 2);
+
+obj = { x: 0 }
+obj.x ||= 2;
+assert.equal(obj.x, 2);
+
+obj = { x: 0 }
+assert.equal(obj.x ||= 2, 2);
 
 obj = undefined;
 obj ||= 2;
@@ -54,3 +68,23 @@ assert.equal(obj, 2);
 obj = null;
 assert.equal(obj ||= 2 , 2);
 
+obj = false;
+obj ||= 2;
+assert.equal(obj, 2);
+
+obj = false;
+assert.equal(obj ||= 2 , 2);
+
+obj = '';
+obj ||= 2;
+assert.equal(obj, 2);
+
+obj = '';
+assert.equal(obj ||= 2 , 2);
+
+obj = 0;
+obj ||= 2;
+assert.equal(obj, 2);
+
+obj = 0;
+assert.equal(obj ||= 2 , 2);
