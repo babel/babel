@@ -80,6 +80,64 @@ test('var squared = 2 ** 2;', {
   ecmaVersion: 7
 });
 
+test("2 ** (3 ** 2)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "Literal",
+        value: 2
+      },
+      operator: "**",
+      right: {
+        type: "BinaryExpression",
+        left: {
+          type: "Literal",
+          value: 3
+        },
+        operator: "**",
+        right: {
+          type: "Literal",
+          value: 2
+        }
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test("2 ** 3 ** 2", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "Literal",
+        value: 2
+      },
+      operator: "**",
+      right: {
+        type: "BinaryExpression",
+        left: {
+          type: "Literal",
+          value: 3
+        },
+        operator: "**",
+        right: {
+          type: "Literal",
+          value: 2
+        }
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
 // ES7: Object Rest/Spread
 
 test('let {...x} = z', {
