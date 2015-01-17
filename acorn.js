@@ -2515,9 +2515,17 @@
         var op = tokType;
         next();
         var start = storeCurrentPos();
-        node.right = parseExprOp(parseMaybeUnary(), start, prec, noIn);
+        if(op.rightAssociative) {
+          node.right = parseExprOp(parseMaybeUnary(), start, prec - 1, noIn);
+        } else {
+          node.right = parseExprOp(parseMaybeUnary(), start, prec, noIn);
+        }
         finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(node, leftStart, minPrec, noIn);
+        if(op.rightAssociative) {
+          return node;
+        } else {
+          return parseExprOp(node, leftStart, minPrec, noIn);
+        }
       }
     }
     return left;
