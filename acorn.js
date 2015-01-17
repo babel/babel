@@ -2516,7 +2516,7 @@
         next();
         var start = storeCurrentPos();
         if(op.rightAssociative) {
-          node.right = parseExprOp(parseMaybeUnary(), start, prec - 1, noIn);
+          node.right = parseExprOp(parseMaybeUnary(), start, minPrec, noIn);
         } else {
           node.right = parseExprOp(parseMaybeUnary(), start, prec, noIn);
         }
