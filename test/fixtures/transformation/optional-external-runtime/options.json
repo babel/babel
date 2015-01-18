@@ -1,0 +1,4 @@
+{
+  "runtime": "6to5-runtime",
+  "optional": ["externalRuntime"]
+}
