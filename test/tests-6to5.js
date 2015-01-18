@@ -138,20 +138,20 @@ test("2 ** 3 ** 2", {
   ecmaVersion: 7
 });
 
-test("2 ** -1 * 2", {
+test("(2 ** -1) * 2", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
     expression: {
       type: "BinaryExpression",
       left: {
-        type: "Literal",
-        value: 2
-      },
-      operator: "**",
-      right: {
         type: "BinaryExpression",
         left: {
+          type: "Literal",
+          value: 2
+        },
+        operator: "**",
+        right: {
           type: "UnaryExpression",
           operator: "-",
           prefix: true,
@@ -159,12 +159,46 @@ test("2 ** -1 * 2", {
             type: "Literal",
             value: 1
           }
-        },
-        operator: "*",
-        right: {
+        }
+      },
+      operator: "*",
+      right: {
+        type: "Literal",
+        value: 2
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 7
+});
+
+test("2 ** -1 * 2", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "BinaryExpression",
+        left: {
           type: "Literal",
           value: 2
+        },
+        operator: "**",
+        right: {
+          type: "UnaryExpression",
+          operator: "-",
+          prefix: true,
+          argument: {
+            type: "Literal",
+            value: 1
+          }
         }
+      },
+      operator: "*",
+      right: {
+        type: "Literal",
+        value: 2
       }
     }
   }]
