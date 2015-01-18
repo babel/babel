@@ -94,7 +94,12 @@ var run = function (task, done) {
     checkAst(result);
     actualCode = result.code;
 
-    chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+    try {
+      chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+    } catch (err) {
+      //require("fs").writeFileSync(expect.loc, actualCode);
+      throw err;
+    }
   }
 
   if (task.sourceMap) {
