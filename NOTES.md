@@ -11,3 +11,4 @@
  * Add autoindentation.
  * Move `super` transformation from classes into a separate transformer that also supports object expressions.
  * Remove fast transformer backwards compatibility.
+ * Rename let scoping transformer to block scoping.
