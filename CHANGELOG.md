@@ -11,6 +11,25 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.0
+
+ * **Internal**
+  * Upgrade `acorn-6to5`.
+  * Upgrade `chokidar` to `0.12.6`.
+  * Upgrade `commander` to `2.6.0`.
+  * Upgrade `core-js` to `0.4.5`.
+  * Upgrade `estraverse` to `1.9.1`.
+  * Upgrade `jshint` to `2.5.11`.
+  * Upgrade `regenerator` to `0.8.9`.
+  * Upgrade `regexpu` to `1.0.0`.
+  * Upgrade `source-map` to `0.1.43`.
+  * Upgrade `source-map-support` to `0.2.9`.
+  * Upgrade `browserify` to `8.1.1`.
+  * Upgrade `chai` to `1.10.0`.
+  * Upgrade `istanbul` to `0.3.5`.
+  * Upgrade `mocha` to `2.1.0`.
+  * Upgrade `uglify-js` to `2.4.16`.
+
 ## 2.12.6
 
  * **Bug Fix**

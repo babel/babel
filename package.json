@@ -35,32 +35,32 @@
   "dependencies": {
     "acorn-6to5": "0.11.1-17",
     "ast-types": "~0.6.1",
-    "chokidar": "0.11.1",
-    "commander": "2.5.0",
-    "core-js": "0.4.4",
-    "estraverse": "1.8.0",
+    "chokidar": "0.12.6",
+    "commander": "2.6.0",
+    "core-js": "0.4.5",
+    "estraverse": "1.9.1",
     "esutils": "1.1.6",
     "esvalid": "1.1.0",
     "fs-readdir-recursive": "0.1.0",
-    "jshint": "2.5.10",
+    "jshint": "2.5.11",
     "lodash": "2.4.1",
     "output-file-sync": "^1.1.0",
     "private": "0.1.6",
-    "regenerator": "0.8.3",
-    "regexpu": "0.3.0",
+    "regenerator": "0.8.9",
+    "regexpu": "1.0.0",
     "roadrunner": "1.0.4",
-    "source-map": "0.1.40",
-    "source-map-support": "0.2.8"
+    "source-map": "0.1.43",
+    "source-map-support": "0.2.9"
   },
   "devDependencies": {
-    "browserify": "6.3.2",
-    "chai": "1.9.2",
-    "istanbul": "0.3.2",
+    "browserify": "8.1.1",
+    "chai": "1.10.0",
+    "istanbul": "0.3.5",
     "jshint-stylish": "1.0.0",
     "matcha": "0.6.0",
-    "mocha": "1.21.4",
+    "mocha": "2.1.0",
     "rimraf": "2.2.8",
-    "uglify-js": "2.4.15"
+    "uglify-js": "2.4.16"
   },
   "optionalDependencies": {
     "kexec": "0.2.0"
