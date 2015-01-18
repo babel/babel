@@ -2,7 +2,7 @@ assert.equal(8, 2 ** 3);
 assert.equal(24, 3 * 2 ** 3);
 var x = 2;
 assert.equal(8, 2 ** ++x);
-assert.equal(1, (2 ** -1) * 2);
+assert.equal(1, 2 ** -1 * 2);
 
 var calls = 0;
 var q = {q: 3};

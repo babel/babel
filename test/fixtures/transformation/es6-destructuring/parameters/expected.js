@@ -32,16 +32,16 @@ function unpackObject(_ref2) {
 console.log(unpackObject({ title: "title", author: "author" }));
 
 var unpackArray = function (_ref3, _ref4) {
-  var _ref3 = _slicedToArray(_ref3, 3);
+  var _ref32 = _slicedToArray(_ref3, 3);
 
-  var a = _ref3[0];
-  var b = _ref3[1];
-  var c = _ref3[2];
-  var _ref4 = _slicedToArray(_ref4, 3);
+  var a = _ref32[0];
+  var b = _ref32[1];
+  var c = _ref32[2];
+  var _ref42 = _slicedToArray(_ref4, 3);
 
-  var x = _ref4[0];
-  var y = _ref4[1];
-  var z = _ref4[2];
+  var x = _ref42[0];
+  var y = _ref42[1];
+  var z = _ref42[2];
   return a + b + c;
 };
 
