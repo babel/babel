@@ -1,1 +1,0 @@
-add(foo, bar, ...numbers);
