@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.3
+
+ * **Internal**
+  * Add `coverage` and `vendor` to npmignore.
+
 ## 2.13.2
 
  * **Bug Fix**

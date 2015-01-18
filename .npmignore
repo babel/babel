@@ -11,3 +11,4 @@ tests.json
 CHANGELOG.md
 .package.json
 coverage
+vendor
