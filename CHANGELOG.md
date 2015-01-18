@@ -13,7 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 2.13.0
 
+ * **New Feature**
+  * Block scoped functions.
+  * Add `--loose all` option.
+  * Add playground mallet operator thanks to [@jridgewell](https://github.com/jridgewell).
+ * **Bug Fix**
+  * Rewrote large parts of the let scoping transformer. Now passes all known tests.
  * **Internal**
+  * Even more optimisations thanks to the awesome [@gaearon](https://github.com/gaearon).
   * Upgrade `acorn-6to5`.
   * Upgrade `chokidar` to `0.12.6`.
   * Upgrade `commander` to `2.6.0`.
