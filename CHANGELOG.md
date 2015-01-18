@@ -22,6 +22,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Internal**
   * Even more optimisations thanks to the awesome [@gaearon](https://github.com/gaearon).
   * Upgrade `acorn-6to5`.
+    * Fixes exponentation operator thanks to [@charliesome](https://github.com/charliesome).
+    * Fix flow optional parameters with types.
   * Upgrade `chokidar` to `0.12.6`.
   * Upgrade `commander` to `2.6.0`.
   * Upgrade `core-js` to `0.4.5`.
