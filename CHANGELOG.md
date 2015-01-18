@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.1
+
+ * **New Feature**
+  * Temporal dead zone for block binding.
+
 ## 2.13.0
 
  * **New Feature**
