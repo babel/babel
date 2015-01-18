@@ -10,3 +10,4 @@ dist
 tests.json
 CHANGELOG.md
 .package.json
+coverage
