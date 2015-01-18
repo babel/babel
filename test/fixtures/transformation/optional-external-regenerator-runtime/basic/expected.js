@@ -1,6 +1,6 @@
 "use strict";
 
-var _regeneratorRuntime = require("regenerator/runtime-module");
+var _regeneratorRuntime = require("6to5-runtime/regenerator");
 
 void _regeneratorRuntime.mark(function callee$0$0() {
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {

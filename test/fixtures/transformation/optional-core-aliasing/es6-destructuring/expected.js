@@ -16,7 +16,7 @@ var _slicedToArray = function (arr, i) {
   }
 };
 
-var _core = require("core-js/library");
+var _core = require("6to5-runtime/core-js");
 
 var _ref = ["hello", [", ", "junk"], ["world"]];
 

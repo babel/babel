@@ -1,6 +1,6 @@
 "use strict";
 
-var _core = require("core-js/library");
+var _core = require("6to5-runtime/core-js");
 
 var arr = (function () {
   var _arr = [];
