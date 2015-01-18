@@ -20,7 +20,7 @@
       "web": "http://sebmck.com"
     }
   ],
-  "repository": "https://github.com/sebmck/acorn-6to5",
+  "repository": "https://github.com/6to5/acorn-6to5",
   "licenses": [
     {
       "type": "MIT",
