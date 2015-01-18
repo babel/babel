@@ -11,6 +11,14 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.2
+
+ * **Bug Fix**
+  * Fix `super` inside of nested functions.
+ * **Internal**
+  * Move let scoping TDZ into a separate transformer until it's more solid.
+  * Use `process.stdin.write` instead of `console.log` in `bin` to avoid sprintfification.
+
 ## 2.13.1
 
  * **New Feature**
