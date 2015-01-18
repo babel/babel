@@ -63,7 +63,7 @@ module.exports = function (commander, filenames) {
 
       fs.writeFileSync(commander.outFile, result.code);
     } else {
-      console.log(result.code);
+      process.stdout.write(result.code + "\n");
     }
   };
 
