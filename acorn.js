@@ -3043,6 +3043,7 @@
             defaults.push(null);
           }
         }
+
         if (!eat(_comma)) {
           expect(_parenR);
           break;
@@ -3058,10 +3059,11 @@
   }
 
   function parseFunctionParam(param) {
+    if (eat(_question)) {
+      param.optional = true;
+    }
     if (tokType === _colon) {
       param.typeAnnotation = parseTypeAnnotation();
-    } else if (eat(_question)) {
-      param.optional = true;
     }
     finishNode(param, param.type);
   }
