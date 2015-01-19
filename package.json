@@ -45,7 +45,7 @@
     "lodash": "2.4.1",
     "output-file-sync": "^1.1.0",
     "private": "0.1.6",
-    "regenerator": "0.8.9",
+    "regenerator-6to5": "0.8.9-1",
     "regexpu": "1.0.0",
     "roadrunner": "1.0.4",
     "source-map": "0.1.43",
