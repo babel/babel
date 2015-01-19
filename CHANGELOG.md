@@ -18,6 +18,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
+  * Removed the optional runtime in favor of the `selfContained` transformer.
+  * Removed the `coreAliasing` transformer in favor of `selfContained`.
 
 ## 2.13.3
 

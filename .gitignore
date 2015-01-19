@@ -11,3 +11,4 @@ test/tmp
 coverage
 dist
 .package.json
+packages/6to5-runtime/*.js

@@ -7,7 +7,7 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core
+.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime
 
 build:
 	mkdir -p dist
@@ -19,9 +19,6 @@ build:
 
 	node $(BROWSERIFY_CMD) lib/6to5/browser.js -s to5 >dist/6to5.js
 	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
-
-	node bin/6to5-runtime >dist/runtime.js
-	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
 
 	rm -rf templates.json
 
@@ -78,7 +75,6 @@ publish:
 	make build
 	cp dist/6to5.min.js browser.js
 	cp dist/polyfill.min.js browser-polyfill.js
-	cp dist/runtime.min.js runtime.js
 
 	node bin/cache-templates
 	test -f templates.json
@@ -87,18 +83,25 @@ publish:
 
 	git push --follow-tags
 
-	# generate
+	make publish-core
+	make publish-runtime
+
+	rm -rf templates.json browser.js browser-polyfill.js
+
+publish-runtime:
+	cd packages; \
+	node build-runtime.js; \
+	npm publish
+
+publish-core:
 	bin/generate-core-package-json >package2.json
 	mv package.json .package.json
 	mv package2.json package.json
 
 	npm publish
 
-	# restore
 	rm -rf package.json
 	mv .package.json package.json
-
-	rm -rf templates.json browser.js runtime.js browser-polyfill.js
 
 bootstrap:
 	npm install
