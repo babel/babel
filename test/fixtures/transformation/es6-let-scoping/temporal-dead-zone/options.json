@@ -1,0 +1,4 @@
+{
+  "throws": "Temporal dead zone - accessing a variable before it's initialized",
+  "optional": ["blockScopingTDZ"]
+}

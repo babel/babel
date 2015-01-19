@@ -19,6 +19,86 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
 
+## 2.13.3
+
+ * **Internal**
+  * Add `coverage` and `vendor` to npmignore.
+
+## 2.13.2
+
+ * **Bug Fix**
+  * Fix `super` inside of nested functions.
+ * **Internal**
+  * Move let scoping TDZ into a separate transformer until it's more solid.
+  * Use `process.stdin.write` instead of `console.log` in `bin` to avoid sprintfification.
+
+## 2.13.1
+
+ * **New Feature**
+  * Temporal dead zone for block binding.
+
+## 2.13.0
+
+ * **New Feature**
+  * Block scoped functions.
+  * Add `--loose all` option.
+  * Add playground mallet operator thanks to [@jridgewell](https://github.com/jridgewell).
+ * **Bug Fix**
+  * Rewrote large parts of the let scoping transformer. Now passes all known tests.
+ * **Internal**
+  * Even more optimisations thanks to the awesome [@gaearon](https://github.com/gaearon).
+  * Upgrade `acorn-6to5`.
+    * Fixes exponentation operator thanks to [@charliesome](https://github.com/charliesome).
+    * Fix flow optional parameters with types.
+  * Upgrade `chokidar` to `0.12.6`.
+  * Upgrade `commander` to `2.6.0`.
+  * Upgrade `core-js` to `0.4.5`.
+  * Upgrade `estraverse` to `1.9.1`.
+  * Upgrade `jshint` to `2.5.11`.
+  * Upgrade `regenerator` to `0.8.9`.
+  * Upgrade `regexpu` to `1.0.0`.
+  * Upgrade `source-map` to `0.1.43`.
+  * Upgrade `source-map-support` to `0.2.9`.
+  * Upgrade `browserify` to `8.1.1`.
+  * Upgrade `chai` to `1.10.0`.
+  * Upgrade `istanbul` to `0.3.5`.
+  * Upgrade `mocha` to `2.1.0`.
+  * Upgrade `uglify-js` to `2.4.16`.
+
+## 2.12.6
+
+ * **Bug Fix**
+  * Add missing flow type traversal keys.
+
+## 2.12.5
+
+ * **Internal**
+  * Fix incorrect `for...in` loop still causing `ember-script` issues.
+
+## 2.12.4
+
+ * **Polish**
+  * Rest parameters now allocate the array before populating.
+ * **Internal**
+  * `for...in` loops have been changed to optimised `for` loops - better performance and no enumeration of protoype keys.
+  * Parts of the code generator have now been optimised thanks to [gaearon](https://github.com/gaearon).
+
+## 2.12.3
+
+ * **Spec Compliancy**
+  * Optional `typeof` transformer checks for `undefined` before passing it to the helper.
+  * Class methods are now named.
+
+## 2.12.2
+
+ * **Internal**
+  * Exclude nodes in function parameters and catch clauses from `isReferenced` check.
+
+## 2.12.1
+
+ * **Internal**
+  * Add `.jsx` to list of allowed extensions.
+
 ## 2.12.0
 
  * **Bug Fix**

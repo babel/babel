@@ -28,7 +28,7 @@ module.exports = function (commander, filenames) {
         map.setSourceContent(filename, result.actual);
 
         consumer.eachMapping(function (mapping) {
-          map._mappings.push({
+          map._mappings.add({
             generatedLine: mapping.generatedLine + offset,
             generatedColumn: mapping.generatedColumn,
             originalLine: mapping.originalLine,
@@ -63,7 +63,7 @@ module.exports = function (commander, filenames) {
 
       fs.writeFileSync(commander.outFile, result.code);
     } else {
-      console.log(result.code);
+      process.stdout.write(result.code + "\n");
     }
   };
 

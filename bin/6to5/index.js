@@ -34,13 +34,10 @@ commander.on("--help", function(){
     console.log("  " + title + ":");
     console.log();
 
-    var hasOptional = true;
-
     _.each(_.keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
 
       if (obj[key].optional) {
-        hasOptional = true;
         key = "[" + key + "]";
       }
 

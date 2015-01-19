@@ -1,9 +1,9 @@
-var chokidar = require("chokidar");
-var mkdirp   = require("mkdirp");
-var path     = require("path");
-var util     = require("./util");
-var fs       = require("fs");
-var _        = require("lodash");
+var outputFileSync = require("output-file-sync");
+var chokidar       = require("chokidar");
+var path           = require("path");
+var util           = require("./util");
+var fs             = require("fs");
+var _              = require("lodash");
 
 module.exports = function (commander, filenames, opts) {
   if (commander.sourceMapsInline) {
@@ -15,16 +15,13 @@ module.exports = function (commander, filenames, opts) {
 
     var data = util.compile(src, { sourceMapName: dest });
 
-    var up = path.normalize(dest + "/..");
-    mkdirp.sync(up);
-
     if (commander.sourceMaps) {
       var mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
-      fs.writeFileSync(mapLoc, JSON.stringify(data.map));
+      outputFileSync(mapLoc, JSON.stringify(data.map));
     }
 
-    fs.writeFileSync(dest, data.code);
+    outputFileSync(dest, data.code);
 
     console.log(src + " -> " + dest);
   };

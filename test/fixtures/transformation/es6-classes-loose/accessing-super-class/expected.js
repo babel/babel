@@ -1,11 +1,6 @@
 "use strict";
 
 var _slice = Array.prototype.slice;
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
 var _inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -37,21 +32,19 @@ var Test = (function (Foo) {
 
   _inherits(Test, Foo);
 
-  Test.prototype.test = function () {
+  Test.prototype.test = function test() {
     var _Foo$prototype$test3, _Foo$prototype$test4;
     Foo.prototype.test.call(this);
     (_Foo$prototype$test3 = Foo.prototype.test).call.apply(_Foo$prototype$test3, [this].concat(_slice.call(arguments)));
     (_Foo$prototype$test4 = Foo.prototype.test).call.apply(_Foo$prototype$test4, [this, "test"].concat(_slice.call(arguments)));
   };
 
-  Test.foo = function () {
+  Test.foo = function foo() {
     var _Foo$foo, _Foo$foo2;
     Foo.foo.call(this);
     (_Foo$foo = Foo.foo).call.apply(_Foo$foo, [this].concat(_slice.call(arguments)));
     (_Foo$foo2 = Foo.foo).call.apply(_Foo$foo2, [this, "test"].concat(_slice.call(arguments)));
   };
-
-  _prototypeProperties(Test, {}, {});
 
   return Test;
 })(Foo);

@@ -9,16 +9,16 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView = function () {
+var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
 var BaseView = (function () {
-  var _class2 = function () {};
+  function BaseView() {}
 
-  _prototypeProperties(_class2, null, {
+  _prototypeProperties(BaseView, null, {
     foo: {
-      value: function () {
+      value: function foo() {
         this.autoRender = true;
       },
       writable: true,
@@ -27,5 +27,5 @@ var BaseView = (function () {
     }
   });
 
-  return _class2;
+  return BaseView;
 })();

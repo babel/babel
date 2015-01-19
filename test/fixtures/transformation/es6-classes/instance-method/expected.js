@@ -10,7 +10,7 @@ var Test = (function () {
 
   _prototypeProperties(Test, null, {
     test: {
-      value: function () {
+      value: function test() {
         return 5 + 5;
       },
       writable: true,

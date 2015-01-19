@@ -61,7 +61,7 @@ var Test = (function (Foo) {
 
   _prototypeProperties(Test, {
     foo: {
-      value: function () {
+      value: function foo() {
         var _get4;
         _get(Object.getPrototypeOf(Test), "foo", this).call(this);
         _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
@@ -73,7 +73,7 @@ var Test = (function (Foo) {
     }
   }, {
     test: {
-      value: function () {
+      value: function test() {
         var _get5;
         _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
         _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);

@@ -16,6 +16,7 @@
   "VariableDeclaration": ["Statement", "Declaration"],
   "ExportDeclaration":   ["Statement", "Declaration"],
   "ImportDeclaration":   ["Statement", "Declaration"],
+  "PrivateDeclaration":  ["Statement", "Declaration"],
 
   "ArrowFunctionExpression": ["Scope", "Function", "Expression"],
   "FunctionDeclaration":     ["Statement", "Declaration", "Scope", "Function"],
@@ -52,7 +53,7 @@
   "BindFunctionExpression": ["Expression"],
   "BindMemberExpression": ["Expression"],
   "CallExpression": ["Expression"],
-  "ComprehensionExpression": ["Expression"],
+  "ComprehensionExpression": ["Expression", "Scope"],
   "ConditionalExpression": ["Expression"],
   "Identifier": ["Expression"],
   "Literal": ["Expression"],

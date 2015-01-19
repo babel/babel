@@ -1,9 +1,7 @@
 "use strict";
 
 var concat = function () {
-  var arrs = [];
-
-  for (var _key = 0; _key < arguments.length; _key++) {
+  for (var _len = arguments.length, arrs = Array(_len), _key = 0; _key < _len; _key++) {
     arrs[_key] = arguments[_key];
   }
 };

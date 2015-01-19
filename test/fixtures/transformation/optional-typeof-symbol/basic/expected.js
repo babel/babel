@@ -5,4 +5,4 @@ var _typeof = function (obj) {
 };
 
 var s = Symbol("s");
-assert.equal(_typeof(s), "symbol");
+assert.equal(typeof s === "undefined" ? "undefined" : _typeof(s), "symbol");

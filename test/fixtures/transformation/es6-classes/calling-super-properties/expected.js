@@ -52,7 +52,7 @@ var Test = (function (Foo) {
 
   _prototypeProperties(Test, {
     test: {
-      value: function () {
+      value: function test() {
         return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
       },
       writable: true,
