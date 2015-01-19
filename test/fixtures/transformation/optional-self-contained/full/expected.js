@@ -19,6 +19,7 @@ var giveWord = _regeneratorRuntime.mark(function giveWord() {
   }, giveWord, this);
 });
 
+exports.giveWord = giveWord;
 var foo = _to5Runtime.interopRequire(require("someModule"));
 
 var bar = _to5Runtime.interopRequireWildcard(require("someModule"));
