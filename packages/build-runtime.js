@@ -49,5 +49,5 @@ var buildHelpers = function () {
 
 writeFile("helpers.js", buildHelpers());
 writeFile("core-js.js", readFile("core-js/library"));
-writeFile("regenerator.js", readFile("core-js/library"));
+writeFile("regenerator.js", readFile("regenerator/runtime-module"));
 updatePackage();
