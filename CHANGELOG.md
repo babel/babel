@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
   * Removed the optional runtime in favor of the `selfContained` transformer.
   * Removed the `coreAliasing` transformer in favor of `selfContained`.
+  * Remove `includeRegenerator` option.
 
 ## 2.13.3
 
