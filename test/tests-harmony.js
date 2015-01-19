@@ -3328,8 +3328,7 @@ test("[for (x of array) x]", {
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 17}
-        },
-        of: true
+        }
       }],
       body: {
         type: "Identifier",
@@ -3412,8 +3411,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3436,8 +3434,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3521,8 +3518,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3545,8 +3541,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3617,8 +3612,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 20}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3728,8 +3722,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 65}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3940,7 +3933,7 @@ test("[a, b] = [b, a]", {
   locations: true
 });
 
-test("({ responseText: text } = res)", {
+test("({ responseText: text }) = res", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -3985,13 +3978,13 @@ test("({ responseText: text } = res)", {
         type: "Identifier",
         name: "res",
         loc: {
-          start: {line: 1, column: 26},
-          end: {line: 1, column: 29}
+          start: {line: 1, column: 27},
+          end: {line: 1, column: 30}
         }
       },
       loc: {
-        start: {line: 1, column: 1},
-        end: {line: 1, column: 29}
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 30}
       }
     },
     loc: {
@@ -13826,11 +13819,9 @@ testFail("[v] += ary", "Assigning to rvalue (1:0)", {ecmaVersion: 6});
 
 testFail("[2] = 42", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:13)", {ecmaVersion: 6});
+testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
 
-testFail("({ obj:20 } = 42)", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
-
-testFail("( { get x() {} } = 0 )", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
 
 testFail("x \n is y", "Unexpected token (2:4)", {ecmaVersion: 6});
 
@@ -13850,9 +13841,9 @@ testFail("let default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("const default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: eval } = obj)", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: arguments } = obj)", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
 testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
@@ -14086,7 +14077,7 @@ testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unterminated template (1:0)", {ecmaVersion: 6});
+testFail("`test", "Unterminated template (1:1)", {ecmaVersion: 6});
 
 testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 
@@ -14754,4 +14745,98 @@ test("class A { *static() {} }", {
   ecmaVersion: 6,
   ranges: true,
   locations: true
+});
+
+test("`${/\d/.exec('1')[0]}`", {
+  "type": "Program",
+  "start": 0,
+  "end": 21,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 21,
+      "expression": {
+        "type": "TemplateLiteral",
+        "start": 0,
+        "end": 21,
+        "expressions": [
+          {
+            "type": "MemberExpression",
+            "start": 3,
+            "end": 19,
+            "object": {
+              "type": "CallExpression",
+              "start": 3,
+              "end": 16,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 3,
+                "end": 11,
+                "object": {
+                  "type": "Literal",
+                  "start": 3,
+                  "end": 6,
+                  "regex": {
+                    "pattern": "d",
+                    "flags": ""
+                  },
+                  "value": {},
+                  "raw": "/d/"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 7,
+                  "end": 11,
+                  "name": "exec"
+                },
+                "computed": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 12,
+                  "end": 15,
+                  "value": "1",
+                  "raw": "'1'"
+                }
+              ]
+            },
+            "property": {
+              "type": "Literal",
+              "start": 17,
+              "end": 18,
+              "value": 0,
+              "raw": "0"
+            },
+            "computed": true
+          }
+        ],
+        "quasis": [
+          {
+            "type": "TemplateElement",
+            "start": 1,
+            "end": 1,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "start": 20,
+            "end": 20,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": true
+          }
+        ]
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 6
 });

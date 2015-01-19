@@ -66,6 +66,8 @@
       ahead.length = 0;
 
     token = ahead.shift() || readToken(forceRegexp);
+    if (options.onToken)
+      options.onToken(token);
 
     if (token.start >= nextLineStart) {
       while (token.start >= nextLineStart) {
@@ -101,8 +103,10 @@
             replace = {start: e.pos, end: pos, type: tt.regexp, value: re};
           } else if (/template/.test(msg)) {
             replace = {start: e.pos, end: pos,
-                       type: input.charAt(e.pos) == "`" ? tt.template : tt.templateContinued,
-                       value: input.slice(e.pos + 1, pos)};
+                       type: tt.template,
+                       value: input.slice(e.pos, pos)};
+          } else if (/comment/.test(msg)) {
+            replace = fetchToken.current();
           } else {
             replace = false;
           }
@@ -250,14 +254,6 @@
       node.loc.end = lastEndLoc;
     if (options.ranges)
       node.range[1] = lastEnd;
-    return node;
-  }
-
-  function finishNodeAt(node, type, pos) {
-    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
-    node.type = type;
-    node.end = pos;
-    if (options.ranges) node.range[1] = pos;
     return node;
   }
 
@@ -693,7 +689,7 @@
         node.callee = base;
         node.arguments = parseExprList(tt.parenR);
         base = finishNode(node, "CallExpression");
-      } else if (token.type == tt.template) {
+      } else if (token.type == tt.backQuote) {
         var node = startNodeAt(start);
         node.tag = base;
         node.quasi = parseTemplate();
@@ -786,7 +782,7 @@
       }
       return finishNode(node, "YieldExpression");
 
-    case tt.template:
+    case tt.backQuote:
       return parseTemplate();
 
     default:
@@ -809,36 +805,35 @@
   }
 
   function parseTemplateElement() {
-    var elem = startNodeAt(options.locations ? [token.start + 1, token.startLoc.offset(1)] : token.start + 1);
-    elem.value = token.value;
-    elem.tail = input.charCodeAt(token.end - 1) !== 123; // '{'
-    var endOff = elem.tail ? 1 : 2;
-    var endPos = options.locations ? [token.end - endOff, token.endLoc.offset(-endOff)] : token.end - endOff;
+    var elem = startNode();
+    elem.value = {
+      raw: input.slice(token.start, token.end),
+      cooked: token.value
+    };
     next();
-    return finishNodeAt(elem, "TemplateElement", endPos);
+    elem.tail = token.type === tt.backQuote;
+    return finishNode(elem, "TemplateElement");
   }
 
   function parseTemplate() {
     var node = startNode();
+    next();
     node.expressions = [];
     var curElt = parseTemplateElement();
     node.quasis = [curElt];
     while (!curElt.tail) {
-      var next = parseExpression();
-      if (isDummy(next)) {
-        node.quasis[node.quasis.length - 1].tail = true;
-        break;
-      }
-      node.expressions.push(next);
-      if (token.type === tt.templateContinued) {
-        node.quasis.push(curElt = parseTemplateElement());
+      next();
+      node.expressions.push(parseExpression());
+      if (expect(tt.braceR)) {
+        curElt = parseTemplateElement();
       } else {
         curElt = startNode();
-        curElt.value = {cooked: "", raw: ""};
+        curElt.value = {cooked: '', raw: ''};
         curElt.tail = true;
-        node.quasis.push(curElt);
       }
+      node.quasis.push(curElt);
     }
+    expect(tt.backQuote);
     return finishNode(node, "TemplateLiteral");
   }
 
