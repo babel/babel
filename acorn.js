@@ -1638,7 +1638,7 @@
     var first = true;
     if (!node.body) node.body = [];
     while (tokType !== _eof) {
-      var stmt = parseStatement(true);
+      var stmt = parseStatement(true, true);
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
@@ -1657,7 +1657,7 @@
   // `if (foo) /blah/.exec(foo);`, where looking at the previous token
   // does not help.
 
-  function parseStatement(topLevel) {
+  function parseStatement(declaration, topLevel) {
     var starttype = tokType, node = startNode();
 
     // Most types of statements are recognized by the keyword they
@@ -1669,14 +1669,19 @@
     case _debugger: return parseDebuggerStatement(node);
     case _do: return parseDoStatement(node);
     case _for: return parseForStatement(node);
-    case _function: return parseFunctionStatement(node);
-    case _class: return parseClass(node, true);
+    case _function:
+      if (!declaration && options.ecmaVersion >= 6) unexpected();
+      return parseFunctionStatement(node);
+    case _class:
+      if (!declaration) unexpected();
+      return parseClass(node, true);
     case _if: return parseIfStatement(node);
     case _return: return parseReturnStatement(node);
     case _switch: return parseSwitchStatement(node);
     case _throw: return parseThrowStatement(node);
     case _try: return parseTryStatement(node);
-    case _var: case _let: case _const: return parseVarStatement(node, starttype.keyword);
+    case _let: case _const: if (!declaration) unexpected(); // NOTE: falls through to _var
+    case _var: return parseVarStatement(node, starttype.keyword);
     case _while: return parseWhileStatement(node);
     case _with: return parseWithStatement(node);
     case _braceL: return parseBlock(); // no point creating a function for this
@@ -1732,7 +1737,7 @@
   function parseDoStatement(node) {
     next();
     labels.push(loopLabel);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     expect(_while);
     node.test = parseParenExpression();
@@ -1782,8 +1787,8 @@
   function parseIfStatement(node) {
     next();
     node.test = parseParenExpression();
-    node.consequent = parseStatement();
-    node.alternate = eat(_else) ? parseStatement() : null;
+    node.consequent = parseStatement(false);
+    node.alternate = eat(_else) ? parseStatement(false) : null;
     return finishNode(node, "IfStatement");
   }
 
@@ -1827,7 +1832,7 @@
         expect(_colon);
       } else {
         if (!cur) unexpected();
-        cur.consequent.push(parseStatement());
+        cur.consequent.push(parseStatement(true));
       }
     }
     if (cur) finishNode(cur, "SwitchCase");
@@ -1878,7 +1883,7 @@
     next();
     node.test = parseParenExpression();
     labels.push(loopLabel);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, "WhileStatement");
   }
@@ -1887,7 +1892,7 @@
     if (strict) raise(tokStart, "'with' in strict mode");
     next();
     node.object = parseParenExpression();
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     return finishNode(node, "WithStatement");
   }
 
@@ -1901,7 +1906,7 @@
       if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
     var kind = tokType.isLoop ? "loop" : tokType === _switch ? "switch" : null;
     labels.push({name: maybeName, kind: kind});
-    node.body = parseStatement();
+    node.body = parseStatement(true);
     labels.pop();
     node.label = expr;
     return finishNode(node, "LabeledStatement");
@@ -1932,7 +1937,7 @@
     node.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
-      var stmt = parseStatement();
+      var stmt = parseStatement(true);
       node.body.push(stmt);
       if (first && allowStrict && isUseStrict(stmt)) {
         oldStrict = strict;
@@ -1955,7 +1960,7 @@
     expect(_semi);
     node.update = tokType === _parenR ? null : parseExpression();
     expect(_parenR);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, "ForStatement");
   }
@@ -1969,7 +1974,7 @@
     node.left = init;
     node.right = parseExpression();
     expect(_parenR);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, type);
   }
@@ -2602,7 +2607,7 @@
     next();
     // export var|const|let|function|class ...;
     if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
-      node.declaration = parseStatement();
+      node.declaration = parseStatement(true);
       node['default'] = false;
       node.specifiers = null;
       node.source = null;

@@ -14876,3 +14876,8 @@ test("`${/\d/.exec('1')[0]}`", {
 }, {
   ecmaVersion: 6
 });
+
+testFail("if (1) let x = 10;", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("for (;;) const x = 10;", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("while (1) function foo(){}", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("if (1) ; else class Cls {}", "Unexpected token (1:14)", {ecmaVersion: 6});
