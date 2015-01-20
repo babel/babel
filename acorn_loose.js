@@ -854,6 +854,7 @@
     eat(tt.braceL);
     if (curIndent + 1 < indent) { indent = curIndent; line = curLineStart; }
     while (!closes(tt.braceR, indent, line)) {
+      if (isClass && semicolon()) continue;
       var prop = startNode(), isGenerator;
       if (options.ecmaVersion >= 6) {
         if (isClass) {
@@ -904,7 +905,6 @@
 
       if (isClass) {
         node.body.body.push(finishNode(prop, "MethodDefinition"));
-        semicolon();
       } else {
         node.properties.push(finishNode(prop, "Property"));
         eat(tt.comma);

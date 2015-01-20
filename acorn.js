@@ -2524,8 +2524,7 @@
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
-      while (eat(_semi));
-      if (tokType === _braceR) continue;
+      if (eat(_semi)) continue;
       var method = startNode();
       var isGenerator = eat(_star);
       parsePropertyName(method);
