@@ -11,6 +11,16 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.4
+
+ * **Bug Fix**
+  * Fix ordering of destructuring and default params.
+  * Fix loop body scope.
+  * Fix `for...of` transformation not retaining it's scope.
+  * Add destructuring assignment support to scope tracking.
+ * **Polish**
+  * More reliable newlines for pretty printing variable declarations.
+
 ## 2.13.3
 
  * **Internal**
