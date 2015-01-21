@@ -8859,6 +8859,42 @@ test("class A { foo() {} get foo() {} }",{
   locations: true
 });
 
+test("class Semicolon { ; }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 21}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 21}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 15}
+      },
+      name: "Semicolon"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 16},
+        end: {line: 1, column: 21}
+      },
+      body: []
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
 // ES6: Computed Properties
 
 test("({[x]: 10})", {
@@ -14840,3 +14876,8 @@ test("`${/\d/.exec('1')[0]}`", {
 }, {
   ecmaVersion: 6
 });
+
+testFail("if (1) let x = 10;", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("for (;;) const x = 10;", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("while (1) function foo(){}", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("if (1) ; else class Cls {}", "Unexpected token (1:14)", {ecmaVersion: 6});
