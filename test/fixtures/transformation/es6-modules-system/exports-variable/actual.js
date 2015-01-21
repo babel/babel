@@ -6,3 +6,4 @@ export let foo5;
 export const foo6 = 3;
 export function foo7 () {}
 export class foo8 {}
+foo3 = 5;
