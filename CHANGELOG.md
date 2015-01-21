@@ -22,6 +22,23 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Removed the `coreAliasing` transformer in favor of `selfContained`.
   * Remove `includeRegenerator` option.
 
+## 2.13.5
+
+ * **Bug Fix**
+  * Allow rest parameters to be destructuring patterns.
+ * **Internal**
+  * Upgrade `kexec` to `1.1.0`.
+
+## 2.13.4
+
+ * **Bug Fix**
+  * Fix ordering of destructuring and default params.
+  * Fix loop body scope.
+  * Fix `for...of` transformation not retaining it's scope.
+  * Add destructuring assignment support to scope tracking.
+ * **Polish**
+  * More reliable newlines for pretty printing variable declarations.
+
 ## 2.13.3
 
  * **Internal**
