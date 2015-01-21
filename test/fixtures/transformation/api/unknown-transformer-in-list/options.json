@@ -1,4 +1,4 @@
 {
-  "throws": "unknown transformer arrowFunctions2 specified in whitelist",
+  "throws": "Unknown transformer arrowFunctions2 specified in whitelist",
   "whitelist": ["arrowFunctions2"]
 }
