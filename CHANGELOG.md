@@ -19,6 +19,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * `this` is now illegal in the top level scope.
  * **Internal**
   * Rewritten constants transformer.
+  * Upgrade `core-js` to `0.4.6`.
  * **Bug Fix**
   * Generators now work flawlessly with any parameter transformers.
   * Optional async function transformers should not name their functions.
@@ -44,7 +45,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * The transformer `restParameters` has been renamed to `parameters.rest`.
   * The transformer `defaultParameters` has been renamed to `parameters.default`.
   * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
-  * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**
+  * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**.
 
 ## 2.13.5
 
