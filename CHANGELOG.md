@@ -21,6 +21,19 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Removed the optional runtime in favor of the `selfContained` transformer.
   * Removed the `coreAliasing` transformer in favor of `selfContained`.
   * Remove `includeRegenerator` option.
+  * This shorthand has been removed from the playground.
+  * The transformer `generators` has been renamed to `regenerator`.
+  * The transformer `propertyMethodAssignment` has been renamed to `property.shorthand`.
+  * The transformer `propertyNameShorthand` has been merged into `property.shorthand`.
+  * The mutator part of the `propertyMethodAssignment` transformer has been merged into `property.mutators`.
+  * The transformer `computedPropertyNames` has been renamed to `property.computed`.
+  * The transformer `letScoping` jas been renamed to `blockScoping`.
+  * The transformer `restParameters` has been renamed to `parameters.rest`.
+  * The transformer `defaultParameters` has been renamed to `parameters.default`.
+  * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
+  * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**
+  * Add autoindentation.
+  * Move global uid registry to a scope registry.
 
 ## 2.13.5
 
