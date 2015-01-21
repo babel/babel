@@ -16,13 +16,18 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Polish**
   * Add autoindentation.
   * Move global uid registry to a scope registry.
+  * `this` is now illegal in the top level scope.
  * **Internal**
   * Rewritten constants transformer.
  * **Bug Fix**
   * Generators now work flawlessly with any parameter transformers.
+ * **New Feature**
+  * New `selfContained` transformer.
+  * New `undeclaredVariableCheck` optional transformer.
  * **Breaking Change**
   * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
+  * Bare `super();` only works inside of constructors.
   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
   * Removed the optional runtime in favor of the `selfContained` transformer.
