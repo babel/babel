@@ -17,10 +17,9 @@ var _slicedToArray = function (arr, i) {
 };
 
 for (var _iterator = this.test.expectation.registers[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-  var _ref = _step.value;
-  var _ref2 = _slicedToArray(_ref, 3);
+  var _step$value = _slicedToArray(_step.value, 3);
 
-  var name = _ref2[0];
-  var before = _ref2[1];
-  var after = _ref2[2];
+  var name = _step$value[0];
+  var before = _step$value[1];
+  var after = _step$value[2];
 }
