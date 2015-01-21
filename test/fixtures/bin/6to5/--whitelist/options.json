@@ -1,3 +1,3 @@
 {
-  "args": ["--whitelist", "arrowFunctions"]
+  "args": ["--whitelist", "es6.arrowFunctions"]
 }
