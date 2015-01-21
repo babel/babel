@@ -684,7 +684,7 @@
     if (type === _parenR || type === _braceR) {
       var out = tokContext.pop();
       tokExprAllowed = !(out && out.isExpr);
-      preserveSpace = out === b_tmpl;
+      preserveSpace = out === b_tmpl || curTokContext() === j_expr;
     } else if (type === _braceL) {
       tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
       tokExprAllowed = true;
@@ -702,13 +702,12 @@
     } else if (tokExprAllowed && type == _function) {
       tokExprAllowed = false;
     } else if (type === _backQuote) {
-      if (tokContext[tokContext.length - 1] === q_tmpl) {
+      if (curTokContext() === q_tmpl) {
         tokContext.pop();
       } else {
         tokContext.push(q_tmpl);
         preserveSpace = true;
       }
-      tokExprAllowed = false;
       tokExprAllowed = false;
     } else if (type === _xjsTagStart) {
       tokContext.push(j_expr); // treat as beginning of JSX expression
@@ -718,12 +717,12 @@
       var out = tokContext.pop();
       if (out === j_oTag && prevType === _slash || out === j_cTag) {
         tokContext.pop();
-        tokExprAllowed = curTokContext() === j_expr;
+        preserveSpace = tokExprAllowed = curTokContext() === j_expr;
       } else {
-        tokExprAllowed = true;
+        preserveSpace = tokExprAllowed = true;
       }
     } else if (type === _xjsText) {
-      tokExprAllowed = true;
+      preserveSpace = tokExprAllowed = true;
     } else if (type === _slash && prevType === _xjsTagStart) {
       tokContext.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
       tokContext.push(j_cTag); // reconsider as closing tag context
@@ -732,7 +731,7 @@
       tokExprAllowed = type.beforeExpr;
     }
 
-    if (!preserveSpace && curTokContext() !== j_expr) skipSpace();
+    if (!preserveSpace) skipSpace();
   }
 
   function skipBlockComment() {
@@ -888,8 +887,6 @@
       skipSpace();
       return readToken();
     }
-    if (next === 61)
-      size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
     if (tokExprAllowed && code === 60) {
       ++tokPos;
       return finishToken(_xjsTagStart);
@@ -901,6 +898,8 @@
         return finishToken(_xjsTagEnd);
       }
     }
+    if (next === 61)
+      size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
     return finishOp(_relational, size);
   }
 
@@ -995,13 +994,17 @@
     if (options.locations) tokStartLoc = curPosition();
     if (tokPos >= inputLen) return finishToken(_eof);
 
-    if (tokContext[tokContext.length - 1] === q_tmpl) {
+    var context = curTokContext();
+
+    if (context === q_tmpl) {
       return readTmplToken();
     }
 
-    var code = input.charCodeAt(tokPos);
-    var context = curTokContext();
+    if (context === j_expr) {
+      return readXJSToken();
+    }
 
+    var code = input.charCodeAt(tokPos);
     if (context === j_oTag || context === j_cTag) {
       // JSX identifier
       if (isIdentifierStart(code)) return readJSXWord();
@@ -1528,32 +1531,32 @@
     var out = "", start = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
-      var ch = input.charAt(tokPos);
+      var ch = input.charCodeAt(tokPos);
       switch (ch) {
-        case "{":
-        case "<":
+        case 123: // '{'
+        case 60: // '<'
           if (tokPos === start) {
-            return getTokenFromCode(ch.charCodeAt(0));
+            return getTokenFromCode(ch);
           }
           return finishToken(_xjsText, out);
 
-        case "&":
+        case 38: // '&'
           out += readXJSEntity();
           break;
 
         default:
           ++tokPos;
-          if (newline.test(ch)) {
-            if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
+          if (isNewLine(ch)) {
+            if (ch === 13 && input.charCodeAt(tokPos) === 10) {
               ++tokPos;
-              ch = "\n";
+              ch = 10;
             }
             if (options.locations) {
               ++tokCurLine;
               tokLineStart = tokPos;
             }
           }
-          out += ch;
+          out += String.fromCharCode(ch);
       }
     }
   }
