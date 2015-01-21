@@ -62,10 +62,10 @@ var Test = (function (Foo) {
   _prototypeProperties(Test, {
     foo: {
       value: function foo() {
-        var _get4;
+        var _get2;
         _get(Object.getPrototypeOf(Test), "foo", this).call(this);
         _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
-        (_get4 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get4, [this, "test"].concat(_slice.call(arguments)));
+        (_get2 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       enumerable: true,
@@ -74,10 +74,10 @@ var Test = (function (Foo) {
   }, {
     test: {
       value: function test() {
-        var _get5;
+        var _get2;
         _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
         _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
-        (_get5 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get5, [this, "test"].concat(_slice.call(arguments)));
+        (_get2 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       enumerable: true,

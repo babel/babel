@@ -33,10 +33,10 @@ var Test = (function (Foo) {
   _inherits(Test, Foo);
 
   Test.prototype.test = function test() {
-    var _Foo$prototype$test3, _Foo$prototype$test4;
+    var _Foo$prototype$test, _Foo$prototype$test2;
     Foo.prototype.test.call(this);
-    (_Foo$prototype$test3 = Foo.prototype.test).call.apply(_Foo$prototype$test3, [this].concat(_slice.call(arguments)));
-    (_Foo$prototype$test4 = Foo.prototype.test).call.apply(_Foo$prototype$test4, [this, "test"].concat(_slice.call(arguments)));
+    (_Foo$prototype$test = Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(_slice.call(arguments)));
+    (_Foo$prototype$test2 = Foo.prototype.test).call.apply(_Foo$prototype$test2, [this, "test"].concat(_slice.call(arguments)));
   };
 
   Test.foo = function foo() {
