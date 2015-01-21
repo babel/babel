@@ -37,6 +37,6 @@ var _asyncToGenerator = function (fn) {
   };
 };
 
-var foo = _asyncToGenerator(function* foo() {
+var foo = _asyncToGenerator(function* () {
   var wat = yield bar();
 });
