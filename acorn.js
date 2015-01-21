@@ -361,7 +361,7 @@
 
   var _num = {type: "num"}, _regexp = {type: "regexp"}, _string = {type: "string"};
   var _name = {type: "name"}, _eof = {type: "eof"};
-  var _xjsName = {type: "xjsName"};
+  var _jsxName = {type: "jsxName"};
 
   // Keyword tokens. The `keyword` property (also used in keyword-like
   // operators) indicates that the token originated from an
@@ -425,7 +425,7 @@
   var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"};
   var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
   var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
-  var _xjsText = {type: "xjsText"};
+  var _jsxText = {type: "jsxText"};
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
@@ -461,7 +461,7 @@
   var _star = {binop: 10, beforeExpr: true};
 
   // JSX tag boundaries
-  var _xjsTagStart = {type: "xjsTagStart"}, _xjsTagEnd = {type: "xjsTagEnd"};
+  var _jsxTagStart = {type: "jsxTagStart"}, _jsxTagEnd = {type: "jsxTagEnd"};
 
   // Provide access to the token types for external users of the
   // tokenizer.
@@ -661,9 +661,9 @@
       return true;
     if (prevType == _braceL)
       return curTokContext() === b_stat;
-    if (prevType === _xjsTagEnd || prevType === _xjsText)
+    if (prevType === _jsxTagEnd || prevType === _jsxText)
       return true;
-    if (prevType === _xjsName)
+    if (prevType === _jsxName)
       return false;
     return !tokExprAllowed;
   }
@@ -709,11 +709,11 @@
         preserveSpace = true;
       }
       tokExprAllowed = false;
-    } else if (type === _xjsTagStart) {
+    } else if (type === _jsxTagStart) {
       tokContext.push(j_expr); // treat as beginning of JSX expression
       tokContext.push(j_oTag); // start opening tag context
       tokExprAllowed = false;
-    } else if (type === _xjsTagEnd) {
+    } else if (type === _jsxTagEnd) {
       var out = tokContext.pop();
       if (out === j_oTag && prevType === _slash || out === j_cTag) {
         tokContext.pop();
@@ -721,9 +721,9 @@
       } else {
         preserveSpace = tokExprAllowed = true;
       }
-    } else if (type === _xjsText) {
+    } else if (type === _jsxText) {
       preserveSpace = tokExprAllowed = true;
-    } else if (type === _slash && prevType === _xjsTagStart) {
+    } else if (type === _slash && prevType === _jsxTagStart) {
       tokContext.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
       tokContext.push(j_cTag); // reconsider as closing tag context
       tokExprAllowed = false;
@@ -889,13 +889,13 @@
     }
     if (tokExprAllowed && code === 60) {
       ++tokPos;
-      return finishToken(_xjsTagStart);
+      return finishToken(_jsxTagStart);
     }
     if (code === 62) {
       var context = curTokContext();
       if (context === j_oTag || context === j_cTag) {
         ++tokPos;
-        return finishToken(_xjsTagEnd);
+        return finishToken(_jsxTagEnd);
       }
     }
     if (next === 61)
@@ -1001,7 +1001,7 @@
     }
 
     if (context === j_expr) {
-      return readXJSToken();
+      return readJSXToken();
     }
 
     var code = input.charCodeAt(tokPos);
@@ -1009,7 +1009,7 @@
       // JSX identifier
       if (isIdentifierStart(code)) return readJSXWord();
     } else if (context === j_expr) {
-      return readXJSToken();
+      return readJSXToken();
     } else {
       // Identifier or keyword. '\uXXXX' sequences are allowed in
       // identifiers, so '\' also dispatches to that.
@@ -1186,7 +1186,7 @@
       if (ch === 92 && !isJSX) { // '\'
         out += readEscapedChar();
       } else if (ch === 38 && isJSX) { // '&'
-        out += readXJSEntity();
+        out += readJSXEntity();
       } else {
         ++tokPos;
         if (isNewLine(ch)) {
@@ -1491,7 +1491,7 @@
     diams: '\u2666'
   };
 
-  function readXJSEntity() {
+  function readJSXEntity() {
     var str = '', count = 0, entity;
     var ch = input[tokPos];
     if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
@@ -1527,7 +1527,7 @@
 
   // Reads inline JSX contents token.
 
-  function readXJSToken() {
+  function readJSXToken() {
     var out = "", start = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
@@ -1538,10 +1538,10 @@
           if (tokPos === start) {
             return getTokenFromCode(ch);
           }
-          return finishToken(_xjsText, out);
+          return finishToken(_jsxText, out);
 
         case 38: // '&'
-          out += readXJSEntity();
+          out += readJSXEntity();
           break;
 
         default:
@@ -1665,7 +1665,7 @@
     do {
       ch = input.charCodeAt(++tokPos);
     } while (isIdentifierChar(ch) || ch === 45); // '-'
-    return finishToken(_xjsName, input.slice(start, tokPos));
+    return finishToken(_jsxName, input.slice(start, tokPos));
   }
 
   // ## Parser
@@ -2580,7 +2580,7 @@
       next();
       return finishNode(node, "Literal");
 
-    case _num: case _string: case _xjsText:
+    case _num: case _string: case _jsxText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);
@@ -2659,8 +2659,8 @@
     case _backQuote:
       return parseTemplate();
 
-    case _xjsTagStart:
-      return parseXJSElement();
+    case _jsxTagStart:
+      return parseJSXElement();
 
     default:
       unexpected();
@@ -3175,26 +3175,26 @@
 
   // Transforms JSX element name to string.
 
-  function getQualifiedXJSName(object) {
-    if (object.type === "XJSIdentifier") {
+  function getQualifiedJSXName(object) {
+    if (object.type === "JSXIdentifier") {
       return object.name;
     }
-    if (object.type === "XJSNamespacedName") {
+    if (object.type === "JSXNamespacedName") {
       return object.namespace.name + ':' + object.name.name;
     }
-    if (object.type === "XJSMemberExpression") {
+    if (object.type === "JSXMemberExpression") {
       return (
-        getQualifiedXJSName(object.object) + '.' +
-        getQualifiedXJSName(object.property)
+        getQualifiedJSXName(object.object) + '.' +
+        getQualifiedJSXName(object.property)
       );
     }
   }
 
   // Parse next token as JSX identifier
 
-  function parseXJSIdentifier() {
+  function parseJSXIdentifier() {
     var node = startNode();
-    if (tokType === _xjsName) {
+    if (tokType === _jsxName) {
       node.name = tokVal;
     } else if (tokType.keyword) {
       node.name = tokType.keyword;
@@ -3202,68 +3202,68 @@
       unexpected();
     }
     next();
-    return finishNode(node, "XJSIdentifier");
+    return finishNode(node, "JSXIdentifier");
   }
 
   // Parse namespaced identifier.
 
-  function parseXJSNamespacedName() {
+  function parseJSXNamespacedName() {
     var start = storeCurrentPos();
-    var name = parseXJSIdentifier();
+    var name = parseJSXIdentifier();
     if (!eat(_colon)) return name;
     var node = startNodeAt(start);
     node.namespace = name;
-    node.name = parseXJSIdentifier();
-    return finishNode(node, "XJSNamespacedName");
+    node.name = parseJSXIdentifier();
+    return finishNode(node, "JSXNamespacedName");
   }
 
   // Parses element name in any form - namespaced, member
   // or single identifier.
 
-  function parseXJSElementName() {
+  function parseJSXElementName() {
     var start = storeCurrentPos();
-    var node = parseXJSNamespacedName();
+    var node = parseJSXNamespacedName();
     while (eat(_dot)) {
       var newNode = startNodeAt(start);
       newNode.object = node;
-      newNode.property = parseXJSIdentifier();
-      node = finishNode(newNode, "XJSMemberExpression");
+      newNode.property = parseJSXIdentifier();
+      node = finishNode(newNode, "JSXMemberExpression");
     }
     return node;
   }
 
   // Parses any type of JSX attribute value.
 
-  function parseXJSAttributeValue() {
+  function parseJSXAttributeValue() {
     switch (tokType) {
       case _braceL:
-        var node = parseXJSExpressionContainer();
-        if (node.expression.type === "XJSEmptyExpression") {
+        var node = parseJSXExpressionContainer();
+        if (node.expression.type === "JSXEmptyExpression") {
           raise(
             node.start,
-              'XJS attributes must only be assigned a non-empty ' +
+              'JSX attributes must only be assigned a non-empty ' +
               'expression'
           );
         }
         return node;
 
-      case _xjsTagStart:
-        return parseXJSElement();
+      case _jsxTagStart:
+        return parseJSXElement();
 
-      case _xjsText:
+      case _jsxText:
       case _string:
         return parseExprAtom();
 
       default:
-        raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
+        raise(tokStart, "JSX value should be either an expression or a quoted JSX text");
     }
   }
 
-  // XJSEmptyExpression is unique type since it doesn't actually parse anything,
+  // JSXEmptyExpression is unique type since it doesn't actually parse anything,
   // and so it should start at the end of last read token (left brace) and finish
   // at the beginning of the next one (right brace).
 
-  function parseXJSEmptyExpression() {
+  function parseJSXEmptyExpression() {
     if (tokType !== _braceR) {
       unexpected();
     }
@@ -3278,95 +3278,95 @@
     tokStartLoc = lastEndLoc;
     lastEndLoc = tmp;
 
-    return finishNode(startNode(), "XJSEmptyExpression");
+    return finishNode(startNode(), "JSXEmptyExpression");
   }
 
   // Parses JSX expression enclosed into curly brackets.
 
-  function parseXJSExpressionContainer() {
+  function parseJSXExpressionContainer() {
     var node = startNode();
     next();
-    node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
+    node.expression = tokType === _braceR ? parseJSXEmptyExpression() : parseExpression();
     expect(_braceR);
-    return finishNode(node, "XJSExpressionContainer");
+    return finishNode(node, "JSXExpressionContainer");
   }
 
   // Parses following JSX attribute name-value pair.
 
-  function parseXJSAttribute() {
+  function parseJSXAttribute() {
     var node = startNode();
     if (eat(_braceL)) {
       if (tokType !== _ellipsis) unexpected();
       node.argument = parseMaybeUnary().argument;
       expect(_braceR);
-      return finishNode(node, "XJSSpreadAttribute");
+      return finishNode(node, "JSXSpreadAttribute");
     }
-    node.name = parseXJSNamespacedName();
-    node.value = eat(_eq) ? parseXJSAttributeValue() : null;
-    return finishNode(node, "XJSAttribute");
+    node.name = parseJSXNamespacedName();
+    node.value = eat(_eq) ? parseJSXAttributeValue() : null;
+    return finishNode(node, "JSXAttribute");
   }
 
   // Parses JSX opening tag starting after '<'.
 
-  function parseXJSOpeningElementAt(start) {
+  function parseJSXOpeningElementAt(start) {
     var node = startNodeAt(start);
     node.attributes = [];
-    node.name = parseXJSElementName();
-    while (tokType !== _slash && tokType !== _xjsTagEnd) {
-      node.attributes.push(parseXJSAttribute());
+    node.name = parseJSXElementName();
+    while (tokType !== _slash && tokType !== _jsxTagEnd) {
+      node.attributes.push(parseJSXAttribute());
     }
     node.selfClosing = eat(_slash);
-    expect(_xjsTagEnd);
-    return finishNode(node, "XJSOpeningElement");
+    expect(_jsxTagEnd);
+    return finishNode(node, "JSXOpeningElement");
   }
 
   // Parses JSX closing tag starting after '</'.
 
-  function parseXJSClosingElementAt(start) {
+  function parseJSXClosingElementAt(start) {
     var node = startNodeAt(start);
-    node.name = parseXJSElementName();
-    expect(_xjsTagEnd);
-    return finishNode(node, "XJSClosingElement");
+    node.name = parseJSXElementName();
+    expect(_jsxTagEnd);
+    return finishNode(node, "JSXClosingElement");
   }
 
   // Parses entire JSX element, including it's opening tag
   // (starting after '<'), attributes, contents and closing tag.
 
-  function parseXJSElementAt(start) {
+  function parseJSXElementAt(start) {
     var node = startNodeAt(start);
     var children = [];
-    var openingElement = parseXJSOpeningElementAt(start);
+    var openingElement = parseJSXOpeningElementAt(start);
     var closingElement = null;
 
     if (!openingElement.selfClosing) {
       contents:for (;;) {
         switch (tokType) {
-          case _xjsTagStart:
+          case _jsxTagStart:
             start = storeCurrentPos();
             next();
             if (eat(_slash)) {
-              closingElement = parseXJSClosingElementAt(start);
+              closingElement = parseJSXClosingElementAt(start);
               break contents;
             }
-            children.push(parseXJSElementAt(start));
+            children.push(parseJSXElementAt(start));
             break;
 
-          case _xjsText:
+          case _jsxText:
             children.push(parseExprAtom());
             break;
 
           case _braceL:
-            children.push(parseXJSExpressionContainer());
+            children.push(parseJSXExpressionContainer());
             break;
 
           default:
             unexpected();
         }
       }
-      if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
+      if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
         raise(
           closingElement.start,
-          "Expected corresponding XJS closing tag for <" + getQualifiedXJSName(openingElement.name) + ">"
+          "Expected corresponding JSX closing tag for <" + getQualifiedJSXName(openingElement.name) + ">"
         );
       }
     }
@@ -3374,14 +3374,14 @@
     node.openingElement = openingElement;
     node.closingElement = closingElement;
     node.children = children;
-    return finishNode(node, "XJSElement");
+    return finishNode(node, "JSXElement");
   }
 
   // Parses entire JSX element from current position.
 
-  function parseXJSElement() {
+  function parseJSXElement() {
     var start = storeCurrentPos();
     next();
-    return parseXJSElementAt(start);
+    return parseJSXElementAt(start);
   }
 });
