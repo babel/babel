@@ -13,6 +13,9 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 3.0.0
 
+ * **Polish**
+  * Add autoindentation.
+  * Move global uid registry to a scope registry.
  * **Breaking Change**
   * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
@@ -32,8 +35,6 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * The transformer `defaultParameters` has been renamed to `parameters.default`.
   * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
   * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**
-  * Add autoindentation.
-  * Move global uid registry to a scope registry.
 
 ## 2.13.5
 
