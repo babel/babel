@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 2.13.5
+
+ * **Bug Fix**
+  * Allow rest parameters to be destructuring patterns.
+ * **Internal**
+  * Upgrade `kexec` to `1.1.0`.
+
 ## 2.13.4
 
  * **Bug Fix**
