@@ -21,6 +21,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Rewritten constants transformer.
  * **Bug Fix**
   * Generators now work flawlessly with any parameter transformers.
+  * Optional async function transformers should not name their functions.
  * **New Feature**
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
