@@ -17,6 +17,8 @@ System.register([], function (_export) {
       foo8 = function foo8() {};
 
       _export("foo8", foo8);
+
+      _export("foo3", foo3 = 5);
     }
   };
 });
