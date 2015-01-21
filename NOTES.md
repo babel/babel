@@ -1,7 +1,3 @@
 # Notes
 
  * Wildcard exports/imports wont normalise if `export default` is a non-object. See [#224](https://github.com/6to5/6to5/issues/224).
-
-## 3.0.0 breaking changes
-
- * Remove `super()` inside non-constructors - add descriptive error message.
