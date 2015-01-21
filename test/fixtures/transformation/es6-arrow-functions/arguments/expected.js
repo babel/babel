@@ -10,15 +10,15 @@ function one() {
 one(1, 2);
 
 function two() {
-  var _arguments2 = arguments;
+  var _arguments = arguments;
   var inner = function () {
-    return _arguments2;
+    return _arguments;
   };
 
   var another = function () {
-    var _arguments3 = arguments;
+    var _arguments2 = arguments;
     var inner2 = function () {
-      return _arguments3;
+      return _arguments2;
     };
   };
 
@@ -27,18 +27,18 @@ function two() {
 two(1, 2);
 
 function three() {
-  var _arguments4 = arguments;
+  var _arguments = arguments;
   var fn = function () {
-    return _arguments4[0] + "bar";
+    return _arguments[0] + "bar";
   };
   return fn();
 }
 three("foo");
 
 function four() {
-  var _arguments5 = arguments;
+  var _arguments = arguments;
   var fn = function () {
-    return _arguments5[0].foo + "bar";
+    return _arguments[0].foo + "bar";
   };
   return fn();
 }
