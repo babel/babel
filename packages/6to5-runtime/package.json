@@ -1,6 +1,6 @@
 {
   "name": "6to5-runtime",
   "description": "6to5 selfContained runtime",
-  "version": "2.13.3",
+  "version": "2.13.5",
   "author": "Sebastian McKenzie <sebmck@gmail.com>"
 }
