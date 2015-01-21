@@ -9,4 +9,4 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-var obj = _defineProperty({}, "x" + this.foo, "heh");
+var obj = _defineProperty({}, "x" + foo.bar, "heh");

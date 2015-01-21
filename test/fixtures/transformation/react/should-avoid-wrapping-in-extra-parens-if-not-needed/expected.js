@@ -7,13 +7,13 @@ var x = React.createElement(
 var x = React.createElement(
   "div",
   null,
-  this.props.children
+  props.children
 );
 
 var x = React.createElement(
   Composite,
   null,
-  this.props.children
+  props.children
 );
 
 var x = React.createElement(

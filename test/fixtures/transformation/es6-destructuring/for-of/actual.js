@@ -1,3 +1,3 @@
-for (var [ name, before, after ] of this.test.expectation.registers) {
+for (var [ name, before, after ] of test.expectation.registers) {
 
 }

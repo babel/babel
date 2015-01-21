@@ -3,11 +3,11 @@ var x = <div>
 </div>;
 
 var x = <div>
-  {this.props.children}
+  {props.children}
 </div>;
 
 var x = <Composite>
-  {this.props.children}
+  {props.children}
 </Composite>;
 
 var x = <Composite>

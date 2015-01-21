@@ -1,2 +1,2 @@
-React.createElement(Component, React.__spread({}, this.props, {
+React.createElement(Component, React.__spread({}, props, {
   sound: "moo" }));

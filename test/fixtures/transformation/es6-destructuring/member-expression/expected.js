@@ -20,5 +20,5 @@ var _ref = [1, 2];
 
 var _ref2 = _slicedToArray(_ref, 2);
 
-this.foo = _ref2[0];
-this.bar = _ref2[1];
+foo.foo = _ref2[0];
+foo.bar = _ref2[1];

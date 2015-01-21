@@ -1,1 +1,1 @@
-[this.foo, this.bar] = [1, 2];
+[foo.foo, foo.bar] = [1, 2];

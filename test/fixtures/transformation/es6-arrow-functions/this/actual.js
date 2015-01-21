@@ -1,1 +1,3 @@
-var t = x => this.x + x;
+function b() {
+  var t = x => this.x + x;
+}

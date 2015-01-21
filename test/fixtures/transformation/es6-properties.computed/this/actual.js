@@ -1,3 +1,3 @@
 var obj = {
-  ["x" + this.foo]: "heh"
+  ["x" + foo.bar]: "heh"
 };
