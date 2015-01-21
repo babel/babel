@@ -12,14 +12,14 @@ class Test extends Foo {
   }
 
   test() {
-    super();
-    super(...arguments);
-    super("test", ...arguments);
+    super.test();
+    super.test(...arguments);
+    super.test("test", ...arguments);
   }
 
   static foo() {
-    super();
-    super(...arguments);
-    super("test", ...arguments);
+    super.foo();
+    super.foo(...arguments);
+    super.foo("test", ...arguments);
   }
 }
