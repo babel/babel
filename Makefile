@@ -13,7 +13,7 @@ export NODE_ENV = test
 build:
 	mkdir -p dist
 
-	node bin/cache-templates
+	node tools/cache-templates
 
 	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
@@ -59,8 +59,8 @@ test-travis: bootstrap
 test-browser:
 	mkdir -p dist
 
-	node bin/cache-templates
-	node bin/cache-tests
+	node tools/cache-templates
+	node tools/cache-tests
 	node $(BROWSERIFY_CMD) -e test/_browser.js >dist/6to5-test.js
 	rm -rf templates.json tests.json
 
@@ -81,7 +81,7 @@ publish:
 	cp dist/6to5.min.js browser.js
 	cp dist/polyfill.min.js browser-polyfill.js
 
-	node bin/cache-templates
+	node tools/cache-templates
 	test -f templates.json
 
 	npm publish
@@ -99,7 +99,7 @@ publish-runtime:
 	npm publish
 
 publish-core:
-	bin/generate-core-package-json >package2.json
+	tools/generate-core-package-json >package2.json
 	mv package.json .package.json
 	mv package2.json package.json
 
