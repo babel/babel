@@ -200,9 +200,6 @@
     if (options.locations) {
       this.loc = new SourceLocation();
       this.loc.end = tokEndLoc;
-      // TODO: remove in next major release
-      this.startLoc = tokStartLoc;
-      this.endLoc = tokEndLoc;
     }
     if (options.ranges)
       this.range = [tokStart, tokEnd];
