@@ -3328,8 +3328,7 @@ test("[for (x of array) x]", {
         loc: {
           start: {line: 1, column: 1},
           end: {line: 1, column: 17}
-        },
-        of: true
+        }
       }],
       body: {
         type: "Identifier",
@@ -3412,8 +3411,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3436,8 +3434,7 @@ test("[for (x of array) for (y of array2) if (x === test) x]", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3521,8 +3518,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 17}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3545,8 +3541,7 @@ test("(for (x of array) for (y of array2) if (x === test) x)", {
           loc: {
             start: {line: 1, column: 18},
             end: {line: 1, column: 35}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -3617,8 +3612,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 20}
-          },
-          of: true
+          }
         },
         {
           type: "ComprehensionBlock",
@@ -3728,8 +3722,7 @@ test("[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]", {
           loc: {
             start: {line: 1, column: 21},
             end: {line: 1, column: 65}
-          },
-          of: true
+          }
         }
       ],
       body: {
@@ -5279,20 +5272,13 @@ test("import $ from \"jquery\"", {
       type: "ImportSpecifier",
       id: {
         type: "Identifier",
-        name: "default",
-        loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 8}
-        }
-      },
-      name: {
-        type: "Identifier",
         name: "$",
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 8}
         }
       },
+      name: null,
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
@@ -5460,16 +5446,10 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
             start: {line: 1, column: 7},
             end: {line: 1, column: 13}
           },
-          name: "default"
-        },
-        name: {
-          type: "Identifier",
-          loc: {
-            start: {line: 1, column: 7},
-            end: {line: 1, column: 13}
-          },
           name: "crypto"
-        }
+        },
+        name: null,
+        default: true
       },
       {
         type: "ImportSpecifier",
@@ -6471,6 +6451,72 @@ test("var A = class extends B {}", {
   loc: {
     start: {line: 1, column: 0},
     end: {line: 1, column: 26}
+  }
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class A extends class B extends C {} {}", {
+  type: "Program",
+  body: [{
+    type: "ClassDeclaration",
+    id: {
+      type: "Identifier",
+      name: "A",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 7}
+      }
+    },
+    superClass: {
+      type: "ClassExpression",
+      id: {
+        type: "Identifier",
+        name: "B",
+        loc: {
+          start: {line: 1, column: 22},
+          end: {line: 1, column: 23}
+        }
+      },
+      superClass: {
+        type: "Identifier",
+        name: "C",
+        loc: {
+          start: {line: 1, column: 32},
+          end: {line: 1, column: 33}
+        }
+      },
+      body: {
+        type: "ClassBody",
+        body: [],
+        loc: {
+          start: {line: 1, column: 34},
+          end: {line: 1, column: 36}
+        }
+      },
+      loc: {
+        start: {line: 1, column: 16},
+        end: {line: 1, column: 36}
+      }
+    },
+    body: {
+      type: "ClassBody",
+      body: [],
+      loc: {
+        start: {line: 1, column: 37},
+        end: {line: 1, column: 39}
+      }
+    },
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 39}
+    }
+  }],
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 39}
   }
 }, {
   ecmaVersion: 6,
@@ -8808,6 +8854,42 @@ test("class A { foo() {} get foo() {} }",{
     }
   }]
 },{
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class Semicolon { ; }", {
+  type: "Program",
+  loc: {
+    start: {line: 1, column: 0},
+    end: {line: 1, column: 21}
+  },
+  body: [{
+    type: "ClassDeclaration",
+    loc: {
+      start: {line: 1, column: 0},
+      end: {line: 1, column: 21}
+    },
+    id: {
+      type: "Identifier",
+      loc: {
+        start: {line: 1, column: 6},
+        end: {line: 1, column: 15}
+      },
+      name: "Semicolon"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      loc: {
+        start: {line: 1, column: 16},
+        end: {line: 1, column: 21}
+      },
+      body: []
+    }
+  }]
+}, {
   ecmaVersion: 6,
   ranges: true,
   locations: true
@@ -13809,9 +13891,9 @@ testFail("import { foo, bar }", "Unexpected token (1:19)", {ecmaVersion: 6});
 
 testFail("import foo from bar", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("((a)) => 42", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("((a)) => 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("(a, (b)) => 42", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
@@ -14031,7 +14113,7 @@ testFail("class A extends yield B { }", "Unexpected token (1:22)", {ecmaVersion:
 
 testFail("class default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("`test", "Unterminated template (1:0)", {ecmaVersion: 6});
+testFail("`test", "Unterminated template (1:1)", {ecmaVersion: 6});
 
 testFail("switch `test`", "Unexpected token (1:7)", {ecmaVersion: 6});
 
@@ -14069,7 +14151,7 @@ testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Argument
 
 testFail("\"use strict\"; function x(a, ...[a]){}", "Argument name clash in strict mode (1:32)", {ecmaVersion: 6});
 
-testFail("(...a, b) => {}", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("(...a, b) => {}", "Unexpected token (1:5)", {ecmaVersion: 6});
 
 testFail("([ 5 ]) => {}", "Unexpected token (1:3)", {ecmaVersion: 6});
 
@@ -14144,9 +14226,9 @@ test("[...a, ] = b", {
   locations: true
 });
 
-testFail("if (b,...a, );", "Unexpected token (1:12)", {ecmaVersion: 6});
+testFail("if (b,...a, );", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("(b, ...a)", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("(b, ...a)", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:37)", {ecmaVersion: 6});
 
@@ -14291,12 +14373,10 @@ test("import foo, * as bar from 'baz';", {
         type: "ImportSpecifier",
         id: {
           type: "Identifier",
-          name: "default"
-        },
-        name: {
-          type: "Identifier",
           name: "foo"
-        }
+        },
+        name: null,
+        default: true
       },
       {
         type: "ImportBatchSpecifier",
@@ -14545,3 +14625,259 @@ test("var [localVar = defaultValue] = obj", {
   locations: true,
   loose: false
 });
+
+// https://github.com/marijnh/acorn/issues/191
+
+test("try {} catch ({message}) {}", {
+  type: "Program",
+  range: [0, 27],
+  body: [{
+    type: "TryStatement",
+    range: [0, 27],
+    block: {
+      type: "BlockStatement",
+      range: [4, 6],
+      body: []
+    },
+    handler: {
+      type: "CatchClause",
+      range: [7, 27],
+      param: {
+        type: "ObjectPattern",
+        range: [14, 23],
+        properties: [{
+          type: "Property",
+          range: [15, 22],
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            range: [15, 22],
+            name: "message"
+          },
+          kind: "init",
+          value: {
+            type: "Identifier",
+            range: [15, 22],
+            name: "message"
+          }
+        }]
+      },
+      guard: null,
+      body: {
+        type: "BlockStatement",
+        range: [25, 27],
+        body: []
+      }
+    },
+    guardedHandlers: [],
+    finalizer: null
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true,
+  loose: false
+});
+
+// https://github.com/marijnh/acorn/issues/192
+
+test("class A { static() {} }", {
+  type: "Program",
+  range: [0, 23],
+  body: [{
+    type: "ClassDeclaration",
+    range: [0, 23],
+    id: {
+      type: "Identifier",
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      range: [8, 23],
+      body: [{
+        type: "MethodDefinition",
+        range: [10, 21],
+        computed: false,
+        key: {
+          type: "Identifier",
+          range: [10, 16],
+          name: "static"
+        },
+        static: false,
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          range: [16, 21],
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: false,
+          body: {
+            type: "BlockStatement",
+            range: [19, 21],
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("class A { *static() {} }", {
+  type: "Program",
+  range: [0, 24],
+  body: [{
+    type: "ClassDeclaration",
+    range: [0, 24],
+    id: {
+      type: "Identifier",
+      range: [6, 7],
+      name: "A"
+    },
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      range: [8, 24],
+      body: [{
+        type: "MethodDefinition",
+        range: [10, 22],
+        computed: false,
+        key: {
+          type: "Identifier",
+          range: [11, 17],
+          name: "static"
+        },
+        static: false,
+        kind: "",
+        value: {
+          type: "FunctionExpression",
+          range: [17, 22],
+          id: null,
+          params: [],
+          defaults: [],
+          rest: null,
+          generator: true,
+          body: {
+            type: "BlockStatement",
+            range: [20, 22],
+            body: []
+          },
+          expression: false
+        }
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  locations: true
+});
+
+test("`${/\d/.exec('1')[0]}`", {
+  "type": "Program",
+  "start": 0,
+  "end": 21,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 21,
+      "expression": {
+        "type": "TemplateLiteral",
+        "start": 0,
+        "end": 21,
+        "expressions": [
+          {
+            "type": "MemberExpression",
+            "start": 3,
+            "end": 19,
+            "object": {
+              "type": "CallExpression",
+              "start": 3,
+              "end": 16,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 3,
+                "end": 11,
+                "object": {
+                  "type": "Literal",
+                  "start": 3,
+                  "end": 6,
+                  "regex": {
+                    "pattern": "d",
+                    "flags": ""
+                  },
+                  "value": {},
+                  "raw": "/d/"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 7,
+                  "end": 11,
+                  "name": "exec"
+                },
+                "computed": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 12,
+                  "end": 15,
+                  "value": "1",
+                  "raw": "'1'"
+                }
+              ]
+            },
+            "property": {
+              "type": "Literal",
+              "start": 17,
+              "end": 18,
+              "value": 0,
+              "raw": "0"
+            },
+            "computed": true
+          }
+        ],
+        "quasis": [
+          {
+            "type": "TemplateElement",
+            "start": 1,
+            "end": 1,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "start": 20,
+            "end": 20,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": true
+          }
+        ]
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 6
+});
+
+testFail("if (1) let x = 10;", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("for (;;) const x = 10;", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("while (1) function foo(){}", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("if (1) ; else class Cls {}", "Unexpected token (1:14)", {ecmaVersion: 6});

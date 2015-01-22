@@ -231,12 +231,12 @@
     initTokenState();
     skipSpace();
 
-    function getToken(forceRegexp) {
+    function getToken() {
       lastEnd = tokEnd;
-      readToken(forceRegexp);
+      readToken();
       return new Token();
     }
-    getToken.jumpTo = function(pos, reAllowed) {
+    getToken.jumpTo = function(pos, exprAllowed) {
       tokPos = pos;
       if (options.locations) {
         tokCurLine = 1;
@@ -247,12 +247,23 @@
           tokLineStart = match.index + match[0].length;
         }
       }
-      tokRegexpAllowed = reAllowed;
+      tokExprAllowed = !!exprAllowed;
       skipSpace();
     };
-    getToken.noRegexp = function() {
-      tokRegexpAllowed = false;
-    };
+    getToken.current = function() { return new Token(); };
+    if (typeof Symbol !== 'undefined') {
+      getToken[Symbol.iterator] = function () {
+        return {
+          next: function () {
+            var token = getToken();
+            return {
+              done: token.type === _eof,
+              value: token
+            };
+          }
+        };
+      };
+    }
     getToken.options = options;
     return getToken;
   };
@@ -285,12 +296,13 @@
 
   // Internal state for the tokenizer. To distinguish between division
   // operators and regular expressions, it remembers whether the last
-  // token was one that is allowed to be followed by an expression.
-  // (If it is, a slash is probably a regexp, if it isn't it's a
-  // division operator. See the `parseStatement` function for a
-  // caveat.)
+  // token was one that is allowed to be followed by an expression. In
+  // some cases, notably after ')' or '}' tokens, the situation
+  // depends on the context before the matching opening bracket, so
+  // tokContext keeps a stack of information about current bracketed
+  // forms.
 
-  var tokRegexpAllowed;
+  var tokContext, tokExprAllowed;
 
   // When `options.locations` is true, these are used to keep
   // track of the current line, and know when a new line has been
@@ -311,18 +323,6 @@
 
   var inFunction, inGenerator, inAsync, labels, strict,
     inXJSChild, inXJSTag, inType;
-
-  // This counter is used for checking that arrow expressions did
-  // not contain nested parentheses in argument list.
-
-  var metParenL;
-
-  // This is used by the tokenizer to track the template strings it is
-  // inside, and count the amount of open braces seen inside them, to
-  // be able to switch back to a template token when the } to match ${
-  // is encountered. It will hold an array of integers.
-
-  var templates;
 
   function initParserState() {
     lastStart = lastEnd = tokPos;
@@ -365,6 +365,7 @@
 
   var _num = {type: "num"}, _regexp = {type: "regexp"}, _string = {type: "string"};
   var _name = {type: "name"}, _eof = {type: "eof"};
+  var _jsxName = {type: "jsxName"};
 
   // These are JSX-specific token types
 
@@ -429,10 +430,10 @@
   var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
-  var _arrow = {type: "=>", beforeExpr: true}, _bquote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
-  var _ltSlash = {type: "</"};
-  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"}, _templateContinued = {type: "templateContinued"};
-  var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
+  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"};
+  var _ellipsis = {type: "...", beforeExpr: true};
+  var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
+  var _jsxText = {type: "jsxText"};
   var _paamayimNekudotayim = { type: "::", beforeExpr: true };
   var _at = { type: '@' };
   var _hash = { type: '#' };
@@ -474,6 +475,9 @@
   // '<', '>' may be relational or have special meaning in JSX
   var _lt = {binop: 7, beforeExpr: true}, _gt = {binop: 7, beforeExpr: true};
 
+  // JSX tag boundaries
+  var _jsxTagStart = {type: "jsxTagStart"}, _jsxTagEnd = {type: "jsxTagEnd"};
+
   // Provide access to the token types for external users of the
   // tokenizer.
 
@@ -481,10 +485,9 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, bquote: _bquote, dollarBraceL: _dollarBraceL, star: _star,
-                      assign: _assign, xjsName: _xjsName, xjsText: _xjsText,
                       paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, at: _at, hash: _hash,
-                      template: _template, templateContinued: _templateContinued};
+                      arrow: _arrow, template: _template, star: _star, assign: _assign,
+                      backQuote: _backQuote, dollarBraceL: _dollarBraceL};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -627,7 +630,7 @@
 
   Position.prototype.offset = function(n) {
     return new Position(this.line, this.column + n);
-  }
+  };
 
   function curPosition() {
     return new Position(tokCurLine, tokPos - tokLineStart);
@@ -644,29 +647,109 @@
       tokCurLine = 1;
       tokPos = tokLineStart = 0;
     }
-    tokRegexpAllowed = true;
-    metParenL = 0;
-    inType = inXJSChild = inXJSTag = false;
-    templates = [];
+    tokType = _eof;
+    tokContext = [];
+    tokExprAllowed = true;
+    inType = false;
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
     }
   }
 
-  // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
-  // `tokRegexpAllowed`, and skips the space after the token, so that
-  // the next one's `tokStart` will point at the right position.
+  // The algorithm used to determine whether a regexp can appear at a
+  // given point in the program is loosely based on sweet.js' approach.
+  // See https://github.com/mozilla/sweet.js/wiki/design
 
-  function finishToken(type, val, shouldSkipSpace) {
+  var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true}, b_tmpl = {token: "${", isExpr: true};
+  var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
+  var q_tmpl = {token: "`", isExpr: true};
+  var j_oTag = {token: "<tag", isExpr: false}, j_cTag = {token: "</tag", isExpr: false}, j_expr = {token: "<tag>...</tag>", isExpr: true};
+
+  function curTokContext() {
+    return tokContext[tokContext.length - 1];
+  }
+
+  function braceIsBlock(prevType) {
+    var parent;
+    if (prevType === _colon && (parent = curTokContext()).token == "{")
+      return !parent.isExpr;
+    if (prevType === _return)
+      return newline.test(input.slice(lastEnd, tokStart));
+    if (prevType === _else || prevType === _semi || prevType === _eof)
+      return true;
+    if (prevType == _braceL)
+      return curTokContext() === b_stat;
+    if (prevType === _jsxTagEnd || prevType === _jsxText)
+      return true;
+    if (prevType === _jsxName)
+      return false;
+    return !tokExprAllowed;
+  }
+
+  // Called at the end of every token. Sets `tokEnd`, `tokVal`, and
+  // maintains `tokContext` and `tokExprAllowed`, and skips the space
+  // after the token, so that the next one's `tokStart` will point at
+  // the right position.
+
+  function finishToken(type, val) {
     tokEnd = tokPos;
     if (options.locations) tokEndLoc = curPosition();
+    var prevType = tokType, preserveSpace = false;
     tokType = type;
-    if (shouldSkipSpace !== false) skipSpace();
     tokVal = val;
-    tokRegexpAllowed = type.beforeExpr;
-    if (options.onToken) {
-      options.onToken(new Token());
+
+    // Update context info
+    if (type === _parenR || type === _braceR) {
+      var out = tokContext.pop();
+      tokExprAllowed = !(out && out.isExpr);
+      preserveSpace = out === b_tmpl || curTokContext() === j_expr;
+    } else if (type === _braceL) {
+      tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      tokExprAllowed = true;
+    } else if (type === _dollarBraceL) {
+      tokContext.push(b_tmpl);
+      tokExprAllowed = true;
+    } else if (type == _parenL) {
+      var statementParens = prevType === _if || prevType === _for || prevType === _with || prevType === _while;
+      tokContext.push(statementParens ? p_stat : p_expr);
+      tokExprAllowed = true;
+    } else if (type == _incDec) {
+      // tokExprAllowed stays unchanged
+    } else if (type.keyword && prevType == _dot) {
+      tokExprAllowed = false;
+    } else if (tokExprAllowed && type == _function) {
+      tokExprAllowed = false;
+    } else if (type === _backQuote) {
+      if (curTokContext() === q_tmpl) {
+        tokContext.pop();
+      } else {
+        tokContext.push(q_tmpl);
+        preserveSpace = true;
+      }
+      tokExprAllowed = false;
+    } else if (type === _jsxTagStart) {
+      tokContext.push(j_expr); // treat as beginning of JSX expression
+      tokContext.push(j_oTag); // start opening tag context
+      tokExprAllowed = false;
+    } else if (type === _jsxTagEnd) {
+      var out = tokContext.pop();
+      if (out === j_oTag && prevType === _slash || out === j_cTag) {
+        tokContext.pop();
+        preserveSpace = tokExprAllowed = curTokContext() === j_expr;
+      } else {
+        preserveSpace = tokExprAllowed = true;
+      }
+    } else if (type === _jsxText) {
+      preserveSpace = tokExprAllowed = true;
+    } else if (type === _slash && prevType === _jsxTagStart) {
+      tokContext.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
+      tokContext.push(j_cTag); // reconsider as closing tag context
+      tokExprAllowed = false;
+    } else {
+      tokExprAllowed = type.beforeExpr;
     }
+
+    if (!preserveSpace) skipSpace();
   }
 
   function skipBlockComment() {
@@ -752,9 +835,6 @@
   //
   // All in the name of speed.
   //
-  // The `forceRegexp` parameter is used in the one case where the
-  // `tokRegexpAllowed` trick does not work. See `parseStatement`.
-
   function readToken_dot() {
     var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
@@ -773,7 +853,7 @@
 
   function readToken_slash() { // '/'
     var next = input.charCodeAt(tokPos + 1);
-    if (tokRegexpAllowed) {++tokPos; return readRegexp();}
+    if (tokExprAllowed) {++tokPos; return readRegexp();}
     if (next === 61) return finishOp(_assign, 2);
     return finishOp(_slash, 1);
   }
@@ -838,7 +918,7 @@
   function readToken_lt_gt(code) { // '<>'
     var next = input.charCodeAt(tokPos + 1);
     var size = 1;
-    if (!inType && next === code) {
+    if (next === code) {
       size = code === 62 && input.charCodeAt(tokPos + 2) === 62 ? 3 : 2;
       if (input.charCodeAt(tokPos + size) === 61) return finishOp(_assign, size + 1);
       return finishOp(_bitShift, size);
@@ -850,16 +930,20 @@
       skipSpace();
       return readToken();
     }
-    if (next === 61) {
+    if (tokExprAllowed && code === 60) {
+      ++tokPos;
+      return finishToken(_jsxTagStart);
+    }
+    if (code === 62) {
+      var context = curTokContext();
+      if (context === j_oTag || context === j_cTag) {
+        ++tokPos;
+        return finishToken(_jsxTagEnd);
+      }
+    }
+    if (next === 61)
       size = input.charCodeAt(tokPos + 2) === 61 ? 3 : 2;
-      return finishOp(_relational, size);
-    }
-    if (code === 60 && next === 47) {
-      // '</', beginning of JSX closing element
-      size = 2;
-      return finishOp(_ltSlash, size);
-    }
-    return code === 60 ? finishOp(_lt, size) : finishOp(_gt, size, !inXJSTag);
+    return finishOp(_relational, size);
   }
 
   function readToken_eq_excl(code) { // '=!', '=>'
@@ -904,16 +988,8 @@
     case 44: ++tokPos; return finishToken(_comma);
     case 91: ++tokPos; return finishToken(_bracketL);
     case 93: ++tokPos; return finishToken(_bracketR);
-    case 123:
-      ++tokPos;
-      if (templates.length) ++templates[templates.length - 1];
-      return finishToken(_braceL);
-    case 125:
-      ++tokPos;
-      if (templates.length && --templates[templates.length - 1] === 0)
-        return readTemplateString(_templateContinued);
-      else
-        return finishToken(_braceR);
+    case 123: ++tokPos; return finishToken(_braceL);
+    case 125: ++tokPos; return finishToken(_braceR);
     case 63: ++tokPos; return finishToken(_question);
 
     case 64:
@@ -942,7 +1018,9 @@
     case 96: // '`'
       if (options.ecmaVersion >= 6) {
         ++tokPos;
-        return readTemplateString(_template);
+        return finishToken(_backQuote);
+      } else {
+        return false;
       }
 
     case 48: // '0'
@@ -997,23 +1075,32 @@
     return false;
   }
 
-  function readToken(forceRegexp) {
-    if (!forceRegexp) tokStart = tokPos;
-    else tokPos = tokStart + 1;
+  function readToken() {
+    tokStart = tokPos;
     if (options.locations) tokStartLoc = curPosition();
-    if (forceRegexp) return readRegexp();
     if (tokPos >= inputLen) return finishToken(_eof);
 
-    var code = input.charCodeAt(tokPos);
+    var context = curTokContext();
 
-    // JSX content - either simple text, start of <tag> or {expression}
-    if (inXJSChild && tokType !== _braceL && code !== 60 && code !== 123 && code !== 125) {
-      return readXJSText(['<', '{']);
+    if (context === q_tmpl) {
+      return readTmplToken();
     }
 
-    // Identifier or keyword. '\uXXXX' sequences are allowed in
-    // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    if (context === j_expr) {
+      return readJSXToken();
+    }
+
+    var code = input.charCodeAt(tokPos);
+    if (context === j_oTag || context === j_cTag) {
+      // JSX identifier
+      if (isIdentifierStart(code)) return readJSXWord();
+    } else if (context === j_expr) {
+      return readJSXToken();
+    } else {
+      // Identifier or keyword. '\uXXXX' sequences are allowed in
+      // identifiers, so '\' also dispatches to that.
+      if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    }
 
     var tok = getTokenFromCode(code);
 
@@ -1173,6 +1260,7 @@
   }
 
   function readString(quote) {
+    var isJSX = curTokContext() === j_oTag;
     ++tokPos;
     var out = "";
     for (;;) {
@@ -1182,11 +1270,13 @@
         ++tokPos;
         return finishToken(_string, out);
       }
-      if (ch === 92) { // '\'
+      if (ch === 92 && !isJSX) { // '\'
         out += readEscapedChar();
+      } else if (ch === 38 && isJSX) { // '&'
+        out += readJSXEntity();
       } else {
         ++tokPos;
-        if (newline.test(String.fromCharCode(ch))) {
+        if (isNewLine(ch)) {
           raise(tokStart, "Unterminated string constant");
           }
         out += String.fromCharCode(ch); // '\'
@@ -1194,34 +1284,366 @@
     }
   }
 
-  function readTemplateString(type) {
-    if (type == _templateContinued) templates.pop();
-    var out = "", start = tokPos;;
+  // Reads template string tokens.
+
+  function readTmplToken() {
+    var out = "", start = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated template");
-      var ch = input.charAt(tokPos);
-      if (ch === "`" || ch === "$" && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
-        var raw = input.slice(start, tokPos);
-        ++tokPos;
-        if (ch == "$") { ++tokPos; templates.push(1); }
-        return finishToken(type, {cooked: out, raw: raw});
+      var ch = input.charCodeAt(tokPos);
+      if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
+        if (tokPos === start && tokType === _template) {
+          if (ch === 36) {
+            tokPos += 2;
+            return finishToken(_dollarBraceL);
+          } else {
+            ++tokPos;
+            return finishToken(_backQuote);
+          }
+        }
+        return finishToken(_template, out);
       }
-
-      if (ch === "\\") { // '\'
+      if (ch === 92) { // '\'
         out += readEscapedChar();
       } else {
         ++tokPos;
-        if (newline.test(ch)) {
-          if (ch === "\r" && input.charCodeAt(tokPos) === 10) {
+        if (isNewLine(ch)) {
+          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
             ++tokPos;
-            ch = "\n";
+            ch = 10;
           }
           if (options.locations) {
             ++tokCurLine;
             tokLineStart = tokPos;
           }
         }
-        out += ch;
+        out += String.fromCharCode(ch);
+      }
+    }
+  }
+
+  var XHTMLEntities = {
+    quot: '\u0022',
+    amp: '&',
+    apos: '\u0027',
+    lt: '<',
+    gt: '>',
+    nbsp: '\u00A0',
+    iexcl: '\u00A1',
+    cent: '\u00A2',
+    pound: '\u00A3',
+    curren: '\u00A4',
+    yen: '\u00A5',
+    brvbar: '\u00A6',
+    sect: '\u00A7',
+    uml: '\u00A8',
+    copy: '\u00A9',
+    ordf: '\u00AA',
+    laquo: '\u00AB',
+    not: '\u00AC',
+    shy: '\u00AD',
+    reg: '\u00AE',
+    macr: '\u00AF',
+    deg: '\u00B0',
+    plusmn: '\u00B1',
+    sup2: '\u00B2',
+    sup3: '\u00B3',
+    acute: '\u00B4',
+    micro: '\u00B5',
+    para: '\u00B6',
+    middot: '\u00B7',
+    cedil: '\u00B8',
+    sup1: '\u00B9',
+    ordm: '\u00BA',
+    raquo: '\u00BB',
+    frac14: '\u00BC',
+    frac12: '\u00BD',
+    frac34: '\u00BE',
+    iquest: '\u00BF',
+    Agrave: '\u00C0',
+    Aacute: '\u00C1',
+    Acirc: '\u00C2',
+    Atilde: '\u00C3',
+    Auml: '\u00C4',
+    Aring: '\u00C5',
+    AElig: '\u00C6',
+    Ccedil: '\u00C7',
+    Egrave: '\u00C8',
+    Eacute: '\u00C9',
+    Ecirc: '\u00CA',
+    Euml: '\u00CB',
+    Igrave: '\u00CC',
+    Iacute: '\u00CD',
+    Icirc: '\u00CE',
+    Iuml: '\u00CF',
+    ETH: '\u00D0',
+    Ntilde: '\u00D1',
+    Ograve: '\u00D2',
+    Oacute: '\u00D3',
+    Ocirc: '\u00D4',
+    Otilde: '\u00D5',
+    Ouml: '\u00D6',
+    times: '\u00D7',
+    Oslash: '\u00D8',
+    Ugrave: '\u00D9',
+    Uacute: '\u00DA',
+    Ucirc: '\u00DB',
+    Uuml: '\u00DC',
+    Yacute: '\u00DD',
+    THORN: '\u00DE',
+    szlig: '\u00DF',
+    agrave: '\u00E0',
+    aacute: '\u00E1',
+    acirc: '\u00E2',
+    atilde: '\u00E3',
+    auml: '\u00E4',
+    aring: '\u00E5',
+    aelig: '\u00E6',
+    ccedil: '\u00E7',
+    egrave: '\u00E8',
+    eacute: '\u00E9',
+    ecirc: '\u00EA',
+    euml: '\u00EB',
+    igrave: '\u00EC',
+    iacute: '\u00ED',
+    icirc: '\u00EE',
+    iuml: '\u00EF',
+    eth: '\u00F0',
+    ntilde: '\u00F1',
+    ograve: '\u00F2',
+    oacute: '\u00F3',
+    ocirc: '\u00F4',
+    otilde: '\u00F5',
+    ouml: '\u00F6',
+    divide: '\u00F7',
+    oslash: '\u00F8',
+    ugrave: '\u00F9',
+    uacute: '\u00FA',
+    ucirc: '\u00FB',
+    uuml: '\u00FC',
+    yacute: '\u00FD',
+    thorn: '\u00FE',
+    yuml: '\u00FF',
+    OElig: '\u0152',
+    oelig: '\u0153',
+    Scaron: '\u0160',
+    scaron: '\u0161',
+    Yuml: '\u0178',
+    fnof: '\u0192',
+    circ: '\u02C6',
+    tilde: '\u02DC',
+    Alpha: '\u0391',
+    Beta: '\u0392',
+    Gamma: '\u0393',
+    Delta: '\u0394',
+    Epsilon: '\u0395',
+    Zeta: '\u0396',
+    Eta: '\u0397',
+    Theta: '\u0398',
+    Iota: '\u0399',
+    Kappa: '\u039A',
+    Lambda: '\u039B',
+    Mu: '\u039C',
+    Nu: '\u039D',
+    Xi: '\u039E',
+    Omicron: '\u039F',
+    Pi: '\u03A0',
+    Rho: '\u03A1',
+    Sigma: '\u03A3',
+    Tau: '\u03A4',
+    Upsilon: '\u03A5',
+    Phi: '\u03A6',
+    Chi: '\u03A7',
+    Psi: '\u03A8',
+    Omega: '\u03A9',
+    alpha: '\u03B1',
+    beta: '\u03B2',
+    gamma: '\u03B3',
+    delta: '\u03B4',
+    epsilon: '\u03B5',
+    zeta: '\u03B6',
+    eta: '\u03B7',
+    theta: '\u03B8',
+    iota: '\u03B9',
+    kappa: '\u03BA',
+    lambda: '\u03BB',
+    mu: '\u03BC',
+    nu: '\u03BD',
+    xi: '\u03BE',
+    omicron: '\u03BF',
+    pi: '\u03C0',
+    rho: '\u03C1',
+    sigmaf: '\u03C2',
+    sigma: '\u03C3',
+    tau: '\u03C4',
+    upsilon: '\u03C5',
+    phi: '\u03C6',
+    chi: '\u03C7',
+    psi: '\u03C8',
+    omega: '\u03C9',
+    thetasym: '\u03D1',
+    upsih: '\u03D2',
+    piv: '\u03D6',
+    ensp: '\u2002',
+    emsp: '\u2003',
+    thinsp: '\u2009',
+    zwnj: '\u200C',
+    zwj: '\u200D',
+    lrm: '\u200E',
+    rlm: '\u200F',
+    ndash: '\u2013',
+    mdash: '\u2014',
+    lsquo: '\u2018',
+    rsquo: '\u2019',
+    sbquo: '\u201A',
+    ldquo: '\u201C',
+    rdquo: '\u201D',
+    bdquo: '\u201E',
+    dagger: '\u2020',
+    Dagger: '\u2021',
+    bull: '\u2022',
+    hellip: '\u2026',
+    permil: '\u2030',
+    prime: '\u2032',
+    Prime: '\u2033',
+    lsaquo: '\u2039',
+    rsaquo: '\u203A',
+    oline: '\u203E',
+    frasl: '\u2044',
+    euro: '\u20AC',
+    image: '\u2111',
+    weierp: '\u2118',
+    real: '\u211C',
+    trade: '\u2122',
+    alefsym: '\u2135',
+    larr: '\u2190',
+    uarr: '\u2191',
+    rarr: '\u2192',
+    darr: '\u2193',
+    harr: '\u2194',
+    crarr: '\u21B5',
+    lArr: '\u21D0',
+    uArr: '\u21D1',
+    rArr: '\u21D2',
+    dArr: '\u21D3',
+    hArr: '\u21D4',
+    forall: '\u2200',
+    part: '\u2202',
+    exist: '\u2203',
+    empty: '\u2205',
+    nabla: '\u2207',
+    isin: '\u2208',
+    notin: '\u2209',
+    ni: '\u220B',
+    prod: '\u220F',
+    sum: '\u2211',
+    minus: '\u2212',
+    lowast: '\u2217',
+    radic: '\u221A',
+    prop: '\u221D',
+    infin: '\u221E',
+    ang: '\u2220',
+    and: '\u2227',
+    or: '\u2228',
+    cap: '\u2229',
+    cup: '\u222A',
+    'int': '\u222B',
+    there4: '\u2234',
+    sim: '\u223C',
+    cong: '\u2245',
+    asymp: '\u2248',
+    ne: '\u2260',
+    equiv: '\u2261',
+    le: '\u2264',
+    ge: '\u2265',
+    sub: '\u2282',
+    sup: '\u2283',
+    nsub: '\u2284',
+    sube: '\u2286',
+    supe: '\u2287',
+    oplus: '\u2295',
+    otimes: '\u2297',
+    perp: '\u22A5',
+    sdot: '\u22C5',
+    lceil: '\u2308',
+    rceil: '\u2309',
+    lfloor: '\u230A',
+    rfloor: '\u230B',
+    lang: '\u2329',
+    rang: '\u232A',
+    loz: '\u25CA',
+    spades: '\u2660',
+    clubs: '\u2663',
+    hearts: '\u2665',
+    diams: '\u2666'
+  };
+
+  function readJSXEntity() {
+    var str = '', count = 0, entity;
+    var ch = input[tokPos];
+    if (ch !== '&') raise(tokPos, "Entity must start with an ampersand");
+    var startPos = ++tokPos;
+    while (tokPos < inputLen && count++ < 10) {
+      ch = input[tokPos++];
+      if (ch === ';') {
+        if (str[0] === '#') {
+          if (str[1] === 'x') {
+            str = str.substr(2);
+            if (hexNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 16));
+            }
+          } else {
+            str = str.substr(1);
+            if (decimalNumber.test(str)) {
+              entity = String.fromCharCode(parseInt(str, 10));
+            }
+          }
+        } else {
+          entity = XHTMLEntities[str];
+        }
+        break;
+      }
+      str += ch;
+    }
+    if (!entity) {
+      tokPos = startPos;
+      return '&';
+    }
+    return entity;
+  }
+
+  // Reads inline JSX contents token.
+
+  function readJSXToken() {
+    var out = "", start = tokPos;
+    for (;;) {
+      if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
+      var ch = input.charCodeAt(tokPos);
+      switch (ch) {
+        case 123: // '{'
+        case 60: // '<'
+          if (tokPos === start) {
+            return getTokenFromCode(ch);
+          }
+          return finishToken(_jsxText, out);
+
+        case 38: // '&'
+          out += readJSXEntity();
+          break;
+
+        default:
+          ++tokPos;
+          if (isNewLine(ch)) {
+            if (ch === 13 && input.charCodeAt(tokPos) === 10) {
+              ++tokPos;
+              ch = 10;
+            }
+            if (options.locations) {
+              ++tokCurLine;
+              tokLineStart = tokPos;
+            }
+          }
+          out += String.fromCharCode(ch);
       }
     }
   }
@@ -1655,6 +2077,21 @@
     return finishToken(type, word);
   }
 
+  // Read a JSX identifier (valid tag or attribute name).
+  //
+  // Optimized version since JSX identifiers can't contain
+  // escape characters and so can be read as single slice.
+  // Also assumes that first character was already checked
+  // by isIdentifierStart in readToken.
+
+  function readJSXWord() {
+    var ch, start = tokPos;
+    do {
+      ch = input.charCodeAt(++tokPos);
+    } while (isIdentifierChar(ch) || ch === 45); // '-'
+    return finishToken(_jsxName, input.slice(start, tokPos));
+  }
+
   // ## Parser
 
   // A recursive descent parser operates by defining functions for all
@@ -1680,17 +2117,21 @@
   // Continue to the next token.
 
   function next() {
+    if (options.onToken)
+      options.onToken(new Token());
+
     lastStart = tokStart;
     lastEnd = tokEnd;
     lastEndLoc = tokEndLoc;
     readToken();
   }
 
-  // Enter strict mode. Re-reads the next token to please pedantic
-  // tests ("use strict"; 010; -- should fail).
+  // Enter strict mode. Re-reads the next number or string to
+  // please pedantic tests ("use strict"; 010; -- should fail).
 
   function setStrict(strct) {
     strict = strct;
+    if (tokType !== _num && tokType !== _string) return;
     tokPos = tokStart;
     if (options.locations) {
       while (tokPos < tokLineStart) {
@@ -1764,6 +2205,8 @@
       node.range[1] = lastEnd;
     return node;
   }
+
+  // Finish node at given position
 
   function finishNodeAt(node, type, pos) {
     if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
@@ -1840,7 +2283,10 @@
       switch (node.type) {
         case "Identifier":
         case "MemberExpression":
-          break;          
+        case "ObjectPattern":
+        case "ArrayPattern":
+        case "AssignmentPattern":
+          break;
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
@@ -1882,6 +2328,21 @@
     return node;
   }
 
+  // Parses spread element.
+
+  function parseSpread(isBinding) {
+    var spread = startNode();
+    next();
+    if (isBinding) {
+      var arg = parseAssignableAtom();
+      checkSpreadAssign(arg);
+      spread.argument = arg;
+    } else {
+      spread.argument = parseMaybeAssign();
+    }
+    return finishNode(spread, "SpreadElement");
+  }
+
   // Parses lvalue (assignable) atom.
 
   function parseAssignableAtom() {
@@ -1897,11 +2358,7 @@
         while (!eat(_bracketR)) {
           first ? first = false : expect(_comma);
           if (tokType === _ellipsis) {
-            var spread = startNode();
-            next();
-            spread.argument = parseAssignableAtom();
-            checkSpreadAssign(spread.argument);
-            elts.push(finishNode(spread, "SpreadElement"));
+            elts.push(parseSpread(true));
             expect(_bracketR);
             break;
           }
@@ -2043,15 +2500,13 @@
     var first = true;
     if (!node.body) node.body = [];
     while (tokType !== _eof) {
-      var stmt = parseStatement(true);
+      var stmt = parseStatement(true, true);
       node.body.push(stmt);
       if (first && isUseStrict(stmt)) setStrict(true);
       first = false;
     }
 
-    lastStart = tokStart;
-    lastEnd = tokEnd;
-    lastEndLoc = tokEndLoc;
+    next();
     return finishNode(node, "Program");
   }
 
@@ -2064,11 +2519,8 @@
   // `if (foo) /blah/.exec(foo);`, where looking at the previous token
   // does not help.
 
-  function parseStatement(topLevel) {
-    if (tokType === _slash || tokType === _assign && tokVal == "/=")
-      readToken(true);
-
-    var starttype = tokType, node = startNode(), start = storeCurrentPos();
+  function parseStatement(declaration, topLevel) {
+    var starttype = tokType, node = startNode();
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -2079,14 +2531,19 @@
     case _debugger: return parseDebuggerStatement(node);
     case _do: return parseDoStatement(node);
     case _for: return parseForStatement(node);
-    case _function: return parseFunctionStatement(node);
-    case _class: return parseClass(node, true);
+    case _function:
+      if (!declaration && options.ecmaVersion >= 6) unexpected();
+      return parseFunctionStatement(node);
+    case _class:
+      if (!declaration) unexpected();
+      return parseClass(node, true);
     case _if: return parseIfStatement(node);
     case _return: return parseReturnStatement(node);
     case _switch: return parseSwitchStatement(node);
     case _throw: return parseThrowStatement(node);
     case _try: return parseTryStatement(node);
-    case _var: case _let: case _const: return parseVarStatement(node, starttype.keyword);
+    case _let: case _const: if (!declaration) unexpected(); // NOTE: falls through to _var
+    case _var: return parseVarStatement(node, starttype.keyword);
     case _while: return parseWhileStatement(node);
     case _with: return parseWithStatement(node);
     case _braceL: return parseBlock(); // no point creating a function for this
@@ -2162,7 +2619,7 @@
   function parseDoStatement(node) {
     next();
     labels.push(loopLabel);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     expect(_while);
     node.test = parseParenExpression();
@@ -2212,8 +2669,8 @@
   function parseIfStatement(node) {
     next();
     node.test = parseParenExpression();
-    node.consequent = parseStatement();
-    node.alternate = eat(_else) ? parseStatement() : null;
+    node.consequent = parseStatement(false);
+    node.alternate = eat(_else) ? parseStatement(false) : null;
     return finishNode(node, "IfStatement");
   }
   
@@ -2257,7 +2714,7 @@
         expect(_colon);
       } else {
         if (!cur) unexpected();
-        cur.consequent.push(parseStatement());
+        cur.consequent.push(parseStatement(true));
       }
     }
     if (cur) finishNode(cur, "SwitchCase");
@@ -2283,9 +2740,8 @@
       var clause = startNode();
       next();
       expect(_parenL);
-      clause.param = parseIdent();
-      if (strict && isStrictBadIdWord(clause.param.name))
-        raise(clause.param.start, "Binding " + clause.param.name + " in strict mode");
+      clause.param = parseAssignableAtom();
+      checkLVal(clause.param, true);
       expect(_parenR);
       clause.guard = null;
       clause.body = parseBlock();
@@ -2309,7 +2765,7 @@
     next();
     node.test = parseParenExpression();
     labels.push(loopLabel);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, "WhileStatement");
   }
@@ -2318,7 +2774,7 @@
     if (strict) raise(tokStart, "'with' in strict mode");
     next();
     node.object = parseParenExpression();
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     return finishNode(node, "WithStatement");
   }
   
@@ -2332,7 +2788,7 @@
       if (labels[i].name === maybeName) raise(expr.start, "Label '" + maybeName + "' is already declared");
     var kind = tokType.isLoop ? "loop" : tokType === _switch ? "switch" : null;
     labels.push({name: maybeName, kind: kind});
-    node.body = parseStatement();
+    node.body = parseStatement(true);
     labels.pop();
     node.label = expr;
     return finishNode(node, "LabeledStatement");
@@ -2363,7 +2819,7 @@
     node.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
-      var stmt = parseStatement();
+      var stmt = parseStatement(true);
       node.body.push(stmt);
       if (first && allowStrict && isUseStrict(stmt)) {
         oldStrict = strict;
@@ -2386,7 +2842,7 @@
     expect(_semi);
     node.update = tokType === _parenR ? null : parseExpression();
     expect(_parenR);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, "ForStatement");
   }
@@ -2400,7 +2856,7 @@
     node.left = init;
     node.right = parseExpression();
     expect(_parenR);
-    node.body = parseStatement();
+    node.body = parseStatement(false);
     labels.pop();
     return finishNode(node, type);
   }
@@ -2527,22 +2983,16 @@
 
   function parseMaybeUnary(isStatement) {
     if (tokType.prefix) {
-      var node = startNode(), update = tokType.isUpdate, nodeType;
-      if (tokType === _ellipsis) {
-        nodeType = "SpreadElement";
-      } else {
-        nodeType = update ? "UpdateExpression" : "UnaryExpression";
+      var node = startNode(), update = tokType.isUpdate;
       node.operator = tokVal;
       node.prefix = true;
-      }
-      tokRegexpAllowed = true;
       next();
       node.argument = parseMaybeUnary();
       if (update) checkLVal(node.argument);
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
         raise(node.start, "Deleting local variable in strict mode");
-      return finishNode(node, nodeType);
+      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts(isStatement);
@@ -2599,7 +3049,7 @@
       node.callee = base;
       node.arguments = parseExprList(_parenR, false);
       return parseSubscripts(finishNode(node, "CallExpression"), start, noCalls);
-    } else if (tokType === _template) {
+    } else if (tokType === _backQuote) {
       var node = startNodeAt(start);
       node.tag = base;
       node.quasi = parseTemplate();
@@ -2643,16 +3093,16 @@
           // arrow functions
           if (tokType === _parenL) {
             next();
-            var oldParenL = ++metParenL;
+            var exprList;
             if (tokType !== _parenR) {
-              val = parseExpression();
+              var val = parseExpression();
               exprList = val.type === "SequenceExpression" ? val.expressions : [val];
             } else {
               exprList = [];
             }
             expect(_parenR);
             // if '=>' follows '(...)', convert contents to arguments
-            if (metParenL === oldParenL && eat(_arrow)) {
+            if (eat(_arrow)) {
               return parseArrowExpression(node, exprList, true);
             } else {
               node.callee = id;
@@ -2693,7 +3143,7 @@
       next();
       return finishNode(node, "Literal");
 
-    case _num: case _string: case _xjsText:
+    case _num: case _string: case _jsxText:
       var node = startNode();
       node.value = tokVal;
       node.raw = input.slice(tokStart, tokEnd);
@@ -2708,42 +3158,7 @@
       return finishNode(node, "Literal");
 
     case _parenL:
-      var start = storeCurrentPos();
-      var val, exprList;
-      next();
-      // check whether this is generator comprehension or regular expression
-      if (options.ecmaVersion >= 7 && tokType === _for) {
-        val = parseComprehension(startNodeAt(start), true);
-      } else {
-        var oldParenL = ++metParenL;
-        if (tokType !== _parenR) {
-          val = parseExpression();
-          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-        } else {
-          exprList = [];
-        }
-        expect(_parenR);
-        // if '=>' follows '(...)', convert contents to arguments
-        if (metParenL === oldParenL && eat(_arrow)) {
-          val = parseArrowExpression(startNodeAt(start), exprList);
-        } else {
-          // forbid '()' before everything but '=>'
-          if (!val) unexpected(lastStart);
-          // forbid '...' in sequence expressions
-          if (options.ecmaVersion >= 6) {
-            for (var i = 0; i < exprList.length; i++) {
-              if (exprList[i].type === "SpreadElement") unexpected();
-            }
-          }
-
-          if (options.preserveParens) {
-            var par = startNodeAt(start);
-            par.expression = val;
-            val = finishNode(par, "ParenthesizedExpression");
-          }
-        }
-      }
-      return val;
+      return parseParenAndDistinguishExpression();
 
     case _bracketL:
       var node = startNode();
@@ -2769,14 +3184,14 @@
     case _new:
       return parseNew();
 
-    case _template:
+    case _backQuote:
       return parseTemplate();
-
-    case _lt:
-      return parseXJSElement();
 
     case _hash:
       return parseBindFunctionExpression();
+
+    case _jsxTagStart:
+      return parseJSXElement();
 
     default:
       unexpected();
@@ -2799,6 +3214,60 @@
     return finishNode(node, "BindFunctionExpression");
   }
 
+  function parseParenAndDistinguishExpression() {
+    var start = storeCurrentPos(), val;
+    if (options.ecmaVersion >= 6) {
+      next();
+
+      if (options.ecmaVersion >= 7 && tokType === _for) {
+        return parseComprehension(startNodeAt(start), true);
+      }
+
+      var innerStart = storeCurrentPos(), exprList = [], first = true, spreadStart, innerParenStart;
+      while (tokType !== _parenR) {
+        first ? first = false : expect(_comma);
+        if (tokType === _ellipsis) {
+          spreadStart = tokStart;
+          exprList.push(parseSpread(true));
+          break;
+        } else {
+          if (tokType === _parenL && !innerParenStart) {
+            innerParenStart = tokStart;
+          }
+          exprList.push(parseMaybeAssign());
+        }
+      }
+      var innerEnd = storeCurrentPos();
+      expect(_parenR);
+
+      if (eat(_arrow)) {
+        if (innerParenStart) unexpected(innerParenStart);
+        return parseArrowExpression(startNodeAt(start), exprList);
+      }
+
+      if (!exprList.length) unexpected(lastStart);
+      if (spreadStart) unexpected(spreadStart);
+
+      if (exprList.length > 1) {
+        val = startNodeAt(innerStart);
+        val.expressions = exprList;
+        finishNodeAt(val, "SequenceExpression", innerEnd);
+      } else {
+        val = exprList[0];
+      }
+    } else {
+      val = parseParenExpression();
+    }
+
+    if (options.preserveParens) {
+      var par = startNodeAt(start);
+      par.expression = val;
+      return finishNode(par, "ParenthesizedExpression");
+    } else {
+      return val;
+    }
+  }
+
   // New's precedence is slightly tricky. It must allow its argument
   // to be a `[]` or dot subscript expression, but not a call — at
   // least, not without wrapping it in parentheses. Thus, it uses the
@@ -2816,28 +3285,33 @@
   // Parse template expression.
 
   function parseTemplateElement() {
-    var elem = startNodeAt(options.locations ? [tokStart + 1, tokStartLoc.offset(1)] : tokStart + 1);
-    elem.value = tokVal;
-    elem.tail = input.charCodeAt(tokEnd - 1) !== 123; // '{'
+    var elem = startNode();
+    elem.value = {
+      raw: input.slice(tokStart, tokEnd),
+      cooked: tokVal
+    };
     next();
-    var endOff = elem.tail ? 1 : 2;
-    return finishNodeAt(elem, "TemplateElement", options.locations ? [lastEnd - endOff, lastEndLoc.offset(-endOff)] : lastEnd - endOff);
+    elem.tail = tokType === _backQuote;
+    return finishNode(elem, "TemplateElement");
   }
 
   function parseTemplate() {
     var node = startNode();
+    next();
     node.expressions = [];
     var curElt = parseTemplateElement();
     node.quasis = [curElt];
     while (!curElt.tail) {
+      expect(_dollarBraceL);
       node.expressions.push(parseExpression());
-      if (tokType !== _templateContinued) unexpected();
+      expect(_braceR);
       node.quasis.push(curElt = parseTemplateElement());
     }
+    next();
     return finishNode(node, "TemplateLiteral");
   }
 
-  // Parse an object literal.
+  // Parse an object literal or binding pattern.
 
   function parseObj(isPattern) {
     var node = startNode(), first = true, propHash = {};
@@ -2851,7 +3325,7 @@
 
       var prop = startNode(), start, isGenerator = false, isAsync = false;
       if (options.ecmaVersion >= 7 && tokType === _ellipsis) {
-        prop = parseMaybeUnary();
+        prop = parseSpread();
         prop.type = "SpreadProperty";
         node.properties.push(prop);
         continue;
@@ -2890,7 +3364,7 @@
         prop.method = true;
         prop.value = parseMethod(isGenerator, isAsync);
       } else if (options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-                 (prop.key.name === "get" || prop.key.name === "set"|| (options.playground && prop.key.name === "memo")) &&
+                 (prop.key.name === "get" || prop.key.name === "set" || (options.playground && prop.key.name === "memo")) &&
                  (tokType != _comma && tokType != _braceR)) {
         if (isGenerator || isAsync || isPattern) unexpected();
         prop.kind = prop.key.name;
@@ -3015,7 +3489,7 @@
     for (;;) {
       if (eat(_parenR)) {
         break;
-      } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
+      } else if (eat(_ellipsis)) {
         node.rest = parseAssignableAtom();
         checkSpreadAssign(node.rest);
         parseFunctionParam(node.rest);
@@ -3026,7 +3500,6 @@
         var param = parseAssignableAtom();
         parseFunctionParam(param);
         node.params.push(param);
-
         if (options.ecmaVersion >= 6) {
           if (eat(_eq)) {
             hasDefaults = true;
@@ -3110,70 +3583,45 @@
   function parseClass(node, isStatement) {
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
-    if (tokType === _lt) {
-      node.typeParameters = parseTypeParameterDeclaration();
-    }
-    node.superClass = eat(_extends) ? parseMaybeAssign(false, true) : null;
-    if (node.superClass && tokType === _lt) {
-      node.superTypeParameters = parseTypeParameterInstantiation();
-    }
-    if (tokType === _name && tokVal === "implements") {
-      next();
-      node.implements = parseClassImplements();
-    }
+    node.superClass = eat(_extends) ? parseExprSubscripts() : null;
     var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
     while (!eat(_braceR)) {
-      while (eat(_semi));
-      if (tokType === _braceR) continue;
+      if (eat(_semi)) continue;
       var method = startNode();
       if (options.ecmaVersion >= 7 && tokType === _name && tokVal === "private") {
         next();
         classBody.body.push(parsePrivate(method));
         continue;
       }
-      if (tokType === _name && tokVal === "static") {
-        next();
-        method['static'] = true;
-      } else {
-        method['static'] = false;
-      }
-      var isAsync = false;
       var isGenerator = eat(_star);
-      if (options.ecmaVersion >= 7 && !isGenerator && tokType === _name && tokVal === "async") {
-        var asyncId = parseIdent();
-        if (tokType === _colon || tokType === _parenL) {
-          method.key = asyncId;
-        } else {
-          isAsync = true;
-          parsePropertyName(method);
-        }
-      } else {
+      var isAsync = false;
+      parsePropertyName(method);
+      if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
+          method.key.name === "async") {
+        isAsync = true;
         parsePropertyName(method);
       }
       if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
-          (method.key.name === "get" || method.key.name === "set" || (options.playground && method.key.name === "memo"))) {
+          method.key.name === "static") {
+        if (isGenerator || isAsync) unexpected();
+        method['static'] = true;
+        isGenerator = eat(_star);
+        parsePropertyName(method);
+      } else {
+        method['static'] = false;
+      }
+      if (tokType !== _parenL && !method.computed && method.key.type === "Identifier" &&
+          (method.key.name === "get" || method.key.name === "set") || (options.playground && method.key.name === "memo")) {
         if (isGenerator || isAsync) unexpected();
         method.kind = method.key.name;
         parsePropertyName(method);
       } else {
         method.kind = "";
       }
-      if (tokType === _colon) {
-        if (isGenerator || isAsync) unexpected();
-        method.typeAnnotation = parseTypeAnnotation();
-        semicolon();
-        classBody.body.push(finishNode(method, "ClassProperty"));
-      } else {
-        var typeParameters;
-        if (tokType === _lt) {
-          typeParameters = parseTypeParameterDeclaration();
-        }
-        method.value = parseMethod(isGenerator, isAsync);
-        method.value.typeParameters = typeParameters;
-        classBody.body.push(finishNode(method, "MethodDefinition"));
-      }
+      method.value = parseMethod(isGenerator, isAsync);
+      classBody.body.push(finishNode(method, "MethodDefinition"));
     }
     node.body = finishNode(classBody, "ClassBody");
     return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
@@ -3210,8 +3658,11 @@
         if (allowTrailingComma && options.allowTrailingCommas && eat(close)) break;
       } else first = false;
 
-      if (allowEmpty && tokType === _comma) elts.push(null);
-      else elts.push(parseExpression(true));
+      if (allowEmpty && tokType === _comma) {
+        elts.push(null);
+      } else {
+        elts.push(tokType === _ellipsis ? parseSpread() : parseMaybeAssign());
+      }
     }
     return elts;
   }
@@ -3236,7 +3687,6 @@
     } else {
       unexpected();
     }
-    tokRegexpAllowed = false;
     next();
     return finishNode(node, "Identifier");
   }
@@ -3247,7 +3697,7 @@
     next();
     // export var|const|let|function|class ...;
     if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || tokType === _name && tokVal === 'async') {
-      node.declaration = parseStatement();
+      node.declaration = parseStatement(true);
       node['default'] = false;
       node.specifiers = null;
       node.source = null;
@@ -3342,11 +3792,10 @@
     if (tokType === _name) {
       // import defaultObj, { x, y as z } from '...'
       var node = startNode();
-      node.id = startNode();
-      node.name = parseIdent();
-      checkLVal(node.name, true);
-      node.id.name = "default";
-      finishNode(node.id, "Identifier");
+      node.id = parseIdent();
+      checkLVal(node.id, true);
+      node.name = null;
+      node['default'] = true;
       nodes.push(finishNode(node, "ImportSpecifier"));
       if (!eat(_comma)) return nodes;
     }
@@ -3420,9 +3869,6 @@
       checkLVal(block.left, true);
       if (tokType !== _name || tokVal !== "of") unexpected();
       next();
-      // `of` property is here for compatibility with Esprima's AST
-      // which also supports deprecated [for (... in ...) expr]
-      block.of = true;
       block.right = parseExpression();
       expect(_parenR);
       node.blocks.push(finishNode(block, "ComprehensionBlock"));
@@ -3436,122 +3882,95 @@
 
   // Transforms JSX element name to string.
 
-  function getQualifiedXJSName(object) {
-    if (object.type === "XJSIdentifier") {
+  function getQualifiedJSXName(object) {
+    if (object.type === "JSXIdentifier") {
       return object.name;
     }
-    if (object.type === "XJSNamespacedName") {
+    if (object.type === "JSXNamespacedName") {
       return object.namespace.name + ':' + object.name.name;
     }
-    if (object.type === "XJSMemberExpression") {
+    if (object.type === "JSXMemberExpression") {
       return (
-        getQualifiedXJSName(object.object) + '.' +
-        getQualifiedXJSName(object.property)
+        getQualifiedJSXName(object.object) + '.' +
+        getQualifiedJSXName(object.property)
       );
     }
   }
 
   // Parse next token as JSX identifier
 
-  function parseXJSIdentifier() {
+  function parseJSXIdentifier() {
     var node = startNode();
-    if (tokType === _xjsName) {
+    if (tokType === _jsxName) {
       node.name = tokVal;
     } else if (tokType.keyword) {
       node.name = tokType.keyword;
     } else {
       unexpected();
     }
-    tokRegexpAllowed = false;
     next();
-    return finishNode(node, "XJSIdentifier");
+    return finishNode(node, "JSXIdentifier");
   }
 
   // Parse namespaced identifier.
 
-  function parseXJSNamespacedName() {
-    var node = startNode();
-
-    node.namespace = parseXJSIdentifier();
-    expect(_colon);
-    node.name = parseXJSIdentifier();
-
-    return finishNode(node, "XJSNamespacedName");
+  function parseJSXNamespacedName() {
+    var start = storeCurrentPos();
+    var name = parseJSXIdentifier();
+    if (!eat(_colon)) return name;
+    var node = startNodeAt(start);
+    node.namespace = name;
+    node.name = parseJSXIdentifier();
+    return finishNode(node, "JSXNamespacedName");
   }
 
-  // Parse JSX object.
+  // Parses element name in any form - namespaced, member
+  // or single identifier.
 
-  function parseXJSMemberExpression() {
+  function parseJSXElementName() {
     var start = storeCurrentPos();
-    var node = parseXJSIdentifier();
-
+    var node = parseJSXNamespacedName();
     while (eat(_dot)) {
       var newNode = startNodeAt(start);
       newNode.object = node;
-      newNode.property = parseXJSIdentifier();
-      node = finishNode(newNode, "XJSMemberExpression");
+      newNode.property = parseJSXIdentifier();
+      node = finishNode(newNode, "JSXMemberExpression");
     }
-
     return node;
-  }
-
-  // Parses element name in any form - namespaced, object
-  // or single identifier.
-
-  function parseXJSElementName() {
-    switch (nextChar()) {
-      case ':':
-        return parseXJSNamespacedName();
-
-      case '.':
-        return parseXJSMemberExpression();
-
-      default:
-        return parseXJSIdentifier();
-    }
-  }
-
-  // Parses attribute name as optionally namespaced identifier.
-
-  function parseXJSAttributeName() {
-    if (nextChar() === ':') {
-      return parseXJSNamespacedName();
-    }
-
-    return parseXJSIdentifier();
   }
 
   // Parses any type of JSX attribute value.
 
-  function parseXJSAttributeValue() {
+  function parseJSXAttributeValue() {
     switch (tokType) {
       case _braceL:
-        var node = parseXJSExpressionContainer();
-        if (node.expression.type === "XJSEmptyExpression") {
+        var node = parseJSXExpressionContainer();
+        if (node.expression.type === "JSXEmptyExpression") {
           raise(
             node.start,
-              'XJS attributes must only be assigned a non-empty ' +
+              'JSX attributes must only be assigned a non-empty ' +
               'expression'
           );
         }
         return node;
 
-      case _lt:
-        return parseXJSElement();
+      case _jsxTagStart:
+        return parseJSXElement();
 
-      case _xjsText:
+      case _jsxText:
+      case _string:
         return parseExprAtom();
 
       default:
-        raise(tokStart, "XJS value should be either an expression or a quoted XJS text");
+        raise(tokStart, "JSX value should be either an expression or a quoted JSX text");
     }
   }
 
-  // XJSEmptyExpression is unique type since it doesn't actually parse anything,
+  // JSXEmptyExpression is unique type since it doesn't actually parse anything,
   // and so it should start at the end of last read token (left brace) and finish
   // at the beginning of the next one (right brace).
 
-  function parseXJSEmptyExpression() {
+  function parseJSXEmptyExpression() {
     if (tokType !== _braceR) {
       unexpected();
     }
@@ -3566,193 +3985,111 @@
     tokStartLoc = lastEndLoc;
     lastEndLoc = tmp;
 
-    return finishNode(startNode(), "XJSEmptyExpression");
+    return finishNode(startNode(), "JSXEmptyExpression");
   }
 
   // Parses JSX expression enclosed into curly brackets.
 
-  function parseXJSExpressionContainer() {
+  function parseJSXExpressionContainer() {
     var node = startNode();
-
-    var origInXJSTag = inXJSTag,
-      origInXJSChild = inXJSChild;
-
-    inXJSTag = false;
-    inXJSChild = false;
-
     next();
-    node.expression = tokType === _braceR ? parseXJSEmptyExpression() : parseExpression();
-
-    inXJSTag = origInXJSTag;
-    inXJSChild = origInXJSChild;
-
-    if (inXJSChild) {
-      tokPos = tokEnd;
-    }
+    node.expression = tokType === _braceR ? parseJSXEmptyExpression() : parseExpression();
     expect(_braceR);
-    return finishNode(node, "XJSExpressionContainer");
+    return finishNode(node, "JSXExpressionContainer");
   }
 
   // Parses following JSX attribute name-value pair.
 
-  function parseXJSAttribute() {
-    if (tokType === _braceL) {
-      var tokStart1 = tokStart, tokStartLoc1 = tokStartLoc;
-
-      var origInXJSTag = inXJSTag;
-      inXJSTag = false;
-
-      next();
-      if (tokType !== _ellipsis) unexpected();
-      var node = parseMaybeUnary();
-
-      inXJSTag = origInXJSTag;
-
+  function parseJSXAttribute() {
+    var node = startNode();
+    if (eat(_braceL)) {
+      expect(_ellipsis);
+      node.argument = parseMaybeAssign();
       expect(_braceR);
-      node.type = "XJSSpreadAttribute";
-      
-      node.start = tokStart1;
-      node.end = lastEnd;
-      if (options.locations) {
-        node.loc.start = tokStartLoc1;
-        node.loc.end = lastEndLoc;
-      }
-      if (options.ranges) {
-        node.range = [tokStart1, lastEnd];
-      }
-
-      return node;
+      return finishNode(node, "JSXSpreadAttribute");
     }
-
-    var node = startNode();
-    node.name = parseXJSAttributeName();
-
-    // HTML empty attribute
-    if (tokType === _eq) {
-      next();
-      node.value = parseXJSAttributeValue();
-    } else {
-      node.value = null;
-    }
-
-    return finishNode(node, "XJSAttribute");
+    node.name = parseJSXNamespacedName();
+    node.value = eat(_eq) ? parseJSXAttributeValue() : null;
+    return finishNode(node, "JSXAttribute");
   }
 
-  // Parses any type of JSX contents (expression, text or another tag).
+  // Parses JSX opening tag starting after '<'.
 
-  function parseXJSChild() {
-    switch (tokType) {
-      case _braceL:
-        return parseXJSExpressionContainer();
-
-      case _xjsText:
-        return parseExprAtom();
-
-      default:
-        return parseXJSElement();
+  function parseJSXOpeningElementAt(start) {
+    var node = startNodeAt(start);
+    node.attributes = [];
+    node.name = parseJSXElementName();
+    while (tokType !== _slash && tokType !== _jsxTagEnd) {
+      node.attributes.push(parseJSXAttribute());
     }
+    node.selfClosing = eat(_slash);
+    expect(_jsxTagEnd);
+    return finishNode(node, "JSXOpeningElement");
   }
 
-  // Parses JSX open tag.
+  // Parses JSX closing tag starting after '</'.
 
-  function parseXJSOpeningElement() {
-    var node = startNode(), attributes = node.attributes = [];
-
-    var origInXJSChild = inXJSChild;
-    var origInXJSTag = inXJSTag;
-    inXJSChild = false;
-    inXJSTag = true;
-
-    next();
-
-    node.name = parseXJSElementName();
-
-    while (tokType !== _eof && tokType !== _slash && tokType !== _gt) {
-      attributes.push(parseXJSAttribute());
-    }
-
-    inXJSTag = false;
-
-    if (node.selfClosing = !!eat(_slash)) {
-      inXJSTag = origInXJSTag;
-      inXJSChild = origInXJSChild;
-    } else {
-      inXJSChild = true;
-    }
-
-    expect(_gt);
-
-    return finishNode(node, "XJSOpeningElement");
+  function parseJSXClosingElementAt(start) {
+    var node = startNodeAt(start);
+    node.name = parseJSXElementName();
+    expect(_jsxTagEnd);
+    return finishNode(node, "JSXClosingElement");
   }
 
-  // Parses JSX closing tag.
+  // Parses entire JSX element, including it's opening tag
+  // (starting after '<'), attributes, contents and closing tag.
 
-  function parseXJSClosingElement() {
-    var node = startNode();
-    var origInXJSChild = inXJSChild;
-    var origInXJSTag = inXJSTag;
-    inXJSChild = false;
-    inXJSTag = true;
-    tokRegexpAllowed = false;
-    expect(_ltSlash);
-    node.name = parseXJSElementName();
-    skipSpace();
-    // A valid token is expected after >, so parser needs to know
-    // whether to look for a standard JS token or an XJS text node
-    inXJSChild = origInXJSChild;
-    inXJSTag = origInXJSTag;
-    tokRegexpAllowed = false;
-    if (inXJSChild) {
-      tokPos = tokEnd;
-    }
-    expect(_gt);
-    return finishNode(node, "XJSClosingElement");
-  }
-
-  // Parses entire JSX element, including it's opening tag,
-  // attributes, contents and closing tag.
-
-  function parseXJSElement() {
-    var node = startNode();
-
+  function parseJSXElementAt(start) {
+    var node = startNodeAt(start);
     var children = [];
-
-    var origInXJSChild = inXJSChild;
-    var openingElement = parseXJSOpeningElement();
+    var openingElement = parseJSXOpeningElementAt(start);
     var closingElement = null;
 
     if (!openingElement.selfClosing) {
-      while (tokType !== _eof && tokType !== _ltSlash) {
-        inXJSChild = true;
-        children.push(parseXJSChild());
+      contents:for (;;) {
+        switch (tokType) {
+          case _jsxTagStart:
+            start = storeCurrentPos();
+            next();
+            if (eat(_slash)) {
+              closingElement = parseJSXClosingElementAt(start);
+              break contents;
+            }
+            children.push(parseJSXElementAt(start));
+            break;
+
+          case _jsxText:
+            children.push(parseExprAtom());
+            break;
+
+          case _braceL:
+            children.push(parseJSXExpressionContainer());
+            break;
+
+          default:
+            unexpected();
+        }
       }
-      inXJSChild = origInXJSChild;
-      closingElement = parseXJSClosingElement();
-      if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
+      if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
         raise(
           closingElement.start,
-          "Expected corresponding XJS closing tag for '" + getQualifiedXJSName(openingElement.name) + "'"
+          "Expected corresponding JSX closing tag for <" + getQualifiedJSXName(openingElement.name) + ">"
         );
       }
-    }
-
-    // When (erroneously) writing two adjacent tags like
-    //
-    //     var x = <div>one</div><div>two</div>;
-    //
-    // the default error message is a bit incomprehensible. Since it's
-    // rarely (never?) useful to write a less-than sign after an XJS
-    // element, we disallow it here in the parser in order to provide a
-    // better error message. (In the rare case that the less-than operator
-    // was intended, the left tag can be wrapped in parentheses.)
-    if (!origInXJSChild && tokType === _lt) {
-      raise(tokStart, "Adjacent XJS elements must be wrapped in an enclosing tag");
     }
 
     node.openingElement = openingElement;
     node.closingElement = closingElement;
     node.children = children;
-    return finishNode(node, "XJSElement");
+    return finishNode(node, "JSXElement");
+  }
+
+  // Parses entire JSX element from current position.
+
+  function parseJSXElement() {
+    var start = storeCurrentPos();
+    next();
+    return parseJSXElementAt(start);
   }
 
   // Declare

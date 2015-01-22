@@ -1,4 +1,4 @@
 /node_modules
 /.idea
 /.tern-port
-acorn_csp.js
+/acorn_csp.js

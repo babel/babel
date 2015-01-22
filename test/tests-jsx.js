@@ -2,15 +2,15 @@
 
 var fbTestFixture = {
   // Taken and adapted from esprima-fb/fbtest.js.
-  'XJS': {
+  'JSX': {
     '<a />': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "a",
             range: [1, 2],
             loc: {
@@ -43,13 +43,13 @@ var fbTestFixture = {
     '<n:a n:v />': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSNamespacedName',
+            type: 'JSXNamespacedName',
             namespace: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'n',
               range: [1, 2],
               loc: {
@@ -58,7 +58,7 @@ var fbTestFixture = {
               }
             },
             name: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'a',
               range: [3, 4],
               loc: {
@@ -74,11 +74,11 @@ var fbTestFixture = {
           },
           selfClosing: true,
           attributes: [{
-            type: 'XJSAttribute',
+            type: 'JSXAttribute',
             name: {
-              type: 'XJSNamespacedName',
+              type: 'JSXNamespacedName',
               namespace: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'n',
                 range: [5, 6],
                 loc: {
@@ -87,7 +87,7 @@ var fbTestFixture = {
                 }
               },
               name: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'v',
                 range: [7, 8],
                 loc: {
@@ -131,11 +131,11 @@ var fbTestFixture = {
     '<a n:foo="bar"> {value} <b><c /></b></a>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [1, 2],
             loc: {
@@ -145,11 +145,11 @@ var fbTestFixture = {
           },
           selfClosing: false,
           attributes: [{
-            type: 'XJSAttribute',
+            type: 'JSXAttribute',
             name: {
-              type: 'XJSNamespacedName',
+              type: 'JSXNamespacedName',
               namespace: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'n',
                 range: [3, 4],
                 loc: {
@@ -158,7 +158,7 @@ var fbTestFixture = {
                 }
               },
               name: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'foo',
                 range: [5, 8],
                 loc: {
@@ -195,9 +195,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [38, 39],
             loc: {
@@ -221,7 +221,7 @@ var fbTestFixture = {
             end: { line: 1, column: 16 }
           }
         }, {
-          type: 'XJSExpressionContainer',
+          type: 'JSXExpressionContainer',
           expression: {
             type: 'Identifier',
             name: 'value',
@@ -246,11 +246,11 @@ var fbTestFixture = {
             end: { line: 1, column: 24 }
           }
         }, {
-          type: 'XJSElement',
+          type: 'JSXElement',
           openingElement: {
-            type: 'XJSOpeningElement',
+            type: 'JSXOpeningElement',
             name: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'b',
               range: [25, 26],
               loc: {
@@ -267,9 +267,9 @@ var fbTestFixture = {
             }
           },
           closingElement: {
-            type: 'XJSClosingElement',
+            type: 'JSXClosingElement',
             name: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'b',
               range: [34, 35],
               loc: {
@@ -284,11 +284,11 @@ var fbTestFixture = {
             }
           },
           children: [{
-            type: 'XJSElement',
+            type: 'JSXElement',
             openingElement: {
-              type: 'XJSOpeningElement',
+              type: 'JSXOpeningElement',
               name: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'c',
                 range: [28, 29],
                 loc: {
@@ -333,25 +333,25 @@ var fbTestFixture = {
     '<a b={" "} c=" " d="&amp;" e="&ampr;" />': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "a",
             range: [1, 2]
           },
           selfClosing: true,
           attributes: [
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "b",
                 range: [3, 4]
               },
               value: {
-                type: "XJSExpressionContainer",
+                type: "JSXExpressionContainer",
                 expression: {
                   type: "Literal",
                   value: " ",
@@ -363,9 +363,9 @@ var fbTestFixture = {
               range: [3, 10]
             },
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "c",
                 range: [11, 12]
               },
@@ -378,9 +378,9 @@ var fbTestFixture = {
               range: [11, 16]
             },
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "d",
                 range: [17, 18]
               },
@@ -393,9 +393,9 @@ var fbTestFixture = {
               range: [17, 26]
             },
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "e",
                 range: [27, 28]
               },
@@ -419,11 +419,11 @@ var fbTestFixture = {
     '<a\n/>': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "a",
             range: [
               1,
@@ -492,11 +492,11 @@ var fbTestFixture = {
     '<日本語></日本語>': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "日本語",
             range: [
               1,
@@ -531,9 +531,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: "XJSClosingElement",
+          type: "JSXClosingElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "日本語",
             range: [
               7,
@@ -600,11 +600,11 @@ var fbTestFixture = {
     '<AbC-def\n  test="&#x0026;&#38;">\nbar\nbaz\n</AbC-def>': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "AbC-def",
             range: [
               1,
@@ -624,9 +624,9 @@ var fbTestFixture = {
           selfClosing: false,
           attributes: [
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "test",
                 range: [
                   11,
@@ -694,9 +694,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: "XJSClosingElement",
+          type: "JSXClosingElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "AbC-def",
             range: [
               43,
@@ -783,11 +783,11 @@ var fbTestFixture = {
     '<a b={x ? <c /> : <d />} />': {
       type: "ExpressionStatement",
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             name: "a",
             range: [
               1,
@@ -807,9 +807,9 @@ var fbTestFixture = {
           selfClosing: true,
           attributes: [
             {
-              type: "XJSAttribute",
+              type: "JSXAttribute",
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 name: "b",
                 range: [
                   3,
@@ -827,7 +827,7 @@ var fbTestFixture = {
                 }
               },
               value: {
-                type: "XJSExpressionContainer",
+                type: "JSXExpressionContainer",
                 expression: {
                   type: "ConditionalExpression",
                   test: {
@@ -849,11 +849,11 @@ var fbTestFixture = {
                     }
                   },
                   consequent: {
-                    type: "XJSElement",
+                    type: "JSXElement",
                     openingElement: {
-                      type: "XJSOpeningElement",
+                      type: "JSXOpeningElement",
                       name: {
-                        type: "XJSIdentifier",
+                        type: "JSXIdentifier",
                         name: "c",
                         range: [
                           11,
@@ -905,11 +905,11 @@ var fbTestFixture = {
                     }
                   },
                   alternate: {
-                    type: "XJSElement",
+                    type: "JSXElement",
                     openingElement: {
-                      type: "XJSOpeningElement",
+                      type: "JSXOpeningElement",
                       name: {
-                        type: "XJSIdentifier",
+                        type: "JSXIdentifier",
                         name: "d",
                         range: [
                           19,
@@ -1057,11 +1057,11 @@ var fbTestFixture = {
     '<a>{}</a>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [1, 2],
             loc: {
@@ -1078,9 +1078,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [7, 8],
             loc: {
@@ -1095,9 +1095,9 @@ var fbTestFixture = {
           }
         },
         children: [{
-          type: 'XJSExpressionContainer',
+          type: 'JSXExpressionContainer',
           expression: {
-            type: 'XJSEmptyExpression',
+            type: 'JSXEmptyExpression',
             range: [4, 4],
             loc: {
               start: { line: 1, column: 4 },
@@ -1126,11 +1126,11 @@ var fbTestFixture = {
     '<a>{/* this is a comment */}</a>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [1, 2],
             loc: {
@@ -1147,9 +1147,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'a',
             range: [30, 31],
             loc: {
@@ -1164,9 +1164,9 @@ var fbTestFixture = {
           }
         },
         children: [{
-          type: 'XJSExpressionContainer',
+          type: 'JSXExpressionContainer',
           expression: {
-            type: 'XJSEmptyExpression',
+            type: 'JSXEmptyExpression',
             range: [4, 27],
             loc: {
               start: { line: 1, column: 4 },
@@ -1195,11 +1195,11 @@ var fbTestFixture = {
     '<div>@test content</div>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'div',
             range: [1, 4],
             loc: {
@@ -1216,9 +1216,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'div',
             range: [20, 23],
             loc: {
@@ -1258,11 +1258,11 @@ var fbTestFixture = {
     '<div><br />7x invalid-js-identifier</div>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'div',
             range: [
               1,
@@ -1297,9 +1297,9 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             name: 'div',
             range: [
               37,
@@ -1332,11 +1332,11 @@ var fbTestFixture = {
           }
         },
         children: [{
-          type: 'XJSElement',
+          type: 'JSXElement',
           openingElement: {
-            type: 'XJSOpeningElement',
+            type: 'JSXOpeningElement',
             name: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'br',
               range: [
                 6,
@@ -1439,11 +1439,11 @@ var fbTestFixture = {
     '<LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />': {
       "type": "ExpressionStatement",
       "expression": {
-        "type": "XJSElement",
+        "type": "JSXElement",
         "openingElement": {
-          "type": "XJSOpeningElement",
+          "type": "JSXOpeningElement",
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "name": "LeftRight",
             "range": [
               1,
@@ -1463,9 +1463,9 @@ var fbTestFixture = {
           "selfClosing": true,
           "attributes": [
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "name": "left",
                 "range": [
                   11,
@@ -1483,11 +1483,11 @@ var fbTestFixture = {
                 }
               },
               "value": {
-                "type": "XJSElement",
+                "type": "JSXElement",
                 "openingElement": {
-                  "type": "XJSOpeningElement",
+                  "type": "JSXOpeningElement",
                   "name": {
-                    "type": "XJSIdentifier",
+                    "type": "JSXIdentifier",
                     "name": "a",
                     "range": [
                       17,
@@ -1554,9 +1554,9 @@ var fbTestFixture = {
               }
             },
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "name": "right",
                 "range": [
                   22,
@@ -1574,11 +1574,11 @@ var fbTestFixture = {
                 }
               },
               "value": {
-                "type": "XJSElement",
+                "type": "JSXElement",
                 "openingElement": {
-                  "type": "XJSOpeningElement",
+                  "type": "JSXOpeningElement",
                   "name": {
-                    "type": "XJSIdentifier",
+                    "type": "JSXIdentifier",
                     "name": "b",
                     "range": [
                       29,
@@ -1613,9 +1613,9 @@ var fbTestFixture = {
                   }
                 },
                 "closingElement": {
-                  "type": "XJSClosingElement",
+                  "type": "JSXClosingElement",
                   "name": {
-                    "type": "XJSIdentifier",
+                    "type": "JSXIdentifier",
                     "name": "b",
                     "range": [
                       52,
@@ -1750,13 +1750,13 @@ var fbTestFixture = {
     '<a.b></a.b>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSMemberExpression',
+            type: 'JSXMemberExpression',
             object: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'a',
               range: [1, 2],
               loc: {
@@ -1765,7 +1765,7 @@ var fbTestFixture = {
               }
             },
             property: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'b',
               range: [3, 4],
               loc: {
@@ -1788,11 +1788,11 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSMemberExpression',
+            type: 'JSXMemberExpression',
             object: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'a',
               range: [7, 8],
               loc: {
@@ -1801,7 +1801,7 @@ var fbTestFixture = {
               }
             },
             property: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'b',
               range: [9, 10],
               loc: {
@@ -1838,15 +1838,15 @@ var fbTestFixture = {
     '<a.b.c></a.b.c>': {
       type: 'ExpressionStatement',
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           name: {
-            type: 'XJSMemberExpression',
+            type: 'JSXMemberExpression',
             object: {
-              type: 'XJSMemberExpression',
+              type: 'JSXMemberExpression',
               object: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'a',
                 range: [1, 2],
                 loc: {
@@ -1855,7 +1855,7 @@ var fbTestFixture = {
                 }
               },
               property: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'b',
                 range: [3, 4],
                 loc: {
@@ -1870,7 +1870,7 @@ var fbTestFixture = {
               }
             },
             property: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'c',
               range: [5, 6],
               loc: {
@@ -1893,13 +1893,13 @@ var fbTestFixture = {
           }
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           name: {
-            type: 'XJSMemberExpression',
+            type: 'JSXMemberExpression',
             object: {
-              type: 'XJSMemberExpression',
+              type: 'JSXMemberExpression',
               object: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'a',
                 range: [9, 10],
                 loc: {
@@ -1908,7 +1908,7 @@ var fbTestFixture = {
                 }
               },
               property: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 name: 'b',
                 range: [11, 12],
                 loc: {
@@ -1923,7 +1923,7 @@ var fbTestFixture = {
               }
             },
             property: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'c',
               range: [13, 14],
               loc: {
@@ -1958,7 +1958,7 @@ var fbTestFixture = {
     },
 
     // In order to more useful parse errors, we disallow following an
-    // XJSElement by a less-than symbol. In the rare case that the binary
+    // JSXElement by a less-than symbol. In the rare case that the binary
     // operator was intended, the tag can be wrapped in parentheses:
     '(<div />) < x;': {
       type: 'ExpressionStatement',
@@ -1966,11 +1966,11 @@ var fbTestFixture = {
         type: 'BinaryExpression',
         operator: '<',
         left: {
-          type: 'XJSElement',
+          type: 'JSXElement',
           openingElement: {
-            type: 'XJSOpeningElement',
+            type: 'JSXOpeningElement',
             name: {
-              type: 'XJSIdentifier',
+              type: 'JSXIdentifier',
               name: 'div',
               range: [2, 5],
               loc: {
@@ -2019,11 +2019,11 @@ var fbTestFixture = {
     '<div {...props} />': {
       "type": "ExpressionStatement",
       "expression": {
-        "type": "XJSElement",
+        "type": "JSXElement",
         "openingElement": {
-          "type": "XJSOpeningElement",
+          "type": "JSXOpeningElement",
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "name": "div",
             "range": [
               1,
@@ -2043,7 +2043,7 @@ var fbTestFixture = {
           "selfClosing": true,
           "attributes": [
             {
-              "type": "XJSSpreadAttribute",
+              "type": "JSXSpreadAttribute",
               "argument": {
                 "type": "Identifier",
                 "name": "props",
@@ -2129,11 +2129,11 @@ var fbTestFixture = {
     '<div {...props} post="attribute" />': {
       "type": "ExpressionStatement",
       "expression": {
-        "type": "XJSElement",
+        "type": "JSXElement",
         "openingElement": {
-          "type": "XJSOpeningElement",
+          "type": "JSXOpeningElement",
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "name": "div",
             "range": [
               1,
@@ -2153,7 +2153,7 @@ var fbTestFixture = {
           "selfClosing": true,
           "attributes": [
             {
-              "type": "XJSSpreadAttribute",
+              "type": "JSXSpreadAttribute",
               "argument": {
                 "type": "Identifier",
                 "name": "props",
@@ -2188,9 +2188,9 @@ var fbTestFixture = {
               }
             },
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "name": "post",
                 "range": [
                   16,
@@ -2293,11 +2293,11 @@ var fbTestFixture = {
     '<div pre="leading" pre2="attribute" {...props}></div>': {
       "type": "ExpressionStatement",
       "expression": {
-        "type": "XJSElement",
+        "type": "JSXElement",
         "openingElement": {
-          "type": "XJSOpeningElement",
+          "type": "JSXOpeningElement",
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "name": "div",
             "range": [
               1,
@@ -2317,9 +2317,9 @@ var fbTestFixture = {
           "selfClosing": false,
           "attributes": [
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "name": "pre",
                 "range": [
                   5,
@@ -2371,9 +2371,9 @@ var fbTestFixture = {
               }
             },
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "name": "pre2",
                 "range": [
                   19,
@@ -2425,7 +2425,7 @@ var fbTestFixture = {
               }
             },
             {
-              "type": "XJSSpreadAttribute",
+              "type": "JSXSpreadAttribute",
               "argument": {
                 "type": "Identifier",
                 "name": "props",
@@ -2476,9 +2476,9 @@ var fbTestFixture = {
           }
         },
         "closingElement": {
-          "type": "XJSClosingElement",
+          "type": "JSXClosingElement",
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "name": "div",
             "range": [
               49,
@@ -2560,7 +2560,7 @@ var fbTestFixture = {
         52
       ],
       "expression": {
-        "type": "XJSElement",
+        "type": "JSXElement",
         "start": 0,
         "end": 52,
         "loc": {
@@ -2578,7 +2578,7 @@ var fbTestFixture = {
           52
         ],
         "openingElement": {
-          "type": "XJSOpeningElement",
+          "type": "JSXOpeningElement",
           "start": 0,
           "end": 31,
           "loc": {
@@ -2597,7 +2597,7 @@ var fbTestFixture = {
           ],
           "attributes": [
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "start": 3,
               "end": 16,
               "loc": {
@@ -2615,7 +2615,7 @@ var fbTestFixture = {
                 16
               ],
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "start": 3,
                 "end": 5,
                 "loc": {
@@ -2635,7 +2635,7 @@ var fbTestFixture = {
                 "name": "aa"
               },
               "value": {
-                "type": "XJSExpressionContainer",
+                "type": "JSXExpressionContainer",
                 "start": 6,
                 "end": 16,
                 "loc": {
@@ -2755,7 +2755,7 @@ var fbTestFixture = {
               }
             },
             {
-              "type": "XJSAttribute",
+              "type": "JSXAttribute",
               "start": 17,
               "end": 30,
               "loc": {
@@ -2773,7 +2773,7 @@ var fbTestFixture = {
                 30
               ],
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "start": 17,
                 "end": 19,
                 "loc": {
@@ -2793,7 +2793,7 @@ var fbTestFixture = {
                 "name": "bb"
               },
               "value": {
-                "type": "XJSExpressionContainer",
+                "type": "JSXExpressionContainer",
                 "start": 20,
                 "end": 30,
                 "loc": {
@@ -2914,7 +2914,7 @@ var fbTestFixture = {
             }
           ],
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "start": 1,
             "end": 2,
             "loc": {
@@ -2936,7 +2936,7 @@ var fbTestFixture = {
           "selfClosing": false
         },
         "closingElement": {
-          "type": "XJSClosingElement",
+          "type": "JSXClosingElement",
           "start": 48,
           "end": 52,
           "loc": {
@@ -2954,7 +2954,7 @@ var fbTestFixture = {
             52
           ],
           "name": {
-            "type": "XJSIdentifier",
+            "type": "JSXIdentifier",
             "start": 50,
             "end": 51,
             "loc": {
@@ -2976,7 +2976,7 @@ var fbTestFixture = {
         },
         "children": [
           {
-            "type": "XJSElement",
+            "type": "JSXElement",
             "start": 31,
             "end": 48,
             "loc": {
@@ -2994,7 +2994,7 @@ var fbTestFixture = {
               48
             ],
             "openingElement": {
-              "type": "XJSOpeningElement",
+              "type": "JSXOpeningElement",
               "start": 31,
               "end": 36,
               "loc": {
@@ -3013,7 +3013,7 @@ var fbTestFixture = {
               ],
               "attributes": [],
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "start": 32,
                 "end": 35,
                 "loc": {
@@ -3035,7 +3035,7 @@ var fbTestFixture = {
               "selfClosing": false
             },
             "closingElement": {
-              "type": "XJSClosingElement",
+              "type": "JSXClosingElement",
               "start": 42,
               "end": 48,
               "loc": {
@@ -3053,7 +3053,7 @@ var fbTestFixture = {
                 48
               ],
               "name": {
-                "type": "XJSIdentifier",
+                "type": "JSXIdentifier",
                 "start": 44,
                 "end": 47,
                 "loc": {
@@ -3075,7 +3075,7 @@ var fbTestFixture = {
             },
             "children": [
               {
-                "type": "XJSExpressionContainer",
+                "type": "JSXExpressionContainer",
                 "start": 36,
                 "end": 42,
                 "loc": {
@@ -3165,16 +3165,16 @@ var fbTestFixture = {
       start: 0,
       end: 40,
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         start: 0,
         end: 38,
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           start: 0,
           end: 3,
           attributes: [],
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 1,
             end: 2,
             name: "p"
@@ -3182,11 +3182,11 @@ var fbTestFixture = {
           selfClosing: false
         },
         closingElement: {
-          type: "XJSClosingElement",
+          type: "JSXClosingElement",
           start: 34,
           end: 38,
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 36,
             end: 37,
             name: "p"
@@ -3201,19 +3201,19 @@ var fbTestFixture = {
             raw: "foo "
           },
           {
-            type: "XJSElement",
+            type: "JSXElement",
             start: 7,
             end: 30,
             openingElement: {
-              type: "XJSOpeningElement",
+              type: "JSXOpeningElement",
               start: 7,
               end: 22,
               attributes: [{
-                type: "XJSAttribute",
+                type: "JSXAttribute",
                 start: 10,
                 end: 21,
                 name: {
-                  type: "XJSIdentifier",
+                  type: "JSXIdentifier",
                   start: 10,
                   end: 14,
                   name: "href"
@@ -3227,7 +3227,7 @@ var fbTestFixture = {
                 }
               }],
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 start: 8,
                 end: 9,
                 name: "a"
@@ -3235,11 +3235,11 @@ var fbTestFixture = {
               selfClosing: false
             },
             closingElement: {
-              type: "XJSClosingElement",
+              type: "JSXClosingElement",
               start: 26,
               end: 30,
               name: {
-                type: "XJSIdentifier",
+                type: "JSXIdentifier",
                 start: 28,
                 end: 29,
                 name: "a"
@@ -3269,16 +3269,16 @@ var fbTestFixture = {
       start: 0,
       end: 30,
       expression: {
-        type: 'XJSElement',
+        type: 'JSXElement',
         start: 0,
         end: 30,
         openingElement: {
-          type: 'XJSOpeningElement',
+          type: 'JSXOpeningElement',
           start: 0,
           end: 5,
           attributes: [],
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             start: 1,
             end: 4,
             name: 'div'
@@ -3286,31 +3286,31 @@ var fbTestFixture = {
           selfClosing: false
         },
         closingElement: {
-          type: 'XJSClosingElement',
+          type: 'JSXClosingElement',
           start: 24,
           end: 30,
           name: {
-            type: 'XJSIdentifier',
+            type: 'JSXIdentifier',
             start: 26,
             end: 29,
             name: 'div'
           }
         },
         children: [{
-          type: 'XJSExpressionContainer',
+          type: 'JSXExpressionContainer',
           start: 5,
           end: 24,
           expression: {
-            type: 'XJSElement',
+            type: 'JSXElement',
             start: 6,
             end: 23,
             openingElement: {
-              type: 'XJSOpeningElement',
+              type: 'JSXOpeningElement',
               start: 6,
               end: 23,
               attributes: [
                 {
-                  type: 'XJSSpreadAttribute',
+                  type: 'JSXSpreadAttribute',
                   start: 11,
                   end: 20,
                   argument: {
@@ -3322,7 +3322,7 @@ var fbTestFixture = {
                 }
               ],
               name: {
-                type: 'XJSIdentifier',
+                type: 'JSXIdentifier',
                 start: 7,
                 end: 10,
                 name: 'div'
@@ -3341,16 +3341,16 @@ var fbTestFixture = {
       start: 0,
       end: 18,
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         start: 0,
         end: 18,
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           start: 0,
           end: 5,
           attributes: [],
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 1,
             end: 4,
             name: "div"
@@ -3358,18 +3358,18 @@ var fbTestFixture = {
           selfClosing: false
         },
         closingElement: {
-          type: "XJSClosingElement",
+          type: "JSXClosingElement",
           start: 12,
           end: 18,
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 14,
             end: 17,
             name: "div"
           }
         },
         children: [{
-          type: "XJSExpressionContainer",
+          type: "JSXExpressionContainer",
           start: 5,
           end: 12,
           expression: {
@@ -3407,16 +3407,16 @@ var fbTestFixture = {
       start: 0,
       end: 16,
       expression: {
-        type: "XJSElement",
+        type: "JSXElement",
         start: 0,
         end: 16,
         openingElement: {
-          type: "XJSOpeningElement",
+          type: "JSXOpeningElement",
           start: 0,
           end: 5,
           attributes: [],
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 1,
             end: 4,
             name: "div"
@@ -3424,11 +3424,11 @@ var fbTestFixture = {
           selfClosing: false
         },
         closingElement: {
-          type: "XJSClosingElement",
+          type: "JSXClosingElement",
           start: 10,
           end: 16,
           name: {
-            type: "XJSIdentifier",
+            type: "JSXIdentifier",
             start: 12,
             end: 15,
             name: "div"
@@ -3459,7 +3459,8 @@ for (var ns in fbTestFixture) {
     }, {
       ecmaVersion: 6,
       locations: true,
-      ranges: true
+      ranges: true,
+      loose: false
     });
   }
 }
