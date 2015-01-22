@@ -2,7 +2,15 @@
 
 [![Build Status](https://travis-ci.org/marijnh/acorn.svg?branch=master)](https://travis-ci.org/marijnh/acorn)
 
-A tiny, fast JavaScript parser, written completely in JavaScript.
+This is modification of [Acorn](http://marijnhaverbeke.nl/acorn/) - a tiny, fast JavaScript parser, written completely in JavaScript.
+
+It was forked to create experimental alternative, faster [React.js JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) parser by integrating pieces of code from official parser, modified to match Acorn's parsing logic.
+
+According to [benchmarks](https://github.com/RReverser/acorn-jsx/blob/master/test/bench.html), Acorn-JSX is 2x faster than official [Esprima-based parser](https://github.com/facebook/esprima) when location tracking is turned on in both (call it "source maps enabled mode"). At the same time, it consumes all the ES6+JSX syntax that can be consumed by Esprima-FB (this is proved by [official tests](https://github.com/RReverser/acorn-jsx/blob/master/test/tests-jsx.js)).
+
+## Transpiler
+
+Please note that this tool only parses source code to JSX AST, which is useful for various language tools and services. If you want to transpile your code to regular ES5-compliant JavaScript with source map, check out [6to5 transpiler](http://6to5.org/) which used `acorn-jsx` under the hood.
 
 ## Installation
 
