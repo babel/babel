@@ -3337,8 +3337,8 @@
   function parseJSXAttribute() {
     var node = startNode();
     if (eat(_braceL)) {
-      if (tokType !== _ellipsis) unexpected();
-      node.argument = parseMaybeUnary().argument;
+      expect(_ellipsis);
+      node.argument = parseMaybeAssign();
       expect(_braceR);
       return finishNode(node, "JSXSpreadAttribute");
     }
