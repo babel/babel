@@ -14,8 +14,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
 ## 3.0.0
 
  * **Polish**
-  * Add autoindentation.
-  * Move global uid registry to a scope registry.
+  * Generated code autoindentation.
+  * Moved global uid registry to a scope registry resulting in nicer uids.
   * `this` is now illegal in the top level scope.
   * New `asyncToGenerator` helper that's much more compact.
  * **Internal**
@@ -28,25 +28,30 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
  * **Breaking Change**
-  * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
   * Bare `super();` only works inside of constructors.
-  * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
-  * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
   * Removed the optional runtime in favor of the `selfContained` transformer.
-  * Removed the `coreAliasing` transformer in favor of `selfContained`.
-  * Remove `includeRegenerator` option.
   * This shorthand has been removed from the playground.
-  * The transformer `generators` has been renamed to `regenerator`.
-  * The transformer `propertyMethodAssignment` has been renamed to `property.shorthand`.
-  * The transformer `propertyNameShorthand` has been merged into `property.shorthand`.
-  * The mutator part of the `propertyMethodAssignment` transformer has been merged into `property.mutators`.
-  * The transformer `computedPropertyNames` has been renamed to `property.computed`.
-  * The transformer `letScoping` jas been renamed to `blockScoping`.
-  * The transformer `restParameters` has been renamed to `parameters.rest`.
-  * The transformer `defaultParameters` has been renamed to `parameters.default`.
-  * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
-  * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**.
+  * `--indent` option has been removed from the CLI.
+  * **Options**
+   * Remove `includeRegenerator` option.
+   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
+  * **Modules**
+    * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
+    * Module formatters `umdStrict`, `amdStrict` and `commonStrict` have been removed.
+  * **Transformers**
+    * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
+    * Removed the `coreAliasing` transformer in favor of `selfContained`.
+    * The transformer `generators` has been renamed to `regenerator`.
+    * The transformer `propertyMethodAssignment` has been renamed to `property.shorthand`.
+    * The transformer `propertyNameShorthand` has been merged into `property.shorthand`.
+    * The mutator part of the `propertyMethodAssignment` transformer has been merged into `property.mutators`.
+    * The transformer `computedPropertyNames` has been renamed to `property.computed`.
+    * The transformer `letScoping` jas been renamed to `blockScoping`.
+    * The transformer `restParameters` has been renamed to `parameters.rest`.
+    * The transformer `defaultParameters` has been renamed to `parameters.default`.
+    * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
+    * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**.
 
 ## 2.13.5
 
