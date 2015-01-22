@@ -56,6 +56,7 @@
     "browserify": "8.1.1",
     "chai": "1.10.0",
     "istanbul": "0.3.5",
+    "jscs": "^1.10.0",
     "jshint-stylish": "1.0.0",
     "matcha": "0.6.0",
     "mocha": "2.1.0",

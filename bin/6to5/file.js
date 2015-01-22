@@ -77,7 +77,7 @@ module.exports = function (commander, filenames) {
       if (chunk !== null) code += chunk;
     });
 
-    process.stdin.on("end", function() {
+    process.stdin.on("end", function () {
       results.push(util.transform(commander.filename, code));
       output();
     });
@@ -117,7 +117,7 @@ module.exports = function (commander, filenames) {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename) {
-        if (type === "add" || type === "change" || type === "unlink" ) {
+        if (type === "add" || type === "change" || type === "unlink") {
           console.log(type, filename);
           walk();
         }

@@ -28,7 +28,7 @@ commander.option("-R, --react-compat", "Makes the react transformer produce pre-
 commander.option("-E, --include-regenerator", "Include the regenerator runtime if necessary", false);
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 
-commander.on("--help", function(){
+commander.on("--help", function () {
   var outKeys = function (title, obj) {
     console.log("  " + title + ":");
     console.log();
