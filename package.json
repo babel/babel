@@ -32,7 +32,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-18",
+    "acorn-6to5": "0.11.1-19",
     "ast-types": "~0.6.1",
     "chokidar": "0.12.6",
     "commander": "2.6.0",
