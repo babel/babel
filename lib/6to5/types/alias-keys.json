@@ -45,7 +45,7 @@
   "AssignmentPattern": ["Pattern"],
 
   "Property": ["UserWhitespacable"],
-  "XJSElement": ["UserWhitespacable", "Expression"],
+  "JSXElement": ["UserWhitespacable", "Expression"],
 
   "ArrayExpression": ["Expression"],
   "AssignmentExpression": ["Expression"],
@@ -65,7 +65,7 @@
   "ThisExpression": ["Expression"],
   "UpdateExpression": ["Expression"],
   "VirtualPropertyExpression": ["Expression"],
-  "XJSEmptyExpression": ["Expression"],
-  "XJSMemberExpression": ["Expression"],
+  "JSXEmptyExpression": ["Expression"],
+  "JSXMemberExpression": ["Expression"],
   "YieldExpression": ["Expression"]
 }
