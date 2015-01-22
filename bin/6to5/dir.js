@@ -51,7 +51,7 @@ module.exports = function (commander, filenames, opts) {
         ignoreInitial: true
       });
 
-      _.each(["add", "change", "unlink"], function (type) {
+      _.each(["add", "change"], function (type) {
         watcher.on(type, function (filename) {
           // chop off the dirname plus the path separator
           var relative = filename.slice(dirname.length + 1);

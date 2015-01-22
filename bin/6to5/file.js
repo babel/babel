@@ -117,7 +117,7 @@ module.exports = function (commander, filenames) {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename) {
-        if (type === "add" || type === "change" || type === "unlink") {
+        if (type === "add" || type === "change") {
           console.log(type, filename);
           walk();
         }
