@@ -5,34 +5,28 @@ var _asyncToGenerator = function (fn) {
     var gen = fn.apply(this, arguments);
 
     return new Promise(function (resolve, reject) {
-      function step(getNext) {
-        var next;
+      var callNext = step.bind(gen.next);
+
+      var callThrow = step.bind(gen["throw"]);
+
+      function step(arg) {
         try {
-          next = getNext();
-        } catch (e) {
-          reject(e);
+          var info = this(arg);
+
+          var value = info.value;
+        } catch (error) {
+          reject(error);
 
           return;
         }
-        if (next.done) {
-          resolve(next.value);
-
-          return;
+        if (info.done) {
+          resolve(value);
+        } else {
+          Promise.resolve(value).then(callNext, callThrow);
         }
-        Promise.resolve(next.value).then(function (v) {
-          step(function () {
-            return gen.next(v);
-          });
-        }, function (e) {
-          step(function () {
-            return gen["throw"](e);
-          });
-        });
       }
 
-      step(function () {
-        return gen.next();
-      });
+      callNext();
     });
   };
 };
