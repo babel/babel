@@ -17,6 +17,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Add autoindentation.
   * Move global uid registry to a scope registry.
   * `this` is now illegal in the top level scope.
+  * New `asyncToGenerator` helper that's much more compact.
  * **Internal**
   * Rewritten constants transformer.
   * Upgrade `core-js` to `0.4.6`.
