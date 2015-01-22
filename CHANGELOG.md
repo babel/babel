@@ -18,12 +18,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Moved global uid registry to a scope registry resulting in nicer uids.
   * `this` is now illegal in the top level scope.
   * New `asyncToGenerator` helper that's much more compact.
+  * Throw errors on unknown options.
  * **Internal**
   * Rewritten constants transformer.
   * Upgrade `core-js` to `0.4.6`.
+  * Upgrade `acorn-6to5`.
+   * JSX support is now on-par with react-tools/esprima.
  * **Bug Fix**
   * Generators now work flawlessly with any parameter transformers.
   * Optional async function transformers should not name their functions.
+  * Remove `unlink` event watching in `bin/6to5`.
  * **New Feature**
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
@@ -33,6 +37,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Removed the optional runtime in favor of the `selfContained` transformer.
   * This shorthand has been removed from the playground.
   * `--indent` option has been removed from the CLI.
+  * `6to5/polyfill` can now only be required **once**.
   * **Options**
    * Remove `includeRegenerator` option.
    * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
