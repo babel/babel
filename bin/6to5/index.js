@@ -22,7 +22,6 @@ commander.option("--loose [list]", "List of transformers to enable their loose m
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
-commander.option("-I, --indent [width]", "Indent width [2]", 2);
 commander.option("-a, --amd-module-ids", "Insert module id in AMD modules", false); // todo: remove in 3.0.0
 commander.option("-m, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
@@ -109,12 +108,7 @@ exports.opts = {
   comments:               !commander.removeComments,
   runtime:                commander.runtime,
   modules:                commander.modules,
-  loose:                  commander.loose,
-  format: {
-    indent: {
-      style:     util.repeat(parseInt(commander.indent))
-    }
-  }
+  loose:                  commander.loose
 };
 
 var fn;
