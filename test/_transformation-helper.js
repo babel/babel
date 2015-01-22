@@ -49,8 +49,11 @@ var run = function (task, done) {
   var execCode = exec.code;
   var result;
 
+  var noCheckAst = opts.noCheckAst;
+  delete opts.noCheckAst;
+
   var checkAst = function (result) {
-    if (opts.noCheckAst) return;
+    if (noCheckAst) return;
 
     var errors = esvalid.errors(result.ast.program);
     if (errors.length) {
