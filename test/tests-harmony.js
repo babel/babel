@@ -13891,9 +13891,9 @@ testFail("import { foo, bar }", "Unexpected token (1:19)", {ecmaVersion: 6});
 
 testFail("import foo from bar", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("((a)) => 42", "Unexpected token (1:6)", {ecmaVersion: 6});
+testFail("((a)) => 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("(a, (b)) => 42", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
@@ -14151,7 +14151,7 @@ testFail("\"use strict\"; function x({ b: { a } }, [{ b: { a } }]){}", "Argument
 
 testFail("\"use strict\"; function x(a, ...[a]){}", "Argument name clash in strict mode (1:32)", {ecmaVersion: 6});
 
-testFail("(...a, b) => {}", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("(...a, b) => {}", "Unexpected token (1:5)", {ecmaVersion: 6});
 
 testFail("([ 5 ]) => {}", "Unexpected token (1:3)", {ecmaVersion: 6});
 
@@ -14226,9 +14226,9 @@ test("[...a, ] = b", {
   locations: true
 });
 
-testFail("if (b,...a, );", "Unexpected token (1:12)", {ecmaVersion: 6});
+testFail("if (b,...a, );", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("(b, ...a)", "Unexpected token (1:9)", {ecmaVersion: 6});
+testFail("(b, ...a)", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:37)", {ecmaVersion: 6});
 

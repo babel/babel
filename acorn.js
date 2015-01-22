@@ -315,11 +315,6 @@
 
   var inFunction, inGenerator, labels, strict;
 
-  // This counter is used for checking that arrow expressions did
-  // not contain nested parentheses in argument list.
-
-  var metParenL;
-
   function initParserState() {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = curPosition();
@@ -423,7 +418,7 @@
   var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
   var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
   var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"};
-  var _ellipsis = {type: "...", prefix: true, beforeExpr: true};
+  var _ellipsis = {type: "...", beforeExpr: true};
   var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _jsxText = {type: "jsxText"};
 
@@ -632,7 +627,6 @@
     tokType = _eof;
     tokContext = [];
     tokExprAllowed = true;
-    metParenL = 0;
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
     }
@@ -1782,6 +1776,17 @@
     return node;
   }
 
+  // Finish node at given position
+
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges)
+      node.range[1] = pos;
+    return node;
+  }
+
   // Test whether a statement node is the string literal `"use strict"`.
 
   function isUseStrict(stmt) {
@@ -1842,6 +1847,9 @@
       switch (node.type) {
         case "Identifier":
         case "MemberExpression":
+        case "ObjectPattern":
+        case "ArrayPattern":
+        case "AssignmentPattern":
           break;
 
         case "ObjectExpression":
@@ -1884,6 +1892,21 @@
     return node;
   }
 
+  // Parses spread element.
+
+  function parseSpread(isBinding) {
+    var spread = startNode();
+    next();
+    if (isBinding) {
+      var arg = parseAssignableAtom();
+      checkSpreadAssign(arg);
+      spread.argument = arg;
+    } else {
+      spread.argument = parseMaybeAssign();
+    }
+    return finishNode(spread, "SpreadElement");
+  }
+
   // Parses lvalue (assignable) atom.
 
   function parseAssignableAtom() {
@@ -1899,11 +1922,7 @@
         while (!eat(_bracketR)) {
           first ? first = false : expect(_comma);
           if (tokType === _ellipsis) {
-            var spread = startNode();
-            next();
-            spread.argument = parseAssignableAtom();
-            checkSpreadAssign(spread.argument);
-            elts.push(finishNode(spread, "SpreadElement"));
+            elts.push(parseSpread(true));
             expect(_bracketR);
             break;
           }
@@ -2490,21 +2509,16 @@
 
   function parseMaybeUnary() {
     if (tokType.prefix) {
-      var node = startNode(), update = tokType.isUpdate, nodeType;
-      if (tokType === _ellipsis) {
-        nodeType = "SpreadElement";
-      } else {
-        nodeType = update ? "UpdateExpression" : "UnaryExpression";
-        node.operator = tokVal;
-        node.prefix = true;
-      }
+      var node = startNode(), update = tokType.isUpdate;
+      node.operator = tokVal;
+      node.prefix = true;
       next();
       node.argument = parseMaybeUnary();
       if (update) checkLVal(node.argument);
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
         raise(node.start, "Deleting local variable in strict mode");
-      return finishNode(node, nodeType);
+      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts();
@@ -2600,42 +2614,7 @@
       return finishNode(node, "Literal");
 
     case _parenL:
-      var start = storeCurrentPos();
-      var val, exprList;
-      next();
-      // check whether this is generator comprehension or regular expression
-      if (options.ecmaVersion >= 7 && tokType === _for) {
-        val = parseComprehension(startNodeAt(start), true);
-      } else {
-        var oldParenL = ++metParenL;
-        if (tokType !== _parenR) {
-          val = parseExpression();
-          exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-        } else {
-          exprList = [];
-        }
-        expect(_parenR);
-        // if '=>' follows '(...)', convert contents to arguments
-        if (metParenL === oldParenL && eat(_arrow)) {
-          val = parseArrowExpression(startNodeAt(start), exprList);
-        } else {
-          // forbid '()' before everything but '=>'
-          if (!val) unexpected(lastStart);
-          // forbid '...' in sequence expressions
-          if (options.ecmaVersion >= 6) {
-            for (var i = 0; i < exprList.length; i++) {
-              if (exprList[i].type === "SpreadElement") unexpected();
-            }
-          }
-
-          if (options.preserveParens) {
-            var par = startNodeAt(start);
-            par.expression = val;
-            val = finishNode(par, "ParenthesizedExpression");
-          }
-        }
-      }
-      return val;
+      return parseParenAndDistinguishExpression();
 
     case _bracketL:
       var node = startNode();
@@ -2669,6 +2648,60 @@
 
     default:
       unexpected();
+    }
+  }
+
+  function parseParenAndDistinguishExpression() {
+    var start = storeCurrentPos(), val;
+    if (options.ecmaVersion >= 6) {
+      next();
+
+      if (options.ecmaVersion >= 7 && tokType === _for) {
+        return parseComprehension(startNodeAt(start), true);
+      }
+
+      var innerStart = storeCurrentPos(), exprList = [], first = true, spreadStart, innerParenStart;
+      while (tokType !== _parenR) {
+        first ? first = false : expect(_comma);
+        if (tokType === _ellipsis) {
+          spreadStart = tokStart;
+          exprList.push(parseSpread(true));
+          break;
+        } else {
+          if (tokType === _parenL && !innerParenStart) {
+            innerParenStart = tokStart;
+          }
+          exprList.push(parseMaybeAssign());
+        }
+      }
+      var innerEnd = storeCurrentPos();
+      expect(_parenR);
+
+      if (eat(_arrow)) {
+        if (innerParenStart) unexpected(innerParenStart);
+        return parseArrowExpression(startNodeAt(start), exprList);
+      }
+
+      if (!exprList.length) unexpected(lastStart);
+      if (spreadStart) unexpected(spreadStart);
+
+      if (exprList.length > 1) {
+        val = startNodeAt(innerStart);
+        val.expressions = exprList;
+        finishNodeAt(val, "SequenceExpression", innerEnd);
+      } else {
+        val = exprList[0];
+      }
+    } else {
+      val = parseParenExpression();
+    }
+
+    if (options.preserveParens) {
+      var par = startNodeAt(start);
+      par.expression = val;
+      return finishNode(par, "ParenthesizedExpression");
+    } else {
+      return val;
     }
   }
 
@@ -2715,7 +2748,7 @@
     return finishNode(node, "TemplateLiteral");
   }
 
-  // Parse an object literal.
+  // Parse an object literal or binding pattern.
 
   function parseObj(isPattern) {
     var node = startNode(), first = true, propHash = {};
@@ -2865,7 +2898,7 @@
     for (;;) {
       if (eat(_parenR)) {
         break;
-      } else if (options.ecmaVersion >= 6 && eat(_ellipsis)) {
+      } else if (eat(_ellipsis)) {
         node.rest = parseAssignableAtom();
         checkSpreadAssign(node.rest);
         expect(_parenR);
@@ -2976,8 +3009,11 @@
         if (allowTrailingComma && options.allowTrailingCommas && eat(close)) break;
       } else first = false;
 
-      if (allowEmpty && tokType === _comma) elts.push(null);
-      else elts.push(parseExpression(true));
+      if (allowEmpty && tokType === _comma) {
+        elts.push(null);
+      } else {
+        elts.push(tokType === _ellipsis ? parseSpread() : parseMaybeAssign());
+      }
     }
     return elts;
   }

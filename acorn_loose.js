@@ -622,20 +622,18 @@
 
   function parseMaybeUnary(noIn) {
     if (token.type.prefix) {
-      var node = startNode(), update = token.type.isUpdate, nodeType;
-      if (token.type === tt.ellipsis) {
-        nodeType = "SpreadElement";
-      } else {
-        nodeType = update ? "UpdateExpression" : "UnaryExpression";
-        node.operator = token.value;
-        node.prefix = true;
-      }
+      var node = startNode(), update = token.type.isUpdate;
       node.operator = token.value;
       node.prefix = true;
       next();
       node.argument = parseMaybeUnary(noIn);
       if (update) node.argument = checkLVal(node.argument);
-      return finishNode(node, nodeType);
+      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+    } else if (token.type === tt.ellipsis) {
+      var node = startNode();
+      next();
+      node.argument = parseMaybeUnary(noIn);
+      return finishNode(node, "SpreadElement");
     }
     var start = storeCurrentPos();
     var expr = parseExprSubscripts();
