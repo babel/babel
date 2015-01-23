@@ -614,7 +614,7 @@
       tokPos = tokLineStart = 0;
     }
     tokType = _eof;
-    tokContext = [];
+    tokContext = [b_stat];
     tokExprAllowed = true;
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
