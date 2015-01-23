@@ -24,7 +24,6 @@ commander.option("-d, --out-dir [out]", "Compile an input directory of modules i
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
 commander.option("-m, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
-commander.option("-E, --include-regenerator", "Include the regenerator runtime if necessary", false);
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 
 commander.on("--help", function () {
@@ -94,7 +93,6 @@ if (errors.length) {
 
 exports.opts = {
   keepModuleIdExtensions: commander.keepModuleIdExtensions,
-  includeRegenerator:     commander.includeRegenerator,
   sourceMapName:          commander.outFile,
   experimental:           commander.experimental,
   reactCompat:            commander.reactCompat,
