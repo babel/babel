@@ -627,18 +627,22 @@
 
   var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true}, b_tmpl = {token: "${", isExpr: true};
   var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
-  var q_tmpl = {token: "`", isExpr: true};
+  var q_tmpl = {token: "`", isExpr: true}, f_expr = {token: "function", isExpr: true};
+
+  function curTokContext() {
+    return tokContext[tokContext.length - 1];
+  }
 
   function braceIsBlock(prevType) {
     var parent;
-    if (prevType === _colon && (parent = tokContext[tokContext.length - 1]).token == "{")
+    if (prevType === _colon && (parent = curTokContext()).token == "{")
       return !parent.isExpr;
     if (prevType === _return)
       return newline.test(input.slice(lastEnd, tokStart));
     if (prevType === _else || prevType === _semi || prevType === _eof)
       return true;
     if (prevType == _braceL)
-      return tokContext[tokContext.length - 1] === b_stat;
+      return curTokContext() === b_stat;
     return !tokExprAllowed;
   }
 
@@ -657,8 +661,14 @@
     // Update context info
     if (type === _parenR || type === _braceR) {
       var out = tokContext.pop();
-      tokExprAllowed = !(out && out.isExpr);
-      preserveSpace = out === b_tmpl;
+      if (out === b_tmpl) {
+        preserveSpace = true;
+      } else if (out === b_stat && curTokContext() === f_expr) {
+        tokContext.pop();
+        tokExprAllowed = false;
+      } else {
+        tokExprAllowed = !(out && out.isExpr);
+      }
     } else if (type === _braceL) {
       tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
       tokExprAllowed = true;
@@ -673,10 +683,13 @@
       // tokExprAllowed stays unchanged
     } else if (type.keyword && prevType == _dot) {
       tokExprAllowed = false;
-    } else if (tokExprAllowed && type == _function) {
+    } else if (type == _function) {
+      if (curTokContext() !== b_stat) {
+        tokContext.push(f_expr);
+      }
       tokExprAllowed = false;
     } else if (type === _backQuote) {
-      if (tokContext[tokContext.length - 1] === q_tmpl) {
+      if (curTokContext() === q_tmpl) {
         tokContext.pop();
       } else {
         tokContext.push(q_tmpl);
@@ -939,7 +952,7 @@
     if (options.locations) tokStartLoc = curPosition();
     if (tokPos >= inputLen) return finishToken(_eof);
 
-    if (tokContext[tokContext.length - 1] === q_tmpl) {
+    if (curTokContext() === q_tmpl) {
       return readTmplToken();
     }
 
