@@ -93,8 +93,6 @@ function replEval(code, context, filename, callback) {
       code = code.slice(1, -1); // remove "(" and ")"
     }
 
-    console.log(JSON.stringify(code));
-
     result = _eval(code, filename);
   } catch (e) {
     err = e;
