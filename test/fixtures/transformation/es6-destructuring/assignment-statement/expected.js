@@ -22,3 +22,4 @@ var _ref2 = _slicedToArray(_ref, 2);
 
 a = _ref2[0];
 b = _ref2[1];
+;
