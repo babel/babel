@@ -28862,3 +28862,48 @@ test("#!/usr/bin/node\n;", {}, {
     end: 15
   }]
 });
+
+// https://github.com/marijnh/acorn/issues/204
+test("(function () {} / 1)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "FunctionExpression",
+        id: null,
+        params: [],
+        body: {
+          type: "BlockStatement",
+          body: []
+        }
+      },
+      operator: "/",
+      right: {type: "Literal", value: 1}
+    }
+  }]
+});
+
+test("function f() {} / 1 /", {
+  type: "Program",
+  body: [
+    {
+      type: "FunctionDeclaration",
+      id: {type: "Identifier", name: "f"},
+      params: [],
+      body: {
+        type: "BlockStatement",
+        body: []
+      }
+    },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {pattern: " 1 ", flags: ""},
+        value: {}
+      }
+    }
+  ]
+});
