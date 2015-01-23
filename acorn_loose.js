@@ -271,9 +271,18 @@
     }
   }
 
+  function isContextual(name) {
+    return token.type === tt.name && token.value === name;
+  }
+
+  function eatContextual(name) {
+    return token.value === name && eat(tt.name);
+  }
+
   function canInsertSemicolon() {
     return (token.type === tt.eof || token.type === tt.braceR || newline.test(input.slice(lastEnd, token.start)));
   }
+
   function semicolon() {
     return eat(tt.semi);
   }
@@ -352,13 +361,13 @@
       if (token.type === tt.semi) return parseFor(node, null);
       if (token.type === tt._var || token.type === tt._let) {
         var init = parseVar(true);
-        if (init.declarations.length === 1 && (token.type === tt._in || token.type === tt.name && token.value === "of")) {
+        if (init.declarations.length === 1 && (token.type === tt._in || isContextual("of"))) {
           return parseForIn(node, init);
         }
         return parseFor(node, init);
       }
       var init = parseExpression(false, true);
-      if (token.type === tt._in || token.type === tt.name && token.value === "of") {
+      if (token.type === tt._in || isContextual("of")) {
         return parseForIn(node, checkLVal(init));
       }
       return parseFor(node, init);
@@ -1081,10 +1090,7 @@
     if (token.type === tt.star) {
       var elt = startNode();
       next();
-      if (token.type === tt.name && token.value === "as") {
-        next();
-        elt.name = parseIdent();
-      }
+      if (eatContextual("as")) elt.name = parseIdent();
       elts.push(finishNode(elt, prefix + "BatchSpecifier"));
     } else {
       var indent = curIndent, line = curLineStart, continuedLine = nextLineStart;
@@ -1093,22 +1099,13 @@
       if (curLineStart > continuedLine) continuedLine = curLineStart;
       while (!closes(tt.braceR, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
         var elt = startNode();
-        if (token.type === tt.star) {
-          next();
-          if (token.type === tt.name && token.value === "as") {
-            next();
-            elt.name = parseIdent();
-          }
+        if (eat(tt.star)) {
+          if (eatContextual("as")) elt.name = parseIdent();
           finishNode(elt, prefix + "BatchSpecifier");
         } else {
-          if (token.type === tt.name && token.value === "from") break;
+          if (isContextual("from")) break;
           elt.id = parseIdent();
-          if (token.type === tt.name && token.value === "as") {
-            next();
-            elt.name = parseIdent();
-          } else {
-            elt.name = null;
-          }
+          elt.name = eatContextual("as") ? parseIdent() : null;
           finishNode(elt, prefix + "Specifier");
         }
         elts.push(elt);
@@ -1117,12 +1114,7 @@
       eat(tt.braceR);
       popCx();
     }
-    if (token.type === tt.name && token.value === "from") {
-      next();
-      node.source = parseExprAtom();
-    } else {
-      node.source = null;
-    }
+    node.source = eatContextual("from") ? parseExprAtom() : null;
   }
 
   function parseExprList(close, allowEmpty) {

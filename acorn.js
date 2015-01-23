@@ -2241,6 +2241,24 @@
     }
   }
 
+  // Tests whether parsed token is a contextual keyword.
+
+  function isContextual(name) {
+    return tokType === _name && tokVal === name;
+  }
+
+  // Consumes contextual keyword if possible.
+
+  function eatContextual(name) {
+    return tokVal === name && eat(_name);
+  }
+
+  // Asserts that following token is given contextual keyword.
+
+  function expectContextual(name) {
+    if (!eatContextual(name)) unexpected();
+  }
+
   // Test whether a semicolon can be inserted at the current position.
 
   function canInsertSemicolon() {
@@ -2691,13 +2709,13 @@
       next();
       parseVar(init, true, varKind);
       finishNode(init, "VariableDeclaration");
-      if ((tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) && init.declarations.length === 1 &&
+      if ((tokType === _in || (options.ecmaVersion >= 6 && isContextual("of"))) && init.declarations.length === 1 &&
           !(isLet && init.declarations[0].init))
         return parseForIn(node, init);
       return parseFor(node, init);
     }
     var init = parseExpression(false, true);
-    if (tokType === _in || (options.ecmaVersion >= 6 && tokType === _name && tokVal === "of")) {
+    if (tokType === _in || (options.ecmaVersion >= 6 && isContextual("of"))) {
       checkLVal(init);
       return parseForIn(node, init);
     }
@@ -3716,8 +3734,7 @@
       node.declaration = null;
       node['default'] = false;
       node.specifiers = parseExportSpecifiers();
-      if (tokType === _name && tokVal === "from") {
-        next();
+      if (eatContextual("from")) {
         node.source = tokType === _string ? parseExprAtom() : unexpected();
       } else {
         if (isBatch) unexpected();
@@ -3748,12 +3765,7 @@
 
         var node = startNode();
         node.id = parseIdent(tokType === _default);
-        if (tokType === _name && tokVal === "as") {
-          next();
-          node.name = parseIdent(true);
-        } else {
-          node.name = null;
-        }
+        node.name = eatContextual("as") ? parseIdent(true) : null;
         nodes.push(finishNode(node, "ExportSpecifier"));
       }
     }
@@ -3770,8 +3782,7 @@
       node.source = parseExprAtom();
     } else {
       node.specifiers = parseImportSpecifiers();
-      if (tokType !== _name || tokVal !== "from") unexpected();
-      next();
+      expectContextual("from");
       node.source = tokType === _string ? parseExprAtom() : unexpected();
     }
     semicolon();
@@ -3795,8 +3806,7 @@
     if (tokType === _star) {
       var node = startNode();
       next();
-      if (tokType !== _name || tokVal !== "as") unexpected();
-      next();
+      expectContextual("as");
       node.name = parseIdent();
       checkLVal(node.name, true);
       nodes.push(finishNode(node, "ImportBatchSpecifier"));
@@ -3811,12 +3821,7 @@
 
       var node = startNode();
       node.id = parseIdent(true);
-      if (tokType === _name && tokVal === "as") {
-        next();
-        node.name = parseIdent();
-      } else {
-        node.name = null;
-      }
+      node.name = eatContextual("as") ? parseIdent() : null;
       checkLVal(node.name || node.id, true);
       node['default'] = false;
       nodes.push(finishNode(node, "ImportSpecifier"));
@@ -3860,8 +3865,7 @@
       expect(_parenL);
       block.left = parseAssignableAtom();
       checkLVal(block.left, true);
-      if (tokType !== _name || tokVal !== "of") unexpected();
-      next();
+      expectContextual("of");
       block.right = parseExpression();
       expect(_parenR);
       node.blocks.push(finishNode(block, "ComprehensionBlock"));
