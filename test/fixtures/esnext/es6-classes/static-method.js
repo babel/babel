@@ -4,13 +4,13 @@ class Tripler {
   }
 
   static toString() {
-    return '3' + super() + '3';
+    return '3' + super.toString() + '3';
   }
 }
 
 class MegaTripler extends Tripler {
   static triple(n=1) {
-    return super(n) * super(n);
+    return super.triple(n) * super.triple(n);
   }
 }
 

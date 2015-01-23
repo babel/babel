@@ -8,7 +8,7 @@ class Dog extends Animal {
   type() { return 'dog'; }
 
   sayHi() {
-    return super() + ' WOOF!';
+    return super.sayHi() + ' WOOF!';
   }
 }
 

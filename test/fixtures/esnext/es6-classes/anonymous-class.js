@@ -12,11 +12,11 @@ var Dog = class extends Animal {
   type() { return 'dog'; }
 
   sayHi() {
-    return super() + ' WOOF!';
+    return super.sayHi() + ' WOOF!';
   }
 
   static getName() {
-    return super() + '/Dog';
+    return super.getName() + '/Dog';
   }
 };
 
