@@ -297,7 +297,7 @@
       case "MemberExpression":
       case "ObjectPattern":
       case "ArrayPattern":
-      case "SpreadElement":
+      case "RestElement":
       case "AssignmentPattern":
         return expr;
 
@@ -982,6 +982,7 @@
           break;
 
         case "SpreadElement":
+          node.type = "RestElement";
           node.argument = toAssignable(node.argument);
           break;
 
@@ -1007,7 +1008,7 @@
         param = param.left;
       }
       param = toAssignable(param);
-      if (param.type === "SpreadElement") {
+      if (param.type === "RestElement") {
         param = param.argument;
         if (i === params.length - 1) {
           node.rest = param;

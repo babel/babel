@@ -12913,7 +12913,7 @@ test("[...a] = b", {
       left: {
         type: "ArrayPattern",
         elements: [{
-          type: "SpreadElement",
+          type: "RestElement",
           argument: {
             type: "Identifier",
             name: "a",
@@ -12979,7 +12979,7 @@ test("[a, ...b] = c", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "Identifier",
               name: "b",
@@ -13101,7 +13101,7 @@ test("[{ a, b }, ...c] = d", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "Identifier",
               name: "c",
@@ -13168,7 +13168,7 @@ test("[a, ...[b, c]] = d", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "ArrayPattern",
               elements: [
@@ -13242,7 +13242,7 @@ test("var [...a] = b", {
       id: {
         type: "ArrayPattern",
         elements: [{
-          type: "SpreadElement",
+          type: "RestElement",
           argument: {
             type: "Identifier",
             name: "a",
@@ -13308,7 +13308,7 @@ test("var [a, ...b] = c", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "Identifier",
               name: "b",
@@ -13430,7 +13430,7 @@ test("var [{ a, b }, ...c] = d", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "Identifier",
               name: "c",
@@ -13497,7 +13497,7 @@ test("var [a, ...[b, c]] = d", {
             }
           },
           {
-            type: "SpreadElement",
+            type: "RestElement",
             argument: {
               type: "ArrayPattern",
               elements: [
@@ -14195,7 +14195,7 @@ test("[...a, ] = b", {
           end: {line: 1, column: 8}
         },
         elements: [{
-          type: "SpreadElement",
+          type: "RestElement",
           loc: {
             start: {line: 1, column: 1},
             end: {line: 1, column: 5}

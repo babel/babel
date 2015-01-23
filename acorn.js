@@ -1458,6 +1458,7 @@
         case "ObjectPattern":
         case "ArrayPattern":
         case "AssignmentPattern":
+        case "RestElement":
           break;
 
         case "ObjectExpression":
@@ -1478,6 +1479,7 @@
 
         case "SpreadElement":
           if (allowSpread) {
+            node.type = "RestElement";
             toAssignable(node.argument, false, checkType);
             checkSpreadAssign(node.argument);
           } else {
@@ -1502,17 +1504,19 @@
 
   // Parses spread element.
 
-  function parseSpread(isBinding) {
-    var spread = startNode();
+  function parseSpread() {
+    var node = startNode();
     next();
-    if (isBinding) {
-      var arg = parseAssignableAtom();
-      checkSpreadAssign(arg);
-      spread.argument = arg;
-    } else {
-      spread.argument = parseMaybeAssign();
-    }
-    return finishNode(spread, "SpreadElement");
+    node.argument = parseMaybeAssign();
+    return finishNode(node, "SpreadElement");
+  }
+
+  function parseRest() {
+    var node = startNode();
+    next();
+    node.argument = parseAssignableAtom();
+    checkSpreadAssign(node.argument);
+    return finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
@@ -1530,7 +1534,7 @@
         while (!eat(_bracketR)) {
           first ? first = false : expect(_comma);
           if (tokType === _ellipsis) {
-            elts.push(parseSpread(true));
+            elts.push(parseRest());
             expect(_bracketR);
             break;
           }
@@ -1648,7 +1652,7 @@
         break;
 
       case "AssignmentPattern":
-      case "SpreadElement":
+      case "RestElement":
         break;
 
       default:
@@ -2270,7 +2274,7 @@
         first ? first = false : expect(_comma);
         if (tokType === _ellipsis) {
           spreadStart = tokStart;
-          exprList.push(parseSpread(true));
+          exprList.push(parseRest());
           break;
         } else {
           if (tokType === _parenL && !innerParenStart) {
@@ -2479,7 +2483,7 @@
       } else {
         toAssignable(param, i === lastI, true);
         defaults.push(null);
-        if (param.type === "SpreadElement") {
+        if (param.type === "RestElement") {
           params.length--;
           node.rest = param.argument;
           break;
