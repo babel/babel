@@ -174,7 +174,6 @@ test("function test() {'use strict'; 0o0; }", {
       }
     },
     params: [],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [
@@ -216,7 +215,6 @@ test("function test() {'use strict'; 0o0; }", {
         end: {line: 1, column: 37}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -331,7 +329,6 @@ test("function test() {'use strict'; 0O0; }", {
       }
     },
     params: [],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [
@@ -373,7 +370,6 @@ test("function test() {'use strict'; 0O0; }", {
         end: {line: 1, column: 37}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -1028,8 +1024,6 @@ test("`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`",{
                 type: "FunctionExpression",
                 id: null,
                 params: [],
-                defaults: [],
-                rest: null,
                 generator: false,
                 body: {
                   type: "BlockStatement",
@@ -1198,7 +1192,6 @@ test("() => \"test\"", {
       type: "ArrowFunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "Literal",
         value: "test",
@@ -1208,7 +1201,6 @@ test("() => \"test\"", {
           end: {line: 1, column: 12}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1246,7 +1238,6 @@ test("e => \"test\"", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: "test",
@@ -1256,7 +1247,6 @@ test("e => \"test\"", {
           end: {line: 1, column: 11}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1294,7 +1284,6 @@ test("(e) => \"test\"", {
           end: {line: 1, column: 2}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: "test",
@@ -1304,7 +1293,6 @@ test("(e) => \"test\"", {
           end: {line: 1, column: 13}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1352,7 +1340,6 @@ test("(a, b) => \"test\"", {
           }
         }
       ],
-      defaults: [],
       body: {
         type: "Literal",
         value: "test",
@@ -1362,7 +1349,6 @@ test("(a, b) => \"test\"", {
           end: {line: 1, column: 16}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1400,7 +1386,6 @@ test("e => { 42; }", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -1424,7 +1409,6 @@ test("e => { 42; }", {
           end: {line: 1, column: 12}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -1462,7 +1446,6 @@ test("e => ({ property: 42 })", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "ObjectExpression",
         properties: [{
@@ -1498,7 +1481,6 @@ test("e => ({ property: 42 })", {
           end: {line: 1, column: 22}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1536,7 +1518,6 @@ test("e => { label: 42 }", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -1575,7 +1556,6 @@ test("e => { label: 42 }", {
           end: {line: 1, column: 18}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -1623,7 +1603,6 @@ test("(a, b) => { 42; }", {
           }
         }
       ],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -1647,7 +1626,6 @@ test("(a, b) => { 42; }", {
           end: {line: 1, column: 17}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -1703,7 +1681,6 @@ test("([a, , b]) => 42", {
           end: {line: 1, column: 9}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: 42,
@@ -1713,7 +1690,6 @@ test("([a, , b]) => 42", {
           end: {line: 1, column: 16}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1774,7 +1750,6 @@ test("([a.a]) => 42", {
           end: {line: 1, column: 6}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: 42,
@@ -1784,7 +1759,6 @@ test("([a.a]) => 42", {
           end: {line: 1, column: 13}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1815,20 +1789,23 @@ test("(x=1) => x * x", {
       type: "ArrowFunctionExpression",
       id: null,
       params: [{
-        type: "Identifier",
-        name: "x",
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
-        }
-      }],
-      defaults: [{
-        type: "Literal",
-        value: 1,
-        raw: "1",
-        loc: {
-          start: {line: 1, column: 3},
-          end: {line: 1, column: 4}
+        type: "AssignmentPattern",
+        left: {
+          type: "Identifier",
+          name: "x",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 2}
+          }
+        },
+        right: {
+          type: "Literal",
+          value: 1,
+          raw: "1",
+          loc: {
+            start: {line: 1, column: 3},
+            end: {line: 1, column: 4}
+          }
         }
       }],
       body: {
@@ -1855,7 +1832,6 @@ test("(x=1) => x * x", {
           end: {line: 1, column: 14}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1893,7 +1869,6 @@ test("eval => 42", {
           end: {line: 1, column: 4}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: 42,
@@ -1903,7 +1878,6 @@ test("eval => 42", {
           end: {line: 1, column: 10}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1941,7 +1915,6 @@ test("arguments => 42", {
           end: {line: 1, column: 9}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: 42,
@@ -1951,7 +1924,6 @@ test("arguments => 42", {
           end: {line: 1, column: 15}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -1989,7 +1961,6 @@ test("(a) => 00", {
           end: {line: 1, column: 2}
         }
       }],
-      defaults: [],
       body: {
         type: "Literal",
         value: 0,
@@ -1999,7 +1970,6 @@ test("(a) => 00", {
           end: {line: 1, column: 9}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2047,7 +2017,6 @@ test("(eval, a) => 42", {
           }
         }
       ],
-      defaults: [],
       body: {
         type: "Literal",
         value: 42,
@@ -2057,7 +2026,6 @@ test("(eval, a) => 42", {
           end: {line: 1, column: 15}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2088,20 +2056,23 @@ test("(eval = 10) => 42", {
       type: "ArrowFunctionExpression",
       id: null,
       params: [{
-        type: "Identifier",
-        name: "eval",
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 5}
-        }
-      }],
-      defaults: [{
-        type: "Literal",
-        value: 10,
-        raw: "10",
-        loc: {
-          start: {line: 1, column: 8},
-          end: {line: 1, column: 10}
+        type: "AssignmentPattern",
+        left: {
+          type: "Identifier",
+          name: "eval",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 5}
+          }
+        },
+        right: {
+          type: "Literal",
+          value: 10,
+          raw: "10",
+          loc: {
+            start: {line: 1, column: 8},
+            end: {line: 1, column: 10}
+          }
         }
       }],
       body: {
@@ -2113,7 +2084,6 @@ test("(eval = 10) => 42", {
           end: {line: 1, column: 17}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2153,23 +2123,23 @@ test("(eval, a = 10) => 42", {
           }
         },
         {
-          type: "Identifier",
-          name: "a",
-          loc: {
-            start: {line: 1, column: 7},
-            end: {line: 1, column: 8}
-          }
-        }
-      ],
-      defaults: [
-        null,
-        {
-          type: "Literal",
-          value: 10,
-          raw: "10",
-          loc: {
-            start: {line: 1, column: 11},
-            end: {line: 1, column: 13}
+          type: "AssignmentPattern",
+          left: {
+            type: "Identifier",
+            name: "a",
+            loc: {
+              start: {line: 1, column: 7},
+              end: {line: 1, column: 8}
+            }
+          },
+          right: {
+            type: "Literal",
+            value: 10,
+            raw: "10",
+            loc: {
+              start: {line: 1, column: 11},
+              end: {line: 1, column: 13}
+            }
           }
         }
       ],
@@ -2182,7 +2152,6 @@ test("(eval, a = 10) => 42", {
           end: {line: 1, column: 20}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2220,7 +2189,6 @@ test("(x => x)", {
           end: {line: 1, column: 2}
         }
       }],
-      defaults: [],
       body: {
         type: "Identifier",
         name: "x",
@@ -2229,7 +2197,6 @@ test("(x => x)", {
           end: {line: 1, column: 7}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2267,7 +2234,6 @@ test("x => y => 42", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "ArrowFunctionExpression",
         id: null,
@@ -2279,7 +2245,6 @@ test("x => y => 42", {
             end: {line: 1, column: 6}
           }
         }],
-        defaults: [],
         body: {
           type: "Literal",
           value: 42,
@@ -2289,7 +2254,6 @@ test("x => y => 42", {
             end: {line: 1, column: 12}
           }
         },
-        rest: null,
         generator: false,
         expression: true,
         loc: {
@@ -2297,7 +2261,6 @@ test("x => y => 42", {
           end: {line: 1, column: 12}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2335,7 +2298,6 @@ test("(x) => ((y, z) => (x, y, z))", {
           end: {line: 1, column: 2}
         }
       }],
-      defaults: [],
       body: {
         type: "ArrowFunctionExpression",
         id: null,
@@ -2357,7 +2319,6 @@ test("(x) => ((y, z) => (x, y, z))", {
             }
           }
         ],
-        defaults: [],
         body: {
           type: "SequenceExpression",
           expressions: [
@@ -2391,7 +2352,6 @@ test("(x) => ((y, z) => (x, y, z))", {
             end: {line: 1, column: 26}
           }
         },
-        rest: null,
         generator: false,
         expression: true,
         loc: {
@@ -2399,7 +2359,6 @@ test("(x) => ((y, z) => (x, y, z))", {
           end: {line: 1, column: 27}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -2440,7 +2399,6 @@ test("foo(() => {})", {
         type: "ArrowFunctionExpression",
         id: null,
         params: [],
-        defaults: [],
         body: {
           type: "BlockStatement",
           body: [],
@@ -2449,7 +2407,6 @@ test("foo(() => {})", {
             end: {line: 1, column: 12}
           }
         },
-        rest: null,
         generator: false,
         expression: false,
         loc: {
@@ -2512,7 +2469,6 @@ test("foo((x, y) => {})", {
             }
           }
         ],
-        defaults: [],
         body: {
           type: "BlockStatement",
           body: [],
@@ -2521,7 +2477,6 @@ test("foo((x, y) => {})", {
             end: {line: 1, column: 16}
           }
         },
-        rest: null,
         generator: false,
         expression: false,
         loc: {
@@ -2586,8 +2541,6 @@ test("(a, a) => 42", {
           name: "a"
         }
       ],
-      defaults: [],
-      rest: null,
       generator: false,
       body: {
         type: "Literal",
@@ -2640,7 +2593,6 @@ test("x = { method() { } }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -2649,7 +2601,6 @@ test("x = { method() { } }", {
                 end: {line: 1, column: 18}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -2729,7 +2680,6 @@ test("x = { method(test) { } }", {
                 end: {line: 1, column: 17}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -2738,7 +2688,6 @@ test("x = { method(test) { } }", {
                 end: {line: 1, column: 22}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -2812,7 +2761,6 @@ test("x = { 'method'() { } }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -2821,7 +2769,6 @@ test("x = { 'method'() { } }", {
                 end: {line: 1, column: 20}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -2894,7 +2841,6 @@ test("x = { get() { } }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -2903,7 +2849,6 @@ test("x = { get() { } }", {
                 end: {line: 1, column: 15}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -2976,7 +2921,6 @@ test("x = { set() { } }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -2985,7 +2929,6 @@ test("x = { set() { } }", {
                 end: {line: 1, column: 15}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -3058,7 +3001,6 @@ test("x = { method() 42 }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "Literal",
               value: 42,
@@ -3068,7 +3010,6 @@ test("x = { method() 42 }", {
                 end: {line: 1, column: 17}
               }
             },
-            rest: null,
             generator: false,
             expression: true,
             loc: {
@@ -3141,7 +3082,6 @@ test("x = { get method() 42 }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "Literal",
               value: 42,
@@ -3151,7 +3091,6 @@ test("x = { get method() 42 }", {
                 end: {line: 1, column: 21}
               }
             },
-            rest: null,
             generator: false,
             expression: true,
             loc: {
@@ -3231,7 +3170,6 @@ test("x = { set method(val) v = val }", {
                 end: {line: 1, column: 20}
               }
             }],
-            defaults: [],
             body: {
               type: "AssignmentExpression",
               operator: "=",
@@ -3256,7 +3194,6 @@ test("x = { set method(val) v = val }", {
                 end: {line: 1, column: 29}
               }
             },
-            rest: null,
             generator: false,
             expression: true,
             loc: {
@@ -4834,7 +4771,6 @@ test("export function parse() { }", {
         }
       },
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [],
@@ -4843,7 +4779,6 @@ test("export function parse() { }", {
           end: {line: 1, column: 27}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -5615,7 +5550,6 @@ test("(function* () { yield v })", {
       type: "FunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -5646,7 +5580,6 @@ test("(function* () { yield v })", {
           end: {line: 1, column: 25}
         }
       },
-      rest: null,
       generator: true,
       expression: false,
       loc: {
@@ -5677,7 +5610,6 @@ test("(function* () { yield\nv })", {
       type: "FunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [
@@ -5718,7 +5650,6 @@ test("(function* () { yield\nv })", {
           end: {line: 2, column: 3}
         }
       },
-      rest: null,
       generator: true,
       expression: false,
       loc: {
@@ -5749,7 +5680,6 @@ test("(function* () { yield *v })", {
       type: "FunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -5780,7 +5710,6 @@ test("(function* () { yield *v })", {
           end: {line: 1, column: 26}
         }
       },
-      rest: null,
       generator: true,
       expression: false,
       loc: {
@@ -5816,7 +5745,6 @@ test("function* test () { yield *v }", {
       }
     },
     params: [],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [{
@@ -5847,7 +5775,6 @@ test("function* test () { yield *v }", {
         end: {line: 1, column: 30}
       }
     },
-    rest: null,
     generator: true,
     expression: false,
     loc: {
@@ -5895,7 +5822,6 @@ test("var x = { *test () { yield *v } };", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [{
@@ -5926,7 +5852,6 @@ test("var x = { *test () { yield *v } };", {
                 end: {line: 1, column: 31}
               }
             },
-            rest: null,
             generator: true,
             expression: false,
             loc: {
@@ -5982,7 +5907,6 @@ test("function* t() {}", {
       }
     },
     params: [],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [],
@@ -5991,7 +5915,6 @@ test("function* t() {}", {
         end: {line: 1, column: 16}
       }
     },
-    rest: null,
     generator: true,
     expression: false,
     loc: {
@@ -6017,7 +5940,6 @@ test("(function* () { yield yield 10 })", {
       type: "FunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -6057,7 +5979,6 @@ test("(function* () { yield yield 10 })", {
           end: {line: 1, column: 32}
         }
       },
-      rest: null,
       generator: true,
       expression: false,
       loc: {
@@ -6554,7 +6475,6 @@ test("class A {get() {}}", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6563,7 +6483,6 @@ test("class A {get() {}}", {
               end: {line: 1, column: 17}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -6628,7 +6547,6 @@ test("class A { static get() {}}", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6637,7 +6555,6 @@ test("class A { static get() {}}", {
               end: {line: 1, column: 25}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -6709,7 +6626,6 @@ test("class A extends B {get foo() {}}", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6718,7 +6634,6 @@ test("class A extends B {get foo() {}}", {
               end: {line: 1, column: 31}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -6790,7 +6705,6 @@ test("class A extends B { static get foo() {}}", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6799,7 +6713,6 @@ test("class A extends B { static get foo() {}}", {
               end: {line: 1, column: 39}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -6871,7 +6784,6 @@ test("class A {set a(v) {}}", {
               end: {line: 1, column: 16}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6880,7 +6792,6 @@ test("class A {set a(v) {}}", {
               end: {line: 1, column: 20}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -6952,7 +6863,6 @@ test("class A { static set a(v) {}}", {
               end: {line: 1, column: 24}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -6961,7 +6871,6 @@ test("class A { static set a(v) {}}", {
               end: {line: 1, column: 28}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -7033,7 +6942,6 @@ test("class A {set(v) {};}", {
               end: {line: 1, column: 14}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -7042,7 +6950,6 @@ test("class A {set(v) {};}", {
               end: {line: 1, column: 18}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -7114,7 +7021,6 @@ test("class A { static set(v) {};}", {
               end: {line: 1, column: 22}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -7123,7 +7029,6 @@ test("class A { static set(v) {};}", {
               end: {line: 1, column: 26}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -7195,7 +7100,6 @@ test("class A {*gen(v) { yield v; }}", {
               end: {line: 1, column: 15}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [{
@@ -7226,7 +7130,6 @@ test("class A {*gen(v) { yield v; }}", {
               end: {line: 1, column: 29}
             }
           },
-          rest: null,
           generator: true,
           expression: false,
           loc: {
@@ -7298,7 +7201,6 @@ test("class A { static *gen(v) { yield v; }}", {
               end: {line: 1, column: 23}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [{
@@ -7329,7 +7231,6 @@ test("class A { static *gen(v) { yield v; }}", {
               end: {line: 1, column: 37}
             }
           },
-          rest: null,
           generator: true,
           expression: false,
           loc: {
@@ -7413,7 +7314,6 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
               type: "FunctionExpression",
               id: null,
               params: [],
-              defaults: [],
               body: {
                 type: "BlockStatement",
                 body: [{
@@ -7444,7 +7344,6 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                   end: {line: 1, column: 49}
                 }
               },
-              rest: null,
               generator: false,
               expression: false,
               loc: {
@@ -7515,7 +7414,6 @@ test("class A {static foo() {}}", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -7524,7 +7422,6 @@ test("class A {static foo() {}}", {
               end: {line: 1, column: 24}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -7590,7 +7487,6 @@ test("class A {foo() {} static bar() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7599,7 +7495,6 @@ test("class A {foo() {} static bar() {}}", {
                 end: {line: 1, column: 17}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -7629,7 +7524,6 @@ test("class A {foo() {} static bar() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7638,7 +7532,6 @@ test("class A {foo() {} static bar() {}}", {
                 end: {line: 1, column: 33}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -7723,7 +7616,6 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
               type: "FunctionExpression",
               id: null,
               params: [],
-              defaults: [],
               body: {
                 type: "BlockStatement",
                 body: [{
@@ -7754,7 +7646,6 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                   end: {line: 1, column: 57}
                 }
               },
-              rest: null,
               generator: false,
               expression: false,
               loc: {
@@ -7826,7 +7717,6 @@ test("class A { foo() {} bar() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7835,7 +7725,6 @@ test("class A { foo() {} bar() {}}", {
                 end: {line: 1, column: 18}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -7865,7 +7754,6 @@ test("class A { foo() {} bar() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7874,7 +7762,6 @@ test("class A { foo() {} bar() {}}", {
                 end: {line: 1, column: 27}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -7941,7 +7828,6 @@ test("class A { get foo() {} set foo(v) {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7950,7 +7836,6 @@ test("class A { get foo() {} set foo(v) {}}", {
                 end: {line: 1, column: 22}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -7987,7 +7872,6 @@ test("class A { get foo() {} set foo(v) {}}", {
                 end: {line: 1, column: 32}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -7996,7 +7880,6 @@ test("class A { get foo() {} set foo(v) {}}", {
                 end: {line: 1, column: 36}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8063,7 +7946,6 @@ test("class A { static get foo() {} get foo() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8072,7 +7954,6 @@ test("class A { static get foo() {} get foo() {}}", {
                 end: {line: 1, column: 29}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8102,7 +7983,6 @@ test("class A { static get foo() {} get foo() {}}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8111,7 +7991,6 @@ test("class A { static get foo() {} get foo() {}}", {
                 end: {line: 1, column: 42}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8178,7 +8057,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8187,7 +8065,6 @@ test("class A { static get foo() {} static get bar() {} }", {
                 end: {line: 1, column: 29}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8217,7 +8094,6 @@ test("class A { static get foo() {} static get bar() {} }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8226,7 +8102,6 @@ test("class A { static get foo() {} static get bar() {} }", {
                 end: {line: 1, column: 49}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8293,7 +8168,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8302,7 +8176,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 29}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8339,7 +8212,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 46}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8348,7 +8220,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 50}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8378,7 +8249,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8387,7 +8257,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 63}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8424,7 +8293,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 73}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8433,7 +8301,6 @@ test("class A { static get foo() {} static set foo(v) {} get foo() {} set foo(v)
                 end: {line: 1, column: 77}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8522,8 +8389,6 @@ test("class A { static [foo]() {} }", {
           },
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           body: {
             type: "BlockStatement",
@@ -8600,8 +8465,6 @@ test("class A { static get [foo]() {} }", {
           },
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           body: {
             type: "BlockStatement",
@@ -8660,7 +8523,6 @@ test("class A { set foo(v) {} get foo() {} }", {
                 end: {line: 1, column: 19}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8669,7 +8531,6 @@ test("class A { set foo(v) {} get foo() {} }", {
                 end: {line: 1, column: 23}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8699,7 +8560,6 @@ test("class A { set foo(v) {} get foo() {} }", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -8708,7 +8568,6 @@ test("class A { set foo(v) {} get foo() {} }", {
                 end: {line: 1, column: 36}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -8797,8 +8656,6 @@ test("class A { foo() {} get foo() {} }",{
             },
             id: null,
             params: [],
-            defaults: [],
-            rest: null,
             generator: false,
             body: {
               type: "BlockStatement",
@@ -8836,8 +8693,6 @@ test("class A { foo() {} get foo() {} }",{
             },
             id: null,
             params: [],
-            defaults: [],
-            rest: null,
             generator: false,
             body: {
               type: "BlockStatement",
@@ -9043,7 +8898,6 @@ test("({[x]: function() {}})", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -9052,7 +8906,6 @@ test("({[x]: function() {}})", {
               end: {line: 1, column: 20}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -9194,7 +9047,6 @@ test("({get [x]() {}, set [x](v) {}})", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -9203,7 +9055,6 @@ test("({get [x]() {}, set [x](v) {}})", {
                 end: {line: 1, column: 14}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -9241,7 +9092,6 @@ test("({get [x]() {}, set [x](v) {}})", {
                 end: {line: 1, column: 25}
               }
             }],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [],
@@ -9250,7 +9100,6 @@ test("({get [x]() {}, set [x](v) {}})", {
                 end: {line: 1, column: 29}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -9308,7 +9157,6 @@ test("({[x]() {}})", {
           type: "FunctionExpression",
           id: null,
           params: [],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -9317,7 +9165,6 @@ test("({[x]() {}})", {
               end: {line: 1, column: 10}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -9495,7 +9342,6 @@ test("function f({[x]: y}) {}", {
         end: {line: 1, column: 19}
       }
     }],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [],
@@ -9504,7 +9350,6 @@ test("function f({[x]: y}) {}", {
         end: {line: 1, column: 23}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -9552,7 +9397,6 @@ test("var x = {*[test]() { yield *v; }}", {
             type: "FunctionExpression",
             id: null,
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [{
@@ -9583,7 +9427,6 @@ test("var x = {*[test]() { yield *v; }}", {
                 end: {line: 1, column: 32}
               }
             },
-            rest: null,
             generator: true,
             expression: false,
             loc: {
@@ -9678,8 +9521,6 @@ test("class A {[x]() {}}", {
           },
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           body: {
             type: "BlockStatement",
@@ -9717,34 +9558,37 @@ test("function f([x] = [1]) {}", {
       }
     },
     params: [{
-      type: "ArrayPattern",
-      elements: [{
-        type: "Identifier",
-        name: "x",
+      type: "AssignmentPattern",
+      left: {
+        type: "ArrayPattern",
+        elements: [{
+          type: "Identifier",
+          name: "x",
+          loc: {
+            start: {line: 1, column: 12},
+            end: {line: 1, column: 13}
+          }
+        }],
         loc: {
-          start: {line: 1, column: 12},
-          end: {line: 1, column: 13}
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 14}
         }
-      }],
-      loc: {
-        start: {line: 1, column: 11},
-        end: {line: 1, column: 14}
-      }
-    }],
-    defaults: [{
-      type: "ArrayExpression",
-      elements: [{
-        type: "Literal",
-        value: 1,
-        raw: "1",
+      },
+      right: {
+        type: "ArrayExpression",
+        elements: [{
+          type: "Literal",
+          value: 1,
+          raw: "1",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 19}
+          }
+        }],
         loc: {
-          start: {line: 1, column: 18},
-          end: {line: 1, column: 19}
+          start: {line: 1, column: 17},
+          end: {line: 1, column: 20}
         }
-      }],
-      loc: {
-        start: {line: 1, column: 17},
-        end: {line: 1, column: 20}
       }
     }],
     body: {
@@ -9755,7 +9599,6 @@ test("function f([x] = [1]) {}", {
         end: {line: 1, column: 24}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -9786,72 +9629,75 @@ test("function f({x} = {x: 10}) {}", {
       }
     },
     params: [{
-      type: "ObjectPattern",
-      properties: [{
-        type: "Property",
-        key: {
-          type: "Identifier",
-          name: "x",
+      type: "AssignmentPattern",
+      left: {
+        type: "ObjectPattern",
+        properties: [{
+          type: "Property",
+          key: {
+            type: "Identifier",
+            name: "x",
+            loc: {
+              start: {line: 1, column: 12},
+              end: {line: 1, column: 13}
+            }
+          },
+          value: {
+            type: "Identifier",
+            name: "x",
+            loc: {
+              start: {line: 1, column: 12},
+              end: {line: 1, column: 13}
+            }
+          },
+          kind: "init",
+          method: false,
+          shorthand: true,
+          computed: false,
           loc: {
             start: {line: 1, column: 12},
             end: {line: 1, column: 13}
           }
-        },
-        value: {
-          type: "Identifier",
-          name: "x",
-          loc: {
-            start: {line: 1, column: 12},
-            end: {line: 1, column: 13}
-          }
-        },
-        kind: "init",
-        method: false,
-        shorthand: true,
-        computed: false,
+        }],
         loc: {
-          start: {line: 1, column: 12},
-          end: {line: 1, column: 13}
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 14}
         }
-      }],
-      loc: {
-        start: {line: 1, column: 11},
-        end: {line: 1, column: 14}
-      }
-    }],
-    defaults: [{
-      type: "ObjectExpression",
-      properties: [{
-        type: "Property",
-        key: {
-          type: "Identifier",
-          name: "x",
+      },
+      right: {
+        type: "ObjectExpression",
+        properties: [{
+          type: "Property",
+          key: {
+            type: "Identifier",
+            name: "x",
+            loc: {
+              start: {line: 1, column: 18},
+              end: {line: 1, column: 19}
+            }
+          },
+          value: {
+            type: "Literal",
+            value: 10,
+            raw: "10",
+            loc: {
+              start: {line: 1, column: 21},
+              end: {line: 1, column: 23}
+            }
+          },
+          kind: "init",
+          method: false,
+          shorthand: false,
+          computed: false,
           loc: {
             start: {line: 1, column: 18},
-            end: {line: 1, column: 19}
-          }
-        },
-        value: {
-          type: "Literal",
-          value: 10,
-          raw: "10",
-          loc: {
-            start: {line: 1, column: 21},
             end: {line: 1, column: 23}
           }
-        },
-        kind: "init",
-        method: false,
-        shorthand: false,
-        computed: false,
+        }],
         loc: {
-          start: {line: 1, column: 18},
-          end: {line: 1, column: 23}
+          start: {line: 1, column: 17},
+          end: {line: 1, column: 24}
         }
-      }],
-      loc: {
-        start: {line: 1, column: 17},
-        end: {line: 1, column: 24}
       }
     }],
     body: {
@@ -9862,7 +9708,6 @@ test("function f({x} = {x: 10}) {}", {
         end: {line: 1, column: 28}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -9899,72 +9744,75 @@ test("f = function({x} = {x: 10}) {}", {
         type: "FunctionExpression",
         id: null,
         params: [{
-          type: "ObjectPattern",
-          properties: [{
-            type: "Property",
-            key: {
-              type: "Identifier",
-              name: "x",
+          type: "AssignmentPattern",
+          left: {
+            type: "ObjectPattern",
+            properties: [{
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "x",
+                loc: {
+                  start: {line: 1, column: 14},
+                  end: {line: 1, column: 15}
+                }
+              },
+              value: {
+                type: "Identifier",
+                name: "x",
+                loc: {
+                  start: {line: 1, column: 14},
+                  end: {line: 1, column: 15}
+                }
+              },
+              kind: "init",
+              method: false,
+              shorthand: true,
+              computed: false,
               loc: {
                 start: {line: 1, column: 14},
                 end: {line: 1, column: 15}
               }
-            },
-            value: {
-              type: "Identifier",
-              name: "x",
-              loc: {
-                start: {line: 1, column: 14},
-                end: {line: 1, column: 15}
-              }
-            },
-            kind: "init",
-            method: false,
-            shorthand: true,
-            computed: false,
+            }],
             loc: {
-              start: {line: 1, column: 14},
-              end: {line: 1, column: 15}
+              start: {line: 1, column: 13},
+              end: {line: 1, column: 16}
             }
-          }],
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 16}
-          }
-        }],
-        defaults: [{
-          type: "ObjectExpression",
-          properties: [{
-            type: "Property",
-            key: {
-              type: "Identifier",
-              name: "x",
+          },
+          right: {
+            type: "ObjectExpression",
+            properties: [{
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "x",
+                loc: {
+                  start: {line: 1, column: 20},
+                  end: {line: 1, column: 21}
+                }
+              },
+              value: {
+                type: "Literal",
+                value: 10,
+                raw: "10",
+                loc: {
+                  start: {line: 1, column: 23},
+                  end: {line: 1, column: 25}
+                }
+              },
+              kind: "init",
+              method: false,
+              shorthand: false,
+              computed: false,
               loc: {
                 start: {line: 1, column: 20},
-                end: {line: 1, column: 21}
-              }
-            },
-            value: {
-              type: "Literal",
-              value: 10,
-              raw: "10",
-              loc: {
-                start: {line: 1, column: 23},
                 end: {line: 1, column: 25}
               }
-            },
-            kind: "init",
-            method: false,
-            shorthand: false,
-            computed: false,
+            }],
             loc: {
-              start: {line: 1, column: 20},
-              end: {line: 1, column: 25}
+              start: {line: 1, column: 19},
+              end: {line: 1, column: 26}
             }
-          }],
-          loc: {
-            start: {line: 1, column: 19},
-            end: {line: 1, column: 26}
           }
         }],
         body: {
@@ -9975,7 +9823,6 @@ test("f = function({x} = {x: 10}) {}", {
             end: {line: 1, column: 30}
           }
         },
-        rest: null,
         generator: false,
         expression: false,
         loc: {
@@ -10023,72 +9870,75 @@ test("({f: function({x} = {x: 10}) {}})", {
           type: "FunctionExpression",
           id: null,
           params: [{
-            type: "ObjectPattern",
-            properties: [{
-              type: "Property",
-              key: {
-                type: "Identifier",
-                name: "x",
+            type: "AssignmentPattern",
+            left: {
+              type: "ObjectPattern",
+              properties: [{
+                type: "Property",
+                key: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 15},
+                    end: {line: 1, column: 16}
+                  }
+                },
+                value: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 15},
+                    end: {line: 1, column: 16}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: true,
+                computed: false,
                 loc: {
                   start: {line: 1, column: 15},
                   end: {line: 1, column: 16}
                 }
-              },
-              value: {
-                type: "Identifier",
-                name: "x",
-                loc: {
-                  start: {line: 1, column: 15},
-                  end: {line: 1, column: 16}
-                }
-              },
-              kind: "init",
-              method: false,
-              shorthand: true,
-              computed: false,
+              }],
               loc: {
-                start: {line: 1, column: 15},
-                end: {line: 1, column: 16}
+                start: {line: 1, column: 14},
+                end: {line: 1, column: 17}
               }
-            }],
-            loc: {
-              start: {line: 1, column: 14},
-              end: {line: 1, column: 17}
-            }
-          }],
-          defaults: [{
-            type: "ObjectExpression",
-            properties: [{
-              type: "Property",
-              key: {
-                type: "Identifier",
-                name: "x",
+            },
+            right: {
+              type: "ObjectExpression",
+              properties: [{
+                type: "Property",
+                key: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 21},
+                    end: {line: 1, column: 22}
+                  }
+                },
+                value: {
+                  type: "Literal",
+                  value: 10,
+                  raw: "10",
+                  loc: {
+                    start: {line: 1, column: 24},
+                    end: {line: 1, column: 26}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: false,
+                computed: false,
                 loc: {
                   start: {line: 1, column: 21},
-                  end: {line: 1, column: 22}
-                }
-              },
-              value: {
-                type: "Literal",
-                value: 10,
-                raw: "10",
-                loc: {
-                  start: {line: 1, column: 24},
                   end: {line: 1, column: 26}
                 }
-              },
-              kind: "init",
-              method: false,
-              shorthand: false,
-              computed: false,
+              }],
               loc: {
-                start: {line: 1, column: 21},
-                end: {line: 1, column: 26}
+                start: {line: 1, column: 20},
+                end: {line: 1, column: 27}
               }
-            }],
-            loc: {
-              start: {line: 1, column: 20},
-              end: {line: 1, column: 27}
             }
           }],
           body: {
@@ -10099,7 +9949,6 @@ test("({f: function({x} = {x: 10}) {}})", {
               end: {line: 1, column: 31}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -10156,72 +10005,75 @@ test("({f({x} = {x: 10}) {}})", {
           type: "FunctionExpression",
           id: null,
           params: [{
-            type: "ObjectPattern",
-            properties: [{
-              type: "Property",
-              key: {
-                type: "Identifier",
-                name: "x",
+            type: "AssignmentPattern",
+            left: {
+              type: "ObjectPattern",
+              properties: [{
+                type: "Property",
+                key: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 5},
+                    end: {line: 1, column: 6}
+                  }
+                },
+                value: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 5},
+                    end: {line: 1, column: 6}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: true,
+                computed: false,
                 loc: {
                   start: {line: 1, column: 5},
                   end: {line: 1, column: 6}
                 }
-              },
-              value: {
-                type: "Identifier",
-                name: "x",
-                loc: {
-                  start: {line: 1, column: 5},
-                  end: {line: 1, column: 6}
-                }
-              },
-              kind: "init",
-              method: false,
-              shorthand: true,
-              computed: false,
+              }],
               loc: {
-                start: {line: 1, column: 5},
-                end: {line: 1, column: 6}
+                start: {line: 1, column: 4},
+                end: {line: 1, column: 7}
               }
-            }],
-            loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 7}
-            }
-          }],
-          defaults: [{
-            type: "ObjectExpression",
-            properties: [{
-              type: "Property",
-              key: {
-                type: "Identifier",
-                name: "x",
+            },
+            right: {
+              type: "ObjectExpression",
+              properties: [{
+                type: "Property",
+                key: {
+                  type: "Identifier",
+                  name: "x",
+                  loc: {
+                    start: {line: 1, column: 11},
+                    end: {line: 1, column: 12}
+                  }
+                },
+                value: {
+                  type: "Literal",
+                  value: 10,
+                  raw: "10",
+                  loc: {
+                    start: {line: 1, column: 14},
+                    end: {line: 1, column: 16}
+                  }
+                },
+                kind: "init",
+                method: false,
+                shorthand: false,
+                computed: false,
                 loc: {
                   start: {line: 1, column: 11},
-                  end: {line: 1, column: 12}
-                }
-              },
-              value: {
-                type: "Literal",
-                value: 10,
-                raw: "10",
-                loc: {
-                  start: {line: 1, column: 14},
                   end: {line: 1, column: 16}
                 }
-              },
-              kind: "init",
-              method: false,
-              shorthand: false,
-              computed: false,
+              }],
               loc: {
-                start: {line: 1, column: 11},
-                end: {line: 1, column: 16}
+                start: {line: 1, column: 10},
+                end: {line: 1, column: 17}
               }
-            }],
-            loc: {
-              start: {line: 1, column: 10},
-              end: {line: 1, column: 17}
             }
           }],
           body: {
@@ -10232,7 +10084,6 @@ test("({f({x} = {x: 10}) {}})", {
               end: {line: 1, column: 21}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -10293,72 +10144,75 @@ test("(class {f({x} = {x: 10}) {}})", {
             type: "FunctionExpression",
             id: null,
             params: [{
-              type: "ObjectPattern",
-              properties: [{
-                type: "Property",
-                key: {
-                  type: "Identifier",
-                  name: "x",
+              type: "AssignmentPattern",
+              left: {
+                type: "ObjectPattern",
+                properties: [{
+                  type: "Property",
+                  key: {
+                    type: "Identifier",
+                    name: "x",
+                    loc: {
+                      start: {line: 1, column: 11},
+                      end: {line: 1, column: 12}
+                    }
+                  },
+                  value: {
+                    type: "Identifier",
+                    name: "x",
+                    loc: {
+                      start: {line: 1, column: 11},
+                      end: {line: 1, column: 12}
+                    }
+                  },
+                  kind: "init",
+                  method: false,
+                  shorthand: true,
+                  computed: false,
                   loc: {
                     start: {line: 1, column: 11},
                     end: {line: 1, column: 12}
                   }
-                },
-                value: {
-                  type: "Identifier",
-                  name: "x",
-                  loc: {
-                    start: {line: 1, column: 11},
-                    end: {line: 1, column: 12}
-                  }
-                },
-                kind: "init",
-                method: false,
-                shorthand: true,
-                computed: false,
+                }],
                 loc: {
-                  start: {line: 1, column: 11},
-                  end: {line: 1, column: 12}
+                  start: {line: 1, column: 10},
+                  end: {line: 1, column: 13}
                 }
-              }],
-              loc: {
-                start: {line: 1, column: 10},
-                end: {line: 1, column: 13}
-              }
-            }],
-            defaults: [{
-              type: "ObjectExpression",
-              properties: [{
-                type: "Property",
-                key: {
-                  type: "Identifier",
-                  name: "x",
+              },
+              right: {
+                type: "ObjectExpression",
+                properties: [{
+                  type: "Property",
+                  key: {
+                    type: "Identifier",
+                    name: "x",
+                    loc: {
+                      start: {line: 1, column: 17},
+                      end: {line: 1, column: 18}
+                    }
+                  },
+                  value: {
+                    type: "Literal",
+                    value: 10,
+                    raw: "10",
+                    loc: {
+                      start: {line: 1, column: 20},
+                      end: {line: 1, column: 22}
+                    }
+                  },
+                  kind: "init",
+                  method: false,
+                  shorthand: false,
+                  computed: false,
                   loc: {
                     start: {line: 1, column: 17},
-                    end: {line: 1, column: 18}
-                  }
-                },
-                value: {
-                  type: "Literal",
-                  value: 10,
-                  raw: "10",
-                  loc: {
-                    start: {line: 1, column: 20},
                     end: {line: 1, column: 22}
                   }
-                },
-                kind: "init",
-                method: false,
-                shorthand: false,
-                computed: false,
+                }],
                 loc: {
-                  start: {line: 1, column: 17},
-                  end: {line: 1, column: 22}
+                  start: {line: 1, column: 16},
+                  end: {line: 1, column: 23}
                 }
-              }],
-              loc: {
-                start: {line: 1, column: 16},
-                end: {line: 1, column: 23}
               }
             }],
             body: {
@@ -10369,7 +10223,6 @@ test("(class {f({x} = {x: 10}) {}})", {
                 end: {line: 1, column: 27}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -10417,72 +10270,75 @@ test("(({x} = {x: 10}) => {})", {
       type: "ArrowFunctionExpression",
       id: null,
       params: [{
-        type: "ObjectPattern",
-        properties: [{
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "x",
+        type: "AssignmentPattern",
+        left: {
+          type: "ObjectPattern",
+          properties: [{
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "x",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              }
+            },
+            value: {
+              type: "Identifier",
+              name: "x",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: true,
+            computed: false,
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
             }
-          },
-          value: {
-            type: "Identifier",
-            name: "x",
-            loc: {
-              start: {line: 1, column: 3},
-              end: {line: 1, column: 4}
-            }
-          },
-          kind: "init",
-          method: false,
-          shorthand: true,
-          computed: false,
+          }],
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 4}
+            start: {line: 1, column: 2},
+            end: {line: 1, column: 5}
           }
-        }],
-        loc: {
-          start: {line: 1, column: 2},
-          end: {line: 1, column: 5}
-        }
-      }],
-      defaults: [{
-        type: "ObjectExpression",
-        properties: [{
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "x",
+        },
+        right: {
+          type: "ObjectExpression",
+          properties: [{
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "x",
+              loc: {
+                start: {line: 1, column: 9},
+                end: {line: 1, column: 10}
+              }
+            },
+            value: {
+              type: "Literal",
+              value: 10,
+              raw: "10",
+              loc: {
+                start: {line: 1, column: 12},
+                end: {line: 1, column: 14}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: false,
+            computed: false,
             loc: {
               start: {line: 1, column: 9},
-              end: {line: 1, column: 10}
-            }
-          },
-          value: {
-            type: "Literal",
-            value: 10,
-            raw: "10",
-            loc: {
-              start: {line: 1, column: 12},
               end: {line: 1, column: 14}
             }
-          },
-          kind: "init",
-          method: false,
-          shorthand: false,
-          computed: false,
+          }],
           loc: {
-            start: {line: 1, column: 9},
-            end: {line: 1, column: 14}
+            start: {line: 1, column: 8},
+            end: {line: 1, column: 15}
           }
-        }],
-        loc: {
-          start: {line: 1, column: 8},
-          end: {line: 1, column: 15}
         }
       }],
       body: {
@@ -10493,7 +10349,6 @@ test("(({x} = {x: 10}) => {})", {
           end: {line: 1, column: 22}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -10535,20 +10390,23 @@ test("x = function(y = 1) {}", {
         type: "FunctionExpression",
         id: null,
         params: [{
-          type: "Identifier",
-          name: "y",
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 14}
-          }
-        }],
-        defaults: [{
-          type: "Literal",
-          value: 1,
-          raw: "1",
-          loc: {
-            start: {line: 1, column: 17},
-            end: {line: 1, column: 18}
+          type: "AssignmentPattern",
+          left: {
+            type: "Identifier",
+            name: "y",
+            loc: {
+              start: {line: 1, column: 13},
+              end: {line: 1, column: 14}
+            }
+          },
+          right: {
+            type: "Literal",
+            value: 1,
+            raw: "1",
+            loc: {
+              start: {line: 1, column: 17},
+              end: {line: 1, column: 18}
+            }
           }
         }],
         body: {
@@ -10559,7 +10417,6 @@ test("x = function(y = 1) {}", {
             end: {line: 1, column: 22}
           }
         },
-        rest: null,
         generator: false,
         expression: false,
         loc: {
@@ -10600,20 +10457,23 @@ test("function f(a = 1) {}", {
       }
     },
     params: [{
-      type: "Identifier",
-      name: "a",
-      loc: {
-        start: {line: 1, column: 11},
-        end: {line: 1, column: 12}
-      }
-    }],
-    defaults: [{
-      type: "Literal",
-      value: 1,
-      raw: "1",
-      loc: {
-        start: {line: 1, column: 15},
-        end: {line: 1, column: 16}
+      type: "AssignmentPattern",
+      left: {
+        type: "Identifier",
+        name: "a",
+        loc: {
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 12}
+        }
+      },
+      right: {
+        type: "Literal",
+        value: 1,
+        raw: "1",
+        loc: {
+          start: {line: 1, column: 15},
+          end: {line: 1, column: 16}
+        }
       }
     }],
     body: {
@@ -10624,7 +10484,6 @@ test("function f(a = 1) {}", {
         end: {line: 1, column: 20}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -10673,20 +10532,23 @@ test("x = { f: function(a=1) {} }", {
             type: "FunctionExpression",
             id: null,
             params: [{
-              type: "Identifier",
-              name: "a",
-              loc: {
-                start: {line: 1, column: 18},
-                end: {line: 1, column: 19}
-              }
-            }],
-            defaults: [{
-              type: "Literal",
-              value: 1,
-              raw: "1",
-              loc: {
-                start: {line: 1, column: 20},
-                end: {line: 1, column: 21}
+              type: "AssignmentPattern",
+              left: {
+                type: "Identifier",
+                name: "a",
+                loc: {
+                  start: {line: 1, column: 18},
+                  end: {line: 1, column: 19}
+                }
+              },
+              right: {
+                type: "Literal",
+                value: 1,
+                raw: "1",
+                loc: {
+                  start: {line: 1, column: 20},
+                  end: {line: 1, column: 21}
+                }
               }
             }],
             body: {
@@ -10697,7 +10559,6 @@ test("x = { f: function(a=1) {} }", {
                 end: {line: 1, column: 25}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -10770,20 +10631,23 @@ test("x = { f(a=1) {} }", {
             type: "FunctionExpression",
             id: null,
             params: [{
-              type: "Identifier",
-              name: "a",
-              loc: {
-                start: {line: 1, column: 8},
-                end: {line: 1, column: 9}
-              }
-            }],
-            defaults: [{
-              type: "Literal",
-              value: 1,
-              raw: "1",
-              loc: {
-                start: {line: 1, column: 10},
-                end: {line: 1, column: 11}
+              type: "AssignmentPattern",
+              left: {
+                type: "Identifier",
+                name: "a",
+                loc: {
+                  start: {line: 1, column: 8},
+                  end: {line: 1, column: 9}
+                }
+              },
+              right: {
+                type: "Literal",
+                value: 1,
+                raw: "1",
+                loc: {
+                  start: {line: 1, column: 10},
+                  end: {line: 1, column: 11}
+                }
               }
             }],
             body: {
@@ -10794,7 +10658,6 @@ test("x = { f(a=1) {} }", {
                 end: {line: 1, column: 15}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             loc: {
@@ -10850,29 +10713,33 @@ test("function f(a, ...b) {}", {
         end: {line: 1, column: 10}
       }
     },
-    params: [{
-      type: "Identifier",
-      name: "a",
-      loc: {
-        start: {line: 1, column: 11},
-        end: {line: 1, column: 12}
+    params: [
+      {
+        type: "Identifier",
+        name: "a",
+        loc: {
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 12}
+        }
+      },
+      {
+        type: "RestElement",
+        argument: {
+          type: "Identifier",
+          name: "b",
+          loc: {
+            start: {line: 1, column: 17},
+            end: {line: 1, column: 18}
+          }
+        }
       }
-    }],
-    defaults: [],
+    ],
     body: {
       type: "BlockStatement",
       body: [],
       loc: {
         start: {line: 1, column: 20},
         end: {line: 1, column: 22}
-      }
-    },
-    rest: {
-      type: "Identifier",
-      name: "b",
-      loc: {
-        start: {line: 1, column: 17},
-        end: {line: 1, column: 18}
       }
     },
     generator: false,
@@ -10931,7 +10798,6 @@ test("function x([ a, b ]){}", {
         end: {line: 1, column: 19}
       }
     }],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [],
@@ -10940,7 +10806,6 @@ test("function x([ a, b ]){}", {
         end: {line: 1, column: 22}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -11033,7 +10898,6 @@ test("function x({ a, b }){}", {
         end: {line: 1, column: 19}
       }
     }],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [],
@@ -11042,7 +10906,6 @@ test("function x({ a, b }){}", {
         end: {line: 1, column: 22}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -11116,7 +10979,6 @@ test("function x(a, { a }){}", {
         }
       }
     ],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [],
@@ -11125,7 +10987,6 @@ test("function x(a, { a }){}", {
         end: {line: 1, column: 22}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     loc: {
@@ -11155,39 +11016,40 @@ test("function x(...[ a, b ]){}", {
         end: {line: 1, column: 10}
       }
     },
-    params: [],
-    defaults: [],
+    params: [{
+      type: "RestElement",
+      argument: {
+        type: "ArrayPattern",
+        elements: [
+          {
+            type: "Identifier",
+            name: "a",
+            loc: {
+              start: {line: 1, column: 16},
+              end: {line: 1, column: 17}
+            }
+          },
+          {
+            type: "Identifier",
+            name: "b",
+            loc: {
+              start: {line: 1, column: 19},
+              end: {line: 1, column: 20}
+            }
+          }
+        ],
+        loc: {
+          start: {line: 1, column: 14},
+          end: {line: 1, column: 22}
+        }
+      }
+    }],
     body: {
       type: "BlockStatement",
       body: [],
       loc: {
         start: {line: 1, column: 23},
         end: {line: 1, column: 25}
-      }
-    },
-    rest: {
-      type: "ArrayPattern",
-      elements: [
-        {
-          type: "Identifier",
-          name: "a",
-          loc: {
-            start: {line: 1, column: 16},
-            end: {line: 1, column: 17}
-          }
-        },
-        {
-          type: "Identifier",
-          name: "b",
-          loc: {
-            start: {line: 1, column: 19},
-            end: {line: 1, column: 20}
-          }
-        }
-      ],
-      loc: {
-        start: {line: 1, column: 14},
-        end: {line: 1, column: 22}
       }
     },
     generator: false,
@@ -11219,181 +11081,185 @@ test("function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){}", {
         end: {line: 1, column: 10}
       }
     },
-    params: [{
-      type: "ObjectPattern",
-      properties: [
-        {
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "a",
+    params: [
+      {
+        type: "ObjectPattern",
+        properties: [
+          {
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 13},
+                end: {line: 1, column: 14}
+              }
+            },
+            value: {
+              type: "ObjectPattern",
+              properties: [
+                {
+                  type: "Property",
+                  key: {
+                    type: "Identifier",
+                    name: "w",
+                    loc: {
+                      start: {line: 1, column: 18},
+                      end: {line: 1, column: 19}
+                    }
+                  },
+                  value: {
+                    type: "Identifier",
+                    name: "w",
+                    loc: {
+                      start: {line: 1, column: 18},
+                      end: {line: 1, column: 19}
+                    }
+                  },
+                  kind: "init",
+                  method: false,
+                  shorthand: true,
+                  computed: false,
+                  loc: {
+                    start: {line: 1, column: 18},
+                    end: {line: 1, column: 19}
+                  }
+                },
+                {
+                  type: "Property",
+                  key: {
+                    type: "Identifier",
+                    name: "x",
+                    loc: {
+                      start: {line: 1, column: 21},
+                      end: {line: 1, column: 22}
+                    }
+                  },
+                  value: {
+                    type: "Identifier",
+                    name: "x",
+                    loc: {
+                      start: {line: 1, column: 21},
+                      end: {line: 1, column: 22}
+                    }
+                  },
+                  kind: "init",
+                  method: false,
+                  shorthand: true,
+                  computed: false,
+                  loc: {
+                    start: {line: 1, column: 21},
+                    end: {line: 1, column: 22}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 16},
+                end: {line: 1, column: 24}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: false,
+            computed: false,
             loc: {
               start: {line: 1, column: 13},
-              end: {line: 1, column: 14}
-            }
-          },
-          value: {
-            type: "ObjectPattern",
-            properties: [
-              {
-                type: "Property",
-                key: {
-                  type: "Identifier",
-                  name: "w",
-                  loc: {
-                    start: {line: 1, column: 18},
-                    end: {line: 1, column: 19}
-                  }
-                },
-                value: {
-                  type: "Identifier",
-                  name: "w",
-                  loc: {
-                    start: {line: 1, column: 18},
-                    end: {line: 1, column: 19}
-                  }
-                },
-                kind: "init",
-                method: false,
-                shorthand: true,
-                computed: false,
-                loc: {
-                  start: {line: 1, column: 18},
-                  end: {line: 1, column: 19}
-                }
-              },
-              {
-                type: "Property",
-                key: {
-                  type: "Identifier",
-                  name: "x",
-                  loc: {
-                    start: {line: 1, column: 21},
-                    end: {line: 1, column: 22}
-                  }
-                },
-                value: {
-                  type: "Identifier",
-                  name: "x",
-                  loc: {
-                    start: {line: 1, column: 21},
-                    end: {line: 1, column: 22}
-                  }
-                },
-                kind: "init",
-                method: false,
-                shorthand: true,
-                computed: false,
-                loc: {
-                  start: {line: 1, column: 21},
-                  end: {line: 1, column: 22}
-                }
-              }
-            ],
-            loc: {
-              start: {line: 1, column: 16},
               end: {line: 1, column: 24}
             }
           },
-          kind: "init",
-          method: false,
-          shorthand: false,
-          computed: false,
-          loc: {
-            start: {line: 1, column: 13},
-            end: {line: 1, column: 24}
-          }
-        },
-        {
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "b",
+          {
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "b",
+              loc: {
+                start: {line: 1, column: 26},
+                end: {line: 1, column: 27}
+              }
+            },
+            value: {
+              type: "ArrayPattern",
+              elements: [
+                {
+                  type: "Identifier",
+                  name: "y",
+                  loc: {
+                    start: {line: 1, column: 30},
+                    end: {line: 1, column: 31}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "z",
+                  loc: {
+                    start: {line: 1, column: 33},
+                    end: {line: 1, column: 34}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 29},
+                end: {line: 1, column: 35}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: false,
+            computed: false,
             loc: {
               start: {line: 1, column: 26},
-              end: {line: 1, column: 27}
-            }
-          },
-          value: {
-            type: "ArrayPattern",
-            elements: [
-              {
-                type: "Identifier",
-                name: "y",
-                loc: {
-                  start: {line: 1, column: 30},
-                  end: {line: 1, column: 31}
-                }
-              },
-              {
-                type: "Identifier",
-                name: "z",
-                loc: {
-                  start: {line: 1, column: 33},
-                  end: {line: 1, column: 34}
-                }
-              }
-            ],
-            loc: {
-              start: {line: 1, column: 29},
               end: {line: 1, column: 35}
             }
-          },
-          kind: "init",
-          method: false,
-          shorthand: false,
-          computed: false,
+          }
+        ],
+        loc: {
+          start: {line: 1, column: 11},
+          end: {line: 1, column: 37}
+        }
+      },
+      {
+        type: "RestElement",
+        argument: {
+          type: "ArrayPattern",
+          elements: [
+            {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 43},
+                end: {line: 1, column: 44}
+              }
+            },
+            {
+              type: "Identifier",
+              name: "b",
+              loc: {
+                start: {line: 1, column: 46},
+                end: {line: 1, column: 47}
+              }
+            },
+            {
+              type: "Identifier",
+              name: "c",
+              loc: {
+                start: {line: 1, column: 49},
+                end: {line: 1, column: 50}
+              }
+            }
+          ],
           loc: {
-            start: {line: 1, column: 26},
-            end: {line: 1, column: 35}
+            start: {line: 1, column: 42},
+            end: {line: 1, column: 51}
           }
         }
-      ],
-      loc: {
-        start: {line: 1, column: 11},
-        end: {line: 1, column: 37}
       }
-    }],
-    defaults: [],
+    ],
     body: {
       type: "BlockStatement",
       body: [],
       loc: {
         start: {line: 1, column: 52},
         end: {line: 1, column: 54}
-      }
-    },
-    rest: {
-      type: "ArrayPattern",
-      elements: [
-        {
-          type: "Identifier",
-          name: "a",
-          loc: {
-            start: {line: 1, column: 43},
-            end: {line: 1, column: 44}
-          }
-        },
-        {
-          type: "Identifier",
-          name: "b",
-          loc: {
-            start: {line: 1, column: 46},
-            end: {line: 1, column: 47}
-          }
-        },
-        {
-          type: "Identifier",
-          name: "c",
-          loc: {
-            start: {line: 1, column: 49},
-            end: {line: 1, column: 50}
-          }
-        }
-      ],
-      loc: {
-        start: {line: 1, column: 42},
-        end: {line: 1, column: 51}
       }
     },
     generator: false,
@@ -11452,7 +11318,6 @@ test("(function x([ a, b ]){})", {
           end: {line: 1, column: 20}
         }
       }],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [],
@@ -11461,7 +11326,6 @@ test("(function x([ a, b ]){})", {
           end: {line: 1, column: 23}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -11561,7 +11425,6 @@ test("(function x({ a, b }){})", {
           end: {line: 1, column: 20}
         }
       }],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [],
@@ -11570,7 +11433,6 @@ test("(function x({ a, b }){})", {
           end: {line: 1, column: 23}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -11607,39 +11469,40 @@ test("(function x(...[ a, b ]){})", {
           end: {line: 1, column: 11}
         }
       },
-      params: [],
-      defaults: [],
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "ArrayPattern",
+          elements: [
+            {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 17},
+                end: {line: 1, column: 18}
+              }
+            },
+            {
+              type: "Identifier",
+              name: "b",
+              loc: {
+                start: {line: 1, column: 20},
+                end: {line: 1, column: 21}
+              }
+            }
+          ],
+          loc: {
+            start: {line: 1, column: 15},
+            end: {line: 1, column: 23}
+          }
+        }
+      }],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 24},
           end: {line: 1, column: 26}
-        }
-      },
-      rest: {
-        type: "ArrayPattern",
-        elements: [
-          {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 17},
-              end: {line: 1, column: 18}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "b",
-            loc: {
-              start: {line: 1, column: 20},
-              end: {line: 1, column: 21}
-            }
-          }
-        ],
-        loc: {
-          start: {line: 1, column: 15},
-          end: {line: 1, column: 23}
         }
       },
       generator: false,
@@ -11678,181 +11541,185 @@ test("(function x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){})", {
           end: {line: 1, column: 11}
         }
       },
-      params: [{
-        type: "ObjectPattern",
-        properties: [
-          {
-            type: "Property",
-            key: {
-              type: "Identifier",
-              name: "a",
+      params: [
+        {
+          type: "ObjectPattern",
+          properties: [
+            {
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "a",
+                loc: {
+                  start: {line: 1, column: 14},
+                  end: {line: 1, column: 15}
+                }
+              },
+              value: {
+                type: "ObjectPattern",
+                properties: [
+                  {
+                    type: "Property",
+                    key: {
+                      type: "Identifier",
+                      name: "w",
+                      loc: {
+                        start: {line: 1, column: 19},
+                        end: {line: 1, column: 20}
+                      }
+                    },
+                    value: {
+                      type: "Identifier",
+                      name: "w",
+                      loc: {
+                        start: {line: 1, column: 19},
+                        end: {line: 1, column: 20}
+                      }
+                    },
+                    kind: "init",
+                    method: false,
+                    shorthand: true,
+                    computed: false,
+                    loc: {
+                      start: {line: 1, column: 19},
+                      end: {line: 1, column: 20}
+                    }
+                  },
+                  {
+                    type: "Property",
+                    key: {
+                      type: "Identifier",
+                      name: "x",
+                      loc: {
+                        start: {line: 1, column: 22},
+                        end: {line: 1, column: 23}
+                      }
+                    },
+                    value: {
+                      type: "Identifier",
+                      name: "x",
+                      loc: {
+                        start: {line: 1, column: 22},
+                        end: {line: 1, column: 23}
+                      }
+                    },
+                    kind: "init",
+                    method: false,
+                    shorthand: true,
+                    computed: false,
+                    loc: {
+                      start: {line: 1, column: 22},
+                      end: {line: 1, column: 23}
+                    }
+                  }
+                ],
+                loc: {
+                  start: {line: 1, column: 17},
+                  end: {line: 1, column: 25}
+                }
+              },
+              kind: "init",
+              method: false,
+              shorthand: false,
+              computed: false,
               loc: {
                 start: {line: 1, column: 14},
-                end: {line: 1, column: 15}
-              }
-            },
-            value: {
-              type: "ObjectPattern",
-              properties: [
-                {
-                  type: "Property",
-                  key: {
-                    type: "Identifier",
-                    name: "w",
-                    loc: {
-                      start: {line: 1, column: 19},
-                      end: {line: 1, column: 20}
-                    }
-                  },
-                  value: {
-                    type: "Identifier",
-                    name: "w",
-                    loc: {
-                      start: {line: 1, column: 19},
-                      end: {line: 1, column: 20}
-                    }
-                  },
-                  kind: "init",
-                  method: false,
-                  shorthand: true,
-                  computed: false,
-                  loc: {
-                    start: {line: 1, column: 19},
-                    end: {line: 1, column: 20}
-                  }
-                },
-                {
-                  type: "Property",
-                  key: {
-                    type: "Identifier",
-                    name: "x",
-                    loc: {
-                      start: {line: 1, column: 22},
-                      end: {line: 1, column: 23}
-                    }
-                  },
-                  value: {
-                    type: "Identifier",
-                    name: "x",
-                    loc: {
-                      start: {line: 1, column: 22},
-                      end: {line: 1, column: 23}
-                    }
-                  },
-                  kind: "init",
-                  method: false,
-                  shorthand: true,
-                  computed: false,
-                  loc: {
-                    start: {line: 1, column: 22},
-                    end: {line: 1, column: 23}
-                  }
-                }
-              ],
-              loc: {
-                start: {line: 1, column: 17},
                 end: {line: 1, column: 25}
               }
             },
-            kind: "init",
-            method: false,
-            shorthand: false,
-            computed: false,
-            loc: {
-              start: {line: 1, column: 14},
-              end: {line: 1, column: 25}
-            }
-          },
-          {
-            type: "Property",
-            key: {
-              type: "Identifier",
-              name: "b",
+            {
+              type: "Property",
+              key: {
+                type: "Identifier",
+                name: "b",
+                loc: {
+                  start: {line: 1, column: 27},
+                  end: {line: 1, column: 28}
+                }
+              },
+              value: {
+                type: "ArrayPattern",
+                elements: [
+                  {
+                    type: "Identifier",
+                    name: "y",
+                    loc: {
+                      start: {line: 1, column: 31},
+                      end: {line: 1, column: 32}
+                    }
+                  },
+                  {
+                    type: "Identifier",
+                    name: "z",
+                    loc: {
+                      start: {line: 1, column: 34},
+                      end: {line: 1, column: 35}
+                    }
+                  }
+                ],
+                loc: {
+                  start: {line: 1, column: 30},
+                  end: {line: 1, column: 36}
+                }
+              },
+              kind: "init",
+              method: false,
+              shorthand: false,
+              computed: false,
               loc: {
                 start: {line: 1, column: 27},
-                end: {line: 1, column: 28}
-              }
-            },
-            value: {
-              type: "ArrayPattern",
-              elements: [
-                {
-                  type: "Identifier",
-                  name: "y",
-                  loc: {
-                    start: {line: 1, column: 31},
-                    end: {line: 1, column: 32}
-                  }
-                },
-                {
-                  type: "Identifier",
-                  name: "z",
-                  loc: {
-                    start: {line: 1, column: 34},
-                    end: {line: 1, column: 35}
-                  }
-                }
-              ],
-              loc: {
-                start: {line: 1, column: 30},
                 end: {line: 1, column: 36}
               }
-            },
-            kind: "init",
-            method: false,
-            shorthand: false,
-            computed: false,
+            }
+          ],
+          loc: {
+            start: {line: 1, column: 12},
+            end: {line: 1, column: 38}
+          }
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "ArrayPattern",
+            elements: [
+              {
+                type: "Identifier",
+                name: "a",
+                loc: {
+                  start: {line: 1, column: 44},
+                  end: {line: 1, column: 45}
+                }
+              },
+              {
+                type: "Identifier",
+                name: "b",
+                loc: {
+                  start: {line: 1, column: 47},
+                  end: {line: 1, column: 48}
+                }
+              },
+              {
+                type: "Identifier",
+                name: "c",
+                loc: {
+                  start: {line: 1, column: 50},
+                  end: {line: 1, column: 51}
+                }
+              }
+            ],
             loc: {
-              start: {line: 1, column: 27},
-              end: {line: 1, column: 36}
+              start: {line: 1, column: 43},
+              end: {line: 1, column: 52}
             }
           }
-        ],
-        loc: {
-          start: {line: 1, column: 12},
-          end: {line: 1, column: 38}
         }
-      }],
-      defaults: [],
+      ],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 53},
           end: {line: 1, column: 55}
-        }
-      },
-      rest: {
-        type: "ArrayPattern",
-        elements: [
-          {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 44},
-              end: {line: 1, column: 45}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "b",
-            loc: {
-              start: {line: 1, column: 47},
-              end: {line: 1, column: 48}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "c",
-            loc: {
-              start: {line: 1, column: 50},
-              end: {line: 1, column: 51}
-            }
-          }
-        ],
-        loc: {
-          start: {line: 1, column: 43},
-          end: {line: 1, column: 52}
         }
       },
       generator: false,
@@ -11921,7 +11788,6 @@ test("({ x([ a, b ]){} })", {
               end: {line: 1, column: 13}
             }
           }],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [],
@@ -11930,7 +11796,6 @@ test("({ x([ a, b ]){} })", {
               end: {line: 1, column: 16}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           loc: {
@@ -11986,39 +11851,40 @@ test("({ x(...[ a, b ]){} })", {
         value: {
           type: "FunctionExpression",
           id: null,
-          params: [],
-          defaults: [],
+          params: [{
+            type: "RestElement",
+            argument: {
+              type: "ArrayPattern",
+              elements: [
+                {
+                  type: "Identifier",
+                  name: "a",
+                  loc: {
+                    start: {line: 1, column: 10},
+                    end: {line: 1, column: 11}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "b",
+                  loc: {
+                    start: {line: 1, column: 13},
+                    end: {line: 1, column: 14}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 8},
+                end: {line: 1, column: 16}
+              }
+            }
+          }],
           body: {
             type: "BlockStatement",
             body: [],
             loc: {
               start: {line: 1, column: 17},
               end: {line: 1, column: 19}
-            }
-          },
-          rest: {
-            type: "ArrayPattern",
-            elements: [
-              {
-                type: "Identifier",
-                name: "a",
-                loc: {
-                  start: {line: 1, column: 10},
-                  end: {line: 1, column: 11}
-                }
-              },
-              {
-                type: "Identifier",
-                name: "b",
-                loc: {
-                  start: {line: 1, column: 13},
-                  end: {line: 1, column: 14}
-                }
-              }
-            ],
-            loc: {
-              start: {line: 1, column: 8},
-              end: {line: 1, column: 16}
             }
           },
           generator: false,
@@ -12076,7 +11942,8 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
         value: {
           type: "FunctionExpression",
           id: null,
-          params: [{
+          params: [
+          {
             type: "ObjectPattern",
             properties: [
               {
@@ -12210,47 +12077,50 @@ test("({ x({ a: { w, x }, b: [y, z] }, ...[a, b, c]){} })", {
               start: {line: 1, column: 5},
               end: {line: 1, column: 31}
             }
-          }],
-          defaults: [],
+          },
+          {
+            type: "RestElement",
+            argument: {
+              type: "ArrayPattern",
+              elements: [
+                {
+                  type: "Identifier",
+                  name: "a",
+                  loc: {
+                    start: {line: 1, column: 37},
+                    end: {line: 1, column: 38}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "b",
+                  loc: {
+                    start: {line: 1, column: 40},
+                    end: {line: 1, column: 41}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "c",
+                  loc: {
+                    start: {line: 1, column: 43},
+                    end: {line: 1, column: 44}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 36},
+                end: {line: 1, column: 45}
+              }
+            }
+          }
+          ],
           body: {
             type: "BlockStatement",
             body: [],
             loc: {
               start: {line: 1, column: 46},
               end: {line: 1, column: 48}
-            }
-          },
-          rest: {
-            type: "ArrayPattern",
-            elements: [
-              {
-                type: "Identifier",
-                name: "a",
-                loc: {
-                  start: {line: 1, column: 37},
-                  end: {line: 1, column: 38}
-                }
-              },
-              {
-                type: "Identifier",
-                name: "b",
-                loc: {
-                  start: {line: 1, column: 40},
-                  end: {line: 1, column: 41}
-                }
-              },
-              {
-                type: "Identifier",
-                name: "c",
-                loc: {
-                  start: {line: 1, column: 43},
-                  end: {line: 1, column: 44}
-                }
-              }
-            ],
-            loc: {
-              start: {line: 1, column: 36},
-              end: {line: 1, column: 45}
             }
           },
           generator: false,
@@ -12296,22 +12166,23 @@ test("(...a) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [],
-      defaults: [],
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 5}
+          }
+        }
+      }],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 10},
           end: {line: 1, column: 12}
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "a",
-        loc: {
-          start: {line: 1, column: 4},
-          end: {line: 1, column: 5}
         }
       },
       generator: false,
@@ -12343,29 +12214,33 @@ test("(a, ...b) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [{
-        type: "Identifier",
-        name: "a",
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
+      params: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 2}
+          }
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "b",
+            loc: {
+              start: {line: 1, column: 7},
+              end: {line: 1, column: 8}
+            }
+          }
         }
-      }],
-      defaults: [],
+      ],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 13},
           end: {line: 1, column: 15}
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "b",
-        loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 8}
         }
       },
       generator: false,
@@ -12431,7 +12306,6 @@ test("({ a }) => {}", {
           end: {line: 1, column: 6}
         }
       }],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [],
@@ -12440,7 +12314,6 @@ test("({ a }) => {}", {
           end: {line: 1, column: 13}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -12470,55 +12343,59 @@ test("({ a }, ...b) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [{
-        type: "ObjectPattern",
-        properties: [{
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "a",
+      params: [
+        {
+          type: "ObjectPattern",
+          properties: [{
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              }
+            },
+            value: {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: true,
+            computed: false,
             loc: {
               start: {line: 1, column: 3},
               end: {line: 1, column: 4}
             }
-          },
-          value: {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 3},
-              end: {line: 1, column: 4}
-            }
-          },
-          kind: "init",
-          method: false,
-          shorthand: true,
-          computed: false,
+          }],
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 4}
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 6}
           }
-        }],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 6}
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "b",
+            loc: {
+              start: {line: 1, column: 11},
+              end: {line: 1, column: 12}
+            }
+          }
         }
-      }],
-      defaults: [],
+      ],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 17},
           end: {line: 1, column: 19}
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "b",
-        loc: {
-          start: {line: 1, column: 11},
-          end: {line: 1, column: 12}
         }
       },
       generator: false,
@@ -12550,39 +12427,40 @@ test("(...[a, b]) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [],
-      defaults: [],
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "ArrayPattern",
+          elements: [
+            {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 5},
+                end: {line: 1, column: 6}
+              }
+            },
+            {
+              type: "Identifier",
+              name: "b",
+              loc: {
+                start: {line: 1, column: 8},
+                end: {line: 1, column: 9}
+              }
+            }
+          ],
+          loc: {
+            start: {line: 1, column: 4},
+            end: {line: 1, column: 10}
+          }
+        }
+      }],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 17}
-        }
-      },
-      rest: {
-        type: "ArrayPattern",
-        elements: [
-          {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 5},
-              end: {line: 1, column: 6}
-            }
-          },
-          {
-            type: "Identifier",
-            name: "b",
-            loc: {
-              start: {line: 1, column: 8},
-              end: {line: 1, column: 9}
-            }
-          }
-        ],
-        loc: {
-          start: {line: 1, column: 4},
-          end: {line: 1, column: 10}
         }
       },
       generator: false,
@@ -12614,36 +12492,40 @@ test("(a, ...[b]) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [{
-        type: "Identifier",
-        name: "a",
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 2}
+      params: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 2}
+          }
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "ArrayPattern",
+            elements: [{
+              type: "Identifier",
+              name: "b",
+              loc: {
+                start: {line: 1, column: 8},
+                end: {line: 1, column: 9}
+              }
+            }],
+            loc: {
+              start: {line: 1, column: 7},
+              end: {line: 1, column: 10}
+            }
+          }
         }
-      }],
-      defaults: [],
+      ],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 15},
           end: {line: 1, column: 17}
-        }
-      },
-      rest: {
-        type: "ArrayPattern",
-        elements: [{
-          type: "Identifier",
-          name: "b",
-          loc: {
-            start: {line: 1, column: 8},
-            end: {line: 1, column: 9}
-          }
-        }],
-        loc: {
-          start: {line: 1, column: 7},
-          end: {line: 1, column: 10}
         }
       },
       generator: false,
@@ -12675,72 +12557,76 @@ test("({ a: [a, b] }, ...c) => {}", {
     expression: {
       type: "ArrowFunctionExpression",
       id: null,
-      params: [{
-        type: "ObjectPattern",
-        properties: [{
-          type: "Property",
-          key: {
-            type: "Identifier",
-            name: "a",
+      params: [
+        {
+          type: "ObjectPattern",
+          properties: [{
+            type: "Property",
+            key: {
+              type: "Identifier",
+              name: "a",
+              loc: {
+                start: {line: 1, column: 3},
+                end: {line: 1, column: 4}
+              }
+            },
+            value: {
+              type: "ArrayPattern",
+              elements: [
+                {
+                  type: "Identifier",
+                  name: "a",
+                  loc: {
+                    start: {line: 1, column: 7},
+                    end: {line: 1, column: 8}
+                  }
+                },
+                {
+                  type: "Identifier",
+                  name: "b",
+                  loc: {
+                    start: {line: 1, column: 10},
+                    end: {line: 1, column: 11}
+                  }
+                }
+              ],
+              loc: {
+                start: {line: 1, column: 6},
+                end: {line: 1, column: 12}
+              }
+            },
+            kind: "init",
+            method: false,
+            shorthand: false,
+            computed: false,
             loc: {
               start: {line: 1, column: 3},
-              end: {line: 1, column: 4}
-            }
-          },
-          value: {
-            type: "ArrayPattern",
-            elements: [
-              {
-                type: "Identifier",
-                name: "a",
-                loc: {
-                  start: {line: 1, column: 7},
-                  end: {line: 1, column: 8}
-                }
-              },
-              {
-                type: "Identifier",
-                name: "b",
-                loc: {
-                  start: {line: 1, column: 10},
-                  end: {line: 1, column: 11}
-                }
-              }
-            ],
-            loc: {
-              start: {line: 1, column: 6},
               end: {line: 1, column: 12}
             }
-          },
-          kind: "init",
-          method: false,
-          shorthand: false,
-          computed: false,
+          }],
           loc: {
-            start: {line: 1, column: 3},
-            end: {line: 1, column: 12}
+            start: {line: 1, column: 1},
+            end: {line: 1, column: 14}
           }
-        }],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 14}
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "c",
+            loc: {
+              start: {line: 1, column: 19},
+              end: {line: 1, column: 20}
+            }
+          }
         }
-      }],
-      defaults: [],
+      ],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 25},
           end: {line: 1, column: 27}
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "c",
-        loc: {
-          start: {line: 1, column: 19},
-          end: {line: 1, column: 20}
         }
       },
       generator: false,
@@ -12860,23 +12746,25 @@ test("({ a: b, c }, [d, e], ...f) => {}", {
             start: {line: 1, column: 14},
             end: {line: 1, column: 20}
           }
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "f",
+            loc: {
+              start: {line: 1, column: 25},
+              end: {line: 1, column: 26}
+            }
+          }
         }
       ],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [],
         loc: {
           start: {line: 1, column: 31},
           end: {line: 1, column: 33}
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "f",
-        loc: {
-          start: {line: 1, column: 25},
-          end: {line: 1, column: 26}
         }
       },
       generator: false,
@@ -13981,7 +13869,6 @@ test("e => yield* 10", {
           end: {line: 1, column: 1}
         }
       }],
-      defaults: [],
       body: {
         type: "BinaryExpression",
         operator: "*",
@@ -14007,7 +13894,6 @@ test("e => yield* 10", {
           end: {line: 1, column: 14}
         }
       },
-      rest: null,
       generator: false,
       expression: true,
       loc: {
@@ -14041,7 +13927,6 @@ test("(function () { yield* 10 })", {
       type: "FunctionExpression",
       id: null,
       params: [],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [{
@@ -14081,7 +13966,6 @@ test("(function () { yield* 10 })", {
           end: {line: 1, column: 26}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -14317,19 +14201,18 @@ test('function normal(x, y = 10) {}', {
         name: "x"
       },
       {
-        type: "Identifier",
-        name: "y"
+        type: "AssignmentPattern",
+        left: {
+          type: "Identifier",
+          name: "y"
+        },
+        right: {
+          type: "Literal",
+          value: 10,
+          raw: "10"
+        }
       }
     ],
-    defaults: [
-      null,
-      {
-        type: "Literal",
-        value: 10,
-        raw: "10"
-      }
-    ],
-    rest: null,
     generator: false,
     body: {
       type: "BlockStatement",
@@ -14714,8 +14597,6 @@ test("class A { static() {} }", {
           range: [16, 21],
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           body: {
             type: "BlockStatement",
@@ -14764,8 +14645,6 @@ test("class A { *static() {} }", {
           range: [17, 22],
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: true,
           body: {
             type: "BlockStatement",

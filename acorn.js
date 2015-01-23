@@ -1472,9 +1472,7 @@
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          for (var i = 0, lastI = node.elements.length - 1; i <= lastI; i++) {
-            toAssignable(node.elements[i], i === lastI, checkType);
-          }
+          toAssignableList(node.elements, checkType);
           break;
 
         case "SpreadElement":
@@ -1500,6 +1498,15 @@
       }
     }
     return node;
+  }
+
+  // Convert list of expression atoms to binding list.
+
+  function toAssignableList(exprList, checkType) {
+    for (var i = 0; i < exprList.length; i++) {
+      toAssignable(exprList[i], i === exprList.length - 1, checkType);
+    }
+    return exprList;
   }
 
   // Parses spread element.
@@ -1530,16 +1537,7 @@
       case _bracketL:
         var node = startNode();
         next();
-        var elts = node.elements = [], first = true;
-        while (!eat(_bracketR)) {
-          first ? first = false : expect(_comma);
-          if (tokType === _ellipsis) {
-            elts.push(parseRest());
-            expect(_bracketR);
-            break;
-          }
-          elts.push(tokType === _comma ? null : parseMaybeDefault());
-        }
+        node.elements = parseAssignableList(_bracketR, true);
         return finishNode(node, "ArrayPattern");
 
       case _braceL:
@@ -1548,6 +1546,20 @@
       default:
         unexpected();
     }
+  }
+
+  function parseAssignableList(close, allowEmpty) {
+    var elts = [], first = true;
+    while (!eat(close)) {
+      first ? first = false : expect(_comma);
+      if (tokType === _ellipsis) {
+        elts.push(parseRest());
+        expect(close);
+        break;
+      }
+      elts.push(allowEmpty && tokType === _comma ? null : parseMaybeDefault());
+    }
+    return elts;
   }
 
   // Parses assignment pattern around given atom if possible.
@@ -1593,6 +1605,9 @@
           if (elem) checkFunctionParam(elem, nameHash);
         }
         break;
+
+      case "RestElement":
+        return checkFunctionParam(param.argument, nameHash);
     }
   }
 
@@ -2425,11 +2440,9 @@
 
   function initFunction(node) {
     node.id = null;
-    node.params = [];
     if (options.ecmaVersion >= 6) {
-      node.defaults = [];
-      node.rest = null;
       node.generator = false;
+      node.expression = false;
     }
   }
 
@@ -2444,7 +2457,8 @@
     if (isStatement || tokType === _name) {
       node.id = parseIdent();
     }
-    parseFunctionParams(node);
+    expect(_parenL);
+    node.params = parseAssignableList(_parenR, false);
     parseFunctionBody(node, allowExpressionBody);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
@@ -2454,7 +2468,8 @@
   function parseMethod(isGenerator) {
     var node = startNode();
     initFunction(node);
-    parseFunctionParams(node);
+    expect(_parenL);
+    node.params = parseAssignableList(_parenR, false);
     var allowExpressionBody;
     if (options.ecmaVersion >= 6) {
       node.generator = isGenerator;
@@ -2470,67 +2485,9 @@
 
   function parseArrowExpression(node, params) {
     initFunction(node);
-
-    var defaults = node.defaults, hasDefaults = false;
-
-    for (var i = 0, lastI = params.length - 1; i <= lastI; i++) {
-      var param = params[i];
-
-      if (param.type === "AssignmentExpression" && param.operator === "=") {
-        hasDefaults = true;
-        params[i] = param.left;
-        defaults.push(param.right);
-      } else {
-        toAssignable(param, i === lastI, true);
-        defaults.push(null);
-        if (param.type === "RestElement") {
-          params.length--;
-          node.rest = param.argument;
-          break;
-        }
-      }
-    }
-
-    node.params = params;
-    if (!hasDefaults) node.defaults = [];
-
+    node.params = toAssignableList(params, true);
     parseFunctionBody(node, true);
     return finishNode(node, "ArrowFunctionExpression");
-  }
-
-  // Parse function parameters.
-
-  function parseFunctionParams(node) {
-    var defaults = [], hasDefaults = false;
-
-    expect(_parenL);
-    for (;;) {
-      if (eat(_parenR)) {
-        break;
-      } else if (eat(_ellipsis)) {
-        node.rest = parseAssignableAtom();
-        checkSpreadAssign(node.rest);
-        expect(_parenR);
-        defaults.push(null);
-        break;
-      } else {
-        node.params.push(parseAssignableAtom());
-        if (options.ecmaVersion >= 6) {
-          if (eat(_eq)) {
-            hasDefaults = true;
-            defaults.push(parseExpression(true));
-          } else {
-            defaults.push(null);
-          }
-        }
-        if (!eat(_comma)) {
-          expect(_parenR);
-          break;
-        }
-      }
-    }
-
-    if (hasDefaults) node.defaults = defaults;
   }
 
   // Parse function body and check parameters.
@@ -2560,8 +2517,6 @@
         checkFunctionParam(node.id, {});
       for (var i = 0; i < node.params.length; i++)
         checkFunctionParam(node.params[i], nameHash);
-      if (node.rest)
-        checkFunctionParam(node.rest, nameHash);
     }
   }
 

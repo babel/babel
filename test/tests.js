@@ -23788,21 +23788,23 @@ test("function hello(...rest) { }", {
           }
         }
       },
-      params: [],
-      rest: {
-        type: "Identifier",
-        name: "rest",
-        loc: {
-          start: {
-            line: 1,
-            column: 18
-          },
-          end: {
-            line: 1,
-            column: 22
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "Identifier",
+          name: "rest",
+          loc: {
+            start: {
+              line: 1,
+              column: 18
+            },
+            end: {
+              line: 1,
+              column: 22
+            }
           }
         }
-      },
+      }],
       body: {
         type: "BlockStatement",
         body: [],
@@ -23877,22 +23879,25 @@ test("function hello(a, ...rest) { }", {
               column: 16
             }
           }
-        }
-      ],
-      rest: {
-        type: "Identifier",
-        name: "rest",
-        loc: {
-          start: {
-            line: 1,
-            column: 21
-          },
-          end: {
-            line: 1,
-            column: 25
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "rest",
+            loc: {
+              start: {
+                line: 1,
+                column: 21
+              },
+              end: {
+                line: 1,
+                column: 25
+              }
+            }
           }
         }
-      },
+      ],
       body: {
         type: "BlockStatement",
         body: [],
@@ -24089,21 +24094,23 @@ test("var hi = function (...r) { sayHi() };", {
           init: {
             type: "FunctionExpression",
             id: null,
-            params: [],
-            rest: {
-              type: "Identifier",
-              name: "r",
-              loc: {
-                start: {
-                  line: 1,
-                  column: 22
-                },
-                end: {
-                  line: 1,
-                  column: 23
+            params: [{
+              type: "RestElement",
+              argument: {
+                type: "Identifier",
+                name: "r",
+                loc: {
+                  start: {
+                    line: 1,
+                    column: 22
+                  },
+                  end: {
+                    line: 1,
+                    column: 23
+                  }
                 }
               }
-            },
+            }],
             body: {
               type: "BlockStatement",
               body: [
