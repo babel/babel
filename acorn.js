@@ -1837,7 +1837,7 @@
         return parseForIn(node, init);
       return parseFor(node, init);
     }
-    var init = parseExpression(false, true);
+    var init = parseExpression(true);
     if (tokType === _in || (options.ecmaVersion >= 6 && isContextual("of"))) {
       checkLVal(init);
       return parseForIn(node, init);
@@ -2054,7 +2054,7 @@
       var decl = startNode();
       decl.id = parseAssignableAtom();
       checkLVal(decl.id, true);
-      decl.init = eat(_eq) ? parseExpression(true, noIn) : (kind === _const.keyword ? unexpected() : null);
+      decl.init = eat(_eq) ? parseMaybeAssign(noIn) : (kind === _const.keyword ? unexpected() : null);
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
       if (!eat(_comma)) break;
     }
@@ -2073,10 +2073,10 @@
   // sequences (in argument lists, array literals, or object literals)
   // or the `in` operator (in for loops initalization expressions).
 
-  function parseExpression(noComma, noIn) {
+  function parseExpression(noIn) {
     var start = storeCurrentPos();
     var expr = parseMaybeAssign(noIn);
-    if (!noComma && tokType === _comma) {
+    if (tokType === _comma) {
       var node = startNodeAt(start);
       node.expressions = [expr];
       while (eat(_comma)) node.expressions.push(parseMaybeAssign(noIn));
@@ -2111,9 +2111,9 @@
     if (eat(_question)) {
       var node = startNodeAt(start);
       node.test = expr;
-      node.consequent = parseExpression(true);
+      node.consequent = parseMaybeAssign();
       expect(_colon);
-      node.alternate = parseExpression(true, noIn);
+      node.alternate = parseMaybeAssign(noIn);
       return finishNode(node, "ConditionalExpression");
     }
     return expr;
@@ -2514,7 +2514,7 @@
     var isExpression = allowExpression && tokType !== _braceL;
 
     if (isExpression) {
-      node.body = parseExpression(true);
+      node.body = parseMaybeAssign();
       node.expression = true;
     } else {
       // Start a new scope with regard to labels and the `inFunction`
@@ -2637,7 +2637,7 @@
     } else
     // export default ...;
     if (eat(_default)) {
-      node.declaration = parseExpression(true);
+      node.declaration = parseMaybeAssign();
       node['default'] = true;
       node.specifiers = null;
       node.source = null;
@@ -2755,7 +2755,7 @@
       node.argument = null;
     } else {
       node.delegate = eat(_star);
-      node.argument = parseExpression(true);
+      node.argument = parseMaybeAssign();
     }
     return finishNode(node, "YieldExpression");
   }

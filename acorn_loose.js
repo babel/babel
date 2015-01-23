@@ -366,7 +366,7 @@
         }
         return parseFor(node, init);
       }
-      var init = parseExpression(false, true);
+      var init = parseExpression(true);
       if (token.type === tt._in || isContextual("of")) {
         return parseForIn(node, checkLVal(init));
       }
@@ -539,7 +539,7 @@
     do {
       var decl = startNode();
       decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
-      decl.init = eat(tt.eq) ? parseExpression(true, noIn) : null;
+      decl.init = eat(tt.eq) ? parseMaybeAssign(noIn) : null;
       node.declarations.push(finishNode(decl, "VariableDeclarator"));
     } while (eat(tt.comma));
     if (!node.declarations.length) {
@@ -551,10 +551,10 @@
     return finishNode(node, "VariableDeclaration");
   }
 
-  function parseExpression(noComma, noIn) {
+  function parseExpression(noIn) {
     var start = storeCurrentPos();
     var expr = parseMaybeAssign(noIn);
-    if (!noComma && token.type === tt.comma) {
+    if (token.type === tt.comma) {
       var node = startNodeAt(start);
       node.expressions = [expr];
       while (eat(tt.comma)) node.expressions.push(parseMaybeAssign(noIn));
@@ -592,8 +592,8 @@
     if (eat(tt.question)) {
       var node = startNodeAt(start);
       node.test = expr;
-      node.consequent = parseExpression(true);
-      node.alternate = expect(tt.colon) ? parseExpression(true, noIn) : dummyIdent();
+      node.consequent = parseMaybeAssign();
+      node.alternate = expect(tt.colon) ? parseMaybeAssign(noIn) : dummyIdent();
       return finishNode(node, "ConditionalExpression");
     }
     return expr;
@@ -783,7 +783,7 @@
         node.argument = null;
       } else {
         node.delegate = eat(tt.star);
-        node.argument = parseExpression(true);
+        node.argument = parseMaybeAssign();
       }
       return finishNode(node, "YieldExpression");
 
@@ -871,7 +871,7 @@
         isGenerator = eat(tt.star);
       }
       parsePropertyName(prop);
-      if (isDummy(prop.key)) { if (isDummy(parseExpression(true))) next(); eat(tt.comma); continue; }
+      if (isDummy(prop.key)) { if (isDummy(parseMaybeAssign())) next(); eat(tt.comma); continue; }
       if (isClass) {
         if (prop.key.type === "Identifier" && !prop.computed && prop.key.name === "static" &&
             (token.type != tt.parenL && token.type != tt.braceL)) {
@@ -884,7 +884,7 @@
       }
       if (!isClass && eat(tt.colon)) {
         prop.kind = "init";
-        prop.value = parseExpression(true);
+        prop.value = parseMaybeAssign();
       } else if (options.ecmaVersion >= 6 && (token.type === tt.parenL || token.type === tt.braceL)) {
         if (isClass) {
           prop.kind = "";
@@ -1029,7 +1029,7 @@
     node.params = parseFunctionParams();
     node.generator = isGenerator || false;
     node.expression = options.ecmaVersion >= 6 && token.type !== tt.braceL;
-    node.body = node.expression ? parseExpression(true) : parseBlock();
+    node.body = node.expression ? parseMaybeAssign() : parseBlock();
     return finishNode(node, "FunctionExpression");
   }
 
@@ -1037,7 +1037,7 @@
     initFunction(node);
     node.params = toAssignableList(params);
     node.expression = token.type !== tt.braceL;
-    node.body = node.expression ? parseExpression(true) : parseBlock();
+    node.body = node.expression ? parseMaybeAssign() : parseBlock();
     return finishNode(node, "ArrowFunctionExpression");
   }
 
@@ -1124,7 +1124,7 @@
         elts.push(allowEmpty ? null : dummyIdent());
         continue;
       }
-      var elt = parseExpression(true);
+      var elt = parseMaybeAssign();
       if (isDummy(elt)) {
         if (closes(close, indent, line)) break;
         next();
