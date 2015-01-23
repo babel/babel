@@ -14,7 +14,7 @@
                   "url": "http://marijnhaverbeke.nl/acorn/LICENSE"}],
     "scripts": {
       "test": "node test/run.js",
-      "prepublish": "bin/without_eval > acorn_csp.js"
+      "prepublish": "node bin/without_eval > acorn_csp.js"
     },
     "bin": {"acorn": "./bin/acorn"},
     "devDependencies": {"regenerate": "~0.6.2",
