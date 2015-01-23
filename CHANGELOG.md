@@ -16,7 +16,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Polish**
   * Generated code autoindentation.
   * Moved global uid registry to a scope registry resulting in nicer uids.
-  * `this` is now illegal in the top level scope.
+  * `this` is now illegal in the top level scope when using the default `useStrict` transformer.
   * New `asyncToGenerator` helper that's much more compact.
   * Throw errors on unknown options.
  * **Internal**
@@ -28,6 +28,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Generators now work flawlessly with any parameter transformers.
   * Optional async function transformers should not name their functions.
   * Remove `unlink` event watching in `bin/6to5`.
+  * Fix regenerator variable declarations being incorrectly hoisted breaking scope.
  * **New Feature**
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
@@ -39,6 +40,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * `6to5/polyfill` can now only be required **once**.
   * **CLI**
    * `--indent` option has been removed.
+   * `--include-regenerator` option has been removed.
    * `--amd-modules-id` option has been removed, use `--module-ids` instead.
   * **Options**
    * `amdModuleIds` option has been removed, use `moduleIds` instead.
@@ -50,16 +52,45 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * **Transformers**
     * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
     * Removed the `coreAliasing` transformer in favor of `selfContained`.
-    * The transformer `generators` has been renamed to `regenerator`.
-    * The transformer `propertyMethodAssignment` has been renamed to `property.shorthand`.
-    * The transformer `propertyNameShorthand` has been merged into `property.shorthand`.
-    * The mutator part of the `propertyMethodAssignment` transformer has been merged into `property.mutators`.
-    * The transformer `computedPropertyNames` has been renamed to `property.computed`.
-    * The transformer `letScoping` jas been renamed to `blockScoping`.
-    * The transformer `restParameters` has been renamed to `parameters.rest`.
-    * The transformer `defaultParameters` has been renamed to `parameters.default`.
-    * The transformer `arrayComprehension` and `generatorComprehension` have been merged into `comprehensions`.
-    * **All transformers have been prefixed with their corresponding type. For example, `classes` is now `es6.classes`**.
+    * Renamed transformers:
+     * `specNoForInOfAssignment` -> `validation.noForInOfAssignment`
+     * `specSetters` -> `validation.setters`
+     * `specBlockScopedFunctions` -> `spec.blockScopedFunctions`
+     * `malletOperator` -> `playground.malletOperator`
+     * `methodBinding` -> `playground.methodBinding`
+     * `memoizationOperator` -> `playground.memoizationOperator`
+     * `objectGetterMemoization` -> `playground.objectGetterMemoization`
+     * `asyncToGenerator` -> `misc.asyncToGenerator`
+     * `bluebirdCoroutines` -> `misc.bluebirdCoroutines`
+     * `modules` -> `es6.modules`
+     * `propertyNameShorthand` -> `es6.properties.shorthand`
+     * `arrayComprehension` -> `es7.comprehensions`
+     * `generatorComprehension` -> `es7.comprehensions`
+     * `arrowFunctions` -> `es6.arrowFunctions`
+     * `classes` -> `es6.classes`
+     * `objectSpread` -> `es7.objectSpread`
+     * `exponentiationOperator` -> `es7.exponentiationOperator`
+     * `spread` -> `es6.spread`
+     * `templateLiterals` -> `es6.templateLiterals`
+     * `propertyMethodAssignment` -> `es6.properties.shorthand`
+     * `computedPropertyNames` -> `es6.properties.computed`
+     * `defaultParameters` -> `es6.parameters.default`
+     * `restParameters` -> `es6.parameters.rest`
+     * `destructuring` -> `es6.destructuring`
+     * `forOf` -> `es6.forOf`
+     * `unicodeRegex` -> `es6.unicodeRegex`
+     * `abstractReferences` -> `es7.abstractReferences`
+     * `constants` -> `es6.constants`
+     * `letScoping` -> `es6.letScoping`
+     * `blockScopingTDZ` -> `es6.blockScopingTDZ`
+     * `generators` -> `regenerator`
+     * `protoToAssign` -> `spec.protoToAssign`
+     * `typeofSymbol` -> `spec.typeofSymbol`
+     * `coreAliasing` -> `selfContained`
+     * `undefinedToVoid` -> `spec.undefinedToVoid`
+     * `undeclaredVariableCheck` -> `validation.undeclaredVariableCheck`
+     * `specPropertyLiterals` -> `minification.propertyLiterals`
+     * `specMemberExpressionLiterals` -> `minification.memberExpressionLiterals`
 
 ## 2.13.5
 
