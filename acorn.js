@@ -3581,6 +3581,13 @@
     next();
     node.id = tokType === _name ? parseIdent() : isStatement ? unexpected() : null;
     node.superClass = eat(_extends) ? parseExprSubscripts() : null;
+    if (node.superClass && tokType === _lt) {
+      node.superTypeParameters = parseTypeParameterInstantiation();
+    }
+    if (tokType === _name && tokVal === "implements") {
+      next();
+      node.implements = parseClassImplements();
+    }
     var classBody = startNode();
     classBody.body = [];
     expect(_braceL);
@@ -3617,8 +3624,20 @@
       } else {
         method.kind = "";
       }
-      method.value = parseMethod(isGenerator, isAsync);
-      classBody.body.push(finishNode(method, "MethodDefinition"));
+      if (tokType === _colon) {
+        method.typeAnnotation = parseTypeAnnotation();
+        semicolon();
+        classBody.body.push(finishNode(method, "ClassProperty"));
+      } else {
+        var typeParameters;
+        if (tokType === _lt) {
+          typeParameters = parseTypeParameterDeclaration();
+        }
+        method.value = parseMethod(isGenerator, isAsync);
+        method.value.typeParameters = typeParameters;
+        classBody.body.push(finishNode(method, "MethodDefinition"));
+        eat(_semi);
+      }
     }
     node.body = finishNode(classBody, "ClassBody");
     return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
@@ -4276,7 +4295,7 @@
   }
 
   function parseObjectPropertyKey() {
-    return (tokType === _num || tokType === _string) ? parseExprAtom() : parseIdent(true);;
+    return (tokType === _num || tokType === _string) ? parseExprAtom() : parseIdent(true);
   }
 
   function parseObjectTypeIndexer(node, isStatic) {
