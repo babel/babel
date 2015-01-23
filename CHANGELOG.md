@@ -29,6 +29,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Optional async function transformers should not name their functions.
   * Remove `unlink` event watching in `bin/6to5`.
   * Fix regenerator variable declarations being incorrectly hoisted breaking scope.
+  * Transformers that attempted to simplify expressions that had no consequence now take into account whether it's one of the last statements/expressions in the script.
  * **New Feature**
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
