@@ -6,6 +6,7 @@
     require("./tests.js");
     require("./tests-harmony.js");
     require("./tests-jsx.js");
+    require("./tests-flow.js");
     require("./tests-6to5.js");
     require("./tests-6to5-playground.js");
   } else {
