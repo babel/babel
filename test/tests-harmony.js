@@ -14783,47 +14783,47 @@ test("class A { *static() {} }", {
   locations: true
 });
 
-test("`${/\d/.exec('1')[0]}`", {
+test("`${/\\d/.exec('1')[0]}`", {
   "type": "Program",
   "start": 0,
-  "end": 21,
+  "end": 22,
   "body": [
     {
       "type": "ExpressionStatement",
       "start": 0,
-      "end": 21,
+      "end": 22,
       "expression": {
         "type": "TemplateLiteral",
         "start": 0,
-        "end": 21,
+        "end": 22,
         "expressions": [
           {
             "type": "MemberExpression",
             "start": 3,
-            "end": 19,
+            "end": 20,
             "object": {
               "type": "CallExpression",
               "start": 3,
-              "end": 16,
+              "end": 17,
               "callee": {
                 "type": "MemberExpression",
                 "start": 3,
-                "end": 11,
+                "end": 12,
                 "object": {
                   "type": "Literal",
                   "start": 3,
-                  "end": 6,
+                  "end": 7,
                   "regex": {
-                    "pattern": "d",
+                    "pattern": "\\d",
                     "flags": ""
                   },
-                  "value": {},
-                  "raw": "/d/"
+                  "value": /\d/,
+                  "raw": "/\\d/"
                 },
                 "property": {
                   "type": "Identifier",
-                  "start": 7,
-                  "end": 11,
+                  "start": 8,
+                  "end": 12,
                   "name": "exec"
                 },
                 "computed": false
@@ -14831,8 +14831,8 @@ test("`${/\d/.exec('1')[0]}`", {
               "arguments": [
                 {
                   "type": "Literal",
-                  "start": 12,
-                  "end": 15,
+                  "start": 13,
+                  "end": 16,
                   "value": "1",
                   "raw": "'1'"
                 }
@@ -14840,8 +14840,8 @@ test("`${/\d/.exec('1')[0]}`", {
             },
             "property": {
               "type": "Literal",
-              "start": 17,
-              "end": 18,
+              "start": 18,
+              "end": 19,
               "value": 0,
               "raw": "0"
             },
@@ -14861,8 +14861,8 @@ test("`${/\d/.exec('1')[0]}`", {
           },
           {
             "type": "TemplateElement",
-            "start": 20,
-            "end": 20,
+            "start": 21,
+            "end": 21,
             "value": {
               "raw": "",
               "cooked": ""
