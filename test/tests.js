@@ -169,7 +169,7 @@ test("/[a-z]/g", {
       type: "ExpressionStatement",
       expression: {
         type: "Literal",
-        value: /[a-z]/,
+        value: /[a-z]/g,
         regex: {
           pattern: "[a-z]",
           flags: "g"
@@ -7331,7 +7331,7 @@ test("var x = /[a-z]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[a-z]/i,
             loc: {
               start: {
                 line: 1,
@@ -7404,7 +7404,7 @@ test("var x = /[x-z]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[x-z]/i,
             loc: {
               start: {
                 line: 1,
@@ -7477,7 +7477,7 @@ test("var x = /[a-c]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[a-c]/i,
             loc: {
               start: {
                 line: 1,
@@ -7550,7 +7550,7 @@ test("var x = /[P QR]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[P QR]/i,
             loc: {
               start: {
                 line: 1,
@@ -7623,7 +7623,7 @@ test("var x = /foo\\/bar/", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /foo\/bar/,
             loc: {
               start: {
                 line: 1,
@@ -7696,7 +7696,7 @@ test("var x = /=([^=\\s])+/g", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /=([^=\s])+/g,
             loc: {
               start: {
                 line: 1,
@@ -7769,7 +7769,7 @@ test("var x = /[P QR]/\\u0067", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[P QR]/g,
             loc: {
               start: {
                 line: 1,
@@ -28902,7 +28902,7 @@ test("function f() {} / 1 /", {
       expression: {
         type: "Literal",
         regex: {pattern: " 1 ", flags: ""},
-        value: {}
+        value: / 1 /
       }
     }
   ]
