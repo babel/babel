@@ -1468,7 +1468,7 @@
   // Convert existing expression atom to assignable pattern
   // if possible.
 
-  function toAssignable(node, allowSpread, checkType) {
+  function toAssignable(node) {
     if (options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "Identifier":
@@ -1476,43 +1476,32 @@
         case "ObjectPattern":
         case "ArrayPattern":
         case "AssignmentPattern":
-        case "RestElement":
           break;
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
           for (var i = 0; i < node.properties.length; i++) {
             var prop = node.properties[i];
-            if (prop.kind !== "init") unexpected(prop.key.start);
-            toAssignable(prop.value, false, checkType);
+            if (prop.kind !== "init") raise(prop.key.start, "Object pattern can't contain getter or setter");
+            toAssignable(prop.value);
           }
           break;
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          toAssignableList(node.elements, checkType);
-          break;
-
-        case "SpreadElement":
-          if (allowSpread) {
-            node.type = "RestElement";
-            toAssignable(node.argument, false, checkType);
-            checkSpreadAssign(node.argument);
-          } else {
-            unexpected(node.start);
-          }
+          toAssignableList(node.elements);
           break;
 
         case "AssignmentExpression":
           if (node.operator === "=") {
             node.type = "AssignmentPattern";
           } else {
-            unexpected(node.left.end);
+            raise(node.left.end, "Only '=' operator can be used for specifying default value.");
           }
           break;
 
         default:
-          if (checkType) unexpected(node.start);
+          raise(node.start, "Assigning to rvalue");
       }
     }
     return node;
@@ -1520,19 +1509,33 @@
 
   // Convert list of expression atoms to binding list.
 
-  function toAssignableList(exprList, checkType) {
-    for (var i = 0; i < exprList.length; i++) {
-      toAssignable(exprList[i], i === exprList.length - 1, checkType);
+  function toAssignableList(exprList) {
+    if (exprList.length) {
+      for (var i = 0; i < exprList.length - 1; i++) {
+        toAssignable(exprList[i]);
+      }
+      var last = exprList[exprList.length - 1];
+      switch (last.type) {
+        case "RestElement":
+          break;
+        case "SpreadElement":
+          last.type = "RestElement";
+          toAssignable(last.argument);
+          checkSpreadAssign(last.argument);
+          break;
+        default:
+          toAssignable(last);
+      }
     }
     return exprList;
   }
 
   // Parses spread element.
 
-  function parseSpread() {
+  function parseSpread(refShorthandDefaultPos) {
     var node = startNode();
     next();
-    node.argument = parseMaybeAssign();
+    node.argument = parseMaybeAssign(refShorthandDefaultPos);
     return finishNode(node, "SpreadElement");
   }
 
@@ -1837,10 +1840,14 @@
         return parseForIn(node, init);
       return parseFor(node, init);
     }
-    var init = parseExpression(true);
+    var refShorthandDefaultPos = {start: 0};
+    var init = parseExpression(true, refShorthandDefaultPos);
     if (tokType === _in || (options.ecmaVersion >= 6 && isContextual("of"))) {
+      toAssignable(init);
       checkLVal(init);
       return parseForIn(node, init);
+    } else if (refShorthandDefaultPos.start) {
+      unexpected(refShorthandDefaultPos.start);
     }
     return parseFor(node, init);
   }
@@ -2069,17 +2076,20 @@
   // and, *if* the syntactic construct they handle is present, wrap
   // the AST node that the inner parser gave them in another node.
 
-  // Parse a full expression. The arguments are used to forbid comma
-  // sequences (in argument lists, array literals, or object literals)
-  // or the `in` operator (in for loops initalization expressions).
+  // Parse a full expression. The optional arguments are used to
+  // forbid the `in` operator (in for loops initalization expressions)
+  // and provide reference for storing '=' operator inside shorthand
+  // property assignment in contexts where both object expression
+  // and object pattern might appear (so it's possible to raise
+  // delayed syntax error at correct position).
 
-  function parseExpression(noIn) {
+  function parseExpression(noIn, refShorthandDefaultPos) {
     var start = storeCurrentPos();
-    var expr = parseMaybeAssign(noIn);
+    var expr = parseMaybeAssign(noIn, refShorthandDefaultPos);
     if (tokType === _comma) {
       var node = startNodeAt(start);
       node.expressions = [expr];
-      while (eat(_comma)) node.expressions.push(parseMaybeAssign(noIn));
+      while (eat(_comma)) node.expressions.push(parseMaybeAssign(noIn, refShorthandDefaultPos));
       return finishNode(node, "SequenceExpression");
     }
     return expr;
@@ -2088,26 +2098,37 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  function parseMaybeAssign(noIn) {
+  function parseMaybeAssign(noIn, refShorthandDefaultPos) {
+    var failOnShorthandAssign;
+    if (!refShorthandDefaultPos) {
+      refShorthandDefaultPos = {start: 0};
+      failOnShorthandAssign = true;
+    } else {
+      failOnShorthandAssign = false;
+    }
     var start = storeCurrentPos();
-    var left = parseMaybeConditional(noIn);
+    var left = parseMaybeConditional(noIn, refShorthandDefaultPos);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
       node.left = tokType === _eq ? toAssignable(left) : left;
+      refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
       checkLVal(left);
       next();
       node.right = parseMaybeAssign(noIn);
       return finishNode(node, "AssignmentExpression");
+    } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
+      unexpected(refShorthandDefaultPos.start);
     }
     return left;
   }
 
   // Parse a ternary conditional (`?:`) operator.
 
-  function parseMaybeConditional(noIn) {
+  function parseMaybeConditional(noIn, refShorthandDefaultPos) {
     var start = storeCurrentPos();
-    var expr = parseExprOps(noIn);
+    var expr = parseExprOps(noIn, refShorthandDefaultPos);
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
     if (eat(_question)) {
       var node = startNodeAt(start);
       node.test = expr;
@@ -2121,9 +2142,11 @@
 
   // Start the precedence parser.
 
-  function parseExprOps(noIn) {
+  function parseExprOps(noIn, refShorthandDefaultPos) {
     var start = storeCurrentPos();
-    return parseExprOp(parseMaybeUnary(), start, -1, noIn);
+    var expr = parseMaybeUnary(refShorthandDefaultPos);
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
+    return parseExprOp(expr, start, -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -2152,13 +2175,14 @@
 
   // Parse unary operators, both prefix and postfix.
 
-  function parseMaybeUnary() {
+  function parseMaybeUnary(refShorthandDefaultPos) {
     if (tokType.prefix) {
       var node = startNode(), update = tokType.isUpdate;
       node.operator = tokVal;
       node.prefix = true;
       next();
       node.argument = parseMaybeUnary();
+      if (refShorthandDefaultPos && refShorthandDefaultPos.start) unexpected(refShorthandDefaultPos.start);
       if (update) checkLVal(node.argument);
       else if (strict && node.operator === "delete" &&
                node.argument.type === "Identifier")
@@ -2166,7 +2190,8 @@
       return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
     }
     var start = storeCurrentPos();
-    var expr = parseExprSubscripts();
+    var expr = parseExprSubscripts(refShorthandDefaultPos);
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
     while (tokType.postfix && !canInsertSemicolon()) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -2181,9 +2206,11 @@
 
   // Parse call, dot, and `[]`-subscript expressions.
 
-  function parseExprSubscripts() {
+  function parseExprSubscripts(refShorthandDefaultPos) {
     var start = storeCurrentPos();
-    return parseSubscripts(parseExprAtom(), start);
+    var expr = parseExprAtom(refShorthandDefaultPos);
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
+    return parseSubscripts(expr, start);
   }
 
   function parseSubscripts(base, start, noCalls) {
@@ -2218,7 +2245,7 @@
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,
   // or `{}`.
 
-  function parseExprAtom() {
+  function parseExprAtom(refShorthandDefaultPos) {
     switch (tokType) {
     case _this:
       var node = startNode();
@@ -2268,11 +2295,11 @@
       if (options.ecmaVersion >= 7 && tokType === _for) {
         return parseComprehension(node, false);
       }
-      node.elements = parseExprList(_bracketR, true, true);
+      node.elements = parseExprList(_bracketR, true, true, refShorthandDefaultPos);
       return finishNode(node, "ArrayExpression");
 
     case _braceL:
-      return parseObj();
+      return parseObj(false, refShorthandDefaultPos);
 
     case _function:
       var node = startNode();
@@ -2302,7 +2329,8 @@
         return parseComprehension(startNodeAt(start), true);
       }
 
-      var innerStart = storeCurrentPos(), exprList = [], first = true, spreadStart, innerParenStart;
+      var innerStart = storeCurrentPos(), exprList = [], first = true;
+      var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart;
       while (tokType !== _parenR) {
         first ? first = false : expect(_comma);
         if (tokType === _ellipsis) {
@@ -2313,7 +2341,7 @@
           if (tokType === _parenL && !innerParenStart) {
             innerParenStart = tokStart;
           }
-          exprList.push(parseMaybeAssign());
+          exprList.push(parseMaybeAssign(false, refShorthandDefaultPos));
         }
       }
       var innerEnd = storeCurrentPos();
@@ -2326,6 +2354,7 @@
 
       if (!exprList.length) unexpected(lastStart);
       if (spreadStart) unexpected(spreadStart);
+      if (refShorthandDefaultPos.start) unexpected(refShorthandDefaultPos.start);
 
       if (exprList.length > 1) {
         val = startNodeAt(innerStart);
@@ -2392,7 +2421,7 @@
 
   // Parse an object literal or binding pattern.
 
-  function parseObj(isPattern) {
+  function parseObj(isPattern, refShorthandDefaultPos) {
     var node = startNode(), first = true, propHash = {};
     node.properties = [];
     next();
@@ -2414,7 +2443,7 @@
       }
       parsePropertyName(prop);
       if (eat(_colon)) {
-        prop.value = isPattern ? parseMaybeDefault(start) : parseMaybeAssign();
+        prop.value = isPattern ? parseMaybeDefault(start) : parseMaybeAssign(false, refShorthandDefaultPos);
         prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         if (isPattern) unexpected();
@@ -2430,7 +2459,15 @@
         prop.value = parseMethod(false);
       } else if (options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
         prop.kind = "init";
-        prop.value = isPattern ? parseMaybeDefault(start, prop.key) : prop.key;
+        if (isPattern) {
+          prop.value = parseMaybeDefault(start, prop.key);
+        } else if (tokType === _eq && refShorthandDefaultPos) {
+          if (!refShorthandDefaultPos.start)
+            refShorthandDefaultPos.start = tokStart;
+          prop.value = parseMaybeDefault(start, prop.key);
+        } else {
+          prop.value = prop.key;
+        }
         prop.shorthand = true;
       } else unexpected();
 
@@ -2583,7 +2620,7 @@
   // nothing in between them to be parsed as `null` (which is needed
   // for array literals).
 
-  function parseExprList(close, allowTrailingComma, allowEmpty) {
+  function parseExprList(close, allowTrailingComma, allowEmpty, refShorthandDefaultPos) {
     var elts = [], first = true;
     while (!eat(close)) {
       if (!first) {
@@ -2594,7 +2631,10 @@
       if (allowEmpty && tokType === _comma) {
         elts.push(null);
       } else {
-        elts.push(tokType === _ellipsis ? parseSpread() : parseMaybeAssign());
+        if (tokType === _ellipsis)
+          elts.push(parseSpread(refShorthandDefaultPos));
+        else
+          elts.push(parseMaybeAssign(false, refShorthandDefaultPos));
       }
     }
     return elts;
