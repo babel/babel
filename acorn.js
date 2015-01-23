@@ -208,9 +208,6 @@
     if (options.locations) {
       this.loc = new SourceLocation();
       this.loc.end = tokEndLoc;
-      // TODO: remove in next major release
-      this.startLoc = tokStartLoc;
-      this.endLoc = tokEndLoc;
     }
     if (options.ranges)
       this.range = [tokStart, tokEnd];
@@ -648,7 +645,7 @@
       tokPos = tokLineStart = 0;
     }
     tokType = _eof;
-    tokContext = [];
+    tokContext = [b_stat];
     tokExprAllowed = true;
     inType = false;
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {

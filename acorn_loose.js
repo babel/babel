@@ -58,14 +58,12 @@
   var lastEnd, token = {start: 0, end: 0}, ahead = [];
   var curLineStart, nextLineStart, curIndent, lastEndLoc, sourceFile;
 
-  function next(forceRegexp) {
+  function next() {
     lastEnd = token.end;
     if (options.locations)
-      lastEndLoc = token.endLoc;
-    if (forceRegexp)
-      ahead.length = 0;
+      lastEndLoc = token.loc && token.loc.end;
 
-    token = ahead.shift() || readToken(forceRegexp);
+    token = ahead.shift() || readToken();
     if (options.onToken)
       options.onToken(token);
 
@@ -78,10 +76,10 @@
     }
   }
 
-  function readToken(forceRegexp) {
+  function readToken() {
     for (;;) {
       try {
-        var tok = fetchToken(forceRegexp);
+        var tok = fetchToken();
         if (tok.type === tt.dot && input.substr(tok.end, 1) === '.') {
           tok = fetchToken();
           tok.start--;
@@ -129,8 +127,8 @@
         if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖"};
         if (replace) {
           if (options.locations) {
-            replace.startLoc = acorn.getLineInfo(input, replace.start);
-            replace.endLoc = acorn.getLineInfo(input, replace.end);
+            replace.loc = new SourceLocation(acorn.getLineInfo(input, replace.start));
+            replace.loc.end = acorn.getLineInfo(input, replace.end);
           }
           return replace;
         }
@@ -212,7 +210,7 @@
   Node.prototype = acorn.Node.prototype;
 
   function SourceLocation(start) {
-    this.start = start || token.startLoc || {line: 1, column: 0};
+    this.start = start || token.loc.start || {line: 1, column: 0};
     this.end = null;
     if (sourceFile !== null) this.source = sourceFile;
   }
@@ -229,7 +227,7 @@
   }
 
   function storeCurrentPos() {
-    return options.locations ? [token.start, token.startLoc] : token.start;
+    return options.locations ? [token.start, token.loc.start] : token.start;
   }
 
   function startNodeAt(pos) {
@@ -313,7 +311,7 @@
     node.body = [];
     while (token.type !== tt.eof) node.body.push(parseStatement());
     lastEnd = token.end;
-    lastEndLoc = token.endLoc;
+    lastEndLoc = token.loc && token.loc.end;
     return finishNode(node, "Program");
   }
 
@@ -913,7 +911,7 @@
       // If there is no closing brace, make the node span to the start
       // of the next token (this is useful for Tern)
       lastEnd = token.start;
-      if (options.locations) lastEndLoc = token.startLoc;
+      if (options.locations) lastEndLoc = token.loc.start;
     }
     if (isClass) {
       semicolon();
@@ -1169,7 +1167,7 @@
       // If there is no closing brace, make the node span to the start
       // of the next token (this is useful for Tern)
       lastEnd = token.start;
-      if (options.locations) lastEndLoc = token.startLoc;
+      if (options.locations) lastEndLoc = token.loc.start;
     }
     return elts;
   }
