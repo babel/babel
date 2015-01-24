@@ -2940,7 +2940,7 @@
 
   function parseExpression(noComma, noIn, isStatement) {
     var start = storeCurrentPos();
-    var expr = parseMaybeAssign(noIn, false, isStatement);
+    var expr = parseMaybeAssign(noIn, isStatement);
     if (!noComma && tokType === _comma) {
       var node = startNodeAt(start);
       node.expressions = [expr];
@@ -2953,9 +2953,9 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  function parseMaybeAssign(noIn, noLess, isStatement) {
+  function parseMaybeAssign(noIn, isStatement) {
     var start = storeCurrentPos();
-    var left = parseMaybeConditional(noIn, noLess, isStatement);
+    var left = parseMaybeConditional(noIn, isStatement);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -2970,9 +2970,9 @@
 
   // Parse a ternary conditional (`?:`) operator.
 
-  function parseMaybeConditional(noIn, noLess, isStatement) {
+  function parseMaybeConditional(noIn, isStatement) {
     var start = storeCurrentPos();
-    var expr = parseExprOps(noIn, noLess, isStatement);
+    var expr = parseExprOps(noIn, isStatement);
     if (eat(_question)) {
       var node = startNodeAt(start);
       if (options.playground && eat(_eq)) {
@@ -2993,9 +2993,9 @@
 
   // Start the precedence parser.
 
-  function parseExprOps(noIn, noLess, isStatement) {
+  function parseExprOps(noIn, isStatement) {
     var start = storeCurrentPos();
-    return parseExprOp(parseMaybeUnary(isStatement), start, -1, noIn, noLess);
+    return parseExprOp(parseMaybeUnary(isStatement), start, -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -3004,7 +3004,7 @@
   // defer further parser to one of its callers when it encounters an
   // operator that has a lower precedence than the set it is parsing.
 
-  function parseExprOp(left, leftStart, minPrec, noIn, noLess) {
+  function parseExprOp(left, leftStart, minPrec, noIn) {
     var prec = tokType.binop;
     if (prec != null && (!noIn || tokType !== _in)) {
       if (prec > minPrec) {
