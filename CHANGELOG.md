@@ -61,8 +61,6 @@ _Note: Gaps between patch versions are faulty/broken releases._
      * `methodBinding` -> `playground.methodBinding`
      * `memoizationOperator` -> `playground.memoizationOperator`
      * `objectGetterMemoization` -> `playground.objectGetterMemoization`
-     * `asyncToGenerator` -> `misc.asyncToGenerator`
-     * `bluebirdCoroutines` -> `misc.bluebirdCoroutines`
      * `modules` -> `es6.modules`
      * `propertyNameShorthand` -> `es6.properties.shorthand`
      * `arrayComprehension` -> `es7.comprehensions`

@@ -1,4 +1,0 @@
-{
-  "noCheckAst": true,
-  "optional": ["misc.asyncToGenerator"]
-}
