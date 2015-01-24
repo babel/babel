@@ -2,8 +2,9 @@ var path = require("path");
 var fs   = require("fs");
 var _    = require("lodash");
 
-var humanise = function (val) {
-  return path.basename(val, path.extname(val)).replace(/-/g, " ");
+var humanise = function (val, noext) {
+  if (noext) val = path.basename(val, path.extname(val));
+  return val.replace(/-/g, " ");
 };
 
 var readFile = exports.readFile = function (filename) {
@@ -74,7 +75,7 @@ exports.get = function (entryName, entryLoc) {
       if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
 
       var test = {
-        title: humanise(taskName),
+        title: humanise(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
         exec: {
