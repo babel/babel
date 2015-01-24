@@ -93,6 +93,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
      * `specPropertyLiterals` -> `minification.propertyLiterals`
      * `specMemberExpressionLiterals` -> `minification.memberExpressionLiterals`
 
+## 2.13.7
+
+ * **Bug Fix**
+  * Don't realias variables that are already declared in optional `coreAliasing` transformer.
+
+## 2.13.6
+
+ * **Bug Fix**
+  * Add `NewExpression` as a valid parent for parentheses insertion for `ConditionalExpression`.
+
 ## 2.13.5
 
  * **Bug Fix**
