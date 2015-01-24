@@ -21,6 +21,10 @@ class Cat extends Animal {
     return super.sound + ' MEOW!';
   }
 
+  get name() {
+    return super.name;
+  }
+
   set name(val) {
     super.name = val;
     this._name += ' Cat';
@@ -31,4 +35,4 @@ var cat = new Cat();
 
 assert.equal(cat.sound, 'I am a cat. MEOW!');
 cat.name = 'Nyan';
-assert.equal(new Cat().name, 'Nyan Cat');
+assert.equal(cat.name, 'Nyan Cat');
