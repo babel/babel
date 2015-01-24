@@ -26,8 +26,7 @@ class Cat extends Animal {
   }
 
   set name(val) {
-    super.name = val;
-    this._name += ' Cat';
+    super.name = val + ' Cat';
   }
 }
 
