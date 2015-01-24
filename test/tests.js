@@ -169,7 +169,7 @@ test("/[a-z]/g", {
       type: "ExpressionStatement",
       expression: {
         type: "Literal",
-        value: /[a-z]/,
+        value: /[a-z]/g,
         regex: {
           pattern: "[a-z]",
           flags: "g"
@@ -7331,7 +7331,7 @@ test("var x = /[a-z]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[a-z]/i,
             loc: {
               start: {
                 line: 1,
@@ -7404,7 +7404,7 @@ test("var x = /[x-z]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[x-z]/i,
             loc: {
               start: {
                 line: 1,
@@ -7477,7 +7477,7 @@ test("var x = /[a-c]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[a-c]/i,
             loc: {
               start: {
                 line: 1,
@@ -7550,7 +7550,7 @@ test("var x = /[P QR]/i", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[P QR]/i,
             loc: {
               start: {
                 line: 1,
@@ -7623,7 +7623,7 @@ test("var x = /foo\\/bar/", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /foo\/bar/,
             loc: {
               start: {
                 line: 1,
@@ -7696,7 +7696,7 @@ test("var x = /=([^=\\s])+/g", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /=([^=\s])+/g,
             loc: {
               start: {
                 line: 1,
@@ -7769,7 +7769,7 @@ test("var x = /[P QR]/\\u0067", {
           },
           init: {
             type: "Literal",
-            value: {},
+            value: /[P QR]/g,
             loc: {
               start: {
                 line: 1,
@@ -23788,21 +23788,23 @@ test("function hello(...rest) { }", {
           }
         }
       },
-      params: [],
-      rest: {
-        type: "Identifier",
-        name: "rest",
-        loc: {
-          start: {
-            line: 1,
-            column: 18
-          },
-          end: {
-            line: 1,
-            column: 22
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "Identifier",
+          name: "rest",
+          loc: {
+            start: {
+              line: 1,
+              column: 18
+            },
+            end: {
+              line: 1,
+              column: 22
+            }
           }
         }
-      },
+      }],
       body: {
         type: "BlockStatement",
         body: [],
@@ -23877,22 +23879,25 @@ test("function hello(a, ...rest) { }", {
               column: 16
             }
           }
-        }
-      ],
-      rest: {
-        type: "Identifier",
-        name: "rest",
-        loc: {
-          start: {
-            line: 1,
-            column: 21
-          },
-          end: {
-            line: 1,
-            column: 25
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "rest",
+            loc: {
+              start: {
+                line: 1,
+                column: 21
+              },
+              end: {
+                line: 1,
+                column: 25
+              }
+            }
           }
         }
-      },
+      ],
       body: {
         type: "BlockStatement",
         body: [],
@@ -24089,21 +24094,23 @@ test("var hi = function (...r) { sayHi() };", {
           init: {
             type: "FunctionExpression",
             id: null,
-            params: [],
-            rest: {
-              type: "Identifier",
-              name: "r",
-              loc: {
-                start: {
-                  line: 1,
-                  column: 22
-                },
-                end: {
-                  line: 1,
-                  column: 23
+            params: [{
+              type: "RestElement",
+              argument: {
+                type: "Identifier",
+                name: "r",
+                loc: {
+                  start: {
+                    line: 1,
+                    column: 22
+                  },
+                  end: {
+                    line: 1,
+                    column: 23
+                  }
                 }
               }
-            },
+            }],
             body: {
               type: "BlockStatement",
               body: [
@@ -28861,4 +28868,49 @@ test("#!/usr/bin/node\n;", {}, {
     start: 0,
     end: 15
   }]
+});
+
+// https://github.com/marijnh/acorn/issues/204
+test("(function () {} / 1)", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "BinaryExpression",
+      left: {
+        type: "FunctionExpression",
+        id: null,
+        params: [],
+        body: {
+          type: "BlockStatement",
+          body: []
+        }
+      },
+      operator: "/",
+      right: {type: "Literal", value: 1}
+    }
+  }]
+});
+
+test("function f() {} / 1 /", {
+  type: "Program",
+  body: [
+    {
+      type: "FunctionDeclaration",
+      id: {type: "Identifier", name: "f"},
+      params: [],
+      body: {
+        type: "BlockStatement",
+        body: []
+      }
+    },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {pattern: " 1 ", flags: ""},
+        value: / 1 /
+      }
+    }
+  ]
 });
