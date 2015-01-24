@@ -112,8 +112,6 @@ test("class Foo { memo bar() {} }", {
           end: 25,
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           body: {
             type: "BlockStatement",
@@ -174,8 +172,6 @@ test("var foo = { memo bar() {} };",
             end: 25,
             id: null,
             params: [],
-            defaults: [],
-            rest: null,
             generator: false,
             body: {
               type: "BlockStatement",

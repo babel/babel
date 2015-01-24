@@ -200,7 +200,7 @@
   base.ReturnStatement = base.YieldExpression = function(node, st, c) {
     if (node.argument) c(node.argument, st, "Expression");
   };
-  base.ThrowStatement = base.SpreadElement = function(node, st, c) {
+  base.ThrowStatement = base.SpreadElement = base.RestElement = function(node, st, c) {
     c(node.argument, st, "Expression");
   };
   base.TryStatement = function(node, st, c) {
@@ -249,13 +249,13 @@
 
   base.Expression = skipThrough;
   base.ThisExpression = ignore;
-  base.ArrayExpression = function(node, st, c) {
+  base.ArrayExpression = base.ArrayPattern =  function(node, st, c) {
     for (var i = 0; i < node.elements.length; ++i) {
       var elt = node.elements[i];
       if (elt) c(elt, st, "Expression");
     }
   };
-  base.ObjectExpression = function(node, st, c) {
+  base.ObjectExpression = base.ObjectPattern = function(node, st, c) {
     for (var i = 0; i < node.properties.length; ++i)
       c(node.properties[i], st);
   };
@@ -267,7 +267,7 @@
   base.UnaryExpression = base.UpdateExpression = function(node, st, c) {
     c(node.argument, st, "Expression");
   };
-  base.BinaryExpression = base.AssignmentExpression = base.LogicalExpression = function(node, st, c) {
+  base.BinaryExpression = base.AssignmentExpression = base.AssignmentPattern = base.LogicalExpression = function(node, st, c) {
     c(node.left, st, "Expression");
     c(node.right, st, "Expression");
   };

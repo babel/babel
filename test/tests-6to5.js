@@ -373,8 +373,6 @@ test('(function({x, ...y}) { })', {
           ]
         }
       ],
-      defaults: [],
-      rest: null,
       generator: false,
       async: false,
       body: {
@@ -628,7 +626,6 @@ test('async function foo(promise) { await promise; }', {
         end: {line: 1, column: 26}
       }
     }],
-    defaults: [],
     body: {
       type: "BlockStatement",
       body: [{
@@ -658,7 +655,6 @@ test('async function foo(promise) { await promise; }', {
         end: {line: 1, column: 46}
       }
     },
-    rest: null,
     generator: false,
     expression: false,
     async: true,
@@ -689,7 +685,6 @@ test('(function(x) { async function inner() { await x } })', {
           }
         }
       ],
-      defaults: [],
       body: {
         type: "BlockStatement",
         body: [
@@ -704,7 +699,6 @@ test('(function(x) { async function inner() { await x } })', {
               }
             },
             params: [],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [
@@ -736,7 +730,6 @@ test('(function(x) { async function inner() { await x } })', {
                 end: {line: 1, column: 49}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             async: true,
@@ -751,7 +744,6 @@ test('(function(x) { async function inner() { await x } })', {
           end: {line: 1, column: 51}
         }
       },
-      rest: null,
       generator: false,
       expression: false,
       loc: {
@@ -797,7 +789,6 @@ test('var foo = async function(promise) { await promise; }', {
               }
             }
           ],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [
@@ -829,7 +820,6 @@ test('var foo = async function(promise) { await promise; }', {
               end: {line: 1, column: 52}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           async: true,
@@ -923,7 +913,6 @@ test('var o = { a: 1, async foo(promise) { await promise } }', {
                     }
                   }
                 ],
-                defaults: [],
                 body: {
                   type: "BlockStatement",
                   body: [
@@ -955,7 +944,6 @@ test('var o = { a: 1, async foo(promise) { await promise } }', {
                     end: {line: 1, column: 52}
                   }
                 },
-                rest: null,
                 generator: false,
                 expression: false,
                 async: true,
@@ -1035,7 +1023,6 @@ test('class Foo { async bar(promise) { await promise } }', {
                 }
               }
             ],
-            defaults: [],
             body: {
               type: "BlockStatement",
               body: [
@@ -1067,7 +1054,6 @@ test('class Foo { async bar(promise) { await promise } }', {
                 end: {line: 1, column: 48}
               }
             },
-            rest: null,
             generator: false,
             expression: false,
             async: true,
@@ -1135,7 +1121,6 @@ test('f(a, async promise => await promise)', {
               }
             }
           ],
-          defaults: [],
           body: {
             type: "AwaitExpression",
             argument: {
@@ -1151,7 +1136,6 @@ test('f(a, async promise => await promise)', {
               end: {line: 1, column: 35}
             }
           },
-          rest: null,
           generator: false,
           expression: true,
           async: true,
@@ -1220,7 +1204,6 @@ test('f(a, async(x, y) => await [x, y], b)', {
               }
             }
           ],
-          defaults: [],
           body: {
             type: "AwaitExpression",
             argument: {
@@ -1253,7 +1236,6 @@ test('f(a, async(x, y) => await [x, y], b)', {
               end: {line: 1, column: 32}
             }
           },
-          rest: null,
           generator: false,
           expression: true,
           async: true,
@@ -1314,7 +1296,6 @@ test('f(async function(promise) { await promise })', {
               }
             }
           ],
-          defaults: [],
           body: {
             type: "BlockStatement",
             body: [
@@ -1346,7 +1327,6 @@ test('f(async function(promise) { await promise })', {
               end: {line: 1, column: 43}
             }
           },
-          rest: null,
           generator: false,
           expression: false,
           async: true,
@@ -1670,7 +1650,6 @@ test('(function() { var async; async = 10 })', {
       "type": "FunctionExpression",
       "id": null,
       "params": [],
-      "defaults": [],
       "body": {
         "type": "BlockStatement",
         "body": [
@@ -1818,7 +1797,6 @@ test('(function() { var async; async = 10 })', {
           }
         }
       },
-      "rest": null,
       "generator": false,
       "expression": false,
       "range": [
@@ -1894,8 +1872,6 @@ test('class Test { async() {} }', {
           end: 23,
           id: null,
           params: [],
-          defaults: [],
-          rest: null,
           generator: false,
           async: false,
           body: {
@@ -2005,8 +1981,6 @@ test('var obj = { async() {} };', {
             end: 22,
             id: null,
             params: [],
-            defaults: [],
-            rest: null,
             generator: false,
             body: {
               type: "BlockStatement",
@@ -2044,8 +2018,6 @@ test('export async function foo(){}', {
         "name": "foo"
       },
       "params": [],
-      "defaults": [],
-      "rest": null,
       "generator": false,
       "async": true,
       "body": {
