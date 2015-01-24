@@ -653,10 +653,6 @@
       return true;
     if (prevType == _braceL)
       return curTokContext() === b_stat;
-    if (prevType === _jsxTagEnd || prevType === _jsxText)
-      return true;
-    if (prevType === _jsxName)
-      return false;
     return !tokExprAllowed;
   }
 
@@ -676,8 +672,6 @@
     if (type === _parenR || type === _braceR) {
       var out = tokContext.pop();
       if (out === b_tmpl) {
-        preserveSpace = true;
-      } else if (curTokContext() === j_expr) {
         preserveSpace = tokExprAllowed = true;
       } else if (out === b_stat && curTokContext() === f_expr) {
         tokContext.pop();
@@ -686,7 +680,11 @@
         tokExprAllowed = !(out && out.isExpr);
       }
     } else if (type === _braceL) {
-      tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      switch (curTokContext()) {
+        case j_oTag: tokContext.push(b_expr); break;
+        case j_expr: tokContext.push(b_tmpl); break;
+        default: tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      }
       tokExprAllowed = true;
     } else if (type === _dollarBraceL) {
       tokContext.push(b_tmpl);

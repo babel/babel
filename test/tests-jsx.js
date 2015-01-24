@@ -3541,6 +3541,52 @@ var fbTestFixture = {
           }
         ]
       }
+    },
+
+    '<div pre="leading" {...props} />': {
+      type: "ExpressionStatement",
+      range: [0, 32],
+      expression: {
+        type: "JSXElement",
+        range: [0, 32],
+        openingElement: {
+          type: "JSXOpeningElement",
+          range: [0, 32],
+          attributes: [
+            {
+              type: "JSXAttribute",
+              range: [5, 18],
+              name: {
+                type: "JSXIdentifier",
+                range: [5, 8],
+                name: "pre"
+              },
+              value: {
+                type: "Literal",
+                range: [9, 18],
+                value: "leading"
+              }
+            },
+            {
+              type: "JSXSpreadAttribute",
+              range: [19, 29],
+              argument: {
+                type: "Identifier",
+                range: [23, 28],
+                name: "props"
+              }
+            }
+          ],
+          name: {
+            type: "JSXIdentifier",
+            range: [1, 4],
+            name: "div"
+          },
+          selfClosing: true
+        },
+        closingElement: null,
+        children: []
+      }
     }
   }
 };
