@@ -315,7 +315,7 @@
   function initParserState() {
     lastStart = lastEnd = tokPos;
     if (options.locations) lastEndLoc = curPosition();
-    inFunction = inGenerator = strict = false;
+    inFunction = inGenerator = false;
     labels = [];
     skipSpace();
     readToken();
@@ -616,6 +616,7 @@
     tokType = _eof;
     tokContext = [b_stat];
     tokExprAllowed = true;
+    strict = false;
     if (tokPos === 0 && options.allowHashBang && input.slice(0, 2) === '#!') {
       skipLineComment(2);
     }
@@ -1523,8 +1524,10 @@
           break;
         case "SpreadElement":
           last.type = "RestElement";
-          toAssignable(last.argument);
-          checkSpreadAssign(last.argument);
+          var arg = last.argument;
+          toAssignable(arg);
+          if (arg.type !== "Identifier" && arg.type !== "ArrayPattern")
+            unexpected(arg.start);
           break;
         default:
           toAssignable(last);
@@ -1545,8 +1548,7 @@
   function parseRest() {
     var node = startNode();
     next();
-    node.argument = parseAssignableAtom();
-    checkSpreadAssign(node.argument);
+    node.argument = tokType === _name || tokType === _bracketL ? parseAssignableAtom() : unexpected();
     return finishNode(node, "RestElement");
   }
 
@@ -1596,13 +1598,6 @@
     node.left = left;
     node.right = parseMaybeAssign();
     return finishNode(node, "AssignmentPattern");
-  }
-
-  // Checks if node can be assignable spread argument.
-
-  function checkSpreadAssign(node) {
-    if (node.type !== "Identifier" && node.type !== "ArrayPattern")
-      unexpected(node.start);
   }
 
   // Verify that argument names are not repeated, and it does not
@@ -1691,7 +1686,11 @@
         break;
 
       case "AssignmentPattern":
+        checkLVal(expr.left);
+        break;
+
       case "RestElement":
+        checkLVal(expr.argument);
         break;
 
       default:

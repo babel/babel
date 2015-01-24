@@ -325,9 +325,6 @@
   }
 
   function parseStatement() {
-    if (token.type === tt.slash || token.type === tt.assign && token.value === "/=")
-      next(true);
-
     var starttype = token.type, node = startNode();
 
     switch (starttype) {
