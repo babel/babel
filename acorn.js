@@ -1119,36 +1119,33 @@
   }
 
   function readString(quote) {
-    ++tokPos;
-    var out = "";
+    var out = "", chunkStart = ++tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated string constant");
       var ch = input.charCodeAt(tokPos);
-      if (ch === quote) {
-        ++tokPos;
-        return finishToken(_string, out);
-      }
+      if (ch === quote) break;
       if (ch === 92) { // '\'
+        out += input.slice(chunkStart, tokPos);
         out += readEscapedChar();
+        chunkStart = tokPos;
       } else {
+        if (isNewLine(ch)) raise(tokStart, "Unterminated string constant");
         ++tokPos;
-        if (isNewLine(ch)) {
-          raise(tokStart, "Unterminated string constant");
-        }
-        out += String.fromCharCode(ch); // '\'
       }
     }
+    out += input.slice(chunkStart, tokPos++);
+    return finishToken(_string, out);
   }
 
   // Reads template string tokens.
 
   function readTmplToken() {
-    var out = "", start = tokPos;
+    var out = "", chunkStart = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated template");
       var ch = input.charCodeAt(tokPos);
       if (ch === 96 || ch === 36 && input.charCodeAt(tokPos + 1) === 123) { // '`', '${'
-        if (tokPos === start && tokType === _template) {
+        if (tokPos === tokStart && tokType === _template) {
           if (ch === 36) {
             tokPos += 2;
             return finishToken(_dollarBraceL);
@@ -1157,23 +1154,29 @@
             return finishToken(_backQuote);
           }
         }
+        out += input.slice(chunkStart, tokPos);
         return finishToken(_template, out);
       }
       if (ch === 92) { // '\'
+        out += input.slice(chunkStart, tokPos);
         out += readEscapedChar();
+        chunkStart = tokPos;
+      } else if (isNewLine(ch)) {
+        out += input.slice(chunkStart, tokPos);
+        ++tokPos;
+        if (ch === 13 && input.charCodeAt(tokPos) === 10) {
+          ++tokPos;
+          out += "\n";
+        } else {
+          out += String.fromCharCode(ch);
+        }
+        if (options.locations) {
+          ++tokCurLine;
+          tokLineStart = tokPos;
+        }
+        chunkStart = tokPos;
       } else {
         ++tokPos;
-        if (isNewLine(ch)) {
-          if (ch === 13 && input.charCodeAt(tokPos) === 10) {
-            ++tokPos;
-            ch = 10;
-          }
-          if (options.locations) {
-            ++tokCurLine;
-            tokLineStart = tokPos;
-          }
-        }
-        out += String.fromCharCode(ch);
       }
     }
   }
@@ -1228,20 +1231,19 @@
   // Read an identifier, and return it as a string. Sets `containsEsc`
   // to whether the word contained a '\u' escape.
   //
-  // Only builds up the word character-by-character when it actually
-  // containeds an escape, as a micro-optimization.
+  // Incrementally adds only escaped chars, adding other chunks as-is
+  // as a micro-optimization.
 
   function readWord1() {
     containsEsc = false;
-    var word, first = true, start = tokPos;
+    var word = "", first = true, chunkStart = tokPos;
     for (;;) {
       var ch = input.charCodeAt(tokPos);
       if (isIdentifierChar(ch)) {
-        if (containsEsc) word += input.charAt(tokPos);
         ++tokPos;
       } else if (ch === 92) { // "\"
-        if (!containsEsc) word = input.slice(start, tokPos);
         containsEsc = true;
+        word += input.slice(chunkStart, tokPos);
         if (input.charCodeAt(++tokPos) != 117) // "u"
           raise(tokPos, "Expecting Unicode escape sequence \\uXXXX");
         ++tokPos;
@@ -1251,12 +1253,13 @@
         if (!(first ? isIdentifierStart(esc) : isIdentifierChar(esc)))
           raise(tokPos - 4, "Invalid Unicode escape");
         word += escStr;
+        chunkStart = tokPos;
       } else {
         break;
       }
       first = false;
     }
-    return containsEsc ? word : input.slice(start, tokPos);
+    return word + input.slice(chunkStart, tokPos);
   }
 
   // Read an identifier or keyword token. Will check for reserved
