@@ -13745,7 +13745,7 @@ testFail("[2] = 42", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
 testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
 
-testFail("( { get x() {} } ) = 0", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("( { get x() {} } ) = 0", "Object pattern can't contain getter or setter (1:8)", {ecmaVersion: 6});
 
 testFail("x \n is y", "Unexpected token (2:4)", {ecmaVersion: 6});
 
@@ -13801,9 +13801,9 @@ testFail("\"use strict\"; (a) => 00", "Invalid number (1:21)", {ecmaVersion: 6})
 
 testFail("() <= 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
-testFail("(10) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("(10) => 00", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("(10, 20) => 00", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("(10, 20) => 00", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
 testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 
@@ -14037,7 +14037,7 @@ testFail("\"use strict\"; function x(a, ...[a]){}", "Argument name clash in stri
 
 testFail("(...a, b) => {}", "Unexpected token (1:5)", {ecmaVersion: 6});
 
-testFail("([ 5 ]) => {}", "Unexpected token (1:3)", {ecmaVersion: 6});
+testFail("([ 5 ]) => {}", "Assigning to rvalue (1:3)", {ecmaVersion: 6});
 
 testFail("({ 5 }) => {}", "Unexpected token (1:5)", {ecmaVersion: 6});
 
@@ -14045,7 +14045,7 @@ testFail("(...[ 5 ]) => {}", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 testFail("[...{ a }] = b", "Unexpected token (1:4)", {ecmaVersion: 6});
 
-testFail("[...a, b] = c", "Unexpected token (1:1)", {ecmaVersion: 6});
+testFail("[...a, b] = c", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
 testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
 
@@ -14120,7 +14120,7 @@ testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)"
 
 testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
 
-testFail("({ get test() { } }) => 42", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("({ get test() { } }) => 42", "Object pattern can't contain getter or setter (1:7)", {ecmaVersion: 6});
 
 /* Regression tests */
 
@@ -14509,6 +14509,259 @@ test("var [localVar = defaultValue] = obj", {
   loose: false
 });
 
+test("({x = 0} = obj)", {
+  type: "Program",
+  range: [0, 15],
+  body: [{
+    type: "ExpressionStatement",
+    range: [0, 15],
+    expression: {
+      type: "AssignmentExpression",
+      range: [1, 14],
+      operator: "=",
+      left: {
+        type: "ObjectPattern",
+        range: [1, 8],
+        properties: [{
+          type: "Property",
+          range: [2, 7],
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            range: [2, 3],
+            name: "x"
+          },
+          kind: "init",
+          value: {
+            type: "AssignmentPattern",
+            range: [6, 7],
+            operator: "=",
+            left: {
+              type: "Identifier",
+              range: [2, 3],
+              name: "x"
+            },
+            right: {
+              type: "Literal",
+              range: [6, 7],
+              value: 0
+            }
+          }
+        }]
+      },
+      right: {
+        type: "Identifier",
+        range: [11, 14],
+        name: "obj"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  loose: false
+});
+
+test("({x = 0}) => x", {
+  type: "Program",
+  range: [0, 14],
+  body: [{
+    type: "ExpressionStatement",
+    range: [0, 14],
+    expression: {
+      type: "ArrowFunctionExpression",
+      range: [0, 14],
+      id: null,
+      generator: false,
+      expression: true,
+      params: [{
+        type: "ObjectPattern",
+        range: [1, 8],
+        properties: [{
+          type: "Property",
+          range: [2, 7],
+          method: false,
+          shorthand: true,
+          computed: false,
+          key: {
+            type: "Identifier",
+            range: [2, 3],
+            name: "x"
+          },
+          kind: "init",
+          value: {
+            type: "AssignmentPattern",
+            range: [6, 7],
+            operator: "=",
+            left: {
+              type: "Identifier",
+              range: [2, 3],
+              name: "x"
+            },
+            right: {
+              type: "Literal",
+              range: [6, 7],
+              value: 0
+            }
+          }
+        }]
+      }],
+      body: {
+        type: "Identifier",
+        range: [13, 14],
+        name: "x"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  loose: false
+});
+
+test("[a, {b: {c = 1}}] = arr", {
+  type: "Program",
+  range: [0, 23],
+  body: [{
+    type: "ExpressionStatement",
+    range: [0, 23],
+    expression: {
+      type: "AssignmentExpression",
+      range: [0, 23],
+      operator: "=",
+      left: {
+        type: "ArrayPattern",
+        range: [0, 17],
+        elements: [
+          {
+            type: "Identifier",
+            range: [1, 2],
+            name: "a"
+          },
+          {
+            type: "ObjectPattern",
+            range: [4, 16],
+            properties: [{
+              type: "Property",
+              range: [5, 15],
+              method: false,
+              shorthand: false,
+              computed: false,
+              key: {
+                type: "Identifier",
+                range: [5, 6],
+                name: "b"
+              },
+              value: {
+                type: "ObjectPattern",
+                range: [8, 15],
+                properties: [{
+                  type: "Property",
+                  range: [9, 14],
+                  method: false,
+                  shorthand: true,
+                  computed: false,
+                  key: {
+                    type: "Identifier",
+                    range: [9, 10],
+                    name: "c"
+                  },
+                  kind: "init",
+                  value: {
+                    type: "AssignmentPattern",
+                    range: [13, 14],
+                    operator: "=",
+                    left: {
+                      type: "Identifier",
+                      range: [9, 10],
+                      name: "c"
+                    },
+                    right: {
+                      type: "Literal",
+                      range: [13, 14],
+                      value: 1
+                    }
+                  }
+                }]
+              },
+              kind: "init"
+            }]
+          }
+        ]
+      },
+      right: {
+        type: "Identifier",
+        range: [20, 23],
+        name: "arr"
+      }
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  loose: false
+});
+
+test("for ({x = 0} in arr);", {
+  type: "Program",
+  range: [0, 21],
+  body: [{
+    type: "ForInStatement",
+    range: [0, 21],
+    left: {
+      type: "ObjectPattern",
+      range: [5, 12],
+      properties: [{
+        type: "Property",
+        range: [6, 11],
+        method: false,
+        shorthand: true,
+        computed: false,
+        key: {
+          type: "Identifier",
+          range: [6, 7],
+          name: "x"
+        },
+        kind: "init",
+        value: {
+          type: "AssignmentPattern",
+          range: [10, 11],
+          operator: "=",
+          left: {
+            type: "Identifier",
+            range: [6, 7],
+            name: "x"
+          },
+          right: {
+            type: "Literal",
+            range: [10, 11],
+            value: 0
+          }
+        }
+      }]
+    },
+    right: {
+      type: "Identifier",
+      range: [16, 19],
+      name: "arr"
+    },
+    body: {
+      type: "EmptyStatement",
+      range: [20, 21]
+    }
+  }]
+}, {
+  ecmaVersion: 6,
+  ranges: true,
+  loose: false
+});
+
+testFail("obj = {x = 0}", "Unexpected token (1:9)", {ecmaVersion: 6});
+
+testFail("f({x = 0})", "Unexpected token (1:5)", {ecmaVersion: 6});
+
 // https://github.com/marijnh/acorn/issues/191
 
 test("try {} catch ({message}) {}", {
@@ -14760,3 +15013,6 @@ testFail("if (1) let x = 10;", "Unexpected token (1:7)", {ecmaVersion: 6});
 testFail("for (;;) const x = 10;", "Unexpected token (1:9)", {ecmaVersion: 6});
 testFail("while (1) function foo(){}", "Unexpected token (1:10)", {ecmaVersion: 6});
 testFail("if (1) ; else class Cls {}", "Unexpected token (1:14)", {ecmaVersion: 6});
+
+testFail("'use strict'; [...eval] = arr", "Assigning to eval in strict mode (1:18)", {ecmaVersion: 6});
+testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict mode (1:16)", {ecmaVersion: 6});
