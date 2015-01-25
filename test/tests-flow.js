@@ -5476,239 +5476,176 @@ var fbTestFixture = {
     },
     "function foo(...rest: Array<number>) {}": {
       type: "FunctionDeclaration",
+      start: 0,
+      end: 39,
       id: {
         type: "Identifier",
-        name: "foo",
-        range: [9, 12],
-        loc: {
-          start: { line: 1, column: 9 },
-          end: { line: 1, column: 12 }
-        }
-      },
-      params: [],
-      body: {
-        type: "BlockStatement",
-        body: [],
-        range: [37, 39],
-        loc: {
-          start: { line: 1, column: 37 },
-          end: { line: 1, column: 39 }
-        }
-      },
-      rest: {
-        type: "Identifier",
-        name: "rest",
-        typeAnnotation: {
-          type: "TypeAnnotation",
-          typeAnnotation: {
-            type: "GenericTypeAnnotation",
-            id: {
-              type: "Identifier",
-              name: "Array",
-              range: [22, 27],
-              loc: {
-                start: { line: 1, column: 22 },
-                end: { line: 1, column: 27 }
-              }
-            },
-            typeParameters: {
-              type: "TypeParameterInstantiation",
-              params: [{
-                type: "NumberTypeAnnotation",
-                range: [28, 34],
-                loc: {
-                  start: { line: 1, column: 28 },
-                  end: { line: 1, column: 34 }
-                }
-              }],
-              range: [27, 35],
-              loc: {
-                start: { line: 1, column: 27 },
-                end: { line: 1, column: 35 }
-              }
-            },
-            range: [22, 35],
-            loc: {
-              start: { line: 1, column: 22 },
-              end: { line: 1, column: 35 }
-            }
-          },
-          range: [20, 35],
-          loc: {
-            start: { line: 1, column: 20 },
-            end: { line: 1, column: 35 }
-          }
-        },
-        range: [16, 35],
-        loc: {
-          start: { line: 1, column: 16 },
-          end: { line: 1, column: 35 }
-        }
+        start: 9,
+        end: 12,
+        name: "foo"
       },
       generator: false,
       expression: false,
-      range: [0, 39],
-      loc: {
-        start: { line: 1, column: 0 },
-        end: { line: 1, column: 39 }
+      params: [{
+        type: "RestElement",
+        start: 13,
+        end: 35,
+        argument: {
+          type: "Identifier",
+          start: 16,
+          end: 20,
+          name: "rest"
+        },
+        typeAnnotation: {
+          type: "TypeAnnotation",
+          start: 20,
+          end: 35,
+          typeAnnotation: {
+            type: "GenericTypeAnnotation",
+            start: 22,
+            end: 35,
+            typeParameters: {
+              type: "TypeParameterInstantiation",
+              start: 27,
+              end: 35,
+              params: [
+                {
+                  type: "NumberTypeAnnotation",
+                  start: 28,
+                  end: 34
+                }
+              ]
+            },
+            id: {
+              type: "Identifier",
+              start: 22,
+              end: 27,
+              name: "Array"
+            }
+          }
+        }
+      }],
+      body: {
+        type: "BlockStatement",
+        start: 37,
+        end: 39,
+        body: []
       }
     },
     "(function (...rest: Array<number>) {})": {
       type: "ExpressionStatement",
+      start: 0,
+      end: 38,
       expression: {
         type: "FunctionExpression",
+        start: 1,
+        end: 37,
         id: null,
-        params: [],
-        body: {
-          type: "BlockStatement",
-          body: [],
-          range: [35, 37],
-          loc: {
-            start: { line: 1, column: 35 },
-            end: { line: 1, column: 37 }
-          }
-        },
-        rest: {
-          type: "Identifier",
-          name: "rest",
-          typeAnnotation: {
-            type: "TypeAnnotation",
-            typeAnnotation: {
-              type: "GenericTypeAnnotation",
-              id: {
-                type: "Identifier",
-                name: "Array",
-                range: [20, 25],
-                loc: {
-                  start: { line: 1, column: 20 },
-                  end: { line: 1, column: 25 }
-                }
-              },
-              typeParameters: {
-                type: "TypeParameterInstantiation",
-                params: [{
-                  type: "NumberTypeAnnotation",
-                  range: [26, 32],
-                  loc: {
-                    start: { line: 1, column: 26 },
-                    end: { line: 1, column: 32 }
-                  }
-                }],
-                range: [25, 33],
-                loc: {
-                  start: { line: 1, column: 25 },
-                  end: { line: 1, column: 33 }
-                }
-              },
-              range: [20, 33],
-              loc: {
-                start: { line: 1, column: 20 },
-                end: { line: 1, column: 33 }
-              }
-            },
-            range: [18, 33],
-            loc: {
-              start: { line: 1, column: 18 },
-              end: { line: 1, column: 33 }
-            }
-          },
-          range: [14, 33],
-          loc: {
-            start: { line: 1, column: 14 },
-            end: { line: 1, column: 33 }
-          }
-        },
         generator: false,
         expression: false,
-        range: [1, 37],
-        loc: {
-          start: { line: 1, column: 1 },
-          end: { line: 1, column: 37 }
+        params: [{
+          type: "RestElement",
+          start: 11,
+          end: 33,
+          argument: {
+            type: "Identifier",
+            start: 14,
+            end: 18,
+            name: "rest"
+          },
+          typeAnnotation: {
+            type: "TypeAnnotation",
+            start: 18,
+            end: 33,
+            typeAnnotation: {
+              type: "GenericTypeAnnotation",
+              start: 20,
+              end: 33,
+              typeParameters: {
+                type: "TypeParameterInstantiation",
+                start: 25,
+                end: 33,
+                params: [
+                  {
+                    type: "NumberTypeAnnotation",
+                    start: 26,
+                    end: 32
+                  }
+                ]
+              },
+              id: {
+                type: "Identifier",
+                start: 20,
+                end: 25,
+                name: "Array"
+              }
+            }
+          }
+        }],
+        body: {
+          type: "BlockStatement",
+          start: 35,
+          end: 37,
+          body: []
         }
-      },
-      range: [0, 38],
-      loc: {
-        start: { line: 1, column: 0 },
-        end: { line: 1, column: 38 }
       }
     },
     "((...rest: Array<number>) => rest)": {
       type: "ExpressionStatement",
+      start: 0,
+      end: 34,
       expression: {
         type: "ArrowFunctionExpression",
+        start: 1,
+        end: 33,
         id: null,
-        params: [],
-        body: {
-          type: "Identifier",
-          name: "rest",
-          range: [29, 33],
-          loc: {
-            start: { line: 1, column: 29 },
-            end: { line: 1, column: 33 }
-          }
-        },
-        rest: {
-          type: "Identifier",
-          name: "rest",
-          typeAnnotation: {
-            type: "TypeAnnotation",
-            typeAnnotation: {
-              type: "GenericTypeAnnotation",
-              id: {
-                type: "Identifier",
-                name: "Array",
-                range: [11, 16],
-                loc: {
-                  start: { line: 1, column: 11 },
-                  end: { line: 1, column: 16 }
-                }
-              },
-              typeParameters: {
-                type: "TypeParameterInstantiation",
-                params: [{
-                  type: "NumberTypeAnnotation",
-                  range: [17, 23],
-                  loc: {
-                    start: { line: 1, column: 17 },
-                    end: { line: 1, column: 23 }
-                  }
-                }],
-                range: [16, 24],
-                loc: {
-                  start: { line: 1, column: 16 },
-                  end: { line: 1, column: 24 }
-                }
-              },
-              range: [11, 24],
-              loc: {
-                start: { line: 1, column: 11 },
-                end: { line: 1, column: 24 }
-              }
-            },
-            range: [9, 24],
-            loc: {
-              start: { line: 1, column: 9 },
-              end: { line: 1, column: 24 }
-            }
-          },
-          range: [5, 24],
-          loc: {
-            start: { line: 1, column: 5 },
-            end: { line: 1, column: 24 }
-          }
-        },
         generator: false,
         expression: true,
-        range: [1, 33],
-        loc: {
-          start: { line: 1, column: 1 },
-          end: { line: 1, column: 33 }
+        params: [{
+          type: "RestElement",
+          start: 2,
+          end: 9,
+          argument: {
+            type: "Identifier",
+            start: 5,
+            end: 9,
+            name: "rest"
+          },
+          returnType: {
+            type: "TypeAnnotation",
+            start: 9,
+            end: 24,
+            typeAnnotation: {
+              type: "GenericTypeAnnotation",
+              start: 11,
+              end: 24,
+              typeParameters: {
+                type: "TypeParameterInstantiation",
+                start: 16,
+                end: 24,
+                params: [
+                  {
+                    type: "NumberTypeAnnotation",
+                    start: 17,
+                    end: 23
+                  }
+                ]
+              },
+              id: {
+                type: "Identifier",
+                start: 11,
+                end: 16,
+                name: "Array"
+              }
+            }
+          }
+        }],
+        body: {
+          type: "Identifier",
+          start: 29,
+          end: 33,
+          name: "rest"
         }
-      },
-      range: [0, 34],
-      loc: {
-        start: { line: 1, column: 0 },
-        end: { line: 1, column: 34 }
       }
     },
     "var a: Map<string, Array<string> >": {
