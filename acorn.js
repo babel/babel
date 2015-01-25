@@ -2414,7 +2414,7 @@
     while (!eat(close)) {
       first ? first = false : expect(_comma);
       if (tokType === _ellipsis) {
-        elts.push(parseAssingableListItem(parseRest()));
+        elts.push(parseAssignableListItem(parseRest()));
         expect(close);
         break;
       }
@@ -2422,14 +2422,14 @@
       if (allowEmpty && tokType === _comma) {
         elem = null;
       } else {
-        elem = parseAssingableListItem(parseMaybeDefault());
+        elem = parseAssignableListItem(parseMaybeDefault());
       }
       elts.push(elem);
     }
     return elts;
   }
 
-  function parseAssingableListItem(param) {
+  function parseAssignableListItem(param) {
     if (eat(_question)) {
       param.optional = true;
     }
