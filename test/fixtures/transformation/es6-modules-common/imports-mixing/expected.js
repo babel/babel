@@ -4,6 +4,8 @@ var _interopRequire = function (obj) {
   return obj && obj.__esModule ? obj["default"] : obj;
 };
 
-var foo = _interopRequire(require("foo"));
+var _foo = require("foo");
 
-var xyz = require("foo").baz;
+var foo = _interopRequire(_foo);
+
+var xyz = _foo.baz;

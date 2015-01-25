@@ -20,8 +20,10 @@ var giveWord = _regeneratorRuntime.mark(function giveWord() {
 });
 
 exports.giveWord = giveWord;
-var foo = _to5Helpers.interopRequire(require("someModule"));
+var _someModule = require("someModule");
 
-var bar = _to5Helpers.interopRequireWildcard(require("someModule"));
+var foo = _to5Helpers.interopRequire(_someModule);
+
+var bar = _to5Helpers.interopRequireWildcard(_someModule);
 
 var myWord = exports.myWord = _core.Symbol("abc");

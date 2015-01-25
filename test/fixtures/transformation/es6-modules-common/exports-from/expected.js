@@ -16,12 +16,14 @@ var _defaults = function (obj, defaults) {
   return obj;
 };
 
-_defaults(exports, _interopRequireWildcard(require("foo")));
+var _foo = require("foo");
 
-exports.foo = require("foo").foo;
-exports.foo = require("foo").foo;
-exports.bar = require("foo").bar;
-exports.bar = require("foo").foo;
-exports["default"] = require("foo").foo;
-exports["default"] = require("foo").foo;
-exports.bar = require("foo").bar;
+_defaults(exports, _interopRequireWildcard(_foo));
+
+exports.foo = _foo.foo;
+exports.foo = _foo.foo;
+exports.bar = _foo.bar;
+exports.bar = _foo.foo;
+exports["default"] = _foo.foo;
+exports["default"] = _foo.foo;
+exports.bar = _foo.bar;
