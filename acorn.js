@@ -2414,9 +2414,7 @@
     while (!eat(close)) {
       first ? first = false : expect(_comma);
       if (tokType === _ellipsis) {
-        var rest = parseRest();
-        parseAssingableListItem(rest);
-        elts.push(rest);
+        elts.push(parseAssingableListItem(parseRest()));
         expect(close);
         break;
       }
@@ -2424,8 +2422,7 @@
       if (allowEmpty && tokType === _comma) {
         elem = null;
       } else {
-        elem = parseMaybeDefault();
-        parseAssingableListItem(elem);
+        elem = parseAssingableListItem(parseMaybeDefault());
       }
       elts.push(elem);
     }
@@ -2440,6 +2437,7 @@
       param.typeAnnotation = parseTypeAnnotation();
     }
     finishNode(param, param.type);
+    return param;
   }
 
   // Parses assignment pattern around given atom if possible.
