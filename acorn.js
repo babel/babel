@@ -2630,7 +2630,7 @@
     default:
       var maybeName = tokVal, expr = parseExpression(false, true);
 
-      if (options.ecmaVersion >= 7 && starttype === _name && maybeName === "async" && tokType === _function) {
+      if (options.ecmaVersion >= 7 && starttype === _name && maybeName === "async" && tokType === _function && !canInsertSemicolon()) {
         next();
         var func = parseFunctionStatement(node);
         func.async = true;
@@ -3225,7 +3225,7 @@
           }
 
           // normal functions
-          if (tokType === _function) {
+          if (tokType === _function && !canInsertSemicolon()) {
             next();
             return parseFunction(node, false, true);
           }
