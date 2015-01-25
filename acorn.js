@@ -2548,7 +2548,6 @@
 
       case "SpreadProperty":
       case "VirtualPropertyExpression":
-      case "RestElement":
         break;
 
       case "RestElement":
@@ -2626,16 +2625,18 @@
       return starttype === _import ? parseImport(node) : parseExport(node);
 
     case _name:
-      if (tokVal === "async") {
-        var id = parseIdent();
+      /*if (options.ecmaVersion >= 7 && tokVal === "async") {
+        var start = storeCurrentPos();
+        var expr  = startNode();
+        var id    = parseIdent();
 
         if (tokType === _function) {
           next();
-          return parseFunction(node, true, true);
+          return parseFunction(expr, true, true);
         } else {
-          unexpected();
+          // ???
         }
-      }
+      }*/
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -2662,6 +2663,15 @@
           } else if (expr.name === "type") {
             return parseTypeAlias(node);
           }
+        }
+      }
+
+      if (expr.type === "FunctionExpression" && expr.async) {
+        if (expr.id) {
+          expr.type = "FunctionDeclaration";
+          return expr;
+        } else {
+          unexpected(expr.start + "async function ".length); // this is such a hack
         }
       }
 
@@ -3330,18 +3340,27 @@
       }
 
       var innerStart = storeCurrentPos(), exprList = [], first = true;
-      var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart;
+      var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart, typeStart;
+
+      var parseParenItem = function (node) {
+        if (tokType === _colon) {
+          typeStart = typeStart || tokStart;
+          node.returnType = parseTypeAnnotation();
+        }
+        return node;
+      };
+
       while (tokType !== _parenR) {
         first ? first = false : expect(_comma);
         if (tokType === _ellipsis) {
           spreadStart = tokStart;
-          exprList.push(parseRest());
+          exprList.push(parseParenItem(parseRest()));
           break;
         } else {
           if (tokType === _parenL && !innerParenStart) {
             innerParenStart = tokStart;
           }
-          exprList.push(parseMaybeAssign(false, refShorthandDefaultPos));
+          exprList.push(parseParenItem(parseMaybeAssign(false, refShorthandDefaultPos)));
         }
       }
       var innerEnd = storeCurrentPos();
@@ -3353,6 +3372,7 @@
       }
 
       if (!exprList.length) unexpected(lastStart);
+      if (typeStart) unexpected(typeStart);
       if (spreadStart) unexpected(spreadStart);
       if (refShorthandDefaultPos.start) unexpected(refShorthandDefaultPos.start);
 
@@ -3762,10 +3782,10 @@
 
   // Parses module export declaration.
 
-    function parseExport(node) {
+  function parseExport(node) {
     next();
     // export var|const|let|function|class ...;
-    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class) {
+    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || isContextual("async")) {
       node.declaration = parseStatement(true);
       node['default'] = false;
       node.specifiers = null;
@@ -3909,7 +3929,7 @@
       unexpected();
     }
     node.delegate = eat(_star);
-    node.argument = parseExpression(true);
+    node.argument = parseMaybeAssign(true);
     return finishNode(node, "AwaitExpression");
   }
 
@@ -4676,7 +4696,6 @@
         }
     }
 
-    console.log(tokVal, tokType, inType);
     unexpected();
   }
 
@@ -4731,8 +4750,11 @@
   function parseTypeAnnotation() {
     var node = startNode();
 
+    var oldInType = inType;
+    inType = true;
     expect(_colon);
     node.typeAnnotation = parseType();
+    inType = oldInType;
 
     return finishNode(node, "TypeAnnotation");
   }
