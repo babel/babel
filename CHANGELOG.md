@@ -19,11 +19,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * `this` is now illegal in the top level scope when using the default `useStrict` transformer.
   * New `asyncToGenerator` helper that's much more compact.
   * Throw errors on unknown options.
+  * More reliable default parameter scope.
  * **Internal**
-  * Rewritten constants transformer.
+  * Rewritten a lot of the internals to much simpler.
+  * Removed TDZ from default parameters as it was very wonky and unreliable.
   * Upgrade `core-js` to `0.4.6`.
   * Upgrade `acorn-6to5`.
    * JSX support is now on-par with react-tools/esprima.
+   * Shorthand destructuring.
  * **Bug Fix**
   * Generators now work flawlessly with any parameter transformers.
   * Optional async function transformers should not name their functions.
@@ -33,6 +36,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **New Feature**
   * New `selfContained` transformer.
   * New `undeclaredVariableCheck` optional transformer.
+  * Added `--blacklist` and `--whitelist` options to `6to5-node`.
  * **Breaking Change**
   * Caching is now always enabled for the require hook. It also now no longer caches require resolutions.
   * Bare `super();` only works inside of constructors.
@@ -48,6 +52,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
    * `includeRegenerator` has been removed.
    * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * **Modules**
+    * Module interop now only collapses to `module.exports` when there's a **single** export that's default.
     * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
     * Module formatters `umdStrict`, `amdStrict` and `commonStrict` have been removed.
   * **Transformers**
@@ -80,7 +85,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
      * `unicodeRegex` -> `es6.unicodeRegex`
      * `abstractReferences` -> `es7.abstractReferences`
      * `constants` -> `es6.constants`
-     * `letScoping` -> `es6.letScoping`
+     * `letScoping` -> `es6.blockScoping`
      * `blockScopingTDZ` -> `es6.blockScopingTDZ`
      * `generators` -> `regenerator`
      * `protoToAssign` -> `spec.protoToAssign`
