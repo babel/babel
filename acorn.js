@@ -2170,7 +2170,7 @@
   }
 
   function startNode() {
-    var node = new Node();
+    var node = new exports.Node();
     if (options.locations)
       node.loc = new SourceLocation();
     if (options.directSourceFile)
@@ -2189,7 +2189,7 @@
   }
 
   function startNodeAt(pos) {
-    var node = new Node(), start = pos;
+    var node = new exports.Node(), start = pos;
     if (options.locations) {
       node.loc = new SourceLocation();
       node.loc.start = start[1];
@@ -2562,7 +2562,7 @@
   // Parse a program. Initializes the parser, reads any number of
   // statements, and wraps them in a Program node.  Optionally takes a
   // `program` argument.  If present, the statements will be appended
-  // to its body instead of creating a new node.
+  // to its body instead of creating a new exports.Node.
 
   function parseTopLevel(node) {
     var first = true;
