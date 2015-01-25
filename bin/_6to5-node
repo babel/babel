@@ -17,7 +17,7 @@ program.option("-i, --ignore [regex]", "Ignore all files that match this regex w
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
 program.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
 program.option("-g, --playground", "Enable playground support");
-program.option("-l, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
+program.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 program.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 
 var pkg = require("../package.json");
