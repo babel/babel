@@ -2622,20 +2622,6 @@
         raise(tokStart, "'import' and 'export' may only appear at the top level");
       return starttype === _import ? parseImport(node) : parseExport(node);
 
-    case _name:
-      /*if (options.ecmaVersion >= 7 && tokVal === "async") {
-        var start = storeCurrentPos();
-        var expr  = startNode();
-        var id    = parseIdent();
-
-        if (tokType === _function) {
-          next();
-          return parseFunction(expr, true, true);
-        } else {
-          // ???
-        }
-      }*/
-
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
       // simply start parsing an expression, and afterwards, if the
@@ -2643,6 +2629,13 @@
       // Identifier node, we switch to interpreting it as a label.
     default:
       var maybeName = tokVal, expr = parseExpression(false, true);
+
+      if (options.ecmaVersion >= 7 && starttype === _name && maybeName === "async" && tokType === _function) {
+        next();
+        var func = parseFunctionStatement(node);
+        func.async = true;
+        return func;
+      }
 
       if (starttype === _name && expr.type === "Identifier") {
         if (eat(_colon)) {
@@ -3233,9 +3226,6 @@
 
           // normal functions
           if (tokType === _function) {
-            // no line terminator after `async` contextual keyword
-            if (canInsertSemicolon()) return id;
-
             next();
             return parseFunction(node, false, true);
           }
