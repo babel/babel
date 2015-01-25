@@ -52,7 +52,7 @@ var run = function (task, done) {
   var noCheckAst = opts.noCheckAst;
   delete opts.noCheckAst;
 
-  var checkAst = function (result) {
+  var checkAst = function (result, opts) {
     if (noCheckAst) return;
 
     var errors = esvalid.errors(result.ast.program);
@@ -61,13 +61,13 @@ var run = function (task, done) {
       _.each(errors, function (err) {
         msg.push(err.message + " - " + JSON.stringify(err.node));
       });
-      throw new Error(msg.join(". "));
+      throw new Error(opts.loc + ": " + msg.join(". "));
     }
   };
 
   if (execCode) {
     result = transform(execCode, getOpts(exec));
-    checkAst(result);
+    checkAst(result, exec);
     execCode = result.code;
 
     try {
@@ -94,7 +94,7 @@ var run = function (task, done) {
   var expectCode = expect.code;
   if (!execCode || actualCode) {
     result     = transform(actualCode, getOpts(actual));
-    checkAst(result);
+    checkAst(result, actual);
     actualCode = result.code;
 
     try {
