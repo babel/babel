@@ -656,8 +656,8 @@
 
   var b_stat = {token: "{", isExpr: false}, b_expr = {token: "{", isExpr: true}, b_tmpl = {token: "${", isExpr: true};
   var p_stat = {token: "(", isExpr: false}, p_expr = {token: "(", isExpr: true};
-  var j_oTag = {token: "<tag", isExpr: false}, j_cTag = {token: "</tag", isExpr: false}, j_expr = {token: "<tag>...</tag>", isExpr: true};
   var q_tmpl = {token: "`", isExpr: true}, f_expr = {token: "function", isExpr: true};
+  var j_oTag = {token: "<tag", isExpr: false}, j_cTag = {token: "</tag", isExpr: false}, j_expr = {token: "<tag>...</tag>", isExpr: true};
 
   function curTokContext() {
     return tokContext[tokContext.length - 1];
@@ -673,10 +673,6 @@
       return true;
     if (prevType == _braceL)
       return curTokContext() === b_stat;
-    if (prevType === _jsxTagEnd || prevType === _jsxText)
-      return true;
-    if (prevType === _jsxName)
-      return false;
     return !tokExprAllowed;
   }
 
@@ -696,7 +692,7 @@
     if (type === _parenR || type === _braceR) {
       var out = tokContext.pop();
       if (out === b_tmpl) {
-        preserveSpace = true;
+        preserveSpace = tokExprAllowed = true;
       } else if (out === b_stat && curTokContext() === f_expr) {
         tokContext.pop();
         tokExprAllowed = false;
@@ -704,7 +700,11 @@
         tokExprAllowed = !(out && out.isExpr);
       }
     } else if (type === _braceL) {
-      tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      switch (curTokContext()) {
+        case j_oTag: tokContext.push(b_expr); break;
+        case j_expr: tokContext.push(b_tmpl); break;
+        default: tokContext.push(braceIsBlock(prevType) ? b_stat : b_expr);
+      }
       tokExprAllowed = true;
     } else if (type === _dollarBraceL) {
       tokContext.push(b_tmpl);

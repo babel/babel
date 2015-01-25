@@ -40,6 +40,7 @@ var fbTestFixture = {
         end: { line: 1, column: 5 }
       }
     },
+
     '<n:a n:v />': {
       type: 'ExpressionStatement',
       expression: {
@@ -128,6 +129,7 @@ var fbTestFixture = {
         end: { line: 1, column: 11 }
       }
     },
+
     '<a n:foo="bar"> {value} <b><c /></b></a>': {
       type: 'ExpressionStatement',
       expression: {
@@ -330,6 +332,7 @@ var fbTestFixture = {
         end: { line: 1, column: 40 }
       }
     },
+
     '<a b={" "} c=" " d="&amp;" e="&ampr;" />': {
       type: "ExpressionStatement",
       expression: {
@@ -416,6 +419,7 @@ var fbTestFixture = {
       },
       range: [0, 40]
     },
+
     '<a\n/>': {
       type: "ExpressionStatement",
       expression: {
@@ -489,6 +493,7 @@ var fbTestFixture = {
         }
       }
     },
+
     '<日本語></日本語>': {
       type: "ExpressionStatement",
       expression: {
@@ -2541,6 +2546,7 @@ var fbTestFixture = {
         }
       }
     },
+
     '<A aa={aa.bb.cc} bb={bb.cc.dd}><div>{aa.b}</div></A>': {
       "type": "ExpressionStatement",
       "start": 0,
@@ -3441,6 +3447,145 @@ var fbTestFixture = {
           value: "/text",
           raw: "/text"
         }]
+      }
+    },
+
+    '<div>{a}{b}</div>': {
+      type: "ExpressionStatement",
+      start: 0,
+      end: 17,
+      expression: {
+        type: "JSXElement",
+        start: 0,
+        end: 17,
+        openingElement: {
+          type: "JSXOpeningElement",
+          start: 0,
+          end: 5,
+          attributes: [],
+          name: {
+            type: "JSXIdentifier",
+            start: 1,
+            end: 4,
+            name: "div"
+          },
+          selfClosing: false
+        },
+        closingElement: {
+          type: "JSXClosingElement",
+          start: 11,
+          end: 17,
+          name: {
+            type: "JSXIdentifier",
+            start: 13,
+            end: 16,
+            name: "div"
+          }
+        },
+        children: [{
+            type: 'JSXExpressionContainer',
+            expression: {
+              type: 'Identifier',
+              name: 'a',
+              range: [6, 7],
+              loc: {
+                start: {
+                  line: 1,
+                  column: 6
+                },
+                end: {
+                  line: 1,
+                  column: 7
+                }
+              }
+            },
+            range: [5, 8],
+            loc: {
+              start: {
+                line: 1,
+                column: 5
+              },
+              end: {
+                line: 1,
+                column: 8
+              }
+            }
+          }, {
+            type: 'JSXExpressionContainer',
+            expression: {
+              type: 'Identifier',
+              name: 'b',
+              range: [9, 10],
+              loc: {
+                start: {
+                  line: 1,
+                  column: 9
+                },
+                end: {
+                  line: 1,
+                  column: 10
+                }
+              }
+            },
+            range: [8, 11],
+            loc: {
+              start: {
+                line: 1,
+                column: 8
+              },
+              end: {
+                line: 1,
+                column: 11
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    '<div pre="leading" {...props} />': {
+      type: "ExpressionStatement",
+      range: [0, 32],
+      expression: {
+        type: "JSXElement",
+        range: [0, 32],
+        openingElement: {
+          type: "JSXOpeningElement",
+          range: [0, 32],
+          attributes: [
+            {
+              type: "JSXAttribute",
+              range: [5, 18],
+              name: {
+                type: "JSXIdentifier",
+                range: [5, 8],
+                name: "pre"
+              },
+              value: {
+                type: "Literal",
+                range: [9, 18],
+                value: "leading"
+              }
+            },
+            {
+              type: "JSXSpreadAttribute",
+              range: [19, 29],
+              argument: {
+                type: "Identifier",
+                range: [23, 28],
+                name: "props"
+              }
+            }
+          ],
+          name: {
+            type: "JSXIdentifier",
+            range: [1, 4],
+            name: "div"
+          },
+          selfClosing: true
+        },
+        closingElement: null,
+        children: []
       }
     }
   }
