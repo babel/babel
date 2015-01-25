@@ -9,3 +9,4 @@ test = exports.test += 1;
   test = 3;
   test++;
 })();
+exports.__esModule = true;

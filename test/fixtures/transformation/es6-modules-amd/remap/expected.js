@@ -10,4 +10,5 @@ define(["exports"], function (exports) {
     test = 3;
     test++;
   })();
+  exports.__esModule = true;
 });

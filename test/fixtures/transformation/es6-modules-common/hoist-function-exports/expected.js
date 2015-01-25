@@ -11,3 +11,4 @@ var isOdd = exports.isOdd = (function (isEven) {
     return !isEven(n);
   };
 })(isEven);
+exports.__esModule = true;

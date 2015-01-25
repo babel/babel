@@ -19,6 +19,7 @@ System.register(["./evens"], function (_export) {
           return !isEven(n);
         };
       })(isEven));
+      exports.__esModule = true;
     }
   };
 });

@@ -8,4 +8,5 @@ define(["exports"], function (exports) {
   exports["default"] = foo;
   exports["default"] = foo;
   exports.bar = bar;
+  exports.__esModule = true;
 });

@@ -2,7 +2,7 @@ define(["exports", "foo"], function (exports, _foo) {
   "use strict";
 
   var _interopRequireWildcard = function (obj) {
-    return obj && obj.__esModule ? obj["default"] : {
+    return obj && obj.__esModule ? obj : {
       "default": obj
     };
   };
@@ -26,4 +26,5 @@ define(["exports", "foo"], function (exports, _foo) {
   exports["default"] = _foo.foo;
   exports["default"] = _foo.foo;
   exports.bar = _foo.bar;
+  exports.__esModule = true;
 });

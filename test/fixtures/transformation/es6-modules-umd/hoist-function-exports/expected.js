@@ -18,4 +18,5 @@
       return !isEven(n);
     };
   })(isEven);
+  exports.__esModule = true;
 });

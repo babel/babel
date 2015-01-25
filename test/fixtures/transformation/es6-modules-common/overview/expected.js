@@ -1,7 +1,7 @@
 "use strict";
 
 var _interopRequireWildcard = function (obj) {
-  return obj && obj.__esModule ? obj["default"] : {
+  return obj && obj.__esModule ? obj : {
     "default": obj
   };
 };
@@ -24,3 +24,4 @@ var bar = require("foo4").bar;
 var bar2 = require("foo5").foo;
 exports.test = test;
 var test = exports.test = 5;
+exports.__esModule = true;

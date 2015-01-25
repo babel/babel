@@ -14,6 +14,7 @@ System.register([], function (_export) {
         test = 3;
         test++;
       })();
+      exports.__esModule = true;
     }
   };
 });

@@ -19,6 +19,7 @@ System.register([], function (_export) {
       _export("foo8", foo8);
 
       _export("foo3", foo3 = 5);
+      exports.__esModule = true;
     }
   };
 });

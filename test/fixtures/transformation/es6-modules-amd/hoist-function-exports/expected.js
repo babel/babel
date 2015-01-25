@@ -12,4 +12,5 @@ define(["exports", "./evens"], function (exports, _evens) {
       return !isEven(n);
     };
   })(isEven);
+  exports.__esModule = true;
 });
