@@ -1,7 +1,7 @@
 "use strict";
 
 var _interopRequireWildcard = function (obj) {
-  return obj && obj.constructor === Object ? obj : {
+  return obj && obj.__esModule ? obj["default"] : {
     "default": obj
   };
 };

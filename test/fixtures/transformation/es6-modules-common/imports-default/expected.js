@@ -1,7 +1,7 @@
 "use strict";
 
 var _interopRequire = function (obj) {
-  return obj && (obj["default"] || obj);
+  return obj && obj.__esModule ? obj["default"] : obj;
 };
 
 var foo = _interopRequire(require("foo"));
