@@ -58,5 +58,7 @@
   "WeakMap",
   "WeakSet",
   "arguments",
-  "NaN"
+  "NaN",
+  "window",
+  "self"
 ]
