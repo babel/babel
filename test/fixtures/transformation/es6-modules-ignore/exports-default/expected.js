@@ -1,4 +1,5 @@
 "use strict";
 
 function foo() {}
-var Foo = function Foo() {};
+var Foo = undefined;
+Foo = function Foo() {};

@@ -10,6 +10,5 @@ module.exports = function () {};
 module.exports = function () {};
 
 function foo() {}
-var Foo = function Foo() {};
-
-module.exports = Foo;
+var Foo = undefined;
+module.exports = Foo = function Foo() {};

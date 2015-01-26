@@ -17,8 +17,7 @@
   var foo5 = exports.foo5 = undefined;
   var foo6 = exports.foo6 = 3;
   function foo7() {}
-  var foo8 = function foo8() {};
+  var foo8 = exports.foo8 = function foo8() {};
 
-  exports.foo8 = foo8;
   exports.__esModule = true;
 });

@@ -1,10 +1,10 @@
 "use strict";
 
-var _to5Helpers = require("6to5-runtime/helpers");
-
 var _regeneratorRuntime = require("6to5-runtime/regenerator");
 
 var _core = require("6to5-runtime/core-js");
+
+var _to5Helpers = require("6to5-runtime/helpers");
 
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
