@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * New `asyncToGenerator` helper that's much more compact.
   * Throw errors on unknown options.
   * More reliable default parameter scope.
+  * Helpers are now compact and have no newlines.
  * **Internal**
   * Rewritten a lot of the internals to much simpler.
   * Removed TDZ from default parameters as it was very wonky and unreliable.
@@ -54,7 +55,6 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * **Modules**
     * Module interop now only collapses to `module.exports` when there's a **single** export that's default.
     * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
-    * Module formatters `umdStrict`, `amdStrict` and `commonStrict` have been removed.
   * **Transformers**
     * Optional fast transformer backwards compatibility support has been removed. Use [loose mode](https://6to5.org/docs/usage/loose).
     * Removed the `coreAliasing` transformer in favor of `selfContained`.
