@@ -56,7 +56,7 @@
     "chai": "1.10.0",
     "istanbul": "0.3.5",
     "jscs": "^1.10.0",
-    "jshint": "2.5.11",
+    "jshint": "2.6.0",
     "jshint-stylish": "1.0.0",
     "matcha": "0.6.0",
     "mocha": "2.1.0",
@@ -64,6 +64,6 @@
     "uglify-js": "2.4.16"
   },
   "optionalDependencies": {
-    "kexec": "1.1.0"
+    "kexec": "1.1.1"
   }
 }
