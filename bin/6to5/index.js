@@ -33,6 +33,11 @@ commander.on("--help", function () {
 
     _.each(_.keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
+
+      if (obj[key].optional) {
+        key = "[" + key + "]";
+      }
+
       console.log("    - " + key);
     });
 
