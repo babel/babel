@@ -43,11 +43,11 @@
     "esvalid": "1.1.0",
     "fs-readdir-recursive": "0.1.0",
     "jshint": "2.5.11",
-    "lodash": "2.4.1",
+    "lodash": "3.0.0",
     "output-file-sync": "^1.1.0",
     "private": "0.1.6",
     "regenerator": "0.8.9",
-    "regexpu": "1.0.0",
+    "regexpu": "1.1.0",
     "roadrunner": "1.0.4",
     "source-map": "0.1.43",
     "source-map-support": "0.2.9"
