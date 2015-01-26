@@ -64,10 +64,7 @@ test-browser:
 	node $(BROWSERIFY_CMD) -e test/_browser.js >dist/6to5-test.js
 	rm -rf templates.json tests.json
 
-	if [ -n $$BROWSER ]; then $$BROWSER test/browser.html; \
-	elif which xdg-open > /dev/null; then xdg-open 'test/browser.html'; \
-	elif which gnome-open > /dev/null; then gnome-open 'test/browser.html'; \
-	elif which open > /dev/null; then open 'test/browser.html'; fi \
+	test -n "`which open`" && open test/browser.html
 
 publish:
 	git pull --rebase
