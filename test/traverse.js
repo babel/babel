@@ -52,11 +52,6 @@ suite("traverse", function () {
 
   var body = ast.body;
 
-  test("hasType", function () {
-    assert.ok(traverse.hasType(ast, "ThisExpression"));
-    assert.ok(!traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]));
-  });
-
   test("traverse", function () {
     var expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
@@ -76,16 +71,6 @@ suite("traverse", function () {
 
   test("traverse falsy parent", function () {
     traverse(null, {
-      enter: function () {
-        throw new Error("should not be ran");
-      }
-    });
-  });
-
-  test("traverse unknown type", function () {
-    traverse({
-      type: "FooBar"
-    }, {
       enter: function () {
         throw new Error("should not be ran");
       }
@@ -127,12 +112,15 @@ suite("traverse", function () {
   });
 
   test("hasType", function () {
-    assert.ok(traverse.hasType(ast, "ThisExpression"));
-    assert.ok(traverse.hasType(ast, "Program"));
+    assert.ok(traverse.hasType(ast, null, "ThisExpression"));
+    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["AssignmentExpression"]));
 
-    assert.ok(!traverse.hasType(ast, "ThisExpression", ["MemberExpression"]));
-    assert.ok(!traverse.hasType(ast, "ThisExpression", ["Program"]));
+    assert.ok(traverse.hasType(ast, null, "ThisExpression"));
+    assert.ok(traverse.hasType(ast, null, "Program"));
 
-    assert.ok(!traverse.hasType(ast, "ArrowFunctionExpression"));
+    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["MemberExpression"]));
+    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["Program"]));
+
+    assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
   });
 });
