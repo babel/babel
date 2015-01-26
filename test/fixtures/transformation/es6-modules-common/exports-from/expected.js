@@ -1,20 +1,8 @@
 "use strict";
 
-var _interopRequireWildcard = function (obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
-  };
-};
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
 
-var _defaults = function (obj, defaults) {
-  for (var key in defaults) {
-    if (obj[key] === undefined) {
-      obj[key] = defaults[key];
-    }
-  }
-
-  return obj;
-};
+var _defaults = function (obj, defaults) { for (var key in defaults) { if (obj[key] === undefined) { obj[key] = defaults[key]; } } return obj; };
 
 var _foo = require("foo");
 

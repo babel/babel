@@ -7,9 +7,7 @@
 })(function (exports, _foo, _fooBar, _directoryFooBar) {
   "use strict";
 
-  var _interopRequire = function (obj) {
-    return obj && obj.__esModule ? obj["default"] : obj;
-  };
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var foo = _interopRequire(_foo);
 
