@@ -2628,7 +2628,7 @@
       // next token is a colon and the expression was a simple
       // Identifier node, we switch to interpreting it as a label.
     default:
-      var maybeName = tokVal, expr = parseExpression(false, true);
+      var maybeName = tokVal, expr = parseExpression();
 
       if (options.ecmaVersion >= 7 && starttype === _name && maybeName === "async" && tokType === _function && !canInsertSemicolon()) {
         next();
