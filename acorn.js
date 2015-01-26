@@ -2414,7 +2414,7 @@
     while (!eat(close)) {
       first ? first = false : expect(_comma);
       if (tokType === _ellipsis) {
-        elts.push(parseAssignableListItem(parseRest()));
+        elts.push(parseAssignableListItemTypes(parseRest()));
         expect(close);
         break;
       }
@@ -2422,14 +2422,16 @@
       if (allowEmpty && tokType === _comma) {
         elem = null;
       } else {
-        elem = parseAssignableListItem(parseMaybeDefault());
+        var left = parseAssignableAtom();
+        parseAssignableListItemTypes(left);
+        elem = parseMaybeDefault(null, left);
       }
       elts.push(elem);
     }
     return elts;
   }
 
-  function parseAssignableListItem(param) {
+  function parseAssignableListItemTypes(param) {
     if (eat(_question)) {
       param.optional = true;
     }
@@ -3000,7 +3002,7 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  function parseMaybeAssign(noIn, refShorthandDefaultPos) {
+  function parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse) {
     var failOnShorthandAssign;
     if (!refShorthandDefaultPos) {
       refShorthandDefaultPos = {start: 0};
@@ -3010,6 +3012,7 @@
     }
     var start = storeCurrentPos();
     var left = parseMaybeConditional(noIn, refShorthandDefaultPos);
+    if (afterLeftParse) afterLeftParse(left);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -3348,7 +3351,7 @@
           if (tokType === _parenL && !innerParenStart) {
             innerParenStart = tokStart;
           }
-          exprList.push(parseParenItem(parseMaybeAssign(false, refShorthandDefaultPos)));
+          exprList.push(parseMaybeAssign(false, refShorthandDefaultPos, parseParenItem));
         }
       }
       var innerEnd = storeCurrentPos();
