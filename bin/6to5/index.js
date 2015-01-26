@@ -10,7 +10,6 @@ commander.option("-t, --source-maps-inline", "Append sourceMappingURL comment to
 commander.option("-s, --source-maps", "Save source map alongside the compiled code");
 commander.option("-f, --filename [filename]", "Filename to use when reading from stdin - this will be used in source-maps, errors etc [stdin]", "stdin");
 commander.option("-w, --watch", "Recompile files on changes");
-commander.option("-r, --runtime", "Replace 6to5 declarations with references to a runtime");
 commander.option("-e, --experimental", "Enable experimental support for proposed ES7 features");
 commander.option("-p, --playground", "Enable playground support");
 
@@ -108,7 +107,6 @@ exports.opts = {
   sourceMap:              commander.sourceMaps || commander.sourceMapsInline,
   optional:               commander.optional,
   comments:               !commander.removeComments,
-  runtime:                commander.runtime,
   modules:                commander.modules,
   loose:                  commander.loose
 };
