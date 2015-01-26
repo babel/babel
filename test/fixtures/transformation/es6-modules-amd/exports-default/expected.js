@@ -11,6 +11,7 @@ define(["exports", "module"], function (exports, module) {
   module.exports = function () {};
 
   function foo() {}
-  var Foo = undefined;
-  module.exports = Foo = function Foo() {};
+  var Foo = function Foo() {};
+
+  module.exports = Foo;
 });

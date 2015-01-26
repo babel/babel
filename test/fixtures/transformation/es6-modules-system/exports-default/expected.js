@@ -20,8 +20,9 @@ System.register([], function (_export) {
 
       _export("default", function () {});
 
-      Foo = undefined;
-      _export("default", Foo = function Foo() {});
+      Foo = function Foo() {};
+
+      _export("default", Foo);
     }
   };
 });
