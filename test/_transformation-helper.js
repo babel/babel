@@ -100,7 +100,7 @@ var run = function (task, done) {
     try {
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
     } catch (err) {
-      require("fs").writeFileSync(expect.loc, actualCode);
+      //require("fs").writeFileSync(expect.loc, actualCode);
       throw err;
     }
   }
