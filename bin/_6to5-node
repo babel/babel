@@ -41,7 +41,7 @@ to5.register({
 var _eval = function (code, filename) {
   code = to5.transform(code, {
     filename: filename,
-    blacklist: ["useStrict"].concat(opts.blacklist),
+    blacklist: ["useStrict"].concat(program.blacklist || []),
     whitelist: program.whitelist,
     experimental: program.experimental,
     playground: program.playground
