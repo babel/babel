@@ -12,7 +12,7 @@ var _         = require("lodash");
 var program = new commander.Command("6to5-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
-program.option("-p, --print", "Evaluate script and print result");
+program.option("-p, --print [code]", "Evaluate script and print result");
 program.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
 program.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
@@ -49,8 +49,11 @@ var _eval = function (code, filename) {
   return vm.runInThisContext(code, filename);
 };
 
-if (program.eval) {
-  var result = _eval(program.eval, "eval");
+if (program.eval || program.print) {
+  var code = program.eval;
+  if (!code || code === true) code = program.print;
+
+  var result = _eval(code, "eval");
   if (program.print) console.log(result);
 } else {
   if (program.args.length) {
