@@ -3604,8 +3604,7 @@ for (var ns in fbTestFixture) {
     }, {
       ecmaVersion: 6,
       locations: true,
-      ranges: true,
-      loose: false
+      ranges: true
     });
   }
 }

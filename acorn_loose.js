@@ -256,11 +256,27 @@
     return node;
   }
 
-  function dummyIdent() {
-    var dummy = startNode();
-    dummy.name = "✖";
-    return finishNode(dummy, "Identifier");
+  function finishNodeAt(node, type, pos) {
+    if (options.locations) { node.loc.end = pos[1]; pos = pos[0]; }
+    node.type = type;
+    node.end = pos;
+    if (options.ranges)
+      node.range[1] = pos;
+    return node;
   }
+
+  function emptyNode(type) {
+    var dummy = startNodeAt(options.locations ? [lastEnd, lastEndLoc] : lastEnd);
+    dummy.name = "✖";
+    return finishNodeAt(dummy, type, storeCurrentPos());
+  }
+
+  function dummyIdent() {
+    var dummy = emptyNode("Identifier");
+    dummy.name = "✖";
+    return dummy;
+  }
+
   function isDummy(node) { return node.name == "✖"; }
 
   function eat(type) {
@@ -724,7 +740,7 @@
       next();
       return finishNode(node, "Literal");
 
-    case tt.num: case tt.string:
+    case tt.num: case tt.string: case tt.jsxText:
       var node = startNode();
       node.value = token.value;
       node.raw = input.slice(token.start, token.end);
@@ -787,6 +803,9 @@
 
     case tt.backQuote:
       return parseTemplate();
+
+    case tt.jsxTagStart:
+      return parseJSXElement();
 
     default:
       return dummyIdent();
@@ -1160,5 +1179,155 @@
       if (options.locations) lastEndLoc = token.loc.start;
     }
     return elts;
+  }
+
+  // Parse next token as JSX identifier
+
+  function parseJSXIdentifier() {
+    var node = startNode();
+    node.name = token.type === tt.jsxName ? token.value : token.type.keyword;
+    next();
+    return finishNode(node, "JSXIdentifier");
+  }
+
+  // Parse namespaced identifier.
+
+  function parseJSXNamespacedName() {
+    var start = storeCurrentPos();
+    var name = parseJSXIdentifier();
+    if (!eat(tt.colon)) return name;
+    var node = startNodeAt(start);
+    node.namespace = name;
+    node.name = parseJSXIdentifier();
+    return finishNode(node, "JSXNamespacedName");
+  }
+
+  // Parses element name in any form - namespaced, member
+  // or single identifier.
+
+  function parseJSXElementName() {
+    var start = storeCurrentPos();
+    var node = parseJSXNamespacedName();
+    while (eat(tt.dot)) {
+      var newNode = startNodeAt(start);
+      newNode.object = node;
+      newNode.property = parseJSXIdentifier();
+      node = finishNode(newNode, "JSXMemberExpression");
+    }
+    return node;
+  }
+
+  // Parses any type of JSX attribute value.
+
+  function parseJSXAttributeValue() {
+    return token.type === tt.braceL ? parseJSXExpressionContainer() : parseExprAtom();
+  }
+
+  // Parses JSX expression enclosed into curly brackets.
+
+  function parseJSXExpressionContainer(allowEmpty) {
+    var node = startNode();
+    pushCx();
+    next();
+    node.expression = allowEmpty && token.type === tt.braceR ? emptyNode("JSXEmptyExpression") : parseExpression();
+    popCx();
+    expect(tt.braceR);
+    return finishNode(node, "JSXExpressionContainer");
+  }
+
+  // Parses following JSX attribute name-value pair.
+
+  function parseJSXAttribute() {
+    var node = startNode();
+    if (token.type === tt.braceL) {
+      if (lookAhead(1).type === tt.ellipsis) {
+        next();
+        next();
+        node.argument = parseMaybeAssign();
+        expect(tt.braceR);
+        return finishNode(node, "JSXSpreadAttribute");
+      } else {
+        node.name = dummyIdent();
+        node.value = parseJSXAttributeValue();
+      }
+    } else {
+      node.name = parseJSXNamespacedName();
+      node.value = eat(tt.eq) ? parseJSXAttributeValue() : null;
+    }
+    return finishNode(node, "JSXAttribute");
+  }
+
+  // Parses JSX opening tag starting after '<'.
+
+  function parseJSXOpeningElementAt(start) {
+    var node = startNodeAt(start);
+    node.attributes = [];
+    node.name = parseJSXElementName();
+    while (token.type !== tt.slash && token.type !== tt.jsxTagEnd && token.type !== tt.eof) {
+      node.attributes.push(parseJSXAttribute());
+    }
+    node.selfClosing = eat(tt.slash);
+    expect(tt.jsxTagEnd);
+    if (token.type === tt.eof) node.selfClosing = true;
+    return finishNode(node, "JSXOpeningElement");
+  }
+
+  // Parses JSX closing tag starting after '</'.
+
+  function parseJSXClosingElementAt(start) {
+    var node = startNodeAt(start);
+    node.name = parseJSXElementName();
+    expect(tt.jsxTagEnd);
+    return finishNode(node, "JSXClosingElement");
+  }
+
+  // Parses entire JSX element, including it's opening tag
+  // (starting after '<'), attributes, contents and closing tag.
+
+  function parseJSXElementAt(start) {
+    var node = startNodeAt(start);
+    var children = [];
+    var openingElement = parseJSXOpeningElementAt(start);
+    var closingElement = null;
+
+    if (!openingElement.selfClosing) {
+      contents:for (;;) {
+        switch (token.type) {
+          case tt.jsxTagStart:
+            start = storeCurrentPos();
+            next();
+            if (eat(tt.slash)) {
+              closingElement = parseJSXClosingElementAt(start);
+              break contents;
+            }
+            children.push(parseJSXElementAt(start));
+            break;
+
+          case tt.braceL:
+            children.push(parseJSXExpressionContainer(true));
+            break;
+
+          case tt.eof:
+            break contents;
+
+          default:
+            children.push(parseExprAtom());
+            break;
+        }
+      }
+    }
+
+    node.openingElement = openingElement;
+    node.closingElement = closingElement;
+    node.children = children;
+    return finishNode(node, "JSXElement");
+  }
+
+  // Parses entire JSX element from current position.
+
+  function parseJSXElement() {
+    var start = storeCurrentPos();
+    next();
+    return parseJSXElementAt(start);
   }
 });

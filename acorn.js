@@ -463,7 +463,8 @@
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       arrow: _arrow, template: _template, star: _star, assign: _assign,
-                      backQuote: _backQuote, dollarBraceL: _dollarBraceL};
+                      backQuote: _backQuote, dollarBraceL: _dollarBraceL, jsxName: _jsxName,
+                      jsxText: _jsxText, jsxTagStart: _jsxTagStart, jsxTagEnd: _jsxTagEnd};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -3321,9 +3322,6 @@
         return node;
 
       case _jsxTagStart:
-        return parseJSXElement();
-
-      case _jsxText:
       case _string:
         return parseExprAtom();
 
@@ -3337,10 +3335,6 @@
   // at the beginning of the next one (right brace).
 
   function parseJSXEmptyExpression() {
-    if (tokType !== _braceR) {
-      unexpected();
-    }
-
     var tmp;
 
     tmp = tokStart;
