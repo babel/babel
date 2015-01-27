@@ -1534,35 +1534,43 @@
   // Reads inline JSX contents token.
 
   function readJSXToken() {
-    var out = "", start = tokPos;
+    var out = "", chunkStart = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
       var ch = input.charCodeAt(tokPos);
       switch (ch) {
         case 123: // '{'
         case 60: // '<'
-          if (tokPos === start) {
+          if (tokPos === tokStart) {
             return getTokenFromCode(ch);
           }
+          out += input.slice(chunkStart, tokPos);
           return finishToken(_jsxText, out);
 
         case 38: // '&'
+          out += input.slice(chunkStart, tokPos);
           out += readJSXEntity();
+          chunkStart = tokPos;
           break;
 
         default:
-          ++tokPos;
           if (isNewLine(ch)) {
+            out += input.slice(chunkStart, tokPos);
+            ++tokPos;
             if (ch === 13 && input.charCodeAt(tokPos) === 10) {
               ++tokPos;
-              ch = 10;
+              out += "\n";
+            } else {
+              out += String.fromCharCode(ch);
             }
             if (options.locations) {
               ++tokCurLine;
               tokLineStart = tokPos;
             }
+            chunkStart = tokPos;
+          } else {
+            ++tokPos;
           }
-          out += String.fromCharCode(ch);
       }
     }
   }
