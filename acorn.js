@@ -1591,9 +1591,10 @@
   // Parses assignment pattern around given atom if possible.
 
   function parseMaybeDefault(startPos, left) {
+    startPos = startPos || storeCurrentPos();
     left = left || parseAssignableAtom();
     if (!eat(_eq)) return left;
-    var node = startPos ? startNodeAt(startPos) : startNode();
+    var node = startNodeAt(startPos);
     node.operator = "=";
     node.left = left;
     node.right = parseMaybeAssign();
@@ -2437,15 +2438,16 @@
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        if (isPattern) {
+        if (isPattern || refShorthandDefaultPos) {
           start = storeCurrentPos();
-        } else {
+        }
+        if (!isPattern) {
           isGenerator = eat(_star);
         }
       }
       parsePropertyName(prop);
       if (eat(_colon)) {
-        prop.value = isPattern ? parseMaybeDefault(start) : parseMaybeAssign(false, refShorthandDefaultPos);
+        prop.value = isPattern ? parseMaybeDefault() : parseMaybeAssign(false, refShorthandDefaultPos);
         prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         if (isPattern) unexpected();

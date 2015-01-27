@@ -1806,6 +1806,10 @@ test("(x=1) => x * x", {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
           }
+        },
+        loc: {
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 4}
         }
       }],
       body: {
@@ -2073,6 +2077,10 @@ test("(eval = 10) => 42", {
             start: {line: 1, column: 8},
             end: {line: 1, column: 10}
           }
+        },
+        loc: {
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 10}
         }
       }],
       body: {
@@ -2140,6 +2148,10 @@ test("(eval, a = 10) => 42", {
               start: {line: 1, column: 11},
               end: {line: 1, column: 13}
             }
+          },
+          loc: {
+            start: {line: 1, column: 7},
+            end: {line: 1, column: 13}
           }
         }
       ],
@@ -9589,6 +9601,10 @@ test("function f([x] = [1]) {}", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 20}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 20}
       }
     }],
     body: {
@@ -9698,6 +9714,10 @@ test("function f({x} = {x: 10}) {}", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 24}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 24}
       }
     }],
     body: {
@@ -9813,6 +9833,10 @@ test("f = function({x} = {x: 10}) {}", {
               start: {line: 1, column: 19},
               end: {line: 1, column: 26}
             }
+          },
+          loc: {
+            start: {line: 1, column: 13},
+            end: {line: 1, column: 26}
           }
         }],
         body: {
@@ -9939,6 +9963,10 @@ test("({f: function({x} = {x: 10}) {}})", {
                 start: {line: 1, column: 20},
                 end: {line: 1, column: 27}
               }
+            },
+            loc: {
+              start: {line: 1, column: 14},
+              end: {line: 1, column: 27}
             }
           }],
           body: {
@@ -10074,6 +10102,10 @@ test("({f({x} = {x: 10}) {}})", {
                 start: {line: 1, column: 10},
                 end: {line: 1, column: 17}
               }
+            },
+            loc: {
+              start: {line: 1, column: 4},
+              end: {line: 1, column: 17}
             }
           }],
           body: {
@@ -10213,6 +10245,10 @@ test("(class {f({x} = {x: 10}) {}})", {
                   start: {line: 1, column: 16},
                   end: {line: 1, column: 23}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 10},
+                end: {line: 1, column: 23}
               }
             }],
             body: {
@@ -10339,6 +10375,10 @@ test("(({x} = {x: 10}) => {})", {
             start: {line: 1, column: 8},
             end: {line: 1, column: 15}
           }
+        },
+        loc: {
+          start: {line: 1, column: 2},
+          end: {line: 1, column: 15}
         }
       }],
       body: {
@@ -10407,6 +10447,10 @@ test("x = function(y = 1) {}", {
               start: {line: 1, column: 17},
               end: {line: 1, column: 18}
             }
+          },
+          loc: {
+            start: {line: 1, column: 13},
+            end: {line: 1, column: 18}
           }
         }],
         body: {
@@ -10474,6 +10518,10 @@ test("function f(a = 1) {}", {
           start: {line: 1, column: 15},
           end: {line: 1, column: 16}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 16}
       }
     }],
     body: {
@@ -10549,6 +10597,10 @@ test("x = { f: function(a=1) {} }", {
                   start: {line: 1, column: 20},
                   end: {line: 1, column: 21}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 18},
+                end: {line: 1, column: 21}
               }
             }],
             body: {
@@ -10648,6 +10700,10 @@ test("x = { f(a=1) {} }", {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 8},
+                end: {line: 1, column: 11}
               }
             }],
             body: {
@@ -14379,7 +14435,7 @@ test("var {propName: localVar = defaultValue} = obj", {
           },
           value: {
             type: "AssignmentPattern",
-            range: [5, 38],
+            range: [15, 38],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14480,7 +14536,7 @@ test("var [localVar = defaultValue] = obj", {
         range: [4, 29],
         elements: [{
           type: "AssignmentPattern",
-          range: [16, 28],
+          range: [5, 28],
           operator: "=",
           left: {
             type: "Identifier",
@@ -14536,7 +14592,7 @@ test("({x = 0} = obj)", {
           kind: "init",
           value: {
             type: "AssignmentPattern",
-            range: [6, 7],
+            range: [2, 7],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14593,7 +14649,7 @@ test("({x = 0}) => x", {
           kind: "init",
           value: {
             type: "AssignmentPattern",
-            range: [6, 7],
+            range: [2, 7],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14671,7 +14727,7 @@ test("[a, {b: {c = 1}}] = arr", {
                   kind: "init",
                   value: {
                     type: "AssignmentPattern",
-                    range: [13, 14],
+                    range: [9, 14],
                     operator: "=",
                     left: {
                       type: "Identifier",
@@ -14727,7 +14783,7 @@ test("for ({x = 0} in arr);", {
         kind: "init",
         value: {
           type: "AssignmentPattern",
-          range: [10, 11],
+          range: [6, 11],
           operator: "=",
           left: {
             type: "Identifier",
