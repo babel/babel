@@ -1712,74 +1712,7 @@ test("([a, , b]) => 42", {
   locations: true
 });
 
-test("([a.a]) => 42", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ArrowFunctionExpression",
-      id: null,
-      params: [{
-        type: "ArrayPattern",
-        elements: [{
-          type: "MemberExpression",
-          computed: false,
-          object: {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 2},
-              end: {line: 1, column: 3}
-            }
-          },
-          property: {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 5}
-            }
-          },
-          loc: {
-            start: {line: 1, column: 2},
-            end: {line: 1, column: 5}
-          }
-        }],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 6}
-        }
-      }],
-      body: {
-        type: "Literal",
-        value: 42,
-        raw: "42",
-        loc: {
-          start: {line: 1, column: 11},
-          end: {line: 1, column: 13}
-        }
-      },
-      generator: false,
-      expression: true,
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 13}
-      }
-    },
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 13}
-    }
-  }],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 13}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
+testFail("([a.a]) => 42", "Assigning to rvalue (1:2)", {ecmaVersion: 6});
 
 test("(x=1) => x * x", {
   type: "Program",
