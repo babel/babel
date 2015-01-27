@@ -10,9 +10,9 @@ System.register([], function (_export) {
     execute: function () {
       foo = _export("foo", 1);
       foo2 = _export("foo2", function () {});
-      foo3 = _export("foo3", undefined);
+      foo3 = _export("foo3", foo3);
       foo4 = _export("foo4", 2);
-      foo5 = _export("foo5", undefined);
+      foo5 = _export("foo5", foo5);
       foo6 = _export("foo6", 3);
       foo8 = _export("foo8", function foo8() {});
       _export("foo3", foo3 = 5);
