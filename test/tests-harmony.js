@@ -14395,8 +14395,7 @@ test("var {propName: localVar = defaultValue} = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("var {propName = defaultValue} = obj", {
@@ -14451,8 +14450,7 @@ test("var {propName = defaultValue} = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("var [localVar = defaultValue] = obj", {
@@ -14494,8 +14492,7 @@ test("var [localVar = defaultValue] = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("({x = 0} = obj)", {
@@ -14549,8 +14546,7 @@ test("({x = 0} = obj)", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("({x = 0}) => x", {
@@ -14606,8 +14602,7 @@ test("({x = 0}) => x", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("[a, {b: {c = 1}}] = arr", {
@@ -14689,8 +14684,7 @@ test("[a, {b: {c = 1}}] = arr", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("for ({x = 0} in arr);", {
@@ -14743,8 +14737,7 @@ test("for ({x = 0} in arr);", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 testFail("obj = {x = 0}", "Unexpected token (1:9)", {ecmaVersion: 6});
@@ -14796,14 +14789,12 @@ test("try {} catch ({message}) {}", {
         body: []
       }
     },
-    guardedHandlers: [],
     finalizer: null
   }]
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 // https://github.com/marijnh/acorn/issues/192
