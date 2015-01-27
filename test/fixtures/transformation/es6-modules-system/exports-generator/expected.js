@@ -18,8 +18,6 @@ System.register([], function (_export) {
 
   return {
     setters: [],
-    execute: function () {
-      exports.__esModule = true;
-    }
+    execute: function () {}
   };
 });

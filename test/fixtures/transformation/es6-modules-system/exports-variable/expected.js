@@ -16,7 +16,6 @@ System.register([], function (_export) {
       foo6 = _export("foo6", 3);
       foo8 = _export("foo8", function foo8() {});
       _export("foo3", foo3 = 5);
-      exports.__esModule = true;
     }
   };
 });

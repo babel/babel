@@ -21,8 +21,6 @@ System.register(["foo"], function (_export) {
 
       _export("bar", _foo.bar);
     }],
-    execute: function () {
-      exports.__esModule = true;
-    }
+    execute: function () {}
   };
 });
