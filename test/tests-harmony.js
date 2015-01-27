@@ -4826,6 +4826,110 @@ test("export default 42", {
   locations: true
 });
 
+test("export default function () {}", {
+  type: "Program",
+  range: [0, 29],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 29],
+    declaration: {
+      type: "FunctionExpression",
+      range: [15, 29],
+      id: null,
+      generator: false,
+      expression: false,
+      params: [],
+      body: {
+        type: "BlockStatement",
+        range: [27, 29],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default function f() {}", {
+  type: "Program",
+  range: [0, 30],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 30],
+    declaration: {
+      type: "FunctionDeclaration",
+      range: [15, 30],
+      id: {
+        type: "Identifier",
+        range: [24, 25],
+        name: "f"
+      },
+      generator: false,
+      expression: false,
+      params: [],
+      body: {
+        type: "BlockStatement",
+        range: [28, 30],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default class {}", {
+  type: "Program",
+  range: [0, 23],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 23],
+    declaration: {
+      type: "ClassExpression",
+      range: [15, 23],
+      id: null,
+      superClass: null,
+      body: {
+        type: "ClassBody",
+        range: [21, 23],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default class A {}", {
+  type: "Program",
+  range: [0, 25],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 25],
+    declaration: {
+      type: "ClassDeclaration",
+      range: [15, 25],
+      id: {
+        type: "Identifier",
+        range: [21, 22],
+        name: "A"
+      },
+      superClass: null,
+      body: {
+        type: "ClassBody",
+        range: [23, 25],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
 testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6});
 
 test("export * from \"crypto\"", {

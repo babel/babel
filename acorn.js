@@ -2683,7 +2683,14 @@
     } else
     // export default ...;
     if (eat(_default)) {
-      node.declaration = parseMaybeAssign();
+      var expr = parseMaybeAssign();
+      if (expr.id) {
+        switch (expr.type) {
+          case "FunctionExpression": expr.type = "FunctionDeclaration"; break;
+          case "ClassExpression": expr.type = "ClassDeclaration"; break;
+        }
+      }
+      node.declaration = expr;
       node['default'] = true;
       node.specifiers = null;
       node.source = null;

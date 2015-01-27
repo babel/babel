@@ -846,6 +846,7 @@
       next();
       if (token.type === tt.name) node.id = parseIdent();
       else if (isStatement) node.id = dummyIdent();
+      else node.id = null;
       node.superClass = eat(tt._extends) ? parseExpression() : null;
       node.body = startNode();
       node.body.body = [];
@@ -1058,7 +1059,14 @@
     node['default'] = eat(tt._default);
     node.specifiers = node.source = null;
     if (node['default']) {
-      node.declaration = parseExpression();
+      var expr = parseMaybeAssign();
+      if (expr.id) {
+        switch (expr.type) {
+          case "FunctionExpression": expr.type = "FunctionDeclaration"; break;
+          case "ClassExpression": expr.type = "ClassDeclaration"; break;
+        }
+      }
+      node.declaration = expr;
       semicolon();
     } else if (token.type.keyword) {
       node.declaration = parseStatement();
