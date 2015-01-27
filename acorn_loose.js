@@ -235,13 +235,14 @@
     if (options.locations) {
       node = new Node(pos[0]);
       node.loc = new SourceLocation(pos[1]);
+      pos = pos[0];
     } else {
       node = new Node(pos);
     }
     if (options.directSourceFile)
       node.sourceFile = options.directSourceFile;
     if (options.ranges)
-      node.range = [pos[0], 0];
+      node.range = [pos, 0];
     return node;
   }
 
@@ -365,7 +366,7 @@
       }
       var init = parseExpression(true);
       if (token.type === tt._in || isContextual("of")) {
-        return parseForIn(node, checkLVal(init));
+        return parseForIn(node, toAssignable(init));
       }
       return parseFor(node, init);
 
@@ -432,7 +433,7 @@
         var clause = startNode();
         next();
         expect(tt.parenL);
-        clause.param = parseIdent();
+        clause.param = toAssignable(parseExprAtom());
         expect(tt.parenR);
         clause.guard = null;
         clause.body = parseBlock();
@@ -845,6 +846,7 @@
       next();
       if (token.type === tt.name) node.id = parseIdent();
       else if (isStatement) node.id = dummyIdent();
+      else node.id = null;
       node.superClass = eat(tt._extends) ? parseExpression() : null;
       node.body = startNode();
       node.body.body = [];
@@ -857,11 +859,12 @@
     if (curIndent + 1 < indent) { indent = curIndent; line = curLineStart; }
     while (!closes(tt.braceR, indent, line)) {
       if (isClass && semicolon()) continue;
-      var prop = startNode(), isGenerator;
+      var prop = startNode(), isGenerator, start;
       if (options.ecmaVersion >= 6) {
         if (isClass) {
           prop['static'] = false;
         } else {
+          start = storeCurrentPos();
           prop.method = false;
           prop.shorthand = false;
         }
@@ -901,7 +904,19 @@
         prop.value = parseMethod(isGenerator);
       } else {
         prop.kind = "init";
-        prop.value = options.ecmaVersion >= 6 ? prop.key : dummyIdent();
+        if (options.ecmaVersion >= 6) {
+          if (eat(tt.eq)) {
+            var assign = startNodeAt(start);
+            assign.operator = "=";
+            assign.left = prop.key;
+            assign.right = parseMaybeAssign();
+            prop.value = finishNode(assign, "AssignmentExpression");
+          } else {
+            prop.value = prop.key;
+          }
+        } else {
+          prop.value = dummyIdent();
+        }
         prop.shorthand = true;
       }
 
@@ -1044,7 +1059,14 @@
     node['default'] = eat(tt._default);
     node.specifiers = node.source = null;
     if (node['default']) {
-      node.declaration = parseExpression();
+      var expr = parseMaybeAssign();
+      if (expr.id) {
+        switch (expr.type) {
+          case "FunctionExpression": expr.type = "FunctionDeclaration"; break;
+          case "ClassExpression": expr.type = "ClassDeclaration"; break;
+        }
+      }
+      node.declaration = expr;
       semicolon();
     } else if (token.type.keyword) {
       node.declaration = parseStatement();

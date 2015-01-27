@@ -1712,74 +1712,7 @@ test("([a, , b]) => 42", {
   locations: true
 });
 
-test("([a.a]) => 42", {
-  type: "Program",
-  body: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "ArrowFunctionExpression",
-      id: null,
-      params: [{
-        type: "ArrayPattern",
-        elements: [{
-          type: "MemberExpression",
-          computed: false,
-          object: {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 2},
-              end: {line: 1, column: 3}
-            }
-          },
-          property: {
-            type: "Identifier",
-            name: "a",
-            loc: {
-              start: {line: 1, column: 4},
-              end: {line: 1, column: 5}
-            }
-          },
-          loc: {
-            start: {line: 1, column: 2},
-            end: {line: 1, column: 5}
-          }
-        }],
-        loc: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 6}
-        }
-      }],
-      body: {
-        type: "Literal",
-        value: 42,
-        raw: "42",
-        loc: {
-          start: {line: 1, column: 11},
-          end: {line: 1, column: 13}
-        }
-      },
-      generator: false,
-      expression: true,
-      loc: {
-        start: {line: 1, column: 0},
-        end: {line: 1, column: 13}
-      }
-    },
-    loc: {
-      start: {line: 1, column: 0},
-      end: {line: 1, column: 13}
-    }
-  }],
-  loc: {
-    start: {line: 1, column: 0},
-    end: {line: 1, column: 13}
-  }
-}, {
-  ecmaVersion: 6,
-  ranges: true,
-  locations: true
-});
+testFail("([a.a]) => 42", "Assigning to rvalue (1:2)", {ecmaVersion: 6});
 
 test("(x=1) => x * x", {
   type: "Program",
@@ -1806,6 +1739,10 @@ test("(x=1) => x * x", {
             start: {line: 1, column: 3},
             end: {line: 1, column: 4}
           }
+        },
+        loc: {
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 4}
         }
       }],
       body: {
@@ -2073,6 +2010,10 @@ test("(eval = 10) => 42", {
             start: {line: 1, column: 8},
             end: {line: 1, column: 10}
           }
+        },
+        loc: {
+          start: {line: 1, column: 1},
+          end: {line: 1, column: 10}
         }
       }],
       body: {
@@ -2140,6 +2081,10 @@ test("(eval, a = 10) => 42", {
               start: {line: 1, column: 11},
               end: {line: 1, column: 13}
             }
+          },
+          loc: {
+            start: {line: 1, column: 7},
+            end: {line: 1, column: 13}
           }
         }
       ],
@@ -4880,6 +4825,110 @@ test("export default 42", {
   ranges: true,
   locations: true
 });
+
+test("export default function () {}", {
+  type: "Program",
+  range: [0, 29],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 29],
+    declaration: {
+      type: "FunctionExpression",
+      range: [15, 29],
+      id: null,
+      generator: false,
+      expression: false,
+      params: [],
+      body: {
+        type: "BlockStatement",
+        range: [27, 29],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default function f() {}", {
+  type: "Program",
+  range: [0, 30],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 30],
+    declaration: {
+      type: "FunctionDeclaration",
+      range: [15, 30],
+      id: {
+        type: "Identifier",
+        range: [24, 25],
+        name: "f"
+      },
+      generator: false,
+      expression: false,
+      params: [],
+      body: {
+        type: "BlockStatement",
+        range: [28, 30],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default class {}", {
+  type: "Program",
+  range: [0, 23],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 23],
+    declaration: {
+      type: "ClassExpression",
+      range: [15, 23],
+      id: null,
+      superClass: null,
+      body: {
+        type: "ClassBody",
+        range: [21, 23],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
+
+test("export default class A {}", {
+  type: "Program",
+  range: [0, 25],
+  body: [{
+    type: "ExportDeclaration",
+    range: [0, 25],
+    declaration: {
+      type: "ClassDeclaration",
+      range: [15, 25],
+      id: {
+        type: "Identifier",
+        range: [21, 22],
+        name: "A"
+      },
+      superClass: null,
+      body: {
+        type: "ClassBody",
+        range: [23, 25],
+        body: []
+      }
+    },
+    default: true,
+    specifiers: null,
+    source: null
+  }]
+}, {ecmaVersion: 6, ranges: true});
 
 testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6});
 
@@ -9589,6 +9638,10 @@ test("function f([x] = [1]) {}", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 20}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 20}
       }
     }],
     body: {
@@ -9698,6 +9751,10 @@ test("function f({x} = {x: 10}) {}", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 24}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 24}
       }
     }],
     body: {
@@ -9813,6 +9870,10 @@ test("f = function({x} = {x: 10}) {}", {
               start: {line: 1, column: 19},
               end: {line: 1, column: 26}
             }
+          },
+          loc: {
+            start: {line: 1, column: 13},
+            end: {line: 1, column: 26}
           }
         }],
         body: {
@@ -9939,6 +10000,10 @@ test("({f: function({x} = {x: 10}) {}})", {
                 start: {line: 1, column: 20},
                 end: {line: 1, column: 27}
               }
+            },
+            loc: {
+              start: {line: 1, column: 14},
+              end: {line: 1, column: 27}
             }
           }],
           body: {
@@ -10074,6 +10139,10 @@ test("({f({x} = {x: 10}) {}})", {
                 start: {line: 1, column: 10},
                 end: {line: 1, column: 17}
               }
+            },
+            loc: {
+              start: {line: 1, column: 4},
+              end: {line: 1, column: 17}
             }
           }],
           body: {
@@ -10213,6 +10282,10 @@ test("(class {f({x} = {x: 10}) {}})", {
                   start: {line: 1, column: 16},
                   end: {line: 1, column: 23}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 10},
+                end: {line: 1, column: 23}
               }
             }],
             body: {
@@ -10339,6 +10412,10 @@ test("(({x} = {x: 10}) => {})", {
             start: {line: 1, column: 8},
             end: {line: 1, column: 15}
           }
+        },
+        loc: {
+          start: {line: 1, column: 2},
+          end: {line: 1, column: 15}
         }
       }],
       body: {
@@ -10407,6 +10484,10 @@ test("x = function(y = 1) {}", {
               start: {line: 1, column: 17},
               end: {line: 1, column: 18}
             }
+          },
+          loc: {
+            start: {line: 1, column: 13},
+            end: {line: 1, column: 18}
           }
         }],
         body: {
@@ -10474,6 +10555,10 @@ test("function f(a = 1) {}", {
           start: {line: 1, column: 15},
           end: {line: 1, column: 16}
         }
+      },
+      loc: {
+        start: {line: 1, column: 11},
+        end: {line: 1, column: 16}
       }
     }],
     body: {
@@ -10549,6 +10634,10 @@ test("x = { f: function(a=1) {} }", {
                   start: {line: 1, column: 20},
                   end: {line: 1, column: 21}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 18},
+                end: {line: 1, column: 21}
               }
             }],
             body: {
@@ -10648,6 +10737,10 @@ test("x = { f(a=1) {} }", {
                   start: {line: 1, column: 10},
                   end: {line: 1, column: 11}
                 }
+              },
+              loc: {
+                start: {line: 1, column: 8},
+                end: {line: 1, column: 11}
               }
             }],
             body: {
@@ -14379,7 +14472,7 @@ test("var {propName: localVar = defaultValue} = obj", {
           },
           value: {
             type: "AssignmentPattern",
-            range: [5, 38],
+            range: [15, 38],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14406,8 +14499,7 @@ test("var {propName: localVar = defaultValue} = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("var {propName = defaultValue} = obj", {
@@ -14462,8 +14554,7 @@ test("var {propName = defaultValue} = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("var [localVar = defaultValue] = obj", {
@@ -14480,7 +14571,7 @@ test("var [localVar = defaultValue] = obj", {
         range: [4, 29],
         elements: [{
           type: "AssignmentPattern",
-          range: [16, 28],
+          range: [5, 28],
           operator: "=",
           left: {
             type: "Identifier",
@@ -14505,8 +14596,7 @@ test("var [localVar = defaultValue] = obj", {
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 test("({x = 0} = obj)", {
@@ -14536,7 +14626,7 @@ test("({x = 0} = obj)", {
           kind: "init",
           value: {
             type: "AssignmentPattern",
-            range: [6, 7],
+            range: [2, 7],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14560,8 +14650,7 @@ test("({x = 0} = obj)", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("({x = 0}) => x", {
@@ -14593,7 +14682,7 @@ test("({x = 0}) => x", {
           kind: "init",
           value: {
             type: "AssignmentPattern",
-            range: [6, 7],
+            range: [2, 7],
             operator: "=",
             left: {
               type: "Identifier",
@@ -14617,8 +14706,7 @@ test("({x = 0}) => x", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("[a, {b: {c = 1}}] = arr", {
@@ -14671,7 +14759,7 @@ test("[a, {b: {c = 1}}] = arr", {
                   kind: "init",
                   value: {
                     type: "AssignmentPattern",
-                    range: [13, 14],
+                    range: [9, 14],
                     operator: "=",
                     left: {
                       type: "Identifier",
@@ -14700,8 +14788,7 @@ test("[a, {b: {c = 1}}] = arr", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 test("for ({x = 0} in arr);", {
@@ -14727,7 +14814,7 @@ test("for ({x = 0} in arr);", {
         kind: "init",
         value: {
           type: "AssignmentPattern",
-          range: [10, 11],
+          range: [6, 11],
           operator: "=",
           left: {
             type: "Identifier",
@@ -14754,8 +14841,7 @@ test("for ({x = 0} in arr);", {
   }]
 }, {
   ecmaVersion: 6,
-  ranges: true,
-  loose: false
+  ranges: true
 });
 
 testFail("obj = {x = 0}", "Unexpected token (1:9)", {ecmaVersion: 6});
@@ -14807,14 +14893,12 @@ test("try {} catch ({message}) {}", {
         body: []
       }
     },
-    guardedHandlers: [],
     finalizer: null
   }]
 }, {
   ecmaVersion: 6,
   ranges: true,
-  locations: true,
-  loose: false
+  locations: true
 });
 
 // https://github.com/marijnh/acorn/issues/192
