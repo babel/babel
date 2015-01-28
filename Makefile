@@ -93,6 +93,7 @@ publish:
 publish-runtime:
 	cd packages; \
 	node build-runtime.js; \
+	cd 6to5-runtime; \
 	npm publish
 
 publish-core:
