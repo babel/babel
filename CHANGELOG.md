@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.9
+
+ * **Bug Fix**
+  * Make `t.isReferenced` more powerful, actually take into consideration all contexts were identifier nodes aren't actually references.
+  * Don't camelcase underscores when converting a string to a valid identifier.
+
 ## 3.0.8
 
  * **Bug Fix**
