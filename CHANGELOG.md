@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.10
+
+ * **Bug Fix**
+  * In `types.getIds` make sure the `declaration` inside of `ExportDeclaration` is actually a `Declaration`.
+
 ## 3.0.9
 
  * **Bug Fix**
