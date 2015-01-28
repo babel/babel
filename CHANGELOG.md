@@ -11,6 +11,26 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.4
+
+ * **Bug Fix**
+  * Remove traversal stops from block scope tracking.
+
+## 3.0.3
+
+ * **Internal**
+  * Ignore options starting with `_`.
+
+## 3.0.2
+
+ * **Internal**
+  * Add common plugin options to valid options list.
+
+## 3.0.1
+
+ * **Internal**
+  * Downgrade `kexec` as `1.1.0` throws compilation errors.
+
 ## 3.0.0
 
  * **Polish**
