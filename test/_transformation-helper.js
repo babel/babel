@@ -1,6 +1,7 @@
 var genHelpers = require("./_generator-helpers");
 var transform  = require("../lib/6to5/transformation/transform");
 var sourceMap  = require("source-map");
+var codeFrame  = require("../lib/6to5/helpers/code-frame");
 var esvalid    = require("esvalid");
 var Module     = require("module");
 var helper     = require("./_helper");
@@ -85,7 +86,7 @@ var run = function (task, done) {
       fn.call(global, fakeRequire, chai.assert, done);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
-      err.message += util.codeFrame(execCode);
+      err.message += codeFrame(execCode);
       throw err;
     }
   }
