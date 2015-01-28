@@ -1,5 +1,5 @@
-function* foo(foo = "bar") {
-  return foo;
+function* foo(bar = "bar") {
+  return bar;
 }
 
 assert.deepEqual(foo().next().value, "bar");

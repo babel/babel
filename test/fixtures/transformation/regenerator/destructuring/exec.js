@@ -1,5 +1,5 @@
-function* foo({ foo }) {
-  return foo;
+function* foo({ bar }) {
+  return bar;
 }
 
-assert(foo({ foo: "bar" }).next().value, "bar");
+assert(foo({ bar: "bar" }).next().value, "bar");
