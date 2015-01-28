@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.5
+
+ * **Internal**
+  * More reliable default parameter scope.
+
 ## 3.0.4
 
  * **Bug Fix**
