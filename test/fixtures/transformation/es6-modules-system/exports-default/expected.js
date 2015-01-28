@@ -1,7 +1,7 @@
 System.register([], function (_export) {
   "use strict";
 
-  var Foo;
+  var _default, Foo;
   _export("default", foo);
 
   function foo() {}
@@ -18,7 +18,9 @@ System.register([], function (_export) {
 
       _export("default", function () {});
 
-      _export("default", function () {});
+      _default = function _default() {};
+
+      _export("default", _default);
 
       Foo = function Foo() {};
 
