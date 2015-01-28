@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.7
+
+ * **Internal**
+  * Upgrade `core-js` to `0.4.9`.
+ * **Bug Fix**
+  * Add id to function express scope tracking.
+
 ## 3.0.6
 
  * **Bug Fix**
