@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.13
+
+ * **Bug Fix**
+  * Fix modules loose mode using `modules` instead of `es6.modules`.
+
 ## 3.0.12
 
  * **Internal**
