@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.11
+
+ * **Bug Fix**
+  * Fix `ast-types` `RestElement` definition.
+  * Make `es6.forOf` loose mode more versatile and support destructuring.
+
 ## 3.0.10
 
  * **Bug Fix**
