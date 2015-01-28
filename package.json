@@ -38,6 +38,7 @@
     "chokidar": "0.12.6",
     "commander": "2.6.0",
     "core-js": "^0.4.9",
+    "debug": "^2.1.1",
     "detect-indent": "3.0.0",
     "estraverse": "1.9.1",
     "esutils": "1.1.6",
