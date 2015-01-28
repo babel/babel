@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.6
+
+ * **Bug Fix**
+  * Fix block scope variable tracking stopping whenever it hits a new scope.
+  * Fix block scope variable tracking breaking on all block statement scopes that have a for loop parent.
+
 ## 3.0.5
 
  * **Internal**
