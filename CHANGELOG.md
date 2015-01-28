@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.12
+
+ * **Internal**
+  * Add internal debug messages.
+ * **Bug Fix**
+  * Add `noScope` option to `traverse.clearProperties`.
+
 ## 3.0.11
 
  * **Bug Fix**
