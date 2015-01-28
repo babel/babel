@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.8
+
+ * **Bug Fix**
+  * Split up default function declaration exports due to regenerator destroying the parent export declaration.
+
 ## 3.0.7
 
  * **Internal**
