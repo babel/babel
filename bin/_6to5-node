@@ -19,6 +19,7 @@ program.option("-r, --experimental", "Enable experimental support for proposed E
 program.option("-g, --playground", "Enable playground support");
 program.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 program.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
+program.option("-o, --optional [optional]", "List of optional transformers to enable", util.list);
 
 var pkg = require("../package.json");
 program.version(pkg.version);
@@ -33,6 +34,7 @@ to5.register({
   playground:   program.playground,
   blacklist:    program.blacklist,
   whitelist:    program.whitelist,
+  optional:     program.optional,
   ignore:       program.ignore
 });
 
@@ -43,6 +45,7 @@ var _eval = function (code, filename) {
     filename: filename,
     blacklist: ["useStrict"].concat(program.blacklist || []),
     whitelist: program.whitelist,
+    optional: program.optional,
     experimental: program.experimental,
     playground: program.playground
   }).code;
@@ -61,8 +64,18 @@ if (program.eval || program.print) {
     var args = process.argv.slice(2);
 
     var i = 0;
+    var ignoreNext = false;
     _.each(args, function (arg, i2) {
-      if (arg[0] !== "-") {
+      if (ignoreNext) {
+        ignoreNext = false;
+        return;
+      }
+
+      if (arg[0] === "-") {
+        if (program[arg.slice(2)]) {
+          ignoreNext = true;
+        }
+      } else {
         i = i2;
         return false;
       }
