@@ -8,13 +8,11 @@ var A = (function () {
   _prototypeProperties(A, {
     a: {
       value: function a() {},
-      enumerable: false,
       writable: true,
       configurable: true
     },
     b: {
       get: function () {},
-      enumerable: false,
       set: function (b) {},
       configurable: true
     }

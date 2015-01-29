@@ -19,7 +19,6 @@ var Test = (function (Foo) {
       value: function test() {
         return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
       },
-      enumerable: false,
       writable: true,
       configurable: true
     }

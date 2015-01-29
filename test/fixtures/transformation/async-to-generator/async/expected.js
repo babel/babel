@@ -12,7 +12,6 @@ var Foo = (function () {
       value: _asyncToGenerator(function* () {
         var wat = yield bar();
       }),
-      enumerable: false,
       writable: true,
       configurable: true
     }

@@ -18,7 +18,6 @@ var BaseView = (function () {
       value: function foo() {
         this.autoRender = true;
       },
-      enumerable: false,
       writable: true,
       configurable: true
     }

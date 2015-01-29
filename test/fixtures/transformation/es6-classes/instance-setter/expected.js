@@ -10,7 +10,6 @@ var Test = (function () {
       set: function (val) {
         this._test = val;
       },
-      enumerable: false,
       configurable: true
     }
   });
