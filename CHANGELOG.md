@@ -117,13 +117,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * This shorthand has been removed from the playground.
   * `6to5/polyfill` can now only be required **once**.
   * **CLI**
-   * `--indent` option has been removed.
-   * `--include-regenerator` option has been removed.
-   * `--amd-modules-id` option has been removed, use `--module-ids` instead.
+    * `--indent` option has been removed.
+    * `--include-regenerator` option has been removed.
+    * `--amd-modules-id` option has been removed, use `--module-ids` instead.
   * **Options**
-   * `amdModuleIds` option has been removed, use `moduleIds` instead.
-   * `includeRegenerator` has been removed.
-   * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
+    * `amdModuleIds` option has been removed, use `moduleIds` instead.
+    * `includeRegenerator` has been removed.
+    * `ignoreRegex` fallback has now been dropped from the require hook. `register(/foo/);`, `register({ ignoreRegex: /foo/ })` -> `register({ ignore: /foo/ })`.
   * **Modules**
     * Module interop now only collapses to `module.exports` when there's a **single** export that's default.
     * Imports and exports are now illegal anywhere except the root level by default. Set `modules` to [loose mode](http://6to5.org/docs/usage/loose) to allow them everywhere.
