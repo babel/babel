@@ -13,6 +13,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 3.0.16
 
+ * **Bug Fix**
+  * Don't ignore dynamic import specifiers.
  * **Internal**
   * Upgrade `regenerator-6to5`.
  * **Polish**
