@@ -2,3 +2,4 @@
 /.idea
 /.tern-port
 /acorn_csp.js
+.DS_Store
