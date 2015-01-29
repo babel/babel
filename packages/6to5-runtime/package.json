@@ -1,7 +1,7 @@
 {
   "name": "6to5-runtime",
   "description": "6to5 selfContained runtime",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "repository": "6to5/6to5",
   "author": "Sebastian McKenzie <sebmck@gmail.com>"
 }
