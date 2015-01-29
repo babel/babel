@@ -12,14 +12,14 @@ var Foo = (function () {
       get: function () {
         return _defineProperty(this, "bar", complex()).bar;
       },
-      enumerable: true,
+      enumerable: false,
       configurable: true
     }
   }, bar, {
     get: function () {
       return _defineProperty(this, bar, complex())[bar];
     },
-    enumerable: true,
+    enumerable: false,
     configurable: true
   }));
 

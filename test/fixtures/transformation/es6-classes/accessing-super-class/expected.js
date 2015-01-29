@@ -31,8 +31,8 @@ var Test = (function (Foo) {
         _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
         (_get2 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
+      enumerable: false,
       writable: true,
-      enumerable: true,
       configurable: true
     }
   }, {
@@ -43,8 +43,8 @@ var Test = (function (Foo) {
         _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
         (_get2 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
+      enumerable: false,
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });

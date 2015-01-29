@@ -10,8 +10,8 @@ var Test = (function () {
       value: function test() {
         return 5 + 5;
       },
+      enumerable: false,
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });

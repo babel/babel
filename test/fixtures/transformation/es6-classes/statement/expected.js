@@ -18,8 +18,8 @@ var BaseView = (function () {
       value: function foo() {
         this.autoRender = true;
       },
+      enumerable: false,
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });

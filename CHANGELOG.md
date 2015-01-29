@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.1.0
+
+ * **Breaking Change**
+  * Make class methods nonenumerable.
+
 ## 3.0.16
 
  * **Bug Fix**

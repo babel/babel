@@ -10,7 +10,7 @@ var Test = (function () {
       get: function () {
         return 5 + 5;
       },
-      enumerable: true,
+      enumerable: false,
       configurable: true
     }
   });

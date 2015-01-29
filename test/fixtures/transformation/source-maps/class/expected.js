@@ -10,7 +10,7 @@ var Test = (function () {
       get: function () {
         throw new Error("wow");
       },
-      enumerable: true,
+      enumerable: false,
       configurable: true
     }
   });

@@ -10,10 +10,10 @@ var Test = (function () {
       get: function () {
         return 5 + 5;
       },
+      enumerable: false,
       set: function (val) {
         this._test = val;
       },
-      enumerable: true,
       configurable: true
     }
   });
