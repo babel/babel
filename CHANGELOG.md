@@ -14,7 +14,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 ## 3.1.0
 
  * **Breaking Change**
-  * [Make class methods unenumerable](/Users/sebastian/Projects/6to5/6to5/test/fixtures/esnext/es6-classes/getter-setter.js).
+  * [Make class methods unenumerable](https://esdiscuss.org/topic/classes-and-enumerability#content-61).
 
 ## 3.0.16
 
