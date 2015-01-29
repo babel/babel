@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.14
+
+ * **New Feature**
+  * Add `--optional` argument to `6to5-node`.
+ * **Bug Fix**
+  * Fix bug in `asyncToGenerator` helper where it was incorrectly calling generator iterator functions.
+
 ## 3.0.13
 
  * **Bug Fix**
