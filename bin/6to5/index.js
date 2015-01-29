@@ -4,7 +4,8 @@ var commander = require("commander");
 var transform = require("../../lib/6to5/transformation/transform");
 var util      = require("../../lib/6to5/util");
 var fs        = require("fs");
-var _         = require("lodash");
+var each      = require("lodash/collection/each");
+var keys      = require("lodash/object/keys");
 
 commander.option("-t, --source-maps-inline", "Append sourceMappingURL comment to bottom of code");
 commander.option("-s, --source-maps", "Save source map alongside the compiled code");
@@ -30,7 +31,7 @@ commander.on("--help", function () {
     console.log("  " + title + ":");
     console.log();
 
-    _.each(_.keys(obj).sort(), function (key) {
+    each(keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
 
       if (obj[key].optional) {
@@ -58,7 +59,7 @@ var errors = [];
 
 var filenames = commander.args;
 
-_.each(filenames, function (filename) {
+each(filenames, function (filename) {
   if (!fs.existsSync(filename)) {
     errors.push(filename + " doesn't exist");
   }
