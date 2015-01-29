@@ -3919,7 +3919,7 @@
     if (eat(_semi) || canInsertSemicolon()) {
       unexpected();
     }
-    node.delegate = eat(_star);
+    node.all = eat(_star);
     node.argument = parseMaybeAssign(true);
     return finishNode(node, "AwaitExpression");
   }
