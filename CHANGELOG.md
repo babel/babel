@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.15
+
+ * **Bug Fix**
+  * Use `debug/node` instead of `debug` to avoid browserify using the browser version that references `window`.
+
 ## 3.0.14
 
  * **New Feature**
