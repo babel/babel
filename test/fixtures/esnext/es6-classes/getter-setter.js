@@ -25,4 +25,4 @@ var forLoopProperties = [];
 for (var key in mazer) {
   forLoopProperties.push(key);
 }
-assert.ok(forLoopProperties.indexOf('name') >= 0, 'getters/setters are enumerable');
+assert.ok(forLoopProperties.indexOf('name') === -1, 'getters/setters should be unenumerable');

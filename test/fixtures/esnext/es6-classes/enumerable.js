@@ -17,4 +17,4 @@ for (var key in point) {
 }
 
 assert.equal(point.toString(), '(1, 2)');
-assert.deepEqual(keys.sort(), ['toString', 'x', 'y']);
+assert.deepEqual(keys.sort(), ['x', 'y']);
