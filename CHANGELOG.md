@@ -11,6 +11,14 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.0.16
+
+ * **Internal**
+  * Upgrade `regenerator-6to5`.
+ * **Polish**
+  * Use `Object.assign` in place of extends helper if it exists.
+  * Require individual `lodash` methods. Thanks [@stefanpenner](https://github.com/stefanpenner)!
+
 ## 3.0.15
 
  * **Bug Fix**
