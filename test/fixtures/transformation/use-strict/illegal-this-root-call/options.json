@@ -1,3 +1,3 @@
 {
-  "throws": "Top level `this` is not allowed"
+  "throws": "Top level `this` is `undefined` in strict mode"
 }
