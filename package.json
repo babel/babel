@@ -43,6 +43,7 @@
     "estraverse": "1.9.1",
     "esutils": "1.1.6",
     "fs-readdir-recursive": "0.1.0",
+    "globals": "^5.1.0",
     "js-tokenizer": "1.3.3",
     "lodash": "3.0.0",
     "output-file-sync": "1.1.0",
