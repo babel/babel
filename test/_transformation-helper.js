@@ -125,12 +125,14 @@ var run = function (task, done) {
 module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
   taskOpts = taskOpts || {};
 
-  require("../register")(taskOpts);
-
   _.each(helper.get(suiteOpts.name, suiteOpts.loc), function (testSuite) {
     if (_.contains(suiteOpts.ignoreSuites, testSuite.title)) return;
 
     suite(suiteOpts.name + "/" + testSuite.title, function () {
+      setup(function () {
+        require("../register")(taskOpts);
+      });
+
       _.each(testSuite.tests, function (task) {
         if (_.contains(suiteOpts.ignoreTasks, task.title) || _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) return;
 
