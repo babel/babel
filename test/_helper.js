@@ -1,3 +1,4 @@
+var util = require("../lib/6to5/util");
 var path = require("path");
 var fs   = require("fs");
 var _    = require("lodash");
@@ -34,8 +35,8 @@ exports.get = function (entryName, entryLoc) {
     };
     suites.push(suite);
 
-    var suiteOptsLoc = suite.filename + "/options.json";
-    if (fs.existsSync(suiteOptsLoc)) suite.options = require(suiteOptsLoc);
+    var suiteOptsLoc = util.resolve(suite.filename + "/options");
+    if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
     if (fs.statSync(suite.filename).isFile()) {
       push(suiteName, suite.filename);
@@ -71,8 +72,8 @@ exports.get = function (entryName, entryLoc) {
         sourceMapName:    expectLocAlias
       }, _.cloneDeep(suite.options));
 
-      var taskOptsLoc = taskDir + "/options.json";
-      if (fs.existsSync(taskOptsLoc)) _.merge(taskOpts, require(taskOptsLoc));
+      var taskOptsLoc = util.resolve(taskDir + "/options");
+      if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
 
       var test = {
         title: humanise(taskName, true),
