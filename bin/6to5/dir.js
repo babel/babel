@@ -53,10 +53,7 @@ module.exports = function (commander, filenames, opts) {
 
       _.each(["add", "change"], function (type) {
         watcher.on(type, function (filename) {
-          // chop off the dirname plus the path separator
-          var relative = filename.slice(dirname.length + 1);
-
-          console.log(type, filename);
+          var relative = path.relative(dirname, filename) || filename;
           write(filename, relative);
         });
       });
