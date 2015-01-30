@@ -37,7 +37,7 @@ suite("kangax/compat-table", function () {
 
     var exec = data.exec;
     var code = exec.toString().match(/[^]*\/\*([^]*)\*\/\}$/);
-    if (!code) console.log(exec + "", key);
+    if (!code) continue;
     code = code[1];
 
     // eval test
