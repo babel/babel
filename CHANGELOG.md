@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.1.1
+
+ * **Polish**
+  * Drop `enumerable: false` clause from class method definitions as `enumerable` already defaults to `false`.
+ * **Bug Fix**
+  * Properly transform `XJSIdentifier` nodes referencing `this` into a `ThisExpression`.
+
 ## 3.1.0
 
  * **Breaking Change**
