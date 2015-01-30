@@ -11,6 +11,16 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.2.0
+
+ * **Bug Fix**
+  * Fixed scope tracking for default parameters IIFE.
+  * Fixed block scoped functions.
+ * **New Feature**
+  * You can now trigger super setters in classes. Thanks [@kruppel](https://github.com/kruppel)!
+  * Add `resolveSourceMap` option.
+  * Better support and output for block scoping loops with labels.
+
 ## 3.1.1
 
  * **Polish**
