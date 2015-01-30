@@ -36,9 +36,7 @@ suite("kangax/compat-table", function () {
     if (data.res._6to5 !== true) continue;
 
     var exec = data.exec;
-    var code = exec.toString().match(/[^]*\/\*([^]*)\*\/\}$/);
-    if (!code) continue;
-    code = code[1];
+    var code = exec.toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
 
     // eval test
     if (_.contains(code, "eval") || _.contains(code, "Function")) continue;
