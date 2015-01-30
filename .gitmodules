@@ -7,3 +7,6 @@
 [submodule "vendor/test262"]
 	path = vendor/test262
 	url = https://github.com/tc39/test262
+[submodule "vendor/compat-table"]
+	path = vendor/compat-table
+	url = https://github.com/kangax/compat-table
