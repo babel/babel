@@ -1,5 +1,7 @@
 if (process.env.SIMPLE_6TO5_TESTS) return;
 
+require("./_helper").assertVendor("test262");
+
 var transform = require("../lib/6to5/transformation/transform");
 var readdir   = require("fs-readdir-recursive");
 var path      = require("path");
@@ -7,10 +9,6 @@ var fs        = require("fs");
 var _         = require("lodash");
 
 var test262Loc = __dirname + "/../vendor/test262";
-if (!fs.existsSync(test262Loc)) {
-  console.error("No vendor/test262 - run `make bootstrap`");
-  process.exit(1);
-}
 
 var read = function (loc) {
   return readdir(loc).map(function (filename) {

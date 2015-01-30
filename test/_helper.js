@@ -18,6 +18,13 @@ var readFile = exports.readFile = function (filename) {
   }
 };
 
+exports.assertVendor = function (name) {
+  if (!fs.existsSync(__dirname + "/../vendor/" + name)) {
+    console.error("No vendor/" + name + " - run `make bootstrap`");
+    process.exit(1);
+  }
+};
+
 exports.get = function (entryName, entryLoc) {
   if (exports.cache[entryName]) return exports.cache[entryName];
 

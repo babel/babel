@@ -1,17 +1,13 @@
 if (!process.env.ALL_6TO5_TESTS) return;
 
+require("./_helper").assertVendor("traceur");
+
 var fs = require("fs");
 var _  = require("lodash");
 
-var traceurLoc = __dirname + "/../vendor/traceur";
-if (!fs.existsSync(traceurLoc)) {
-  console.error("No vendor/traceur - run `make bootstrap`");
-  process.exit(1);
-}
-
 require("./_transformation-helper")({
   name: "traceur",
-  loc: traceurLoc + "/test/feature",
+  loc: __dirname + "/../vendor/traceur/test/feature",
 
   ignoreSuites: [
     // these are all internal traceur tests or non-standard features
