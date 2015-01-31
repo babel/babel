@@ -2,7 +2,7 @@ if (!process.env.ALL_6TO5_TESTS) return;
 
 require("./_helper").assertVendor("regenerator");
 
-var transform = require("../lib/6to5/transformation/transform");
+var transform = require("../lib/6to5/transformation");
 var fs        = require("fs");
 var _         = require("lodash");
 

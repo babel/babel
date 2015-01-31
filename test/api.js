@@ -1,4 +1,4 @@
-var transform = require("../lib/6to5/transformation/transform");
+var transform = require("../lib/6to5/transformation");
 var assert    = require("assert");
 var File      = require("../lib/6to5/file");
 

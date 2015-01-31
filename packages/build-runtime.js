@@ -1,6 +1,6 @@
 "use strict";
 
-var transform = require("../lib/6to5/transformation/transform");
+var transform = require("../lib/6to5/transformation");
 var File      = require("../lib/6to5/file");
 var util      = require("../lib/6to5/util");
 var fs        = require("fs");

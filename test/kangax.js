@@ -2,7 +2,7 @@ require("./_helper").assertVendor("compat-table");
 
 require("../polyfill");
 
-var transform = require("../lib/6to5/transformation/transform");
+var transform = require("../lib/6to5/transformation");
 var assert    = require("assert");
 var data      = require("../vendor/compat-table/data-es6");
 var _         = require("lodash");

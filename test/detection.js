@@ -1,4 +1,4 @@
-var detect = require("../lib/6to5/detection/detect");
+var detect = require("../lib/6to5/detection");
 var assert = require("assert");
 var util   = require("../lib/6to5/util");
 

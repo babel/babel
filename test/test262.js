@@ -2,7 +2,7 @@ if (process.env.SIMPLE_6TO5_TESTS) return;
 
 require("./_helper").assertVendor("test262");
 
-var transform = require("../lib/6to5/transformation/transform");
+var transform = require("../lib/6to5/transformation");
 var readdir   = require("fs-readdir-recursive");
 var path      = require("path");
 var fs        = require("fs");

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
-var transform = require("../../lib/6to5/transformation/transform");
+var transform = require("../../lib/6to5/transformation");
 var util      = require("../../lib/6to5/util");
 var fs        = require("fs");
 var each      = require("lodash/collection/each");

@@ -1,5 +1,5 @@
 var genHelpers = require("./_generator-helpers");
-var transform  = require("../lib/6to5/transformation/transform");
+var transform  = require("../lib/6to5/transformation");
 var sourceMap  = require("source-map");
 var codeFrame  = require("../lib/6to5/helpers/code-frame");
 var esvalid    = require("esvalid");
