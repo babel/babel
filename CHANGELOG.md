@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Bug Fix**
   * Fixed scope tracking for default parameters IIFE.
   * Fixed block scoped functions.
+  * Improved `bin/6to5` path resolution.
  * **New Feature**
   * You can now trigger super setters in classes. Thanks [@kruppel](https://github.com/kruppel)!
   * Add `resolveSourceMap` option.
