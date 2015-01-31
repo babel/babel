@@ -22,6 +22,10 @@ suite("util", function () {
     assert.ok(util.canCompile("/test.es"));
     assert.ok(util.canCompile("/scripts/test.es"));
 
+    assert.ok(util.canCompile("test.jsx"));
+    assert.ok(util.canCompile("/test.jsx"));
+    assert.ok(util.canCompile("/scripts/test.jsx"));
+
     assert.ok(!util.canCompile("test"));
     assert.ok(!util.canCompile("test.css"));
     assert.ok(!util.canCompile("/test.css"));
@@ -75,24 +79,8 @@ suite("util", function () {
     }, /illegal type for regexify/);
   });
 
-  test("getIds");
-
-  test("toStatement");
-
-  test("toBlock");
-
   test("toIdentifier", function () {
     assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
   });
-
-  test("isDynamic");
-
-  test("isReferenced");
-
-  test("removeProperties");
-
-  test("ensureBlock");
-
-  test("pushMutatorMap");
 });
