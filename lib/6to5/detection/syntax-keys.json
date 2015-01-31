@@ -1,0 +1,84 @@
+{
+  "ArrowFunctionExpression":   "es6.arrowFunctions",
+
+  "AwaitExpression":           "es7.asyncFunctions",
+
+  "ClassBody":                 "es6.classes",
+  "ClassDeclaration":          "es6.classes",
+  "ClassExpression":           "es6.classes",
+  "MethodDefinition":          "es6.classes",
+
+  "ComprehensionBlock":        "es7.comprehensions",
+  "ComprehensionExpression":   "es7.comprehensions",
+
+  "ForOfStatement":            "es6.forOf",
+
+  "ExportBatchSpecifier":      "es6.modules",
+  "ExportDeclaration":         "es6.modules",
+  "ExportSpecifier":           "es6.modules",
+  "ImportBatchSpecifier":      "es6.modules",
+  "ImportDeclaration":         "es6.modules",
+  "ImportSpecifier":           "es6.modules",
+
+  "ArrayPattern":              "es6.destructuring",
+  "AssignmentPattern":         "es6.destructuring",
+  "ObjectPattern":             "es6.destructuring",
+
+  "RestElement":               "es6.parameters.rest",
+
+  "SpreadElement":             "es6.spread",
+
+  "SpreadProperty":            "es7.objectSpread",
+
+  "TaggedTemplateExpression":  "es6.templateLiterals",
+  "TemplateElement":           "es6.templateLiterals",
+  "TemplateLiteral":           "es6.templateLiterals",
+
+  "VirtualPropertyExpression": "es7.abstractReferences",
+  "PrivateDeclaration":        "es7.abstractReferences",
+
+  "YieldExpression":           "es6.generators",
+
+  "AnyTypeAnnotation":           "flow",
+  "ArrayTypeAnnotation":         "flow",
+  "BooleanTypeAnnotation":       "flow",
+  "ClassProperty":               "flow",
+  "DeclareClass":                "flow",
+  "DeclareFunction":             "flow",
+  "DeclareModule":               "flow",
+  "DeclareVariable":             "flow",
+  "FunctionTypeAnnotation":      "flow",
+  "FunctionTypeParam":           "flow",
+  "GenericTypeAnnotation":       "flow",
+  "InterfaceExtends":            "flow",
+  "InterfaceDeclaration":        "flow",
+  "IntersectionTypeAnnotation":  "flow",
+  "NullableTypeAnnotation":      "flow",
+  "NumberTypeAnnotation":        "flow",
+  "StringLiteralTypeAnnotation": "flow",
+  "StringTypeAnnotation":        "flow",
+  "TupleTypeAnnotation":         "flow",
+  "TypeofTypeAnnotation":        "flow",
+  "TypeAlias":                   "flow",
+  "TypeAnnotation":              "flow",
+  "TypeParameterDeclaration":    "flow",
+  "TypeParameterInstantiation":  "flow",
+  "ObjectTypeAnnotation":        "flow",
+  "ObjectTypeCallProperty":      "flow",
+  "ObjectTypeIndexer":           "flow",
+  "ObjectTypeProperty":          "flow",
+  "QualifiedTypeIdentifier":     "flow",
+  "UnionTypeAnnotation":         "flow",
+  "VoidTypeAnnotation":          "flow",
+
+  "JSXAttribute":              "jsx",
+  "JSXClosingElement":         "jsx",
+  "JSXElement":                "jsx",
+  "JSXEmptyExpression":        "jsx",
+  "JSXExpressionContainer":    "jsx",
+  "JSXIdentifier":             "jsx",
+  "JSXMemberExpression":       "jsx",
+  "JSXNamespacedName":         "jsx",
+  "JSXOpeningElement":         "jsx",
+  "JSXSpreadAttribute":        "jsx"
+}
