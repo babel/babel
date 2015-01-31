@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.2.1
+
+ * **Bug Fix**
+  * Fix block scoping transformer rewriting breaks and continues to inner labels.
+
 ## 3.2.0
 
  * **Bug Fix**
