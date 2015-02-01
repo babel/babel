@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.0
+
+ * **Bug Fix**
+  * Do all transforms before the regenerator transform is ran.
+ * **New Feature**
+  * Added back the 2.x optional runtime.
+
 ## 3.2.1
 
  * **Bug Fix**
