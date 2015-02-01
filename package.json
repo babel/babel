@@ -1,7 +1,7 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://6to5.org/",
   "repository": "6to5/6to5",
