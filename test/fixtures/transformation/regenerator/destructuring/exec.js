@@ -1,5 +1,6 @@
-function* foo({ bar }) {
+function* foo() {
+  var { bar } = { bar: "bar" };
   return bar;
 }
 
-assert(foo({ bar: "bar" }).next().value, "bar");
+assert.deepEqual(foo().next().value, "bar");
