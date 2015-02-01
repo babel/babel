@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.1
+
+ * **Bug Fix**
+  * Block hoist assignment pattern destructuring.
+
 ## 3.3.0
 
  * **Bug Fix**
