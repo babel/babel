@@ -30,7 +30,7 @@ var updatePackage = function () {
   writeFile("package.json", JSON.stringify(pkg, null, 2));
 };
 
-var buildHelpers = function () {
+var buildHelpers2 = function () {
   var body = [];
   var tree = t.program(body);
 
@@ -41,7 +41,7 @@ var buildHelpers = function () {
   }).code;
 };
 
-writeFile("helpers.js", buildHelpers());
+writeFile("helpers.js", buildHelpers2());
 writeFile("core-js.js", readFile("core-js/library"));
 writeFile("regenerator/index.js", readFile("regenerator-6to5/runtime-module"));
 writeFile("regenerator/runtime.js", readFile("regenerator-6to5/runtime"));
