@@ -30,6 +30,12 @@ var updatePackage = function () {
   writeFile("package.json", JSON.stringify(pkg, null, 2));
 };
 
+var selfContainify = function (code) {
+  return transform(code, {
+    optional: ["selfContained"]
+  }).code;
+};
+
 var buildHelpers2 = function () {
   var body = [];
   var tree = t.program(body);
@@ -44,5 +50,5 @@ var buildHelpers2 = function () {
 writeFile("helpers.js", buildHelpers2());
 writeFile("core-js.js", readFile("core-js/library"));
 writeFile("regenerator/index.js", readFile("regenerator-6to5/runtime-module"));
-writeFile("regenerator/runtime.js", readFile("regenerator-6to5/runtime"));
+writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-6to5/runtime")));
 updatePackage();
