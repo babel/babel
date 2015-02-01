@@ -1,11 +1,10 @@
 "use strict";
 
-var transform = require("../lib/6to5/transformation");
-var File      = require("../lib/6to5/file");
-var util      = require("../lib/6to5/util");
-var fs        = require("fs");
-var t         = require("../lib/6to5/types");
-var _         = require("lodash");
+var buildHelpers = require("../lib/6to5/build-helpers");
+var transform    = require("../lib/6to5/transformation");
+var fs           = require("fs");
+var t            = require("../lib/6to5/types");
+var _            = require("lodash");
 
 var relative = function (filename) {
   return __dirname + "/6to5-runtime/" + filename;
@@ -35,12 +34,7 @@ var buildHelpers = function () {
   var body = [];
   var tree = t.program(body);
 
-  _.each(File.helpers, function (name) {
-    var key = t.identifier(t.toIdentifier(name));
-    body.push(t.expressionStatement(
-      t.assignmentExpression("=", t.memberExpression(t.identifier("exports"), key), util.template(name))
-    ));
-  });
+  buildHelpers(body, t.identifier("exports"));
 
   return transform.fromAst(tree, null, {
     optional: ["selfContained"]

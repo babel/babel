@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var runtime = require("../lib/6to5/build-runtime");
+console.log(runtime());
