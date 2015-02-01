@@ -13,8 +13,9 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 3.3.3
 
- * **Bug Fix**
+ * **Polish**
   * Remap top level `this` to `undefined` instead of throwing an error.
+ * **Bug Fix**
   * Run `selfContained` transformer over the regenerator runtime when building `6to5-runtime`.
   * Fix `t.isReferenced` not properly allowing `value` nodes.
 
