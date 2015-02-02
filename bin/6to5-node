@@ -5,7 +5,7 @@
  * when found, before invoking the "real" _6to5-node(1) executable.
  */
 
-var args  = ["--harmony", __dirname + "/_6to5-node"];
+var args  = [__dirname + "/_6to5-node"];
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split("=")[0];
