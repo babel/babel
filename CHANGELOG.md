@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.4
+
+ * **Polish**
+  * Add istanbul `require` interop.
+ * **Bug Fix**
+  * Fix incorrect source map column tracking in specific scenarios.
+
 ## 3.3.3
 
  * **Polish**
