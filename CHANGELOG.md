@@ -11,7 +11,7 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
-## 3.3.8
+## 3.3.9
 
  * **Bug Fix**
   * Fix super inside of functions.
