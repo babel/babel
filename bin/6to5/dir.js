@@ -11,6 +11,9 @@ module.exports = function (commander, filenames, opts) {
   }
 
   var write = function (src, relative) {
+    // remove extension and then append back on .js
+    relative = relative.replace(/\.(\w*?)$/, "") + ".js";
+
     var dest = path.join(commander.outDir, relative);
 
     var data = util.compile(src, { sourceMapName: dest });
