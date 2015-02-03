@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+var opts = require("./6to5").opts;
+opts.optional = (opts.optional || []).concat("minification");
+opts.format = {
+  compact: true
+};

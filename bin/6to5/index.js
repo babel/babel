@@ -114,12 +114,17 @@ exports.opts = {
   loose:                  commander.loose
 };
 
-var fn;
+setTimeout(function () {
+  // this is just a hack to give `6to5-minify` and other files including this
+  // time to modify `exports.opts`
 
-if (commander.outDir) {
-  fn = require("./dir");
-} else {
-  fn = require("./file");
-}
+  var fn;
 
-fn(commander, filenames, exports.opts);
+  if (commander.outDir) {
+    fn = require("./dir");
+  } else {
+    fn = require("./file");
+  }
+
+  fn(commander, filenames, exports.opts);
+}, 0);
