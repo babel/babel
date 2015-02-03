@@ -333,8 +333,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Polish**
   * Rest parameters now allocate the array before populating.
  * **Internal**
-  * `for...in` loops have been changed to optimised `for` loops - better performance and no enumeration of protoype keys.
-  * Parts of the code generator have now been optimised thanks to [gaearon](https://github.com/gaearon).
+  * `for...in` loops have been changed to optimized `for` loops - better performance and no enumeration of protoype keys.
+  * Parts of the code generator have now been optimized thanks to [gaearon](https://github.com/gaearon).
 
 ## 2.12.3
 
@@ -357,7 +357,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Bug Fix**
   * Support non-string JSX literals.
  * **New Feature**
-  * Loose mode for some transformers that enables non-spec behaviour.
+  * Loose mode for some transformers that enables non-spec behavior.
  * **Internal**
   * Uglify `--mangle sort` has been added to the build script, cutting minified scripts in half.
 
@@ -795,7 +795,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 1.13.2
 
- * Optimise `Array.from` usage by adding a helper method.
+ * Optimize `Array.from` usage by adding a helper method.
  * Upgrade `acorn-6to5`.
 
 ## 1.13.1

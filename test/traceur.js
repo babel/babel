@@ -37,7 +37,7 @@ require("./_transformation-helper")({
     "Syntax/UseStrictEscapeSequence",
     "Syntax/UseStrictLineContinuation",
 
-    // experimental es7 - the spec hasn't been finalised yet
+    // experimental es7 - the spec hasn't been finalized yet
     // these both fail because of filter between blocks
     "ArrayComprehension/Simple",
     "GeneratorComprehension/Simple",
