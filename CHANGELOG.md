@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.7
+
+ * **Bug Fix**
+  * Add `--use-strict` to valid node flags in `6to5-node`.
+  * Fix booleans not being properly stripped from the arguments in `6to5-node`.
+  * Force `.js` extension when writing files to directories with `6to5`.
+
 ## 3.3.5
 
  * **Bug Fix**
