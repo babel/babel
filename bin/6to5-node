@@ -35,6 +35,7 @@ process.argv.slice(2).forEach(function(arg){
     case "--prof":
     case "--throw-deprecation":
     case "--trace-deprecation":
+    case "--use-strict":
       args.unshift(arg);
       break;
 
