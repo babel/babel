@@ -3,7 +3,7 @@ var path = require("path");
 var fs   = require("fs");
 var _    = require("lodash");
 
-var humanise = function (val, noext) {
+var humanize = function (val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
   return val.replace(/-/g, " ");
 };
@@ -37,7 +37,7 @@ exports.get = function (entryName, entryLoc) {
     var suite = {
       options: {},
       tests: [],
-      title: humanise(suiteName),
+      title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName
     };
     suites.push(suite);
@@ -83,7 +83,7 @@ exports.get = function (entryName, entryLoc) {
       if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
 
       var test = {
-        title: humanise(taskName, true),
+        title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
         exec: {
