@@ -72,7 +72,8 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        if (program[arg.slice(2)]) {
+        var parsedArg = program[arg.slice(2)];
+        if (parsedArg && parsedArg !== true) {
           ignoreNext = true;
         }
       } else {
