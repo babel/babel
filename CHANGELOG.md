@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.8
+
+ * **Bug Fix**
+  * Fix super inside of functions.
+  * Fix super constructor inheritance.
+
 ## 3.3.7
 
  * **Bug Fix**
