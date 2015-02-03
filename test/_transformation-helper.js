@@ -114,10 +114,10 @@ var run = function (task, done) {
     var consumer = new sourceMap.SourceMapConsumer(result.map);
 
     _.each(task.sourceMappings, function (mapping, i) {
-      var expect = mapping.original;
+      var actual = mapping.original;
 
-      var actual = consumer.originalPositionFor(mapping.generated);
-      chai.expect({ line: actual.line, column: actual.column }).to.deep.equal(expect);
+      var expect = consumer.originalPositionFor(mapping.generated);
+      chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
   }
 };

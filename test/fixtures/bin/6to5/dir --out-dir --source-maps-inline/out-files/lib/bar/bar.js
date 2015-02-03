@@ -1,4 +1,8 @@
 "use strict";
 
-var Test = function Test() {};
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0lBQU0sZ0JBQUEiLCJmaWxlIjoic3JjL2Jhci9iYXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJjbGFzcyBUZXN0IHtcblxufSJdfQ==
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+var Test = function Test() {
+  _classCallCheck(this, Test);
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7SUFBTSxnQkFBQTt3QkFBQSIsImZpbGUiOiJzcmMvYmFyL2Jhci5qcyIsInNvdXJjZXNDb250ZW50IjpbImNsYXNzIFRlc3Qge1xuXG59Il19
