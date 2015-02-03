@@ -1,7 +1,7 @@
 var x = React.createElement(
   "div",
   null,
-  "foo bar baz",
+  "foobarbaz",
   React.createElement(
     "div",
     null,
