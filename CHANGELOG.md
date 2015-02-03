@@ -11,6 +11,17 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.5
+
+ * **Bug Fix**
+  * Fix block scoping inside of while loops.
+  * Make module name regex more conservative. Thanks [@johlrich](https://github.com/johlrich)!
+  * Fix block scoping of constants.
+  * Fix istanbul interop.
+  * Make JSX transforming more inline with the official transformer with spaces after non-empty last lines.
+ * **Polish**
+  * Make it illegal to export a property called `__esModule`.
+
 ## 3.3.4
 
  * **Polish**
