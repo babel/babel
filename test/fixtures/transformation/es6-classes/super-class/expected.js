@@ -9,7 +9,7 @@ var Test = (function (Foo) {
     _classCallCheck(this, Test);
 
     if (Object.getPrototypeOf(Test) !== null) {
-      Object.getPrototypeOf(Test).apply(instance, arguments);
+      Object.getPrototypeOf(Test).apply(this, arguments);
     }
   }
 

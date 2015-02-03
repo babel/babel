@@ -11,7 +11,7 @@ var Foo = (function (Bar) {
     _classCallCheck(this, Foo);
 
     if (Object.getPrototypeOf(Foo) !== null) {
-      Object.getPrototypeOf(Foo).apply(instance, arguments);
+      Object.getPrototypeOf(Foo).apply(this, arguments);
     }
   }
 
