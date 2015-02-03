@@ -14,7 +14,6 @@
   },
   "disallowSpacesInsideArrayBrackets": true,
   "disallowSpacesInsideParentheses": true,
-  "disallowQuotedKeysInObjects": true,
   "disallowSpaceAfterObjectKeys": true,
   "disallowSpaceAfterPrefixUnaryOperators": true,
   "disallowSpaceBeforePostfixUnaryOperators": true,
@@ -35,7 +34,6 @@
   "requireSpaceAfterBinaryOperators": true,
   "requireLineFeedAtFileEnd": true,
   "requireCapitalizedConstructors": true,
-  "requireDotNotation": true,
   "requireSpacesInForStatement": true,
   "requireCurlyBraces": [
     "do"
@@ -51,7 +49,8 @@
     "return",
     "try",
     "catch",
-    "typeof"
+    "typeof",
+    "function"
   ],
   "validateLineBreaks": "LF",
   "validateQuoteMarks": "\"",
