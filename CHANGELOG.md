@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.12
+
+ * **Bug Fix**
+  * Don't override `MemberExpression`s with `core-js` in `selfContaiend` if a local binding exists.
+
 ## 3.3.11
 
  * **Bug Fix**
