@@ -13,6 +13,8 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 3.3.10
 
+ * **Internal**
+  * Restructure transformers so they're only ran if the AST contains nodes that they need to worry about. Improves transpilation speed significantly.
  * **Bug Fix**
   * Fix source maps not tracking end of node locations.
  * **Spec Compliancy**
