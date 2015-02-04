@@ -1238,7 +1238,7 @@
   function readWord1() {
     containsEsc = false;
     var word = "", first = true, chunkStart = tokPos;
-    for (;;) {
+    while (tokPos < inputLen) {
       var ch = input.charCodeAt(tokPos);
       if (isIdentifierChar(ch)) {
         ++tokPos;
