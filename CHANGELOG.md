@@ -11,6 +11,16 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.10
+
+ * **Bug Fix**
+  * Fix source maps not tracking end of node locations.
+ * **Spec Compliancy**
+  * Use static super references as the home object is actually done at definition time.
+ * **Polish**
+  * Force the `es6.destructuring` transformer to be whitelisted when the `es7.objectSpread` transformer is.
+  * Join sibling string literals when creating JSX.
+
 ## 3.3.9
 
  * **Bug Fix**
