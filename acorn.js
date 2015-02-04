@@ -2263,7 +2263,7 @@
     case _name:
       var start = storeCurrentPos();
       var id = parseIdent(tokType !== _name);
-      if (eat(_arrow)) {
+      if (!canInsertSemicolon() && eat(_arrow)) {
         return parseArrowExpression(startNodeAt(start), [id]);
       }
       return id;
@@ -2352,7 +2352,7 @@
       var innerEnd = storeCurrentPos();
       expect(_parenR);
 
-      if (eat(_arrow)) {
+      if (!canInsertSemicolon() && eat(_arrow)) {
         if (innerParenStart) unexpected(innerParenStart);
         return parseArrowExpression(startNodeAt(start), exprList);
       }
