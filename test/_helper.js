@@ -1,7 +1,8 @@
-var util = require("../lib/6to5/util");
-var path = require("path");
-var fs   = require("fs");
-var _    = require("lodash");
+var esvalid = require("esvalid");
+var util    = require("../lib/6to5/util");
+var path    = require("path");
+var fs      = require("fs");
+var _       = require("lodash");
 
 var humanize = function (val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -15,6 +16,17 @@ var readFile = exports.readFile = function (filename) {
     return file;
   } else {
     return "";
+  }
+};
+
+exports.esvalid = function (ast, loc) {
+  var errors = esvalid.errors(ast);
+  if (errors.length) {
+    var msg = [];
+    _.each(errors, function (err) {
+      msg.push(err.message + " - " + JSON.stringify(err.node));
+    });
+    throw new Error(loc + ": " + msg.join(". "));
   }
 };
 

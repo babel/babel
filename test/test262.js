@@ -4,6 +4,7 @@ require("./_helper").assertVendor("test262");
 
 var transform = require("../lib/6to5/transformation");
 var readdir   = require("fs-readdir-recursive");
+var helper    = require("./_helper");
 var path      = require("path");
 var fs        = require("fs");
 var _         = require("lodash");
@@ -16,7 +17,7 @@ var read = function (loc) {
   });
 };
 
-var exec = function (loc) {
+var check = function (loc) {
   try {
     var file = fs.readFileSync(loc, "utf8");
 
@@ -26,24 +27,20 @@ var exec = function (loc) {
     // ReferenceError: 1++; (runtime)
     var lazyError = /negative: (\S+)/.test(file);
 
-    var compiled = transform(file, {
+    transform(file, {
       filename: loc,
-      blacklist: ["useStrict"]
+      blacklist: ["useStrict"],
+      _anal: true
     });
-
-    global.eval(compiled);
   } catch (err) {
     if (err && lazyError && err instanceof SyntaxError) {
       return;
     } else {
+      err.stack = loc + ": " + err.stack;
       throw err;
     }
   }
 };
-
-// harness
-var harness = read(test262Loc + "/harness");
-_.each(harness, exec);
 
 // tests!
 var tests = read(test262Loc + "/test");
@@ -52,6 +49,6 @@ _.each(tests, function (loc) {
   alias = alias.replace(/\.([^\.]+)$/g, "");
   test(alias, function () {
     this.timeout(0);
-    exec(loc);
+    check(loc);
   });
 });

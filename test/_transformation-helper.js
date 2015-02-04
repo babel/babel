@@ -2,7 +2,6 @@ var genHelpers = require("./_generator-helpers");
 var transform  = require("../lib/6to5/transformation");
 var sourceMap  = require("source-map");
 var codeFrame  = require("../lib/6to5/helpers/code-frame");
-var esvalid    = require("esvalid");
 var Module     = require("module");
 var helper     = require("./_helper");
 var assert     = require("assert");
@@ -55,15 +54,7 @@ var run = function (task, done) {
 
   var checkAst = function (result, opts) {
     if (noCheckAst) return;
-
-    var errors = esvalid.errors(result.ast.program);
-    if (errors.length) {
-      var msg = [];
-      _.each(errors, function (err) {
-        msg.push(err.message + " - " + JSON.stringify(err.node));
-      });
-      throw new Error(opts.loc + ": " + msg.join(". "));
-    }
+    helper.esvalid(result.ast.program, opts.loc);
   };
 
   if (execCode) {
