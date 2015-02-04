@@ -8,8 +8,8 @@ var BaseController = (function (_Chaplin$Controller) {
   function BaseController() {
     _classCallCheck(this, BaseController);
 
-    if (Object.getPrototypeOf(BaseController) !== null) {
-      Object.getPrototypeOf(BaseController).apply(this, arguments);
+    if (_Chaplin$Controller != null) {
+      _Chaplin$Controller.apply(this, arguments);
     }
   }
 
@@ -22,8 +22,8 @@ var BaseController2 = (function (_Chaplin$Controller$Another) {
   function BaseController2() {
     _classCallCheck(this, BaseController2);
 
-    if (Object.getPrototypeOf(BaseController2) !== null) {
-      Object.getPrototypeOf(BaseController2).apply(this, arguments);
+    if (_Chaplin$Controller$Another != null) {
+      _Chaplin$Controller$Another.apply(this, arguments);
     }
   }
 

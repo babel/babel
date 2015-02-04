@@ -10,8 +10,8 @@ var Foo = (function (Bar) {
   function Foo() {
     _classCallCheck(this, Foo);
 
-    if (Object.getPrototypeOf(Foo) !== null) {
-      Object.getPrototypeOf(Foo).apply(this, arguments);
+    if (Bar != null) {
+      Bar.apply(this, arguments);
     }
   }
 
