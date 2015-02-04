@@ -72,6 +72,6 @@
     "uglify-js": "2.4.16"
   },
   "optionalDependencies": {
-    "kexec": "1.0.0"
+    "kexec": "1.1.1"
   }
 }
