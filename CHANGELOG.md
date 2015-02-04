@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.3.11
+
+ * **Bug Fix**
+  * Fix the require cache.
+
 ## 3.3.10
 
  * **Internal**
