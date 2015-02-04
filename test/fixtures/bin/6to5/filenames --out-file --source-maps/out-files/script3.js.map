@@ -1,1 +1,1 @@
-{"version":3,"sources":["script.js","script2.js"],"names":[],"mappings":";;;;IAAM,gBAAA;wBAAA;;;;;ACAN,IAAI,IAAI,UAAA;SAAK,IAAI","file":"script3.js","sourcesContent":["class Test {\n\n}","arr.map(x => x * MULTIPLIER);"]}
+{"version":3,"sources":["script.js","script2.js"],"names":[],"mappings":";;;;IAAM,IAAI,YAAJ,IAAI;wBAAJ,IAAI;;;;;ACAV,GAAG,CAAC,GAAG,CAAC,UAAA,CAAC;SAAI,CAAC,GAAG,UAAU;CAAA,CAAC,CAAC","file":"script3.js","sourcesContent":["class Test {\n\n}","arr.map(x => x * MULTIPLIER);"]}
