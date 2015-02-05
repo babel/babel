@@ -1,10 +1,10 @@
 var detect = require("../lib/6to5/detection");
 var assert = require("assert");
-var util   = require("../lib/6to5/util");
+var parse  = require("../lib/6to5/helpers/parse");
 
 suite("detection", function () {
   var checkSyntax = function (code, name) {
-    var ast = util.parse({
+    var ast = parse({
       experimental: true
     }, code);
 

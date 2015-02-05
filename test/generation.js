@@ -1,7 +1,7 @@
 var generate = require("../lib/6to5/generation");
 var assert   = require("assert");
 var helper   = require("./_helper");
-var util     = require("../lib/6to5/util");
+var parse    = require("../lib/6to5/helpers/parse");
 var chai     = require("chai");
 var t        = require("../lib/6to5/types");
 var _        = require("lodash");
@@ -26,7 +26,7 @@ _.each(helper.get("generation"), function (testSuite) {
         var expect = task.expect;
         var actual = task.actual;
 
-        var actualAst  = util.parse({ filename: actual.loc, experimental: true }, actual.code);
+        var actualAst  = parse({ filename: actual.loc, experimental: true }, actual.code);
         var actualCode = generate(actualAst, null, actual.code).code;
 
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);

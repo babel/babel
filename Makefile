@@ -92,7 +92,7 @@ publish:
 	make publish-core
 	make publish-runtime
 
-	rm -rf templates.json browser.js browser-polyfill.js
+	rm -rf templates.json browser.js browser-polyfill.js runtime.js
 
 publish-runtime:
 	cd packages; \
