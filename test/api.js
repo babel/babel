@@ -1,6 +1,6 @@
 var transform = require("../lib/6to5/transformation");
 var assert    = require("assert");
-var File      = require("../lib/6to5/file");
+var File      = require("../lib/6to5/transformation/file");
 
 suite("api", function () {
   test("{ code: false }", function () {

@@ -1,4 +1,4 @@
-var traverse = require("../lib/6to5/traverse");
+var traverse = require("../lib/6to5/traversal");
 var assert   = require("assert");
 var _        = require("lodash");
 
