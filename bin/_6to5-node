@@ -56,7 +56,15 @@ if (program.eval || program.print) {
   var code = program.eval;
   if (!code || code === true) code = program.print;
 
-  var result = _eval(code, "eval");
+  global.__filename = "[eval]";
+  global.__dirname = process.cwd();
+  global.require = require;
+  global.exports = exports;
+
+  var module = new Module(global.__filename);
+  global.module = module;
+
+  var result = _eval(code, global.__filename);
   if (program.print) console.log(result);
 } else {
   if (program.args.length) {
