@@ -11,6 +11,17 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.4.0
+
+ * **New Feature**
+  * Add `commonStandard` module formatter.
+ * **Bug Fix**
+  * Fix conflicting `--module-ids` shorthand arg in `$ 6to5`.
+ * **Internal**
+  * Lots of internal refactoring with scope tracking and traversal.
+ * **Polish**
+  * Don't return `map` in the API result if `sourceMap` was set to `"inline"`.
+
 ## 3.3.12
 
  * **Bug Fix**
