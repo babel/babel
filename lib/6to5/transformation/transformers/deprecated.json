@@ -34,6 +34,8 @@
   "coreAliasing": "selfContained",
   "undefinedToVoid": "spec.undefinedToVoid",
   "undeclaredVariableCheck": "validation.undeclaredVariableCheck",
-  "specPropertyLiterals": "minification.propertyLiterals",
-  "specMemberExpressionLiterals": "minification.memberExpressionLiterals"
+  "specPropertyLiterals": "es3.propertyLiterals",
+  "specMemberExpressionLiterals": "es3.memberExpressionLiterals",
+  "minification.propertyLiterals": "es3.propertyLiterals",
+  "minification.memberExpressionLiterals": "es3.memberExpressionLiterals"
 }
