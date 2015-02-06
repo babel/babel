@@ -18,7 +18,7 @@ build:
 	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
-	node $(BROWSERIFY_CMD) lib/6to5/browser.js -s to5 >dist/6to5.js
+	node $(BROWSERIFY_CMD) lib/6to5/api/browser.js -s to5 >dist/6to5.js
 	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
 
 	node bin/6to5-runtime >dist/runtime.js
