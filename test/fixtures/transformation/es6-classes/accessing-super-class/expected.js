@@ -15,14 +15,14 @@ var Test = (function (Foo) {
     _classCallCheck(this, Test);
 
     woops["super"].test();
-    _get(Foo.prototype, "constructor", this).call(this);
-    _get(Foo.prototype, "test", this).call(this);
+    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
 
-    _get(Foo.prototype, "constructor", this).apply(this, arguments);
-    (_get2 = _get(Foo.prototype, "constructor", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
+    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).apply(this, arguments);
+    (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
 
-    _get(Foo.prototype, "test", this).apply(this, arguments);
-    (_get3 = _get(Foo.prototype, "test", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+    (_get3 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
   }
 
   _inherits(Test, Foo);
@@ -31,9 +31,9 @@ var Test = (function (Foo) {
     foo: {
       value: function foo() {
         var _get2;
-        _get(Foo, "foo", this).call(this);
-        _get(Foo, "foo", this).apply(this, arguments);
-        (_get2 = _get(Foo, "foo", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
+        _get(Object.getPrototypeOf(Test), "foo", this).call(this);
+        _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
+        (_get2 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       configurable: true
@@ -42,9 +42,9 @@ var Test = (function (Foo) {
     test: {
       value: function test() {
         var _get2;
-        _get(Foo.prototype, "test", this).call(this);
-        _get(Foo.prototype, "test", this).apply(this, arguments);
-        (_get2 = _get(Foo.prototype, "test", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
+        _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
+        _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+        (_get2 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
       },
       writable: true,
       configurable: true

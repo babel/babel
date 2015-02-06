@@ -12,8 +12,8 @@ var Test = (function (Foo) {
   function Test() {
     _classCallCheck(this, Test);
 
-    _get(Foo.prototype, "test", this).whatever();
-    _get(Foo.prototype, "test", this).call(this);
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).whatever();
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
   }
 
   _inherits(Test, Foo);
@@ -21,7 +21,7 @@ var Test = (function (Foo) {
   _prototypeProperties(Test, {
     test: {
       value: function test() {
-        return _get(Foo, "wow", this).call(this);
+        return _get(Object.getPrototypeOf(Test), "wow", this).call(this);
       },
       writable: true,
       configurable: true

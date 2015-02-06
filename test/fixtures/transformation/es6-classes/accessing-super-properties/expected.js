@@ -10,8 +10,8 @@ var Test = (function (Foo) {
   function Test() {
     _classCallCheck(this, Test);
 
-    _get(Foo.prototype, "test", this);
-    _get(Foo.prototype, "test", this).whatever;
+    _get(Object.getPrototypeOf(Test.prototype), "test", this);
+    _get(Object.getPrototypeOf(Test.prototype), "test", this).whatever;
   }
 
   _inherits(Test, Foo);

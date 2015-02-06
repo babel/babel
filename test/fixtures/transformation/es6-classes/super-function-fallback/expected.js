@@ -7,5 +7,5 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 var Test = function Test() {
   _classCallCheck(this, Test);
 
-  _get(Function.prototype, "hasOwnProperty", this).call(this, "test");
+  _get(Object.getPrototypeOf(Test.prototype), "hasOwnProperty", this).call(this, "test");
 };
