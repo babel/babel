@@ -2,6 +2,7 @@
   "esnext": true,
   "indent": 2,
   "freeze": true,
+  "validthis": true,
   "camelcase": true,
   "unused": true,
   "eqnull": true,
