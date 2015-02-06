@@ -1,21 +1,20 @@
 {
   "name": "6to5",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "3.3.12",
+  "version": "3.4.0",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://6to5.org/",
   "repository": "6to5/6to5",
   "preferGlobal": true,
   "main": "lib/6to5/api/node.js",
-  "browser": "lib/6to5/api/browser.js",
+  "browser": {
+    "./lib/6to5/api/register/node.js": "./lib/6to5/api/register/browser.js"
+  },
   "bin": {
     "6to5": "./bin/6to5/index.js",
     "6to5-minify": "./bin/6to5-minify",
     "6to5-node": "./bin/6to5-node",
     "6to5-runtime": "./bin/6to5-runtime"
-  },
-  "browser": {
-    "./lib/6to5/api/register/node.js": "./lib/6to5/api/register/browser.js"
   },
   "keywords": [
     "harmony",
