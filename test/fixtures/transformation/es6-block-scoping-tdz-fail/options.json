@@ -1,0 +1,4 @@
+{
+  "optional": "es6.blockScopingTDZ",
+  "throws": "is not defined - temporal dead zone"
+}
