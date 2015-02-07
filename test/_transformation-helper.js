@@ -54,7 +54,7 @@ var run = function (task, done) {
 
   var checkAst = function (result, opts) {
     if (noCheckAst) return;
-    helper.esvalid(result.ast.program, opts.loc);
+    helper.esvalid(result.ast.program, result.code, opts.loc);
   };
 
   if (execCode) {

@@ -19,14 +19,14 @@ var readFile = exports.readFile = function (filename) {
   }
 };
 
-exports.esvalid = function (ast, loc) {
+exports.esvalid = function (ast, code, loc) {
   var errors = esvalid.errors(ast);
   if (errors.length) {
     var msg = [];
     _.each(errors, function (err) {
       msg.push(err.message + " - " + JSON.stringify(err.node));
     });
-    throw new Error(loc + ": " + msg.join(". "));
+    throw new Error(loc + ": " + msg.join(". ") + "\n" + code);
   }
 };
 
