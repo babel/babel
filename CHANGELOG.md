@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Bug Fix**
   * Fix conflicting `--module-ids` shorthand arg in `$ 6to5`.
   * Add require hook options to cache key.
+  * Fix strict module formatter.
 
 ## 3.4.0
 
