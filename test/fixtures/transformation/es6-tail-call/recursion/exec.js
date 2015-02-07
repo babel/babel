@@ -1,4 +1,4 @@
-var timeLimit = Date.now() + 1000;
+var timeLimit = Date.now() + 5000;
 
 assert.equal((function f(n) {
   assert.operator(Date.now(), '<', timeLimit, "Timeout");
