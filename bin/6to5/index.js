@@ -23,7 +23,7 @@ commander.option("-L, --loose [list]", "List of transformers to enable loose mod
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
-commander.option("-i, --module-ids", "Insert module id in modules", false);
+commander.option("-M, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 
