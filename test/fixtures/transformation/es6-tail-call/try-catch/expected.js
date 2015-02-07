@@ -10,26 +10,14 @@
 })(1000000) === "foo";
 
 (function f(n) {
-  var _arguments = arguments,
-      _this = this,
-      _shouldContinue,
-      _result;
-  do {
-    _shouldContinue = false;
-    _result = (function (n) {
-      if (n <= 0) {
-        return "foo";
-      }
-      try {
-        throw new Error();
-      } catch (e) {
-        _arguments = [n - 1];
-        _this = undefined;
-        return _shouldContinue = true;
-      }
-    }).apply(_this, _arguments);
-  } while (_shouldContinue);
-  return _result;
+  if (n <= 0) {
+    return "foo";
+  }
+  try {
+    throw new Error();
+  } catch (e) {
+    return to5Runtime.tailCall(f, [n - 1]);
+  }
 })(1000000) === "foo";
 
 (function f(n) {
@@ -44,22 +32,10 @@
 })(1000000) === "foo";
 
 (function f(n) {
-  var _arguments = arguments,
-      _this = this,
-      _shouldContinue,
-      _result;
-  do {
-    _shouldContinue = false;
-    _result = (function (n) {
-      if (n <= 0) {
-        return "foo";
-      }
-      try {} finally {
-        _arguments = [n - 1];
-        _this = undefined;
-        return _shouldContinue = true;
-      }
-    }).apply(_this, _arguments);
-  } while (_shouldContinue);
-  return _result;
+  if (n <= 0) {
+    return "foo";
+  }
+  try {} finally {
+    return to5Runtime.tailCall(f, [n - 1]);
+  }
 })(1000000) === "foo";
