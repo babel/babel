@@ -1,13 +1,14 @@
 "use strict";
 
-(function f() {
+(function f(_x, /* should be undefined after first pass */m) {
   var _arguments = arguments,
       _this = this,
       _shouldContinue,
       _result;
   do {
     _shouldContinue = false;
-    _result = (function (n, /* should be undefined after first pass */m) {
+    _result = (function (_x, m) {
+      var n = arguments[0] === undefined ? getDefaultValue() : arguments[0];
       if (n <= 0) {
         return "foo";
       }

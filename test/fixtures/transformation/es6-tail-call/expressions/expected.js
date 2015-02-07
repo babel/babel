@@ -1,6 +1,6 @@
 "use strict";
 
-(function f() {
+(function f(n) {
   var _arguments = arguments,
       _this = this,
       _shouldContinue,

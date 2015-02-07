@@ -9,7 +9,7 @@
   } catch (e) {}
 })(1000000) === "foo";
 
-(function f() {
+(function f(n) {
   var _arguments = arguments,
       _this = this,
       _shouldContinue,
@@ -43,7 +43,7 @@
   } finally {}
 })(1000000) === "foo";
 
-(function f() {
+(function f(n) {
   var _arguments = arguments,
       _this = this,
       _shouldContinue,

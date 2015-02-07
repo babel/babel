@@ -1,4 +1,4 @@
-(function f(n, /* should be undefined after first pass */ m) {
+(function f(n = getDefaultValue(), /* should be undefined after first pass */ m) {
   if (n <= 0) {
     return "foo";
   }
