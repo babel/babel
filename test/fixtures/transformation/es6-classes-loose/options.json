@@ -1,3 +1,4 @@
 {
-  "loose": ["es6.classes"]
+  "loose": ["es6.classes"],
+  "blacklist": ["es6.tailCall"]
 }
