@@ -17,6 +17,6 @@ suite("api", function () {
     var file = new File;
     assert.throws(function () {
       file.addHelper("foob");
-    }, /unknown declaration foob/);
+    }, /Unknown helper foob/);
   });
 });
