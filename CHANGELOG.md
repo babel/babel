@@ -11,6 +11,12 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.4.1
+
+ * **Bug Fix**
+  * Fix conflicting `--module-ids` shorthand arg in `$ 6to5`.
+  * Add require hook options to cache key.
+
 ## 3.4.0
 
  * **New Feature**
