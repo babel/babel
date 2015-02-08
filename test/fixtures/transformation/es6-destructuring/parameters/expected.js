@@ -3,10 +3,12 @@
 var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } };
 
 function somethingAdvanced(_ref) {
-  var x1 = _ref.topLeft.x;
-  var y1 = _ref.topLeft.y;
-  var x2 = _ref.bottomRight.x;
-  var y2 = _ref.bottomRight.y;
+  var _ref$topLeft = _ref.topLeft;
+  var x1 = _ref$topLeft.x;
+  var y1 = _ref$topLeft.y;
+  var _ref$bottomRight = _ref.bottomRight;
+  var x2 = _ref$bottomRight.x;
+  var y2 = _ref$bottomRight.y;
 }
 
 function unpackObject(_ref) {

@@ -1,6 +1,8 @@
 "use strict";
 
-var x1 = rect.topLeft.x;
-var y1 = rect.topLeft.y;
-var x2 = rect.bottomRight.x;
-var y2 = rect.bottomRight.y;
+var _rect$topLeft = rect.topLeft;
+var x1 = _rect$topLeft.x;
+var y1 = _rect$topLeft.y;
+var _rect$bottomRight = rect.bottomRight;
+var x2 = _rect$bottomRight.x;
+var y2 = _rect$bottomRight.y;
