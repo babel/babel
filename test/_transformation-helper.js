@@ -16,6 +16,14 @@ global.assertNoOwnProperties = function (obj) {
   assert.equal(Object.getOwnPropertyNames(obj).length, 0);
 };
 
+global.assertHasOwnProperty = function () {
+
+};
+
+global.assertLacksOwnProperty = function () {
+
+};
+
 global.assertArrayEquals = assert.deepEqual;
 global.assert = chai.assert;
 global.chai = chai;
@@ -129,12 +137,7 @@ module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
 
         var runTest = function (done) {
           var runTask = function () {
-            try {
-              run(task, done);
-            } catch (err) {
-              if (task.options.after) task.options.after();
-              throw err;
-            }
+            run(task, done);
           };
 
           _.extend(task.options, taskOpts);
