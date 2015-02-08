@@ -2426,7 +2426,7 @@
       if (allowEmpty && tokType === _comma) {
         elem = null;
       } else {
-        var left = parseAssignableAtom();
+        var left = parseMaybeDefault();
         parseAssignableListItemTypes(left);
         elem = parseMaybeDefault(null, left);
       }
@@ -3558,8 +3558,6 @@
       node.typeParameters = parseTypeParameterDeclaration();
     }
     parseFunctionParams(node);
-    expect(_parenL);
-    node.params = parseBindingList(_parenR, false);
     parseFunctionBody(node, allowExpressionBody);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
