@@ -17,6 +17,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Destructuring patterns as the left operator in `ForInStatement`/`ForOfStatement`.
  * **Polish**
   * Make default parameter IIFE invocation smarter.
+  * Make `__esModule` flag non-enumerable. Thanks [@daliwali](https://github.com/daliwali)!
  * **New Feature**
   * Optional `es6.blockScopingTDZ` is now completely functional and handles all edgecases.
   * `super` in object literals.
