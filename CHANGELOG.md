@@ -11,6 +11,17 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.5.0
+
+ * **Bug Fix**
+  * Destructuring patterns as the left operator in `ForInStatement`/`ForOfStatement`.
+ * **Polish**
+  * Make default parameter IIFE invocation smarter.
+ * **New Feature**
+  * Optional `es6.blockScopingTDZ` is now completely functional and handles all edgecases.
+  * `super` in object literals.
+  * Tail call optimisation. Thanks [@RReverser](https://github.com/RReverser)!
+
 ## 3.4.1
 
  * **Bug Fix**
