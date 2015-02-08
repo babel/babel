@@ -45,6 +45,9 @@
     initTokenState();
     var startPos = options.locations ? [tokPos, curPosition()] : tokPos;
     initParserState();
+    if (options.strictMode) {
+      strict = true;
+    }
     return parseTopLevel(options.program || startNodeAt(startPos));
   };
 
@@ -52,6 +55,7 @@
   // the parser process. These options are recognized:
 
   var defaultOptions = exports.defaultOptions = {
+    strictMode: false,
     playground: false,
     // `ecmaVersion` indicates the ECMAScript version to parse. Must
     // be either 3, or 5, or 6. This influences support for strict
@@ -171,9 +175,6 @@
           comment.range = [start, end];
         comments.push(comment);
       };
-    }
-    if (options.strictMode) {
-      strict = true;
     }
     if (options.ecmaVersion >= 6) {
       isKeyword = isEcma6Keyword;
