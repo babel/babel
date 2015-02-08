@@ -14,20 +14,22 @@
       _this = this,
       _shouldContinue,
       _result;
+  var _callee = function (n) {
+    if (n <= 0) {
+      return "foo";
+    }
+    try {
+      throw new Error();
+    } catch (e) {
+      _arguments = [n - 1];
+      _this = undefined;
+      return _shouldContinue = true;
+    }
+  };
+
   do {
     _shouldContinue = false;
-    _result = (function (n) {
-      if (n <= 0) {
-        return "foo";
-      }
-      try {
-        throw new Error();
-      } catch (e) {
-        _arguments = [n - 1];
-        _this = undefined;
-        return _shouldContinue = true;
-      }
-    }).apply(_this, _arguments);
+    _result = _callee.apply(_this, _arguments);
   } while (_shouldContinue);
   return _result;
 })(1000000) === "foo";
@@ -48,18 +50,20 @@
       _this = this,
       _shouldContinue,
       _result;
+  var _callee = function (n) {
+    if (n <= 0) {
+      return "foo";
+    }
+    try {} finally {
+      _arguments = [n - 1];
+      _this = undefined;
+      return _shouldContinue = true;
+    }
+  };
+
   do {
     _shouldContinue = false;
-    _result = (function (n) {
-      if (n <= 0) {
-        return "foo";
-      }
-      try {} finally {
-        _arguments = [n - 1];
-        _this = undefined;
-        return _shouldContinue = true;
-      }
-    }).apply(_this, _arguments);
+    _result = _callee.apply(_this, _arguments);
   } while (_shouldContinue);
   return _result;
 })(1000000) === "foo";
