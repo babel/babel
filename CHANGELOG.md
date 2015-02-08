@@ -18,6 +18,9 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Polish**
   * Make default parameter IIFE invocation smarter.
   * Make `__esModule` flag non-enumerable. Thanks [@daliwali](https://github.com/daliwali)!
+ * **Internal**
+  * More performance improvements.
+  * Parsing is now ~30% faster thanks to [marijnh/acorn@7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f](https://github.com/marijnh/acorn/commit/7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f).
  * **New Feature**
   * Optional `es6.blockScopingTDZ` is now completely functional and handles all edgecases.
   * `super` in object literals.
