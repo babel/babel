@@ -2052,7 +2052,7 @@
   function readWord1() {
     containsEsc = false;
     var word = "", first = true, chunkStart = tokPos;
-    for (;;) {
+    while (tokPos < inputLen) {
       var ch = input.charCodeAt(tokPos);
       if (isIdentifierChar(ch)) {
         ++tokPos;
@@ -2307,12 +2307,12 @@
   // Convert existing expression atom to assignable pattern
   // if possible.
 
-  function toAssignable(node) {
+  function toAssignable(node, isBinding) {
     if (options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "Identifier":
-        case "MemberExpression":
         case "VirtualPropertyExpression":
+        case "MemberExpression":
         case "ObjectPattern":
         case "ArrayPattern":
         case "AssignmentPattern":
@@ -2323,13 +2323,13 @@
           for (var i = 0; i < node.properties.length; i++) {
             var prop = node.properties[i];
             if (prop.kind !== "init") raise(prop.key.start, "Object pattern can't contain getter or setter");
-            toAssignable(prop.value);
+            toAssignable(prop.value, isBinding);
           }
           break;
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          toAssignableList(node.elements);
+          toAssignableList(node.elements, isBinding);
           break;
 
         case "AssignmentExpression":
@@ -2340,6 +2340,9 @@
           }
           break;
 
+        case "MemberExpression":
+          if (!isBinding) break;
+
         default:
           raise(node.start, "Assigning to rvalue");
       }
@@ -2349,10 +2352,10 @@
 
   // Convert list of expression atoms to binding list.
 
-  function toAssignableList(exprList) {
+  function toAssignableList(exprList, isBinding) {
     if (exprList.length) {
       for (var i = 0; i < exprList.length - 1; i++) {
-        toAssignable(exprList[i]);
+        toAssignable(exprList[i], isBinding);
       }
       var last = exprList[exprList.length - 1];
       switch (last.type) {
@@ -2361,12 +2364,12 @@
         case "SpreadElement":
           last.type = "RestElement";
           var arg = last.argument;
-          toAssignable(arg);
-          if (arg.type !== "Identifier" && arg.type !== "ArrayPattern")
+          toAssignable(arg, isBinding);
+          if (arg.type !== "Identifier" && arg.type !== "MemberExpression" && arg.type !== "ArrayPattern")
             unexpected(arg.start);
           break;
         default:
-          toAssignable(last);
+          toAssignable(last, isBinding);
       }
     }
     return exprList;
@@ -2384,13 +2387,13 @@
   function parseRest() {
     var node = startNode();
     next();
-    node.argument = tokType === _name || tokType === _bracketL ? parseAssignableAtom() : unexpected();
+    node.argument = tokType === _name || tokType === _bracketL ? parseBindingAtom() : unexpected();
     return finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
 
-  function parseAssignableAtom() {
+  function parseBindingAtom() {
     if (options.ecmaVersion < 6) return parseIdent();
     switch (tokType) {
       case _name:
@@ -2399,7 +2402,7 @@
       case _bracketL:
         var node = startNode();
         next();
-        node.elements = parseAssignableList(_bracketR, true);
+        node.elements = parseBindingList(_bracketR, true);
         return finishNode(node, "ArrayPattern");
 
       case _braceL:
@@ -2410,7 +2413,7 @@
     }
   }
 
-  function parseAssignableList(close, allowEmpty) {
+  function parseBindingList(close, allowEmpty) {
     var elts = [], first = true;
     while (!eat(close)) {
       first ? first = false : expect(_comma);
@@ -2446,9 +2449,10 @@
   // Parses assignment pattern around given atom if possible.
 
   function parseMaybeDefault(startPos, left) {
-    left = left || parseAssignableAtom();
+    startPos = startPos || storeCurrentPos();
+    left = left || parseBindingAtom();
     if (!eat(_eq)) return left;
-    var node = startPos ? startNodeAt(startPos) : startNode();
+    var node = startNodeAt(startPos);
     node.operator = "=";
     node.left = left;
     node.right = parseMaybeAssign();
@@ -2830,7 +2834,7 @@
       var clause = startNode();
       next();
       expect(_parenL);
-      clause.param = parseAssignableAtom();
+      clause.param = parseBindingAtom();
       checkLVal(clause.param, true);
       expect(_parenR);
       clause.guard = null;
@@ -2958,7 +2962,7 @@
     node.kind = kind;
     for (;;) {
       var decl = startNode();
-      decl.id = parseAssignableAtom();
+      decl.id = parseBindingAtom();
       checkLVal(decl.id, true);
 
       if (tokType === _colon) {
@@ -3238,8 +3242,8 @@
         }
       }
 
-      if (eat(_arrow)) {
-        return parseArrowExpression(node, [id]);
+      if (!canInsertSemicolon() && eat(_arrow)) {
+        return parseArrowExpression(startNodeAt(start), [id]);
       }
       return id;
       
@@ -3358,7 +3362,7 @@
       var innerEnd = storeCurrentPos();
       expect(_parenR);
 
-      if (eat(_arrow)) {
+      if (!canInsertSemicolon() && eat(_arrow)) {
         if (innerParenStart) unexpected(innerParenStart);
         return parseArrowExpression(startNodeAt(start), exprList);
       }
@@ -3453,9 +3457,10 @@
       if (options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        if (isPattern) {
+        if (isPattern || refShorthandDefaultPos) {
           start = storeCurrentPos();
-        } else {
+        }
+        if (!isPattern) {
           isGenerator = eat(_star);
         }
       }
@@ -3476,7 +3481,7 @@
         if (tokType !== _parenL) unexpected();
       }
       if (eat(_colon)) {
-        prop.value = isPattern ? parseMaybeDefault(start) : parseMaybeAssign(false, refShorthandDefaultPos);
+        prop.value = isPattern ? parseMaybeDefault() : parseMaybeAssign(false, refShorthandDefaultPos);
         prop.kind = "init";
       } else if (options.ecmaVersion >= 6 && tokType === _parenL) {
         if (isPattern) unexpected();
@@ -3553,6 +3558,8 @@
       node.typeParameters = parseTypeParameterDeclaration();
     }
     parseFunctionParams(node);
+    expect(_parenL);
+    node.params = parseBindingList(_parenR, false);
     parseFunctionBody(node, allowExpressionBody);
     return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   }
@@ -3576,7 +3583,7 @@
 
   function parseFunctionParams(node) {
     expect(_parenL);
-    node.params = parseAssignableList(_parenR, false);
+    node.params = parseBindingList(_parenR, false);
     if (tokType === _colon) {
       node.returnType = parseTypeAnnotation();
     }
@@ -3785,14 +3792,14 @@
     } else
     // export default ...;
     if (eat(_default)) {
-      var declar = node.declaration = parseMaybeAssign(true);
-      if (declar.id) {
-        if (declar.type === "FunctionExpression") {
-          declar.type = "FunctionDeclaration";
-        } else if (declar.type === "ClassExpression") {
-          declar.type = "ClassDeclaration";
+      var expr = parseMaybeAssign();
+      if (expr.id) {
+        switch (expr.type) {
+          case "FunctionExpression": expr.type = "FunctionDeclaration"; break;
+          case "ClassExpression": expr.type = "ClassDeclaration"; break;
         }
       }
+      node.declaration = expr;
       node['default'] = true;
       node.specifiers = null;
       node.source = null;
@@ -3933,7 +3940,7 @@
       var block = startNode();
       next();
       expect(_parenL);
-      block.left = parseAssignableAtom();
+      block.left = parseBindingAtom();
       checkLVal(block.left, true);
       expectContextual("of");
       block.right = parseExpression();
