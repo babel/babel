@@ -433,7 +433,6 @@
   var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
   var _jsxText = {type: "jsxText"};
   var _paamayimNekudotayim = { type: "::", beforeExpr: true };
-  var _at = { type: '@' };
   var _hash = { type: '#' };
 
   // Operators. These carry several kinds of properties to help the
@@ -480,7 +479,7 @@
                       parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
                       dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, at: _at, hash: _hash,
+                      paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, hash: _hash,
                       arrow: _arrow, template: _template, star: _star, assign: _assign,
                       backQuote: _backQuote, dollarBraceL: _dollarBraceL};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
@@ -997,12 +996,6 @@
     case 123: ++tokPos; return finishToken(_braceL);
     case 125: ++tokPos; return finishToken(_braceR);
     case 63: ++tokPos; return finishToken(_question);
-
-    case 64:
-      if (options.playground) {
-        ++tokPos;
-        return finishToken(_at);
-      }
 
     case 35:
       if (options.playground) {
@@ -3183,16 +3176,6 @@
       var node = startNode();
       next();
       return finishNode(node, "ThisExpression");
-
-    case _at:
-      var start = storeCurrentPos();
-      var node = startNode();
-      var thisNode = startNode();
-      next();
-      node.object = finishNode(thisNode, "ThisExpression");
-      node.property = parseSubscripts(parseIdent(), start);
-      node.computed = false;
-      return finishNode(node, "MemberExpression");
     
     case _yield:
       if (inGenerator) return parseYield();
