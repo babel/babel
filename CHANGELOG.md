@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.5.1
+
+ * **Polish**
+  * Allow tail calls to work across files without the runtime.
+ * **Internal**
+  * Upgrade `acorn-6to5`.
+
 ## 3.5.0
 
  * **Bug Fix**
