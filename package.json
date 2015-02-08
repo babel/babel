@@ -33,7 +33,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-27",
+    "acorn-6to5": "0.11.1-28",
     "ast-types": "~0.6.1",
     "chalk": "^0.5.1",
     "chokidar": "0.12.6",
