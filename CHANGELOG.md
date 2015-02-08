@@ -11,6 +11,10 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.5.2
+
+ * Disable `es6.tailCall` temporairly after reports of it breaking.
+
 ## 3.5.1
 
  * **Polish**
