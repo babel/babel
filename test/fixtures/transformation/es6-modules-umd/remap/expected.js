@@ -16,5 +16,7 @@
     test = 3;
     test++;
   })();
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

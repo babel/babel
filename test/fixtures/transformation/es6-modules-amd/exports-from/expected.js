@@ -14,5 +14,7 @@ define(["exports", "foo"], function (exports, _foo) {
   exports["default"] = _foo.foo;
   exports["default"] = _foo.foo;
   exports.bar = _foo.bar;
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

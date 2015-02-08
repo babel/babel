@@ -27,4 +27,6 @@ var foo = _to5Helpers.interopRequire(_someModule);
 var bar = _to5Helpers.interopRequireWildcard(_someModule);
 
 var myWord = exports.myWord = _core.Symbol("abc");
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
