@@ -11,6 +11,10 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.5.3
+
+ * Enable `es6.tailCall` transformer with the first implementation that only works with self referencing calls until we can implement nested tail calls elegantly.
+
 ## 3.5.2
 
  * Disable `es6.tailCall` temporairly after reports of it breaking.
