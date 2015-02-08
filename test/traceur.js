@@ -1,5 +1,3 @@
-if (!process.env.ALL_6TO5_TESTS) return;
-
 require("./_helper").assertVendor("traceur");
 
 var fs = require("fs");
@@ -10,8 +8,8 @@ require("./_transformation-helper")({
   loc: __dirname + "/../vendor/traceur/test/feature",
 
   ignoreSuites: [
+    // weird environmental issue make these hard to test
     "Modules",
-    "Classes",
 
     // these are the responsibility of regenerator
     "AsyncFunctions",
@@ -36,6 +34,16 @@ require("./_transformation-helper")({
   ],
 
   ignoreTasks: [
+    // TODO: #426
+    "Classes/SuperUnary",
+    "Classes/SuperPostfix",
+
+    // TODO: investigate
+    "Classes/SuperSet",
+    "Classes/PrototypeDescriptor",
+    "Classes/ExtendStrange",
+    "Classes/ClassNameBinding",
+
     // these are the responsibility of core-js
     "Symbol/GetOwnPropertySymbols",
     "Spread/Type",
@@ -59,7 +67,7 @@ require("./_transformation-helper")({
     // they have no names
     "PropertyMethodAssignment/PropertyMethodAssignment",
 
-    // 6to5 assumes that all code transformed is a module
+    // 6to5 assumes that all code transformed is a module so this isn't necessary
     "Strict",
     "Syntax/UseStrictEscapeSequence",
     "Syntax/UseStrictLineContinuation",

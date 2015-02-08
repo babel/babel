@@ -37,6 +37,8 @@ chai.assert.throw = function (fn, msg) {
     msg = "Generator is already running";
   } else if (msg === "Sent value to newborn generator") {
     msg = /^attempt to send (.*?) to newborn generator$/;
+  } else if (msg === "super prototype must be an Object or null") {
+    msg = "Object prototype may only be an Object or null";
   }
 
   return chai.assert._throw(fn, msg);
