@@ -6,9 +6,5 @@ function f() {
 }
 
 function g() {
-  var _temp;
-  if (_temp = getFalseValue()) {
-    return _temp;
-  }
-  return to5Runtime.tailCall(getValue);
+  return getFalseValue() || to5Runtime.tailCall(getValue);
 }

@@ -1,5 +1,5 @@
 function f() {
-    return getObj().method();
+  return getObj().method();
 }
 
 function g() {
