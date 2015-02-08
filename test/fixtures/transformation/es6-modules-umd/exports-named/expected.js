@@ -14,5 +14,7 @@
   exports["default"] = foo;
   exports["default"] = foo;
   exports.bar = bar;
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

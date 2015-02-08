@@ -18,4 +18,6 @@ var bar = require("foo4").bar;
 var bar2 = require("foo5").foo;
 exports.test = test;
 var test = exports.test = 5;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});

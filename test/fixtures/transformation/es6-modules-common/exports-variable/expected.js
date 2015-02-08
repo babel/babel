@@ -16,4 +16,6 @@ var foo8 = exports.foo8 = function foo8() {
   _classCallCheck(this, foo8);
 };
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});

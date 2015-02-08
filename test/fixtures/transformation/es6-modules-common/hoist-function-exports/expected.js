@@ -11,4 +11,6 @@ var isOdd = exports.isOdd = (function (isEven) {
     return !isEven(n);
   };
 })(isEven);
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
