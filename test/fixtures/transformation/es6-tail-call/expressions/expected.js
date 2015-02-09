@@ -1,12 +1,9 @@
 "use strict";
 
-(function f(n) {
-  var _arguments = arguments,
-      _this = this,
-      _shouldContinue,
-      _result;
-  var _callee = function (n) {
-    var _left;
+(function f(_x) {
+  var _left;
+  _function: while (true) {
+    var n = _x;
     if (n <= 0) {
       return "foo";
     } else {
@@ -18,15 +15,8 @@
       if (_left = getFalseValue()) {
         return _left;
       }
-      _arguments = [n - 1];
-      _this = undefined;
-      return _shouldContinue = true;
+      _x = n - 1;
+      continue _function;
     }
-  };
-
-  do {
-    _shouldContinue = false;
-    _result = _callee.apply(_this, _arguments);
-  } while (_shouldContinue);
-  return _result;
+  }
 })(1000000, true) === "foo";
