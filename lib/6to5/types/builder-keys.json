@@ -99,6 +99,7 @@
     "key": null,
     "value": null,
     "computed": false,
+    "static": false,
     "kind": null
   },
 

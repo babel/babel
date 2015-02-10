@@ -73,7 +73,7 @@
   "AnyTypeAnnotation":           [],
   "ArrayTypeAnnotation":         [],
   "BooleanTypeAnnotation":       [],
-  "ClassProperty":               ["key"],
+  "ClassProperty":               ["key", "value"],
   "DeclareClass":                [],
   "DeclareFunction":             [],
   "DeclareModule":               [],
