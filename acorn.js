@@ -3674,8 +3674,20 @@
       } else {
         method.kind = "";
       }
+
+      var classProperty = false;
+
       if (tokType === _colon) {
         method.typeAnnotation = parseTypeAnnotation();
+        classProperty = true;
+      }
+
+      if (options.playground && eat(_eq)) {
+        method.value = parseMaybeAssign();
+        classProperty = true;
+      }
+
+      if (classProperty) {
         semicolon();
         classBody.body.push(finishNode(method, "ClassProperty"));
       } else {
