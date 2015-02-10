@@ -1,29 +1,20 @@
 "use strict";
 
-(function f(n) {
-  var _arguments = arguments,
-      _this = this,
-      _shouldContinue,
-      _result;
-  var _callee = function (n) {
+(function f(_x) {
+  var _this = this,
+      _arguments = arguments;
+  _function: while (true) {
+    var n = _x;
     if (n <= 0) {
-      console.log(this, arguments);
+      console.log(_this, _arguments);
       return "foo";
     }
     if (Math.random() > 0.5) {
-      _arguments = [n - 1];
-      _this = this;
-      return _shouldContinue = true;
+      _arguments = [_x = n - 1];
+      continue _function;
     } else {
-      _arguments = [n - 1];
-      _this = this;
-      return _shouldContinue = true;
+      _arguments = [_x = n - 1];
+      continue _function;
     }
-  };
-
-  do {
-    _shouldContinue = false;
-    _result = _callee.apply(_this, _arguments);
-  } while (_shouldContinue);
-  return _result;
+  }
 })(1000000) === "foo";
