@@ -278,6 +278,65 @@ describe("try-finally generator", function() {
     }
   }
 
+  function *usingAbrupt(abruptType, finallyAbruptType) {
+    yield 0;
+    for (;;) {
+      try {
+        yield 1;
+        if (abruptType === "return") {
+          return 2;
+        } else if (abruptType === "break") {
+          break;
+        } else if (abruptType === "continue") {
+          abruptType = "return";
+          continue;
+        }
+      }
+      finally {
+        yield 3;
+        if (finallyAbruptType === "return") {
+          return 4;
+        } else if (finallyAbruptType === "break") {
+          break;
+        } else if (finallyAbruptType === "continue") {
+          finallyAbruptType = null;
+          continue;
+        }
+      }
+    }
+    return 5;
+  }
+  
+  it("should honor return", function() {
+    check(usingAbrupt("return", null), [0, 1, 3], 2);
+  });
+
+  it("should honor break", function() {
+    check(usingAbrupt("break", null), [0, 1, 3], 5);
+  });
+
+  it("should honor continue", function() {
+    check(usingAbrupt("continue", null), [0, 1, 3, 1, 3], 2);
+  });
+  
+  it("should override abrupt with return", function() {
+    check(usingAbrupt("return", "return"), [0, 1, 3], 4);
+    check(usingAbrupt("break", "return"), [0, 1, 3], 4);
+    check(usingAbrupt("continue", "return"), [0, 1, 3], 4);
+  });
+
+  it("should override abrupt with break", function() {
+    check(usingAbrupt("return", "break"), [0, 1, 3], 5);
+    check(usingAbrupt("break", "break"), [0, 1, 3], 5);
+    check(usingAbrupt("continue", "break"), [0, 1, 3], 5);
+  });
+
+  it("should override abrupt with continue", function() {
+    check(usingAbrupt("return", "continue"), [0, 1, 3, 1, 3], 2);
+    check(usingAbrupt("break", "continue"), [0, 1, 3, 1, 3], 5);
+    check(usingAbrupt("continue", "continue"), [0, 1, 3, 1, 3], 2);
+  });
+
   it("should execute finally blocks statically", function() {
     check(usingThrow(true), [0, 1, 4], 5);
     check(usingThrow(false), [0, 1, 6], 7);
