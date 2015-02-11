@@ -7,7 +7,7 @@ System.register(["6to5-runtime/helpers"], function (_export) {
       _to5Helpers = _to5RuntimeHelpers;
     }],
     execute: function () {
-      foo.apply(undefined, _to5Helpers.toArray(bar));
+      foo.apply(undefined, _to5Helpers.toConsumableArray(bar));
     }
   };
 });
