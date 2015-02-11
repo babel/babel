@@ -69,8 +69,5 @@
     "mocha": "2.1.0",
     "rimraf": "2.2.8",
     "uglify-js": "2.4.16"
-  },
-  "optionalDependencies": {
-    "kexec": "1.0.0"
   }
 }
