@@ -98,10 +98,12 @@ function CatchEntry(firstLoc, paramId) {
 inherits(CatchEntry, Entry);
 exports.CatchEntry = CatchEntry;
 
-function FinallyEntry(firstLoc) {
+function FinallyEntry(firstLoc, afterLoc) {
   Entry.call(this);
   n.Literal.assert(firstLoc);
+  n.Literal.assert(afterLoc);
   this.firstLoc = firstLoc;
+  this.afterLoc = afterLoc;
 }
 
 inherits(FinallyEntry, Entry);

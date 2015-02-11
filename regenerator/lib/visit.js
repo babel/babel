@@ -123,9 +123,9 @@ var visitor = types.PathVisitor.fromMethodsObject({
       b.thisExpression()
     ];
 
-    var tryEntryList = emitter.getTryEntryList();
-    if (tryEntryList) {
-      wrapArgs.push(tryEntryList);
+    var tryLocsList = emitter.getTryLocsList();
+    if (tryLocsList) {
+      wrapArgs.push(tryLocsList);
     }
 
     var wrapCall = b.callExpression(
