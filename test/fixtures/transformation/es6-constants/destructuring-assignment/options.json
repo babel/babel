@@ -1,3 +1,3 @@
 {
-  "throws": "a is read-only"
+  "throws": "\"a\" is read-only"
 }
