@@ -467,7 +467,7 @@
       return ContinueSentinel;
     },
 
-    complete: function(record) {
+    complete: function(record, afterLoc) {
       if (record.type === "throw") {
         throw record.arg;
       }
@@ -478,6 +478,8 @@
       } else if (record.type === "return") {
         this.rval = record.arg;
         this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
       }
 
       return ContinueSentinel;
@@ -485,7 +487,7 @@
 
     finish: function(finallyLoc) {
       var entry = this._findFinallyEntry(finallyLoc);
-      return this.complete(entry.completion);
+      return this.complete(entry.completion, entry.afterLoc);
     },
 
     "catch": function(tryLoc) {
