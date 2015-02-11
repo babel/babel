@@ -797,10 +797,10 @@ Ep.explodeStatement = function(path, labelId) {
           self.explodeStatement(path.get("finalizer"));
         });
 
-        self.emit(b.callExpression(
+        self.emit(b.returnStatement(b.callExpression(
           self.contextProperty("finish"),
           [finallyEntry.firstLoc]
-        ));
+        )));
       }
     });
 
