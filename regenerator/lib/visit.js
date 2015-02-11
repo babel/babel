@@ -384,7 +384,22 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
   },
 
   visitAwaitExpression: function(path) {
-    // Convert await expressions to yield expressions.
-    return b.yieldExpression(path.value.argument, false);
+    // Convert await and await* expressions to yield expressions.
+    var argument = path.value.argument;
+
+    // If the parser supports await* syntax using a boolean .all property
+    // (#171), desugar that syntax to yield Promise.all(argument).
+    if (path.value.all) {
+      argument = b.callExpression(
+        b.memberExpression(
+          b.identifier("Promise"),
+          b.identifier("all"),
+          false
+        ),
+        [argument]
+      );
+    }
+
+    return b.yieldExpression(argument, false);
   }
 });
