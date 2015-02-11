@@ -962,6 +962,10 @@ describe("delegated yield", function() {
     }
     check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
 
+    if (!runningInTranslation) {
+      return;
+    }
+
     check(outer({
       next: function() {
         return { value: "oyez", done: true };
@@ -981,6 +985,11 @@ describe("delegated yield", function() {
 
     check(gen(inner(2)), [], 3);
     check(gen(inner(3)), [], 4);
+
+    if (!runningInTranslation) {
+      return;
+    }
+
     check(gen({
       next: function() {
         return { value: "foo", done: true };
