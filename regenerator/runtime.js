@@ -270,9 +270,9 @@
     this.tryEntries.push(entry);
   }
 
-  function resetTryEntry(entry, i) {
+  function resetTryEntry(entry) {
     var record = entry.completion || {};
-    record.type = i === 0 ? "normal" : "return";
+    record.type = "normal";
     delete record.arg;
     entry.completion = record;
   }
@@ -494,7 +494,7 @@
           var record = entry.completion;
           if (record.type === "throw") {
             var thrown = record.arg;
-            resetTryEntry(entry, i);
+            resetTryEntry(entry);
           }
           return thrown;
         }
