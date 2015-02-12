@@ -12,6 +12,10 @@ exports.readdirFilter = function (filename) {
   });
 };
 
+exports.readdir = readdir;
+
+exports.canCompile = util.canCompile;
+
 exports.addSourceMappingUrl = function (code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 };

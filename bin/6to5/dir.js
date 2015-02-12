@@ -37,8 +37,13 @@ module.exports = function (commander, filenames, opts) {
     if (stat.isDirectory(filename)) {
       var dirname = filename;
 
-      _.each(util.readdirFilter(dirname), function (filename) {
-        write(path.join(dirname, filename), filename);
+      _.each(util.readdir(dirname), function (filename) {
+        var src = path.join(dirname, filename);
+        if (util.canCompile(filename)) {
+          write(src, filename);
+        } else {
+          outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
+        }
       });
     } else {
       write(filename, filename);
