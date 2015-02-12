@@ -58,6 +58,7 @@
     "useragent": "^2.1.5"
   },
   "devDependencies": {
+    "6to5": "3.5.3",
     "browserify": "8.1.1",
     "chai": "1.10.0",
     "esvalid": "1.1.0",

@@ -5,10 +5,17 @@ UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
 JSHINT_CMD = node_modules/jshint/bin/jshint
 MOCHA_CMD = node_modules/mocha/bin/_mocha
 JSCS_CMD = node_modules/jscs/bin/jscs
+6TO5_CMD = node_modules/6to5/bin/6to5
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime
+.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
+
+build-core:
+	#node $(6TO5_CMD) src --out-dir lib
+
+watch-core:
+	#node $(6TO5_CMD) src --out-dir lib --watch
 
 build:
 	mkdir -p dist
@@ -55,7 +62,7 @@ test-cov:
 	export SIMPLE_6TO5_TESTS=1; \
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-travis: bootstrap
+test-travis: build-core bootstrap
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
