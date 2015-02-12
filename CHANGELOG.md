@@ -11,6 +11,18 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.0
+
+ * **New Feature**
+  * Add playground class property initializers.
+ * **Polish**
+  * Completely reimplemented scope tracking, can now track types and optimise certain helpers based on it.
+  * Extremely fast tail recursion optimisation implementation. Thanks [@RReverser](https://github.com/RReverser)!
+ * **Internal**
+  * Upgrade `regenerator-6to5`.
+  * Upgrade `acorn-6to5`.
+  * Upgrade `core-js`.
+
 ## 3.5.3
 
  * Enable `es6.tailCall` transformer with the first implementation that only works with self referencing calls until we can implement nested tail calls elegantly.
