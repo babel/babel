@@ -59,6 +59,11 @@
     "generator": false
   },
 
+  "GenericTypeAnnotation": {
+    "id": null,
+    "typeParameters": null
+  },
+
   "Identifier": {
     "name": null
   },
