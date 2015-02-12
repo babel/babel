@@ -19,6 +19,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Completely reimplemented scope tracking, can now track types and optimise certain helpers based on it.
   * Extremely fast tail recursion optimisation implementation. Thanks [@RReverser](https://github.com/RReverser)!
  * **Internal**
+  * `kexec` has been removed as an optional dependency and must be user installed.
   * Upgrade `regenerator-6to5`.
   * Upgrade `acorn-6to5`.
   * Upgrade `core-js`.
