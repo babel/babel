@@ -16,7 +16,10 @@ module.exports = function (commander, filenames, opts) {
 
     var dest = path.join(commander.outDir, relative);
 
-    var data = util.compile(src, { sourceMapName: dest });
+    var data = util.compile(src, {
+      // sourceMapName is the destination relative to the source
+      sourceMapName: path.relative(dest + '/..', src)
+    });
 
     if (commander.sourceMaps) {
       var mapLoc = dest + ".map";
