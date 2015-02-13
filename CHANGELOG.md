@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.2
+
+ * **Polish**
+  * Use better iterator detection in `slicedToArray` helper and add support for it to the `selfContained` transformer.
+
 ## 3.6.1
 
  * **Bug Fix**
