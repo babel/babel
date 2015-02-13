@@ -22,6 +22,9 @@
   "FunctionDeclaration":     ["Statement", "Declaration", "Scopable", "Function"],
   "FunctionExpression":      ["Scopable", "Function", "Expression"],
 
+  "ImportSpecifier": ["ModuleSpecifier"],
+  "ExportSpecifier": ["ModuleSpecifier"],
+
   "BlockStatement": ["Statement", "Scopable"],
   "Program":        ["Scopable"],
   "CatchClause":    ["Scopable"],
