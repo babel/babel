@@ -33,7 +33,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-29",
+    "acorn-6to5": "0.11.1-30",
     "ast-types": "~0.6.1",
     "chalk": "^0.5.1",
     "chokidar": "0.12.6",
@@ -58,7 +58,7 @@
     "useragent": "^2.1.5"
   },
   "devDependencies": {
-    "6to5": "3.5.3",
+    "6to5": "3.6.0",
     "browserify": "8.1.1",
     "chai": "1.10.0",
     "esvalid": "1.1.0",
