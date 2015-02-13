@@ -3587,6 +3587,42 @@ var fbTestFixture = {
         closingElement: null,
         children: []
       }
+    },
+    '<path d="M230 80\n\t\tA 45 45, 0, 1, 0, 275 125 \r\n    L 275 80 Z"/>': {
+      type: "ExpressionStatement",
+      expression: {
+        type: "JSXElement",
+        range: [0, 64],
+        openingElement: {
+          type: "JSXOpeningElement",
+          range: [0, 64],
+          attributes: [
+            {
+              type: "JSXAttribute",
+              range: [6, 62],
+              name: {
+                type: "JSXIdentifier",
+                range: [6, 7],
+                name: "d"
+              },
+              value: {
+                type: "Literal",
+                range: [8, 62],
+                value: "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125 \r\n    L 275 80 Z",
+                raw: "\"M230 80\n\t\tA 45 45, 0, 1, 0, 275 125 \r\n    L 275 80 Z\""
+              }
+            }
+          ],
+          name: {
+            type: "JSXIdentifier",
+            range: [1, 5],
+            name: "path"
+          },
+          selfClosing: true
+        },
+        closingElement: null,
+        children: []
+      }
     }
   }
 };

@@ -1190,7 +1190,7 @@
         out += readJSXEntity();
         chunkStart = tokPos;
       } else {
-        if (isNewLine(ch)) raise(tokStart, "Unterminated string constant");
+        if (isNewLine(ch) && !isJSX) raise(tokStart, "Unterminated string constant");
         ++tokPos;
       }
     }
