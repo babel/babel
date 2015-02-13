@@ -481,7 +481,8 @@
                       name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
                       paamayimNekudotayim: _paamayimNekudotayim, exponent: _exponent, hash: _hash,
                       arrow: _arrow, template: _template, star: _star, assign: _assign,
-                      backQuote: _backQuote, dollarBraceL: _dollarBraceL};
+                      backQuote: _backQuote, dollarBraceL: _dollarBraceL, jsxName: _jsxName,
+                      jsxText: _jsxText, jsxTagStart: _jsxTagStart, jsxTagEnd: _jsxTagEnd};
   for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
 
   // This is a trick taken from Esprima. It turns out that, on
@@ -1274,7 +1275,7 @@
         out += readJSXEntity();
         chunkStart = tokPos;
       } else {
-        if (isNewLine(ch)) raise(tokStart, "Unterminated string constant");
+        if (isNewLine(ch) && !isJSX) raise(tokStart, "Unterminated string constant");
         ++tokPos;
       }
     }
@@ -1619,35 +1620,43 @@
   // Reads inline JSX contents token.
 
   function readJSXToken() {
-    var out = "", start = tokPos;
+    var out = "", chunkStart = tokPos;
     for (;;) {
       if (tokPos >= inputLen) raise(tokStart, "Unterminated JSX contents");
       var ch = input.charCodeAt(tokPos);
       switch (ch) {
         case 123: // '{'
         case 60: // '<'
-          if (tokPos === start) {
+          if (tokPos === tokStart) {
             return getTokenFromCode(ch);
           }
+          out += input.slice(chunkStart, tokPos);
           return finishToken(_jsxText, out);
 
         case 38: // '&'
+          out += input.slice(chunkStart, tokPos);
           out += readJSXEntity();
+          chunkStart = tokPos;
           break;
 
         default:
-          ++tokPos;
           if (isNewLine(ch)) {
+            out += input.slice(chunkStart, tokPos);
+            ++tokPos;
             if (ch === 13 && input.charCodeAt(tokPos) === 10) {
               ++tokPos;
-              ch = 10;
+              out += "\n";
+            } else {
+              out += String.fromCharCode(ch);
             }
             if (options.locations) {
               ++tokCurLine;
               tokLineStart = tokPos;
             }
+            chunkStart = tokPos;
+          } else {
+            ++tokPos;
           }
-          out += String.fromCharCode(ch);
       }
     }
   }
