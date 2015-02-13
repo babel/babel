@@ -2,6 +2,7 @@
 
 var buildHelpers = require("../lib/6to5/build-helpers");
 var transform    = require("../lib/6to5/transformation");
+var util         = require("../lib/6to5/util");
 var fs           = require("fs");
 var t            = require("../lib/6to5/types");
 var _            = require("lodash");
@@ -16,8 +17,14 @@ var writeFile = function (filename, content) {
   fs.writeFileSync(filename, content);
 };
 
-var readFile = function (filename) {
-  return fs.readFileSync(require.resolve(filename), "utf8");
+var readFile = function (filename, defaultify) {
+  var file = fs.readFileSync(require.resolve(filename), "utf8");
+
+  if (defaultify) {
+    file += '\nmodule.exports = { "default": module.exports, __esModule: true };\n';
+  }
+
+  return file;
 };
 
 var updatePackage = function () {
@@ -37,10 +44,10 @@ var selfContainify = function (code) {
 };
 
 var buildHelpers2 = function () {
-  var body = [];
+  var body = util.template("self-contained-helpers-head");
   var tree = t.program(body);
 
-  buildHelpers(body, t.identifier("exports"));
+  buildHelpers(body, t.identifier("helpers"));
 
   return transform.fromAst(tree, null, {
     optional: ["selfContained"]
@@ -48,7 +55,7 @@ var buildHelpers2 = function () {
 };
 
 writeFile("helpers.js", buildHelpers2());
-writeFile("core-js.js", readFile("core-js/library"));
-writeFile("regenerator/index.js", readFile("regenerator-6to5/runtime-module"));
+writeFile("core-js.js", readFile("core-js/library", true));
+writeFile("regenerator/index.js", readFile("regenerator-6to5/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-6to5/runtime")));
 updatePackage();

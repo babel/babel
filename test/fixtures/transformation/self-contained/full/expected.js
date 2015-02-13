@@ -1,11 +1,8 @@
 "use strict";
 
-var _regeneratorRuntime = require("6to5-runtime/regenerator");
-
-var _to5Helpers = require("6to5-runtime/helpers");
-
-var _core = require("6to5-runtime/core-js");
-
+var _core = require("6to5-runtime/core-js")["default"];
+var _regeneratorRuntime = require("6to5-runtime/regenerator")["default"];
+var _to5Helpers = require("6to5-runtime/helpers")["default"];
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
