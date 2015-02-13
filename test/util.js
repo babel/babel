@@ -1,5 +1,6 @@
 var assert = require("assert");
 var util   = require("../lib/6to5/util");
+var parse  = require("../lib/6to5/helpers/parse");
 var t      = require("../lib/6to5/types");
 
 suite("util", function () {
@@ -7,6 +8,23 @@ suite("util", function () {
     assert.throws(function () {
       util.template("invalid template");
     }, /unknown template/);
+  });
+
+  test("templates do not recurse", function () {
+    var key = __filename;
+    var KEY = parse({ loc: key }, "replacedKey").program.body[0].expression;
+    var VALUE = parse({ loc: key }, "+KEY").program.body[0].expression;
+
+    util.templates[key] = util.parseTemplate(key, "KEY = VALUE;");
+    var result = util.template(key, {KEY: KEY, VALUE: VALUE});
+    delete util.templates[key];
+
+    assert.strictEqual(
+      result.right.argument.name,
+      "KEY",
+      "template should not recurse into replaced nodes, " +
+        "replacing KEY inside VALUE"
+    );
   });
 
   test("canCompile", function () {
