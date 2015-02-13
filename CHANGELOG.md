@@ -11,6 +11,16 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.1
+
+ * **Bug Fix**
+  * Multiline JSX string literals are now supported.
+  * Fix scope tracking import specifiers incorrectly.
+  * Fix templates incorrectly recursing into their replacements.
+ * **Internal**
+  * Type inferrence now extends to function return types.
+  * Upgrade `acorn-6to5`.
+
 ## 3.6.0
 
  * **New Feature**
