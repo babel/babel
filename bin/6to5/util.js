@@ -21,7 +21,7 @@ exports.addSourceMappingUrl = function (code, loc) {
 };
 
 exports.transform = function (filename, code, opts) {
-  opts = _.extend(opts || {}, index.opts);
+  opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;
 
   var result;
