@@ -11,6 +11,13 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.5
+
+ * **Internal**
+  * Upgrade `core-js`.
+ * **New Feature**
+  * Add `validation.react` transformer.
+
 ## 3.6.4
 
  * **New Feature**
