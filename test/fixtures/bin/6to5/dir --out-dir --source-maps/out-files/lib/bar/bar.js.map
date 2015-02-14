@@ -1,1 +1,1 @@
-{"version":3,"sources":["src/bar/bar.js"],"names":[],"mappings":";;;;IAAM,IAAI,YAAJ,IAAI;wBAAJ,IAAI","file":"src/bar/bar.js","sourcesContent":["class Test {\n\n}"]}
+{"version":3,"sources":["../../src/bar/bar.js"],"names":[],"mappings":";;;;IAAM,IAAI,YAAJ,IAAI;wBAAJ,IAAI","file":"src/bar/bar.js","sourcesContent":["class Test {\n\n}"]}
