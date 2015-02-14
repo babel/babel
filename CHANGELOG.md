@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.4
+
+ * **New Feature**
+  * Add support for flow type casts and module types.
+
 ## 3.6.3
 
  * **Internal**

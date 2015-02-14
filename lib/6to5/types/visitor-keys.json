@@ -92,6 +92,7 @@
   "TypeofTypeAnnotation":        [],
   "TypeAlias":                   [],
   "TypeAnnotation":              [],
+  "TypeCastExpression":          ["expression"],
   "TypeParameterDeclaration":    [],
   "TypeParameterInstantiation":  [],
   "ObjectTypeAnnotation":        [],
