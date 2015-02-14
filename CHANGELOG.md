@@ -11,6 +11,11 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
+## 3.6.3
+
+ * **Internal**
+  * Upgrade `acorn-6to5`.
+
 ## 3.6.2
 
  * **Polish**
