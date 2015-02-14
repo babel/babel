@@ -3019,7 +3019,7 @@
     }
     var start = storeCurrentPos();
     var left = parseMaybeConditional(noIn, refShorthandDefaultPos);
-    if (afterLeftParse) afterLeftParse(left);
+    if (afterLeftParse) left = afterLeftParse(left, start);
     if (tokType.isAssign) {
       var node = startNodeAt(start);
       node.operator = tokVal;
@@ -3330,19 +3330,23 @@
       var innerStart = storeCurrentPos(), exprList = [], first = true;
       var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart, typeStart;
 
-      var parseParenItem = function (node) {
+      var parseParenItem = function (node, start) {
         if (tokType === _colon) {
-          typeStart = typeStart || tokStart;
-          node.returnType = parseTypeAnnotation();
+          var typeCastNode = startNodeAt(start);
+          typeCastNode.expression = node;
+          typeCastNode.typeAnnotation = parseTypeAnnotation();
+          return finishNode(typeCastNode, "TypeCastExpression");
+        } else {
+          return node;
         }
-        return node;
       };
 
       while (tokType !== _parenR) {
         first ? first = false : expect(_comma);
         if (tokType === _ellipsis) {
+          var spreadNodeStart = storeCurrentPos();
           spreadStart = tokStart;
-          exprList.push(parseParenItem(parseRest()));
+          exprList.push(parseParenItem(parseRest(), spreadNodeStart));
           break;
         } else {
           if (tokType === _parenL && !innerParenStart) {
@@ -3356,13 +3360,24 @@
 
       if (!canInsertSemicolon() && eat(_arrow)) {
         if (innerParenStart) unexpected(innerParenStart);
+
+        for (var i = 0; i < exprList.length; i++) {
+          var listItem = exprList[i];
+          if (listItem.type === "TypeCastExpression") {
+            var expr = listItem.expression;
+            expr.returnType = listItem.typeAnnotation;
+            exprList[i] = expr;
+          }
+        }
+
         return parseArrowExpression(startNodeAt(start), exprList);
       }
 
       if (!exprList.length) unexpected(lastStart);
-      if (typeStart) unexpected(typeStart);
       if (spreadStart) unexpected(spreadStart);
       if (refShorthandDefaultPos.start) unexpected(refShorthandDefaultPos.start);
+
+      //
 
       if (exprList.length > 1) {
         val = startNodeAt(innerStart);
@@ -3786,7 +3801,7 @@
   function parseExport(node) {
     next();
     // export var|const|let|function|class ...;
-    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || isContextual("async")) {
+    if (tokType === _var || tokType === _const || tokType === _let || tokType === _function || tokType === _class || isContextual("async") || isContextual("type")) {
       node.declaration = parseStatement(true);
       node['default'] = false;
       node.specifiers = null;
@@ -3855,12 +3870,29 @@
 
   function parseImport(node) {
     next();
+    
+    node.isType = false;
+    node.specifiers = [];
+
+    var typeId;
+    if (isContextual('type')) {
+      var start = storeCurrentPos();
+      typeId = parseIdent();
+      if ((tokType === _name && tokVal !== "from") || tokType === _braceL || tokType === _star) {
+        node.isType = true;
+      } else {
+        node.specifiers.push(parseImportSpecifierDefault(typeId, start));
+        eat(_comma);
+      }
+    }
+
+    
     // import '...';
     if (tokType === _string) {
-      node.specifiers = [];
+      if (typeId) unexpected(typeId.start);
       node.source = parseExprAtom();
     } else {
-      node.specifiers = parseImportSpecifiers();
+      if (!isContextual("from")) parseImportSpecifiers(node.specifiers);
       expectContextual("from");
       node.source = tokType === _string ? parseExprAtom() : unexpected();
     }
@@ -3870,16 +3902,13 @@
 
   // Parses a comma-separated list of module imports.
 
-  function parseImportSpecifiers() {
-    var nodes = [], first = true;
+  function parseImportSpecifiers(nodes) {
+    var first = true;
     if (tokType === _name) {
       // import defaultObj, { x, y as z } from '...'
-      var node = startNode();
-      node.id = parseIdent();
-      checkLVal(node.id, true);
-      node.name = null;
-      node['default'] = true;
-      nodes.push(finishNode(node, "ImportSpecifier"));
+      var start = storeCurrentPos();
+      var id = parseIdent();
+      nodes.push(parseImportSpecifierDefault(id, start));
       if (!eat(_comma)) return nodes;
     }
     if (tokType === _star) {
@@ -3906,6 +3935,15 @@
       nodes.push(finishNode(node, "ImportSpecifier"));
     }
     return nodes;
+  }
+
+  function parseImportSpecifierDefault(id, start) {
+    var node = startNodeAt(start);
+    node.id = id;
+    checkLVal(node.id, true);
+    node.name = null;
+    node['default'] = true;
+    return finishNode(node, "ImportSpecifier");
   }
 
   // Parses yield expression inside generator.
