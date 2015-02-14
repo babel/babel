@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
  * **Internal**
   * Upgrade `acorn-6to5`.
+  * Use `default` property on `6to5-runtime`.
 
 ## 3.6.2
 
