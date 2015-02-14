@@ -15,6 +15,9 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
  * **Internal**
   * Upgrade `core-js`.
+ * **Bug Fix**
+  * Fix block scoping leaking variables in IIFE mode.
+  * Fix tail call transformer exploding on return statements as the consequent of an if statement.
  * **New Feature**
   * Add `validation.react` transformer.
 
