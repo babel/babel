@@ -442,7 +442,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
  * **Bug Fix**
   * Rewrote large parts of the let scoping transformer. Now passes all known tests.
  * **Internal**
-  * Even more optimisations thanks to the awesome [@gaearon](https://github.com/gaearon).
+  * Even more optimizations thanks to the awesome [@gaearon](https://github.com/gaearon).
   * Upgrade `acorn-6to5`.
     * Fixes exponentation operator thanks to [@charliesome](https://github.com/charliesome).
     * Fix flow optional parameters with types.
@@ -561,7 +561,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
   * Fix bin name in `6to5-node --help`.
   * Fix shorthand `--whitelist` name in `bin/6to5`.
  * **Internal**
-  * Hot code optimisation of traversal etc thanks to [gaearon](https://github.com/gaearon).
+  * Hot code optimization of traversal etc thanks to [gaearon](https://github.com/gaearon).
 
 ## 2.9.4
 
@@ -943,7 +943,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 ## 1.13.1
 
- * Fix constructor spread optimisation. Thanks [@zloirock](https://github.com/zloirock).
+ * Fix constructor spread optimization. Thanks [@zloirock](https://github.com/zloirock).
 
 ## 1.13.0
 
@@ -996,7 +996,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 ## 1.12.17
 
  * Add `moduleName`, `sourceRoot` and `filenameRelative` options. Thanks [@darvelo](https://github.com/darvelo).
- * Traversal optimisations.
+ * Traversal optimizations.
 
 ## 1.12.16
 
