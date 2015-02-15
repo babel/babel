@@ -13,7 +13,7 @@ pollutes the git tree.
 #### Workflow
 
 * Fork the repository
-* Clone your fork and change directory to it (`git clone git@github.com:yourUserName/babel.git && cd 6to5`)
+* Clone your fork and change directory to it (`git clone git@github.com:yourUserName/babel.git && cd babel`)
 * Install the project dependencies (`make bootstrap`)
 * Link your forked clone (`npm link`)
 * Develop your changes ensuring you're fetching updates from upstream often

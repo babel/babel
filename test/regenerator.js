@@ -1,4 +1,4 @@
-if (!process.env.ALL_6TO5_TESTS) return;
+if (!process.env.ALL_BABEL_TESTS) return;
 
 require("./_helper").assertVendor("regenerator");
 

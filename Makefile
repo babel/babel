@@ -49,17 +49,16 @@ test: lint
 
 test-simple:
 	# excludes test262
-	export SIMPLE_6TO5_TESTS=1; \
+	export SIMPLE_BABEL_TESTS=1; \
 	make test
 
 test-all:
-	# includes traceur, esnext, regenerator
-	export ALL_6TO5_TESTS=1; \
+	export ALL_BABEL_TESTS=1; \
 	make test
 
 test-cov:
 	rm -rf coverage
-	export SIMPLE_6TO5_TESTS=1; \
+	export SIMPLE_BABEL_TESTS=1; \
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
 test-travis: build-core bootstrap
