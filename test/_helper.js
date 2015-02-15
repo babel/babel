@@ -1,5 +1,5 @@
 var esvalid = require("esvalid");
-var util    = require("../lib/6to5/util");
+var util    = require("../lib/babel/util");
 var path    = require("path");
 var fs      = require("fs");
 var _       = require("lodash");

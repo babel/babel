@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+console.error("`6to5-minify` has been renamed to `babel-minify`");
+require("../babel-minify");

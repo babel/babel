@@ -1,6 +1,6 @@
-var transform = require("../lib/6to5/transformation");
+var transform = require("../lib/babel/transformation");
 var assert    = require("assert");
-var File      = require("../lib/6to5/transformation/file");
+var File      = require("../lib/babel/transformation/file");
 
 suite("api", function () {
   test("{ code: false }", function () {

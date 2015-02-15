@@ -1,7 +1,7 @@
 node_modules
 *.log
 *.cache
-lib/6to5/transformation/templates
+lib/babel/transformation/templates
 test
 benchmark
 Makefile

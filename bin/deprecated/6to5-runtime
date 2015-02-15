@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+console.error("`6to5-runtime` has been renamed to `babel-external-helpers`");
+require("../babel-external-helpers");

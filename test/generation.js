@@ -1,9 +1,9 @@
-var generate = require("../lib/6to5/generation");
+var generate = require("../lib/babel/generation");
 var assert   = require("assert");
 var helper   = require("./_helper");
-var parse    = require("../lib/6to5/helpers/parse");
+var parse    = require("../lib/babel/helpers/parse");
 var chai     = require("chai");
-var t        = require("../lib/6to5/types");
+var t        = require("../lib/babel/types");
 var _        = require("lodash");
 
 suite("generation", function () {

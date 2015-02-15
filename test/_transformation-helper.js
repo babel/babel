@@ -1,16 +1,16 @@
 var genHelpers = require("./_generator-helpers");
-var transform  = require("../lib/6to5/transformation");
+var transform  = require("../lib/babel/transformation");
 var sourceMap  = require("source-map");
-var codeFrame  = require("../lib/6to5/helpers/code-frame");
+var codeFrame  = require("../lib/babel/helpers/code-frame");
 var Module     = require("module");
 var helper     = require("./_helper");
 var assert     = require("assert");
 var chai       = require("chai");
 var path       = require("path");
-var util       = require("../lib/6to5/util");
+var util       = require("../lib/babel/util");
 var _          = require("lodash");
 
-require("../lib/6to5/polyfill");
+require("../lib/babel/polyfill");
 
 global.assertNoOwnProperties = function (obj) {
   assert.equal(Object.getOwnPropertyNames(obj).length, 0);

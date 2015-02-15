@@ -5,31 +5,31 @@ UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
 JSHINT_CMD = node_modules/jshint/bin/jshint
 MOCHA_CMD = node_modules/mocha/bin/_mocha
 JSCS_CMD = node_modules/jscs/bin/jscs
-6TO5_CMD = node_modules/6to5/bin/6to5
+BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
 
 .PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
 
 build-core:
-	#node $(6TO5_CMD) src --out-dir lib
+	#node $(BABEL_CMD) src --out-dir lib
 
 watch-core:
-	#node $(6TO5_CMD) src --out-dir lib --watch
+	#node $(BABEL_CMD) src --out-dir lib --watch
 
 build:
 	mkdir -p dist
 
 	node tools/cache-templates
 
-	node $(BROWSERIFY_CMD) -e lib/6to5/polyfill.js >dist/polyfill.js
+	node $(BROWSERIFY_CMD) -e lib/babel/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
-	node $(BROWSERIFY_CMD) lib/6to5/api/browser.js -s to5 >dist/6to5.js
-	node $(UGLIFY_CMD) dist/6to5.js >dist/6to5.min.js
+	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s to5 >dist/babel.js
+	node $(UGLIFY_CMD) dist/babel.js >dist/babel.min.js
 
-	node bin/6to5-runtime >dist/runtime.js
-	node $(UGLIFY_CMD) dist/runtime.js >dist/runtime.min.js
+	node bin/babel-external-helpers >dist/external-helpers.js
+	node $(UGLIFY_CMD) dist/external-helpers.js >dist/external-helpers.min.js
 
 	rm -rf templates.json
 
@@ -71,7 +71,7 @@ test-browser:
 
 	node tools/cache-templates
 	node tools/cache-tests
-	node $(BROWSERIFY_CMD) -e test/_browser.js >dist/6to5-test.js
+	node $(BROWSERIFY_CMD) -e test/_browser.js >dist/babel-test.js
 	rm -rf templates.json tests.json
 
 	test -n "`which open`" && open test/browser.html
@@ -85,9 +85,9 @@ publish:
 	npm version $$version --message "v%s"
 
 	make build
-	cp dist/6to5.min.js browser.js
+	cp dist/babel.min.js browser.js
 	cp dist/polyfill.min.js browser-polyfill.js
-	cp dist/runtime.min.js runtime.js
+	cp dist/external-helpers.min.js external-helpers.js
 
 	node tools/cache-templates
 	test -f templates.json
@@ -99,12 +99,12 @@ publish:
 	make publish-core
 	make publish-runtime
 
-	rm -rf templates.json browser.js browser-polyfill.js runtime.js
+	rm -rf templates.json browser.js browser-polyfill.js external-helpers.js
 
 publish-runtime:
 	cd packages; \
 	node build-runtime.js; \
-	cd 6to5-runtime; \
+	cd babel-runtime; \
 	npm publish
 
 publish-core:

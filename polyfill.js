@@ -1,1 +1,1 @@
-module.exports = require("./lib/6to5/polyfill");
+module.exports = require("./lib/babel/polyfill");

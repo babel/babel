@@ -1,6 +1,6 @@
 "use strict";
 
-var _core = require("6to5-runtime/core-js")["default"];
+var _core = require("babel-runtime/core-js")["default"];
 var arr = (function () {
   var _arr = [];
 

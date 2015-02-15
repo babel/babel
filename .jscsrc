@@ -1,5 +1,5 @@
 {
-  "excludeFiles": ["lib/6to5/transformation/templates"],
+  "excludeFiles": ["lib/babel/transformation/templates"],
   "disallowSpacesInNamedFunctionExpression": {
     "beforeOpeningRoundBrace": true
   },

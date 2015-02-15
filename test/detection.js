@@ -1,6 +1,6 @@
-var detect = require("../lib/6to5/detection");
+var detect = require("../lib/babel/detection");
 var assert = require("assert");
-var parse  = require("../lib/6to5/helpers/parse");
+var parse  = require("../lib/babel/helpers/parse");
 
 suite("detection", function () {
   var checkSyntax = function (code, name) {

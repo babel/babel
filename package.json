@@ -1,20 +1,25 @@
 {
-  "name": "6to5",
+  "name": "babel",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "3.6.5",
+  "version": "1.0.0",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://6to5.org/",
-  "repository": "6to5/6to5",
+  "homepage": "https://babeljs.io/",
+  "repository": "babel/babel",
   "preferGlobal": true,
-  "main": "lib/6to5/api/node.js",
+  "main": "lib/babel/api/node.js",
   "browser": {
-    "./lib/6to5/api/register/node.js": "./lib/6to5/api/register/browser.js"
+    "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
   },
   "bin": {
-    "6to5": "./bin/6to5/index.js",
-    "6to5-minify": "./bin/6to5-minify",
-    "6to5-node": "./bin/6to5-node",
-    "6to5-runtime": "./bin/6to5-runtime"
+    "6to5": "./bin/deprecated/6to5",
+    "6to5-minify": "./bin/deprecated/6to5-minify",
+    "6to5-node": "./bin/deprecated/6to5-node",
+    "6to5-runtime": "./bin/deprecated/6to5-runtime",
+
+    "babel": "./bin/babel/index.js",
+    "babel-minify": "./bin/babel-minify",
+    "babel-node": "./bin/babel-node",
+    "babel-external-helpers": "./bin/babel-external-helpers"
   },
   "keywords": [
     "harmony",
@@ -26,19 +31,20 @@
     "es6",
     "transpile",
     "transpiler",
-    "6to5"
+    "6to5",
+    "babel"
   ],
   "scripts": {
     "bench": "make bench",
     "test": "make test"
   },
   "dependencies": {
-    "acorn-6to5": "0.11.1-31",
+    "acorn-babel": "0.11.1-32",
     "ast-types": "~0.6.1",
     "chalk": "^0.5.1",
     "chokidar": "0.12.6",
     "commander": "2.6.0",
-    "core-js": "^0.5.3",
+    "core-js": "^0.5.4",
     "debug": "^2.1.1",
     "detect-indent": "3.0.0",
     "estraverse": "1.9.1",
@@ -49,7 +55,7 @@
     "lodash": "3.0.0",
     "output-file-sync": "1.1.0",
     "private": "0.1.6",
-    "regenerator-6to5": "0.8.10-1",
+    "regenerator-babel": "0.8.10-1",
     "regexpu": "1.1.0",
     "roadrunner": "1.0.4",
     "source-map": "0.1.43",
@@ -58,7 +64,6 @@
     "useragent": "^2.1.5"
   },
   "devDependencies": {
-    "6to5": "3.6.0",
     "browserify": "8.1.1",
     "chai": "1.10.0",
     "esvalid": "1.1.0",

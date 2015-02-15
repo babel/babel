@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+
+/**
+ * This tiny wrapper file checks for known node flags and appends them
+ * when found, before invoking the "real" _babel-node(1) executable.
+ */
+
+var args  = [__dirname + "/_babel-node"];
+
+process.argv.slice(2).forEach(function(arg){
+  var flag = arg.split("=")[0];
+
+  switch (flag) {
+    case "-d":
+      args.unshift("--debug");
+      break;
+
+    case "debug":
+    case "--debug":
+    case "--debug-brk":
+      args.unshift(arg);
+      break;
+
+    case "-gc":
+    case "--expose-gc":
+      args.unshift("--expose-gc");
+      break;
+
+    case "--gc-global":
+    case "--harmony":
+    case "--harmony-proxies":
+    case "--harmony-collections":
+    case "--harmony-generators":
+    case "--no-deprecation":
+    case "--prof":
+    case "--throw-deprecation":
+    case "--trace-deprecation":
+    case "--use-strict":
+      args.unshift(arg);
+      break;
+
+    default:
+      if (arg.indexOf("--trace") === 0) {
+        args.unshift(arg);
+      } else {
+        args.push(arg);
+      }
+      break;
+  }
+});
+
+try {
+  var kexec = require("kexec");
+  kexec(process.argv[0], args);
+} catch (err) {
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
+
+  var child_process = require("child_process");
+  var proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
+  proc.on("exit", function (code, signal) {
+    process.on("exit", function () {
+      if (signal) {
+        process.kill(process.pid, signal);
+      } else {
+        process.exit(code);
+      }
+    })
+  });
+}

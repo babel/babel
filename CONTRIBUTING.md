@@ -2,7 +2,7 @@
 
 Contributions are always welcome, no matter how large or small. Before
 contributing, please read the
-[code of conduct](https://github.com/6to5/6to5/blob/master/CODE_OF_CONDUCT.md).
+[code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
 **NOTE:** Please do not send pull requests that fix linting issues. It's highly
 likely that they've already been fixed by the time it's submitted and it just
@@ -13,7 +13,7 @@ pollutes the git tree.
 #### Workflow
 
 * Fork the repository
-* Clone your fork and change directory to it (`git clone git@github.com:yourUserName/6to5.git && cd 6to5`)
+* Clone your fork and change directory to it (`git clone git@github.com:yourUserName/babel.git && cd 6to5`)
 * Install the project dependencies (`make bootstrap`)
 * Link your forked clone (`npm link`)
 * Develop your changes ensuring you're fetching updates from upstream often

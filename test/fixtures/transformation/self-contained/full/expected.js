@@ -1,8 +1,8 @@
 "use strict";
 
-var _core = require("6to5-runtime/core-js")["default"];
-var _regeneratorRuntime = require("6to5-runtime/regenerator")["default"];
-var _to5Helpers = require("6to5-runtime/helpers")["default"];
+var _core = require("babel-runtime/core-js")["default"];
+var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
+var _babelHelpers = require("babel-runtime/helpers")["default"];
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -19,9 +19,9 @@ var giveWord = _regeneratorRuntime.mark(function giveWord() {
 exports.giveWord = giveWord;
 var _someModule = require("someModule");
 
-var foo = _to5Helpers.interopRequire(_someModule);
+var foo = _babelHelpers.interopRequire(_someModule);
 
-var bar = _to5Helpers.interopRequireWildcard(_someModule);
+var bar = _babelHelpers.interopRequireWildcard(_someModule);
 
 var myWord = exports.myWord = _core.Symbol("abc");
 Object.defineProperty(exports, "__esModule", {

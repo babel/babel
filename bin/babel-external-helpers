@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var runtime = require("../lib/babel/build-external-helpers");
+console.log(runtime());

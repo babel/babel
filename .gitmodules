@@ -3,7 +3,7 @@
 	url = https://github.com/google/traceur-compiler
 [submodule "vendor/regenerator"]
 	path = vendor/regenerator
-	url = https://github.com/6to5/regenerator-6to5
+	url = https://github.com/babel/regenerator-babel
 [submodule "vendor/test262"]
 	path = vendor/test262
 	url = https://github.com/tc39/test262

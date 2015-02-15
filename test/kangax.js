@@ -2,7 +2,7 @@ require("./_helper").assertVendor("compat-table");
 
 require("../polyfill");
 
-var transform = require("../lib/6to5/transformation");
+var transform = require("../lib/babel/transformation");
 var assert    = require("assert");
 var data      = require("../vendor/compat-table/data-es6");
 var _         = require("lodash");
@@ -33,7 +33,7 @@ suite("kangax/compat-table", function () {
   for (var key in tests) {
     var data = tests[key];
 
-    if (data.res._6to5 !== true) continue;
+    if (data.res._babel !== true) continue;
 
     var exec = data.exec;
     var code = exec.toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];

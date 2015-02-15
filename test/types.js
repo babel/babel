@@ -1,5 +1,5 @@
 var assert = require("assert");
-var t      = require("../lib/6to5/types");
+var t      = require("../lib/babel/types");
 
 suite("types", function () {
   test("isFalsyExpression", function () {

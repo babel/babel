@@ -67,7 +67,7 @@ require("./_transformation-helper")({
     // they have no names
     "PropertyMethodAssignment/PropertyMethodAssignment",
 
-    // 6to5 assumes that all code transformed is a module so this isn't necessary
+    // Babel assumes that all code transformed is a module so this isn't necessary
     "Strict",
     "Syntax/UseStrictEscapeSequence",
     "Syntax/UseStrictLineContinuation",

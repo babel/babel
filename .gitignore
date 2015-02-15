@@ -11,5 +11,5 @@ test/tmp
 coverage
 dist
 .package.json
-packages/6to5-runtime/*.js
-packages/6to5-runtime/regenerator/*.js
+packages/babel-runtime/*.js
+packages/babel-runtime/regenerator/*.js

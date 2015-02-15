@@ -4,7 +4,7 @@ var path = require("path");
 var vm = require("vm");
 
 suite("browserify", function() {
-  test("6to5/register may be used without breaking browserify", function(done) {
+  test("babel/register may be used without breaking browserify", function(done) {
     var bundler = browserify(path.join(__dirname, "fixtures/browserify/register.js"));
 
     bundler.bundle(function(err, bundle) {
