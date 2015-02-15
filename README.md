@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>6to5</strong> turns ES6+ code into vanilla ES5, so you can use next generation features <strong>today.</strong>
+  <strong>Babel</strong> is a transpiler for writing next generation JavaScript.
 </p>
 
 <p align="center">
