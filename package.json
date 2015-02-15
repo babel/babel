@@ -1,6 +1,6 @@
 {
-  "name": "acorn-6to5",
-  "description": "Acorn fork used by 6to5",
+  "name": "acorn-babel",
+  "description": "Acorn fork used by babel",
   "main": "acorn_csp.js",
   "version": "0.11.1-31",
   "maintainers": [
@@ -20,7 +20,7 @@
       "web": "http://sebmck.com"
     }
   ],
-  "repository": "https://github.com/6to5/acorn-6to5",
+  "repository": "https://github.com/babel/acorn-babel",
   "licenses": [
     {
       "type": "MIT",
