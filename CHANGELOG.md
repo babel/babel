@@ -11,9 +11,9 @@
 
 _Note: Gaps between patch versions are faulty/broken releases._
 
-See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the previous 6to5 version changelog.
+See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 1.0.0
+## 4.0.0
 
  * 6to5 is now known as Babel.
  * Global helpers/runtime has now been given the more descriptive name of "external helpers".
