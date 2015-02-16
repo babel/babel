@@ -57,10 +57,8 @@
     "private": "^0.1.6",
     "regenerator-babel": "0.8.10-1",
     "regexpu": "^1.1.1",
-    "roadrunner": "^1.0.4",
     "source-map": "^0.1.43",
-    "source-map-support": "^0.2.9",
-    "useragent": "^2.1.5"
+    "source-map-support": "^0.2.9"
   },
   "devDependencies": {
     "browserify": "8.1.3",
