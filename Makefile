@@ -25,7 +25,7 @@ build:
 	node $(BROWSERIFY_CMD) -e lib/babel/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
-	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s to5 >dist/babel.js
+	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s babel >dist/babel.js
 	node $(UGLIFY_CMD) dist/babel.js >dist/babel.min.js
 
 	node bin/babel-external-helpers >dist/external-helpers.js
