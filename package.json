@@ -60,7 +60,6 @@
     "roadrunner": "1.0.4",
     "source-map": "0.1.43",
     "source-map-support": "0.2.9",
-    "supports-color": "1.2.0",
     "useragent": "^2.1.5"
   },
   "devDependencies": {
