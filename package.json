@@ -51,6 +51,7 @@
     "fs-readdir-recursive": "0.1.0",
     "globals": "^5.1.0",
     "js-tokenizer": "1.3.3",
+    "leven": "^1.0.1",
     "lodash": "3.0.0",
     "output-file-sync": "1.1.0",
     "private": "0.1.6",
