@@ -30,7 +30,7 @@
   "dependencies": {
     "commoner": "~0.10.0",
     "esprima-fb": "~10001.1.0-dev-harmony-fb",
-    "recast": "~0.9.14",
+    "recast": "~0.10.0",
     "private": "~0.1.5",
     "through": "~2.3.6",
     "defs": "~1.1.0"
