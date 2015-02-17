@@ -80,7 +80,7 @@
     for (;;) {
       try {
         var tok = fetchToken();
-        if (tok.type === tt.dot && input.substr(tok.end, 1) === '.') {
+        if (tok.type === tt.dot && input.substr(tok.end, 1) === '.' && options.ecmaVersion >= 6) {
           tok = fetchToken();
           tok.start--;
           tok.type = tt.ellipsis;
