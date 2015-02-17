@@ -58,7 +58,8 @@
     "regenerator-babel": "0.8.10-1",
     "regexpu": "^1.1.1",
     "source-map": "^0.1.43",
-    "source-map-support": "^0.2.9"
+    "source-map-support": "^0.2.9",
+    "source-map-to-comment": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^8.1.3",
