@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.1.0
+
+ * **New Feature**
+  * Add `BABEL_CACHE_PATH` and `BABEL_DISABLE_CACHE` environment variables.
+ * **Internal**
+  * Replace many internal util functions with modules. Thanks [@sindresorhus](https://github.com/sindresorhus)!
+
 ## 4.0.2
 
  * **Bug Fix**
