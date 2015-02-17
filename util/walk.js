@@ -172,7 +172,7 @@
   };
   base.Statement = skipThrough;
   base.EmptyStatement = ignore;
-  base.ExpressionStatement = function(node, st, c) {
+  base.ExpressionStatement = base.ParenthesizedExpression = function(node, st, c) {
     c(node.expression, st, "Expression");
   };
   base.IfStatement = function(node, st, c) {
