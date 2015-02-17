@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-var commander = require("commander");
-var Module    = require("module");
-var babel     = require("../lib/babel/api/node");
-var path      = require("path");
-var repl      = require("repl");
-var util      = require("../lib/babel/util");
-var vm        = require("vm");
-var _         = require("lodash");
+var pathIsAbsolute = require("path-is-absolute");
+var commander      = require("commander");
+var Module         = require("module");
+var babel          = require("../lib/babel/api/node");
+var path           = require("path");
+var repl           = require("repl");
+var util           = require("../lib/babel/util");
+var vm             = require("vm");
+var _              = require("lodash");
 
 var program = new commander.Command("babel-node");
 
@@ -85,7 +86,7 @@ if (program.eval || program.print) {
 
     // make the filename absolute
     var filename = args[0]
-    if (!util.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+    if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
