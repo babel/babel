@@ -1,10 +1,10 @@
-var sourceMap = require("source-map");
-var chokidar  = require("chokidar");
-var util2     = require("../../lib/babel/util");
-var path      = require("path");
-var util      = require("./util");
-var fs        = require("fs");
-var _         = require("lodash");
+var sourceMapToComment = require("source-map-to-comment");
+var sourceMap          = require("source-map");
+var chokidar           = require("chokidar");
+var path               = require("path");
+var util               = require("./util");
+var fs                 = require("fs");
+var _                  = require("lodash");
 
 module.exports = function (commander, filenames) {
   var results = [];
@@ -42,7 +42,7 @@ module.exports = function (commander, filenames) {
     });
 
     if (commander.sourceMapsInline || (!commander.outFile && commander.sourceMaps)) {
-      code += "\n" + util2.sourceMapToComment(map);
+      code += "\n" + sourceMapToComment(map);
     }
 
     return {
