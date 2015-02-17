@@ -55,7 +55,7 @@
     "lodash": "^3.2.0",
     "output-file-sync": "^1.1.0",
     "private": "^0.1.6",
-    "regenerator-babel": "0.8.10-1",
+    "regenerator-babel": "0.8.10-2",
     "regexpu": "^1.1.1",
     "source-map": "^0.1.43",
     "source-map-support": "^0.2.9"
