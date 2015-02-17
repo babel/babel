@@ -80,8 +80,7 @@ publish:
 
 	make test
 
-	read -p "Version: " version; \
-	npm version $$version --message "v%s"
+	read -p "Version: " version && npm version $$version --message "v%s"
 
 	make build
 	cp dist/babel.min.js browser.js
