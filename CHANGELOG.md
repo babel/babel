@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.0.2
+
+ * **Bug Fix**
+  * Fix generators not properly fuck.
+ * **Polish**
+  * Update setter param length error message.
+  * Use ranges on dependencies.
+
 ## 4.0.0
 
  * 6to5 is now known as Babel.
