@@ -2475,8 +2475,14 @@
         break;
 
       case "ObjectPattern":
-        for (var i = 0; i < param.properties.length; i++)
-          checkFunctionParam(param.properties[i].value, nameHash);
+        for (var i = 0; i < param.properties.length; i++) {
+          var param2 = param.properties[i];
+          if (param2.type === "SpreadProperty") {
+            checkFunctionParam(param2.argument, nameHash);
+          } else {
+            checkFunctionParam(param2.value, nameHash);
+          }
+        }
         break;
 
       case "ArrayPattern":
@@ -2631,6 +2637,12 @@
         raise(tokStart, "'import' and 'export' may only appear at the top level");
       return starttype === _import ? parseImport(node) : parseExport(node);
 
+    case _name:
+      if (options.ecmaVersion >= 7 && tokVal === "private") {
+        next();
+        return parsePrivate(node);
+      } 
+
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
       // simply start parsing an expression, and afterwards, if the
@@ -2651,9 +2663,7 @@
           return parseLabeledStatement(node, maybeName, expr);
         }
 
-        if (options.ecmaVersion >= 7 && expr.name === "private" && tokType === _name) {
-          return parsePrivate(node);
-        } else if (expr.name === "declare") {
+        if (expr.name === "declare") {
           if (tokType === _class || tokType === _name || tokType === _function || tokType === _var) {
             return parseDeclare(node);
           }
