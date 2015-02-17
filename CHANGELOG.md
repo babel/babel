@@ -16,7 +16,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 4.0.2
 
  * **Bug Fix**
-  * Fix generators not properly fuck.
+  * Fix generators not properly propagating their internal declarations.
  * **Polish**
   * Update setter param length error message.
   * Use ranges on dependencies.
