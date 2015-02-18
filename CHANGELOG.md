@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.2.1
+
+ * **Polish**
+  * Add auxiliary comment to let scoping closure flow control.
+
 ## 4.2.0
 
  * **Polish**
