@@ -5,5 +5,6 @@ function f() {
     if (true) {} else {
       continue _function;
     }
+    return;
   }
 }

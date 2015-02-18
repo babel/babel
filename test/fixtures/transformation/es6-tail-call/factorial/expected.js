@@ -11,6 +11,6 @@ function fact(_x2) {
       continue _function;
     } else {
       return acc;
-    }
+    }return;
   }
 }
