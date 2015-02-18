@@ -1,7 +1,0 @@
-#!/usr/bin/env node
-
-var opts = require("./babel").opts;
-opts.optional = (opts.optional || []).concat("minification");
-opts.format = {
-  compact: true
-};

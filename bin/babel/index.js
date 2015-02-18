@@ -116,17 +116,12 @@ exports.opts = {
   loose:                  commander.loose
 };
 
-setTimeout(function () {
-  // this is just a hack to give `babel-minify` and other files including this
-  // time to modify `exports.opts`
+var fn;
 
-  var fn;
+if (commander.outDir) {
+  fn = require("./dir");
+} else {
+  fn = require("./file");
+}
 
-  if (commander.outDir) {
-    fn = require("./dir");
-  } else {
-    fn = require("./file");
-  }
-
-  fn(commander, filenames, exports.opts);
-}, 0);
+fn(commander, filenames, exports.opts);
