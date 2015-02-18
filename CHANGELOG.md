@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.2.0
+
+ * **Polish**
+  * Use an assignment instead of a define for `__esModule` in loose mode.
+ * **Internal**
+  * Add error for `eval();` usage and enable strict mode for parsing.
+
 ## 4.1.0
 
  * **New Feature**
