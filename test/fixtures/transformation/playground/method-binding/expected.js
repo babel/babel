@@ -14,7 +14,7 @@ var fn = (_obj$foo3 = obj[foo()], _obj$foo3.method.bind(_obj$foo3));
   return _val2.toFixed(_args2[0]);
 }));
 
-var get = function () {
+var get = function get() {
   return 2;
 };
 [1.1234, 23.53245, 3].map((_args3 = [get()], function (_val3) {

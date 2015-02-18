@@ -15,7 +15,7 @@ function two() {
     return _arguments;
   };
 
-  var another = function () {
+  var another = function another() {
     var _arguments2 = arguments;
     var inner2 = function () {
       return _arguments2;
@@ -54,7 +54,7 @@ five({ arguments: ["foo"] });
 
 function six(obj) {
   var fn = function () {
-    var fn2 = function () {
+    var fn2 = function fn2() {
       return arguments[0];
     };
     return fn2("foobar");

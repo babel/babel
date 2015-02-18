@@ -19,7 +19,7 @@ function unpackObject(_ref) {
 
 console.log(unpackObject({ title: "title", author: "author" }));
 
-var unpackArray = function (_ref, _ref3) {
+var unpackArray = function unpackArray(_ref, _ref3) {
   var _ref2 = _slicedToArray(_ref, 3);
 
   var a = _ref2[0];

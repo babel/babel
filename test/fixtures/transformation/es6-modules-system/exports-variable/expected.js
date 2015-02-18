@@ -11,7 +11,7 @@ System.register([], function (_export) {
       _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
       foo = _export("foo", 1);
-      foo2 = _export("foo2", function () {});
+      foo2 = _export("foo2", function foo2() {});
       foo3 = _export("foo3", undefined);
       foo4 = _export("foo4", 2);
       foo5 = _export("foo5", undefined);
