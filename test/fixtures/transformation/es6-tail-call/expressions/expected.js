@@ -17,6 +17,6 @@
       }
       _x = n - 1;
       continue _function;
-    }
+    }return;
   }
 })(1000000, true) === "foo";

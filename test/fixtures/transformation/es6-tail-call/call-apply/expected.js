@@ -15,6 +15,6 @@
     } else {
       _arguments = [_x = n - 1];
       continue _function;
-    }
+    }return;
   }
 })(1000000) === "foo";
