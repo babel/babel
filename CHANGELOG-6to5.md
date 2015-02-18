@@ -7,7 +7,7 @@
  * **Bug Fix**
   * Fix temp variables not being properly pushed inside of `while` loops.
  * **New Feature**
-  * Add `auxilaryComment`/`--auxilary-comment` option that prepends comments to auxilary helpers.
+  * Add `auxiliaryComment`/`--auxiliary-comment` option that prepends comments to auxiliary helpers.
 
 ## 3.6.5
 
