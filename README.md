@@ -1,6 +1,8 @@
 # Acorn
 
 [![Build Status](https://travis-ci.org/marijnh/acorn.svg?branch=master)](https://travis-ci.org/marijnh/acorn)
+[![NPM version](https://img.shields.io/npm/v/acorn.svg)](https://www.npmjs.org/package/acorn)  
+[Funding status: ![maintainer happiness](https://marijnhaverbeke.nl/fund/status_s.png)](https://marijnhaverbeke.nl/fund/)
 
 A tiny, fast JavaScript parser, written completely in JavaScript.
 
