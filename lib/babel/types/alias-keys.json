@@ -19,7 +19,7 @@
   "PrivateDeclaration":  ["Statement", "Declaration"],
 
   "ArrowFunctionExpression": ["Scopable", "Function", "Expression"],
-  "FunctionDeclaration":     ["Statement", "Declaration", "Scopable", "Function"],
+  "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Declaration"],
   "FunctionExpression":      ["Scopable", "Function", "Expression"],
 
   "ImportSpecifier": ["ModuleSpecifier"],
@@ -39,9 +39,9 @@
   "ClassDeclaration": ["Statement", "Declaration", "Class"],
   "ClassExpression":  ["Class", "Expression"],
 
-  "ForOfStatement": ["Statement", "For", "Scopable", "Loop"],
-  "ForInStatement": ["Statement", "For", "Scopable", "Loop"],
-  "ForStatement":   ["Statement", "For", "Scopable", "Loop"],
+  "ForOfStatement": ["Scopable", "Statement", "For", "Loop"],
+  "ForInStatement": ["Scopable", "Statement", "For", "Loop"],
+  "ForStatement":   ["Scopable", "Statement", "For", "Loop"],
 
   "ObjectPattern":     ["Pattern"],
   "ArrayPattern":      ["Pattern"],
