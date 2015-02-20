@@ -59,8 +59,8 @@ function compile(source, options) {
 
   var recastOptions = getRecastOptions(options);
   var ast = recast.parse(source, recastOptions);
-  var path = new types.NodePath(ast);
-  var programPath = path.get("program");
+  var nodePath = new types.NodePath(ast);
+  var programPath = nodePath.get("program");
 
   if (shouldVarify(source, options)) {
     // Transpile let/const into var declarations.
@@ -69,7 +69,7 @@ function compile(source, options) {
 
   transform(programPath, options);
 
-  return recast.print(path, recastOptions);
+  return recast.print(nodePath, recastOptions);
 }
 
 function normalizeOptions(options) {
