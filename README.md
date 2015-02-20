@@ -12,3 +12,7 @@
   For more information view the <a href="https://babeljs.io/">documentation</a>. For
   support visit the <a href="https://gitter.im/babel/babel">gitter room</a>.
 </p>
+
+<p align="center">
+  For documentation and website issues please visit the <a href="https://github.com/babel/babel.github.io">babel.github.io</a> repo.
+</p>
