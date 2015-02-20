@@ -1,4 +1,5 @@
 function test() {
+
   /*
    * this is comment
    */

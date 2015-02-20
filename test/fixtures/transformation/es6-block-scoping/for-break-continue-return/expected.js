@@ -20,8 +20,10 @@
     switch (_ret) {
       case "continue":
         continue;
+
       case "break":
         break;
+
       default:
         if (typeof _ret === "object") return _ret.v;
     }
