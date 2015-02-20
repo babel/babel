@@ -52,7 +52,7 @@ function compile(source, options) {
     return {
       // Shortcut: no generators or async functions to transform.
       code: (options.includeRuntime === true ? fs.readFileSync(
-        runtime.path, "utf-8"
+        path.join(__dirname, "runtime.js"), "utf-8"
       ) + "\n" : "") + source
     };
   }
