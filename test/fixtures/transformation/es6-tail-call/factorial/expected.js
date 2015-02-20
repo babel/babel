@@ -2,6 +2,7 @@
 
 function fact(_x2) {
   var _arguments = arguments;
+
   _function: while (true) {
     var n = _x2;
     acc = undefined;

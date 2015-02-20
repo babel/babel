@@ -2,6 +2,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {
     return f(n - 1);
   } catch (e) {}
@@ -11,6 +12,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {
     throw new Error();
   } catch (e) {
@@ -22,6 +24,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {
     throw new Error();
   } catch (e) {
@@ -33,6 +36,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {} finally {
     return f(n - 1);
   }

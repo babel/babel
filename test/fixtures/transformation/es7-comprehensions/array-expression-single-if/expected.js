@@ -5,6 +5,7 @@ var arr = (function () {
 
   for (var _iterator = [1, 2, 3][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
     var i = _step.value;
+
     if (i > 1) {
       _arr.push(i * i);
     }

@@ -2,12 +2,14 @@
 
 (function f(_x2) {
   var _arguments = arguments;
+
   _function: while (true) {
     var g = function g() {};
 
     var n = _x2;
     m = local1 = local2 = local3 = undefined;
     var m = _arguments[1] === undefined ? getDefaultValue() : _arguments[1];
+
     // `m` should be `getDefaultValue()` after first pass
     if (n <= 0) {
       return "foo";

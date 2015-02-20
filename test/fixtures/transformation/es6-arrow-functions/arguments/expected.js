@@ -2,6 +2,7 @@
 
 function one() {
   var _arguments = arguments;
+
   var inner = function () {
     return _arguments;
   };
@@ -11,12 +12,14 @@ one(1, 2);
 
 function two() {
   var _arguments = arguments;
+
   var inner = function () {
     return _arguments;
   };
 
   var another = function another() {
     var _arguments2 = arguments;
+
     var inner2 = function () {
       return _arguments2;
     };
@@ -28,6 +31,7 @@ two(1, 2);
 
 function three() {
   var _arguments = arguments;
+
   var fn = function () {
     return _arguments[0] + "bar";
   };
@@ -37,6 +41,7 @@ three("foo");
 
 function four() {
   var _arguments = arguments;
+
   var fn = function () {
     return _arguments[0].foo + "bar";
   };

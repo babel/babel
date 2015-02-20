@@ -1,6 +1,7 @@
 "use strict";
 
 var _obj, _obj2, _obj$foo, _obj$foo2, _obj$foo3, _args, _args2, _args3;
+
 var fn = (_obj = obj, _obj.method.bind(_obj));
 var fn = (_obj2 = obj, _obj2.method.bind(_obj2, "foob"));
 var fn = (_obj$foo = obj[foo], _obj$foo.method.bind(_obj$foo));

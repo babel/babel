@@ -6,6 +6,7 @@ System.register([], function (_export) {
     setters: [],
     execute: function () {
       test = _export("test", 2);
+
       _export("test", test = 5);
       _export("test", test += 1);
 

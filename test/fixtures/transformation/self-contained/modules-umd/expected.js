@@ -8,5 +8,6 @@
   "use strict";
 
   var _babelHelpers = _babelRuntimeHelpers["default"];
+
   var foo = _babelHelpers.interopRequire(_foo);
 });

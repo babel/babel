@@ -4,6 +4,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {
     return f(n - 1);
   } catch (e) {}
@@ -12,9 +13,11 @@
 (function f(_x) {
   _function: while (true) {
     var n = _x;
+
     if (n <= 0) {
       return "foo";
     }
+
     try {
       throw new Error();
     } catch (e) {
@@ -29,6 +32,7 @@
   if (n <= 0) {
     return "foo";
   }
+
   try {
     throw new Error();
   } catch (e) {
@@ -39,9 +43,11 @@
 (function f(_x) {
   _function: while (true) {
     var n = _x;
+
     if (n <= 0) {
       return "foo";
     }
+
     try {} finally {
       _x = n - 1;
       continue _function;

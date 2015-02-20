@@ -2,6 +2,7 @@ System.register([], function (_export) {
   "use strict";
 
   var _classCallCheck, _default, Foo;
+
   _export("default", foo);
 
   function foo() {}

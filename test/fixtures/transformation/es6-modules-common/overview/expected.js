@@ -15,7 +15,9 @@ var foo = _interopRequire(require("foo2"));
 var foo2 = _interopRequireWildcard(require("foo3"));
 
 var bar = require("foo4").bar;
+
 var bar2 = require("foo5").foo;
+
 exports.test = test;
 var test = exports.test = 5;
 Object.defineProperty(exports, "__esModule", {

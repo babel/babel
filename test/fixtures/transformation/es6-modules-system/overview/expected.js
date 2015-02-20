@@ -13,6 +13,7 @@ System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
       _export("test", test);
 
       test2 = _export("test2", 5);
+
       _export("default", test);
     }
   };

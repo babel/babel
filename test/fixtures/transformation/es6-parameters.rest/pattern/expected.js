@@ -5,7 +5,6 @@ var foo = function foo() {
     _ref[_key] = arguments[_key];
   }
 
-  var _ref2 = _ref;
-  var a = _ref2[0];
-  var b = _ref2[1];
+  var a = _ref[0];
+  var b = _ref[1];
 };

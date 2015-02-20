@@ -2,6 +2,7 @@ System.register(["./evens"], function (_export) {
   "use strict";
 
   var isEven, p, isOdd;
+
   _export("nextOdd", nextOdd);
 
   function nextOdd(n) {

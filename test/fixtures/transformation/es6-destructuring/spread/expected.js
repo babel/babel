@@ -7,6 +7,7 @@ var isSorted = function (_ref) {
 
   var x = _ref2[0];
   var y = _ref2[1];
+
   var wow = _ref2.slice(2);
 
   if (!zs.length) return true;

@@ -6,6 +6,7 @@ var _rect$topLeft = _slicedToArray(rect.topLeft, 2);
 
 var x1 = _rect$topLeft[0];
 var y1 = _rect$topLeft[1];
+
 var _rect$bottomRight = _slicedToArray(rect.bottomRight, 2);
 
 var x2 = _rect$bottomRight[0];

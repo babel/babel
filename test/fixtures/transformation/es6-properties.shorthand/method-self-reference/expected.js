@@ -1,19 +1,15 @@
 "use strict";
 
 var bar = {
-  foo: (function (_foo) {
-    var _fooWrapper = function foo() {
-      return _foo.apply(this, arguments);
-    };
+  foo: (function () {
+    function _getOuter() {
+      return foo;
+    }
 
-    _fooWrapper.toString = function () {
-      return _foo.toString();
+    return function foo() {
+      console.log(_getOuter());
     };
-
-    return _fooWrapper;
-  })(function () {
-    console.log(foo);
-  })
+  })()
 };
 
 var bar = {
@@ -25,17 +21,13 @@ var bar = {
 
 var foobar = 123;
 var foobar2 = {
-  foobar: (function (_foobar) {
-    var _foobarWrapper = function foobar() {
-      return _foobar.apply(this, arguments);
-    };
+  foobar: (function () {
+    function _getOuter() {
+      return foobar;
+    }
 
-    _foobarWrapper.toString = function () {
-      return _foobar.toString();
+    return function foobar() {
+      console.log(_getOuter());
     };
-
-    return _foobarWrapper;
-  })(function () {
-    console.log(foobar);
-  })
+  })()
 };

@@ -2,6 +2,7 @@
 
 (function f(_x) {
   var _left;
+
   _function: while (true) {
     var n = _x;
     if (n <= 0) {
@@ -12,9 +13,11 @@
       if (!(_left = getTrueValue())) {
         return _left;
       }
+
       if (_left = getFalseValue()) {
         return _left;
       }
+
       _x = n - 1;
       continue _function;
     }return;

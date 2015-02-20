@@ -7,6 +7,7 @@ System.register([], function (_export) {
         case 0:
           context$1$0.next = 2;
           return 1;
+
         case 2:
         case "end":
           return context$1$0.stop();
