@@ -1,6 +1,6 @@
-System.register([], function (_export) {
-  "use strict";
+"use strict";
 
+System.register([], function (_export) {
   var _classCallCheck, _default, Foo;
 
   _export("default", foo);

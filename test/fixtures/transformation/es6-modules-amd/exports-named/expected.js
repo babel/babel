@@ -1,6 +1,6 @@
-define(["exports"], function (exports) {
-  "use strict";
+"use strict";
 
+define(["exports"], function (exports) {
   exports.foo = foo;
   exports.foo = foo;
   exports.bar = bar;

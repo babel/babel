@@ -1,6 +1,6 @@
-System.register(["foo"], function (_export) {
-  "use strict";
+"use strict";
 
+System.register(["foo"], function (_export) {
   var foo;
   return {
     setters: [function (_foo) {

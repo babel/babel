@@ -1,6 +1,6 @@
-define(["exports", "./evens"], function (exports, _evens) {
-  "use strict";
+"use strict";
 
+define(["exports", "./evens"], function (exports, _evens) {
   exports.nextOdd = nextOdd;
   var isEven = _evens.isEven;
   function nextOdd(n) {

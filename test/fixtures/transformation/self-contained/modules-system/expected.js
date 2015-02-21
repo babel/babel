@@ -1,6 +1,6 @@
-System.register(["babel-runtime/helpers"], function (_export) {
-  "use strict";
+"use strict";
 
+System.register(["babel-runtime/helpers"], function (_export) {
   var _babelHelpers;
 
   return {

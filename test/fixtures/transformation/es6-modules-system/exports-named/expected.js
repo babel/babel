@@ -1,6 +1,6 @@
-System.register([], function (_export) {
-  "use strict";
+"use strict";
 
+System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {

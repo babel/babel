@@ -1,6 +1,6 @@
-System.register([], function (_export) {
-  "use strict";
+"use strict";
 
+System.register([], function (_export) {
   var generator = regeneratorRuntime.mark(function generator() {
     return regeneratorRuntime.wrap(function generator$(context$1$0) {
       while (1) switch (context$1$0.prev = context$1$0.next) {
