@@ -119,5 +119,5 @@ publish-core:
 bootstrap:
 	npm install
 	git submodule update --init
-	cd vendor/regenerator; npm install
-	cd vendor/compat-table; npm install object-assign
+	cd vendor/regenerator && npm install
+	cd vendor/compat-table && npm install object-assign
