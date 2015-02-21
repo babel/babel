@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.4.0
+
+ * **New Feature**
+  * `/*** @jsx NAMESPACE **/` comments are now honored by the `react` transformer.
+  * `getModuleName` option.
+  * Infer function expression names. Thanks [@RReverser](https://github.com/RReverser)!
+ * **Bug Fix**
+  * Add proper control flow for tail recursion optimisation.
+ * **Internal**
+  * Remove useless `format` options and move the `format.compact` option to `format`.
+ * **Polish**
+  * Newline handling of the code generator has been heavily improved.
+  * Code generator now deopts whitespace if the input size is >100KB.
+
 ## 4.3.0
 
  * **Breaking Change**
