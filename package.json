@@ -49,7 +49,6 @@
     "fs-readdir-recursive": "^0.1.0",
     "globals": "^6.2.0",
     "is-integer": "^1.0.4",
-    "is-keyword-js": "^1.0.3",
     "js-tokens": "~0.4.1",
     "leven": "^1.0.1",
     "line-numbers": "~0.2.0",
