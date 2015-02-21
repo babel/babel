@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.4.3
+
+ * **Bug Fix**
+  * Fix `for...of` iterator break returns being duplicated.
+  * Only call `return` on the iterator if it exists.
+ * **Internal**
+  * Rename `selfContained` transformer to `runtime`.
+
 ## 4.4.2
 
  * **New Feature**
