@@ -15,6 +15,7 @@ commander.option("-r, --external-helpers", "Replace helpers with references to a
 commander.option("-e, --experimental", "Enable experimental support for proposed ES7 features");
 commander.option("-p, --playground", "Enable playground support");
 
+commander.option("-c, --compact [mode]", "When set to \"auto\" compact is `true` when the input size exceeds 100KB. (auto|true|false)", "auto");
 commander.option("-m, --modules [modules]", "Module formatter type to use [common]", "common");
 commander.option("-l, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 commander.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
@@ -113,6 +114,7 @@ exports.opts = {
   optional:               commander.optional,
   comments:               !commander.removeComments,
   modules:                commander.modules,
+  compact:                commander.compact,
   loose:                  commander.loose
 };
 
