@@ -1,10 +1,14 @@
 "use strict";
 
 function f() {
-  _function: while (true) {
+  var _again = true;
+
+  _function: while (_again) {
+    _again = false;
+
     if (true) {} else {
+      _again = true;
       continue _function;
     }
-    return;
   }
 }

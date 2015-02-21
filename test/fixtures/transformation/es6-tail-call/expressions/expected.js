@@ -3,7 +3,10 @@
 (function f(_x) {
   var _left;
 
-  _function: while (true) {
+  var _again = true;
+
+  _function: while (_again) {
+    _again = false;
     var n = _x;
     if (n <= 0) {
       return "foo";
@@ -19,7 +22,8 @@
       }
 
       _x = n - 1;
+      _again = true;
       continue _function;
-    }return;
+    }
   }
 })(1000000, true) === "foo";

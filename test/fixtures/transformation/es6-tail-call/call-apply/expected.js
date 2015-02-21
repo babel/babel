@@ -4,7 +4,10 @@
   var _this = this,
       _arguments = arguments;
 
-  _function: while (true) {
+  var _again = true;
+
+  _function: while (_again) {
+    _again = false;
     var n = _x;
 
     if (n <= 0) {
@@ -14,10 +17,12 @@
 
     if (Math.random() > 0.5) {
       _arguments = [_x = n - 1];
+      _again = true;
       continue _function;
     } else {
       _arguments = [_x = n - 1];
+      _again = true;
       continue _function;
-    }return;
+    }
   }
 })(1000000) === "foo";

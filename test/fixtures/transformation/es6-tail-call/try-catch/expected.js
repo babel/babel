@@ -11,7 +11,10 @@
 })(1000000) === "foo";
 
 (function f(_x) {
-  _function: while (true) {
+  var _again = true;
+
+  _function: while (_again) {
+    _again = false;
     var n = _x;
 
     if (n <= 0) {
@@ -22,9 +25,9 @@
       throw new Error();
     } catch (e) {
       _x = n - 1;
+      _again = true;
       continue _function;
     }
-    return;
   }
 })(1000000) === "foo";
 
@@ -41,7 +44,10 @@
 })(1000000) === "foo";
 
 (function f(_x) {
-  _function: while (true) {
+  var _again = true;
+
+  _function: while (_again) {
+    _again = false;
     var n = _x;
 
     if (n <= 0) {
@@ -50,8 +56,8 @@
 
     try {} finally {
       _x = n - 1;
+      _again = true;
       continue _function;
     }
-    return;
   }
 })(1000000) === "foo";
