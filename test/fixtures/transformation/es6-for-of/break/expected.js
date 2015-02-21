@@ -6,7 +6,7 @@ foo: for (var _iterator = foo()[Symbol.iterator](), _step; !(_step = _iterator.n
   var x = _step.value;
 
   while (true) {
-    _iterator["return"]();
+    if (_iterator["return"]) _iterator["return"]();
 
     break foo;
   }
@@ -22,8 +22,7 @@ foo: for (var _iterator2 = foo()[Symbol.iterator](), _step2; !(_step2 = _iterato
 
 foo: for (var _iterator3 = foo()[Symbol.iterator](), _step3; !(_step3 = _iterator3.next()).done;) {
   var x = _step3.value;
-
-  _iterator3["return"]();
+  if (_iterator3["return"]) _iterator3["return"]();
 
   break foo;
 }
@@ -32,8 +31,7 @@ foo: for (var _iterator3 = foo()[Symbol.iterator](), _step3; !(_step3 = _iterato
 
 for (var _iterator4 = foo()[Symbol.iterator](), _step4; !(_step4 = _iterator4.next()).done;) {
   var x = _step4.value;
-
-  _iterator4["return"]();
+  if (_iterator4["return"]) _iterator4["return"]();
 
   break;
 }

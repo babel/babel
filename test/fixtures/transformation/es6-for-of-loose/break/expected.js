@@ -17,7 +17,7 @@ foo: for (var _iterator = foo(), _isArray = Array.isArray(_iterator), _i = 0, _i
   var x = _ref;
 
   while (true) {
-    if (!_isArray) _iterator["return"]();
+    if (!_isArray && _iterator["return"]) _iterator["return"]();
 
     break foo;
   }
@@ -55,7 +55,7 @@ foo: for (var _iterator3 = foo(), _isArray3 = Array.isArray(_iterator3), _i3 = 0
   }
 
   var x = _ref3;
-  if (!_isArray3) _iterator3["return"]();
+  if (!_isArray3 && _iterator3["return"]) _iterator3["return"]();
 
   break foo;
 }
@@ -75,7 +75,7 @@ for (var _iterator4 = foo(), _isArray4 = Array.isArray(_iterator4), _i4 = 0, _it
   }
 
   var x = _ref4;
-  if (!_isArray4) _iterator4["return"]();
+  if (!_isArray4 && _iterator4["return"]) _iterator4["return"]();
 
   break;
 }
