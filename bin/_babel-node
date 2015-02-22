@@ -50,7 +50,10 @@ var _eval = function (code, filename) {
     experimental: program.experimental,
     playground: program.playground
   }).code;
-  return vm.runInThisContext(code, filename);
+
+  return vm.runInThisContext(code, {
+    filename: filename
+  });
 };
 
 if (program.eval || program.print) {
