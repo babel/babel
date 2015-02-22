@@ -20,6 +20,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Don't unpack array patterns that have more elements than their right hand array expression.
  * **Polish**
   * Improve syntax highlighting in the code frame. Thanks [@lydell](https://github.com/lydell)!
+ * **Internal**
+  * Upgrade `acorn-babel`.
 
 ## 4.4.3
 
