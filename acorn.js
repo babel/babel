@@ -2635,10 +2635,22 @@
       return starttype === _import ? parseImport(node) : parseExport(node);
 
     case _name:
-      if (options.ecmaVersion >= 7 && tokVal === "private") {
-        next();
-        return parsePrivate(node);
-      } 
+      if (options.ecmaVersion >= 7 && tokType === _name) {
+        if (tokVal === "private") {
+          next();
+          return parsePrivate(node);
+        }
+
+        if (tokVal === "async") {
+          // check to see if `function ` appears after this token, this is
+          // pretty hacky
+          if (input.slice(tokEnd + 1, tokEnd + 10) === "function ") {
+            next();
+            expect(_function);
+            return parseFunction(node, true, true);
+          }
+        }
+      }
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -2647,13 +2659,6 @@
       // Identifier node, we switch to interpreting it as a label.
     default:
       var maybeName = tokVal, expr = parseExpression();
-
-      if (options.ecmaVersion >= 7 && starttype === _name && maybeName === "async" && tokType === _function && !canInsertSemicolon()) {
-        next();
-        var func = parseFunctionStatement(node);
-        func.async = true;
-        return func;
-      }
 
       if (starttype === _name && expr.type === "Identifier") {
         if (eat(_colon)) {
@@ -2670,15 +2675,6 @@
           } else if (expr.name === "type") {
             return parseTypeAlias(node);
           }
-        }
-      }
-
-      if (expr.type === "FunctionExpression" && expr.async) {
-        if (expr.id) {
-          expr.type = "FunctionDeclaration";
-          return expr;
-        } else {
-          unexpected(expr.start + "async function ".length); // this is such a hack
         }
       }
 
@@ -3206,29 +3202,22 @@
         if (id.name === "async") {
           // arrow functions
           if (tokType === _parenL) {
-            next();
-            var exprList;
-            if (tokType !== _parenR) {
-              var val = parseExpression();
-              exprList = val.type === "SequenceExpression" ? val.expressions : [val];
-            } else {
-              exprList = [];
-            }
-            expect(_parenR);
-            // if '=>' follows '(...)', convert contents to arguments
-            if (eat(_arrow)) {
-              return parseArrowExpression(node, exprList, true);
+            var expr = parseParenAndDistinguishExpression(start, true);
+            if (expr.type === "ArrowFunctionExpression") {
+              return expr;
             } else {
               node.callee = id;
-              node.arguments = exprList;
+              if (expr.type === "SequenceExpression") {
+                node.arguments = expr.expressions;
+              } else {
+                node.arguments = [expr];
+              }
               return parseSubscripts(finishNode(node, "CallExpression"), start);
             }
           } else if (tokType === _name) {
             id = parseIdent();
-            if (eat(_arrow)) {
-              return parseArrowExpression(node, [id], true);
-            }
-            return id;
+            expect(_arrow);
+            return parseArrowExpression(node, [id], true);
           }
 
           // normal functions
@@ -3325,8 +3314,9 @@
     return finishNode(node, "BindFunctionExpression");
   }
 
-  function parseParenAndDistinguishExpression() {
-    var start = storeCurrentPos(), val;
+  function parseParenAndDistinguishExpression(start, isAsync) {
+    start = start || storeCurrentPos();
+    var val;
     if (options.ecmaVersion >= 6) {
       next();
 
@@ -3377,7 +3367,7 @@
           }
         }
 
-        return parseArrowExpression(startNodeAt(start), exprList);
+        return parseArrowExpression(startNodeAt(start), exprList, isAsync);
       }
 
       if (!exprList.length) unexpected(lastStart);
