@@ -469,6 +469,70 @@ describe("try-catch-finally generator", function() {
   it("should dynamically catch and then finalize", function() {
     check(usingRaise(), [0, 1, 2, 5, 3, 6]);
   });
+
+  it("should execute catch and finally blocks at most once", function() {
+    var error = new Error();
+
+    function *gen() {
+      try {
+        switch (1) {
+        case 1:
+          yield "a";
+          break;
+        default:
+          break;
+        }
+        throw error;
+      } catch (e) {
+        assert.strictEqual(e, error);
+        yield "b";
+        do {
+          do {
+            yield "c";
+            break;
+          } while (false);
+          yield "d";
+          break;
+        } while (false);
+        yield "e";
+      } finally {
+        yield "f";
+      }
+    }
+
+    check(gen(), ["a", "b", "c", "d", "e", "f"]);
+  });
+
+  it("should handle backwards jumps in labeled loops", function() {
+    function *gen() {
+      var firstTime = true;
+      outer:
+      while (true) {
+        yield 0;
+        try {
+          while (true) {
+            yield 1;
+            if (firstTime) {
+              firstTime = false;
+              yield 2;
+              continue outer;
+            } else {
+              yield 3;
+              break;
+            }
+          }
+          yield 4;
+          break;
+        } finally {
+          yield 5;
+        }
+        yield 6;
+      }
+      yield 7;
+    }
+
+    check(gen(), [0, 1, 2, 5, 0, 1, 3, 4, 5, 7]);
+  });
 });
 
 describe("dynamic exception", function() {
