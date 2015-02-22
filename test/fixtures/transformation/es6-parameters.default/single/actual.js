@@ -1,3 +1,3 @@
-var t = function (t = "foo") {
-  return t + " bar";
+var t = function (f = "foo") {
+  return f + " bar";
 };
