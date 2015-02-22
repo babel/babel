@@ -9,15 +9,19 @@ var obj = {
   },
 
   // self reference
-  h: (function () {
-    function _getOuter() {
-      return h;
-    }
-
-    return function h() {
-      console.log(_getOuter());
+  h: (function (_h) {
+    var _hWrapper = function h() {
+      return _h.apply(this, arguments);
     };
-  })(),
+
+    _hWrapper.toString = function () {
+      return _h.toString();
+    };
+
+    return _hWrapper;
+  })(function () {
+    console.log(h);
+  }),
 
   // no reference
   m: function m() {
@@ -31,15 +35,19 @@ var f = function f() {
 };
 
 // self reference
-var f = (function () {
-  function _getOuter() {
-    return f;
-  }
-
-  return function f() {
-    console.log(_getOuter(), g);
+var f = (function (_f) {
+  var _fWrapper = function f() {
+    return _f.apply(this, arguments);
   };
-})();
+
+  _fWrapper.toString = function () {
+    return _f.toString();
+  };
+
+  return _fWrapper;
+})(function () {
+  console.log(f, g);
+});
 
 // no reference
 var g = function g() {
