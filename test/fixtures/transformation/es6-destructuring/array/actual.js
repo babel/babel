@@ -1,1 +1,1 @@
-var [a, [b], [c], d] = ["hello", [", ", "junk"], ["world"]];
+var [a, [b], [c]] = ["hello", [", ", "junk"], ["world"]];
