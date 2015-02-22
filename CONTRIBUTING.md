@@ -10,6 +10,20 @@ pollutes the git tree.
 
 ## Developing
 
+#### Line Endings
+
+Please make sure git is set up to correctly handle cross-platform line endings.
+
+On Mac OS X and Linux:
+
+    git config --global core.autocrlf input
+
+On Windows:
+
+    git config --global core.autocrlf true
+
+For more information, see [here](https://help.github.com/articles/dealing-with-line-endings/).
+
 #### Workflow
 
 * Fork the repository
