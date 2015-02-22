@@ -843,10 +843,7 @@
     var next = input.charCodeAt(tokPos + 1);
     if (next >= 48 && next <= 57) return readNumber(true);
     var next2 = input.charCodeAt(tokPos + 2);
-    if (options.playground && next === 63) { // 63
-      tokPos += 2;
-      return finishToken(_dotQuestion);
-    } else if (options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+    if (options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
       tokPos += 3;
       return finishToken(_ellipsis);
     } else {
