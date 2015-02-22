@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.4.4
+
+ * **Bug Fix**
+  * Handle inferred function ids to be reassigned and deopt to a slower but working equivalent.
+  * Don't unpack array patterns that have more elements than their right hand array expression.
+ * **Polish**
+  * Improve syntax highlighting in the code frame. Thanks [@lydell](https://github.com/lydell)!
+
 ## 4.4.3
 
  * **Bug Fix**
