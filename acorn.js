@@ -202,7 +202,7 @@
           next: function () {
             var token = getToken();
             return {
-              done: token.type === _eof,
+              done: token.type === tt.eof,
               value: token
             };
           }
@@ -263,16 +263,6 @@
   // All token type variables start with an underscore, to make them
   // easy to recognize.
 
-  // These are the general types. The `type` property is only used to
-  // make them recognizeable when debugging.
-
-  var _num = {type: "num"}, _regexp = {type: "regexp"}, _string = {type: "string"};
-  var _name = {type: "name"}, _eof = {type: "eof"};
-
-  // Keyword tokens. The `keyword` property (also used in keyword-like
-  // operators) indicates that the token originated from an
-  // identifier-like word, which is used when parsing property names.
-  //
   // The `beforeExpr` property is used to disambiguate between regular
   // expressions and divisions. It is set on all token types that can
   // be followed by an expression (thus, a slash after them would be a
@@ -282,99 +272,125 @@
   // to know when parsing a label, in order to allow or disallow
   // continue jumps to that label.
 
-  var _break = {keyword: "break"}, _case = {keyword: "case", beforeExpr: true}, _catch = {keyword: "catch"};
-  var _continue = {keyword: "continue"}, _debugger = {keyword: "debugger"}, _default = {keyword: "default"};
-  var _do = {keyword: "do", isLoop: true}, _else = {keyword: "else", beforeExpr: true};
-  var _finally = {keyword: "finally"}, _for = {keyword: "for", isLoop: true}, _function = {keyword: "function"};
-  var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
-  var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"}, _var = {keyword: "var"};
-  var _let = {keyword: "let"}, _const = {keyword: "const"};
-  var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
-  var _this = {keyword: "this"};
-  var _class = {keyword: "class"}, _extends = {keyword: "extends", beforeExpr: true};
-  var _export = {keyword: "export"}, _import = {keyword: "import"};
-  var _yield = {keyword: "yield", beforeExpr: true};
+  function TokenType(label, beforeExpr, binop, kind, keyword) {
+    this.label = label;
+    this.keyword = keyword;
+    this.beforeExpr = !!beforeExpr;
+    this.isLoop = kind === "loop";
+    this.isAssign = kind === "assign";
+    this.prefix = kind && kind.indexOf("prefix") > -1;
+    this.postfix = kind && kind.indexOf("postfix") > -1;
+    this.binop = binop || null;
+  }
 
-  // The keywords that denote values.
 
-  var _null = {keyword: "null", atomValue: null}, _true = {keyword: "true", atomValue: true};
-  var _false = {keyword: "false", atomValue: false};
+  function binop(name, prec) {
+    return new TokenType(name, true, prec);
+  }
 
-  // Some keywords are treated as regular operators. `in` sometimes
-  // (when parsing `for`) needs to be tested against specifically, so
-  // we assign a variable name to it for quick comparing.
+  var tt = exports.tokTypes = {
+    num: new TokenType("num"),
+    regexp: new TokenType("regexp"),
+    string: new TokenType("string"),
+    name: new TokenType("name"),
+    eof: new TokenType("eof"),
 
-  var _in = {keyword: "in", binop: 7, beforeExpr: true};
+    // Punctuation token types.
+    bracketL: new TokenType("[", true),
+    bracketR: new TokenType("]"),
+    braceL: new TokenType("{", true),
+    braceR: new TokenType("}"),
+    parenL: new TokenType("(", true),
+    parenR: new TokenType(")"),
+    comma: new TokenType(",", true),
+    semi: new TokenType(";", true),
+    colon: new TokenType(":", true),
+    dot: new TokenType("."),
+    question: new TokenType("?", true),
+    arrow: new TokenType("=>", true),
+    template: new TokenType("template"),
+    ellipsis: new TokenType("...", true),
+    backQuote: new TokenType("`"),
+    dollarBraceL: new TokenType("${", true),
+
+    // Operators. These carry several kinds of properties to help the
+    // parser use them properly (the presence of these properties is
+    // what categorizes them as operators).
+    //
+    // `binop`, when present, specifies that this operator is a binary
+    // operator, and will refer to its precedence.
+    //
+    // `prefix` and `postfix` mark the operator as a prefix or postfix
+    // unary operator.
+    //
+    // `isAssign` marks all of `=`, `+=`, `-=` etcetera, which act as
+    // binary operators with a very low precedence, that should result
+    // in AssignmentExpression nodes.
+
+    eq: new TokenType("=", true, null, "assign"),
+    assign: new TokenType("_=", true, null, "assign"),
+    incDec: new TokenType("++/--", false, null, "prefix postfix"),
+    prefix: new TokenType("prefix", true, null, "prefix"),
+    logicalOR: binop("||", 1),
+    logicalAND: binop("&&", 2),
+    bitwiseOR: binop("|", 3),
+    bitwiseXOR: binop("^", 4),
+    bitwiseAND: binop("&", 5),
+    equality: binop("==/!=", 6),
+    relational: binop("</>", 7),
+    bitShift: binop("<</>>", 8),
+    plusMin: new TokenType("+/-", true, 9, "prefix"),
+    modulo: binop("%", 10),
+    star: binop("*", 10),
+    slash: binop("/", 10)
+  };
 
   // Map keyword names to token types.
 
-  var keywordTypes = {"break": _break, "case": _case, "catch": _catch,
-                      "continue": _continue, "debugger": _debugger, "default": _default,
-                      "do": _do, "else": _else, "finally": _finally, "for": _for,
-                      "function": _function, "if": _if, "return": _return, "switch": _switch,
-                      "throw": _throw, "try": _try, "var": _var, "let": _let, "const": _const,
-                      "while": _while, "with": _with,
-                      "null": _null, "true": _true, "false": _false, "new": _new, "in": _in,
-                      "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
-                      "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
-                      "void": {keyword: "void", prefix: true, beforeExpr: true},
-                      "delete": {keyword: "delete", prefix: true, beforeExpr: true},
-                      "class": _class, "extends": _extends,
-                      "export": _export, "import": _import, "yield": _yield};
+  var keywordTypes = {};
 
-  // Punctuation token types. Again, the `type` property is purely for debugging.
+  // Succinct definitions of keyword token types
+  function kw(name, beforeExpr, kind, binop) {
+    keywordTypes[name] = tt["_" + name] =
+       new TokenType(name, beforeExpr, binop, kind, name);
+  };
 
-  var _bracketL = {type: "[", beforeExpr: true}, _bracketR = {type: "]"}, _braceL = {type: "{", beforeExpr: true};
-  var _braceR = {type: "}"}, _parenL = {type: "(", beforeExpr: true}, _parenR = {type: ")"};
-  var _comma = {type: ",", beforeExpr: true}, _semi = {type: ";", beforeExpr: true};
-  var _colon = {type: ":", beforeExpr: true}, _dot = {type: "."}, _question = {type: "?", beforeExpr: true};
-  var _arrow = {type: "=>", beforeExpr: true}, _template = {type: "template"};
-  var _ellipsis = {type: "...", beforeExpr: true};
-  var _backQuote = {type: "`"}, _dollarBraceL = {type: "${", beforeExpr: true};
-
-  // Operators. These carry several kinds of properties to help the
-  // parser use them properly (the presence of these properties is
-  // what categorizes them as operators).
-  //
-  // `binop`, when present, specifies that this operator is a binary
-  // operator, and will refer to its precedence.
-  //
-  // `prefix` and `postfix` mark the operator as a prefix or postfix
-  // unary operator. `isUpdate` specifies that the node produced by
-  // the operator should be of type UpdateExpression rather than
-  // simply UnaryExpression (`++` and `--`).
-  //
-  // `isAssign` marks all of `=`, `+=`, `-=` etcetera, which act as
-  // binary operators with a very low precedence, that should result
-  // in AssignmentExpression nodes.
-
-  var _slash = {binop: 10, beforeExpr: true}, _eq = {isAssign: true, beforeExpr: true};
-  var _assign = {isAssign: true, beforeExpr: true};
-  var _incDec = {postfix: true, prefix: true, isUpdate: true}, _prefix = {prefix: true, beforeExpr: true};
-  var _logicalOR = {binop: 1, beforeExpr: true};
-  var _logicalAND = {binop: 2, beforeExpr: true};
-  var _bitwiseOR = {binop: 3, beforeExpr: true};
-  var _bitwiseXOR = {binop: 4, beforeExpr: true};
-  var _bitwiseAND = {binop: 5, beforeExpr: true};
-  var _equality = {binop: 6, beforeExpr: true};
-  var _relational = {binop: 7, beforeExpr: true};
-  var _bitShift = {binop: 8, beforeExpr: true};
-  var _plusMin = {binop: 9, prefix: true, beforeExpr: true};
-  var _modulo = {binop: 10, beforeExpr: true};
-
-  // '*' may be multiply or have special meaning in ES6
-  var _star = {binop: 10, beforeExpr: true};
-
-  // Provide access to the token types for external users of the
-  // tokenizer.
-
-  exports.tokTypes = {bracketL: _bracketL, bracketR: _bracketR, braceL: _braceL, braceR: _braceR,
-                      parenL: _parenL, parenR: _parenR, comma: _comma, semi: _semi, colon: _colon,
-                      dot: _dot, ellipsis: _ellipsis, question: _question, slash: _slash, eq: _eq,
-                      name: _name, eof: _eof, num: _num, regexp: _regexp, string: _string,
-                      arrow: _arrow, template: _template, star: _star, assign: _assign,
-                      backQuote: _backQuote, dollarBraceL: _dollarBraceL};
-  for (var kw in keywordTypes) exports.tokTypes["_" + kw] = keywordTypes[kw];
+  kw("break"),
+  kw("case", true),
+  kw("catch"),
+  kw("continue"),
+  kw("debugger"),
+  kw("default"),
+  kw("do", false, "loop"),
+  kw("else", true),
+  kw("finally"),
+  kw("for", false, "loop"),
+  kw("function"),
+  kw("if"),
+  kw("return", true),
+  kw("switch");
+  kw("throw", true),
+  kw("try"),
+  kw("var"),
+  kw("let");
+  kw("const");
+  kw("while", false, "loop");
+  kw("with");
+  kw("new", true);
+  kw("this");
+  kw("class");
+  kw("extends", true);
+  kw("export");
+  kw("import");
+  kw("yield", true);
+  kw("null", false, null, null, null);
+  kw("true", false, null, null, true);
+  kw("false", false, null, null, false);
+  kw("in", true, null, 7);
+  kw("instanceof", true, null, 7);
+  kw("typeof", true, "prefix");
+  kw("void", true, "prefix");
+  kw("delete", true, "prefix");
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a
@@ -578,7 +594,7 @@
 
     // Properties of the current token:
     // Its type
-    this.type = _eof;
+    this.type = tt.eof;
     // For tokens that include more information than their type, the value
     this.value = null;
     // Its start and end offset
@@ -629,7 +645,7 @@
 
   pp.setStrict = function(strict) {
     this.strict = strict;
-    if (this.type !== _num && this.type !== _string) return;
+    if (this.type !== tt.num && this.type !== tt.string) return;
     this.pos = this.start;
     if (this.options.locations) {
       while (this.pos < this.lineStart) {
@@ -653,7 +669,7 @@
 
     this.start = this.pos;
     if (this.options.locations) this.startLoc = this.curPosition();
-    if (this.pos >= this.input.length) return this.finishToken(_eof);
+    if (this.pos >= this.input.length) return this.finishToken(tt.eof);
 
     if (inTemplate) return this.readTmplToken();
 
@@ -762,13 +778,13 @@
 
   pp.braceIsBlock = function(prevType) {
     var parent;
-    if (prevType === _colon && (parent = this.curTokContext()).token == "{")
+    if (prevType === tt.colon && (parent = this.curTokContext()).token == "{")
       return !parent.isExpr;
-    if (prevType === _return)
+    if (prevType === tt._return)
       return newline.test(this.input.slice(this.lastTokEnd, this.start));
-    if (prevType === _else || prevType === _semi || prevType === _eof)
+    if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof)
       return true;
-    if (prevType == _braceL)
+    if (prevType == tt.braceL)
       return this.curTokContext() === b_stat;
     return !this.exprAllowed;
   };
@@ -786,7 +802,7 @@
     this.value = val;
 
     // Update context info
-    if (type === _parenR || type === _braceR) {
+    if (type === tt.parenR || type === tt.braceR) {
       var out = this.context.pop();
       if (out === b_stat && this.curTokContext() === f_expr) {
         this.context.pop();
@@ -794,26 +810,26 @@
       } else if (out !== b_tmpl) {
         this.exprAllowed = !(out && out.isExpr);
       }
-    } else if (type === _braceL) {
+    } else if (type === tt.braceL) {
       this.context.push(this.braceIsBlock(prevType) ? b_stat : b_expr);
       this.exprAllowed = true;
-    } else if (type === _dollarBraceL) {
+    } else if (type === tt.dollarBraceL) {
       this.context.push(b_tmpl);
       this.exprAllowed = true;
-    } else if (type == _parenL) {
-      var statementParens = prevType === _if || prevType === _for || prevType === _with || prevType === _while;
+    } else if (type == tt.parenL) {
+      var statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
       this.context.push(statementParens ? p_stat : p_expr);
       this.exprAllowed = true;
-    } else if (type == _incDec) {
+    } else if (type == tt.incDec) {
       // tokExprAllowed stays unchanged
-    } else if (type.keyword && prevType == _dot) {
+    } else if (type.keyword && prevType == tt.dot) {
       this.exprAllowed = false;
-    } else if (type == _function) {
+    } else if (type == tt._function) {
       if (this.curTokContext() !== b_stat) {
         this.context.push(f_expr);
       }
       this.exprAllowed = false;
-    } else if (type === _backQuote) {
+    } else if (type === tt.backQuote) {
       if (this.curTokContext() === q_tmpl)
         this.context.pop();
       else
@@ -839,37 +855,37 @@
     var next2 = this.input.charCodeAt(this.pos + 2);
     if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
       this.pos += 3;
-      return this.finishToken(_ellipsis);
+      return this.finishToken(tt.ellipsis);
     } else {
       ++this.pos;
-      return this.finishToken(_dot);
+      return this.finishToken(tt.dot);
     }
   };
 
   pp.readToken_slash = function() { // '/'
     var next = this.input.charCodeAt(this.pos + 1);
     if (this.exprAllowed) {++this.pos; return this.readRegexp();}
-    if (next === 61) return this.finishOp(_assign, 2);
-    return this.finishOp(_slash, 1);
+    if (next === 61) return this.finishOp(tt.assign, 2);
+    return this.finishOp(tt.slash, 1);
   };
 
   pp.readToken_mult_modulo = function(code) { // '%*'
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(_assign, 2);
-    return this.finishOp(code === 42 ? _star : _modulo, 1);
+    if (next === 61) return this.finishOp(tt.assign, 2);
+    return this.finishOp(code === 42 ? tt.star : tt.modulo, 1);
   };
 
   pp.readToken_pipe_amp = function(code) { // '|&'
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === code) return this.finishOp(code === 124 ? _logicalOR : _logicalAND, 2);
-    if (next === 61) return this.finishOp(_assign, 2);
-    return this.finishOp(code === 124 ? _bitwiseOR : _bitwiseAND, 1);
+    if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
+    if (next === 61) return this.finishOp(tt.assign, 2);
+    return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
   };
 
   pp.readToken_caret = function() { // '^'
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(_assign, 2);
-    return this.finishOp(_bitwiseXOR, 1);
+    if (next === 61) return this.finishOp(tt.assign, 2);
+    return this.finishOp(tt.bitwiseXOR, 1);
   };
 
   pp.readToken_plus_min = function(code) { // '+-'
@@ -882,10 +898,10 @@
         this.skipSpace();
         return this.readToken();
       }
-      return this.finishOp(_incDec, 2);
+      return this.finishOp(tt.incDec, 2);
     }
-    if (next === 61) return this.finishOp(_assign, 2);
-    return this.finishOp(_plusMin, 1);
+    if (next === 61) return this.finishOp(tt.assign, 2);
+    return this.finishOp(tt.plusMin, 1);
   };
 
   pp.readToken_lt_gt = function(code) { // '<>'
@@ -893,8 +909,8 @@
     var size = 1;
     if (next === code) {
       size = code === 62 && this.input.charCodeAt(this.pos + 2) === 62 ? 3 : 2;
-      if (this.input.charCodeAt(this.pos + size) === 61) return this.finishOp(_assign, size + 1);
-      return this.finishOp(_bitShift, size);
+      if (this.input.charCodeAt(this.pos + size) === 61) return this.finishOp(tt.assign, size + 1);
+      return this.finishOp(tt.bitShift, size);
     }
     if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
         this.input.charCodeAt(this.pos + 3) == 45) {
@@ -905,17 +921,17 @@
     }
     if (next === 61)
       size = this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2;
-    return this.finishOp(_relational, size);
+    return this.finishOp(tt.relational, size);
   };
 
-  pp.readToken_eq_excl = function(code) { // '=!', '=>'
+  pp.readToken_eq_excl = function(code) { // '=!'
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(_equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
+    if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
     if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
       this.pos += 2;
-      return this.finishToken(_arrow);
+      return this.finishToken(tt.arrow);
     }
-    return this.finishOp(code === 61 ? _eq : _prefix, 1);
+    return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
   };
 
   pp.getTokenFromCode = function(code) {
@@ -926,21 +942,21 @@
       return this.readToken_dot();
 
     // Punctuation tokens.
-    case 40: ++this.pos; return this.finishToken(_parenL);
-    case 41: ++this.pos; return this.finishToken(_parenR);
-    case 59: ++this.pos; return this.finishToken(_semi);
-    case 44: ++this.pos; return this.finishToken(_comma);
-    case 91: ++this.pos; return this.finishToken(_bracketL);
-    case 93: ++this.pos; return this.finishToken(_bracketR);
-    case 123: ++this.pos; return this.finishToken(_braceL);
-    case 125: ++this.pos; return this.finishToken(_braceR);
-    case 58: ++this.pos; return this.finishToken(_colon);
-    case 63: ++this.pos; return this.finishToken(_question);
+    case 40: ++this.pos; return this.finishToken(tt.parenL);
+    case 41: ++this.pos; return this.finishToken(tt.parenR);
+    case 59: ++this.pos; return this.finishToken(tt.semi);
+    case 44: ++this.pos; return this.finishToken(tt.comma);
+    case 91: ++this.pos; return this.finishToken(tt.bracketL);
+    case 93: ++this.pos; return this.finishToken(tt.bracketR);
+    case 123: ++this.pos; return this.finishToken(tt.braceL);
+    case 125: ++this.pos; return this.finishToken(tt.braceR);
+    case 58: ++this.pos; return this.finishToken(tt.colon);
+    case 63: ++this.pos; return this.finishToken(tt.question);
 
     case 96: // '`'
       if (this.options.ecmaVersion < 6) break;
       ++this.pos;
-      return this.finishToken(_backQuote);
+      return this.finishToken(tt.backQuote);
 
     case 48: // '0'
       var next = this.input.charCodeAt(this.pos + 1);
@@ -985,7 +1001,7 @@
       return this.readToken_eq_excl(code);
 
     case 126: // '~'
-      return this.finishOp(_prefix, 1);
+      return this.finishOp(tt.prefix, 1);
     }
 
     this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'");
@@ -1052,7 +1068,7 @@
     } catch (err) {
       value = null;
     }
-    return this.finishToken(_regexp, {pattern: content, flags: mods, value: value});
+    return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value});
   };
 
   // Read an integer in the given radix. Return null if zero digits
@@ -1081,7 +1097,7 @@
     var val = this.readInt(radix);
     if (val == null) this.raise(this.start + 2, "Expected number in radix " + radix);
     if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.pos, "Identifier directly after number");
-    return this.finishToken(_num, val);
+    return this.finishToken(tt.num, val);
   };
 
   // Read an integer, octal integer, or floating-point number.
@@ -1108,7 +1124,7 @@
     else if (!octal || str.length === 1) val = parseInt(str, 10);
     else if (/[89]/.test(str) || this.strict) this.raise(start, "Invalid number");
     else val = parseInt(str, 8);
-    return this.finishToken(_num, val);
+    return this.finishToken(tt.num, val);
   };
 
   // Read a string value, interpreting backslash-escapes.
@@ -1151,7 +1167,7 @@
       }
     }
     out += this.input.slice(chunkStart, this.pos++);
-    return this.finishToken(_string, out);
+    return this.finishToken(tt.string, out);
   };
 
   // Reads template string tokens.
@@ -1162,17 +1178,17 @@
       if (this.pos >= this.input.length) this.raise(this.start, "Unterminated template");
       var ch = this.input.charCodeAt(this.pos);
       if (ch === 96 || ch === 36 && this.input.charCodeAt(this.pos + 1) === 123) { // '`', '${'
-        if (this.pos === this.start && this.type === _template) {
+        if (this.pos === this.start && this.type === tt.template) {
           if (ch === 36) {
             this.pos += 2;
-            return this.finishToken(_dollarBraceL);
+            return this.finishToken(tt.dollarBraceL);
           } else {
             ++this.pos;
-            return this.finishToken(_backQuote);
+            return this.finishToken(tt.backQuote);
           }
         }
         out += this.input.slice(chunkStart, this.pos);
-        return this.finishToken(_template, out);
+        return this.finishToken(tt.template, out);
       }
       if (ch === 92) { // '\'
         out += this.input.slice(chunkStart, this.pos);
@@ -1284,7 +1300,7 @@
 
   pp.readWord = function() {
     var word = this.readWord1();
-    var type = _name;
+    var type = tt.name;
     if ((this.options.ecmaVersion >= 6 || !containsEsc) && this.isKeyword(word))
       type = keywordTypes[word];
     return this.finishToken(type, word);
@@ -1391,13 +1407,13 @@
   // Tests whether parsed token is a contextual keyword.
 
   pp.isContextual = function(name) {
-    return this.type === _name && this.value === name;
+    return this.type === tt.name && this.value === name;
   };
 
   // Consumes contextual keyword if possible.
 
   pp.eatContextual = function(name) {
-    return this.value === name && this.eat(_name);
+    return this.value === name && this.eat(tt.name);
   };
 
   // Asserts that following token is given contextual keyword.
@@ -1410,14 +1426,14 @@
 
   pp.canInsertSemicolon = function() {
     return !this.options.strictSemicolons &&
-      (this.type === _eof || this.type === _braceR || newline.test(this.input.slice(this.lastTokEnd, this.start)));
+      (this.type === tt.eof || this.type === tt.braceR || newline.test(this.input.slice(this.lastTokEnd, this.start)));
   };
 
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
   pp.semicolon = function() {
-    if (!this.eat(_semi) && !this.canInsertSemicolon()) this.unexpected();
+    if (!this.eat(tt.semi) && !this.canInsertSemicolon()) this.unexpected();
   };
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -1524,7 +1540,7 @@
   pp.parseRest = function() {
     var node = this.startNode();
     this.next();
-    node.argument = this.type === _name || this.type === _bracketL ? this.parseBindingAtom() : this.unexpected();
+    node.argument = this.type === tt.name || this.type === tt.bracketL ? this.parseBindingAtom() : this.unexpected();
     return this.finishNode(node, "RestElement");
   };
 
@@ -1533,16 +1549,16 @@
   pp.parseBindingAtom = function() {
     if (this.options.ecmaVersion < 6) return this.parseIdent();
     switch (this.type) {
-      case _name:
+      case tt.name:
         return this.parseIdent();
 
-      case _bracketL:
+      case tt.bracketL:
         var node = this.startNode();
         this.next();
-        node.elements = this.parseBindingList(_bracketR, true);
+        node.elements = this.parseBindingList(tt.bracketR, true);
         return this.finishNode(node, "ArrayPattern");
 
-      case _braceL:
+      case tt.braceL:
         return this.parseObj(true);
 
       default:
@@ -1553,13 +1569,13 @@
   pp.parseBindingList = function(close, allowEmpty) {
     var elts = [], first = true;
     while (!this.eat(close)) {
-      first ? first = false : this.expect(_comma);
-      if (this.type === _ellipsis) {
+      first ? first = false : this.expect(tt.comma);
+      if (this.type === tt.ellipsis) {
         elts.push(this.parseRest());
         this.expect(close);
         break;
       }
-      elts.push(allowEmpty && this.type === _comma ? null : this.parseMaybeDefault());
+      elts.push(allowEmpty && this.type === tt.comma ? null : this.parseMaybeDefault());
     }
     return elts;
   };
@@ -1569,7 +1585,7 @@
   pp.parseMaybeDefault = function(startPos, left) {
     startPos = startPos || this.currentPos();
     left = left || this.parseBindingAtom();
-    if (!this.eat(_eq)) return left;
+    if (!this.eat(tt.eq)) return left;
     var node = this.startNodeAt(startPos);
     node.operator = "=";
     node.left = left;
@@ -1685,7 +1701,7 @@
   pp.parseTopLevel = function(node) {
     var first = true;
     if (!node.body) node.body = [];
-    while (this.type !== _eof) {
+    while (this.type !== tt.eof) {
       var stmt = this.parseStatement(true, true);
       node.body.push(stmt);
       if (first && this.isUseStrict(stmt)) this.setStrict(true);
@@ -1713,32 +1729,32 @@
     // complexity.
 
     switch (starttype) {
-    case _break: case _continue: return this.parseBreakContinueStatement(node, starttype.keyword);
-    case _debugger: return this.parseDebuggerStatement(node);
-    case _do: return this.parseDoStatement(node);
-    case _for: return this.parseForStatement(node);
-    case _function:
+    case tt._break: case tt._continue: return this.parseBreakContinueStatement(node, starttype.keyword);
+    case tt._debugger: return this.parseDebuggerStatement(node);
+    case tt._do: return this.parseDoStatement(node);
+    case tt._for: return this.parseForStatement(node);
+    case tt._function:
       if (!declaration && this.options.ecmaVersion >= 6) this.unexpected();
       return this.parseFunctionStatement(node);
-    case _class:
+    case tt._class:
       if (!declaration) this.unexpected();
       return this.parseClass(node, true);
-    case _if: return this.parseIfStatement(node);
-    case _return: return this.parseReturnStatement(node);
-    case _switch: return this.parseSwitchStatement(node);
-    case _throw: return this.parseThrowStatement(node);
-    case _try: return this.parseTryStatement(node);
-    case _let: case _const: if (!declaration) this.unexpected(); // NOTE: falls through to _var
-    case _var: return this.parseVarStatement(node, starttype.keyword);
-    case _while: return this.parseWhileStatement(node);
-    case _with: return this.parseWithStatement(node);
-    case _braceL: return this.parseBlock(); // no point creating a function for this
-    case _semi: return this.parseEmptyStatement(node);
-    case _export:
-    case _import:
+    case tt._if: return this.parseIfStatement(node);
+    case tt._return: return this.parseReturnStatement(node);
+    case tt._switch: return this.parseSwitchStatement(node);
+    case tt._throw: return this.parseThrowStatement(node);
+    case tt._try: return this.parseTryStatement(node);
+    case tt._let: case tt._const: if (!declaration) this.unexpected(); // NOTE: falls through to _var
+    case tt._var: return this.parseVarStatement(node, starttype.keyword);
+    case tt._while: return this.parseWhileStatement(node);
+    case tt._with: return this.parseWithStatement(node);
+    case tt.braceL: return this.parseBlock(); // no point creating a function for this
+    case tt.semi: return this.parseEmptyStatement(node);
+    case tt._export:
+    case tt._import:
       if (!topLevel && !this.options.allowImportExportEverywhere)
         this.raise(this.start, "'import' and 'export' may only appear at the top level");
-      return starttype === _import ? this.parseImport(node) : this.parseExport(node);
+      return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
 
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -1747,7 +1763,7 @@
       // Identifier node, we switch to interpreting it as a label.
     default:
       var maybeName = this.value, expr = this.parseExpression();
-      if (starttype === _name && expr.type === "Identifier" && this.eat(_colon))
+      if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon))
         return this.parseLabeledStatement(node, maybeName, expr);
       else return this.parseExpressionStatement(node, expr);
     }
@@ -1756,8 +1772,8 @@
   pp.parseBreakContinueStatement = function(node, keyword) {
     var isBreak = keyword == "break";
     this.next();
-    if (this.eat(_semi) || this.canInsertSemicolon()) node.label = null;
-    else if (this.type !== _name) this.unexpected();
+    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.label = null;
+    else if (this.type !== tt.name) this.unexpected();
     else {
       node.label = this.parseIdent();
       this.semicolon();
@@ -1787,10 +1803,10 @@
     this.labels.push(loopLabel);
     node.body = this.parseStatement(false);
     this.labels.pop();
-    this.expect(_while);
+    this.expect(tt._while);
     node.test = this.parseParenExpression();
     if (this.options.ecmaVersion >= 6)
-      this.eat(_semi);
+      this.eat(tt.semi);
     else
       this.semicolon();
     return this.finishNode(node, "DoWhileStatement");
@@ -1807,21 +1823,21 @@
   pp.parseForStatement = function(node) {
     this.next();
     this.labels.push(loopLabel);
-    this.expect(_parenL);
-    if (this.type === _semi) return this.parseFor(node, null);
-    if (this.type === _var || this.type === _let) {
-      var init = this.startNode(), varKind = this.type.keyword, isLet = this.type === _let;
+    this.expect(tt.parenL);
+    if (this.type === tt.semi) return this.parseFor(node, null);
+    if (this.type === tt._var || this.type === tt._let) {
+      var init = this.startNode(), varKind = this.type.keyword, isLet = this.type === tt._let;
       this.next();
       this.parseVar(init, true, varKind);
       this.finishNode(init, "VariableDeclaration");
-      if ((this.type === _in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init.declarations.length === 1 &&
+      if ((this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init.declarations.length === 1 &&
           !(isLet && init.declarations[0].init))
         return this.parseForIn(node, init);
       return this.parseFor(node, init);
     }
     var refShorthandDefaultPos = {start: 0};
     var init = this.parseExpression(true, refShorthandDefaultPos);
-    if (this.type === _in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) {
+    if (this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) {
       this.toAssignable(init);
       this.checkLVal(init);
       return this.parseForIn(node, init);
@@ -1840,7 +1856,7 @@
     this.next();
     node.test = this.parseParenExpression();
     node.consequent = this.parseStatement(false);
-    node.alternate = this.eat(_else) ? this.parseStatement(false) : null;
+    node.alternate = this.eat(tt._else) ? this.parseStatement(false) : null;
     return this.finishNode(node, "IfStatement");
   };
 
@@ -1853,7 +1869,7 @@
     // optional arguments, we eagerly look for a semicolon or the
     // possibility to insert one.
 
-    if (this.eat(_semi) || this.canInsertSemicolon()) node.argument = null;
+    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.argument = null;
     else { node.argument = this.parseExpression(); this.semicolon(); }
     return this.finishNode(node, "ReturnStatement");
   };
@@ -1862,16 +1878,16 @@
     this.next();
     node.discriminant = this.parseParenExpression();
     node.cases = [];
-    this.expect(_braceL);
+    this.expect(tt.braceL);
     this.labels.push(switchLabel);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
     // adding statements to.
 
-    for (var cur, sawDefault; this.type != _braceR;) {
-      if (this.type === _case || this.type === _default) {
-        var isCase = this.type === _case;
+    for (var cur, sawDefault; this.type != tt.braceR;) {
+      if (this.type === tt._case || this.type === tt._default) {
+        var isCase = this.type === tt._case;
         if (cur) this.finishNode(cur, "SwitchCase");
         node.cases.push(cur = this.startNode());
         cur.consequent = [];
@@ -1881,7 +1897,7 @@
           if (sawDefault) this.raise(this.lastTokStart, "Multiple default clauses"); sawDefault = true;
           cur.test = null;
         }
-        this.expect(_colon);
+        this.expect(tt.colon);
       } else {
         if (!cur) this.unexpected();
         cur.consequent.push(this.parseStatement(true));
@@ -1906,19 +1922,19 @@
     this.next();
     node.block = this.parseBlock();
     node.handler = null;
-    if (this.type === _catch) {
+    if (this.type === tt._catch) {
       var clause = this.startNode();
       this.next();
-      this.expect(_parenL);
+      this.expect(tt.parenL);
       clause.param = this.parseBindingAtom();
       this.checkLVal(clause.param, true);
-      this.expect(_parenR);
+      this.expect(tt.parenR);
       clause.guard = null;
       clause.body = this.parseBlock();
       node.handler = this.finishNode(clause, "CatchClause");
     }
     node.guardedHandlers = empty;
-    node.finalizer = this.eat(_finally) ? this.parseBlock() : null;
+    node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
     if (!node.handler && !node.finalizer)
       this.raise(node.start, "Missing catch or finally clause");
     return this.finishNode(node, "TryStatement");
@@ -1956,7 +1972,7 @@
   pp.parseLabeledStatement = function(node, maybeName, expr) {
     for (var i = 0; i < this.labels.length; ++i)
       if (this.labels[i].name === maybeName) this.raise(expr.start, "Label '" + maybeName + "' is already declared");
-    var kind = this.type.isLoop ? "loop" : this.type === _switch ? "switch" : null;
+    var kind = this.type.isLoop ? "loop" : this.type === tt._switch ? "switch" : null;
     this.labels.push({name: maybeName, kind: kind});
     node.body = this.parseStatement(true);
     this.labels.pop();
@@ -1974,9 +1990,9 @@
   // parentheses around their expression.
 
   pp.parseParenExpression = function() {
-    this.expect(_parenL);
+    this.expect(tt.parenL);
     var val = this.parseExpression();
-    this.expect(_parenR);
+    this.expect(tt.parenR);
     return val;
   };
 
@@ -1987,8 +2003,8 @@
   pp.parseBlock = function(allowStrict) {
     var node = this.startNode(), first = true, oldStrict;
     node.body = [];
-    this.expect(_braceL);
-    while (!this.eat(_braceR)) {
+    this.expect(tt.braceL);
+    while (!this.eat(tt.braceR)) {
       var stmt = this.parseStatement(true);
       node.body.push(stmt);
       if (first && allowStrict && this.isUseStrict(stmt)) {
@@ -2007,11 +2023,11 @@
 
   pp.parseFor = function(node, init) {
     node.init = init;
-    this.expect(_semi);
-    node.test = this.type === _semi ? null : this.parseExpression();
-    this.expect(_semi);
-    node.update = this.type === _parenR ? null : this.parseExpression();
-    this.expect(_parenR);
+    this.expect(tt.semi);
+    node.test = this.type === tt.semi ? null : this.parseExpression();
+    this.expect(tt.semi);
+    node.update = this.type === tt.parenR ? null : this.parseExpression();
+    this.expect(tt.parenR);
     node.body = this.parseStatement(false);
     this.labels.pop();
     return this.finishNode(node, "ForStatement");
@@ -2021,11 +2037,11 @@
   // same from parser's perspective.
 
   pp.parseForIn = function(node, init) {
-    var type = this.type === _in ? "ForInStatement" : "ForOfStatement";
+    var type = this.type === tt._in ? "ForInStatement" : "ForOfStatement";
     this.next();
     node.left = init;
     node.right = this.parseExpression();
-    this.expect(_parenR);
+    this.expect(tt.parenR);
     node.body = this.parseStatement(false);
     this.labels.pop();
     return this.finishNode(node, type);
@@ -2040,9 +2056,9 @@
       var decl = this.startNode();
       decl.id = this.parseBindingAtom();
       this.checkLVal(decl.id, true);
-      decl.init = this.eat(_eq) ? this.parseMaybeAssign(noIn) : (kind === _const.keyword ? this.unexpected() : null);
+      decl.init = this.eat(tt.eq) ? this.parseMaybeAssign(noIn) : (kind === tt._const.keyword ? this.unexpected() : null);
       node.declarations.push(this.finishNode(decl, "VariableDeclarator"));
-      if (!this.eat(_comma)) break;
+      if (!this.eat(tt.comma)) break;
     }
     return node;
   };
@@ -2065,10 +2081,10 @@
   pp.parseExpression = function(noIn, refShorthandDefaultPos) {
     var start = this.currentPos();
     var expr = this.parseMaybeAssign(noIn, refShorthandDefaultPos);
-    if (this.type === _comma) {
+    if (this.type === tt.comma) {
       var node = this.startNodeAt(start);
       node.expressions = [expr];
-      while (this.eat(_comma)) node.expressions.push(this.parseMaybeAssign(noIn, refShorthandDefaultPos));
+      while (this.eat(tt.comma)) node.expressions.push(this.parseMaybeAssign(noIn, refShorthandDefaultPos));
       return this.finishNode(node, "SequenceExpression");
     }
     return expr;
@@ -2090,7 +2106,7 @@
     if (this.type.isAssign) {
       var node = this.startNodeAt(start);
       node.operator = this.value;
-      node.left = this.type === _eq ? this.toAssignable(left) : left;
+      node.left = this.type === tt.eq ? this.toAssignable(left) : left;
       refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
       this.checkLVal(left);
       this.next();
@@ -2108,11 +2124,11 @@
     var start = this.currentPos();
     var expr = this.parseExprOps(noIn, refShorthandDefaultPos);
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
-    if (this.eat(_question)) {
+    if (this.eat(tt.question)) {
       var node = this.startNodeAt(start);
       node.test = expr;
       node.consequent = this.parseMaybeAssign();
-      this.expect(_colon);
+      this.expect(tt.colon);
       node.alternate = this.parseMaybeAssign(noIn);
       return this.finishNode(node, "ConditionalExpression");
     }
@@ -2136,7 +2152,7 @@
 
   pp.parseExprOp = function(left, leftStart, minPrec, noIn) {
     var prec = this.type.binop;
-    if (prec != null && (!noIn || this.type !== _in)) {
+    if (prec != null && (!noIn || this.type !== tt._in)) {
       if (prec > minPrec) {
         var node = this.startNodeAt(leftStart);
         node.left = left;
@@ -2145,7 +2161,7 @@
         this.next();
         var start = this.currentPos();
         node.right = this.parseExprOp(this.parseMaybeUnary(), start, prec, noIn);
-        this.finishNode(node, (op === _logicalOR || op === _logicalAND) ? "LogicalExpression" : "BinaryExpression");
+        this.finishNode(node, (op === tt.logicalOR || op === tt.logicalAND) ? "LogicalExpression" : "BinaryExpression");
         return this.parseExprOp(node, leftStart, minPrec, noIn);
       }
     }
@@ -2156,7 +2172,7 @@
 
   pp.parseMaybeUnary = function(refShorthandDefaultPos) {
     if (this.type.prefix) {
-      var node = this.startNode(), update = this.type.isUpdate;
+      var node = this.startNode(), update = this.type === tt.incDec;
       node.operator = this.value;
       node.prefix = true;
       this.next();
@@ -2193,25 +2209,25 @@
   };
 
   pp.parseSubscripts = function(base, start, noCalls) {
-    if (this.eat(_dot)) {
+    if (this.eat(tt.dot)) {
       var node = this.startNodeAt(start);
       node.object = base;
       node.property = this.parseIdent(true);
       node.computed = false;
       return this.parseSubscripts(this.finishNode(node, "MemberExpression"), start, noCalls);
-    } else if (this.eat(_bracketL)) {
+    } else if (this.eat(tt.bracketL)) {
       var node = this.startNodeAt(start);
       node.object = base;
       node.property = this.parseExpression();
       node.computed = true;
-      this.expect(_bracketR);
+      this.expect(tt.bracketR);
       return this.parseSubscripts(this.finishNode(node, "MemberExpression"), start, noCalls);
-    } else if (!noCalls && this.eat(_parenL)) {
+    } else if (!noCalls && this.eat(tt.parenL)) {
       var node = this.startNodeAt(start);
       node.callee = base;
-      node.arguments = this.parseExprList(_parenR, false);
+      node.arguments = this.parseExprList(tt.parenR, false);
       return this.parseSubscripts(this.finishNode(node, "CallExpression"), start, noCalls);
-    } else if (this.type === _backQuote) {
+    } else if (this.type === tt.backQuote) {
       var node = this.startNodeAt(start);
       node.tag = base;
       node.quasi = this.parseTemplate();
@@ -2226,23 +2242,23 @@
 
   pp.parseExprAtom = function(refShorthandDefaultPos) {
     switch (this.type) {
-    case _this:
+    case tt._this:
       var node = this.startNode();
       this.next();
       return this.finishNode(node, "ThisExpression");
 
-    case _yield:
+    case tt._yield:
       if (this.inGenerator) return this.parseYield();
 
-    case _name:
+    case tt.name:
       var start = this.currentPos();
-      var id = this.parseIdent(this.type !== _name);
-      if (!this.canInsertSemicolon() && this.eat(_arrow)) {
+      var id = this.parseIdent(this.type !== tt.name);
+      if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
         return this.parseArrowExpression(this.startNodeAt(start), [id]);
       }
       return id;
 
-    case _regexp:
+    case tt.regexp:
       var node = this.startNode();
       node.regex = {pattern: this.value.pattern, flags: this.value.flags};
       node.value = this.value.value;
@@ -2250,48 +2266,48 @@
       this.next();
       return this.finishNode(node, "Literal");
 
-    case _num: case _string:
+    case tt.num: case tt.string:
       var node = this.startNode();
       node.value = this.value;
       node.raw = this.input.slice(this.start, this.end);
       this.next();
       return this.finishNode(node, "Literal");
 
-    case _null: case _true: case _false:
+    case tt._null: case tt._true: case tt._false:
       var node = this.startNode();
-      node.value = this.type.atomValue;
+      node.value = this.type === tt._null ? null : this.type === tt._true;
       node.raw = this.type.keyword;
       this.next();
       return this.finishNode(node, "Literal");
 
-    case _parenL:
+    case tt.parenL:
       return this.parseParenAndDistinguishExpression();
 
-    case _bracketL:
+    case tt.bracketL:
       var node = this.startNode();
       this.next();
       // check whether this is array comprehension or regular array
-      if (this.options.ecmaVersion >= 7 && this.type === _for) {
+      if (this.options.ecmaVersion >= 7 && this.type === tt._for) {
         return this.parseComprehension(node, false);
       }
-      node.elements = this.parseExprList(_bracketR, true, true, refShorthandDefaultPos);
+      node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
       return this.finishNode(node, "ArrayExpression");
 
-    case _braceL:
+    case tt.braceL:
       return this.parseObj(false, refShorthandDefaultPos);
 
-    case _function:
+    case tt._function:
       var node = this.startNode();
       this.next();
       return this.parseFunction(node, false);
 
-    case _class:
+    case tt._class:
       return this.parseClass(this.startNode(), false);
 
-    case _new:
+    case tt._new:
       return this.parseNew();
 
-    case _backQuote:
+    case tt.backQuote:
       return this.parseTemplate();
 
     default:
@@ -2304,29 +2320,29 @@
     if (this.options.ecmaVersion >= 6) {
       this.next();
 
-      if (this.options.ecmaVersion >= 7 && this.type === _for) {
+      if (this.options.ecmaVersion >= 7 && this.type === tt._for) {
         return this.parseComprehension(this.startNodeAt(start), true);
       }
 
       var innerStart = this.currentPos(), exprList = [], first = true;
       var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart;
-      while (this.type !== _parenR) {
-        first ? first = false : this.expect(_comma);
-        if (this.type === _ellipsis) {
+      while (this.type !== tt.parenR) {
+        first ? first = false : this.expect(tt.comma);
+        if (this.type === tt.ellipsis) {
           spreadStart = this.start;
           exprList.push(this.parseRest());
           break;
         } else {
-          if (this.type === _parenL && !innerParenStart) {
+          if (this.type === tt.parenL && !innerParenStart) {
             innerParenStart = this.start;
           }
           exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos));
         }
       }
       var innerEnd = this.currentPos();
-      this.expect(_parenR);
+      this.expect(tt.parenR);
 
-      if (!this.canInsertSemicolon() && this.eat(_arrow)) {
+      if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
         if (innerParenStart) this.unexpected(innerParenStart);
         return this.parseArrowExpression(this.startNodeAt(start), exprList);
       }
@@ -2364,7 +2380,7 @@
     this.next();
     var start = this.currentPos();
     node.callee = this.parseSubscripts(this.parseExprAtom(), start, true);
-    if (this.eat(_parenL)) node.arguments = this.parseExprList(_parenR, false);
+    if (this.eat(tt.parenL)) node.arguments = this.parseExprList(tt.parenR, false);
     else node.arguments = empty;
     return this.finishNode(node, "NewExpression");
   };
@@ -2378,7 +2394,7 @@
       cooked: this.value
     };
     this.next();
-    elem.tail = this.type === _backQuote;
+    elem.tail = this.type === tt.backQuote;
     return this.finishNode(elem, "TemplateElement");
   };
 
@@ -2389,9 +2405,9 @@
     var curElt = this.parseTemplateElement();
     node.quasis = [curElt];
     while (!curElt.tail) {
-      this.expect(_dollarBraceL);
+      this.expect(tt.dollarBraceL);
       node.expressions.push(this.parseExpression());
-      this.expect(_braceR);
+      this.expect(tt.braceR);
       node.quasis.push(curElt = this.parseTemplateElement());
     }
     this.next();
@@ -2404,10 +2420,10 @@
     var node = this.startNode(), first = true, propHash = {};
     node.properties = [];
     this.next();
-    while (!this.eat(_braceR)) {
+    while (!this.eat(tt.braceR)) {
       if (!first) {
-        this.expect(_comma);
-        if (this.options.allowTrailingCommas && this.eat(_braceR)) break;
+        this.expect(tt.comma);
+        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
       } else first = false;
 
       var prop = this.startNode(), isGenerator, start;
@@ -2418,21 +2434,21 @@
           start = this.currentPos();
         }
         if (!isPattern) {
-          isGenerator = this.eat(_star);
+          isGenerator = this.eat(tt.star);
         }
       }
       this.parsePropertyName(prop);
-      if (this.eat(_colon)) {
+      if (this.eat(tt.colon)) {
         prop.value = isPattern ? this.parseMaybeDefault() : this.parseMaybeAssign(false, refShorthandDefaultPos);
         prop.kind = "init";
-      } else if (this.options.ecmaVersion >= 6 && this.type === _parenL) {
+      } else if (this.options.ecmaVersion >= 6 && this.type === tt.parenL) {
         if (isPattern) this.unexpected();
         prop.kind = "init";
         prop.method = true;
         prop.value = this.parseMethod(isGenerator);
       } else if (this.options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
                  (prop.key.name === "get" || prop.key.name === "set") &&
-                 (this.type != _comma && this.type != _braceR)) {
+                 (this.type != tt.comma && this.type != tt.braceR)) {
         if (isGenerator || isPattern) this.unexpected();
         prop.kind = prop.key.name;
         this.parsePropertyName(prop);
@@ -2441,7 +2457,7 @@
         prop.kind = "init";
         if (isPattern) {
           prop.value = this.parseMaybeDefault(start, prop.key);
-        } else if (this.type === _eq && refShorthandDefaultPos) {
+        } else if (this.type === tt.eq && refShorthandDefaultPos) {
           if (!refShorthandDefaultPos.start)
             refShorthandDefaultPos.start = this.start;
           prop.value = this.parseMaybeDefault(start, prop.key);
@@ -2459,16 +2475,16 @@
 
   pp.parsePropertyName = function(prop) {
     if (this.options.ecmaVersion >= 6) {
-      if (this.eat(_bracketL)) {
+      if (this.eat(tt.bracketL)) {
         prop.computed = true;
         prop.key = this.parseExpression();
-        this.expect(_bracketR);
+        this.expect(tt.bracketR);
         return;
       } else {
         prop.computed = false;
       }
     }
-    prop.key = (this.type === _num || this.type === _string) ? this.parseExprAtom() : this.parseIdent(true);
+    prop.key = (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true);
   };
 
   // Initialize empty function node.
@@ -2487,13 +2503,13 @@
   pp.parseFunction = function(node, isStatement, allowExpressionBody) {
     this.initFunction(node);
     if (this.options.ecmaVersion >= 6) {
-      node.generator = this.eat(_star);
+      node.generator = this.eat(tt.star);
     }
-    if (isStatement || this.type === _name) {
+    if (isStatement || this.type === tt.name) {
       node.id = this.parseIdent();
     }
-    this.expect(_parenL);
-    node.params = this.parseBindingList(_parenR, false);
+    this.expect(tt.parenL);
+    node.params = this.parseBindingList(tt.parenR, false);
     this.parseFunctionBody(node, allowExpressionBody);
     return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   };
@@ -2503,8 +2519,8 @@
   pp.parseMethod = function(isGenerator) {
     var node = this.startNode();
     this.initFunction(node);
-    this.expect(_parenL);
-    node.params = this.parseBindingList(_parenR, false);
+    this.expect(tt.parenL);
+    node.params = this.parseBindingList(tt.parenR, false);
     var allowExpressionBody;
     if (this.options.ecmaVersion >= 6) {
       node.generator = isGenerator;
@@ -2528,7 +2544,7 @@
   // Parse function body and check parameters.
 
   pp.parseFunctionBody = function(node, allowExpression) {
-    var isExpression = allowExpression && this.type !== _braceL;
+    var isExpression = allowExpression && this.type !== tt.braceL;
 
     if (isExpression) {
       node.body = this.parseMaybeAssign();
@@ -2560,26 +2576,26 @@
 
   pp.parseClass = function(node, isStatement) {
     this.next();
-    node.id = this.type === _name ? this.parseIdent() : isStatement ? this.unexpected() : null;
-    node.superClass = this.eat(_extends) ? this.parseExprSubscripts() : null;
+    node.id = this.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null;
+    node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
     var classBody = this.startNode();
     classBody.body = [];
-    this.expect(_braceL);
-    while (!this.eat(_braceR)) {
-      if (this.eat(_semi)) continue;
+    this.expect(tt.braceL);
+    while (!this.eat(tt.braceR)) {
+      if (this.eat(tt.semi)) continue;
       var method = this.startNode();
-      var isGenerator = this.eat(_star);
+      var isGenerator = this.eat(tt.star);
       this.parsePropertyName(method);
-      if (this.type !== _parenL && !method.computed && method.key.type === "Identifier" &&
+      if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
           method.key.name === "static") {
         if (isGenerator) this.unexpected();
         method['static'] = true;
-        isGenerator = this.eat(_star);
+        isGenerator = this.eat(tt.star);
         this.parsePropertyName(method);
       } else {
         method['static'] = false;
       }
-      if (this.type !== _parenL && !method.computed && method.key.type === "Identifier" &&
+      if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
           (method.key.name === "get" || method.key.name === "set")) {
         if (isGenerator) this.unexpected();
         method.kind = method.key.name;
@@ -2604,14 +2620,14 @@
     var elts = [], first = true;
     while (!this.eat(close)) {
       if (!first) {
-        this.expect(_comma);
+        this.expect(tt.comma);
         if (allowTrailingComma && this.options.allowTrailingCommas && this.eat(close)) break;
       } else first = false;
 
-      if (allowEmpty && this.type === _comma) {
+      if (allowEmpty && this.type === tt.comma) {
         elts.push(null);
       } else {
-        if (this.type === _ellipsis)
+        if (this.type === tt.ellipsis)
           elts.push(this.parseSpread(refShorthandDefaultPos));
         else
           elts.push(this.parseMaybeAssign(false, refShorthandDefaultPos));
@@ -2627,7 +2643,7 @@
   pp.parseIdent = function(liberal) {
     var node = this.startNode();
     if (liberal && this.options.forbidReserved == "everywhere") liberal = false;
-    if (this.type === _name) {
+    if (this.type === tt.name) {
       if (!liberal &&
           (this.options.forbidReserved &&
            (this.options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(this.value) ||
@@ -2649,14 +2665,14 @@
   pp.parseExport = function(node) {
     this.next();
     // export var|const|let|function|class ...;
-    if (this.type === _var || this.type === _const || this.type === _let || this.type === _function || this.type === _class) {
+    if (this.type === tt._var || this.type === tt._const || this.type === tt._let || this.type === tt._function || this.type === tt._class) {
       node.declaration = this.parseStatement(true);
       node['default'] = false;
       node.specifiers = null;
       node.source = null;
     } else
     // export default ...;
-    if (this.eat(_default)) {
+    if (this.eat(tt._default)) {
       var expr = this.parseMaybeAssign();
       if (expr.id) {
         switch (expr.type) {
@@ -2672,12 +2688,12 @@
     } else {
       // export * from '...';
       // export { x, y as z } [from '...'];
-      var isBatch = this.type === _star;
+      var isBatch = this.type === tt.star;
       node.declaration = null;
       node['default'] = false;
       node.specifiers = this.parseExportSpecifiers();
       if (this.eatContextual("from")) {
-        node.source = this.type === _string ? this.parseExprAtom() : this.unexpected();
+        node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
       } else {
         if (isBatch) this.unexpected();
         node.source = null;
@@ -2691,22 +2707,22 @@
 
   pp.parseExportSpecifiers = function() {
     var nodes = [], first = true;
-    if (this.type === _star) {
+    if (this.type === tt.star) {
       // export * from '...'
       var node = this.startNode();
       this.next();
       nodes.push(this.finishNode(node, "ExportBatchSpecifier"));
     } else {
       // export { x, y as z } [from '...']
-      this.expect(_braceL);
-      while (!this.eat(_braceR)) {
+      this.expect(tt.braceL);
+      while (!this.eat(tt.braceR)) {
         if (!first) {
-          this.expect(_comma);
-          if (this.options.allowTrailingCommas && this.eat(_braceR)) break;
+          this.expect(tt.comma);
+          if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
         } else first = false;
 
         var node = this.startNode();
-        node.id = this.parseIdent(this.type === _default);
+        node.id = this.parseIdent(this.type === tt._default);
         node.name = this.eatContextual("as") ? this.parseIdent(true) : null;
         nodes.push(this.finishNode(node, "ExportSpecifier"));
       }
@@ -2719,14 +2735,14 @@
   pp.parseImport = function(node) {
     this.next();
     // import '...';
-    if (this.type === _string) {
+    if (this.type === tt.string) {
       node.specifiers = [];
       node.source = this.parseExprAtom();
       node.kind = "";
     } else {
       node.specifiers = this.parseImportSpecifiers();
       this.expectContextual("from");
-      node.source = this.type === _string ? this.parseExprAtom() : this.unexpected();
+      node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
     }
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
@@ -2736,7 +2752,7 @@
 
   pp.parseImportSpecifiers = function() {
     var nodes = [], first = true;
-    if (this.type === _name) {
+    if (this.type === tt.name) {
       // import defaultObj, { x, y as z } from '...'
       var node = this.startNode();
       node.id = this.parseIdent();
@@ -2744,9 +2760,9 @@
       node.name = null;
       node['default'] = true;
       nodes.push(this.finishNode(node, "ImportSpecifier"));
-      if (!this.eat(_comma)) return nodes;
+      if (!this.eat(tt.comma)) return nodes;
     }
-    if (this.type === _star) {
+    if (this.type === tt.star) {
       var node = this.startNode();
       this.next();
       this.expectContextual("as");
@@ -2755,11 +2771,11 @@
       nodes.push(this.finishNode(node, "ImportBatchSpecifier"));
       return nodes;
     }
-    this.expect(_braceL);
-    while (!this.eat(_braceR)) {
+    this.expect(tt.braceL);
+    while (!this.eat(tt.braceR)) {
       if (!first) {
-        this.expect(_comma);
-        if (this.options.allowTrailingCommas && this.eat(_braceR)) break;
+        this.expect(tt.comma);
+        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
       } else first = false;
 
       var node = this.startNode();
@@ -2777,11 +2793,11 @@
   pp.parseYield = function() {
     var node = this.startNode();
     this.next();
-    if (this.eat(_semi) || this.canInsertSemicolon()) {
+    if (this.eat(tt.semi) || this.canInsertSemicolon()) {
       node.delegate = false;
       node.argument = null;
     } else {
-      node.delegate = this.eat(_star);
+      node.delegate = this.eat(tt.star);
       node.argument = this.parseMaybeAssign();
     }
     return this.finishNode(node, "YieldExpression");
@@ -2791,20 +2807,20 @@
 
   pp.parseComprehension = function(node, isGenerator) {
     node.blocks = [];
-    while (this.type === _for) {
+    while (this.type === tt._for) {
       var block = this.startNode();
       this.next();
-      this.expect(_parenL);
+      this.expect(tt.parenL);
       block.left = this.parseBindingAtom();
       this.checkLVal(block.left, true);
       this.expectContextual("of");
       block.right = this.parseExpression();
-      this.expect(_parenR);
+      this.expect(tt.parenR);
       node.blocks.push(this.finishNode(block, "ComprehensionBlock"));
     }
-    node.filter = this.eat(_if) ? this.parseParenExpression() : null;
+    node.filter = this.eat(tt._if) ? this.parseParenExpression() : null;
     node.body = this.parseExpression();
-    this.expect(isGenerator ? _parenR : _bracketR);
+    this.expect(isGenerator ? tt.parenR : tt.bracketR);
     node.generator = isGenerator;
     return this.finishNode(node, "ComprehensionExpression");
   };

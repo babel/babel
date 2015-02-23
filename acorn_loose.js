@@ -627,7 +627,7 @@
 
   function parseMaybeUnary(noIn) {
     if (token.type.prefix) {
-      var node = startNode(), update = token.type.isUpdate;
+      var node = startNode(), update = token.type === tt.incDec;
       node.operator = token.value;
       node.prefix = true;
       next();
@@ -733,7 +733,7 @@
 
     case tt._null: case tt._true: case tt._false:
       var node = startNode();
-      node.value = token.type.atomValue;
+      node.value = token.type === tt._null ? null : token.type === tt._true;
       node.raw = token.type.keyword;
       next();
       return finishNode(node, "Literal");
