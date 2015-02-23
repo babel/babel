@@ -38,7 +38,6 @@
   exports.parse = function(input, options) {
     var p = new Parser(options, input);
     var startPos = p.options.locations ? [p.pos, p.curPosition()] : p.pos;
-    p.skipSpace();
     p.readToken();
     return p.parseTopLevel(p.options.program || p.startNodeAt(startPos));
   };
@@ -126,7 +125,6 @@
 
   exports.parseExpressionAt = function(input, pos, options) {
     var p = new Parser(options, input, pos);
-    p.skipSpace();
     p.readToken();
     return p.parseExpression();
   };
@@ -174,7 +172,6 @@
 
   exports.tokenize = function(input, options) {
     var p = new Parser(options, input);
-    p.skipSpace();
 
     function getToken() {
       p.lastTokEnd = p.end;
@@ -196,7 +193,6 @@
         }
       }
       p.exprAllowed = !!exprAllowed;
-      p.skipSpace();
     };
 
     // If we're in an ES6 environment, make this an iterator.
@@ -641,7 +637,6 @@
         --this.curLine;
       }
     }
-    this.skipSpace();
     this.readToken();
   };
 
@@ -653,12 +648,14 @@
   // properties.
 
   pp.readToken = function() {
+    var inTemplate = this.curTokContext() === q_tmpl;
+    if (!inTemplate) this.skipSpace();
+
     this.start = this.pos;
     if (this.options.locations) this.startLoc = this.curPosition();
     if (this.pos >= this.input.length) return this.finishToken(_eof);
 
-    if (this.curTokContext() === q_tmpl)
-      return this.readTmplToken();
+    if (inTemplate) return this.readTmplToken();
 
     var code = this.fullCharCodeAtPos();
 
@@ -784,19 +781,17 @@
   pp.finishToken = function(type, val) {
     this.end = this.pos;
     if (this.options.locations) this.endLoc = this.curPosition();
-    var prevType = this.type, preserveSpace = false;
+    var prevType = this.type;
     this.type = type;
     this.value = val;
 
     // Update context info
     if (type === _parenR || type === _braceR) {
       var out = this.context.pop();
-      if (out === b_tmpl) {
-        preserveSpace = true;
-      } else if (out === b_stat && this.curTokContext() === f_expr) {
+      if (out === b_stat && this.curTokContext() === f_expr) {
         this.context.pop();
         this.exprAllowed = false;
-      } else {
+      } else if (out !== b_tmpl) {
         this.exprAllowed = !(out && out.isExpr);
       }
     } else if (type === _braceL) {
@@ -819,18 +814,14 @@
       }
       this.exprAllowed = false;
     } else if (type === _backQuote) {
-      if (this.curTokContext() === q_tmpl) {
+      if (this.curTokContext() === q_tmpl)
         this.context.pop();
-      } else {
+      else
         this.context.push(q_tmpl);
-        preserveSpace = true;
-      }
       this.exprAllowed = false;
     } else {
       this.exprAllowed = type.beforeExpr;
     }
-
-    if (!preserveSpace) this.skipSpace();
   };
 
   // ### Token reading
