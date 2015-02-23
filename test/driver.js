@@ -33,8 +33,7 @@
           } else {
             callback("fail", test.code, "Expected error message: " + test.error + "\nBut parsing succeeded.");
           }
-        }
-        else if (test.assert) {
+        } else if (test.assert) {
           var error = test.assert(ast);
           if (error) callback("fail", test.code,
                                  "\n  Assertion failed:\n " + error);
