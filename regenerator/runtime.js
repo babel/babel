@@ -439,27 +439,33 @@
       }
     },
 
-    _findFinallyEntry: function(finallyLoc) {
+    abrupt: function(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
         if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") && (
-              entry.finallyLoc === finallyLoc ||
-              this.prev < entry.finallyLoc)) {
-          return entry;
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
         }
       }
-    },
 
-    abrupt: function(type, arg) {
-      var entry = this._findFinallyEntry();
-      var record = entry ? entry.completion : {};
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg < finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
 
+      var record = finallyEntry ? finallyEntry.completion : {};
       record.type = type;
       record.arg = arg;
 
-      if (entry) {
-        this.next = entry.finallyLoc;
+      if (finallyEntry) {
+        this.next = finallyEntry.finallyLoc;
       } else {
         this.complete(record);
       }
@@ -486,8 +492,12 @@
     },
 
     finish: function(finallyLoc) {
-      var entry = this._findFinallyEntry(finallyLoc);
-      return this.complete(entry.completion, entry.afterLoc);
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          return this.complete(entry.completion, entry.afterLoc);
+        }
+      }
     },
 
     "catch": function(tryLoc) {
