@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.4.6
+
+ * **Bug Fix**
+  * Fix extending a class expression with no methods/only constructor. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
+  * Allow `MemberExpression` as a valid `left` of `ForOfStatement`.
+ * **Polish**
+  * Throw an error when people try and transpile code with the `@jsx React.DOM` pragma as it conflicts with the custom jsx constructo method detection.
+  * Crawl all comments for `@jsx` pragma.
+ * **Internal**
+  * Upgrade `chalk`.
+  * Upgrade `core-js`.
+
 ## 4.4.5
 
  * **Internal**
