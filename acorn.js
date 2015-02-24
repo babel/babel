@@ -281,6 +281,7 @@
     this.prefix = kind && kind.indexOf("prefix") > -1;
     this.postfix = kind && kind.indexOf("postfix") > -1;
     this.binop = binop || null;
+    this.updateContext = null;
   }
 
 
@@ -391,6 +392,52 @@
   kw("typeof", true, "prefix");
   kw("void", true, "prefix");
   kw("delete", true, "prefix");
+
+  // Update tokenizer context for a given token type
+
+  tt.parenR.updateContext = tt.braceR.updateContext = function() {
+    var out = this.context.pop();
+    if (out === b_stat && this.curTokContext() === f_expr) {
+      this.context.pop();
+      this.exprAllowed = false;
+    } else if (out !== b_tmpl) {
+      this.exprAllowed = !(out && out.isExpr);
+    }
+  };
+
+  tt.braceL.updateContext = function(prevType) {
+    this.context.push(this.braceIsBlock(prevType) ? b_stat : b_expr);
+    this.exprAllowed = true;
+  };
+
+  tt.dollarBraceL.updateContext = function() {
+    this.context.push(b_tmpl);
+    this.exprAllowed = true;
+  };
+
+  tt.parenL.updateContext = function(prevType) {
+    var statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
+    this.context.push(statementParens ? p_stat : p_expr);
+    this.exprAllowed = true;
+  };
+
+  tt.incDec.updateContext = function() {
+    // tokExprAllowed stays unchanged
+  };
+
+  tt._function.updateContext = function() {
+    if (this.curTokContext() !== b_stat)
+      this.context.push(f_expr);
+    this.exprAllowed = false;
+  };
+
+  tt.backQuote.updateContext = function() {
+    if (this.curTokContext() === q_tmpl)
+      this.context.pop();
+    else
+      this.context.push(q_tmpl);
+    this.exprAllowed = false;
+  };
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a
@@ -801,43 +848,13 @@
     this.type = type;
     this.value = val;
 
-    // Update context info
-    if (type === tt.parenR || type === tt.braceR) {
-      var out = this.context.pop();
-      if (out === b_stat && this.curTokContext() === f_expr) {
-        this.context.pop();
-        this.exprAllowed = false;
-      } else if (out !== b_tmpl) {
-        this.exprAllowed = !(out && out.isExpr);
-      }
-    } else if (type === tt.braceL) {
-      this.context.push(this.braceIsBlock(prevType) ? b_stat : b_expr);
-      this.exprAllowed = true;
-    } else if (type === tt.dollarBraceL) {
-      this.context.push(b_tmpl);
-      this.exprAllowed = true;
-    } else if (type == tt.parenL) {
-      var statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
-      this.context.push(statementParens ? p_stat : p_expr);
-      this.exprAllowed = true;
-    } else if (type == tt.incDec) {
-      // tokExprAllowed stays unchanged
-    } else if (type.keyword && prevType == tt.dot) {
+    var update;
+    if (type.keyword && prevType == tt.dot)
       this.exprAllowed = false;
-    } else if (type == tt._function) {
-      if (this.curTokContext() !== b_stat) {
-        this.context.push(f_expr);
-      }
-      this.exprAllowed = false;
-    } else if (type === tt.backQuote) {
-      if (this.curTokContext() === q_tmpl)
-        this.context.pop();
-      else
-        this.context.push(q_tmpl);
-      this.exprAllowed = false;
-    } else {
+    else if (update = type.updateContext)
+      update.call(this, prevType);
+    else
       this.exprAllowed = type.beforeExpr;
-    }
   };
 
   // ### Token reading
