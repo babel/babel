@@ -43,8 +43,6 @@ module.exports = function (commander, filenames, opts) {
         var src = path.join(dirname, filename);
         if (util.canCompile(filename)) {
           write(src, filename);
-        } else {
-          outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
         }
       });
     } else {
