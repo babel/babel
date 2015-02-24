@@ -48,7 +48,6 @@
   "AssignmentPattern": ["Pattern"],
 
   "Property":   ["UserWhitespacable"],
-  "JSXElement": ["UserWhitespacable", "Expression"],
 
   "ArrayExpression":           ["Expression"],
   "AssignmentExpression":      ["Expression"],
@@ -74,7 +73,7 @@
 
   "JSXAttribute":           ["JSX"],
   "JSXClosingElement":      ["JSX"],
-  "JSXElement":             ["JSX"],
+  "JSXElement":             ["JSX", "Expression"],
   "JSXEmptyExpression":     ["JSX"],
   "JSXExpressionContainer": ["JSX"],
   "JSXIdentifier":          ["JSX"],
