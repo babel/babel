@@ -1,13 +1,14 @@
 module.exports = {
   useStrict:                               require("./other/use-strict"),
 
-  // this goes at the start so we only transform the original user code
-  "spec.functionName":                     require("./spec/function-name"),
-
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.noForInOfAssignment":        require("./validation/no-for-in-of-assignment"),
   "validation.setters":                    require("./validation/setters"),
   "validation.react":                      require("./validation/react"),
+
+  // this goes at the start so we only transform the original user code
+  "spec.functionName":                     require("./spec/function-name"),
+
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
 
   // needs to be before `_aliasFunction`
