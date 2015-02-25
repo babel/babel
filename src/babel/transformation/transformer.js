@@ -40,18 +40,16 @@ function Transformer(key, transformer, opts) {
 }
 
 Transformer.prototype.normalize = function (transformer) {
-  var self = this;
-
   if (isFunction(transformer)) {
     transformer = { ast: transformer };
   }
 
   traverse.explode(transformer);
 
-  each(transformer, function (fns, type) {
+  each(transformer, (fns, type) => {
     // hidden property
     if (type[0] === "_") {
-      self[type] = fns;
+      this[type] = fns;
       return;
     }
 

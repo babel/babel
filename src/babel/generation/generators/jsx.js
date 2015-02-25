@@ -40,16 +40,14 @@ exports.JSXExpressionContainer = function (node, print) {
 };
 
 exports.JSXElement = function (node, print) {
-  var self = this;
-
   var open = node.openingElement;
   print(open);
   if (open.selfClosing) return;
 
   this.indent();
-  each(node.children, function (child) {
+  each(node.children, (child) => {
     if (t.isLiteral(child)) {
-      self.push(child.value);
+      this.push(child.value);
     } else {
       print(child);
     }

@@ -58,8 +58,6 @@ exports.ExportDeclaration = function (node, print) {
 };
 
 exports.ImportDeclaration = function (node, print) {
-  var self = this;
-
   this.push("import ");
 
   if (node.isType) {
@@ -70,16 +68,16 @@ exports.ImportDeclaration = function (node, print) {
   if (specfiers && specfiers.length) {
     var foundImportSpecifier = false;
 
-    each(node.specifiers, function (spec, i) {
+    each(node.specifiers, (spec, i) => {
       if (+i > 0) {
-        self.push(", ");
+        this.push(", ");
       }
 
       var isDefault = t.isSpecifierDefault(spec);
 
       if (!isDefault && spec.type !== "ImportBatchSpecifier" && !foundImportSpecifier) {
         foundImportSpecifier = true;
-        self.push("{ ");
+        this.push("{ ");
       }
 
       print(spec);

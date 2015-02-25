@@ -58,23 +58,22 @@ exports.Property = function (node, print) {
 exports.ArrayExpression =
 exports.ArrayPattern = function (node, print) {
   var elems = node.elements;
-  var self  = this;
   var len   = elems.length;
 
   this.push("[");
 
-  each(elems, function (elem, i) {
+  each(elems, (elem, i) => {
     if (!elem) {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      self.push(",");
+      this.push(",");
     } else {
-      if (i > 0) self.push(" ");
+      if (i > 0) this.push(" ");
       print(elem);
-      if (i < len - 1) self.push(",");
+      if (i < len - 1) this.push(",");
     }
   });
 

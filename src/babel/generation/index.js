@@ -105,20 +105,18 @@ CodeGenerator.prototype.generate = function () {
 };
 
 CodeGenerator.prototype.buildPrint = function (parent) {
-  var self = this;
-
-  var print = function (node, opts) {
-    return self.print(node, parent, opts);
+  var print = (node, opts) => {
+    return this.print(node, parent, opts);
   };
 
-  print.sequence = function (nodes, opts) {
+  print.sequence = (nodes, opts) => {
     opts = opts || {};
     opts.statement = true;
-    return self.printJoin(print, nodes, opts);
+    return this.printJoin(print, nodes, opts);
   };
 
-  print.join = function (nodes, opts) {
-    return self.printJoin(print, nodes, opts);
+  print.join = (nodes, opts) => {
+    return this.printJoin(print, nodes, opts);
   };
 
   print.list = function (items, opts) {
@@ -127,12 +125,12 @@ CodeGenerator.prototype.buildPrint = function (parent) {
     print.join(items, opts);
   };
 
-  print.block = function (node) {
-    return self.printBlock(print, node);
+  print.block = (node) => {
+    return this.printBlock(print, node);
   };
 
-  print.indentOnComments = function (node) {
-    return self.printAndIndentOnComments(print, node);
+  print.indentOnComments = (node) => {
+    return this.printAndIndentOnComments(print, node);
   };
 
   return print;
@@ -150,11 +148,9 @@ CodeGenerator.prototype.print = function (node, parent, opts) {
     this.format.concise = true;
   }
 
-  var self = this;
-
   opts = opts || {};
 
-  var newline = function (leading) {
+  var newline = (leading) => {
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
       return;
     }
@@ -164,9 +160,9 @@ CodeGenerator.prototype.print = function (node, parent, opts) {
     if (node.start != null && !node._ignoreUserWhitespace) {
       // user node
       if (leading) {
-        lines = self.whitespace.getNewlinesBefore(node);
+        lines = this.whitespace.getNewlinesBefore(node);
       } else {
-        lines = self.whitespace.getNewlinesAfter(node);
+        lines = this.whitespace.getNewlinesAfter(node);
       }
     } else {
       // generated node
@@ -178,10 +174,10 @@ CodeGenerator.prototype.print = function (node, parent, opts) {
       if (needs(node, parent)) lines++;
 
       // generated nodes can't add starting file whitespace
-      if (!self.buffer.buf) lines = 0;
+      if (!this.buffer.buf) lines = 0;
     }
 
-    self.newline(lines);
+    this.newline(lines);
   };
 
   if (this[node.type]) {
@@ -224,28 +220,27 @@ CodeGenerator.prototype.printJoin = function (print, nodes, opts) {
 
   opts = opts || {};
 
-  var self = this;
-  var len  = nodes.length;
+  var len = nodes.length;
 
-  if (opts.indent) self.indent();
+  if (opts.indent) this.indent();
 
-  each(nodes, function (node, i) {
+  each(nodes, (node, i) => {
     print(node, {
       statement: opts.statement,
       addNewlines: opts.addNewlines,
-      after: function () {
+      after: () => {
         if (opts.iterator) {
           opts.iterator(node, i);
         }
 
         if (opts.separator && i < len - 1) {
-          self.push(opts.separator);
+          this.push(opts.separator);
         }
       }
     });
   });
 
-  if (opts.indent) self.dedent();
+  if (opts.indent) this.dedent();
 };
 
 CodeGenerator.prototype.printAndIndentOnComments = function (print, node) {
@@ -289,14 +284,13 @@ CodeGenerator.prototype.getComments = function (key, node, parent) {
 
   var comments = [];
   var nodes    = [node];
-  var self     = this;
 
   if (t.isExpressionStatement(node)) {
     nodes.push(node.argument);
   }
 
-  each(nodes, function (node) {
-    comments = comments.concat(self._getComments(key, node));
+  each(nodes, (node) => {
+    comments = comments.concat(this._getComments(key, node));
   });
 
   return comments;
@@ -312,13 +306,11 @@ CodeGenerator.prototype._printComments = function (comments) {
   if (!this.format.comments) return;
   if (!comments || !comments.length) return;
 
-  var self = this;
-
-  each(comments, function (comment) {
+  each(comments, (comment) => {
     var skip = false;
 
     // find the original comment in the ast and set it as displayed
-    each(self.ast.comments, function (origComment) {
+    each(this.ast.comments, function (origComment) {
       if (origComment.start === comment.start) {
         // comment has already been output
         if (origComment._displayed) skip = true;
@@ -331,38 +323,38 @@ CodeGenerator.prototype._printComments = function (comments) {
     if (skip) return;
 
     // whitespace before
-    self.newline(self.whitespace.getNewlinesBefore(comment));
+    this.newline(this.whitespace.getNewlinesBefore(comment));
 
-    var column = self.position.column;
-    var val    = self.generateComment(comment);
+    var column = this.position.column;
+    var val    = this.generateComment(comment);
 
-    if (column && !self.isLast(["\n", " ", "[", "{"])) {
-      self._push(" ");
+    if (column && !this.isLast(["\n", " ", "[", "{"])) {
+      this._push(" ");
       column++;
     }
 
     //
 
-    if (comment.type === "Block" && self.format.indent.adjustMultilineComment) {
+    if (comment.type === "Block" && this.format.indent.adjustMultilineComment) {
       var offset = comment.loc.start.column;
       if (offset) {
         var newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
         val = val.replace(newlineRegex, "\n");
       }
 
-      var indent = Math.max(self.indentSize(), column);
+      var indent = Math.max(this.indentSize(), column);
       val = val.replace(/\n/g, "\n" + repeating(" ", indent));
     }
 
     if (column === 0) {
-      val = self.getIndent() + val;
+      val = this.getIndent() + val;
     }
 
     //
 
-    self._push(val);
+    this._push(val);
 
     // whitespace after
-    self.newline(self.whitespace.getNewlinesAfter(comment));
+    this.newline(this.whitespace.getNewlinesAfter(comment));
   });
 };

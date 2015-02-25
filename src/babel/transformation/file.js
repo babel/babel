@@ -370,8 +370,6 @@ File.prototype.addCode = function (code) {
 };
 
 File.prototype.parse = function (code) {
-  var self = this;
-
   code = this.addCode(code);
 
   var opts = this.opts;
@@ -379,9 +377,9 @@ File.prototype.parse = function (code) {
   opts.allowImportExportEverywhere = this.isLoose("es6.modules");
   opts.strictMode = this.transformers.useStrict.canRun();
 
-  return parse(opts, code, function (tree) {
-    self.transform(tree);
-    return self.generate();
+  return parse(opts, code, (tree) => {
+    this.transform(tree);
+    return this.generate();
   });
 };
 
