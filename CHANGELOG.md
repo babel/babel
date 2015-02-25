@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.5.1
+
+Babel now compiles itself!
+
+![holy shit](http://gifsec.com/wp-content/uploads/GIF/2014/03/OMG-GIF_2.gif)
+
 ## 4.5.0
 
  * **New Feature**
