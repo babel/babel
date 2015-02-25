@@ -1,5 +1,6 @@
-var util = require("../../util");
-var t    = require("../../types");
+var getFunctionArity = require("./get-function-arity");
+var util             = require("../../util");
+var t                = require("../../types");
 
 var visitor = {
   enter(node, parent, scope, state) {
@@ -21,12 +22,21 @@ var wrap = function (state, method, id, scope) {
   if (state.selfReference) {
     var templateName = "property-method-assignment-wrapper";
     if (method.generator) templateName += "-generator";
-    return util.template(templateName, {
+    var template = util.template(templateName, {
       FUNCTION: method,
       FUNCTION_ID: id,
       FUNCTION_KEY: scope.generateUidIdentifier(id.name),
       WRAPPER_KEY: scope.generateUidIdentifier(id.name + "Wrapper")
     });
+
+    // shim in dummy params to retain function arity, if you try to read the
+    // source then you'll get the original since it's proxied so it's all good
+    var params = template.callee.body.body[0].declarations[0].init.params;
+    for (var i = 0, len = getFunctionArity(method); i < len; i++) {
+      params.push(scope.generateUidIdentifier("x"));
+    }
+
+    return template;
   } else {
     method.id = id;
     return method;
