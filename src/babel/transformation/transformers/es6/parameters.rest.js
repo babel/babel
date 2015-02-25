@@ -32,10 +32,10 @@ var memberExpressionVisitor = {
   }
 };
 
-function optimizeMemberExpression(node, parent, offset) {
+function optimizeMemberExpression(node, parent, offset, strictMode) {
   var newExpr;
-
   var prop = parent.property;
+
   if (t.isLiteral(prop)) {
     node.name = 'arguments';
     prop.value += offset;
@@ -49,16 +49,11 @@ function optimizeMemberExpression(node, parent, offset) {
     newExpr = t.binaryExpression('+', prop, t.literal(offset));
     parent.property = newExpr;
   }
-}
 
-function optimizeMemberExpressionStrict(node, parent, offset) {
-  // handle basic expressions specially (especially literals)
-  optimizeMemberExpression(node, parent, offset);
-  if (node.name === 'arguments') return;
-
-  var prop = parent.property;
-  node.name = 'arguments';
-  parent.property = t.binaryExpression('+', prop, t.literal(offset));
+  if (strictMode && node.name !== 'arguments') {
+    node.name = 'arguments';
+    parent.property = t.binaryExpression('+', prop, t.literal(offset));
+  }
 }
 
 var hasRest = function (node) {
@@ -98,10 +93,9 @@ exports.Function = function (node, parent, scope, file) {
   scope.traverse(node, memberExpressionVisitor, state);
 
   if (state.isOptimizable) {
-    var optimize = state.strictMode ? optimizeMemberExpressionStrict : optimizeMemberExpression;
     for (var i = 0, count = state.candidates.length; i < count; ++i) {
       var candidate = state.candidates[i];
-      optimize(candidate.node, candidate.parent, node.params.length);
+      optimizeMemberExpression(candidate.node, candidate.parent, node.params.length, state.strictMode);
     }
     return;
   }
