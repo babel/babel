@@ -52,6 +52,10 @@ function optimizeMemberExpression(node, parent, offset) {
 }
 
 function optimizeMemberExpressionStrict(node, parent, offset) {
+  // handle basic expressions specially (especially literals)
+  optimizeMemberExpression(node, parent, offset);
+  if (node.name === 'arguments') return;
+
   var prop = parent.property;
   node.name = 'arguments';
   parent.property = t.binaryExpression('+', prop, t.literal(offset));
