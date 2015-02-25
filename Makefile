@@ -8,7 +8,7 @@ BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
 
 build-core:
 	node $(BABEL_CMD) src --out-dir lib --copy-files
@@ -36,13 +36,10 @@ build:
 clean:
 	rm -rf coverage templates.json test/tmp dist
 
-lint:
-	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js src bin
-
 test-clean:
 	rm -rf test/tmp
 
-test: lint
+test:
 	$(MOCHA_CMD)
 	make test-clean
 

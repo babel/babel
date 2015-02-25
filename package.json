@@ -72,8 +72,6 @@
     "chai": "^2.0.0",
     "esvalid": "^1.1.0",
     "istanbul": "^0.3.5",
-    "jshint": "^2.6.0",
-    "jshint-stylish": "^1.0.0",
     "matcha": "^0.6.0",
     "mocha": "^2.1.0",
     "rimraf": "^2.2.8",
