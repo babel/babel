@@ -50,9 +50,6 @@ function optimizeMemberExpression(node, parent, offset) {
   }
 }
 
-function optimizeCandidates(candidates) {
-}
-
 var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
