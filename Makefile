@@ -4,7 +4,6 @@ UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
 #UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs --mangle sort
 JSHINT_CMD = node_modules/jshint/bin/jshint
 MOCHA_CMD = node_modules/mocha/bin/_mocha
-JSCS_CMD = node_modules/jscs/bin/jscs
 BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
@@ -39,7 +38,6 @@ clean:
 
 lint:
 	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js src bin
-	$(JSCS_CMD) src bin
 
 test-clean:
 	rm -rf test/tmp
