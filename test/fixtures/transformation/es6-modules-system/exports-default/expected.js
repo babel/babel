@@ -1,5 +1,3 @@
-"use strict";
-
 System.register([], function (_export) {
   var _classCallCheck, _default, Foo;
 
@@ -9,6 +7,8 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
+      "use strict";
+
       _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
       _export("default", 42);

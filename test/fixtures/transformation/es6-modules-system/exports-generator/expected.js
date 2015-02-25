@@ -1,5 +1,3 @@
-"use strict";
-
 System.register([], function (_export) {
   var generator = regeneratorRuntime.mark(function generator() {
     return regeneratorRuntime.wrap(function generator$(context$1$0) {
@@ -19,6 +17,8 @@ System.register([], function (_export) {
 
   return {
     setters: [],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+    }
   };
 });

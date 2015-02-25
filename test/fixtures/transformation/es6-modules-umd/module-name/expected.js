@@ -1,5 +1,3 @@
-"use strict";
-
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define("es6-modules-umd/module-name/expected", ["exports"], factory);
@@ -7,5 +5,7 @@
     factory(exports);
   }
 })(function (exports) {
+  "use strict";
+
   foobar();
 });

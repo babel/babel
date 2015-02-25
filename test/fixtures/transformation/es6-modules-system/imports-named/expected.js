@@ -1,5 +1,3 @@
-"use strict";
-
 System.register(["foo"], function (_export) {
   var bar, bar2, baz, baz2, baz3, xyz;
   return {
@@ -11,6 +9,8 @@ System.register(["foo"], function (_export) {
       baz3 = _foo.bar;
       xyz = _foo.xyz;
     }],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+    }
   };
 });

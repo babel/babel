@@ -1,5 +1,3 @@
-"use strict";
-
 System.register(["babel-runtime/helpers"], function (_export) {
   var _babelHelpers;
 
@@ -8,6 +6,8 @@ System.register(["babel-runtime/helpers"], function (_export) {
       _babelHelpers = _babelRuntimeHelpers["default"];
     }],
     execute: function () {
+      "use strict";
+
       foo.apply(undefined, _babelHelpers.toConsumableArray(bar));
     }
   };
