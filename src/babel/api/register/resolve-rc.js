@@ -30,7 +30,12 @@ module.exports = function (loc, opts) {
         throw err;
       }
 
-      opts = merge(json, opts);
+      if (json.breakConfig) return;
+      merge(opts, json, function(a, b) {
+        if (Array.isArray(a)) {
+          return a.concat(b);
+        }
+      });
     }
 
     var up = path.dirname(start);

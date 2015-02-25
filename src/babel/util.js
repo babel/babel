@@ -2,20 +2,21 @@
 
 require("./patch");
 
-var cloneDeep  = require("lodash/lang/cloneDeep");
-var contains   = require("lodash/collection/contains");
-var traverse   = require("./traversal");
-var isString   = require("lodash/lang/isString");
-var isRegExp   = require("lodash/lang/isRegExp");
-var isEmpty    = require("lodash/lang/isEmpty");
-var parse      = require("./helpers/parse");
-var debug      = require("debug/node");
-var path       = require("path");
-var util       = require("util");
-var each       = require("lodash/collection/each");
-var has        = require("lodash/object/has");
-var fs         = require("fs");
-var t          = require("./types");
+var cloneDeep = require("lodash/lang/cloneDeep");
+var isBoolean = require("lodash/lang/isBoolean");
+var contains  = require("lodash/collection/contains");
+var traverse  = require("./traversal");
+var isString  = require("lodash/lang/isString");
+var isRegExp  = require("lodash/lang/isRegExp");
+var isEmpty   = require("lodash/lang/isEmpty");
+var parse     = require("./helpers/parse");
+var debug     = require("debug/node");
+var path      = require("path");
+var util      = require("util");
+var each      = require("lodash/collection/each");
+var has       = require("lodash/object/has");
+var fs        = require("fs");
+var t         = require("./types");
 
 exports.inherits = util.inherits;
 
@@ -51,6 +52,7 @@ exports.regexify = function (val) {
 
 exports.arrayify = function (val) {
   if (!val) return [];
+  if (isBoolean(val)) return [val];
   if (isString(val)) return exports.list(val);
   if (Array.isArray(val)) return val;
   throw new TypeError("illegal type for arrayify");

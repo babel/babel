@@ -64,7 +64,7 @@ module.exports = function (commander, filenames, opts) {
       _.each(["add", "change"], function (type) {
         watcher.on(type, function (filename) {
           var relative = path.relative(dirname, filename) || filename;
-          write(filename, relative);
+          if (util.canCompile(filename)) write(filename, relative);
         });
       });
     });

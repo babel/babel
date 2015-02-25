@@ -12,13 +12,14 @@ export NODE_ENV = test
 .PHONY: clean test test-cov test-clean lint test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
 
 build-core:
-	#node $(BABEL_CMD) src --out-dir lib
+	node $(BABEL_CMD) src --out-dir lib --copy-files
 
 watch-core:
-	#node $(BABEL_CMD) src --out-dir lib --watch
+	node $(BABEL_CMD) src --out-dir lib --watch --copy-files
 
 build:
 	mkdir -p dist
+	make build-core
 
 	node tools/cache-templates
 
@@ -37,8 +38,8 @@ clean:
 	rm -rf coverage templates.json test/tmp dist
 
 lint:
-	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js lib bin
-	$(JSCS_CMD) lib bin
+	$(JSHINT_CMD) --reporter node_modules/jshint-stylish/stylish.js src bin
+	$(JSCS_CMD) src bin
 
 test-clean:
 	rm -rf test/tmp

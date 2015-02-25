@@ -13,3 +13,4 @@ dist
 .package.json
 packages/babel-runtime/*.js
 packages/babel-runtime/regenerator/*.js
+lib

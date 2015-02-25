@@ -24,6 +24,7 @@ exports.addSourceMappingUrl = function (code, loc) {
 exports.transform = function (filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;
+  resolveRc(filename, opts);
 
   var result;
   try {
@@ -42,7 +43,6 @@ exports.transform = function (filename, code, opts) {
 };
 
 exports.compile = function (filename, opts) {
-  resolveRc(filename, opts);
   var code = fs.readFileSync(filename, "utf8");
   return exports.transform(filename, code, opts);
 };
