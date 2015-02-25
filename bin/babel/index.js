@@ -28,6 +28,9 @@ commander.option("-M, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 commander.option("-a, --auxiliary-comment [comment]", "Comment text to prepend to all auxiliary code");
+commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
+
+
 
 commander.on("--help", function () {
   var outKeys = function (title, obj) {
