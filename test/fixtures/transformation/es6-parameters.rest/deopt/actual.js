@@ -13,3 +13,12 @@ var z = function (foo, ...bar) {
         bar[1] = 5;
     };
 };
+
+var a = function (foo, ...bar) {
+    return bar.join(',');
+};
+
+var b = function (foo, ...bar) {
+    var join = "join";
+    return bar[join];
+};
