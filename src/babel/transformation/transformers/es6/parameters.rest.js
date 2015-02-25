@@ -64,6 +64,17 @@ exports.Function = function (node, parent, scope) {
   // otherwise `arguments` will be remapped in arrow functions
   argsId._ignoreAliasFunctions = true;
 
+  // support patterns
+  if (t.isPattern(rest)) {
+    var pattern = rest;
+    rest = scope.generateUidIdentifier("ref");
+    var declar = t.variableDeclaration("var", pattern.elements.map(function (elem, index) {
+      var accessExpr = t.memberExpression(rest, t.literal(index));
+      return t.variableDeclarator(elem, accessExpr);
+    }));
+    node.body.body.unshift(declar);
+  }
+
   // check if rest is used only in member expressions
   var restOuterDeclar = scope.getBindingIdentifier(rest.name);
   var state = {
@@ -105,22 +116,6 @@ exports.Function = function (node, parent, scope) {
       t.binaryExpression("-", len, start),
       t.literal(0)
     );
-  }
-
-  // support patterns
-  if (t.isPattern(rest)) {
-    var pattern = rest;
-    rest = scope.generateUidIdentifier("ref");
-
-    // let the destructuring transformer handle this
-    var restDeclar = t.variableDeclaration("var", [
-      t.variableDeclarator(pattern, rest)
-    ]);
-
-    // retain evaluation position
-    restDeclar._blockHoist = node.params.length + 1;
-
-    node.body.body.unshift(restDeclar);
   }
 
   scope.assignTypeGeneric(rest.name, "Array");
