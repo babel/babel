@@ -9,9 +9,7 @@
 </p>
 
 <p align="center">
-  For more information view the <a href="https://babeljs.io/">documentation</a>. For questions
-  and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> before
-  creating an issue.
+  For questions and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> before creating an issue.
 </p>
 
 <p align="center">
