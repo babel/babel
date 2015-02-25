@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.5.2
+
+ * **New Feature**
+  * `returnUsedHelpers` option and add whitelist to `buildHelpers`.
+ * **Bug Fix**
+  * Fix function arity on self referencing inferred named functions.
+ * **Internal**
+  * Bump `acorn-babel`.
+  * Start converting source to ES6...
+
 ## 4.5.1
 
 **Babel now compiles itself!**
