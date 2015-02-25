@@ -1,13 +1,12 @@
 "use strict";
 
 var t = function t() {
-  for (var _len = arguments.length, items = Array(_len), _key = 0; _key < _len; _key++) {
-    items[_key] = arguments[_key];
-  }
+    var x = arguments[0];
+    var y = arguments[1];
 };
 
 function t() {
-  for (var _len = arguments.length, items = Array(_len), _key = 0; _key < _len; _key++) {
-    items[_key] = arguments[_key];
-  }
+    var x = arguments[0];
+    var y = arguments[1];
 }
+
