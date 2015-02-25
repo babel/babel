@@ -30,8 +30,6 @@ commander.option("--keep-module-id-extensions", "Keep extensions when generating
 commander.option("-a, --auxiliary-comment [comment]", "Comment text to prepend to all auxiliary code");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 
-
-
 commander.on("--help", function () {
   var outKeys = function (title, obj) {
     console.log("  " + title + ":");
