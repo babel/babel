@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.5.0
+
+ * **New Feature**
+  * Add `.babelrc` support.
+ * **Bug Fix**
+  * Move use strict directives to the module formatter bodies.
+ * **Internal**
+  * Make default `bin/babel` behaviour to ignore non-compilable files and add a `--copy-files` flag to revert to the old behaviour.
+
 ## 4.4.6
 
  * **Bug Fix**
