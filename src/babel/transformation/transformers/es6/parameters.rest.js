@@ -5,13 +5,13 @@ exports.check = t.isRestElement;
 
 var memberExpressionVisitor = {
   enter: function (node, parent, scope, state) {
-    var localDeclar = scope.getBindingIdentifier(state.name);
-    if (localDeclar !== state.outerDeclar) return;
+    if (t.isScope(node, parent) && !scope.bindingIdentifierEquals(state.name, state.outerDeclar)) {
+      return this.skip();
+    }
 
     if (t.isFunctionDeclaration(node) || t.isFunctionExpression(node)) {
       state.isOptimizable = false;
-      this.skip();
-      return;
+      return this.skip();
     }
 
     if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
