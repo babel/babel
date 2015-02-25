@@ -16,11 +16,11 @@ var memberExpressionVisitor = {
 
     if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
 
-    if (parent.type === 'MemberExpression') {
+    if (t.isMemberExpression(parent)) {
       var prop = parent.property;
       if (typeof prop.value === 'number' ||
-          prop.type === 'UnaryExpression' ||
-          prop.type === 'BinaryExpression') {
+          t.isUnaryExpression(prop) ||
+          t.isBinaryExpression(prop)) {
         state.candidates.push({ node: node, parent: parent });
         return;
       }
@@ -35,26 +35,18 @@ function optimizeMemberExpression(node, parent, offset) {
   var newExpr;
 
   var prop = parent.property;
-  switch (prop.type) {
-  case 'Literal':
+  if (t.isLiteral(prop)) {
     node.name = 'arguments';
     prop.value += offset;
     prop.raw = String(prop.value);
-    break;
-  case 'UnaryExpression': {
+  } else if (t.isUnaryExpression(prop)) {
     node.name = 'arguments';
     newExpr = t.binaryExpression('+', prop, t.literal(offset));
     parent.property = newExpr;
-    break;
-  }
-  case 'BinaryExpression': {
+  } else if (t.isBinaryExpression(prop)) {
     node.name = 'arguments';
     newExpr = t.binaryExpression('+', prop, t.literal(offset));
     parent.property = newExpr;
-    break;
-  }
-  default:
-    throw new Error('Unsupported property type');
   }
 }
 
