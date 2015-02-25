@@ -10,6 +10,49 @@ pollutes the git tree.
 
 ## Developing
 
+#### Setup
+
+```sh
+$ git clone https://github.com/babel/babel
+$ cd babel
+$ make bootstrap
+```
+
+Then you need to run:
+
+```sh
+$ make watch-core
+```
+
+This will compile babel and then sit in the background and on file modification
+recompile the necessary files.
+
+#### Running tests
+
+You can run tests via:
+
+```sh
+$ make test
+```
+
+This will usually take around two minutes as it's compiling the entire
+[test262](https://github.com/tc39/test262) test suite and validating it's AST.
+This is mostly overkill and you can limit the tests to a select few by directly
+running them with `mocha`:
+
+```sh
+$ mocha test/transformation.js
+```
+
+#### Linting
+
+Please follow the correct code style, this ensures that the code is consistent
+and increases maintainability.
+
+```sh
+$ make lint
+```
+
 #### Workflow
 
 * Fork the repository
@@ -18,8 +61,7 @@ pollutes the git tree.
 * Link your forked clone (`npm link`)
 * Develop your changes ensuring you're fetching updates from upstream often
 * Ensure the test are passing (`make test`)
-* Create new pull request explaining your proposed change or reference an issue
-  in your commit message
+* Create new pull request explaining your proposed change or reference an issue in your commit message
 
 #### Code Standards
 
@@ -43,11 +85,3 @@ pollutes the git tree.
  * **Declaration**
    * No unused variables
    * No pollution of global variables and prototypes
-
-## Testing
-
-    $ make test
-
-## Linting
-
-    $ make lint
