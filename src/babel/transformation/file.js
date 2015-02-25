@@ -22,12 +22,13 @@ function File(opts) {
   this.dynamicImported          = [];
   this.dynamicImports           = [];
 
-  this.dynamicData      = {};
-  this.data             = {};
+  this.usedHelpers = {};
+  this.dynamicData = {};
+  this.data        = {};
 
-  this.lastStatements   = [];
-  this.opts             = this.normalizeOptions(opts);
-  this.ast              = {};
+  this.lastStatements = [];
+  this.opts           = this.normalizeOptions(opts);
+  this.ast            = {};
 
   this.buildTransformers();
 }
@@ -85,6 +86,7 @@ File.validOptions = [
   "externalHelpers",
   "auxiliaryComment",
   "compact",
+  "returnUsedHelpers",
 
   "resolveModuleSource",
   "moduleId",
@@ -111,6 +113,7 @@ File.prototype.normalizeOptions = function (opts) {
   defaults(opts, {
     keepModuleIdExtensions: false,
     resolveModuleSource:    null,
+    returnUsedHelpers:      false,
     externalHelpers:        false,
     auxilaryComment:        "",
     experimental:           false,
@@ -331,6 +334,8 @@ File.prototype.addHelper = function (name) {
   var declar = program._declarations && program._declarations[name];
   if (declar) return declar.id;
 
+  this.usedHelpers[name] = true;
+
   var runtime = this.get("helpersNamespace");
   if (runtime) {
     name = t.identifier(t.toIdentifier(name));
@@ -447,6 +452,10 @@ File.prototype.generate = function () {
     map: null,
     ast: null
   };
+
+  if (this.opts.returnUsedHelpers) {
+    result.usedHelpers = Object.keys(this.usedHelpers);
+  }
 
   if (opts.ast) result.ast = ast;
   if (!opts.code) return result;

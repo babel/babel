@@ -3,9 +3,11 @@ var util = require("./util");
 var each = require("lodash/collection/each");
 var t    = require("./types");
 
-module.exports = function (body, namespace) {
+module.exports = function (body, namespace, whitelist = []) {
   each(File.helpers, function (name) {
     var key = t.identifier(t.toIdentifier(name));
+    if (whitelist.length && whitelist.indexOf(key) >= 0) return;
+
     body.push(t.expressionStatement(
       t.assignmentExpression("=", t.memberExpression(namespace, key), util.template(name))
     ));

@@ -3,7 +3,7 @@ var generator    = require("./generation");
 var util         = require("./util");
 var t            = require("./types");
 
-module.exports = function () {
+module.exports = function (whitelist) {
   var namespace = t.identifier("babelHelpers");
 
   var body      = [];
@@ -17,7 +17,7 @@ module.exports = function () {
     )
   ]));
 
-  buildHelpers(body, namespace);
+  buildHelpers(body, namespace, whitelist);
 
   return generator(tree).code;
 };
