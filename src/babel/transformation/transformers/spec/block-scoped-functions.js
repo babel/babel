@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../../types");
 
 exports.BlockStatement = function (node, parent, scope, file) {

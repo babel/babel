@@ -1,5 +1,3 @@
-"use strict";
-
 var isBoolean = require("lodash/lang/isBoolean");
 var each      = require("lodash/collection/each");
 var map       = require("lodash/collection/map");

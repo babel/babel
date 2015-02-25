@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../types");
 
 exports._params = function (node, print) {

@@ -1,5 +1,3 @@
-"use strict";
-
 var messages = require("../../../messages");
 var util     = require("../../../util");
 var t        = require("../../../types");

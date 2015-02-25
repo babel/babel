@@ -1,5 +1,3 @@
-"use strict";
-
 var isInteger = require("is-integer");
 var isNumber  = require("lodash/lang/isNumber");
 var t         = require("../../types");

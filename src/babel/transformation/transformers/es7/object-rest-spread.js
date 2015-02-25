@@ -1,5 +1,3 @@
-"use strict";
-
 // https://github.com/sebmarkbage/ecmascript-rest-spread
 
 var t = require("../../../types");

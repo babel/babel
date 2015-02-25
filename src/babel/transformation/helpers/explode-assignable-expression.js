@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../types");
 
 var getObjRef = function (node, nodes, file, scope) {

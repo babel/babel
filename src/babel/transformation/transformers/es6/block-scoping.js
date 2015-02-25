@@ -1,5 +1,3 @@
-"use strict";
-
 var traverse = require("../../../traversal");
 var object   = require("../../../helpers/object");
 var util     = require("../../../util");

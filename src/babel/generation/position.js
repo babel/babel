@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Position;
 
 function Position() {

@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("lodash/collection/each");
 
 exports.TaggedTemplateExpression = function (node, print) {

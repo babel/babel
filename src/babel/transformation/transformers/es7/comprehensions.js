@@ -1,5 +1,3 @@
-"use strict";
-
 var buildComprehension = require("../../helpers/build-comprehension");
 var traverse           = require("../../../traversal");
 var util               = require("../../../util");

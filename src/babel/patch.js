@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("lodash/object/extend");
 var t      = require("./types");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var regenerator = require("regenerator-babel");
 var t           = require("../../../types");
 

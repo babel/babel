@@ -1,5 +1,3 @@
-"use strict";
-
 require("../../polyfill");
 
 var sourceMapSupport = require("source-map-support");

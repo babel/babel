@@ -1,5 +1,3 @@
-"use strict";
-
 exports.File = function (node, print) {
   print(node.program);
 };

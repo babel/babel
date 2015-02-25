@@ -1,5 +1,3 @@
-"use strict";
-
 exports.ClassExpression =
 exports.ClassDeclaration = function (node, print) {
   this.push("class");

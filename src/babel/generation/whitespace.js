@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Whitespace;
 
 var sortBy = require("lodash/collection/sortBy");

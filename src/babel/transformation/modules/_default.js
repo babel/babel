@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = DefaultFormatter;
 
 var messages = require("../../messages");

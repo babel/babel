@@ -1,5 +1,3 @@
-"use strict";
-
 // Based upon the excellent jsx-transpiler by Ingvar Stepanyan (RReverser)
 // https://github.com/RReverser/jsx-transpiler
 

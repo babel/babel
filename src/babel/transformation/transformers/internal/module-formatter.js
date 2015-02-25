@@ -1,5 +1,3 @@
-"use strict";
-
 var useStrict = require("../../helpers/use-strict");
 
 exports.Program = function (program, parent, scope, file) {

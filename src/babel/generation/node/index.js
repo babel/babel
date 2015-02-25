@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Node;
 
 var whitespace = require("./whitespace");

@@ -1,5 +1,3 @@
-"use strict";
-
 var messages = require("../../../messages");
 
 exports.check = function (node) {

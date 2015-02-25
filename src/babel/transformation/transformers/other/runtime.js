@@ -1,5 +1,3 @@
-"use strict";
-
 var includes = require("lodash/collection/includes");
 var util     = require("../../../util");
 var core     = require("core-js/library");

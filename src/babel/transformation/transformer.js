@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Transformer;
 
 var TransformerPass = require("./transformer-pass");

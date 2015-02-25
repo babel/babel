@@ -1,5 +1,3 @@
-"use strict";
-
 var ReplaceSupers = require("../../helpers/replace-supers");
 var t             = require("../../../types");
 

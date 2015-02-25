@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = SystemFormatter;
 
 var DefaultFormatter = require("./_default");

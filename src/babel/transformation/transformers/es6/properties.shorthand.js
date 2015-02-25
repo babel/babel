@@ -1,5 +1,3 @@
-"use strict";
-
 var clone = require("lodash/lang/clone");
 var t     = require("../../../types");
 

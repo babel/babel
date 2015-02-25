@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = File;
 
 var sourceMapToComment = require("source-map-to-comment");

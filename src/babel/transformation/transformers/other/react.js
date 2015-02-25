@@ -1,5 +1,3 @@
-"use strict";
-
 var react = require("../../helpers/react");
 var t     = require("../../../types");
 

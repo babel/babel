@@ -1,5 +1,3 @@
-"use strict";
-
 var messages = require("../../../messages");
 var build    = require("../../helpers/build-conditional-assignment-operator-transformer");
 var t        = require("../../../types");

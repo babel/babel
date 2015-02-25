@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = TraversalContext;
 
 var TraversalPath = require("./path");

@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Scope;
 
 var includes = require("lodash/collection/includes");

@@ -1,5 +1,3 @@
-"use strict";
-
 var ReplaceSupers = require("../../helpers/replace-supers");
 var nameMethod    = require("../../helpers/name-method");
 var defineMap     = require("../../helpers/define-map");

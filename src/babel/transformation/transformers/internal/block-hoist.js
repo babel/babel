@@ -1,5 +1,3 @@
-"use strict";
-
 var groupBy = require("lodash/collection/groupBy");
 var flatten = require("lodash/array/flatten");
 var values  = require("lodash/object/values");

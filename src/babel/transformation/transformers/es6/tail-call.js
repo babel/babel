@@ -1,5 +1,3 @@
-"use strict";
-
 var reduceRight = require("lodash/collection/reduceRight");
 var messages    = require("../../../messages");
 var flatten     = require("lodash/array/flatten");

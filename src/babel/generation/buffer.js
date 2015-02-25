@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = Buffer;
 
 var repeating = require("repeating");

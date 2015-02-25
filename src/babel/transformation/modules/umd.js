@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = UMDFormatter;
 
 var AMDFormatter = require("./amd");

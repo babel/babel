@@ -1,5 +1,3 @@
-"use strict";
-
 // https://github.com/zenparsing/es-abstract-refs
 
 var util = require("../../../util");

@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = ReplaceSupers;
 
 var messages = require("../../messages");

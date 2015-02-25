@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../../types");
 
 var isConsole = t.buildMatchMemberExpression("console", true);

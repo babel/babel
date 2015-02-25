@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = AMDFormatter;
 
 var DefaultFormatter = require("./_default");

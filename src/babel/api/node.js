@@ -1,5 +1,3 @@
-"use strict";
-
 var isFunction = require("lodash/lang/isFunction");
 var transform  = require("../transformation");
 var util       = require("../util");

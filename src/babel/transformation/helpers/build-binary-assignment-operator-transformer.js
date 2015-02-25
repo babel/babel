@@ -1,5 +1,3 @@
-"use strict";
-
 var explode = require("./explode-assignable-expression");
 var t       = require("../../types");
 

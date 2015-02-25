@@ -1,5 +1,3 @@
-"use strict";
-
 var buildHelpers = require("./build-helpers");
 var generator    = require("./generation");
 var util         = require("./util");

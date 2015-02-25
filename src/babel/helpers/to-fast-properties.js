@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * A trick from Bluebird to force V8 to use fast properties for an object.
  * Read more: http://stackoverflow.com/questions/24987896/

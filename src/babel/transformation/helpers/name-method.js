@@ -1,5 +1,3 @@
-"use strict";
-
 var util = require("../../util");
 var t    = require("../../types");
 

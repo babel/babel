@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../../types");
 
 var buildBinaryExpression = function (left, right) {

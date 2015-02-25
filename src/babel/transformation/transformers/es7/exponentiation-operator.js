@@ -1,5 +1,3 @@
-"use strict";
-
 // https://github.com/rwaldron/exponentiation-operator
 
 exports.experimental = true;

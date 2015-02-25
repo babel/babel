@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = transform;
 
 var normalizeAst = require("../helpers/normalize-ast");

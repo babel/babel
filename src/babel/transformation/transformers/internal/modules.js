@@ -1,5 +1,3 @@
-"use strict";
-
 // in this transformer we have to split up classes and function declarations
 // from their exports. why? because sometimes we need to replace classes with
 // nodes that aren't allowed in the same contexts. also, if you're exporting

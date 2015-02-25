@@ -1,5 +1,3 @@
-"use strict";
-
 var toFastProperties = require("../helpers/to-fast-properties");
 var isString         = require("lodash/lang/isString");
 var compact          = require("lodash/array/compact");

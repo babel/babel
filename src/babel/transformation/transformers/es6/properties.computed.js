@@ -1,5 +1,3 @@
-"use strict";
-
 var t = require("../../../types");
 
 exports.check = function (node) {

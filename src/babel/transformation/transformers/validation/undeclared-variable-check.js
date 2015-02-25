@@ -1,5 +1,3 @@
-"use strict";
-
 var levenshtein = require("leven");
 var messages    = require("../../../messages");
 var t           = require("../../../types");

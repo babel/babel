@@ -1,5 +1,3 @@
-"use strict";
-
 var rewritePattern = require("regexpu/rewrite-pattern");
 var pull           = require("lodash/array/pull");
 var t              = require("../../../types");

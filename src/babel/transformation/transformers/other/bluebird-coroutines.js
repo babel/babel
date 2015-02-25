@@ -1,5 +1,3 @@
-"use strict";
-
 var remapAsyncToGenerator = require("../../helpers/remap-async-to-generator");
 var t                     = require("../../../types");
 

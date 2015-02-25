@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = SourceMap;
 
 var sourceMap = require("source-map");

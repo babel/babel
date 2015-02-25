@@ -1,5 +1,3 @@
-"use strict";
-
 var repeating = require("repeating");
 var t         = require("../../types");
 

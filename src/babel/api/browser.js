@@ -1,5 +1,3 @@
-"use strict";
-
 var transform = module.exports = require("../transformation");
 
 transform.version = require("../../../package").version;

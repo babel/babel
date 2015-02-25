@@ -1,5 +1,3 @@
-"use strict";
-
 exports.AnyTypeAnnotation =
 exports.ArrayTypeAnnotation =
 exports.BooleanTypeAnnotation =

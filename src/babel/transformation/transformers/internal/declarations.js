@@ -1,5 +1,3 @@
-"use strict";
-
 var useStrict = require("../../helpers/use-strict");
 var t         = require("../../../types");
 

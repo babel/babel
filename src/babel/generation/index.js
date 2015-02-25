@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = function (ast, opts, code) {
   var gen = new CodeGenerator(ast, opts, code);
   return gen.generate();

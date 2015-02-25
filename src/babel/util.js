@@ -1,5 +1,3 @@
-"use strict";
-
 require("./patch");
 
 var cloneDeep = require("lodash/lang/cloneDeep");

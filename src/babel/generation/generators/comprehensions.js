@@ -1,5 +1,3 @@
-"use strict";
-
 exports.ComprehensionBlock = function (node, print) {
   this.keyword("for");
   this.push("(");

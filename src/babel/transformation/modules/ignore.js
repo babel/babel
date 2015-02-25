@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = IgnoreFormatter;
 
 var t = require("../../types");

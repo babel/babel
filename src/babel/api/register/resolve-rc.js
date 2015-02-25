@@ -1,5 +1,3 @@
-"use strict";
-
 var merge = require("lodash/object/merge");
 var path  = require("path");
 var fs    = require("fs");

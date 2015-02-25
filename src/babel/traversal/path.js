@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = TraversalPath;
 
 var traverse = require("./index");

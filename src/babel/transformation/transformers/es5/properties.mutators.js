@@ -1,5 +1,3 @@
-"use strict";
-
 var defineMap = require("../../helpers/define-map");
 var t         = require("../../../types");
 
