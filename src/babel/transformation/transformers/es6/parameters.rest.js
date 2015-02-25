@@ -3,6 +3,64 @@ var t    = require("../../../types");
 
 exports.check = t.isRestElement;
 
+var memberExpressionVisitor = {
+  enter: function (node, parent, scope, state) {
+    var localDeclar = scope.getBindingIdentifier(state.name);
+    if (localDeclar !== state.outerDeclar) return;
+
+    if (t.isFunctionDeclaration(node) || t.isFunctionExpression(node)) {
+      state.isOptimizable = false;
+      this.skip();
+      return;
+    }
+
+    if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
+
+    if (parent.type === 'MemberExpression') {
+      var prop = parent.property;
+      if (typeof prop.value === 'number' ||
+          prop.type === 'UnaryExpression' ||
+          prop.type === 'BinaryExpression') {
+        state.candidates.push({ node: node, parent: parent });
+        return;
+      }
+    }
+
+    state.isOptimizable = false;
+    this.stop();
+  }
+};
+
+function optimizeMemberExpression(node, parent, offset) {
+  var newExpr;
+
+  var prop = parent.property;
+  switch (prop.type) {
+  case 'Literal':
+    node.name = 'arguments';
+    prop.value += offset;
+    prop.raw = String(prop.value);
+    break;
+  case 'UnaryExpression': {
+    node.name = 'arguments';
+    newExpr = t.binaryExpression('+', prop, t.literal(offset));
+    parent.property = newExpr;
+    break;
+  }
+  case 'BinaryExpression': {
+    node.name = 'arguments';
+    newExpr = t.binaryExpression('+', prop, t.literal(offset));
+    parent.property = newExpr;
+    break;
+  }
+  default:
+    throw new Error('Unsupported property type');
+  }
+}
+
+function optimizeCandidates(candidates) {
+}
+
 var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
@@ -16,6 +74,24 @@ exports.Function = function (node, parent, scope) {
 
   // otherwise `arguments` will be remapped in arrow functions
   argsId._ignoreAliasFunctions = true;
+
+  // check if rest is used only in member expressions
+  var restOuterDeclar = scope.getBindingIdentifier(rest.name);
+  var state = {
+    name: rest.name,
+    outerDeclar: restOuterDeclar,
+    isOptimizable: true,
+    candidates: []
+  };
+  scope.traverse(node, memberExpressionVisitor, state);
+
+  if (state.isOptimizable) {
+    for (var i = 0, count = state.candidates.length; i < count; ++i) {
+      var candidate = state.candidates[i];
+      optimizeMemberExpression(candidate.node, candidate.parent, node.params.length);
+    }
+    return;
+  }
 
   var start = t.literal(node.params.length);
   var key = scope.generateUidIdentifier("key");
