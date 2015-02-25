@@ -46,7 +46,7 @@ var isType = function (node) {
 };
 
 exports.nodes = {
-  AssignmentExpression: function (node) {
+  AssignmentExpression(node) {
     var state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
@@ -56,13 +56,13 @@ exports.nodes = {
     }
   },
 
-  SwitchCase: function (node, parent) {
+  SwitchCase(node, parent) {
     return {
       before: node.consequent.length || parent.cases[0] === node
     };
   },
 
-  LogicalExpression: function (node) {
+  LogicalExpression(node) {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
       return {
         after: true
@@ -70,7 +70,7 @@ exports.nodes = {
     }
   },
 
-  Literal: function (node) {
+  Literal(node) {
     if (node.value === "use strict") {
       return {
         after: true
@@ -78,7 +78,7 @@ exports.nodes = {
     }
   },
 
-  CallExpression: function (node) {
+  CallExpression(node) {
     if (t.isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
@@ -87,7 +87,7 @@ exports.nodes = {
     }
   },
 
-  VariableDeclaration: function (node) {
+  VariableDeclaration(node) {
     for (var i = 0; i < node.declarations.length; i++) {
       var declar = node.declarations[i];
 
@@ -106,7 +106,7 @@ exports.nodes = {
     }
   },
 
-  IfStatement: function (node) {
+  IfStatement(node) {
     if (t.isBlockStatement(node.consequent)) {
       return {
         before: true,
@@ -126,15 +126,15 @@ exports.nodes.SpreadProperty = function (node, parent) {
 };
 
 exports.list = {
-  VariableDeclaration: function (node) {
+  VariableDeclaration(node) {
     return map(node.declarations, "init");
   },
 
-  ArrayExpression: function (node) {
+  ArrayExpression(node) {
     return node.elements;
   },
 
-  ObjectExpression: function (node) {
+  ObjectExpression(node) {
     return node.properties;
   }
 };

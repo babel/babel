@@ -181,7 +181,7 @@ Scope.prototype.rename = function (oldName, newName) {
   var scope = info.scope;
 
   scope.traverse(scope.block, {
-    enter: function (node, parent, scope) {
+    enter(node, parent, scope) {
       if (t.isReferencedIdentifier(node, parent) && node.name === oldName) {
         node.name = newName;
       } else if (t.isDeclaration(node)) {
@@ -372,7 +372,7 @@ Scope.prototype.registerVariableDeclaration = function (declar) {
 };
 
 var functionVariableVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isFor(node)) {
       each(t.FOR_INIT_KEYS, function (key) {
         var declar = node[key];
@@ -413,7 +413,7 @@ Scope.prototype.hasGlobal = function (name) {
 };
 
 var programReferenceVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isReferencedIdentifier(node, parent) && !scope.hasBinding(node.name)) {
       state.addGlobal(node);
     } else if (t.isLabeledStatement(node)) {
@@ -425,7 +425,7 @@ var programReferenceVisitor = {
 };
 
 var blockVariableVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isFunctionDeclaration(node) || t.isBlockScoped(node)) {
       state.registerDeclaration(node);
     } else if (t.isScope(node, parent)) {

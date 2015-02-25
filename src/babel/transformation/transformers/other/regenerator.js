@@ -8,7 +8,7 @@ exports.check = function (node) {
 };
 
 exports.Program = {
-  enter: function (ast) {
+  enter(ast) {
     regenerator.transform(ast);
     this.stop();
   }

@@ -3,7 +3,7 @@
 var t = require("../../types");
 
 var visitor = {
-  enter: function (node) {
+  enter(node) {
     if (t.isFunction(node)) this.skip();
 
     if (t.isAwaitExpression(node)) {

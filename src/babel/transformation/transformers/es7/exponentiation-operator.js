@@ -12,7 +12,7 @@ var MATH_POW = t.memberExpression(t.identifier("Math"), t.identifier("pow"));
 build(exports, {
   operator: "**",
 
-  build: function (left, right) {
+  build(left, right) {
     return t.callExpression(MATH_POW, [left, right]);
   }
 });

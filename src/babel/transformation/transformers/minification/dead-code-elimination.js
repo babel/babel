@@ -17,7 +17,7 @@ exports.ExpressionStatement = function (node) {
 };
 
 exports.IfStatement = {
-  exit: function (node) {
+  exit(node) {
     // todo: in scenarios where we can just return the consequent or
     // alternate we should drop the block statement if it contains no
     // block scoped variables

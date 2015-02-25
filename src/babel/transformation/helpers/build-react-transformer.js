@@ -33,7 +33,7 @@ module.exports = function (exports, opts) {
   };
 
   exports.JSXMemberExpression = {
-    exit: function (node) {
+    exit(node) {
       node.computed = t.isLiteral(node.property);
       node.type = "MemberExpression";
     }
@@ -44,21 +44,21 @@ module.exports = function (exports, opts) {
   };
 
   exports.JSXAttribute = {
-    enter: function (node) {
+    enter(node) {
       var value = node.value;
       if (t.isLiteral(value) && isString(value.value)) {
         value.value = value.value.replace(/\n\s+/g, " ");
       }
     },
 
-    exit: function (node) {
+    exit(node) {
       var value = node.value || t.literal(true);
       return t.inherits(t.property("init", node.name, value), node);
     }
   };
 
   exports.JSXOpeningElement = {
-    exit: function (node, parent, scope, file) {
+    exit(node, parent, scope, file) {
       var tagExpr = node.name;
       var args = [];
 
@@ -146,7 +146,7 @@ module.exports = function (exports, opts) {
   };
 
   exports.JSXElement = {
-    exit: function (node) {
+    exit(node) {
       var callExpr = node.openingElement;
 
       for (var i = 0; i < node.children.length; i++) {

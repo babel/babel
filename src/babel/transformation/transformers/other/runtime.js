@@ -22,7 +22,7 @@ var ALIASABLE_CONSTRUCTORS = [
 ];
 
 var astVisitor = {
-  enter: function (node, parent, scope, file) {
+  enter(node, parent, scope, file) {
     var prop;
 
     if (t.isMemberExpression(node) && t.isReferenced(node, parent)) {

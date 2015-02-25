@@ -305,7 +305,7 @@ TailCallTransformer.prototype.subTransformCallExpression = function (node) {
 
 // looks for and replaces tail recursion calls
 var firstPass = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isIfStatement(node)) {
       if (t.isReturnStatement(node.alternate)) {
         t.ensureBlock(node, "alternate");
@@ -335,7 +335,7 @@ var firstPass = {
 // hoists up function declarations, replaces `this` and `arguments` and marks
 // them as needed
 var secondPass = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isThisExpression(node)) {
       state.needsThis = true;
       return state.getThisId();
@@ -357,7 +357,7 @@ var secondPass = {
 
 // optimizes recursion by removing `this` and `arguments` if they aren't used
 var thirdPass = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (!t.isExpressionStatement(node)) return;
 
     var expr = node.expression;

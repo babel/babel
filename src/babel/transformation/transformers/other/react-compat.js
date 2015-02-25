@@ -10,11 +10,11 @@ exports.manipulateOptions = function (opts) {
 exports.optional = true;
 
 require("../../helpers/build-react-transformer")(exports, {
-  pre: function (state) {
+  pre(state) {
     state.callee = state.tagExpr;
   },
 
-  post: function (state) {
+  post(state) {
     if (react.isCompatTag(state.tagName)) {
       state.call = t.callExpression(
         t.memberExpression(

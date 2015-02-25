@@ -3,7 +3,7 @@
 var t = require("../../../types");
 
 var visitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (!t.isReferencedIdentifier(node, parent)) return;
 
     var declared = state.letRefs[node.name];

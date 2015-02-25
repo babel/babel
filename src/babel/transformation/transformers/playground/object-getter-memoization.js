@@ -5,7 +5,7 @@ var t = require("../../../types");
 exports.playground = true;
 
 var visitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isFunction(node)) return this.skip();
 
     if (t.isReturnStatement(node) && node.argument) {

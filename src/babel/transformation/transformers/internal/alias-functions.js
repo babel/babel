@@ -3,7 +3,7 @@
 var t = require("../../../types");
 
 var functionChildrenVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isFunction(node) && !node._aliasFunction) {
       return this.skip();
     }
@@ -25,7 +25,7 @@ var functionChildrenVisitor = {
 };
 
 var functionVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (!node._aliasFunction) {
       if (t.isFunction(node)) {
         // stop traversal of this node as it'll be hit again by this transformer
@@ -47,10 +47,10 @@ var go = function (getBody, node, scope) {
   var thisId;
 
   var state = {
-    getArgumentsId: function () {
+    getArgumentsId() {
       return argumentsId = argumentsId || scope.generateUidIdentifier("arguments");
     },
-    getThisId: function () {
+    getThisId() {
       return thisId = thisId || scope.generateUidIdentifier("this");
     }
   };

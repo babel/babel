@@ -417,7 +417,7 @@ File.prototype.call = function (key) {
 };
 
 var checkTransformerVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     checkNode(state.stack, node, scope);
   }
 };

@@ -266,7 +266,7 @@ BlockScoping.prototype.wrapClosure = function () {
 };
 
 var letReferenceFunctionVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     // not a direct reference
     if (!t.isReferencedIdentifier(node, parent)) return;
 
@@ -282,7 +282,7 @@ var letReferenceFunctionVisitor = {
 };
 
 var letReferenceBlockVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isFunction(node)) {
       scope.traverse(node, letReferenceFunctionVisitor, state);
       return this.skip();
@@ -351,7 +351,7 @@ var loopNodeTo = function (node) {
 };
 
 var loopVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     var replace;
 
     if (t.isLoop(node)) {
@@ -403,7 +403,7 @@ var loopVisitor = {
 };
 
 var loopLabelVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isLabeledStatement(node)) {
       state.innerLabels.push(node.label.name);
     }
@@ -436,7 +436,7 @@ BlockScoping.prototype.checkLoop = function () {
 };
 
 var hoistVarDeclarationsVisitor = {
-  enter: function (node, parent, scope, self) {
+  enter(node, parent, scope, self) {
     if (t.isForStatement(node)) {
       if (isVar(node.init, node)) {
         node.init = t.sequenceExpression(self.pushDeclar(node.init));

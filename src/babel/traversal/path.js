@@ -60,11 +60,11 @@ TraversalPath.prototype.flatten = function () {
 };
 
 Object.defineProperty(TraversalPath.prototype, "node", {
-  get: function () {
+  get() {
     return this.container[this.key];
   },
 
-  set: function (replacement) {
+  set(replacement) {
     var isArray = Array.isArray(replacement);
 
     // inherit comments from original node to the first replacement node

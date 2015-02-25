@@ -38,7 +38,7 @@ exports.ForOfStatement = function (node, parent, scope, file) {
 };
 
 var breakVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isLoop(node)) {
       state.ignoreLabeless = true;
       scope.traverse(node, breakVisitor, state);

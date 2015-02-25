@@ -12,7 +12,7 @@ var util             = require("../../util");
 var fs               = require("fs");
 
 sourceMapSupport.install({
-  retrieveSourceMap: function (source) {
+  retrieveSourceMap(source) {
     var map = maps && maps[source];
     if (map) {
       return {

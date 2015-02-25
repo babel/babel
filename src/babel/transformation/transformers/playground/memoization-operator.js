@@ -6,13 +6,13 @@ var t     = require("../../../types");
 exports.playground = true;
 
 build(exports, {
-  is: function (node) {
+  is(node) {
     var is = t.isAssignmentExpression(node) && node.operator === "?=";
     if (is) t.assertMemberExpression(node.left);
     return is;
   },
 
-  build: function (node, file) {
+  build(node, file) {
     return t.unaryExpression(
       "!",
       t.callExpression(

@@ -27,7 +27,7 @@ exports.Program = function (node, parent, scope, file) {
 };
 
 require("../../helpers/build-react-transformer")(exports, {
-  pre: function (state) {
+  pre(state) {
     var tagName = state.tagName;
     var args    = state.args;
     if (react.isCompatTag(tagName)) {
@@ -37,7 +37,7 @@ require("../../helpers/build-react-transformer")(exports, {
     }
   },
 
-  post: function (state, file) {
+  post(state, file) {
     state.callee = file.get("jsxIdentifier");
   }
 });

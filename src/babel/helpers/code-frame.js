@@ -77,7 +77,7 @@ module.exports = function (lines, lineNumber, colNumber) {
     start: start + 1,
     before: "  ",
     after: " | ",
-    transform: function (params) {
+    transform(params) {
       if (params.number !== lineNumber) {
         return;
       }

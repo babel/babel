@@ -7,7 +7,7 @@ var t        = require("../../../types");
 exports.playground = true;
 
 build(exports, {
-  is: function (node, file) {
+  is(node, file) {
     var is = t.isAssignmentExpression(node) && node.operator === "||=";
     if (is) {
       var left = node.left;
@@ -18,7 +18,7 @@ build(exports, {
     }
   },
 
-  build: function (node) {
+  build(node) {
     return t.unaryExpression("!", node, true);
   }
 });

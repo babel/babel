@@ -96,7 +96,7 @@ ReplaceSupers.prototype.replace = function () {
 };
 
 var visitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     var topLevel = state.topLevel;
     var self = state.self;
 

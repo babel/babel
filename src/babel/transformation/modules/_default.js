@@ -40,7 +40,7 @@ DefaultFormatter.prototype.bumpImportOccurences = function (node) {
 };
 
 var exportsVisitor = {
-  enter: function (node, parent, scope, formatter) {
+  enter(node, parent, scope, formatter) {
     var declar = node && node.declaration;
     if (t.isExportDeclaration(node)) {
       formatter.hasLocalImports = true;
@@ -65,7 +65,7 @@ DefaultFormatter.prototype.getLocalExports = function () {
 };
 
 var importsVisitor = {
-  enter: function (node, parent, scope, formatter) {
+  enter(node, parent, scope, formatter) {
     if (t.isImportDeclaration(node)) {
       formatter.hasLocalImports = true;
       extend(formatter.localImports, t.getBindingIdentifiers(node));
@@ -79,7 +79,7 @@ DefaultFormatter.prototype.getLocalImports = function () {
 };
 
 var remapVisitor = {
-  enter: function (node, parent, scope, formatter) {
+  enter(node, parent, scope, formatter) {
     if (t.isUpdateExpression(node) && formatter.isLocalReference(node.argument, scope)) {
       this.skip();
 

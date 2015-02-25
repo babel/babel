@@ -13,7 +13,7 @@ var values  = require("lodash/object/values");
 
 exports.BlockStatement =
 exports.Program = {
-  exit: function (node) {
+  exit(node) {
     var hasChange = false;
     for (var i = 0; i < node.body.length; i++) {
       var bodyNode = node.body[i];

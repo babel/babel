@@ -151,7 +151,7 @@ exports.SwitchStatement = function (node, print) {
 
   print.sequence(node.cases, {
     indent: true,
-    addNewlines: function (leading, cas) {
+    addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
     }
   });

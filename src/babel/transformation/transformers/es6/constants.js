@@ -8,7 +8,7 @@ exports.check = function (node) {
 };
 
 var visitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isAssignmentExpression(node) || t.isUpdateExpression(node)) {
       var ids = t.getBindingIdentifiers(node);
 

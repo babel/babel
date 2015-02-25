@@ -15,7 +15,7 @@ function detect(ast) {
   };
 
   traverse(ast, {
-    enter: function (node, parent) {
+    enter(node, parent) {
       if (SYNTAX_KEYS[node.type]) {
         detectedSyntax(SYNTAX_KEYS[node.type]);
       }

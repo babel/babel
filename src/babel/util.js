@@ -65,7 +65,7 @@ exports.booleanify = function (val) {
 };
 
 var templateVisitor = {
-  enter: function (node, parent, scope, nodes) {
+  enter(node, parent, scope, nodes) {
     if (t.isExpressionStatement(node)) {
       node = node.expression;
     }

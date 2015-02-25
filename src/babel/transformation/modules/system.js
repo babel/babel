@@ -68,7 +68,7 @@ SystemFormatter.prototype.importSpecifier = function (specifier, node, nodes) {
 };
 
 var runnerSettersVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (node._importSource === state.source) {
       if (t.isVariableDeclaration(node)) {
         each(node.declarations, function (declar) {
@@ -103,7 +103,7 @@ SystemFormatter.prototype.buildRunnerSetters = function (block, hoistDeclarators
 };
 
 var hoistVariablesVisitor = {
-  enter: function (node, parent, scope, hoistDeclarators) {
+  enter(node, parent, scope, hoistDeclarators) {
     if (t.isFunction(node)) {
       // nothing inside is accessible
       return this.skip();
@@ -148,7 +148,7 @@ var hoistVariablesVisitor = {
 };
 
 var hoistFunctionsVisitor = {
-  enter: function (node, parent, scope, handlerBody) {
+  enter(node, parent, scope, handlerBody) {
     if (t.isFunction(node)) this.skip();
 
     if (t.isFunctionDeclaration(node) || node._blockHoist) {

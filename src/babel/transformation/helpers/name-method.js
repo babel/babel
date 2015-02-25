@@ -4,7 +4,7 @@ var util = require("../../util");
 var t    = require("../../types");
 
 var visitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     // check if this node is a referenced identifier that matches the same as our
     // function id
     if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
@@ -99,7 +99,7 @@ exports.bare = function (node, parent, scope) {
 
   var id;
   if (t.isProperty(parent) && parent.kind === "init" && !parent.computed) {
-    // { foo: function () {} };
+    // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {
     // var foo = function () {};
