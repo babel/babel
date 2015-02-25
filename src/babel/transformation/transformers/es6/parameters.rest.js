@@ -4,7 +4,7 @@ var t    = require("../../../types");
 exports.check = t.isRestElement;
 
 var memberExpressionVisitor = {
-  enter: function (node, parent, scope, state) {
+  enter(node, parent, scope, state) {
     if (t.isScope(node, parent) && !scope.bindingIdentifierEquals(state.name, state.outerDeclar)) {
       return this.skip();
     }
@@ -22,7 +22,7 @@ var memberExpressionVisitor = {
           typeof prop.value === "number" ||
           t.isUnaryExpression(prop) ||
           t.isBinaryExpression(prop)) {
-        state.candidates.push({ node: node, parent: parent });
+        state.candidates.push({ node, parent });
         return;
       }
     }
@@ -93,8 +93,7 @@ exports.Function = function (node, parent, scope, file) {
   scope.traverse(node, memberExpressionVisitor, state);
 
   if (state.isOptimizable) {
-    for (var i = 0, count = state.candidates.length; i < count; ++i) {
-      var candidate = state.candidates[i];
+    for (let candidate of state.candidates) {
       optimizeMemberExpression(candidate.node, candidate.parent, node.params.length, state.strictMode);
     }
     return;
