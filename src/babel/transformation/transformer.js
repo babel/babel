@@ -33,7 +33,7 @@ function Transformer(key, transformer, opts) {
   this.optional     = !!take("optional");
 
   this.handlers = this.normalize(transformer);
-  this.opts     = opts || {};
+  this.opts     ||= {};
   this.key      = key;
 }
 

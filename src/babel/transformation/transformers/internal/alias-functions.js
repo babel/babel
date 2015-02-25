@@ -46,10 +46,10 @@ var go = function (getBody, node, scope) {
 
   var state = {
     getArgumentsId() {
-      return argumentsId = argumentsId || scope.generateUidIdentifier("arguments");
+      return argumentsId ||= scope.generateUidIdentifier("arguments");
     },
     getThisId() {
-      return thisId = thisId || scope.generateUidIdentifier("this");
+      return thisId ||= scope.generateUidIdentifier("this");
     }
   };
 
@@ -60,7 +60,7 @@ var go = function (getBody, node, scope) {
   var body;
 
   var pushDeclaration = function (id, init) {
-    body = body || getBody();
+    body ||= getBody();
     body.unshift(t.variableDeclaration("var", [
       t.variableDeclarator(id, init)
     ]));

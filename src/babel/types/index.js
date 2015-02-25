@@ -22,7 +22,7 @@ function registerType(type, skipAliasCheck) {
   };
 
   t["assert" + type] = function (node, opts) {
-    opts = opts || {};
+    opts ||= {};
     if (!is(node, opts)) {
       throw new Error("Expected type " + JSON.stringify(type) + " with option " + JSON.stringify(opts));
     }
@@ -405,7 +405,7 @@ t.toIdentifier = function (name) {
  */
 
 t.ensureBlock = function (node, key) {
-  key = key || "body";
+  key ||= "body";
   return node[key] = t.toBlock(node[key], node);
 };
 

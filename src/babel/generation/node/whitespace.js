@@ -4,7 +4,7 @@ var map       = require("lodash/collection/map");
 var t         = require("../../types");
 
 var crawl = function (node, state) {
-  state = state || {};
+  state ||= {};
 
   if (t.isMemberExpression(node)) {
     crawl(node.object, state);
@@ -18,7 +18,7 @@ var crawl = function (node, state) {
   } else if (t.isFunction(node)) {
     state.hasFunction = true;
   } else if (t.isIdentifier(node)) {
-    state.hasHelper = state.hasHelper || isHelper(node.callee);
+    state.hasHelper ||= isHelper(node.callee);
   }
 
   return state;

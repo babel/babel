@@ -201,7 +201,7 @@ ClassTransformer.prototype.buildBody = function () {
   }
 
   if (instanceProps || staticProps) {
-    staticProps = staticProps || t.literal(null);
+    staticProps ||= t.literal(null);
 
     var args = [className, staticProps];
     if (instanceProps) args.push(instanceProps);

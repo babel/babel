@@ -170,7 +170,7 @@ Scope.prototype.checkBlockScopedCollisions = function (kind, name, id) {
 };
 
 Scope.prototype.rename = function (oldName, newName) {
-  newName = newName || this.generateUidIdentifier(oldName).name;
+  newName ||= this.generateUidIdentifier(oldName).name;
 
   var info = this.getBindingInfo(oldName);
   if (!info) return;
@@ -530,7 +530,7 @@ Scope.prototype.push = function (opts) {
   }
 
   if (t.isBlockStatement(block) || t.isProgram(block)) {
-    block._declarations = block._declarations || {};
+    block._declarations ||= {};
     block._declarations[opts.key] = {
       kind: opts.kind,
       id: opts.id,

@@ -467,7 +467,7 @@ exports.VariableDeclaration = function (node, parent, scope, file) {
 
     for (i = 0; i < nodes.length; i++) {
       node = nodes[i];
-      declar = declar || t.variableDeclaration(node.kind, []);
+      declar ||= t.variableDeclaration(node.kind, []);
 
       if (!t.isVariableDeclaration(node) && declar.kind !== node.kind) {
         throw file.errorWithNode(node, messages.get("invalidParentForThisNode"));

@@ -286,7 +286,7 @@ File.prototype.get = function (key) {
 };
 
 File.prototype.addImport = function (source, name, noDefault) {
-  name = name || source;
+  name ||= source;
   var id = this.dynamicImportIds[name];
 
   if (!id) {
@@ -312,7 +312,7 @@ File.prototype.isConsequenceExpressionStatement = function (node) {
 File.prototype.attachAuxiliaryComment = function (node) {
   var comment = this.opts.auxiliaryComment;
   if (comment) {
-    node.leadingComments = node.leadingComments || [];
+    node.leadingComments ||= [];
     node.leadingComments.push({
       type: "Line",
       value: " " + comment
@@ -353,7 +353,7 @@ File.prototype.logDeopt = function () {
 };
 
 File.prototype.errorWithNode = function (node, msg, Error) {
-  Error = Error || SyntaxError;
+  Error ||= SyntaxError;
 
   var loc = node.loc.start;
   var err = new Error("Line " + loc.line + ": " + msg);
@@ -429,7 +429,7 @@ var checkNode = function (stack, node, scope) {
 
 File.prototype.checkNode = function (node, scope) {
   var stack = this.transformerStack;
-  scope = scope || this.scope;
+  scope ||= this.scope;
 
   checkNode(stack, node, scope);
 

@@ -18,7 +18,7 @@ var n            = require("./node");
 var t            = require("../types");
 
 function CodeGenerator(ast, opts, code) {
-  opts = opts || {};
+  opts ||= {};
 
   this.comments = ast.comments || [];
   this.tokens   = ast.tokens || [];
@@ -108,7 +108,7 @@ CodeGenerator.prototype.buildPrint = function (parent) {
   };
 
   print.sequence = (nodes, opts) => {
-    opts = opts || {};
+    opts ||= {};
     opts.statement = true;
     return this.printJoin(print, nodes, opts);
   };
@@ -118,8 +118,8 @@ CodeGenerator.prototype.buildPrint = function (parent) {
   };
 
   print.list = function (items, opts) {
-    opts = opts || {};
-    opts.separator = opts.separator || ", ";
+    opts ||= {};
+    opts.separator ||= ", ";
     print.join(items, opts);
   };
 
@@ -146,7 +146,7 @@ CodeGenerator.prototype.print = function (node, parent, opts) {
     this.format.concise = true;
   }
 
-  opts = opts || {};
+  opts ||= {};
 
   var newline = (leading) => {
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
@@ -216,7 +216,7 @@ CodeGenerator.prototype.print = function (node, parent, opts) {
 CodeGenerator.prototype.printJoin = function (print, nodes, opts) {
   if (!nodes || !nodes.length) return;
 
-  opts = opts || {};
+  opts ||= {};
 
   var len = nodes.length;
 

@@ -18,7 +18,7 @@ var isLet = function (node, parent) {
   if (isLetInitable(node, parent)) {
     for (var i = 0; i < node.declarations.length; i++) {
       var declar = node.declarations[i];
-      declar.init = declar.init || t.identifier("undefined");
+      declar.init ||= t.identifier("undefined");
     }
   }
 

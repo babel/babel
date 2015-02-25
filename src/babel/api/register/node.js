@@ -136,7 +136,7 @@ hookExtensions(util.canCompile.EXTENSIONS);
 
 module.exports = function (opts) {
   // normalize options
-  opts = opts || {};
+  opts ||= {};
 
   if (opts.only != null) onlyRegex = util.regexify(opts.only);
   if (opts.ignore != null) ignoreRegex = util.regexify(opts.ignore);

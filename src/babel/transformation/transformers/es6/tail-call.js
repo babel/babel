@@ -23,23 +23,23 @@ function TailCallTransformer(node, scope, file) {
 }
 
 TailCallTransformer.prototype.getArgumentsId = function () {
-  return this.argumentsId = this.argumentsId || this.scope.generateUidIdentifier("arguments");
+  return this.argumentsId ||= this.scope.generateUidIdentifier("arguments");
 };
 
 TailCallTransformer.prototype.getThisId = function () {
-  return this.thisId = this.thisId || this.scope.generateUidIdentifier("this");
+  return this.thisId ||= this.scope.generateUidIdentifier("this");
 };
 
 TailCallTransformer.prototype.getLeftId = function () {
-  return this.leftId = this.leftId || this.scope.generateUidIdentifier("left");
+  return this.leftId ||= this.scope.generateUidIdentifier("left");
 };
 
 TailCallTransformer.prototype.getFunctionId = function () {
-  return this.functionId = this.functionId || this.scope.generateUidIdentifier("function");
+  return this.functionId ||= this.scope.generateUidIdentifier("function");
 };
 
 TailCallTransformer.prototype.getAgainId = function () {
-  return this.againId = this.againId || this.scope.generateUidIdentifier("again");
+  return this.againId ||= this.scope.generateUidIdentifier("again");
 };
 
 TailCallTransformer.prototype.getParams = function () {

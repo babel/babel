@@ -12,7 +12,7 @@ function exists(filename) {
 
 module.exports = function (loc, opts) {
   var rel = ".babelrc";
-  opts = opts || {};
+  opts ||= {};
 
   function find(start, rel) {
     var file = path.join(start, rel);

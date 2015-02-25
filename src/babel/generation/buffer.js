@@ -78,7 +78,7 @@ Buffer.prototype.newline = function (i, removeLast) {
     return;
   }
 
-  removeLast = removeLast || false;
+  removeLast ||= false;
 
   if (isNumber(i)) {
     i = Math.min(2, i);

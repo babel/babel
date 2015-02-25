@@ -20,7 +20,7 @@ exports.Program = function (node, parent, scope, file) {
       if (declar.init) {
         node.body.unshift(file.attachAuxiliaryComment(t.variableDeclaration(kind, [declarNode])));
       } else {
-        kinds[kind] = kinds[kind] || [];
+        kinds[kind] ||= [];
         kinds[kind].push(declarNode);
       }
     }

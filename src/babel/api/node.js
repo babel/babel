@@ -50,7 +50,7 @@ exports.transformFile = function (filename, opts, callback) {
 };
 
 exports.transformFileSync = function (filename, opts) {
-  opts = opts || {};
+  opts ||= {};
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
 };

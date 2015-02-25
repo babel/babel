@@ -33,7 +33,7 @@ DefaultFormatter.prototype.doDefaultExportInterop = function (node) {
 DefaultFormatter.prototype.bumpImportOccurences = function (node) {
   var source = node.source.value;
   var occurs = this.localImportOccurences;
-  occurs[source] = occurs[source] || 0;
+  occurs[source] ||= 0;
   occurs[source] += node.specifiers.length;
 };
 
