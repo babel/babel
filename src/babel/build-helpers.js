@@ -5,9 +5,9 @@ var t    = require("./types");
 
 module.exports = function (body, namespace, whitelist = []) {
   each(File.helpers, function (name) {
-    var key = t.identifier(t.toIdentifier(name));
     if (whitelist.length && whitelist.indexOf(key) >= 0) return;
 
+    var key = t.identifier(t.toIdentifier(name));
     body.push(t.expressionStatement(
       t.assignmentExpression("=", t.memberExpression(namespace, key), util.template(name))
     ));
