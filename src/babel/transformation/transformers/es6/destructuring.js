@@ -3,269 +3,6 @@ var t        = require("../../../types");
 
 exports.check = t.isPattern;
 
-function DestructuringTransformer(opts) {
-  this.blockHoist = opts.blockHoist;
-  this.operator   = opts.operator;
-  this.nodes      = opts.nodes;
-  this.scope      = opts.scope;
-  this.file       = opts.file;
-  this.kind       = opts.kind;
-}
-
-DestructuringTransformer.prototype.buildVariableAssignment = function (id, init) {
-  var op = this.operator;
-  if (t.isMemberExpression(id)) op = "=";
-
-  var node;
-
-  if (op) {
-    node = t.expressionStatement(t.assignmentExpression(op, id, init));
-  } else {
-    node = t.variableDeclaration(this.kind, [
-      t.variableDeclarator(id, init)
-    ]);
-  }
-
-  node._blockHoist = this.blockHoist;
-
-  return node;
-};
-
-DestructuringTransformer.prototype.buildVariableDeclaration = function (id, init) {
-  var declar = t.variableDeclaration("var", [
-    t.variableDeclarator(id, init)
-  ]);
-  declar._blockHoist = this.blockHoist;
-  return declar;
-};
-
-DestructuringTransformer.prototype.push = function (id, init) {
-  if (t.isObjectPattern(id)) {
-    this.pushObjectPattern(id, init);
-  } else if (t.isArrayPattern(id)) {
-    this.pushArrayPattern(id, init);
-  } else if (t.isAssignmentPattern(id)) {
-    this.pushAssignmentPattern(id, init);
-  } else {
-    this.nodes.push(this.buildVariableAssignment(id, init));
-  }
-};
-
-DestructuringTransformer.prototype.get = function () {
-
-};
-
-DestructuringTransformer.prototype.pushAssignmentPattern = function (pattern, valueRef) {
-  // we need to assign the current value of the assignment to avoid evaluating
-  // it more than once
-
-  var tempValueRef = this.scope.generateUidBasedOnNode(valueRef);
-
-  var declar = t.variableDeclaration("var", [
-    t.variableDeclarator(tempValueRef, valueRef)
-  ]);
-  declar._blockHoist = this.blockHoist;
-  this.nodes.push(declar);
-
-  //
-
-  this.nodes.push(this.buildVariableAssignment(
-    pattern.left,
-    t.conditionalExpression(
-      t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
-      pattern.right,
-      tempValueRef
-    )
-  ));
-};
-
-DestructuringTransformer.prototype.pushObjectSpread = function (pattern, objRef, spreadProp, spreadPropIndex) {
-  // get all the keys that appear in this object before the current spread
-
-  var keys = [];
-
-  for (var i = 0; i < pattern.properties.length; i++) {
-    var prop = pattern.properties[i];
-
-    // we've exceeded the index of the spread property to all properties to the
-    // right need to be ignored
-    if (i >= spreadPropIndex) break;
-
-    // ignore other spread properties
-    if (t.isSpreadProperty(prop)) continue;
-
-    var key = prop.key;
-    if (t.isIdentifier(key)) key = t.literal(prop.key.name);
-    keys.push(key);
-  }
-
-  keys = t.arrayExpression(keys);
-
-  //
-
-  var value = t.callExpression(this.file.addHelper("object-without-properties"), [objRef, keys]);
-  this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
-};
-
-DestructuringTransformer.prototype.pushObjectProperty = function (prop, propRef) {
-  if (t.isLiteral(prop.key)) prop.computed = true;
-
-  var pattern = prop.value;
-  var objRef  = t.memberExpression(propRef, prop.key, prop.computed);
-
-  if (t.isPattern(pattern)) {
-    this.push(pattern, objRef);
-  } else {
-    this.nodes.push(this.buildVariableAssignment(pattern, objRef));
-  }
-};
-
-DestructuringTransformer.prototype.pushObjectPattern = function (pattern, objRef) {
-  // https://github.com/babel/babel/issues/681
-
-  if (!pattern.properties.length) {
-    this.nodes.push(t.expressionStatement(
-      t.callExpression(this.file.addHelper("object-destructuring-empty"), [objRef])
-    ));
-  }
-
-  // if we have more than one properties in this pattern and the objectRef is a
-  // member expression then we need to assign it to a temporary variable so it's
-  // only evaluated once
-
-  if (pattern.properties.length > 1 && t.isMemberExpression(objRef)) {
-    var temp = this.scope.generateUidBasedOnNode(objRef, this.file);
-    this.nodes.push(this.buildVariableDeclaration(temp, objRef));
-    objRef = temp;
-  }
-
-  //
-
-  for (var i = 0; i < pattern.properties.length; i++) {
-    var prop = pattern.properties[i];
-    if (t.isSpreadProperty(prop)) {
-      this.pushObjectSpread(pattern, objRef, prop, i);
-    } else {
-      this.pushObjectProperty(prop, objRef);
-    }
-  }
-};
-
-var hasRest = function (pattern) {
-  for (var i = 0; i < pattern.elements.length; i++) {
-    if (t.isRestElement(pattern.elements[i])) {
-      return true;
-    }
-  }
-  return false;
-};
-
-DestructuringTransformer.prototype.canUnpackArrayPattern = function (pattern, arr) {
-  // not an array so there's no way we can deal with this
-  if (!t.isArrayExpression(arr)) return false;
-
-  // pattern has less elements than the array and doesn't have a rest so some
-  // elements wont be evaluated
-  if (pattern.elements.length > arr.elements.length) return;
-  if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
-
-  // deopt on holes
-  for (var i = 0; i < pattern.elements.length; i++) {
-    if (!pattern.elements[i]) return false;
-  }
-
-  return true;
-};
-
-DestructuringTransformer.prototype.pushUnpackedArrayPattern = function (pattern, arr) {
-  for (var i = 0; i < pattern.elements.length; i++) {
-    var elem = pattern.elements[i];
-    if (t.isRestElement(elem)) {
-      this.push(elem.argument, t.arrayExpression(arr.elements.slice(i)));
-    } else {
-      this.push(elem, arr.elements[i]);
-    }
-  }
-};
-
-DestructuringTransformer.prototype.pushArrayPattern = function (pattern, arrayRef) {
-  if (!pattern.elements) return;
-
-  // optimise basic array destructuring of an array expression
-  //
-  // we can't do this to a pattern of unequal size to it's right hand
-  // array expression as then there will be values that wont be evaluated
-  //
-  // eg: var [a, b] = [1, 2];
-
-  if (this.canUnpackArrayPattern(pattern, arrayRef)) {
-    return this.pushUnpackedArrayPattern(pattern, arrayRef);
-  }
-
-  // if we have a rest then we need all the elements so don't tell
-  // `scope.toArray` to only get a certain amount
-
-  var count = !hasRest(pattern) && pattern.elements.length;
-
-  // so we need to ensure that the `arrayRef` is an array, `scope.toArray` will
-  // return a locally bound identifier if it's been inferred to be an array,
-  // otherwise it'll be a call to a helper that will ensure it's one
-
-  var toArray = this.scope.toArray(arrayRef, count);
-
-  if (t.isIdentifier(toArray)) {
-    // we've been given an identifier so it must have been inferred to be an
-    // array
-    arrayRef = toArray;
-  } else {
-    arrayRef = this.scope.generateUidBasedOnNode(arrayRef);
-    this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
-    this.scope.assignTypeGeneric(arrayRef.name, "Array");
-  }
-
-  //
-
-  for (var i = 0; i < pattern.elements.length; i++) {
-    var elem = pattern.elements[i];
-
-    // hole
-    if (!elem) continue;
-
-    var elemRef;
-
-    if (t.isRestElement(elem)) {
-      elemRef = this.scope.toArray(arrayRef);
-
-      if (i > 0) {
-        elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.literal(i)]);
-      }
-
-      // set the element to the rest element argument since we've dealt with it
-      // being a rest already
-      elem = elem.argument;
-    } else {
-      elemRef = t.memberExpression(arrayRef, t.literal(i), true);
-    }
-
-    this.push(elem, elemRef);
-  }
-};
-
-DestructuringTransformer.prototype.init = function (pattern, ref) {
-  // trying to destructure a value that we can't evaluate more than once so we
-  // need to save it to a variable
-
-  if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref) && !t.isIdentifier(ref)) {
-    var key = this.scope.generateUidBasedOnNode(ref);
-    this.nodes.push(this.buildVariableDeclaration(key, ref));
-    ref = key;
-  }
-
-  //
-
-  this.push(pattern, ref);
-};
-
 exports.ForInStatement =
 exports.ForOfStatement = function (node, parent, scope, file) {
   var left = node.left;
@@ -481,3 +218,264 @@ exports.VariableDeclaration = function (node, parent, scope, file) {
 
   return nodes;
 };
+
+var hasRest = function (pattern) {
+  for (var i = 0; i < pattern.elements.length; i++) {
+    if (t.isRestElement(pattern.elements[i])) {
+      return true;
+    }
+  }
+  return false;
+};
+
+class DestructuringTransformer {
+  constructor(opts) {
+    this.blockHoist = opts.blockHoist;
+    this.operator   = opts.operator;
+    this.nodes      = opts.nodes;
+    this.scope      = opts.scope;
+    this.file       = opts.file;
+    this.kind       = opts.kind;
+  }
+
+  buildVariableAssignment(id, init) {
+    var op = this.operator;
+    if (t.isMemberExpression(id)) op = "=";
+
+    var node;
+
+    if (op) {
+      node = t.expressionStatement(t.assignmentExpression(op, id, init));
+    } else {
+      node = t.variableDeclaration(this.kind, [
+        t.variableDeclarator(id, init)
+      ]);
+    }
+
+    node._blockHoist = this.blockHoist;
+
+    return node;
+  }
+
+  buildVariableDeclaration(id, init) {
+    var declar = t.variableDeclaration("var", [
+      t.variableDeclarator(id, init)
+    ]);
+    declar._blockHoist = this.blockHoist;
+    return declar;
+  }
+
+  push(id, init) {
+    if (t.isObjectPattern(id)) {
+      this.pushObjectPattern(id, init);
+    } else if (t.isArrayPattern(id)) {
+      this.pushArrayPattern(id, init);
+    } else if (t.isAssignmentPattern(id)) {
+      this.pushAssignmentPattern(id, init);
+    } else {
+      this.nodes.push(this.buildVariableAssignment(id, init));
+    }
+  }
+
+  pushAssignmentPattern(pattern, valueRef) {
+    // we need to assign the current value of the assignment to avoid evaluating
+    // it more than once
+
+    var tempValueRef = this.scope.generateUidBasedOnNode(valueRef);
+
+    var declar = t.variableDeclaration("var", [
+      t.variableDeclarator(tempValueRef, valueRef)
+    ]);
+    declar._blockHoist = this.blockHoist;
+    this.nodes.push(declar);
+
+    //
+
+    this.nodes.push(this.buildVariableAssignment(
+      pattern.left,
+      t.conditionalExpression(
+        t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
+        pattern.right,
+        tempValueRef
+      )
+    ));
+  }
+
+  pushObjectSpread(pattern, objRef, spreadProp, spreadPropIndex) {
+    // get all the keys that appear in this object before the current spread
+
+    var keys = [];
+
+    for (var i = 0; i < pattern.properties.length; i++) {
+      var prop = pattern.properties[i];
+
+      // we've exceeded the index of the spread property to all properties to the
+      // right need to be ignored
+      if (i >= spreadPropIndex) break;
+
+      // ignore other spread properties
+      if (t.isSpreadProperty(prop)) continue;
+
+      var key = prop.key;
+      if (t.isIdentifier(key)) key = t.literal(prop.key.name);
+      keys.push(key);
+    }
+
+    keys = t.arrayExpression(keys);
+
+    //
+
+    var value = t.callExpression(this.file.addHelper("object-without-properties"), [objRef, keys]);
+    this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
+  }
+
+  pushObjectProperty(prop, propRef) {
+    if (t.isLiteral(prop.key)) prop.computed = true;
+
+    var pattern = prop.value;
+    var objRef  = t.memberExpression(propRef, prop.key, prop.computed);
+
+    if (t.isPattern(pattern)) {
+      this.push(pattern, objRef);
+    } else {
+      this.nodes.push(this.buildVariableAssignment(pattern, objRef));
+    }
+  }
+
+  pushObjectPattern(pattern, objRef) {
+    // https://github.com/babel/babel/issues/681
+
+    if (!pattern.properties.length) {
+      this.nodes.push(t.expressionStatement(
+        t.callExpression(this.file.addHelper("object-destructuring-empty"), [objRef])
+      ));
+    }
+
+    // if we have more than one properties in this pattern and the objectRef is a
+    // member expression then we need to assign it to a temporary variable so it's
+    // only evaluated once
+
+    if (pattern.properties.length > 1 && t.isMemberExpression(objRef)) {
+      var temp = this.scope.generateUidBasedOnNode(objRef, this.file);
+      this.nodes.push(this.buildVariableDeclaration(temp, objRef));
+      objRef = temp;
+    }
+
+    //
+
+    for (var i = 0; i < pattern.properties.length; i++) {
+      var prop = pattern.properties[i];
+      if (t.isSpreadProperty(prop)) {
+        this.pushObjectSpread(pattern, objRef, prop, i);
+      } else {
+        this.pushObjectProperty(prop, objRef);
+      }
+    }
+  }
+
+  canUnpackArrayPattern(pattern, arr) {
+    // not an array so there's no way we can deal with this
+    if (!t.isArrayExpression(arr)) return false;
+
+    // pattern has less elements than the array and doesn't have a rest so some
+    // elements wont be evaluated
+    if (pattern.elements.length > arr.elements.length) return;
+    if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
+
+    // deopt on holes
+    for (var i = 0; i < pattern.elements.length; i++) {
+      if (!pattern.elements[i]) return false;
+    }
+
+    return true;
+  }
+
+  pushUnpackedArrayPattern(pattern, arr) {
+    for (var i = 0; i < pattern.elements.length; i++) {
+      var elem = pattern.elements[i];
+      if (t.isRestElement(elem)) {
+        this.push(elem.argument, t.arrayExpression(arr.elements.slice(i)));
+      } else {
+        this.push(elem, arr.elements[i]);
+      }
+    }
+  }
+
+  pushArrayPattern(pattern, arrayRef) {
+    if (!pattern.elements) return;
+
+    // optimise basic array destructuring of an array expression
+    //
+    // we can't do this to a pattern of unequal size to it's right hand
+    // array expression as then there will be values that wont be evaluated
+    //
+    // eg: var [a, b] = [1, 2];
+
+    if (this.canUnpackArrayPattern(pattern, arrayRef)) {
+      return this.pushUnpackedArrayPattern(pattern, arrayRef);
+    }
+
+    // if we have a rest then we need all the elements so don't tell
+    // `scope.toArray` to only get a certain amount
+
+    var count = !hasRest(pattern) && pattern.elements.length;
+
+    // so we need to ensure that the `arrayRef` is an array, `scope.toArray` will
+    // return a locally bound identifier if it's been inferred to be an array,
+    // otherwise it'll be a call to a helper that will ensure it's one
+
+    var toArray = this.scope.toArray(arrayRef, count);
+
+    if (t.isIdentifier(toArray)) {
+      // we've been given an identifier so it must have been inferred to be an
+      // array
+      arrayRef = toArray;
+    } else {
+      arrayRef = this.scope.generateUidBasedOnNode(arrayRef);
+      this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
+      this.scope.assignTypeGeneric(arrayRef.name, "Array");
+    }
+
+    //
+
+    for (var i = 0; i < pattern.elements.length; i++) {
+      var elem = pattern.elements[i];
+
+      // hole
+      if (!elem) continue;
+
+      var elemRef;
+
+      if (t.isRestElement(elem)) {
+        elemRef = this.scope.toArray(arrayRef);
+
+        if (i > 0) {
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.literal(i)]);
+        }
+
+        // set the element to the rest element argument since we've dealt with it
+        // being a rest already
+        elem = elem.argument;
+      } else {
+        elemRef = t.memberExpression(arrayRef, t.literal(i), true);
+      }
+
+      this.push(elem, elemRef);
+    }
+  }
+
+  init(pattern, ref) {
+    // trying to destructure a value that we can't evaluate more than once so we
+    // need to save it to a variable
+
+    if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref) && !t.isIdentifier(ref)) {
+      var key = this.scope.generateUidBasedOnNode(ref);
+      this.nodes.push(this.buildVariableDeclaration(key, ref));
+      ref = key;
+    }
+
+    //
+
+    this.push(pattern, ref);
+  }
+}
