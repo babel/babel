@@ -93,7 +93,8 @@ exports.Function = function (node, parent, scope, file) {
   scope.traverse(node, memberExpressionVisitor, state);
 
   if (state.isOptimizable) {
-    for (let candidate of state.candidates) {
+    for (let i = 0, count = state.candidates.length; i < count; ++i) {
+      let candidate = state.candidates[i];
       optimizeMemberExpression(candidate.node, candidate.parent, node.params.length, state.strictMode);
     }
     return;
