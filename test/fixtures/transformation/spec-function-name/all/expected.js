@@ -55,17 +55,7 @@ var g = function g() {
 };
 
 // param with the same name as id
-var h = (function (_h) {
-  var _hWrapper = function h() {
-    return _h.apply(this, arguments);
-  };
-
-  _hWrapper.toString = function () {
-    return _h.toString();
-  };
-
-  return _hWrapper;
-})(function (h) {});
+var h = function h(h) {};
 
 // assignment to self
 var i = (function (_i) {
