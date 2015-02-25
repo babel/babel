@@ -19,7 +19,7 @@ var memberExpressionVisitor = {
     if (t.isMemberExpression(parent)) {
       var prop = parent.property;
       if (state.strictMode ||
-          typeof prop.value === 'number' ||
+          typeof prop.value === "number" ||
           t.isUnaryExpression(prop) ||
           t.isBinaryExpression(prop)) {
         state.candidates.push({ node: node, parent: parent });
@@ -37,22 +37,22 @@ function optimizeMemberExpression(node, parent, offset, strictMode) {
   var prop = parent.property;
 
   if (t.isLiteral(prop)) {
-    node.name = 'arguments';
+    node.name = "arguments";
     prop.value += offset;
     prop.raw = String(prop.value);
   } else if (t.isUnaryExpression(prop)) {
-    node.name = 'arguments';
-    newExpr = t.binaryExpression('+', prop, t.literal(offset));
+    node.name = "arguments";
+    newExpr = t.binaryExpression("+", prop, t.literal(offset));
     parent.property = newExpr;
   } else if (t.isBinaryExpression(prop)) {
-    node.name = 'arguments';
-    newExpr = t.binaryExpression('+', prop, t.literal(offset));
+    node.name = "arguments";
+    newExpr = t.binaryExpression("+", prop, t.literal(offset));
     parent.property = newExpr;
   }
 
-  if (strictMode && node.name !== 'arguments') {
-    node.name = 'arguments';
-    parent.property = t.binaryExpression('+', prop, t.literal(offset));
+  if (strictMode && node.name !== "arguments") {
+    node.name = "arguments";
+    parent.property = t.binaryExpression("+", prop, t.literal(offset));
   }
 }
 
