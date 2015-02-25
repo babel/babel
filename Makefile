@@ -60,7 +60,7 @@ test-cov:
 	export SIMPLE_BABEL_TESTS=1; \
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
-test-travis: build-core bootstrap
+test-travis: bootstrap build
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 	if test -n "$$CODECLIMATE_REPO_TOKEN"; then codeclimate < coverage/lcov.info; fi
 
