@@ -18,7 +18,8 @@ var memberExpressionVisitor = {
 
     if (t.isMemberExpression(parent)) {
       var prop = parent.property;
-      if (typeof prop.value === 'number' ||
+      if (state.strictMode ||
+          typeof prop.value === 'number' ||
           t.isUnaryExpression(prop) ||
           t.isBinaryExpression(prop)) {
         state.candidates.push({ node: node, parent: parent });
@@ -50,11 +51,17 @@ function optimizeMemberExpression(node, parent, offset) {
   }
 }
 
+function optimizeMemberExpressionStrict(node, parent, offset) {
+  var prop = parent.property;
+  node.name = 'arguments';
+  parent.property = t.binaryExpression('+', prop, t.literal(offset));
+}
+
 var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
 
-exports.Function = function (node, parent, scope) {
+exports.Function = function (node, parent, scope, file) {
   if (!hasRest(node)) return;
 
   var rest = node.params.pop().argument;
@@ -81,14 +88,16 @@ exports.Function = function (node, parent, scope) {
     name: rest.name,
     outerDeclar: restOuterDeclar,
     isOptimizable: true,
-    candidates: []
+    candidates: [],
+    strictMode: file.transformers.useStrict.canRun()
   };
   scope.traverse(node, memberExpressionVisitor, state);
 
   if (state.isOptimizable) {
+    var optimize = state.strictMode ? optimizeMemberExpressionStrict : optimizeMemberExpression;
     for (var i = 0, count = state.candidates.length; i < count; ++i) {
       var candidate = state.candidates[i];
-      optimizeMemberExpression(candidate.node, candidate.parent, node.params.length);
+      optimize(candidate.node, candidate.parent, node.params.length);
     }
     return;
   }
