@@ -48,6 +48,7 @@ var go = function (getBody, node, scope) {
     getArgumentsId() {
       return argumentsId ||= scope.generateUidIdentifier("arguments");
     },
+
     getThisId() {
       return thisId ||= scope.generateUidIdentifier("this");
     }
