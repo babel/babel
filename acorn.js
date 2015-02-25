@@ -2312,6 +2312,7 @@
         case "Identifier":
         case "VirtualPropertyExpression":
         case "MemberExpression":
+        case "SpreadProperty":
         case "ObjectPattern":
         case "ArrayPattern":
         case "AssignmentPattern":
@@ -2321,6 +2322,8 @@
           node.type = "ObjectPattern";
           for (var i = 0; i < node.properties.length; i++) {
             var prop = node.properties[i];
+            if (prop.type === "SpreadProperty") continue;
+            
             if (prop.kind !== "init") raise(prop.key.start, "Object pattern can't contain getter or setter");
             toAssignable(prop.value, isBinding);
           }
