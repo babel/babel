@@ -61,7 +61,7 @@
     "repeating": "^1.1.2",
     "shebang-regex": "^1.0.0",
     "slash": "^1.0.0",
-    "source-map": "^0.1.43",
+    "source-map": "^0.4.0",
     "source-map-support": "^0.2.9",
     "source-map-to-comment": "^1.0.0",
     "trim-right": "^1.0.0"
