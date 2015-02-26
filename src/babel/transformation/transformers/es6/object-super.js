@@ -1,5 +1,5 @@
-var ReplaceSupers = require("../../helpers/replace-supers");
-var t             = require("../../../types");
+import ReplaceSupers from "../../helpers/replace-supers";
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isIdentifier(node, { name: "super" });

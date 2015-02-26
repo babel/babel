@@ -1,8 +1,8 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.optional = true;
+export var optional = true;
 
-exports.UnaryExpression = function (node, parent, scope, file) {
+export function UnaryExpression(node, parent, scope, file) {
   this.skip();
 
   if (node.operator === "typeof") {

@@ -3,11 +3,11 @@
 
 // jsx
 
-var isString = require("lodash/lang/isString");
-var messages = require("../../messages");
-var esutils  = require("esutils");
-var react    = require("./react");
-var t        = require("../../types");
+import isString from "lodash/lang/isString";
+import * as messages from "../../messages";
+import esutils from "esutils";
+import react from "./react";
+import t from "../../types";
 
 module.exports = function (exports, opts) {
   exports.check = function (node) {

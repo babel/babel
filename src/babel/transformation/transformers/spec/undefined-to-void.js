@@ -1,9 +1,9 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.optional = true;
+export var optional = true;
 
-exports.Identifier = function (node, parent) {
+export function Identifier(node, parent) {
   if (node.name === "undefined" && t.isReferenced(node, parent)) {
     return t.unaryExpression("void", t.literal(0), true);
   }
-};
+}

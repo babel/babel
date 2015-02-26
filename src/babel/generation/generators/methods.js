@@ -1,12 +1,12 @@
-var t = require("../../types");
+import t from "../../types";
 
-exports._params = function (node, print) {
+export function _params(node, print) {
   this.push("(");
   print.list(node.params);
   this.push(")");
-};
+}
 
-exports._method = function (node, print) {
+export function _method(node, print) {
   var value = node.value;
   var kind  = node.kind;
   var key   = node.key;
@@ -32,7 +32,7 @@ exports._method = function (node, print) {
   this._params(value, print);
   this.push(" ");
   print(value.body);
-};
+}
 
 exports.FunctionDeclaration =
 exports.FunctionExpression = function (node, print) {
@@ -52,7 +52,7 @@ exports.FunctionExpression = function (node, print) {
   print(node.body);
 };
 
-exports.ArrowFunctionExpression = function (node, print) {
+export function ArrowFunctionExpression(node, print) {
   if (node.async) this.push("async ");
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
@@ -63,4 +63,4 @@ exports.ArrowFunctionExpression = function (node, print) {
 
   this.push(" => ");
   print(node.body);
-};
+}

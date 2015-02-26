@@ -1,6 +1,6 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.MemberExpression = function (node) {
+export function MemberExpression(node) {
   var prop = node.property;
   if (node.computed && t.isLiteral(prop) && t.isValidIdentifier(prop.value)) {
     // foo["bar"] => foo.bar
@@ -11,4 +11,4 @@ exports.MemberExpression = function (node) {
     node.property = t.literal(prop.name);
     node.computed = true;
   }
-};
+}

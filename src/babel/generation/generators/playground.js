@@ -1,4 +1,4 @@
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
 
 each(["BindMemberExpression", "BindFunctionExpression"], function (type) {
   exports[type] = function () {

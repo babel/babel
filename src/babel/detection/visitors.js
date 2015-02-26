@@ -1,19 +1,19 @@
-var t = require("../types");
-var includes = require("lodash/collection/includes");
+import includes from "lodash/collection/includes";
+import t from "../types";
 
-exports.AssignmentExpression = function (node, parent, detected) {
+export function AssignmentExpression(node, parent, detected) {
   if (node.operator === "**=") {
     detected("es6.exponentation");
   }
-};
+}
 
-exports.BinaryExpression = function (node, parent, detected) {
+export function BinaryExpression(node, parent, detected) {
   if (node.operator === "**") {
     detected("es6.exponentation");
   }
-};
+}
 
-exports.VariableDeclaration = function (node, parent, detected) {
+export function VariableDeclaration(node, parent, detected) {
   if (node.kind === "let" || node.kind === "const") {
     detected("es6.blockScoping");
   }
@@ -21,9 +21,9 @@ exports.VariableDeclaration = function (node, parent, detected) {
   if (node.kind === "const") {
     detected("es6.constants");
   }
-};
+}
 
-exports.Property = function (node, parent, detected) {
+export function Property(node, parent, detected) {
   if (node.shorthand || node.method) {
     detected("es6.properties.shorthand");
   }
@@ -35,15 +35,15 @@ exports.Property = function (node, parent, detected) {
   if (node.computed) {
     detected("es6.properties.computed");
   }
-};
+}
 
-exports.AssignmentPattern = function (node, parent, detected) {
+export function AssignmentPattern(node, parent, detected) {
   if (t.isFunction(parent) && includes(parent.params, node)) {
     detected("es6.parameters.default");
   }
-};
+}
 
-exports.Function = function (node, parent, detected) {
+export function Function(node, parent, detected) {
   if (node.generator) {
     detected("es6.generators");
   }
@@ -51,4 +51,4 @@ exports.Function = function (node, parent, detected) {
   if (node.async) {
     detected("es7.asyncFunctions");
   }
-};
+}

@@ -1,6 +1,6 @@
-var groupBy = require("lodash/collection/groupBy");
-var flatten = require("lodash/array/flatten");
-var values  = require("lodash/object/values");
+import groupBy from "lodash/collection/groupBy";
+import flatten from "lodash/array/flatten";
+import values from "lodash/object/values";
 
 // Priority:
 //

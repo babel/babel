@@ -1,66 +1,65 @@
-require("./patch");
+import "./patch";
 
-var cloneDeep = require("lodash/lang/cloneDeep");
-var isBoolean = require("lodash/lang/isBoolean");
-var contains  = require("lodash/collection/contains");
-var traverse  = require("./traversal");
-var isString  = require("lodash/lang/isString");
-var isRegExp  = require("lodash/lang/isRegExp");
-var isEmpty   = require("lodash/lang/isEmpty");
-var parse     = require("./helpers/parse");
-var debug     = require("debug/node");
-var path      = require("path");
-var util      = require("util");
-var each      = require("lodash/collection/each");
-var has       = require("lodash/object/has");
-var fs        = require("fs");
-var t         = require("./types");
+import buildDebug from "debug/node";
+import cloneDeep from "lodash/lang/cloneDeep";
+import isBoolean from "lodash/lang/isBoolean";
+import contains from "lodash/collection/contains";
+import traverse from "./traversal";
+import isString from "lodash/lang/isString";
+import isRegExp from "lodash/lang/isRegExp";
+import isEmpty from "lodash/lang/isEmpty";
+import parse from "./helpers/parse";
+import path from "path";
+import each from "lodash/collection/each";
+import has from "lodash/object/has";
+import fs from "fs";
+import t from "./types";
 
-exports.inherits = util.inherits;
+export { inherits } from "util";
 
-exports.debug = debug("babel");
+export var debug = buildDebug("babel");
 
-exports.canCompile = function (filename, altExts) {
+export function canCompile(filename, altExts) {
   var exts = altExts || exports.canCompile.EXTENSIONS;
   var ext = path.extname(filename);
   return contains(exts, ext);
-};
+}
 
-exports.canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
+canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
 
-exports.resolve = function (loc) {
+export function resolve(loc) {
   try {
     return require.resolve(loc);
   } catch (err) {
     return null;
   }
-};
+}
 
-exports.list = function (val) {
+export function list(val) {
   return val ? val.split(",") : [];
-};
+}
 
-exports.regexify = function (val) {
+export function regexify(val) {
   if (!val) return new RegExp(/.^/);
   if (Array.isArray(val)) val = val.join("|");
   if (isString(val)) return new RegExp(val);
   if (isRegExp(val)) return val;
   throw new TypeError("illegal type for regexify");
-};
+}
 
-exports.arrayify = function (val) {
+export function arrayify(val) {
   if (!val) return [];
   if (isBoolean(val)) return [val];
   if (isString(val)) return exports.list(val);
   if (Array.isArray(val)) return val;
   throw new TypeError("illegal type for arrayify");
-};
+}
 
-exports.booleanify = function (val) {
+export function booleanify(val) {
   if (val === "true") return true;
   if (val === "false") return false;
   return val;
-};
+}
 
 var templateVisitor = {
   enter(node, parent, scope, nodes) {
@@ -74,7 +73,7 @@ var templateVisitor = {
   }
 };
 
-exports.template = function (name, nodes, keepExpression) {
+export function template(name, nodes, keepExpression) {
   var template = exports.templates[name];
   if (!template) throw new ReferenceError("unknown template " + name);
 
@@ -98,14 +97,14 @@ exports.template = function (name, nodes, keepExpression) {
   } else {
     return node;
   }
-};
+}
 
-exports.parseTemplate = function (loc, code) {
+export function parseTemplate(loc, code) {
   var ast = parse({ filename: loc }, code).program;
   return traverse.removeProperties(ast);
-};
+}
 
-var loadTemplates = function () {
+function loadTemplates() {
   var templates = {};
 
   var templatesLoc = __dirname + "/transformation/templates";
@@ -122,11 +121,11 @@ var loadTemplates = function () {
     var loc  = templatesLoc + "/" + name;
     var code = fs.readFileSync(loc, "utf8");
 
-    templates[key] = exports.parseTemplate(loc, code);
+    templates[key] = parseTemplate(loc, code);
   });
 
   return templates;
-};
+}
 
 try {
   exports.templates = require("../../templates.json");

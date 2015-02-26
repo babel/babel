@@ -1,11 +1,10 @@
-var remapAsyncToGenerator = require("../../helpers/remap-async-to-generator");
-var bluebirdCoroutines    = require("./bluebird-coroutines");
+import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 
-exports.optional = true;
+export { manipulateOptions } from "./bluebird-coroutines";
 
-exports.manipulateOptions = bluebirdCoroutines.manipulateOptions;
+export var optional = true;
 
-exports.Function = function (node, parent, scope, file) {
+export function Function(node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
   return remapAsyncToGenerator(node, file.addHelper("async-to-generator"), scope);

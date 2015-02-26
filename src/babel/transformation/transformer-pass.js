@@ -1,4 +1,4 @@
-var includes = require("lodash/collection/includes");
+import includes from "lodash/collection/includes";
 
 /**
  * This class is responsible for traversing over the provided `File`s

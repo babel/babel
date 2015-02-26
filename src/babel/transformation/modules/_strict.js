@@ -1,6 +1,6 @@
-var util = require("../../util");
+import * as util from "../../util";
 
-module.exports = function (Parent) {
+export default function (Parent) {
   var Constructor = function () {
     this.noInteropRequireImport = true;
     this.noInteropRequireExport = true;

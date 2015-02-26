@@ -1,4 +1,4 @@
-var t = require("../../types");
+import t from "../../types";
 
 export default class IgnoreFormatter {
   exportDeclaration(node, nodes) {

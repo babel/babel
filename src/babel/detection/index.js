@@ -1,10 +1,9 @@
-module.exports = detect;
+import SYNTAX_KEYS from "./syntax-keys";
+import traverse from "../traversal";
 
-var SYNTAX_KEYS = require("./syntax-keys");
-var traverse    = require("../traversal");
-var visitors    = traverse.explode(require("./visitors"));
+var visitors  = traverse.explode(require("./visitors"));
 
-function detect(ast) {
+export default function (ast) {
   var stats = {
     syntax: {},
     builtins: {}
@@ -26,4 +25,4 @@ function detect(ast) {
   });
 
   return stats;
-}
+};

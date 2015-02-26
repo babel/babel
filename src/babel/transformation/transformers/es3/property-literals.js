@@ -1,6 +1,6 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.Property = function (node) {
+export function Property(node) {
   var key = node.key;
   if (t.isLiteral(key) && t.isValidIdentifier(key.value)) {
     // "foo": "bar" -> foo: "bar"
@@ -10,4 +10,4 @@ exports.Property = function (node) {
     // default: "bar" -> "default": "bar"
     node.key = t.literal(key.name);
   }
-};
+}

@@ -1,8 +1,8 @@
-var isInteger = require("is-integer");
-var isNumber  = require("lodash/lang/isNumber");
-var t         = require("../../types");
+import isInteger from "is-integer";
+import isNumber from "lodash/lang/isNumber";
+import t from "../../types";
 
-exports.UnaryExpression = function (node, print) {
+export function UnaryExpression(node, print) {
   var hasSpace = /[a-z]$/.test(node.operator);
   var arg = node.argument;
 
@@ -17,9 +17,9 @@ exports.UnaryExpression = function (node, print) {
   this.push(node.operator);
   if (hasSpace) this.push(" ");
   print(node.argument);
-};
+}
 
-exports.UpdateExpression = function (node, print) {
+export function UpdateExpression(node, print) {
   if (node.prefix) {
     this.push(node.operator);
     print(node.argument);
@@ -27,9 +27,9 @@ exports.UpdateExpression = function (node, print) {
     print(node.argument);
     this.push(node.operator);
   }
-};
+}
 
-exports.ConditionalExpression = function (node, print) {
+export function ConditionalExpression(node, print) {
   print(node.test);
   this.space();
   this.push("?");
@@ -39,25 +39,25 @@ exports.ConditionalExpression = function (node, print) {
   this.push(":");
   this.space();
   print(node.alternate);
-};
+}
 
-exports.NewExpression = function (node, print) {
+export function NewExpression(node, print) {
   this.push("new ");
   print(node.callee);
   this.push("(");
   print.list(node.arguments);
   this.push(")");
-};
+}
 
-exports.SequenceExpression = function (node, print) {
+export function SequenceExpression(node, print) {
   print.list(node.expressions);
-};
+}
 
-exports.ThisExpression = function () {
+export function ThisExpression() {
   this.push("this");
-};
+}
 
-exports.CallExpression = function (node, print) {
+export function CallExpression(node, print) {
   print(node.callee);
 
   this.push("(");
@@ -80,7 +80,7 @@ exports.CallExpression = function (node, print) {
   }
 
   this.push(")");
-};
+}
 
 var buildYieldAwait = function (keyword) {
   return function (node, print) {
@@ -97,17 +97,17 @@ var buildYieldAwait = function (keyword) {
   };
 };
 
-exports.YieldExpression = buildYieldAwait("yield");
-exports.AwaitExpression = buildYieldAwait("await");
+export var YieldExpression = buildYieldAwait("yield");
+export var AwaitExpression = buildYieldAwait("await");
 
-exports.EmptyStatement = function () {
+export function EmptyStatement() {
   this.semicolon();
-};
+}
 
-exports.ExpressionStatement = function (node, print) {
+export function ExpressionStatement(node, print) {
   print(node.expression);
   this.semicolon();
-};
+}
 
 exports.BinaryExpression =
 exports.LogicalExpression =
@@ -123,7 +123,7 @@ exports.AssignmentExpression = function (node, print) {
 
 var SCIENTIFIC_NOTATION = /e/i;
 
-exports.MemberExpression = function (node, print) {
+export function MemberExpression(node, print) {
   var obj = node.object;
   print(obj);
 
@@ -149,4 +149,4 @@ exports.MemberExpression = function (node, print) {
     this.push(".");
     print(node.property);
   }
-};
+}

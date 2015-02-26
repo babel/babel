@@ -1,4 +1,4 @@
-var useStrict = require("../../helpers/use-strict");
+import useStrict from "../../helpers/use-strict";
 
 exports.Program = function (program, parent, scope, file) {
   if (!file.transformers["es6.modules"].canRun()) return;

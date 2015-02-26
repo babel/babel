@@ -1,11 +1,11 @@
-var defineMap = require("../../helpers/define-map");
-var t         = require("../../../types");
+import defineMap from "../../helpers/define-map";
+import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isProperty(node) && (node.kind === "get" || node.kind === "set");
-};
+}
 
-exports.ObjectExpression = function (node) {
+export function ObjectExpression(node) {
   var mutatorMap = {};
   var hasAny = false;
 
@@ -25,4 +25,4 @@ exports.ObjectExpression = function (node) {
     t.memberExpression(t.identifier("Object"), t.identifier("defineProperties")),
     [node, defineMap.build(mutatorMap)]
   );
-};
+}

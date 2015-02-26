@@ -1,8 +1,8 @@
-var includes = require("lodash/collection/includes");
-var util     = require("../../../util");
-var core     = require("core-js/library");
-var has      = require("lodash/object/has");
-var t        = require("../../../types");
+import includes from "lodash/collection/includes";
+import * as util from  "../../../util";
+import core from "core-js/library";
+import has from "lodash/object/has";
+import t from "../../../types";
 
 var isSymboliterator = t.buildMatchMemberExpression("Symbol.iterator");
 
@@ -69,17 +69,17 @@ var astVisitor = {
   }
 };
 
-exports.optional = true;
+export var optional = true;
 
-exports.manipulateOptions = function (opts) {
+export function manipulateOptions(opts) {
   if (opts.whitelist.length) opts.whitelist.push("es6.modules");
-};
+}
 
-exports.Program = function (node, parent, scope, file) {
+export function Program(node, parent, scope, file) {
   scope.traverse(node, astVisitor, file);
-};
+}
 
-exports.pre = function (file) {
+export function pre(file) {
   file.setDynamic("helpersNamespace", function () {
     return file.addImport("babel-runtime/helpers", "babelHelpers");
   });
@@ -91,10 +91,10 @@ exports.pre = function (file) {
   file.setDynamic("regeneratorIdentifier", function () {
     return file.addImport("babel-runtime/regenerator", "regeneratorRuntime");
   });
-};
+}
 
-exports.Identifier = function (node, parent, scope, file) {
+export function Identifier(node, parent, scope, file) {
   if (t.isReferencedIdentifier(node, parent, { name: "regeneratorRuntime" })) {
     return file.get("regeneratorIdentifier");
   }
-};
+}

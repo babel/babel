@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   useStrict:                               require("./other/use-strict"),
 
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),

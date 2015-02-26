@@ -3,5 +3,5 @@ if (global._babelPolyfill) {
 }
 global._babelPolyfill = true;
 
-require("core-js/shim");
-require("regenerator-babel/runtime");
+import "core-js/shim";
+import "regenerator-babel/runtime";

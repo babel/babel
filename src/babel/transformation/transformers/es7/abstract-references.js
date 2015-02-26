@@ -1,7 +1,7 @@
 // https://github.com/zenparsing/es-abstract-refs
 
-var util = require("../../../util");
-var t    = require("../../../types");
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.experimental = true;
 

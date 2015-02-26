@@ -1,6 +1,6 @@
-var util = require("util");
+import * as util from  "util";
 
-exports.messages = {
+export var messages = {
   tailCallReassignmentDeopt: "Function reference has been reassigned so it's probably be dereferenced so we can't optimise this with confidence",
   JSXNamespacedTags: "Namespace tags are not supported. ReactJSX is not XML.",
   classesIllegalBareSuper: "Illegal use of bare super",
@@ -21,7 +21,7 @@ exports.messages = {
   codeGeneratorDeopt: "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2."
 };
 
-exports.get = function (key) {
+export function get(key) {
   var msg = exports.messages[key];
   if (!msg) throw new ReferenceError("Unknown message `" + key + "`");
 
@@ -34,9 +34,9 @@ exports.get = function (key) {
   return msg.replace(/\$(\d+)/g, function (str, i) {
     return args[--i];
   });
-};
+}
 
-exports.parseArgs = function (args) {
+export function parseArgs(args) {
   return args.map(function (val) {
     if (val != null && val.inspect) {
       return val.inspect();
@@ -48,4 +48,4 @@ exports.parseArgs = function (args) {
       }
     }
   });
-};
+}

@@ -1,13 +1,13 @@
-var includes = require("lodash/collection/includes");
-var traverse = require("./index");
-var defaults = require("lodash/object/defaults");
-var messages = require("../messages");
-var globals  = require("globals");
-var flatten  = require("lodash/array/flatten");
-var extend   = require("lodash/object/extend");
-var object   = require("../helpers/object");
-var each     = require("lodash/collection/each");
-var t        = require("../types");
+import includes from "lodash/collection/includes";
+import traverse from "./index";
+import defaults from "lodash/object/defaults";
+import * as messages from "../messages";
+import globals from "globals";
+import flatten from "lodash/array/flatten";
+import extend from "lodash/object/extend";
+import object from "../helpers/object";
+import each from "lodash/collection/each";
+import t from "../types";
 
 
 var functionVariableVisitor = {

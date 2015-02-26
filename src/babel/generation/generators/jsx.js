@@ -1,43 +1,43 @@
-var t    = require("../../types");
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
+import t from "../../types";
 
-exports.JSXAttribute = function (node, print) {
+export function JSXAttribute(node, print) {
   print(node.name);
   if (node.value) {
     this.push("=");
     print(node.value);
   }
-};
+}
 
-exports.JSXIdentifier = function (node) {
+export function JSXIdentifier(node) {
   this.push(node.name);
-};
+}
 
-exports.JSXNamespacedName = function (node, print) {
+export function JSXNamespacedName(node, print) {
   print(node.namespace);
   this.push(":");
   print(node.name);
-};
+}
 
-exports.JSXMemberExpression = function (node, print) {
+export function JSXMemberExpression(node, print) {
   print(node.object);
   this.push(".");
   print(node.property);
-};
+}
 
-exports.JSXSpreadAttribute = function (node, print) {
+export function JSXSpreadAttribute(node, print) {
   this.push("{...");
   print(node.argument);
   this.push("}");
-};
+}
 
-exports.JSXExpressionContainer = function (node, print) {
+export function JSXExpressionContainer(node, print) {
   this.push("{");
   print(node.expression);
   this.push("}");
-};
+}
 
-exports.JSXElement = function (node, print) {
+export function JSXElement(node, print) {
   var open = node.openingElement;
   print(open);
   if (open.selfClosing) return;
@@ -53,9 +53,9 @@ exports.JSXElement = function (node, print) {
   this.dedent();
 
   print(node.closingElement);
-};
+}
 
-exports.JSXOpeningElement = function (node, print) {
+export function JSXOpeningElement(node, print) {
   this.push("<");
   print(node.name);
   if (node.attributes.length > 0) {
@@ -63,12 +63,12 @@ exports.JSXOpeningElement = function (node, print) {
     print.join(node.attributes, { separator: " " });
   }
   this.push(node.selfClosing ? " />" : ">");
-};
+}
 
-exports.JSXClosingElement = function (node, print) {
+export function JSXClosingElement(node, print) {
   this.push("</");
   print(node.name);
   this.push(">");
-};
+}
 
-exports.JSXEmptyExpression = function () {};
+export function JSXEmptyExpression() {};

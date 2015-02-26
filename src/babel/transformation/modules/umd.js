@@ -1,7 +1,7 @@
-var AMDFormatter = require("./amd");
-var values       = require("lodash/object/values");
-var util         = require("../../util");
-var t            = require("../../types");
+import AMDFormatter from "./amd";
+import values from "lodash/object/values";
+import * as util from  "../../util";
+import t from "../../types";
 
 export default class UMDFormatter extends AMDFormatter {
   transform(program) {

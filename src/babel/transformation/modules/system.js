@@ -1,10 +1,10 @@
-var DefaultFormatter = require("./_default");
-var AMDFormatter     = require("./amd");
-var util             = require("../../util");
-var last             = require("lodash/array/last");
-var each             = require("lodash/collection/each");
-var map              = require("lodash/collection/map");
-var t                = require("../../types");
+import DefaultFormatter from "./_default";
+import AMDFormatter from "./amd";
+import * as util from  "../../util";
+import last from "lodash/array/last";
+import each from "lodash/collection/each";
+import map from "lodash/collection/map";
+import t from "../../types";
 
 var hoistVariablesVisitor = {
   enter(node, parent, scope, hoistDeclarators) {

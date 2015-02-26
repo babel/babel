@@ -1,10 +1,10 @@
-var levenshtein = require("leven");
-var messages    = require("../../../messages");
-var t           = require("../../../types");
+import levenshtein from "leven";
+import * as messages from "../../../messages";
+import t from "../../../types";
 
-exports.optional = true;
+export var optional = true;
 
-exports.Identifier = function (node, parent, scope, file) {
+export function Identifier(node, parent, scope, file) {
   if (!t.isReferenced(node, parent)) return;
   if (scope.hasBinding(node.name)) return;
 
@@ -35,4 +35,4 @@ exports.Identifier = function (node, parent, scope, file) {
   //
 
   throw file.errorWithNode(node, msg, ReferenceError);
-};
+}

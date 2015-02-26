@@ -1,4 +1,4 @@
-var t = require("../../types");
+import t from "../../types";
 
 var getObjRef = function (node, nodes, file, scope) {
   var ref;

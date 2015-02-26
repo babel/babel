@@ -1,5 +1,5 @@
-var clone = require("lodash/lang/clone");
-var t     = require("../../../types");
+import clone from "lodash/lang/clone";
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isProperty(node) && (node.method || node.shorthand);

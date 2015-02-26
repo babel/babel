@@ -1,13 +1,13 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.TypeCastExpression = function (node) {
+export function TypeCastExpression(node) {
   return node.expression;
-};
+}
 
-exports.ImportDeclaration = function (node) {
+export function ImportDeclaration(node) {
   if (node.isType) this.remove();
-};
+}
 
-exports.ExportDeclaration = function (node) {
+export function ExportDeclaration(node) {
   if (t.isTypeAlias(node.declaration)) this.remove();
-};
+}

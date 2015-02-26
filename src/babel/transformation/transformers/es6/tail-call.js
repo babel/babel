@@ -1,9 +1,9 @@
-var reduceRight = require("lodash/collection/reduceRight");
-var messages    = require("../../../messages");
-var flatten     = require("lodash/array/flatten");
-var util        = require("../../../util");
-var map         = require("lodash/collection/map");
-var t           = require("../../../types");
+import reduceRight from "lodash/collection/reduceRight";
+import * as messages from "../../../messages";
+import flatten from "lodash/array/flatten";
+import * as util from  "../../../util";
+import map from "lodash/collection/map";
+import t from "../../../types";
 
 exports.Function = function (node, parent, scope, file) {
   var tailCall = new TailCallTransformer(node, scope, file);

@@ -1,13 +1,12 @@
-require("../../polyfill");
-
-var sourceMapSupport = require("source-map-support");
-var registerCache    = require("./cache");
-var resolveRc        = require("./resolve-rc");
-var extend           = require("lodash/object/extend");
-var babel            = require("../node");
-var each             = require("lodash/collection/each");
-var util             = require("../../util");
-var fs               = require("fs");
+import "../../polyfill";
+import sourceMapSupport from "source-map-support";
+import * as registerCache from "./cache";
+import resolveRc from "./resolve-rc";
+import extend from "lodash/object/extend";
+import babel from "../node";
+import each from "lodash/collection/each";
+import * as util from  "../../util";
+import fs from "fs";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -139,7 +138,7 @@ var hookExtensions = function (_exts) {
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
-module.exports = function (opts) {
+export default function (opts) {
   // normalize options
   opts ||= {};
 

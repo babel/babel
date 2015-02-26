@@ -1,5 +1,5 @@
-var util = require("../../../util");
-var t    = require("../../../types");
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isFunction(node) && hasDefaults(node);

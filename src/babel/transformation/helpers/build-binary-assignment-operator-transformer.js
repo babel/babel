@@ -1,5 +1,5 @@
-var explode = require("./explode-assignable-expression");
-var t       = require("../../types");
+import explode from "./explode-assignable-expression";
+import t from "../../types";
 
 module.exports = function (exports, opts) {
   var isAssignment = function (node) {

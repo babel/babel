@@ -1,5 +1,5 @@
-var messages = require("../../../messages");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isVariableDeclaration(node, { kind: "const" });

@@ -1,7 +1,7 @@
-var buildComprehension = require("../../helpers/build-comprehension");
-var traverse           = require("../../../traversal");
-var util               = require("../../../util");
-var t                  = require("../../../types");
+import buildComprehension from "../../helpers/build-comprehension";
+import traverse from "../../../traversal";
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.experimental = true;
 

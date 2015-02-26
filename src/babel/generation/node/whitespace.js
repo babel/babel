@@ -1,7 +1,7 @@
-var isBoolean = require("lodash/lang/isBoolean");
-var each      = require("lodash/collection/each");
-var map       = require("lodash/collection/map");
-var t         = require("../../types");
+import isBoolean from "lodash/lang/isBoolean";
+import each from "lodash/collection/each";
+import map from "lodash/collection/map";
+import t from "../../types";
 
 var crawl = function (node, state) {
   state ||= {};

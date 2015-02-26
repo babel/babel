@@ -1,9 +1,9 @@
-var traverse = require("../../../traversal");
-var object   = require("../../../helpers/object");
-var util     = require("../../../util");
-var t        = require("../../../types");
-var values   = require("lodash/object/values");
-var extend   = require("lodash/object/extend");
+import traverse from "../../../traversal";
+import object from "../../../helpers/object";
+import * as util from  "../../../util";
+import t from "../../../types";
+import values from "lodash/object/values";
+import extend from "lodash/object/extend";
 
 exports.check = function (node) {
   return t.isVariableDeclaration(node) && (node.kind === "let" || node.kind === "const");

@@ -1,24 +1,24 @@
-var messages = require("../../../messages");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import t from "../../../types";
 
-exports.Program = function (program) {
+export function Program(program) {
   var first = program.body[0];
   if (t.isExpressionStatement(first) && t.isLiteral(first.expression, { value: "use strict" })) {
     program.body.shift();
   }
-};
+}
 
 exports.FunctionDeclaration =
 exports.FunctionExpression = function () {
   this.skip();
 };
 
-exports.ThisExpression = function () {
+export function ThisExpression() {
   return t.identifier("undefined");
-};
+}
 
-exports.CallExpression = function (node, parent, scope, file) {
+export function CallExpression(node, parent, scope, file) {
   if (t.isIdentifier(node.callee, { name: "eval" })) {
     throw file.errorWithNode(node, messages.get("evalInStrictMode"));
   }
-};
+}

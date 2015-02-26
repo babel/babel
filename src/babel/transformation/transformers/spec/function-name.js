@@ -1,3 +1,1 @@
-var nameMethod = require("../../helpers/name-method");
-
-exports.FunctionExpression = nameMethod.bare;
+export { bare as FunctionExpression } from "../../helpers/name-method";

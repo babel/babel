@@ -1,9 +1,9 @@
-var TransformerPass = require("./transformer-pass");
-var isFunction      = require("lodash/lang/isFunction");
-var traverse        = require("../traversal");
-var isObject        = require("lodash/lang/isObject");
-var assign          = require("lodash/object/assign");
-var each            = require("lodash/collection/each");
+import TransformerPass from "./transformer-pass";
+import isFunction from "lodash/lang/isFunction";
+import traverse from "../traversal";
+import isObject from "lodash/lang/isObject";
+import assign from "lodash/object/assign";
+import each from "lodash/collection/each";
 
 /**
  * This is the class responsible for normalising a transformers handlers

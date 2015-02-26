@@ -1,9 +1,9 @@
-//var t = require("../../../types");
+//import t from "../../../types";
 
-exports.optional = true;
+export var optional = true;
 
-exports.Scopable = function () {
+export function Scopable() {
   //for (var name in scope.bindings) {
   //  scope.rename(name, scope.generateUidIdentifier("a").name);
   //}
-};
+}

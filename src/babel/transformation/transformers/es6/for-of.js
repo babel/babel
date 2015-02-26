@@ -1,6 +1,6 @@
-var messages = require("../../../messages");
-var util     = require("../../../util");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.check = t.isForOfStatement;
 

@@ -1,32 +1,25 @@
-var isFunction = require("lodash/lang/isFunction");
-var transform  = require("../transformation");
-var util       = require("../util");
-var fs         = require("fs");
+import isFunction from "lodash/lang/isFunction";
+import fs from "fs";
 
-exports.version = require("../../../package").version;
+export { default as _util, canCompile } from "../util";
+export { default as transform } from "../transformation";
 
-exports.buildExternalHelpers = require("../build-external-helpers");
+export { version } from "../../../package";
 
-exports.types = require("../types");
+export { default as buildExternalHelpers } from "../build-external-helpers";
+export { default as types } from "../types";
 
-exports.register = function (opts) {
+export function register(opts) {
   var register = require("./register/node");
   if (opts != null) register(opts);
   return register;
-};
+}
 
-exports.polyfill = function () {
+export function polyfill() {
   require("../polyfill");
-};
+}
 
-exports.canCompile = util.canCompile;
-
-// do not use this - this is for use by official maintained babel plugins
-exports._util = util;
-
-exports.transform = transform;
-
-exports.transformFile = function (filename, opts, callback) {
+export function transformFile(filename, opts, callback) {
   if (isFunction(opts)) {
     callback = opts;
     opts = {};
@@ -47,10 +40,10 @@ exports.transformFile = function (filename, opts, callback) {
 
     callback(null, result);
   });
-};
+}
 
-exports.transformFileSync = function (filename, opts) {
+export function transformFileSync(filename, opts) {
   opts ||= {};
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
-};
+}

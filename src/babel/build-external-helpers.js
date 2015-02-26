@@ -1,9 +1,9 @@
-var buildHelpers = require("./build-helpers");
-var generator    = require("./generation");
-var util         = require("./util");
-var t            = require("./types");
+import buildHelpers from "./build-helpers";
+import generator from "./generation";
+import * as util from  "./util";
+import t from "./types";
 
-module.exports = function (whitelist) {
+export default function (whitelist) {
   var namespace = t.identifier("babelHelpers");
 
   var body      = [];

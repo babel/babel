@@ -1,27 +1,27 @@
-var t    = require("../../types");
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
+import t from "../../types";
 
-exports.ImportSpecifier = function (node, print) {
+export function ImportSpecifier(node, print) {
   if (t.isSpecifierDefault(node)) {
     print(t.getSpecifierName(node));
   } else {
     return exports.ExportSpecifier.apply(this, arguments);
   }
-};
+}
 
-exports.ExportSpecifier = function (node, print) {
+export function ExportSpecifier(node, print) {
   print(node.id);
   if (node.name) {
     this.push(" as ");
     print(node.name);
   }
-};
+}
 
-exports.ExportBatchSpecifier = function () {
+export function ExportBatchSpecifier() {
   this.push("*");
-};
+}
 
-exports.ExportDeclaration = function (node, print) {
+export function ExportDeclaration(node, print) {
   this.push("export ");
 
   var specifiers = node.specifiers;
@@ -53,9 +53,9 @@ exports.ExportDeclaration = function (node, print) {
   }
 
   this.ensureSemicolon();
-};
+}
 
-exports.ImportDeclaration = function (node, print) {
+export function ImportDeclaration(node, print) {
   this.push("import ");
 
   if (node.isType) {
@@ -90,9 +90,9 @@ exports.ImportDeclaration = function (node, print) {
 
   print(node.source);
   this.semicolon();
-};
+}
 
-exports.ImportBatchSpecifier = function (node, print) {
+export function ImportBatchSpecifier(node, print) {
   this.push("* as ");
   print(node.name);
-};
+}

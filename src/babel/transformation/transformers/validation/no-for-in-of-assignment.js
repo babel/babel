@@ -1,7 +1,7 @@
-var messages = require("../../../messages");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import t from "../../../types";
 
-exports.check = t.isFor;
+export { isFor as check } from "../../../types";
 
 exports.ForInStatement =
 exports.ForOfStatement = function (node, parent, scope, file) {

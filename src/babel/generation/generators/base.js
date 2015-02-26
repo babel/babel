@@ -1,12 +1,12 @@
-exports.File = function (node, print) {
+export function File(node, print) {
   print(node.program);
-};
+}
 
-exports.Program = function (node, print) {
+export function Program(node, print) {
   print.sequence(node.body);
-};
+}
 
-exports.BlockStatement = function (node, print) {
+export function BlockStatement(node, print) {
   if (node.body.length === 0) {
     this.push("{}");
   } else {
@@ -16,4 +16,4 @@ exports.BlockStatement = function (node, print) {
     this.removeLast("\n");
     this.rightBrace();
   }
-};
+}

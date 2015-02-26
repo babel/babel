@@ -1,22 +1,22 @@
-var path = require("path");
-var os   = require("os");
-var fs   = require("fs");
+import path from "path";
+import os from "os";
+import fs from "fs";
 
 var FILENAME = process.env.BABEL_CACHE_PATH || path.join(os.tmpdir(), "babel.json");
 var data = {};
 
-exports.save = function () {
+export function save() {
   fs.writeFileSync(FILENAME, JSON.stringify(data, null, "  "));
-};
+}
 
-exports.load = function () {
+export function load() {
   if (process.env.BABEL_DISABLE_CACHE) return;
 
-  process.on("exit", exports.save);
+  process.on("exit", save);
 
   var sigint = function () {
     process.removeListener("SIGINT", sigint);
-    exports.save();
+    save();
     process.kill(process.pid, "SIGINT");
   };
 
@@ -29,8 +29,8 @@ exports.load = function () {
   } catch (err) {
     return;
   }
-};
+}
 
-exports.get = function () {
+export function get() {
   return data;
-};
+}

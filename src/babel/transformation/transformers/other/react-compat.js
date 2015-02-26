@@ -1,11 +1,11 @@
-var react = require("../../helpers/react");
-var t     = require("../../../types");
+import react from "../../helpers/react";
+import t from "../../../types";
 
-exports.manipulateOptions = function (opts) {
+export function manipulateOptions(opts) {
   opts.blacklist.push("react");
-};
+}
 
-exports.optional = true;
+export var optional = true;
 
 require("../../helpers/build-react-transformer")(exports, {
   pre(state) {

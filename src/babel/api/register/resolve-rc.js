@@ -1,6 +1,6 @@
-var merge = require("lodash/object/merge");
-var path  = require("path");
-var fs    = require("fs");
+import merge from "lodash/object/merge";
+import path from "path";
+import fs from "fs";
 
 var cache = {};
 
@@ -10,9 +10,8 @@ function exists(filename) {
   return cache[filename] = fs.existsSync(filename);
 }
 
-module.exports = function (loc, opts) {
+export default function (loc, opts = {}) {
   var rel = ".babelrc";
-  opts ||= {};
 
   function find(start, rel) {
     var file = path.join(start, rel);

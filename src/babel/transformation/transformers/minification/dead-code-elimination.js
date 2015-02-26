@@ -1,8 +1,8 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.optional = true;
+export var optional = true;
 
-exports.ExpressionStatement = function (node) {
+export function ExpressionStatement(node) {
   // remove consequence-less expressions such as local variables and literals
   // note: will remove directives
   //
@@ -14,9 +14,9 @@ exports.ExpressionStatement = function (node) {
   if (t.isLiteral(expr) || (t.isIdentifier(node) && t.hasBinding(node.name))) {
     this.remove();
   }
-};
+}
 
-exports.IfStatement = {
+export var IfStatement = {
   exit(node) {
     // todo: in scenarios where we can just return the consequent or
     // alternate we should drop the block statement if it contains no

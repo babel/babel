@@ -1,7 +1,7 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.Program = function (program, parent, scope, file) {
+export function Program(program, parent, scope, file) {
   if (file.transformers.useStrict.canRun()) {
     program.body.unshift(t.expressionStatement(t.literal("use strict")));
   }
-};
+}

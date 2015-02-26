@@ -1,8 +1,8 @@
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
 
-exports.Identifier = function (node) {
+export function Identifier(node) {
   this.push(node.name);
-};
+}
 
 exports.RestElement =
 exports.SpreadElement =
@@ -11,11 +11,11 @@ exports.SpreadProperty = function (node, print) {
   print(node.argument);
 };
 
-exports.VirtualPropertyExpression = function (node, print) {
+export function VirtualPropertyExpression(node, print) {
   print(node.object);
   this.push("::");
   print(node.property);
-};
+}
 
 exports.ObjectExpression =
 exports.ObjectPattern = function (node, print) {
@@ -34,7 +34,7 @@ exports.ObjectPattern = function (node, print) {
   }
 };
 
-exports.Property = function (node, print) {
+export function Property(node, print) {
   if (node.method || node.kind === "get" || node.kind === "set") {
     this._method(node, print);
   } else {
@@ -51,7 +51,7 @@ exports.Property = function (node, print) {
     this.space();
     print(node.value);
   }
-};
+}
 
 exports.ArrayExpression =
 exports.ArrayPattern = function (node, print) {
@@ -78,7 +78,7 @@ exports.ArrayPattern = function (node, print) {
   this.push("]");
 };
 
-exports.Literal = function (node) {
+export function Literal(node) {
   var val  = node.value;
   var type = typeof val;
 
@@ -100,4 +100,4 @@ exports.Literal = function (node) {
   } else if (val === null) {
     this.push("null");
   }
-};
+}

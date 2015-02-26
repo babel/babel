@@ -1,4 +1,4 @@
-var t = require("../../../types");
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isProperty(node) && node.computed;

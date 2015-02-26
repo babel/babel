@@ -4,23 +4,21 @@
 // a generator function as a default then regenerator will destroy the export
 // declaration and leave a variable declaration in it's place... yeah, handy.
 
-var t = require("../../../types");
+import t from "../../../types";
 
-var resolveModuleSource = function (node, parent, scope, file) {
+export function check(node) {
+  return t.isImportDeclaration(node) || t.isExportDeclaration(node);
+}
+
+export function ImportDeclaration(node, parent, scope, file) {
   var resolveModuleSource = file.opts.resolveModuleSource;
   if (node.source && resolveModuleSource) {
     node.source.value = resolveModuleSource(node.source.value);
   }
-};
+}
 
-exports.check = function (node) {
-  return t.isImportDeclaration(node) || t.isExportDeclaration(node);
-};
-
-exports.ImportDeclaration = resolveModuleSource;
-
-exports.ExportDeclaration = function (node, parent, scope) {
-  resolveModuleSource.apply(null, arguments);
+export function ExportDeclaration(node, parent, scope) {
+  ImportDeclaration.apply(this, arguments);
 
   // flow type
   if (node.isType) return;

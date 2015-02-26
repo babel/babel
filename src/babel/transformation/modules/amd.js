@@ -1,9 +1,9 @@
-var DefaultFormatter = require("./_default");
-var CommonFormatter  = require("./common");
-var includes         = require("lodash/collection/includes");
-var values           = require("lodash/object/values");
-var util             = require("../../util");
-var t                = require("../../types");
+import DefaultFormatter from "./_default";
+import CommonFormatter from "./common";
+import includes from "lodash/collection/includes";
+import values from "lodash/object/values";
+import * as util from  "../../util";
+import t from "../../types";
 
 export default class AMDFormatter extends DefaultFormatter {
   init = CommonFormatter.prototype.init;

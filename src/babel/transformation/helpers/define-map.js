@@ -1,9 +1,9 @@
-var cloneDeep = require("lodash/lang/cloneDeep");
-var traverse  = require("../../traversal");
-var clone     = require("lodash/lang/clone");
-var each      = require("lodash/collection/each");
-var has       = require("lodash/object/has");
-var t         = require("../../types");
+import cloneDeep from "lodash/lang/cloneDeep";
+import traverse from "../../traversal";
+import clone from "lodash/lang/clone";
+import each from "lodash/collection/each";
+import has from "lodash/object/has";
+import t from "../../types";
 
 exports.push = function (mutatorMap, key, kind, computed, value) {
   var alias;

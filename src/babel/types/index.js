@@ -1,12 +1,13 @@
-var toFastProperties = require("../helpers/to-fast-properties");
-var isString         = require("lodash/lang/isString");
-var compact          = require("lodash/array/compact");
-var esutils          = require("esutils");
-var object           = require("../helpers/object");
-var each             = require("lodash/collection/each");
-var uniq             = require("lodash/array/uniq");
+import toFastProperties from "../helpers/to-fast-properties";
+import isString from "lodash/lang/isString";
+import compact from "lodash/array/compact";
+import esutils from "esutils";
+import object from "../helpers/object";
+import each from "lodash/collection/each";
+import uniq from "lodash/array/uniq";
 
-var t = exports;
+var t = {};
+export default t;
 
 /**
  * Registers `is[Type]` and `assert[Type]` generated functions for a given `type`.
@@ -518,7 +519,7 @@ t.toStatement = function (node, ignore) {
  * @returns {Object}
  */
 
-exports.toExpression = function (node) {
+t.toExpression = function (node) {
   if (t.isExpressionStatement(node)) {
     node = node.expression;
   }
@@ -534,7 +535,7 @@ exports.toExpression = function (node) {
   } else {
     throw new Error("cannot turn " + node.type + " to an expression");
   }
-};
+}
 
 /**
  * Description

@@ -1,15 +1,15 @@
-var repeating = require("repeating");
-var t         = require("../../types");
+import repeating from "repeating";
+import t from "../../types";
 
-exports.WithStatement = function (node, print) {
+export function WithStatement(node, print) {
   this.keyword("with");
   this.push("(");
   print(node.object);
   this.push(")");
   print.block(node.body);
-};
+}
 
-exports.IfStatement = function (node, print) {
+export function IfStatement(node, print) {
   this.keyword("if");
   this.push("(");
   print(node.test);
@@ -23,9 +23,9 @@ exports.IfStatement = function (node, print) {
     this.push("else ");
     print.indentOnComments(node.alternate);
   }
-};
+}
 
-exports.ForStatement = function (node, print) {
+export function ForStatement(node, print) {
   this.keyword("for");
   this.push("(");
 
@@ -45,15 +45,15 @@ exports.ForStatement = function (node, print) {
 
   this.push(")");
   print.block(node.body);
-};
+}
 
-exports.WhileStatement = function (node, print) {
+export function WhileStatement(node, print) {
   this.keyword("while");
   this.push("(");
   print(node.test);
   this.push(")");
   print.block(node.body);
-};
+}
 
 var buildForXStatement = function (op) {
   return function (node, print) {
@@ -67,10 +67,10 @@ var buildForXStatement = function (op) {
   };
 };
 
-exports.ForInStatement = buildForXStatement("in");
-exports.ForOfStatement = buildForXStatement("of");
+export var ForInStatement = buildForXStatement("in");
+export var ForOfStatement = buildForXStatement("of");
 
-exports.DoWhileStatement = function (node, print) {
+export function DoWhileStatement(node, print) {
   this.keyword("do");
   print(node.body);
   this.space();
@@ -78,7 +78,7 @@ exports.DoWhileStatement = function (node, print) {
   this.push("(");
   print(node.test);
   this.push(");");
-};
+}
 
 var buildLabelStatement = function (prefix, key) {
   return function (node, print) {
@@ -94,17 +94,17 @@ var buildLabelStatement = function (prefix, key) {
   };
 };
 
-exports.ContinueStatement = buildLabelStatement("continue");
-exports.ReturnStatement   = buildLabelStatement("return", "argument");
-exports.BreakStatement    = buildLabelStatement("break");
+export var ContinueStatement = buildLabelStatement("continue");
+export var ReturnStatement   = buildLabelStatement("return", "argument");
+export var BreakStatement    = buildLabelStatement("break");
 
-exports.LabeledStatement = function (node, print) {
+export function LabeledStatement(node, print) {
   print(node.label);
   this.push(": ");
   print(node.body);
-};
+}
 
-exports.TryStatement = function (node, print) {
+export function TryStatement(node, print) {
   this.keyword("try");
   print(node.block);
   this.space();
@@ -123,23 +123,23 @@ exports.TryStatement = function (node, print) {
     this.push("finally ");
     print(node.finalizer);
   }
-};
+}
 
-exports.CatchClause = function (node, print) {
+export function CatchClause(node, print) {
   this.keyword("catch");
   this.push("(");
   print(node.param);
   this.push(") ");
   print(node.body);
-};
+}
 
-exports.ThrowStatement = function (node, print) {
+export function ThrowStatement(node, print) {
   this.push("throw ");
   print(node.argument);
   this.semicolon();
-};
+}
 
-exports.SwitchStatement = function (node, print) {
+export function SwitchStatement(node, print) {
   this.keyword("switch");
   this.push("(");
   print(node.discriminant);
@@ -155,9 +155,9 @@ exports.SwitchStatement = function (node, print) {
   });
 
   this.push("}");
-};
+}
 
-exports.SwitchCase = function (node, print) {
+export function SwitchCase(node, print) {
   if (node.test) {
     this.push("case ");
     print(node.test);
@@ -170,13 +170,13 @@ exports.SwitchCase = function (node, print) {
     this.newline();
     print.sequence(node.consequent, { indent: true });
   }
-};
+}
 
-exports.DebuggerStatement = function () {
+export function DebuggerStatement() {
   this.push("debugger;");
-};
+}
 
-exports.VariableDeclaration = function (node, print, parent) {
+export function VariableDeclaration(node, print, parent) {
   this.push(node.kind + " ");
 
   var hasInits = false;
@@ -202,15 +202,15 @@ exports.VariableDeclaration = function (node, print, parent) {
   if (!t.isFor(parent)) {
     this.semicolon();
   }
-};
+}
 
-exports.PrivateDeclaration = function (node, print) {
+export function PrivateDeclaration(node, print) {
   this.push("private ");
   print.join(node.declarations, { separator: ", " });
   this.semicolon();
-};
+}
 
-exports.VariableDeclarator = function (node, print) {
+export function VariableDeclarator(node, print) {
   if (node.init) {
     print(node.id);
     this.space();
@@ -220,4 +220,4 @@ exports.VariableDeclarator = function (node, print) {
   } else {
     print(node.id);
   }
-};
+}

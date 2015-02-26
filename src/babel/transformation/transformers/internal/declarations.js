@@ -1,5 +1,5 @@
-var useStrict = require("../../helpers/use-strict");
-var t         = require("../../../types");
+import useStrict from "../../helpers/use-strict";
+import t from "../../../types";
 
 exports.secondPass = true;
 

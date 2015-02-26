@@ -1,4 +1,4 @@
-var t = require("../../../types");
+import t from "../../../types";
 
 var buildBinaryExpression = function (left, right) {
   return t.binaryExpression("+", left, right);

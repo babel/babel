@@ -1,6 +1,6 @@
 // https://github.com/sebmarkbage/ecmascript-rest-spread
 
-var t = require("../../../types");
+import t from "../../../types";
 
 exports.experimental = true;
 

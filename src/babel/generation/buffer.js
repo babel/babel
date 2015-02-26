@@ -1,8 +1,8 @@
-var repeating = require("repeating");
-var trimRight = require("trim-right");
-var isBoolean = require("lodash/lang/isBoolean");
-var includes  = require("lodash/collection/includes");
-var isNumber  = require("lodash/lang/isNumber");
+import repeating from "repeating";
+import trimRight from "trim-right";
+import isBoolean from "lodash/lang/isBoolean";
+import includes from "lodash/collection/includes";
+import isNumber from "lodash/lang/isNumber";
 
 export default class Buffer {
   constructor(position, format) {

@@ -1,6 +1,6 @@
-var getFunctionArity = require("./get-function-arity");
-var util             = require("../../util");
-var t                = require("../../types");
+import getFunctionArity from "./get-function-arity";
+import * as util from  "../../util";
+import t from "../../types";
 
 var visitor = {
   enter(node, parent, scope, state) {

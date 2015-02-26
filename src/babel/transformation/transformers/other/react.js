@@ -1,9 +1,9 @@
-var react = require("../../helpers/react");
-var t     = require("../../../types");
+import react from "../../helpers/react";
+import t from "../../../types";
 
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
-exports.Program = function (node, parent, scope, file) {
+export function Program(node, parent, scope, file) {
   var id = "React.createElement";
 
   for (var i = 0; i < file.ast.comments.length; i++) {
@@ -22,7 +22,7 @@ exports.Program = function (node, parent, scope, file) {
   file.set("jsxIdentifier", id.split(".").map(t.identifier).reduce(function (object, property) {
     return t.memberExpression(object, property);
   }));
-};
+}
 
 require("../../helpers/build-react-transformer")(exports, {
   pre(state) {

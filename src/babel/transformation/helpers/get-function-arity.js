@@ -1,4 +1,4 @@
-var t = require("../../types");
+import t from "../../types";
 
 module.exports = function (node) {
   var lastNonDefault = 0;

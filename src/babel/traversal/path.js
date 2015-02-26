@@ -1,7 +1,7 @@
-var traverse = require("./index");
-var includes = require("lodash/collection/includes");
-var Scope    = require("./scope");
-var t        = require("../types");
+import traverse from "./index";
+import includes from "lodash/collection/includes";
+import Scope from "./scope";
+import t from "../types";
 
 export default class TraversalPath {
   constructor(context, parent, container, key) {

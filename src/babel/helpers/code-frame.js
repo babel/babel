@@ -1,9 +1,9 @@
-var lineNumbers = require("line-numbers");
-var repeating   = require("repeating");
-var jsTokens    = require("js-tokens");
-var esutils     = require("esutils");
-var chalk       = require("chalk");
-var ary         = require("lodash/function/ary");
+import lineNumbers from "line-numbers";
+import repeating from "repeating";
+import jsTokens from "js-tokens";
+import esutils from "esutils";
+import chalk from "chalk";
+import ary from "lodash/function/ary";
 
 var defs = {
   string:      chalk.red,

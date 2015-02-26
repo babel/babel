@@ -1,5 +1,5 @@
-var includes = require("lodash/collection/includes");
-var t        = require("../../../types");
+import includes from "lodash/collection/includes";
+import t from "../../../types";
 
 exports.check = t.isSpreadElement;
 

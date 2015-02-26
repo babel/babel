@@ -1,12 +1,10 @@
-module.exports = transform;
+import normalizeAst from "../helpers/normalize-ast";
+import Transformer from "./transformer";
+import object from "../helpers/object";
+import File from "./file";
+import each from "lodash/collection/each";
 
-var normalizeAst = require("../helpers/normalize-ast");
-var Transformer  = require("./transformer");
-var object       = require("../helpers/object");
-var File         = require("./file");
-var each         = require("lodash/collection/each");
-
-function transform(code, opts) {
+export default function transform(code, opts) {
   var file = new File(opts);
   return file.parse(code);
 }
@@ -53,7 +51,7 @@ transform.namespaces            = object();
 transform.deprecatedTransformerMap = require("./transformers/deprecated");
 transform.moduleFormatters = require("./modules");
 
-var rawTransformers = require("./transformers");
+import rawTransformers from "./transformers";
 
 each(rawTransformers, function (transformer, key) {
   var namespace = key.split(".")[0];

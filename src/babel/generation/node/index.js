@@ -1,8 +1,8 @@
-var whitespace = require("./whitespace");
-var parens     = require("./parentheses");
-var each       = require("lodash/collection/each");
-var some       = require("lodash/collection/some");
-var t          = require("../../types");
+import whitespace from "./whitespace";
+import * as parens from "./parentheses";
+import each from "lodash/collection/each";
+import some from "lodash/collection/some";
+import t from "../../types";
 
 var find = function (obj, node, parent) {
   if (!obj) return;

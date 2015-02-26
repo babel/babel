@@ -1,6 +1,6 @@
-var rewritePattern = require("regexpu/rewrite-pattern");
-var pull           = require("lodash/array/pull");
-var t              = require("../../../types");
+import rewritePattern from "regexpu/rewrite-pattern";
+import pull from "lodash/array/pull";
+import t from "../../../types";
 
 exports.check = function (node) {
   return t.isLiteral(node) && node.regex && node.regex.flags.indexOf("u") >= 0;

@@ -1,4 +1,4 @@
-exports.ComprehensionBlock = function (node, print) {
+export function ComprehensionBlock(node, print) {
   this.keyword("for");
   this.push("(");
   print(node.left);
@@ -7,7 +7,7 @@ exports.ComprehensionBlock = function (node, print) {
   this.push(")");
 };
 
-exports.ComprehensionExpression = function (node, print) {
+export function ComprehensionExpression(node, print) {
   this.push(node.generator ? "(" : "[");
 
   print.join(node.blocks, { separator: " " });

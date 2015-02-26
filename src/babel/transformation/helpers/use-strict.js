@@ -1,4 +1,4 @@
-var t = require("../../types");
+import t from "../../types";
 
 exports.has = function (node) {
   var first = node.body[0];

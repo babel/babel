@@ -2,8 +2,8 @@
 
 exports.experimental = true;
 
-var build = require("../../helpers/build-binary-assignment-operator-transformer");
-var t     = require("../../../types");
+import build from "../../helpers/build-binary-assignment-operator-transformer";
+import t from "../../../types";
 
 var MATH_POW = t.memberExpression(t.identifier("Math"), t.identifier("pow"));
 

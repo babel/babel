@@ -1,14 +1,14 @@
-var extend = require("lodash/object/extend");
-var t      = require("./types");
+import estraverse from "estraverse";
+import extend from "lodash/object/extend";
+import types from "ast-types";
+import t from "./types";
 
 // estraverse
 
-var estraverse = require("estraverse");
 extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
 // regenerator-babel/ast-types
 
-var types = require("ast-types");
 var def   = types.Type.def;
 var or    = types.Type.or;
 

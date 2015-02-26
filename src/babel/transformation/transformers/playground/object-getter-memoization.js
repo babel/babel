@@ -1,6 +1,6 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.playground = true;
+export var playground = true;
 
 var visitor = {
   enter(node, parent, scope, state) {

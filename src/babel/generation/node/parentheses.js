@@ -1,5 +1,5 @@
-var t    = require("../../types");
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
+import t from "../../types";
 
 var PRECEDENCE = {};
 
@@ -21,14 +21,14 @@ each([
   });
 });
 
-exports.UpdateExpression = function (node, parent) {
+export function UpdateExpression(node, parent) {
   if (t.isMemberExpression(parent) && parent.object === node) {
     // (foo++).test()
     return true;
   }
-};
+}
 
-exports.ObjectExpression = function (node, parent) {
+export function ObjectExpression(node, parent) {
   if (t.isExpressionStatement(parent)) {
     // ({ foo: "bar" });
     return true;
@@ -40,9 +40,9 @@ exports.ObjectExpression = function (node, parent) {
   }
 
   return false;
-};
+}
 
-exports.Binary = function (node, parent) {
+export function Binary(node, parent) {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;
   }
@@ -70,9 +70,9 @@ exports.Binary = function (node, parent) {
       return true;
     }
   }
-};
+}
 
-exports.BinaryExpression = function (node, parent) {
+export function BinaryExpression(node, parent) {
   if (node.operator === "in") {
     // var i = (1 in []);
     if (t.isVariableDeclarator(parent)) {
@@ -84,9 +84,9 @@ exports.BinaryExpression = function (node, parent) {
       return true;
     }
   }
-};
+}
 
-exports.SequenceExpression = function (node, parent) {
+export function SequenceExpression(node, parent) {
   if (t.isForStatement(parent)) {
     // Although parentheses wouldn't hurt around sequence
     // expressions in the head of for loops, traditional style
@@ -102,9 +102,9 @@ exports.SequenceExpression = function (node, parent) {
   // Otherwise err on the side of overparenthesization, adding
   // explicit exceptions above if this proves overzealous.
   return true;
-};
+}
 
-exports.YieldExpression = function (node, parent) {
+export function YieldExpression(node, parent) {
   return t.isBinary(parent) ||
          t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
@@ -112,17 +112,17 @@ exports.YieldExpression = function (node, parent) {
          t.isNewExpression(parent) ||
          t.isConditionalExpression(parent) ||
          t.isYieldExpression(parent);
-};
+}
 
-exports.ClassExpression = function (node, parent) {
+export function ClassExpression(node, parent) {
   return t.isExpressionStatement(parent);
-};
+}
 
-exports.UnaryLike = function (node, parent) {
+export function UnaryLike(node, parent) {
   return t.isMemberExpression(parent) && parent.object === node;
-};
+}
 
-exports.FunctionExpression = function (node, parent) {
+export function FunctionExpression(node, parent) {
   // function () {};
   if (t.isExpressionStatement(parent)) {
     return true;
@@ -137,7 +137,7 @@ exports.FunctionExpression = function (node, parent) {
   if (t.isCallExpression(parent) && parent.callee === node) {
     return true;
   }
-};
+}
 
 exports.AssignmentExpression =
 exports.ConditionalExpression = function (node, parent) {

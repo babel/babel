@@ -16,7 +16,7 @@ exports.ClassDeclaration = function (node, print) {
   print(node.body);
 };
 
-exports.ClassBody = function (node, print) {
+export function ClassBody(node, print) {
   if (node.body.length === 0) {
     this.push("{}");
   } else {
@@ -29,12 +29,12 @@ exports.ClassBody = function (node, print) {
 
     this.rightBrace();
   }
-};
+}
 
-exports.MethodDefinition = function (node, print) {
+export function MethodDefinition(node, print) {
   if (node.static) {
     this.push("static ");
   }
 
   this._method(node, print);
-};
+}

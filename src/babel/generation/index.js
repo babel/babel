@@ -1,14 +1,14 @@
-var detectIndent = require("detect-indent");
-var Whitespace   = require("./whitespace");
-var repeating    = require("repeating");
-var SourceMap    = require("./source-map");
-var Position     = require("./position");
-var messages     = require("../messages");
-var Buffer       = require("./buffer");
-var extend       = require("lodash/object/extend");
-var each         = require("lodash/collection/each");
-var n            = require("./node");
-var t            = require("../types");
+import detectIndent from "detect-indent";
+import Whitespace from "./whitespace";
+import repeating from "repeating";
+import SourceMap from "./source-map";
+import Position from "./position";
+import * as messages from "../messages";
+import Buffer from "./buffer";
+import extend from "lodash/object/extend";
+import each from "lodash/collection/each";
+import n from "./node";
+import t from "../types";
 
 class CodeGenerator {
   constructor(ast, opts, code) {

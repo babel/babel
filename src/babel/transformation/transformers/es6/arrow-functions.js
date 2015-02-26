@@ -1,8 +1,8 @@
-var t = require("../../../types");
+import t from "../../../types";
 
 exports.check = t.isArrowFunctionExpression;
 
-exports.ArrowFunctionExpression = function (node) {
+export function ArrowFunctionExpression(node) {
   t.ensureBlock(node);
 
   node._aliasFunction = "arrow";
@@ -10,4 +10,4 @@ exports.ArrowFunctionExpression = function (node) {
   node.type = "FunctionExpression";
 
   return node;
-};
+}

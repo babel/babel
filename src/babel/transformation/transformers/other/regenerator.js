@@ -1,11 +1,11 @@
-var regenerator = require("regenerator-babel");
-var t           = require("../../../types");
+import regenerator from "regenerator-babel";
+import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isFunction(node) && (node.async || node.generator);
-};
+}
 
-exports.Program = {
+export var Program = {
   enter(ast) {
     regenerator.transform(ast);
     this.stop();

@@ -1,7 +1,7 @@
-var normalizeAst = require("./normalize-ast");
-var estraverse   = require("estraverse");
-var codeFrame    = require("./code-frame");
-var acorn        = require("acorn-babel");
+import normalizeAst from "./normalize-ast";
+import estraverse from "estraverse";
+import codeFrame from "./code-frame";
+import acorn from "acorn-babel";
 
 module.exports = function (opts, code, callback) {
   try {

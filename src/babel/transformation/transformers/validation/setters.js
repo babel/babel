@@ -1,8 +1,8 @@
-var messages = require("../../../messages");
+import * as messages from "../../../messages";
 
-exports.check = function (node) {
+export function check(node) {
   return node.kind === "set";
-};
+}
 
 exports.MethodDefinition =
 exports.Property = function (node, parent, scope, file) {

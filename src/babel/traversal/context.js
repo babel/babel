@@ -1,6 +1,6 @@
-var TraversalPath = require("./path");
-var flatten       = require("lodash/array/flatten");
-var compact       = require("lodash/array/compact");
+import TraversalPath from "./path";
+import flatten from "lodash/array/flatten";
+import compact from "lodash/array/compact";
 
 export default class TraversalConext {
   constructor(scope, opts, state, parentPath) {

@@ -1,8 +1,8 @@
-var messages = require("../../../messages");
-var build    = require("../../helpers/build-conditional-assignment-operator-transformer");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import build from "../../helpers/build-conditional-assignment-operator-transformer";
+import t from "../../../types";
 
-exports.playground = true;
+export var playground = true;
 
 build(exports, {
   is(node, file) {

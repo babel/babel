@@ -1,14 +1,14 @@
-var remapAsyncToGenerator = require("../../helpers/remap-async-to-generator");
-var t                     = require("../../../types");
+import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
+import t from "../../../types";
 
-exports.manipulateOptions = function (opts) {
+export function manipulateOptions(opts) {
   opts.experimental = true;
   opts.blacklist.push("regenerator");
-};
+}
 
-exports.optional = true;
+export var optional = true;
 
-exports.Function = function (node, parent, scope, file) {
+export function Function(node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
   return remapAsyncToGenerator(
@@ -16,4 +16,4 @@ exports.Function = function (node, parent, scope, file) {
     t.memberExpression(file.addImport("bluebird", null, true), t.identifier("coroutine")),
     scope
   );
-};
+}

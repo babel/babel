@@ -1,8 +1,8 @@
 module.exports = traverse;
 
-var TraversalContext = require("./context");
-var includes         = require("lodash/collection/includes");
-var t                = require("../types");
+import TraversalContext from "./context";
+import includes from "lodash/collection/includes";
+import t from "../types";
 
 function traverse(parent, opts, scope, state) {
   if (!parent) return;

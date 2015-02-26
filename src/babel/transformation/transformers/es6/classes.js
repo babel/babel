@@ -1,9 +1,9 @@
-var ReplaceSupers = require("../../helpers/replace-supers");
-var nameMethod    = require("../../helpers/name-method");
-var defineMap     = require("../../helpers/define-map");
-var messages      = require("../../../messages");
-var util          = require("../../../util");
-var t             = require("../../../types");
+import ReplaceSupers from "../../helpers/replace-supers";
+import nameMethod from "../../helpers/name-method";
+import defineMap from "../../helpers/define-map";
+import * as messages from "../../../messages";
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.check = t.isClass;
 

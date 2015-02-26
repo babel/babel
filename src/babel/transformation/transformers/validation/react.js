@@ -1,5 +1,5 @@
-var messages = require("../../../messages");
-var t        = require("../../../types");
+import * as messages from "../../../messages";
+import t from "../../../types";
 
 // check if the input Literal `source` is an alternate casing of "react"
 var check = function (source, file) {
@@ -13,11 +13,11 @@ var check = function (source, file) {
   }
 };
 
-exports.CallExpression = function (node, parent, scope, file) {
+export function CallExpression(node, parent, scope, file) {
   if (t.isIdentifier(node.callee, { name: "require" }) && node.arguments.length === 1) {
     check(node.arguments[0], file);
   }
-};
+}
 
 exports.ImportDeclaration =
 exports.ExportDeclaration = function (node, parent, scope, file) {

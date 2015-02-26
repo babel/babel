@@ -1,8 +1,8 @@
-var messages = require("../../messages");
-var extend   = require("lodash/object/extend");
-var object   = require("../../helpers/object");
-var util     = require("../../util");
-var t        = require("../../types");
+import * as messages from "../../messages";
+import extend from "lodash/object/extend";
+import object from "../../helpers/object";
+import * as util from  "../../util";
+import t from "../../types";
 
 var remapVisitor = {
   enter(node, parent, scope, formatter) {

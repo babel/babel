@@ -1,10 +1,10 @@
-var t = require("../../../types");
+import t from "../../../types";
 
 var isConsole = t.buildMatchMemberExpression("console", true);
 
-exports.optional = true;
+export var optional = true;
 
-exports.CallExpression = function (node, parent) {
+export function CallExpression(node, parent) {
   if (isConsole(node.callee)) {
     if (t.isExpressionStatement(parent)) {
       this.parentPath.remove();
@@ -12,4 +12,4 @@ exports.CallExpression = function (node, parent) {
       this.remove();
     }
   }
-};
+}

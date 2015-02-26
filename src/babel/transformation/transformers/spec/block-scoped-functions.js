@@ -1,6 +1,6 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.BlockStatement = function (node, parent, scope, file) {
+export function BlockStatement(node, parent, scope, file) {
   if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
     return;
   }
@@ -23,4 +23,4 @@ exports.BlockStatement = function (node, parent, scope, file) {
 
     file.checkNode(declar);
   }
-};
+}

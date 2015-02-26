@@ -1,8 +1,8 @@
-var t = require("../../../types");
+import t from "../../../types";
 
-exports.playground = true;
+export var playground = true;
 
-exports.BindMemberExpression = function (node, parent, scope) {
+export function BindMemberExpression(node, parent, scope) {
   var object = node.object;
   var prop   = node.property;
 
@@ -22,9 +22,9 @@ exports.BindMemberExpression = function (node, parent, scope) {
   } else {
     return call;
   }
-};
+}
 
-exports.BindFunctionExpression = function (node, parent, scope) {
+export function BindFunctionExpression(node, parent, scope) {
   var buildCall = function (args) {
     var param = scope.generateUidIdentifier("val");
     return t.functionExpression(null, [param], t.blockStatement([
@@ -40,4 +40,4 @@ exports.BindFunctionExpression = function (node, parent, scope) {
       return t.memberExpression(temp, t.literal(i), true);
     }))
   ]);
-};
+}

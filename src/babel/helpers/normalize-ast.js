@@ -1,4 +1,4 @@
-var t = require("../types");
+import t from "../types";
 
 module.exports = function (ast, comments, tokens) {
   if (ast && ast.type === "Program") {

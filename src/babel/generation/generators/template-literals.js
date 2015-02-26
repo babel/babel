@@ -1,15 +1,15 @@
-var each = require("lodash/collection/each");
+import each from "lodash/collection/each";
 
-exports.TaggedTemplateExpression = function (node, print) {
+export function TaggedTemplateExpression(node, print) {
   print(node.tag);
   print(node.quasi);
-};
+}
 
-exports.TemplateElement = function (node) {
+export function TemplateElement(node) {
   this._push(node.value.raw);
-};
+}
 
-exports.TemplateLiteral = function (node, print) {
+export function TemplateLiteral(node, print) {
   this.push("`");
 
   var quasis = node.quasis;
@@ -26,4 +26,4 @@ exports.TemplateLiteral = function (node, print) {
   });
 
   this._push("`");
-};
+}

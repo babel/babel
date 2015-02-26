@@ -1,9 +1,9 @@
-var File = require("./transformation/file");
-var util = require("./util");
-var each = require("lodash/collection/each");
-var t    = require("./types");
+import File from "./transformation/file";
+import * as util from  "./util";
+import each from "lodash/collection/each";
+import t from "./types";
 
-module.exports = function (body, namespace, whitelist = []) {
+export default function (body, namespace, whitelist = []) {
   each(File.helpers, function (name) {
     if (whitelist.length && whitelist.indexOf(name) == -1) return;
 

@@ -1,6 +1,6 @@
-var isNumber = require("lodash/lang/isNumber");
-var util     = require("../../../util");
-var t        = require("../../../types");
+import isNumber from "lodash/lang/isNumber";
+import * as util from  "../../../util";
+import t from "../../../types";
 
 exports.check = t.isRestElement;
 

@@ -1,18 +1,18 @@
-var sourceMapToComment = require("source-map-to-comment");
-var shebangRegex       = require("shebang-regex");
-var isFunction         = require("lodash/lang/isFunction");
-var transform          = require("./index");
-var generate           = require("../generation");
-var defaults           = require("lodash/object/defaults");
-var includes           = require("lodash/collection/includes");
-var assign             = require("lodash/object/assign");
-var parse              = require("../helpers/parse");
-var Scope              = require("../traversal/scope");
-var slash              = require("slash");
-var util               = require("../util");
-var path               = require("path");
-var each               = require("lodash/collection/each");
-var t                  = require("../types");
+import sourceMapToComment from "source-map-to-comment";
+import shebangRegex from "shebang-regex";
+import isFunction from "lodash/lang/isFunction";
+import transform from "./index";
+import generate from "../generation";
+import defaults from "lodash/object/defaults";
+import includes from "lodash/collection/includes";
+import assign from "lodash/object/assign";
+import parse from "../helpers/parse";
+import Scope from "../traversal/scope";
+import slash from "slash";
+import * as util from  "../util";
+import path from "path";
+import each from "lodash/collection/each";
+import t from "../types";
 
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
