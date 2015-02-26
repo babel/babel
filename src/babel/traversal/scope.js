@@ -1,5 +1,3 @@
-
-
 var includes = require("lodash/collection/includes");
 var traverse = require("./index");
 var defaults = require("lodash/object/defaults");

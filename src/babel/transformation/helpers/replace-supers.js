@@ -295,7 +295,7 @@ export default class ReplaceSupers {
       } else {
         return t.callExpression(
           t.memberExpression(superProperty, t.identifier("call")),
-          [thisReference].concat(args)
+          [thisReference, ...args]
         );
       }
     } else {

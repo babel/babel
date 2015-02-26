@@ -11,7 +11,7 @@ exports.BindMemberExpression = function (node, parent, scope) {
 
   var call = t.callExpression(
     t.memberExpression(t.memberExpression(object, prop), t.identifier("bind")),
-    [object].concat(node.arguments)
+    [object, ...node.arguments]
   );
 
   if (temp) {
