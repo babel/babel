@@ -34,7 +34,7 @@ var cache = registerCache.get();
 var transformOpts = {};
 var ignoreRegex   = /node_modules/;
 var onlyRegex;
-var exts          = {};
+var oldHandlers   = {};
 var maps          = {};
 
 var mtime = function (filename) {
@@ -106,7 +106,7 @@ var normalLoader = function (m, filename) {
 };
 
 var registerExtension = function (ext) {
-  var old = require.extensions[ext];
+  var old = oldHandlers[ext] || oldHandlers[".js"];
 
   var loader = normalLoader;
   if (process.env.running_under_istanbul) loader = istanbulLoader; // jshint ignore:line
@@ -121,7 +121,7 @@ var registerExtension = function (ext) {
 };
 
 var hookExtensions = function (_exts) {
-  each(exts, function (old, ext) {
+  each(oldHandlers, function (old, ext) {
     if (old === undefined) {
       delete require.extensions[ext];
     } else {
@@ -129,10 +129,10 @@ var hookExtensions = function (_exts) {
     }
   });
 
-  exts = {};
+  oldHandlers = {};
 
   each(_exts, function (ext) {
-    exts[ext] = require.extensions[ext];
+    oldHandlers[ext] = require.extensions[ext];
     registerExtension(ext);
   });
 };
