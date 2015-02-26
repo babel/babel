@@ -6,18 +6,17 @@ import chalk from "chalk";
 import ary from "lodash/function/ary";
 
 var defs = {
-  string:      chalk.red,
-  punctuation: chalk.white.bold,
-  operator:    chalk.white.bold,
-  curly:       chalk.green,
-  parens:      chalk.blue.bold,
-  square:      chalk.yellow,
-  name:        chalk.white,
-  keyword:     chalk.cyan,
-  number:      chalk.magenta,
-  regex:       chalk.magenta,
-  comment:     chalk.grey,
-  invalid:     chalk.inverse
+  string:     chalk.red,
+  punctuator: chalk.white.bold,
+  curly:      chalk.green,
+  parens:     chalk.blue.bold,
+  square:     chalk.yellow,
+  name:       chalk.white,
+  keyword:    chalk.cyan,
+  number:     chalk.magenta,
+  regex:      chalk.magenta,
+  comment:    chalk.grey,
+  invalid:    chalk.inverse
 };
 
 var newline = /\r\n|[\n\r\u2028\u2029]/;
@@ -25,11 +24,11 @@ var newline = /\r\n|[\n\r\u2028\u2029]/;
 var highlight = function (text) {
   var tokenType = function (match) {
     var token = jsTokens.matchToToken(match);
-    if (token.type === "name" && esutils.keyword.isKeywordES6(token.value)) {
+    if (token.type === "name" && esutils.keyword.isReservedWordES6(token.value)) {
       return "keyword";
     }
 
-    if (token.type === "punctuation") {
+    if (token.type === "punctuator") {
       switch (token.value) {
         case "{":
         case "}":
