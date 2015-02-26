@@ -121,7 +121,11 @@ var registerExtension = function (ext) {
 
 var hookExtensions = function (_exts) {
   each(exts, function (old, ext) {
-    require.extensions[ext] = old;
+    if (old === undefined) {
+      delete require.extensions[ext];
+    } else {
+      require.extensions[ext] = old;
+    }
   });
 
   exts = {};
