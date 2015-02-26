@@ -1,33 +1,40 @@
-var util = require("../../../util");
-var t    = require("../../../types");
+var isNumber = require("lodash/lang/isNumber");
+var util     = require("../../../util");
+var t        = require("../../../types");
 
 exports.check = t.isRestElement;
 
-var memberExpressionVisitor = {
+var memberExpressionOptimisationVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isScope(node, parent) && !scope.bindingIdentifierEquals(state.name, state.outerDeclar)) {
+    // check if this scope has a local binding that will shadow the rest parameter
+    if (t.isScope(node, parent) && !scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
       return this.skip();
     }
 
+    // skip over functions as whatever `arguments` we reference inside will refer
+    // to the wrong function
     if (t.isFunctionDeclaration(node) || t.isFunctionExpression(node)) {
-      state.isOptimizable = false;
-      return this.stop();
+      state.noOptimise = true;
+      scope.traverse(node, memberExpressionOptimisationVisitor, state);
+      state.noOptimise = false;
+      return this.skip();
     }
 
+    // is this a referenced identifier and is it referencing the rest parameter?
     if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
 
-    if (t.isMemberExpression(parent)) {
+    if (!state.noOptimise && t.isMemberExpression(parent) && parent.computed) {
+      // if we know that this member expression is referencing a number then we can safely
+      // optimise it
       var prop = parent.property;
-      if (typeof prop.value === "number" ||
-          t.isUnaryExpression(prop) ||
-          t.isBinaryExpression(prop)) {
-        state.candidates.push({ node, parent });
+      if (isNumber(prop.value) || t.isUnaryExpression(prop) || t.isBinaryExpression(prop)) {
+        optimizeMemberExpression(node, parent, state.method.params.length);
+        state.hasShorthand = true;
         return;
       }
     }
 
-    state.isOptimizable = false;
-    this.stop();
+    state.longForm = true;
   }
 };
 
@@ -39,7 +46,7 @@ function optimizeMemberExpression(node, parent, offset) {
     node.name = "arguments";
     prop.value += offset;
     prop.raw = String(prop.value);
-  } else {
+  } else { // Identifier
     node.name = "arguments";
     newExpr = t.binaryExpression("+", prop, t.literal(offset));
     parent.property = newExpr;
@@ -71,23 +78,22 @@ exports.Function = function (node, parent, scope) {
     node.body.body.unshift(declar);
   }
 
-  // check if rest is used only in member expressions
-  var restOuterDeclar = scope.getBindingIdentifier(rest.name);
-  var state = {
-    name: rest.name,
-    outerDeclar: restOuterDeclar,
-    isOptimizable: true,
-    candidates: []
-  };
-  scope.traverse(node, memberExpressionVisitor, state);
+  // check if rest is used in member expressions and optimise for those cases
 
-  if (state.isOptimizable) {
-    for (let i = 0, count = state.candidates.length; i < count; ++i) {
-      let candidate = state.candidates[i];
-      optimizeMemberExpression(candidate.node, candidate.parent, node.params.length, state.strictMode);
-    }
-    return;
-  }
+  var state = {
+    outerBinding: scope.getBindingIdentifier(rest.name),
+    hasShorthand: true,
+    longForm:     false,
+    method:       node,
+    name:         rest.name,
+  };
+
+  scope.traverse(node, memberExpressionOptimisationVisitor, state);
+
+  // we only have shorthands and there's no other references
+  if (!state.longForm && state.hasShorthand) return;
+
+  //
 
   var start = t.literal(node.params.length);
   var key = scope.generateUidIdentifier("key");
