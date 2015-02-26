@@ -26,17 +26,7 @@ exports.transform = function (filename, code, opts) {
   opts.filename = filename;
   resolveRc(filename, opts);
 
-  var result;
-  try {
-    result = babel.transform(code, opts);
-  } catch (e) {
-    if (e instanceof SyntaxError) {
-      console.error("SyntaxError:", e.message);
-      process.exit(1);
-    } else {
-      throw e;
-    }
-  }
+  var result = babel.transform(code, opts);
   result.filename = filename;
   result.actual = code;
   return result;
