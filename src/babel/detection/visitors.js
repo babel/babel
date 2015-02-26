@@ -43,7 +43,7 @@ export function AssignmentPattern(node, parent, detected) {
   }
 }
 
-export function Function(node, parent, detected) {
+exports.Function = function (node, parent, detected) {
   if (node.generator) {
     detected("es6.generators");
   }

@@ -8,7 +8,7 @@ export function manipulateOptions(opts) {
 
 export var optional = true;
 
-export function Function(node, parent, scope, file) {
+exports.Function = function (node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
   return remapAsyncToGenerator(
@@ -16,4 +16,4 @@ export function Function(node, parent, scope, file) {
     t.memberExpression(file.addImport("bluebird", null, true), t.identifier("coroutine")),
     scope
   );
-}
+};
