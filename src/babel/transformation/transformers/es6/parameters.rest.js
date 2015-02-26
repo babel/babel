@@ -65,7 +65,7 @@ exports.Function = function (node, parent, scope) {
     var pattern = rest;
     rest = scope.generateUidIdentifier("ref");
     var declar = t.variableDeclaration("var", pattern.elements.map(function (elem, index) {
-      var accessExpr = t.memberExpression(rest, t.literal(index));
+      var accessExpr = t.memberExpression(rest, t.literal(index), true);
       return t.variableDeclarator(elem, accessExpr);
     }));
     node.body.body.unshift(declar);
