@@ -46,7 +46,7 @@ function optimizeMemberExpression(node, parent, offset) {
     node.name = "arguments";
     prop.value += offset;
     prop.raw = String(prop.value);
-  } else { // Identifier
+  } else { // // UnaryExpression, BinaryExpression
     node.name = "arguments";
     newExpr = t.binaryExpression("+", prop, t.literal(offset));
     parent.property = newExpr;
