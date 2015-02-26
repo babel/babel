@@ -1,4 +1,5 @@
 import isFunction from "lodash/lang/isFunction";
+import transform from "../transformation";
 import fs from "fs";
 
 export { default as _util, canCompile } from "../util";
