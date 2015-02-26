@@ -24,6 +24,7 @@ var runtimeWrapMethod = runtimeProperty("wrap");
 var runtimeMarkMethod = runtimeProperty("mark");
 var runtimeValuesMethod = runtimeProperty("values");
 var runtimeAsyncMethod = runtimeProperty("async");
+var getMarkInfo = require("private").makeAccessor();
 
 exports.transform = function transform(node, options) {
   options = options || {};
@@ -89,10 +90,11 @@ var visitor = types.PathVisitor.fromMethodsObject({
       awaitVisitor.visit(path.get("body"));
     }
 
-    var outerFnId = node.id || (
-      node.id = path.scope.parent.declareTemporary("callee$")
-    );
-
+    var outerFnExpr = getOuterFnExpr(path);
+    // Note that getOuterFnExpr has the side-effect of ensuring that the
+    // function has a name (so node.id will always be an Identifier), even
+    // if a temporary name has to be synthesized.
+    n.Identifier.assert(node.id);
     var innerFnId = b.identifier(node.id.name + "$");
     var contextId = path.scope.declareTemporary("context$");
     var argsId = path.scope.declareTemporary("args$");
@@ -117,9 +119,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var wrapArgs = [
       emitter.getContextFunction(innerFnId),
-      // Async functions don't care about the outer function because they
-      // don't need it to be marked and don't inherit from its .prototype.
-      shouldTransformAsync ? b.literal(null) : outerFnId,
+      outerFnExpr,
       b.thisExpression()
     ];
 
@@ -141,95 +141,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       return;
     }
 
-    if (n.FunctionDeclaration.check(node)) {
-      var pp = path.parent;
-
-      while (pp && !(n.BlockStatement.check(pp.value) ||
-                     n.Program.check(pp.value))) {
-        pp = pp.parent;
-      }
-
-      if (!pp) {
-        return;
-      }
-
-      // Here we turn the FunctionDeclaration into a named
-      // FunctionExpression that will be assigned to a variable of the
-      // same name at the top of the enclosing block. This is important
-      // for a very subtle reason: named function expressions can refer to
-      // themselves by name without fear that the binding may change due
-      // to code executing outside the function, whereas function
-      // declarations are vulnerable to the following rebinding:
-      //
-      //   function f() { return f }
-      //   var g = f;
-      //   f = "asdf";
-      //   g(); // "asdf"
-      //
-      // One way to prevent the problem illustrated above is to transform
-      // the function declaration thus:
-      //
-      //   var f = function f() { return f };
-      //   var g = f;
-      //   f = "asdf";
-      //   g(); // f
-      //   g()()()()(); // f
-      //
-      // In the code below, we transform generator function declarations
-      // in the following way:
-      //
-      //   gen().next(); // { value: gen, done: true }
-      //   function *gen() {
-      //     return gen;
-      //   }
-      //
-      // becomes something like
-      //
-      //   var gen = runtime.mark(function *gen() {
-      //     return gen;
-      //   });
-      //   gen().next(); // { value: gen, done: true }
-      //
-      // which ensures that the generator body can always reliably refer
-      // to gen by name.
-
-      // Remove the FunctionDeclaration so that we can add it back as a
-      // FunctionExpression passed to runtime.mark.
-      path.replace();
-
-      // Change the type of the function to be an expression instead of a
-      // declaration. Note that all the other fields are the same.
-      node.type = "FunctionExpression";
-
-      var varDecl = b.variableDeclaration("var", [
-        b.variableDeclarator(
-          node.id,
-          b.callExpression(runtimeMarkMethod, [node])
-        )
-      ]);
-
-      if (node.comments) {
-        // Copy any comments preceding the function declaration to the
-        // variable declaration, to avoid weird formatting consequences.
-        varDecl.comments = node.comments;
-        node.comments = null;
-      }
-
-      var bodyPath = pp.get("body");
-      var bodyLen = bodyPath.value.length;
-
-      for (var i = 0; i < bodyLen; ++i) {
-        var firstStmtPath = bodyPath.get(i);
-        if (!shouldNotHoistAbove(firstStmtPath)) {
-          firstStmtPath.insertBefore(varDecl);
-          return;
-        }
-      }
-
-      bodyPath.push(varDecl);
-
-    } else {
-      n.FunctionExpression.assert(node);
+    if (n.Expression.check(node)) {
       return b.callExpression(runtimeMarkMethod, [node]);
     }
   },
@@ -312,30 +224,91 @@ var visitor = types.PathVisitor.fromMethodsObject({
   }
 });
 
+// Given a NodePath for a Function, return an Expression node that can be
+// used to refer reliably to the function object from inside the function.
+// This expression is essentially a replacement for arguments.callee, with
+// the key advantage that it works in strict mode.
+function getOuterFnExpr(funPath) {
+  var node = funPath.value;
+  n.Function.assert(node);
+
+  if (!node.async && // Async functions don't need to be marked.
+      n.FunctionDeclaration.check(node)) {
+    var pp = funPath.parent;
+
+    while (pp && !(n.BlockStatement.check(pp.value) ||
+                   n.Program.check(pp.value))) {
+      pp = pp.parent;
+    }
+
+    if (!pp) {
+      return node.id;
+    }
+
+    var markDecl = getRuntimeMarkDecl(pp);
+    var markedArray = markDecl.declarations[0].id;
+    var funDeclIdArray = markDecl.declarations[0].init.callee.object;
+    n.ArrayExpression.assert(funDeclIdArray);
+
+    var index = funDeclIdArray.elements.length;
+    funDeclIdArray.elements.push(node.id);
+
+    return b.memberExpression(
+      markedArray,
+      b.literal(index),
+      true
+    );
+  }
+
+  return node.id || (
+    node.id = funPath.scope.parent.declareTemporary("callee$")
+  );
+}
+
+function getRuntimeMarkDecl(blockPath) {
+  assert.ok(blockPath instanceof NodePath);
+  var block = blockPath.node;
+  isArray.assert(block.body);
+
+  var info = getMarkInfo(block);
+  if (info.decl) {
+    return info.decl;
+  }
+
+  info.decl = b.variableDeclaration("var", [
+    b.variableDeclarator(
+      blockPath.scope.declareTemporary("marked"),
+      b.callExpression(
+        b.memberExpression(
+          b.arrayExpression([]),
+          b.identifier("map"),
+          false
+        ),
+        [runtimeProperty("mark")]
+      )
+    )
+  ]);
+
+  for (var i = 0; i < block.body.length; ++i) {
+    if (!shouldNotHoistAbove(blockPath.get("body", i))) {
+      break;
+    }
+  }
+
+  blockPath.get("body").insertAt(i, info.decl);
+
+  return info.decl;
+}
+
 function shouldNotHoistAbove(stmtPath) {
   var value = stmtPath.value;
   n.Statement.assert(value);
 
   // If the first statement is a "use strict" declaration, make sure to
   // insert hoisted declarations afterwards.
-  if (n.ExpressionStatement.check(value) &&
-      n.Literal.check(value.expression) &&
-      value.expression.value === "use strict") {
-    return true;
-  }
-
-  if (n.VariableDeclaration.check(value)) {
-    for (var i = 0; i < value.declarations.length; ++i) {
-      var decl = value.declarations[i];
-      if (n.CallExpression.check(decl.init) &&
-          types.astNodesAreEquivalent(decl.init.callee,
-                                      runtimeMarkMethod)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
+  return n.ExpressionStatement.check(value) &&
+    n.Literal.check(value.expression) &&
+    value.expression.value === "use strict";
 }
 
 function renameArguments(funcPath, argsId) {
