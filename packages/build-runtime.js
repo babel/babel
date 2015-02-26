@@ -1,7 +1,7 @@
 "use strict";
 
-var buildHelpers = require("../lib/babel/build-helpers");
 var transform    = require("../lib/babel/transformation");
+var buildHelpers = require("../lib/babel/build-helpers");
 var util         = require("../lib/babel/util");
 var fs           = require("fs");
 var t            = require("../lib/babel/types");
