@@ -1,18 +1,12 @@
-module.exports = IgnoreFormatter;
-
 var t = require("../../types");
 
-function IgnoreFormatter() {
+export default class IgnoreFormatter {
+  exportDeclaration(node, nodes) {
+    var declar = t.toStatement(node.declaration, true);
+    if (declar) nodes.push(t.inherits(declar, node));
+  }
 
+  importDeclaration() {}
+  importSpecifier() {}
+  exportSpecifier() {}
 }
-
-IgnoreFormatter.prototype.exportDeclaration = function (node, nodes) {
-  var declar = t.toStatement(node.declaration, true);
-  if (declar) nodes.push(t.inherits(declar, node));
-};
-
-IgnoreFormatter.prototype.importDeclaration =
-IgnoreFormatter.prototype.importSpecifier =
-IgnoreFormatter.prototype.exportSpecifier = function () {
-
-};
