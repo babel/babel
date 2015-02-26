@@ -119,7 +119,9 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var wrapArgs = [
       emitter.getContextFunction(innerFnId),
-      outerFnExpr,
+      // Async functions don't care about the outer function because they
+      // don't need it to be marked and don't inherit from its .prototype.
+      shouldTransformAsync ? b.literal(null) : outerFnExpr,
       b.thisExpression()
     ];
 
