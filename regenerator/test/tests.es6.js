@@ -1115,6 +1115,44 @@ describe("function declaration hoisting", function() {
 
     check(outer(2), [0, 1, 2, 3], 4);
   });
+
+  it("should not interfere with function rebinding", function() {
+    function rebindTo(value) {
+      var oldValue = toBeRebound;
+      toBeRebound = value;
+      return oldValue;
+    }
+
+    function *toBeRebound() {
+      var originalValue = toBeRebound;
+      yield toBeRebound;
+      assert.strictEqual(rebindTo(42), originalValue);
+      yield toBeRebound;
+      assert.strictEqual(rebindTo("asdf"), 42);
+      yield toBeRebound;
+    }
+
+    var original = toBeRebound;
+    check(toBeRebound(), [original, 42, "asdf"]);
+
+    function attemptToRebind(value) {
+      var oldValue = safe;
+      safe = value;
+      return oldValue;
+    }
+
+    var safe = function *safe() {
+      var originalValue = safe;
+      yield safe;
+      assert.strictEqual(attemptToRebind(42), originalValue);
+      yield safe;
+      assert.strictEqual(attemptToRebind("asdf"), 42);
+      yield safe;
+    }
+
+    original = safe;
+    check(safe(), [safe, safe, safe]);
+  });
 });
 
 describe("the arguments object", function() {
