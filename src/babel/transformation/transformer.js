@@ -1,5 +1,3 @@
-module.exports = Transformer;
-
 var TransformerPass = require("./transformer-pass");
 var isFunction      = require("lodash/lang/isFunction");
 var traverse        = require("../traversal");
@@ -13,59 +11,61 @@ var each            = require("lodash/collection/each");
  * actually running the transformer over the provided `File`.
  */
 
-function Transformer(key, transformer, opts) {
-  transformer = assign({}, transformer);
+export default class Transformer {
+  constructor(key, transformer, opts) {
+    transformer = assign({}, transformer);
 
-  var take = function (key) {
-    var val = transformer[key];
-    delete transformer[key];
-    return val;
-  };
+    var take = function (key) {
+      var val = transformer[key];
+      delete transformer[key];
+      return val;
+    };
 
-  this.manipulateOptions = take("manipulateOptions");
-  this.check             = take("check");
-  this.post              = take("post");
-  this.pre               = take("pre");
+    this.manipulateOptions = take("manipulateOptions");
+    this.check             = take("check");
+    this.post              = take("post");
+    this.pre               = take("pre");
 
-  this.experimental = !!take("experimental");
-  this.playground   = !!take("playground");
-  this.secondPass   = !!take("secondPass");
-  this.optional     = !!take("optional");
+    this.experimental = !!take("experimental");
+    this.playground   = !!take("playground");
+    this.secondPass   = !!take("secondPass");
+    this.optional     = !!take("optional");
 
-  this.handlers = this.normalize(transformer);
-  this.opts     ||= {};
-  this.key      = key;
-}
-
-Transformer.prototype.normalize = function (transformer) {
-  if (isFunction(transformer)) {
-    transformer = { ast: transformer };
+    this.handlers = this.normalize(transformer);
+    this.opts     ||= {};
+    this.key      = key;
   }
 
-  traverse.explode(transformer);
-
-  each(transformer, (fns, type) => {
-    // hidden property
-    if (type[0] === "_") {
-      this[type] = fns;
-      return;
+  normalize(transformer) {
+    if (isFunction(transformer)) {
+      transformer = { ast: transformer };
     }
 
-    if (type === "enter" || type === "exit") return;
+    traverse.explode(transformer);
 
-    if (isFunction(fns)) fns = { enter: fns };
+    each(transformer, (fns, type) => {
+      // hidden property
+      if (type[0] === "_") {
+        this[type] = fns;
+        return;
+      }
 
-    if (!isObject(fns)) return;
+      if (type === "enter" || type === "exit") return;
 
-    if (!fns.enter) fns.enter = function () { };
-    if (!fns.exit) fns.exit = function () { };
+      if (isFunction(fns)) fns = { enter: fns };
 
-    transformer[type] = fns;
-  });
+      if (!isObject(fns)) return;
 
-  return transformer;
-};
+      if (!fns.enter) fns.enter = function () { };
+      if (!fns.exit) fns.exit = function () { };
 
-Transformer.prototype.buildPass = function (file) {
-  return new TransformerPass(file, this);
-};
+      transformer[type] = fns;
+    });
+
+    return transformer;
+  }
+
+  buildPass(file) {
+    return new TransformerPass(file, this);
+  }
+}
