@@ -4,10 +4,6 @@ Contributions are always welcome, no matter how large or small. Before
 contributing, please read the
 [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
-**NOTE:** Please do not send pull requests that fix linting issues. It's highly
-likely that they've already been fixed by the time it's submitted and it just
-pollutes the git tree.
-
 ## Developing
 
 #### Setup
@@ -42,15 +38,6 @@ running them with `mocha`:
 
 ```sh
 $ mocha test/transformation.js
-```
-
-#### Linting
-
-Please follow the correct code style, this ensures that the code is consistent
-and increases maintainability.
-
-```sh
-$ make lint
 ```
 
 #### Workflow
