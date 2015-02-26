@@ -10,6 +10,7 @@ var util             = require("../../util");
 var fs               = require("fs");
 
 sourceMapSupport.install({
+  handleUncaughtExceptions: false,
   retrieveSourceMap(source) {
     var map = maps && maps[source];
     if (map) {
