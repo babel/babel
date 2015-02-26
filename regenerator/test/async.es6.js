@@ -226,4 +226,15 @@ describe("async functions and await expressions", function() {
       }).catch(done);
     });
   });
+
+  describe("async function expressions", function() {
+    it("should be allowed", function(done) {
+      (async function(arg) {
+        return await arg;
+      })(Promise.resolve(1234)).then(function(value) {
+        assert.strictEqual(value, 1234);
+        done();
+      }).catch(done);
+    });
+  });
 });
