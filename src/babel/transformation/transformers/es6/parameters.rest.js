@@ -11,7 +11,7 @@ var memberExpressionVisitor = {
 
     if (t.isFunctionDeclaration(node) || t.isFunctionExpression(node)) {
       state.isOptimizable = false;
-      return this.skip();
+      return this.stop();
     }
 
     if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
