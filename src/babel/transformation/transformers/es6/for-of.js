@@ -32,7 +32,7 @@ exports.ForOfStatement = function (node, parent, scope, file) {
   // todo: find out why this is necessary? #538
   loop._scopeInfo = node._scopeInfo;
 
-  return loop;
+  return build.node;
 };
 
 var breakVisitor = {
@@ -113,6 +113,7 @@ var loose = function (node, parent, scope, file) {
 
   return {
     declar: declar,
+    node:   loop,
     loop:   loop
   };
 };
@@ -140,11 +141,17 @@ var spec = function (node, parent, scope, file) {
 
   var iteratorKey = scope.generateUidIdentifier("iterator");
 
-  var loop = util.template("for-of", {
-    ITERATOR_KEY: iteratorKey,
-    STEP_KEY:     stepKey,
-    OBJECT:       node.right
+  var node = util.template("for-of", {
+    ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
+    ITERATOR_COMPLETION:    scope.generateUidIdentifier("iteratorNormalCompletion"),
+    ITERATOR_ERROR_KEY:     scope.generateUidIdentifier("iteratorError"),
+    ITERATOR_KEY:           iteratorKey,
+    STEP_KEY:               stepKey,
+    OBJECT:                 node.right,
+    BODY:                   null
   });
+
+  var loop = node[3].block.body[0];
 
   //
 
@@ -160,6 +167,7 @@ var spec = function (node, parent, scope, file) {
 
   return {
     declar: declar,
-    loop:   loop
+    loop:   loop,
+    node:   node
   };
 };
