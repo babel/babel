@@ -1,0 +1,20 @@
+{
+  "name": "babel-eslint",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel-eslint.git"
+  },
+  "dependencies": {
+    "babel": "^4.6.0",
+    "lodash": "^3.3.1"
+  },
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/babel/babel-eslint/issues"
+  },
+  "homepage": "https://github.com/babel/babel-eslint"
+}
