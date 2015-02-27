@@ -17,9 +17,11 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
  * **New Feature**
   * Desugar sticky regexes to a new constructor expression so it can be handled by a polyfill.
+ * **Spec Compliancy**
+  * `for...of` now outputs in a lengthy `try...catch` this is to ensure spec compliancy in regards to iterator returns and abrupt completions. See [google/traceur-compiler#1773](https://github.com/google/traceur-compiler/issues/1773) and [babel/babel/#838](https://github.com/babel/babel/issues/838) for more information.
  * **Polish**
   * Rest parameters that are only refered to via number properties on member expressions are desugared into a direct `arguments` reference. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
-  * `$ babel` no longer exists on syntax errors.
+  * `$ babel` no longer exits on syntax errors.
  * **Internal**
   * Upgrade `browserify`.
   * Upgrade `source-map`.
