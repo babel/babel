@@ -1,8 +1,5 @@
 {
-  "parser": "/Users/sebastian/Projects/babel/core/eslint.js",
-  "ecmaFeatures": {
-    "blockBindings": true
-  },
+  "parser": "babel-eslint",
   "rules": {
     "strict": 0,
     "no-underscore-dangle": 0,

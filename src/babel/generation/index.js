@@ -11,7 +11,9 @@ import n from "./node";
 import t from "../types";
 
 class CodeGenerator {
-  constructor(ast, opts = {}, code) {
+  constructor(ast, opts, code) {
+    opts ||= {};
+
     this.comments = ast.comments || [];
     this.tokens   = ast.tokens || [];
     this.format   = CodeGenerator.normalizeOptions(code, opts);
