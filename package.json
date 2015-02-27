@@ -67,11 +67,11 @@
     "trim-right": "^1.0.0"
   },
   "devDependencies": {
-    "babel": "4.5.1",
+    "babel": "4.6.0",
     "browserify": "^9.0.3",
     "chai": "^2.0.0",
     "eslint": "^0.15.1",
-    "babel-eslint": "^1.0.0",
+    "babel-eslint": "^1.0.1",
     "esvalid": "^1.1.0",
     "istanbul": "^0.3.5",
     "matcha": "^0.6.0",
