@@ -4,7 +4,6 @@ import fs from "fs";
 
 export { default as _util, canCompile } from "../util";
 export { default as transform } from "../transformation";
-export { default as parse } from "../esprima-compatibility";
 
 export { version } from "../../../package";
 
