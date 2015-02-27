@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.6.0
+
+ * **New Feature**
+  * Desugar sticky regexes to a new constructor expression so it can be handled by a polyfill.
+ * **Polish**
+  * Rest parameters that are only refered to via number properties on member expressions are desugared into a direct `arguments` reference. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
+  * `$ babel` no longer exists on syntax errors.
+ * **Internal**
+  * Upgrade `browserify`.
+  * Upgrade `source-map`.
+  * Publicly expose more internals.
+
 ## 4.5.5
 
  * **Polish**
