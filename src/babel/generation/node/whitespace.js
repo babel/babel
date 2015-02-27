@@ -3,9 +3,7 @@ import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import t from "../../types";
 
-function crawl(node, state) {
-  state ||= {};
-
+function crawl(node, state = {}) {
   if (t.isMemberExpression(node)) {
     crawl(node.object, state);
     if (node.computed) crawl(node.property, state);

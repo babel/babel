@@ -1,6 +1,9 @@
-var traverse = require("./lib/babel/traversal");
-var Module   = require("module");
-var acorn    = require("acorn-babel");
+var acornToEsprima = require("./lib/babel/helpers/acorn-to-esprima");
+var traverse       = require("./lib/babel/traversal");
+var extend         = require("lodash/object/extend");
+var Module         = require("module");
+var acorn          = require("acorn-babel");
+var t              = require("./lib/babel/types");
 
 var hasPatched = false;
 
@@ -8,27 +11,18 @@ function monkeypatch() {
   if (hasPatched) return;
   hasPatched = true;
 
-  var mod = new Module(require.resolve("eslint"));
-
   // monkeypatch estraverse
-  //var estraverse = mod.require("estraverse");
+  var estraverse = require("estraverse");
+  extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
   // monkeypatch escope
-  var escope = mod.require("escope");
-  console.log(escope);
-}
-
-var tokTypes = acorn.tokTypes;
-
-function toEsprimaToken(token) {
-  var type = token.type;
-
-  if (type === tokTypes.name) {
-    token.type = "Identifier";
-  } else if (type === tokTypes.semi || type === tokTypes.comma || type === tokTypes.parenL || type === tokTypes.parenR || type === tokTypes.braceL || type === tokTypes.braceR) {
-    token.type = "Punctuator";
-    token.value = type.type;
-  }
+  var escope = require("eslint/node_modules/escope");
+  var analyze = escope.analyze;
+  escope.analyze = function (ast, opts) {
+    opts.sourceType = 'module';
+    opts.ecmaVersion = 6;
+    return analyze.call(this, ast, opts)
+  };
 }
 
 exports.parse = function (code) {
@@ -46,14 +40,13 @@ exports.parse = function (code) {
   var ast = acorn.parse(code, opts);
 
   // convert tokens
-  ast.tokens = tokens.map(function (token) {
-    return toEsprimaToken(token) || token;
-  });
+  ast.tokens = tokens.map(acornToEsprima.toEsprimaToken);
 
   // add comments
   ast.comments = comments;
 
   // transform esprima and acorn divergent nodes
+  acornToEsprima.toEsprimaAST(ast);
 
   return ast;
 };

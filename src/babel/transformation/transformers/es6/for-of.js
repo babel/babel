@@ -141,7 +141,7 @@ var spec = function (node, parent, scope, file) {
 
   var iteratorKey = scope.generateUidIdentifier("iterator");
 
-  var node = util.template("for-of", {
+  var template = util.template("for-of", {
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_COMPLETION:    scope.generateUidIdentifier("iteratorNormalCompletion"),
     ITERATOR_ERROR_KEY:     scope.generateUidIdentifier("iteratorError"),
@@ -151,16 +151,16 @@ var spec = function (node, parent, scope, file) {
     BODY:                   null
   });
 
-  var loop = node[3].block.body[0];
+  var loop = template[3].block.body[0];
 
   //
 
   scope.traverse(node, breakVisitor, {
     iteratorKey: iteratorKey,
+    label:       t.isLabeledStatement(parent) && parent.label.name,
     wrapReturn:  function (node) {
       return t.ifStatement(t.memberExpression(iteratorKey, t.identifier("return")), node);
-    },
-    label:       t.isLabeledStatement(parent) && parent.label.name
+    }
   });
 
   //
@@ -168,6 +168,6 @@ var spec = function (node, parent, scope, file) {
   return {
     declar: declar,
     loop:   loop,
-    node:   node
+    node:   template
   };
 };

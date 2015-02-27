@@ -49,7 +49,7 @@ var visit = function (node, name, scope) {
     selfReference:  false,
     outerDeclar:    scope.getBindingIdentifier(name),
     references:     [],
-    name:           name,
+    name:           name
   };
 
   // check to see if we have a local binding of the id we're setting inside of

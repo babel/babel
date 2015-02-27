@@ -11,7 +11,7 @@ export function ComprehensionExpression(node, parent, scope, file) {
   return callback(node, parent, scope, file);
 }
 
-var generator = function (node) {
+function generator(node) {
   var body = [];
   var container = t.functionExpression(null, [], t.blockStatement(body), true);
   container._aliasFunction = true;
@@ -21,9 +21,9 @@ var generator = function (node) {
   }));
 
   return t.callExpression(container, []);
-};
+}
 
-var array = function (node, parent, scope, file) {
+function array(node, parent, scope, file) {
   var uid = scope.generateUidBasedOnNode(parent, file);
 
   var container = util.template("array-comprehension-container", {
@@ -50,4 +50,4 @@ var array = function (node, parent, scope, file) {
   body.push(returnStatement);
 
   return container;
-};
+}

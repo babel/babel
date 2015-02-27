@@ -4,14 +4,12 @@ transform.version = require("../../../package").version;
 
 transform.transform = transform;
 
-transform.run = function (code, opts) {
-  opts ||= {};
+transform.run = function (code, opts = {}) {
   opts.sourceMap = "inline";
   return new Function(transform(code, opts).code)();
 };
 
-transform.load = function (url, callback, opts, hold) {
-  opts ||= {};
+transform.load = function (url, callback, opts = {}, hold) {
   opts.filename ||= url;
 
   var xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();

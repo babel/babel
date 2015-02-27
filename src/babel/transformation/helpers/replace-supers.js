@@ -4,16 +4,16 @@ import * as messages from "../../messages";
 import t from "../../types";
 
 
-var isIllegalBareSuper = function (node, parent) {
+function isIllegalBareSuper(node, parent) {
   if (!isSuper(node, parent)) return false;
   if (t.isMemberExpression(parent, { computed: false })) return false;
   if (t.isCallExpression(parent, { callee: node })) return false;
   return true;
-};
+}
 
-var isSuper = function (node, parent) {
+function isSuper(node, parent) {
   return t.isIdentifier(node, { name: "super" }) && t.isReferenced(node, parent);
-};
+}
 
 var visitor = {
   enter(node, parent, scope, state) {

@@ -43,8 +43,7 @@ export function transformFile(filename, opts, callback) {
   });
 }
 
-export function transformFileSync(filename, opts) {
-  opts ||= {};
+export function transformFileSync(filename, opts = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
 }

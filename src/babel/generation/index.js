@@ -11,9 +11,7 @@ import n from "./node";
 import t from "../types";
 
 class CodeGenerator {
-  constructor(ast, opts, code) {
-    opts ||= {};
-
+  constructor(ast, opts = {}, code) {
     this.comments = ast.comments || [];
     this.tokens   = ast.tokens || [];
     this.format   = CodeGenerator.normalizeOptions(code, opts);
@@ -91,8 +89,7 @@ class CodeGenerator {
       return this.print(node, parent, opts);
     };
 
-    print.sequence = (nodes, opts) => {
-      opts ||= {};
+    print.sequence = (nodes, opts = {}) => {
       opts.statement = true;
       return this.printJoin(print, nodes, opts);
     };
@@ -101,8 +98,7 @@ class CodeGenerator {
       return this.printJoin(print, nodes, opts);
     };
 
-    print.list = function (items, opts) {
-      opts ||= {};
+    print.list = function (items, opts = {}) {
       opts.separator ||= ", ";
       print.join(items, opts);
     };
@@ -118,7 +114,7 @@ class CodeGenerator {
     return print;
   }
 
-  print(node, parent, opts) {
+  print(node, parent, opts = {}) {
     if (!node) return "";
 
     if (parent && parent._compact) {
@@ -129,8 +125,6 @@ class CodeGenerator {
     if (node._compact) {
       this.format.concise = true;
     }
-
-    opts ||= {};
 
     var newline = (leading) => {
       if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
@@ -197,10 +191,8 @@ class CodeGenerator {
     this.format.concise = oldConcise;
   }
 
-  printJoin(print, nodes, opts) {
+  printJoin(print, nodes, opts = {}) {
     if (!nodes || !nodes.length) return;
-
-    opts ||= {};
 
     var len = nodes.length;
 

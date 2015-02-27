@@ -369,9 +369,7 @@ export default class File {
     // todo, (node, msg)
   }
 
-  errorWithNode(node, msg, Error) {
-    Error ||= SyntaxError;
-
+  errorWithNode(node, msg, Error = SyntaxError) {
     var loc = node.loc.start;
     var err = new Error("Line " + loc.line + ": " + msg);
     err.loc = loc;

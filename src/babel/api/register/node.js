@@ -138,10 +138,7 @@ var hookExtensions = function (_exts) {
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
-export default function (opts) {
-  // normalize options
-  opts ||= {};
-
+export default function (opts = {}) {
   if (opts.only != null) onlyRegex = util.regexify(opts.only);
   if (opts.ignore != null) ignoreRegex = util.regexify(opts.ignore);
 
