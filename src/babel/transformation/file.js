@@ -103,6 +103,8 @@ export default class File {
     "resolveModuleSource",
     "moduleId",
 
+    "color",
+
     // legacy
     "format",
 
@@ -140,6 +142,7 @@ export default class File {
       filename:               "unknown",
       modules:                "common",
       compact:                "auto",
+      color:                  "auto",
       loose:                  [],
       code:                   true,
       ast:                    true

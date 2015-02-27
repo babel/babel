@@ -21,6 +21,7 @@ program.option("-g, --playground", "Enable playground support");
 program.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 program.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 program.option("-o, --optional [optional]", "List of optional transformers to enable", util.list);
+program.option("--color [when]", "Use color in output (never, always or auto) [auto]", "auto");
 
 var pkg = require("../package.json");
 program.version(pkg.version);
@@ -36,7 +37,8 @@ babel.register({
   blacklist:    program.blacklist,
   whitelist:    program.whitelist,
   optional:     program.optional,
-  ignore:       program.ignore
+  ignore:       program.ignore,
+  color:        program.color,
 });
 
 //
@@ -48,7 +50,8 @@ var _eval = function (code, filename) {
     whitelist: program.whitelist,
     optional: program.optional,
     experimental: program.experimental,
-    playground: program.playground
+    playground: program.playground,
+    color: program.color
   }).code;
 
   return vm.runInThisContext(code, {

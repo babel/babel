@@ -55,10 +55,14 @@ var highlight = function (text) {
   });
 };
 
-module.exports = function (lines, lineNumber, colNumber) {
+module.exports = function (lines, lineNumber, colNumber, opts) {
   colNumber = Math.max(colNumber, 0);
 
-  if (chalk.supportsColor) {
+  var useColor = !opts || opts.color === 'auto' ?
+    chalk.supportsColor :
+    opts.color === 'always';
+
+  if (useColor) {
     lines = highlight(lines);
   }
 
