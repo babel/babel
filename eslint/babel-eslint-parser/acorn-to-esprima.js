@@ -44,6 +44,12 @@ var astTransformVisitor = {
       if (t.isRestElement(node.params[node.params.length - 1])) {
         node.rest = node.params.pop();
       }
+    } else if (t.isSpreadProperty(node)) {
+      node.type = "Property";
+      node.kind = "init";
+      node.computed = false;
+      node.key = node.value = node.argument;
+      delete node.argument;
     } else if (t.isClassProperty(node)) {
       // eslint doesn't like these
       this.remove();
