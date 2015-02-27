@@ -5,6 +5,10 @@ import esutils from "esutils";
 import chalk from "chalk";
 import ary from "lodash/function/ary";
 
+// By default, chalk is disabled if it doesn't support colors. As we want to
+// override this with the "highlight" option, let's make it always enabled.
+chalk.enabled = true;
+
 var defs = {
   string:     chalk.red,
   punctuator: chalk.white.bold,
