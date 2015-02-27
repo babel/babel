@@ -1,3 +1,3 @@
 "use strict";
 
-var re = new RegExp("o+", y);
+var re = new RegExp("o+", "y");
