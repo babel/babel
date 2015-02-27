@@ -18,4 +18,4 @@ export function UnaryExpression(node, parent, scope, file) {
       return call;
     }
   }
-};
+}

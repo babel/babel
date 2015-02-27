@@ -136,6 +136,11 @@
     "expressions": null
   },
 
+  "TemplateLiteral": {
+    "quasis": null,
+    "expressions": null
+  },
+
   "ThrowExpression": {
     "argument": null
   },

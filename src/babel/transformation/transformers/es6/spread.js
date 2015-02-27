@@ -3,20 +3,20 @@ import t from "../../../types";
 
 exports.check = t.isSpreadElement;
 
-var getSpreadLiteral = function (spread, scope) {
+function getSpreadLiteral(spread, scope) {
   return scope.toArray(spread.argument, true);
-};
+}
 
-var hasSpread = function (nodes) {
+function hasSpread(nodes) {
   for (var i = 0; i < nodes.length; i++) {
     if (t.isSpreadElement(nodes[i])) {
       return true;
     }
   }
   return false;
-};
+}
 
-var build = function (props, scope) {
+function build(props, scope) {
   var nodes = [];
 
   var _props = [];
@@ -40,9 +40,9 @@ var build = function (props, scope) {
   push();
 
   return nodes;
-};
+}
 
-exports.ArrayExpression = function (node, parent, scope) {
+export function ArrayExpression(node, parent, scope) {
   var elements = node.elements;
   if (!hasSpread(elements)) return;
 
@@ -55,9 +55,9 @@ exports.ArrayExpression = function (node, parent, scope) {
   }
 
   return t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
-};
+}
 
-exports.CallExpression = function (node, parent, scope) {
+export function CallExpression(node, parent, scope) {
   var args = node.arguments;
   if (!hasSpread(args)) return;
 
@@ -95,9 +95,9 @@ exports.CallExpression = function (node, parent, scope) {
   }
 
   node.arguments.unshift(contextLiteral);
-};
+}
 
-exports.NewExpression = function (node, parent, scope, file) {
+export function NewExpression(node, parent, scope, file) {
   var args = node.arguments;
   if (!hasSpread(args)) return;
 
@@ -128,4 +128,4 @@ exports.NewExpression = function (node, parent, scope, file) {
   } else {
     return t.callExpression(file.addHelper("apply-constructor"), [node.callee, args]);
   }
-};
+}

@@ -4,6 +4,7 @@ import fs from "fs";
 
 export { default as _util, canCompile } from "../util";
 export { default as transform } from "../transformation";
+export { default as parse } from "../esprima-compatibility";
 
 export { version } from "../../../package";
 
@@ -11,9 +12,9 @@ export { default as buildExternalHelpers } from "../build-external-helpers";
 export { default as types } from "../types";
 
 export function register(opts) {
-  var register = require("./register/node");
-  if (opts != null) register(opts);
-  return register;
+  var callback = require("./register/node");
+  if (opts != null) callback(opts);
+  return callback;
 }
 
 export function polyfill() {

@@ -120,7 +120,7 @@ export default class TraversalPath {
 
     // type is blacklisted
     if (opts.blacklist && opts.blacklist.indexOf(node.type) > -1) {
-      return;
+      return false;
     }
 
     this.call("enter");

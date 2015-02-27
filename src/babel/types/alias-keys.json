@@ -14,8 +14,8 @@
   "EmptyStatement":      ["Statement"],
   "LabeledStatement":    ["Statement"],
   "VariableDeclaration": ["Statement", "Declaration"],
-  "ExportDeclaration":   ["Statement", "Declaration"],
-  "ImportDeclaration":   ["Statement", "Declaration"],
+  "ExportDeclaration":   ["Statement", "Declaration", "ModuleDeclaration"],
+  "ImportDeclaration":   ["Statement", "Declaration", "ModuleDeclaration"],
   "PrivateDeclaration":  ["Statement", "Declaration"],
 
   "ArrowFunctionExpression": ["Scopable", "Function", "Expression"],

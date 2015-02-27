@@ -71,4 +71,4 @@ export function JSXClosingElement(node, print) {
   this.push(">");
 }
 
-export function JSXEmptyExpression() {};
+export function JSXEmptyExpression() {}

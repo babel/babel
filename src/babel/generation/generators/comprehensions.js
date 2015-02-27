@@ -5,7 +5,7 @@ export function ComprehensionBlock(node, print) {
   this.push(" of ");
   print(node.right);
   this.push(")");
-};
+}
 
 export function ComprehensionExpression(node, print) {
   this.push(node.generator ? "(" : "[");
@@ -24,4 +24,4 @@ export function ComprehensionExpression(node, print) {
   print(node.body);
 
   this.push(node.generator ? ")" : "]");
-};
+}

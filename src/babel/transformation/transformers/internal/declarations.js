@@ -1,7 +1,7 @@
 import useStrict from "../../helpers/use-strict";
 import t from "../../../types";
 
-exports.secondPass = true;
+export var secondPass = true;
 
 exports.BlockStatement =
 exports.Program = function (node, parent, scope, file) {

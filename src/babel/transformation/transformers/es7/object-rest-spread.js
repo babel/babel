@@ -2,11 +2,11 @@
 
 import t from "../../../types";
 
-exports.experimental = true;
+export var experimental = true;
 
-exports.manipulateOptions = function (opts) {
+export function manipulateOptions(opts) {
   if (opts.whitelist.length) opts.whitelist.push("es6.destructuring");
-};
+}
 
 var hasSpread = function (node) {
   for (var i = 0; i < node.properties.length; i++) {
@@ -17,7 +17,7 @@ var hasSpread = function (node) {
   return false;
 };
 
-exports.ObjectExpression = function (node, parent, scope, file) {
+export function ObjectExpression(node, parent, scope, file) {
   if (!hasSpread(node)) return;
 
   var args = [];
@@ -46,4 +46,4 @@ exports.ObjectExpression = function (node, parent, scope, file) {
   }
 
   return t.callExpression(file.addHelper("extends"), args);
-};
+}

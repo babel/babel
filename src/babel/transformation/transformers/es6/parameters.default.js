@@ -1,9 +1,9 @@
 import * as util from  "../../../util";
 import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isFunction(node) && hasDefaults(node);
-};
+}
 
 var hasDefaults = function (node) {
   for (var i = 0; i < node.params.length; i++) {

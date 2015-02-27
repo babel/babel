@@ -3,13 +3,13 @@ import traverse from "../../../traversal";
 import * as util from  "../../../util";
 import t from "../../../types";
 
-exports.experimental = true;
+export var experimental = true;
 
-exports.ComprehensionExpression = function (node, parent, scope, file) {
+export function ComprehensionExpression(node, parent, scope, file) {
   var callback = array;
   if (node.generator) callback = generator;
   return callback(node, parent, scope, file);
-};
+}
 
 var generator = function (node) {
   var body = [];

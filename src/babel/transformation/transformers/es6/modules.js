@@ -1,8 +1,8 @@
 import t from "../../../types";
 
-exports.check = require("../internal/modules").check;
+export { check } from "../internal/modules";
 
-exports.ImportDeclaration = function (node, parent, scope, file) {
+export function ImportDeclaration(node, parent, scope, file) {
   // flow type
   if (node.isType) return;
 
@@ -22,9 +22,9 @@ exports.ImportDeclaration = function (node, parent, scope, file) {
   }
 
   return nodes;
-};
+}
 
-exports.ExportDeclaration = function (node, parent, scope, file) {
+export function ExportDeclaration(node, parent, scope, file) {
   // flow type
   if (t.isTypeAlias(node.declaration)) return;
 
@@ -53,4 +53,4 @@ exports.ExportDeclaration = function (node, parent, scope, file) {
   }
 
   return nodes;
-};
+}

@@ -4,11 +4,11 @@ var buildBinaryExpression = function (left, right) {
   return t.binaryExpression("+", left, right);
 };
 
-exports.check = function (node) {
+export function check(node) {
   return t.isTemplateLiteral(node) || t.isTaggedTemplateExpression(node);
-};
+}
 
-exports.TaggedTemplateExpression = function (node, parent, scope, file) {
+export function TaggedTemplateExpression(node, parent, scope, file) {
   var args = [];
   var quasi = node.quasi;
 
@@ -31,9 +31,9 @@ exports.TaggedTemplateExpression = function (node, parent, scope, file) {
   args = args.concat(quasi.expressions);
 
   return t.callExpression(node.tag, args);
-};
+}
 
-exports.TemplateLiteral = function (node) {
+export function TemplateLiteral(node) {
   var nodes = [];
   var i;
 
@@ -61,4 +61,4 @@ exports.TemplateLiteral = function (node) {
   } else {
     return nodes[0];
   }
-};
+}

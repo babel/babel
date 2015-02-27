@@ -1,0 +1,20 @@
+{
+  "parser": "/Users/sebastian/Projects/6to5/6to5/eslint.js",
+  "ecmaFeatures": {
+    "blockBindings": true
+  },
+  "rules": {
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": 0,
+    "curly": 0,
+    "no-multi-spaces": 0,
+    "key-spacing": 0,
+    "no-return-assign": 0,
+    "consistent-return": 0,
+    "no-shadow": 0
+  },
+  "env": {
+    "node": true
+  }
+}

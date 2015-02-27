@@ -3,7 +3,7 @@ import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import t from "../../types";
 
-var crawl = function (node, state) {
+function crawl(node, state) {
   state ||= {};
 
   if (t.isMemberExpression(node)) {
@@ -22,9 +22,9 @@ var crawl = function (node, state) {
   }
 
   return state;
-};
+}
 
-var isHelper = function (node) {
+function isHelper(node) {
   if (t.isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
   } else if (t.isIdentifier(node)) {
@@ -36,12 +36,12 @@ var isHelper = function (node) {
   } else {
     return false;
   }
-};
+}
 
-var isType = function (node) {
+function isType(node) {
   return t.isLiteral(node) || t.isObjectExpression(node) || t.isArrayExpression(node) ||
          t.isIdentifier(node) || t.isMemberExpression(node);
-};
+}
 
 exports.nodes = {
   AssignmentExpression(node) {

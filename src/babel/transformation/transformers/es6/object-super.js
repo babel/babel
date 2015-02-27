@@ -1,11 +1,11 @@
 import ReplaceSupers from "../../helpers/replace-supers";
 import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isIdentifier(node, { name: "super" });
-};
+}
 
-exports.Property = function (node, parent, scope, file) {
+export function Property(node, parent, scope, file) {
   if (!node.method) return;
 
   var value = node.value;
@@ -29,4 +29,4 @@ exports.Property = function (node, parent, scope, file) {
       ])
     );
   }
-};
+}

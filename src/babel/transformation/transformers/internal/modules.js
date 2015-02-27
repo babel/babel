@@ -49,4 +49,4 @@ export function ExportDeclaration(node, parent, scope) {
       return [declar, node];
     }
   }
-};
+}

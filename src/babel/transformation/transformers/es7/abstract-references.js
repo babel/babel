@@ -3,7 +3,7 @@
 import * as util from  "../../../util";
 import t from "../../../types";
 
-exports.experimental = true;
+export var experimental = true;
 
 var container = function (parent, call, ret, file) {
   if (t.isExpressionStatement(parent) && !file.isConsequenceExpressionStatement(parent)) {
@@ -21,7 +21,7 @@ var container = function (parent, call, ret, file) {
   }
 };
 
-exports.AssignmentExpression = function (node, parent, scope, file) {
+export function AssignmentExpression(node, parent, scope, file) {
   var left = node.left;
   if (!t.isVirtualPropertyExpression(left)) return;
 
@@ -59,9 +59,9 @@ exports.AssignmentExpression = function (node, parent, scope, file) {
   }
 
   return container(parent, call, value, file);
-};
+}
 
-exports.UnaryExpression = function (node, parent, scope, file) {
+export function UnaryExpression(node, parent, scope, file) {
   var arg = node.argument;
   if (!t.isVirtualPropertyExpression(arg)) return;
   if (node.operator !== "delete") return;
@@ -72,9 +72,9 @@ exports.UnaryExpression = function (node, parent, scope, file) {
   });
 
   return container(parent, call, t.literal(true), file);
-};
+}
 
-exports.CallExpression = function (node, parent, scope) {
+export function CallExpression(node, parent, scope) {
   var callee = node.callee;
   if (!t.isVirtualPropertyExpression(callee)) return;
 
@@ -95,17 +95,17 @@ exports.CallExpression = function (node, parent, scope) {
   } else {
     return call;
   }
-};
+}
 
-exports.VirtualPropertyExpression = function (node) {
+export function VirtualPropertyExpression(node) {
   return util.template("abstract-expression-get", {
     PROPERTY: node.property,
     OBJECT:   node.object
   });
-};
+}
 
-exports.PrivateDeclaration = function (node) {
+export function PrivateDeclaration(node) {
   return t.variableDeclaration("const", node.declarations.map(function (id) {
     return t.variableDeclarator(id, t.newExpression(t.identifier("WeakMap"), []));
   }));
-};
+}

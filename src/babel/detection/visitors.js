@@ -51,4 +51,4 @@ exports.Function = function (node, parent, detected) {
   if (node.async) {
     detected("es7.asyncFunctions");
   }
-}
+};

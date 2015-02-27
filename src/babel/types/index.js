@@ -535,7 +535,7 @@ t.toExpression = function (node) {
   } else {
     throw new Error("cannot turn " + node.type + " to an expression");
   }
-}
+};
 
 /**
  * Description

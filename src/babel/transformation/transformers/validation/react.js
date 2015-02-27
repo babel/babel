@@ -19,7 +19,6 @@ export function CallExpression(node, parent, scope, file) {
   }
 }
 
-exports.ImportDeclaration =
-exports.ExportDeclaration = function (node, parent, scope, file) {
+export function ModuleDeclaration(node, parent, scope, file) {
   check(node.source, file);
-};
+}

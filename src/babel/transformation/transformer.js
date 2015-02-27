@@ -12,7 +12,7 @@ import each from "lodash/collection/each";
  */
 
 export default class Transformer {
-  constructor(key, transformer, opts) {
+  constructor(transformerKey, transformer, opts) {
     transformer = assign({}, transformer);
 
     var take = function (key) {
@@ -33,7 +33,7 @@ export default class Transformer {
 
     this.handlers = this.normalize(transformer);
     this.opts     ||= {};
-    this.key      = key;
+    this.key      = transformerKey;
   }
 
   normalize(transformer) {

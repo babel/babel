@@ -74,23 +74,23 @@ var templateVisitor = {
 };
 
 export function template(name, nodes, keepExpression) {
-  var template = exports.templates[name];
-  if (!template) throw new ReferenceError("unknown template " + name);
+  var ast = exports.templates[name];
+  if (!ast) throw new ReferenceError("unknown template " + name);
 
   if (nodes === true) {
     keepExpression = true;
     nodes = null;
   }
 
-  template = cloneDeep(template);
+  ast = cloneDeep(ast);
 
   if (!isEmpty(nodes)) {
-    traverse(template, templateVisitor, null, nodes);
+    traverse(ast, templateVisitor, null, nodes);
   }
 
-  if (template.body.length > 1) return template.body;
+  if (ast.body.length > 1) return ast.body;
 
-  var node = template.body[0];
+  var node = ast.body[0];
 
   if (!keepExpression && t.isExpressionStatement(node)) {
     return node.expression;
@@ -107,7 +107,7 @@ export function parseTemplate(loc, code) {
 function loadTemplates() {
   var templates = {};
 
-  var templatesLoc = __dirname + "/transformation/templates";
+  var templatesLoc = path.join(__dirname, "transformation/templates");
   if (!fs.existsSync(templatesLoc)) {
     throw new Error("no templates directory - this is most likely the " +
                     "result of a broken `npm publish`. Please report to " +
@@ -118,7 +118,7 @@ function loadTemplates() {
     if (name[0] === ".") return;
 
     var key  = path.basename(name, path.extname(name));
-    var loc  = templatesLoc + "/" + name;
+    var loc  = path.join(templatesLoc, name);
     var code = fs.readFileSync(loc, "utf8");
 
     templates[key] = parseTemplate(loc, code);

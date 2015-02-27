@@ -2,11 +2,11 @@ import rewritePattern from "regexpu/rewrite-pattern";
 import pull from "lodash/array/pull";
 import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isLiteral(node) && node.regex && node.regex.flags.indexOf("u") >= 0;
-};
+}
 
-exports.Literal = function (node) {
+export function Literal(node) {
   var regex = node.regex;
   if (!regex) return;
 
@@ -16,4 +16,4 @@ exports.Literal = function (node) {
 
   regex.pattern = rewritePattern(regex.pattern, regex.flags);
   regex.flags   = flags.join("");
-};
+}
