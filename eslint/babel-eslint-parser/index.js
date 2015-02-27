@@ -77,6 +77,11 @@ exports.parse = function (code) {
     throw err;
   }
 
+  // remove EOF token, eslint doesn't use this for anything and it interferes with some rules
+  // see https://github.com/babel/babel-eslint/issues/2 for more info
+  // todo: find a more elegant way to do this
+  tokens.pop();
+
   // convert tokens
   ast.tokens = tokens.map(acornToEsprima.toToken);
 
