@@ -1,3 +1,4 @@
 {
-  "selfContained": "runtime"
+  "selfContained": "runtime",
+  "unicode-regex": "regex.unicode"
 }

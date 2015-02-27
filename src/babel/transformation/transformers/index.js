@@ -47,7 +47,8 @@ export default {
 
   "es6.forOf":                             require("./es6/for-of"),
 
-  "es6.unicodeRegex":                      require("./es6/unicode-regex"),
+  "es6.regex.sticky":                      require("./es6/regex.sticky"),
+  "es6.regex.unicode":                     require("./es6/regex.unicode"),
   "es7.abstractReferences":                require("./es7/abstract-references"),
 
   "es6.constants":                         require("./es6/constants"),
