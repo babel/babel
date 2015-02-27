@@ -16,6 +16,7 @@ define(["exports", "module"], function (exports, module) {
   };
 
   module.exports = _default;
+
   function foo() {}
 
   var Foo = function Foo() {

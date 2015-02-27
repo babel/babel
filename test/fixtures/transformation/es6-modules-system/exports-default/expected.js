@@ -4,6 +4,7 @@ System.register([], function (_export) {
   _export("default", foo);
 
   function foo() {}
+
   return {
     setters: [],
     execute: function () {

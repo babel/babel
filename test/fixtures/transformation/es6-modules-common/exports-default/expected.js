@@ -15,6 +15,7 @@ var _default = function _default() {
 };
 
 module.exports = _default;
+
 function foo() {}
 
 var Foo = function Foo() {
