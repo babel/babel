@@ -62,7 +62,20 @@ exports.parse = function (code) {
   var comments = opts.onComment = [];
   var tokens = opts.onToken = [];
 
-  var ast = acorn.parse(code, opts);
+  var ast;
+  try {
+    ast = acorn.parse(code, opts);
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      err.lineNumber = err.loc.line;
+      err.column = err.loc.column;
+
+      // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
+      err.message = "Line X: " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
+    }
+    
+    throw err;
+  }
 
   // convert tokens
   ast.tokens = tokens.map(acornToEsprima.toToken);
