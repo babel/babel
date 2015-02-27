@@ -53,6 +53,8 @@ var astTransformVisitor = {
     } else if (t.isClassProperty(node)) {
       // eslint doesn't like these
       this.remove();
+    } else if (t.isArrowFunctionExpression(node)) {
+      node.type = "FunctionExpression";
     }
   }
 };
