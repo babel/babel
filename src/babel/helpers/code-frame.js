@@ -58,9 +58,9 @@ var highlight = function (text) {
 module.exports = function (lines, lineNumber, colNumber, opts) {
   colNumber = Math.max(colNumber, 0);
 
-  var useColor = !opts || opts.color === 'auto' ?
+  var useColor = !opts || opts.highlight === 'auto' ?
     chalk.supportsColor :
-    opts.color === 'always';
+    opts.highlight === 'always';
 
   if (useColor) {
     lines = highlight(lines);

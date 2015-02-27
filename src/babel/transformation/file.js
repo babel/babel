@@ -103,7 +103,7 @@ export default class File {
     "resolveModuleSource",
     "moduleId",
 
-    "color",
+    "highlight",
 
     // legacy
     "format",
@@ -137,12 +137,12 @@ export default class File {
       blacklist:              [],
       whitelist:              [],
       sourceMap:              false,
+      highlight:              "auto",
       optional:               [],
       comments:               true,
       filename:               "unknown",
       modules:                "common",
       compact:                "auto",
-      color:                  "auto",
       loose:                  [],
       code:                   true,
       ast:                    true

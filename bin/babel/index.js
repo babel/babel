@@ -29,7 +29,7 @@ commander.option("-R, --react-compat", "Makes the react transformer produce pre-
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 commander.option("-a, --auxiliary-comment [comment]", "Comment text to prepend to all auxiliary code");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
-commander.option("--color [when]", "Use color in output (never, always or auto) [auto]", 'auto');
+commander.option("--highlight [when]", "Use color in output (never, always or auto) [auto]", 'auto');
 
 commander.on("--help", function () {
   var outKeys = function (title, obj) {
@@ -118,7 +118,7 @@ exports.opts = {
   modules:                commander.modules,
   compact:                commander.compact,
   loose:                  commander.loose,
-  color:                  commander.color,
+  highlight:              commander.highlight,
 };
 
 var fn;
