@@ -23,12 +23,13 @@ var astTransformVisitor = {
   noScope: true,
   enter: function (node) {
     if (t.isImportBatchSpecifier(node)) {
+      // ImportBatchSpecifier<name> => ImportNamespaceSpecifier<id>
       node.type = "ImportNamespaceSpecifier";
       node.id = node.name;
       delete node.name;
     } else if (t.isFunction(node)) {
+      // defaults
       node.defaults = [];
-
       node.params = node.params.map(function (param) {
         if (t.isAssignmentPattern(param)) {
           node.defaults.push(param.right);
@@ -44,6 +45,7 @@ var astTransformVisitor = {
         node.rest = node.params.pop();
       }
     } else if (t.isClassProperty(node)) {
+      // eslint doesn't like these
       this.remove();
     }
   }
