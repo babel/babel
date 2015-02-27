@@ -12,6 +12,8 @@ foo: {
       var x = _step.value;
 
       while (true) {
+        if (_iterator["return"]) _iterator["return"]();
+
         break foo;
       }
     }
@@ -64,6 +66,7 @@ foo: {
   try {
     for (var _iterator3 = foo()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
       var x = _step3.value;
+      if (_iterator3["return"]) _iterator3["return"]();
 
       break foo;
     }
@@ -90,6 +93,7 @@ var _iteratorError4 = undefined;
 try {
   for (var _iterator4 = foo()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
     var x = _step4.value;
+    if (_iterator4["return"]) _iterator4["return"]();
 
     break;
   }
