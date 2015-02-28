@@ -6,6 +6,13 @@
 **NOTE:** Please note that this is experimental and may have numerous bugs. It is however
 successfuly linting the [babel core](https://github.com/babel/babel/blob/master/.eslintrc).
 
+## How does it work?
+
+ESLint allows custom parsers. This is great but some of the syntax nodes that Babel supports
+aren't supported by ESLint. When using this plugin, ESLint is monkeypatched and your code is
+transformed into code that ESLint can understand. All location info such as line numbers,
+columns is also retained so you can track down errors with ease.
+
 ## Usage
 
 ### Install
@@ -34,10 +41,3 @@ Check out the [ESLint docs](http://eslint.org/docs/rules/) for all possible rule
 ```sh
 $ eslint your-files-here
 ```
-
-## How does it work?
-
-ESLint allows custom parsers. This is great but some of the syntax nodes that Babel supports
-aren't supported by ESLint. When using this plugin, ESLint is monkeypatched and your code is
-transformed into code that ESLint can understand. All location info such as line numbers,
-columns is also retained so you can track down errors with ease.
