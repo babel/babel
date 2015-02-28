@@ -83,14 +83,7 @@ export function Literal(node) {
   var type = typeof val;
 
   if (type === "string") {
-    val = JSON.stringify(val);
-
-    // escape illegal js but valid json unicode characters
-    val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
-      return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
-    });
-
-    this.push(val);
+    this._stringLiteral(val);
   } else if (type === "number") {
     this.push(val + "");
   } else if (type === "boolean") {
@@ -100,4 +93,15 @@ export function Literal(node) {
   } else if (val === null) {
     this.push("null");
   }
+}
+
+export function _stringLiteral(val) {
+  val = JSON.stringify(val);
+
+  // escape illegal js but valid json unicode characters
+  val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
+    return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
+  });
+
+  this.push(val);
 }

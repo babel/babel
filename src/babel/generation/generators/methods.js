@@ -1,9 +1,19 @@
 import t from "../../types";
 
 export function _params(node, print) {
+  print(node.typeParameters);
   this.push("(");
-  print.list(node.params);
+  print.list(node.params, {
+    iterator: (node) =>{
+      if (node.optional) this.push("?");
+      print(node.typeAnnotation);
+    }
+  });
   this.push(")");
+
+  if (node.returnType) {
+    print(node.returnType);
+  }
 }
 
 export function _method(node, print) {

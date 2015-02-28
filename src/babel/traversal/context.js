@@ -43,7 +43,7 @@ export default class TraversalConext {
     if (this.shouldFlatten) {
       node[key] = flatten(node[key]);
 
-      if (key === "body") {
+      if (key === "body" || key === "expressions") {
         // we can safely compact this
         node[key] = compact(node[key]);
       }

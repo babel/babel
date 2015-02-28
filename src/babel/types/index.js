@@ -709,6 +709,10 @@ t.inherits = function (child, parent) {
   child.start         = parent.start;
   child.loc           = parent.loc;
   child.end           = parent.end;
+
+  child.typeAnnotation = parent.typeAnnotation;
+  child.returnType     = parent.returnType;
+
   t.inheritsComments(child, parent);
   return child;
 };

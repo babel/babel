@@ -15,7 +15,7 @@ import has from "lodash/object/has";
 import fs from "fs";
 import t from "./types";
 
-export { inherits } from "util";
+export { inherits, inspect } from "util";
 
 export var debug = buildDebug("babel");
 

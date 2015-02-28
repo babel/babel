@@ -97,7 +97,7 @@ var run = function (task, done) {
   if (!execCode || actualCode) {
     result     = transform(actualCode, getOpts(actual));
     checkAst(result, actual);
-    actualCode = result.code;
+    actualCode = result.code.trim();
 
     try {
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);

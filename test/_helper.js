@@ -24,7 +24,7 @@ exports.esvalid = function (ast, code, loc) {
   if (errors.length) {
     var msg = [];
     _.each(errors, function (err) {
-      msg.push(err.message + " - " + JSON.stringify(err.node));
+      msg.push(err.message + " - " + util.inspect(err.node));
     });
     throw new Error(loc + ": " + msg.join(". ") + "\n" + code);
   }

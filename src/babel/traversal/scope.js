@@ -299,7 +299,7 @@ export default class Scope {
     var info = this.getBindingInfo(name);
     if (!info) return;
 
-    info.identifier.typeAnnotation = info.typeAnnotation = type;
+    info.typeAnnotation = type;
   }
 
   getTypeAnnotation(name, id, node) {

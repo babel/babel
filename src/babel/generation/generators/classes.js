@@ -1,5 +1,4 @@
-exports.ClassExpression =
-exports.ClassDeclaration = function (node, print) {
+export function ClassDeclaration(node, print) {
   this.push("class");
 
   if (node.id) {
@@ -7,14 +6,24 @@ exports.ClassDeclaration = function (node, print) {
     print(node.id);
   }
 
+  print(node.typeParameters);
+
   if (node.superClass) {
     this.push(" extends ");
     print(node.superClass);
+    print(node.superTypeParameters);
+  }
+
+  if (node.implements) {
+    this.push(" implements ");
+    print.join(node.implements, { separator: ", " });
   }
 
   this.space();
   print(node.body);
-};
+}
+
+export { ClassDeclaration as ClassExpression };
 
 export function ClassBody(node, print) {
   if (node.body.length === 0) {

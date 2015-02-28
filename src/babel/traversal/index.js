@@ -84,7 +84,7 @@ traverse.explode = function (obj) {
     var aliases = t.FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
       for (var i = 0; i < aliases.length; i++) {
-        obj[aliases[i]] = fns;
+        obj[aliases[i]] ||= fns;
       }
     }
   }

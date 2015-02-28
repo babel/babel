@@ -211,13 +211,12 @@ export function PrivateDeclaration(node, print) {
 }
 
 export function VariableDeclarator(node, print) {
+  print(node.id);
+  print(node.id.typeAnnotation);
   if (node.init) {
-    print(node.id);
     this.space();
     this.push("=");
     this.space();
     print(node.init);
-  } else {
-    print(node.id);
   }
 }

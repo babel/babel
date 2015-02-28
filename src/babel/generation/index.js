@@ -117,7 +117,7 @@ class CodeGenerator {
   }
 
   print(node, parent, opts = {}) {
-    if (!node) return "";
+    if (!node) return;
 
     if (parent && parent._compact) {
       node._compact = true;

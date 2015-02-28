@@ -21,6 +21,12 @@ each([
   });
 });
 
+export function NullableTypeAnnotation(node, parent) {
+  return t.isArrayTypeAnnotation(parent);
+}
+
+export { NullableTypeAnnotation as FunctionTypeAnnotation };
+
 export function UpdateExpression(node, parent) {
   if (t.isMemberExpression(parent) && parent.object === node) {
     // (foo++).test()
@@ -139,8 +145,7 @@ export function FunctionExpression(node, parent) {
   }
 }
 
-exports.AssignmentExpression =
-exports.ConditionalExpression = function (node, parent) {
+export function ConditionalExpression(node, parent) {
   if (t.isUnaryLike(parent)) {
     return true;
   }
@@ -164,4 +169,6 @@ exports.ConditionalExpression = function (node, parent) {
   }
 
   return false;
-};
+}
+
+export { ConditionalExpression as AssignmentExpression };
