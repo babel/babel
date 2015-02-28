@@ -84,8 +84,7 @@ exports.Function = function (node, parent, scope) {
     canOptimise:  false,
     candidates:   [],
     method:       node,
-    name:         rest.name,
-    argsId:       argsId
+    name:         rest.name
   };
 
   scope.traverse(node, memberExpressionOptimisationVisitor, state);
@@ -94,7 +93,8 @@ exports.Function = function (node, parent, scope) {
   if (state.canOptimise) {
     for (var i = 0; i < state.candidates.length; i++) {
       var candidate = state.candidates[i];
-      optimizeMemberExpression(candidate.node, candidate.parent, node.params.length);
+      candidate.node = argsId;
+      optimizeMemberExpression(candidate.parent, node.params.length);
     }
     return;
   }
