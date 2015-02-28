@@ -22,38 +22,43 @@ exports.toAST = function (ast) {
 var astTransformVisitor = {
   noScope: true,
   enter: function (node) {
+    if (t.isSpreadProperty(node)) {
+      node.type = "Property";
+      node.kind = "init";
+      node.computed = false;
+      node.key = node.value = node.argument;
+      delete node.argument;
+    }
+
+    if (t.isClassProperty(node)) {
+      // eslint doesn't like these
+      this.remove();
+    }
+
     if (t.isImportBatchSpecifier(node)) {
       // ImportBatchSpecifier<name> => ImportNamespaceSpecifier<id>
       node.type = "ImportNamespaceSpecifier";
       node.id = node.name;
       delete node.name;
-    } else if (t.isFunction(node)) {
-      // defaults
+    }
+
+    // functions
+
+    if (t.isFunction(node)) {
       node.defaults = [];
       node.params = node.params.map(function (param) {
         if (t.isAssignmentPattern(param)) {
           node.defaults.push(param.right);
           return param.left;
         } else {
+          if (t.isRestElement(param)) param = param.argument;
           node.defaults.push(null);
           return param;
         }
       });
+    }
 
-      // rest
-      if (t.isRestElement(node.params[node.params.length - 1])) {
-        node.rest = node.params.pop();
-      }
-    } else if (t.isSpreadProperty(node)) {
-      node.type = "Property";
-      node.kind = "init";
-      node.computed = false;
-      node.key = node.value = node.argument;
-      delete node.argument;
-    } else if (t.isClassProperty(node)) {
-      // eslint doesn't like these
-      this.remove();
-    } else if (t.isArrowFunctionExpression(node)) {
+    if (t.isArrowFunctionExpression(node)) {
       node.type = "FunctionExpression";
     }
   }
