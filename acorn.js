@@ -3365,7 +3365,7 @@
           var listItem = exprList[i];
           if (listItem.type === "TypeCastExpression") {
             var expr = listItem.expression;
-            expr.returnType = listItem.typeAnnotation;
+            expr.typeAnnotation = listItem.typeAnnotation;
             exprList[i] = expr;
           }
         }
