@@ -30,6 +30,10 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
+    if (t.isRestElement(node)) {
+      return node.argument;
+    }
+
     if (t.isImportBatchSpecifier(node)) {
       // ImportBatchSpecifier<name> => ImportNamespaceSpecifier<id>
       node.type = "ImportNamespaceSpecifier";
@@ -67,7 +71,6 @@ var astTransformVisitor = {
           node.defaults.push(param.right);
           return param.left;
         } else {
-          if (t.isRestElement(param)) param = param.argument;
           node.defaults.push(null);
           return param;
         }
