@@ -31,6 +31,14 @@ module.exports = function (commander, filenames, opts) {
     console.log(src + " -> " + dest);
   };
 
+  var handleFile = function (src, filename) {
+    if (util.canCompile(filename)) {
+      write(src, filename);
+    } else if (commander.copyFiles) {
+      outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
+    }
+  };
+
   var handle = function (filename) {
     if (!fs.existsSync(filename)) return;
 
@@ -41,11 +49,7 @@ module.exports = function (commander, filenames, opts) {
 
       _.each(util.readdir(dirname), function (filename) {
         var src = path.join(dirname, filename);
-        if (util.canCompile(filename)) {
-          write(src, filename);
-        } else if (commander.copyFiles) {
-          outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
-        }
+        handleFile(src, filename);
       });
     } else {
       write(filename, filename);
@@ -65,7 +69,7 @@ module.exports = function (commander, filenames, opts) {
         watcher.on(type, function (filename) {
           var relative = path.relative(dirname, filename) || filename;
           try {
-            if (util.canCompile(filename)) write(filename, relative);
+            handleFile(filename, relative);
           } catch (err) {
             console.error(err.stack);
           }
