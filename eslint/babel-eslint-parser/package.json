@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "babel": "^4.6.0",
-    "lodash": "^3.3.1"
+    "lodash.assign": "^3.0.0"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",

@@ -1,6 +1,6 @@
 var acornToEsprima = require("./acorn-to-esprima");
 var traverse       = require("babel").traverse;
-var extend         = require("lodash/object/extend");
+var assign         = require("lodash.assign");
 var Module         = require("module");
 var acorn          = require("babel").acorn;
 var path           = require("path");
@@ -33,7 +33,7 @@ function monkeypatch() {
 
   // monkeypatch estraverse
   var estraverse = escopeMod.require("estraverse");
-  extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
+  assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
   // monkeypatch escope
   var escope  = require(escopeLoc);
@@ -73,7 +73,7 @@ exports.parse = function (code) {
       // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
       err.message = "Line X: " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
     }
-    
+
     throw err;
   }
 
