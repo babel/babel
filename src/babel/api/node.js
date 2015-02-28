@@ -2,8 +2,11 @@ import isFunction from "lodash/lang/isFunction";
 import transform from "../transformation";
 import fs from "fs";
 
+import * as util from "../util";
+export { util as _util };
+export {canCompile } from "../util";
+
 export { default as acorn } from "acorn-babel";
-export { default as _util, canCompile } from "../util";
 export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../build-external-helpers";
