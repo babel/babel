@@ -42,6 +42,20 @@ var astTransformVisitor = {
       delete node.name;
     }
 
+    // JSX
+
+    if (t.isJSXIdentifier(node)) {
+      if (node.name === "this" && t.isReferenced(node, parent)) {
+        return t.thisExpression();
+      } else {
+        node.type = "Identifier";
+      }
+    }
+
+    if (t.isJSXMemberExpression(node)) {
+      node.type = "MemberExpression";
+    }
+
     // functions
 
     if (t.isFunction(node)) {
