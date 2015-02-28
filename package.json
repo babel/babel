@@ -1,7 +1,7 @@
 {
   "name": "babel",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "repository": "babel/babel",
