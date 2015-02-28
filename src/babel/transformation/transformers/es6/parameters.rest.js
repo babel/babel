@@ -39,16 +39,14 @@ var memberExpressionOptimisationVisitor = {
   }
 };
 
-function optimizeMemberExpression(node, parent, offset) {
+function optimizeMemberExpression(parent, offset) {
   var newExpr;
   var prop = parent.property;
 
   if (t.isLiteral(prop)) {
-    node.name = "arguments";
     prop.value += offset;
     prop.raw = String(prop.value);
   } else { // // UnaryExpression, BinaryExpression
-    node.name = "arguments";
     newExpr = t.binaryExpression("+", prop, t.literal(offset));
     parent.property = newExpr;
   }
@@ -87,6 +85,7 @@ exports.Function = function (node, parent, scope) {
     candidates:   [],
     method:       node,
     name:         rest.name,
+    argsId:       argsId
   };
 
   scope.traverse(node, memberExpressionOptimisationVisitor, state);
