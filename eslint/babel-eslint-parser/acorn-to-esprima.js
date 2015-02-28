@@ -19,6 +19,10 @@ exports.toAST = function (ast) {
   traverse(ast, astTransformVisitor);
 };
 
+function isCompatTag(tagName) {
+  return tagName && /^[a-z]|\-/.test(tagName);
+}
+
 var astTransformVisitor = {
   noScope: true,
   enter: function (node) {
@@ -53,8 +57,10 @@ var astTransformVisitor = {
     if (t.isJSXIdentifier(node)) {
       if (node.name === "this" && t.isReferenced(node, parent)) {
         return t.inherits(t.thisExpression(), node);
-      } else {
+      } else if (!t.isJSXAttribute(parent) && !isCompatTag(node.name)) {
         node.type = "Identifier";
+      } else {
+        // just ignore this node as it'd be something like <div> or an attribute name
       }
     }
 
