@@ -6,7 +6,7 @@
 import isString from "lodash/lang/isString";
 import * as messages from "../../messages";
 import esutils from "esutils";
-import react from "./react";
+import * as react from "./react";
 import t from "../../types";
 
 module.exports = function (exports, opts) {

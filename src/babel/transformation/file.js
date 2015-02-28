@@ -20,12 +20,12 @@ var checkTransformerVisitor = {
   }
 };
 
-var checkNode = function (stack, node, scope) {
+function checkNode(stack, node, scope) {
   each(stack, function (pass) {
     if (pass.shouldRun) return;
     pass.checkNode(node, scope);
   });
-};
+}
 
 export default class File {
   constructor(opts) {

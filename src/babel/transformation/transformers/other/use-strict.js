@@ -8,10 +8,11 @@ export function Program(program) {
   }
 }
 
-exports.FunctionDeclaration =
-exports.FunctionExpression = function () {
+export function FunctionExpression() {
   this.skip();
-};
+}
+
+export { FunctionExpression as FunctionDeclaration };
 
 export function ThisExpression() {
   return t.identifier("undefined");

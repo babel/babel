@@ -5,11 +5,7 @@ import t from "../../../types";
 import values from "lodash/object/values";
 import extend from "lodash/object/extend";
 
-exports.check = function (node) {
-  return t.isVariableDeclaration(node) && (node.kind === "let" || node.kind === "const");
-};
-
-var isLet = function (node, parent) {
+function isLet(node, parent) {
   if (!t.isVariableDeclaration(node)) return false;
   if (node._let) return true;
   if (node.kind !== "let") return false;
@@ -25,23 +21,27 @@ var isLet = function (node, parent) {
   node._let = true;
   node.kind = "var";
   return true;
-};
+}
 
-var isLetInitable = function (node, parent) {
+function isLetInitable(node, parent) {
   return !t.isFor(parent) || !t.isFor(parent, { left: node });
-};
+}
 
-var isVar = function (node, parent) {
+function isVar(node, parent) {
   return t.isVariableDeclaration(node, { kind: "var" }) && !isLet(node, parent);
-};
+}
 
-var standardizeLets = function (declars) {
+function standardizeLets(declars) {
   for (var i = 0; i < declars.length; i++) {
     delete declars[i]._let;
   }
-};
+}
 
-exports.VariableDeclaration = function (node, parent, scope, file) {
+export function check(node) {
+  return t.isVariableDeclaration(node) && (node.kind === "let" || node.kind === "const");
+}
+
+export function VariableDeclaration(node, parent, scope, file) {
   if (!isLet(node, parent)) return;
 
   if (isLetInitable(node) && file.transformers["es6.blockScopingTDZ"].canRun()) {
@@ -61,9 +61,9 @@ exports.VariableDeclaration = function (node, parent, scope, file) {
 
     return nodes;
   }
-};
+}
 
-exports.Loop = function (node, parent, scope, file) {
+export function Loop(node, parent, scope, file) {
   var init = node.left || node.init;
   if (isLet(init, node)) {
     t.ensureBlock(node);
@@ -71,15 +71,16 @@ exports.Loop = function (node, parent, scope, file) {
   }
   var blockScoping = new BlockScoping(node, node.body, parent, scope, file);
   blockScoping.run();
-};
+}
 
-exports.Program =
-exports.BlockStatement = function (block, parent, scope, file) {
+export function BlockStatement(block, parent, scope, file) {
   if (!t.isLoop(parent)) {
     var blockScoping = new BlockScoping(false, block, parent, scope, file);
     blockScoping.run();
   }
-};
+}
+
+export { BlockStatement as Program };
 
 function replace(node, parent, scope, remaps) {
   if (!t.isReferencedIdentifier(node, parent)) return;

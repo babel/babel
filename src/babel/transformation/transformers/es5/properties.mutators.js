@@ -1,4 +1,4 @@
-import defineMap from "../../helpers/define-map";
+import * as defineMap from "../../helpers/define-map";
 import t from "../../../types";
 
 export function check(node) {

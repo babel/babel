@@ -76,16 +76,17 @@ var go = function (getBody, node, scope) {
   }
 };
 
-exports.Program = function (node, parent, scope) {
+export function Program(node, parent, scope) {
   go(function () {
     return node.body;
   }, node, scope);
 };
 
-exports.FunctionDeclaration =
-exports.FunctionExpression = function (node, parent, scope) {
+export function FunctionDeclaration(node, parent, scope) {
   go(function () {
     t.ensureBlock(node);
     return node.body.body;
   }, node, scope);
-};
+}
+
+export { FunctionDeclaration as FunctionExpression };

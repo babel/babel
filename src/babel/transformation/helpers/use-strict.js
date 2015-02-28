@@ -1,11 +1,11 @@
 import t from "../../types";
 
-exports.has = function (node) {
+export function has(node) {
   var first = node.body[0];
   return t.isExpressionStatement(first) && t.isLiteral(first.expression, { value: "use strict" });
-};
+}
 
-exports.wrap = function (node, callback) {
+export function wrap(node, callback) {
   var useStrictNode;
   if (exports.has(node)) {
     useStrictNode = node.body.shift();
@@ -16,4 +16,4 @@ exports.wrap = function (node, callback) {
   if (useStrictNode) {
     node.body.unshift(useStrictNode);
   }
-};
+}

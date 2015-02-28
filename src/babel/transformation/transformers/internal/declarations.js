@@ -1,10 +1,9 @@
-import useStrict from "../../helpers/use-strict";
+import * as useStrict from "../../helpers/use-strict";
 import t from "../../../types";
 
 export var secondPass = true;
 
-exports.BlockStatement =
-exports.Program = function (node, parent, scope, file) {
+export function BlockStatement(node, parent, scope, file) {
   if (!node._declarations) return;
 
   useStrict.wrap(node, function () {
@@ -31,4 +30,6 @@ exports.Program = function (node, parent, scope, file) {
 
     node._declarations = null;
   });
-};
+}
+
+export { BlockStatement as Program };

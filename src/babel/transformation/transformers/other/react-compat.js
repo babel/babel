@@ -1,4 +1,4 @@
-import react from "../../helpers/react";
+import * as react from "../../helpers/react";
 import t from "../../../types";
 
 export function manipulateOptions(opts) {

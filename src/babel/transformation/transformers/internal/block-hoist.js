@@ -9,8 +9,7 @@ import values from "lodash/object/values";
 //  - 2 Priority over normal nodes
 //  - 3 We want this to be at the **very** top
 
-exports.BlockStatement =
-exports.Program = {
+export var BlockStatement = {
   exit(node) {
     var hasChange = false;
     for (var i = 0; i < node.body.length; i++) {
@@ -29,3 +28,5 @@ exports.Program = {
     node.body = flatten(values(nodePriorities).reverse());
   }
 };
+
+export { BlockStatement as Program };

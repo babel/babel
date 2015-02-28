@@ -1,10 +1,9 @@
 import * as messages from "../../../messages";
 import t from "../../../types";
 
-exports.check = t.isPattern;
+export var check = t.isPattern;
 
-exports.ForInStatement =
-exports.ForOfStatement = function (node, parent, scope, file) {
+export function ForOfStatement(node, parent, scope, file) {
   var left = node.left;
 
   if (t.isPattern(left)) {
@@ -50,7 +49,9 @@ exports.ForOfStatement = function (node, parent, scope, file) {
 
   var block = node.body;
   block.body = nodes.concat(block.body);
-};
+}
+
+export { ForOfStatement as ForInStatement };
 
 exports.Function = function (node, parent, scope, file) {
   var nodes = [];
@@ -83,7 +84,7 @@ exports.Function = function (node, parent, scope, file) {
   block.body = nodes.concat(block.body);
 };
 
-exports.CatchClause = function (node, parent, scope, file) {
+export function CatchClause(node, parent, scope, file) {
   var pattern = node.param;
   if (!t.isPattern(pattern)) return;
 
@@ -103,9 +104,9 @@ exports.CatchClause = function (node, parent, scope, file) {
   node.body.body = nodes.concat(node.body.body);
 
   return node;
-};
+}
 
-exports.ExpressionStatement = function (node, parent, scope, file) {
+export function ExpressionStatement(node, parent, scope, file) {
   var expr = node.expression;
   if (expr.type !== "AssignmentExpression") return;
   if (!t.isPattern(expr.left)) return;
@@ -127,9 +128,9 @@ exports.ExpressionStatement = function (node, parent, scope, file) {
   destructuring.init(expr.left, ref);
 
   return nodes;
-};
+}
 
-exports.AssignmentExpression = function (node, parent, scope, file) {
+export function AssignmentExpression(node, parent, scope, file) {
   if (!t.isPattern(node.left)) return;
 
   var ref = scope.generateUidIdentifier("temp");
@@ -152,18 +153,18 @@ exports.AssignmentExpression = function (node, parent, scope, file) {
   nodes.push(ref);
 
   return t.toSequenceExpression(nodes, scope);
-};
+}
 
-var variableDeclarationHasPattern = function (node) {
+function variableDeclarationHasPattern(node) {
   for (var i = 0; i < node.declarations.length; i++) {
     if (t.isPattern(node.declarations[i].id)) {
       return true;
     }
   }
   return false;
-};
+}
 
-exports.VariableDeclaration = function (node, parent, scope, file) {
+export function VariableDeclaration(node, parent, scope, file) {
   if (t.isForInStatement(parent) || t.isForOfStatement(parent)) return;
   if (!variableDeclarationHasPattern(node)) return;
 

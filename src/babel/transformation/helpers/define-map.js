@@ -5,7 +5,7 @@ import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import t from "../../types";
 
-exports.push = function (mutatorMap, key, kind, computed, value) {
+export function push(mutatorMap, key, kind, computed, value) {
   var alias;
 
   if (t.isIdentifier(key)) {
@@ -31,9 +31,9 @@ exports.push = function (mutatorMap, key, kind, computed, value) {
   }
 
   map[kind] = value;
-};
+}
 
-exports.build = function (mutatorMap) {
+export function build(mutatorMap) {
   var objExpr = t.objectExpression([]);
 
   each(mutatorMap, function (map) {
@@ -70,4 +70,4 @@ exports.build = function (mutatorMap) {
   });
 
   return objExpr;
-};
+}

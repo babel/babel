@@ -89,7 +89,7 @@ var visit = function (node, name, scope) {
   return state;
 };
 
-exports.property = function (node, file, scope) {
+export function property(node, file, scope) {
   var key = t.toComputedKey(node, node.key);
   if (!t.isLiteral(key)) return node; // we can't set a function id with this
 
@@ -99,9 +99,9 @@ exports.property = function (node, file, scope) {
   var method = node.value;
   var state  = visit(method, name, scope);
   node.value = wrap(state, method, id, scope);
-};
+}
 
-exports.bare = function (node, parent, scope) {
+export function bare(node, parent, scope) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
@@ -123,4 +123,4 @@ exports.bare = function (node, parent, scope) {
 
   var state = visit(node, name, scope);
   return wrap(state, node, id, scope);
-};
+}

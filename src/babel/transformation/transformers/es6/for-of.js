@@ -2,9 +2,9 @@ import * as messages from "../../../messages";
 import * as util from  "../../../util";
 import t from "../../../types";
 
-exports.check = t.isForOfStatement;
+export var check = t.isForOfStatement;
 
-exports.ForOfStatement = function (node, parent, scope, file) {
+export function ForOfStatement(node, parent, scope, file) {
   var callback = spec;
   if (file.isLoose("es6.forOf")) callback = loose;
 
@@ -33,7 +33,7 @@ exports.ForOfStatement = function (node, parent, scope, file) {
   loop._scopeInfo = node._scopeInfo;
 
   return build.node;
-};
+}
 
 var breakVisitor = {
   enter(node, parent, scope, state) {

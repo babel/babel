@@ -1,8 +1,6 @@
 import includes from "lodash/collection/includes";
 import t from "../../../types";
 
-exports.check = t.isSpreadElement;
-
 function getSpreadLiteral(spread, scope) {
   return scope.toArray(spread.argument, true);
 }
@@ -41,6 +39,8 @@ function build(props, scope) {
 
   return nodes;
 }
+
+export var check = t.isSpreadElement;
 
 export function ArrayExpression(node, parent, scope) {
   var elements = node.elements;

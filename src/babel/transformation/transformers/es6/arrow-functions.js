@@ -1,6 +1,6 @@
 import t from "../../../types";
 
-exports.check = t.isArrowFunctionExpression;
+export var check = t.isArrowFunctionExpression;
 
 export function ArrowFunctionExpression(node) {
   t.ensureBlock(node);

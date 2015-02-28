@@ -2,7 +2,7 @@ import t from "../../types";
 
 var isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
 
-exports.isCreateClass = function (node) {
+export function isCreateClass(node) {
   if (!node || !t.isCallExpression(node)) return false;
 
   // not React.createClass call member object
@@ -17,10 +17,10 @@ exports.isCreateClass = function (node) {
   if (!t.isObjectExpression(first)) return false;
 
   return true;
-};
+}
 
-exports.isReactComponent = t.buildMatchMemberExpression("React.Component");
+export var isReactComponent = t.buildMatchMemberExpression("React.Component");
 
-exports.isCompatTag = function (tagName) {
+export function isCompatTag(tagName) {
   return tagName && /^[a-z]|\-/.test(tagName);
-};
+}

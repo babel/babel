@@ -1,17 +1,17 @@
 import ReplaceSupers from "../../helpers/replace-supers";
-import nameMethod from "../../helpers/name-method";
-import defineMap from "../../helpers/define-map";
+import * as nameMethod from "../../helpers/name-method";
+import * as defineMap from "../../helpers/define-map";
 import * as messages from "../../../messages";
 import * as util from  "../../../util";
 import t from "../../../types";
 
-exports.check = t.isClass;
+export var check = t.isClass;
 
-exports.ClassDeclaration = function (node, parent, scope, file) {
+export function ClassDeclaration(node, parent, scope, file) {
   return new ClassTransformer(node, file, scope, true).run();
-};
+}
 
-exports.ClassExpression = function (node, parent, scope, file) {
+export function ClassExpression(node, parent, scope, file) {
   if (!node.id) {
     if (t.isProperty(parent) && parent.value === node && !parent.computed && t.isIdentifier(parent.key)) {
       // var o = { foo: class {} };
@@ -25,7 +25,7 @@ exports.ClassExpression = function (node, parent, scope, file) {
   }
 
   return new ClassTransformer(node, file, scope, false).run();
-};
+}
 
 class ClassTransformer {
 

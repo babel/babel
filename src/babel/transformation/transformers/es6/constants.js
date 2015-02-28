@@ -1,9 +1,9 @@
 import * as messages from "../../../messages";
 import t from "../../../types";
 
-exports.check = function (node) {
+export function check(node) {
   return t.isVariableDeclaration(node, { kind: "const" });
-};
+}
 
 var visitor = {
   enter(node, parent, scope, state) {
@@ -36,13 +36,13 @@ var visitor = {
   }
 };
 
-exports.Scopable = function (node, parent, scope, file) {
+export function Scopable(node, parent, scope, file) {
   scope.traverse(node, visitor, {
     constants: scope.getAllBindingsOfKind("const"),
     file:      file
   });
-};
+}
 
-exports.VariableDeclaration = function (node) {
+export function VariableDeclaration(node) {
   if (node.kind === "const") node.kind = "let";
-};
+}

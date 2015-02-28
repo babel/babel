@@ -26,11 +26,9 @@ var visitor = {
   }
 };
 
-exports.optional = true;
+export var optional = true;
 
-exports.Loop =
-exports.Program =
-exports.BlockStatement = function (node, parent, scope, file) {
+export function BlockStatement(node, parent, scope, file) {
   var letRefs = node._letReferences;
   if (!letRefs) return;
 
@@ -40,4 +38,6 @@ exports.BlockStatement = function (node, parent, scope, file) {
   };
 
   scope.traverse(node, visitor, state);
-};
+}
+
+export { BlockStatement as Program, BlockStatement as Loop };

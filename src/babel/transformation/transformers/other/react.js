@@ -1,4 +1,4 @@
-import react from "../../helpers/react";
+import * as react from "../../helpers/react";
 import t from "../../../types";
 
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;

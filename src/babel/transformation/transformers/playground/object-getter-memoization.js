@@ -16,8 +16,7 @@ var visitor = {
   }
 };
 
-exports.Property =
-exports.MethodDefinition = function (node, parent, scope, file) {
+export function MethodDefinition(node, parent, scope, file) {
   if (node.kind !== "memo") return;
   node.kind = "get";
 
@@ -38,4 +37,6 @@ exports.MethodDefinition = function (node, parent, scope, file) {
   scope.traverse(value, visitor, state);
 
   return node;
-};
+}
+
+export { MethodDefinition as Property };
