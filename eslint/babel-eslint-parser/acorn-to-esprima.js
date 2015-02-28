@@ -38,12 +38,6 @@ var astTransformVisitor = {
     }
 
     // classes
-    
-    if (t.isClassDeclaration(node)) {
-      return t.variableDeclaration("let", [
-        t.variableDeclarator(node.id, node)
-      ]);
-    }
 
     if (t.isClassProperty(node)) {
       // eslint doesn't like these
@@ -54,7 +48,7 @@ var astTransformVisitor = {
 
     if (t.isJSXIdentifier(node)) {
       if (node.name === "this" && t.isReferenced(node, parent)) {
-        return t.thisExpression();
+        return t.inherits(t.thisExpression(), node);
       } else {
         node.type = "Identifier";
       }
