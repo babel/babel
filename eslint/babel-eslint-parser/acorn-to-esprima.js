@@ -25,7 +25,7 @@ function isCompatTag(tagName) {
 
 var astTransformVisitor = {
   noScope: true,
-  enter: function (node) {
+  enter: function (node, parent) {
     if (t.isSpreadProperty(node)) {
       node.type = "Property";
       node.kind = "init";
@@ -46,6 +46,10 @@ var astTransformVisitor = {
     }
 
     // classes
+    
+    if (t.isReferencedIdentifier(node, parent, { name: "super" })) {
+      return t.inherits(t.thisExpression(), node);
+    }
 
     if (t.isClassProperty(node)) {
       // eslint doesn't like these
