@@ -1,3 +1,3 @@
 {
-  "blacklist": ["useStrict", "es6.blockScoping"]
+  "blacklist": ["useStrict", "es6.blockScoping", "regenerator"]
 }
