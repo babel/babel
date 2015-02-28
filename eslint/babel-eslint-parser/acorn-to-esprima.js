@@ -30,16 +30,24 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
-    if (t.isClassProperty(node)) {
-      // eslint doesn't like these
-      this.remove();
-    }
-
     if (t.isImportBatchSpecifier(node)) {
       // ImportBatchSpecifier<name> => ImportNamespaceSpecifier<id>
       node.type = "ImportNamespaceSpecifier";
       node.id = node.name;
       delete node.name;
+    }
+
+    // classes
+    
+    if (t.isClassDeclaration(node)) {
+      return t.variableDeclaration("let", [
+        t.variableDeclarator(node.id, node)
+      ]);
+    }
+
+    if (t.isClassProperty(node)) {
+      // eslint doesn't like these
+      this.remove();
     }
 
     // JSX
