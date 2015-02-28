@@ -28,9 +28,7 @@ var memberExpressionOptimisationVisitor = {
       // optimise it
       var prop = parent.property;
       if (isNumber(prop.value) || t.isUnaryExpression(prop) || t.isBinaryExpression(prop)) {
-        this.node = state.argsId;
-        optimizeMemberExpression(parent, state.method.params.length);
-        state.hasShorthand = true;
+        state.candidates.push(parent);
         return;
       }
     }
@@ -81,17 +79,22 @@ exports.Function = function (node, parent, scope) {
 
   var state = {
     outerBinding: scope.getBindingIdentifier(rest.name),
-    hasShorthand: true,
     longForm:     false,
-    method:       node,
     name:         rest.name,
-    argsId:       argsId
+    candidates:   []
   };
 
   scope.traverse(node, memberExpressionOptimisationVisitor, state);
 
   // we only have shorthands and there's no other references
-  if (!state.longForm && state.hasShorthand) return;
+  if (!state.longForm) {
+    for (let i = 0, count = state.candidates.length; i < count; ++i) {
+      var expr = state.candidates[i];
+      expr.object = argsId;
+      optimizeMemberExpression(expr, node.params.length);
+    }
+    return;
+  }
 
   //
 
