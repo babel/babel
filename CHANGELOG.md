@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.6.3
+
+ * **Bug Fix**
+  * Fix `arguments` being incorrectly aliased in arrow function rest parameter optimisation.
+  * Make deoptimisation trigger safer.
+
 ## 4.6.1
 
  * **Bug Fix**
