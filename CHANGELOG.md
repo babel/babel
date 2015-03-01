@@ -18,6 +18,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **Bug Fix**
   * Fix `arguments` being incorrectly aliased in arrow function rest parameter optimisation.
   * Make deoptimisation trigger safer.
+ * **New Feature**
+  * Flow types are now retained when blacklisting the `flow` transformer.
 
 ## 4.6.1
 
