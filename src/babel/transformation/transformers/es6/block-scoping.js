@@ -327,7 +327,7 @@ class BlockScoping {
       for (var name in outsideRefs) {
         var id = outsideRefs[name];
 
-        if (this.scope.hasGlobal(id.name)) {
+        if (this.scope.hasGlobal(id.name) || this.scope.parentHasBinding(id.name)) {
           delete outsideRefs[id.name];
           delete this.letReferences[id.name];
 
