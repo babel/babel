@@ -84,6 +84,11 @@
     "name": null
   },
 
+  "LabeledStatement": {
+    "label": null,
+    "body": null
+  },
+
   "Literal": {
     "value": null
   },

@@ -32,7 +32,11 @@ export function ForOfStatement(node, parent, scope, file) {
   // todo: find out why this is necessary? #538
   loop._scopeInfo = node._scopeInfo;
 
-  return build.node;
+  if (build.replaceParent) {
+    this.parentPath.node = build.node;
+  } else {
+    return build.node;
+  }
 }
 
 var breakVisitor = {
@@ -97,7 +101,9 @@ var loose = function (node, parent, scope, file) {
 
   scope.traverse(node, breakVisitor, {
     iteratorKey: iteratorKey,
-    wrapReturn:  function (node) {
+    label:       t.isLabeledStatement(parent) && parent.label.name,
+
+    wrapReturn: function (node) {
       return t.ifStatement(
         t.logicalExpression(
           "&&",
@@ -105,8 +111,7 @@ var loose = function (node, parent, scope, file) {
           t.memberExpression(iteratorKey, t.identifier("return")
         )
       ), node);
-    },
-    label:       t.isLabeledStatement(parent) && parent.label.name
+    }
   });
 
   //
@@ -119,6 +124,8 @@ var loose = function (node, parent, scope, file) {
 };
 
 var spec = function (node, parent, scope, file) {
+
+
   var left = node.left;
   var declar;
 
@@ -151,14 +158,22 @@ var spec = function (node, parent, scope, file) {
     BODY:                   null
   });
 
-  var loop = template[3].block.body[0];
+  var isLabeledParent = t.isLabeledStatement(parent);
+
+  var tryBody = template[3].block.body;
+  var loop = tryBody[0];
+
+  if (isLabeledParent) {
+    tryBody[0] = t.labeledStatement(parent.label, loop);
+  }
 
   //
 
   scope.traverse(node, breakVisitor, {
     iteratorKey: iteratorKey,
-    label:       t.isLabeledStatement(parent) && parent.label.name,
-    wrapReturn:  function (node) {
+    label:       isLabeledParent && parent.label.name,
+
+    wrapReturn: function (node) {
       return t.ifStatement(t.memberExpression(iteratorKey, t.identifier("return")), node);
     }
   });
@@ -166,8 +181,9 @@ var spec = function (node, parent, scope, file) {
   //
 
   return {
-    declar: declar,
-    loop:   loop,
-    node:   template
+    replaceParent: isLabeledParent,
+    declar:        declar,
+    loop:          loop,
+    node:          template
   };
 };
