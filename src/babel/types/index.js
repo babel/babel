@@ -804,5 +804,133 @@ t.isScope = function (node, parent) {
   return t.isScopable(node);
 };
 
+/**
+ * Walk the input `node` and statically evaluate if it's truthy.
+ *
+ * Returning `true` when we're sure that the expression will evaluate to a
+ * truthy value, `false` if we're sure that it will evaluate to a falsy
+ * value and `undefined` if we aren't sure. Because of this please do not
+ * rely on coercion when using this method and check with === if it's false.
+ *
+ * For example do:
+ *
+ *   if (t.evaluateTruthy(node) === false) falsyLogic();
+ *
+ * **AND NOT**
+ *
+ *   if (!t.evaluateTruthy(node)) falsyLogic();
+ *
+ * @param {Node} node
+ * @returns {Boolean}
+ */
+
+t.evaluateTruthy = function (node) {
+  var res = t.evaluate(node);
+  if (!res.broke) return !!res.value;
+};
+
+/**
+ * Walk the input `node` and statically evaluate it.
+ *
+ * Returns an pbject in the form `{ broke, value }`. `broke` indicates whether
+ * or not we had to drop out of evaluating the expression because of hitting
+ * an unknown node that we couldn't confidently find the value of.
+ *
+ * Example:
+ *
+ *   t.evaluate(parse("5 + 5")) // { broke: false, value: 10 }
+ *   t.evaluate(parse("!true")) // { broke: false, value: false }
+ *
+ *   t.evaluate(parse("foo + foo")) // { broke: true, value: undefined }
+ *
+ * @param {Node} node
+ * @returns {Object}
+ */
+
+t.evaluate = function (node) {
+  var BREAK = false;
+
+  var value = evaluate(node);
+  if (BREAK) value = undefined;
+  return {
+    value: value,
+    broke: BREAK
+  };
+
+  function evaluate(node) {
+    if (BREAK) return;
+
+    if (t.isSequenceExpression(node)) {
+      return evaluate(node.expressions[node.expressions.length - 1]);
+    }
+
+    if (t.isLiteral(node)) {
+      if (node.regex && node.value === null) {
+        // we have a regex and we can't represent it natively
+      } else {
+        return node.value;
+      }
+    }
+
+    if (t.isIdentifier(node, { name: "undefined" })) {
+      return undefined;
+    }
+
+    if (t.isUnaryExpression(node, { prefix: true })) {
+      switch (node.operator) {
+        case "void": return undefined;
+        case "!": return !evaluate(node);
+      }
+    }
+
+    if (t.isArrayExpression(node)) {
+      // possible perf issues - could deopt on X elements
+      var values = [];
+      for (var i = 0; i < node.elements.length; i++) {
+        values.push(evaluate(node.elements[i]));
+      }
+      return values;
+    }
+
+    if (t.isObjectExpression(node)) {
+      // todo: deopt on mutable computed property keys etc
+    }
+
+    if (t.isLogicalExpression(node)) {
+      var left = evaluate(node.left);
+      var right = evaluate(node.right);
+
+      switch (node.operator) {
+        case "||": return left || right;
+        case "&&": return left && right;
+      }
+    }
+
+    if (t.isBinaryExpression(node)) {
+      var left = evaluate(node.left);
+      var right = evaluate(node.right);
+
+      switch (node.operator) {
+        case "-": return left - right;
+        case "+": return left + right;
+        case "/": return left / right;
+        case "*": return left * right;
+        case "%": return left % right;
+        case "<": return left < right;
+        case ">": return left > right;
+        case "<=": return left <= right;
+        case ">=": return left >= right;
+        case "==": return left == right;
+        case "!=": return left != right;
+        case "===": return left === right;
+        case "!==": return left !== right;
+      }
+    }
+
+    // we can't deal with this node
+    BREAK = true;
+  }
+};
+
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);

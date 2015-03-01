@@ -26,6 +26,8 @@ export var IfStatement = {
     var alternate  = node.alternate;
     var test       = node.test;
 
+    var evaluateTest = t.evaluateTruthy(test);
+
     // we can check if a test will be truthy 100% and if so then we can inline
     // the consequent and completely ignore the alternate
     //
@@ -33,7 +35,7 @@ export var IfStatement = {
     //   if ("foo") { foo; } -> { foo; }
     //
 
-    if (t.isLiteral(test) && test.value) {
+    if (evaluateTest === true) {
       return consequent;
     }
 
@@ -44,7 +46,7 @@ export var IfStatement = {
     //   if ("") { bar; } ->
     //
 
-    if (t.isFalsyExpression(test)) {
+    if (evaluateTest === false) {
       if (alternate) {
         return alternate;
       } else {
