@@ -32,8 +32,26 @@ export function ForOfStatement(node, parent, scope, file) {
   // todo: find out why this is necessary? #538
   loop._scopeInfo = node._scopeInfo;
 
+  // fix labels
+  if (t.isLabeledStatement(parent) && !file.isLoose("es6.forOf")) {
+    let label = t.labeledStatement(parent.label);
+    // replace original label with loop wrapper (try statement)
+    this.parentPath.node = build.node;
+    // move labels
+    scope.traverse(build.node, labelFixerVisitor, { loop, label });
+  }
   return build.node;
 }
+
+var labelFixerVisitor = {
+  enter(node, parent, scope, state) {
+    if (node !== state.loop) return;
+    var label = state.label;
+    label.body = node;
+    this.node = label;
+    this.stop();
+  }
+};
 
 var breakVisitor = {
   enter(node, parent, scope, state) {
