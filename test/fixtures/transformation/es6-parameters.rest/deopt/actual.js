@@ -8,17 +8,23 @@ var y = function (foo, ...bar) {
   };
 };
 
+var b = function (x, y, ...args) {
+  console.log(args[0]);
+  args.pop();
+  console.log(args[1]);
+};
+
 var z = function (foo, ...bar) {
-    var x = function () {
-        bar[1] = 5;
-    };
+  var x = function () {
+    bar[1] = 5;
+  };
 };
 
 var a = function (foo, ...bar) {
-    return bar.join(',');
+  return bar.join(',');
 };
 
 var b = function (foo, ...bar) {
-    var join = "join";
-    return bar[join];
+  var join = "join";
+  return bar[join];
 };

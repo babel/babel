@@ -29,7 +29,6 @@ var memberExpressionOptimisationVisitor = {
       var prop = parent.property;
       if (isNumber(prop.value) || t.isUnaryExpression(prop) || t.isBinaryExpression(prop)) {
         state.candidates.push(this);
-        state.canOptimise = true;
         return;
       }
     }
@@ -81,7 +80,7 @@ exports.Function = function (node, parent, scope) {
 
   var state = {
     outerBinding: scope.getBindingIdentifier(rest.name),
-    canOptimise:  false,
+    canOptimise:  true,
     candidates:   [],
     method:       node,
     name:         rest.name
@@ -90,7 +89,7 @@ exports.Function = function (node, parent, scope) {
   scope.traverse(node, memberExpressionOptimisationVisitor, state);
 
   // we only have shorthands and there's no other references
-  if (state.canOptimise) {
+  if (state.canOptimise && state.candidates.length) {
     for (var i = 0; i < state.candidates.length; i++) {
       var candidate = state.candidates[i];
       candidate.node = argsId;
