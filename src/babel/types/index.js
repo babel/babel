@@ -826,39 +826,39 @@ t.isScope = function (node, parent) {
 
 t.evaluateTruthy = function (node) {
   var res = t.evaluate(node);
-  if (!res.broke) return !!res.value;
+  if (res.confident) return !!res.value;
 };
 
 /**
  * Walk the input `node` and statically evaluate it.
  *
- * Returns an pbject in the form `{ broke, value }`. `broke` indicates whether
- * or not we had to drop out of evaluating the expression because of hitting
- * an unknown node that we couldn't confidently find the value of.
+ * Returns an pbject in the form `{ confident, value }`. `confident` indicates
+ * whether or not we had to drop out of evaluating the expression because of
+ * hitting an unknown node that we couldn't confidently find the value of.
  *
  * Example:
  *
- *   t.evaluate(parse("5 + 5")) // { broke: false, value: 10 }
- *   t.evaluate(parse("!true")) // { broke: false, value: false }
+ *   t.evaluate(parse("5 + 5")) // { confident: false, value: 10 }
+ *   t.evaluate(parse("!true")) // { confident: false, value: false }
  *
- *   t.evaluate(parse("foo + foo")) // { broke: true, value: undefined }
+ *   t.evaluate(parse("foo + foo")) // { confident: true, value: undefined }
  *
  * @param {Node} node
  * @returns {Object}
  */
 
 t.evaluate = function (node) {
-  var BREAK = false;
+  var confident = true;
 
   var value = evaluate(node);
-  if (BREAK) value = undefined;
+  if (!confident) value = undefined;
   return {
-    value: value,
-    broke: BREAK
+    confident: confident,
+    value:     value
   };
 
   function evaluate(node) {
-    if (BREAK) return;
+    if (!confident) return;
 
     if (t.isSequenceExpression(node)) {
       return evaluate(node.expressions[node.expressions.length - 1]);
@@ -927,8 +927,7 @@ t.evaluate = function (node) {
       }
     }
 
-    // we can't deal with this node
-    BREAK = true;
+    confident = false;
   }
 };
 
