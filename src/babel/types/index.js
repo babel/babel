@@ -1,4 +1,7 @@
 import toFastProperties from "../helpers/to-fast-properties";
+import isPlainObject from "lodash/lang/isPlainObject";
+import isNumber from "lodash/lang/isNumber";
+import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
 import compact from "lodash/array/compact";
 import esutils from "esutils";
@@ -838,10 +841,9 @@ t.evaluateTruthy = function (node) {
  *
  * Example:
  *
- *   t.evaluate(parse("5 + 5")) // { confident: false, value: 10 }
- *   t.evaluate(parse("!true")) // { confident: false, value: false }
- *
- *   t.evaluate(parse("foo + foo")) // { confident: true, value: undefined }
+ *   t.evaluate(parse("5 + 5")) // { confident: true, value: 10 }
+ *   t.evaluate(parse("!true")) // { confident: true, value: false }
+ *   t.evaluate(parse("foo + foo")) // { confident: false, value: undefined }
  *
  * @param {Node} node
  * @returns {Object}
@@ -872,6 +874,14 @@ t.evaluate = function (node) {
       }
     }
 
+    if (t.isConditionalExpression(node)) {
+      if (evaluate(node.test)) {
+        return evaluate(node.consequent);
+      } else {
+        return evaluate(node.alternate);
+      }
+    }
+
     if (t.isIdentifier(node, { name: "undefined" })) {
       return undefined;
     }
@@ -879,7 +889,9 @@ t.evaluate = function (node) {
     if (t.isUnaryExpression(node, { prefix: true })) {
       switch (node.operator) {
         case "void": return undefined;
-        case "!": return !evaluate(node);
+        case "!": return !evaluate(node.argument);
+        case "+": return +evaluate(node.argument);
+        case "-": return -evaluate(node.argument);
       }
     }
 
@@ -929,6 +941,43 @@ t.evaluate = function (node) {
 
     confident = false;
   }
+};
+
+/**
+ * Description
+ *
+ * @param value
+ * @returns {Node}
+ */
+
+t.valueToNode = function (value) {
+  if (value === undefined) {
+    return t.identifier("undefined");
+  }
+
+  if (value === true || value === false || value === null || isString(value) || isNumber(value) || isRegExp(value)) {
+    return t.literal(value);
+  }
+
+  if (Array.isArray(value)) {
+    return t.arrayExpression(value.map(t.valueToNode));
+  }
+
+  if (isPlainObject(value)) {
+    var props = [];
+    for (var key in value) {
+      var nodeKey;
+      if (t.isValidIdentifier(key)) {
+        nodeKey = t.identifier(key);
+      } else {
+        nodeKey = t.literal(key);
+      }
+      props.push(t.property("init", nodeKey, t.valueToNode(value[key])));
+    }
+    return t.objectExpression(props);
+  }
+
+  throw new Error("don't know how to turn this value into a node");
 };
 
 toFastProperties(t);
