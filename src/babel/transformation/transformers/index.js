@@ -103,10 +103,12 @@ export default {
   "es3.propertyLiterals":                  require("./es3/property-literals"),
   "es3.memberExpressionLiterals":          require("./es3/member-expression-literals"),
 
-  "minification.removeDebugger":           require("./minification/remove-debugger"),
-  "minification.removeConsoleCalls":       require("./minification/remove-console-calls"),
-  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
-  "minification.renameLocalVariables":     require("./minification/rename-local-variables"),
+  "utility.removeDebugger":                require("./utility/remove-debugger"),
+  "utility.removeConsole":                 require("./utility/remove-console"),
+
+  "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
+  "utility.inlineExpressions":             require("./utility/inline-expressions"),
+  "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
 
   _cleanUp:                                require("./internal/cleanup")
 };

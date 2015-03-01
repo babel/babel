@@ -1,27 +1,35 @@
 import t from "../../../types";
 
+function toStatements(node) {
+  if (t.isBlockStatement(node)) {
+    var hasBlockScoped = false;
+
+    for (var i = 0; i < node.body.length; i++) {
+      var bodyNode = node.body[i];
+      if (t.isBlockScoped(bodyNode)) hasBlockScoped = true;
+    }
+
+    if (!hasBlockScoped) {
+      return node.body;
+    }
+  }
+
+  return node;
+}
+
 export var optional = true;
 
-export function ExpressionStatement(node) {
-  // remove consequence-less expressions such as local variables and literals
-  // note: will remove directives
-  //
-  //   var foo = true; foo; -> var foo = true;
-  //   "foo"; ->
-  //
-
-  var expr = node.expression;
-  if (t.isLiteral(expr) || (t.isIdentifier(node) && t.hasBinding(node.name))) {
-    this.remove();
+export function ConditionalExpression(node) {
+  var evaluateTest = t.evaluateTruthy(node.test);
+  if (evaluateTest === true) {
+    return node.consequent;
+  } else if (evaluateTest === false) {
+    return node.alternate;
   }
 }
 
 export var IfStatement = {
   exit(node) {
-    // todo: in scenarios where we can just return the consequent or
-    // alternate we should drop the block statement if it contains no
-    // block scoped variables
-
     var consequent = node.consequent;
     var alternate  = node.alternate;
     var test       = node.test;
@@ -36,7 +44,7 @@ export var IfStatement = {
     //
 
     if (evaluateTest === true) {
-      return consequent;
+      return toStatements(consequent);
     }
 
     // we can check if a test will be falsy 100% and if so we can inline the
@@ -48,7 +56,7 @@ export var IfStatement = {
 
     if (evaluateTest === false) {
       if (alternate) {
-        return alternate;
+        return toStatements(alternate);
       } else {
         return this.remove();
       }

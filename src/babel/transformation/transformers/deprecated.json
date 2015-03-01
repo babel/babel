@@ -1,4 +1,8 @@
 {
   "selfContained": "runtime",
-  "unicode-regex": "regex.unicode"
+  "unicode-regex": "regex.unicode",
+
+  "minification.deadCodeElimination": "utility.deadCodeElimination",
+  "minification.removeConsoleCalls": "utility.removeConsole",
+  "minification.removeDebugger": "utility.removeDebugger"
 }
