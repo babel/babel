@@ -102,6 +102,17 @@ var replaceVisitor = {
   enter: replace
 };
 
+var letReferenceFilterVisitor = {
+  enter(node, parent, scope, state) {
+    if (scope === state.enclosingScope &&
+        state.enclosingScope.parent.getBindingIdentifier(node.name) &&
+        state.letReferences[node.name]) {
+      scope.rename(node.name);
+      delete state.letReferences[node.name];
+    }
+  }
+};
+
 function traverseReplace(node, parent, scope, remaps) {
   replace(node, parent, scope, remaps);
   scope.traverse(node, replaceVisitor, remaps);
@@ -262,6 +273,10 @@ class BlockScoping {
 
     if (needsClosure) {
       this.wrapClosure();
+      this.scope.traverse(this.block, letReferenceFilterVisitor, {
+        letReferences: this.letReferences,
+        enclosingScope: this.scope
+      });
     } else {
       this.remap();
     }
