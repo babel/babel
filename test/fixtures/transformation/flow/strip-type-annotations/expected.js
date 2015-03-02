@@ -61,7 +61,7 @@ class Foo7 {
 class Foo8 {
   "bar"() {}
 }
-function foo(requiredParam, optParam?) {}
+function foo(requiredParam, optParam) {}
 class Foo9 {}
 class Foo10 {}
 var x = 4;

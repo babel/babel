@@ -13,6 +13,13 @@ export function Class(node) {
   node.implements = null;
 }
 
+export function Function(node) {
+  for (var i = 0; i < node.params.length; i++) {
+    var param = node.params[i];
+    param.optional = false;
+  }
+}
+
 export function TypeCastExpression(node) {
   return node.expression;
 }
