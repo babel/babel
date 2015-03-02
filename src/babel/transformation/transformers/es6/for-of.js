@@ -103,7 +103,7 @@ var loose = function (node, parent, scope, file) {
     iteratorKey: iteratorKey,
     label:       t.isLabeledStatement(parent) && parent.label.name,
 
-    wrapReturn: function (node) {
+    wrapReturn(node) {
       return t.ifStatement(
         t.logicalExpression(
           "&&",
@@ -124,8 +124,6 @@ var loose = function (node, parent, scope, file) {
 };
 
 var spec = function (node, parent, scope, file) {
-
-
   var left = node.left;
   var declar;
 
@@ -173,7 +171,7 @@ var spec = function (node, parent, scope, file) {
     iteratorKey: iteratorKey,
     label:       isLabeledParent && parent.label.name,
 
-    wrapReturn: function (node) {
+    wrapReturn(node) {
       return t.ifStatement(t.memberExpression(iteratorKey, t.identifier("return")), node);
     }
   });
