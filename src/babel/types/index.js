@@ -887,25 +887,17 @@ t.evaluate = function (node) {
     }
 
     if (t.isUnaryExpression(node, { prefix: true })) {
+      var arg = evaluate(node.argument);
       switch (node.operator) {
         case "void": return undefined;
-        case "!": return !evaluate(node.argument);
-        case "+": return +evaluate(node.argument);
-        case "-": return -evaluate(node.argument);
+        case "!": return !arg;
+        case "+": return +arg;
+        case "-": return -arg;
       }
     }
 
-    if (t.isArrayExpression(node)) {
-      // possible perf issues - could deopt on X elements
-      var values = [];
-      for (var i = 0; i < node.elements.length; i++) {
-        values.push(evaluate(node.elements[i]));
-      }
-      return values;
-    }
-
-    if (t.isObjectExpression(node)) {
-      // todo: deopt on mutable computed property keys etc
+    if (t.isArrayExpression(node) || t.isObjectExpression(node)) {
+      // we could evaluate these but it's probably impractical and not very useful
     }
 
     if (t.isLogicalExpression(node)) {
