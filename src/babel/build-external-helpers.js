@@ -13,21 +13,15 @@ export default function (whitelist) {
 
   buildHelpers(body, namespace, whitelist);
 
-  var globalHelpersDeclar = t.variableDeclaration("var", [
-    t.variableDeclarator(
-      namespace,
-      t.objectExpression({})
-    )
-  ]);
   var container = util.template("umd-commonjs-strict", {
     AMD_ARGUMENTS:      t.arrayExpression([t.literal("exports")]),
     COMMON_ARGUMENTS:   t.identifier("exports"),
-    BROWSER_ARGUMENTS:  t.identifier("root"),
-    UMD_ROOT:           namespace,
+    BROWSER_ARGUMENTS:  t.assignmentExpression("=", t.memberExpression(t.identifier("root"), namespace), t.objectExpression({})),
+    UMD_ROOT:           t.identifier("this"),
     FACTORY_PARAMETERS: t.identifier("global"),
     FACTORY_BODY:       body
   });
-  var tree = t.program([globalHelpersDeclar, container]);
+  var tree = t.program([container]);
 
   return generator(tree).code;
 };
