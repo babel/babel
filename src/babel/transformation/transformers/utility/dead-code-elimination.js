@@ -77,7 +77,7 @@ export var IfStatement = {
     //   if (foo) {} else { bar; } -> if (!foo) { bar; }
     //
 
-    if (t.blockStatement(consequent) && !consequent.body.length && t.isBlockStatement(alternate) && alternate.body.length) {
+    if (t.blockStatement(consequent) && consequent.body && !consequent.body.length && t.isBlockStatement(alternate) && alternate.body && alternate.body.length) {
       node.consequent = node.alternate;
       node.alternate  = null;
       node.test       = t.unaryExpression("!", test, true);
