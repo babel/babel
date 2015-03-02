@@ -1,9 +1,9 @@
-import * as useStrict from "../../helpers/use-strict";
+import * as strict from "../../helpers/strict";
 
 export function Program(program, parent, scope, file) {
   if (!file.transformers["es6.modules"].canRun()) return;
 
-  useStrict.wrap(program, function () {
+  strict.wrap(program, function () {
     program.body = file.dynamicImports.concat(program.body);
   });
 

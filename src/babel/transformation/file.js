@@ -388,7 +388,7 @@ export default class File {
     var opts = this.opts;
 
     opts.allowImportExportEverywhere = this.isLoose("es6.modules");
-    opts.strictMode = this.transformers.useStrict.canRun();
+    opts.strictMode = this.transformers.strict.canRun();
 
     return parse(opts, code, (tree) => {
       this.transform(tree);

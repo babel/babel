@@ -1,4 +1,5 @@
 {
+  "useStrict": "strict",
   "selfContained": "runtime",
   "unicode-regex": "regex.unicode",
 

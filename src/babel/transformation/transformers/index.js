@@ -1,5 +1,5 @@
 export default {
-  useStrict:                               require("./other/use-strict"),
+  strict:                                  require("./other/strict"),
 
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.noForInOfAssignment":        require("./validation/no-for-in-of-assignment"),
@@ -97,7 +97,7 @@ export default {
   "spec.typeofSymbol":                     require("./spec/typeof-symbol"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
 
-  _useStrict:                              require("./internal/use-strict"),
+  _strict:                                 require("./internal/strict"),
   _moduleFormatter:                        require("./internal/module-formatter"),
 
   "es3.propertyLiterals":                  require("./es3/property-literals"),

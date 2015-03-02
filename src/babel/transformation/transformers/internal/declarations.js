@@ -1,4 +1,4 @@
-import * as useStrict from "../../helpers/use-strict";
+import * as strict from "../../helpers/use-strict";
 import t from "../../../types";
 
 export var secondPass = true;
@@ -6,7 +6,7 @@ export var secondPass = true;
 export function BlockStatement(node, parent, scope, file) {
   if (!node._declarations) return;
 
-  useStrict.wrap(node, function () {
+  strict.wrap(node, function () {
     var kinds = {};
     var kind;
 
