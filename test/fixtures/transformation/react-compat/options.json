@@ -1,4 +1,4 @@
 {
-  "blacklist": "useStrict",
+  "blacklist": "strict",
   "optional": "reactCompat"
 }

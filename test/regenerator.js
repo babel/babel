@@ -11,7 +11,7 @@ var regeneratorLoc = __dirname + "/../vendor/regenerator";
 suite("regenerator", function () {
   setup(function () {
     require("../register")({
-      blacklist: ["useStrict"],
+      blacklist: ["strict"],
       experimental: true
     });
   });

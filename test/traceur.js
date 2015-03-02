@@ -86,6 +86,6 @@ require("./_transformation-helper")({
   experimental: true
 }, function (opts, task) {
   if (!_.contains(task.exec.loc, "module.js")) {
-    opts.blacklist = ["useStrict"];
+    opts.blacklist = ["strict"];
   }
 });

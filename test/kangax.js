@@ -47,7 +47,7 @@ suite("kangax/compat-table", function () {
     test(key, function () {
       code = transform(code, {
         filename: key,
-        blacklist: ["useStrict"],
+        blacklist: ["strict"],
         optional: ["spec.typeofSymbol", "es6.blockScopingTDZ"]
       }).code;
 

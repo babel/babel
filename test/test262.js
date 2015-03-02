@@ -29,7 +29,7 @@ var check = function (loc) {
 
     transform(file, {
       filename: loc,
-      blacklist: ["useStrict"],
+      blacklist: ["strict"],
       _anal: true
     });
   } catch (err) {
