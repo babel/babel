@@ -1,3 +1,4 @@
 /node_modules
 /.tern-port
 /acorn_csp.js
+/local
