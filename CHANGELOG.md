@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.6.4
+
+ * **Bug Fix**
+  * Fix `ForOfStatement` not proplery inheriting labels.
+  * When in closure mode in block scoping transformer, properly check for variable shadowing.
+ * **New Feature**
+  * New `utility.inlineEnvironmentVariables` and `utility.inlineExpression` transformers.
+
 ## 4.6.3
 
  * **Bug Fix**
