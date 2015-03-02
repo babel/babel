@@ -45,6 +45,15 @@ var astTransformVisitor = {
       delete node.name;
     }
 
+    if (t.isFunction(node) && node.async) {
+      node.generator = true;
+      node.async - false;
+    }
+
+    if (t.isAwaitExpression(node)) {
+      node.type = "YieldExpression";
+    }
+
     // classes
     
     if (t.isReferencedIdentifier(node, parent, { name: "super" })) {
