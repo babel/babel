@@ -53,7 +53,6 @@ $ mocha test/transformation.js
 #### Code Standards
 
  * **General**
-   * No ES6 syntax features or methods, exclusively ES5.
    * Max of five arguments for functions
    * Max depth of four nested blocks
    * 2-spaced soft tabs
