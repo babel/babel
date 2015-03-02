@@ -29,7 +29,7 @@ var astTransformVisitor = {
     if (t.isSpreadProperty(node)) {
       node.type = "Property";
       node.kind = "init";
-      node.computed = false;
+      node.computed = true;
       node.key = node.value = node.argument;
       delete node.argument;
     }
