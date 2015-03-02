@@ -25,7 +25,10 @@ transform._ensureTransformerNames = function (type, rawKeys) {
     var key = rawKeys[i];
 
     var deprecatedKey = transform.deprecatedTransformerMap[key];
-    if (deprecatedKey) {
+    var aliasKey = transform.aliasTransformerMap[key];
+    if (aliasKey) {
+      keys.push(aliasKey);
+    } else if (deprecatedKey) {
       // deprecated key, remap it to the new one
       console.error("The transformer " + key + " has been renamed to " + deprecatedKey);
       rawKeys.push(deprecatedKey);
@@ -49,6 +52,7 @@ transform.transformers          = object();
 transform.namespaces            = object();
 
 transform.deprecatedTransformerMap = require("./transformers/deprecated");
+transform.aliasTransformerMap = require("./transformers/aliases");
 transform.moduleFormatters = require("./modules");
 
 import rawTransformers from "./transformers";
