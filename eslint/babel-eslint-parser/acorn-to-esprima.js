@@ -45,11 +45,6 @@ var astTransformVisitor = {
       delete node.name;
     }
 
-    if (t.isFunction(node) && node.async) {
-      node.generator = true;
-      node.async - false;
-    }
-
     if (t.isAwaitExpression(node)) {
       node.type = "YieldExpression";
     }
@@ -98,6 +93,16 @@ var astTransformVisitor = {
 
     if (t.isArrowFunctionExpression(node)) {
       node.type = "FunctionExpression";
+      if (node.body.type !== "BlockStatement") {
+        node.body = t.inherits(t.blockStatement([
+          node.body
+        ]), node);
+      }
+    }
+
+    if (t.isFunction(node) && node.async) {
+      node.generator = true;
+      node.async - false;
     }
   }
 };
