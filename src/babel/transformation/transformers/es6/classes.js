@@ -301,6 +301,8 @@ class ClassTransformer {
 
     construct._ignoreUserWhitespace = true;
     construct.params                = fn.params;
-    construct.body.body             = construct.body.body.concat(fn.body.body);
+
+    t.inherits(construct.body, fn.body);
+    construct.body.body = construct.body.body.concat(fn.body.body);
   }
 }
