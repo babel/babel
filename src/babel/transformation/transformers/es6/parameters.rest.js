@@ -55,7 +55,7 @@ var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
 
-exports.Function = function (node, parent, scope) {
+exports.Function = function (node, parent, scope, file) {
   if (!hasRest(node)) return;
 
   var rest = node.params.pop().argument;
@@ -69,10 +69,12 @@ exports.Function = function (node, parent, scope) {
   if (t.isPattern(rest)) {
     var pattern = rest;
     rest = scope.generateUidIdentifier("ref");
-    var declar = t.variableDeclaration("var", pattern.elements.map(function (elem, index) {
+
+    var declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
       var accessExpr = t.memberExpression(rest, t.literal(index), true);
       return t.variableDeclarator(elem, accessExpr);
     }));
+    file.checkNode(declar);
     node.body.body.unshift(declar);
   }
 

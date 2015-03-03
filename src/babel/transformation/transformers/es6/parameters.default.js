@@ -61,7 +61,7 @@ exports.Function = function (node, parent, scope, file) {
         scope.traverse(param, iifeVisitor, state);
       }
 
-      if (file.transformers["es6.blockScopingTDZ"].canRun()) {
+      if (file.transformers["es6.blockScopingTDZ"].canRun() && t.isIdentifier(param)) {
         pushDefNode(param, t.identifier("undefined"), i);
       }
 

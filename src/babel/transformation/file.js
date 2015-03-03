@@ -118,7 +118,7 @@ export default class File {
 
     for (var key in opts) {
       if (key[0] !== "_" && File.validOptions.indexOf(key) < 0) {
-        throw new ReferenceError("Unknown option: " + key);
+        throw new ReferenceError(`Unknown option: ${key}`);
       }
     }
 
@@ -248,7 +248,7 @@ export default class File {
 
   debug(msg) {
     var parts = this.opts.filename;
-    if (msg) parts += ": " + msg;
+    if (msg) parts += `: ${msg}`;
     util.debug(parts);
   }
 
@@ -261,7 +261,7 @@ export default class File {
     }
 
     if (!ModuleFormatter) {
-      throw new ReferenceError("Unknown module formatter type " + JSON.stringify(type));
+      throw new ReferenceError(`Unknown module formatter type ${JSON.stringify(type)}`);
     }
 
     return new ModuleFormatter(this);
@@ -338,7 +338,7 @@ export default class File {
 
   addHelper(name) {
     if (!includes(File.helpers, name)) {
-      throw new ReferenceError("Unknown helper " + name);
+      throw new ReferenceError(`Unknown helper ${name}`);
     }
 
     var program = this.ast.program;
@@ -371,7 +371,7 @@ export default class File {
 
   errorWithNode(node, msg, Error = SyntaxError) {
     var loc = node.loc.start;
-    var err = new Error("Line " + loc.line + ": " + msg);
+    var err = new Error(`Line ${loc.line}: ${msg}`);
     err.loc = loc;
     return err;
   }
@@ -430,6 +430,13 @@ export default class File {
   }
 
   checkNode(node, scope) {
+    if (Array.isArray(node)) {
+      for (var i = 0; i < node.length; i++) {
+        this.checkNode(node[i], scope);
+      }
+      return;
+    }
+
     var stack = this.transformerStack;
     scope ||= this.scope;
 
@@ -463,7 +470,7 @@ export default class File {
 
     if (this.shebang) {
       // add back shebang
-      result.code = this.shebang + "\n" + result.code;
+      result.code = `${this.shebang}\n${result.code}`;
     }
 
     if (opts.sourceMap === "inline") {

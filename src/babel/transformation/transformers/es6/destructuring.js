@@ -56,12 +56,12 @@ export { ForOfStatement as ForInStatement };
 exports.Function = function (node, parent, scope, file) {
   var nodes = [];
 
-  var hasDestructuringTransformer = false;
+  var hasDestructuring = false;
 
   node.params = node.params.map(function (pattern, i) {
     if (!t.isPattern(pattern)) return pattern;
 
-    hasDestructuringTransformer = true;
+    hasDestructuring = true;
     var ref = scope.generateUidIdentifier("ref");
 
     var destructuring = new DestructuringTransformer({
@@ -69,15 +69,16 @@ exports.Function = function (node, parent, scope, file) {
       nodes:      nodes,
       scope:      scope,
       file:       file,
-      kind:       "var",
+      kind:       "let"
     });
     destructuring.init(pattern, ref);
 
     return ref;
   });
 
-  if (!hasDestructuringTransformer) return;
+  if (!hasDestructuring) return;
 
+  file.checkNode(nodes);
   t.ensureBlock(node);
 
   var block = node.body;
