@@ -187,7 +187,7 @@ class CodeGenerator {
 
       this.printTrailingComments(node, parent);
     } else {
-      throw new ReferenceError("unknown node of type " + JSON.stringify(node.type) + " with constructor " + JSON.stringify(node && node.constructor.name));
+      throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
     this.format.concise = oldConcise;
@@ -238,9 +238,9 @@ class CodeGenerator {
   generateComment(comment) {
     var val = comment.value;
     if (comment.type === "Line") {
-      val = "//" + val;
+      val = `//${val}`;
     } else {
-      val = "/*" + val + "*/";
+      val = `/*${val}*/`;
     }
     return val;
   }
@@ -319,7 +319,7 @@ class CodeGenerator {
         }
 
         var indent = Math.max(this.indentSize(), column);
-        val = val.replace(/\n/g, "\n" + repeating(" ", indent));
+        val = val.replace(/\n/g, `\n${repeating(" ", indent)}`);
       }
 
       if (column === 0) {

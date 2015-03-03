@@ -56,7 +56,7 @@ export default class TransformerPass {
 
     var file = this.file;
 
-    file.debug("Running transformer " + this.transformer.key);
+    file.debug(`Running transformer ${this.transformer.key}`);
 
     file.scope.traverse(file.ast, this.handlers, file);
   }

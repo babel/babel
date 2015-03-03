@@ -46,7 +46,7 @@ var compile = function (filename) {
   var opts = extend({}, transformOpts);
   resolveRc(filename, opts);
 
-  var cacheKey = filename + ":" + JSON.stringify(opts);
+  var cacheKey = `${filename}:${JSON.stringify(opts)}`;
 
   if (cache) {
     var cached = cache[cacheKey];

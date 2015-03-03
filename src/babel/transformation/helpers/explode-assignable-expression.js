@@ -23,7 +23,7 @@ var getObjRef = function (node, nodes, file, scope) {
       return ref;
     }
   } else {
-    throw new Error("We can't explode this node type " + node.type);
+    throw new Error(`We can't explode this node type ${node.type}`);
   }
 
   var temp = scope.generateUidBasedOnNode(ref);

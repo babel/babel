@@ -5,7 +5,7 @@ export function ImportSpecifier(node, print) {
   if (t.isSpecifierDefault(node)) {
     print(t.getSpecifierName(node));
   } else {
-    return exports.ExportSpecifier.apply(this, arguments);
+    return ExportSpecifier.apply(this, arguments);
   }
 }
 

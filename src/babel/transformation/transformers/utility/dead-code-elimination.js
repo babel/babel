@@ -19,8 +19,8 @@ function toStatements(node) {
 
 export var optional = true;
 
-export function ConditionalExpression(node) {
-  var evaluateTest = t.evaluateTruthy(node.test);
+export function ConditionalExpression(node, parent, scope) {
+  var evaluateTest = t.evaluateTruthy(node.test, scope);
   if (evaluateTest === true) {
     return node.consequent;
   } else if (evaluateTest === false) {
@@ -29,12 +29,12 @@ export function ConditionalExpression(node) {
 }
 
 export var IfStatement = {
-  exit(node) {
+  exit(node, parent, scope) {
     var consequent = node.consequent;
     var alternate  = node.alternate;
     var test       = node.test;
 
-    var evaluateTest = t.evaluateTruthy(test);
+    var evaluateTest = t.evaluateTruthy(test, scope);
 
     // we can check if a test will be truthy 100% and if so then we can inline
     // the consequent and completely ignore the alternate

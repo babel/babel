@@ -9,7 +9,7 @@ function traverse(parent, opts, scope, state) {
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
-      throw new Error("Must pass a scope unless traversing a Program/File got a " + parent.type + " node");
+      throw new Error(`Must pass a scope unless traversing a Program/File got a ${parent.type} node`);
     }
   }
 

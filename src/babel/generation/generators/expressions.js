@@ -109,16 +109,19 @@ export function ExpressionStatement(node, print) {
   this.semicolon();
 }
 
-exports.BinaryExpression =
-exports.LogicalExpression =
-exports.AssignmentPattern =
-exports.AssignmentExpression = function (node, print) {
+export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
   print(node.left);
   this.push(" ");
   this.push(node.operator);
   this.push(" ");
   print(node.right);
+}
+
+export {
+  AssignmentExpression as BinaryExpression,
+  AssignmentExpression as LogicalExpression,
+  AssignmentExpression as AssignmentPattern
 };
 
 var SCIENTIFIC_NOTATION = /e/i;

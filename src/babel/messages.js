@@ -22,14 +22,14 @@ export var messages = {
 };
 
 export function get(key) {
-  var msg = exports.messages[key];
-  if (!msg) throw new ReferenceError("Unknown message `" + key + "`");
+  var msg = messages[key];
+  if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
   var args = [];
   for (var i = 1; i < arguments.length; i++) {
     args.push(arguments[i]);
   }
-  args = exports.parseArgs(args);
+  args = parseArgs(args);
 
   return msg.replace(/\$(\d+)/g, function (str, i) {
     return args[--i];

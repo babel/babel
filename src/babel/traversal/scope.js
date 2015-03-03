@@ -143,7 +143,7 @@ export default class Scope {
   _generateUid(name, i) {
     var id = name;
     if (i > 1) id += i;
-    return "_" + id;
+    return `_${id}`;
   }
 
   /*
@@ -415,7 +415,7 @@ export default class Scope {
   registerVariableDeclaration(declar) {
     var declars = declar.declarations;
     for (var i = 0; i < declars.length; i++) {
-      this.registerBinding(declars[i], declar.kind);
+      this.registerBinding(declar.kind, declars[i]);
     }
   }
 
@@ -538,7 +538,7 @@ export default class Scope {
         init: opts.init
       };
     } else {
-      throw new TypeError("cannot add a declaration here in node type " + block.type);
+      throw new TypeError(`cannot add a declaration here in node type ${block.type}`);
     }
   }
 
@@ -624,6 +624,37 @@ export default class Scope {
   getOwnBindingIdentifier(name) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
+  }
+
+
+  getOwnImmutableBindingValue(name) {
+    return this._immutableBindingInfoToValue(this.getOwnBindingInfo(name));
+  }
+
+  getImmutableBindingValue(name) {
+    return this._immutableBindingInfoToValue(this.getBindingInfo(name));
+  }
+
+  _immutableBindingInfoToValue(info) {
+    if (!info) return;
+
+    // can't guarantee this value is the same
+    if (info.reassigned) return;
+
+    var node = info.node;
+    if (t.isVariableDeclarator(node)) {
+      if (t.isIdentifier(node.id)) {
+        node = node.init;
+      } else {
+        // otherwise it's probably a destructuring like:
+        // var { foo } = "foo";
+        return;
+      }
+    }
+
+    if (t.isImmutable(node)) {
+      return node;
+    }
   }
 
   // has

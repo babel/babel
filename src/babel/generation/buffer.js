@@ -140,7 +140,7 @@ export default class Buffer {
       var indent = this.getIndent();
 
       // replace all newlines with newlines with the indentation
-      str = str.replace(/\n/g, "\n" + indent);
+      str = str.replace(/\n/g, `\n${indent}`);
 
       // we've got a newline before us so prepend on the indentation
       if (this.isLast("\n")) this._push(indent);

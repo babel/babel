@@ -23,7 +23,7 @@ export default function (loc, opts = {}) {
       try {
         json = JSON.parse(content);
       } catch (err) {
-        err.message = file + ": " + err.message;
+        err.message = `${file}: ${err.message}`;
         throw err;
       }
 

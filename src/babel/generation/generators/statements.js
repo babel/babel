@@ -60,7 +60,7 @@ var buildForXStatement = function (op) {
     this.keyword("for");
     this.push("(");
     print(node.left);
-    this.push(" " + op + " ");
+    this.push(` ${op} `);
     print(node.right);
     this.push(")");
     print.block(node.body);
@@ -192,7 +192,7 @@ export function VariableDeclaration(node, print, parent) {
 
   var sep = ",";
   if (!this.format.compact && hasInits) {
-    sep += "\n" + repeating(" ", node.kind.length + 1);
+    sep += `\n${repeating(" ", node.kind.length + 1)}`;
   } else {
     sep += " ";
   }

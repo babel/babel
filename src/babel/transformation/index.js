@@ -30,7 +30,7 @@ transform._ensureTransformerNames = function (type, rawKeys) {
       keys.push(aliasKey);
     } else if (deprecatedKey) {
       // deprecated key, remap it to the new one
-      console.error("The transformer " + key + " has been renamed to " + deprecatedKey);
+      console.error(`The transformer ${key} has been renamed to ${deprecatedKey}`);
       rawKeys.push(deprecatedKey);
     } else if (transform.transformers[key]) {
       // valid key
@@ -40,7 +40,7 @@ transform._ensureTransformerNames = function (type, rawKeys) {
       keys = keys.concat(transform.namespaces[key]);
     } else {
       // invalid key
-      throw new ReferenceError("Unknown transformer " + key + " specified in " + type);
+      throw new ReferenceError(`Unknown transformer ${key} specified in ${type}`);
     }
   }
 

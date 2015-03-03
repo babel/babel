@@ -44,8 +44,7 @@ export function _method(node, print) {
   print(value.body);
 }
 
-exports.FunctionDeclaration =
-exports.FunctionExpression = function (node, print) {
+export function FunctionExpression(node, print) {
   if (node.async) this.push("async ");
   this.push("function");
   if (node.generator) this.push("*");
@@ -60,7 +59,9 @@ exports.FunctionExpression = function (node, print) {
   this._params(node, print);
   this.space();
   print(node.body);
-};
+}
+
+export { FunctionExpression as FunctionDeclaration };
 
 export function ArrowFunctionExpression(node, print) {
   if (node.async) this.push("async ");

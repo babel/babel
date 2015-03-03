@@ -32,12 +32,10 @@ export function BlockStatement(node, parent, scope, file) {
   var letRefs = node._letReferences;
   if (!letRefs) return;
 
-  var state = {
+  scope.traverse(node, visitor, {
     letRefs: letRefs,
     file:    file
-  };
-
-  scope.traverse(node, visitor, state);
+  });
 }
 
 export { BlockStatement as Program, BlockStatement as Loop };

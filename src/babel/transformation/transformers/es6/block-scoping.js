@@ -189,7 +189,7 @@ var loopVisitor = {
           return;
         }
 
-        loopText = loopText + "|" + node.label.name;
+        loopText = `${loopText}|${node.label.name}`;
       } else {
         // we shouldn't be transforming these statements because
         // they don't refer to the actual loop we're scopifying

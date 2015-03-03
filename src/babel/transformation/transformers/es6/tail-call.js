@@ -229,7 +229,7 @@ class TailCallTransformer {
   subTransform(node) {
     if (!node) return;
 
-    var handler = this["subTransform" + node.type];
+    var handler = this[`subTransform${node.type}`];
     if (handler) return handler.call(this, node);
   }
 

@@ -32,7 +32,7 @@ module.exports = function (opts, code, callback) {
   } catch (err) {
     if (!err._babel) {
       err._babel = true;
-      var message = opts.filename + ": " + err.message;
+      var message = `${opts.filename}: ${err.message}`;
 
       var loc = err.loc;
       if (loc) {

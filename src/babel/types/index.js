@@ -21,14 +21,14 @@ export default t;
  */
 
 function registerType(type, skipAliasCheck) {
-  var is = t["is" + type] = function (node, opts) {
+  var is = t[`is${type}`] = function (node, opts) {
     return t.is(type, node, opts, skipAliasCheck);
   };
 
-  t["assert" + type] = function (node, opts) {
+  t[`assert${type}`] = function (node, opts) {
     opts ||= {};
     if (!is(node, opts)) {
-      throw new Error("Expected type " + JSON.stringify(type) + " with option " + JSON.stringify(opts));
+      throw new Error(`Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`);
     }
   };
 }
@@ -395,7 +395,7 @@ t.toIdentifier = function (name) {
   });
 
   if (!t.isValidIdentifier(name)) {
-    name = "_" + name;
+    name = `_${name}`;
   }
 
   return name || "_";
@@ -506,7 +506,7 @@ t.toStatement = function (node, ignore) {
     if (ignore) {
       return false;
     } else {
-      throw new Error("cannot turn " + node.type + " to a statement");
+      throw new Error(`cannot turn ${node.type} to a statement`);
     }
   }
 
@@ -536,7 +536,7 @@ t.toExpression = function (node) {
   if (t.isExpression(node)) {
     return node;
   } else {
-    throw new Error("cannot turn " + node.type + " to an expression");
+    throw new Error(`cannot turn ${node.type} to an expression`);
   }
 };
 
@@ -808,6 +808,35 @@ t.isScope = function (node, parent) {
 };
 
 /**
+ * Description
+ *
+ * @param {Node} node
+ * @returns {Boolean}
+ */
+
+t.isImmutable = function (node) {
+  if (t.isLiteral(node)) {
+    if (node.regex) {
+      // regexes are mutable
+      return false;
+    } else {
+      // immutable!
+      return true;
+    }
+  } else if (t.isIdentifier(node)) {
+    if (node.name === "undefined") {
+      // immutable!
+      return true;
+    } else {
+      // no idea...
+      return false;
+    }
+  }
+
+  return false;
+};
+
+/**
  * Walk the input `node` and statically evaluate if it's truthy.
  *
  * Returning `true` when we're sure that the expression will evaluate to a
@@ -824,11 +853,12 @@ t.isScope = function (node, parent) {
  *   if (!t.evaluateTruthy(node)) falsyLogic();
  *
  * @param {Node} node
+ * @param {Scope} scope
  * @returns {Boolean}
  */
 
-t.evaluateTruthy = function (node) {
-  var res = t.evaluate(node);
+t.evaluateTruthy = function (node, scope) {
+  var res = t.evaluate(node, scope);
   if (res.confident) return !!res.value;
 };
 
@@ -846,10 +876,11 @@ t.evaluateTruthy = function (node) {
  *   t.evaluate(parse("foo + foo")) // { confident: false, value: undefined }
  *
  * @param {Node} node
+ * @param {Scope} scope
  * @returns {Object}
  */
 
-t.evaluate = function (node) {
+t.evaluate = function (node, scope) {
   var confident = true;
 
   var value = evaluate(node);
@@ -882,8 +913,12 @@ t.evaluate = function (node) {
       }
     }
 
-    if (t.isIdentifier(node, { name: "undefined" })) {
-      return undefined;
+    if (t.isIdentifier(node)) {
+      if (node.name === "undefined") {
+        return undefined;
+      } else {
+        return evaluate(scope.getImmutableBindingValue(node.name));
+      }
     }
 
     if (t.isUnaryExpression(node, { prefix: true })) {

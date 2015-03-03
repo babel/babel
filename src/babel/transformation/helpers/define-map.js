@@ -10,7 +10,7 @@ export function push(mutatorMap, key, kind, computed, value) {
 
   if (t.isIdentifier(key)) {
     alias = key.name;
-    if (computed) alias = "computed:" + alias;
+    if (computed) alias = `computed:${alias}`;
   } else if (t.isLiteral(key)) {
     alias = String(key.value);
   } else {

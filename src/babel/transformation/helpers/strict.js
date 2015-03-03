@@ -7,7 +7,7 @@ export function has(node) {
 
 export function wrap(node, callback) {
   var useStrictNode;
-  if (exports.has(node)) {
+  if (has(node)) {
     useStrictNode = node.body.shift();
   }
 

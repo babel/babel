@@ -20,7 +20,7 @@ export { inherits, inspect } from "util";
 export var debug = buildDebug("babel");
 
 export function canCompile(filename, altExts) {
-  var exts = altExts || exports.canCompile.EXTENSIONS;
+  var exts = altExts || canCompile.EXTENSIONS;
   var ext = path.extname(filename);
   return contains(exts, ext);
 }
@@ -50,7 +50,7 @@ export function regexify(val) {
 export function arrayify(val) {
   if (!val) return [];
   if (isBoolean(val)) return [val];
-  if (isString(val)) return exports.list(val);
+  if (isString(val)) return list(val);
   if (Array.isArray(val)) return val;
   throw new TypeError("illegal type for arrayify");
 }
@@ -75,7 +75,7 @@ var templateVisitor = {
 
 export function template(name, nodes, keepExpression) {
   var ast = exports.templates[name];
-  if (!ast) throw new ReferenceError("unknown template " + name);
+  if (!ast) throw new ReferenceError(`unknown template ${name}`);
 
   if (nodes === true) {
     keepExpression = true;

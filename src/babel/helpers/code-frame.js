@@ -81,8 +81,7 @@ module.exports = function (lines, lineNumber, colNumber) {
         return;
       }
       if (colNumber) {
-        params.line += "\n" + params.before + repeating(" ", params.width) +
-                       params.after + repeating(" ", colNumber - 1) + "^";
+        params.line += `\n${params.before}${repeating(" ", params.width)}${params.after}${repeating(" ", colNumber - 1)}^`;
       }
       params.before = params.before.replace(/^./, ">");
     }

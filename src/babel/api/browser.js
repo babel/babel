@@ -25,7 +25,7 @@ transform.load = function (url, callback, opts = {}, hold) {
       if (!hold) transform.run.apply(transform, param);
       if (callback) callback(param);
     } else {
-      throw new Error("Could not load " + url);
+      throw new Error(`Could not load ${url}`);
     }
   };
 

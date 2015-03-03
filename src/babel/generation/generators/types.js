@@ -4,12 +4,12 @@ export function Identifier(node) {
   this.push(node.name);
 }
 
-exports.RestElement =
-exports.SpreadElement =
-exports.SpreadProperty = function (node, print) {
+export function RestElement(node, print) {
   this.push("...");
   print(node.argument);
-};
+}
+
+export { RestElement as SpreadElement, RestElement as SpreadProperty };
 
 export function VirtualPropertyExpression(node, print) {
   print(node.object);
@@ -17,8 +17,7 @@ export function VirtualPropertyExpression(node, print) {
   print(node.property);
 }
 
-exports.ObjectExpression =
-exports.ObjectPattern = function (node, print) {
+export function ObjectExpression(node, print) {
   var props = node.properties;
 
   if (props.length) {
@@ -32,7 +31,9 @@ exports.ObjectPattern = function (node, print) {
   } else {
     this.push("{}");
   }
-};
+}
+
+export { ObjectExpression as ObjectPattern };
 
 export function Property(node, print) {
   if (node.method || node.kind === "get" || node.kind === "set") {
@@ -53,8 +54,7 @@ export function Property(node, print) {
   }
 }
 
-exports.ArrayExpression =
-exports.ArrayPattern = function (node, print) {
+export function ArrayExpression(node, print) {
   var elems = node.elements;
   var len   = elems.length;
 
@@ -76,7 +76,9 @@ exports.ArrayPattern = function (node, print) {
   });
 
   this.push("]");
-};
+}
+
+export { ArrayExpression as ArrayPattern };
 
 export function Literal(node) {
   var val  = node.value;
@@ -89,7 +91,7 @@ export function Literal(node) {
   } else if (type === "boolean") {
     this.push(val ? "true" : "false");
   } else if (node.regex) {
-    this.push("/" + node.regex.pattern + "/" + node.regex.flags);
+    this.push(`/${node.regex.pattern}/${node.regex.flags}`);
   } else if (val === null) {
     this.push("null");
   }

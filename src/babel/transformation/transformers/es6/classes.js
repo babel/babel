@@ -182,7 +182,7 @@ class ClassTransformer {
     }
 
     // we have no constructor, we have a super, and the super doesn't appear to be falsy
-    if (!this.hasConstructor && this.hasSuper && t.evaluateTruthy(superName) !== false) {
+    if (!this.hasConstructor && this.hasSuper && t.evaluateTruthy(superName, this.scope) !== false) {
       var helperName = "class-super-constructor-call";
       if (this.isLoose) helperName += "-loose";
       constructor.body.body.push(util.template(helperName, {
