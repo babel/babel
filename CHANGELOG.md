@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.6.6
+
+ * **Bug Fix**
+  * Fix incorrect method call in `utility.deadCodeElimination` transformer.
+  * Fix `es6.blockScopingTDZ` transformer duplicating binding nodes.
+
 ## 4.6.5
 
  * **Internal**
