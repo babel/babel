@@ -13,7 +13,7 @@ export function check(node) {
 export function ImportDeclaration(node, parent, scope, file) {
   var resolveModuleSource = file.opts.resolveModuleSource;
   if (node.source && resolveModuleSource) {
-    node.source.value = resolveModuleSource(node.source.value);
+    node.source.value = resolveModuleSource(node.source.value, file.opts.filename);
   }
 }
 
