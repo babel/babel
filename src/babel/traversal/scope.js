@@ -82,6 +82,7 @@ export default class Scope {
   }
 
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
+  static contextVariables = ["this", "arguments"];
 
   /**
    * Description
@@ -533,7 +534,7 @@ export default class Scope {
     if (t.isBlockStatement(block) || t.isProgram(block)) {
       block._declarations ||= {};
       block._declarations[opts.key] = {
-        kind: opts.kind,
+        kind: opts.kind || "var",
         id: opts.id,
         init: opts.init
       };
@@ -668,6 +669,7 @@ export default class Scope {
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name)) return true;
     if (includes(Scope.globals, name)) return true;
+    if (includes(Scope.contextVariables, name)) return true;
     return false;
   }
 
