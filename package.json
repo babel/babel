@@ -56,7 +56,7 @@
     "output-file-sync": "^1.1.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
-    "regenerator-babel": "0.8.13-1",
+    "regenerator-babel": "0.8.13-2",
     "regexpu": "^1.1.2",
     "repeating": "^1.1.2",
     "shebang-regex": "^1.0.0",
