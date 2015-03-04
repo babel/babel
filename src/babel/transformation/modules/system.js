@@ -142,9 +142,9 @@ export default class SystemFormatter extends AMDFormatter {
 
     return t.arrayExpression(map(this.ids, function (uid, source) {
       var state = {
+        hoistDeclarators: hoistDeclarators,
         source:           source,
-        nodes:            [],
-        hoistDeclarators: hoistDeclarators
+        nodes:            []
       };
 
       scope.traverse(block, runnerSettersVisitor, state);
@@ -161,11 +161,11 @@ export default class SystemFormatter extends AMDFormatter {
     var block = t.blockStatement(program.body);
 
     var runner = util.template("system", {
-      MODULE_NAME: moduleNameLiteral,
       MODULE_DEPENDENCIES: t.arrayExpression(this.buildDependencyLiterals()),
-      EXPORT_IDENTIFIER: this.exportIdentifier,
-      SETTERS: this.buildRunnerSetters(block, hoistDeclarators),
-      EXECUTE: t.functionExpression(null, [], block)
+      EXPORT_IDENTIFIER:   this.exportIdentifier,
+      MODULE_NAME:         moduleNameLiteral,
+      SETTERS:             this.buildRunnerSetters(block, hoistDeclarators),
+      EXECUTE:             t.functionExpression(null, [], block)
     }, true);
 
     var handlerBody = runner.expression.arguments[2].body.body;
