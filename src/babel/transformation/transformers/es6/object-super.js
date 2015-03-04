@@ -5,7 +5,7 @@ export function check(node) {
   return t.isIdentifier(node, { name: "super" });
 }
 
-export function Property(node, parent, scope, file) {
+function Property(node, scope, getObjectRef, file) {
   if (!node.method) return;
 
   var value = node.value;
@@ -13,8 +13,8 @@ export function Property(node, parent, scope, file) {
 
   var replaceSupers = new ReplaceSupers({
     topLevelThisReference: thisExpr,
+    getObjectRef:          getObjectRef,
     methodNode:            node,
-    className:             thisExpr,
     isStatic:              true,
     scope:                 scope,
     file:                  file
@@ -28,5 +28,22 @@ export function Property(node, parent, scope, file) {
         t.variableDeclarator(thisExpr, t.thisExpression())
       ])
     );
+  }
+}
+
+export function ObjectExpression(node, parent, scope, file) {
+  var objectRef;
+  var getObjectRef = () => objectRef ||= scope.generateUidIdentifier("obj");
+
+  for (var i = 0; i < node.properties.length; i++) {
+    Property(node.properties[i], scope, getObjectRef, file);
+  }
+
+  if (objectRef) {
+    scope.push({
+      id: objectRef
+    });
+
+    return t.assignmentExpression("=", objectRef, node);
   }
 }

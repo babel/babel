@@ -159,8 +159,8 @@ class ClassTransformer {
       if (t.isMethodDefinition(node)) {
         var replaceSupers = new ReplaceSupers({
           methodNode: node,
-          className:  this.className,
-          superName:  this.superName,
+          objectRef:  this.className,
+          superRef:   this.superName,
           isStatic:   node.static,
           isLoose:    this.isLoose,
           scope:      this.scope,
