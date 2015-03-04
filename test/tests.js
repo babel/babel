@@ -26869,10 +26869,10 @@ testFail("x\\",
          "Expecting Unicode escape sequence \\uXXXX (1:2)");
 
 testFail("x\\u005c",
-         "Invalid Unicode escape (1:3)");
+         "Invalid Unicode escape (1:1)");
 
 testFail("x\\u002a",
-         "Invalid Unicode escape (1:3)");
+         "Invalid Unicode escape (1:1)");
 
 testFail("/",
          "Unterminated regular expression (1:1)");
@@ -27150,13 +27150,13 @@ testFail("\\\\",
          "Expecting Unicode escape sequence \\uXXXX (1:1)");
 
 testFail("\\u005c",
-         "Invalid Unicode escape (1:2)");
+         "Invalid Unicode escape (1:0)");
 
 testFail("\\x",
          "Expecting Unicode escape sequence \\uXXXX (1:1)");
 
 testFail("\\u0000",
-         "Invalid Unicode escape (1:2)");
+         "Invalid Unicode escape (1:0)");
 
 testFail("‌ = []",
          "Unexpected character '‌' (1:0)");

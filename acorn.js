@@ -1245,15 +1245,15 @@
       } else if (ch === 92) { // "\"
         containsEsc = true;
         word += input.slice(chunkStart, tokPos);
+        var escStart = tokPos;
         if (input.charCodeAt(++tokPos) != 117) // "u"
           raise(tokPos, "Expecting Unicode escape sequence \\uXXXX");
         ++tokPos;
-        var esc = readHexChar(4);
-        var escStr = String.fromCharCode(esc);
-        if (!escStr) raise(tokPos - 1, "Invalid Unicode escape");
-        if (!(first ? isIdentifierStart(esc) : isIdentifierChar(esc)))
-          raise(tokPos - 4, "Invalid Unicode escape");
-        word += escStr;
+        var esc = readCodePoint();
+        if (esc.length != 1 ||
+            !(first ? isIdentifierStart : isIdentifierChar)(esc.charCodeAt(0)))
+          raise(escStart, "Invalid Unicode escape");
+        word += esc;
         chunkStart = tokPos;
       } else {
         break;
