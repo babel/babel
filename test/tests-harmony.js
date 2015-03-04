@@ -15093,6 +15093,111 @@ test("`${/\\d/.exec('1')[0]}`", {
   ecmaVersion: 6
 });
 
+test("var _𐒦 = 10;", {
+  "type": "Program",
+  "start": 0,
+  "end": 13,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 13,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 12,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 7,
+            "name": "_𐒦"
+          },
+          "init": {
+            "type": "Literal",
+            "start": 10,
+            "end": 12,
+            "value": 10,
+            "raw": "10"
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+}, {ecmaVersion: 6});
+
+test("var 𫠝_ = 10;", {
+  "type": "Program",
+  "start": 0,
+  "end": 13,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 13,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 12,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 7,
+            "name": "𫠝_"
+          },
+          "init": {
+            "type": "Literal",
+            "start": 10,
+            "end": 12,
+            "value": 10,
+            "raw": "10"
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+}, {ecmaVersion: 6});
+
+test("var _\\u{104A6} = 10;", {
+  "type": "Program",
+  "start": 0,
+  "end": 20,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 20,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 19,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 14,
+            "name": "_𐒦"
+          },
+          "init": {
+            "type": "Literal",
+            "start": 17,
+            "end": 19,
+            "value": 10,
+            "raw": "10"
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+}, {ecmaVersion: 6});
+
+testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
+testFail("var 𫠞_ = 12;", "Unexpected character '𫠞' (1:4)", {ecmaVersion: 6});
+testFail("var 𫠝_ = 10;", "Unexpected character '𫠝' (1:4)", {ecmaVersion: 5});
 testFail("if (1) let x = 10;", "Unexpected token (1:7)", {ecmaVersion: 6});
 testFail("for (;;) const x = 10;", "Unexpected token (1:9)", {ecmaVersion: 6});
 testFail("while (1) function foo(){}", "Unexpected token (1:10)", {ecmaVersion: 6});
