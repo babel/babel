@@ -1,16 +1,19 @@
-var genHelpers = require("./_generator-helpers");
-var transform  = require("../lib/babel/transformation");
-var sourceMap  = require("source-map");
-var codeFrame  = require("../lib/babel/helpers/code-frame");
-var Module     = require("module");
-var helper     = require("./_helper");
-var assert     = require("assert");
-var chai       = require("chai");
-var path       = require("path");
-var util       = require("../lib/babel/util");
-var _          = require("lodash");
+var genHelpers          = require("./_generator-helpers");
+var transform           = require("../lib/babel/transformation");
+var buildExernalHelpers = require("../lib/babel/build-external-helpers");
+var sourceMap           = require("source-map");
+var codeFrame           = require("../lib/babel/helpers/code-frame");
+var Module              = require("module");
+var helper              = require("./_helper");
+var assert              = require("assert");
+var chai                = require("chai");
+var path                = require("path");
+var util                = require("../lib/babel/util");
+var _                   = require("lodash");
 
 require("../lib/babel/polyfill");
+
+eval(buildExernalHelpers());
 
 global.assertNoOwnProperties = function (obj) {
   assert.equal(Object.getOwnPropertyNames(obj).length, 0);

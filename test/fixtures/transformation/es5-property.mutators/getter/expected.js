@@ -5,7 +5,7 @@ var obj = Object.defineProperties({}, {
     get: function () {
       return 5 + 5;
     },
-    enumerable: true,
-    configurable: true
+    configurable: true,
+    enumerable: true
   }
 });

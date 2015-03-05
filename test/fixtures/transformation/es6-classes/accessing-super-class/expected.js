@@ -1,59 +1,43 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
-
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
-
-var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
 var Test = (function (Foo) {
   function Test() {
-    var _get2, _get3;
+    var _babelHelpers$get, _babelHelpers$get2;
 
-    _classCallCheck(this, Test);
+    babelHelpers.classCallCheck(this, Test);
 
     woops["super"].test();
-    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
-    _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
 
-    _get(Object.getPrototypeOf(Test.prototype), "constructor", this).apply(this, arguments);
-    (_get2 = _get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "constructor", this).apply(this, arguments);
+    (_babelHelpers$get = babelHelpers.get(Object.getPrototypeOf(Test.prototype), "constructor", this)).call.apply(_babelHelpers$get, [this, "test"].concat(babelHelpers.slice.call(arguments)));
 
-    _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
-    (_get3 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get3, [this, "test"].concat(_slice.call(arguments)));
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+    (_babelHelpers$get2 = babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_babelHelpers$get2, [this, "test"].concat(babelHelpers.slice.call(arguments)));
   }
 
-  _inherits(Test, Foo);
-
-  _prototypeProperties(Test, {
-    foo: {
-      value: function foo() {
-        var _get2;
-
-        _get(Object.getPrototypeOf(Test), "foo", this).call(this);
-        _get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
-        (_get2 = _get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
-      },
-      writable: true,
-      configurable: true
-    }
-  }, {
+  babelHelpers.inherits(Test, Foo);
+  babelHelpers.createClass(Test, {
     test: {
       value: function test() {
-        var _get2;
+        var _babelHelpers$get;
 
-        _get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
-        _get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
-        (_get2 = _get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_get2, [this, "test"].concat(_slice.call(arguments)));
-      },
-      writable: true,
-      configurable: true
+        babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this).call(this);
+        babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
+        (_babelHelpers$get = babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this)).call.apply(_babelHelpers$get, [this, "test"].concat(babelHelpers.slice.call(arguments)));
+      }
+    }
+  }, {
+    foo: {
+      value: function foo() {
+        var _babelHelpers$get;
+
+        babelHelpers.get(Object.getPrototypeOf(Test), "foo", this).call(this);
+        babelHelpers.get(Object.getPrototypeOf(Test), "foo", this).apply(this, arguments);
+        (_babelHelpers$get = babelHelpers.get(Object.getPrototypeOf(Test), "foo", this)).call.apply(_babelHelpers$get, [this, "test"].concat(babelHelpers.slice.call(arguments)));
+      }
     }
   });
-
   return Test;
 })(Foo);

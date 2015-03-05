@@ -48,7 +48,7 @@ export default class File {
   static helpers = [
     "inherits",
     "defaults",
-    "prototype-properties",
+    "create-class",
     "apply-constructor",
     "tagged-template-literal",
     "tagged-template-literal-loose",

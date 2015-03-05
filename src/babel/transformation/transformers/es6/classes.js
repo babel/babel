@@ -195,21 +195,21 @@ class ClassTransformer {
     var staticProps;
 
     if (this.hasInstanceMutators) {
-      instanceProps = defineMap.build(this.instanceMutatorMap);
+      instanceProps = defineMap.toClassObject(this.instanceMutatorMap);
     }
 
     if (this.hasStaticMutators) {
-      staticProps = defineMap.build(this.staticMutatorMap);
+      staticProps = defineMap.toClassObject(this.staticMutatorMap);
     }
 
     if (instanceProps || staticProps) {
-      staticProps ||= t.literal(null);
+      instanceProps ||= t.literal(null);
 
-      var args = [className, staticProps];
-      if (instanceProps) args.push(instanceProps);
+      var args = [className, instanceProps];
+      if (staticProps) args.push(staticProps);
 
       body.push(t.expressionStatement(
-        t.callExpression(this.file.addHelper("prototype-properties"), args)
+        t.callExpression(this.file.addHelper("create-class"), args)
       ));
     }
   }
@@ -253,7 +253,6 @@ class ClassTransformer {
     }
 
     defineMap.push(mutatorMap, methodName, kind, node.computed, node);
-    defineMap.push(mutatorMap, methodName, "enumerable", node.computed, false);
   }
 
   /**

@@ -1,26 +1,18 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
 var A = (function () {
   function A() {
-    _classCallCheck(this, A);
+    babelHelpers.classCallCheck(this, A);
   }
 
-  _prototypeProperties(A, {
+  babelHelpers.createClass(A, null, {
     a: {
-      value: function a() {},
-      writable: true,
-      configurable: true
+      value: function a() {}
     },
     b: {
       get: function () {},
-      set: function (b) {},
-      configurable: true
+      set: function (b) {}
     }
   });
-
   return A;
 })();

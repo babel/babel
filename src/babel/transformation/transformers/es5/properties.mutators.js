@@ -23,6 +23,6 @@ export function ObjectExpression(node) {
 
   return t.callExpression(
     t.memberExpression(t.identifier("Object"), t.identifier("defineProperties")),
-    [node, defineMap.build(mutatorMap)]
+    [node, defineMap.toDefineObject(mutatorMap)]
   );
 }
