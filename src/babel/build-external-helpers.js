@@ -29,12 +29,12 @@ function buildUmd(namespace, builder) {
   builder(body);
 
   var container = util.template("umd-commonjs-strict", {
-    AMD_ARGUMENTS:      t.arrayExpression([t.literal("exports")]),
-    COMMON_ARGUMENTS:   t.identifier("exports"),
-    BROWSER_ARGUMENTS:  t.assignmentExpression("=", t.memberExpression(t.identifier("root"), namespace), t.objectExpression({})),
-    UMD_ROOT:           t.identifier("this"),
     FACTORY_PARAMETERS: t.identifier("global"),
-    FACTORY_BODY:       body
+    BROWSER_ARGUMENTS:  t.assignmentExpression("=", t.memberExpression(t.identifier("root"), namespace), t.objectExpression({})),
+    COMMON_ARGUMENTS:   t.identifier("exports"),
+    AMD_ARGUMENTS:      t.arrayExpression([t.literal("exports")]),
+    FACTORY_BODY:       body,
+    UMD_ROOT:           t.identifier("this")
   });
   return t.program([container]);
 }
