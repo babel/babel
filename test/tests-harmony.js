@@ -14051,6 +14051,8 @@ testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 testFail("yield 10", "Unexpected token (1:6)", {ecmaVersion: 6});
 
+testFail("void { [1, 2]: 3 };", "Unexpected token (1:9)", {ecmaVersion: 6});
+
 test("yield* 10", {
   type: "Program",
   body: [{
