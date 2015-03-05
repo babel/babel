@@ -18,7 +18,8 @@ export var messages = {
   unknownForHead: "Unknown node type $1 in ForStatement",
   didYouMean: "Did you mean $1?",
   evalInStrictMode: "eval is not allowed in strict mode",
-  codeGeneratorDeopt: "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2."
+  codeGeneratorDeopt: "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
+  missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues"
 };
 
 export function get(key) {

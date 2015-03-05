@@ -3,6 +3,7 @@ import "./patch";
 import buildDebug from "debug/node";
 import cloneDeep from "lodash/lang/cloneDeep";
 import isBoolean from "lodash/lang/isBoolean";
+import * as messages from "./messages";
 import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
@@ -71,7 +72,9 @@ var templateVisitor = {
       return nodes[node.name];
     }
   }
-};
+}
+
+//
 
 export function template(name, nodes, keepExpression) {
   var ast = exports.templates[name];
@@ -101,7 +104,8 @@ export function template(name, nodes, keepExpression) {
 
 export function parseTemplate(loc, code) {
   var ast = parse({ filename: loc }, code).program;
-  return traverse.removeProperties(ast);
+  ast = traverse.removeProperties(ast);
+  return ast;
 }
 
 function loadTemplates() {
@@ -109,9 +113,7 @@ function loadTemplates() {
 
   var templatesLoc = path.join(__dirname, "transformation/templates");
   if (!fs.existsSync(templatesLoc)) {
-    throw new Error("no templates directory - this is most likely the " +
-                    "result of a broken `npm publish`. Please report to " +
-                    "https://github.com/babel/babel/issues");
+    throw new ReferenceError(messages.get("missingTemplatesDirectory"));
   }
 
   each(fs.readdirSync(templatesLoc), function (name) {
@@ -133,4 +135,16 @@ try {
   if (err.code !== "MODULE_NOT_FOUND") throw err;
 
   exports.templates = loadTemplates();
+}
+
+//
+
+try {
+  var runtimePackage = require("babel-runtime/package");
+  var version = require("../../package").version;
+  if (runtimePackage.version !== version) {
+    throw new ReferenceError(`The verison of babel-runtime of ${runtimePackage.runtime} that you have installed does not match the babel verison of ${version}`);
+  }
+} catch (err) {
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
 }
