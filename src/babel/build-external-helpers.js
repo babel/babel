@@ -55,17 +55,13 @@ export default function (whitelist, outputType = "global") {
   };
 
   var tree;
-  switch (outputType) {
-  case "global":
+  if (outputType === "global") {
     tree = buildGlobal(namespace, builder);
-    break;
-  case "umd":
+  } else if (outputType === "umd") {
     tree = buildUmd(namespace, builder);
-    break;
-  case "var":
+  } else if (outputType === "var") {
     tree = buildVar(namespace, builder);
-    break;
-  default:
+  } else {
     throw new Error("Unsupported output type");
   }
 
