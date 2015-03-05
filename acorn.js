@@ -171,48 +171,8 @@
   // the Acorn parser itself, this interface is somewhat crude and not
   // very modular.
 
-  exports.tokenize = function(input, options) {
-    var p = new Parser(options, input);
-
-    function getToken() {
-      p.lastTokEnd = p.end;
-      p.nextToken();
-      return new Token(p);
-    }
-
-    getToken.current = function() { return new Token(p); };
-
-    getToken.jumpTo = function(pos, exprAllowed) {
-      p.pos = pos;
-      if (p.options.locations) {
-        p.curLine = 1;
-        p.lineStart = lineBreak.lastIndex = 0;
-        var match;
-        while ((match = lineBreak.exec(p.input)) && match.index < pos) {
-          ++p.curLine;
-          p.lineStart = match.index + match[0].length;
-        }
-      }
-      p.exprAllowed = !!exprAllowed;
-    };
-
-    // If we're in an ES6 environment, make this an iterator.
-    if (typeof Symbol !== "undefined") {
-      getToken[Symbol.iterator] = function () {
-        return {
-          next: function () {
-            var token = getToken();
-            return {
-              done: token.type === tt.eof,
-              value: token
-            };
-          }
-        };
-      };
-    }
-
-    getToken.options = p.options;
-    return getToken;
+  exports.tokenizer = function(input, options) {
+    return new Parser(options, input);
   };
 
   // Interpret and default an options object
@@ -661,6 +621,24 @@
     this.lastTokEndLoc = this.endLoc;
     this.nextToken();
   };
+
+  pp.getToken = function() {
+    this.next();
+    return new Token(this);
+  };
+
+  // If we're in an ES6 environment, make parsers iterable
+  if (typeof Symbol !== "undefined")
+    pp[Symbol.iterator] = function () {
+      var self = this;
+      return {next: function () {
+        var token = self.getToken();
+        return {
+          done: token.type === tt.eof,
+          value: token
+        };
+      }};
+    };
 
   // Toggle strict mode. Re-reads the next number or string to please
   // pedantic tests (`"use strict"; 010;` should fail).
