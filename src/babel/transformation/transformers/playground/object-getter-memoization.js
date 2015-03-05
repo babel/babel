@@ -4,9 +4,9 @@ export var playground = true;
 
 var visitor = {
   enter(node, parent, scope, state) {
-    if (t.isFunction(node)) return this.skip();
+    if (this.isFunction()) return this.skip();
 
-    if (t.isReturnStatement(node) && node.argument) {
+    if (this.isReturnStatement() && node.argument) {
       node.argument = t.memberExpression(t.callExpression(state.file.addHelper("define-property"), [
         t.thisExpression(),
         state.key,

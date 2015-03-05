@@ -1,11 +1,10 @@
 import levenshtein from "leven";
 import * as messages from "../../../messages";
-import t from "../../../types";
 
 export var optional = true;
 
 export function Identifier(node, parent, scope, file) {
-  if (!t.isReferenced(node, parent)) return;
+  if (!this.isReferenced()) return;
   if (scope.hasBinding(node.name)) return;
 
   // get the closest declaration to offer as a suggestion

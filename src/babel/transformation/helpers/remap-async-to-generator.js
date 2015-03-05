@@ -24,7 +24,7 @@ module.exports = function (node, callId, scope) {
 
   var call = t.callExpression(callId, [node]);
   var id = node.id;
-  delete node.id;
+  node.id = null;
 
   if (t.isFunctionDeclaration(node)) {
     var declar = t.variableDeclaration("let", [

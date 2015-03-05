@@ -5,7 +5,7 @@ export var playground = true;
 
 build(exports, {
   is(node) {
-    var is = t.isAssignmentExpression(node) && node.operator === "?=";
+    var is = t.isAssignmentExpression(node, { operator: "?=" });
     if (is) t.assertMemberExpression(node.left);
     return is;
   },

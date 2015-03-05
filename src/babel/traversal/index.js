@@ -42,13 +42,14 @@ traverse.node = function (node, opts, scope, state, parentPath) {
 function clearNode(node) {
   node._declarations = null;
   node.extendedRange = null;
-  node._scopeInfo = null;
-  node.tokens = null;
-  node.range = null;
-  node.start = null;
-  node.end = null;
-  node.loc = null;
-  node.raw = null;
+  node._scopeInfo    = null;
+  node._paths        = null;
+  node.tokens        = null;
+  node.range         = null;
+  node.start         = null;
+  node.end           = null;
+  node.loc           = null;
+  node.raw           = null;
 
   if (Array.isArray(node.trailingComments)) {
     clearComments(node.trailingComments);
@@ -57,11 +58,18 @@ function clearNode(node) {
   if (Array.isArray(node.leadingComments)) {
     clearComments(node.leadingComments);
   }
+
+  for (var key in node) {
+    var val = node[key];
+    if (Array.isArray(val)) {
+      delete val._paths;
+    }
+  }
 }
 
 var clearVisitor = {
   noScope: true,
-  enter: clearNode
+  exit: clearNode
 };
 
 function clearComments(comments) {
@@ -71,8 +79,8 @@ function clearComments(comments) {
 }
 
 traverse.removeProperties = function (tree) {
-  clearNode(tree);
   traverse(tree, clearVisitor);
+  clearNode(tree);
 
   return tree;
 };

@@ -2,7 +2,7 @@ import t from "../../../types";
 
 var functionChildrenVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isFunction(node) && !node._aliasFunction) {
+    if (this.isFunction() && !node._aliasFunction) {
       return this.skip();
     }
 
@@ -10,22 +10,22 @@ var functionChildrenVisitor = {
 
     var getId;
 
-    if (t.isIdentifier(node) && node.name === "arguments") {
+    if (this.isIdentifier() && node.name === "arguments") {
       getId = state.getArgumentsId;
-    } else if (t.isThisExpression(node)) {
+    } else if (this.isThisExpression()) {
       getId = state.getThisId;
     } else {
       return;
     }
 
-    if (t.isReferenced(node, parent)) return getId();
+    if (this.isReferenced()) return getId();
   }
 };
 
 var functionVisitor = {
   enter(node, parent, scope, state) {
     if (!node._aliasFunction) {
-      if (t.isFunction(node)) {
+      if (this.isFunction()) {
         // stop traversal of this node as it'll be hit again by this transformer
         return this.skip();
       } else {

@@ -7,8 +7,8 @@ export function check(node) {
 
 var visitor = {
   enter(node, parent, scope, state) {
-    if (t.isAssignmentExpression(node) || t.isUpdateExpression(node)) {
-      var ids = t.getBindingIdentifiers(node);
+    if (this.isAssignmentExpression() || this.isUpdateExpression()) {
+      var ids = this.getBindingIdentifiers();
 
       for (var name in ids) {
         var id = ids[name];
@@ -30,7 +30,7 @@ var visitor = {
 
         throw state.file.errorWithNode(id, messages.get("readOnly", name));
       }
-    } else if (t.isScope(node, parent)) {
+    } else if (this.isScope()) {
       this.skip();
     }
   }

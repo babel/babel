@@ -4,23 +4,34 @@ import Scope from "./scope";
 import t from "../types";
 
 export default class TraversalPath {
-  constructor(context, parent, container, key) {
-    this.shouldRemove = false;
-    this.shouldSkip   = false;
-    this.shouldStop   = false;
+  constructor(parentPath, parent, container) {
+    this.parentPath = parentPath;
+    this.container  = container;
+    this.parent     = parent;
+    this.data       = {};
+  }
 
-    this.parentPath = context.parentPath;
-    this.context    = context;
-    this.state      = this.context.state;
-    this.opts       = this.context.opts;
+  static get(parentPath, context, parent, container, key) {
+    var targetNode = container[key];
+    var paths = container._paths ||= [];
+    var path;
 
-    this.container = container;
-    this.key       = key;
+    for (var i = 0; i < paths.length; i++) {
+      var pathCheck = paths[i];
+      if (pathCheck.node === targetNode) {
+        path = pathCheck;
+        break;
+      }
+    }
 
-    this.parent = parent;
-    this.state  = context.state;
+    if (!path) {
+      path = new TraversalPath(parentPath, parent, container);
+      paths.push(path);
+    }
 
-    this.setScope();
+    path.setContext(context, key);
+
+    return path;
   }
 
   static getScope(node, parent, scope) {
@@ -34,8 +45,29 @@ export default class TraversalPath {
     return ourScope;
   }
 
+  setData(key, val) {
+    return this.data[key] = val;
+  }
+
+  getData(key) {
+    return this.data[key];
+  }
+
   setScope() {
     this.scope = TraversalPath.getScope(this.node, this.parent, this.context.scope);
+  }
+
+  setContext(context, key) {
+    this.shouldRemove = false;
+    this.shouldSkip   = false;
+    this.shouldStop   = false;
+
+    this.context = context;
+    this.state   = context.state;
+    this.opts    = context.opts;
+    this.key     = key;
+
+    this.setScope();
   }
 
   remove() {
@@ -114,14 +146,13 @@ export default class TraversalPath {
     }
   }
 
-  visit() {
-    var opts = this.opts;
-    var node = this.node;
+  isBlacklisted() {
+    var blacklist = this.opts.blacklist;
+    return blacklist && blacklist.indexOf(this.node.type) > -1;
+  }
 
-    // type is blacklisted
-    if (opts.blacklist && opts.blacklist.indexOf(node.type) > -1) {
-      return false;
-    }
+  visit() {
+    if (this.isBlacklisted()) return false;
 
     this.call("enter");
 
@@ -129,7 +160,8 @@ export default class TraversalPath {
       return this.shouldStop;
     }
 
-    node = this.node;
+    var node = this.node;
+    var opts = this.opts;
 
     if (Array.isArray(node)) {
       // traverse over these replacement nodes we purposely don't call exitNode
@@ -139,13 +171,38 @@ export default class TraversalPath {
       }
     } else {
       traverse.node(node, opts, this.scope, this.state, this);
+
       this.call("exit");
     }
 
     return this.shouldStop;
   }
 
-  isReferencedIdentifier() {
-    return t.isReferencedIdentifier(this.node);
+  get(key) {
+    return TraversalPath.get(this, this.context, this.node, this.node, key);
   }
+
+  isReferencedIdentifier(opts) {
+    return t.isReferencedIdentifier(this.node, this.parent, opts);
+  }
+
+  isReferenced() {
+    return t.isReferenced(this.node, this.parent);
+  }
+
+  isScope() {
+    return t.isScope(this.node, this.parent);
+  }
+
+  getBindingIdentifiers() {
+    return t.getBindingIdentifiers(this.node);
+  }
+}
+
+for (var i = 0; i < t.TYPES.length; i++) {
+  let type = t.TYPES[i];
+  let typeKey = `is${type}`;
+  TraversalPath.prototype[typeKey] = function (opts) {
+    return t[typeKey](this.node, opts);
+  };
 }

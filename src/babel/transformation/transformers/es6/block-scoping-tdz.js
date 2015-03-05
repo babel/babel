@@ -2,7 +2,7 @@ import t from "../../../types";
 
 var visitor = {
   enter(node, parent, scope, state) {
-    if (!t.isReferencedIdentifier(node, parent)) return;
+    if (!this.isReferencedIdentifier()) return;
 
     var declared = state.letRefs[node.name];
     if (!declared) return;

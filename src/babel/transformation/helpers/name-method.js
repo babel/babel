@@ -6,7 +6,7 @@ var visitor = {
   enter(node, parent, scope, state) {
     // check if this node is a referenced identifier that matches the same as our
     // function id
-    if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
+    if (!this.isReferencedIdentifier({ name: state.name })) return;
 
     // check that we don't have a local variable declared as that removes the need
     // for the wrapper

@@ -16,14 +16,15 @@ var ALIASABLE_CONSTRUCTORS = [
   "Map",
   "WeakMap",
   "Set",
-  "WeakSet"
+  "WeakSet",
+  "Number"
 ];
 
 var astVisitor = {
   enter(node, parent, scope, file) {
     var prop;
 
-    if (t.isMemberExpression(node) && t.isReferenced(node, parent)) {
+    if (this.isMemberExpression() && this.isReferenced()) {
       // Array.from -> _core.Array.from
       var obj = node.object;
       prop = node.property;
@@ -34,10 +35,10 @@ var astVisitor = {
         this.skip();
         return t.prependToMemberExpression(node, file.get("coreIdentifier"));
       }
-    } else if (t.isReferencedIdentifier(node, parent) && !t.isMemberExpression(parent) && includes(ALIASABLE_CONSTRUCTORS, node.name) && !scope.getBindingIdentifier(node.name)) {
+    } else if (this.isReferencedIdentifier() && !t.isMemberExpression(parent) && includes(ALIASABLE_CONSTRUCTORS, node.name) && !scope.getBindingIdentifier(node.name)) {
       // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
       return t.memberExpression(file.get("coreIdentifier"), node);
-    } else if (t.isCallExpression(node)) {
+    } else if (this.isCallExpression()) {
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
 
       var callee = node.callee;
@@ -53,7 +54,7 @@ var astVisitor = {
         CORE_ID: file.get("coreIdentifier"),
         VALUE:   callee.object
       });
-    } else if (t.isBinaryExpression(node)) {
+    } else if (this.isBinaryExpression()) {
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
 
       if (node.operator !== "in") return;
@@ -94,7 +95,7 @@ export function pre(file) {
 }
 
 export function Identifier(node, parent, scope, file) {
-  if (t.isReferencedIdentifier(node, parent, { name: "regeneratorRuntime" })) {
+  if (this.isReferencedIdentifier({ name: "regeneratorRuntime" })) {
     return file.get("regeneratorIdentifier");
   }
 }

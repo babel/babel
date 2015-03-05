@@ -219,7 +219,7 @@ export function VariableDeclaration(node, parent, scope, file) {
   }
 
   return nodes;
-};
+}
 
 var hasRest = function (pattern) {
   for (var i = 0; i < pattern.elements.length; i++) {

@@ -1,4 +1,3 @@
-import clone from "lodash/lang/clone";
 import t from "../../../types";
 
 export function check(node) {
@@ -12,6 +11,6 @@ export function Property(node) {
 
   if (node.shorthand) {
     node.shorthand = false;
-    node.key = t.removeComments(clone(node.key));
+    node.key = t.removeComments(t.clone(node.key));
   }
 }

@@ -109,7 +109,7 @@ function traverseReplace(node, parent, scope, remaps) {
 
 var letReferenceBlockVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isFunction(node)) {
+    if (this.isFunction()) {
       scope.traverse(node, letReferenceFunctionVisitor, state);
       return this.skip();
     }
@@ -119,7 +119,7 @@ var letReferenceBlockVisitor = {
 var letReferenceFunctionVisitor = {
   enter(node, parent, scope, state) {
     // not a direct reference
-    if (!t.isReferencedIdentifier(node, parent)) return;
+    if (!this.isReferencedIdentifier()) return;
 
     // this scope has a variable with the same name so it couldn't belong
     // to our let scope
@@ -134,17 +134,17 @@ var letReferenceFunctionVisitor = {
 
 var hoistVarDeclarationsVisitor = {
   enter(node, parent, scope, self) {
-    if (t.isForStatement(node)) {
+    if (this.isForStatement()) {
       if (isVar(node.init, node)) {
         node.init = t.sequenceExpression(self.pushDeclar(node.init));
       }
-    } else if (t.isFor(node)) {
+    } else if (this.isFor()) {
       if (isVar(node.left, node)) {
         node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent)) {
       return self.pushDeclar(node).map(t.expressionStatement);
-    } else if (t.isFunction(node)) {
+    } else if (this.isFunction()) {
       return this.skip();
     }
   }
@@ -152,7 +152,7 @@ var hoistVarDeclarationsVisitor = {
 
 var loopLabelVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isLabeledStatement(node)) {
+    if (this.isLabeledStatement()) {
       state.innerLabels.push(node.label.name);
     }
   }
@@ -170,13 +170,13 @@ var loopVisitor = {
   enter(node, parent, scope, state) {
     var replace;
 
-    if (t.isLoop(node)) {
+    if (this.isLoop()) {
       state.ignoreLabeless = true;
       scope.traverse(node, loopVisitor, state);
       state.ignoreLabeless = false;
     }
 
-    if (t.isFunction(node) || t.isLoop(node)) {
+    if (this.isFunction() || this.isLoop()) {
       return this.skip();
     }
 
@@ -204,7 +204,7 @@ var loopVisitor = {
       replace = t.literal(loopText);
     }
 
-    if (t.isReturnStatement(node)) {
+    if (this.isReturnStatement()) {
       state.hasReturn = true;
       replace = t.objectExpression([
         t.property("init", t.identifier("v"), node.argument || t.identifier("undefined"))

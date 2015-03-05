@@ -6,8 +6,7 @@ export var playground = true;
 
 build(exports, {
   is(node, file) {
-    var is = t.isAssignmentExpression(node) && node.operator === "||=";
-    if (is) {
+    if (t.isAssignmentExpression(node, { operator: "||=" })) {
       var left = node.left;
       if (!t.isMemberExpression(left) && !t.isIdentifier(left)) {
         throw file.errorWithNode(left, messages.get("expectedMemberExpressionOrIdentifier"));

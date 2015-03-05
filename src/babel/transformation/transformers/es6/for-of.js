@@ -41,14 +41,14 @@ export function ForOfStatement(node, parent, scope, file) {
 
 var breakVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isLoop(node)) {
+    if (this.isLoop()) {
       state.ignoreLabeless = true;
       scope.traverse(node, breakVisitor, state);
       state.ignoreLabeless = false;
       return this.skip();
     }
 
-    if (t.isBreakStatement(node)) {
+    if (this.isBreakStatement()) {
       if (!node.label && state.ignoreLabeless) return;
       if (node.label && node.label.name !== state.label) return;
 

@@ -17,7 +17,7 @@ function returnBlock(expr) {
 // looks for and replaces tail recursion calls
 var firstPass = {
   enter(node, parent, scope, state) {
-    if (t.isIfStatement(node)) {
+    if (this.isIfStatement()) {
       if (t.isReturnStatement(node.alternate)) {
         t.ensureBlock(node, "alternate");
       }
@@ -25,7 +25,7 @@ var firstPass = {
       if (t.isReturnStatement(node.consequent)) {
         t.ensureBlock(node, "consequent");
       }
-    } else if (t.isReturnStatement(node)) {
+    } else if (this.isReturnStatement()) {
       this.skip();
       return state.subTransform(node.argument);
     } else if (t.isTryStatement(parent)) {
@@ -34,9 +34,9 @@ var firstPass = {
       } else if (parent.finalizer && node !== parent.finalizer) {
         this.skip();
       }
-    } else if (t.isFunction(node)) {
+    } else if (this.isFunction()) {
       this.skip();
-    } else if (t.isVariableDeclaration(node)) {
+    } else if (this.isVariableDeclaration()) {
       this.skip();
       state.vars.push(node);
     }
@@ -47,15 +47,15 @@ var firstPass = {
 // them as needed
 var secondPass = {
   enter(node, parent, scope, state) {
-    if (t.isThisExpression(node)) {
+    if (this.isThisExpression()) {
       state.needsThis = true;
       return state.getThisId();
-    } else if (t.isReferencedIdentifier(node, parent, { name: "arguments" })) {
+    } else if (this.isReferencedIdentifier({ name: "arguments" })) {
       state.needsArguments = true;
       return state.getArgumentsId();
-    } else if (t.isFunction(node)) {
+    } else if (this.isFunction()) {
       this.skip();
-      if (t.isFunctionDeclaration(node)) {
+      if (this.isFunctionDeclaration()) {
         node = t.variableDeclaration("var", [
           t.variableDeclarator(node.id, t.toExpression(node))
         ]);
@@ -69,7 +69,7 @@ var secondPass = {
 // optimizes recursion by removing `this` and `arguments` if they aren't used
 var thirdPass = {
   enter(node, parent, scope, state) {
-    if (!t.isExpressionStatement(node)) return;
+    if (!this.isExpressionStatement()) return;
 
     var expr = node.expression;
     if (!t.isAssignmentExpression(expr)) return;

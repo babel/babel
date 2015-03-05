@@ -7,13 +7,13 @@ export var check = t.isRestElement;
 var memberExpressionOptimisationVisitor = {
   enter(node, parent, scope, state) {
     // check if this scope has a local binding that will shadow the rest parameter
-    if (t.isScope(node, parent) && !scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
+    if (this.isScope() && !scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
       return this.skip();
     }
 
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
-    if (t.isFunctionDeclaration(node) || t.isFunctionExpression(node)) {
+    if (this.isFunctionDeclaration() || this.isFunctionExpression()) {
       state.noOptimise = true;
       scope.traverse(node, memberExpressionOptimisationVisitor, state);
       state.noOptimise = false;
@@ -21,7 +21,7 @@ var memberExpressionOptimisationVisitor = {
     }
 
     // is this a referenced identifier and is it referencing the rest parameter?
-    if (!t.isReferencedIdentifier(node, parent, { name: state.name })) return;
+    if (!this.isReferencedIdentifier({ name: state.name })) return;
 
     if (!state.noOptimise && t.isMemberExpression(parent) && parent.computed) {
       // if we know that this member expression is referencing a number then we can safely

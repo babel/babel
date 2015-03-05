@@ -6,6 +6,7 @@ import isString from "lodash/lang/isString";
 import compact from "lodash/array/compact";
 import esutils from "esutils";
 import object from "../helpers/object";
+import clone from "lodash/lang/clone";
 import each from "lodash/collection/each";
 import uniq from "lodash/array/uniq";
 
@@ -48,7 +49,7 @@ each(t.VISITOR_KEYS, function (keys, type) {
 
 each(t.ALIAS_KEYS, function (aliases, type) {
   each(aliases, function (alias) {
-    var types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [];
+    var types = t.FLIPPED_ALIAS_KEYS[alias] ||= [];
     types.push(type);
   });
 });
@@ -57,6 +58,8 @@ each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   t[type.toUpperCase() + "_TYPES"] = types;
   registerType(type, false);
 });
+
+t.TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
 
 /**
  * Returns whether `node` is of given `type`.
@@ -411,6 +414,49 @@ t.toIdentifier = function (name) {
 t.ensureBlock = function (node, key) {
   key ||= "body";
   return node[key] = t.toBlock(node[key], node);
+};
+
+/**
+ * Description
+ *
+ * @param {Object} node
+ * @returns {Object}
+ */
+
+t.clone = function (node) {
+  var newNode = {};
+  for (var key in node) {
+    if (key[0] === "_") continue;
+    newNode[key] = node[key];
+  }
+  return newNode;
+};
+
+/**
+ * Description
+ *
+ * @param {Object} node
+ * @returns {Object}
+ */
+
+t.cloneDeep = function (node) {
+  var newNode = {};
+
+  for (var key in node) {
+    var val = node[key];
+
+    if (val) {
+      if (val.type) {
+        val = t.cloneDeep(val);
+      } else if (Array.isArray(val)) {
+        val = val.map(t.cloneDeep);
+      }
+    }
+
+    newNode[key] = val;
+  }
+
+  return newNode;
 };
 
 /**

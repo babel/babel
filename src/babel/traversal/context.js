@@ -2,7 +2,7 @@ import TraversalPath from "./path";
 import flatten from "lodash/array/flatten";
 import compact from "lodash/array/compact";
 
-export default class TraversalConext {
+export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.shouldFlatten = false;
     this.parentPath    = parentPath;
@@ -17,7 +17,7 @@ export default class TraversalConext {
   }
 
   visitNode(node, obj, key) {
-    var iteration = new TraversalPath(this, node, obj, key);
+    var iteration = TraversalPath.get(this.parentPath, this, node, obj, key);
     return iteration.visit();
   }
 
