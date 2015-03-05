@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var indexOf = require("lodash/array/indexOf");
+
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
@@ -7,7 +9,17 @@
 
 var args  = [__dirname + "/_babel-node"];
 
-process.argv.slice(2).forEach(function(arg){
+var babelArgs = process.argv.slice(2);
+var userArgs;
+
+// separate node arguments from script arguments
+var argSeparator = indexOf(babelArgs, "--");
+if (argSeparator > -1) {
+  userArgs = babelArgs.slice(argSeparator); // including the  --
+  babelArgs = babelArgs.slice(0, argSeparator);
+}
+
+babelArgs.forEach(function(arg){
   var flag = arg.split("=")[0];
 
   switch (flag) {
@@ -48,6 +60,11 @@ process.argv.slice(2).forEach(function(arg){
       break;
   }
 });
+
+// append arguments passed after --
+if (argSeparator > -1) {
+  args = args.concat(userArgs);
+}
 
 try {
   var kexec = require("kexec");
