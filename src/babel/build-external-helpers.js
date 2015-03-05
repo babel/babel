@@ -1,5 +1,6 @@
 import buildHelpers from "./build-helpers";
 import generator from "./generation";
+import * as messages from "./messages";
 import * as util from  "./util";
 import t from "./types";
 
@@ -62,7 +63,7 @@ export default function (whitelist, outputType = "global") {
   } else if (outputType === "var") {
     tree = buildVar(namespace, builder);
   } else {
-    throw new Error("Unsupported output type");
+    throw new Error(messages.get("unsupportedOutputType", outputType));
   }
 
   return generator(tree).code;
