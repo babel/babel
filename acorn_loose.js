@@ -38,82 +38,85 @@
 
   var tt = acorn.tokTypes;
 
-  var options, input, fetchToken, context;
-
   acorn.defaultOptions.tabSize = 4;
 
-  exports.parse_dammit = function(inpt, opts) {
-    if (!opts) opts = {};
-    input = String(inpt);
-    fetchToken = acorn.tokenize(input, opts);
-    options = fetchToken.options;
-    sourceFile = options.sourceFile || null;
-    context = [];
-    nextLineStart = 0;
-    ahead.length = 0;
-    next();
-    return parseTopLevel();
+  exports.parse_dammit = function(input, options) {
+    var p = new LooseParser(options, input);
+    p.next();
+    return p.parseTopLevel();
   };
 
-  var lastEnd, token = {start: 0, end: 0}, ahead = [];
-  var curLineStart, nextLineStart, curIndent, lastEndLoc, sourceFile;
-
-  function next() {
-    lastEnd = token.end;
-    if (options.locations)
-      lastEndLoc = token.loc && token.loc.end;
-
-    token = ahead.shift() || readToken();
-    if (options.onToken)
-      options.onToken(token);
-
-    if (token.start >= nextLineStart) {
-      while (token.start >= nextLineStart) {
-        curLineStart = nextLineStart;
-        nextLineStart = lineEnd(curLineStart) + 1;
-      }
-      curIndent = indentationAfter(curLineStart);
+  var LooseParser = exports.LooseParser = function(input, options) {
+    this.toks = new acorn.Parser(input, options);
+    this.options = this.toks.options;
+    this.input = this.toks.input;
+    this.tok = this.last = {type: tt.eof, start: 0, end: 0};
+    if (this.options.locations) {
+      var here = this.toks.curPosition();
+      this.tok.loc = new acorn.SourceLocation(this.toks, here, here);
     }
-  }
+    this.ahead = []; // Tokens ahead
+    this.context = []; // Indentation contexted
+    this.curIndent = 0;
+    this.curLineStart = 0;
+    this.nextLineStart = this.lineEnd(this.curLineStart) + 1;
+  };
 
-  function readToken() {
+  var lp = LooseParser.prototype;
+
+  lp.next = function() {
+    this.last = this.tok;
+    if (this.ahead.length)
+      this.tok = this.ahead.shift();
+    else
+      this.tok = this.readToken();
+
+    if (this.tok.start >= this.nextLineStart) {
+      while (this.tok.start >= this.nextLineStart) {
+        this.curLineStart = this.nextLineStart;
+        this.nextLineStart = this.lineEnd(this.curLineStart) + 1;
+      }
+      this.curIndent = this.indentationAfter(this.curLineStart);
+    }
+  };
+
+  lp.readToken = function() {
     for (;;) {
       try {
-        var tok = fetchToken();
-        if (tok.type === tt.dot && input.substr(tok.end, 1) === '.' && options.ecmaVersion >= 6) {
-          tok = fetchToken();
-          tok.start--;
-          tok.type = tt.ellipsis;
+        this.toks.next();
+        if (this.toks.type === tt.dot &&
+            this.input.substr(this.toks.end, 1) === "." &&
+            this.options.ecmaVersion >= 6) {
+          this.toks.end++;
+          this.toks.type = tt.ellipsis;
         }
-        return tok;
+        return new acorn.Token(this.toks);
       } catch(e) {
         if (!(e instanceof SyntaxError)) throw e;
 
         // Try to skip some text, based on the error message, and then continue
         var msg = e.message, pos = e.raisedAt, replace = true;
         if (/unterminated/i.test(msg)) {
-          pos = lineEnd(e.pos + 1);
+          pos = this.lineEnd(e.pos + 1);
           if (/string/.test(msg)) {
-            replace = {start: e.pos, end: pos, type: tt.string, value: input.slice(e.pos + 1, pos)};
+            replace = {start: e.pos, end: pos, type: tt.string, value: this.input.slice(e.pos + 1, pos)};
           } else if (/regular expr/i.test(msg)) {
-            var re = input.slice(e.pos, pos);
+            var re = this.input.slice(e.pos, pos);
             try { re = new RegExp(re); } catch(e) {}
             replace = {start: e.pos, end: pos, type: tt.regexp, value: re};
           } else if (/template/.test(msg)) {
             replace = {start: e.pos, end: pos,
                        type: tt.template,
-                       value: input.slice(e.pos, pos)};
-          } else if (/comment/.test(msg)) {
-            replace = fetchToken.current();
+                       value: this.input.slice(e.pos, pos)};
           } else {
             replace = false;
           }
         } else if (/invalid (unicode|regexp|number)|expecting unicode|octal literal|is reserved|directly after number/i.test(msg)) {
-          while (pos < input.length && !isSpace(input.charCodeAt(pos))) ++pos;
+          while (pos < this.input.length && !isSpace(this.input.charCodeAt(pos))) ++pos;
         } else if (/character escape|expected hexadecimal/i.test(msg)) {
-          while (pos < input.length) {
-            var ch = input.charCodeAt(pos++);
-            if (ch === 34 || ch === 39 || isNewline(ch)) break;
+          while (pos < this.input.length) {
+            var ch = this.input.charCodeAt(pos++);
+            if (ch === 34 || ch === 39 || acorn.isNewLine(ch)) break;
           }
         } else if (/unexpected character/i.test(msg)) {
           pos++;
@@ -123,184 +126,171 @@
         } else {
           throw e;
         }
-        resetTo(pos);
+        this.resetTo(pos);
         if (replace === true) replace = {start: pos, end: pos, type: tt.name, value: "✖"};
         if (replace) {
-          if (options.locations) {
-            replace.loc = new SourceLocation(acorn.getLineInfo(input, replace.start));
-            replace.loc.end = acorn.getLineInfo(input, replace.end);
-          }
+          if (this.options.locations)
+            replace.loc = new acorn.SourceLocation(
+              this.toks,
+              acorn.getLineInfo(this.input, replace.start),
+              acorn.getLineInfo(this.input, replace.end));
           return replace;
         }
       }
     }
-  }
+  };
 
-  function resetTo(pos) {
-    for (;;) {
-      try {
-        var ch = input.charAt(pos - 1);
-        var reAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
-          /[enwfd]/.test(ch) && /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(input.slice(pos - 10, pos));
-        return fetchToken.jumpTo(pos, reAllowed);
-      } catch(e) {
-        if (!(e instanceof SyntaxError && /unterminated comment/i.test(e.message))) throw e;
-        pos = lineEnd(e.pos + 1);
-        if (pos >= input.length) return;
+  lp.resetTo = function(pos) {
+    this.toks.pos = pos;
+    var ch = this.input.charAt(pos - 1);
+    this.toks.exprAllowed = !ch || /[\[\{\(,;:?\/*=+\-~!|&%^<>]/.test(ch) ||
+      /[enwfd]/.test(ch) &&
+      /\b(keywords|case|else|return|throw|new|in|(instance|type)of|delete|void)$/.test(this.input.slice(pos - 10, pos));
+
+    if (this.options.locations) {
+      this.toks.curLine = 1;
+      this.toks.lineStart = acorn.lineBreak.lastIndex = 0;
+      var match;
+      while ((match = acorn.lineBreak.exec(this.input)) && match.index < pos) {
+        ++this.toks.curLine;
+        this.toks.lineStart = match.index + match[0].length;
       }
     }
-  }
+  };
 
-  function lookAhead(n) {
-    while (n > ahead.length)
-      ahead.push(readToken());
-    return ahead[n-1];
-  }
+  lp.lookAhead = function(n) {
+    while (n > this.ahead.length)
+      this.ahead.push(this.readToken());
+    return this.ahead[n - 1];
+  };
 
-  var newline = /[\n\r\u2028\u2029]/;
-
-  function isNewline(ch) {
-    return ch === 10 || ch === 13 || ch === 8232 || ch === 8329;
-  }
   function isSpace(ch) {
-    return (ch < 14 && ch > 8) || ch === 32 || ch === 160 || isNewline(ch);
+    return (ch < 14 && ch > 8) || ch === 32 || ch === 160 || acorn.isNewLine(ch);
   }
 
-  function pushCx() {
-    context.push(curIndent);
-  }
-  function popCx() {
-    curIndent = context.pop();
-  }
+  lp.pushCx = function() {
+    this.context.push(this.curIndent);
+  };
+  lp.popCx = function() {
+    this.curIndent = this.context.pop();
+  };
 
-  function lineEnd(pos) {
-    while (pos < input.length && !isNewline(input.charCodeAt(pos))) ++pos;
+  lp.lineEnd = function(pos) {
+    while (pos < this.input.length && !acorn.isNewLine(this.input.charCodeAt(pos))) ++pos;
     return pos;
-  }
-  function indentationAfter(pos) {
+  };
+
+  lp.indentationAfter = function(pos) {
     for (var count = 0;; ++pos) {
-      var ch = input.charCodeAt(pos);
+      var ch = this.input.charCodeAt(pos);
       if (ch === 32) ++count;
-      else if (ch === 9) count += options.tabSize;
+      else if (ch === 9) count += this.options.tabSize;
       else return count;
     }
-  }
+  };
 
-  function closes(closeTok, indent, line, blockHeuristic) {
-    if (token.type === closeTok || token.type === tt.eof) return true;
-    if (line != curLineStart && curIndent < indent && tokenStartsLine() &&
-        (!blockHeuristic || nextLineStart >= input.length ||
-         indentationAfter(nextLineStart) < indent)) return true;
-    return false;
-  }
+  lp.closes = function(closeTok, indent, line, blockHeuristic) {
+    if (this.tok.type === closeTok || this.tok.type === tt.eof) return true;
+    return line != this.curLineStart && this.curIndent < indent && this.tokenStartsLine() &&
+      (!blockHeuristic || this.nextLineStart >= this.input.length ||
+       this.indentationAfter(this.nextLineStart) < indent);
+  };
 
-  function tokenStartsLine() {
-    for (var p = token.start - 1; p >= curLineStart; --p) {
-      var ch = input.charCodeAt(p);
+  lp.tokenStartsLine = function() {
+    for (var p = this.tok.start - 1; p >= this.curLineStart; --p) {
+      var ch = this.input.charCodeAt(p);
       if (ch !== 9 && ch !== 32) return false;
     }
     return true;
-  }
+  };
 
-  function Node(start) {
-    this.type = null;
-    this.start = start;
-    this.end = null;
-  }
-  Node.prototype = acorn.Node.prototype;
-
-  function SourceLocation(start) {
-    this.start = start || token.loc.start || {line: 1, column: 0};
-    this.end = null;
-    if (sourceFile !== null) this.source = sourceFile;
-  }
-
-  function startNode() {
-    var node = new Node(token.start);
-    if (options.locations)
-      node.loc = new SourceLocation();
-    if (options.directSourceFile)
-      node.sourceFile = options.directSourceFile;
-    if (options.ranges)
-      node.range = [token.start, 0];
+  lp.startNode = function() {
+    var node = new acorn.Node;
+    node.start = this.tok.start;
+    if (this.options.locations)
+      node.loc = new acorn.SourceLocation(this.toks, this.tok.loc.start);
+    if (this.options.directSourceFile)
+      node.sourceFile = this.options.directSourceFile;
+    if (this.options.ranges)
+      node.range = [this.tok.start, 0];
     return node;
-  }
+  };
 
-  function storeCurrentPos() {
-    return options.locations ? [token.start, token.loc.start] : token.start;
-  }
+  lp.storeCurrentPos = function() {
+    return this.options.locations ? [this.tok.start, this.tok.loc.start] : this.tok.start;
+  };
 
-  function startNodeAt(pos) {
-    var node;
-    if (options.locations) {
-      node = new Node(pos[0]);
-      node.loc = new SourceLocation(pos[1]);
+  lp.startNodeAt = function(pos) {
+    var node = new acorn.Node;
+    if (this.options.locations) {
+      node.start = pos[0];
+      node.loc = new acorn.SourceLocation(this.toks, pos[1]);
       pos = pos[0];
     } else {
-      node = new Node(pos);
+      node.start = pos;
     }
-    if (options.directSourceFile)
-      node.sourceFile = options.directSourceFile;
-    if (options.ranges)
+    if (this.options.directSourceFile)
+      node.sourceFile = this.options.directSourceFile;
+    if (this.options.ranges)
       node.range = [pos, 0];
     return node;
-  }
+  };
 
-  function finishNode(node, type) {
+  lp.finishNode = function(node, type) {
     node.type = type;
-    node.end = lastEnd;
-    if (options.locations)
-      node.loc.end = lastEndLoc;
-    if (options.ranges)
-      node.range[1] = lastEnd;
+    node.end = this.last.end;
+    if (this.options.locations)
+      node.loc.end = this.last.loc.end;
+    if (this.options.ranges)
+      node.range[1] = this.last.end;
     return node;
-  }
+  };
 
-  function dummyIdent() {
-    var dummy = startNode();
+  lp.dummyIdent = function() {
+    var dummy = this.startNode();
     dummy.name = "✖";
-    return finishNode(dummy, "Identifier");
-  }
+    return this.finishNode(dummy, "Identifier");
+  };
+
   function isDummy(node) { return node.name == "✖"; }
 
-  function eat(type) {
-    if (token.type === type) {
-      next();
+  lp.eat = function(type) {
+    if (this.tok.type === type) {
+      this.next();
       return true;
     } else {
       return false;
     }
-  }
+  };
 
-  function isContextual(name) {
-    return token.type === tt.name && token.value === name;
-  }
+  lp.isContextual = function(name) {
+    return this.tok.type === tt.name && this.tok.value === name;
+  };
 
-  function eatContextual(name) {
-    return token.value === name && eat(tt.name);
-  }
+  lp.eatContextual = function(name) {
+    return this.tok.value === name && this.eat(tt.name);
+  };
 
-  function canInsertSemicolon() {
-    return (token.type === tt.eof || token.type === tt.braceR || newline.test(input.slice(lastEnd, token.start)));
-  }
+  lp.canInsertSemicolon = function() {
+    return this.tok.type === tt.eof || this.tok.type === tt.braceR ||
+      acorn.newline.test(this.input.slice(this.last.end, this.tok.start));
+  };
 
-  function semicolon() {
-    return eat(tt.semi);
-  }
+  lp.semicolon = function() {
+    return this.eat(tt.semi);
+  };
 
-  function expect(type) {
-    if (eat(type)) return true;
-    if (lookAhead(1).type == type) {
-      next(); next();
-      return true;
+  lp.expect = function(type) {
+    if (this.eat(type)) return true;
+    for (var i = 1; i <= 2; i++) {
+      if (this.lookAhead(i).type == type) {
+        for (var j = 0; j < i; j++) this.next();
+        return true;
+      }
     }
-    if (lookAhead(2).type == type) {
-      next(); next(); next();
-      return true;
-    }
-  }
+  };
 
-  function checkLVal(expr) {
+  lp.checkLVal = function(expr) {
     if (!expr) return expr;
     switch (expr.type) {
       case "Identifier":
@@ -312,694 +302,691 @@
         return expr;
 
       default:
-        return dummyIdent();
+        return this.dummyIdent();
     }
-  }
+  };
 
-  function parseTopLevel() {
-    var node = startNodeAt(options.locations ? [0, acorn.getLineInfo(input, 0)] : 0);
+  lp.parseTopLevel = function() {
+    var node = this.startNodeAt(this.options.locations ? [0, acorn.getLineInfo(this.input, 0)] : 0);
     node.body = [];
-    while (token.type !== tt.eof) node.body.push(parseStatement());
-    lastEnd = token.end;
-    lastEndLoc = token.loc && token.loc.end;
-    return finishNode(node, "Program");
-  }
+    while (this.tok.type !== tt.eof) node.body.push(this.parseStatement());
+    this.last = this.tok;
+    return this.finishNode(node, "Program");
+  };
 
-  function parseStatement() {
-    var starttype = token.type, node = startNode();
+  lp.parseStatement = function() {
+    var starttype = this.tok.type, node = this.startNode();
 
     switch (starttype) {
     case tt._break: case tt._continue:
-      next();
+      this.next();
       var isBreak = starttype === tt._break;
-      if (semicolon() || canInsertSemicolon()) {
+      if (this.semicolon() || this.canInsertSemicolon()) {
         node.label = null;
       } else {
-        node.label = token.type === tt.name ? parseIdent() : null;
-        semicolon();
+        node.label = this.tok.type === tt.name ? this.parseIdent() : null;
+        this.semicolon();
       }
-      return finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
+      return this.finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement");
 
     case tt._debugger:
-      next();
-      semicolon();
-      return finishNode(node, "DebuggerStatement");
+      this.next();
+      this.semicolon();
+      return this.finishNode(node, "DebuggerStatement");
 
     case tt._do:
-      next();
-      node.body = parseStatement();
-      node.test = eat(tt._while) ? parseParenExpression() : dummyIdent();
-      semicolon();
-      return finishNode(node, "DoWhileStatement");
+      this.next();
+      node.body = this.parseStatement();
+      node.test = this.eat(tt._while) ? this.parseParenExpression() : this.dummyIdent();
+      this.semicolon();
+      return this.finishNode(node, "DoWhileStatement");
 
     case tt._for:
-      next();
-      pushCx();
-      expect(tt.parenL);
-      if (token.type === tt.semi) return parseFor(node, null);
-      if (token.type === tt._var || token.type === tt._let) {
-        var init = parseVar(true);
-        if (init.declarations.length === 1 && (token.type === tt._in || isContextual("of"))) {
-          return parseForIn(node, init);
+      this.next();
+      this.pushCx();
+      this.expect(tt.parenL);
+      if (this.tok.type === tt.semi) return this.parseFor(node, null);
+      if (this.tok.type === tt._var || this.tok.type === tt._let) {
+        var init = this.parseVar(true);
+        if (init.declarations.length === 1 && (this.tok.type === tt._in || this.isContextual("of"))) {
+          return this.parseForIn(node, init);
         }
-        return parseFor(node, init);
+        return this.parseFor(node, init);
       }
-      var init = parseExpression(true);
-      if (token.type === tt._in || isContextual("of")) {
-        return parseForIn(node, toAssignable(init));
-      }
-      return parseFor(node, init);
+      var init = this.parseExpression(true);
+      if (this.tok.type === tt._in || this.isContextual("of"))
+        return this.parseForIn(node, this.toAssignable(init));
+      return this.parseFor(node, init);
 
     case tt._function:
-      next();
-      return parseFunction(node, true);
+      this.next();
+      return this.parseFunction(node, true);
 
     case tt._if:
-      next();
-      node.test = parseParenExpression();
-      node.consequent = parseStatement();
-      node.alternate = eat(tt._else) ? parseStatement() : null;
-      return finishNode(node, "IfStatement");
+      this.next();
+      node.test = this.parseParenExpression();
+      node.consequent = this.parseStatement();
+      node.alternate = this.eat(tt._else) ? this.parseStatement() : null;
+      return this.finishNode(node, "IfStatement");
 
     case tt._return:
-      next();
-      if (eat(tt.semi) || canInsertSemicolon()) node.argument = null;
-      else { node.argument = parseExpression(); semicolon(); }
-      return finishNode(node, "ReturnStatement");
+      this.next();
+      if (this.eat(tt.semi) || this.canInsertSemicolon()) node.argument = null;
+      else { node.argument = this.parseExpression(); this.semicolon(); }
+      return this.finishNode(node, "ReturnStatement");
 
     case tt._switch:
-      var blockIndent = curIndent, line = curLineStart;
-      next();
-      node.discriminant = parseParenExpression();
+      var blockIndent = this.curIndent, line = this.curLineStart;
+      this.next();
+      node.discriminant = this.parseParenExpression();
       node.cases = [];
-      pushCx();
-      expect(tt.braceL);
+      this.pushCx();
+      this.expect(tt.braceL);
 
-      for (var cur; !closes(tt.braceR, blockIndent, line, true);) {
-        if (token.type === tt._case || token.type === tt._default) {
-          var isCase = token.type === tt._case;
-          if (cur) finishNode(cur, "SwitchCase");
-          node.cases.push(cur = startNode());
+      for (var cur; !this.closes(tt.braceR, blockIndent, line, true);) {
+        if (this.tok.type === tt._case || this.tok.type === tt._default) {
+          var isCase = this.tok.type === tt._case;
+          if (cur) this.finishNode(cur, "SwitchCase");
+          node.cases.push(cur = this.startNode());
           cur.consequent = [];
-          next();
-          if (isCase) cur.test = parseExpression();
+          this.next();
+          if (isCase) cur.test = this.parseExpression();
           else cur.test = null;
-          expect(tt.colon);
+          this.expect(tt.colon);
         } else {
           if (!cur) {
-            node.cases.push(cur = startNode());
+            node.cases.push(cur = this.startNode());
             cur.consequent = [];
             cur.test = null;
           }
-          cur.consequent.push(parseStatement());
+          cur.consequent.push(this.parseStatement());
         }
       }
-      if (cur) finishNode(cur, "SwitchCase");
-      popCx();
-      eat(tt.braceR);
-      return finishNode(node, "SwitchStatement");
+      if (cur) this.finishNode(cur, "SwitchCase");
+      this.popCx();
+      this.eat(tt.braceR);
+      return this.finishNode(node, "SwitchStatement");
 
     case tt._throw:
-      next();
-      node.argument = parseExpression();
-      semicolon();
-      return finishNode(node, "ThrowStatement");
+      this.next();
+      node.argument = this.parseExpression();
+      this.semicolon();
+      return this.finishNode(node, "ThrowStatement");
 
     case tt._try:
-      next();
-      node.block = parseBlock();
+      this.next();
+      node.block = this.parseBlock();
       node.handler = null;
-      if (token.type === tt._catch) {
-        var clause = startNode();
-        next();
-        expect(tt.parenL);
-        clause.param = toAssignable(parseExprAtom());
-        expect(tt.parenR);
+      if (this.tok.type === tt._catch) {
+        var clause = this.startNode();
+        this.next();
+        this.expect(tt.parenL);
+        clause.param = this.toAssignable(this.parseExprAtom());
+        this.expect(tt.parenR);
         clause.guard = null;
-        clause.body = parseBlock();
-        node.handler = finishNode(clause, "CatchClause");
+        clause.body = this.parseBlock();
+        node.handler = this.finishNode(clause, "CatchClause");
       }
-      node.finalizer = eat(tt._finally) ? parseBlock() : null;
+      node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
       if (!node.handler && !node.finalizer) return node.block;
-      return finishNode(node, "TryStatement");
+      return this.finishNode(node, "TryStatement");
 
     case tt._var:
     case tt._let:
     case tt._const:
-      return parseVar();
+      return this.parseVar();
 
     case tt._while:
-      next();
-      node.test = parseParenExpression();
-      node.body = parseStatement();
-      return finishNode(node, "WhileStatement");
+      this.next();
+      node.test = this.parseParenExpression();
+      node.body = this.parseStatement();
+      return this.finishNode(node, "WhileStatement");
 
     case tt._with:
-      next();
-      node.object = parseParenExpression();
-      node.body = parseStatement();
-      return finishNode(node, "WithStatement");
+      this.next();
+      node.object = this.parseParenExpression();
+      node.body = this.parseStatement();
+      return this.finishNode(node, "WithStatement");
 
     case tt.braceL:
-      return parseBlock();
+      return this.parseBlock();
 
     case tt.semi:
-      next();
-      return finishNode(node, "EmptyStatement");
+      this.next();
+      return this.finishNode(node, "EmptyStatement");
 
     case tt._class:
-      return parseObj(true, true);
+      return this.parseObj(true, true);
 
     case tt._import:
-      return parseImport();
+      return this.parseImport();
 
     case tt._export:
-      return parseExport();
+      return this.parseExport();
 
     default:
-      var expr = parseExpression();
+      var expr = this.parseExpression();
       if (isDummy(expr)) {
-        next();
-        if (token.type === tt.eof) return finishNode(node, "EmptyStatement");
-        return parseStatement();
-      } else if (starttype === tt.name && expr.type === "Identifier" && eat(tt.colon)) {
-        node.body = parseStatement();
+        this.next();
+        if (this.tok.type === tt.eof) return this.finishNode(node, "EmptyStatement");
+        return this.parseStatement();
+      } else if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon)) {
+        node.body = this.parseStatement();
         node.label = expr;
-        return finishNode(node, "LabeledStatement");
+        return this.finishNode(node, "LabeledStatement");
       } else {
         node.expression = expr;
-        semicolon();
-        return finishNode(node, "ExpressionStatement");
+        this.semicolon();
+        return this.finishNode(node, "ExpressionStatement");
       }
     }
-  }
+  };
 
-  function parseBlock() {
-    var node = startNode();
-    pushCx();
-    expect(tt.braceL);
-    var blockIndent = curIndent, line = curLineStart;
+  lp.parseBlock = function() {
+    var node = this.startNode();
+    this.pushCx();
+    this.expect(tt.braceL);
+    var blockIndent = this.curIndent, line = this.curLineStart;
     node.body = [];
-    while (!closes(tt.braceR, blockIndent, line, true))
-      node.body.push(parseStatement());
-    popCx();
-    eat(tt.braceR);
-    return finishNode(node, "BlockStatement");
-  }
+    while (!this.closes(tt.braceR, blockIndent, line, true))
+      node.body.push(this.parseStatement());
+    this.popCx();
+    this.eat(tt.braceR);
+    return this.finishNode(node, "BlockStatement");
+  };
 
-  function parseFor(node, init) {
+  lp.parseFor = function(node, init) {
     node.init = init;
     node.test = node.update = null;
-    if (eat(tt.semi) && token.type !== tt.semi) node.test = parseExpression();
-    if (eat(tt.semi) && token.type !== tt.parenR) node.update = parseExpression();
-    popCx();
-    expect(tt.parenR);
-    node.body = parseStatement();
-    return finishNode(node, "ForStatement");
-  }
+    if (this.eat(tt.semi) && this.tok.type !== tt.semi) node.test = this.parseExpression();
+    if (this.eat(tt.semi) && this.tok.type !== tt.parenR) node.update = this.parseExpression();
+    this.popCx();
+    this.expect(tt.parenR);
+    node.body = this.parseStatement();
+    return this.finishNode(node, "ForStatement");
+  };
 
-  function parseForIn(node, init) {
-    var type = token.type === tt._in ? "ForInStatement" : "ForOfStatement";
-    next();
+  lp.parseForIn = function(node, init) {
+    var type = this.tok.type === tt._in ? "ForInStatement" : "ForOfStatement";
+    this.next();
     node.left = init;
-    node.right = parseExpression();
-    popCx();
-    expect(tt.parenR);
-    node.body = parseStatement();
-    return finishNode(node, type);
-  }
+    node.right = this.parseExpression();
+    this.popCx();
+    this.expect(tt.parenR);
+    node.body = this.parseStatement();
+    return this.finishNode(node, type);
+  };
 
-  function parseVar(noIn) {
-    var node = startNode();
-    node.kind = token.type.keyword;
-    next();
+  lp.parseVar = function(noIn) {
+    var node = this.startNode();
+    node.kind = this.tok.type.keyword;
+    this.next();
     node.declarations = [];
     do {
-      var decl = startNode();
-      decl.id = options.ecmaVersion >= 6 ? toAssignable(parseExprAtom()) : parseIdent();
-      decl.init = eat(tt.eq) ? parseMaybeAssign(noIn) : null;
-      node.declarations.push(finishNode(decl, "VariableDeclarator"));
-    } while (eat(tt.comma));
+      var decl = this.startNode();
+      decl.id = this.options.ecmaVersion >= 6 ? this.toAssignable(this.parseExprAtom()) : this.parseIdent();
+      decl.init = this.eat(tt.eq) ? this.parseMaybeAssign(noIn) : null;
+      node.declarations.push(this.finishNode(decl, "VariableDeclarator"));
+    } while (this.eat(tt.comma));
     if (!node.declarations.length) {
-      var decl = startNode();
-      decl.id = dummyIdent();
-      node.declarations.push(finishNode(decl, "VariableDeclarator"));
+      var decl = this.startNode();
+      decl.id = this.dummyIdent();
+      node.declarations.push(this.finishNode(decl, "VariableDeclarator"));
     }
-    if (!noIn) semicolon();
-    return finishNode(node, "VariableDeclaration");
-  }
+    if (!noIn) this.semicolon();
+    return this.finishNode(node, "VariableDeclaration");
+  };
 
-  function parseExpression(noIn) {
-    var start = storeCurrentPos();
-    var expr = parseMaybeAssign(noIn);
-    if (token.type === tt.comma) {
-      var node = startNodeAt(start);
+  lp.parseExpression = function(noIn) {
+    var start = this.storeCurrentPos();
+    var expr = this.parseMaybeAssign(noIn);
+    if (this.tok.type === tt.comma) {
+      var node = this.startNodeAt(start);
       node.expressions = [expr];
-      while (eat(tt.comma)) node.expressions.push(parseMaybeAssign(noIn));
-      return finishNode(node, "SequenceExpression");
+      while (this.eat(tt.comma)) node.expressions.push(this.parseMaybeAssign(noIn));
+      return this.finishNode(node, "SequenceExpression");
     }
     return expr;
-  }
+  };
 
-  function parseParenExpression() {
-    pushCx();
-    expect(tt.parenL);
-    var val = parseExpression();
-    popCx();
-    expect(tt.parenR);
+  lp.parseParenExpression = function() {
+    this.pushCx();
+    this.expect(tt.parenL);
+    var val = this.parseExpression();
+    this.popCx();
+    this.expect(tt.parenR);
     return val;
-  }
+  };
 
-  function parseMaybeAssign(noIn) {
-    var start = storeCurrentPos();
-    var left = parseMaybeConditional(noIn);
-    if (token.type.isAssign) {
-      var node = startNodeAt(start);
-      node.operator = token.value;
-      node.left = token.type === tt.eq ? toAssignable(left) : checkLVal(left);
-      next();
-      node.right = parseMaybeAssign(noIn);
-      return finishNode(node, "AssignmentExpression");
+  lp.parseMaybeAssign = function(noIn) {
+    var start = this.storeCurrentPos();
+    var left = this.parseMaybeConditional(noIn);
+    if (this.tok.type.isAssign) {
+      var node = this.startNodeAt(start);
+      node.operator = this.tok.value;
+      node.left = this.tok.type === tt.eq ? this.toAssignable(left) : this.checkLVal(left);
+      this.next();
+      node.right = this.parseMaybeAssign(noIn);
+      return this.finishNode(node, "AssignmentExpression");
     }
     return left;
-  }
+  };
 
-  function parseMaybeConditional(noIn) {
-    var start = storeCurrentPos();
-    var expr = parseExprOps(noIn);
-    if (eat(tt.question)) {
-      var node = startNodeAt(start);
+  lp.parseMaybeConditional = function(noIn) {
+    var start = this.storeCurrentPos();
+    var expr = this.parseExprOps(noIn);
+    if (this.eat(tt.question)) {
+      var node = this.startNodeAt(start);
       node.test = expr;
-      node.consequent = parseMaybeAssign();
-      node.alternate = expect(tt.colon) ? parseMaybeAssign(noIn) : dummyIdent();
-      return finishNode(node, "ConditionalExpression");
+      node.consequent = this.parseMaybeAssign();
+      node.alternate = this.expect(tt.colon) ? this.parseMaybeAssign(noIn) : this.dummyIdent();
+      return this.finishNode(node, "ConditionalExpression");
     }
     return expr;
-  }
+  };
 
-  function parseExprOps(noIn) {
-    var start = storeCurrentPos();
-    var indent = curIndent, line = curLineStart;
-    return parseExprOp(parseMaybeUnary(noIn), start, -1, noIn, indent, line);
-  }
+  lp.parseExprOps = function(noIn) {
+    var start = this.storeCurrentPos();
+    var indent = this.curIndent, line = this.curLineStart;
+    return this.parseExprOp(this.parseMaybeUnary(noIn), start, -1, noIn, indent, line);
+  };
 
-  function parseExprOp(left, start, minPrec, noIn, indent, line) {
-    if (curLineStart != line && curIndent < indent && tokenStartsLine()) return left;
-    var prec = token.type.binop;
-    if (prec != null && (!noIn || token.type !== tt._in)) {
+  lp.parseExprOp = function(left, start, minPrec, noIn, indent, line) {
+    if (this.curLineStart != line && this.curIndent < indent && this.tokenStartsLine()) return left;
+    var prec = this.tok.type.binop;
+    if (prec != null && (!noIn || this.tok.type !== tt._in)) {
       if (prec > minPrec) {
-        var node = startNodeAt(start);
+        var node = this.startNodeAt(start);
         node.left = left;
-        node.operator = token.value;
-        next();
-        if (curLineStart != line && curIndent < indent && tokenStartsLine()) {
-          node.right = dummyIdent();
+        node.operator = this.tok.value;
+        this.next();
+        if (this.curLineStart != line && this.curIndent < indent && this.tokenStartsLine()) {
+          node.right = this.dummyIdent();
         } else {
-          var rightStart = storeCurrentPos();
-          node.right = parseExprOp(parseMaybeUnary(noIn), rightStart, prec, noIn, indent, line);
+          var rightStart = this.storeCurrentPos();
+          node.right = this.parseExprOp(this.parseMaybeUnary(noIn), rightStart, prec, noIn, indent, line);
         }
-        finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
-        return parseExprOp(node, start, minPrec, noIn, indent, line);
+        this.finishNode(node, /&&|\|\|/.test(node.operator) ? "LogicalExpression" : "BinaryExpression");
+        return this.parseExprOp(node, start, minPrec, noIn, indent, line);
       }
     }
     return left;
-  }
+  };
 
-  function parseMaybeUnary(noIn) {
-    if (token.type.prefix) {
-      var node = startNode(), update = token.type === tt.incDec;
-      node.operator = token.value;
+  lp.parseMaybeUnary = function(noIn) {
+    if (this.tok.type.prefix) {
+      var node = this.startNode(), update = this.tok.type === tt.incDec;
+      node.operator = this.tok.value;
       node.prefix = true;
-      next();
-      node.argument = parseMaybeUnary(noIn);
-      if (update) node.argument = checkLVal(node.argument);
-      return finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
-    } else if (token.type === tt.ellipsis) {
-      var node = startNode();
-      next();
-      node.argument = parseMaybeUnary(noIn);
-      return finishNode(node, "SpreadElement");
+      this.next();
+      node.argument = this.parseMaybeUnary(noIn);
+      if (update) node.argument = this.checkLVal(node.argument);
+      return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+    } else if (this.tok.type === tt.ellipsis) {
+      var node = this.startNode();
+      this.next();
+      node.argument = this.parseMaybeUnary(noIn);
+      return this.finishNode(node, "SpreadElement");
     }
-    var start = storeCurrentPos();
-    var expr = parseExprSubscripts();
-    while (token.type.postfix && !canInsertSemicolon()) {
-      var node = startNodeAt(start);
-      node.operator = token.value;
+    var start = this.storeCurrentPos();
+    var expr = this.parseExprSubscripts();
+    while (this.tok.type.postfix && !this.canInsertSemicolon()) {
+      var node = this.startNodeAt(start);
+      node.operator = this.tok.value;
       node.prefix = false;
-      node.argument = checkLVal(expr);
-      next();
-      expr = finishNode(node, "UpdateExpression");
+      node.argument = this.checkLVal(expr);
+      this.next();
+      expr = this.finishNode(node, "UpdateExpression");
     }
     return expr;
-  }
+  };
 
-  function parseExprSubscripts() {
-    var start = storeCurrentPos();
-    return parseSubscripts(parseExprAtom(), start, false, curIndent, curLineStart);
-  }
+  lp.parseExprSubscripts = function() {
+    var start = this.storeCurrentPos();
+    return this.parseSubscripts(this.parseExprAtom(), start, false, this.curIndent, this.curLineStart);
+  };
 
-  function parseSubscripts(base, start, noCalls, startIndent, line) {
+  lp.parseSubscripts = function(base, start, noCalls, startIndent, line) {
     for (;;) {
-      if (curLineStart != line && curIndent <= startIndent && tokenStartsLine()) {
-        if (token.type == tt.dot && curIndent == startIndent)
+      if (this.curLineStart != line && this.curIndent <= startIndent && this.tokenStartsLine()) {
+        if (this.tok.type == tt.dot && this.curIndent == startIndent)
           --startIndent;
         else
           return base;
       }
 
-      if (eat(tt.dot)) {
-        var node = startNodeAt(start);
+      if (this.eat(tt.dot)) {
+        var node = this.startNodeAt(start);
         node.object = base;
-        if (curLineStart != line && curIndent <= startIndent && tokenStartsLine())
-          node.property = dummyIdent();
+        if (this.curLineStart != line && this.curIndent <= startIndent && this.tokenStartsLine())
+          node.property = this.dummyIdent();
         else
-          node.property = parsePropertyAccessor() || dummyIdent();
+          node.property = this.parsePropertyAccessor() || this.dummyIdent();
         node.computed = false;
-        base = finishNode(node, "MemberExpression");
-      } else if (token.type == tt.bracketL) {
-        pushCx();
-        next();
-        var node = startNodeAt(start);
+        base = this.finishNode(node, "MemberExpression");
+      } else if (this.tok.type == tt.bracketL) {
+        this.pushCx();
+        this.next();
+        var node = this.startNodeAt(start);
         node.object = base;
-        node.property = parseExpression();
+        node.property = this.parseExpression();
         node.computed = true;
-        popCx();
-        expect(tt.bracketR);
-        base = finishNode(node, "MemberExpression");
-      } else if (!noCalls && token.type == tt.parenL) {
-        pushCx();
-        var node = startNodeAt(start);
+        this.popCx();
+        this.expect(tt.bracketR);
+        base = this.finishNode(node, "MemberExpression");
+      } else if (!noCalls && this.tok.type == tt.parenL) {
+        this.pushCx();
+        var node = this.startNodeAt(start);
         node.callee = base;
-        node.arguments = parseExprList(tt.parenR);
-        base = finishNode(node, "CallExpression");
-      } else if (token.type == tt.backQuote) {
-        var node = startNodeAt(start);
+        node.arguments = this.parseExprList(tt.parenR);
+        base = this.finishNode(node, "CallExpression");
+      } else if (this.tok.type == tt.backQuote) {
+        var node = this.startNodeAt(start);
         node.tag = base;
-        node.quasi = parseTemplate();
-        base = finishNode(node, "TaggedTemplateExpression");
+        node.quasi = this.parseTemplate();
+        base = this.finishNode(node, "TaggedTemplateExpression");
       } else {
         return base;
       }
     }
-  }
+  };
 
-  function parseExprAtom() {
-    switch (token.type) {
+  lp.parseExprAtom = function() {
+    switch (this.tok.type) {
     case tt._this:
-      var node = startNode();
-      next();
-      return finishNode(node, "ThisExpression");
+      var node = this.startNode();
+      this.next();
+      return this.finishNode(node, "ThisExpression");
 
     case tt.name:
-      var start = storeCurrentPos();
-      var id = parseIdent();
-      return eat(tt.arrow) ? parseArrowExpression(startNodeAt(start), [id]) : id;
+      var start = this.storeCurrentPos();
+      var id = this.parseIdent();
+      return this.eat(tt.arrow) ? this.parseArrowExpression(this.startNodeAt(start), [id]) : id;
 
     case tt.regexp:
-      var node = startNode();
-      var val = token.value;
+      var node = this.startNode();
+      var val = this.tok.value;
       node.regex = {pattern: val.pattern, flags: val.flags};
       node.value = val.value;
-      node.raw = input.slice(token.start, token.end);
-      next();
-      return finishNode(node, "Literal");
+      node.raw = this.input.slice(this.tok.start, this.tok.end);
+      this.next();
+      return this.finishNode(node, "Literal");
 
     case tt.num: case tt.string:
-      var node = startNode();
-      node.value = token.value;
-      node.raw = input.slice(token.start, token.end);
-      next();
-      return finishNode(node, "Literal");
+      var node = this.startNode();
+      node.value = this.tok.value;
+      node.raw = this.input.slice(this.tok.start, this.tok.end);
+      this.next();
+      return this.finishNode(node, "Literal");
 
     case tt._null: case tt._true: case tt._false:
-      var node = startNode();
-      node.value = token.type === tt._null ? null : token.type === tt._true;
-      node.raw = token.type.keyword;
-      next();
-      return finishNode(node, "Literal");
+      var node = this.startNode();
+      node.value = this.tok.type === tt._null ? null : this.tok.type === tt._true;
+      node.raw = this.tok.type.keyword;
+      this.next();
+      return this.finishNode(node, "Literal");
 
     case tt.parenL:
-      var start = storeCurrentPos();
-      next();
-      var val = parseExpression();
-      expect(tt.parenR);
-      if (eat(tt.arrow)) {
-        return parseArrowExpression(startNodeAt(start), val.expressions || (isDummy(val) ? [] : [val]));
+      var start = this.storeCurrentPos();
+      this.next();
+      var val = this.parseExpression();
+      this.expect(tt.parenR);
+      if (this.eat(tt.arrow)) {
+        return this.parseArrowExpression(this.startNodeAt(start), val.expressions || (isDummy(val) ? [] : [val]));
       }
-      if (options.preserveParens) {
-        var par = startNodeAt(start);
+      if (this.options.preserveParens) {
+        var par = this.startNodeAt(start);
         par.expression = val;
-        val = finishNode(par, "ParenthesizedExpression");
+        val = this.finishNode(par, "ParenthesizedExpression");
       }
       return val;
 
     case tt.bracketL:
-      var node = startNode();
-      pushCx();
-      node.elements = parseExprList(tt.bracketR, true);
-      return finishNode(node, "ArrayExpression");
+      var node = this.startNode();
+      this.pushCx();
+      node.elements = this.parseExprList(tt.bracketR, true);
+      return this.finishNode(node, "ArrayExpression");
 
     case tt.braceL:
-      return parseObj();
+      return this.parseObj();
 
     case tt._class:
-      return parseObj(true);
+      return this.parseObj(true);
 
     case tt._function:
-      var node = startNode();
-      next();
-      return parseFunction(node, false);
+      var node = this.startNode();
+      this.next();
+      return this.parseFunction(node, false);
 
     case tt._new:
-      return parseNew();
+      return this.parseNew();
 
     case tt._yield:
-      var node = startNode();
-      next();
-      if (semicolon() || canInsertSemicolon()) {
+      var node = this.startNode();
+      this.next();
+      if (this.semicolon() || this.canInsertSemicolon()) {
         node.delegate = false;
         node.argument = null;
       } else {
-        node.delegate = eat(tt.star);
-        node.argument = parseMaybeAssign();
+        node.delegate = this.eat(tt.star);
+        node.argument = this.parseMaybeAssign();
       }
-      return finishNode(node, "YieldExpression");
+      return this.finishNode(node, "YieldExpression");
 
     case tt.backQuote:
-      return parseTemplate();
+      return this.parseTemplate();
 
     default:
-      return dummyIdent();
+      return this.dummyIdent();
     }
-  }
+  };
 
-  function parseNew() {
-    var node = startNode(), startIndent = curIndent, line = curLineStart;
-    next();
-    var start = storeCurrentPos();
-    node.callee = parseSubscripts(parseExprAtom(), start, true, startIndent, line);
-    if (token.type == tt.parenL) {
-      pushCx();
-      node.arguments = parseExprList(tt.parenR);
+  lp.parseNew = function() {
+    var node = this.startNode(), startIndent = this.curIndent, line = this.curLineStart;
+    this.next();
+    var start = this.storeCurrentPos();
+    node.callee = this.parseSubscripts(this.parseExprAtom(), start, true, startIndent, line);
+    if (this.tok.type == tt.parenL) {
+      this.pushCx();
+      node.arguments = this.parseExprList(tt.parenR);
     } else {
       node.arguments = [];
     }
-    return finishNode(node, "NewExpression");
-  }
+    return this.finishNode(node, "NewExpression");
+  };
 
-  function parseTemplateElement() {
-    var elem = startNode();
+  lp.parseTemplateElement = function() {
+    var elem = this.startNode();
     elem.value = {
-      raw: input.slice(token.start, token.end),
-      cooked: token.value
+      raw: this.input.slice(this.tok.start, this.tok.end),
+      cooked: this.tok.value
     };
-    next();
-    elem.tail = token.type === tt.backQuote;
-    return finishNode(elem, "TemplateElement");
-  }
+    this.next();
+    elem.tail = this.tok.type === tt.backQuote;
+    return this.finishNode(elem, "TemplateElement");
+  };
 
-  function parseTemplate() {
-    var node = startNode();
-    next();
+  lp.parseTemplate = function() {
+    var node = this.startNode();
+    this.next();
     node.expressions = [];
-    var curElt = parseTemplateElement();
+    var curElt = this.parseTemplateElement();
     node.quasis = [curElt];
     while (!curElt.tail) {
-      next();
-      node.expressions.push(parseExpression());
-      if (expect(tt.braceR)) {
-        curElt = parseTemplateElement();
+      this.next();
+      node.expressions.push(this.parseExpression());
+      if (this.expect(tt.braceR)) {
+        curElt = this.parseTemplateElement();
       } else {
-        curElt = startNode();
+        curElt = this.startNode();
         curElt.value = {cooked: '', raw: ''};
         curElt.tail = true;
       }
       node.quasis.push(curElt);
     }
-    expect(tt.backQuote);
-    return finishNode(node, "TemplateLiteral");
-  }
+    this.expect(tt.backQuote);
+    return this.finishNode(node, "TemplateLiteral");
+  };
 
-  function parseObj(isClass, isStatement) {
-    var node = startNode();
+  lp.parseObj = function(isClass, isStatement) {
+    var node = this.startNode();
     if (isClass) {
-      next();
-      if (token.type === tt.name) node.id = parseIdent();
-      else if (isStatement) node.id = dummyIdent();
+      this.next();
+      if (this.tok.type === tt.name) node.id = this.parseIdent();
+      else if (isStatement) node.id = this.dummyIdent();
       else node.id = null;
-      node.superClass = eat(tt._extends) ? parseExpression() : null;
-      node.body = startNode();
+      node.superClass = this.eat(tt._extends) ? this.parseExpression() : null;
+      node.body = this.startNode();
       node.body.body = [];
     } else {
       node.properties = [];
     }
-    pushCx();
-    var indent = curIndent + 1, line = curLineStart;
-    eat(tt.braceL);
-    if (curIndent + 1 < indent) { indent = curIndent; line = curLineStart; }
-    while (!closes(tt.braceR, indent, line)) {
-      if (isClass && semicolon()) continue;
-      var prop = startNode(), isGenerator, start;
-      if (options.ecmaVersion >= 6) {
+    this.pushCx();
+    var indent = this.curIndent + 1, line = this.curLineStart;
+    this.eat(tt.braceL);
+    if (this.curIndent + 1 < indent) { indent = this.curIndent; line = this.curLineStart; }
+    while (!this.closes(tt.braceR, indent, line)) {
+      if (isClass && this.semicolon()) continue;
+      var prop = this.startNode(), isGenerator, start;
+      if (this.options.ecmaVersion >= 6) {
         if (isClass) {
           prop['static'] = false;
         } else {
-          start = storeCurrentPos();
+          start = this.storeCurrentPos();
           prop.method = false;
           prop.shorthand = false;
         }
-        isGenerator = eat(tt.star);
+        isGenerator = this.eat(tt.star);
       }
-      parsePropertyName(prop);
-      if (isDummy(prop.key)) { if (isDummy(parseMaybeAssign())) next(); eat(tt.comma); continue; }
+      this.parsePropertyName(prop);
+      if (isDummy(prop.key)) { if (isDummy(this.parseMaybeAssign())) this.next(); this.eat(tt.comma); continue; }
       if (isClass) {
         if (prop.key.type === "Identifier" && !prop.computed && prop.key.name === "static" &&
-            (token.type != tt.parenL && token.type != tt.braceL)) {
+            (this.tok.type != tt.parenL && this.tok.type != tt.braceL)) {
           prop['static'] = true;
-          isGenerator = eat(tt.star);
-          parsePropertyName(prop);
+          isGenerator = this.eat(tt.star);
+          this.parsePropertyName(prop);
         } else {
           prop['static'] = false;
         }
       }
-      if (!isClass && eat(tt.colon)) {
+      if (!isClass && this.eat(tt.colon)) {
         prop.kind = "init";
-        prop.value = parseMaybeAssign();
-      } else if (options.ecmaVersion >= 6 && (token.type === tt.parenL || token.type === tt.braceL)) {
+        prop.value = this.parseMaybeAssign();
+      } else if (this.options.ecmaVersion >= 6 && (this.tok.type === tt.parenL || this.tok.type === tt.braceL)) {
         if (isClass) {
           prop.kind = "";
         } else {
           prop.kind = "init";
           prop.method = true;
         }
-        prop.value = parseMethod(isGenerator);
-      } else if (options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
+        prop.value = this.parseMethod(isGenerator);
+      } else if (this.options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  !prop.computed && (prop.key.name === "get" || prop.key.name === "set") &&
-                 (token.type != tt.comma && token.type != tt.braceR)) {
+                 (this.tok.type != tt.comma && this.tok.type != tt.braceR)) {
         prop.kind = prop.key.name;
-        parsePropertyName(prop);
-        prop.value = parseMethod(false);
+        this.parsePropertyName(prop);
+        prop.value = this.parseMethod(false);
       } else if (isClass) {
         prop.kind = "";
-        prop.value = parseMethod(isGenerator);
+        prop.value = this.parseMethod(isGenerator);
       } else {
         prop.kind = "init";
-        if (options.ecmaVersion >= 6) {
-          if (eat(tt.eq)) {
-            var assign = startNodeAt(start);
+        if (this.options.ecmaVersion >= 6) {
+          if (this.eat(tt.eq)) {
+            var assign = this.startNodeAt(start);
             assign.operator = "=";
             assign.left = prop.key;
-            assign.right = parseMaybeAssign();
-            prop.value = finishNode(assign, "AssignmentExpression");
+            assign.right = this.parseMaybeAssign();
+            prop.value = this.finishNode(assign, "AssignmentExpression");
           } else {
             prop.value = prop.key;
           }
         } else {
-          prop.value = dummyIdent();
+          prop.value = this.dummyIdent();
         }
         prop.shorthand = true;
       }
 
       if (isClass) {
-        node.body.body.push(finishNode(prop, "MethodDefinition"));
+        node.body.body.push(this.finishNode(prop, "MethodDefinition"));
       } else {
-        node.properties.push(finishNode(prop, "Property"));
-        eat(tt.comma);
+        node.properties.push(this.finishNode(prop, "Property"));
+        this.eat(tt.comma);
       }
     }
-    popCx();
-    if (!eat(tt.braceR)) {
+    this.popCx();
+    if (!this.eat(tt.braceR)) {
       // If there is no closing brace, make the node span to the start
       // of the next token (this is useful for Tern)
-      lastEnd = token.start;
-      if (options.locations) lastEndLoc = token.loc.start;
+      this.last.end = this.tok.start;
+      if (this.options.locations) this.last.loc.end = this.tok.loc.start;
     }
     if (isClass) {
-      semicolon();
-      finishNode(node.body, "ClassBody");
-      return finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
+      this.semicolon();
+      this.finishNode(node.body, "ClassBody");
+      return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
     } else {
-      return finishNode(node, "ObjectExpression");
+      return this.finishNode(node, "ObjectExpression");
     }
-  }
+  };
 
-  function parsePropertyName(prop) {
-    if (options.ecmaVersion >= 6) {
-      if (eat(tt.bracketL)) {
+  lp.parsePropertyName = function(prop) {
+    if (this.options.ecmaVersion >= 6) {
+      if (this.eat(tt.bracketL)) {
         prop.computed = true;
-        prop.key = parseExpression();
-        expect(tt.bracketR);
+        prop.key = this.parseExpression();
+        this.expect(tt.bracketR);
         return;
       } else {
         prop.computed = false;
       }
     }
-    var key = (token.type === tt.num || token.type === tt.string) ? parseExprAtom() : parseIdent();
-    prop.key = key || dummyIdent();
-  }
+    var key = (this.tok.type === tt.num || this.tok.type === tt.string) ? this.parseExprAtom() : this.parseIdent();
+    prop.key = key || this.dummyIdent();
+  };
 
-  function parsePropertyAccessor() {
-    if (token.type === tt.name || token.type.keyword) return parseIdent();
-  }
+  lp.parsePropertyAccessor = function() {
+    if (this.tok.type === tt.name || this.tok.type.keyword) return this.parseIdent();
+  };
 
-  function parseIdent() {
-    var node = startNode();
-    node.name = token.type === tt.name ? token.value : token.type.keyword;
-    next();
-    return finishNode(node, "Identifier");
-  }
+  lp.parseIdent = function() {
+    var node = this.startNode();
+    node.name = this.tok.type === tt.name ? this.tok.value : this.tok.type.keyword;
+    this.next();
+    return this.finishNode(node, "Identifier");
+  };
 
-  function initFunction(node) {
+  lp.initFunction = function(node) {
     node.id = null;
     node.params = [];
-    if (options.ecmaVersion >= 6) {
+    if (this.options.ecmaVersion >= 6) {
       node.generator = false;
       node.expression = false;
     }
-  }
+  };
 
   // Convert existing expression atom to assignable pattern
   // if possible.
 
-  function toAssignable(node) {
-    if (options.ecmaVersion >= 6 && node) {
+  lp.toAssignable = function(node) {
+    if (this.options.ecmaVersion >= 6 && node) {
       switch (node.type) {
         case "ObjectExpression":
           node.type = "ObjectPattern";
           var props = node.properties;
-          for (var i = 0; i < props.length; i++) {
-            toAssignable(props[i].value);
-          }
+          for (var i = 0; i < props.length; i++)
+            this.toAssignable(props[i].value);
           break;
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          toAssignableList(node.elements);
+          this.toAssignableList(node.elements);
           break;
 
         case "SpreadElement":
           node.type = "RestElement";
-          node.argument = toAssignable(node.argument);
+          node.argument = this.toAssignable(node.argument);
           break;
 
         case "AssignmentExpression":
@@ -1007,59 +994,58 @@
           break;
       }
     }
-    return checkLVal(node);
-  }
+    return this.checkLVal(node);
+  };
 
-  function toAssignableList(exprList) {
-    for (var i = 0; i < exprList.length; i++) {
-      toAssignable(exprList[i]);
-    }
+  lp.toAssignableList = function(exprList) {
+    for (var i = 0; i < exprList.length; i++)
+      this.toAssignable(exprList[i]);
     return exprList;
-  }
+  };
 
-  function parseFunctionParams(params) {
-    pushCx();
-    params = parseExprList(tt.parenR);
-    return toAssignableList(params);
-  }
+  lp.parseFunctionParams = function(params) {
+    this.pushCx();
+    params = this.parseExprList(tt.parenR);
+    return this.toAssignableList(params);
+  };
 
-  function parseFunction(node, isStatement) {
-    initFunction(node);
-    if (options.ecmaVersion >= 6) {
-      node.generator = eat(tt.star);
+  lp.parseFunction = function(node, isStatement) {
+    this.initFunction(node);
+    if (this.options.ecmaVersion >= 6) {
+      node.generator = this.eat(tt.star);
     }
-    if (token.type === tt.name) node.id = parseIdent();
-    else if (isStatement) node.id = dummyIdent();
-    node.params = parseFunctionParams();
-    node.body = parseBlock();
-    return finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
-  }
+    if (this.tok.type === tt.name) node.id = this.parseIdent();
+    else if (isStatement) node.id = this.dummyIdent();
+    node.params = this.parseFunctionParams();
+    node.body = this.parseBlock();
+    return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
+  };
 
-  function parseMethod(isGenerator) {
-    var node = startNode();
-    initFunction(node);
-    node.params = parseFunctionParams();
+  lp.parseMethod = function(isGenerator) {
+    var node = this.startNode();
+    this.initFunction(node);
+    node.params = this.parseFunctionParams();
     node.generator = isGenerator || false;
-    node.expression = options.ecmaVersion >= 6 && token.type !== tt.braceL;
-    node.body = node.expression ? parseMaybeAssign() : parseBlock();
-    return finishNode(node, "FunctionExpression");
-  }
+    node.expression = this.options.ecmaVersion >= 6 && this.tok.type !== tt.braceL;
+    node.body = node.expression ? this.parseMaybeAssign() : this.parseBlock();
+    return this.finishNode(node, "FunctionExpression");
+  };
 
-  function parseArrowExpression(node, params) {
-    initFunction(node);
-    node.params = toAssignableList(params);
-    node.expression = token.type !== tt.braceL;
-    node.body = node.expression ? parseMaybeAssign() : parseBlock();
-    return finishNode(node, "ArrowFunctionExpression");
-  }
+  lp.parseArrowExpression = function(node, params) {
+    this.initFunction(node);
+    node.params = this.toAssignableList(params);
+    node.expression = this.tok.type !== tt.braceL;
+    node.body = node.expression ? this.parseMaybeAssign() : this.parseBlock();
+    return this.finishNode(node, "ArrowFunctionExpression");
+  };
 
-  function parseExport() {
-    var node = startNode();
-    next();
-    node['default'] = eat(tt._default);
+  lp.parseExport = function() {
+    var node = this.startNode();
+    this.next();
+    node['default'] = this.eat(tt._default);
     node.specifiers = node.source = null;
     if (node['default']) {
-      var expr = parseMaybeAssign();
+      var expr = this.parseMaybeAssign();
       if (expr.id) {
         switch (expr.type) {
           case "FunctionExpression": expr.type = "FunctionDeclaration"; break;
@@ -1067,98 +1053,98 @@
         }
       }
       node.declaration = expr;
-      semicolon();
-    } else if (token.type.keyword) {
-      node.declaration = parseStatement();
+      this.semicolon();
+    } else if (this.tok.type.keyword) {
+      node.declaration = this.parseStatement();
     } else {
       node.declaration = null;
-      parseSpecifierList(node, "Export");
+      this.parseSpecifierList(node, "Export");
     }
-    semicolon();
-    return finishNode(node, "ExportDeclaration");
-  }
+    this.semicolon();
+    return this.finishNode(node, "ExportDeclaration");
+  };
 
-  function parseImport() {
-    var node = startNode();
-    next();
-    if (token.type === tt.string) {
+  lp.parseImport = function() {
+    var node = this.startNode();
+    this.next();
+    if (this.tok.type === tt.string) {
       node.specifiers = [];
-      node.source = parseExprAtom();
+      node.source = this.parseExprAtom();
       node.kind = '';
     } else {
-      if (token.type === tt.name && token.value !== "from") {
-        var elt = startNode();
-        elt.id = parseIdent();
+      if (this.tok.type === tt.name && this.tok.value !== "from") {
+        var elt = this.startNode();
+        elt.id = this.parseIdent();
         elt.name = null;
         elt['default'] = true;
-        finishNode(elt, "ImportSpecifier");
-        eat(tt.comma);
+        this.finishNode(elt, "ImportSpecifier");
+        this.eat(tt.comma);
       }
-      parseSpecifierList(node, "Import");
+      this.parseSpecifierList(node, "Import");
       var specs = node.specifiers;
       for (var i = 0; i < specs.length; i++) specs[i]['default'] = false;
       if (elt) node.specifiers.unshift(elt);
     }
-    semicolon();
-    return finishNode(node, "ImportDeclaration");
-  }
+    this.semicolon();
+    return this.finishNode(node, "ImportDeclaration");
+  };
 
-  function parseSpecifierList(node, prefix) {
+  lp.parseSpecifierList = function(node, prefix) {
     var elts = node.specifiers = [];
-    if (token.type === tt.star) {
-      var elt = startNode();
-      next();
-      if (eatContextual("as")) elt.name = parseIdent();
-      elts.push(finishNode(elt, prefix + "BatchSpecifier"));
+    if (this.tok.type === tt.star) {
+      var elt = this.startNode();
+      this.next();
+      if (this.eatContextual("as")) elt.name = this.parseIdent();
+      elts.push(this.finishNode(elt, prefix + "BatchSpecifier"));
     } else {
-      var indent = curIndent, line = curLineStart, continuedLine = nextLineStart;
-      pushCx();
-      eat(tt.braceL);
-      if (curLineStart > continuedLine) continuedLine = curLineStart;
-      while (!closes(tt.braceR, indent + (curLineStart <= continuedLine ? 1 : 0), line)) {
-        var elt = startNode();
-        if (eat(tt.star)) {
-          if (eatContextual("as")) elt.name = parseIdent();
-          finishNode(elt, prefix + "BatchSpecifier");
+      var indent = this.curIndent, line = this.curLineStart, continuedLine = this.nextLineStart;
+      this.pushCx();
+      this.eat(tt.braceL);
+      if (this.curLineStart > continuedLine) continuedLine = this.curLineStart;
+      while (!this.closes(tt.braceR, indent + (this.curLineStart <= continuedLine ? 1 : 0), line)) {
+        var elt = this.startNode();
+        if (this.eat(tt.star)) {
+          if (this.eatContextual("as")) elt.name = this.parseIdent();
+          this.finishNode(elt, prefix + "BatchSpecifier");
         } else {
-          if (isContextual("from")) break;
-          elt.id = parseIdent();
-          elt.name = eatContextual("as") ? parseIdent() : null;
-          finishNode(elt, prefix + "Specifier");
+          if (this.isContextual("from")) break;
+          elt.id = this.parseIdent();
+          elt.name = this.eatContextual("as") ? this.parseIdent() : null;
+          this.finishNode(elt, prefix + "Specifier");
         }
         elts.push(elt);
-        eat(tt.comma);
+        this.eat(tt.comma);
       }
-      eat(tt.braceR);
-      popCx();
+      this.eat(tt.braceR);
+      this.popCx();
     }
-    node.source = eatContextual("from") ? parseExprAtom() : null;
-  }
+    node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
+  };
 
-  function parseExprList(close, allowEmpty) {
-    var indent = curIndent, line = curLineStart, elts = [];
-    next(); // Opening bracket
-    while (!closes(close, indent + 1, line)) {
-      if (eat(tt.comma)) {
-        elts.push(allowEmpty ? null : dummyIdent());
+  lp.parseExprList = function(close, allowEmpty) {
+    var indent = this.curIndent, line = this.curLineStart, elts = [];
+    this.next(); // Opening bracket
+    while (!this.closes(close, indent + 1, line)) {
+      if (this.eat(tt.comma)) {
+        elts.push(allowEmpty ? null : this.dummyIdent());
         continue;
       }
-      var elt = parseMaybeAssign();
+      var elt = this.parseMaybeAssign();
       if (isDummy(elt)) {
-        if (closes(close, indent, line)) break;
-        next();
+        if (this.closes(close, indent, line)) break;
+        this.next();
       } else {
         elts.push(elt);
       }
-      eat(tt.comma);
+      this.eat(tt.comma);
     }
-    popCx();
-    if (!eat(close)) {
+    this.popCx();
+    if (!this.eat(close)) {
       // If there is no closing brace, make the node span to the start
       // of the next token (this is useful for Tern)
-      lastEnd = token.start;
-      if (options.locations) lastEndLoc = token.loc.start;
+      this.last.end = this.tok.start;
+      if (this.options.locations) this.last.loc.end = this.tok.loc.start;
     }
     return elts;
-  }
+  };
 });

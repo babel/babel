@@ -159,10 +159,8 @@
     this.value = p.value;
     this.start = p.start;
     this.end = p.end;
-    if (p.options.locations) {
-      this.loc = new SourceLocation(p);
-      this.loc.end = p.endLoc;
-    }
+    if (p.options.locations)
+      this.loc = new SourceLocation(p, p.startLoc, p.endLoc);
     if (p.options.ranges)
       this.range = [p.start, p.end];
   };
@@ -242,11 +240,8 @@
         start: start,
         end: end
       };
-      if (options.locations) {
-        comment.loc = new SourceLocation(this);
-        comment.loc.start = startLoc;
-        comment.loc.end = endLoc;
-      }
+      if (options.locations)
+        comment.loc = new SourceLocation(this, startLoc, endLoc);
       if (options.ranges)
         comment.range = [start, end];
       array.push(comment);
@@ -506,7 +501,7 @@
 
   // Whether a single character denotes a newline.
 
-  var newline = /[\n\r\u2028\u2029]/;
+  var newline = exports.newline = /[\n\r\u2028\u2029]/;
 
   var isNewLine = exports.isNewLine = function(code) {
     return code === 10 || code === 13 || code === 0x2028 || code == 0x2029;
@@ -515,7 +510,7 @@
   // Matches a whole line break (where CRLF is considered a single
   // line break). Used to count lines.
 
-  var lineBreak = /\r\n|[\n\r\u2028\u2029]/g;
+  var lineBreak = exports.lineBreak = /\r\n|[\n\r\u2028\u2029]/g;
 
   // Test whether a given character code starts an identifier.
 
@@ -1393,16 +1388,17 @@
 
   var Node = exports.Node = function() {};
 
-  function SourceLocation(p) {
-    this.start = p.startLoc;
+  var SourceLocation = exports.SourceLocation = function(p, start, end) {
+    this.start = start;
+    this.end = end;
     if (p.sourceFile !== null) this.source = p.sourceFile;
-  }
+  };
 
   pp.startNode = function() {
     var node = new Node;
     node.start = this.start;
     if (this.options.locations)
-      node.loc = new SourceLocation(this);
+      node.loc = new SourceLocation(this, this.startLoc);
     if (this.options.directSourceFile)
       node.sourceFile = this.options.directSourceFile;
     if (this.options.ranges)
@@ -1413,8 +1409,7 @@
   pp.startNodeAt = function(pos) {
     var node = new Node, start = pos;
     if (this.options.locations) {
-      node.loc = new SourceLocation(this);
-      node.loc.start = start[1];
+      node.loc = new SourceLocation(this, start[1]);
       start = pos[0];
     }
     node.start = start;
