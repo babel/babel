@@ -1,51 +1,47 @@
-// Based on https://gist.github.com/mathiasbynens/6334847 by @mathias
-
-var regenerate = require('regenerate');
+// Note: run `npm install unicode-7.0.0` first.
 
 // Which Unicode version should be used?
-var version = '7.0.0'; // note: also update `package.json` when this changes
+var version = '7.0.0';
 
-// Shorthand function
-var get = function(what) {
-    return require('unicode-' + version + '/' + what + '/code-points');
-};
+var start = require('unicode-' + version + '/properties/ID_Start/code-points')
+    .filter(function(ch) { return ch > 127; });
+var cont = [0x200c, 0x200d].concat(require('unicode-' + version + '/properties/ID_Continue/code-points')
+    .filter(function(ch) { return ch > 127 && start.indexOf(ch) == -1; }));
 
-// Unicode categories needed to construct the ES5 regex
-var Lu = get('categories/Lu');
-var Ll = get('categories/Ll');
-var Lt = get('categories/Lt');
-var Lm = get('categories/Lm');
-var Lo = get('categories/Lo');
-var Nl = get('categories/Nl');
-var Mn = get('categories/Mn');
-var Mc = get('categories/Mc');
-var Nd = get('categories/Nd');
-var Pc = get('categories/Pc');
+function pad(str, width) {
+  while (str.length < width) str = "0" + str;
+  return str;
+}
 
-var generateES5Regex = function() { // ES 5.1
-    // http://mathiasbynens.be/notes/javascript-identifiers#valid-identifier-names
-    var identifierStart = regenerate('$', '_')
-        .add(Lu, Ll, Lt, Lm, Lo, Nl)
-        .removeRange(0x010000, 0x10FFFF) // remove astral symbols
-        .removeRange(0x0, 0x7F); // remove ASCII symbols (Acorn-specific)
-    var identifierPart = regenerate('\u200C', '\u200D', Mn, Mc, Nd, Pc)
-        .removeRange(0x010000, 0x10FFFF) // remove astral symbols
-        .remove(identifierStart) // (Acorn-specific)
-        .removeRange(0x0, 0x7F); // remove ASCII symbols (Acorn-specific)
-    return {
-        'NonAsciiIdentifierStart': identifierStart.toString(),
-        'NonAsciiIdentifierPart': identifierPart.toString()
-    };
-};
+function esc(code) {
+  var hex = code.toString(16);
+  if (hex.length <= 2) return "\\x" + pad(hex, 2);
+  else return "\\u" + pad(hex, 4);
+}
 
-var result = generateES5Regex();
-console.log(
-    '// ECMAScript 5.1/Unicode v%s `nonASCIIidentifierStart`:\n\n%s\n',
-    version,
-    result.NonAsciiIdentifierStart
-);
-console.log(
-    '// ECMAScript 5.1/Unicode v%s `nonASCIIidentifier`:\n\n%s',
-    version,
-    result.NonAsciiIdentifierPart
-);
+function generate(chars) {
+  var astral = [], re = "";
+  for (var i = 0, at = 0x10000; i < chars.length; i++) {
+    var from = chars[i], to = from;
+    while (i < chars.length - 1 && chars[i + 1] == to + 1) {
+      i++;
+      to++;
+    }
+    if (to <= 0xffff) {
+      if (from == to) re += esc(from);
+      else if (from + 1 == to) re += esc(from) + esc(to);
+      else re += esc(from) + "-" + esc(to);
+    } else {
+      astral.push(from - at, to - from);
+      at = to;
+    }
+  }
+  return {nonASCII: re, astral: astral};
+}
+
+var startData = generate(start), contData = generate(cont);
+
+console.log("  var nonASCIIidentifierStartChars = \"" + startData.nonASCII + "\";");
+console.log("  var nonASCIIidentifierChars = \"" + contData.nonASCII + "\";");
+console.log("  var astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";");
+console.log("  var astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";");
