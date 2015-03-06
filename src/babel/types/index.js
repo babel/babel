@@ -295,6 +295,16 @@ t.isReferenced = function (node, parent) {
     return parent.id !== node;
   }
 
+  // no: export { foo as NODE };
+  if (t.isExportSpecifier(parent, { name: node })) {
+    return false;
+  }
+
+  // no: import { NODE as foo } from "foo";
+  if (t.isImportSpecifier(parent, { id: node })) {
+    return false;
+  }
+
   // no: class NODE {}
   if (t.isClass(parent)) {
     return parent.id !== node;
