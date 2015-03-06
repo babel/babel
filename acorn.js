@@ -230,21 +230,23 @@
   // to know when parsing a label, in order to allow or disallow
   // continue jumps to that label.
 
-  var TokenType = exports.TokenType = function(label, beforeExpr, binop, kind, keyword) {
+  var TokenType = exports.TokenType = function(label, conf) {
+    if (!conf) conf = {};
     this.label = label;
-    this.keyword = keyword;
-    this.beforeExpr = !!beforeExpr;
-    this.isLoop = kind === "loop";
-    this.isAssign = kind === "assign";
-    this.prefix = kind && kind.indexOf("prefix") > -1;
-    this.postfix = kind && kind.indexOf("postfix") > -1;
-    this.binop = binop || null;
+    this.keyword = conf.keyword;
+    this.beforeExpr = !!conf.beforeExpr;
+    this.isLoop = !!conf.isLoop;
+    this.isAssign = !!conf.isAssign;
+    this.prefix = !!conf.prefix;
+    this.postfix = !!conf.postfix;
+    this.binop = conf.binop || null;
     this.updateContext = null;
   };
 
   function binop(name, prec) {
-    return new TokenType(name, true, prec);
+    return new TokenType(name, {beforeExpr: true, binop: prec});
   }
+  var beforeExpr = {beforeExpr: true};
 
   var tt = exports.tokTypes = {
     num: new TokenType("num"),
@@ -254,22 +256,22 @@
     eof: new TokenType("eof"),
 
     // Punctuation token types.
-    bracketL: new TokenType("[", true),
+    bracketL: new TokenType("[", beforeExpr),
     bracketR: new TokenType("]"),
-    braceL: new TokenType("{", true),
+    braceL: new TokenType("{", beforeExpr),
     braceR: new TokenType("}"),
-    parenL: new TokenType("(", true),
+    parenL: new TokenType("(", beforeExpr),
     parenR: new TokenType(")"),
-    comma: new TokenType(",", true),
-    semi: new TokenType(";", true),
-    colon: new TokenType(":", true),
+    comma: new TokenType(",", beforeExpr),
+    semi: new TokenType(";", beforeExpr),
+    colon: new TokenType(":", beforeExpr),
     dot: new TokenType("."),
-    question: new TokenType("?", true),
-    arrow: new TokenType("=>", true),
+    question: new TokenType("?", beforeExpr),
+    arrow: new TokenType("=>", beforeExpr),
     template: new TokenType("template"),
-    ellipsis: new TokenType("...", true),
+    ellipsis: new TokenType("...", beforeExpr),
     backQuote: new TokenType("`"),
-    dollarBraceL: new TokenType("${", true),
+    dollarBraceL: new TokenType("${", beforeExpr),
 
     // Operators. These carry several kinds of properties to help the
     // parser use them properly (the presence of these properties is
@@ -285,10 +287,10 @@
     // binary operators with a very low precedence, that should result
     // in AssignmentExpression nodes.
 
-    eq: new TokenType("=", true, null, "assign"),
-    assign: new TokenType("_=", true, null, "assign"),
-    incDec: new TokenType("++/--", false, null, "prefix postfix"),
-    prefix: new TokenType("prefix", true, null, "prefix"),
+    eq: new TokenType("=", {beforeExpr: true, isAssign: true}),
+    assign: new TokenType("_=", {beforeExpr: true, isAssign: true}),
+    incDec: new TokenType("++/--", {prefix: true, postfix: true}),
+    prefix: new TokenType("prefix", {beforeExpr: true, prefix: true}),
     logicalOR: binop("||", 1),
     logicalAND: binop("&&", 2),
     bitwiseOR: binop("|", 3),
@@ -297,7 +299,7 @@
     equality: binop("==/!=", 6),
     relational: binop("</>", 7),
     bitShift: binop("<</>>", 8),
-    plusMin: new TokenType("+/-", true, 9, "prefix"),
+    plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true}),
     modulo: binop("%", 10),
     star: binop("*", 10),
     slash: binop("/", 10)
@@ -308,47 +310,48 @@
   var keywordTypes = {};
 
   // Succinct definitions of keyword token types
-  function kw(name, beforeExpr, kind, binop) {
-    keywordTypes[name] = tt["_" + name] =
-       new TokenType(name, beforeExpr, binop, kind, name);
+  function kw(name, options) {
+    if (!options) options = {};
+    options.keyword = name;
+    keywordTypes[name] = tt["_" + name] = new TokenType(name, options);
   };
 
   kw("break"),
-  kw("case", true),
+  kw("case", beforeExpr),
   kw("catch"),
   kw("continue"),
   kw("debugger"),
   kw("default"),
-  kw("do", false, "loop"),
-  kw("else", true),
+  kw("do", {isLoop: true}),
+  kw("else", beforeExpr),
   kw("finally"),
-  kw("for", false, "loop"),
+  kw("for", {isLoop: true}),
   kw("function"),
   kw("if"),
-  kw("return", true),
+  kw("return", beforeExpr),
   kw("switch");
-  kw("throw", true),
+  kw("throw", beforeExpr),
   kw("try"),
   kw("var"),
   kw("let");
   kw("const");
-  kw("while", false, "loop");
+  kw("while", {isLoop: true});
   kw("with");
-  kw("new", true);
+  kw("new", beforeExpr);
   kw("this");
   kw("class");
-  kw("extends", true);
+  kw("extends", beforeExpr);
   kw("export");
   kw("import");
-  kw("yield", true);
-  kw("null", false, null, null, null);
-  kw("true", false, null, null, true);
-  kw("false", false, null, null, false);
-  kw("in", true, null, 7);
-  kw("instanceof", true, null, 7);
-  kw("typeof", true, "prefix");
-  kw("void", true, "prefix");
-  kw("delete", true, "prefix");
+  kw("yield", beforeExpr);
+  kw("null");
+  kw("true");
+  kw("false");
+  kw("in", {beforeExpr: true, binop: 7});
+  kw("instanceof", {beforeExpr: true, binop: 7});
+  kw("typeof", {beforeExpr: true, prefix: true});
+  kw("void", {beforeExpr: true, prefix: true});
+  kw("delete", {beforeExpr: true, prefix: true});
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a
