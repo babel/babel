@@ -133,7 +133,6 @@ try {
   exports.templates = require("../../templates.json");
 } catch (err) {
   if (err.code !== "MODULE_NOT_FOUND") throw err;
-
   exports.templates = loadTemplates();
 }
 
@@ -146,5 +145,6 @@ try {
     throw new ReferenceError(`The verison of babel-runtime of ${runtimePackage.runtime} that you have installed does not match the babel verison of ${version}`);
   }
 } catch (err) {
+  console.log(err.code);
   if (err.code !== "MODULE_NOT_FOUND") throw err;
 }
