@@ -60,7 +60,18 @@ if (program.eval || program.print) {
   var code = program.eval;
   if (!code || code === true) code = program.print;
 
-  var result = _eval(code, "eval");
+  global.__filename = "[eval]";
+  global.__dirname = process.cwd();
+
+  var module = new Module(global.__filename);
+  module.filename = global.__filename;
+  module.paths    = Module._nodeModulePaths(global.__dirname);
+
+  global.exports = module.exports;
+  global.module  = module;
+  global.require = module.require.bind(module);
+
+  var result = _eval(code, global.__filename);
   if (program.print) console.log(result);
 } else {
   if (program.args.length) {
@@ -88,7 +99,7 @@ if (program.eval || program.print) {
     args = args.slice(i);
 
     // make the filename absolute
-    var filename = args[0]
+    var filename = args[0];
     if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
