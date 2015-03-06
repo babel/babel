@@ -153,3 +153,17 @@ export default function (opts = {}) {
 
   extend(transformOpts, opts);
 };
+
+//
+
+try {
+  var runtimePackage = require("babel-runtime/package");
+  var version = require("../../package").version;
+  if (runtimePackage.version !== version) {
+    throw new ReferenceError(`The verison of babel-runtime of ${runtimePackage.runtime} that you have installed does not match the babel verison of ${version}`);
+  }
+} catch (err) {
+  console.log(err.code);
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
+}
+
