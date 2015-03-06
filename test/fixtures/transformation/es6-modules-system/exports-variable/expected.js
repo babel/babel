@@ -18,9 +18,13 @@ System.register([], function (_export) {
       foo4 = _export("foo4", 2);
       foo5 = _export("foo5", undefined);
       foo6 = _export("foo6", 3);
-      foo8 = _export("foo8", function foo8() {
-        _classCallCheck(this, foo8);
-      });
+      foo8 = _export("foo8", (function () {
+        var _foo8 = function foo8() {
+          _classCallCheck(this, _foo8);
+        };
+
+        return _foo8;
+      })());
 
       _export("foo3", foo3 = 5);
     }

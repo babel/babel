@@ -1,18 +1,23 @@
 "use strict";
 
-var Test = function Test() {
-  babelHelpers.classCallCheck(this, Test);
-
-  this.state = "test";
-};
-
-var Foo = (function (Bar) {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+var Test = (function () {
+  var _Test = function Test() {
+    babelHelpers.classCallCheck(this, _Test);
 
     this.state = "test";
-  }
+  };
 
-  babelHelpers.inherits(Foo, Bar);
-  return Foo;
+  return _Test;
+})();
+
+var Foo = (function (_Bar) {
+  var _Foo = function Foo() {
+    babelHelpers.classCallCheck(this, _Foo);
+
+    babelHelpers.get(Object.getPrototypeOf(_Foo.prototype), "constructor", this).call(this);
+    this.state = "test";
+  };
+
+  babelHelpers.inherits(_Foo, _Bar);
+  return _Foo;
 })(Bar);

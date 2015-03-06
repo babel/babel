@@ -1,16 +1,16 @@
 "use strict";
 
 var Test = (function () {
-  function Test() {
-    babelHelpers.classCallCheck(this, Test);
-  }
+  var _Test = function Test() {
+    babelHelpers.classCallCheck(this, _Test);
+  };
 
-  babelHelpers.createClass(Test, {
+  babelHelpers.createClass(_Test, {
     test: {
       set: function (val) {
         this._test = val;
       }
     }
   });
-  return Test;
+  return _Test;
 })();

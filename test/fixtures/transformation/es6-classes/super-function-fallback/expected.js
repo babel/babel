@@ -1,7 +1,11 @@
 "use strict";
 
-var Test = function Test() {
-  babelHelpers.classCallCheck(this, Test);
+var Test = (function () {
+  var _Test = function Test() {
+    babelHelpers.classCallCheck(this, _Test);
 
-  babelHelpers.get(Object.getPrototypeOf(Test.prototype), "hasOwnProperty", this).call(this, "test");
-};
+    babelHelpers.get(Object.getPrototypeOf(_Test.prototype), "hasOwnProperty", this).call(this, "test");
+  };
+
+  return _Test;
+})();

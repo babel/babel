@@ -17,17 +17,25 @@
 
   module.exports = function () {};
 
-  var _default = function _default() {
-    _classCallCheck(this, _default);
-  };
+  var _default = (function () {
+    var _class = function _default() {
+      _classCallCheck(this, _class);
+    };
+
+    return _class;
+  })();
 
   module.exports = _default;
 
   function foo() {}
 
-  var Foo = function Foo() {
-    _classCallCheck(this, Foo);
-  };
+  var Foo = (function () {
+    var _Foo = function Foo() {
+      _classCallCheck(this, _Foo);
+    };
+
+    return _Foo;
+  })();
 
   module.exports = Foo;
 });

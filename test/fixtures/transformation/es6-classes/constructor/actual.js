@@ -6,6 +6,7 @@ class Test {
 
 class Foo extends Bar {
   constructor() {
+    super();
     this.state = "test";
   }
 }

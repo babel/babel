@@ -1,13 +1,14 @@
 "use strict";
 
-var Test = (function (Foo) {
-  function Test() {
-    babelHelpers.classCallCheck(this, Test);
+var Test = (function (_Foo) {
+  var _Test = function Test() {
+    babelHelpers.classCallCheck(this, _Test);
 
-    Foo.prototype.test;
-    Foo.prototype.test.whatever;
-  }
+    _Foo.call(this);
+    _Foo.prototype.test;
+    _Foo.prototype.test.whatever;
+  };
 
-  babelHelpers.inherits(Test, Foo);
-  return Test;
+  babelHelpers.inherits(_Test, _Foo);
+  return _Test;
 })(Foo);

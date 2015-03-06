@@ -3,29 +3,40 @@ import * as nameMethod from "../../helpers/name-method";
 import * as defineMap from "../../helpers/define-map";
 import * as messages from "../../../messages";
 import * as util from  "../../../util";
+import traverse from "../../../traversal";
 import t from "../../../types";
 
 export var check = t.isClass;
 
 export function ClassDeclaration(node, parent, scope, file) {
-  return new ClassTransformer(node, file, scope, true).run();
+  return new ClassTransformer(node, parent, scope, file, true).run();
 }
 
 export function ClassExpression(node, parent, scope, file) {
-  if (!node.id) {
-    if (t.isProperty(parent) && parent.value === node && !parent.computed && t.isIdentifier(parent.key)) {
-      // var o = { foo: class {} };
-      node.id = parent.key;
-    }
+  return new ClassTransformer(node, parent, scope, file, false).run();
+}
 
-    if (t.isVariableDeclarator(parent) && t.isIdentifier(parent.id)) {
-      // var foo = class {};
-      node.id = parent.id;
+var verifyConstructorVisitor = {
+  CallExpression: {
+    enter(node, parent, scope, state) {
+      if (t.isIdentifier(node.callee, { name: "super" })) {
+        state.hasBareSuper = true;
+
+        if (!state.hasSuper) {
+          throw state.file.errorWithNode(node, "super call is only allowed in derived constructor");
+        }
+      }
+    }
+  },
+
+  ThisExpression: {
+    enter(node, parent, scope, state) {
+      if (state.hasSuper && !state.hasBareSuper) {
+        throw state.file.errorWithNode(node, "'this' is not allowed before super()");
+      }
     }
   }
-
-  return new ClassTransformer(node, file, scope, false).run();
-}
+};
 
 class ClassTransformer {
 
@@ -33,13 +44,15 @@ class ClassTransformer {
    * Description
    *
    * @param {Node} node
-   * @param {File} file
+   * @param {Node} parent
    * @param {Scope} scope
+   * @param {File} file
    * @param {Boolean} isStatement
    */
 
-  constructor(node, file, scope, isStatement) {
+  constructor(node, parent, scope, file, isStatement) {
     this.isStatement = isStatement;
+    this.parent      = parent;
     this.scope       = scope;
     this.node        = node;
     this.file        = file;
@@ -49,11 +62,15 @@ class ClassTransformer {
 
     this.instanceMutatorMap = {};
     this.staticMutatorMap   = {};
-    this.hasConstructor     = false;
-    this.className          = node.id || scope.generateUidIdentifier("class");
-    this.superName          = node.superClass || t.identifier("Function");
-    this.hasSuper           = !!node.superClass;
-    this.isLoose            = file.isLoose("es6.classes");
+
+    this.hasConstructor = false;
+    this.className      = node.id;
+    this.classRef       = scope.generateUidIdentifier(node.id ? node.id.name : "class");
+
+    this.superName = node.superClass || t.identifier("Function");
+    this.hasSuper  = !!node.superClass;
+
+    this.isLoose = file.isLoose("es6.classes");
   }
 
   /**
@@ -66,38 +83,45 @@ class ClassTransformer {
     var superName = this.superName;
     var className = this.className;
     var classBody = this.node.body.body;
+    var classRef  = this.classRef;
     var file      = this.file;
 
     //
 
     var body = this.body = [];
 
+    //
+
+    var useFunctionDeclaration = false;
+
+    // class expressions have their class id lexically bound
+
+    if (!this.isStatement && this.className) {
+      useFunctionDeclaration = true;
+      classRef = this.classRef = this.className || this.classRef;
+    }
+
+    //
+
     var constructorBody = t.blockStatement([
       t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
         t.thisExpression(),
-        className
+        classRef
       ]))
     ]);
 
     var constructor;
-    if (this.node.id) {
-      constructor = t.functionDeclaration(className, [], constructorBody);
+
+    if (useFunctionDeclaration) {
+      constructor = t.functionDeclaration(classRef, [], constructorBody);
       body.push(constructor);
     } else {
-      var constructorName = null;
-      // when a class has no parent and there is only a constructor or no body
-      // then the constructor is not wrapped in a closure and needs to be named
-      var containsOnlyConstructor = classBody.length === 1 && classBody[0].key.name === "constructor";
-      if (!this.hasSuper && (classBody.length === 0 || containsOnlyConstructor)) {
-        constructorName = className;
-      }
-
-      constructor = t.functionExpression(constructorName, [], constructorBody);
-      body.push(t.variableDeclaration("var", [
-        t.variableDeclarator(className, constructor)
-      ]));
+      constructor = t.functionExpression(null, [], constructorBody);
     }
+
     this.constructor = constructor;
+
+    //
 
     var closureParams = [];
     var closureArgs = [];
@@ -107,36 +131,44 @@ class ClassTransformer {
     if (this.hasSuper) {
       closureArgs.push(superName);
 
-      if (!t.isIdentifier(superName)) {
-        superName = this.scope.generateUidBasedOnNode(superName, this.file);
-      }
-
+      superName = this.scope.generateUidBasedOnNode(superName, this.file);
       closureParams.push(superName);
 
       this.superName = superName;
-      body.push(t.expressionStatement(t.callExpression(file.addHelper("inherits"), [className, superName])));
+      body.push(t.expressionStatement(t.callExpression(file.addHelper("inherits"), [classRef, superName])));
     }
+
+    //
 
     this.buildBody();
 
-    t.inheritsComments(body[0], this.node);
+    if (!useFunctionDeclaration) {
+      if (this.isStatement) {
+        constructor = nameMethod.custom(constructor, this.className, this.scope);
+      } else if (!this.className) {
+        // infer class name if this is a nameless class expression
+        constructor = nameMethod.bare(constructor, this.parent, this.scope);
+      }
 
-    var init;
+      body.unshift(t.variableDeclaration("var", [
+        t.variableDeclarator(classRef, constructor)
+      ]));
 
-    if (body.length === 1) {
-      // only a constructor so no need for a closure container
-      init = t.toExpression(constructor);
-    } else {
-      body.push(t.returnStatement(className));
-      init = t.callExpression(
-        t.functionExpression(null, closureParams, t.blockStatement(body)),
-        closureArgs
-      );
+      t.inheritsComments(body[0], this.node);
     }
+
+    //
+
+    body.push(t.returnStatement(classRef));
+
+    var init = t.callExpression(
+      t.functionExpression(null, closureParams, t.blockStatement(body)),
+      closureArgs
+    );
 
     if (this.isStatement) {
       return t.variableDeclaration("let", [
-        t.variableDeclarator(className, init)
+        t.variableDeclarator(this.className, init)
       ]);
     } else {
       return init;
@@ -157,18 +189,22 @@ class ClassTransformer {
     for (var i = 0; i < classBody.length; i++) {
       var node = classBody[i];
       if (t.isMethodDefinition(node)) {
+        var isConstructor = (!node.computed && t.isIdentifier(node.key, { name: "constructor" })) || t.isLiteral(node.key, { value: "constructor" });
+        if (isConstructor) this.verifyConstructor(node);
+
         var replaceSupers = new ReplaceSupers({
           methodNode: node,
-          objectRef:  this.className,
+          objectRef:  this.classRef,
           superRef:   this.superName,
           isStatic:   node.static,
           isLoose:    this.isLoose,
           scope:      this.scope,
           file:       this.file
         }, true);
+
         replaceSupers.replace();
 
-        if ((!node.computed && t.isIdentifier(node.key, { name: "constructor" })) || t.isLiteral(node.key, { value: "constructor" })) {
+        if (isConstructor) {
           this.pushConstructor(node);
         } else {
           this.pushMethod(node);
@@ -205,7 +241,7 @@ class ClassTransformer {
     if (instanceProps || staticProps) {
       instanceProps ||= t.literal(null);
 
-      var args = [className, instanceProps];
+      var args = [this.classRef, instanceProps];
       if (staticProps) args.push(staticProps);
 
       body.push(t.expressionStatement(
@@ -213,6 +249,26 @@ class ClassTransformer {
       ));
     }
   }
+
+  /**
+   * Description
+   *
+   * @param {Node} node
+   */
+
+   verifyConstructor(node) {
+    var state = {
+      hasBareSuper: false,
+      hasSuper:     this.hasSuper,
+      file:         this.file
+    };
+
+    traverse(node, verifyConstructorVisitor, this.scope, state);
+
+    if (!state.hasBareSuper && this.hasSuper) {
+      throw this.file.errorWithNode(node, "Derived constructor must call super()");
+    }
+   }
 
   /**
    * Push a method to its respective mutatorMap.
@@ -231,9 +287,9 @@ class ClassTransformer {
       if (this.isLoose) {
         // use assignments instead of define properties for loose classes
 
-        var className = this.className;
-        if (!node.static) className = t.memberExpression(className, t.identifier("prototype"));
-        methodName = t.memberExpression(className, methodName, node.computed);
+        var classRef = this.classRef;
+        if (!node.static) classRef = t.memberExpression(classRef, t.identifier("prototype"));
+        methodName = t.memberExpression(classRef, methodName, node.computed);
 
         var expr = t.expressionStatement(t.assignmentExpression("=", methodName, node.value));
         t.inheritsComments(expr, node);
@@ -267,7 +323,7 @@ class ClassTransformer {
     var key;
 
     if (node.static) {
-      key = t.memberExpression(this.className, node.key);
+      key = t.memberExpression(this.classRef, node.key);
       this.body.push(
         t.expressionStatement(t.assignmentExpression("=", key, node.value))
       );

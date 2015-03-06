@@ -1,11 +1,11 @@
 "use strict";
 
 var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
-  }
+  var _Foo = function Foo() {
+    babelHelpers.classCallCheck(this, _Foo);
+  };
 
-  babelHelpers.createClass(Foo, babelHelpers.defineProperty({
+  babelHelpers.createClass(_Foo, babelHelpers.defineProperty({
     bar: {
       get: function () {
         return babelHelpers.defineProperty(this, "bar", complex()).bar;
@@ -16,7 +16,7 @@ var Foo = (function () {
       return babelHelpers.defineProperty(this, bar, complex())[bar];
     }
   }));
-  return Foo;
+  return _Foo;
 })();
 
 var foo = Object.defineProperties({}, babelHelpers.defineProperty({

@@ -7,25 +7,23 @@ var B = new WeakMap(),
     C = new WeakMap();
 
 var D = (function () {
+  var _D = function D() {
+    _classCallCheck(this, _D);
+  };
+
   var F = new WeakMap(),
       G = new WeakMap();
   var E = new WeakMap();
-
-  function D() {
-    _classCallCheck(this, D);
-  }
-
-  return D;
+  return _D;
 })();
 
 var H = (function () {
+  var _class = function H() {
+    _classCallCheck(this, _class);
+  };
+
   var J = new WeakMap(),
       K = new WeakMap();
   var I = new WeakMap();
-
-  function H() {
-    _classCallCheck(this, H);
-  }
-
-  return H;
+  return _class;
 })();

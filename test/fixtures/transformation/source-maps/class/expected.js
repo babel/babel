@@ -5,11 +5,11 @@ var _createClass = (function () { function defineProperties(target, props) { for
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Test = (function () {
-  function Test() {
-    _classCallCheck(this, Test);
-  }
+  var _Test = function Test() {
+    _classCallCheck(this, _Test);
+  };
 
-  _createClass(Test, {
+  _createClass(_Test, {
     bar: {
       get: function () {
         throw new Error("wow");
@@ -17,7 +17,7 @@ var Test = (function () {
     }
   });
 
-  return Test;
+  return _Test;
 })();
 
 var test = new Test();

@@ -1,0 +1,3 @@
+{
+  "throws": "Derived constructor must call super()"
+}

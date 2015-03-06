@@ -1,16 +1,16 @@
 "use strict";
 
 var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
-  }
+  var _Foo = function Foo() {
+    babelHelpers.classCallCheck(this, _Foo);
+  };
 
-  babelHelpers.createClass(Foo, {
+  babelHelpers.createClass(_Foo, {
     foo: {
       value: babelHelpers.asyncToGenerator(function* () {
         var wat = yield bar();
       })
     }
   });
-  return Foo;
+  return _Foo;
 })();

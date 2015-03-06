@@ -21,9 +21,13 @@
 
   function foo7() {}
 
-  var foo8 = exports.foo8 = function foo8() {
-    _classCallCheck(this, foo8);
-  };
+  var foo8 = exports.foo8 = (function () {
+    var _foo8 = function foo8() {
+      _classCallCheck(this, _foo8);
+    };
+
+    return _foo8;
+  })();
 
   Object.defineProperty(exports, "__esModule", {
     value: true

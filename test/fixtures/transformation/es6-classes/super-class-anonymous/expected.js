@@ -1,46 +1,54 @@
 "use strict";
 
 var TestEmpty = (function (_ref) {
-    function TestEmpty() {
-        babelHelpers.classCallCheck(this, TestEmpty);
+    var _TestEmpty = function TestEmpty() {
+        babelHelpers.classCallCheck(this, _TestEmpty);
 
         if (_ref != null) {
             _ref.apply(this, arguments);
         }
-    }
+    };
 
-    babelHelpers.inherits(TestEmpty, _ref);
-    return TestEmpty;
-})(function _class() {
-    babelHelpers.classCallCheck(this, _class);
-});
+    babelHelpers.inherits(_TestEmpty, _ref);
+    return _TestEmpty;
+})((function () {
+    var _class = function () {
+        babelHelpers.classCallCheck(this, _class);
+    };
+
+    return _class;
+})());
 
 var TestConstructorOnly = (function (_ref2) {
-    function TestConstructorOnly() {
-        babelHelpers.classCallCheck(this, TestConstructorOnly);
+    var _TestConstructorOnly = function TestConstructorOnly() {
+        babelHelpers.classCallCheck(this, _TestConstructorOnly);
 
         if (_ref2 != null) {
             _ref2.apply(this, arguments);
         }
-    }
+    };
 
-    babelHelpers.inherits(TestConstructorOnly, _ref2);
-    return TestConstructorOnly;
-})(function _class2() {
-    babelHelpers.classCallCheck(this, _class2);
-});
+    babelHelpers.inherits(_TestConstructorOnly, _ref2);
+    return _TestConstructorOnly;
+})((function () {
+    var _class2 = function () {
+        babelHelpers.classCallCheck(this, _class2);
+    };
+
+    return _class2;
+})());
 
 var TestMethodOnly = (function (_ref3) {
-    function TestMethodOnly() {
-        babelHelpers.classCallCheck(this, TestMethodOnly);
+    var _TestMethodOnly = function TestMethodOnly() {
+        babelHelpers.classCallCheck(this, _TestMethodOnly);
 
         if (_ref3 != null) {
             _ref3.apply(this, arguments);
         }
-    }
+    };
 
-    babelHelpers.inherits(TestMethodOnly, _ref3);
-    return TestMethodOnly;
+    babelHelpers.inherits(_TestMethodOnly, _ref3);
+    return _TestMethodOnly;
 })((function () {
     var _class3 = function () {
         babelHelpers.classCallCheck(this, _class3);
@@ -55,16 +63,16 @@ var TestMethodOnly = (function (_ref3) {
 })());
 
 var TestConstructorAndMethod = (function (_ref4) {
-    function TestConstructorAndMethod() {
-        babelHelpers.classCallCheck(this, TestConstructorAndMethod);
+    var _TestConstructorAndMethod = function TestConstructorAndMethod() {
+        babelHelpers.classCallCheck(this, _TestConstructorAndMethod);
 
         if (_ref4 != null) {
             _ref4.apply(this, arguments);
         }
-    }
+    };
 
-    babelHelpers.inherits(TestConstructorAndMethod, _ref4);
-    return TestConstructorAndMethod;
+    babelHelpers.inherits(_TestConstructorAndMethod, _ref4);
+    return _TestConstructorAndMethod;
 })((function () {
     var _class4 = function () {
         babelHelpers.classCallCheck(this, _class4);
@@ -79,16 +87,16 @@ var TestConstructorAndMethod = (function (_ref4) {
 })());
 
 var TestMultipleMethods = (function (_ref5) {
-    function TestMultipleMethods() {
-        babelHelpers.classCallCheck(this, TestMultipleMethods);
+    var _TestMultipleMethods = function TestMultipleMethods() {
+        babelHelpers.classCallCheck(this, _TestMultipleMethods);
 
         if (_ref5 != null) {
             _ref5.apply(this, arguments);
         }
-    }
+    };
 
-    babelHelpers.inherits(TestMultipleMethods, _ref5);
-    return TestMultipleMethods;
+    babelHelpers.inherits(_TestMultipleMethods, _ref5);
+    return _TestMultipleMethods;
 })((function () {
     var _class5 = function () {
         babelHelpers.classCallCheck(this, _class5);

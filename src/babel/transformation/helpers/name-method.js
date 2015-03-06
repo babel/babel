@@ -89,6 +89,11 @@ var visit = function (node, name, scope) {
   return state;
 };
 
+export function custom(node, id, scope) {
+  var state = visit(node, id.name, scope);
+  return wrap(state, node, id, scope);
+}
+
 export function property(node, file, scope) {
   var key = t.toComputedKey(node, node.key);
   if (!t.isLiteral(key)) return node; // we can't set a function id with this
@@ -103,7 +108,7 @@ export function property(node, file, scope) {
 
 export function bare(node, parent, scope) {
   // has an `id` so we don't need to infer one
-  if (node.id) return;
+  if (node.id) return node;
 
   var id;
   if (t.isProperty(parent) && parent.kind === "init" && !parent.computed) {
@@ -113,10 +118,10 @@ export function bare(node, parent, scope) {
     // var foo = function () {};
     id = parent.id;
   } else {
-    return;
+    return node;
   }
 
-  if (!t.isIdentifier(id)) return;
+  if (!t.isIdentifier(id)) return node;
 
   var name = t.toIdentifier(id.name);
   id = t.identifier(name);

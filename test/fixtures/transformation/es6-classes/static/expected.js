@@ -1,11 +1,11 @@
 "use strict";
 
 var A = (function () {
-  function A() {
-    babelHelpers.classCallCheck(this, A);
-  }
+  var _A = function A() {
+    babelHelpers.classCallCheck(this, _A);
+  };
 
-  babelHelpers.createClass(A, null, {
+  babelHelpers.createClass(_A, null, {
     a: {
       value: function a() {}
     },
@@ -14,5 +14,5 @@ var A = (function () {
       set: function (b) {}
     }
   });
-  return A;
+  return _A;
 })();
