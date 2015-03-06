@@ -7,15 +7,15 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Foo = (function (_Bar) {
-  var _Foo = function Foo() {
-    _classCallCheck(this, _Foo);
+  function Foo() {
+    _classCallCheck(this, Foo);
 
     if (_Bar != null) {
       _Bar.apply(this, arguments);
     }
-  };
+  }
 
-  _inherits(_Foo, _Bar);
+  _inherits(Foo, _Bar);
 
-  return _Foo;
+  return Foo;
 })(Bar);

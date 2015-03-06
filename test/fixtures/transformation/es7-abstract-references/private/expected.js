@@ -7,14 +7,15 @@ var B = new WeakMap(),
     C = new WeakMap();
 
 var D = (function () {
-  var _D = function D() {
-    _classCallCheck(this, _D);
-  };
-
   var F = new WeakMap(),
       G = new WeakMap();
   var E = new WeakMap();
-  return _D;
+
+  function D() {
+    _classCallCheck(this, D);
+  }
+
+  return D;
 })();
 
 var H = (function () {

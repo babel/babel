@@ -13,9 +13,9 @@ var _default = (function () {
 function foo() {}
 
 var Foo = (function () {
-  var _Foo = function Foo() {
-    _classCallCheck(this, _Foo);
-  };
+  function Foo() {
+    _classCallCheck(this, Foo);
+  }
 
-  return _Foo;
+  return Foo;
 })();

@@ -9,14 +9,28 @@ import t from "../../../types";
 export var check = t.isClass;
 
 export function ClassDeclaration(node, parent, scope, file) {
-  return new ClassTransformer(node, parent, scope, file, true).run();
+  return t.variableDeclaration("let", [
+    t.variableDeclarator(node.id, t.toExpression(node))
+  ]);
 }
 
 export function ClassExpression(node, parent, scope, file) {
-  return new ClassTransformer(node, parent, scope, file, false).run();
+  return new ClassTransformer(node, parent, scope, file).run();
 }
 
-var verifyConstructorVisitor = {
+var verifyConstructorVisitor = traverse.explode({
+  MethodDefinition: {
+    enter() {
+      this.skip();
+    }
+  },
+
+  Property: {
+    enter(node) {
+      if (node.method) this.skip();
+    }
+  },
+
   CallExpression: {
     enter(node, parent, scope, state) {
       if (t.isIdentifier(node.callee, { name: "super" })) {
@@ -36,7 +50,7 @@ var verifyConstructorVisitor = {
       }
     }
   }
-};
+});
 
 class ClassTransformer {
 
@@ -47,15 +61,13 @@ class ClassTransformer {
    * @param {Node} parent
    * @param {Scope} scope
    * @param {File} file
-   * @param {Boolean} isStatement
    */
 
-  constructor(node, parent, scope, file, isStatement) {
-    this.isStatement = isStatement;
-    this.parent      = parent;
-    this.scope       = scope;
-    this.node        = node;
-    this.file        = file;
+  constructor(node, parent, scope, file) {
+    this.parent = parent;
+    this.scope  = scope;
+    this.node   = node;
+    this.file   = file;
 
     this.hasInstanceMutators = false;
     this.hasStaticMutators   = false;
@@ -65,7 +77,7 @@ class ClassTransformer {
 
     this.hasConstructor = false;
     this.className      = node.id;
-    this.classRef       = scope.generateUidIdentifier(node.id ? node.id.name : "class");
+    this.classRef       = node.id || scope.generateUidIdentifier("class");
 
     this.superName = node.superClass || t.identifier("Function");
     this.hasSuper  = !!node.superClass;
@@ -92,17 +104,6 @@ class ClassTransformer {
 
     //
 
-    var useFunctionDeclaration = false;
-
-    // class expressions have their class id lexically bound
-
-    if (!this.isStatement && this.className) {
-      useFunctionDeclaration = true;
-      classRef = this.classRef = this.className || this.classRef;
-    }
-
-    //
-
     var constructorBody = t.blockStatement([
       t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
         t.thisExpression(),
@@ -112,8 +113,8 @@ class ClassTransformer {
 
     var constructor;
 
-    if (useFunctionDeclaration) {
-      constructor = t.functionDeclaration(classRef, [], constructorBody);
+    if (this.className) {
+      constructor = t.functionDeclaration(this.className, [], constructorBody);
       body.push(constructor);
     } else {
       constructor = t.functionExpression(null, [], constructorBody);
@@ -142,13 +143,10 @@ class ClassTransformer {
 
     this.buildBody();
 
-    if (!useFunctionDeclaration) {
-      if (this.isStatement) {
-        constructor = nameMethod.custom(constructor, this.className, this.scope);
-      } else if (!this.className) {
-        // infer class name if this is a nameless class expression
-        constructor = nameMethod.bare(constructor, this.parent, this.scope);
-      }
+    // infer class name if this is a nameless class expression
+
+    if (!this.className) {
+      constructor = nameMethod.bare(constructor, this.parent, this.scope);
 
       body.unshift(t.variableDeclaration("var", [
         t.variableDeclarator(classRef, constructor)
@@ -161,18 +159,10 @@ class ClassTransformer {
 
     body.push(t.returnStatement(classRef));
 
-    var init = t.callExpression(
+    return t.callExpression(
       t.functionExpression(null, closureParams, t.blockStatement(body)),
       closureArgs
     );
-
-    if (this.isStatement) {
-      return t.variableDeclaration("let", [
-        t.variableDeclarator(this.className, init)
-      ]);
-    } else {
-      return init;
-    }
   }
 
   /**
@@ -257,6 +247,8 @@ class ClassTransformer {
    */
 
    verifyConstructor(node) {
+    return; // enable this for the next major
+
     var state = {
       hasBareSuper: false,
       hasSuper:     this.hasSuper,

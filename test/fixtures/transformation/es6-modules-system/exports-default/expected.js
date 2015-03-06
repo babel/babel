@@ -33,11 +33,11 @@ System.register([], function (_export) {
       _export("default", _default);
 
       Foo = (function () {
-        var _Foo = function Foo() {
-          _classCallCheck(this, _Foo);
-        };
+        function Foo() {
+          _classCallCheck(this, Foo);
+        }
 
-        return _Foo;
+        return Foo;
       })();
 
       _export("default", Foo);
