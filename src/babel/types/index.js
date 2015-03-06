@@ -34,7 +34,7 @@ function registerType(type, skipAliasCheck) {
   };
 }
 
-t.STATEMENT_OR_BLOCK_KEYS = ["consequent", "body"];
+t.STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 t.NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
 t.FOR_INIT_KEYS           = ["left", "init"];
 
