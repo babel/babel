@@ -599,17 +599,6 @@
     }
   };
 
-  function combineHooks(hooks) {
-    if (!hooks.length) return null;
-    return function(arg) {
-      for (var i = 0; i < hooks.length; i++) {
-        var result = hooks[i].call(this, arg);
-        if (result !== false) return result;
-      }
-      return false;
-    };
-  }
-
   // Move to the next token
 
   pp.next = function() {
@@ -1041,7 +1030,7 @@
     }
 
     this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'");
-  }
+  };
 
   pp.finishOp = function(type, size) {
     var str = this.input.slice(this.pos, this.pos + size);
@@ -1178,7 +1167,7 @@
       code = this.readHexChar(4);
     }
     return code;
-  }
+  };
 
   function codePointToString(code) {
     // UTF-16 Decoding
