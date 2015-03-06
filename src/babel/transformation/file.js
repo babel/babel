@@ -1,6 +1,7 @@
-import sourceMapToComment from "source-map-to-comment";
+import convertSourceMap from "convert-source-map";
 import shebangRegex from "shebang-regex";
 import isFunction from "lodash/lang/isFunction";
+import sourceMap from "source-map";
 import transform from "./index";
 import generate from "../generation";
 import defaults from "lodash/object/defaults";
@@ -77,34 +78,41 @@ export default class File {
   static validOptions = [
     "filename",
     "filenameRelative",
+
     "blacklist",
     "whitelist",
-    "loose",
     "optional",
+
+    "loose",
+    "playground",
+    "experimental",
+
     "modules",
+    "moduleIds",
+    "moduleId",
+    "resolveModuleSource",
+    "keepModuleIdExtensions",
+
+    "code",
+    "ast",
+
+    "comments",
+    "compact",
+
+    "auxiliaryComment",
+    "externalHelpers",
+    "returnUsedHelpers",
+
+    "inputSourceMap",
     "sourceMap",
     "sourceMapName",
     "sourceFileName",
     "sourceRoot",
     "moduleRoot",
-    "moduleIds",
-    "comments",
-    "reactCompat",
-    "keepModuleIdExtensions",
-    "code",
-    "ast",
-    "playground",
-    "experimental",
-    "externalHelpers",
-    "auxiliaryComment",
-    "compact",
-    "returnUsedHelpers",
-
-    "resolveModuleSource",
-    "moduleId",
 
     // legacy
     "format",
+    "reactCompat",
 
     // these are used by plugins
     "ignore",
@@ -128,6 +136,7 @@ export default class File {
       returnUsedHelpers:      false,
       externalHelpers:        false,
       auxilaryComment:        "",
+      inputSourceMap:         false,
       experimental:           false,
       reactCompat:            false,
       playground:             false,
@@ -144,6 +153,10 @@ export default class File {
       code:                   true,
       ast:                    true
     });
+
+    if (opts.inputSourceMap) {
+      opts.sourceMap = true;
+    }
 
     // normalize windows path separators to unix
     opts.filename = slash(opts.filename);
@@ -267,6 +280,18 @@ export default class File {
     return new ModuleFormatter(this);
   }
 
+  parseInputSourceMap(code) {
+    var opts = this.opts;
+
+    var inputMap = convertSourceMap.fromSource(code);
+    if (inputMap) {
+      opts.inputSourceMap = inputMap;
+      code = convertSourceMap.removeComments(code);
+    }
+
+    return code;
+  }
+
   parseShebang(code) {
     var shebangMatch = shebangRegex.exec(code);
 
@@ -378,6 +403,7 @@ export default class File {
 
   addCode(code) {
     code = (code || "") + "";
+    code = this.parseInputSourceMap(code);
     this.code = code;
     return this.parseShebang(code);
   }
@@ -447,6 +473,26 @@ export default class File {
     });
   }
 
+  mergeSourceMap(map) {
+    var opts = this.opts;
+
+    var inputMap = opts.inputSourceMap;
+
+    if (inputMap) {
+      var inputMapConsumer = new sourceMap.SourceMapConsumer(inputMap);
+      var outputMapConsumer = new sourceMap.SourceMapConsumer(map);
+      var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
+      outputMapGenerator.applySourceMap(inputMapConsumer);
+
+      var mergedMap = outputMapGenerator.toJSON();
+      mergedMap.sources = map.sources
+      mergedMap.file = map.file;
+      return mergedMap;
+    }
+
+    return map;
+  }
+
   generate() {
     var opts = this.opts;
     var ast  = this.ast;
@@ -473,8 +519,10 @@ export default class File {
       result.code = `${this.shebang}\n${result.code}`;
     }
 
+    result.map = this.mergeSourceMap(result.map);
+
     if (opts.sourceMap === "inline") {
-      result.code += "\n" + sourceMapToComment(result.map);
+      result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
       result.map = null;
     }
 

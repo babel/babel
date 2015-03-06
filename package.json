@@ -41,6 +41,7 @@
     "chalk": "^1.0.0",
     "chokidar": "^0.12.6",
     "commander": "^2.6.0",
+    "convert-source-map": "^0.5.0",
     "core-js": "^0.6.1",
     "debug": "^2.1.1",
     "detect-indent": "^3.0.0",
@@ -63,7 +64,6 @@
     "slash": "^1.0.0",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.9",
-    "source-map-to-comment": "^1.0.0",
     "to-fast-properties": "^1.0.0",
     "trim-right": "^1.0.0"
   },
