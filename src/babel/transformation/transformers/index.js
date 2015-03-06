@@ -3,6 +3,7 @@ export default {
 
   _validation:                             require("./internal/validation"),
 
+  "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.react":                      require("./validation/react"),
 
   // this goes at the start so we only transform the original user code

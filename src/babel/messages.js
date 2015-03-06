@@ -10,6 +10,7 @@ export var messages = {
   undeclaredVariable: "Reference to undeclared variable $1",
   undeclaredVariableSuggestion: "Reference to undeclared variable $1 - did you mean $2?",
   settersInvalidParamLength: "Setters must have exactly one parameter",
+  settersNoRest: "Setters aren't allowed to have a rest",
   noAssignmentsInForHead: "No assignments allowed in for-in/of head",
   expectedMemberExpressionOrIdentifier: "Expected type MemeberExpression or Identifier",
   invalidParentForThisNode: "We don't know how to handle this node within the current parent - please open an issue",

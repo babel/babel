@@ -12,8 +12,15 @@ export function ForOfStatement(node, parent, scope, file) {
 export { ForOfStatement as ForInStatement };
 
 export function Property(node, parent, scope, file) {
-  if (node.kind === "set" && node.value.params.length !== 1) {
-    throw file.errorWithNode(node.value, messages.get("settersInvalidParamLength"));
+  if (node.kind === "set") {
+    if (node.value.params.length !== 1) {
+      throw file.errorWithNode(node.value, messages.get("settersInvalidParamLength"));
+    }
+
+    var first = node.value.params[0];
+    if (t.isRestElement(first)) {
+      throw file.errorWithNode(first, messages.get("settersNoRest"));
+    }
   }
 }
 

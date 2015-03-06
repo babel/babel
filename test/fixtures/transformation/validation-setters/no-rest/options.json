@@ -1,0 +1,3 @@
+{
+  "throws": "Setters aren't allowed to have a rest"
+}
