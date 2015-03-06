@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.0
+
+ * **Bug Fix**
+  * Add `alternate` to list of `STATEMENT_OR_BLOCK` keys.
+  * Add support for module specifiers to `t.isReferenced`.
+ * **New Feature**
+  * Add `inputSourceMap` option.
+ * **Polish**
+  * Throw an error on different `babel` and `babel-runtime` versions.
+  * Replicate module environment for `babel-node` eval.
+  * Clean up classes output.
+ * **Spec Compliancy**
+  * Make it illegal to use a rest parameter on a setter.
+
 ## 4.6.6
 
  * **Bug Fix**
