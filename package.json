@@ -64,6 +64,7 @@
     "slash": "^1.0.0",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.9",
+    "source-map-to-comment": "^1.0.0",
     "to-fast-properties": "^1.0.0",
     "trim-right": "^1.0.0"
   },
