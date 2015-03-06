@@ -1,8 +1,6 @@
 import * as messages from "../../../messages";
 import t from "../../../types";
 
-export { isFor as check } from "../../../types";
-
 export function ForOfStatement(node, parent, scope, file) {
   var left = node.left;
   if (t.isVariableDeclaration(left)) {
@@ -12,3 +10,11 @@ export function ForOfStatement(node, parent, scope, file) {
 }
 
 export { ForOfStatement as ForInStatement };
+
+export function Property(node, parent, scope, file) {
+  if (node.kind === "set" && node.value.params.length !== 1) {
+    throw file.errorWithNode(node.value, messages.get("settersInvalidParamLength"));
+  }
+}
+
+export { Property as MethodDefinition };

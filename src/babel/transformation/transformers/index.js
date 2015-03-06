@@ -1,9 +1,8 @@
 export default {
   strict:                                  require("./other/strict"),
 
-  "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
-  "validation.noForInOfAssignment":        require("./validation/no-for-in-of-assignment"),
-  "validation.setters":                    require("./validation/setters"),
+  _validation:                             require("./internal/validation"),
+
   "validation.react":                      require("./validation/react"),
 
   // this goes at the start so we only transform the original user code
