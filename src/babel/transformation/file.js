@@ -285,7 +285,7 @@ export default class File {
 
     var inputMap = convertSourceMap.fromSource(code);
     if (inputMap) {
-      opts.inputSourceMap = inputMap;
+      opts.inputSourceMap = inputMap.toObject();
       code = convertSourceMap.removeComments(code);
     }
 
@@ -479,14 +479,16 @@ export default class File {
     var inputMap = opts.inputSourceMap;
 
     if (inputMap) {
+      map.sources[0] = inputMap.file;
+
       var inputMapConsumer = new sourceMap.SourceMapConsumer(inputMap);
       var outputMapConsumer = new sourceMap.SourceMapConsumer(map);
       var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
       outputMapGenerator.applySourceMap(inputMapConsumer);
 
       var mergedMap = outputMapGenerator.toJSON();
-      mergedMap.sources = map.sources
-      mergedMap.file = map.file;
+      mergedMap.sources = inputMap.sources
+      mergedMap.file = inputMap.file;
       return mergedMap;
     }
 
