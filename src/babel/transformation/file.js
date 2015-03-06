@@ -339,7 +339,11 @@ export default class File {
       this.dynamicImported.push(declar);
       if (noDefault) this.dynamicImportedNoDefault.push(declar);
 
-      this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
+      if (this.transformers["es6.modules"].canRun()) {
+        this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
+      } else {
+        this.dynamicImports.push(declar);
+      }
     }
 
     return id;
