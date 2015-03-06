@@ -22,12 +22,8 @@ module.exports = _default;
 
 function foo() {}
 
-var Foo = (function () {
-  function Foo() {
-    _classCallCheck(this, Foo);
-  }
-
-  return Foo;
-})();
+var Foo = function Foo() {
+  _classCallCheck(this, Foo);
+};
 
 module.exports = Foo;

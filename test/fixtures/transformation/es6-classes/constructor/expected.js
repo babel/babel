@@ -1,14 +1,10 @@
 "use strict";
 
-var Test = (function () {
-  function Test() {
-    babelHelpers.classCallCheck(this, Test);
+var Test = function Test() {
+  babelHelpers.classCallCheck(this, Test);
 
-    this.state = "test";
-  }
-
-  return Test;
-})();
+  this.state = "test";
+};
 
 var Foo = (function (_Bar) {
   function Foo() {

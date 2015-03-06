@@ -14,13 +14,9 @@ var foo6 = exports.foo6 = 3;
 
 function foo7() {}
 
-var foo8 = exports.foo8 = (function () {
-  function foo8() {
-    _classCallCheck(this, foo8);
-  }
-
-  return foo8;
-})();
+var foo8 = exports.foo8 = function foo8() {
+  _classCallCheck(this, foo8);
+};
 
 Object.defineProperty(exports, "__esModule", {
   value: true

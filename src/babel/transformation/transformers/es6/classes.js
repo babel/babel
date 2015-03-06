@@ -143,9 +143,12 @@ class ClassTransformer {
 
     this.buildBody();
 
-    // infer class name if this is a nameless class expression
 
-    if (!this.className) {
+    if (this.className) {
+      // named class with only a constructor
+      if (body.length === 1) return t.toExpression(body[0]);
+    } else {
+      // infer class name if this is a nameless class expression
       constructor = nameMethod.bare(constructor, this.parent, this.scope);
 
       body.unshift(t.variableDeclaration("var", [

@@ -32,13 +32,9 @@ System.register([], function (_export) {
 
       _export("default", _default);
 
-      Foo = (function () {
-        function Foo() {
-          _classCallCheck(this, Foo);
-        }
-
-        return Foo;
-      })();
+      Foo = function Foo() {
+        _classCallCheck(this, Foo);
+      };
 
       _export("default", Foo);
     }
