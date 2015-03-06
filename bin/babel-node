@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-var indexOf = require("lodash/array/indexOf");
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
@@ -13,9 +11,9 @@ var babelArgs = process.argv.slice(2);
 var userArgs;
 
 // separate node arguments from script arguments
-var argSeparator = indexOf(babelArgs, "--");
+var argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs = babelArgs.slice(argSeparator); // including the  --
+  userArgs  = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
