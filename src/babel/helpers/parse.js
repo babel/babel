@@ -36,7 +36,7 @@ module.exports = function (opts, code, callback) {
 
       var loc = err.loc;
       if (loc) {
-        var frame = codeFrame(code, loc.line, loc.column + 1);
+        var frame = codeFrame(code, loc.line, loc.column + 1, opts);
         message += frame;
       }
 
