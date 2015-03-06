@@ -20,6 +20,10 @@ require("./_transformation-helper")({
     "ArrayExtras",
     "Collections",
 
+    // not supported
+    "ProperTailCalls",
+    "AsyncGenerators",
+
     // these are all internal traceur tests or non-standard features
     "ObjectMixin",
     "Annotations",
@@ -34,6 +38,9 @@ require("./_transformation-helper")({
   ],
 
   ignoreTasks: [
+    // broken test, see google/traceur-compiler#1797
+    "Classes/NestedClassSuperAnimal",
+
     // TODO: #426
     "Classes/SuperUnary",
     "Classes/SuperPostfix",
@@ -48,6 +55,7 @@ require("./_transformation-helper")({
     "Symbol/GetOwnPropertySymbols",
     "Spread/Type",
     "Symbol/ObjectModel",
+    "Symbol/Inherited",
     "Symbol/Object",
     "Spread/NoIterator",
     "Destructuring/Rest",
