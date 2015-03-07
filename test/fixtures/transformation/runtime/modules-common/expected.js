@@ -1,5 +1,5 @@
 "use strict";
 
-var _babelHelpers = require("babel-runtime/helpers")["default"];
+var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
 
-var foo = _babelHelpers.interopRequire(require("foo"));
+var foo = _interopRequire(require("foo"));

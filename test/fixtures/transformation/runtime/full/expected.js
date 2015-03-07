@@ -4,7 +4,7 @@ var _core = require("babel-runtime/core-js")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
-var _babelHelpers = require("babel-runtime/helpers")["default"];
+var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
 
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
@@ -24,9 +24,9 @@ exports.giveWord = giveWord;
 
 var _someModule = require("someModule");
 
-var foo = _babelHelpers.interopRequire(_someModule);
+var foo = _interopRequire(_someModule);
 
-var bar = _babelHelpers.interopRequireWildcard(_someModule);
+var bar = _interopRequire(_someModule);
 
 var myWord = _core.Symbol("abc");
 exports.myWord = myWord;

@@ -81,8 +81,8 @@ export function Program(node, parent, scope, file) {
 }
 
 export function pre(file) {
-  file.setDynamic("helpersNamespace", function () {
-    return file.addImport("babel-runtime/helpers", "babelHelpers");
+  file.set("helperGenerator", function (name, id) {
+    return file.addImport("babel-runtime/helpers/" + name, id);
   });
 
   file.setDynamic("coreIdentifier", function () {

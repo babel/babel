@@ -1,11 +1,12 @@
 "use strict";
 
-var transform    = require("../lib/babel/transformation");
-var buildHelpers = require("../lib/babel/build-helpers");
-var util         = require("../lib/babel/util");
-var fs           = require("fs");
-var t            = require("../lib/babel/types");
-var _            = require("lodash");
+var transform = require("../lib/babel/transformation");
+var each      = require("lodash/collection/each");
+var File      = require("../lib/babel/transformation/file");
+var util      = require("../lib/babel/util");
+var fs        = require("fs");
+var t         = require("../lib/babel/types");
+var _         = require("lodash");
 
 var relative = function (filename) {
   return __dirname + "/babel-runtime/" + filename;
@@ -39,22 +40,26 @@ var updatePackage = function () {
 
 var selfContainify = function (code) {
   return transform(code, {
-    optional: ["selfContained"]
+    optional: ["runtime"]
   }).code;
 };
 
-var buildHelpers2 = function () {
-  var body = util.template("self-contained-helpers-head");
-  var tree = t.program(body);
-
-  buildHelpers(body, t.identifier("helpers"));
+var buildHelper = function (helperName) {
+  var tree = t.program(
+    util.template("self-contained-helpers-head", {
+      HELPER: util.template(helperName)
+    })
+  );
 
   return transform.fromAst(tree, null, {
-    optional: ["selfContained"]
+    optional: ["runtime"]
   }).code;
 };
 
-writeFile("helpers.js", buildHelpers2());
+each(File.helpers, function (helperName) {
+  writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+});
+
 writeFile("core-js.js", readFile("core-js/library", true));
 writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));

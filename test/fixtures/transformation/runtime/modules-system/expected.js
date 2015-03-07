@@ -1,14 +1,14 @@
-System.register(["babel-runtime/helpers"], function (_export) {
-  var _babelHelpers;
+System.register(["babel-runtime/helpers/to-consumable-array"], function (_export) {
+  var _toConsumableArray;
 
   return {
-    setters: [function (_babelRuntimeHelpers) {
-      _babelHelpers = _babelRuntimeHelpers["default"];
+    setters: [function (_babelRuntimeHelpersToConsumableArray) {
+      _toConsumableArray = _babelRuntimeHelpersToConsumableArray["default"];
     }],
     execute: function () {
       "use strict";
 
-      foo.apply(undefined, _babelHelpers.toConsumableArray(bar));
+      foo.apply(undefined, _toConsumableArray(bar));
     }
   };
 });

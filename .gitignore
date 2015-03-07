@@ -12,5 +12,6 @@ coverage
 dist
 .package.json
 packages/babel-runtime/*.js
+packages/babel-runtime/helpers/*.js
 packages/babel-runtime/regenerator/*.js
 lib

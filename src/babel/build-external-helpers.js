@@ -1,7 +1,8 @@
-import buildHelpers from "./build-helpers";
 import generator from "./generation";
 import * as messages from "./messages";
 import * as util from  "./util";
+import File from "./transformation/file";
+import each from "lodash/collection/each";
 import t from "./types";
 
 function buildGlobal(namespace, builder) {
@@ -49,8 +50,20 @@ function buildVar(namespace, builder) {
   return t.program(body);
 }
 
+function buildHelpers(body, namespace, whitelist = []) {
+  each(File.helpers, function (name) {
+    if (whitelist.length && whitelist.indexOf(name) === -1) return;
+
+    var key = t.identifier(t.toIdentifier(name));
+    body.push(t.expressionStatement(
+      t.assignmentExpression("=", t.memberExpression(namespace, key), util.template(name))
+    ));
+  });
+}
+
 export default function (whitelist, outputType = "global") {
   var namespace = t.identifier("babelHelpers");
+
   var builder = function (body) {
     return buildHelpers(body, namespace, whitelist);
   };
