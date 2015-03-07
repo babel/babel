@@ -6,6 +6,8 @@ var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
 
+var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
+
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -26,7 +28,7 @@ var _someModule = require("someModule");
 
 var foo = _interopRequire(_someModule);
 
-var bar = _interopRequire(_someModule);
+var bar = _interopRequireWildcard(_someModule);
 
 var myWord = _core.Symbol("abc");
 exports.myWord = myWord;

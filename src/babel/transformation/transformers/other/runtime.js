@@ -81,8 +81,8 @@ export function Program(node, parent, scope, file) {
 }
 
 export function pre(file) {
-  file.set("helperGenerator", function (name, id) {
-    return file.addImport("babel-runtime/helpers/" + name, id);
+  file.set("helperGenerator", function (name) {
+    return file.addImport("babel-runtime/helpers/" + name, name);
   });
 
   file.setDynamic("coreIdentifier", function () {

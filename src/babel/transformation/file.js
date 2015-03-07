@@ -379,13 +379,11 @@ export default class File {
 
     var generator = this.get("helperGenerator");
     var runtime = this.get("helpersNamespace");
-    if (runtime || generator) {
+    if (generator) {
+      return generator(name);
+    } else if (runtime) {
       var id = t.identifier(t.toIdentifier(name));
-      if (generator) {
-        return generator(name, id);
-      } else {
-        return t.memberExpression(runtime, id);
-      }
+      return t.memberExpression(runtime, id);
     } else {
       var ref = util.template(name);
       ref._compact = true;
