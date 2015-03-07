@@ -57,7 +57,7 @@ var compile = function (filename) {
 
   if (!result) {
     result = babel.transformFileSync(filename, extend(opts, {
-      sourceMap: true,
+      sourceMap: "both",
       ast:       false
     }));
   }

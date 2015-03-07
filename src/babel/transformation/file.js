@@ -527,8 +527,11 @@ export default class File {
 
     result.map = this.mergeSourceMap(result.map);
 
-    if (opts.sourceMap === "inline") {
+    if (opts.sourceMap === "inline" || opts.sourceMap === "both") {
       result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
+    }
+
+    if (opts.sourceMap === "both") {
       result.map = null;
     }
 
