@@ -1,4 +1,13 @@
 #!/usr/bin/env node
 
+var commander = require("commander");
+var util      = require("../lib/babel/util");
 var runtime = require("../lib/babel/build-external-helpers");
-console.log(runtime());
+
+commander.option("-l, --whitelist [whitelist]", "Whitelist of helpers to ONLY include", util.list);
+commander.option("-t, --output-type [type]", "Type of output (global|umd|var)", "global");
+
+commander.usage("[options]");
+commander.parse(process.argv);
+
+console.log(runtime(commander.whitelist, commander.outputType));
