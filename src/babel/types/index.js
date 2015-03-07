@@ -144,22 +144,6 @@ t.toComputedKey = function (node, key) {
   return key;
 };
 
-/*
- * Shallowly checks to see if the passed `node` is falsy.
- *
- * @param {Object} node
- * @returns {Boolean}
- */
-
-t.isFalsyExpression = function (node) {
-  if (t.isLiteral(node)) {
-    return !node.value;
-  } else if (t.isIdentifier(node)) {
-    return node.name === "undefined";
-  }
-  return false;
-};
-
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
  *
@@ -453,6 +437,8 @@ t.cloneDeep = function (node) {
   var newNode = {};
 
   for (var key in node) {
+    if (key[0] === "_") continue;
+
     var val = node[key];
 
     if (val) {
