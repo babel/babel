@@ -534,7 +534,7 @@ export default class File {
       result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
     }
 
-    if (opts.sourceMap === "both") {
+    if (opts.sourceMap === "inline") {
       result.map = null;
     }
 
