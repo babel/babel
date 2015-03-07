@@ -56,12 +56,15 @@ export default function (whitelist, outputType = "global") {
   };
 
   var tree;
-  if (outputType === "global") {
-    tree = buildGlobal(namespace, builder);
-  } else if (outputType === "umd") {
-    tree = buildUmd(namespace, builder);
-  } else if (outputType === "var") {
-    tree = buildVar(namespace, builder);
+
+  var build = {
+    global: buildGlobal,
+    umd:    buildUmd,
+    var:    buildVar
+  }[outputType];
+
+  if (builder) {
+    tree = build(namespace, builder);
   } else {
     throw new Error(messages.get("unsupportedOutputType", outputType));
   }
