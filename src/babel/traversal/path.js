@@ -61,7 +61,7 @@ export default class TraversalPath {
     this.shouldSkip   = false;
     this.shouldStop   = false;
 
-    this.parentPath = parentPath;
+    this.parentPath = parentPath || this.parentPath;
     this.context    = context;
     this.state      = context.state;
     this.opts       = context.opts;
