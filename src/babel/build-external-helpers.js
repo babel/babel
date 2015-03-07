@@ -63,7 +63,7 @@ export default function (whitelist, outputType = "global") {
     var:    buildVar
   }[outputType];
 
-  if (builder) {
+  if (build) {
     tree = build(namespace, builder);
   } else {
     throw new Error(messages.get("unsupportedOutputType", outputType));
