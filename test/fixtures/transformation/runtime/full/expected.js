@@ -28,7 +28,8 @@ var foo = _babelHelpers.interopRequire(_someModule);
 
 var bar = _babelHelpers.interopRequireWildcard(_someModule);
 
-var myWord = exports.myWord = _core.Symbol("abc");
+var myWord = _core.Symbol("abc");
+exports.myWord = myWord;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });

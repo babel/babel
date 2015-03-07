@@ -6,7 +6,7 @@ var foo = 1;
 var foo = 1,
     bar = 2;
 var foo2 = function foo2() {};
-var foo3 = undefined;
+var foo3;
 var foo4 = 2;
 var foo5 = undefined;
 var foo6 = 3;

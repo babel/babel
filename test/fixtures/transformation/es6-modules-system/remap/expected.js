@@ -5,7 +5,9 @@ System.register([], function (_export) {
     execute: function () {
       "use strict";
 
-      test = _export("test", 2);
+      test = 2;
+
+      _export("test", test);
 
       _export("test", test = 5);
       _export("test", test += 1);

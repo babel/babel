@@ -86,8 +86,8 @@ var run = function (task, done) {
         }
       };
 
-      var fn = new Function("require", "done", execCode);
-      fn.call(global, fakeRequire, chai.assert, done);
+      var fn = new Function("require", "done", "exports", execCode);
+      fn.call(global, fakeRequire, chai.assert, {}, done);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);

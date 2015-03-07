@@ -7,7 +7,8 @@
 })(function (exports) {
   "use strict";
 
-  var test = exports.test = 2;
+  var test = 2;
+  exports.test = test;
   test = exports.test = 5;
   test = exports.test += 1;
 

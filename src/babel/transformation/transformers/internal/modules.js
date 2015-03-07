@@ -52,6 +52,16 @@ export function ExportDeclaration(node, parent, scope) {
       node.declaration = null;
       node._blockHoist = 2;
       return [getDeclar(), node];
+    } else if (t.isVariableDeclaration(declar)) {
+      var specifiers = [];
+
+      var bindings = t.getBindingIdentifiers(declar);
+      for (var key in bindings) {
+        var id = bindings[key];
+        specifiers.push(t.exportSpecifier(id, id));
+      }
+
+      return [declar, t.exportDeclaration(null, specifiers)];
     }
   }
 }

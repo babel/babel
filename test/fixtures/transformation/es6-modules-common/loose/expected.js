@@ -1,4 +1,5 @@
 "use strict";
 
-var foo = exports.foo = 5;
+var foo = 5;
+exports.foo = foo;
 exports.__esModule = true;

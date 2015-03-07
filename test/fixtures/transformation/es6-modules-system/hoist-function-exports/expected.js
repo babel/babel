@@ -14,12 +14,17 @@ System.register(["./evens"], function (_export) {
     execute: function () {
       "use strict";
 
-      p = _export("p", 5);
-      isOdd = _export("isOdd", (function (isEven) {
+      p = 5;
+
+      _export("p", p);
+
+      isOdd = (function (isEven) {
         return function (n) {
           return !isEven(n);
         };
-      })(isEven));
+      })(isEven);
+
+      _export("isOdd", isOdd);
     }
   };
 });

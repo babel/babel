@@ -9,8 +9,9 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
   var bar = _foo.bar;
   var bar2 = _foo.foo;
   exports.test = test;
-  var test2 = exports.test2 = 5;
+  var test2 = 5;
 
+  exports.test2 = test2;
   exports["default"] = test;
   Object.defineProperty(exports, "__esModule", {
     value: true
