@@ -1,6 +1,6 @@
 import t from "../../types";
 
-module.exports = function build(node, buildBody) {
+export default function build(node, buildBody) {
   var self = node.blocks.shift();
   if (!self) return;
 
@@ -20,4 +20,4 @@ module.exports = function build(node, buildBody) {
     self.right,
     t.blockStatement([child])
   );
-};
+}

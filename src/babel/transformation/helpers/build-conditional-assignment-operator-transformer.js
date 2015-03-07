@@ -1,7 +1,7 @@
 import explode from "./explode-assignable-expression";
 import t from "../../types";
 
-module.exports = function (exports, opts) {
+export default function (exports, opts) {
   var buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };

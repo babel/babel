@@ -1,6 +1,6 @@
 import t from "../types";
 
-module.exports = function (ast, comments, tokens) {
+export default function (ast, comments, tokens) {
   if (ast && ast.type === "Program") {
     return t.file(ast, comments || [], tokens || []);
   } else {

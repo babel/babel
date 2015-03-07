@@ -55,7 +55,7 @@ var highlight = function (text) {
   });
 };
 
-module.exports = function (lines, lineNumber, colNumber) {
+export default function (lines, lineNumber, colNumber) {
   colNumber = Math.max(colNumber, 0);
 
   if (chalk.supportsColor) {

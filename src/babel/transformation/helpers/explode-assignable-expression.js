@@ -45,7 +45,7 @@ var getPropRef = function (node, nodes, file, scope) {
   return temp;
 };
 
-module.exports = function (node, nodes, file, scope, allowedSingleIdent) {
+export default function (node, nodes, file, scope, allowedSingleIdent) {
   var obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
     obj = node;

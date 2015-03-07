@@ -6,10 +6,9 @@ export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.shouldFlatten = false;
     this.parentPath    = parentPath;
-
-    this.scope = scope;
-    this.state = state;
-    this.opts  = opts;
+    this.scope         = scope;
+    this.state         = state;
+    this.opts          = opts;
   }
 
   flatten() {

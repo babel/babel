@@ -42,8 +42,8 @@ var remapVisitor = {
 };
 
 var importsVisitor = {
-  enter(node, parent, scope, formatter) {
-    if (t.isImportDeclaration(node)) {
+  ImportDeclaration: {
+    enter(node, parent, scope, formatter) {
       formatter.hasLocalImports = true;
       extend(formatter.localImports, t.getBindingIdentifiers(node));
       formatter.bumpImportOccurences(node);
@@ -52,9 +52,9 @@ var importsVisitor = {
 };
 
 var exportsVisitor = {
-  enter(node, parent, scope, formatter) {
-    var declar = node && node.declaration;
-    if (t.isExportDeclaration(node)) {
+  ExportDeclaration: {
+    enter(node, parent, scope, formatter) {
+      var declar = node.declaration;
       formatter.hasLocalImports = true;
 
       if (declar && t.isStatement(declar)) {

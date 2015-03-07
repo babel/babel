@@ -3,7 +3,7 @@ import estraverse from "estraverse";
 import codeFrame from "./code-frame";
 import acorn from "acorn-babel";
 
-module.exports = function (opts, code, callback) {
+export default function (opts, code, callback) {
   try {
     var comments = [];
     var tokens   = [];

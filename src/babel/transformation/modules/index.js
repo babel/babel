@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   commonStrict: require("./common-strict"),
   amdStrict:    require("./amd-strict"),
   umdStrict:    require("./umd-strict"),

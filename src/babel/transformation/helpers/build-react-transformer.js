@@ -9,7 +9,7 @@ import esutils from "esutils";
 import * as react from "./react";
 import t from "../../types";
 
-module.exports = function (exports, opts) {
+export default function (exports, opts) {
   exports.check = function (node) {
     if (t.isJSX(node)) return true;
     if (react.isCreateClass(node)) return true;

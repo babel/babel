@@ -1,7 +1,7 @@
 import explode from "./explode-assignable-expression";
 import t from "../../types";
 
-module.exports = function (exports, opts) {
+export default function (exports, opts) {
   var isAssignment = function (node) {
     return node.operator === opts.operator + "=";
   };

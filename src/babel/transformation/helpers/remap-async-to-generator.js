@@ -16,7 +16,7 @@ var visitor = {
   }
 };
 
-module.exports = function (node, callId, scope) {
+export default function (node, callId, scope) {
   node.async = false;
   node.generator = true;
 
