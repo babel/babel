@@ -1,0 +1,5 @@
+(function (global) {
+  var babelHelpers = global.babelHelpers = {};
+  babelHelpers.hasOwn = Object.prototype.hasOwnProperty;
+  babelHelpers.slice = Array.prototype.slice;
+})(typeof global === "undefined" ? self : global);
