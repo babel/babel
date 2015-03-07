@@ -1,5 +1,6 @@
 import "../../polyfill";
 import sourceMapSupport from "source-map-support";
+import convertSourceMap from "convert-source-map";
 import * as registerCache from "./cache";
 import resolveRc from "./resolve-rc";
 import extend from "lodash/object/extend";
@@ -60,6 +61,7 @@ var compile = function (filename) {
       sourceMap: "both",
       ast:       false
     }));
+    result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
   }
 
   if (cache) {
