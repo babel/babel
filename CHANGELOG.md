@@ -13,6 +13,17 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.1
+
+ * **New Feature**
+  * `"both"` option for `sourceMap`.
+  * Add output types to external helpers. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
+ * **Bug Fix**
+  * Fix node duplication sometimes resulting in a recursion error.
+  * Ignore `break`s within cases inside `for...of`.
+ * **Polish**
+  * Split up variable declarations and export declarations to allow easier transformation.
+
 ## 4.7.0
 
  * **Bug Fix**
