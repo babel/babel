@@ -4,11 +4,10 @@ import Scope from "./scope";
 import t from "../types";
 
 export default class TraversalPath {
-  constructor(parentPath, parent, container) {
-    this.parentPath = parentPath;
-    this.container  = container;
-    this.parent     = parent;
-    this.data       = {};
+  constructor(parent, container) {
+    this.container = container;
+    this.parent    = parent;
+    this.data      = {};
   }
 
   static get(parentPath, context, parent, container, key) {
@@ -25,11 +24,11 @@ export default class TraversalPath {
     }
 
     if (!path) {
-      path = new TraversalPath(parentPath, parent, container);
+      path = new TraversalPath(parent, container);
       paths.push(path);
     }
 
-    path.setContext(context, key);
+    path.setContext(parentPath, context, key);
 
     return path;
   }
@@ -57,15 +56,16 @@ export default class TraversalPath {
     this.scope = TraversalPath.getScope(this.node, this.parent, this.context.scope);
   }
 
-  setContext(context, key) {
+  setContext(parentPath, context, key) {
     this.shouldRemove = false;
     this.shouldSkip   = false;
     this.shouldStop   = false;
 
-    this.context = context;
-    this.state   = context.state;
-    this.opts    = context.opts;
-    this.key     = key;
+    this.parentPath = parentPath;
+    this.context    = context;
+    this.state      = context.state;
+    this.opts       = context.opts;
+    this.key        = key;
 
     this.setScope();
   }
