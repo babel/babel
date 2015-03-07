@@ -52,6 +52,9 @@ var breakVisitor = {
       if (!node.label && state.ignoreLabeless) return;
       if (node.label && node.label.name !== state.label) return;
 
+      // break statements mean something different in this context
+      if (t.isSwitchCase(parent)) return;
+
       var ret = t.expressionStatement(
         t.callExpression(t.memberExpression(state.iteratorKey, t.identifier("return")), [])
       );
