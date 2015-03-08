@@ -13861,6 +13861,34 @@ test("/[a-z]/u", {
   ecmaVersion: 6
 });
 
+test("/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {
+          pattern: "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
+          flags: "u"
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 33
+          }
+        }
+      }
+    }
+  ]
+}, {
+  locations: true,
+  ecmaVersion: 6
+});
 
 test("do {} while (false) foo();", {
   type: "Program",
