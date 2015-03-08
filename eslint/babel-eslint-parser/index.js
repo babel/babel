@@ -21,7 +21,7 @@ function monkeypatch() {
 
   var eslintLoc;
   try {
-    eslintLoc = require.resolve("eslint");
+    eslintLoc = Module._resolveFilename("eslint", module.parent);
   } catch (err) {
     throw new ReferenceError("couldn't resolve eslint");
   }
@@ -42,6 +42,17 @@ function monkeypatch() {
     opts.ecmaVersion = 6;
     opts.sourceType = "module";
     return analyze.call(this, ast, opts)
+  };
+
+  var eslint = require(eslintLoc);
+  var getScope = eslint.linter.getScope;
+  eslint.linter.getScope = function () {
+    var scope = getScope.apply(this, arguments);
+    if (scope.type === "global" && !scope.__patchedWithModuleVariables) {
+      scope.__patchedWithModuleVariables = true;
+      scope.variables.push.apply(scope.variables, scope.childScopes[0].variables);
+    }
+    return scope;
   };
 }
 

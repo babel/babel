@@ -7,9 +7,24 @@ exports.toToken = function (token) {
 
   if (type === tokTypes.name) {
     token.type = "Identifier";
-  } else if (type === tokTypes.semi || type === tokTypes.comma || type === tokTypes.parenL || type === tokTypes.parenR || type === tokTypes.braceL || type === tokTypes.braceR) {
+  } else if (type === tokTypes.semi || type === tokTypes.comma || type === tokTypes.parenL || type === tokTypes.parenR || type === tokTypes.braceL || type === tokTypes.braceR || type === tokTypes.slash || type === tokTypes.dot || type.isAssign) {
     token.type = "Punctuator";
-    token.value = type.type;
+    if (!token.value) {
+      token.value = type.type;
+    }
+  } else if (type === tokTypes.jsxTagStart) {
+    token.type = "Punctuator";
+    token.value = "<";
+  } else if (type === tokTypes.jsxTagEnd) {
+    token.type = "Punctuator";
+    token.value = ">";
+  } else if (type === tokTypes.jsxName) {
+    token.type = "JSXIdentifier";
+  } else if (type.keyword) {
+    token.type = "Keyword";
+  } else if (type === tokTypes.num) {
+    token.type = "Numeric";
+    token.value = String(token.value);
   }
 
   return token;
@@ -50,7 +65,12 @@ var astTransformVisitor = {
     }
 
     // classes
-    
+
+    if (t.isClassDeclaration(node) || t.isClassExpression(node)) {
+      node.name = node.id;
+      delete node.id;
+    }
+
     if (t.isReferencedIdentifier(node, parent, { name: "super" })) {
       return t.inherits(t.thisExpression(), node);
     }
@@ -58,22 +78,6 @@ var astTransformVisitor = {
     if (t.isClassProperty(node)) {
       // eslint doesn't like these
       this.remove();
-    }
-
-    // JSX
-
-    if (t.isJSXIdentifier(node)) {
-      if (node.name === "this" && t.isReferenced(node, parent)) {
-        return t.inherits(t.thisExpression(), node);
-      } else if (!t.isJSXAttribute(parent) && !isCompatTag(node.name)) {
-        node.type = "Identifier";
-      } else {
-        // just ignore this node as it'd be something like <div> or an attribute name
-      }
-    }
-
-    if (t.isJSXMemberExpression(node)) {
-      node.type = "MemberExpression";
     }
 
     // functions
