@@ -8,10 +8,13 @@ BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test
 
 build-core:
 	node $(BABEL_CMD) src --out-dir lib --copy-files
+
+build-core-test:
+	node $(BABEL_CMD) src --out-dir lib --copy-files --auxiliary-comment "istanbul ignore next"
 
 watch-core:
 	node $(BABEL_CMD) src --out-dir lib --watch --copy-files
@@ -54,6 +57,7 @@ test-all:
 
 test-cov:
 	rm -rf coverage
+	make build-core-test
 	export SIMPLE_BABEL_TESTS=1; \
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
