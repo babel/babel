@@ -82,7 +82,7 @@ export default class Scope {
   }
 
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
-  static contextVariables = ["this", "arguments"];
+  static contextVariables = ["this", "arguments", "super"];
 
   /**
    * Description
