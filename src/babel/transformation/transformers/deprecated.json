@@ -1,6 +1,7 @@
 {
   "selfContained": "runtime",
   "unicode-regex": "regex.unicode",
+  "spec.typeofSymbol": "es6.symbols",
 
   "minification.deadCodeElimination": "utility.deadCodeElimination",
   "minification.removeConsoleCalls": "utility.removeConsole",
