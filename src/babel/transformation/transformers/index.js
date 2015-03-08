@@ -94,7 +94,7 @@ export default {
 
   _aliasFunctions:                         require("./internal/alias-functions"),
 
-  "spec.typeofSymbol":                     require("./spec/typeof-symbol"),
+  "es6.symbols":                           require("./es6/symbols"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
 
   _strict:                                 require("./internal/strict"),
