@@ -583,7 +583,7 @@ export default class Scope {
 
     if (t.isBlockStatement(block) || t.isProgram(block)) {
       block._declarations ||= {};
-      block._declarations[opts.key] = {
+      block._declarations[opts.key || opts.id.name] = {
         kind: opts.kind || "var",
         id: opts.id,
         init: opts.init
