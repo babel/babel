@@ -59,7 +59,7 @@ export function arrayify(val: any): Array {
 export function booleanify(val: any): boolean {
   if (val === "true") return true;
   if (val === "false") return false;
-  return !!val;
+  return val;
 }
 
 var templateVisitor = {
