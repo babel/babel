@@ -6,14 +6,14 @@ import includes from "lodash/collection/includes";
  */
 
 export default class TransformerPass {
-  constructor(file, transformer) {
+  constructor(file: File, transformer: Transformer) {
     this.transformer = transformer;
     this.shouldRun   = !transformer.check;
     this.handlers    = transformer.handlers;
     this.file        = file;
   }
 
-  canRun() {
+  canRun(): boolean {
     var transformer = this.transformer;
 
     var opts = this.file.opts;
@@ -42,7 +42,7 @@ export default class TransformerPass {
     return true;
   }
 
-  checkNode(node) {
+  checkNode(node: Object): boolean {
     var check = this.transformer.check;
     if (check) {
       return this.shouldRun = check(node);

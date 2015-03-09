@@ -16,12 +16,9 @@ export default t;
 /**
  * Registers `is[Type]` and `assert[Type]` generated functions for a given `type`.
  * Pass `skipAliasCheck` to force it to directly compare `node.type` with `type`.
- *
- * @param {String} type
- * @param {Boolean?} skipAliasCheck
  */
 
-function registerType(type, skipAliasCheck) {
+function registerType(type: string, skipAliasCheck?: boolean) {
   var is = t[`is${type}`] = function (node, opts) {
     return t.is(type, node, opts, skipAliasCheck);
   };
@@ -67,15 +64,9 @@ t.TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
  *
  * For better performance, use this instead of `is[Type]` when `type` is unknown.
  * Optionally, pass `skipAliasCheck` to directly compare `node.type` with `type`.
- *
- * @param {String} type
- * @param {Node} node
- * @param {Object?} opts
- * @param {Boolean?} skipAliasCheck
- * @returns {Boolean} isOfType
  */
 
-t.is = function (type, node, opts, skipAliasCheck) {
+t.is = function (type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
   if (!node) return false;
 
   var typeMatches = type === node.type;
@@ -133,12 +124,9 @@ each(t.BUILDER_KEYS, function (keys, type) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Object}
  */
 
-t.toComputedKey = function (node, key) {
+t.toComputedKey = function (node: Object, key: Object): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.literal(key.name);
   }
@@ -152,12 +140,9 @@ t.toComputedKey = function (node, key) {
  * declarations hoisted to the top of the current scope.
  *
  * Expression statements are just resolved to their standard expression.
- *
- * @param {Array} nodes
- * @param {Scope} scope
  */
 
-t.toSequenceExpression = function (nodes, scope) {
+t.toSequenceExpression = function (nodes: Array<Object>, scope: Scope): Object {
   var exprs = [];
 
   each(nodes, function (node) {
@@ -186,13 +171,9 @@ t.toSequenceExpression = function (nodes, scope) {
 
 /*
  * Description
- *
- * @param {Object} actual
- * @param {Object} expected
- * @returns {Boolean}
  */
 
-t.shallowEqual = function (actual, expected) {
+t.shallowEqual = function (actual: Object, expected: Object): boolean {
   var keys = Object.keys(expected);
 
   for (var i = 0; i < keys.length; i++) {
@@ -208,14 +189,9 @@ t.shallowEqual = function (actual, expected) {
 
 /**
  * Description
- *
- * @param {Object} member
- * @param {Object} append
- * @param {Boolean} [computed]
- * @returns {Object} member
  */
 
-t.appendToMemberExpression = function (member, append, computed) {
+t.appendToMemberExpression = function (member: Object, append: Object, computed?: boolean): Object {
   member.object   = t.memberExpression(member.object, member.property, member.computed);
   member.property = append;
   member.computed = !!computed;
@@ -224,26 +200,18 @@ t.appendToMemberExpression = function (member, append, computed) {
 
 /**
  * Description
- *
- * @param {Object} member
- * @param {Object} append
- * @returns {Object} member
  */
 
-t.prependToMemberExpression = function (member, append) {
+t.prependToMemberExpression = function (member: Object, append: Object): Object {
   member.object = t.memberExpression(append, member.object);
   return member;
 };
 
 /**
  * Check if the input `node` is a reference to a bound variable.
- *
- * @param {Object} node
- * @param {Object} parent
- * @returns {Boolean}
  */
 
-t.isReferenced = function (node, parent) {
+t.isReferenced = function (node: Object, parent: Object): boolean {
   // yes: PARENT[NODE]
   // yes: NODE.child
   // no: parent.CHILD
@@ -347,36 +315,26 @@ t.isReferenced = function (node, parent) {
 
 /**
  * Check if the input `node` is an `Identifier` and `isReferenced`.
- *
- * @param {Node} node
- * @parma {Node} parent
- * @returns {Boolean}
  */
 
-t.isReferencedIdentifier = function (node, parent, opts) {
+t.isReferencedIdentifier = function (node: Object, parent: Object, opts?: Object): boolean {
   return t.isIdentifier(node, opts) && t.isReferenced(node, parent);
 };
 
 /**
  * Check if the input `name` is a valid identifier name
  * and isn't a reserved word.
- *
- * @param {String} name
- * @returns {Boolean}
  */
 
-t.isValidIdentifier = function (name) {
+t.isValidIdentifier = function (name: string): boolean {
   return isString(name) && esutils.keyword.isIdentifierName(name) && !esutils.keyword.isReservedWordES6(name, true);
 };
 
 /*
  * Description
- *
- * @param {String} name
- * @returns {String}
  */
 
-t.toIdentifier = function (name) {
+t.toIdentifier = function (name: string): string {
   if (t.isIdentifier(name)) return name.name;
 
   name = name + "";
@@ -401,24 +359,17 @@ t.toIdentifier = function (name) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @param {String=} key
  */
 
-t.ensureBlock = function (node, key) {
-  key ||= "body";
+t.ensureBlock = function (node: Object, key: string = "body") {
   return node[key] = t.toBlock(node[key], node);
 };
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Object}
  */
 
-t.clone = function (node) {
+t.clone = function (node: Object): Object {
   var newNode = {};
   for (var key in node) {
     if (key[0] === "_") continue;
@@ -429,12 +380,9 @@ t.clone = function (node) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Object}
  */
 
-t.cloneDeep = function (node) {
+t.cloneDeep = function (node: Object): Object {
   var newNode = {};
 
   for (var key in node) {
@@ -462,13 +410,9 @@ t.cloneDeep = function (node) {
  *
  * For example, given the match `React.createClass` it would match the
  * parsed nodes of `React.createClass` and `React["createClass"]`.
- *
- * @param {String} match Dot-delimited string
- * @param {Boolean} [allowPartial] Allow a partial match
- * @returns {Function}
  */
 
-t.buildMatchMemberExpression = function (match, allowPartial) {
+t.buildMatchMemberExpression = function (match:string, allowPartial?: boolean): Function {
   var parts = match.split(".");
 
   return function (member) {
@@ -518,12 +462,10 @@ t.buildMatchMemberExpression = function (match, allowPartial) {
 /**
  * Description
  *
- * @param {Object} node
- * @param {Boolean} [ignore]
  * @returns {Object|Boolean}
  */
 
-t.toStatement = function (node, ignore) {
+t.toStatement = function (node: Object, ignore?: boolean) {
   if (t.isStatement(node)) {
     return node;
   }
@@ -560,12 +502,9 @@ t.toStatement = function (node, ignore) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Object}
  */
 
-t.toExpression = function (node) {
+t.toExpression = function (node: Object): Object {
   if (t.isExpressionStatement(node)) {
     node = node.expression;
   }
@@ -585,13 +524,9 @@ t.toExpression = function (node) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @param {Object} parent
- * @returns {Object}
  */
 
-t.toBlock = function (node, parent) {
+t.toBlock = function (node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }
@@ -618,12 +553,9 @@ t.toBlock = function (node, parent) {
 /**
  * Return a list of binding identifiers associated with
  * the input `node`.
- *
- * @param {Object} node
- * @returns {Array|Object}
  */
 
-t.getBindingIdentifiers = function (node) {
+t.getBindingIdentifiers = function (node: Object): Object {
   var search = [].concat(node);
   var ids    = object();
 
@@ -678,34 +610,25 @@ t.getBindingIdentifiers.keys = {
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Boolean}
  */
 
-t.isLet = function (node) {
+t.isLet = function (node: Object): boolean {
   return t.isVariableDeclaration(node) && (node.kind !== "var" || node._let);
 };
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Boolean}
  */
 
-t.isBlockScoped = function (node) {
+t.isBlockScoped = function (node: Object): boolean {
   return t.isFunctionDeclaration(node) || t.isClassDeclaration(node) || t.isLet(node);
 };
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Boolean}
  */
 
-t.isVar = function (node) {
+t.isVar = function (node: Object): boolean {
   return t.isVariableDeclaration(node, { kind: "var" }) && !node._let;
 };
 
@@ -715,12 +638,9 @@ t.COMMENT_KEYS = ["leadingComments", "trailingComments"];
 
 /**
  * Description
- *
- * @param {Object} child
- * @returns {Object} child
  */
 
-t.removeComments = function (child) {
+t.removeComments = function (child: Object): Object {
   each(t.COMMENT_KEYS, function (key) {
     delete child[key];
   });
@@ -729,13 +649,9 @@ t.removeComments = function (child) {
 
 /**
  * Description
- *
- * @param {Object} child
- * @param {Object} parent
- * @returns {Object} child
  */
 
-t.inheritsComments = function (child, parent) {
+t.inheritsComments = function (child: Object, parent: Object): Object {
   each(t.COMMENT_KEYS, function (key) {
     child[key]  = uniq(compact([].concat(child[key], parent[key])));
   });
@@ -744,13 +660,9 @@ t.inheritsComments = function (child, parent) {
 
 /**
  * Description
- *
- * @param {Object} child
- * @param {Object} parent
- * @returns {Object} child
  */
 
-t.inherits = function (child, parent) {
+t.inherits = function (child: Object, parent: Object): Object {
   child._declarations = parent._declarations;
   child._scopeInfo    = parent._scopeInfo;
   child.range         = parent.range;
@@ -767,12 +679,9 @@ t.inherits = function (child, parent) {
 
 /**
  * Description
- *
- * @param {Object} node
- * @returns {Array}
  */
 
-t.getLastStatements = function (node) {
+t.getLastStatements = function (node: Object): Array<Object> {
   var nodes = [];
 
   var add = function (node) {
@@ -795,23 +704,17 @@ t.getLastStatements = function (node) {
 
 /**
  * Description
- *
- * @param {Object} specifier
- * @returns {String}
  */
 
-t.getSpecifierName = function (specifier) {
+t.getSpecifierName = function (specifier: Object): Object {
   return specifier.name || specifier.id;
 };
 
 /**
  * Description
- *
- * @param {Object} specifier
- * @returns {String}
  */
 
-t.getSpecifierId = function (specifier) {
+t.getSpecifierId = function (specifier: Object): Object {
   if (specifier.default) {
     return t.identifier("default");
   } else {
@@ -821,24 +724,17 @@ t.getSpecifierId = function (specifier) {
 
 /**
  * Description
- *
- * @param {Object} specifier
- * @returns {Boolean}
  */
 
-t.isSpecifierDefault = function (specifier) {
+t.isSpecifierDefault = function (specifier: Object): boolean {
   return specifier.default || t.isIdentifier(specifier.id) && specifier.id.name === "default";
 };
 
 /**
  * Description
- *
- * @param {Node} node
- * @param {Node} parent
- * @returns {Boolean}
  */
 
-t.isScope = function (node, parent) {
+t.isScope = function (node: Object, parent: Object): boolean {
   if (t.isBlockStatement(node)) {
     if (t.isLoop(parent.block, { body: node })) {
       return false;
@@ -854,12 +750,9 @@ t.isScope = function (node, parent) {
 
 /**
  * Description
- *
- * @param {Node} node
- * @returns {Boolean}
  */
 
-t.isImmutable = function (node) {
+t.isImmutable = function (node: Object): boolean {
   if (t.isLiteral(node)) {
     if (node.regex) {
       // regexes are mutable
@@ -897,12 +790,9 @@ t.isImmutable = function (node) {
  *
  *   if (!t.evaluateTruthy(node)) falsyLogic();
  *
- * @param {Node} node
- * @param {Scope} scope
- * @returns {Boolean}
  */
 
-t.evaluateTruthy = function (node, scope) {
+t.evaluateTruthy = function (node: Object, scope: Scope): boolean {
   var res = t.evaluate(node, scope);
   if (res.confident) return !!res.value;
 };
@@ -920,12 +810,9 @@ t.evaluateTruthy = function (node, scope) {
  *   t.evaluate(parse("!true")) // { confident: true, value: false }
  *   t.evaluate(parse("foo + foo")) // { confident: false, value: undefined }
  *
- * @param {Node} node
- * @param {Scope} scope
- * @returns {Object}
  */
 
-t.evaluate = function (node, scope) {
+t.evaluate = function (node: Object, scope: Scope): { confident: boolean; value: any } {
   var confident = true;
 
   var value = evaluate(node);
@@ -1017,12 +904,9 @@ t.evaluate = function (node, scope) {
 
 /**
  * Description
- *
- * @param value
- * @returns {Node}
  */
 
-t.valueToNode = function (value) {
+t.valueToNode = function (value: any): Object {
   if (value === undefined) {
     return t.identifier("undefined");
   }

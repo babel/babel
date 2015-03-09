@@ -9,7 +9,6 @@ import object from "../helpers/object";
 import each from "lodash/collection/each";
 import t from "../types";
 
-
 var functionVariableVisitor = {
   enter(node, parent, scope, state) {
     if (t.isFor(node)) {
@@ -64,14 +63,9 @@ export default class Scope {
   /**
    * This searches the current "scope" and collects all references/bindings
    * within.
-   *
-   * @param {Node} block
-   * @param {Node} parentBlock
-   * @param {Scope} [parent]
-   * @param {File} [file]
    */
 
-  constructor(block, parentBlock, parent, file) {
+  constructor(block: Object, parentBlock: Object, parent?: Scope, file?: File) {
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 
@@ -86,24 +80,18 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Object} node
-   * @param {Object} opts
-   * @param [state]
    */
 
-  traverse(node, opts, state) {
+  traverse(node: Object, opts: Object, state?) {
     traverse(node, opts, this, state);
   }
 
   /**
    * Description
-   *
-   * @param {String} [name="temp"]
    */
 
-  generateTemp(name) {
-    var id = this.generateUidIdentifier(name || "temp");
+  generateTemp(name: string = "temp") {
+    var id = this.generateUidIdentifier(name);
     this.push({
       key: id.name,
       id: id
@@ -113,11 +101,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  generateUidIdentifier(name) {
+  generateUidIdentifier(name: string) {
     var id = t.identifier(this.generateUid(name));
     this.getFunctionParent().registerBinding("uid", id);
     return id;
@@ -125,11 +111,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  generateUid(name) {
+  generateUid(name: string) {
     name = t.toIdentifier(name).replace(/^_+/, "");
 
     var uid;
@@ -149,12 +133,9 @@ export default class Scope {
 
   /*
    * Description
-   *
-   * @param {Object} parent
-   * @returns {Object}
    */
 
-  generateUidBasedOnNode(parent) {
+  generateUidBasedOnNode(parent: Object):  Object {
     var node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -190,12 +171,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Object} node
-   * @returns {Object}
    */
 
-  generateTempBasedOnNode(node) {
+  generateTempBasedOnNode(node: Object): ?Object {
     if (t.isIdentifier(node) && this.hasBinding(node.name)) {
       return null;
     }
@@ -210,13 +188,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} kind
-   * @param {String} name
-   * @param {Node} id
    */
 
-  checkBlockScopedCollisions(kind, name, id) {
+  checkBlockScopedCollisions(kind: string, name: string, id: Object) {
     var local = this.getOwnBindingInfo(name);
     if (!local) return;
 
@@ -230,12 +204,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} oldName
-   * @param {String} newName
    */
 
-  rename(oldName, newName) {
+  rename(oldName: string, newName: string) {
     newName ||= this.generateUidIdentifier(oldName).name;
 
     var info = this.getBindingInfo(oldName);
@@ -269,11 +240,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  inferType(node) {
+  inferType(node: Object) {
     var target;
 
     if (t.isVariableDeclarator(node)) {
@@ -307,12 +276,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
-   * @param {String} genericName
    */
 
-  isTypeGeneric(name, genericName) {
+  isTypeGeneric(name: string, genericName: string) {
     var info = this.getBindingInfo(name);
     if (!info) return false;
 
@@ -322,23 +288,17 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
-   * @param {Node} type
    */
 
-  assignTypeGeneric(name, type) {
+  assignTypeGeneric(name: string, type: Object) {
     this.assignType(name, t.genericTypeAnnotation(t.identifier(type)));
   }
 
   /**
    * Description
-   *
-   * @param {String} name
-   * @param {Node} type
    */
 
-  assignType(name, type) {
+  assignType(name: string, type: Object) {
     var info = this.getBindingInfo(name);
     if (!info) return;
 
@@ -347,13 +307,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param name
-   * @param id
-   * @param {Node} node
    */
 
-  getTypeAnnotation(name, id, node) {
+  getTypeAnnotation(id: Object, node: Object): Object {
     var info = {
       annotation: null,
       inferred: false
@@ -380,12 +336,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
-   * @param {Number} [i]
    */
 
-  toArray(node, i) {
+  toArray(node: Object, i?: number) {
     var file = this.file;
 
     if (t.isIdentifier(node) && this.isTypeGeneric(node.name, "Array")) {
@@ -413,11 +366,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  refreshDeclaration(node) {
+  refreshDeclaration(node: Object) {
     if (t.isBlockScoped(node)) {
       this.getBlockParent().registerDeclaration(node);
     } else if (t.isVariableDeclaration(node, { kind: "var" })) {
@@ -429,11 +380,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  registerDeclaration(node) {
+  registerDeclaration(node: Object) {
     if (t.isFunctionDeclaration(node)) {
       this.registerBinding("hoisted", node);
     } else if (t.isVariableDeclaration(node)) {
@@ -451,11 +400,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  registerBindingReassignment(node) {
+  registerBindingReassignment(node: Object) {
     var ids = t.getBindingIdentifiers(node);
     for (var name in ids) {
       var info = this.getBindingInfo(name);
@@ -472,12 +419,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} kind
-   * @param {Node} node
    */
 
-  registerBinding(kind, node) {
+  registerBinding(kind: string, node: Object) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     var ids = t.getBindingIdentifiers(node);
@@ -487,7 +431,7 @@ export default class Scope {
 
       this.checkBlockScopedCollisions(kind, name, id);
 
-      var typeInfo = this.getTypeAnnotation(name, id, node);
+      var typeInfo = this.getTypeAnnotation(id, node);
 
       this.bindings[name] = {
         typeAnnotationInferred: typeInfo.inferred,
@@ -503,21 +447,17 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  addGlobal(node) {
+  addGlobal(node: Object) {
     this.globals[node.name] = node;
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  hasGlobal(name) {
+  hasGlobal(name: string): boolean {
     var scope = this;
 
     do {
@@ -631,11 +571,9 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {Object} opts
    */
 
-  push(opts) {
+  push(opts: Object) {
     var block = this.block;
 
     if (t.isLoop(block) || t.isCatchClause(block) || t.isFunction(block)) {
@@ -683,11 +621,9 @@ export default class Scope {
 
   /**
    * Walks the scope tree and gathers **all** bindings.
-   *
-   * @returns {Object}
    */
 
-  getAllBindings() {
+  getAllBindings(): Object {
     var ids = object();
 
     var scope = this;
@@ -701,12 +637,9 @@ export default class Scope {
 
   /**
    * Walks the scope tree and gathers all declarations of `kind`.
-   *
-   * @param {String} kind
-   * @returns {Object}
    */
 
-  getAllBindingsOfKind(kind) {
+  getAllBindingsOfKind(kind: string): Object {
     var ids = object();
 
     var scope = this;
@@ -723,23 +656,17 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
-   * @param {Object} node
-   * @returns {Boolean}
    */
 
-  bindingIdentifierEquals(name, node) {
+  bindingIdentifierEquals(name: string, node: Object): boolean {
     return this.getBindingIdentifier(name) === node;
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getBindingInfo(name) {
+  getBindingInfo(name: string) {
     var scope = this;
 
     do {
@@ -750,53 +677,43 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getOwnBindingInfo(name) {
+  getOwnBindingInfo(name: string) {
     return this.bindings[name];
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getBindingIdentifier(name) {
+  getBindingIdentifier(name: string) {
     var info = this.getBindingInfo(name);
     return info && info.identifier;
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getOwnBindingIdentifier(name) {
+  getOwnBindingIdentifier(name: string) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getOwnImmutableBindingValue(name) {
+  getOwnImmutableBindingValue(name: string) {
     return this._immutableBindingInfoToValue(this.getOwnBindingInfo(name));
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  getImmutableBindingValue(name) {
+  getImmutableBindingValue(name: string) {
     return this._immutableBindingInfoToValue(this.getBindingInfo(name));
   }
 
@@ -824,21 +741,17 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  hasOwnBinding(name) {
+  hasOwnBinding(name: string) {
     return !!this.getOwnBindingInfo(name);
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  hasBinding(name) {
+  hasBinding(name: string) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name)) return true;
@@ -849,31 +762,25 @@ export default class Scope {
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  parentHasBinding(name) {
+  parentHasBinding(name: string) {
     return this.parent && this.parent.hasBinding(name);
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  removeOwnBinding(name) {
+  removeOwnBinding(name: string) {
     this.bindings[name] = null;
   }
 
   /**
    * Description
-   *
-   * @param {String} name
    */
 
-  removeBinding(name) {
+  removeBinding(name: string) {
     var info = this.getBindingInfo(name);
     if (info) info.scope.removeOwnBinding(name);
   }

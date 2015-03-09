@@ -20,7 +20,7 @@ export { inherits, inspect } from "util";
 
 export var debug = buildDebug("babel");
 
-export function canCompile(filename, altExts) {
+export function canCompile(filename: string, altExts?: Array<string>) {
   var exts = altExts || canCompile.EXTENSIONS;
   var ext = path.extname(filename);
   return contains(exts, ext);
@@ -28,7 +28,7 @@ export function canCompile(filename, altExts) {
 
 canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
 
-export function resolve(loc) {
+export function resolve(loc: string) {
   try {
     return require.resolve(loc);
   } catch (err) {
@@ -36,11 +36,11 @@ export function resolve(loc) {
   }
 }
 
-export function list(val) {
+export function list(val: string): Array<string> {
   return val ? val.split(",") : [];
 }
 
-export function regexify(val) {
+export function regexify(val: any): RegExp {
   if (!val) return new RegExp(/.^/);
   if (Array.isArray(val)) val = val.join("|");
   if (isString(val)) return new RegExp(val);
@@ -48,7 +48,7 @@ export function regexify(val) {
   throw new TypeError("illegal type for regexify");
 }
 
-export function arrayify(val) {
+export function arrayify(val: any): Array {
   if (!val) return [];
   if (isBoolean(val)) return [val];
   if (isString(val)) return list(val);
@@ -56,10 +56,10 @@ export function arrayify(val) {
   throw new TypeError("illegal type for arrayify");
 }
 
-export function booleanify(val) {
+export function booleanify(val: any): boolean {
   if (val === "true") return true;
   if (val === "false") return false;
-  return val;
+  return !!val;
 }
 
 var templateVisitor = {
@@ -76,7 +76,7 @@ var templateVisitor = {
 
 //
 
-export function template(name, nodes, keepExpression) {
+export function template(name: string, nodes?: Array<Object>, keepExpression?: boolean): Object {
   var ast = exports.templates[name];
   if (!ast) throw new ReferenceError(`unknown template ${name}`);
 
@@ -102,7 +102,7 @@ export function template(name, nodes, keepExpression) {
   }
 }
 
-export function parseTemplate(loc, code) {
+export function parseTemplate(loc: string, code: string): Object {
   var ast = parse({ filename: loc }, code).program;
   ast = traverse.removeProperties(ast);
   return ast;

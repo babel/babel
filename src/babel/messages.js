@@ -24,7 +24,7 @@ export var messages = {
   unsupportedOutputType: "Unsupported output type $1"
 };
 
-export function get(key, ...args) {
+export function get(key: String, ...args) {
   var msg = messages[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
@@ -35,7 +35,7 @@ export function get(key, ...args) {
   });
 }
 
-export function parseArgs(args) {
+export function parseArgs(args: Array<any>) {
   return args.map(function (val) {
     if (val != null && val.inspect) {
       return val.inspect();

@@ -12,7 +12,7 @@ import each from "lodash/collection/each";
  */
 
 export default class Transformer {
-  constructor(transformerKey, transformer, opts) {
+  constructor(transformerKey: key, transformer: Object, opts: Object) {
     transformer = assign({}, transformer);
 
     var take = function (key) {
@@ -36,7 +36,7 @@ export default class Transformer {
     this.key      = transformerKey;
   }
 
-  normalize(transformer) {
+  normalize(transformer: Object): Object {
     if (isFunction(transformer)) {
       transformer = { ast: transformer };
     }
@@ -65,7 +65,7 @@ export default class Transformer {
     return transformer;
   }
 
-  buildPass(file) {
+  buildPass(file: File): TransformerPass {
     return new TransformerPass(file, this);
   }
 }

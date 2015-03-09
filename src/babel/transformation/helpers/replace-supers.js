@@ -47,12 +47,9 @@ export default class ReplaceSupers {
 
   /**
    * Description
-   *
-   * @param {Object} opts
-   * @param {Boolean} [inClass]
    */
 
-  constructor(opts, inClass) {
+  constructor(opts: Object, inClass?: boolean = false) {
     this.topLevelThisReference = opts.topLevelThisReference;
     this.methodNode            = opts.methodNode;
     this.superRef              = opts.superRef;
@@ -76,15 +73,9 @@ export default class ReplaceSupers {
    *
    *   _set(Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE", this)
    *
-   * @param {Node} property
-   * @param {Node} value
-   * @param {Boolean} isComputed
-   * @param {Node} thisExpression
-   *
-   * @returns {Node}
    */
 
-  setSuperProperty(property, value, isComputed, thisExpression) {
+  setSuperProperty(property: Object, value: Object, isComputed: boolean, thisExpression: Object): Object {
     return t.callExpression(
       this.file.addHelper("set"),
       [
@@ -108,14 +99,9 @@ export default class ReplaceSupers {
    *
    *   _get(Object.getPrototypeOf(CLASS.prototype), "METHOD", this)
    *
-   * @param {Node} property
-   * @param {Boolean} isComputed
-   * @param {Node} thisExpression
-   *
-   * @returns {Node}
    */
 
-  getSuperProperty(property, isComputed, thisExpression) {
+  getSuperProperty(property: Object, isComputed: boolean, thisExpression: Object): Object {
     return t.callExpression(
       this.file.addHelper("get"),
       [
@@ -141,12 +127,9 @@ export default class ReplaceSupers {
 
   /**
    * Description
-   *
-   * @param {Object} node
-   * @param {Boolean} topLevel
    */
 
-  traverseLevel(node, topLevel) {
+  traverseLevel(node: Object, topLevel: boolean) {
     var state = { self: this, topLevel: topLevel };
     this.scope.traverse(node, visitor, state);
   }
@@ -169,14 +152,9 @@ export default class ReplaceSupers {
 
   /**
    * Description
-   *
-   * @param {Object} node
-   * @param {Object} id
-   * @param {Object} parent
-   * @returns {Object}
    */
 
-  getLooseSuperProperty(id, parent) {
+  getLooseSuperProperty(id: Object, parent: Object) {
     var methodNode = this.methodNode;
     var methodName = methodNode.key;
     var superRef   = this.superRef || t.identifier("Function");
@@ -211,13 +189,9 @@ export default class ReplaceSupers {
 
   /**
    * Description
-   *
-   * @param {Function} getThisReference
-   * @param {Object} node
-   * @param {Object} parent
    */
 
-  looseHandle(getThisReference, node, parent) {
+  looseHandle(getThisReference: Function, node: Object, parent: Object) {
     if (t.isIdentifier(node, { name: "super" })) {
       this.hasSuper = true;
       return this.getLooseSuperProperty(node, parent);
@@ -235,13 +209,9 @@ export default class ReplaceSupers {
 
   /**
    * Description
-   *
-   * @param {Function} getThisReference
-   * @param {Object} node
-   * @param {Object} parent
    */
 
-  specHandle(getThisReference, node, parent) {
+  specHandle(getThisReference: Function, node: Object, parent: Object) {
     var methodNode = this.methodNode;
     var property;
     var computed;

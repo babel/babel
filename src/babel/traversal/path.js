@@ -70,7 +70,7 @@ export default class TraversalPath {
   }
 
   remove() {
-    this.refreshScope(this.node, []);
+    this._refresh(this.node, []);
     this.container[this.key] = null;
     this.flatten();
   }
@@ -88,13 +88,13 @@ export default class TraversalPath {
     this.context.flatten();
   }
 
-  refreshScope(oldNode, newNodes) {
+  _refresh(oldNode, newNodes) {
     // todo
   }
 
   refresh() {
     var node = this.node;
-    this.refreshScope(node, [node]);
+    this._refresh(node, [node]);
   }
 
   get node() {
@@ -119,7 +119,7 @@ export default class TraversalPath {
     this.setScope();
 
     // refresh scope with new/removed bindings
-    this.refreshScope(oldNode, replacements);
+    this._refresh(oldNode, replacements);
 
     var file = this.scope && this.scope.file;
     if (file) {

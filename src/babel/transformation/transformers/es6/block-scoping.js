@@ -75,7 +75,7 @@ export function Loop(node, parent, scope, file) {
 
 export function BlockStatement(block, parent, scope, file) {
   if (!t.isLoop(parent)) {
-    var blockScoping = new BlockScoping(false, block, parent, scope, file);
+    var blockScoping = new BlockScoping(null, block, parent, scope, file);
     blockScoping.run();
   }
 }
@@ -222,15 +222,9 @@ class BlockScoping {
 
   /**
    * Description
-   *
-   * @param {Boolean|Node} loopParent
-   * @param {Node} block
-   * @param {Node} parent
-   * @param {Scope} scope
-   * @param {File} file
    */
 
-  constructor(loopParent, block, parent, scope, file) {
+  constructor(loopParent?: Object, block: Object, parent: Object, scope: Scope, file: File) {
     this.loopParent = loopParent;
     this.parent     = parent;
     this.scope      = scope;
@@ -466,12 +460,9 @@ class BlockScoping {
   /**
    * Turn a `VariableDeclaration` into an array of `AssignmentExpressions` with
    * their declarations hoisted to before the closure wrapper.
-   *
-   * @param {Node} node VariableDeclaration
-   * @returns {Array}
    */
 
-  pushDeclar(node) {
+  pushDeclar(node: { type: "VariableDeclaration" }): Array<Object> {
     this.body.push(t.variableDeclaration(node.kind, node.declarations.map(function (declar) {
       return t.variableDeclarator(declar.id);
     })));
@@ -491,12 +482,9 @@ class BlockScoping {
 
   /**
    * Push the closure to the body.
-   *
-   * @param {Node} ret Identifier
-   * @param {Node} call CallExpression
    */
 
-  build(ret, call) {
+  build(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
     var has = this.has;
     if (has.hasReturn || has.hasBreakContinue) {
       this.buildHas(ret, call);
@@ -507,12 +495,9 @@ class BlockScoping {
 
   /**
    * Description
-   *
-   * @param {Node} ret Identifier
-   * @param {Node} call CallExpression
    */
 
-  buildHas(ret, call) {
+  buildHas(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
     var body = this.body;
 
     body.push(t.variableDeclaration("var", [

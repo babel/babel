@@ -4,7 +4,7 @@ import object from "../helpers/object";
 import File from "./file";
 import each from "lodash/collection/each";
 
-export default function transform(code, opts) {
+export default function transform(code: code, opts?: Object) {
   var file = new File(opts);
   return file.parse(code);
 }
@@ -18,7 +18,7 @@ transform.fromAst = function (ast, code, opts) {
   return file.generate();
 };
 
-transform._ensureTransformerNames = function (type, rawKeys) {
+transform._ensureTransformerNames = function (type: string, rawKeys: Array<string>) {
   var keys = [];
 
   for (var i = 0; i < rawKeys.length; i++) {

@@ -56,14 +56,9 @@ class ClassTransformer {
 
   /**
    * Description
-   *
-   * @param {Node} node
-   * @param {Node} parent
-   * @param {Scope} scope
-   * @param {File} file
    */
 
-  constructor(node, parent, scope, file) {
+  constructor(node: Object, parent: Object, scope: Scope, file: File) {
     this.parent = parent;
     this.scope  = scope;
     this.node   = node;
@@ -245,11 +240,9 @@ class ClassTransformer {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-   verifyConstructor(node) {
+   verifyConstructor(node: Object) {
     return; // enable this for the next major
 
     var state = {
@@ -267,11 +260,9 @@ class ClassTransformer {
 
   /**
    * Push a method to its respective mutatorMap.
-   *
-   * @param {Node} node MethodDefinition
    */
 
-  pushMethod(node) {
+  pushMethod(node: { type: "MethodDefinition" }) {
     var methodName = node.key;
 
     var kind = node.kind;
@@ -308,11 +299,9 @@ class ClassTransformer {
 
   /**
    * Description
-   *
-   * @param {Node} node
    */
 
-  pushProperty(node) {
+  pushProperty(node: Object) {
     if (!node.value) return;
 
     var key;
@@ -332,11 +321,9 @@ class ClassTransformer {
 
   /**
    * Replace the constructor body of our class.
-   *
-   * @param {Node} method MethodDefinition
    */
 
-  pushConstructor(method) {
+  pushConstructor(method: { type: "MethodDefinition" }) {
     if (method.kind) {
       throw this.file.errorWithNode(method, messages.get("classesIllegalConstructorKind"));
     }

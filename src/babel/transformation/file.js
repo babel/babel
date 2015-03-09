@@ -121,7 +121,7 @@ export default class File {
     "accept"
   ];
 
-  normalizeOptions(opts) {
+  normalizeOptions(opts: Object) {
     opts = assign({}, opts);
 
     for (var key in opts) {
@@ -227,7 +227,7 @@ export default class File {
     return opts;
   };
 
-  isLoose(key) {
+  isLoose(key: string) {
     return includes(this.opts.loose, key);
   }
 
@@ -259,13 +259,13 @@ export default class File {
     this.transformers = transformers;
   }
 
-  debug(msg) {
+  debug(msg?: string) {
     var parts = this.opts.filename;
     if (msg) parts += `: ${msg}`;
     util.debug(parts);
   }
 
-  getModuleFormatter(type) {
+  getModuleFormatter(type: string) {
     var ModuleFormatter = isFunction(type) ? type : transform.moduleFormatters[type];
 
     if (!ModuleFormatter) {
@@ -280,7 +280,7 @@ export default class File {
     return new ModuleFormatter(this);
   }
 
-  parseInputSourceMap(code) {
+  parseInputSourceMap(code: string) {
     var opts = this.opts;
 
     var inputMap = convertSourceMap.fromSource(code);
@@ -292,7 +292,7 @@ export default class File {
     return code;
   }
 
-  parseShebang(code) {
+  parseShebang(code: string) {
     var shebangMatch = shebangRegex.exec(code);
 
     if (shebangMatch) {
@@ -305,15 +305,15 @@ export default class File {
     return code;
   }
 
-  set(key, val) {
+  set(key: string, val): any {
     return this.data[key] = val;
   };
 
-  setDynamic(key, fn) {
+  setDynamic(key: string, fn: Function) {
     this.dynamicData[key] = fn;
   }
 
-  get(key) {
+  get(key: string): any {
     var data = this.data[key];
     if (data) {
       return data;
@@ -325,7 +325,7 @@ export default class File {
     }
   }
 
-  addImport(source, name, noDefault) {
+  addImport(source: string, name?: string, noDefault?: boolean): Object {
     name ||= source;
     var id = this.dynamicImportIds[name];
 
@@ -349,11 +349,11 @@ export default class File {
     return id;
   }
 
-  isConsequenceExpressionStatement(node) {
+  isConsequenceExpressionStatement(node: Object): boolean {
     return t.isExpressionStatement(node) && this.lastStatements.indexOf(node) >= 0;
   }
 
-  attachAuxiliaryComment(node) {
+  attachAuxiliaryComment(node: Object): Object {
     var comment = this.opts.auxiliaryComment;
     if (comment) {
       node.leadingComments ||= [];
@@ -365,7 +365,7 @@ export default class File {
     return node;
   }
 
-  addHelper(name) {
+  addHelper(name: string): Object {
     if (!includes(File.helpers, name)) {
       throw new ReferenceError(`Unknown helper ${name}`);
     }
@@ -408,14 +408,14 @@ export default class File {
     return err;
   }
 
-  addCode(code) {
+  addCode(code: string) {
     code = (code || "") + "";
     code = this.parseInputSourceMap(code);
     this.code = code;
     return this.parseShebang(code);
   }
 
-  parse(code) {
+  parse(code: string) {
     code = this.addCode(code);
 
     var opts = this.opts;
@@ -452,7 +452,7 @@ export default class File {
     this.call("post");
   }
 
-  call(key) {
+  call(key: string) {
     var stack = this.transformerStack;
     for (var i = 0; i < stack.length; i++) {
       var transformer = stack[i].transformer;
@@ -480,7 +480,7 @@ export default class File {
     });
   }
 
-  mergeSourceMap(map) {
+  mergeSourceMap(map: Object) {
     var opts = this.opts;
 
     var inputMap = opts.inputSourceMap;
@@ -502,7 +502,11 @@ export default class File {
     return map;
   }
 
-  generate() {
+  generate(): {
+    code: string;
+    map?: Object;
+    ast?: Object;
+  } {
     var opts = this.opts;
     var ast  = this.ast;
 
