@@ -18,6 +18,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **Bug Fix**
   * Rewrite named function expressions in optional async function transformers.
   * Hoist directives.
+  * Remove `Number` from the list of valid `runtime` constructors.
  * **Internal**
   * `spec.typeofSymbol` transformer has been renamed to `es6.symbols`.
 

@@ -16,8 +16,7 @@ var ALIASABLE_CONSTRUCTORS = [
   "Map",
   "WeakMap",
   "Set",
-  "WeakSet",
-  "Number"
+  "WeakSet"
 ];
 
 var astVisitor = {
