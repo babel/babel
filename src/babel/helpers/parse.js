@@ -40,7 +40,13 @@ export default function (opts, code, callback) {
         message += frame;
       }
 
-      if (err.stack) err.stack = err.stack.replace(err.message, message);
+      if (err.stack) {
+        var newStack = err.stack.replace(err.message, message);
+        try {
+          err.stack = newStack;
+        } catch (e) { /* `err.stack` may be a readonly property in some environments. */ }
+      }
+
       err.message = message;
     }
 
