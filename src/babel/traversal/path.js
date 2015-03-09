@@ -56,6 +56,11 @@ export default class TraversalPath {
     this.scope = TraversalPath.getScope(this.node, this.parent, this.context.scope);
   }
 
+  refreshScope() {
+    // todo: remove all binding identifiers associated with this node
+    // todo: if it hasn't been deleted and just replaced with node/s then add their bindings
+  }
+
   setContext(parentPath, context, key) {
     this.shouldRemove = false;
     this.shouldSkip   = false;
@@ -123,6 +128,7 @@ export default class TraversalPath {
       }
 
       this.flatten();
+      // TODO: duplicate internal metadata
     }
   }
 
