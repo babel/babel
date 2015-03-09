@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 4.7.3
+## 4.7.4
 
  * **Bug Fix**
   * Rewrite named function expressions in optional async function transformers.
