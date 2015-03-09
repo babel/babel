@@ -13,7 +13,6 @@ var MyCtrl2 = function MyCtrl2(a) {
   foo;
 };
 
-
 var MyCtrl3 = function MyCtrl3(a) {
   "a";
   babelHelpers.classCallCheck(this, MyCtrl3);
