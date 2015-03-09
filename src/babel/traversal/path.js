@@ -89,22 +89,7 @@ export default class TraversalPath {
   }
 
   refreshScope(oldNode, newNodes) {
-    var scope = this.scope;
-    if (!scope) return;
-
-    if (!t.isAssignmentExpression(oldNode)) {
-      var bindings = t.getBindingIdentifiers(oldNode);
-      for (var key in bindings) {
-        if (scope.bindingIdentifierEquals(key, bindings[key])) {
-          scope.removeBinding(key);
-        }
-      }
-    }
-
-    for (let i = 0; i < newNodes.length; i++) {
-      var newNode = newNodes[i];
-      scope.refreshDeclaration(newNode);
-    }
+    // todo
   }
 
   refresh() {
@@ -151,7 +136,7 @@ export default class TraversalPath {
       }
 
       this.flatten();
-      // TODO: duplicate internal metadata
+      // TODO: duplicate internal path metadata across the new node paths
     }
   }
 

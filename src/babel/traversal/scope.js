@@ -864,7 +864,7 @@ export default class Scope {
    */
 
   removeOwnBinding(name) {
-    delete this.bindings[name];
+    this.bindings[name] = null;
   }
 
   /**
@@ -875,7 +875,6 @@ export default class Scope {
 
   removeBinding(name) {
     var info = this.getBindingInfo(name);
-    if (!info) return;
-    info.scope.removeOwnBinding(name);
+    if (info) info.scope.removeOwnBinding(name);
   }
 }
