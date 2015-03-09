@@ -24,14 +24,10 @@ export var messages = {
   unsupportedOutputType: "Unsupported output type $1"
 };
 
-export function get(key) {
+export function get(key, ...args) {
   var msg = messages[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
-  var args = [];
-  for (var i = 1; i < arguments.length; i++) {
-    args.push(arguments[i]);
-  }
   args = parseArgs(args);
 
   return msg.replace(/\$(\d+)/g, function (str, i) {
