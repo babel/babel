@@ -135,10 +135,7 @@ export function AssignmentExpression(node, parent, scope, file) {
   if (!t.isPattern(node.left)) return;
 
   var ref = scope.generateUidIdentifier("temp");
-  scope.push({
-    key: ref.name,
-    id: ref
-  });
+  scope.push({ id: ref });
 
   var nodes = [];
   nodes.push(t.assignmentExpression("=", ref, node.right));

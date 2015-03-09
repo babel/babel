@@ -581,16 +581,16 @@ export default class Scope {
       block = block.body;
     }
 
-    if (t.isBlockStatement(block) || t.isProgram(block)) {
-      block._declarations ||= {};
-      block._declarations[opts.key || opts.id.name] = {
-        kind: opts.kind || "var",
-        id: opts.id,
-        init: opts.init
-      };
-    } else {
-      throw new TypeError(`cannot add a declaration here in node type ${block.type}`);
+    if (!t.isBlockStatement(block) && !t.isProgram(block)) {
+      block = this.getBlockParent().block;
     }
+
+    block._declarations ||= {};
+    block._declarations[opts.key || opts.id.name] = {
+      kind: opts.kind || "var",
+      id: opts.id,
+      init: opts.init
+    };
   }
 
   /**

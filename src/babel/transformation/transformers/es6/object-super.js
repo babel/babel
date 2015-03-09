@@ -40,10 +40,7 @@ export function ObjectExpression(node, parent, scope, file) {
   }
 
   if (objectRef) {
-    scope.push({
-      id: objectRef
-    });
-
+    scope.push({ id: objectRef });
     return t.assignmentExpression("=", objectRef, node);
   }
 }

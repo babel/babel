@@ -154,7 +154,6 @@ t.toSequenceExpression = function (nodes: Array<Object>, scope: Scope): Object {
       each(node.declarations, function (declar) {
         scope.push({
           kind: node.kind,
-          key: declar.id.name,
           id: declar.id
         });
         exprs.push(t.assignmentExpression("=", declar.id, declar.init));
