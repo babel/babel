@@ -9,8 +9,8 @@ extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
 // regenerator-babel/ast-types
 
-var def   = types.Type.def;
-var or    = types.Type.or;
+var def = types.Type.def;
+var or  = types.Type.or;
 
 def("File")
   .bases("Node")
