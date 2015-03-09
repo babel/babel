@@ -44,7 +44,9 @@ export default function (opts, code, callback) {
         var newStack = err.stack.replace(err.message, message);
         try {
           err.stack = newStack;
-        } catch (e) { /* `err.stack` may be a readonly property in some environments. */ }
+        } catch (e) {
+          // `err.stack` may be a readonly property in some environments
+        }
       }
 
       err.message = message;
