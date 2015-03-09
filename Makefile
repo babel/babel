@@ -46,11 +46,6 @@ test:
 	$(MOCHA_CMD)
 	make test-clean
 
-test-simple:
-	# excludes test262
-	export SIMPLE_BABEL_TESTS=1; \
-	make test
-
 test-all:
 	export ALL_BABEL_TESTS=1; \
 	make test
@@ -58,7 +53,6 @@ test-all:
 test-cov:
 	rm -rf coverage
 	make build-core-test
-	export SIMPLE_BABEL_TESTS=1; \
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
 test-travis: bootstrap build

@@ -1,4 +1,4 @@
-if (process.env.SIMPLE_BABEL_TESTS) return;
+if (!process.env.ALL_BABEL_TESTS) return;
 
 require("./_helper").assertVendor("test262");
 
