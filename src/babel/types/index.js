@@ -36,6 +36,7 @@ function registerType(type, skipAliasCheck) {
 
 t.STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 t.NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
+t.FLATTENABLE_KEYS        = ["body", "expressions"];
 t.FOR_INIT_KEYS           = ["left", "init"];
 
 t.VISITOR_KEYS = require("./visitor-keys");

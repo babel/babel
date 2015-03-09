@@ -1,6 +1,7 @@
 import TraversalPath from "./path";
 import flatten from "lodash/array/flatten";
 import compact from "lodash/array/compact";
+import t from "../types";
 
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
@@ -42,7 +43,7 @@ export default class TraversalContext {
     if (this.shouldFlatten) {
       node[key] = flatten(node[key]);
 
-      if (key === "body" || key === "expressions") {
+      if (t.FLATTENABLE_KEYS.indexOf(key) >= 0) {
         // we can safely compact this
         node[key] = compact(node[key]);
       }
