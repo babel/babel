@@ -56,15 +56,9 @@ export default class TraversalPath {
     this.scope = TraversalPath.getScope(this.node, this.parent, this.context.scope);
   }
 
-  refreshScope() {
-    // todo: remove all binding identifiers associated with this node
-    // todo: if it hasn't been deleted and just replaced with node/s then add their bindings
-  }
-
   setContext(parentPath, context, key) {
-    this.shouldRemove = false;
-    this.shouldSkip   = false;
-    this.shouldStop   = false;
+    this.shouldSkip = false;
+    this.shouldStop = false;
 
     this.parentPath = parentPath || this.parentPath;
     this.context    = context;
@@ -76,8 +70,9 @@ export default class TraversalPath {
   }
 
   remove() {
-    this.shouldRemove = true;
-    this.shouldSkip   = true;
+    this.refreshScope(this.node, []);
+    this.container[this.key] = null;
+    this.flatten();
   }
 
   skip() {
@@ -93,30 +88,58 @@ export default class TraversalPath {
     this.context.flatten();
   }
 
+  refreshScope(oldNode, newNodes) {
+    var scope = this.scope;
+    if (!scope) return;
+
+    if (!t.isAssignmentExpression(oldNode)) {
+      var bindings = t.getBindingIdentifiers(oldNode);
+      for (var key in bindings) {
+        if (scope.bindingIdentifierEquals(key, bindings[key])) {
+          scope.removeBinding(key);
+        }
+      }
+    }
+
+    for (let i = 0; i < newNodes.length; i++) {
+      var newNode = newNodes[i];
+      scope.refreshDeclaration(newNode);
+    }
+  }
+
+  refresh() {
+    var node = this.node;
+    this.refreshScope(node, [node]);
+  }
+
   get node() {
     return this.container[this.key];
   }
 
   set node(replacement) {
-    var isArray = Array.isArray(replacement);
+    if (!replacement) return this.remove();
+
+    var oldNode      = this.node;
+    var isArray      = Array.isArray(replacement);
+    var replacements = isArray ? replacement : [replacement];
 
     // inherit comments from original node to the first replacement node
-    var inheritTo = replacement;
-    if (isArray) inheritTo = replacement[0];
-    if (inheritTo) t.inheritsComments(inheritTo, this.node);
+    var inheritTo = replacements[0];
+    if (inheritTo) t.inheritsComments(inheritTo, oldNode);
 
     // replace the node
     this.container[this.key] = replacement;
+
+    // potentially create new scope
     this.setScope();
+
+    // refresh scope with new/removed bindings
+    this.refreshScope(oldNode, replacements);
 
     var file = this.scope && this.scope.file;
     if (file) {
-      if (isArray) {
-        for (var i = 0; i < replacement.length; i++) {
-          file.checkNode(replacement[i], this.scope);
-        }
-      } else {
-        file.checkNode(replacement, this.scope);
+      for (var i = 0; i < replacements.length; i++) {
+        file.checkNode(replacements[i], this.scope);
       }
     }
 
@@ -145,11 +168,6 @@ export default class TraversalPath {
     if (replacement) {
       this.node = replacement;
     }
-
-    if (this.shouldRemove) {
-      this.container[this.key] = null;
-      this.flatten();
-    }
   }
 
   isBlacklisted() {
@@ -169,16 +187,17 @@ export default class TraversalPath {
     var node = this.node;
     var opts = this.opts;
 
-    if (Array.isArray(node)) {
-      // traverse over these replacement nodes we purposely don't call exitNode
-      // as the original node has been destroyed
-      for (var i = 0; i < node.length; i++) {
-        traverse.node(node[i], opts, this.scope, this.state, this);
+    if (node) {
+      if (Array.isArray(node)) {
+        // traverse over these replacement nodes we purposely don't call exitNode
+        // as the original node has been destroyed
+        for (var i = 0; i < node.length; i++) {
+          traverse.node(node[i], opts, this.scope, this.state, this);
+        }
+      } else {
+        traverse.node(node, opts, this.scope, this.state, this);
+        this.call("exit");
       }
-    } else {
-      traverse.node(node, opts, this.scope, this.state, this);
-
-      this.call("exit");
     }
 
     return this.shouldStop;

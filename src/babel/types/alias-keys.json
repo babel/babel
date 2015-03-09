@@ -25,7 +25,7 @@
   "ImportSpecifier": ["ModuleSpecifier"],
   "ExportSpecifier": ["ModuleSpecifier"],
 
-  "BlockStatement": ["Statement", "Scopable"],
+  "BlockStatement": ["Scopable", "Statement"],
   "Program":        ["Scopable"],
   "CatchClause":    ["Scopable"],
 
@@ -36,8 +36,8 @@
   "SpreadProperty":  ["UnaryLike"],
   "SpreadElement":   ["UnaryLike"],
 
-  "ClassDeclaration": ["Statement", "Declaration", "Class"],
-  "ClassExpression":  ["Class", "Expression"],
+  "ClassDeclaration": ["Scope", "Class", "Statement", "Declaration"],
+  "ClassExpression":  ["Scope", "Class", "Expression"],
 
   "ForOfStatement": ["Scopable", "Statement", "For", "Loop"],
   "ForInStatement": ["Scopable", "Statement", "For", "Loop"],
