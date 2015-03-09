@@ -43,7 +43,7 @@ test-clean:
 	rm -rf test/tmp
 
 test:
-	$(MOCHA_CMD)
+	node $(MOCHA_CMD)
 	make test-clean
 
 test-all:
