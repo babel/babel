@@ -57,8 +57,9 @@ export default class TraversalPath {
   }
 
   setContext(parentPath, context, key) {
-    this.shouldSkip = false;
-    this.shouldStop = false;
+    this.shouldRemove = false;
+    this.shouldSkip   = false;
+    this.shouldStop   = false;
 
     this.parentPath = parentPath || this.parentPath;
     this.context    = context;
@@ -70,6 +71,11 @@ export default class TraversalPath {
   }
 
   remove() {
+    this.shouldRemove = true;
+    this.shouldSkip   = true;
+  }
+
+  _remove() {
     this._refresh(this.node, []);
     this.container[this.key] = null;
     this.flatten();
@@ -152,6 +158,10 @@ export default class TraversalPath {
 
     if (replacement) {
       this.node = replacement;
+    }
+
+    if (this.shouldRemove) {
+      this._remove();
     }
   }
 
