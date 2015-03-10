@@ -61,6 +61,14 @@ var astTransformVisitor = {
       return node.argument;
     }
 
+    // playground
+
+    if (t.isAssignmentExpression(node)) {
+      if (node.operator === "||=" || node.operator === "?=") {
+        node.operator = "+=";
+      }
+    }
+
     // modules
 
     if (t.isImportDeclaration(node)) {
