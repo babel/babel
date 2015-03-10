@@ -1,10 +1,10 @@
 var acornToEsprima = require("./acorn-to-esprima");
-var traverse       = require("babel").traverse;
+var traverse       = require("babel-core").traverse;
 var assign         = require("lodash.assign");
 var Module         = require("module");
-var acorn          = require("babel").acorn;
+var acorn          = require("babel-core").acorn;
 var path           = require("path");
-var t              = require("babel").types;
+var t              = require("babel-core").types;
 
 var hasPatched = false;
 
@@ -42,17 +42,6 @@ function monkeypatch() {
     opts.ecmaVersion = 6;
     opts.sourceType = "module";
     return analyze.call(this, ast, opts)
-  };
-
-  var eslint = require(eslintLoc);
-  var getScope = eslint.linter.getScope;
-  eslint.linter.getScope = function () {
-    var scope = getScope.apply(this, arguments);
-    if (scope.type === "global" && !scope.__patchedWithModuleVariables) {
-      scope.__patchedWithModuleVariables = true;
-      scope.variables.push.apply(scope.variables, scope.childScopes[0].variables);
-    }
-    return scope;
   };
 }
 

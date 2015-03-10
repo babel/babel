@@ -1,7 +1,6 @@
-var util = require("util");
-var espree = require("espree");
 var babelEslint = require("..");
-
+var espree      = require("espree");
+var util        = require("util");
 
 function assertSameAST(a, b, path) {
   if (!path) {
@@ -23,17 +22,19 @@ function assertSameAST(a, b, path) {
     keysB.sort();
     while (true) {
       var keyA = keysA.shift();
+      if (keyA && keyA[0] === "_") continue;
 
       // Exception: ignore "end" and "start" outside "loc" properties
       if ((keyA === "end" || keyA === "start") && path[path.length - 1] !== "loc") continue;
+      
       // Exception: ignore root "comments" property
       if (keyA === "comments" && path.length === 0) continue;
 
       var keyB = keysB.shift();
 
       if (keyA === undefined && keyB === undefined) break;
-      if (keyA === undefined || keyA > keyB) error("first does not have key \"" + keyB + "\"");
-      if (keyB === undefined || keyA < keyB) error("second does not have key \"" + keyA + "\"");
+      if (keyA === undefined || keyA > keyB) error('first does not have key "' + keyB + '"');
+      if (keyB === undefined || keyA < keyB) error('second does not have key "' + keyA + '"');
       path.push(keyA);
       assertSameAST(a[keyA], b[keyB], path);
       path.pop();
@@ -44,21 +45,21 @@ function assertSameAST(a, b, path) {
 }
 
 function parseAndAssertSame(code) {
-    var esAST = espree.parse(code, {
-      ecmaFeatures: {
-        classes: true,
-        jsx: true
-      },
-      tokens: true,
-      loc: true,
-      range: true
-    });
-    var acornAST = babelEslint.parse(code);
-    assertSameAST(acornAST, esAST);
+  var esAST = espree.parse(code, {
+    ecmaFeatures: {
+      modules: true,
+      classes: true,
+      jsx: true
+    },
+    tokens: true,
+    loc: true,
+    range: true
+  });
+  var acornAST = babelEslint.parse(code);
+  assertSameAST(acornAST, esAST);
 }
 
 describe("acorn-to-esprima", function () {
-
   it("simple expression", function () {
     parseAndAssertSame("a = 1");
   });
@@ -87,4 +88,47 @@ describe("acorn-to-esprima", function () {
     parseAndAssertSame("<foo.bar />");
   });
 
+  it("default import", function () {
+    parseAndAssertSame('import foo from "foo";');
+  });
+
+  it("import specifier", function () {
+    parseAndAssertSame('import { foo } from "foo";');
+  });
+
+  it("import specifier with name", function () {
+    parseAndAssertSame('import { foo as bar } from "foo";');
+  });
+
+  it("import bare", function () {
+    parseAndAssertSame('import "foo";');
+  });
+
+  it("export default class declaration", function () {
+    parseAndAssertSame("export default class Foo {}");
+  });
+
+  it("export default class expression", function () {
+    parseAndAssertSame("export default class {};");
+  });
+
+  it("export default function declaration", function () {
+    parseAndAssertSame("export default function Foo() {}");
+  });
+
+  it("export default function expression", function () {
+    parseAndAssertSame("export default function () {};");
+  });
+
+  it("export all", function () {
+    parseAndAssertSame('export * from "foo";');
+  });
+
+  it("export named", function () {
+    parseAndAssertSame("export { foo };");
+  });
+
+  it("export named alias", function () {
+    parseAndAssertSame("export { foo as bar };");
+  });
 });

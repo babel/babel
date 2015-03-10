@@ -8,7 +8,7 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "babel": "^4.6.0",
+    "babel-core": "^4.6.0",
     "lodash.assign": "^3.0.0"
   },
   "scripts": {
