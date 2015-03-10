@@ -2,7 +2,7 @@
 
 var commander = require("commander");
 var util      = require("../lib/babel/util");
-var runtime = require("../lib/babel/build-external-helpers");
+var runtime   = require("../lib/babel/tools/build-external-helpers");
 
 commander.option("-l, --whitelist [whitelist]", "Whitelist of helpers to ONLY include", util.list);
 commander.option("-t, --output-type [type]", "Type of output (global|umd|var)", "global");

@@ -1,6 +1,6 @@
 var genHelpers          = require("./_generator-helpers");
 var transform           = require("../lib/babel/transformation");
-var buildExernalHelpers = require("../lib/babel/build-external-helpers");
+var buildExernalHelpers = require("../lib/babel/tools/build-external-helpers");
 var sourceMap           = require("source-map");
 var codeFrame           = require("../lib/babel/helpers/code-frame");
 var Module              = require("module");

@@ -9,7 +9,7 @@ export { canCompile } from "../util";
 export { default as acorn } from "acorn-babel";
 export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";
-export { default as buildExternalHelpers } from "../build-external-helpers";
+export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { default as types } from "../types";
 export { version } from "../../../package";
 

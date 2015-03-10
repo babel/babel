@@ -1,4 +1,4 @@
-var buildExternalHelpers = require("../lib/babel/build-external-helpers");
+var buildExternalHelpers = require("../lib/babel/tools/build-external-helpers");
 var transform            = require("../lib/babel/transformation");
 var assert               = require("assert");
 var File                 = require("../lib/babel/transformation/file");
