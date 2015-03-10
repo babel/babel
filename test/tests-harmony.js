@@ -5253,8 +5253,8 @@ test("import $ from \"jquery\"", {
   body: [{
     type: "ImportDeclaration",
     specifiers: [{
-      type: "ImportSpecifier",
-      id: {
+      type: "ImportDefaultSpecifier",
+      local: {
         type: "Identifier",
         name: "$",
         loc: {
@@ -5262,7 +5262,6 @@ test("import $ from \"jquery\"", {
           end: {line: 1, column: 8}
         }
       },
-      name: null,
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
@@ -5299,7 +5298,7 @@ test("import { encrypt, decrypt } from \"crypto\"", {
     specifiers: [
       {
         type: "ImportSpecifier",
-        id: {
+        imported: {
           type: "Identifier",
           name: "encrypt",
           loc: {
@@ -5307,7 +5306,14 @@ test("import { encrypt, decrypt } from \"crypto\"", {
             end: {line: 1, column: 16}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "encrypt",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5315,7 +5321,7 @@ test("import { encrypt, decrypt } from \"crypto\"", {
       },
       {
         type: "ImportSpecifier",
-        id: {
+        imported: {
           type: "Identifier",
           name: "decrypt",
           loc: {
@@ -5323,7 +5329,14 @@ test("import { encrypt, decrypt } from \"crypto\"", {
             end: {line: 1, column: 25}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "decrypt",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 25}
+          }
+        },
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 25}
@@ -5360,7 +5373,7 @@ test("import { encrypt as enc } from \"crypto\"", {
     type: "ImportDeclaration",
     specifiers: [{
       type: "ImportSpecifier",
-      id: {
+      imported: {
         type: "Identifier",
         name: "encrypt",
         loc: {
@@ -5368,7 +5381,7 @@ test("import { encrypt as enc } from \"crypto\"", {
           end: {line: 1, column: 16}
         }
       },
-      name: {
+      local: {
         type: "Identifier",
         name: "enc",
         loc: {
@@ -5419,21 +5432,19 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
     },
     specifiers: [
       {
-        type: "ImportSpecifier",
+        type: "ImportDefaultSpecifier",
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 13}
         },
-        id: {
+        local: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 13}
           },
           name: "crypto"
-        },
-        name: null,
-        default: true
+        }
       },
       {
         type: "ImportSpecifier",
@@ -5441,7 +5452,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 24}
         },
-        id: {
+        imported: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 17},
@@ -5449,8 +5460,14 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           },
           name: "decrypt"
         },
-        name: null,
-        default: false
+        local: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 17},
+            end: {line: 1, column: 24}
+          },
+          name: "decrypt"
+        }
       },
       {
         type: "ImportSpecifier",
@@ -5458,7 +5475,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           start: {line: 1, column: 26},
           end: {line: 1, column: 40}
         },
-        id: {
+        imported: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 26},
@@ -5466,15 +5483,14 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           },
           name: "encrypt"
         },
-        name: {
+        local: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 37},
             end: {line: 1, column: 40}
           },
           name: "enc"
-        },
-        default: false
+        }
       }
     ],
     source: {
@@ -5501,7 +5517,7 @@ test("import { null as nil } from \"bar\"", {
     type: "ImportDeclaration",
     specifiers: [{
       type: "ImportSpecifier",
-      id: {
+      imported: {
         type: "Identifier",
         name: "null",
         loc: {
@@ -5509,7 +5525,7 @@ test("import { null as nil } from \"bar\"", {
           end: {line: 1, column: 13}
         }
       },
-      name: {
+      local: {
         type: "Identifier",
         name: "nil",
         loc: {
@@ -5559,12 +5575,12 @@ test("import * as crypto from \"crypto\"", {
       end: {line: 1, column: 32}
     },
     specifiers: [{
-      type: "ImportBatchSpecifier",
+      type: "ImportNamespaceSpecifier",
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 18}
       },
-      name: {
+      local: {
         type: "Identifier",
         loc: {
           start: {line: 1, column: 12},
@@ -14346,17 +14362,15 @@ test("import foo, * as bar from 'baz';", {
     type: "ImportDeclaration",
     specifiers: [
       {
-        type: "ImportSpecifier",
-        id: {
+        type: "ImportDefaultSpecifier",
+        local: {
           type: "Identifier",
           name: "foo"
-        },
-        name: null,
-        default: true
+        }
       },
       {
-        type: "ImportBatchSpecifier",
-        name: {
+        type: "ImportNamespaceSpecifier",
+        local: {
           type: "Identifier",
           name: "bar"
         }

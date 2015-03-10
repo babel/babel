@@ -2785,20 +2785,18 @@
     if (this.type === tt.name) {
       // import defaultObj, { x, y as z } from '...'
       var node = this.startNode();
-      node.id = this.parseIdent();
-      this.checkLVal(node.id, true);
-      node.name = null;
-      node['default'] = true;
-      nodes.push(this.finishNode(node, "ImportSpecifier"));
+      node.local = this.parseIdent();
+      this.checkLVal(node.local, true);
+      nodes.push(this.finishNode(node, "ImportDefaultSpecifier"));
       if (!this.eat(tt.comma)) return nodes;
     }
     if (this.type === tt.star) {
       var node = this.startNode();
       this.next();
       this.expectContextual("as");
-      node.name = this.parseIdent();
-      this.checkLVal(node.name, true);
-      nodes.push(this.finishNode(node, "ImportBatchSpecifier"));
+      node.local = this.parseIdent();
+      this.checkLVal(node.local, true);
+      nodes.push(this.finishNode(node, "ImportNamespaceSpecifier"));
       return nodes;
     }
     this.expect(tt.braceL);
@@ -2809,10 +2807,9 @@
       } else first = false;
 
       var node = this.startNode();
-      node.id = this.parseIdent(true);
-      node.name = this.eatContextual("as") ? this.parseIdent() : null;
-      this.checkLVal(node.name || node.id, true);
-      node['default'] = false;
+      node.imported = this.parseIdent(true);
+      node.local = this.eatContextual("as") ? this.parseIdent() : node.imported;
+      this.checkLVal(node.local, true);
       nodes.push(this.finishNode(node, "ImportSpecifier"));
     }
     return nodes;
