@@ -39,33 +39,6 @@ export function ForOfStatement(node, parent, scope, file) {
   }
 }
 
-var breakVisitor = {
-  enter(node, parent, scope, state) {
-    if (this.isLoop()) {
-      state.ignoreLabeless = true;
-      scope.traverse(node, breakVisitor, state);
-      state.ignoreLabeless = false;
-      return this.skip();
-    }
-
-    if (this.isBreakStatement()) {
-      if (!node.label && state.ignoreLabeless) return;
-      if (node.label && node.label.name !== state.label) return;
-
-      // break statements mean something different in this context
-      if (t.isSwitchCase(parent)) return;
-
-      var ret = t.expressionStatement(
-        t.callExpression(t.memberExpression(state.iteratorKey, t.identifier("return")), [])
-      );
-      ret = state.wrapReturn(ret);
-
-      this.skip();
-      return [ret, node];
-    }
-  }
-};
-
 var loose = function (node, parent, scope, file) {
   var left = node.left;
   var declar, id;
@@ -99,23 +72,6 @@ var loose = function (node, parent, scope, file) {
     // the for-of-loose template
     loop.body.body.shift();
   }
-
-  //
-
-  scope.traverse(node, breakVisitor, {
-    iteratorKey: iteratorKey,
-    label:       t.isLabeledStatement(parent) && parent.label.name,
-
-    wrapReturn(node) {
-      return t.ifStatement(
-        t.logicalExpression(
-          "&&",
-          t.unaryExpression("!", isArrayKey, true),
-          t.memberExpression(iteratorKey, t.identifier("return")
-        )
-      ), node);
-    }
-  });
 
   //
 
@@ -167,17 +123,6 @@ var spec = function (node, parent, scope, file) {
   if (isLabeledParent) {
     tryBody[0] = t.labeledStatement(parent.label, loop);
   }
-
-  //
-
-  scope.traverse(node, breakVisitor, {
-    iteratorKey: iteratorKey,
-    label:       isLabeledParent && parent.label.name,
-
-    wrapReturn(node) {
-      return t.ifStatement(t.memberExpression(iteratorKey, t.identifier("return")), node);
-    }
-  });
 
   //
 
