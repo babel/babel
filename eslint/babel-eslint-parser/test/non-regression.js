@@ -15,7 +15,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages) {
   );
 
   if (messages.length !== expectedMessages.length) {
-    throw new Error("Expected " + expectedMessages.length + " message(s), got " + messages.length);
+    throw new Error("Expected " + expectedMessages.length + " message(s), got " + messages.length + " " + JSON.stringify(messages));
   }
 
   messages.forEach(function (message, i) {
