@@ -1,7 +1,8 @@
 (function() {
   function defineProperties(target, props) {
-    for (var key in props) {
-      var prop = props[key];
+    var keys = Object.getOwnPropertyNames(props).concat(Object.getOwnPropertySymbols(props));
+    for (var i = 0, count = keys.length; i < count; ++i) {
+      var prop = props[keys[i]];
       prop.configurable = true;
       if (prop.value) prop.writable = true;
     }
