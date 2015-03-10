@@ -10,8 +10,10 @@ export { default as acorn } from "acorn-babel";
 export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
-export { default as types } from "../types";
 export { version } from "../../../package";
+
+import * as t from "../types";
+export { t as types };
 
 export function register(opts) {
   var callback = require("./register/node");
