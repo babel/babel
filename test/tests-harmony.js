@@ -14970,6 +14970,55 @@ test("class A { static() {} }", {
   locations: true
 });
 
+// https://github.com/marijnh/acorn/issues/213
+
+test("for (const x of list) process(x);", {
+  type: "Program",
+  body: [{
+    type: "ForOfStatement",
+    left: {
+      type: "VariableDeclaration",
+      declarations: [{
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "x",
+          range: [11, 12]
+        },
+        init: null,
+        range: [11, 12]
+      }],
+      kind: "const",
+      range: [5, 12]
+    },
+    right: {
+      type: "Identifier",
+      name: "list",
+      range: [16, 20]
+    },
+    body: {
+      type: "ExpressionStatement",
+      expression: {
+        type: "CallExpression",
+        callee: {
+          type: "Identifier",
+          name: "process",
+          range: [22, 29]
+        },
+        arguments: [{
+          type: "Identifier",
+          name: "x",
+          range: [30, 31]
+        }],
+        range: [22, 32]
+      },
+      range: [22, 33]
+    },
+    range: [0, 33]
+  }],
+  range: [0, 33]
+}, {ecmaVersion: 6, ranges: true});
+
 test("class A { *static() {} }", {
   type: "Program",
   range: [0, 24],

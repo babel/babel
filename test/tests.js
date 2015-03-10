@@ -28682,7 +28682,39 @@ test("const x = 14, y = 3, z = 1977", {
 
 testFail("const a;", "Unexpected token (1:7)", {ecmaVersion: 6});
 
-testFail("for(const x = 0;;);", "Unexpected token (1:4)", {ecmaVersion: 6});
+test("for(const x = 0;;);", {
+  type: "Program",
+  body: [{
+    type: "ForStatement",
+    init: {
+      type: "VariableDeclaration",
+      declarations: [{
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "x",
+          range: [10, 11]
+        },
+        init: {
+          type: "Literal",
+          value: 0,
+          range: [14, 15]
+        },
+        range: [10, 15]
+      }],
+      kind: "const",
+      range: [4, 15]
+    },
+    test: null,
+    update: null,
+    body: {
+      type: "EmptyStatement",
+      range: [18, 19]
+    },
+    range: [0, 19]
+  }],
+  range: [0, 19]
+}, {ecmaVersion: 6, ranges: true});
 
 testFail("for(x of a);", "Unexpected token (1:6)");
 

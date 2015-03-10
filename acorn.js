@@ -1773,7 +1773,7 @@
     case tt._throw: return this.parseThrowStatement(node);
     case tt._try: return this.parseTryStatement(node);
     case tt._let: case tt._const: if (!declaration) this.unexpected(); // NOTE: falls through to _var
-    case tt._var: return this.parseVarStatement(node, starttype.keyword);
+    case tt._var: return this.parseVarStatement(node, starttype);
     case tt._while: return this.parseWhileStatement(node);
     case tt._with: return this.parseWithStatement(node);
     case tt.braceL: return this.parseBlock(); // no point creating a function for this
@@ -1853,13 +1853,13 @@
     this.labels.push(loopLabel);
     this.expect(tt.parenL);
     if (this.type === tt.semi) return this.parseFor(node, null);
-    if (this.type === tt._var || this.type === tt._let) {
-      var init = this.startNode(), varKind = this.type.keyword, isLet = this.type === tt._let;
+    if (this.type === tt._var || this.type === tt._let || this.type === tt._const) {
+      var init = this.startNode(), varKind = this.type;
       this.next();
       this.parseVar(init, true, varKind);
       this.finishNode(init, "VariableDeclaration");
       if ((this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init.declarations.length === 1 &&
-          !(isLet && init.declarations[0].init))
+          !(varKind !== tt._var && init.declarations[0].init))
         return this.parseForIn(node, init);
       return this.parseFor(node, init);
     }
@@ -2079,12 +2079,18 @@
 
   pp.parseVar = function(node, noIn, kind) {
     node.declarations = [];
-    node.kind = kind;
+    node.kind = kind.keyword;
     for (;;) {
       var decl = this.startNode();
       decl.id = this.parseBindingAtom();
       this.checkLVal(decl.id, true);
-      decl.init = this.eat(tt.eq) ? this.parseMaybeAssign(noIn) : (kind === tt._const.keyword ? this.unexpected() : null);
+      if (this.eat(tt.eq)) {
+        decl.init = this.parseMaybeAssign(noIn);
+      } else if (kind === tt._const && !(this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of")))) {
+        this.unexpected();
+      } else {
+        decl.init = null;
+      }
       node.declarations.push(this.finishNode(decl, "VariableDeclarator"));
       if (!this.eat(tt.comma)) break;
     }

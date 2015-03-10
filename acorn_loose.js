@@ -346,7 +346,7 @@
       this.pushCx();
       this.expect(tt.parenL);
       if (this.tok.type === tt.semi) return this.parseFor(node, null);
-      if (this.tok.type === tt._var || this.tok.type === tt._let) {
+      if (this.tok.type === tt._var || this.tok.type === tt._let || this.tok.type === tt._const) {
         var init = this.parseVar(true);
         if (init.declarations.length === 1 && (this.tok.type === tt._in || this.isContextual("of"))) {
           return this.parseForIn(node, init);
