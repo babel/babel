@@ -3,7 +3,7 @@ import * as messages from "../../../messages";
 import flatten from "lodash/array/flatten";
 import * as util from  "../../../util";
 import map from "lodash/collection/map";
-import t from "../../../types";
+import * as t from "../../../types";
 
 exports.Function = function (node, parent, scope, file) {
   var tailCall = new TailCallTransformer(node, scope, file);

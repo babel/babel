@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 var buildBinaryExpression = function (left, right) {
   return t.binaryExpression("+", left, right);

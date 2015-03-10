@@ -1,5 +1,5 @@
 import explode from "./explode-assignable-expression";
-import t from "../../types";
+import * as t from "../../types";
 
 export default function (exports, opts) {
   var isAssignment = function (node) {

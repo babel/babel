@@ -7,7 +7,7 @@ import flatten from "lodash/array/flatten";
 import extend from "lodash/object/extend";
 import object from "../helpers/object";
 import each from "lodash/collection/each";
-import t from "../types";
+import * as t from "../types";
 
 var functionVariableVisitor = {
   enter(node, parent, scope, state) {

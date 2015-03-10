@@ -1,7 +1,7 @@
 import traverse from "../../../traversal";
 import object from "../../../helpers/object";
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 import values from "lodash/object/values";
 import extend from "lodash/object/extend";
 

@@ -1,5 +1,5 @@
 import * as react from "../../helpers/react";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function manipulateOptions(opts) {
   opts.blacklist.push("react");

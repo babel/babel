@@ -1,6 +1,6 @@
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
-import t from "../../types";
+import * as t from "../../types";
 
 export function UnaryExpression(node, print) {
   var hasSpace = /[a-z]$/.test(node.operator);

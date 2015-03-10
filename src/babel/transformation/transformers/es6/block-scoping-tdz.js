@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 var visitor = {
   enter(node, parent, scope, state) {

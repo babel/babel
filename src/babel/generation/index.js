@@ -8,7 +8,7 @@ import Buffer from "./buffer";
 import extend from "lodash/object/extend";
 import each from "lodash/collection/each";
 import n from "./node";
-import t from "../types";
+import * as t from "../types";
 
 class CodeGenerator {
   constructor(ast, opts, code) {

@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 import pull from "lodash/array/pull";
 
 function isProtoKey(node) {

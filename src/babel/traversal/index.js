@@ -2,7 +2,7 @@ module.exports = traverse;
 
 import TraversalContext from "./context";
 import includes from "lodash/collection/includes";
-import t from "../types";
+import * as t from "../types";
 
 function traverse(parent, opts, scope, state) {
   if (!parent) return;

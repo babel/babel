@@ -1,7 +1,7 @@
 // https://github.com/zenparsing/es-abstract-refs
 
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var experimental = true;
 

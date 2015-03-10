@@ -1,5 +1,5 @@
 import each from "lodash/collection/each";
-import t from "../../types";
+import * as t from "../../types";
 
 var PRECEDENCE = {};
 

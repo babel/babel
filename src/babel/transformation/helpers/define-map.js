@@ -2,7 +2,7 @@ import cloneDeep from "lodash/lang/cloneDeep";
 import traverse from "../../traversal";
 import each from "lodash/collection/each";
 import has from "lodash/object/has";
-import t from "../../types";
+import * as t from "../../types";
 
 export function push(mutatorMap, key, kind, computed, value) {
   var alias = t.toKeyAlias({ computed }, key);

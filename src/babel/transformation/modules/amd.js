@@ -3,7 +3,7 @@ import CommonFormatter from "./common";
 import includes from "lodash/collection/includes";
 import values from "lodash/object/values";
 import * as util from  "../../util";
-import t from "../../types";
+import * as t from "../../types";
 
 export default class AMDFormatter extends DefaultFormatter {
   init = CommonFormatter.prototype.init;

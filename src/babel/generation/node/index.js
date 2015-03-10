@@ -2,7 +2,7 @@ import whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import each from "lodash/collection/each";
 import some from "lodash/collection/some";
-import t from "../../types";
+import * as t from "../../types";
 
 var find = function (obj, node, parent) {
   if (!obj) return;

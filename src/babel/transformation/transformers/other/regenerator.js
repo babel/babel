@@ -1,5 +1,5 @@
 import regenerator from "regenerator-babel";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isFunction(node) && (node.async || node.generator);

@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 function loose(node, body, objId) {
   for (var i = 0; i < node.properties.length; i++) {

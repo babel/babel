@@ -1,5 +1,5 @@
 import ReplaceSupers from "../../helpers/replace-supers";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isIdentifier(node, { name: "super" });

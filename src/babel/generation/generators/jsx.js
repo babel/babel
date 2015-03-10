@@ -1,5 +1,5 @@
 import each from "lodash/collection/each";
-import t from "../../types";
+import * as t from "../../types";
 
 export function JSXAttribute(node, print) {
   print(node.name);

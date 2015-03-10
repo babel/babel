@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function BlockStatement(node, parent, scope, file) {
   if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {

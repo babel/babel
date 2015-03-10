@@ -1,5 +1,5 @@
 import * as messages from "../../../messages";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var check = t.isPattern;
 

@@ -4,7 +4,7 @@
 // a generator function as a default then regenerator will destroy the export
 // declaration and leave a variable declaration in it's place... yeah, handy.
 
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isImportDeclaration(node) || t.isExportDeclaration(node);

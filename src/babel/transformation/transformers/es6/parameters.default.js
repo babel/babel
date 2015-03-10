@@ -1,5 +1,5 @@
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isFunction(node) && hasDefaults(node);

@@ -1,4 +1,4 @@
-import t from "../../types";
+import * as t from "../../types";
 
 export function _params(node, print) {
   print(node.typeParameters);

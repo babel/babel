@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 function toStatements(node) {
   if (t.isBlockStatement(node)) {

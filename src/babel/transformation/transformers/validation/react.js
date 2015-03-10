@@ -1,5 +1,5 @@
 import * as messages from "../../../messages";
-import t from "../../../types";
+import * as t from "../../../types";
 
 // check if the input Literal `source` is an alternate casing of "react"
 function check(source, file) {

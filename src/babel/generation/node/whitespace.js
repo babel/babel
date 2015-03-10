@@ -1,7 +1,7 @@
 import isBoolean from "lodash/lang/isBoolean";
 import each from "lodash/collection/each";
 import map from "lodash/collection/map";
-import t from "../../types";
+import * as t from "../../types";
 
 function crawl(node, state = {}) {
   if (t.isMemberExpression(node)) {

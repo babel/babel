@@ -1,7 +1,7 @@
 import AMDFormatter from "./amd";
 import values from "lodash/object/values";
 import * as util from  "../../util";
-import t from "../../types";
+import * as t from "../../types";
 
 export default class UMDFormatter extends AMDFormatter {
   transform(program) {

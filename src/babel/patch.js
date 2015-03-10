@@ -1,7 +1,7 @@
 import estraverse from "estraverse";
 import extend from "lodash/object/extend";
 import types from "ast-types";
-import t from "./types";
+import * as t from "./types";
 
 // estraverse
 

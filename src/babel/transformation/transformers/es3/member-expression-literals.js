@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function MemberExpression(node) {
   var prop = node.property;

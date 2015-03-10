@@ -4,7 +4,7 @@ import * as defineMap from "../../helpers/define-map";
 import * as messages from "../../../messages";
 import * as util from  "../../../util";
 import traverse from "../../../traversal";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var check = t.isClass;
 

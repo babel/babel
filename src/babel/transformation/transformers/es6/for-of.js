@@ -1,6 +1,6 @@
 import * as messages from "../../../messages";
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var check = t.isForOfStatement;
 

@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isProperty(node) && (node.method || node.shorthand);

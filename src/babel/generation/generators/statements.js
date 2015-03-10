@@ -1,5 +1,5 @@
 import repeating from "repeating";
-import t from "../../types";
+import * as t from "../../types";
 
 export function WithStatement(node, print) {
   this.keyword("with");

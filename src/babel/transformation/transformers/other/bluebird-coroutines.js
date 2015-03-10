@@ -1,5 +1,5 @@
 import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function manipulateOptions(opts) {
   opts.experimental = true;

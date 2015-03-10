@@ -2,7 +2,7 @@ import * as messages from "../../messages";
 import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as util from  "../../util";
-import t from "../../types";
+import * as t from "../../types";
 
 var remapVisitor = {
   enter(node, parent, scope, formatter) {

@@ -1,5 +1,5 @@
 import each from "lodash/collection/each";
-import t from "../../types";
+import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {
   if (t.isSpecifierDefault(node)) {

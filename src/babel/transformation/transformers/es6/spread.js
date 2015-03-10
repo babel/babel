@@ -1,5 +1,5 @@
 import includes from "lodash/collection/includes";
-import t from "../../../types";
+import * as t from "../../../types";
 
 function getSpreadLiteral(spread, scope) {
   return scope.toArray(spread.argument, true);

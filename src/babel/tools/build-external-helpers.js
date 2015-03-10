@@ -1,9 +1,9 @@
-import generator from "./generation";
-import * as messages from "./messages";
-import * as util from  "./util";
-import File from "./transformation/file";
+import generator from "../generation";
+import * as messages from "../messages";
+import * as util from  "../util";
+import File from "../transformation/file";
 import each from "lodash/collection/each";
-import t from "./types";
+import * as t from "../types";
 
 function buildGlobal(namespace, builder) {
   var body      = [];

@@ -14,6 +14,9 @@ var Foo = (function () {
   }, {
     key: bar,
     value: function () {}
+  }, {
+    key: bar + "foo",
+    value: function () {}
   }]);
   return Foo;
 })();

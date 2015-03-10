@@ -1,7 +1,7 @@
 import traverse from "./index";
 import includes from "lodash/collection/includes";
 import Scope from "./scope";
-import t from "../types";
+import * as t from "../types";
 
 export default class TraversalPath {
   constructor(parent, container) {
@@ -42,6 +42,14 @@ export default class TraversalPath {
     }
 
     return ourScope;
+  }
+
+  insertBefore(node) {
+
+  }
+
+  insertAfter(node) {
+
   }
 
   setData(key, val) {

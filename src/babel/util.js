@@ -14,7 +14,7 @@ import path from "path";
 import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import fs from "fs";
-import t from "./types";
+import * as t from "./types";
 
 export { inherits, inspect } from "util";
 

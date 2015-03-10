@@ -1,4 +1,4 @@
-import t from "../../types";
+import * as t from "../../types";
 
 var getObjRef = function (node, nodes, file, scope) {
   var ref;

@@ -1,4 +1,4 @@
-import t from "../../types";
+import * as t from "../../types";
 
 export default function build(node, buildBody) {
   var self = node.blocks.shift();

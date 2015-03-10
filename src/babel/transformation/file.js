@@ -14,7 +14,7 @@ import slash from "slash";
 import * as util from  "../util";
 import path from "path";
 import each from "lodash/collection/each";
-import t from "../types";
+import * as t from "../types";
 
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
@@ -423,7 +423,7 @@ export default class File {
   }
 
   transform(ast) {
-    this.debug();
+    this.log.debug();
 
     this.ast = ast;
     this.lastStatements = t.getLastStatements(ast.program);

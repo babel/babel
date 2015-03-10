@@ -1,4 +1,4 @@
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function Property(node) {
   var key = node.key;

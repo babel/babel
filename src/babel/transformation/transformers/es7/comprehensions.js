@@ -1,7 +1,7 @@
 import buildComprehension from "../../helpers/build-comprehension";
 import traverse from "../../../traversal";
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var experimental = true;
 

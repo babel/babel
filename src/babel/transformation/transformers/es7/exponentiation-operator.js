@@ -1,7 +1,7 @@
 // https://github.com/rwaldron/exponentiation-operator
 
 import build from "../../helpers/build-binary-assignment-operator-transformer";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var experimental = true;
 

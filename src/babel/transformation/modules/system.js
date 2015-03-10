@@ -4,7 +4,7 @@ import * as util from  "../../util";
 import last from "lodash/array/last";
 import each from "lodash/collection/each";
 import map from "lodash/collection/map";
-import t from "../../types";
+import * as t from "../../types";
 
 var hoistVariablesVisitor = {
   enter(node, parent, scope, hoistDeclarators) {

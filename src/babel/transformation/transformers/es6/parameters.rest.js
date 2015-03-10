@@ -1,6 +1,6 @@
 import isNumber from "lodash/lang/isNumber";
 import * as util from  "../../../util";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var check = t.isRestElement;
 

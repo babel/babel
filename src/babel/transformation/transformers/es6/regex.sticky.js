@@ -1,5 +1,5 @@
 import * as regex from "../../helpers/regex";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return regex.is(node, "y");

@@ -1,7 +1,7 @@
 import TraversalPath from "./path";
 import flatten from "lodash/array/flatten";
 import compact from "lodash/array/compact";
-import t from "../types";
+import * as t from "../types";
 
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {

@@ -1,5 +1,5 @@
 import * as defineMap from "../../helpers/define-map";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export function check(node) {
   return t.isProperty(node) && (node.kind === "get" || node.kind === "set");

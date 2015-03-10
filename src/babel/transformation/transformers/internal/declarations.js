@@ -1,5 +1,5 @@
 import * as strict from "../../helpers/strict";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var secondPass = true;
 

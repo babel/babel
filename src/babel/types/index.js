@@ -1,17 +1,10 @@
 import toFastProperties from "to-fast-properties";
-import isPlainObject from "lodash/lang/isPlainObject";
-import isNumber from "lodash/lang/isNumber";
-import isRegExp from "lodash/lang/isRegExp";
-import isString from "lodash/lang/isString";
 import compact from "lodash/array/compact";
-import esutils from "esutils";
-import object from "../helpers/object";
-import clone from "lodash/lang/clone";
+import assign from "lodash/object/assign";
 import each from "lodash/collection/each";
 import uniq from "lodash/array/uniq";
 
-var t = {};
-export default t;
+var t = exports;
 
 /**
  * Registers `is[Type]` and `assert[Type]` generated functions for a given `type`.
@@ -31,13 +24,15 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
-t.STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
-t.NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
-t.FLATTENABLE_KEYS        = ["body", "expressions"];
-t.FOR_INIT_KEYS           = ["left", "init"];
+export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
+export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
+export var FLATTENABLE_KEYS        = ["body", "expressions"];
+export var FOR_INIT_KEYS           = ["left", "init"];
+export var COMMENT_KEYS            = ["leadingComments", "trailingComments"];
 
-t.VISITOR_KEYS = require("./visitor-keys");
-t.ALIAS_KEYS   = require("./alias-keys");
+export var VISITOR_KEYS = require("./visitor-keys");
+export var BUILDER_KEYS = require("./builder-keys");
+export var ALIAS_KEYS   = require("./alias-keys");
 
 t.FLIPPED_ALIAS_KEYS = {};
 
@@ -57,7 +52,7 @@ each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   registerType(type, false);
 });
 
-t.TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
+export var TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
 
 /**
  * Returns whether `node` is of given `type`.
@@ -66,7 +61,7 @@ t.TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
  * Optionally, pass `skipAliasCheck` to directly compare `node.type` with `type`.
  */
 
-t.is = function (type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
+export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
   if (!node) return false;
 
   var typeMatches = type === node.type;
@@ -88,11 +83,7 @@ t.is = function (type: string, node: Object, opts?: Object, skipAliasCheck?: boo
   }
 
   return true;
-};
-
-//
-
-t.BUILDER_KEYS = require("./builder-keys");
+}
 
 each(t.VISITOR_KEYS, function (keys, type) {
   if (t.BUILDER_KEYS[type]) return;
@@ -122,65 +113,11 @@ each(t.BUILDER_KEYS, function (keys, type) {
   };
 });
 
-/**
- * Description
- */
-
-t.toComputedKey = function (node: Object, key: Object = node.key): Object {
-  if (!node.computed) {
-    if (t.isIdentifier(key)) key = t.literal(key.name);
-  }
-  return key;
-};
-
-/**
- * Turn an array of statement `nodes` into a `SequenceExpression`.
- *
- * Variable declarations are turned into simple assignments and their
- * declarations hoisted to the top of the current scope.
- *
- * Expression statements are just resolved to their expression.
- */
-
-t.toSequenceExpression = function (nodes: Array<Object>, scope: Scope): Object {
-  var exprs = [];
-
-  each(nodes, function (node) {
-    if (t.isExpression(node)) {
-      exprs.push(node);
-    } if (t.isExpressionStatement(node)) {
-      exprs.push(node.expression);
-    } else if (t.isVariableDeclaration(node)) {
-      each(node.declarations, function (declar) {
-        scope.push({
-          kind: node.kind,
-          id: declar.id
-        });
-        exprs.push(t.assignmentExpression("=", declar.id, declar.init));
-      });
-    } else if (t.isIfStatement(node)) {
-      return t.conditionalExpression(
-        node.test,
-        node.consequent ? t.toSequenceExpression([node.consequent]) : t.identifier("undefined"),
-        node.alternate ? t.toSequenceExpression([node.alternate]) : t.identifier("undefined")
-      );
-    } else if (t.isBlockStatement(node)) {
-      return t.toSequenceExpression(node.body);
-    }
-  });
-
-  if (exprs.length === 1) {
-    return exprs[0];
-  } else {
-    return t.sequenceExpression(exprs);
-  }
-};
-
 /*
  * Description
  */
 
-t.shallowEqual = function (actual: Object, expected: Object): boolean {
+export function shallowEqual(actual: Object, expected: Object): boolean {
   var keys = Object.keys(expected);
 
   for (var i = 0; i < keys.length; i++) {
@@ -192,204 +129,54 @@ t.shallowEqual = function (actual: Object, expected: Object): boolean {
   }
 
   return true;
-};
+}
 
 /**
  * Description
  */
 
-t.appendToMemberExpression = function (member: Object, append: Object, computed?: boolean): Object {
+export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
   member.object   = t.memberExpression(member.object, member.property, member.computed);
   member.property = append;
   member.computed = !!computed;
   return member;
-};
+}
 
 /**
  * Description
  */
 
-t.prependToMemberExpression = function (member: Object, append: Object): Object {
+export function prependToMemberExpression(member: Object, append: Object): Object {
   member.object = t.memberExpression(append, member.object);
   return member;
-};
-
-/**
- * Check if the input `node` is a reference to a bound variable.
- */
-
-t.isReferenced = function (node: Object, parent: Object): boolean {
-  // yes: PARENT[NODE]
-  // yes: NODE.child
-  // no: parent.CHILD
-  if (t.isMemberExpression(parent)) {
-    if (parent.property === node && parent.computed) {
-      return true;
-    } else if (parent.object === node) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // yes: { [NODE]: "" }
-  // no: { NODE: "" }
-  if (t.isProperty(parent) && parent.key === node) {
-    return parent.computed;
-  }
-
-  // no: var NODE = init;
-  // yes: var id = NODE;
-  if (t.isVariableDeclarator(parent)) {
-    return parent.id !== node;
-  }
-
-  // no: function NODE() {}
-  // no: function foo(NODE) {}
-  if (t.isFunction(parent)) {
-    for (var i = 0; i < parent.params.length; i++) {
-      var param = parent.params[i];
-      if (param === node) return false;
-    }
-
-    return parent.id !== node;
-  }
-
-  // no: export { foo as NODE };
-  if (t.isExportSpecifier(parent, { name: node })) {
-    return false;
-  }
-
-  // no: import { NODE as foo } from "foo";
-  if (t.isImportSpecifier(parent, { id: node })) {
-    return false;
-  }
-
-  // no: class NODE {}
-  if (t.isClass(parent)) {
-    return parent.id !== node;
-  }
-
-  // yes: class { [NODE](){} }
-  if (t.isMethodDefinition(parent)) {
-    return parent.key === node && parent.computed;
-  }
-
-  // no: NODE: for (;;) {}
-  if (t.isLabeledStatement(parent)) {
-    return false;
-  }
-
-  // no: try {} catch (NODE) {}
-  if (t.isCatchClause(parent)) {
-    return parent.param !== node;
-  }
-
-  // no: function foo(...NODE) {}
-  if (t.isRestElement(parent)) {
-    return false;
-  }
-
-  // no: [NODE = foo] = [];
-  // yes: [foo = NODE] = [];
-  if (t.isAssignmentPattern(parent)) {
-    return parent.right === node;
-  }
-
-  // no: [NODE] = [];
-  // no: ({ NODE }) = [];
-  if (t.isPattern(parent)) {
-    return false;
-  }
-
-  // no: import NODE from "bar";
-  if (t.isImportSpecifier(parent)) {
-    return false;
-  }
-
-  // no: import * as NODE from "foo";
-  if (t.isImportBatchSpecifier(parent)) {
-    return false;
-  }
-
-  // no: class Foo { private NODE; }
-  if (t.isPrivateDeclaration(parent)) {
-    return false;
-  }
-
-  return true;
-};
-
-/**
- * Check if the input `node` is an `Identifier` and `isReferenced`.
- */
-
-t.isReferencedIdentifier = function (node: Object, parent: Object, opts?: Object): boolean {
-  return t.isIdentifier(node, opts) && t.isReferenced(node, parent);
-};
-
-/**
- * Check if the input `name` is a valid identifier name
- * and isn't a reserved word.
- */
-
-t.isValidIdentifier = function (name: string): boolean {
-  return isString(name) && esutils.keyword.isIdentifierName(name) && !esutils.keyword.isReservedWordES6(name, true);
-};
-
-/*
- * Description
- */
-
-t.toIdentifier = function (name: string): string {
-  if (t.isIdentifier(name)) return name.name;
-
-  name = name + "";
-
-  // replace all non-valid identifiers with dashes
-  name = name.replace(/[^a-zA-Z0-9$_]/g, "-");
-
-  // remove all dashes and numbers from start of name
-  name = name.replace(/^[-0-9]+/, "");
-
-  // camel case
-  name = name.replace(/[-\s]+(.)?/g, function (match, c) {
-    return c ? c.toUpperCase() : "";
-  });
-
-  if (!t.isValidIdentifier(name)) {
-    name = `_${name}`;
-  }
-
-  return name || "_";
-};
+}
 
 /**
  * Description
  */
 
-t.ensureBlock = function (node: Object, key: string = "body") {
+export function ensureBlock(node: Object, key: string = "body") {
   return node[key] = t.toBlock(node[key], node);
-};
+}
 
 /**
  * Description
  */
 
-t.clone = function (node: Object): Object {
+export function clone(node: Object): Object {
   var newNode = {};
   for (var key in node) {
     if (key[0] === "_") continue;
     newNode[key] = node[key];
   }
   return newNode;
-};
+}
 
 /**
  * Description
  */
 
-t.cloneDeep = function (node: Object): Object {
+export function cloneDeep(node: Object): Object {
   var newNode = {};
 
   for (var key in node) {
@@ -409,7 +196,7 @@ t.cloneDeep = function (node: Object): Object {
   }
 
   return newNode;
-};
+}
 
 /**
  * Build a function that when called will return whether or not the
@@ -419,7 +206,7 @@ t.cloneDeep = function (node: Object): Object {
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-t.buildMatchMemberExpression = function (match:string, allowPartial?: boolean): Function {
+export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
   var parts = match.split(".");
 
   return function (member) {
@@ -464,212 +251,35 @@ t.buildMatchMemberExpression = function (match:string, allowPartial?: boolean): 
 
     return true;
   };
-};
-
-/**
- * Description
- *
- * @returns {Object|Boolean}
- */
-
-t.toStatement = function (node: Object, ignore?: boolean) {
-  if (t.isStatement(node)) {
-    return node;
-  }
-
-  var mustHaveId = false;
-  var newType;
-
-  if (t.isClass(node)) {
-    mustHaveId = true;
-    newType = "ClassDeclaration";
-  } else if (t.isFunction(node)) {
-    mustHaveId = true;
-    newType = "FunctionDeclaration";
-  } else if (t.isAssignmentExpression(node)) {
-    return t.expressionStatement(node);
-  }
-
-  if (mustHaveId && !node.id) {
-    newType = false;
-  }
-
-  if (!newType) {
-    if (ignore) {
-      return false;
-    } else {
-      throw new Error(`cannot turn ${node.type} to a statement`);
-    }
-  }
-
-  node.type = newType;
-
-  return node;
-};
+}
 
 /**
  * Description
  */
 
-t.toExpression = function (node: Object): Object {
-  if (t.isExpressionStatement(node)) {
-    node = node.expression;
-  }
-
-  if (t.isClass(node)) {
-    node.type = "ClassExpression";
-  } else if (t.isFunction(node)) {
-    node.type = "FunctionExpression";
-  }
-
-  if (t.isExpression(node)) {
-    return node;
-  } else {
-    throw new Error(`cannot turn ${node.type} to an expression`);
-  }
-};
-
-/**
- * Description
- */
-
-t.toBlock = function (node: Object, parent: Object): Object {
-  if (t.isBlockStatement(node)) {
-    return node;
-  }
-
-  if (t.isEmptyStatement(node)) {
-    node = [];
-  }
-
-  if (!Array.isArray(node)) {
-    if (!t.isStatement(node)) {
-      if (t.isFunction(parent)) {
-        node = t.returnStatement(node);
-      } else {
-        node = t.expressionStatement(node);
-      }
-    }
-
-    node = [node];
-  }
-
-  return t.blockStatement(node);
-};
-
-/**
- * Return a list of binding identifiers associated with
- * the input `node`.
- */
-
-t.getBindingIdentifiers = function (node: Object): Object {
-  var search = [].concat(node);
-  var ids    = object();
-
-  while (search.length) {
-    var id = search.shift();
-    if (!id) continue;
-
-    var keys = t.getBindingIdentifiers.keys[id.type];
-
-    if (t.isIdentifier(id)) {
-      ids[id.name] = id;
-    } else if (t.isImportSpecifier(id)) {
-      search.push(id.name || id.id);
-    } else if (t.isExportDeclaration(id)) {
-      if (t.isDeclaration(node.declaration)) {
-        search.push(node.declaration);
-      }
-    } else if (keys) {
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        search = search.concat(id[key] || []);
-      }
-    }
-  }
-
-  return ids;
-};
-
-t.getBindingIdentifiers.keys = {
-  UnaryExpression: ["argument"],
-  AssignmentExpression: ["left"],
-  ImportBatchSpecifier: ["name"],
-  VariableDeclarator: ["id"],
-  FunctionDeclaration: ["id"],
-  FunctionExpression: ["id"],
-  ClassDeclaration: ["id"],
-  ClassExpression: ["id"],
-  SpreadElement: ["argument"],
-  RestElement: ["argument"],
-  UpdateExpression: ["argument"],
-  SpreadProperty: ["argument"],
-  Property: ["value"],
-  ComprehensionBlock: ["left"],
-  AssignmentPattern: ["left"],
-  PrivateDeclaration: ["declarations"],
-  ComprehensionExpression: ["blocks"],
-  ImportDeclaration: ["specifiers"],
-  VariableDeclaration: ["declarations"],
-  ArrayPattern: ["elements"],
-  ObjectPattern: ["properties"]
-};
-
-/**
- * Description
- */
-
-t.isLet = function (node: Object): boolean {
-  return t.isVariableDeclaration(node) && (node.kind !== "var" || node._let);
-};
-
-/**
- * Description
- */
-
-t.isBlockScoped = function (node: Object): boolean {
-  return t.isFunctionDeclaration(node) || t.isClassDeclaration(node) || t.isLet(node);
-};
-
-/**
- * Description
- */
-
-t.isVar = function (node: Object): boolean {
-  return t.isVariableDeclaration(node, { kind: "var" }) && !node._let;
-};
-
-//
-
-t.COMMENT_KEYS = ["leadingComments", "trailingComments"];
-
-/**
- * Description
- */
-
-t.removeComments = function (child: Object): Object {
-  each(t.COMMENT_KEYS, function (key) {
+export function removeComments(child: Object): Object {
+  each(COMMENT_KEYS, function (key) {
     delete child[key];
   });
   return child;
-};
+}
 
 /**
  * Description
  */
 
-t.inheritsComments = function (child: Object, parent: Object): Object {
-  each(t.COMMENT_KEYS, function (key) {
+export function inheritsComments(child: Object, parent: Object): Object {
+  each(COMMENT_KEYS, function (key) {
     child[key]  = uniq(compact([].concat(child[key], parent[key])));
   });
   return child;
-};
+}
 
 /**
  * Description
  */
 
-t.inherits = function (child: Object, parent: Object): Object {
+export function inherits(child: Object, parent: Object): Object {
   child._declarations = parent._declarations;
   child._scopeInfo    = parent._scopeInfo;
   child.range         = parent.range;
@@ -682,283 +292,13 @@ t.inherits = function (child: Object, parent: Object): Object {
 
   t.inheritsComments(child, parent);
   return child;
-};
-
-/**
- * Description
- */
-
-t.getLastStatements = function (node: Object): Array<Object> {
-  var nodes = [];
-
-  var add = function (node) {
-    nodes = nodes.concat(t.getLastStatements(node));
-  };
-
-  if (t.isIfStatement(node)) {
-    add(node.consequent);
-    add(node.alternate);
-  } else if (t.isFor(node) || t.isWhile(node)) {
-    add(node.body);
-  } else if (t.isProgram(node) || t.isBlockStatement(node)) {
-    add(node.body[node.body.length - 1]);
-  } else if (node) {
-    nodes.push(node);
-  }
-
-  return nodes;
-};
-
-/**
- * Description
- */
-
-t.toKeyAlias = function (node: Object, key: Object = node.key) {
-  var alias;
-  if (t.isIdentifier(key)) {
-    alias = key.name;
-  } else if (t.isLiteral(key)) {
-    alias = JSON.stringify(key.value);
-  } else {
-    alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
-  }
-  if (node.computed) alias = `[${alias}]`;
-  return alias;
-};
-
-/**
- * Description
- */
-
-t.getSpecifierName = function (specifier: Object): Object {
-  return specifier.name || specifier.id;
-};
-
-/**
- * Description
- */
-
-t.getSpecifierId = function (specifier: Object): Object {
-  if (specifier.default) {
-    return t.identifier("default");
-  } else {
-    return specifier.id;
-  }
-};
-
-/**
- * Description
- */
-
-t.isSpecifierDefault = function (specifier: Object): boolean {
-  return specifier.default || t.isIdentifier(specifier.id) && specifier.id.name === "default";
-};
-
-/**
- * Description
- */
-
-t.isScope = function (node: Object, parent: Object): boolean {
-  if (t.isBlockStatement(node)) {
-    if (t.isLoop(parent.block, { body: node })) {
-      return false;
-    }
-
-    if (t.isFunction(parent.block, { body: node })) {
-      return false;
-    }
-  }
-
-  return t.isScopable(node);
-};
-
-/**
- * Description
- */
-
-t.isImmutable = function (node: Object): boolean {
-  if (t.isLiteral(node)) {
-    if (node.regex) {
-      // regexes are mutable
-      return false;
-    } else {
-      // immutable!
-      return true;
-    }
-  } else if (t.isIdentifier(node)) {
-    if (node.name === "undefined") {
-      // immutable!
-      return true;
-    } else {
-      // no idea...
-      return false;
-    }
-  }
-
-  return false;
-};
-
-/**
- * Walk the input `node` and statically evaluate if it's truthy.
- *
- * Returning `true` when we're sure that the expression will evaluate to a
- * truthy value, `false` if we're sure that it will evaluate to a falsy
- * value and `undefined` if we aren't sure. Because of this please do not
- * rely on coercion when using this method and check with === if it's false.
- *
- * For example do:
- *
- *   if (t.evaluateTruthy(node) === false) falsyLogic();
- *
- * **AND NOT**
- *
- *   if (!t.evaluateTruthy(node)) falsyLogic();
- *
- */
-
-t.evaluateTruthy = function (node: Object, scope: Scope): boolean {
-  var res = t.evaluate(node, scope);
-  if (res.confident) return !!res.value;
-};
-
-/**
- * Walk the input `node` and statically evaluate it.
- *
- * Returns an pbject in the form `{ confident, value }`. `confident` indicates
- * whether or not we had to drop out of evaluating the expression because of
- * hitting an unknown node that we couldn't confidently find the value of.
- *
- * Example:
- *
- *   t.evaluate(parse("5 + 5")) // { confident: true, value: 10 }
- *   t.evaluate(parse("!true")) // { confident: true, value: false }
- *   t.evaluate(parse("foo + foo")) // { confident: false, value: undefined }
- *
- */
-
-t.evaluate = function (node: Object, scope: Scope): { confident: boolean; value: any } {
-  var confident = true;
-
-  var value = evaluate(node);
-  if (!confident) value = undefined;
-  return {
-    confident: confident,
-    value:     value
-  };
-
-  function evaluate(node) {
-    if (!confident) return;
-
-    if (t.isSequenceExpression(node)) {
-      return evaluate(node.expressions[node.expressions.length - 1]);
-    }
-
-    if (t.isLiteral(node)) {
-      if (node.regex && node.value === null) {
-        // we have a regex and we can't represent it natively
-      } else {
-        return node.value;
-      }
-    }
-
-    if (t.isConditionalExpression(node)) {
-      if (evaluate(node.test)) {
-        return evaluate(node.consequent);
-      } else {
-        return evaluate(node.alternate);
-      }
-    }
-
-    if (t.isIdentifier(node)) {
-      if (node.name === "undefined") {
-        return undefined;
-      } else {
-        return evaluate(scope.getImmutableBindingValue(node.name));
-      }
-    }
-
-    if (t.isUnaryExpression(node, { prefix: true })) {
-      var arg = evaluate(node.argument);
-      switch (node.operator) {
-        case "void": return undefined;
-        case "!": return !arg;
-        case "+": return +arg;
-        case "-": return -arg;
-      }
-    }
-
-    if (t.isArrayExpression(node) || t.isObjectExpression(node)) {
-      // we could evaluate these but it's probably impractical and not very useful
-    }
-
-    if (t.isLogicalExpression(node)) {
-      var left = evaluate(node.left);
-      var right = evaluate(node.right);
-
-      switch (node.operator) {
-        case "||": return left || right;
-        case "&&": return left && right;
-      }
-    }
-
-    if (t.isBinaryExpression(node)) {
-      var left = evaluate(node.left);
-      var right = evaluate(node.right);
-
-      switch (node.operator) {
-        case "-": return left - right;
-        case "+": return left + right;
-        case "/": return left / right;
-        case "*": return left * right;
-        case "%": return left % right;
-        case "<": return left < right;
-        case ">": return left > right;
-        case "<=": return left <= right;
-        case ">=": return left >= right;
-        case "==": return left == right;
-        case "!=": return left != right;
-        case "===": return left === right;
-        case "!==": return left !== right;
-      }
-    }
-
-    confident = false;
-  }
-};
-
-/**
- * Description
- */
-
-t.valueToNode = function (value: any): Object {
-  if (value === undefined) {
-    return t.identifier("undefined");
-  }
-
-  if (value === true || value === false || value === null || isString(value) || isNumber(value) || isRegExp(value)) {
-    return t.literal(value);
-  }
-
-  if (Array.isArray(value)) {
-    return t.arrayExpression(value.map(t.valueToNode));
-  }
-
-  if (isPlainObject(value)) {
-    var props = [];
-    for (var key in value) {
-      var nodeKey;
-      if (t.isValidIdentifier(key)) {
-        nodeKey = t.identifier(key);
-      } else {
-        nodeKey = t.literal(key);
-      }
-      props.push(t.property("init", nodeKey, t.valueToNode(value[key])));
-    }
-    return t.objectExpression(props);
-  }
-
-  throw new Error("don't know how to turn this value into a node");
-};
+}
 
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
+
+exports.__esModule = true;
+assign(t, require("./evaluators"));
+assign(t, require("./retrievers"));
+assign(t, require("./validators"));
+assign(t, require("./converters"));

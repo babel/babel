@@ -1,7 +1,7 @@
 module.exports = ReplaceSupers;
 
 import * as messages from "../../messages";
-import t from "../../types";
+import * as t from "../../types";
 
 
 function isIllegalBareSuper(node, parent) {

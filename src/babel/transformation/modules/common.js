@@ -1,7 +1,7 @@
 import DefaultFormatter from "./_default";
 import includes from "lodash/collection/includes";
 import * as util from  "../../util";
-import t from "../../types";
+import * as t from "../../types";
 
 export default class CommonJSFormatter extends DefaultFormatter {
   init() {

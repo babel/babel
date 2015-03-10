@@ -1,5 +1,5 @@
 import build from "../../helpers/build-conditional-assignment-operator-transformer";
-import t from "../../../types";
+import * as t from "../../../types";
 
 export var playground = true;
 

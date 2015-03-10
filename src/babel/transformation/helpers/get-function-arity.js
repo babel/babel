@@ -1,4 +1,4 @@
-import t from "../../types";
+import * as t from "../../types";
 
 export default function (node) {
   var lastNonDefault = 0;

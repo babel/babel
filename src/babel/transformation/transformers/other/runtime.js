@@ -2,7 +2,7 @@ import includes from "lodash/collection/includes";
 import * as util from  "../../../util";
 import core from "core-js/library";
 import has from "lodash/object/has";
-import t from "../../../types";
+import * as t from "../../../types";
 
 var isSymboliterator = t.buildMatchMemberExpression("Symbol.iterator");
 

@@ -1,5 +1,5 @@
 import sourceMap from "source-map";
-import t from "../types";
+import * as t from "../types";
 
 export default class SourceMap {
   constructor(position, opts, code) {

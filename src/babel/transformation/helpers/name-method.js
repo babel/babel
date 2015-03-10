@@ -1,6 +1,6 @@
 import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
-import t from "../../types";
+import * as t from "../../types";
 
 var visitor = {
   enter(node, parent, scope, state) {
