@@ -126,7 +126,7 @@ each(t.BUILDER_KEYS, function (keys, type) {
  * Description
  */
 
-t.toComputedKey = function (node: Object, key: Object): Object {
+t.toComputedKey = function (node: Object, key: Object = node.key): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.literal(key.name);
   }
@@ -699,6 +699,23 @@ t.getLastStatements = function (node: Object): Array<Object> {
   }
 
   return nodes;
+};
+
+/**
+ * Description
+ */
+
+t.toKeyAlias = function (node: Object, key: Object = node.key) {
+  var alias;
+  if (t.isIdentifier(key)) {
+    alias = key.name;
+  } else if (t.isLiteral(key)) {
+    alias = JSON.stringify(key.value);
+  } else {
+    alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
+  }
+  if (node.computed) alias = `[${alias}]`;
+  return alias;
 };
 
 /**

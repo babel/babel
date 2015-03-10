@@ -50,6 +50,7 @@ export default class File {
     "inherits",
     "defaults",
     "create-class",
+    "create-computed-class",
     "apply-constructor",
     "tagged-template-literal",
     "tagged-template-literal-loose",

@@ -217,6 +217,7 @@ class ClassTransformer {
 
     var instanceProps;
     var staticProps;
+    var classHelper = "create-class";
 
     if (this.hasInstanceMutators) {
       instanceProps = defineMap.toClassObject(this.instanceMutatorMap);
@@ -227,13 +228,19 @@ class ClassTransformer {
     }
 
     if (instanceProps || staticProps) {
+      if (defineMap.hasComputed(this.instanceMutatorMap) || defineMap.hasComputed(this.staticMutatorMap)) {
+        if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
+        if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
+        classHelper = "create-computed-class";
+      }
+
       instanceProps ||= t.literal(null);
 
       var args = [this.classRef, instanceProps];
       if (staticProps) args.push(staticProps);
 
       body.push(t.expressionStatement(
-        t.callExpression(this.file.addHelper("create-class"), args)
+        t.callExpression(this.file.addHelper(classHelper), args)
       ));
     }
   }

@@ -5,17 +5,17 @@ var Foo = (function () {
     babelHelpers.classCallCheck(this, Foo);
   }
 
-  babelHelpers.createClass(Foo, babelHelpers.defineProperty({
-    bar: {
-      get: function () {
-        return babelHelpers.defineProperty(this, "bar", complex()).bar;
-      }
+  babelHelpers.createComputedClass(Foo, [{
+    key: "bar",
+    get: function () {
+      return babelHelpers.defineProperty(this, "bar", complex()).bar;
     }
-  }, bar, {
+  }, {
+    key: bar,
     get: function () {
       return babelHelpers.defineProperty(this, bar, complex())[bar];
     }
-  }));
+  }]);
   return Foo;
 })();
 
