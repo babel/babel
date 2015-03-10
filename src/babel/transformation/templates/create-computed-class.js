@@ -1,13 +1,11 @@
 (function() {
-  function defineProperties(target, rawProps) {
-    var props = {};
-    for (var i = 0; i < rawProps.length; i ++) {
-      var prop = rawProps[i];
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i ++) {
+      var prop = props[i];
       prop.configurable = true;
       if (prop.value) prop.writable = true;
-      props[prop.key] = prop;
+      Object.defineProperty(target, prop.key, prop);
     }
-    Object.defineProperties(target, props);
   }
 
   return function (Constructor, protoProps, staticProps) {
