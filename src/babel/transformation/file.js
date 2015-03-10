@@ -7,6 +7,7 @@ import generate from "../generation";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
+import Logger from "./logger";
 import parse from "../helpers/parse";
 import Scope from "../traversal/scope";
 import slash from "slash";
@@ -23,7 +24,7 @@ var checkTransformerVisitor = {
 
 function checkNode(stack, node, scope) {
   each(stack, function (pass) {
-    if (pass.shouldRun) return;
+    if (pass.shouldRun || pass.ran) return;
     pass.checkNode(node, scope);
   });
 }
@@ -41,6 +42,7 @@ export default class File {
 
     this.lastStatements = [];
     this.opts           = this.normalizeOptions(opts);
+    this.log            = new Logger(this);
     this.ast            = {};
 
     this.buildTransformers();
@@ -260,12 +262,6 @@ export default class File {
     this.transformers = transformers;
   }
 
-  debug(msg?: string) {
-    var parts = this.opts.filename;
-    if (msg) parts += `: ${msg}`;
-    util.debug(parts);
-  }
-
   getModuleFormatter(type: string) {
     var ModuleFormatter = isFunction(type) ? type : transform.moduleFormatters[type];
 
@@ -396,10 +392,6 @@ export default class File {
       });
       return uid;
     }
-  }
-
-  logDeopt() {
-    // todo, (node, msg)
   }
 
   errorWithNode(node, msg, Error = SyntaxError) {

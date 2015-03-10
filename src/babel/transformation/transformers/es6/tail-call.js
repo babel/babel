@@ -161,7 +161,7 @@ class TailCallTransformer {
     if (!this.hasTailRecursion) return;
 
     if (this.hasDeopt()) {
-      this.file.logDeopt(node, messages.get("tailCallReassignmentDeopt"));
+      this.file.log.deopt(node, messages.get("tailCallReassignmentDeopt"));
       return;
     }
 

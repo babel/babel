@@ -11,6 +11,7 @@ export default class TransformerPass {
     this.shouldRun   = !transformer.check;
     this.handlers    = transformer.handlers;
     this.file        = file;
+    this.ran         = false;
   }
 
   canRun(): boolean {
@@ -56,8 +57,10 @@ export default class TransformerPass {
 
     var file = this.file;
 
-    file.debug(`Running transformer ${this.transformer.key}`);
+    file.log.debug(`Running transformer ${this.transformer.key}`);
 
     file.scope.traverse(file.ast, this.handlers, file);
+
+    this.ran = true;
   }
 }
