@@ -103,11 +103,11 @@ var astTransformVisitor = {
     }
 
     if (t.isImportSpecifier(node)) {
-      node.local = node.id || node.name;
+      node.local = node.name || node.id;
       if (node.default) {
         node.type = "ImportDefaultSpecifier";
       } else {
-        node.imported = node.name || node.id;
+        node.imported = node.id;
       }
       delete node.id;
       delete node.name;

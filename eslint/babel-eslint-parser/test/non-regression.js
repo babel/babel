@@ -9,7 +9,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages) {
       parser: require.resolve(".."),
       rules: rules,
       env: {
-          node: true
+        node: true
       }
     }
   );
@@ -27,7 +27,6 @@ function verifyAndAssertMessages(code, rules, expectedMessages) {
 }
 
 describe("verify", function () {
-
   it("arrow function support (issue #1)", function () {
     verifyAndAssertMessages(
       "describe('stuff', () => {});",
@@ -141,5 +140,4 @@ describe("verify", function () {
       []
     );
   });
-
 });

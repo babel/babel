@@ -109,7 +109,7 @@ describe("acorn-to-esprima", function () {
   });
 
   it("export default class expression", function () {
-    parseAndAssertSame("export default class {};");
+    parseAndAssertSame("export default class {}");
   });
 
   it("export default function declaration", function () {
@@ -117,7 +117,7 @@ describe("acorn-to-esprima", function () {
   });
 
   it("export default function expression", function () {
-    parseAndAssertSame("export default function () {};");
+    parseAndAssertSame("export default function () {}");
   });
 
   it("export all", function () {
