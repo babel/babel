@@ -140,4 +140,12 @@ describe("verify", function () {
       []
     );
   });
+
+  it("class usage", function () {
+    verifyAndAssertMessages(
+      "class Lol {} module.exports = Lol;",
+      { "no-unused-vars": 1 },
+      []
+    );
+  });
 });
