@@ -66,11 +66,6 @@ var astTransformVisitor = {
 
     // classes
 
-    if (t.isClassDeclaration(node) || t.isClassExpression(node)) {
-      node.name = node.id;
-      delete node.id;
-    }
-
     if (t.isReferencedIdentifier(node, parent, { name: "super" })) {
       return t.inherits(t.thisExpression(), node);
     }
@@ -81,28 +76,6 @@ var astTransformVisitor = {
     }
 
     // functions
-
-    if (t.isFunction(node)) {
-      node.defaults = [];
-      node.params = node.params.map(function (param) {
-        if (t.isAssignmentPattern(param)) {
-          node.defaults.push(param.right);
-          return param.left;
-        } else {
-          node.defaults.push(null);
-          return param;
-        }
-      });
-    }
-
-    if (t.isArrowFunctionExpression(node)) {
-      node.type = "FunctionExpression";
-      if (node.body.type !== "BlockStatement") {
-        node.body = t.inherits(t.blockStatement([
-          node.body
-        ]), node);
-      }
-    }
 
     if (t.isFunction(node) && node.async) {
       node.generator = true;

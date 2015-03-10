@@ -11,6 +11,9 @@
     "babel": "^4.6.0",
     "lodash.assign": "^3.0.0"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -18,7 +21,7 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "^0.15.1",
+    "eslint": "^0.16.0",
     "espree": "^1.10.0",
     "mocha": "^2.1.0"
   },
