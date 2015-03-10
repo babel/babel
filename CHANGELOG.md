@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.5
+
+ * **Bug Fix**
+  * Don't remap` break`s to call the iterator return.
+ * **Polish**
+  * Use a different helper for computed classes for much nicer output. Also fixes a bug in symbols being non-enumerable so they wouldn't be set on the class.
+
 ## 4.7.4
 
  * **Bug Fix**
