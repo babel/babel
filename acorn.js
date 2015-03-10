@@ -2694,15 +2694,13 @@
 
   pp.parseExport = function(node) {
     this.next();
-    // export var|const|let|function|class ...;
-    if (this.type === tt._var || this.type === tt._const || this.type === tt._let || this.type === tt._function || this.type === tt._class) {
-      node.declaration = this.parseStatement(true);
-      node['default'] = false;
-      node.specifiers = null;
-      node.source = null;
-    } else
-    // export default ...;
-    if (this.eat(tt._default)) {
+    // export * from '...';
+    if (this.eat(tt.star)) {
+      this.expectContextual("from");
+      node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
+      return this.finishNode(node, "ExportAllDeclaration");
+    }
+    if (this.eat(tt._default)) { // export default ...;
       var expr = this.parseMaybeAssign();
       if (expr.id) {
         switch (expr.type) {
@@ -2711,51 +2709,43 @@
         }
       }
       node.declaration = expr;
-      node['default'] = true;
-      node.specifiers = null;
-      node.source = null;
       this.semicolon();
-    } else {
-      // export * from '...';
-      // export { x, y as z } [from '...'];
-      var isBatch = this.type === tt.star;
+      return this.finishNode(node, "ExportDefaultDeclaration");
+    }
+    // export var|const|let|function|class ...;
+    if (this.type.keyword) {
+      node.declaration = this.parseStatement(true);
+      node.specifiers = [];
+      node.source = null;
+    } else { // export { x, y as z } [from '...'];
       node.declaration = null;
-      node['default'] = false;
       node.specifiers = this.parseExportSpecifiers();
       if (this.eatContextual("from")) {
         node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
       } else {
-        if (isBatch) this.unexpected();
         node.source = null;
       }
       this.semicolon();
     }
-    return this.finishNode(node, "ExportDeclaration");
+    return this.finishNode(node, "ExportNamedDeclaration");
   };
 
   // Parses a comma-separated list of module exports.
 
   pp.parseExportSpecifiers = function() {
     var nodes = [], first = true;
-    if (this.type === tt.star) {
-      // export * from '...'
-      var node = this.startNode();
-      this.next();
-      nodes.push(this.finishNode(node, "ExportBatchSpecifier"));
-    } else {
-      // export { x, y as z } [from '...']
-      this.expect(tt.braceL);
-      while (!this.eat(tt.braceR)) {
-        if (!first) {
-          this.expect(tt.comma);
-          if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
-        } else first = false;
+    // export { x, y as z } [from '...']
+    this.expect(tt.braceL);
+    while (!this.eat(tt.braceR)) {
+      if (!first) {
+        this.expect(tt.comma);
+        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+      } else first = false;
 
-        var node = this.startNode();
-        node.id = this.parseIdent(this.type === tt._default);
-        node.name = this.eatContextual("as") ? this.parseIdent(true) : null;
-        nodes.push(this.finishNode(node, "ExportSpecifier"));
-      }
+      var node = this.startNode();
+      node.local = this.parseIdent(this.type === tt._default);
+      node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local;
+      nodes.push(this.finishNode(node, "ExportSpecifier"));
     }
     return nodes;
   };

@@ -1042,9 +1042,11 @@
   lp.parseExport = function() {
     var node = this.startNode();
     this.next();
-    node['default'] = this.eat(tt._default);
-    node.specifiers = node.source = null;
-    if (node['default']) {
+    if (this.eat(tt.star)) {
+      node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
+      return this.finishNode(node, "ExportAllDeclaration");
+    }
+    if (this.eat(tt._default)) {
       var expr = this.parseMaybeAssign();
       if (expr.id) {
         switch (expr.type) {
@@ -1054,14 +1056,19 @@
       }
       node.declaration = expr;
       this.semicolon();
-    } else if (this.tok.type.keyword) {
+      return this.finishNode(node, "ExportDefaultDeclaration");
+    }
+    if (this.tok.type.keyword) {
       node.declaration = this.parseStatement();
+      node.specifiers = [];
+      node.source = null;
     } else {
       node.declaration = null;
-      this.parseExportSpecifierList(node);
+      node.specifiers = this.parseExportSpecifierList();
+      node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
+      this.semicolon();
     }
-    this.semicolon();
-    return this.finishNode(node, "ExportDeclaration");
+    return this.finishNode(node, "ExportNamedDeclaration");
   };
 
   lp.parseImport = function() {
@@ -1078,15 +1085,16 @@
         this.finishNode(elt, "ImportDefaultSpecifier");
         this.eat(tt.comma);
       }
-      this.parseImportSpecifierList(node);
+      node.specifiers = this.parseImportSpecifierList();
+      node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
       if (elt) node.specifiers.unshift(elt);
     }
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
   };
 
-  lp.parseImportSpecifierList = function(node) {
-    var elts = node.specifiers = [];
+  lp.parseImportSpecifierList = function() {
+    var elts = [];
     if (this.tok.type === tt.star) {
       var elt = this.startNode();
       this.next();
@@ -1114,39 +1122,27 @@
       this.eat(tt.braceR);
       this.popCx();
     }
-    node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
+    return elts;
   };
 
-  lp.parseExportSpecifierList = function(node) {
-    var elts = node.specifiers = [];
-    if (this.tok.type === tt.star) {
+  lp.parseExportSpecifierList = function() {
+    var elts = [];
+    var indent = this.curIndent, line = this.curLineStart, continuedLine = this.nextLineStart;
+    this.pushCx();
+    this.eat(tt.braceL);
+    if (this.curLineStart > continuedLine) continuedLine = this.curLineStart;
+    while (!this.closes(tt.braceR, indent + (this.curLineStart <= continuedLine ? 1 : 0), line)) {
+      if (this.isContextual("from")) break;
       var elt = this.startNode();
-      this.next();
-      if (this.eatContextual("as")) elt.name = this.parseIdent();
-      elts.push(this.finishNode(elt, "ExportBatchSpecifier"));
-    } else {
-      var indent = this.curIndent, line = this.curLineStart, continuedLine = this.nextLineStart;
-      this.pushCx();
-      this.eat(tt.braceL);
-      if (this.curLineStart > continuedLine) continuedLine = this.curLineStart;
-      while (!this.closes(tt.braceR, indent + (this.curLineStart <= continuedLine ? 1 : 0), line)) {
-        var elt = this.startNode();
-        if (this.eat(tt.star)) {
-          if (this.eatContextual("as")) elt.name = this.parseIdent();
-          this.finishNode(elt, "ExportBatchSpecifier");
-        } else {
-          if (this.isContextual("from")) break;
-          elt.id = this.parseIdent();
-          elt.name = this.eatContextual("as") ? this.parseIdent() : null;
-          this.finishNode(elt, "ExportSpecifier");
-        }
-        elts.push(elt);
-        this.eat(tt.comma);
-      }
-      this.eat(tt.braceR);
-      this.popCx();
+      elt.local = this.parseIdent();
+      elt.exported = this.eatContextual("as") ? this.parseIdent() : elt.local;
+      this.finishNode(elt, "ExportSpecifier");
+      elts.push(elt);
+      this.eat(tt.comma);
     }
-    node.source = this.eatContextual("from") ? this.parseExprAtom() : null;
+    this.eat(tt.braceR);
+    this.popCx();
+    return elts;
   };
 
   lp.parseExprList = function(close, allowEmpty) {
