@@ -1,6 +1,6 @@
 {
   "name": "babel-eslint",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "babel-core": "^4.6.0",
+    "babel-core": "^4.7.8",
     "lodash.assign": "^3.0.0"
   },
   "scripts": {
