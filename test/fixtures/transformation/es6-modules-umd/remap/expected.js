@@ -7,6 +7,9 @@
 })(function (exports) {
   "use strict";
 
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
   var test = 2;
   exports.test = test;
   test = exports.test = 5;
@@ -17,7 +20,4 @@
     test = 3;
     test++;
   })();
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
 });

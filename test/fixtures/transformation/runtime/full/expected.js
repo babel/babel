@@ -23,6 +23,9 @@ var giveWord = _regeneratorRuntime.mark(function giveWord() {
 });
 
 exports.giveWord = giveWord;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _someModule = require("someModule");
 
@@ -32,6 +35,3 @@ var bar = _interopRequireWildcard(_someModule);
 
 var myWord = _core.Symbol("abc");
 exports.myWord = myWord;
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});

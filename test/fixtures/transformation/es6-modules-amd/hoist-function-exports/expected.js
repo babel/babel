@@ -2,6 +2,9 @@ define(["exports", "./evens"], function (exports, _evens) {
   "use strict";
 
   exports.nextOdd = nextOdd;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
   var isEven = _evens.isEven;
 
   function nextOdd(n) {
@@ -14,7 +17,4 @@ define(["exports", "./evens"], function (exports, _evens) {
     };
   })(isEven);
   exports.isOdd = isOdd;
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
 });

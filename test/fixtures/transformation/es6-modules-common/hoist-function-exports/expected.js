@@ -1,6 +1,9 @@
 "use strict";
 
 exports.nextOdd = nextOdd;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var isEven = require("./evens").isEven;
 
@@ -14,6 +17,3 @@ var isOdd = (function (isEven) {
   };
 })(isEven);
 exports.isOdd = isOdd;
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});

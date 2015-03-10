@@ -4,6 +4,10 @@ var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? ob
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require("foo");
 
 require("foo-bar");
@@ -21,6 +25,3 @@ var bar2 = require("foo5").foo;
 exports.test = test;
 var test = 5;
 exports.test = test;
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});

@@ -3,6 +3,10 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
   var foo = _interopRequire(_foo);
 
   var foo2 = _foo;
@@ -13,7 +17,4 @@ define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, 
 
   exports.test2 = test2;
   exports["default"] = test;
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
 });

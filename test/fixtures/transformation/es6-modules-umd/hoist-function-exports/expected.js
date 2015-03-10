@@ -8,6 +8,9 @@
   "use strict";
 
   exports.nextOdd = nextOdd;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
   var isEven = _evens.isEven;
 
   function nextOdd(n) {
@@ -20,7 +23,4 @@
     };
   })(isEven);
   exports.isOdd = isOdd;
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
 });

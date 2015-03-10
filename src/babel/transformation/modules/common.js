@@ -13,7 +13,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
     if (!this.noInteropRequireImport && this.hasNonDefaultExports) {
       var templateName = "exports-module-declaration";
       if (this.file.isLoose("es6.modules")) templateName += "-loose";
-      file.ast.program.body.push(util.template(templateName, true));
+      file.ast.program.body.unshift(util.template(templateName, true));
     }
   };
 
