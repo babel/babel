@@ -139,7 +139,7 @@ t.toComputedKey = function (node: Object, key: Object = node.key): Object {
  * Variable declarations are turned into simple assignments and their
  * declarations hoisted to the top of the current scope.
  *
- * Expression statements are just resolved to their standard expression.
+ * Expression statements are just resolved to their expression.
  */
 
 t.toSequenceExpression = function (nodes: Array<Object>, scope: Scope): Object {
@@ -158,6 +158,14 @@ t.toSequenceExpression = function (nodes: Array<Object>, scope: Scope): Object {
         });
         exprs.push(t.assignmentExpression("=", declar.id, declar.init));
       });
+    } else if (t.isIfStatement(node)) {
+      return t.conditionalExpression(
+        node.test,
+        node.consequent ? t.toSequenceExpression([node.consequent]) : t.identifier("undefined"),
+        node.alternate ? t.toSequenceExpression([node.alternate]) : t.identifier("undefined")
+      );
+    } else if (t.isBlockStatement(node)) {
+      return t.toSequenceExpression(node.body);
     }
   });
 
