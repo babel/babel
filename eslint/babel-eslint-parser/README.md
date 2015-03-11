@@ -18,7 +18,7 @@ columns is also retained so you can track down errors with ease.
 ### Install
 
 ```sh
-$ npm install eslint babel-eslint
+$ npm install -g eslint babel-eslint
 ```
 
 ### Setup
