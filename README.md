@@ -54,12 +54,14 @@ object referring to that same position.
   either 3, 5, or 6. This influences support for strict mode, the set
   of reserved words, and support for new syntax features. Default is 5.
 
-- **strictSemicolons**: If `true`, prevents the parser from doing
-  automatic semicolon insertion, and statements that do not end with
-  a semicolon will generate an error. Defaults to `false`.
+- **onInsertedSemicolon**: If given a callback, that callback will be
+  called whenever a missing semicolon is inserted by the parser. The
+  callback will be given the character offset of the point where the
+  semicolon is inserted as argument, and if `locations` is on, also a
+  `{line, column}` object representing this position.
 
-- **allowTrailingCommas**: If `false`, the parser will not allow
-  trailing commas in array and object literals. Default is `true`.
+- **onTrailingComma**: Like `onInsertedSemicolon`, but for trailing
+  commas.
 
 - **forbidReserved**: If `true`, using a reserved word will generate
   an error. Defaults to `false`. When given the value `"everywhere"`,

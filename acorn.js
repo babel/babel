@@ -51,12 +51,15 @@
     // mode, the set of reserved words, support for getters and
     // setters and other features.
     ecmaVersion: 5,
-    // Turn on `strictSemicolons` to prevent the parser from doing
-    // automatic semicolon insertion.
-    strictSemicolons: false,
-    // When `allowTrailingCommas` is false, the parser will not allow
-    // trailing commas in array and object literals.
-    allowTrailingCommas: true,
+    // `onInsertedSemicolon` can be a callback that will be called
+    // when a semicolon is automatically inserted. It will be passed
+    // th position of the comma as an offset, and if `locations` is
+    // enabled, it is given the location as a `{line, column}` object
+    // as second argument.
+    onInsertedSemicolon: null,
+    // `onTrailingComma` is similar to `onInsertedSemicolon`, but for
+    // trailing commas.
+    onTrailingComma: null,
     // By default, reserved words are not enforced. Enable
     // `forbidReserved` to enforce them. When this option has the
     // value "everywhere", reserved words and keywords can also not be
@@ -566,7 +569,7 @@
     this.startLoc = this.endLoc = null;
 
     // Position information for the previous token
-    this.lastTokEndLoc = null;
+    this.lastTokEndLoc = this.lastTokStartLoc = null;
     this.lastTokStart = this.lastTokEnd = this.pos;
 
     // The context stack is used to superficially track syntactic
@@ -611,6 +614,7 @@
     this.lastTokEnd = this.end;
     this.lastTokStart = this.start;
     this.lastTokEndLoc = this.endLoc;
+    this.lastTokStartLoc = this.startLoc;
     this.nextToken();
   };
 
@@ -1453,15 +1457,33 @@
   // Test whether a semicolon can be inserted at the current position.
 
   pp.canInsertSemicolon = function() {
-    return !this.options.strictSemicolons &&
-      (this.type === tt.eof || this.type === tt.braceR || newline.test(this.input.slice(this.lastTokEnd, this.start)));
+    return this.type === tt.eof ||
+      this.type === tt.braceR ||
+      newline.test(this.input.slice(this.lastTokEnd, this.start));
+  };
+
+  pp.insertSemicolon = function() {
+    if (this.canInsertSemicolon()) {
+      if (this.options.onInsertedSemicolon)
+        this.options.onInsertedSemicolon(this.lastTokEnd, this.lastTokEndLoc)
+      return true;
+    }
   };
 
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
   pp.semicolon = function() {
-    if (!this.eat(tt.semi) && !this.canInsertSemicolon()) this.unexpected();
+    if (!this.eat(tt.semi) && !this.insertSemicolon()) this.unexpected();
+  };
+
+  pp.afterTrailingComma = function(tokType) {
+    if (this.type == tokType) {
+      if (this.options.onTrailingComma)
+        this.options.onTrailingComma(this.lastTokStart, this.lastTokStartLoc);
+      this.next();
+      return true;
+    }
   };
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -1800,7 +1822,7 @@
   pp.parseBreakContinueStatement = function(node, keyword) {
     var isBreak = keyword == "break";
     this.next();
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.label = null;
+    if (this.eat(tt.semi) || this.insertSemicolon()) node.label = null;
     else if (this.type !== tt.name) this.unexpected();
     else {
       node.label = this.parseIdent();
@@ -1897,7 +1919,7 @@
     // optional arguments, we eagerly look for a semicolon or the
     // possibility to insert one.
 
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.argument = null;
+    if (this.eat(tt.semi) || this.insertSemicolon()) node.argument = null;
     else { node.argument = this.parseExpression(); this.semicolon(); }
     return this.finishNode(node, "ReturnStatement");
   };
@@ -2459,7 +2481,7 @@
     while (!this.eat(tt.braceR)) {
       if (!first) {
         this.expect(tt.comma);
-        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+        if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
       var prop = this.startNode(), isGenerator, start;
@@ -2657,7 +2679,7 @@
     while (!this.eat(close)) {
       if (!first) {
         this.expect(tt.comma);
-        if (allowTrailingComma && this.options.allowTrailingCommas && this.eat(close)) break;
+        if (allowTrailingComma && this.afterTrailingComma(close)) break;
       } else first = false;
 
       if (allowEmpty && this.type === tt.comma) {
@@ -2745,7 +2767,7 @@
     while (!this.eat(tt.braceR)) {
       if (!first) {
         this.expect(tt.comma);
-        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+        if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
       var node = this.startNode();
@@ -2799,7 +2821,7 @@
     while (!this.eat(tt.braceR)) {
       if (!first) {
         this.expect(tt.comma);
-        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+        if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
       var node = this.startNode();
@@ -2816,7 +2838,7 @@
   pp.parseYield = function() {
     var node = this.startNode();
     this.next();
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) {
+    if (this.eat(tt.semi) || this.insertSemicolon()) {
       node.delegate = false;
       node.argument = null;
     } else {
