@@ -13871,7 +13871,7 @@ testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Definin
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
-testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, forbidReserved: true});
+testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, allowReserved: false});
 
 testFail("var default", "Unexpected token (1:4)", {ecmaVersion: 6});
 

@@ -63,8 +63,8 @@ object referring to that same position.
 - **onTrailingComma**: Like `onInsertedSemicolon`, but for trailing
   commas.
 
-- **forbidReserved**: If `true`, using a reserved word will generate
-  an error. Defaults to `false`. When given the value `"everywhere"`,
+- **allowReserved**: If `false`, using a reserved word will generate
+  an error. Defaults to `true`. When given the value `"never"`,
   reserved words and keywords can also not be used as property names
   (as in Internet Explorer's old parser).
   

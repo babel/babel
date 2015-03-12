@@ -60,11 +60,11 @@
     // `onTrailingComma` is similar to `onInsertedSemicolon`, but for
     // trailing commas.
     onTrailingComma: null,
-    // By default, reserved words are not enforced. Enable
-    // `forbidReserved` to enforce them. When this option has the
-    // value "everywhere", reserved words and keywords can also not be
+    // By default, reserved words are not enforced. Disable
+    // `allowReserved` to enforce them. When this option has the
+    // value "never", reserved words and keywords can also not be
     // used as property names.
-    forbidReserved: false,
+    allowReserved: true,
     // When enabled, a return at the top level is not considered an
     // error.
     allowReturnOutsideFunction: false,
@@ -2700,10 +2700,10 @@
 
   pp.parseIdent = function(liberal) {
     var node = this.startNode();
-    if (liberal && this.options.forbidReserved == "everywhere") liberal = false;
+    if (liberal && this.options.allowReserved == "never") liberal = false;
     if (this.type === tt.name) {
       if (!liberal &&
-          (this.options.forbidReserved &&
+          (!this.options.allowReserved &&
            (this.options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(this.value) ||
            this.strict && isStrictReservedWord(this.value)) &&
           this.input.slice(this.start, this.end).indexOf("\\") == -1)
