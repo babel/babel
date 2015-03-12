@@ -123,7 +123,6 @@ export function bare(node, parent, scope) {
 
   var name;
   if (t.isLiteral(id)) {
-    console.log(id);
     name = id.value;
   } else if (t.isIdentifier(id)) {
     name = id.name;

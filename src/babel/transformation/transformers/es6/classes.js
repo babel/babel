@@ -250,8 +250,6 @@ class ClassTransformer {
    */
 
    verifyConstructor(node: Object) {
-    return; // enable this for the next major
-
     var state = {
       hasBareSuper: false,
       hasSuper:     this.hasSuper,
