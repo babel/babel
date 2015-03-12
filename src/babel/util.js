@@ -4,6 +4,7 @@ import buildDebug from "debug/node";
 import cloneDeep from "lodash/lang/cloneDeep";
 import isBoolean from "lodash/lang/isBoolean";
 import * as messages from "./messages";
+import minimatch from "minimatch";
 import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
@@ -43,16 +44,21 @@ export function list(val: string): Array<string> {
 export function regexify(val: any): RegExp {
   if (!val) return new RegExp(/.^/);
   if (Array.isArray(val)) val = val.join("|");
-  if (isString(val)) return new RegExp(val);
+  if (isString(val)) return minimatch.makeRe(val, { nocase: true });
   if (isRegExp(val)) return val;
   throw new TypeError("illegal type for regexify");
 }
 
-export function arrayify(val: any): Array {
+export function arrayify(val: any, mapFn?: Function): Array {
   if (!val) return [];
-  if (isBoolean(val)) return [val];
-  if (isString(val)) return list(val);
-  if (Array.isArray(val)) return val;
+  if (isBoolean(val)) return arrayify([val], mapFn);
+  if (isString(val)) return arrayify(list(val), mapFn);
+
+  if (Array.isArray(val)) {
+    if (mapFn) val = val.map(mapFn);
+    return val;
+  }
+
   throw new TypeError("illegal type for arrayify");
 }
 

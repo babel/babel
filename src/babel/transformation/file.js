@@ -1,12 +1,15 @@
 import convertSourceMap from "convert-source-map";
 import shebangRegex from "shebang-regex";
-import isFunction from "lodash/lang/isFunction";
 import TraversalPath from "../traversal/path";
+import isFunction from "lodash/lang/isFunction";
+import isAbsolute from "path-is-absolute";
+import resolveRc from "../tools/resolve-rc";
 import sourceMap from "source-map";
 import transform from "./index";
 import generate from "../generation";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
+import traverse from "../traversal";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
 import parse from "../helpers/parse";
@@ -114,19 +117,24 @@ export default class File {
     "sourceRoot",
     "moduleRoot",
 
+    "ignore",
+    "only",
+
     // legacy
     "format",
     "reactCompat",
 
     // these are used by plugins
-    "ignore",
-    "only",
     "extensions",
     "accept"
   ];
 
   normalizeOptions(opts: Object) {
     opts = assign({}, opts);
+
+    if (opts.filename && isAbsolute(opts.filename)) {
+      opts = resolveRc(opts.filename, opts);
+    }
 
     for (var key in opts) {
       if (key[0] !== "_" && File.validOptions.indexOf(key) < 0) {
@@ -154,6 +162,8 @@ export default class File {
       modules:                "common",
       compact:                "auto",
       loose:                  [],
+      ignore:                 [],
+      only:                   [],
       code:                   true,
       ast:                    true
     });
@@ -179,6 +189,8 @@ export default class File {
     opts.optional  = util.arrayify(opts.optional);
     opts.compact   = util.booleanify(opts.compact);
     opts.loose     = util.arrayify(opts.loose);
+    opts.ignore    = util.arrayify(opts.ignore, util.regexify);
+    opts.only      = util.arrayify(opts.only, util.regexify);
 
     if (includes(opts.loose, "all") || includes(opts.loose, true)) {
       opts.loose = Object.keys(transform.transformers);
@@ -213,11 +225,6 @@ export default class File {
     opts.whitelist = transform._ensureTransformerNames("whitelist", opts.whitelist);
     opts.optional  = transform._ensureTransformerNames("optional", opts.optional);
     opts.loose     = transform._ensureTransformerNames("loose", opts.loose);
-
-    if (opts.reactCompat) {
-      opts.optional.push("reactCompat");
-      console.error("The reactCompat option has been moved into the optional transformer `reactCompat`");
-    }
 
     var ensureEnabled = function (key) {
       var namespace = transform.transformerNamespaces[key];
@@ -409,7 +416,36 @@ export default class File {
     return this.parseShebang(code);
   }
 
+  shouldIgnore() {
+    var opts = this.opts;
+
+    var filename = opts.filename;
+    var ignore   = opts.ignore;
+    var only     = opts.only;
+
+    if (only.length) {
+      for (var i = 0; i < only.length; i++) {
+        if (only[i].test(filename)) return false;
+      }
+      return true;
+    } else if (ignore.length) {
+      for (var i = 0; i < ignore.length; i++) {
+        if (ignore[i].test(filename)) return true;
+      }
+    }
+
+    return false;
+  }
+
   parse(code: string) {
+    if (this.shouldIgnore()) {
+      return {
+        code: code,
+        map:  null,
+        ast:  null
+      };
+    }
+
     code = this.addCode(code);
 
     var opts = this.opts;
@@ -423,12 +459,26 @@ export default class File {
     });
   }
 
-  transform(ast) {
-    this.log.debug();
-
+  setAst(ast) {
     this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
     this.scope = this.path.scope;
     this.ast   = ast;
+
+    traverse(ast, {
+      enter(node, parent, scope) {
+        if (this.isScope()) {
+          for (var key in scope.bindings) {
+            scope.bindings[key].setTypeAnnotation();
+          }
+        }
+      }
+    }, this.scope);
+  }
+
+  transform(ast) {
+    this.log.debug();
+
+    this.setAst(ast);
 
     this.lastStatements = t.getLastStatements(ast.program);
 
