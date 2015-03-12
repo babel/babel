@@ -42,7 +42,6 @@ traverse.node = function (node, opts, scope, state, parentPath) {
 function clearNode(node) {
   node._declarations = null;
   node.extendedRange = null;
-  node._scopeInfo    = null;
   node._paths        = null;
   node.tokens        = null;
   node.range         = null;

@@ -20,7 +20,6 @@ export default {
   "playground.objectGetterMemoization":    require("./playground/object-getter-memoization"),
 
   reactCompat:                             require("./other/react-compat"),
-  flow:                                    require("./other/flow"),
   react:                                   require("./other/react"),
 
   _modules:                                require("./internal/modules"),
@@ -110,5 +109,6 @@ export default {
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
   "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
 
+  flow:                                    require("./other/flow"),
   _cleanUp:                                require("./internal/cleanup")
 };

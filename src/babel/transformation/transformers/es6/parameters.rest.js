@@ -127,16 +127,14 @@ exports.Function = function (node, parent, scope, file) {
     );
   }
 
-  scope.assignTypeGeneric(rest.name, "Array");
-
   var loop = util.template("rest", {
     ARGUMENTS: argsId,
     ARRAY_KEY: arrKey,
     ARRAY_LEN: arrLen,
-    START: start,
-    ARRAY: rest,
-    KEY: key,
-    LEN: len,
+    START:     start,
+    ARRAY:     rest,
+    KEY:       key,
+    LEN:       len
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);

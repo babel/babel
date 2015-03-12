@@ -142,7 +142,7 @@ class TailCallTransformer {
   hasDeopt() {
     // check if the ownerId has been reassigned, if it has then it's not safe to
     // perform optimisations
-    var ownerIdInfo = this.scope.getBindingInfo(this.ownerId.name);
+    var ownerIdInfo = this.scope.getBinding(this.ownerId.name);
     return ownerIdInfo && ownerIdInfo.reassigned;
   }
 

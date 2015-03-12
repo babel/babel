@@ -5,6 +5,12 @@ import * as t from "../../../types";
 export var check = t.isForOfStatement;
 
 export function ForOfStatement(node, parent, scope, file) {
+  if (this.get("right").isTypeGeneric("Array")) {
+    return array(node, scope, file);
+  }
+
+  //
+
   var callback = spec;
   if (file.isLoose("es6.forOf")) callback = loose;
 
@@ -35,6 +41,44 @@ export function ForOfStatement(node, parent, scope, file) {
     return build.node;
   }
 }
+
+var array = function (node, scope, file) {
+  var nodes = [];
+  var right = node.right;
+
+  if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
+    var uid = scope.generateUidIdentifier("arr");
+    nodes.push(t.variableDeclaration("var", [
+      t.variableDeclarator(uid, right)
+    ]));
+    right = uid;
+  }
+
+  var iterationKey = scope.generateUidIdentifier("i");
+
+  var loop = util.template("for-of-array", {
+    BODY: node.body,
+    KEY:  iterationKey,
+    ARR:  right
+  });
+
+  t.inherits(loop, node);
+  t.ensureBlock(loop);
+
+  var iterationValue = t.memberExpression(right, iterationKey, true);
+
+  var left = node.left;
+  if (t.isVariableDeclaration(left)) {
+    left.declarations[0].init = iterationValue;
+    loop.body.body.unshift(left);
+  } else {
+    loop.body.body.unshift(t.expressionStatement(t.assignmentExpression("=", left, iterationValue)));
+  }
+
+  nodes.push(loop);
+
+  return nodes;
+};
 
 var loose = function (node, parent, scope, file) {
   var left = node.left;
