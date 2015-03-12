@@ -65,12 +65,20 @@ export default class Scope {
    * within.
    */
 
-  constructor(block: Object, parentBlock: Object, parent?: Scope, file?: File) {
+  constructor(path: TraversalPath, parent?: Scope, file?: File) {
+    var cached = path.getData("scope");
+    if (cached) {
+      return cached;
+    } else {
+      path.setData("scope", this);
+    }
+
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 
-    this.parentBlock = parentBlock;
-    this.block       = block;
+    this.parentBlock = path.parent;
+    this.block       = path.node;
+    this.path        = path;
 
     this.crawl();
   }
@@ -472,7 +480,7 @@ export default class Scope {
    */
 
   recrawl() {
-    this.block._scopeInfo = null;
+    this.path.setData("scopeInfo", null);
     this.crawl();
   }
 
@@ -481,21 +489,21 @@ export default class Scope {
    */
 
   crawl() {
-    var block  = this.block;
+    var block = this.block;
     var i;
 
     //
 
-    var info = block._scopeInfo;
+    var info = this.path.getData("scopeInfo");
     if (info) {
       extend(this, info);
       return;
     }
 
-    info = block._scopeInfo = {
+    info = this.path.setData("scopeInfo", {
       bindings: object(),
       globals:  object()
-    };
+    });
 
     extend(this, info);
 

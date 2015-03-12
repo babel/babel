@@ -10,7 +10,7 @@ export default class TraversalPath {
     this.data      = {};
   }
 
-  static get(parentPath, context, parent, container, key) {
+  static get(parentPath: TraversalPath, context?: TraversalContext, parent, container, key, file?: File) {
     var targetNode = container[key];
     var paths = container._paths ||= [];
     var path;
@@ -28,17 +28,17 @@ export default class TraversalPath {
       paths.push(path);
     }
 
-    path.setContext(parentPath, context, key);
+    path.setContext(parentPath, context, key, file);
 
     return path;
   }
 
-  static getScope(node, parent, scope) {
+  static getScope(path: TraversalPath, scope: Scope, file?: File) {
     var ourScope = scope;
 
     // we're entering a new scope so let's construct it!
-    if (t.isScope(node, parent)) {
-      ourScope = new Scope(node, parent, scope);
+    if (path.isScope()) {
+      ourScope = new Scope(path, scope, file);
     }
 
     return ourScope;
@@ -60,21 +60,24 @@ export default class TraversalPath {
     return this.data[key];
   }
 
-  setScope() {
-    this.scope = TraversalPath.getScope(this.node, this.parent, this.context.scope);
+  setScope(file?) {
+    this.scope = TraversalPath.getScope(this, this.context && this.context.scope, file);
   }
 
-  setContext(parentPath, context, key) {
+  setContext(parentPath, context, key, file?) {
     this.shouldSkip = false;
     this.shouldStop = false;
 
     this.parentPath = parentPath || this.parentPath;
-    this.context    = context;
-    this.state      = context.state;
-    this.opts       = context.opts;
     this.key        = key;
 
-    this.setScope();
+    if (context) {
+      this.context = context;
+      this.state   = context.state;
+      this.opts    = context.opts;
+    }
+
+    this.setScope(file);
   }
 
   remove() {
@@ -198,6 +201,10 @@ export default class TraversalPath {
 
   get(key) {
     return TraversalPath.get(this, this.context, this.node, this.node, key);
+  }
+
+  isScope() {
+    return t.isScope(this.node, this.parent);
   }
 
   isReferencedIdentifier(opts) {

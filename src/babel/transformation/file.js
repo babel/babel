@@ -1,6 +1,7 @@
 import convertSourceMap from "convert-source-map";
 import shebangRegex from "shebang-regex";
 import isFunction from "lodash/lang/isFunction";
+import TraversalPath from "../traversal/path";
 import sourceMap from "source-map";
 import transform from "./index";
 import generate from "../generation";
@@ -375,7 +376,7 @@ export default class File {
     this.usedHelpers[name] = true;
 
     var generator = this.get("helperGenerator");
-    var runtime = this.get("helpersNamespace");
+    var runtime   = this.get("helpersNamespace");
     if (generator) {
       return generator(name);
     } else if (runtime) {
@@ -425,9 +426,11 @@ export default class File {
   transform(ast) {
     this.log.debug();
 
-    this.ast = ast;
+    this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
+    this.scope = this.path.scope;
+    this.ast   = ast;
+
     this.lastStatements = t.getLastStatements(ast.program);
-    this.scope = new Scope(ast.program, ast, null, this);
 
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canRun()) {
@@ -481,14 +484,14 @@ export default class File {
     if (inputMap) {
       map.sources[0] = inputMap.file;
 
-      var inputMapConsumer = new sourceMap.SourceMapConsumer(inputMap);
-      var outputMapConsumer = new sourceMap.SourceMapConsumer(map);
+      var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
+      var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
       var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
       outputMapGenerator.applySourceMap(inputMapConsumer);
 
       var mergedMap = outputMapGenerator.toJSON();
       mergedMap.sources = inputMap.sources
-      mergedMap.file = inputMap.file;
+      mergedMap.file    = inputMap.file;
       return mergedMap;
     }
 

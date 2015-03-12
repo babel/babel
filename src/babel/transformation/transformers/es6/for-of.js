@@ -29,9 +29,6 @@ export function ForOfStatement(node, parent, scope, file) {
 
   t.inherits(loop, node);
 
-  // todo: find out why this is necessary? #538
-  loop._scopeInfo = node._scopeInfo;
-
   if (build.replaceParent) {
     this.parentPath.node = build.node;
   } else {
