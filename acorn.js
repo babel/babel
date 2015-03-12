@@ -1082,7 +1082,7 @@
         // ASCII symbol to avoid throwing on regular expressions that
         // are only valid in combination with the `/u` flag.
         tmp = tmp
-          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, "x")
+          .replace(/\\u\{([0-9a-fA-F]+)\}/g, "x")
           .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
       }
     }
