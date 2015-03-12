@@ -1605,7 +1605,7 @@
       case tt.bracketL:
         var node = this.startNode();
         this.next();
-        node.elements = this.parseBindingList(tt.bracketR, true);
+        node.elements = this.parseBindingList(tt.bracketR, true, true);
         return this.finishNode(node, "ArrayPattern");
 
       case tt.braceL:
@@ -1616,16 +1616,22 @@
     }
   };
 
-  pp.parseBindingList = function(close, allowEmpty) {
+  pp.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
     var elts = [], first = true;
     while (!this.eat(close)) {
-      first ? first = false : this.expect(tt.comma);
-      if (this.type === tt.ellipsis) {
+      if (first) first = false;
+      else this.expect(tt.comma);
+      if (allowEmpty && this.type === tt.comma) {
+        elts.push(null);
+      } else if (allowTrailingComma && this.afterTrailingComma(close)) {
+        break;
+      } else if (this.type === tt.ellipsis) {
         elts.push(this.parseRest());
         this.expect(close);
         break;
+      } else {
+        elts.push(this.parseMaybeDefault());
       }
-      elts.push(allowEmpty && this.type === tt.comma ? null : this.parseMaybeDefault());
     }
     return elts;
   };
@@ -2567,7 +2573,7 @@
       node.id = this.parseIdent();
     }
     this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR, false);
+    node.params = this.parseBindingList(tt.parenR, false, false);
     this.parseFunctionBody(node, allowExpressionBody);
     return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
   };
@@ -2578,7 +2584,7 @@
     var node = this.startNode();
     this.initFunction(node);
     this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR, false);
+    node.params = this.parseBindingList(tt.parenR, false, false);
     var allowExpressionBody;
     if (this.options.ecmaVersion >= 6) {
       node.generator = isGenerator;

@@ -15263,6 +15263,109 @@ test("var _\\u{104A6} = 10;", {
   ]
 }, {ecmaVersion: 6});
 
+test("let [x,] = [1]", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "elements": [
+              {
+                "start": 5,
+                "name": "x",
+                "type": "Identifier",
+                "end": 6
+              }
+            ],
+            "type": "ArrayPattern",
+            "end": 8
+          },
+          "init": {
+            "start": 11,
+            "elements": [
+              {
+                "start": 12,
+                "value": 1,
+                "raw": "1",
+                "type": "Literal",
+                "end": 13
+              }
+            ],
+            "type": "ArrayExpression",
+            "end": 14
+          },
+          "type": "VariableDeclarator",
+          "end": 14
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 14
+    }
+  ],
+  "type": "Program",
+  "end": 14
+}, {ecmaVersion: 6});
+
+test("let {x} = y", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "properties": [
+              {
+                "start": 5,
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "kind": "init",
+                "value": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "type": "Property",
+                "end": 6
+              }
+            ],
+            "type": "ObjectPattern",
+            "end": 7
+          },
+          "init": {
+            "start": 10,
+            "name": "y",
+            "type": "Identifier",
+            "end": 11
+          },
+          "type": "VariableDeclarator",
+          "end": 11
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 11
+    }
+  ],
+  "type": "Program",
+  "end": 11
+}, {ecmaVersion: 6})
+
 testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
 testFail("var 𫠞_ = 12;", "Unexpected character '𫠞' (1:4)", {ecmaVersion: 6});
 testFail("var 𫠝_ = 10;", "Unexpected character '𫠝' (1:4)", {ecmaVersion: 5});
