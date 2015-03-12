@@ -1,7 +1,7 @@
 "use strict";
 
 (function () {
-  for (var i in nums) {
+  _loop: for (var i in nums) {
     var _ret = (function (i) {
       fns.push(function () {
         return i;
@@ -22,7 +22,7 @@
         continue;
 
       case "break":
-        break;
+        break _loop;
 
       default:
         if (typeof _ret === "object") return _ret.v;

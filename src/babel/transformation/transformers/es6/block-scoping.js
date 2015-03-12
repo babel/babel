@@ -69,8 +69,9 @@ export function Loop(node, parent, scope, file) {
     t.ensureBlock(node);
     node.body._letDeclarators = [init];
   }
-  var blockScoping = new BlockScoping(node, node.body, parent, scope, file);
-  blockScoping.run();
+
+  var blockScoping = new BlockScoping(this, node.body, parent, scope, file);
+  return blockScoping.run();
 }
 
 export function BlockStatement(block, parent, scope, file) {
@@ -224,17 +225,22 @@ class BlockScoping {
    * Description
    */
 
-  constructor(loopParent?: Object, block: Object, parent: Object, scope: Scope, file: File) {
-    this.loopParent = loopParent;
-    this.parent     = parent;
-    this.scope      = scope;
-    this.block      = block;
-    this.file       = file;
+  constructor(loopPath?: TraversalPath, block: Object, parent: Object, scope: Scope, file: File) {
+    this.parent = parent;
+    this.scope  = scope;
+    this.block  = block;
+    this.file   = file;
 
     this.outsideLetReferences = object();
     this.hasLetReferences     = false;
     this.letReferences        = block._letReferences = object();
     this.body                 = [];
+
+    if (loopPath) {
+      this.loopParent = loopPath.parent;
+      this.loopLabel  = t.isLabeledStatement(this.loopParent) && this.loopParent.label;
+      this.loop       = loopPath.node;
+    }
   }
 
   /**
@@ -258,6 +264,10 @@ class BlockScoping {
       this.wrapClosure();
     } else {
       this.remap();
+    }
+
+    if (this.loopLabel && !t.isLabeledStatement(this.loopParent)) {
+      return t.labeledStatement(this.loopLabel, this.loop);
     }
   }
 
@@ -297,11 +307,11 @@ class BlockScoping {
 
     //
 
-    var loopParent = this.loopParent;
-    if (loopParent) {
-      traverseReplace(loopParent.right, loopParent, scope, remaps);
-      traverseReplace(loopParent.test, loopParent, scope, remaps);
-      traverseReplace(loopParent.update, loopParent, scope, remaps);
+    var loop = this.loop;
+    if (loop) {
+      traverseReplace(loop.right, loop, scope, remaps);
+      traverseReplace(loop.test, loop, scope, remaps);
+      traverseReplace(loop.update, loop, scope, remaps);
     }
 
     scope.traverse(this.block, replaceVisitor, remaps);
@@ -317,7 +327,7 @@ class BlockScoping {
     var outsideRefs = this.outsideLetReferences;
 
     // remap loop heads with colliding variables
-    if (this.loopParent) {
+    if (this.loop) {
       for (var name in outsideRefs) {
         var id = outsideRefs[name];
 
@@ -438,7 +448,7 @@ class BlockScoping {
       ignoreLabeless:   false,
       innerLabels:      [],
       hasReturn:        false,
-      isLoop:           !!this.loopParent,
+      isLoop:           !!this.loop,
       map:              {}
     };
 
@@ -504,7 +514,7 @@ class BlockScoping {
       t.variableDeclarator(ret, call)
     ]));
 
-    var loopParent = this.loopParent;
+    var loop = this.loop;
     var retCheck;
     var has = this.has;
     var cases = [];
@@ -517,9 +527,8 @@ class BlockScoping {
     }
 
     if (has.hasBreakContinue) {
-      if (!loopParent) {
-        throw new Error("Has no loop parent but we're trying to reassign breaks " +
-                        "and continues, something is going wrong here.");
+      if (!loop) {
+        throw new Error("Aren't in a loop and we're trying to reassign breaks and continues, something is going wrong here.");
       }
 
       for (var key in has.map) {
@@ -537,6 +546,14 @@ class BlockScoping {
           single.consequent[0]
         )));
       } else {
+        // #998
+        for (var i = 0; i < cases.length; i++) {
+          var caseConsequent = cases[i].consequent[0];
+          if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
+            caseConsequent.label = this.loopLabel ||= this.file.scope.generateUidIdentifier("loop");
+          }
+        }
+
         body.push(this.file.attachAuxiliaryComment(t.switchStatement(ret, cases)));
       }
     } else {
