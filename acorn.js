@@ -2156,6 +2156,8 @@
   // operators like `+=`.
 
   pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos) {
+    if (this.type == tt._yield && this.inGenerator) return this.parseYield();
+
     var failOnShorthandAssign;
     if (!refShorthandDefaultPos) {
       refShorthandDefaultPos = {start: 0};
@@ -2310,7 +2312,7 @@
       return this.finishNode(node, "ThisExpression");
 
     case tt._yield:
-      if (this.inGenerator) return this.parseYield();
+      if (this.inGenerator) unexpected();
 
     case tt.name:
       var start = this.currentPos();
@@ -2844,7 +2846,7 @@
   pp.parseYield = function() {
     var node = this.startNode();
     this.next();
-    if (this.eat(tt.semi) || this.insertSemicolon()) {
+    if (this.type == tt.semi || this.canInsertSemicolon()) {
       node.delegate = false;
       node.argument = null;
     } else {
