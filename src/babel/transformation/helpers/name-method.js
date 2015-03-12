@@ -111,7 +111,7 @@ export function bare(node, parent, scope) {
   if (node.id) return node;
 
   var id;
-  if (t.isProperty(parent) && parent.kind === "init" && !parent.computed) {
+  if (t.isProperty(parent) && parent.kind === "init" && (!parent.computed || t.isLiteral(parent.key))) {
     // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {
@@ -121,9 +121,17 @@ export function bare(node, parent, scope) {
     return node;
   }
 
-  if (!t.isIdentifier(id)) return node;
+  var name;
+  if (t.isLiteral(id)) {
+    console.log(id);
+    name = id.value;
+  } else if (t.isIdentifier(id)) {
+    name = id.name;
+  } else {
+    return;
+  }
 
-  var name = t.toIdentifier(id.name);
+  name = t.toIdentifier(name);
   id = t.identifier(name);
 
   var state = visit(node, name, scope);
