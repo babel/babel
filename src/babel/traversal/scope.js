@@ -133,7 +133,7 @@ export default class Scope {
       uid = this._generateUid(name, i);
       i++;
     } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasUid(uid));
-    this.uids[uid] = true;
+    this.getFunctionParent().uids[uid] = true;
     return uid;
   }
 
