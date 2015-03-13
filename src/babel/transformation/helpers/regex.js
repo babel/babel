@@ -7,7 +7,7 @@ export function is(node, flag) {
 
 export function pullFlag(node, flag) {
   var flags = node.regex.flags.split("");
-  if (node.regex.flags.indexOf("u") < 0) return;
-  pull(flags, "u");
+  if (node.regex.flags.indexOf(flag) < 0) return;
+  pull(flags, flag);
   node.regex.flags = flags.join("");
 }
