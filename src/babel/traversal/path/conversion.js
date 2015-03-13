@@ -1,4 +1,4 @@
-import * as t from "./index";
+import * as t from "../../types";
 
 /**
  * Description

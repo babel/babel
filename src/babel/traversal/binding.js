@@ -3,7 +3,7 @@ import * as t from "../types";
 export default class Binding {
   constructor({ identifier, scope, path, kind }) {
     this.identifier = identifier;
-    this.reassigned = false;
+    this.constant   = true;
     this.scope      = scope;
     this.path       = path;
     this.kind       = kind;
@@ -50,7 +50,7 @@ export default class Binding {
    */
 
   reassign() {
-    this.reassigned = true;
+    this.constant = false;
 
     if (this.typeAnnotationInferred) {
       // destroy the inferred typeAnnotation

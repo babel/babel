@@ -432,7 +432,7 @@ class DestructuringTransformer {
     } else {
       arrayRef = this.scope.generateUidBasedOnNode(arrayRef);
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
-      this.getBinding(arrayRef.name).assignTypeGeneric("Array");
+      //this.getBinding(arrayRef.name).assignTypeGeneric("Array");
     }
 
     //

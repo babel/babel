@@ -144,7 +144,7 @@ class TailCallTransformer {
     // check if the ownerId has been reassigned, if it has then it's not safe to
     // perform optimisations
     var ownerIdInfo = this.scope.getBinding(this.ownerId.name);
-    return ownerIdInfo && ownerIdInfo.reassigned;
+    return ownerIdInfo && !ownerIdInfo.constant;
   }
 
   run() {

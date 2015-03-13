@@ -44,11 +44,11 @@ var programReferenceVisitor = {
     } else if (t.isLabeledStatement(node)) {
       state.addGlobal(node);
     } else if (t.isAssignmentExpression(node)) {
-      scope.registerBindingReassignment(this.get("left"), this.get("right"));
+      scope.registerConstantViolation(this.get("left"), this.get("right"));
     } else if (t.isUpdateExpression(node)) {
-      // TODO
+      scope.registerConstantViolation(this.get("argument"), null);
     } else if (t.isUnaryExpression(node) && node.operator === "delete") {
-      scope.registerBindingReassignment(this.get("left"), null);
+      scope.registerConstantViolation(this.get("left"), null);
     }
   }
 };
@@ -320,7 +320,7 @@ export default class Scope {
    * Description
    */
 
-  registerBindingReassignment(left: TraversalPath, right: TraversalPath) {
+  registerConstantViolation(left: TraversalPath, right: TraversalPath) {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
       var binding = this.getBinding(name);

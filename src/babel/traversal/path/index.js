@@ -61,8 +61,10 @@ export default class TraversalPath {
     return this.data[key] = val;
   }
 
-  getData(key) {
-    return this.data[key];
+  getData(key, def) {
+    var val = this.data[key];
+    if (!val && def) val = this.data[key] = def;
+    return val;
   }
 
   setScope(file?) {
@@ -270,7 +272,7 @@ export default class TraversalPath {
       }
     } else if (this.isIdentifier()) {
       var binding = this.scope.getBinding(this.node.name);
-      if (!binding || binding.reassigned) return;
+      if (!binding || !binding.constant) return;
 
       if (binding.path === this) {
         return this;
