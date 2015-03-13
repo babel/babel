@@ -36,7 +36,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-babel": "0.11.1-37",
+    "acorn-babel": "0.11.1-38",
     "ast-types": "~0.7.0",
     "chalk": "^1.0.0",
     "chokidar": "^0.12.6",
