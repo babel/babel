@@ -5,8 +5,9 @@ var g =
   typeof window === "object" ? window :
   typeof self === "object" ? self : this;
 
-var hasOwn = Object.prototype.hasOwnProperty;
-var hadRuntime = hasOwn.call(g, "regeneratorRuntime");
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = (Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") > -1);
 var oldRuntime = hadRuntime && g.regeneratorRuntime;
 delete g.regeneratorRuntime; // Force reevalutation of runtime.js.
 
