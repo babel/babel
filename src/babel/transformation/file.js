@@ -280,7 +280,7 @@ export default class File {
   parseInputSourceMap(code: string) {
     var opts = this.opts;
 
-    if (opts.inputSourceMap === false) {
+    if (opts.inputSourceMap !== false) {
       var inputMap = convertSourceMap.fromSource(code);
       if (inputMap) {
         opts.inputSourceMap = inputMap.toObject();
