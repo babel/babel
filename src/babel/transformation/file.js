@@ -280,10 +280,12 @@ export default class File {
   parseInputSourceMap(code: string) {
     var opts = this.opts;
 
-    var inputMap = convertSourceMap.fromSource(code);
-    if (inputMap) {
-      opts.inputSourceMap = inputMap.toObject();
-      code = convertSourceMap.removeComments(code);
+    if (opts.inputSourceMap === false) {
+      var inputMap = convertSourceMap.fromSource(code);
+      if (inputMap) {
+        opts.inputSourceMap = inputMap.toObject();
+        code = convertSourceMap.removeComments(code);
+      }
     }
 
     return code;
