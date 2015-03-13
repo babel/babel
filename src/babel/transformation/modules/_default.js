@@ -45,7 +45,7 @@ var importsVisitor = {
   ImportDeclaration: {
     enter(node, parent, scope, formatter) {
       formatter.hasLocalImports = true;
-      extend(formatter.localImports, t.getBindingIdentifiers(node));
+      extend(formatter.localImports, this.getBindingIdentifiers());
       formatter.bumpImportOccurences(node);
     }
   }
@@ -54,11 +54,11 @@ var importsVisitor = {
 var exportsVisitor = {
   ExportDeclaration: {
     enter(node, parent, scope, formatter) {
-      var declar = node.declaration;
+      var declar = this.get("declaration");
       formatter.hasLocalImports = true;
 
-      if (declar && t.isStatement(declar)) {
-        extend(formatter.localExports, t.getBindingIdentifiers(declar));
+      if (declar.isStatement()) {
+        extend(formatter.localExports, declar.getBindingIdentifiers());
       }
 
       if (!node.default) {
@@ -105,16 +105,16 @@ export default class DefaultFormatter {
   }
 
   getLocalExports() {
-    this.file.scope.traverse(this.file.ast, exportsVisitor, this);
+    this.file.path.traverse(exportsVisitor, this);
   }
 
   getLocalImports() {
-    this.file.scope.traverse(this.file.ast, importsVisitor, this);
+    this.file.path.traverse(importsVisitor, this);
   }
 
   remapAssignments() {
     if (this.hasLocalImports) {
-      this.file.scope.traverse(this.file.ast, remapVisitor, this);
+      this.file.path.traverse(remapVisitor, this);
     }
   }
 

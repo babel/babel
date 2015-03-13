@@ -1,4 +1,5 @@
 import includes from "lodash/collection/includes";
+import traverse from "../traversal";
 
 /**
  * This class is responsible for traversing over the provided `File`s
@@ -59,7 +60,7 @@ export default class TransformerPass {
 
     file.log.debug(`Running transformer ${this.transformer.key}`);
 
-    file.scope.traverse(file.ast, this.handlers, file);
+    traverse(file.ast, this.handlers, file.scope, file);
 
     this.ran = true;
   }

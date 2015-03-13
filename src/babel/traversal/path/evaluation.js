@@ -1,5 +1,3 @@
-import * as t from "./index";
-
 /**
  * Walk the input `node` and statically evaluate if it's truthy.
  *
@@ -18,15 +16,15 @@ import * as t from "./index";
  *
  */
 
-export function evaluateTruthy(node: Object, scope: Scope): boolean {
-  var res = evaluate(node, scope);
+export function evaluateTruthy(): boolean {
+  var res = this.evaluate();
   if (res.confident) return !!res.value;
 }
 
 /**
  * Walk the input `node` and statically evaluate it.
  *
- * Returns an pbject in the form `{ confident, value }`. `confident` indicates
+ * Returns an object in the form `{ confident, value }`. `confident` indicates
  * whether or not we had to drop out of evaluating the expression because of
  * hitting an unknown node that we couldn't confidently find the value of.
  *
@@ -38,24 +36,27 @@ export function evaluateTruthy(node: Object, scope: Scope): boolean {
  *
  */
 
-export function evaluate(node: Object, scope: Scope): { confident: boolean; value: any } {
+export function evaluate(): { confident: boolean; value: any } {
   var confident = true;
 
-  var value = evaluate(node);
+  var value = evaluate(this);
   if (!confident) value = undefined;
   return {
     confident: confident,
     value:     value
   };
 
-  function evaluate(node) {
+  function evaluate(path) {
     if (!confident) return;
 
-    if (t.isSequenceExpression(node)) {
-      return evaluate(node.expressions[node.expressions.length - 1]);
+    var node = path.node;
+
+    if (path.isSequenceExpression()) {
+      var exprs = path.get("expressions");
+      return evaluate(exprs[exprs.length - 1]);
     }
 
-    if (t.isLiteral(node)) {
+    if (path.isLiteral()) {
       if (node.regex && node.value === null) {
         // we have a regex and we can't represent it natively
       } else {
@@ -63,24 +64,29 @@ export function evaluate(node: Object, scope: Scope): { confident: boolean; valu
       }
     }
 
-    if (t.isConditionalExpression(node)) {
-      if (evaluate(node.test)) {
-        return evaluate(node.consequent);
+    if (path.isConditionalExpression()) {
+      if (evaluate(path.get("test"))) {
+        return evaluate(path.get("consequent"));
       } else {
-        return evaluate(node.alternate);
+        return evaluate(path.get("alternate"));
       }
     }
 
-    if (t.isIdentifier(node)) {
-      if (node.name === "undefined") {
-        return undefined;
+    if (path.isIdentifier({ name: "undefined" })) {
+      return undefined;
+    }
+
+    if (path.isIdentifier() || path.isMemberExpression()) {
+      path = path.resolve();
+      if (path) {
+        return evaluate(path);
       } else {
-        return evaluate(scope.getImmutableBindingValue(node.name));
+        return confident = false;
       }
     }
 
-    if (t.isUnaryExpression(node, { prefix: true })) {
-      var arg = evaluate(node.argument);
+    if (path.isUnaryExpression({ prefix: true })) {
+      var arg = evaluate(path.get("argument"));
       switch (node.operator) {
         case "void": return undefined;
         case "!": return !arg;
@@ -89,13 +95,13 @@ export function evaluate(node: Object, scope: Scope): { confident: boolean; valu
       }
     }
 
-    if (t.isArrayExpression(node) || t.isObjectExpression(node)) {
+    if (path.isArrayExpression() || path.isObjectExpression()) {
       // we could evaluate these but it's probably impractical and not very useful
     }
 
-    if (t.isLogicalExpression(node)) {
-      let left = evaluate(node.left);
-      let right = evaluate(node.right);
+    if (path.isLogicalExpression()) {
+      let left = evaluate(path.get("left"));
+      let right = evaluate(path.get("right"));
 
       switch (node.operator) {
         case "||": return left || right;
@@ -103,9 +109,9 @@ export function evaluate(node: Object, scope: Scope): { confident: boolean; valu
       }
     }
 
-    if (t.isBinaryExpression(node)) {
-      let left = evaluate(node.left);
-      let right = evaluate(node.right);
+    if (path.isBinaryExpression()) {
+      let left = evaluate(path.get("left"));
+      let right = evaluate(path.get("right"));
 
       switch (node.operator) {
         case "-": return left - right;

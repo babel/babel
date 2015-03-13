@@ -2,7 +2,7 @@ import path from "path";
 import os from "os";
 import fs from "fs";
 
-var FILENAME = process.env.BABEL_CACHE_PATH || path.join(os.tmpdir(), "babel.json");
+const FILENAME = process.env.BABEL_CACHE_PATH || path.join(os.tmpdir(), "babel.json");
 var data = {};
 
 export function save() {

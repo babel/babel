@@ -71,13 +71,6 @@ export default class Scope {
    */
 
   constructor(path: TraversalPath, parent?: Scope, file?: File) {
-    var cached = path.getData("scope");
-    if (cached) {
-      return cached;
-    } else {
-      path.setData("scope", this);
-    }
-
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 
@@ -245,7 +238,7 @@ export default class Scope {
         if (t.isReferencedIdentifier(node, parent) && node.name === oldName) {
           node.name = newName;
         } else if (t.isDeclaration(node)) {
-          var ids = t.getBindingIdentifiers(node);
+          var ids = this.getBindingIdentifiers();
           for (var name in ids) {
             if (name === oldName) ids[name].name = newName;
           }
@@ -272,7 +265,7 @@ export default class Scope {
 
     if (t.isIdentifier(node)) {
       var binding = this.getBinding(node.name);
-      if (binding && binding.isTypeGeneric("Array")) return node;
+      if (binding && binding.isTypeGeneric("Array", { inference: false })) return node;
     }
 
     if (t.isArrayExpression(node)) {
@@ -393,15 +386,11 @@ export default class Scope {
 
   crawl() {
     var path = this.path;
-    var i;
 
     //
 
     var info = path.getData("scopeInfo");
-    if (info) {
-      extend(this, info);
-      return;
-    }
+    if (info) return extend(this, info);
 
     info = path.setData("scopeInfo", {
       bindings: object(),
@@ -414,7 +403,7 @@ export default class Scope {
     // ForStatement - left, init
 
     if (path.isLoop()) {
-      for (i = 0; i < t.FOR_INIT_KEYS.length; i++) {
+      for (let i = 0; i < t.FOR_INIT_KEYS.length; i++) {
         var node = path.get(t.FOR_INIT_KEYS[i]);
         if (node.isBlockScoped()) this.registerBinding("let", node);
       }
@@ -441,16 +430,16 @@ export default class Scope {
 
     if (path.isFunction()) {
       var params = path.get("params");
-      for (i = 0; i < params.length; i++) {
+      for (let i = 0; i < params.length; i++) {
         this.registerBinding("param", params[i]);
       }
-      this.traverse(path.get("body"), blockVariableVisitor, this);
+      path.get("body").traverse(blockVariableVisitor, this);
     }
 
     // Program, BlockStatement, Function - let variables
 
     if (path.isBlockStatement() || path.isProgram()) {
-      this.traverse(path.node, blockVariableVisitor, this);
+      path.traverse(blockVariableVisitor, this);
     }
 
     // CatchClause - param
@@ -468,7 +457,7 @@ export default class Scope {
     // Program, Function - var variables
 
     if (path.isProgram() || path.isFunction()) {
-      this.traverse(path.node, functionVariableVisitor, {
+      path.traverse(functionVariableVisitor, {
         blockId: path.get("id").node,
         scope:   this
       });
@@ -477,7 +466,7 @@ export default class Scope {
     // Program
 
     if (path.isProgram()) {
-      this.traverse(path.node, programReferenceVisitor, this);
+      path.traverse(programReferenceVisitor, this);
     }
   }
 
@@ -611,26 +600,6 @@ export default class Scope {
   getOwnBindingIdentifier(name: string) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
-  }
-
-  /**
-   * Description
-   */
-
-  getOwnImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getOwnBindingInfo(name));
-  }
-
-  /**
-   * Description
-   */
-
-  getImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getBinding(name));
-  }
-
-  _immutableBindingInfoToValue(binding) {
-    if (binding) return binding.getValueIfImmutable();
   }
 
   /**

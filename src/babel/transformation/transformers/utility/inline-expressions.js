@@ -3,7 +3,7 @@ import * as t from "../../../types";
 export var optional = true;
 
 export function Expression(node, parent, scope) {
-  var res = t.evaluate(node, scope);
+  var res = this.evaluate();
   if (res.confident) return t.valueToNode(res.value);
 }
 

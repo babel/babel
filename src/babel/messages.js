@@ -1,6 +1,6 @@
 import * as util from  "util";
 
-export var messages = {
+export const MESSAGES = {
   tailCallReassignmentDeopt: "Function reference has been reassigned so it's probably be dereferenced so we can't optimise this with confidence",
   JSXNamespacedTags: "Namespace tags are not supported. ReactJSX is not XML.",
   classesIllegalBareSuper: "Illegal use of bare super",
@@ -25,7 +25,7 @@ export var messages = {
 };
 
 export function get(key: String, ...args) {
-  var msg = messages[key];
+  var msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
   args = parseArgs(args);

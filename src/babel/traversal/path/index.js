@@ -2,10 +2,11 @@ import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
-import traverse from "./index";
+import traverse from "../index";
 import includes from "lodash/collection/includes";
-import Scope from "./scope";
-import * as t from "../types";
+import assign from "lodash/object/assign";
+import Scope from "../scope";
+import * as t from "../../types";
 
 export default class TraversalPath {
   constructor(parent, container) {
@@ -112,6 +113,13 @@ export default class TraversalPath {
     this._refresh(node, [node]);
   }
 
+  errorWithNode(msg, Error = SyntaxError) {
+    var loc = this.node.loc.start;
+    var err = new Error(`Line ${loc.line}: ${msg}`);
+    err.loc = loc;
+    return err;
+  }
+
   get node() {
     return this.container[this.key];
   }
@@ -132,9 +140,6 @@ export default class TraversalPath {
 
     // potentially create new scope
     this.setScope();
-
-    // refresh scope with new/removed bindings
-    this._refresh(oldNode, replacements);
 
     var file = this.scope && this.scope.file;
     if (file) {
@@ -170,12 +175,12 @@ export default class TraversalPath {
     }
   }
 
-  isBlacklisted() {
+  isBlacklisted(): boolean {
     var blacklist = this.opts.blacklist;
     return blacklist && blacklist.indexOf(this.node.type) > -1;
   }
 
-  visit() {
+  visit(): boolean {
     if (this.isBlacklisted()) return false;
 
     this.call("enter");
@@ -215,11 +220,22 @@ export default class TraversalPath {
     }
   }
 
-  has(key) {
+  has(key): boolean {
     return !!this.node[key];
   }
 
-  getTypeAnnotation(): Object {
+  is(key): boolean {
+    return this.has(key);
+  }
+
+  isnt(key): boolean {
+    return !this.has(key);
+  }
+
+  getTypeAnnotation(): {
+    inferred: boolean;
+    annotation: ?Object;
+  } {
     if (this.typeInfo) {
       return this.typeInfo;
     }
@@ -246,10 +262,15 @@ export default class TraversalPath {
 
   resolve(): ?TraversalPath {
     if (this.isVariableDeclarator()) {
-      return this.get("init").resolve();
+      if (this.get("id").isIdentifier()) {
+        return this.get("init").resolve();
+      } else {
+        // otherwise it's a request for a destructuring declarator and i'm not
+        // ready to resolve those just yet
+      }
     } else if (this.isIdentifier()) {
       var binding = this.scope.getBinding(this.node.name);
-      if (!binding) return;
+      if (!binding || binding.reassigned) return;
 
       if (binding.path === this) {
         return this;
@@ -257,7 +278,7 @@ export default class TraversalPath {
         return binding.path.resolve();;
       }
     } else if (this.isMemberExpression()) {
-      var targetKey = t.toComputedKey(this.node);
+      var targetKey = this.toComputedKey();
       if (!t.isLiteral(targetKey)) return;
       var targetName = targetKey.value;
 
@@ -270,25 +291,42 @@ export default class TraversalPath {
         if (!prop.isProperty()) continue;
 
         var key = prop.get("key");
-        if (key.isIdentifier({ name: targetName }) || key.isLiteral({ value: targetName })) {
-          return prop.get("value");
-        }
+
+        // { foo: obj }
+        var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
+
+        // { "foo": "obj" } or { ["foo"]: "obj" }
+        match ||= key.isLiteral({ value: targetName });
+
+        if (match) return prop.get("value");
       }
     } else {
       return this;
     }
   }
 
-  inferType(path: TraversalPath) {
+  inferType(path: TraversalPath): ?Object {
     path = path.resolve();
     if (!path) return;
 
-    if (path.isRestElement() || path.isArrayExpression()) {
+    if (path.isRestElement() || path.parentPath.isRestElement() || path.isArrayExpression()) {
       return t.genericTypeAnnotation(t.identifier("Array"));
+    }
+
+    if (path.parentPath.isTypeCastExpression()) {
+      return path.parentPath.node.typeAnnotation;
+    }
+
+    if (path.isTypeCastExpression()) {
+      return path.node.typeAnnotation;
     }
 
     if (path.isObjectExpression()) {
       return t.genericTypeAnnotation(t.identifier("Object"));
+    }
+
+    if (path.isFunction()) {
+      return t.identifier("Function");
     }
 
     if (path.isLiteral()) {
@@ -304,39 +342,44 @@ export default class TraversalPath {
     }
   }
 
-  isScope() {
+  isScope(): boolean {
     return t.isScope(this.node, this.parent);
   }
 
-  isReferencedIdentifier(opts) {
+  isReferencedIdentifier(opts): boolean {
     return t.isReferencedIdentifier(this.node, this.parent, opts);
   }
 
-  isReferenced() {
+  isReferenced(): boolean {
     return t.isReferenced(this.node, this.parent);
   }
 
-  isBlockScoped() {
+  isBlockScoped(): boolean {
     return t.isBlockScoped(this.node);
   }
 
-  isVar() {
+  isVar(): boolean {
     return t.isVar(this.node);
   }
 
-  isScope() {
+  isScope(): boolean {
     return t.isScope(this.node, this.parent);
   }
 
-  isTypeGeneric(genericName: string, hasTypeParameters?): boolean {
-    var type = this.getTypeAnnotation().annotation;
+  isTypeGeneric(genericName: string, opts = {}): boolean {
+    var typeInfo = this.getTypeAnnotation();
+    var type     = typeInfo.annotation;
     if (!type) return false;
+
+    if (type.inferred && opts.inference === false) {
+      return false;
+    }
 
     if (!t.isGenericTypeAnnotation(type) || !t.isIdentifier(type.id, { name: genericName })) {
       return false;
     }
 
-    if (hasTypeParameters && !type.typeParameters) {
+    if (opts.requireTypeParameters && !type.typeParameters) {
       return false;
     }
 
@@ -348,9 +391,64 @@ export default class TraversalPath {
   }
 
   traverse(opts, state) {
-    traverse(this.node, opts, this.scope, state);
+    traverse(this.node, opts, this.scope, state, this);
+  }
+
+  /**
+   * Match the current node if it matches the provided `pattern`.
+   *
+   * For example, given the match `React.createClass` it would match the
+   * parsed nodes of `React.createClass` and `React["createClass"]`.
+   */
+
+  matchesPattern(pattern: string, allowPartial?: boolean): boolean {
+   var parts = pattern.split(".");
+
+    // not a member expression
+    if (!this.isMemberExpression()) return false;
+
+    var search = [this.node];
+    var i = 0;
+
+    while (search.length) {
+      var node = search.shift();
+
+      if (allowPartial && i === parts.length) {
+        return true;
+      }
+
+      if (t.isIdentifier(node)) {
+        // this part doesn't match
+        if (parts[i] !== node.name) return false;
+      } else if (t.isLiteral(node)) {
+        // this part doesn't match
+        if (parts[i] !== node.value) return false;
+      } else if (t.isMemberExpression(node)) {
+        if (node.computed && !t.isLiteral(node.property)) {
+          // we can't deal with this
+          return false;
+        } else {
+          search.push(node.object);
+          search.push(node.property);
+          continue;
+        }
+      } else {
+        // we can't deal with this
+        return false;
+      }
+
+      // too many parts
+      if (++i > parts.length) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
+
+assign(TraversalPath.prototype, require("./evaluation"));
+assign(TraversalPath.prototype, require("./conversion"));
 
 for (var i = 0; i < t.TYPES.length; i++) {
   let type = t.TYPES[i];

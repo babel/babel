@@ -111,7 +111,7 @@ function traverseReplace(node, parent, scope, remaps) {
 var letReferenceBlockVisitor = {
   enter(node, parent, scope, state) {
     if (this.isFunction()) {
-      scope.traverse(node, letReferenceFunctionVisitor, state);
+      this.traverse(letReferenceFunctionVisitor, state);
       return this.skip();
     }
   }
@@ -173,7 +173,7 @@ var loopVisitor = {
 
     if (this.isLoop()) {
       state.ignoreLabeless = true;
-      scope.traverse(node, loopVisitor, state);
+      this.traverse(loopVisitor, state);
       state.ignoreLabeless = false;
     }
 

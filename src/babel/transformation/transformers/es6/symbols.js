@@ -7,7 +7,7 @@ export function UnaryExpression(node, parent, scope, file) {
 
   if (node.operator === "typeof") {
     var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
-    if (t.isIdentifier(node.argument)) {
+    if (this.get("argument").isIdentifier()) {
       var undefLiteral = t.literal("undefined");
       return t.conditionalExpression(
         t.binaryExpression("===", t.unaryExpression("typeof", node.argument), undefLiteral),

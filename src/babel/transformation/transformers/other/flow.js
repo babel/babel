@@ -29,5 +29,5 @@ export function ImportDeclaration(node) {
 }
 
 export function ExportDeclaration(node) {
-  if (t.isTypeAlias(node.declaration)) this.remove();
+  if (this.get("declaration").isTypeAlias()) this.remove();
 }

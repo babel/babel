@@ -4,7 +4,7 @@ import core from "core-js/library";
 import has from "lodash/object/has";
 import * as t from "../../../types";
 
-var isSymboliterator = t.buildMatchMemberExpression("Symbol.iterator");
+var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
 var coreHas = function (node) {
   return node.name !== "_" && has(core, node.name);
@@ -47,7 +47,7 @@ var astVisitor = {
       if (!callee.computed) return false;
 
       prop = callee.property;
-      if (!isSymboliterator(prop)) return false;
+      if (!isSymbolIterator(prop)) return false;
 
       return util.template("corejs-iterator", {
         CORE_ID: file.get("coreIdentifier"),
@@ -59,7 +59,7 @@ var astVisitor = {
       if (node.operator !== "in") return;
 
       var left = node.left;
-      if (!isSymboliterator(left)) return;
+      if (!isSymbolIterator(left)) return;
 
       return util.template("corejs-is-iterator", {
         CORE_ID: file.get("coreIdentifier"),
@@ -76,7 +76,7 @@ export function manipulateOptions(opts) {
 }
 
 export function Program(node, parent, scope, file) {
-  scope.traverse(node, astVisitor, file);
+  this.traverse(astVisitor, file);
 }
 
 export function pre(file) {
