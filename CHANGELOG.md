@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.11
+
+ * **Bug Fix**
+  * Fix unicode regexes stripping their unicode flag before being passed on two `regexpu`.
+
 ## 4.7.10
 
  * **Internal**
