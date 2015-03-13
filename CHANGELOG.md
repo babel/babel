@@ -13,6 +13,17 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.9
+
+ * **Polish**
+  * Allow `inputSourceMap` to be set to `false` to skip the source map inference.
+  * Infer computed literal property names.
+ * **Bug Fix**
+  * Fix nested labeled for-ofs.
+  * Fix block scoping `break` colliding with the parent switch case.
+ * **Internal**
+  * Upgrade `acorn-babel`.
+
 ## 4.7.8
 
  * **Bug Fix**
