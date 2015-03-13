@@ -7,6 +7,6 @@ export function check(node) {
 
 export function Literal(node) {
   if (!regex.is(node, "u")) return;
-  regex.pullFlag(node, "y");
   node.regex.pattern = rewritePattern(node.regex.pattern, node.regex.flags);
+  regex.pullFlag(node, "u");
 }

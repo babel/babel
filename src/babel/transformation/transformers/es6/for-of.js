@@ -33,11 +33,8 @@ export function ForOfStatement(node, parent, scope, file) {
 
   t.inherits(loop, node);
 
-  if (build.replaceParent) {
-    this.parentPath.node = build.node;
-  } else {
-    return build.node;
-  }
+  if (build.replaceParent) this.parentPath.node = build.node;
+  return build.node;
 }
 
 export function _ForOfStatementArray(node, scope, file) {
