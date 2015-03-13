@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.10
+
+ * **Internal**
+  * Deprecate `playground.methodBinding` and `playground.objectGetterMemoization`.
+ * **Bug Fix**
+  * Fix `inputSourceMap` option. Thanks [@Rich-Harris](https://github.com/Rich-Harris)!
+
 ## 4.7.9
 
  * **Polish**
