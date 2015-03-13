@@ -440,13 +440,13 @@ export default class Scope {
       for (let i = 0; i < params.length; i++) {
         this.registerBinding("param", params[i]);
       }
-      path.get("body").traverse(blockVariableVisitor, this);
+      this.traverse(path.get("body").node, blockVariableVisitor, this);
     }
 
     // Program, BlockStatement, Function - let variables
 
     if (path.isBlockStatement() || path.isProgram()) {
-      path.traverse(blockVariableVisitor, this);
+      this.traverse(path.node, blockVariableVisitor, this);
     }
 
     // CatchClause - param
@@ -464,7 +464,7 @@ export default class Scope {
     // Program, Function - var variables
 
     if (path.isProgram() || path.isFunction()) {
-      path.traverse(functionVariableVisitor, {
+      this.traverse(path.node, functionVariableVisitor, {
         blockId: path.get("id").node,
         scope:   this
       });
@@ -473,7 +473,7 @@ export default class Scope {
     // Program
 
     if (path.isProgram()) {
-      path.traverse(programReferenceVisitor, this);
+      this.traverse(path.node, programReferenceVisitor, this);
     }
   }
 
