@@ -2,7 +2,8 @@
 // kept identical to the way it is obtained in runtime.js
 var g =
   typeof global === "object" ? global :
-  typeof window === "object" ? window : this;
+  typeof window === "object" ? window :
+  typeof self === "object" ? self : this;
 
 var hasOwn = Object.prototype.hasOwnProperty;
 var hadRuntime = hasOwn.call(g, "regeneratorRuntime");
