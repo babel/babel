@@ -32,11 +32,8 @@ export function ForOfStatement(node, parent, scope, file) {
   // todo: find out why this is necessary? #538
   loop._scopeInfo = node._scopeInfo;
 
-  if (build.replaceParent) {
-    this.parentPath.node = build.node;
-  } else {
-    return build.node;
-  }
+  if (build.replaceParent) this.parentPath.node = build.node;
+  return build.node;
 }
 
 var loose = function (node, parent, scope, file) {
