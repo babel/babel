@@ -1,1 +1,1 @@
-var arr = [for (i of nums) i * i];
+var arr = [for (i of [1, 2, 3]) i * i];
