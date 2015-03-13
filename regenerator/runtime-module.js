@@ -7,9 +7,14 @@ var g =
 
 // Use `getOwnPropertyNames` because not all browsers support calling
 // `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = (Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") > -1);
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
 var oldRuntime = hadRuntime && g.regeneratorRuntime;
-delete g.regeneratorRuntime; // Force reevalutation of runtime.js.
+
+// Force reevalutation of runtime.js.
+delete g.regeneratorRuntime;
 
 module.exports = require("./runtime");
 
