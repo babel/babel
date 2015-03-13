@@ -277,9 +277,12 @@ export default class TraversalPath {
       if (binding.path === this) {
         return this;
       } else {
-        return binding.path.resolve();;
+        return binding.path.resolve();
       }
     } else if (this.isMemberExpression()) {
+      // this is dangerous, as non-direct target assignments will mutate it's state
+      // making this resolution inaccurate
+
       var targetKey = this.toComputedKey();
       if (!t.isLiteral(targetKey)) return;
       var targetName = targetKey.value;
