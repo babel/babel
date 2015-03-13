@@ -139,7 +139,7 @@ export default class File {
       returnUsedHelpers:      false,
       externalHelpers:        false,
       auxilaryComment:        "",
-      inputSourceMap:         false,
+      inputSourceMap:         null,
       experimental:           false,
       reactCompat:            false,
       playground:             false,
