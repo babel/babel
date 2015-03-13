@@ -71,6 +71,13 @@ export default class Scope {
    */
 
   constructor(path: TraversalPath, parent?: Scope, file?: File) {
+    var cached = path.getData("scope");
+    if (cached) {
+      return cached;
+    } else {
+      //path.setData("scope", this);
+    }
+
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 
