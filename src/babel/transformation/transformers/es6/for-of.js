@@ -5,11 +5,9 @@ import * as t from "../../../types";
 export var check = t.isForOfStatement;
 
 export function ForOfStatement(node, parent, scope, file) {
-  if (this.get("right").isTypeGeneric("Array")) {
-    return array(node, scope, file);
+  if (this.get("right").isArrayExpression()) {
+    return _ForOfStatementArray.call(this, node, scope, file);
   }
-
-  //
 
   var callback = spec;
   if (file.isLoose("es6.forOf")) callback = loose;
@@ -42,7 +40,7 @@ export function ForOfStatement(node, parent, scope, file) {
   }
 }
 
-var array = function (node, scope, file) {
+export function _ForOfStatementArray(node, scope, file) {
   var nodes = [];
   var right = node.right;
 
@@ -78,7 +76,7 @@ var array = function (node, scope, file) {
   nodes.push(loop);
 
   return nodes;
-};
+}
 
 var loose = function (node, parent, scope, file) {
   var left = node.left;

@@ -20,8 +20,7 @@ export function MethodDefinition(node, parent, scope, file) {
   if (node.kind !== "memo") return;
   node.kind = "get";
 
-  var value = node.value;
-  t.ensureBlock(value);
+  t.ensureBlock(node.value);
 
   var key = node.key;
 
@@ -34,7 +33,7 @@ export function MethodDefinition(node, parent, scope, file) {
     file: file
   };
 
-  scope.traverse(value, visitor, state);
+  this.get("value").traverse(visitor, state);
 
   return node;
 }

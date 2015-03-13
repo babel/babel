@@ -1,10 +1,8 @@
-module.exports = traverse;
-
 import TraversalContext from "./context";
 import includes from "lodash/collection/includes";
 import * as t from "../types";
 
-function traverse(parent, opts, scope, state) {
+export default function traverse(parent, opts, scope, state, parentPath) {
   if (!parent) return;
 
   if (!opts.noScope && !scope) {
@@ -20,10 +18,10 @@ function traverse(parent, opts, scope, state) {
   // array of nodes
   if (Array.isArray(parent)) {
     for (var i = 0; i < parent.length; i++) {
-      traverse.node(parent[i], opts, scope, state);
+      traverse.node(parent[i], opts, scope, state, parentPath);
     }
   } else {
-    traverse.node(parent, opts, scope, state);
+    traverse.node(parent, opts, scope, state, parentPath);
   }
 }
 

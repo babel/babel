@@ -297,7 +297,6 @@ toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
 exports.__esModule = true;
-assign(t, require("./evaluators"));
 assign(t, require("./retrievers"));
 assign(t, require("./validators"));
 assign(t, require("./converters"));

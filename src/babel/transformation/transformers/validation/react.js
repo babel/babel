@@ -14,7 +14,7 @@ function check(source, file) {
 }
 
 export function CallExpression(node, parent, scope, file) {
-  if (t.isIdentifier(node.callee, { name: "require" }) && node.arguments.length === 1) {
+  if (this.get("callee").isIdentifier({ name: "require" }) && node.arguments.length === 1) {
     check(node.arguments[0], file);
   }
 }

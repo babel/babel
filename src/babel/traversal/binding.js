@@ -62,30 +62,6 @@ export default class Binding {
    * Description
    */
 
-  getValueIfImmutable() {
-    // can't guarantee this value is the same
-    if (this.reassigned) return;
-
-    var node = this.path.node;
-    if (t.isVariableDeclarator(node)) {
-      if (t.isIdentifier(node.id)) {
-        node = node.init;
-      } else {
-        // otherwise it's probably a destructuring like:
-        // var { foo } = "foo";
-        return;
-      }
-    }
-
-    if (t.isImmutable(node)) {
-      return node;
-    }
-  }
-
-  /**
-   * Description
-   */
-
   isCompatibleWithType(newType): boolean {
     return false;
   }

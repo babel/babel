@@ -44,6 +44,7 @@ export default {
   // needs to be before `_aliasFunction` due to define property closure
   "es6.properties.computed":               require("./es6/properties.computed"),
 
+  "optimisation.es6.forOf":                require("./optimisation/flow.for-of"),
   "es6.forOf":                             require("./es6/for-of"),
 
   "es6.regex.sticky":                      require("./es6/regex.sticky"),

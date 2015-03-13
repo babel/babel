@@ -37,7 +37,7 @@ var visitor = {
 };
 
 export function Scopable(node, parent, scope, file) {
-  scope.traverse(node, visitor, {
+  this.traverse(visitor, {
     constants: scope.getAllBindingsOfKind("const"),
     file:      file
   });

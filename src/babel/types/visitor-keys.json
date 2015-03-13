@@ -93,7 +93,7 @@
   "TypeofTypeAnnotation":        ["argument"],
   "TypeAlias":                   ["id", "typeParameters", "right"],
   "TypeAnnotation":              ["typeAnnotation"],
-  "TypeCastExpression":          ["expression"],
+  "TypeCastExpression":          ["expression", "typeAnnotation"],
   "TypeParameterDeclaration":    ["params"],
   "TypeParameterInstantiation":  ["params"],
   "ObjectTypeAnnotation":        ["key", "value"],

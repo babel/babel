@@ -49,41 +49,42 @@ exports.Function = function (node, parent, scope, file) {
     body.push(defNode);
   };
 
-  for (var i = 0; i < node.params.length; i++) {
-    var param = node.params[i];
+  var params = this.get("params");
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i];
 
-    if (!t.isAssignmentPattern(param)) {
-      if (!t.isRestElement(param)) {
+    if (!param.isAssignmentPattern()) {
+      if (!param.isRestElement()) {
         lastNonDefaultParam = i + 1;
       }
 
-      if (!t.isIdentifier(param)) {
-        scope.traverse(param, iifeVisitor, state);
+      if (!param.isIdentifier()) {
+        param.traverse(iifeVisitor, state);
       }
 
-      if (file.transformers["es6.blockScopingTDZ"].canRun() && t.isIdentifier(param)) {
-        pushDefNode(param, t.identifier("undefined"), i);
+      if (file.transformers["es6.blockScopingTDZ"].canRun() && param.isIdentifier()) {
+        pushDefNode(param.node, t.identifier("undefined"), i);
       }
 
       continue;
     }
 
-    var left  = param.left;
-    var right = param.right;
+    var left  = param.get("left");
+    var right = param.get("right");
 
     var placeholder = scope.generateUidIdentifier("x");
     placeholder._isDefaultPlaceholder = true;
     node.params[i] = placeholder;
 
     if (!state.iife) {
-      if (t.isIdentifier(right) && scope.hasOwnBinding(right.name)) {
+      if (right.isIdentifier() && scope.hasOwnBinding(right.node.name)) {
         state.iife = true;
       } else {
-        scope.traverse(right, iifeVisitor, state);
+        right.traverse(iifeVisitor, state);
       }
     }
 
-    pushDefNode(left, right, i);
+    pushDefNode(left.node, right.node, i);
   }
 
   // we need to cut off all trailing default parameters

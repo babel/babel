@@ -15,7 +15,7 @@ var memberExpressionOptimisationVisitor = {
     // to the wrong function
     if (this.isFunctionDeclaration() || this.isFunctionExpression()) {
       state.noOptimise = true;
-      scope.traverse(node, memberExpressionOptimisationVisitor, state);
+      this.traverse(memberExpressionOptimisationVisitor, state);
       state.noOptimise = false;
       return this.skip();
     }
@@ -88,7 +88,7 @@ exports.Function = function (node, parent, scope, file) {
     name:         rest.name
   };
 
-  scope.traverse(node, memberExpressionOptimisationVisitor, state);
+  this.traverse(memberExpressionOptimisationVisitor, state);
 
   // we only have shorthands and there's no other references
   if (state.canOptimise && state.candidates.length) {

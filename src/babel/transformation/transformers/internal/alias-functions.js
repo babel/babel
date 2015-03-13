@@ -34,13 +34,13 @@ var functionVisitor = {
     }
 
     // traverse all child nodes of this function and find `arguments` and `this`
-    scope.traverse(node, functionChildrenVisitor, state);
+    this.traverse(functionChildrenVisitor, state);
 
     return this.skip();
   }
 };
 
-var go = function (getBody, node, scope) {
+function aliasFunction(getBody, path, scope) {
   var argumentsId;
   var thisId;
 
@@ -56,7 +56,7 @@ var go = function (getBody, node, scope) {
 
   // traverse the function and find all alias functions so we can alias
   // `arguments` and `this` if necessary
-  scope.traverse(node, functionVisitor, state);
+  path.traverse(functionVisitor, state);
 
   var body;
 
@@ -77,16 +77,16 @@ var go = function (getBody, node, scope) {
 };
 
 export function Program(node, parent, scope) {
-  go(function () {
+  aliasFunction(function () {
     return node.body;
-  }, node, scope);
+  }, this, scope);
 };
 
 export function FunctionDeclaration(node, parent, scope) {
-  go(function () {
+  aliasFunction(function () {
     t.ensureBlock(node);
     return node.body.body;
-  }, node, scope);
+  }, this, scope);
 }
 
 export { FunctionDeclaration as FunctionExpression };

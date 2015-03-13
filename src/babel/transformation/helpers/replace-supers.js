@@ -219,7 +219,7 @@ export default class ReplaceSupers {
     var thisReference;
 
     if (isIllegalBareSuper(node, parent)) {
-      throw this.file.errorWithNode(node, messages.get("classesIllegalBareSuper"));
+      throw this.errorWithNode(messages.get("classesIllegalBareSuper"));
     }
 
     if (t.isCallExpression(node)) {

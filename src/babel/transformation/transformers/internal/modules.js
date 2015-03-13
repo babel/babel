@@ -59,7 +59,7 @@ export function ExportDeclaration(node, parent, scope) {
     } else if (t.isVariableDeclaration(declar)) {
       // export var foo = "bar";
       var specifiers = [];
-      var bindings = t.getBindingIdentifiers(declar);
+      var bindings = this.get("declaration").getBindingIdentifiers();
       for (var key in bindings) {
         var id = bindings[key];
         specifiers.push(t.exportSpecifier(id, id));

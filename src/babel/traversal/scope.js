@@ -75,7 +75,7 @@ export default class Scope {
     if (cached) {
       return cached;
     } else {
-      path.setData("scope", this);
+      //path.setData("scope", this);
     }
 
     this.parent = parent;
@@ -245,7 +245,7 @@ export default class Scope {
         if (t.isReferencedIdentifier(node, parent) && node.name === oldName) {
           node.name = newName;
         } else if (t.isDeclaration(node)) {
-          var ids = t.getBindingIdentifiers(node);
+          var ids = this.getBindingIdentifiers();
           for (var name in ids) {
             if (name === oldName) ids[name].name = newName;
           }
@@ -272,7 +272,7 @@ export default class Scope {
 
     if (t.isIdentifier(node)) {
       var binding = this.getBinding(node.name);
-      if (binding && binding.isTypeGeneric("Array")) return node;
+      if (binding && binding.isTypeGeneric("Array", { inference: false })) return node;
     }
 
     if (t.isArrayExpression(node)) {
@@ -611,26 +611,6 @@ export default class Scope {
   getOwnBindingIdentifier(name: string) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
-  }
-
-  /**
-   * Description
-   */
-
-  getOwnImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getOwnBindingInfo(name));
-  }
-
-  /**
-   * Description
-   */
-
-  getImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getBinding(name));
-  }
-
-  _immutableBindingInfoToValue(binding) {
-    if (binding) return binding.getValueIfImmutable();
   }
 
   /**
