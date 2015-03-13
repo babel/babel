@@ -4375,7 +4375,7 @@
 
     expectRelational("<");
     while (!isRelational(">")) {
-      node.params.push(parseIdent());
+      node.params.push(parseTypeAnnotatableIdentifier());
       if (!isRelational(">")) {
         expect(_comma);
       }

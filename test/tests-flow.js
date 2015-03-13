@@ -10936,6 +10936,150 @@ var fbTestFixture = {
       }
     },
   },
+    'Bounded Polymorphism': {
+    'class A<T: Foo> {}': {
+      type: 'ClassDeclaration',
+      id: {
+        type: 'Identifier',
+        name: 'A',
+        range: [6, 7],
+        loc: {
+          start: { line: 1, column: 6 },
+          end: { line: 1, column: 7 }
+        }
+      },
+      superClass: null,
+      body: {
+        type: 'ClassBody',
+        body: [],
+        range: [16, 18],
+        loc: {
+          start: { line: 1, column: 16 },
+          end: { line: 1, column: 18 }
+        }
+      },
+      typeParameters: {
+        type: 'TypeParameterDeclaration',
+        params: [{
+          type: 'Identifier',
+          name: 'T',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'GenericTypeAnnotation',
+              id: {
+                type: 'Identifier',
+                name: 'Foo',
+                range: [11, 14],
+                loc: {
+                  start: { line: 1, column: 11 },
+                  end: { line: 1, column: 14 }
+                }
+              },
+              typeParameters: null,
+              range: [11, 14],
+              loc: {
+                start: { line: 1, column: 11 },
+                end: { line: 1, column: 14 }
+              }
+            },
+            range: [9, 14],
+            loc: {
+              start: { line: 1, column: 9 },
+              end: { line: 1, column: 14 }
+            }
+          },
+          range: [8, 14],
+          loc: {
+            start: { line: 1, column: 8 },
+            end: { line: 1, column: 14 }
+          }
+        }],
+        range: [7, 15],
+        loc: {
+          start: { line: 1, column: 7 },
+          end: { line: 1, column: 15 }
+        }
+      },
+      range: [0, 18],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 18 }
+      }
+    },
+    'function bar<T: ?number>() {}': {
+      type: 'FunctionDeclaration',
+      id: {
+        type: 'Identifier',
+        name: 'bar',
+        range: [9, 12],
+        loc: {
+          start: { line: 1, column: 9 },
+          end: { line: 1, column: 12 }
+        }
+      },
+      params: [],
+      defaults: [],
+      body: {
+        type: 'BlockStatement',
+        body: [],
+        range: [27, 29],
+        loc: {
+          start: { line: 1, column: 27 },
+          end: { line: 1, column: 29 }
+        }
+      },
+      rest: null,
+      generator: false,
+      expression: false,
+      typeParameters: {
+        type: 'TypeParameterDeclaration',
+        params: [{
+          type: 'Identifier',
+          name: 'T',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NullableTypeAnnotation',
+              typeAnnotation: {
+                type: 'NumberTypeAnnotation',
+                range: [17, 23],
+                loc: {
+                  start: { line: 1, column: 17 },
+                  end: { line: 1, column: 23 }
+                }
+              },
+              range: [16, 23],
+              loc: {
+                start: { line: 1, column: 16 },
+                end: { line: 1, column: 23 }
+              }
+            },
+            range: [14, 23],
+            loc: {
+              start: { line: 1, column: 14 },
+              end: { line: 1, column: 23 }
+            }
+          },
+          range: [13, 23],
+          loc: {
+            start: { line: 1, column: 13 },
+            end: { line: 1, column: 23 }
+          }
+        }],
+        range: [12, 24],
+        loc: {
+          start: { line: 1, column: 12 },
+          end: { line: 1, column: 24 }
+        }
+      },
+      range: [0, 29],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 29 }
+      }
+    },
+  },
 };
 
 if (typeof exports !== "undefined") {
