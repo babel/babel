@@ -11,7 +11,6 @@ build(exports, {
   },
 
   build(node, file) {
-    console.error("The memoization operator is deprecated and will be removed in 5.0.0");
     return t.unaryExpression(
       "!",
       t.callExpression(
