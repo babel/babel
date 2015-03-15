@@ -19,6 +19,12 @@
 
   },
 
+  "highlightErrors": {
+    "description": "ANSI syntax highlight error messages"
+    "type": "boolean",
+    "default": true
+  },
+
   "suppressDeprecationMessages": {
     "type": "boolean",
     "default": false,
