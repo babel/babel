@@ -2,6 +2,7 @@ import build from "../../helpers/build-conditional-assignment-operator-transform
 import * as t from "../../../types";
 
 export var playground = true;
+export var optional = true;
 
 build(exports, {
   is(node) {

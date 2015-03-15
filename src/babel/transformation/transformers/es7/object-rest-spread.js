@@ -3,6 +3,7 @@
 import * as t from "../../../types";
 
 export var experimental = true;
+export var optional = true;
 
 export function manipulateOptions(opts) {
   if (opts.whitelist.length) opts.whitelist.push("es6.destructuring");

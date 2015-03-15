@@ -1,8 +1,11 @@
 import * as t from "../../../types";
 
 export var playground = true;
+export var optional = true;
 
 export function BindMemberExpression(node, parent, scope) {
+  console.error("Method binding is deprecated and will be removed in 5.0.0");
+
   var object = node.object;
   var prop   = node.property;
 
@@ -25,6 +28,8 @@ export function BindMemberExpression(node, parent, scope) {
 }
 
 export function BindFunctionExpression(node, parent, scope) {
+  console.error("Method binding is deprecated and will be removed in 5.0.0");
+
   var buildCall = function (args) {
     var param = scope.generateUidIdentifier("val");
     return t.functionExpression(null, [param], t.blockStatement([

@@ -1,6 +1,7 @@
 import * as t from "../../../types";
 
 export var playground = true;
+export var optional = true;
 
 var visitor = {
   enter(node, parent, scope, state) {
