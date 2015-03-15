@@ -15,7 +15,9 @@ export default {
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
 
   "playground.malletOperator":             require("./playground/mallet-operator"),
+  "playground.methodBinding":              require("./playground/method-binding"),
   "playground.memoizationOperator":        require("./playground/memoization-operator"),
+  "playground.objectGetterMemoization":    require("./playground/object-getter-memoization"),
 
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),
@@ -47,6 +49,7 @@ export default {
 
   "es6.regex.sticky":                      require("./es6/regex.sticky"),
   "es6.regex.unicode":                     require("./es6/regex.unicode"),
+  "es7.abstractReferences":                require("./es7/abstract-references"),
 
   "es6.constants":                         require("./es6/constants"),
 
