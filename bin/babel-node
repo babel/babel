@@ -405,7 +405,7 @@ babelArgs.forEach(function(arg){
     case "--debugger_port":
     case "--debug_compile_events":
     case "--debug_script_collected_events":
-    case "--gdbjit (enable GDBJIT interface":
+    case "--gdbjit":
     case "--log_runtime":
     case "--prof_auto":
     case "--prof_lazy":
