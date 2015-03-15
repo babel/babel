@@ -1,10 +1,8 @@
 "use strict";
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
-
 var x = "y";
 var valueSet;
-var obj = Object.defineProperties({}, _defineProperty({}, x, {
+var obj = Object.defineProperties({}, babelHelpers.defineProperty({}, x, {
   get: function () {
     return 1;
   },
