@@ -415,6 +415,7 @@ export default class File {
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canRun()) {
       modFormatter.init();
+      this.moduleImports = Object.keys(modFormatter.localImportOccurences);
     }
 
     this.checkNode(ast);
@@ -518,6 +519,8 @@ export default class File {
     if (opts.sourceMap === "inline") {
       result.map = null;
     }
+
+    result.moduleImports = this.moduleImports;
 
     return result;
   }
