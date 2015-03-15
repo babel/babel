@@ -9,11 +9,11 @@ export function check(node) {
 }
 
 export function TaggedTemplateExpression(node, parent, scope, file) {
-  var args = [];
   var quasi = node.quasi;
+  var args  = [];
 
   var strings = [];
-  var raw = [];
+  var raw     = [];
 
   for (var i = 0; i < quasi.quasis.length; i++) {
     var elem = quasi.quasis[i];

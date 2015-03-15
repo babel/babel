@@ -33,7 +33,7 @@ var verifyConstructorVisitor = traverse.explode({
 
   CallExpression: {
     enter(node, parent, scope, state) {
-      if (t.isIdentifier(node.callee, { name: "super" })) {
+      if (this.get("callee").isIdentifier({ name: "super" })) {
         state.hasBareSuper = true;
 
         if (!state.hasSuper) {
@@ -208,7 +208,7 @@ class ClassTransformer {
       }
     }
 
-    // we have no constructor, we have a super, and the super doesn't appear to be falsy
+    // we have no constructor, but we're a derived class
     if (!this.hasConstructor && this.hasSuper) {
       var helperName = "class-super-constructor-call";
       if (this.isLoose) helperName += "-loose";
