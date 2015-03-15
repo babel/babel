@@ -32,14 +32,14 @@ export default class TransformerPass {
     var whitelist = opts.whitelist;
     if (whitelist.length) return includes(whitelist, key);
 
-    // optional
-    if (transformer.optional && !includes(opts.optional, key)) return false;
-
     // experimental
-    if (transformer.experimental && !opts.experimental) return false;
+    if (transformer.experimental && opts.experimental) return true;
 
     // playground
-    if (transformer.playground && !opts.playground) return false;
+    if (transformer.playground && opts.playground) return true;
+
+    // optional
+    if (transformer.optional && !includes(opts.optional, key)) return false;
 
     return true;
   }

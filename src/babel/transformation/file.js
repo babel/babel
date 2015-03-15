@@ -82,52 +82,7 @@ export default class File {
     "self-global"
   ];
 
-  static validOptions = [
-    "filename",
-    "filenameRelative",
-
-    "blacklist",
-    "whitelist",
-    "optional",
-
-    "loose",
-    "playground",
-    "experimental",
-
-    "modules",
-    "moduleIds",
-    "moduleId",
-    "resolveModuleSource",
-    "keepModuleIdExtensions",
-
-    "code",
-    "ast",
-
-    "comments",
-    "compact",
-
-    "auxiliaryComment",
-    "externalHelpers",
-    "returnUsedHelpers",
-
-    "inputSourceMap",
-    "sourceMap",
-    "sourceMapName",
-    "sourceFileName",
-    "sourceRoot",
-    "moduleRoot",
-
-    "ignore",
-    "only",
-
-    // legacy
-    "format",
-    "reactCompat",
-
-    // these are used by plugins
-    "extensions",
-    "accept"
-  ];
+  static options = require("./options");
 
   normalizeOptions(opts: Object) {
     opts = assign({}, opts);
@@ -136,36 +91,32 @@ export default class File {
       opts = resolveRc(opts.filename, opts);
     }
 
-    for (var key in opts) {
-      if (key[0] !== "_" && File.validOptions.indexOf(key) < 0) {
-        throw new ReferenceError(`Unknown option: ${key}`);
-      }
+    //
+
+    for (let key in opts) {
+      if (key[0] === "_") continue;
+
+      let option = File.options[key];
+      if (!option) throw new ReferenceError(`Unknown option: ${key}`);
     }
 
+    for (let key in File.options) {
+      let option = File.options[key];
+
+      var val = opts[key];
+      if (val == null) val = option.default || null;
+      opts[key] = val;
+    }
+
+    //
+
     defaults(opts, {
-      keepModuleIdExtensions: false,
-      resolveModuleSource:    null,
-      returnUsedHelpers:      false,
-      externalHelpers:        false,
-      auxilaryComment:        "",
-      inputSourceMap:         null,
-      experimental:           false,
-      reactCompat:            false,
-      playground:             false,
-      moduleIds:              false,
-      blacklist:              [],
-      whitelist:              [],
-      sourceMap:              false,
-      optional:               [],
-      comments:               true,
-      filename:               "unknown",
-      modules:                "common",
-      compact:                "auto",
-      loose:                  [],
-      ignore:                 [],
-      only:                   [],
-      code:                   true,
-      ast:                    true
+      blacklist: [],
+      whitelist: [],
+      optional:  [],
+      loose:     [],
+      ignore:    [],
+      only:      [],
     });
 
     if (opts.inputSourceMap) {
@@ -213,9 +164,7 @@ export default class File {
       sourceMapName:  opts.filenameRelative
     });
 
-    if (opts.playground) {
-      opts.experimental = true;
-    }
+    //
 
     if (opts.externalHelpers) {
       this.set("helpersNamespace", t.identifier("babelHelpers"));
@@ -226,20 +175,15 @@ export default class File {
     opts.optional  = transform._ensureTransformerNames("optional", opts.optional);
     opts.loose     = transform._ensureTransformerNames("loose", opts.loose);
 
-    var ensureEnabled = function (key) {
-      var namespace = transform.transformerNamespaces[key];
-      if (namespace === "es7") opts.experimental = true;
-      if (namespace === "playground") opts.playground = true;
-    };
-
-    each(opts.whitelist, ensureEnabled);
-    each(opts.optional, ensureEnabled);
-
     return opts;
   };
 
   isLoose(key: string) {
     return includes(this.opts.loose, key);
+  }
+
+  buildPlugins(stack) {
+
   }
 
   buildTransformers() {
@@ -249,6 +193,8 @@ export default class File {
 
     var secondaryStack = [];
     var stack = [];
+
+    this.buildPlugins(stack);
 
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
@@ -551,6 +497,7 @@ export default class File {
   }
 
   generate(): {
+    usedHelpers?: Array<string>;
     code: string;
     map?: Object;
     ast?: Object;
@@ -560,8 +507,8 @@ export default class File {
 
     var result = {
       code: "",
-      map: null,
-      ast: null
+      map:  null,
+      ast:  null
     };
 
     if (this.opts.returnUsedHelpers) {
