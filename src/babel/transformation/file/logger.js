@@ -13,7 +13,7 @@ export default class Logger {
   }
 
   deprecate(msg) {
-    if (!file.opts.suppressDeprecationMessages) {
+    if (!this.file.opts.suppressDeprecationMessages) {
       console.error(msg);
     }
   }

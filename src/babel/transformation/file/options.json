@@ -20,7 +20,7 @@
   },
 
   "highlightErrors": {
-    "description": "ANSI syntax highlight error messages"
+    "description": "ANSI syntax highlight error messages",
     "type": "boolean",
     "default": true
   },
