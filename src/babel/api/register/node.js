@@ -73,7 +73,10 @@ var compile = function (filename) {
 };
 
 var shouldIgnore = function (filename) {
-  return (ignoreRegex && ignoreRegex.test(filename)) || (onlyRegex && !onlyRegex.test(filename));
+  if (onlyRegex && onlyRegex.test(filename)) {
+    return false;
+  }
+  return ignoreRegex && ignoreRegex.test(filename);
 };
 
 var istanbulMonkey = {};
