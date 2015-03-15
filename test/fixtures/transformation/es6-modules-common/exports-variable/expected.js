@@ -25,6 +25,8 @@ exports.foo6 = foo6;
 
 function foo7() {}
 
-var foo8 = exports.foo8 = function foo8() {
+var foo8 = function foo8() {
   _classCallCheck(this, foo8);
 };
+
+exports.foo8 = foo8;

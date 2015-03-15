@@ -50,7 +50,12 @@ export function ExportDeclaration(node, parent, scope) {
       return [getDeclar(), node];
     }
   } else {
-    if (t.isFunctionDeclaration(declar)) {
+    if (t.isClassDeclaration(declar)) {
+      // export class Foo {}
+      node.specifiers  = [t.importSpecifier(declar.id, declar.id)];
+      node.declaration = null;
+      return [getDeclar(), node];
+    } else if (t.isFunctionDeclaration(declar)) {
       // export function Foo() {}
       node.specifiers  = [t.importSpecifier(declar.id, declar.id)];
       node.declaration = null;
