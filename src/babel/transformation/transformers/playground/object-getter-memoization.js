@@ -21,7 +21,7 @@ export function MethodDefinition(node, parent, scope, file) {
   if (node.kind !== "memo") return;
   node.kind = "get";
 
-  console.error("Object getter memoization is deprecated and will be removed in 5.0.0");
+  file.log.deprecate("Object getter memoization is deprecated and will be removed in 5.0.0");
 
   t.ensureBlock(node.value);
 

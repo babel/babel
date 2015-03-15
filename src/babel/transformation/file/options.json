@@ -19,6 +19,12 @@
 
   },
 
+  "suppressDeprecationMessages": {
+    "type": "boolean",
+    "default": false,
+    "hidden": true
+  },
+
   "resolveModuleSource": {
     "hidden": true
   },

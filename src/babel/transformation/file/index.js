@@ -1,24 +1,25 @@
 import convertSourceMap from "convert-source-map";
+import * as optionParsers from "./option-parsers";
 import shebangRegex from "shebang-regex";
-import TraversalPath from "../traversal/path";
+import TraversalPath from "../../traversal/path";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
-import resolveRc from "../tools/resolve-rc";
+import resolveRc from "../../tools/resolve-rc";
 import sourceMap from "source-map";
-import transform from "./index";
-import generate from "../generation";
+import transform from "./../index";
+import generate from "../../generation";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
-import traverse from "../traversal";
+import traverse from "../../traversal";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
-import parse from "../helpers/parse";
-import Scope from "../traversal/scope";
+import parse from "../../helpers/parse";
+import Scope from "../../traversal/scope";
 import slash from "slash";
-import * as util from  "../util";
+import * as util from  "../../util";
 import path from "path";
 import each from "lodash/collection/each";
-import * as t from "../types";
+import * as t from "../../types";
 
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
@@ -105,19 +106,14 @@ export default class File {
 
       var val = opts[key];
       if (val == null) val = option.default || null;
+
+      var optionParser = optionParsers[option.type];
+      if (optionParser) {
+        val = optionParser(key, val);
+      }
+
       opts[key] = val;
     }
-
-    //
-
-    defaults(opts, {
-      blacklist: [],
-      whitelist: [],
-      optional:  [],
-      loose:     [],
-      ignore:    [],
-      only:      [],
-    });
 
     if (opts.inputSourceMap) {
       opts.sourceMap = true;
@@ -135,17 +131,8 @@ export default class File {
 
     opts.basename = path.basename(opts.filename, path.extname(opts.filename));
 
-    opts.blacklist = util.arrayify(opts.blacklist);
-    opts.whitelist = util.arrayify(opts.whitelist);
-    opts.optional  = util.arrayify(opts.optional);
-    opts.compact   = util.booleanify(opts.compact);
-    opts.loose     = util.arrayify(opts.loose);
-    opts.ignore    = util.arrayify(opts.ignore, util.regexify);
-    opts.only      = util.arrayify(opts.only, util.regexify);
-
-    if (includes(opts.loose, "all") || includes(opts.loose, true)) {
-      opts.loose = Object.keys(transform.transformers);
-    }
+    opts.ignore   = util.arrayify(opts.ignore, util.regexify);
+    opts.only     = util.arrayify(opts.only, util.regexify);
 
     defaults(opts, {
       moduleRoot: opts.sourceRoot
@@ -169,11 +156,6 @@ export default class File {
     if (opts.externalHelpers) {
       this.set("helpersNamespace", t.identifier("babelHelpers"));
     }
-
-    opts.blacklist = transform._ensureTransformerNames("blacklist", opts.blacklist);
-    opts.whitelist = transform._ensureTransformerNames("whitelist", opts.whitelist);
-    opts.optional  = transform._ensureTransformerNames("optional", opts.optional);
-    opts.loose     = transform._ensureTransformerNames("loose", opts.loose);
 
     return opts;
   };
