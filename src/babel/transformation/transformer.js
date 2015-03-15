@@ -3,6 +3,7 @@ import isFunction from "lodash/lang/isFunction";
 import traverse from "../traversal";
 import isObject from "lodash/lang/isObject";
 import assign from "lodash/object/assign";
+import File from "./file";
 import each from "lodash/collection/each";
 
 /**
@@ -66,6 +67,10 @@ export default class Transformer {
   }
 
   buildPass(file: File): TransformerPass {
+    if (!(file instanceof File)) {
+      throw new Error("Multiple versions of babel are interacting, this is either due to a version mismatch in a plugin or it was resolved incorrectly");
+    }
+
     return new TransformerPass(file, this);
   }
 }
