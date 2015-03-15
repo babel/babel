@@ -1,11 +1,10 @@
-var resolveRc = require("../../lib/babel/api/register/resolve-rc");
-var readdir   = require("fs-readdir-recursive");
-var index     = require("./index");
-var babel     = require("../../lib/babel/api/node");
-var util      = require("../../lib/babel/util");
-var path      = require("path");
-var fs        = require("fs");
-var _         = require("lodash");
+var readdir = require("fs-readdir-recursive");
+var index   = require("./index");
+var babel   = require("../../lib/babel/api/node");
+var util    = require("../../lib/babel/util");
+var path    = require("path");
+var fs      = require("fs");
+var _       = require("lodash");
 
 exports.readdirFilter = function (filename) {
   return readdir(filename).filter(function (filename) {
@@ -24,7 +23,6 @@ exports.addSourceMappingUrl = function (code, loc) {
 exports.transform = function (filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;
-  resolveRc(filename, opts);
 
   var result = babel.transform(code, opts);
   result.filename = filename;

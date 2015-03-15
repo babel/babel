@@ -55,6 +55,7 @@ var run = function (task, done) {
 
   var getOpts = function (self) {
     return _.merge({
+      suppressDeprecationMessages: true,
       filename: self.loc
     }, opts);
   };

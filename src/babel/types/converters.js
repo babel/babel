@@ -10,7 +10,7 @@ import * as t from "./index";
  * Description
  */
 
-export function toComputedKey(node: Object, key: Object = node.key): Object {
+export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.literal(key.name);
   }

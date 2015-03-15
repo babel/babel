@@ -20,7 +20,6 @@ export default {
   "playground.objectGetterMemoization":    require("./playground/object-getter-memoization"),
 
   reactCompat:                             require("./other/react-compat"),
-  flow:                                    require("./other/flow"),
   react:                                   require("./other/react"),
 
   _modules:                                require("./internal/modules"),
@@ -45,6 +44,7 @@ export default {
   // needs to be before `_aliasFunction` due to define property closure
   "es6.properties.computed":               require("./es6/properties.computed"),
 
+  "optimisation.es6.forOf":                require("./optimisation/flow.for-of"),
   "es6.forOf":                             require("./es6/for-of"),
 
   "es6.regex.sticky":                      require("./es6/regex.sticky"),
@@ -110,5 +110,6 @@ export default {
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
   "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
 
+  flow:                                    require("./other/flow"),
   _cleanUp:                                require("./internal/cleanup")
 };

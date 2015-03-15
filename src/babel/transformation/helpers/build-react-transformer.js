@@ -27,7 +27,7 @@ export default function (exports, opts) {
   };
 
   exports.JSXNamespacedName = function (node, parent, scope, file) {
-    throw file.errorWithNode(node, messages.get("JSXNamespacedTags"));
+    throw this.errorWithNode(messages.get("JSXNamespacedTags"));
   };
 
   exports.JSXMemberExpression = {

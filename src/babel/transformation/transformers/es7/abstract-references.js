@@ -4,6 +4,7 @@ import * as util from  "../../../util";
 import * as t from "../../../types";
 
 export var experimental = true;
+export var optional = true;
 
 var container = function (parent, call, ret, file) {
   if (t.isExpressionStatement(parent) && !file.isConsequenceExpressionStatement(parent)) {

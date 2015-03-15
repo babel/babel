@@ -6,7 +6,7 @@ import map from "lodash/collection/map";
 import * as t from "../../../types";
 
 exports.Function = function (node, parent, scope, file) {
-  var tailCall = new TailCallTransformer(node, scope, file);
+  var tailCall = new TailCallTransformer(this, scope, file);
   tailCall.run();
 };
 
@@ -18,11 +18,11 @@ function returnBlock(expr) {
 var firstPass = {
   enter(node, parent, scope, state) {
     if (this.isIfStatement()) {
-      if (t.isReturnStatement(node.alternate)) {
+      if (this.get("alternate").isReturnStatement()) {
         t.ensureBlock(node, "alternate");
       }
 
-      if (t.isReturnStatement(node.consequent)) {
+      if (this.get("consequent").isReturnStatement()) {
         t.ensureBlock(node, "consequent");
       }
     } else if (this.isReturnStatement()) {
@@ -85,17 +85,18 @@ var thirdPass = {
 };
 
 class TailCallTransformer {
-  constructor(node, scope, file) {
+  constructor(path, scope, file) {
     this.hasTailRecursion = false;
     this.needsArguments   = false;
     this.setsArguments    = false;
     this.needsThis        = false;
-    this.ownerId          = node.id;
+    this.ownerId          = path.node.id;
     this.vars             = [];
 
     this.scope = scope;
+    this.path  = path;
     this.file  = file;
-    this.node  = node;
+    this.node  = path.node;
   }
 
   getArgumentsId() {
@@ -142,8 +143,8 @@ class TailCallTransformer {
   hasDeopt() {
     // check if the ownerId has been reassigned, if it has then it's not safe to
     // perform optimisations
-    var ownerIdInfo = this.scope.getBindingInfo(this.ownerId.name);
-    return ownerIdInfo && ownerIdInfo.reassigned;
+    var ownerIdInfo = this.scope.getBinding(this.ownerId.name);
+    return ownerIdInfo && !ownerIdInfo.constant;
   }
 
   run() {
@@ -156,7 +157,7 @@ class TailCallTransformer {
     if (!ownerId) return;
 
     // traverse the function and look for tail recursion
-    scope.traverse(node, firstPass, this);
+    this.path.traverse(firstPass, this);
 
     if (!this.hasTailRecursion) return;
 
@@ -167,10 +168,10 @@ class TailCallTransformer {
 
     //
 
-    scope.traverse(node, secondPass, this);
+    this.path.traverse(secondPass, this);
 
     if (!this.needsThis || !this.needsArguments) {
-      scope.traverse(node, thirdPass, this);
+      this.path.traverse(thirdPass, this);
     }
 
     var body = t.ensureBlock(node).body;

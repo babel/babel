@@ -81,7 +81,7 @@ export function CallExpression(node, parent, scope) {
 
   var callee = node.callee;
 
-  if (t.isMemberExpression(callee)) {
+  if (this.get("callee").isMemberExpression()) {
     var temp = scope.generateTempBasedOnNode(callee.object);
     if (temp) {
       callee.object = t.assignmentExpression("=", temp, callee.object);
@@ -101,7 +101,7 @@ export function NewExpression(node, parent, scope, file) {
   var args = node.arguments;
   if (!hasSpread(args)) return;
 
-  var nativeType = t.isIdentifier(node.callee) && includes(t.NATIVE_TYPE_NAMES, node.callee.name);
+  var nativeType = this.get("callee").isIdentifier() && includes(t.NATIVE_TYPE_NAMES, node.callee.name);
 
   var nodes = build(args, scope);
 

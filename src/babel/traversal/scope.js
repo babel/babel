@@ -2,6 +2,7 @@ import includes from "lodash/collection/includes";
 import traverse from "./index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../messages";
+import Binding from "./binding";
 import globals from "globals";
 import flatten from "lodash/array/flatten";
 import extend from "lodash/object/extend";
@@ -12,27 +13,27 @@ import * as t from "../types";
 var functionVariableVisitor = {
   enter(node, parent, scope, state) {
     if (t.isFor(node)) {
-      each(t.FOR_INIT_KEYS, function (key) {
-        var declar = node[key];
-        if (t.isVar(declar)) state.scope.registerBinding("var", declar);
+      each(t.FOR_INIT_KEYS, (key) => {
+        var declar = this.get(key);
+        if (declar.isVar()) state.scope.registerBinding("var", declar);
       });
     }
 
     // this block is a function so we'll stop since none of the variables
     // declared within are accessible
-    if (t.isFunction(node)) return this.skip();
+    if (this.isFunction()) return this.skip();
 
     // function identifier doesn't belong to this scope
     if (state.blockId && node === state.blockId) return;
 
     // delegate block scope handling to the `blockVariableVisitor`
-    if (t.isBlockScoped(node)) return;
+    if (this.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    if (t.isExportDeclaration(node) && t.isDeclaration(node.declaration)) return;
+    if (this.isExportDeclaration() && t.isDeclaration(node.declaration)) return;
 
     // we've ran into a declaration!
-    if (t.isDeclaration(node)) state.scope.registerDeclaration(node);
+    if (this.isDeclaration()) state.scope.registerDeclaration(this);
   }
 };
 
@@ -42,16 +43,20 @@ var programReferenceVisitor = {
       state.addGlobal(node);
     } else if (t.isLabeledStatement(node)) {
       state.addGlobal(node);
-    } else if (t.isAssignmentExpression(node) || t.isUpdateExpression(node) || (t.isUnaryExpression(node) && node.operator === "delete")) {
-      scope.registerBindingReassignment(node);
+    } else if (t.isAssignmentExpression(node)) {
+      scope.registerConstantViolation(this.get("left"), this.get("right"));
+    } else if (t.isUpdateExpression(node)) {
+      scope.registerConstantViolation(this.get("argument"), null);
+    } else if (t.isUnaryExpression(node) && node.operator === "delete") {
+      scope.registerConstantViolation(this.get("left"), null);
     }
   }
 };
 
 var blockVariableVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isFunctionDeclaration(node) || t.isBlockScoped(node)) {
-      state.registerDeclaration(node);
+    if (this.isFunctionDeclaration() || this.isBlockScoped()) {
+      state.registerDeclaration(this);
     } else if (t.isScope(node, parent)) {
       this.skip();
     }
@@ -65,12 +70,20 @@ export default class Scope {
    * within.
    */
 
-  constructor(block: Object, parentBlock: Object, parent?: Scope, file?: File) {
+  constructor(path: TraversalPath, parent?: Scope, file?: File) {
+    var cached = path.getData("scope");
+    if (cached) {
+      return cached;
+    } else {
+      //path.setData("scope", this);
+    }
+
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 
-    this.parentBlock = parentBlock;
-    this.block       = block;
+    this.parentBlock = path.parent;
+    this.block       = path.node;
+    this.path        = path;
 
     this.crawl();
   }
@@ -104,9 +117,7 @@ export default class Scope {
    */
 
   generateUidIdentifier(name: string) {
-    var id = t.identifier(this.generateUid(name));
-    this.getFunctionParent().registerBinding("uid", id);
-    return id;
+    return t.identifier(this.generateUid(name));
   }
 
   /**
@@ -121,7 +132,8 @@ export default class Scope {
     do {
       uid = this._generateUid(name, i);
       i++;
-    } while (this.hasBinding(uid) || this.hasGlobal(uid));
+    } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasUid(uid));
+    this.getFunctionParent().uids[uid] = true;
     return uid;
   }
 
@@ -129,6 +141,19 @@ export default class Scope {
     var id = name;
     if (i > 1) id += i;
     return `_${id}`;
+  }
+
+  /**
+   * Description
+   */
+
+  hasUid(name): boolean {
+    var scope = this;
+    do {
+      if (scope.uids[name]) return true;
+      scope = scope.parent;
+    } while (scope);
+    return false;
   }
 
   /*
@@ -209,7 +234,7 @@ export default class Scope {
   rename(oldName: string, newName: string) {
     newName ||= this.generateUidIdentifier(oldName).name;
 
-    var info = this.getBindingInfo(oldName);
+    var info = this.getBinding(oldName);
     if (!info) return;
 
     var binding = info.identifier;
@@ -220,7 +245,7 @@ export default class Scope {
         if (t.isReferencedIdentifier(node, parent) && node.name === oldName) {
           node.name = newName;
         } else if (t.isDeclaration(node)) {
-          var ids = t.getBindingIdentifiers(node);
+          var ids = this.getBindingIdentifiers();
           for (var name in ids) {
             if (name === oldName) ids[name].name = newName;
           }
@@ -242,107 +267,12 @@ export default class Scope {
    * Description
    */
 
-  inferType(node: Object) {
-    var target;
-
-    if (t.isVariableDeclarator(node)) {
-      target = node.init;
-    }
-
-    if (t.isArrayExpression(target)) {
-      return t.genericTypeAnnotation(t.identifier("Array"));
-    }
-
-    if (t.isObjectExpression(target)) {
-      return;
-    }
-
-    if (t.isLiteral(target)) {
-      return;
-    }
-
-    if (t.isCallExpression(target) && t.isIdentifier(target.callee)) {
-      var funcInfo = this.getBindingInfo(target.callee.name);
-      if (funcInfo) {
-        var funcNode = funcInfo.node;
-        return !funcInfo.reassigned && t.isFunction(funcNode) && node.returnType;
-      }
-    }
-
-    if (t.isIdentifier(target)) {
-      return;
-    }
-  }
-
-  /**
-   * Description
-   */
-
-  isTypeGeneric(name: string, genericName: string) {
-    var info = this.getBindingInfo(name);
-    if (!info) return false;
-
-    var type = info.typeAnnotation;
-    return t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName });
-  }
-
-  /**
-   * Description
-   */
-
-  assignTypeGeneric(name: string, type: Object) {
-    this.assignType(name, t.genericTypeAnnotation(t.identifier(type)));
-  }
-
-  /**
-   * Description
-   */
-
-  assignType(name: string, type: Object) {
-    var info = this.getBindingInfo(name);
-    if (!info) return;
-
-    info.typeAnnotation = type;
-  }
-
-  /**
-   * Description
-   */
-
-  getTypeAnnotation(id: Object, node: Object): Object {
-    var info = {
-      annotation: null,
-      inferred: false
-    };
-
-    var type;
-
-    if (id.typeAnnotation) {
-      type = id.typeAnnotation;
-    }
-
-    if (!type) {
-      info.inferred = true;
-      type = this.inferType(node);
-    }
-
-    if (type) {
-      if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
-      info.annotation = type;
-    }
-
-    return info;
-  }
-
-  /**
-   * Description
-   */
-
   toArray(node: Object, i?: number) {
     var file = this.file;
 
-    if (t.isIdentifier(node) && this.isTypeGeneric(node.name, "Array")) {
-      return node;
+    if (t.isIdentifier(node)) {
+      var binding = this.getBinding(node.name);
+      if (binding && binding.isTypeGeneric("Array", { inference: false })) return node;
     }
 
     if (t.isArrayExpression(node)) {
@@ -368,33 +298,21 @@ export default class Scope {
    * Description
    */
 
-  refreshDeclaration(node: Object) {
-    if (t.isBlockScoped(node)) {
-      this.getBlockParent().registerDeclaration(node);
-    } else if (t.isVariableDeclaration(node, { kind: "var" })) {
-      this.getFunctionParent().registerDeclaration(node);
-    } else if (node === this.block) {
-      this.recrawl();
-    }
-  }
-
-  /**
-   * Description
-   */
-
-  registerDeclaration(node: Object) {
+  registerDeclaration(path: TraversalPath) {
+    var node = path.node;
     if (t.isFunctionDeclaration(node)) {
-      this.registerBinding("hoisted", node);
+      this.registerBinding("hoisted", path);
     } else if (t.isVariableDeclaration(node)) {
-      for (var i = 0; i < node.declarations.length; i++) {
-        this.registerBinding(node.kind, node.declarations[i]);
+      var declarations = path.get("declarations");
+      for (var i = 0; i < declarations.length; i++) {
+        this.registerBinding(node.kind, declarations[i]);
       }
     } else if (t.isClassDeclaration(node)) {
-      this.registerBinding("let", node);
+      this.registerBinding("let", path);
     } else if (t.isImportDeclaration(node) || t.isExportDeclaration(node)) {
-      this.registerBinding("module", node);
+      this.registerBinding("module", path);
     } else {
-      this.registerBinding("unknown", node);
+      this.registerBinding("unknown", path);
     }
   }
 
@@ -402,18 +320,16 @@ export default class Scope {
    * Description
    */
 
-  registerBindingReassignment(node: Object) {
-    var ids = t.getBindingIdentifiers(node);
+  registerConstantViolation(left: TraversalPath, right: TraversalPath) {
+    var ids = left.getBindingIdentifiers();
     for (var name in ids) {
-      var info = this.getBindingInfo(name);
-      if (info) {
-        info.reassigned = true;
-
-        if (info.typeAnnotationInferred) {
-          // destroy the inferred typeAnnotation
-          info.typeAnnotation = null;
-        }
+      var binding = this.getBinding(name);
+      if (!binding) continue;
+      if (right) {
+        var rightType = right.typeAnnotation;
+        if (rightType && binding.isCompatibleWithType(rightType)) continue;
       }
+      binding.reassign();
     }
   }
 
@@ -421,27 +337,22 @@ export default class Scope {
    * Description
    */
 
-  registerBinding(kind: string, node: Object) {
+  registerBinding(kind: string, path: TraversalPath) {
     if (!kind) throw new ReferenceError("no `kind`");
 
-    var ids = t.getBindingIdentifiers(node);
+    var ids = path.getBindingIdentifiers();
 
     for (var name in ids) {
       var id = ids[name];
 
       this.checkBlockScopedCollisions(kind, name, id);
 
-      var typeInfo = this.getTypeAnnotation(id, node);
-
-      this.bindings[name] = {
-        typeAnnotationInferred: typeInfo.inferred,
-        typeAnnotation:         typeInfo.annotation,
-        reassigned:             false,
-        identifier:             id,
-        scope:                  this,
-        node:                   node,
-        kind:                   kind
-      };
+      this.bindings[name] = new Binding({
+        identifier: id,
+        scope:      this,
+        path:       path,
+        kind:       kind
+      });
     }
   }
 
@@ -472,7 +383,7 @@ export default class Scope {
    */
 
   recrawl() {
-    this.block._scopeInfo = null;
+    this.path.setData("scopeInfo", null);
     this.crawl();
   }
 
@@ -481,91 +392,88 @@ export default class Scope {
    */
 
   crawl() {
-    var block  = this.block;
-    var i;
+    var path = this.path;
 
     //
 
-    var info = block._scopeInfo;
-    if (info) {
-      extend(this, info);
-      return;
-    }
+    var info = path.getData("scopeInfo");
+    if (info) return extend(this, info);
 
-    info = block._scopeInfo = {
+    info = path.setData("scopeInfo", {
       bindings: object(),
-      globals:  object()
-    };
+      globals:  object(),
+      uids:     object()
+    });
 
     extend(this, info);
 
     // ForStatement - left, init
 
-    if (t.isLoop(block)) {
-      for (i = 0; i < t.FOR_INIT_KEYS.length; i++) {
-        var node = block[t.FOR_INIT_KEYS[i]];
-        if (t.isBlockScoped(node)) this.registerBinding("let", node);
+    if (path.isLoop()) {
+      for (let i = 0; i < t.FOR_INIT_KEYS.length; i++) {
+        var node = path.get(t.FOR_INIT_KEYS[i]);
+        if (node.isBlockScoped()) this.registerBinding("let", node);
       }
 
-      if (t.isBlockStatement(block.body)) {
-        block = block.body;
-      }
+      var body = path.get("body");
+      if (body.isBlockStatement()) path = path.get("body");
     }
 
     // FunctionExpression - id
 
-    if (t.isFunctionExpression(block) && block.id) {
-      if (!t.isProperty(this.parentBlock, { method: true })) {
-        this.registerBinding("var", block.id);
+    if (path.isFunctionExpression() && path.has("id")) {
+      if (!t.isProperty(path.parent, { method: true })) {
+        this.registerBinding("var", path.get("id"));
       }
     }
 
     // Class
 
-    if (t.isClass(block) && block.id) {
-      this.registerBinding("var", block.id);
+    if (path.isClass() && path.has("id")) {
+      this.registerBinding("var", path.get("id"));
     }
 
     // Function - params, rest
 
-    if (t.isFunction(block)) {
-      for (i = 0; i < block.params.length; i++) {
-        this.registerBinding("param", block.params[i]);
+    if (path.isFunction()) {
+      var params = path.get("params");
+      for (let i = 0; i < params.length; i++) {
+        this.registerBinding("param", params[i]);
       }
-      this.traverse(block.body, blockVariableVisitor, this);
+      this.traverse(path.get("body").node, blockVariableVisitor, this);
     }
 
     // Program, BlockStatement, Function - let variables
 
-    if (t.isBlockStatement(block) || t.isProgram(block)) {
-      this.traverse(block, blockVariableVisitor, this);
+    if (path.isBlockStatement() || path.isProgram()) {
+      this.traverse(path.node, blockVariableVisitor, this);
     }
 
     // CatchClause - param
 
-    if (t.isCatchClause(block)) {
-      this.registerBinding("let", block.param);
+    if (path.isCatchClause()) {
+      this.registerBinding("let", path.get("param"));
     }
 
     // ComprehensionExpression - blocks
 
-    if (t.isComprehensionExpression(block)) {
-      this.registerBinding("let", block);
+    if (path.isComprehensionExpression()) {
+      this.registerBinding("let", path);
     }
 
     // Program, Function - var variables
 
-    if (t.isProgram(block) || t.isFunction(block)) {
-      this.traverse(block, functionVariableVisitor, {
-        blockId: block.id,
+    if (path.isProgram() || path.isFunction()) {
+      this.traverse(path.node, functionVariableVisitor, {
+        blockId: path.get("id").node,
         scope:   this
       });
     }
 
     // Program
 
-    if (t.isProgram(block)) {
-      this.traverse(block, programReferenceVisitor, this);
+    if (path.isProgram()) {
+      this.traverse(path.node, programReferenceVisitor, this);
     }
   }
 
@@ -666,7 +574,7 @@ export default class Scope {
    * Description
    */
 
-  getBindingInfo(name: string) {
+  getBinding(name: string) {
     var scope = this;
 
     do {
@@ -688,7 +596,7 @@ export default class Scope {
    */
 
   getBindingIdentifier(name: string) {
-    var info = this.getBindingInfo(name);
+    var info = this.getBinding(name);
     return info && info.identifier;
   }
 
@@ -699,44 +607,6 @@ export default class Scope {
   getOwnBindingIdentifier(name: string) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
-  }
-
-  /**
-   * Description
-   */
-
-  getOwnImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getOwnBindingInfo(name));
-  }
-
-  /**
-   * Description
-   */
-
-  getImmutableBindingValue(name: string) {
-    return this._immutableBindingInfoToValue(this.getBindingInfo(name));
-  }
-
-  _immutableBindingInfoToValue(info) {
-    if (!info) return;
-
-    // can't guarantee this value is the same
-    if (info.reassigned) return;
-
-    var node = info.node;
-    if (t.isVariableDeclarator(node)) {
-      if (t.isIdentifier(node.id)) {
-        node = node.init;
-      } else {
-        // otherwise it's probably a destructuring like:
-        // var { foo } = "foo";
-        return;
-      }
-    }
-
-    if (t.isImmutable(node)) {
-      return node;
-    }
   }
 
   /**
@@ -781,7 +651,7 @@ export default class Scope {
    */
 
   removeBinding(name: string) {
-    var info = this.getBindingInfo(name);
+    var info = this.getBinding(name);
     if (info) info.scope.removeOwnBinding(name);
   }
 }

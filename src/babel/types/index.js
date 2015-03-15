@@ -24,15 +24,15 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
-export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
-export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
-export var FLATTENABLE_KEYS        = ["body", "expressions"];
-export var FOR_INIT_KEYS           = ["left", "init"];
-export var COMMENT_KEYS            = ["leadingComments", "trailingComments"];
+export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
+export const NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
+export const FLATTENABLE_KEYS        = ["body", "expressions"];
+export const FOR_INIT_KEYS           = ["left", "init"];
+export const COMMENT_KEYS            = ["leadingComments", "trailingComments"];
 
-export var VISITOR_KEYS = require("./visitor-keys");
-export var BUILDER_KEYS = require("./builder-keys");
-export var ALIAS_KEYS   = require("./alias-keys");
+export const VISITOR_KEYS = require("./visitor-keys");
+export const BUILDER_KEYS = require("./builder-keys");
+export const ALIAS_KEYS   = require("./alias-keys");
 
 t.FLIPPED_ALIAS_KEYS = {};
 
@@ -52,7 +52,7 @@ each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   registerType(type, false);
 });
 
-export var TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
+export const TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
 
 /**
  * Returns whether `node` is of given `type`.
@@ -281,7 +281,6 @@ export function inheritsComments(child: Object, parent: Object): Object {
 
 export function inherits(child: Object, parent: Object): Object {
   child._declarations = parent._declarations;
-  child._scopeInfo    = parent._scopeInfo;
   child.range         = parent.range;
   child.start         = parent.start;
   child.loc           = parent.loc;
@@ -298,7 +297,6 @@ toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
 exports.__esModule = true;
-assign(t, require("./evaluators"));
 assign(t, require("./retrievers"));
 assign(t, require("./validators"));
 assign(t, require("./converters"));

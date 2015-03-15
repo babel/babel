@@ -26,7 +26,7 @@ export function ImportDeclaration(node, parent, scope, file) {
 
 export function ExportDeclaration(node, parent, scope, file) {
   // flow type
-  if (t.isTypeAlias(node.declaration)) return;
+  if (this.get("declaration").isTypeAlias()) return;
 
   var nodes = [];
   var i;

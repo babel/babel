@@ -1,7 +1,7 @@
 import each from "lodash/collection/each";
 import * as t from "../../types";
 
-var PRECEDENCE = {};
+const PRECEDENCE = {};
 
 each([
   ["||"],

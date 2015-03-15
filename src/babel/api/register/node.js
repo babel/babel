@@ -1,7 +1,7 @@
 import "../../polyfill";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import resolveRc from "./resolve-rc";
+import resolveRc from "../../tools/resolve-rc";
 import extend from "lodash/object/extend";
 import * as babel from "../node";
 import each from "lodash/collection/each";
@@ -44,6 +44,9 @@ var compile = function (filename) {
   var result;
 
   var opts = extend({}, transformOpts);
+
+  // this will be done when the file is transformed anyway but we need all
+  // the options so we can generate the cache key
   resolveRc(filename, opts);
 
   var cacheKey = `${filename}:${JSON.stringify(opts)}:${babel.version}`;

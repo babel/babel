@@ -1,0 +1,164 @@
+{
+  "filename": {
+    "type": "string",
+    "description": "Filename to use when reading from stdin - this will be used in source-maps, errors etc",
+    "default": "unknown",
+    "shorthand": "f"
+  },
+
+  "filenameRelative": {
+    "hidden": true,
+    "type": "string"
+  },
+
+  "inputSourceMap": {
+    "hidden": true
+  },
+
+  "moduleId": {
+
+  },
+
+  "highlightErrors": {
+    "description": "ANSI syntax highlight error messages"
+    "type": "boolean",
+    "default": true
+  },
+
+  "suppressDeprecationMessages": {
+    "type": "boolean",
+    "default": false,
+    "hidden": true
+  },
+
+  "resolveModuleSource": {
+    "hidden": true
+  },
+
+  "experimental": {
+    "description": "Enable all ES7+ transformers",
+    "shorthand": "e",
+    "type": "boolean",
+    "default": false
+  },
+
+  "playground": {
+    "description": "Enable all playground transformers",
+    "shorthand": "p",
+    "type": "boolean",
+    "default": false
+  },
+
+  "blacklist": {
+    "type": "transformerList",
+    "description": "Blacklist of transformers to NOT use",
+    "shorthand": "b"
+  },
+
+  "whitelist": {
+    "type": "transformerList",
+    "description": "Whitelist of transformers to ONLY use",
+    "shorthand": "l"
+  },
+
+  "optional": {
+    "type": "transformerList",
+    "description": "List of optional transformers to enable"
+  },
+
+  "modules": {
+    "type": "string",
+    "description": "Module formatter type to use [common]",
+    "default": "common",
+    "shorthand": "m"
+  },
+
+  "moduleIds": {
+    "type": "boolean",
+    "default": false,
+    "shorthand": "M"
+  },
+
+  "loose": {
+    "type": "transformerList",
+    "description": "List of transformers to enable loose mode ON",
+    "shorthand": "L"
+  },
+
+  "ignore": {
+    "type": "list"
+  },
+
+  "only": {
+    "type": "list"
+  },
+
+  "code": {
+    "hidden": true,
+    "default": true,
+    "type": "boolean"
+  },
+
+  "ast": {
+    "hidden": true,
+    "default": true,
+    "type": "boolean"
+  },
+
+  "comments": {
+    "type": "boolean",
+    "default": true
+  },
+
+  "compact": {
+    "type": "string",
+    "default": "auto"
+  },
+
+  "keepModuleIdExtensions": {
+    "type": "boolean",
+    "description": "Keep extensions when generating module ids",
+    "default": false,
+    "shorthand": "k"
+  },
+
+  "auxiliaryComment": {
+    "type": "string",
+    "default": "",
+    "shorthand": "a"
+  },
+
+  "externalHelpers": {
+    "type": "string",
+    "default": false,
+    "shorthand": "r"
+  },
+
+  "returnUsedHelpers": {
+    "type": "boolean",
+    "default": false,
+    "hidden": true
+  },
+
+  "sourceMap": {
+    "type": "string",
+    "default": false,
+    "shorthand": "s"
+  },
+
+  "sourceMapName": {
+    "type": "string"
+  },
+
+  "sourceFileName": {
+    "type": "string"
+  },
+
+  "sourceRoot": {
+    "type": "string"
+  },
+
+  "moduleRoot": {
+    "type": "string"
+  }
+}

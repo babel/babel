@@ -15,7 +15,7 @@ var memberExpressionOptimisationVisitor = {
     // to the wrong function
     if (this.isFunctionDeclaration() || this.isFunctionExpression()) {
       state.noOptimise = true;
-      scope.traverse(node, memberExpressionOptimisationVisitor, state);
+      this.traverse(memberExpressionOptimisationVisitor, state);
       state.noOptimise = false;
       return this.skip();
     }
@@ -88,7 +88,7 @@ exports.Function = function (node, parent, scope, file) {
     name:         rest.name
   };
 
-  scope.traverse(node, memberExpressionOptimisationVisitor, state);
+  this.traverse(memberExpressionOptimisationVisitor, state);
 
   // we only have shorthands and there's no other references
   if (state.canOptimise && state.candidates.length) {
@@ -127,16 +127,14 @@ exports.Function = function (node, parent, scope, file) {
     );
   }
 
-  scope.assignTypeGeneric(rest.name, "Array");
-
   var loop = util.template("rest", {
     ARGUMENTS: argsId,
     ARRAY_KEY: arrKey,
     ARRAY_LEN: arrLen,
-    START: start,
-    ARRAY: rest,
-    KEY: key,
-    LEN: len,
+    START:     start,
+    ARRAY:     rest,
+    KEY:       key,
+    LEN:       len
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);

@@ -1,12 +1,13 @@
 import isFunction from "lodash/lang/isFunction";
 import transform from "../transformation";
+import * as util from "../util";
 import fs from "fs";
 
-import * as util from "../util";
-export { util as _util };
+export { util };
 export { canCompile } from "../util";
 
 export { default as acorn } from "acorn-babel";
+export { default as Transformer } from "../transformation/transformer";
 export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
@@ -15,7 +16,7 @@ export { version } from "../../../package";
 import * as t from "../types";
 export { t as types };
 
-export function register(opts) {
+export function register(opts?: Object) {
   var callback = require("./register/node");
   if (opts != null) callback(opts);
   return callback;
@@ -25,7 +26,7 @@ export function polyfill() {
   require("../polyfill");
 }
 
-export function transformFile(filename, opts, callback) {
+export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {
     callback = opts;
     opts = {};
@@ -48,7 +49,7 @@ export function transformFile(filename, opts, callback) {
   });
 }
 
-export function transformFileSync(filename, opts = {}) {
+export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
 }

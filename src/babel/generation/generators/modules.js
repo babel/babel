@@ -66,8 +66,10 @@ export function ImportDeclaration(node, print) {
   if (specfiers && specfiers.length) {
     var foundImportSpecifier = false;
 
-    each(node.specifiers, (spec, i) => {
-      if (+i > 0) {
+    for (var i = 0; i < node.specifiers.length; i++) {
+      var spec = node.specifiers[i];
+
+      if (i > 0) {
         this.push(", ");
       }
 
@@ -79,7 +81,7 @@ export function ImportDeclaration(node, print) {
       }
 
       print(spec);
-    });
+    }
 
     if (foundImportSpecifier) {
       this.push(" }");

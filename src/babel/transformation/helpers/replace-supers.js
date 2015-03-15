@@ -39,7 +39,7 @@ var visitor = {
 
     var callback = self.specHandle;
     if (self.isLoose) callback = self.looseHandle;
-    return callback.call(self, getThisReference, node, parent);
+    return callback.call(self, this, getThisReference);
   }
 };
 
@@ -191,11 +191,12 @@ export default class ReplaceSupers {
    * Description
    */
 
-  looseHandle(getThisReference: Function, node: Object, parent: Object) {
-    if (t.isIdentifier(node, { name: "super" })) {
+  looseHandle(path: TraversalPath, getThisReference: Function) {
+    var node = path.node;
+    if (path.isIdentifier({ name: "super" })) {
       this.hasSuper = true;
-      return this.getLooseSuperProperty(node, parent);
-    } else if (t.isCallExpression(node)) {
+      return this.getLooseSuperProperty(node, path.parent);
+    } else if (path.isCallExpression()) {
       var callee = node.callee;
       if (!t.isMemberExpression(callee)) return;
       if (callee.object.name !== "super") return;
@@ -211,15 +212,18 @@ export default class ReplaceSupers {
    * Description
    */
 
-  specHandle(getThisReference: Function, node: Object, parent: Object) {
+  specHandle(path: TraversalPath, getThisReference: Function) {
     var methodNode = this.methodNode;
     var property;
     var computed;
     var args;
     var thisReference;
 
+    var parent = path.parent;
+    var node = path.node;
+
     if (isIllegalBareSuper(node, parent)) {
-      throw this.file.errorWithNode(node, messages.get("classesIllegalBareSuper"));
+      throw path.errorWithNode(messages.get("classesIllegalBareSuper"));
     }
 
     if (t.isCallExpression(node)) {

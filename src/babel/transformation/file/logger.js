@@ -1,4 +1,4 @@
-import * as util from  "../util";
+import * as util from  "../../util";
 
 export default class Logger {
   constructor(file: File) {
@@ -10,6 +10,12 @@ export default class Logger {
     var parts = this.filename;
     if (msg) parts += `: ${msg}`;
     return parts;
+  }
+
+  deprecate(msg) {
+    if (!file.opts.suppressDeprecationMessages) {
+      console.error(msg);
+    }
   }
 
   debug(msg: string) {

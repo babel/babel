@@ -1,6 +1,7 @@
 import * as t from "../../../types";
 
 export var playground = true;
+export var optional = true;
 
 var visitor = {
   enter(node, parent, scope, state) {
@@ -20,10 +21,9 @@ export function MethodDefinition(node, parent, scope, file) {
   if (node.kind !== "memo") return;
   node.kind = "get";
 
-  console.error("Object getter memoization is deprecated and will be removed in 5.0.0");
+  file.log.deprecate("Object getter memoization is deprecated and will be removed in 5.0.0");
 
-  var value = node.value;
-  t.ensureBlock(value);
+  t.ensureBlock(node.value);
 
   var key = node.key;
 
@@ -36,7 +36,7 @@ export function MethodDefinition(node, parent, scope, file) {
     file: file
   };
 
-  scope.traverse(value, visitor, state);
+  this.get("value").traverse(visitor, state);
 
   return node;
 }

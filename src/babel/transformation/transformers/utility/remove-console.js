@@ -1,11 +1,9 @@
 import * as t from "../../../types";
 
-var isConsole = t.buildMatchMemberExpression("console", true);
-
 export var optional = true;
 
 export function CallExpression(node, parent) {
-  if (isConsole(node.callee)) {
+  if (this.get("callee").matchesPattern("console", true)) {
     if (t.isExpressionStatement(parent)) {
       this.parentPath.remove();
     } else {

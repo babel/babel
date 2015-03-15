@@ -4,7 +4,7 @@ import object from "../helpers/object";
 import File from "./file";
 import each from "lodash/collection/each";
 
-export default function transform(code: code, opts?: Object) {
+export default function transform(code: string, opts?: Object) {
   var file = new File(opts);
   return file.parse(code);
 }

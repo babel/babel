@@ -1,4 +1,5 @@
 import includes from "lodash/collection/includes";
+import traverse from "../traversal";
 
 /**
  * This class is responsible for traversing over the provided `File`s
@@ -31,14 +32,14 @@ export default class TransformerPass {
     var whitelist = opts.whitelist;
     if (whitelist.length) return includes(whitelist, key);
 
-    // optional
-    if (transformer.optional && !includes(opts.optional, key)) return false;
-
     // experimental
-    if (transformer.experimental && !opts.experimental) return false;
+    if (transformer.experimental && opts.experimental) return true;
 
     // playground
-    if (transformer.playground && !opts.playground) return false;
+    if (transformer.playground && opts.playground) return true;
+
+    // optional
+    if (transformer.optional && !includes(opts.optional, key)) return false;
 
     return true;
   }
@@ -59,7 +60,7 @@ export default class TransformerPass {
 
     file.log.debug(`Running transformer ${this.transformer.key}`);
 
-    file.scope.traverse(file.ast, this.handlers, file);
+    traverse(file.ast, this.handlers, file.scope, file);
 
     this.ran = true;
   }

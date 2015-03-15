@@ -32,12 +32,12 @@ export default function (opts, code, callback) {
   } catch (err) {
     if (!err._babel) {
       err._babel = true;
+
       var message = `${opts.filename}: ${err.message}`;
 
       var loc = err.loc;
       if (loc) {
-        var frame = codeFrame(code, loc.line, loc.column + 1);
-        message += frame;
+        message += codeFrame(code, loc.line, loc.column + 1, opts.highlightErrors);
       }
 
       if (err.stack) {

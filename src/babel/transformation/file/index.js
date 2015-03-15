@@ -1,20 +1,25 @@
 import convertSourceMap from "convert-source-map";
+import * as optionParsers from "./option-parsers";
 import shebangRegex from "shebang-regex";
+import TraversalPath from "../../traversal/path";
 import isFunction from "lodash/lang/isFunction";
+import isAbsolute from "path-is-absolute";
+import resolveRc from "../../tools/resolve-rc";
 import sourceMap from "source-map";
-import transform from "./index";
-import generate from "../generation";
+import transform from "./../index";
+import generate from "../../generation";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
+import traverse from "../../traversal";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
-import parse from "../helpers/parse";
-import Scope from "../traversal/scope";
+import parse from "../../helpers/parse";
+import Scope from "../../traversal/scope";
 import slash from "slash";
-import * as util from  "../util";
+import * as util from  "../../util";
 import path from "path";
 import each from "lodash/collection/each";
-import * as t from "../types";
+import * as t from "../../types";
 
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
@@ -78,84 +83,37 @@ export default class File {
     "self-global"
   ];
 
-  static validOptions = [
-    "filename",
-    "filenameRelative",
-
-    "blacklist",
-    "whitelist",
-    "optional",
-
-    "loose",
-    "playground",
-    "experimental",
-
-    "modules",
-    "moduleIds",
-    "moduleId",
-    "resolveModuleSource",
-    "keepModuleIdExtensions",
-
-    "code",
-    "ast",
-
-    "comments",
-    "compact",
-
-    "auxiliaryComment",
-    "externalHelpers",
-    "returnUsedHelpers",
-
-    "inputSourceMap",
-    "sourceMap",
-    "sourceMapName",
-    "sourceFileName",
-    "sourceRoot",
-    "moduleRoot",
-
-    // legacy
-    "format",
-    "reactCompat",
-
-    // these are used by plugins
-    "ignore",
-    "only",
-    "extensions",
-    "accept"
-  ];
+  static options = require("./options");
 
   normalizeOptions(opts: Object) {
     opts = assign({}, opts);
 
-    for (var key in opts) {
-      if (key[0] !== "_" && File.validOptions.indexOf(key) < 0) {
-        throw new ReferenceError(`Unknown option: ${key}`);
-      }
+    if (opts.filename && isAbsolute(opts.filename)) {
+      opts = resolveRc(opts.filename, opts);
     }
 
-    defaults(opts, {
-      keepModuleIdExtensions: false,
-      resolveModuleSource:    null,
-      returnUsedHelpers:      false,
-      externalHelpers:        false,
-      auxilaryComment:        "",
-      inputSourceMap:         null,
-      experimental:           false,
-      reactCompat:            false,
-      playground:             false,
-      moduleIds:              false,
-      blacklist:              [],
-      whitelist:              [],
-      sourceMap:              false,
-      optional:               [],
-      comments:               true,
-      filename:               "unknown",
-      modules:                "common",
-      compact:                "auto",
-      loose:                  [],
-      code:                   true,
-      ast:                    true
-    });
+    //
+
+    for (let key in opts) {
+      if (key[0] === "_") continue;
+
+      let option = File.options[key];
+      if (!option) throw new ReferenceError(`Unknown option: ${key}`);
+    }
+
+    for (let key in File.options) {
+      let option = File.options[key];
+
+      var val = opts[key];
+      if (val == null) val = option.default || null;
+
+      var optionParser = optionParsers[option.type];
+      if (optionParser) {
+        val = optionParser(key, val);
+      }
+
+      opts[key] = val;
+    }
 
     if (opts.inputSourceMap) {
       opts.sourceMap = true;
@@ -173,15 +131,8 @@ export default class File {
 
     opts.basename = path.basename(opts.filename, path.extname(opts.filename));
 
-    opts.blacklist = util.arrayify(opts.blacklist);
-    opts.whitelist = util.arrayify(opts.whitelist);
-    opts.optional  = util.arrayify(opts.optional);
-    opts.compact   = util.booleanify(opts.compact);
-    opts.loose     = util.arrayify(opts.loose);
-
-    if (includes(opts.loose, "all") || includes(opts.loose, true)) {
-      opts.loose = Object.keys(transform.transformers);
-    }
+    opts.ignore   = util.arrayify(opts.ignore, util.regexify);
+    opts.only     = util.arrayify(opts.only, util.regexify);
 
     defaults(opts, {
       moduleRoot: opts.sourceRoot
@@ -200,38 +151,21 @@ export default class File {
       sourceMapName:  opts.filenameRelative
     });
 
-    if (opts.playground) {
-      opts.experimental = true;
-    }
+    //
 
     if (opts.externalHelpers) {
       this.set("helpersNamespace", t.identifier("babelHelpers"));
     }
-
-    opts.blacklist = transform._ensureTransformerNames("blacklist", opts.blacklist);
-    opts.whitelist = transform._ensureTransformerNames("whitelist", opts.whitelist);
-    opts.optional  = transform._ensureTransformerNames("optional", opts.optional);
-    opts.loose     = transform._ensureTransformerNames("loose", opts.loose);
-
-    if (opts.reactCompat) {
-      opts.optional.push("reactCompat");
-      console.error("The reactCompat option has been moved into the optional transformer `reactCompat`");
-    }
-
-    var ensureEnabled = function (key) {
-      var namespace = transform.transformerNamespaces[key];
-      if (namespace === "es7") opts.experimental = true;
-      if (namespace === "playground") opts.playground = true;
-    };
-
-    each(opts.whitelist, ensureEnabled);
-    each(opts.optional, ensureEnabled);
 
     return opts;
   };
 
   isLoose(key: string) {
     return includes(this.opts.loose, key);
+  }
+
+  buildPlugins(stack) {
+
   }
 
   buildTransformers() {
@@ -241,6 +175,8 @@ export default class File {
 
     var secondaryStack = [];
     var stack = [];
+
+    this.buildPlugins(stack);
 
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
@@ -377,7 +313,7 @@ export default class File {
     this.usedHelpers[name] = true;
 
     var generator = this.get("helperGenerator");
-    var runtime = this.get("helpersNamespace");
+    var runtime   = this.get("helpersNamespace");
     if (generator) {
       return generator(name);
     } else if (runtime) {
@@ -410,7 +346,36 @@ export default class File {
     return this.parseShebang(code);
   }
 
+  shouldIgnore() {
+    var opts = this.opts;
+
+    var filename = opts.filename;
+    var ignore   = opts.ignore;
+    var only     = opts.only;
+
+    if (only.length) {
+      for (var i = 0; i < only.length; i++) {
+        if (only[i].test(filename)) return false;
+      }
+      return true;
+    } else if (ignore.length) {
+      for (var i = 0; i < ignore.length; i++) {
+        if (ignore[i].test(filename)) return true;
+      }
+    }
+
+    return false;
+  }
+
   parse(code: string) {
+    if (this.shouldIgnore()) {
+      return {
+        code: code,
+        map:  null,
+        ast:  null
+      };
+    }
+
     code = this.addCode(code);
 
     var opts = this.opts;
@@ -424,12 +389,28 @@ export default class File {
     });
   }
 
+  setAst(ast) {
+    this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
+    this.scope = this.path.scope;
+    this.ast   = ast;
+
+    this.path.traverse({
+      enter(node, parent, scope) {
+        if (this.isScope()) {
+          for (var key in scope.bindings) {
+            scope.bindings[key].setTypeAnnotation();
+          }
+        }
+      }
+    });
+  }
+
   transform(ast) {
     this.log.debug();
 
-    this.ast = ast;
+    this.setAst(ast);
+
     this.lastStatements = t.getLastStatements(ast.program);
-    this.scope = new Scope(ast.program, ast, null, this);
 
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canRun()) {
@@ -483,14 +464,14 @@ export default class File {
     if (inputMap) {
       map.sources[0] = inputMap.file;
 
-      var inputMapConsumer = new sourceMap.SourceMapConsumer(inputMap);
-      var outputMapConsumer = new sourceMap.SourceMapConsumer(map);
+      var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
+      var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
       var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
       outputMapGenerator.applySourceMap(inputMapConsumer);
 
       var mergedMap = outputMapGenerator.toJSON();
       mergedMap.sources = inputMap.sources
-      mergedMap.file = inputMap.file;
+      mergedMap.file    = inputMap.file;
       return mergedMap;
     }
 
@@ -498,6 +479,7 @@ export default class File {
   }
 
   generate(): {
+    usedHelpers?: Array<string>;
     code: string;
     map?: Object;
     ast?: Object;
@@ -507,8 +489,8 @@ export default class File {
 
     var result = {
       code: "",
-      map: null,
-      ast: null
+      map:  null,
+      ast:  null
     };
 
     if (this.opts.returnUsedHelpers) {

@@ -15,7 +15,7 @@ export function ClassDeclaration(node, parent, scope, file) {
 }
 
 export function ClassExpression(node, parent, scope, file) {
-  return new ClassTransformer(node, parent, scope, file).run();
+  return new ClassTransformer(this, file).run();
 }
 
 var verifyConstructorVisitor = traverse.explode({
@@ -33,11 +33,11 @@ var verifyConstructorVisitor = traverse.explode({
 
   CallExpression: {
     enter(node, parent, scope, state) {
-      if (t.isIdentifier(node.callee, { name: "super" })) {
+      if (this.get("callee").isIdentifier({ name: "super" })) {
         state.hasBareSuper = true;
 
         if (!state.hasSuper) {
-          throw state.file.errorWithNode(node, "super call is only allowed in derived constructor");
+          throw this.errorWithNode("super call is only allowed in derived constructor");
         }
       }
     }
@@ -46,7 +46,7 @@ var verifyConstructorVisitor = traverse.explode({
   ThisExpression: {
     enter(node, parent, scope, state) {
       if (state.hasSuper && !state.hasBareSuper) {
-        throw state.file.errorWithNode(node, "'this' is not allowed before super()");
+        throw this.errorWithNode("'this' is not allowed before super()");
       }
     }
   }
@@ -58,10 +58,11 @@ class ClassTransformer {
    * Description
    */
 
-  constructor(node: Object, parent: Object, scope: Scope, file: File) {
-    this.parent = parent;
-    this.scope  = scope;
-    this.node   = node;
+  constructor(path: TraversalPath, file: File) {
+    this.parent = path.parent;
+    this.scope  = path.scope;
+    this.node   = path.node;
+    this.path   = path;
     this.file   = file;
 
     this.hasInstanceMutators = false;
@@ -71,11 +72,11 @@ class ClassTransformer {
     this.staticMutatorMap   = {};
 
     this.hasConstructor = false;
-    this.className      = node.id;
-    this.classRef       = node.id || scope.generateUidIdentifier("class");
+    this.className      = this.node.id;
+    this.classRef       = this.node.id || this.scope.generateUidIdentifier("class");
 
-    this.superName = node.superClass || t.identifier("Function");
-    this.hasSuper  = !!node.superClass;
+    this.superName = this.node.superClass || t.identifier("Function");
+    this.hasSuper  = !!this.node.superClass;
 
     this.isLoose = file.isLoose("es6.classes");
   }
@@ -174,11 +175,13 @@ class ClassTransformer {
     var classBody   = this.node.body.body;
     var body        = this.body;
 
+    var classBodyPaths = this.path.get("body").get("body");
+
     for (var i = 0; i < classBody.length; i++) {
       var node = classBody[i];
       if (t.isMethodDefinition(node)) {
         var isConstructor = (!node.computed && t.isIdentifier(node.key, { name: "constructor" })) || t.isLiteral(node.key, { value: "constructor" });
-        if (isConstructor) this.verifyConstructor(node);
+        if (isConstructor) this.verifyConstructor(classBodyPaths[i]);
 
         var replaceSupers = new ReplaceSupers({
           methodNode: node,
@@ -205,8 +208,8 @@ class ClassTransformer {
       }
     }
 
-    // we have no constructor, we have a super, and the super doesn't appear to be falsy
-    if (!this.hasConstructor && this.hasSuper && t.evaluateTruthy(superName, this.scope) !== false) {
+    // we have no constructor, but we're a derived class
+    if (!this.hasConstructor && this.hasSuper) {
       var helperName = "class-super-constructor-call";
       if (this.isLoose) helperName += "-loose";
       constructor.body.body.push(util.template(helperName, {
@@ -249,19 +252,17 @@ class ClassTransformer {
    * Description
    */
 
-   verifyConstructor(node: Object) {
-    return; // enable this for the next major
-
+   verifyConstructor(path: TraversalPath) {
     var state = {
       hasBareSuper: false,
       hasSuper:     this.hasSuper,
       file:         this.file
     };
 
-    traverse(node, verifyConstructorVisitor, this.scope, state);
+    path.traverse(verifyConstructorVisitor, state);
 
     if (!state.hasBareSuper && this.hasSuper) {
-      throw this.file.errorWithNode(node, "Derived constructor must call super()");
+      throw path.errorWithNode("Derived constructor must call super()");
     }
    }
 

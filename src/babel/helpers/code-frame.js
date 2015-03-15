@@ -55,10 +55,10 @@ var highlight = function (text) {
   });
 };
 
-export default function (lines, lineNumber, colNumber) {
+export default function (lines: number, lineNumber: number, colNumber: number, color?): string {
   colNumber = Math.max(colNumber, 0);
 
-  if (chalk.supportsColor) {
+  if (color && chalk.supportsColor) {
     lines = highlight(lines);
   }
 
