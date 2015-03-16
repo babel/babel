@@ -199,6 +199,10 @@ export default class Scope {
    */
 
   generateTempBasedOnNode(node: Object): ?Object {
+    if (t.isThisExpression(node)) {
+      return null;
+    }
+
     if (t.isIdentifier(node) && this.hasBinding(node.name)) {
       return null;
     }
