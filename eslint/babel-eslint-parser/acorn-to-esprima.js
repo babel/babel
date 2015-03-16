@@ -39,6 +39,7 @@ exports.toToken = function (token) {
 };
 
 exports.toAST = function (ast) {
+  ast.sourceType = "module";
   traverse(ast, astTransformVisitor);
 };
 
