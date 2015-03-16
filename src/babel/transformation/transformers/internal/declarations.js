@@ -1,7 +1,9 @@
 import * as strict from "../../helpers/strict";
 import * as t from "../../../types";
 
-export var secondPass = true;
+export var metadata = {
+  secondPass: true
+};
 
 export function BlockStatement(node, parent, scope, file) {
   if (!node._declarations) return;

@@ -1,6 +1,8 @@
 import * as t from "../../../types";
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 export function Expression(node, parent, scope) {
   var res = this.evaluate();

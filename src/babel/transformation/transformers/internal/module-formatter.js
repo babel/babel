@@ -5,7 +5,7 @@ export function Program(program, parent, scope, file) {
     program.body = file.dynamicImports.concat(program.body);
   });
 
-  if (!file.transformers["es6.modules"].canRun()) return;
+  if (!file.transformers["es6.modules"].canRun) return;
 
   if (file.moduleFormatter.transform) {
     file.moduleFormatter.transform(program);

@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 export function Program(program, parent, scope, file) {
-  if (file.transformers.strict.canRun()) {
+  if (file.transformers.strict.canRun) {
     var directive = file.get("existingStrictDirective");
 
     if (!directive) {

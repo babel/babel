@@ -181,10 +181,10 @@ export default class File {
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
 
-      if (pass.canRun(file)) {
+      if (pass.canRun) {
         stack.push(pass);
 
-        if (transformer.secondPass) {
+        if (transformer.metadata.secondPass) {
           secondaryStack.push(pass);
         }
 
@@ -274,7 +274,7 @@ export default class File {
       this.dynamicImported.push(declar);
       if (noDefault) this.dynamicImportedNoDefault.push(declar);
 
-      if (this.transformers["es6.modules"].canRun()) {
+      if (this.transformers["es6.modules"].canRun) {
         this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
       } else {
         this.dynamicImports.push(declar);
@@ -380,8 +380,19 @@ export default class File {
 
     var opts = this.opts;
 
-    opts.allowImportExportEverywhere = this.isLoose("es6.modules");
-    opts.strictMode = this.transformers.strict.canRun();
+    //
+
+    var parseOpts = {};
+
+    var transformers = parseOpts.transformers = {};
+    for (var key in this.transformers) {
+      transformers[key] = this.transformers[key].canRun;
+    }
+
+    parseOpts.looseModules = this.isLoose("es6.modules");
+    parseOpts.strictMode = this.transformers.strict.canRun;
+
+    //
 
     return parse(opts, code, (tree) => {
       this.transform(tree);
@@ -413,7 +424,7 @@ export default class File {
     this.lastStatements = t.getLastStatements(ast.program);
 
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canRun()) {
+    if (modFormatter.init && this.transformers["es6.modules"].canRun) {
       modFormatter.init();
     }
 

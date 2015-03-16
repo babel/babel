@@ -5,7 +5,10 @@ export function manipulateOptions(opts) {
   opts.blacklist.push("react");
 }
 
-export var optional = true;
+export var metadata = {
+  optional: true,
+  react: true
+};
 
 require("../../helpers/build-react-transformer")(exports, {
   pre(state) {

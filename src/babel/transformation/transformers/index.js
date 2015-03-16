@@ -44,7 +44,6 @@ export default {
 
   "es6.regex.sticky":                      require("./es6/regex.sticky"),
   "es6.regex.unicode":                     require("./es6/regex.unicode"),
-  "es7.abstractReferences":                require("./es7/abstract-references"),
 
   "es6.constants":                         require("./es6/constants"),
 

@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+export var metadata = {
+  react: true
+};
+
 export function Flow(node) {
   this.remove();
 }

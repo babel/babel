@@ -1,6 +1,8 @@
 import * as t from "../../../types";
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 var match = t.buildMatchMemberExpression("process.env");
 

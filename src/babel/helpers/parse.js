@@ -9,10 +9,10 @@ export default function (opts, code, callback) {
     var tokens   = [];
 
     var ast = acorn.parse(code, {
-      allowImportExportEverywhere: opts.allowImportExportEverywhere,
-      allowReturnOutsideFunction:  !opts._anal,
-      ecmaVersion:                 opts.experimental ? 7 : 6,
-      playground:                  opts.playground,
+      allowImportExportEverywhere: opts.looseModules,
+      allowReturnOutsideFunction:  opts.looseModules,
+      transformers:                opts.transformers,
+      ecmaVersion:                 6,
       strictMode:                  opts.strictMode,
       onComment:                   comments,
       locations:                   true,

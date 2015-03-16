@@ -19,6 +19,12 @@
 
   },
 
+  "react": {
+    "description": "",
+    "type": "boolean",
+    "default": false
+  },
+
   "highlightErrors": {
     "description": "ANSI syntax highlight error messages",
     "type": "boolean",
@@ -38,13 +44,6 @@
   "experimental": {
     "description": "Enable all ES7+ transformers",
     "shorthand": "e",
-    "type": "boolean",
-    "default": false
-  },
-
-  "playground": {
-    "description": "Enable all playground transformers",
-    "shorthand": "p",
     "type": "boolean",
     "default": false
   },

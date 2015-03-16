@@ -23,14 +23,10 @@ export default class Transformer {
     };
 
     this.manipulateOptions = take("manipulateOptions");
+    this.metadata          = take("metadata") || {};
     this.check             = take("check");
     this.post              = take("post");
     this.pre               = take("pre");
-
-    this.experimental = !!take("experimental");
-    this.playground   = !!take("playground");
-    this.secondPass   = !!take("secondPass");
-    this.optional     = !!take("optional");
 
     this.handlers = this.normalize(transformer);
     this.opts     ||= {};

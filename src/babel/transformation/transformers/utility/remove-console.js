@@ -1,6 +1,8 @@
 import * as t from "../../../types";
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 export function CallExpression(node, parent) {
   if (this.get("callee").matchesPattern("console", true)) {

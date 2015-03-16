@@ -1,7 +1,9 @@
 import levenshtein from "leven";
 import * as messages from "../../../messages";
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 export function Identifier(node, parent, scope, file) {
   if (!this.isReferenced()) return;

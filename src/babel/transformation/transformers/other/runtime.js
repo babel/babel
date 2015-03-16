@@ -69,7 +69,10 @@ var astVisitor = {
   }
 };
 
-export var optional = true;
+export var metadata = {
+  optional: true,
+  react: true
+};
 
 export function manipulateOptions(opts) {
   if (opts.whitelist.length) opts.whitelist.push("es6.modules");

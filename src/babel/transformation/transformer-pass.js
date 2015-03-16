@@ -12,10 +12,12 @@ export default class TransformerPass {
     this.shouldRun   = !transformer.check;
     this.handlers    = transformer.handlers;
     this.file        = file;
-    this.ran         = false;
+
+    this.canRun = this._canRun();
+    this.ran    = false;
   }
 
-  canRun(): boolean {
+  _canRun(): boolean {
     var transformer = this.transformer;
 
     var opts = this.file.opts;
@@ -32,14 +34,14 @@ export default class TransformerPass {
     var whitelist = opts.whitelist;
     if (whitelist.length) return includes(whitelist, key);
 
-    // experimental
-    if (transformer.experimental && opts.experimental) return true;
+    // react
+    if (transformer.metadata.react && opts.react) return true;
 
-    // playground
-    if (transformer.playground && opts.playground) return true;
+    // experimental
+    if (transformer.metadata.experimental && opts.experimental) return true;
 
     // optional
-    if (transformer.optional && !includes(opts.optional, key)) return false;
+    if (transformer.metadata.optional && !includes(opts.optional, key)) return false;
 
     return true;
   }

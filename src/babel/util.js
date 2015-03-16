@@ -78,7 +78,7 @@ var templateVisitor = {
       return nodes[node.name];
     }
   }
-}
+};
 
 //
 
@@ -109,7 +109,7 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
 }
 
 export function parseTemplate(loc: string, code: string): Object {
-  var ast = parse({ filename: loc }, code).program;
+  var ast = parse({ filename: loc, looseModules: true }, code).program;
   ast = traverse.removeProperties(ast);
   return ast;
 }

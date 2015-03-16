@@ -26,7 +26,9 @@ var visitor = {
   }
 };
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 export function BlockStatement(node, parent, scope, file) {
   var letRefs = node._letReferences;

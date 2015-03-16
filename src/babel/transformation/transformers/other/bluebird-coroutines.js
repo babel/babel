@@ -6,7 +6,9 @@ export function manipulateOptions(opts) {
   opts.blacklist.push("regenerator");
 }
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 exports.Function = function (node, parent, scope, file) {
   if (!node.async || node.generator) return;

@@ -14,8 +14,10 @@ function buildDefaultsCallExpression(expr, ref, file) {
   return t.expressionStatement(t.callExpression(file.addHelper("defaults"), [ref, expr.right]));
 }
 
-export var secondPass = true;
-export var optional = true;
+export var metadata = {
+  secondPass: true,
+  optional: true
+};
 
 export function AssignmentExpression(node, parent, scope, file) {
   if (!isProtoAssignmentExpression(node)) return;

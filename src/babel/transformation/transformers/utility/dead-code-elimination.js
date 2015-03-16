@@ -17,7 +17,9 @@ function toStatements(node) {
   return node;
 }
 
-export var optional = true;
+export var metadata = {
+  optional: true
+};
 
 export function ConditionalExpression(node, parent, scope) {
   var evaluateTest = this.get("test").evaluateTruthy();

@@ -3,8 +3,10 @@ import traverse from "../../../traversal";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export var experimental = true;
-export var optional = true;
+export var metadata = {
+  experimental: true,
+  optional: true
+};
 
 export function ComprehensionExpression(node, parent, scope, file) {
   var callback = array;
