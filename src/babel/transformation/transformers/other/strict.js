@@ -1,10 +1,10 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
-export function Program(program) {
+export function Program(program, parent, scope, file) {
   var first = program.body[0];
   if (t.isExpressionStatement(first) && t.isLiteral(first.expression, { value: "use strict" })) {
-    program.body.shift();
+    file.set("existingStrictDirective", program.body.shift());
   }
 }
 
