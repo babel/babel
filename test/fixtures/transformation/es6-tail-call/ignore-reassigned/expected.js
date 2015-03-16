@@ -1,7 +1,7 @@
-"use strict";
-
 // we need to deopt `test` if it's reassigned as we can't be certain of it's
 // state, ie. it could have been rebound or dereferenced
+
+"use strict";
 
 function test(exit) {
   if (exit) {
