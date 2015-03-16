@@ -40,6 +40,12 @@ running them with `mocha`:
 $ mocha test/transformation.js
 ```
 
+Use mocha's `--grep` option to run a subset of tests by name:
+
+```sh
+$ mocha test/transformation.js --grep es7
+```
+
 #### Workflow
 
 * Fork the repository
