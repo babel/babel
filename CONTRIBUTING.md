@@ -32,7 +32,7 @@ $ make test
 ```
 
 This will usually take around two minutes as it's compiling the entire
-[test262](https://github.com/tc39/test262) test suite and validating it's AST.
+[test262](https://github.com/tc39/test262) test suite and validating its AST.
 This is mostly overkill and you can limit the tests to a select few by directly
 running them with `mocha`:
 
