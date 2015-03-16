@@ -14,11 +14,6 @@ export default {
   // needs to be before `_aliasFunction`
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
 
-  "playground.malletOperator":             require("./playground/mallet-operator"),
-  "playground.methodBinding":              require("./playground/method-binding"),
-  "playground.memoizationOperator":        require("./playground/memoization-operator"),
-  "playground.objectGetterMemoization":    require("./playground/object-getter-memoization"),
-
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),
 
