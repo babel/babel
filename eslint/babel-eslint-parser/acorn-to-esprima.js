@@ -85,7 +85,7 @@ var astTransformVisitor = {
         } else if (node.declaration.type === "ClassExpression") {
           node.declaration.type = "ClassDeclaration";
         }
-      } else if (t.isExportBatchSpecifier(node.specifiers[0])) {
+      } else if (node.specifiers && t.isExportBatchSpecifier(node.specifiers[0])) {
         node.type = "ExportAllDeclaration";
         delete node.specifiers;
         delete node.declaration;
@@ -94,7 +94,7 @@ var astTransformVisitor = {
       }
       delete node.default;
     }
-    
+
     if (t.isExportSpecifier(node)) {
       node.local = node.id;
       node.exported = node.name || node.id;
@@ -133,7 +133,7 @@ var astTransformVisitor = {
     }
 
     // functions
-    
+
     if (t.isFunction(node)) {
       node.defaults = [];
       node.params = node.params.map(function (param) {
