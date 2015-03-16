@@ -59,7 +59,6 @@ class CodeGenerator {
     comprehensions:   require("./generators/comprehensions"),
     expressions:      require("./generators/expressions"),
     statements:       require("./generators/statements"),
-    playground:       require("./generators/playground"),
     classes:          require("./generators/classes"),
     methods:          require("./generators/methods"),
     modules:          require("./generators/modules"),

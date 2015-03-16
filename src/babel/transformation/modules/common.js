@@ -18,7 +18,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
   };
 
   importSpecifier(specifier, node, nodes) {
-    var variableName = t.getSpecifierName(specifier);
+    var variableName = node.local;
 
     var ref = this.getExternalReference(node, nodes);
 

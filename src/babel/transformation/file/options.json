@@ -19,12 +19,6 @@
 
   },
 
-  "react": {
-    "description": "",
-    "type": "boolean",
-    "default": false
-  },
-
   "highlightErrors": {
     "description": "ANSI syntax highlight error messages",
     "type": "boolean",

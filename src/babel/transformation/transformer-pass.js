@@ -13,11 +13,11 @@ export default class TransformerPass {
     this.handlers    = transformer.handlers;
     this.file        = file;
 
-    this.canRun = this._canRun();
-    this.ran    = false;
+    this.canTransform = this._canTransform();
+    this.ran          = false;
   }
 
-  _canRun(): boolean {
+  _canTransform(): boolean {
     var transformer = this.transformer;
 
     var opts = this.file.opts;

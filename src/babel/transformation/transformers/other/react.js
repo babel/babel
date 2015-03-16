@@ -3,10 +3,6 @@ import * as t from "../../../types";
 
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
-export var metadata = {
-  react: true
-};
-
 export function Program(node, parent, scope, file) {
   var id = "React.createElement";
 

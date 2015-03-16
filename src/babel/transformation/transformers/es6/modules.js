@@ -24,7 +24,11 @@ export function ImportDeclaration(node, parent, scope, file) {
   return nodes;
 }
 
-export function ExportDeclaration(node, parent, scope, file) {
+export function ExportAllDeclaration(node, parent, scope, file) {
+  return file.moduleFormatter.exportAllDeclaration(node, parent);
+}
+
+export function ExportNamedDeclaration(node, parent, scope, file) {
   // flow type
   if (this.get("declaration").isTypeAlias()) return;
 

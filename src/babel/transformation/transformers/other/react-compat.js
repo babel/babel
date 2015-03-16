@@ -6,8 +6,7 @@ export function manipulateOptions(opts) {
 }
 
 export var metadata = {
-  optional: true,
-  react: true
+  optional: true
 };
 
 require("../../helpers/build-react-transformer")(exports, {
