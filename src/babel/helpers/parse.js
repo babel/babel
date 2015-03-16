@@ -1,7 +1,7 @@
 import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
 import codeFrame from "./code-frame";
-import acorn from "acorn-babel";
+import acorn from "../../acorn";
 
 export default function (opts, code, callback) {
   try {
@@ -11,11 +11,12 @@ export default function (opts, code, callback) {
     var ast = acorn.parse(code, {
       allowImportExportEverywhere: opts.looseModules,
       allowReturnOutsideFunction:  opts.looseModules,
-      transformers:                opts.transformers,
+      transformers:                opts.transformers || {},
       ecmaVersion:                 6,
       strictMode:                  opts.strictMode,
       onComment:                   comments,
       locations:                   true,
+      plugins:                     opts.plugins || [],
       onToken:                     tokens,
       ranges:                      true
     });

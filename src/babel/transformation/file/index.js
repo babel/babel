@@ -21,6 +21,9 @@ import path from "path";
 import each from "lodash/collection/each";
 import * as t from "../../types";
 
+import "../../parser/jsx";
+import "../../parser/flow";
+
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
     checkNode(state.stack, node, scope);
@@ -35,7 +38,7 @@ function checkNode(stack, node, scope) {
 }
 
 export default class File {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.dynamicImportedNoDefault = [];
     this.dynamicImportIds         = {};
     this.dynamicImported          = [];
@@ -46,8 +49,8 @@ export default class File {
     this.data        = {};
 
     this.lastStatements = [];
+    this.log            = new Logger(this, opts.filename || "unknown");
     this.opts           = this.normalizeOptions(opts);
-    this.log            = new Logger(this);
     this.ast            = {};
 
     this.buildTransformers();
@@ -98,7 +101,7 @@ export default class File {
       if (key[0] === "_") continue;
 
       let option = File.options[key];
-      if (!option) throw new ReferenceError(`Unknown option: ${key}`);
+      if (!option) this.log.error(`Unknown option: ${key}`, ReferenceError);
     }
 
     for (let key in File.options) {
@@ -181,7 +184,7 @@ export default class File {
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
 
-      if (pass.canRun) {
+      if (pass.canTransform) {
         stack.push(pass);
 
         if (transformer.metadata.secondPass) {
@@ -274,7 +277,7 @@ export default class File {
       this.dynamicImported.push(declar);
       if (noDefault) this.dynamicImportedNoDefault.push(declar);
 
-      if (this.transformers["es6.modules"].canRun) {
+      if (this.transformers["es6.modules"].canTransform) {
         this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
       } else {
         this.dynamicImports.push(declar);
@@ -382,19 +385,27 @@ export default class File {
 
     //
 
-    var parseOpts = {};
+    var parseOpts = {
+      filename: opts.filename,
+      plugins:  {}
+    };
 
     var transformers = parseOpts.transformers = {};
     for (var key in this.transformers) {
-      transformers[key] = this.transformers[key].canRun;
+      transformers[key] = this.transformers[key].canParse;
     }
 
     parseOpts.looseModules = this.isLoose("es6.modules");
-    parseOpts.strictMode = this.transformers.strict.canRun;
+    parseOpts.strictMode = transformers.strict;
+
+    if (!opts.standardOnly) {
+      parseOpts.plugins.jsx = true;
+      parseOpts.plugins.flow = true;
+    }
 
     //
 
-    return parse(opts, code, (tree) => {
+    return parse(parseOpts, code, (tree) => {
       this.transform(tree);
       return this.generate();
     });
@@ -424,7 +435,7 @@ export default class File {
     this.lastStatements = t.getLastStatements(ast.program);
 
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canRun) {
+    if (modFormatter.init && this.transformers["es6.modules"].canTransform) {
       modFormatter.init();
     }
 

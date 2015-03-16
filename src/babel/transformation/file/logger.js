@@ -1,8 +1,8 @@
 import * as util from  "../../util";
 
 export default class Logger {
-  constructor(file: File) {
-    this.filename = file.opts.filename;
+  constructor(file: File, filename: string) {
+    this.filename = filename;
     this.file     = file;
   }
 
@@ -10,6 +10,10 @@ export default class Logger {
     var parts = this.filename;
     if (msg) parts += `: ${msg}`;
     return parts;
+  }
+
+  error(msg: string, Constructor = Error) {
+    throw new Constructor(this._buildMessage(msg));
   }
 
   deprecate(msg) {

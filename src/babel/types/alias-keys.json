@@ -14,7 +14,9 @@
   "EmptyStatement":      ["Statement"],
   "LabeledStatement":    ["Statement"],
   "VariableDeclaration": ["Statement", "Declaration"],
-  "ExportDeclaration":   ["Statement", "Declaration", "ModuleDeclaration"],
+  "ExportAllDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportDefaultDeclaration": ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportNamedDeclaration":   ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ImportDeclaration":   ["Statement", "Declaration", "ModuleDeclaration"],
   "PrivateDeclaration":  ["Statement", "Declaration"],
 

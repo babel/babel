@@ -10,25 +10,31 @@ export function ImportSpecifier(node, print) {
 }
 
 export function ExportSpecifier(node, print) {
-  print(node.id);
-  if (node.name) {
+  print(node.local);
+  if (node.exported && node.local !== node.exported) {
     this.push(" as ");
-    print(node.name);
+    print(node.exported);
   }
 }
 
-export function ExportBatchSpecifier() {
-  this.push("*");
+export function ExportAllDeclaration(node, source) {
+  this.push("export * from");
+  print(node.source);
+  this.semicolon();
 }
 
-export function ExportDeclaration(node, print) {
+export function ExportNamedDeclaration(node, print) {
   this.push("export ");
+  ExportDeclaration.call(this, node, print);
+}
 
+export function ExportDefaultDeclaration(node, print) {
+  this.push("export default ");
+  ExportDeclaration.call(this, node, print);
+}
+
+function ExportDeclaration(node, print) {
   var specifiers = node.specifiers;
-
-  if (node.default) {
-    this.push("default ");
-  }
 
   if (node.declaration) {
     print(node.declaration);

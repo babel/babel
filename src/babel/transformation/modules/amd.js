@@ -69,7 +69,6 @@ export default class AMDFormatter extends DefaultFormatter {
   }
 
   importSpecifier(specifier, node, nodes) {
-    var key = t.getSpecifierName(specifier);
     var ref = this.getExternalReference(node);
 
     if (includes(this.file.dynamicImportedNoDefault, node)) {
@@ -86,7 +85,7 @@ export default class AMDFormatter extends DefaultFormatter {
     }
 
     nodes.push(t.variableDeclaration("var", [
-      t.variableDeclarator(key, ref)
+      t.variableDeclarator(node.local, ref)
     ]));
   }
 

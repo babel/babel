@@ -18,8 +18,6 @@ export function getBindingIdentifiers(node: Object): Object {
 
     if (t.isIdentifier(id)) {
       ids[id.name] = id;
-    } else if (t.isImportSpecifier(id)) {
-      search.push(id.name || id.id);
     } else if (t.isExportDeclaration(id)) {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);
@@ -38,7 +36,8 @@ export function getBindingIdentifiers(node: Object): Object {
 getBindingIdentifiers.keys = {
   UnaryExpression: ["argument"],
   AssignmentExpression: ["left"],
-  ImportBatchSpecifier: ["name"],
+  ImportSpecifier: ["local"],
+  ImportNamespaceSpecifier: ["local"],
   VariableDeclarator: ["id"],
   FunctionDeclaration: ["id"],
   FunctionExpression: ["id"],
@@ -82,24 +81,4 @@ export function getLastStatements(node: Object): Array<Object> {
   }
 
   return nodes;
-}
-
-/**
- * Description
- */
-
-export function getSpecifierName(specifier: Object): Object {
-  return specifier.name || specifier.id;
-}
-
-/**
- * Description
- */
-
-export function getSpecifierId(specifier: Object): Object {
-  if (specifier.default) {
-    return t.identifier("default");
-  } else {
-    return specifier.id;
-  }
 }

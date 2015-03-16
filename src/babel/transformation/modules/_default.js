@@ -228,14 +228,14 @@ export default class DefaultFormatter {
 
         // export { foo } from "test";
         nodes.push(this.buildExportsAssignment(
-          t.getSpecifierName(specifier),
+          node.local,
           ref,
           node
         ));
       }
     } else {
       // export { foo };
-      nodes.push(this.buildExportsAssignment(t.getSpecifierName(specifier), specifier.id, node));
+      nodes.push(this.buildExportsAssignment(specifier.local, specifier.exported, node));
     }
   }
 
