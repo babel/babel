@@ -699,6 +699,11 @@
       return this.finishNode(node, "ThisExpression");
 
     case tt.name:
+      if (this.tok.value === "super") {
+        var node = this.startNode();
+        this.next();
+        return this.finishNode(node, "SuperExpression");
+      }
       var start = this.storeCurrentPos();
       var id = this.parseIdent();
       return this.eat(tt.arrow) ? this.parseArrowExpression(this.startNodeAt(start), [id]) : id;

@@ -2315,6 +2315,11 @@
       if (this.inGenerator) unexpected();
 
     case tt.name:
+      if (this.value === "super") {
+        var node = this.startNode();
+        this.next();
+        return this.finishNode(node, "SuperExpression");
+      }
       var start = this.currentPos();
       var id = this.parseIdent(this.type !== tt.name);
       if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {

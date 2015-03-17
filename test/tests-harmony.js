@@ -7391,8 +7391,7 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                   expression: {
                     type: "CallExpression",
                     callee: {
-                      type: "Identifier",
-                      name: "super",
+                      type: "SuperExpression",
                       loc: {
                         start: {line: 1, column: 40},
                         end: {line: 1, column: 45}
@@ -7723,8 +7722,7 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                   expression: {
                     type: "CallExpression",
                     callee: {
-                      type: "Identifier",
-                      name: "super",
+                      type: "SuperExpression",
                       loc: {
                         start: {line: 1, column: 48},
                         end: {line: 1, column: 53}
