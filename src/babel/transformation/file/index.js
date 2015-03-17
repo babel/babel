@@ -392,7 +392,13 @@ export default class File {
 
     var transformers = parseOpts.transformers = {};
     for (var key in this.transformers) {
-      transformers[key] = this.transformers[key].canParse;
+      var transformer = this.transformers[key];
+
+      transformers[key] = transformer.canTransform;
+
+      if (transformer.parser) {
+        parseOpts.plugins[key] = true;
+      }
     }
 
     parseOpts.looseModules = this.isLoose("es6.modules");
