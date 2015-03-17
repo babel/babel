@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.13
+
+ * **Bug Fix**
+  * Handle comments on use strict directives.
+  * Fix assignment patterns with a left side pattern.
+ * **Polish**
+  * Special case `this` when doing expression memoisation.
+
 ## 4.7.12
 
  * **Bug Fix**
