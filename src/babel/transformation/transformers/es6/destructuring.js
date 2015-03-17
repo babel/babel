@@ -290,14 +290,21 @@ class DestructuringTransformer {
 
     //
 
-    this.nodes.push(this.buildVariableAssignment(
-      pattern.left,
-      t.conditionalExpression(
-        t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
-        pattern.right,
-        tempValueRef
-      )
-    ));
+    var tempConditional = t.conditionalExpression(
+      t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
+      pattern.right,
+      tempValueRef
+    );
+
+    var left = pattern.left;
+    if (t.isPattern(left)) {
+      this.nodes.push(t.expressionStatement(
+        t.assignmentExpression("=", tempValueRef, tempConditional)
+      ));
+      this.push(left, tempValueRef);
+    } else {
+      this.nodes.push(this.buildVariableAssignment(left, tempConditional));
+    }
   }
 
   pushObjectSpread(pattern, objRef, spreadProp, spreadPropIndex) {
