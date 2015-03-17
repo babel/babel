@@ -1,5 +1,4 @@
 {
-  "react": true,
   "experimental": true,
   "whitelist": ["flow"],
   "noCheckAst": true

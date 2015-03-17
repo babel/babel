@@ -1,4 +1,3 @@
 {
-  "react": true,
   "blacklist": ["strict"]
 }
