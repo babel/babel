@@ -2661,13 +2661,18 @@
       } else {
         method['static'] = false;
       }
-      if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
-          (method.key.name === "get" || method.key.name === "set")) {
-        if (isGenerator) this.unexpected();
-        method.kind = method.key.name;
-        this.parsePropertyName(method);
-      } else {
-        method.kind = "";
+      method.kind = "method";
+      if (!method.computed && !isGenerator) {
+        if (method.key.type === "Identifier") {
+          if (this.type !== tt.parenL && (method.key.name === "get" || method.key.name === "set")) {
+            method.kind = method.key.name;
+            this.parsePropertyName(method);
+          } else if (!method['static'] && method.key.name === "constructor") {
+            method.kind = "constructor";
+          }
+        } else if (!method['static'] && method.key.type === "Literal" && method.key.value === "constructor") {
+          method.kind = "constructor";
+        }
       }
       method.value = this.parseMethod(isGenerator);
       classBody.body.push(this.finishNode(method, "MethodDefinition"));

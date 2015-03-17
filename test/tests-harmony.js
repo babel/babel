@@ -6560,7 +6560,7 @@ test("class A {get() {}}", {
             end: {line: 1, column: 17}
           }
         },
-        kind: "",
+        kind: "method",
         static: false,
         loc: {
           start: {line: 1, column: 9},
@@ -6632,7 +6632,7 @@ test("class A { static get() {}}", {
             end: {line: 1, column: 25}
           }
         },
-        kind: "",
+        kind: "method",
         static: true,
         loc: {
           start: {line: 1, column: 10},
@@ -7027,7 +7027,7 @@ test("class A {set(v) {};}", {
             end: {line: 1, column: 18}
           }
         },
-        kind: "",
+        kind: "method",
         static: false,
         loc: {
           start: {line: 1, column: 9},
@@ -7106,7 +7106,7 @@ test("class A { static set(v) {};}", {
             end: {line: 1, column: 26}
           }
         },
-        kind: "",
+        kind: "method",
         static: true,
         loc: {
           start: {line: 1, column: 10},
@@ -7207,7 +7207,7 @@ test("class A {*gen(v) { yield v; }}", {
             end: {line: 1, column: 29}
           }
         },
-        kind: "",
+        kind: "method",
         static: false,
         loc: {
           start: {line: 1, column: 9},
@@ -7308,7 +7308,7 @@ test("class A { static *gen(v) { yield v; }}", {
             end: {line: 1, column: 37}
           }
         },
-        kind: "",
+        kind: "method",
         static: true,
         loc: {
           start: {line: 1, column: 10},
@@ -7421,7 +7421,7 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                 end: {line: 1, column: 49}
               }
             },
-            kind: "",
+            kind: "constructor",
             static: false,
             loc: {
               start: {line: 1, column: 24},
@@ -7453,6 +7453,36 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
   ranges: true,
   locations: true
 });
+
+test("class A {'constructor'() {}}", {
+  type: "Program",
+  body: [{
+    type: "ClassDeclaration",
+    id: {type: "Identifier", name: "A"},
+    superClass: null,
+    body: {
+      type: "ClassBody",
+      body: [{
+        type: "MethodDefinition",
+        computed: false,
+        key: {type: "Literal", value: "constructor"},
+        static: false,
+        kind: "constructor",
+        value: {
+          type: "FunctionExpression",
+          id: null,
+          generator: false,
+          expression: false,
+          params: [],
+          body: {
+            type: "BlockStatement",
+            body: []
+          }
+        }
+      }]
+    }
+  }]
+}, {ecmaVersion: 6});
 
 test("class A {static foo() {}}", {
   type: "Program",
@@ -7499,7 +7529,7 @@ test("class A {static foo() {}}", {
             end: {line: 1, column: 24}
           }
         },
-        kind: "",
+        kind: "method",
         static: true,
         loc: {
           start: {line: 1, column: 9},
@@ -7572,7 +7602,7 @@ test("class A {foo() {} static bar() {}}", {
               end: {line: 1, column: 17}
             }
           },
-          kind: "",
+          kind: "method",
           static: false,
           loc: {
             start: {line: 1, column: 9},
@@ -7609,7 +7639,7 @@ test("class A {foo() {} static bar() {}}", {
               end: {line: 1, column: 33}
             }
           },
-          kind: "",
+          kind: "method",
           static: true,
           loc: {
             start: {line: 1, column: 18},
@@ -7723,7 +7753,7 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                 end: {line: 1, column: 57}
               }
             },
-            kind: "",
+            kind: "method",
             static: true,
             loc: {
               start: {line: 1, column: 25},
@@ -7802,7 +7832,7 @@ test("class A { foo() {} bar() {}}", {
               end: {line: 1, column: 18}
             }
           },
-          kind: "",
+          kind: "method",
           static: false,
           loc: {
             start: {line: 1, column: 10},
@@ -7839,7 +7869,7 @@ test("class A { foo() {} bar() {}}", {
               end: {line: 1, column: 27}
             }
           },
-          kind: "",
+          kind: "method",
           static: false,
           loc: {
             start: {line: 1, column: 19},
@@ -8450,7 +8480,7 @@ test("class A { static [foo]() {} }", {
           },
           name: "foo"
         },
-        kind: "",
+        kind: "method",
         value: {
           type: "FunctionExpression",
           loc: {
@@ -8717,7 +8747,7 @@ test("class A { foo() {} get foo() {} }",{
             },
             name: "foo"
           },
-          kind: "",
+          kind: "method",
           value: {
             type: "FunctionExpression",
             loc: {
@@ -9582,7 +9612,7 @@ test("class A {[x]() {}}", {
           },
           name: "x"
         },
-        kind: "",
+        kind: "method",
         value: {
           type: "FunctionExpression",
           loc: {
@@ -10324,7 +10354,7 @@ test("(class {f({x} = {x: 10}) {}})", {
               end: {line: 1, column: 27}
             }
           },
-          kind: "",
+          kind: "method",
           static: false,
           loc: {
             start: {line: 1, column: 8},
@@ -14947,7 +14977,7 @@ test("class A { static() {} }", {
           name: "static"
         },
         static: false,
-        kind: "",
+        kind: "method",
         value: {
           type: "FunctionExpression",
           range: [16, 21],
@@ -15044,7 +15074,7 @@ test("class A { *static() {} }", {
           name: "static"
         },
         static: false,
-        kind: "",
+        kind: "method",
         value: {
           type: "FunctionExpression",
           range: [17, 22],

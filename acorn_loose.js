@@ -456,7 +456,7 @@
       return this.finishNode(node, "EmptyStatement");
 
     case tt._class:
-      return this.parseObj(true, true);
+      return this.parseClass(true);
 
     case tt._import:
       return this.parseImport();
@@ -751,7 +751,7 @@
       return this.parseObj();
 
     case tt._class:
-      return this.parseObj(true);
+      return this.parseClass();
 
     case tt._function:
       var node = this.startNode();
@@ -828,58 +828,29 @@
     return this.finishNode(node, "TemplateLiteral");
   };
 
-  lp.parseObj = function(isClass, isStatement) {
+  lp.parseObj = function() {
     var node = this.startNode();
-    if (isClass) {
-      this.next();
-      if (this.tok.type === tt.name) node.id = this.parseIdent();
-      else if (isStatement) node.id = this.dummyIdent();
-      else node.id = null;
-      node.superClass = this.eat(tt._extends) ? this.parseExpression() : null;
-      node.body = this.startNode();
-      node.body.body = [];
-    } else {
-      node.properties = [];
-    }
+    node.properties = [];
     this.pushCx();
     var indent = this.curIndent + 1, line = this.curLineStart;
     this.eat(tt.braceL);
     if (this.curIndent + 1 < indent) { indent = this.curIndent; line = this.curLineStart; }
     while (!this.closes(tt.braceR, indent, line)) {
-      if (isClass && this.semicolon()) continue;
       var prop = this.startNode(), isGenerator, start;
       if (this.options.ecmaVersion >= 6) {
-        if (isClass) {
-          prop['static'] = false;
-        } else {
-          start = this.storeCurrentPos();
-          prop.method = false;
-          prop.shorthand = false;
-        }
+        start = this.storeCurrentPos();
+        prop.method = false;
+        prop.shorthand = false;
         isGenerator = this.eat(tt.star);
       }
       this.parsePropertyName(prop);
       if (isDummy(prop.key)) { if (isDummy(this.parseMaybeAssign())) this.next(); this.eat(tt.comma); continue; }
-      if (isClass) {
-        if (prop.key.type === "Identifier" && !prop.computed && prop.key.name === "static" &&
-            (this.tok.type != tt.parenL && this.tok.type != tt.braceL)) {
-          prop['static'] = true;
-          isGenerator = this.eat(tt.star);
-          this.parsePropertyName(prop);
-        } else {
-          prop['static'] = false;
-        }
-      }
-      if (!isClass && this.eat(tt.colon)) {
+      if (this.eat(tt.colon)) {
         prop.kind = "init";
         prop.value = this.parseMaybeAssign();
       } else if (this.options.ecmaVersion >= 6 && (this.tok.type === tt.parenL || this.tok.type === tt.braceL)) {
-        if (isClass) {
-          prop.kind = "";
-        } else {
-          prop.kind = "init";
-          prop.method = true;
-        }
+        prop.kind = "init";
+        prop.method = true;
         prop.value = this.parseMethod(isGenerator);
       } else if (this.options.ecmaVersion >= 5 && prop.key.type === "Identifier" &&
                  !prop.computed && (prop.key.name === "get" || prop.key.name === "set") &&
@@ -887,9 +858,6 @@
         prop.kind = prop.key.name;
         this.parsePropertyName(prop);
         prop.value = this.parseMethod(false);
-      } else if (isClass) {
-        prop.kind = "";
-        prop.value = this.parseMethod(isGenerator);
       } else {
         prop.kind = "init";
         if (this.options.ecmaVersion >= 6) {
@@ -907,13 +875,8 @@
         }
         prop.shorthand = true;
       }
-
-      if (isClass) {
-        node.body.body.push(this.finishNode(prop, "MethodDefinition"));
-      } else {
-        node.properties.push(this.finishNode(prop, "Property"));
-        this.eat(tt.comma);
-      }
+      node.properties.push(this.finishNode(prop, "Property"));
+      this.eat(tt.comma);
     }
     this.popCx();
     if (!this.eat(tt.braceR)) {
@@ -922,13 +885,67 @@
       this.last.end = this.tok.start;
       if (this.options.locations) this.last.loc.end = this.tok.loc.start;
     }
-    if (isClass) {
-      this.semicolon();
-      this.finishNode(node.body, "ClassBody");
-      return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
-    } else {
-      return this.finishNode(node, "ObjectExpression");
+    return this.finishNode(node, "ObjectExpression");
+  };
+
+  lp.parseClass = function(isStatement) {
+    var node = this.startNode();
+    this.next();
+    if (this.tok.type === tt.name) node.id = this.parseIdent();
+    else if (isStatement) node.id = this.dummyIdent();
+    else node.id = null;
+    node.superClass = this.eat(tt._extends) ? this.parseExpression() : null;
+    node.body = this.startNode();
+    node.body.body = [];
+    this.pushCx();
+    var indent = this.curIndent + 1, line = this.curLineStart;
+    this.eat(tt.braceL);
+    if (this.curIndent + 1 < indent) { indent = this.curIndent; line = this.curLineStart; }
+    while (!this.closes(tt.braceR, indent, line)) {
+      if (this.semicolon()) continue;
+      var method = this.startNode(), isGenerator, start;
+      if (this.options.ecmaVersion >= 6) {
+        method['static'] = false;
+        isGenerator = this.eat(tt.star);
+      }
+      this.parsePropertyName(method);
+      if (isDummy(method.key)) { if (isDummy(this.parseMaybeAssign())) this.next(); this.eat(tt.comma); continue; }
+      if (method.key.type === "Identifier" && !method.computed && method.key.name === "static" &&
+          (this.tok.type != tt.parenL && this.tok.type != tt.braceL)) {
+        method['static'] = true;
+        isGenerator = this.eat(tt.star);
+        this.parsePropertyName(method);
+      } else {
+        method['static'] = false;
+      }
+      if (this.options.ecmaVersion >= 5 && method.key.type === "Identifier" &&
+          !method.computed && (method.key.name === "get" || method.key.name === "set") &&
+          this.tok.type !== tt.parenL && this.tok.type !== tt.braceL) {
+        method.kind = method.key.name;
+        this.parsePropertyName(method);
+        method.value = this.parseMethod(false);
+      } else {
+        if (!method.computed && !method['static'] && !isGenerator && (
+          method.key.type === "Identifier" && method.key.name === "constructor" ||
+          method.key.type === "Literal" && method.key.value === "constructor")) {
+          method.kind = "constructor";
+        } else {
+          method.kind =  "method";
+        }
+        method.value = this.parseMethod(isGenerator);
+      }
+      node.body.body.push(this.finishNode(method, "MethodDefinition"));
     }
+    this.popCx();
+    if (!this.eat(tt.braceR)) {
+      // If there is no closing brace, make the node span to the start
+      // of the next token (this is useful for Tern)
+      this.last.end = this.tok.start;
+      if (this.options.locations) this.last.loc.end = this.tok.loc.start;
+    }
+    this.semicolon();
+    this.finishNode(node.body, "ClassBody");
+    return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
   };
 
   lp.parsePropertyName = function(prop) {
