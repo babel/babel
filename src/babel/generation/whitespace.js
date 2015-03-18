@@ -81,7 +81,7 @@ export default class Whitespace {
       }
     }
 
-    if (endToken && endToken.type.type === "eof") {
+    if (endToken && endToken.type.label === "eof") {
       return 1;
     } else {
       var lines = this.getNewlinesBetween(startToken, endToken);

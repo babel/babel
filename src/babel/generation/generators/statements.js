@@ -212,7 +212,7 @@ export function PrivateDeclaration(node, print) {
 
 export function VariableDeclarator(node, print) {
   print(node.id);
-  print(node.id.typeAnnotation);
+  //print(node.id.typeAnnotation);
   if (node.init) {
     this.space();
     this.push("=");

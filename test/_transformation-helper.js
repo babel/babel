@@ -73,7 +73,6 @@ var run = function (task, done) {
 
   if (execCode) {
     result = transform(execCode, getOpts(exec));
-    checkAst(result, exec);
     execCode = result.code;
 
     try {
@@ -94,13 +93,14 @@ var run = function (task, done) {
       err.message += codeFrame(execCode);
       throw err;
     }
+
+    checkAst(result, exec);
   }
 
   var actualCode = actual.code;
   var expectCode = expect.code;
   if (!execCode || actualCode) {
     result     = transform(actualCode, getOpts(actual));
-    checkAst(result, actual);
     actualCode = result.code.trim();
 
     try {
@@ -109,6 +109,8 @@ var run = function (task, done) {
       //require("fs").writeFileSync(expect.loc, actualCode);
       throw err;
     }
+
+    checkAst(result, actual);
   }
 
   if (task.sourceMap) {

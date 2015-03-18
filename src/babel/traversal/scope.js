@@ -199,7 +199,7 @@ export default class Scope {
    */
 
   generateTempBasedOnNode(node: Object): ?Object {
-    if (t.isThisExpression(node)) {
+    if (t.isThisExpression(node) || t.isSuperExpression(node)) {
       return null;
     }
 

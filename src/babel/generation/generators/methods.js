@@ -21,11 +21,13 @@ export function _method(node, print) {
   var kind  = node.kind;
   var key   = node.key;
 
-  if (!kind || kind === "init") {
+  if (kind === "method" || kind === "init") {
     if (value.generator) {
       this.push("*");
     }
-  } else {
+  }
+
+  if (kind === "get" || kind === "set") {
     this.push(kind + " ");
   }
 

@@ -1,8 +1,8 @@
 "use strict";
 
-export { foo as foo };
+export { foo };
 
-export { bar as bar };
+export { bar };
 
 function foo() {}
 

@@ -44,7 +44,7 @@ export function check(node) {
 export function VariableDeclaration(node, parent, scope, file) {
   if (!isLet(node, parent)) return;
 
-  if (isLetInitable(node) && file.transformers["es6.blockScopingTDZ"].canTransform) {
+  if (isLetInitable(node) && file.transformers["es6.blockScopingTDZ"].canTransform()) {
     var nodes = [node];
 
     for (var i = 0; i < node.declarations.length; i++) {

@@ -1,4 +1,5 @@
 {
   "blacklist": ["useStrict", "es6.blockScoping", "regenerator"],
-  "loose": ["es6.modules"]
+  "loose": ["es6.modules"],
+  "breakConfig": true
 }

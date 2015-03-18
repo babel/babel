@@ -2,11 +2,15 @@ import each from "lodash/collection/each";
 import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {
-  if (t.isSpecifierDefault(node)) {
-    print(t.getSpecifierName(node));
-  } else {
-    return ExportSpecifier.apply(this, arguments);
+  print(node.local);
+  if (node.imported && node.local !== node.imported) {
+    this.push(" as ");
+    print(node.imported);
   }
+}
+
+export function ImportDefaultSpecifier(node, print) {
+  print(node.local);
 }
 
 export function ExportSpecifier(node, print) {
@@ -17,8 +21,8 @@ export function ExportSpecifier(node, print) {
   }
 }
 
-export function ExportAllDeclaration(node, source) {
-  this.push("export * from");
+export function ExportAllDeclaration(node, print) {
+  this.push("export * from ");
   print(node.source);
   this.semicolon();
 }
@@ -40,17 +44,13 @@ function ExportDeclaration(node, print) {
     print(node.declaration);
     if (t.isStatement(node.declaration)) return;
   } else {
-    if (specifiers.length === 1 && t.isExportBatchSpecifier(specifiers[0])) {
-      print(specifiers[0]);
-    } else {
-      this.push("{");
-      if (specifiers.length) {
-        this.space();
-        print.join(specifiers, { separator: ", " });
-        this.space();
-      }
-      this.push("}");
+    this.push("{");
+    if (specifiers.length) {
+      this.space();
+      print.join(specifiers, { separator: ", " });
+      this.space();
     }
+    this.push("}");
 
     if (node.source) {
       this.push(" from ");
@@ -81,7 +81,7 @@ export function ImportDeclaration(node, print) {
 
       var isDefault = t.isSpecifierDefault(spec);
 
-      if (!isDefault && spec.type !== "ImportBatchSpecifier" && !foundImportSpecifier) {
+      if (!isDefault && spec.type !== "ImportNamespaceSpecifier" && !foundImportSpecifier) {
         foundImportSpecifier = true;
         this.push("{ ");
       }
@@ -100,7 +100,7 @@ export function ImportDeclaration(node, print) {
   this.semicolon();
 }
 
-export function ImportBatchSpecifier(node, print) {
+export function ImportNamespaceSpecifier(node, print) {
   this.push("* as ");
   print(node.name);
 }

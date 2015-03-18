@@ -6,6 +6,7 @@ export default class IgnoreFormatter {
     if (declar) nodes.push(t.inherits(declar, node));
   }
 
+  exportAllDeclaration() {}
   importDeclaration() {}
   importSpecifier() {}
   exportSpecifier() {}

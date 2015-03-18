@@ -80,8 +80,8 @@
   },
 
   "ImportSpecifier": {
-    "id": null,
-    "name": null
+    "local": null,
+    "imported": null
   },
 
   "LabeledStatement": {

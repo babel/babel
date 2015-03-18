@@ -12,12 +12,10 @@ export default class TransformerPass {
     this.shouldRun   = !transformer.check;
     this.handlers    = transformer.handlers;
     this.file        = file;
-
-    this.canTransform = this._canTransform();
-    this.ran          = false;
+    this.ran         = false;
   }
 
-  _canTransform(): boolean {
+  canTransform(): boolean {
     var transformer = this.transformer;
 
     var opts = this.file.opts;
@@ -33,9 +31,6 @@ export default class TransformerPass {
     // whitelist
     var whitelist = opts.whitelist;
     if (whitelist.length) return includes(whitelist, key);
-
-    // react
-    if (transformer.metadata.react && opts.react) return true;
 
     // experimental
     if (transformer.metadata.experimental && opts.experimental) return true;

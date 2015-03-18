@@ -33,7 +33,7 @@ var verifyConstructorVisitor = traverse.explode({
 
   CallExpression: {
     enter(node, parent, scope, state) {
-      if (this.get("callee").isIdentifier({ name: "super" })) {
+      if (this.get("callee").isSuperExpression()) {
         state.hasBareSuper = true;
 
         if (!state.hasSuper) {
@@ -275,7 +275,7 @@ class ClassTransformer {
 
     var kind = node.kind;
 
-    if (kind === "") {
+    if (kind === "method") {
       nameMethod.property(node, this.file, this.scope);
 
       if (this.isLoose) {

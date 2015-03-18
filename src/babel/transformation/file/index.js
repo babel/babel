@@ -21,9 +21,6 @@ import path from "path";
 import each from "lodash/collection/each";
 import * as t from "../../types";
 
-import "../../parser/jsx";
-import "../../parser/flow";
-
 var checkTransformerVisitor = {
   enter(node, parent, scope, state) {
     checkNode(state.stack, node, scope);
@@ -184,7 +181,7 @@ export default class File {
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
 
-      if (pass.canTransform) {
+      if (pass.canTransform()) {
         stack.push(pass);
 
         if (transformer.metadata.secondPass) {
@@ -270,14 +267,14 @@ export default class File {
     if (!id) {
       id = this.dynamicImportIds[name] = this.scope.generateUidIdentifier(name);
 
-      var specifiers = [t.importSpecifier(t.identifier("default"), id)];
+      var specifiers = [t.importDefaultSpecifier(id)];
       var declar = t.importDeclaration(specifiers, t.literal(source));
       declar._blockHoist = 3;
 
       this.dynamicImported.push(declar);
       if (noDefault) this.dynamicImportedNoDefault.push(declar);
 
-      if (this.transformers["es6.modules"].canTransform) {
+      if (this.transformers["es6.modules"].canTransform()) {
         this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
       } else {
         this.dynamicImports.push(declar);
@@ -390,24 +387,14 @@ export default class File {
       plugins:  {}
     };
 
-    var transformers = parseOpts.transformers = {};
+    var features = parseOpts.features = {};
     for (var key in this.transformers) {
       var transformer = this.transformers[key];
-
-      transformers[key] = transformer.canTransform;
-
-      if (transformer.parser) {
-        parseOpts.plugins[key] = true;
-      }
+      features[key] = transformer.canTransform();
     }
 
     parseOpts.looseModules = this.isLoose("es6.modules");
-    parseOpts.strictMode = transformers.strict;
-
-    if (!opts.standardOnly) {
-      parseOpts.plugins.jsx = true;
-      parseOpts.plugins.flow = true;
-    }
+    parseOpts.strictMode = features.strict;
 
     //
 
@@ -441,7 +428,7 @@ export default class File {
     this.lastStatements = t.getLastStatements(ast.program);
 
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canTransform) {
+    if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
       modFormatter.init();
     }
 

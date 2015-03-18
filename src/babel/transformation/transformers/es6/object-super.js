@@ -1,9 +1,7 @@
 import ReplaceSupers from "../../helpers/replace-supers";
 import * as t from "../../../types";
 
-export function check(node) {
-  return t.isIdentifier(node, { name: "super" });
-}
+export var check = t.isSuperExpression;
 
 function Property(node, scope, getObjectRef, file) {
   if (!node.method) return;

@@ -252,8 +252,8 @@ export default function (exports, opts) {
     }
   };
 
-  exports.ExportDeclaration = function (node, parent, scope, file) {
-    if (node.default && react.isCreateClass(node.declaration)) {
+  exports.ExportDefaultDeclaration = function (node, parent, scope, file) {
+    if (react.isCreateClass(node.declaration)) {
       addDisplayName(file.opts.basename, node.declaration);
     }
   };

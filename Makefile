@@ -8,7 +8,7 @@ BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test
 
 build-core:
 	node $(BABEL_CMD) src/babel --out-dir lib/babel --copy-files
@@ -42,7 +42,7 @@ clean:
 test-clean:
 	rm -rf test/tmp
 
-test:
+test: test-parser
 	node $(MOCHA_CMD)
 	make test-clean
 
@@ -54,6 +54,9 @@ test-cov:
 	rm -rf coverage
 	make build-core-test
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
+
+test-parser:
+	node vendor/acorn/test/run.js
 
 test-travis: bootstrap build test
 

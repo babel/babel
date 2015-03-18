@@ -57,6 +57,10 @@ export function ThisExpression() {
   this.push("this");
 }
 
+export function SuperExpression() {
+  this.push("super");
+}
+
 export function CallExpression(node, print) {
   print(node.callee);
 

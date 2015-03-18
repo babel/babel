@@ -17,7 +17,6 @@ program.option("-p, --print [code]", "Evaluate script and print result");
 program.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
 program.option("-r, --experimental", "Enable experimental support for proposed ES7 features");
-program.option("-g, --playground", "Enable playground support");
 program.option("-w, --whitelist [whitelist]", "Whitelist of transformers to ONLY use", util.list);
 program.option("-b, --blacklist [blacklist]", "Blacklist of transformers to NOT use", util.list);
 program.option("-o, --optional [optional]", "List of optional transformers to enable", util.list);
@@ -32,7 +31,6 @@ program.parse(process.argv);
 babel.register({
   experimental: program.experimental,
   extensions:   program.extensions,
-  playground:   program.playground,
   blacklist:    program.blacklist,
   whitelist:    program.whitelist,
   optional:     program.optional,
@@ -47,8 +45,7 @@ var _eval = function (code, filename) {
     blacklist: ["useStrict"].concat(program.blacklist || []),
     whitelist: program.whitelist,
     optional: program.optional,
-    experimental: program.experimental,
-    playground: program.playground
+    experimental: program.experimental
   }).code;
 
   return vm.runInThisContext(code, {

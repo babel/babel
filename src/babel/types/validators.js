@@ -7,102 +7,90 @@ import * as t from "./index";
  */
 
 export function isReferenced(node: Object, parent: Object): boolean {
-  // yes: PARENT[NODE]
-  // yes: NODE.child
-  // no: parent.CHILD
-  if (t.isMemberExpression(parent)) {
-    if (parent.property === node && parent.computed) {
-      return true;
-    } else if (parent.object === node) {
-      return true;
-    } else {
+  switch (parent.type) {
+    // yes: PARENT[NODE]
+    // yes: NODE.child
+    // no: parent.CHILD
+    case "MemberExpression":
+      if (parent.property === node && parent.computed) {
+        return true;
+      } else if (parent.object === node) {
+        return true;
+      } else {
+        return false;
+      }
+
+    // yes: { [NODE]: "" }
+    // no: { NODE: "" }
+    case "Property":
+      if (parent.key === node) {
+        return parent.computed;
+      }
+
+    // no: var NODE = init;
+    // yes: var id = NODE;
+    case "VariableDeclarator":
+      return parent.id !== node;
+
+    // no: function NODE() {}
+    // no: function foo(NODE) {}
+    case "ArrowFunctionExpression":
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+      for (var i = 0; i < parent.params.length; i++) {
+        var param = parent.params[i];
+        if (param === node) return false;
+      }
+
+      return parent.id !== node;
+
+    // no: export { foo as NODE };
+    case "ExportSpecifier":
+      return parent.exported !== node;
+
+    // no: import { NODE as foo } from "foo";
+    case "ImportSpecifier":
+      return parent.imported !== node;
+
+    // no: class NODE {}
+    case "ClassDeclaration":
+    case "ClassExpression":
+      return parent.id !== node;
+
+    // yes: class { [NODE](){} }
+    case "MethodDefinition":
+      return parent.key === node && parent.computed;
+
+    // no: NODE: for (;;) {}
+    case "LabeledStatement":
       return false;
-    }
-  }
 
-  // yes: { [NODE]: "" }
-  // no: { NODE: "" }
-  if (t.isProperty(parent) && parent.key === node) {
-    return parent.computed;
-  }
+    // no: try {} catch (NODE) {}
+    case "CatchClause":
+      return parent.param !== node;
 
-  // no: var NODE = init;
-  // yes: var id = NODE;
-  if (t.isVariableDeclarator(parent)) {
-    return parent.id !== node;
-  }
+    // no: function foo(...NODE) {}
+    case "RestElement":
+      return false;
 
-  // no: function NODE() {}
-  // no: function foo(NODE) {}
-  if (t.isFunction(parent)) {
-    for (var i = 0; i < parent.params.length; i++) {
-      var param = parent.params[i];
-      if (param === node) return false;
-    }
+    // no: [NODE = foo] = [];
+    // yes: [foo = NODE] = [];
+    case "AssignmentPattern":
+      return parent.right === node;
 
-    return parent.id !== node;
-  }
+    // no: [NODE] = [];
+    // no: ({ NODE }) = [];
+    case "ObjectPattern":
+    case "ArrayPattern":
+      return false;
 
-  // no: export { foo as NODE };
-  if (t.isExportSpecifier(parent, { name: node })) {
-    return false;
-  }
+    // no: import NODE from "bar";
+    case "ImportSpecifier":
+      return false;
 
-  // no: import { NODE as foo } from "foo";
-  if (t.isImportSpecifier(parent, { id: node })) {
-    return false;
-  }
-
-  // no: class NODE {}
-  if (t.isClass(parent)) {
-    return parent.id !== node;
-  }
-
-  // yes: class { [NODE](){} }
-  if (t.isMethodDefinition(parent)) {
-    return parent.key === node && parent.computed;
-  }
-
-  // no: NODE: for (;;) {}
-  if (t.isLabeledStatement(parent)) {
-    return false;
-  }
-
-  // no: try {} catch (NODE) {}
-  if (t.isCatchClause(parent)) {
-    return parent.param !== node;
-  }
-
-  // no: function foo(...NODE) {}
-  if (t.isRestElement(parent)) {
-    return false;
-  }
-
-  // no: [NODE = foo] = [];
-  // yes: [foo = NODE] = [];
-  if (t.isAssignmentPattern(parent)) {
-    return parent.right === node;
-  }
-
-  // no: [NODE] = [];
-  // no: ({ NODE }) = [];
-  if (t.isPattern(parent)) {
-    return false;
-  }
-
-  // no: import NODE from "bar";
-  if (t.isImportSpecifier(parent)) {
-    return false;
-  }
-
-  // no: import * as NODE from "foo";
-  if (t.isImportBatchSpecifier(parent)) {
-    return false;
-  }
-
-  // no: class Foo { private NODE; }
-  if (t.isPrivateDeclaration(parent)) {
-    return false;
+    // no: import * as NODE from "foo";
+    case "ImportNamespaceSpecifier":
+      return false;
   }
 
   return true;
@@ -154,7 +142,7 @@ export function isVar(node: Object): boolean {
  */
 
 export function isSpecifierDefault(specifier: Object): boolean {
-  return specifier.default || t.isIdentifier(specifier.id) && specifier.id.name === "default";
+  return t.isImportDefaultSpecifier(specifier) || t.isIdentifier(specifier.imported || specifier.exported, { name: "default" });
 }
 
 /**

@@ -29,8 +29,8 @@ export function ExportDefaultDeclaration(node, parent, scope) {
 
   if (t.isClassDeclaration(declar)) {
     // export default class Foo {};
-    this.node = [getDeclar(), node];
     node.declaration = declar.id;
+    return [getDeclar(), node];
   } else if (t.isClassExpression(declar)) {
     // export default class {};
     var temp = scope.generateUidIdentifier("default");
@@ -59,12 +59,12 @@ export function ExportNamedDeclaration(node, parent, scope) {
 
   if (t.isClassDeclaration(declar)) {
     // export class Foo {}
-    node.specifiers  = [t.importSpecifier(declar.id, declar.id)];
+    node.specifiers  = [t.exportSpecifier(declar.id, declar.id)];
     node.declaration = null;
     return [getDeclar(), node];
   } else if (t.isFunctionDeclaration(declar)) {
     // export function Foo() {}
-    node.specifiers  = [t.importSpecifier(declar.id, declar.id)];
+    node.specifiers  = [t.exportSpecifier(declar.id, declar.id)];
     node.declaration = null;
     node._blockHoist = 2;
     return [getDeclar(), node];

@@ -1,4 +1,5 @@
 import * as messages from "../../messages";
+import traverse from "../../traversal";
 import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as util from  "../../util";
@@ -51,17 +52,17 @@ var importsVisitor = {
   }
 };
 
-var exportsVisitor = {
+var exportsVisitor = traverse.explode({
   ExportDeclaration: {
     enter(node, parent, scope, formatter) {
-      var declar = this.get("declaration");
       formatter.hasLocalImports = true;
 
+      var declar = this.get("declaration");
       if (declar.isStatement()) {
         extend(formatter.localExports, declar.getBindingIdentifiers());
       }
 
-      if (!node.default) {
+      if (!t.isExportDefaultDeclaration(node)) {
         formatter.hasNonDefaultExports = true;
       }
 
@@ -70,7 +71,7 @@ var exportsVisitor = {
       }
     }
   }
-};
+});
 
 export default class DefaultFormatter {
   constructor(file) {
@@ -94,14 +95,16 @@ export default class DefaultFormatter {
   }
 
   doDefaultExportInterop(node) {
-    return node.default && !this.noInteropRequireExport && !this.hasNonDefaultExports;
+    return t.isExportDefaultDeclaration(node) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
 
   bumpImportOccurences(node) {
     var source = node.source.value;
     var occurs = this.localImportOccurences;
     occurs[source] ||= 0;
-    occurs[source] += node.specifiers.length;
+    if (node.specifiers) {
+      occurs[source] += node.specifiers.length;
+    }
   }
 
   getLocalExports() {
@@ -211,31 +214,29 @@ export default class DefaultFormatter {
     }
   }
 
+  exportAllDeclaration(node, nodes) {
+    var nodes = [];
+    var ref = this.getExternalReference(node, nodes);
+    nodes.push(this.buildExportsWildcard(ref, node));
+    return nodes;
+  }
+
   exportSpecifier(specifier, node, nodes) {
     if (node.source) {
       var ref = this.getExternalReference(node, nodes);
 
-      if (t.isExportBatchSpecifier(specifier)) {
-        // export * from "foo";
-        nodes.push(this.buildExportsWildcard(ref, node));
+      if (t.isSpecifierDefault(specifier) && !this.noInteropRequireExport) {
+        // importing a default so we need to normalize it
+        ref = t.callExpression(this.file.addHelper("interop-require"), [ref]);
       } else {
-        if (t.isSpecifierDefault(specifier) && !this.noInteropRequireExport) {
-          // importing a default so we need to normalize it
-          ref = t.callExpression(this.file.addHelper("interop-require"), [ref]);
-        } else {
-          ref = t.memberExpression(ref, t.getSpecifierId(specifier));
-        }
-
-        // export { foo } from "test";
-        nodes.push(this.buildExportsAssignment(
-          node.local,
-          ref,
-          node
-        ));
+        ref = t.memberExpression(ref, specifier.local);
       }
+
+      // export { foo } from "test";
+      nodes.push(this.buildExportsAssignment(specifier.exported, ref, node));
     } else {
       // export { foo };
-      nodes.push(this.buildExportsAssignment(specifier.local, specifier.exported, node));
+      nodes.push(this.buildExportsAssignment(specifier.exported, specifier.local, node));
     }
   }
 
@@ -259,7 +260,7 @@ export default class DefaultFormatter {
 
     var id = declar.id;
 
-    if (node.default) {
+    if (t.isExportDefaultDeclaration(node)) {
       id = t.identifier("default");
     }
 

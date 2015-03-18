@@ -18,7 +18,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
   };
 
   importSpecifier(specifier, node, nodes) {
-    var variableName = node.local;
+    var variableName = specifier.local;
 
     var ref = this.getExternalReference(node, nodes);
 
@@ -33,8 +33,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
       }
       nodes.push(t.variableDeclaration("var", [t.variableDeclarator(variableName, ref)]));
     } else {
-      if (specifier.type === "ImportBatchSpecifier") {
-
+      if (t.isImportNamespaceSpecifier(specifier)) {
         if (!this.noInteropRequireImport) {
           ref = t.callExpression(this.file.addHelper("interop-require-wildcard"), [ref]);
         }
@@ -48,7 +47,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
         nodes.push(t.variableDeclaration("var", [
           t.variableDeclarator(
             variableName,
-            t.memberExpression(ref, t.getSpecifierId(specifier))
+            t.memberExpression(ref, specifier.imported)
           )
         ]));
       }

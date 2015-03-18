@@ -3,7 +3,7 @@ import isFunction from "lodash/lang/isFunction";
 import traverse from "../traversal";
 import isObject from "lodash/lang/isObject";
 import assign from "lodash/object/assign";
-import acorn from "../../../../acorn";
+import acorn from "../../../vendor/acorn";
 import File from "./file";
 import each from "lodash/collection/each";
 
@@ -33,10 +33,6 @@ export default class Transformer {
     this.handlers = this.normalize(transformer);
     this.opts     ||= {};
     this.key      = transformerKey;
-
-    if (this.parser) {
-      acorn.plugins[key] = this.parser(acorn.Parser.prototype, acorn.tokTypes);
-    }
   }
 
   normalize(transformer: Object): Object {

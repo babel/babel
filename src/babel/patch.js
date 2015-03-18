@@ -28,4 +28,26 @@ def("RestElement")
   .build("argument")
   .field("argument", def("expression"));
 
+def("ExportDefaultDeclaration")
+  .bases("Declaration")
+  .build("declaration")
+  .field("declaration", or(
+    def("Declaration"),
+    def("Expression"),
+    null
+  ));
+
+def("ExportNamedDeclaration")
+  .bases("Declaration")
+  .build("declaration")
+  .field("declaration", or(
+    def("Declaration"),
+    def("Expression"),
+    null
+  ))
+  .field("specifiers", [or(
+    def("ExportSpecifier")
+  )])
+  .field("source", or(def("ModuleSpecifier"), null));
+
 types.finalize();

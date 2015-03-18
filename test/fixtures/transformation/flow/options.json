@@ -1,5 +1,4 @@
 {
-  "experimental": true,
-  "whitelist": ["flow"],
+  "whitelist": ["flow", "es7.asyncFunctions"],
   "noCheckAst": true
 }

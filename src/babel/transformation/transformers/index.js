@@ -1,4 +1,6 @@
 export default {
+  "es7.asyncFunctions":                    require("./es7/async-functions"),
+
   strict:                                  require("./other/strict"),
 
   _validation:                             require("./internal/validation"),

@@ -38,6 +38,7 @@ getBindingIdentifiers.keys = {
   AssignmentExpression: ["left"],
   ImportSpecifier: ["local"],
   ImportNamespaceSpecifier: ["local"],
+  ImportDefaultSpecifier: ["local"],
   VariableDeclarator: ["id"],
   FunctionDeclaration: ["id"],
   FunctionExpression: ["id"],

@@ -25,7 +25,15 @@ export function ImportDeclaration(node, parent, scope, file) {
 }
 
 export function ExportAllDeclaration(node, parent, scope, file) {
-  return file.moduleFormatter.exportAllDeclaration(node, parent);
+  var nodes = [];
+  file.moduleFormatter.exportAllDeclaration(node, nodes, parent);
+  return nodes;
+}
+
+export function ExportDefaultDeclaration(node, parent, scope, file) {
+  var nodes = [];
+  file.moduleFormatter.exportDeclaration(node, nodes, parent);
+  return nodes;
 }
 
 export function ExportNamedDeclaration(node, parent, scope, file) {
@@ -33,7 +41,6 @@ export function ExportNamedDeclaration(node, parent, scope, file) {
   if (this.get("declaration").isTypeAlias()) return;
 
   var nodes = [];
-  var i;
 
   if (node.declaration) {
     // make sure variable exports have an initializer
@@ -45,13 +52,13 @@ export function ExportNamedDeclaration(node, parent, scope, file) {
 
     file.moduleFormatter.exportDeclaration(node, nodes, parent);
   } else if (node.specifiers) {
-    for (i = 0; i < node.specifiers.length; i++) {
+    for (let i = 0; i < node.specifiers.length; i++) {
       file.moduleFormatter.exportSpecifier(node.specifiers[i], node, nodes, parent);
     }
   }
 
   if (node._blockHoist) {
-    for (i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++) {
       nodes[i]._blockHoist = node._blockHoist;
     }
   }

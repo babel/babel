@@ -1,25 +1,30 @@
 import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
 import codeFrame from "./code-frame";
-import acorn from "../../acorn";
+import acorn from "../../../vendor/acorn";
 
 export default function (opts, code, callback) {
   try {
     var comments = [];
     var tokens   = [];
 
-    var ast = acorn.parse(code, {
+    var parseOpts = {
       allowImportExportEverywhere: opts.looseModules,
       allowReturnOutsideFunction:  opts.looseModules,
-      transformers:                opts.transformers || {},
       ecmaVersion:                 6,
       strictMode:                  opts.strictMode,
       onComment:                   comments,
       locations:                   true,
-      plugins:                     opts.plugins || [],
+      features:                    opts.features || {},
+      plugins:                     opts.plugins || {},
       onToken:                     tokens,
       ranges:                      true
-    });
+    };
+
+    parseOpts.plugins.flow = true;
+    parseOpts.plugins.jsx = true;
+
+    var ast = acorn.parse(code, parseOpts);
 
     estraverse.attachComments(ast, comments, tokens);
 

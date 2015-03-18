@@ -2,7 +2,7 @@ import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 import * as t from "../../../types";
 
 export function manipulateOptions(opts) {
-  opts.experimental = true;
+  opts.optional.push("es7.asyncFunctions");
   opts.blacklist.push("regenerator");
 }
 
