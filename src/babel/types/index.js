@@ -24,11 +24,12 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
-export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
-export const NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
-export const FLATTENABLE_KEYS        = ["body", "expressions"];
-export const FOR_INIT_KEYS           = ["left", "init"];
-export const COMMENT_KEYS            = ["leadingComments", "trailingComments"];
+
+export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
+export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String", "Promise", "Set", "Map", "WeakMap", "WeakSet"];
+export var FLATTENABLE_KEYS        = ["body", "expressions"];
+export var FOR_INIT_KEYS           = ["left", "init"];
+export var COMMENT_KEYS            = ["leadingComments", "trailingComments"];
 
 export const VISITOR_KEYS = require("./visitor-keys");
 export const BUILDER_KEYS = require("./builder-keys");
