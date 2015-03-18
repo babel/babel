@@ -2053,5 +2053,6 @@ test('export async function foo(){}', {
   }]
 }, {
   ecmaVersion: 7,
+  sourceType: "module",
   features: { "es7.asyncFunctions": true }
 });

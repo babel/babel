@@ -460,27 +460,19 @@ pp.flow_parsePrimaryType = function () {
     case tt.parenL:
       this.next();
 
-      var tmpId;
-
       // Check to see if this is actually a grouped type
       if (this.type !== tt.parenR && this.type !== tt.ellipsis) {
         if (this.type === tt.name) {
-          //raise(tokStart, "Grouped types are currently the only flow feature not supported, request it?");
-          //tmpId = identToTypeAnnotation(start, node, parseIdent());
-          //next();
-          //isGroupedType = this.type !== tt.question && this.type !== tt.colon;
+          var token = this.lookahead().type;
+          isGroupedType = token !== tt.question && token !== tt.colon;
         } else {
           isGroupedType = true;
         }
       }
 
       if (isGroupedType) {
-        if (tmpId && tt.parenR) {
-          type = tmpId;
-        } else {
-          type = this.flow_parseType();
-          this.expect(tt.parenR);
-        }
+        type = this.flow_parseType();
+        this.expect(tt.parenR);
 
         // If we see a => next then someone was probably confused about
         // function types, so we can provide a better error message
@@ -627,6 +619,19 @@ acorn.plugins.flow = function (instance) {
     };
   });
 
+  instance.extend("parseStatement", function (inner) {
+    return function(declaration, topLevel) {
+      // strict mode handling of `interface` since it's a reserved word
+      if (this.strict && this.type === tt.name && this.value === "interface") {
+        var node = this.startNode();
+        this.next();
+        return this.flow_parseInterface(node);
+      } else {
+        return inner.call(this, declaration, topLevel);
+      }
+    };
+  });
+
   instance.extend("parseExpressionStatement", function (inner) {
     return function (node, expr) {
       if (expr.type === "Identifier") {
@@ -644,6 +649,12 @@ acorn.plugins.flow = function (instance) {
       }
 
       return inner.call(this, node, expr);
+    };
+  });
+
+  instance.extend("shouldParseExportDeclaration", function (inner) {
+    return function () {
+      return this.isContextual("type") || inner.call(this);
     };
   });
 
@@ -669,13 +680,19 @@ acorn.plugins.flow = function (instance) {
     };
   });
 
-  instance.extend("readToken", function(inner) {
+  instance.extend("readToken", function (inner) {
     return function(code) {
       if (this.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
       } else {
         return inner.call(this, code);
       }
+    };
+  });
+
+  instance.extend("jsx_readToken", function (inner) {
+    return function () {
+      if (!this.inType) return inner.call(this);
     };
   });
 
