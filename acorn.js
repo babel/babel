@@ -2624,7 +2624,7 @@
         if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
-      var prop = this.startNode(), isGenerator, isAsync, start;
+      var prop = this.startNode(), isGenerator = false, isAsync = false, start;
       if (this.options.features["es7.objectRestSpread"] && this.type === tt.ellipsis) {
         prop = this.parseSpread();
         prop.type = "SpreadProperty";
@@ -2813,7 +2813,7 @@
     while (!this.eat(tt.braceR)) {
       if (this.eat(tt.semi)) continue;
       var method = this.startNode();
-      var isGenerator = this.eat(tt.star), isAsync;
+      var isGenerator = this.eat(tt.star), isAsync = false;
       this.parsePropertyName(method);
       if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
           method.key.name === "static") {
