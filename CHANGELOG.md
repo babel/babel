@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 4.7.16
+
+ * **Bug Fix**
+  * Fix constructor spreading of typed arrays.
+  * Fix break/continue/return aliasing of non-loops in block scoping transformer.
+
 ## 4.7.15
 
  * **Bug Fix**
