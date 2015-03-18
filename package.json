@@ -68,7 +68,7 @@
     "trim-right": "^1.0.0"
   },
   "devDependencies": {
-    "babel": "4.6.0",
+    "babel": "4.7.13",
     "browserify": "^9.0.3",
     "chai": "^2.0.0",
     "eslint": "^0.15.1",
