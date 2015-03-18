@@ -2,10 +2,10 @@ import each from "lodash/collection/each";
 import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {
-  print(node.local);
-  if (node.imported && node.local !== node.imported) {
+  print(node.imported);
+  if (node.local && node.local !== node.imported) {
     this.push(" as ");
-    print(node.imported);
+    print(node.local);
   }
 }
 
@@ -79,7 +79,7 @@ export function ImportDeclaration(node, print) {
         this.push(", ");
       }
 
-      if (!t.isSpecifierDefault(spec) && !foundImportSpecifier) {
+      if (!t.isImportDefaultSpecifier(spec) && !t.isImportNamespaceSpecifier(spec) && !foundImportSpecifier) {
         foundImportSpecifier = true;
         this.push("{ ");
       }
@@ -100,5 +100,5 @@ export function ImportDeclaration(node, print) {
 
 export function ImportNamespaceSpecifier(node, print) {
   this.push("* as ");
-  print(node.name);
+  print(node.local);
 }

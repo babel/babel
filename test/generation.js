@@ -26,7 +26,16 @@ _.each(helper.get("generation"), function (testSuite) {
         var expect = task.expect;
         var actual = task.actual;
 
-        var actualAst  = parse({ filename: actual.loc, experimental: true }, actual.code);
+        var actualAst  = parse({
+          filename: actual.loc,
+          experimental: true,
+          strictMode: false,
+          sourceType: "module",
+          features: {
+            "es7.comprehensions": true,
+            "es7.asyncFunctions": true
+          }
+        }, actual.code);
         var actualCode = generate(actualAst, null, actual.code).code;
 
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);

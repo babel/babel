@@ -11,12 +11,6 @@ export function RestElement(node, print) {
 
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
 
-export function VirtualPropertyExpression(node, print) {
-  print(node.object);
-  this.push("::");
-  print(node.property);
-}
-
 export function ObjectExpression(node, print) {
   var props = node.properties;
 

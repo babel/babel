@@ -200,9 +200,6 @@ class ClassTransformer {
         } else {
           this.pushMethod(node);
         }
-      } else if (t.isPrivateDeclaration(node)) {
-        this.closure = true;
-        body.unshift(node);
       } else if (t.isClassProperty(node)) {
         this.pushProperty(node);
       }

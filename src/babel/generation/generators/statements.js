@@ -204,15 +204,9 @@ export function VariableDeclaration(node, print, parent) {
   }
 }
 
-export function PrivateDeclaration(node, print) {
-  this.push("private ");
-  print.join(node.declarations, { separator: ", " });
-  this.semicolon();
-}
-
 export function VariableDeclarator(node, print) {
   print(node.id);
-  //print(node.id.typeAnnotation);
+  print(node.id.typeAnnotation);
   if (node.init) {
     this.space();
     this.push("=");

@@ -51,7 +51,6 @@ getBindingIdentifiers.keys = {
   Property: ["value"],
   ComprehensionBlock: ["left"],
   AssignmentPattern: ["left"],
-  PrivateDeclaration: ["declarations"],
   ComprehensionExpression: ["blocks"],
   ImportDeclaration: ["specifiers"],
   VariableDeclaration: ["declarations"],
