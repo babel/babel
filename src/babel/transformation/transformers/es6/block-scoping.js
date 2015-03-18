@@ -527,10 +527,6 @@ class BlockScoping {
     }
 
     if (has.hasBreakContinue) {
-      if (!loop) {
-        throw new Error("Aren't in a loop and we're trying to reassign breaks and continues, something is going wrong here.");
-      }
-
       for (var key in has.map) {
         cases.push(t.switchCase(t.literal(key), [has.map[key]]));
       }
