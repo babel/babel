@@ -25,7 +25,7 @@ function registerType(type: string, skipAliasCheck?: boolean) {
 }
 
 export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
-export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String"];
+export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String", "Promise"];
 export var FLATTENABLE_KEYS        = ["body", "expressions"];
 export var FOR_INIT_KEYS           = ["left", "init"];
 export var COMMENT_KEYS            = ["leadingComments", "trailingComments"];
