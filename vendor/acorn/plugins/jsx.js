@@ -1,4 +1,4 @@
-import acorn from "../../acorn";
+var acorn = require("../acorn");
 
 var tt = acorn.tokTypes;
 var tc = acorn.tokContexts;
@@ -614,26 +614,29 @@ acorn.plugins.jsx = function(instance) {
 
   instance.extend("readToken", function(inner) {
     return function(code) {
-      var context = this.curContext();
+      if (!this.inType) {
+        var context = this.curContext();
 
-      if (context === tc.j_expr) return this.jsx_readToken();
+        if (context === tc.j_expr) return this.jsx_readToken();
 
-      if (context === tc.j_oTag || context === tc.j_cTag) {
-        if (acorn.isIdentifierStart(code)) return this.jsx_readWord();
+        if (context === tc.j_oTag || context === tc.j_cTag) {
+          if (acorn.isIdentifierStart(code)) return this.jsx_readWord();
 
-        if (code == 62) {
-          ++this.pos;
-          return this.finishToken(tt.jsxTagEnd);
+          if (code == 62) {
+            ++this.pos;
+            return this.finishToken(tt.jsxTagEnd);
+          }
+
+          if ((code === 34 || code === 39) && context == tc.j_oTag)
+            return this.jsx_readString(code);
         }
 
-        if ((code === 34 || code === 39) && context == tc.j_oTag)
-          return this.jsx_readString(code);
+        if (code === 60 && this.exprAllowed) {
+          ++this.pos;
+          return this.finishToken(tt.jsxTagStart);
+        }
       }
 
-      if (code === 60 && this.exprAllowed) {
-        ++this.pos;
-        return this.finishToken(tt.jsxTagStart);
-      }
       return inner.call(this, code);
     };
   });

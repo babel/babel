@@ -1,4 +1,4 @@
-import acorn from "../../acorn";
+var acorn = require("../acorn");
 
 var pp = acorn.Parser.prototype;
 var tt = acorn.tokTypes;
@@ -669,6 +669,54 @@ acorn.plugins.flow = function (instance) {
     };
   });
 
+  instance.extend("readToken", function(inner) {
+    return function(code) {
+      if (this.inType && (code === 62 || code === 60)) {
+        return this.finishOp(tt.relational, 1);
+      } else {
+        return inner.call(this, code);
+      }
+    };
+  });
+
+  instance.extend("parseParenArrowList", function (inner) {
+    return function (start, exprList, isAsync) {
+      for (var i = 0; i < exprList.length; i++) {
+        var listItem = exprList[i];
+        if (listItem.type === "TypeCastExpression") {
+          var expr = listItem.expression;
+          expr.typeAnnotation = listItem.typeAnnotation;
+          exprList[i] = expr;
+        }
+      }
+      return inner.call(this, start, exprList, isAsync);
+    };
+  });
+
+  instance.extend("parseClassMethod", function (inner) {
+    return function (classBody, method, isGenerator, isAsync) {
+      var classProperty = false;
+
+      if (this.type === tt.colon) {
+        method.typeAnnotation = this.flow_parseTypeAnnotation();
+        classProperty = true;
+      }
+
+      if (classProperty) {
+        this.semicolon();
+        classBody.body.push(this.finishNode(method, "ClassProperty"));
+      } else {
+        var typeParameters;
+        if (this.isRelational("<")) {
+          typeParameters = this.flow_parseTypeParameterDeclaration();
+        }
+        method.value = this.parseMethod(isGenerator, isAsync);
+        method.value.typeParameters = typeParameters;
+        classBody.body.push(this.finishNode(method, "MethodDefinition"));
+      }
+    };
+  });
+
   instance.extend("parseClassSuper", function (inner) {
     return function (node, isStatement) {
       inner.call(this, node, isStatement);
@@ -692,6 +740,18 @@ acorn.plugins.flow = function (instance) {
     };
   });
 
+  instance.extend("parseObjPropValue", function (inner) {
+    return function (prop) {
+      var typeParameters;
+      if (this.isRelational("<")) {
+        typeParameters = this.flow_parseTypeParameterDeclaration();
+        if (this.type !== tt.parenL) this.unexpected();
+      }
+      inner.apply(this, arguments);
+      prop.value.typeParameters = typeParameters;
+    };
+  });
+
   instance.extend("parseAssignableListItemTypes", function (inner) {
     return function (param) {
       if (this.eat(tt.question)) {
@@ -702,6 +762,24 @@ acorn.plugins.flow = function (instance) {
       }
       this.finishNode(param, param.type);
       return param;
+    };
+  });
+
+  instance.extend("parseImportSpecifiers", function (inner) {
+    return function (node) {
+      node.isType = false;
+      if (this.isContextual("type")) {
+        var start = this.currentPos();
+        var typeId = this.parseIdent();
+        if ((this.type === tt.name && this.value !== "from") || this.type === tt.braceL || this.type === tt.star) {
+          node.isType = true;
+        } else {
+          node.specifiers.push(this.parseImportSpecifierDefault(typeId, start));
+          if (this.isContextual("from")) return;
+          this.eat(tt.comma);
+        }
+      }
+      inner.call(this, node);
     };
   });
 
