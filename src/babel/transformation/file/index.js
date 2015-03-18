@@ -106,12 +106,10 @@ export default class File {
 
       var val = opts[key];
       if (!val && option.optional) continue;
-      if (val == null) val = option.default || null;
+      if (val == null) val = option.default || val;
 
       var optionParser = optionParsers[option.type];
-      if (optionParser) {
-        val = optionParser(key, val);
-      }
+      if (optionParser) val = optionParser(key, val);
 
       opts[key] = val;
     }
@@ -384,8 +382,9 @@ export default class File {
     //
 
     var parseOpts = {
-      filename: opts.filename,
-      plugins:  {}
+      highlightErrors: opts.highlightErrors,
+      filename:        opts.filename,
+      plugins:         {}
     };
 
     var features = parseOpts.features = {};
