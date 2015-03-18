@@ -11,6 +11,22 @@ export function ForOfStatement(node, parent, scope, file) {
 
 export { ForOfStatement as ForInStatement };
 
+export function MethodDefinition(node) {
+  if (node.kind !== "constructor") {
+    // get constructor() {}
+    var isConstructor = !node.computed && t.isIdentifier(node.key, { name: "constructor" });
+
+    // get ["constructor"]() {}
+    isConstructor ||= t.isLiteral(node.key, { value: "constructor" });
+
+    if (isConstructor) {
+      throw this.errorWithNode(messages.get("classesIllegalConstructorKind"));
+    }
+  }
+
+  Property.apply(this, arguments);
+}
+
 export function Property(node, parent, scope, file) {
   if (node.kind === "set") {
     if (node.value.params.length !== 1) {
@@ -23,8 +39,6 @@ export function Property(node, parent, scope, file) {
     }
   }
 }
-
-export { Property as MethodDefinition };
 
 export function BlockStatement(node) {
   for (var i = 0; i < node.body.length; i++) {

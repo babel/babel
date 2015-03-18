@@ -79,9 +79,7 @@ export function ImportDeclaration(node, print) {
         this.push(", ");
       }
 
-      var isDefault = t.isSpecifierDefault(spec);
-
-      if (!isDefault && spec.type !== "ImportNamespaceSpecifier" && !foundImportSpecifier) {
+      if (!t.isSpecifierDefault(spec) && !foundImportSpecifier) {
         foundImportSpecifier = true;
         this.push("{ ");
       }

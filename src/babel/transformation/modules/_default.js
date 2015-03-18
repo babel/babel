@@ -215,17 +215,15 @@ export default class DefaultFormatter {
   }
 
   exportAllDeclaration(node, nodes) {
-    var nodes = [];
     var ref = this.getExternalReference(node, nodes);
     nodes.push(this.buildExportsWildcard(ref, node));
-    return nodes;
   }
 
   exportSpecifier(specifier, node, nodes) {
     if (node.source) {
       var ref = this.getExternalReference(node, nodes);
 
-      if (t.isSpecifierDefault(specifier) && !this.noInteropRequireExport) {
+      if (specifier.local.name === "default" && !this.noInteropRequireExport) {
         // importing a default so we need to normalize it
         ref = t.callExpression(this.file.addHelper("interop-require"), [ref]);
       } else {

@@ -50,7 +50,7 @@ function four() {
 four({ foo: "foo" });
 
 function five(obj) {
-  var fn = function () {
+  var fn = function fn() {
     return obj.arguments[0].foo + "bar";
   };
   return fn();
@@ -58,7 +58,7 @@ function five(obj) {
 five({ arguments: ["foo"] });
 
 function six(obj) {
-  var fn = function () {
+  var fn = function fn() {
     var fn2 = function fn2() {
       return arguments[0];
     };

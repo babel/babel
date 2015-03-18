@@ -2,6 +2,14 @@ import * as t from "../../../types";
 
 export { check } from "../internal/modules";
 
+function keepBlockHoist(node, nodes) {
+  if (node._blockHoist) {
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i]._blockHoist = node._blockHoist;
+    }
+  }
+}
+
 export function ImportDeclaration(node, parent, scope, file) {
   // flow type
   if (node.isType) return;
@@ -27,12 +35,14 @@ export function ImportDeclaration(node, parent, scope, file) {
 export function ExportAllDeclaration(node, parent, scope, file) {
   var nodes = [];
   file.moduleFormatter.exportAllDeclaration(node, nodes, parent);
+  keepBlockHoist(node, nodes);
   return nodes;
 }
 
 export function ExportDefaultDeclaration(node, parent, scope, file) {
   var nodes = [];
   file.moduleFormatter.exportDeclaration(node, nodes, parent);
+  keepBlockHoist(node, nodes);
   return nodes;
 }
 
@@ -57,11 +67,7 @@ export function ExportNamedDeclaration(node, parent, scope, file) {
     }
   }
 
-  if (node._blockHoist) {
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i]._blockHoist = node._blockHoist;
-    }
-  }
+  keepBlockHoist(node, nodes);
 
   return nodes;
 }

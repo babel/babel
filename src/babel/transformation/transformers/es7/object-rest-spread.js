@@ -9,7 +9,7 @@ export var metadata = {
 };
 
 export function manipulateOptions(opts) {
-  if (opts.whitelist.length) opts.whitelist.push("es6.destructuring");
+  if (opts.whitelist) opts.whitelist.push("es6.destructuring");
 }
 
 var hasSpread = function (node) {
