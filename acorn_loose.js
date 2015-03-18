@@ -311,6 +311,9 @@
     node.body = [];
     while (this.tok.type !== tt.eof) node.body.push(this.parseStatement());
     this.last = this.tok;
+    if (this.options.ecmaVersion >= 6) {
+      node.sourceType = this.options.sourceType;
+    }
     return this.finishNode(node, "Program");
   };
 
@@ -694,16 +697,13 @@
   lp.parseExprAtom = function() {
     switch (this.tok.type) {
     case tt._this:
+    case tt._super:
+      var type = this.tok.type === tt._this ? "ThisExpression" : "SuperExpression";
       var node = this.startNode();
       this.next();
-      return this.finishNode(node, "ThisExpression");
+      return this.finishNode(node, type);
 
     case tt.name:
-      if (this.tok.value === "super") {
-        var node = this.startNode();
-        this.next();
-        return this.finishNode(node, "SuperExpression");
-      }
       var start = this.storeCurrentPos();
       var id = this.parseIdent();
       return this.eat(tt.arrow) ? this.parseArrowExpression(this.startNodeAt(start), [id]) : id;

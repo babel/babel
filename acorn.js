@@ -51,6 +51,8 @@
     // mode, the set of reserved words, support for getters and
     // setters and other features.
     ecmaVersion: 5,
+    // Source type ("script" or "module") for different semantics
+    sourceType: "script",
     // `onInsertedSemicolon` can be a callback that will be called
     // when a semicolon is automatically inserted. It will be passed
     // th position of the comma as an offset, and if `locations` is
@@ -342,6 +344,7 @@
   kw("with");
   kw("new", beforeExpr);
   kw("this");
+  kw("super");
   kw("class");
   kw("extends", beforeExpr);
   kw("export");
@@ -412,6 +415,10 @@
 
   var isReservedWord5 = makePredicate("class enum extends super const export import");
 
+  // ECMAScript 6 reserved words.
+
+  var isReservedWord6 = makePredicate("enum await");
+
   // The additional reserved words in strict mode.
 
   var isStrictReservedWord = makePredicate("implements interface let package private protected public static yield");
@@ -426,7 +433,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield super");
 
   // ## Character categories
 
@@ -543,6 +550,7 @@
     this.loadPlugins(this.options.plugins);
     this.sourceFile = this.options.sourceFile || null;
     this.isKeyword = this.options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
+    this.isReservedWord = this.options.ecmaVersion === 3 ? isReservedWord3 : this.options.ecmaVersion === 5 ? isReservedWord5 : isReservedWord6;
     this.input = String(input);
 
     // Set up token state
@@ -578,9 +586,11 @@
     this.context = [tc.b_stat];
     this.exprAllowed = true;
 
-    // Flags to track whether we are in strict mode, a function, a
-    // generator.
-    this.strict = this.inFunction = this.inGenerator = false;
+    // Figure out if it's a module code.
+    this.strict = this.inModule = this.options.sourceType === "module";
+
+    // Flags to track whether we are in a function, a generator.
+    this.inFunction = this.inGenerator = false;
     // Labels in scope.
     this.labels = [];
 
@@ -946,6 +956,7 @@
     }
     if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
         this.input.charCodeAt(this.pos + 3) == 45) {
+      if (this.inModule) unexpected();
       // `<!--`, an XML-style comment that should be interpreted as a line comment
       this.skipLineComment(4);
       this.skipSpace();
@@ -1763,8 +1774,10 @@
       if (first && this.isUseStrict(stmt)) this.setStrict(true);
       first = false;
     }
-
     this.next();
+    if (this.options.ecmaVersion >= 6) {
+      node.sourceType = this.options.sourceType;
+    }
     return this.finishNode(node, "Program");
   };
 
@@ -1808,8 +1821,12 @@
     case tt.semi: return this.parseEmptyStatement(node);
     case tt._export:
     case tt._import:
-      if (!topLevel && !this.options.allowImportExportEverywhere)
-        this.raise(this.start, "'import' and 'export' may only appear at the top level");
+      if (!this.options.allowImportExportEverywhere) {
+        if (!topLevel)
+          this.raise(this.start, "'import' and 'export' may only appear at the top level");
+        if (!this.inModule)
+          this.raise(this.start, "'import' and 'export' may appear only with 'sourceType: module'");
+      }
       return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
 
       // If the statement does not start with a statement keyword or a
@@ -2307,19 +2324,16 @@
   pp.parseExprAtom = function(refShorthandDefaultPos) {
     switch (this.type) {
     case tt._this:
+    case tt._super:
+      var type = this.type === tt._this ? "ThisExpression" : "SuperExpression";
       var node = this.startNode();
       this.next();
-      return this.finishNode(node, "ThisExpression");
+      return this.finishNode(node, type);
 
     case tt._yield:
       if (this.inGenerator) unexpected();
 
     case tt.name:
-      if (this.value === "super") {
-        var node = this.startNode();
-        this.next();
-        return this.finishNode(node, "SuperExpression");
-      }
       var start = this.currentPos();
       var id = this.parseIdent(this.type !== tt.name);
       if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
@@ -2722,7 +2736,7 @@
     if (this.type === tt.name) {
       if (!liberal &&
           (!this.options.allowReserved &&
-           (this.options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(this.value) ||
+           this.isReservedWord(this.value) ||
            this.strict && isStrictReservedWord(this.value)) &&
           this.input.slice(this.start, this.end).indexOf("\\") == -1)
         this.raise(this.start, "The keyword '" + this.value + "' is reserved");
