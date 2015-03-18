@@ -180,7 +180,7 @@ class ClassTransformer {
     for (var i = 0; i < classBody.length; i++) {
       var node = classBody[i];
       if (t.isMethodDefinition(node)) {
-        var isConstructor = (!node.computed && t.isIdentifier(node.key, { name: "constructor" })) || t.isLiteral(node.key, { value: "constructor" });
+        var isConstructor = node.kind === "constructor";
         if (isConstructor) this.verifyConstructor(classBodyPaths[i]);
 
         var replaceSupers = new ReplaceSupers({
@@ -332,10 +332,6 @@ class ClassTransformer {
    */
 
   pushConstructor(method: { type: "MethodDefinition" }) {
-    if (method.kind) {
-      throw this.file.errorWithNode(method, messages.get("classesIllegalConstructorKind"));
-    }
-
     var construct = this.constructor;
     var fn        = method.value;
 

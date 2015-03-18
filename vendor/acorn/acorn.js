@@ -51,6 +51,8 @@
     // mode, the set of reserved words, support for getters and
     // setters and other features.
     ecmaVersion: 5,
+    // Source type ("script" or "module") for different semantics
+    sourceType: "script",
     // `onInsertedSemicolon` can be a callback that will be called
     // when a semicolon is automatically inserted. It will be passed
     // th position of the comma as an offset, and if `locations` is
@@ -347,6 +349,7 @@
   kw("with");
   kw("new", beforeExpr);
   kw("this");
+  kw("super");
   kw("class");
   kw("extends", beforeExpr);
   kw("export");
@@ -421,6 +424,10 @@
 
   var isStrictReservedWord = makePredicate("implements interface let package private protected public static yield");
 
+  // ECMAScript 6 reserved words.
+
+  var isReservedWord6 = makePredicate("enum await");
+
   // The forbidden variable names in strict mode.
 
   var isStrictBadIdWord = makePredicate("eval arguments");
@@ -431,7 +438,7 @@
 
   var isEcma5AndLessKeyword = makePredicate(ecma5AndLessKeywords);
 
-  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield");
+  var isEcma6Keyword = makePredicate(ecma5AndLessKeywords + " let const class extends export import yield super");
 
   // ## Character categories
 
@@ -548,6 +555,7 @@
     this.loadPlugins(this.options.plugins);
     this.sourceFile = this.options.sourceFile || null;
     this.isKeyword = this.options.ecmaVersion >= 6 ? isEcma6Keyword : isEcma5AndLessKeyword;
+    this.isReservedWord = this.options.ecmaVersion === 3 ? isReservedWord3 : this.options.ecmaVersion === 5 ? isReservedWord5 : isReservedWord6;
     this.input = String(input);
 
     // Set up token state
@@ -583,9 +591,11 @@
     this.context = [tc.b_stat];
     this.exprAllowed = true;
 
-    // Flags to track whether we are in strict mode, a function, a
-    // generator.
-    this.strict = this.inFunction = this.inGenerator = false;
+    // Figure out if it's a module code.
+    this.inModule = this.options.sourceType === "module";
+    this.strict = options.strictMode === false ? false : this.inModule;
+    // Flags to track whether we are in a function, a generator.
+    this.inFunction = this.inGenerator = this.inAsync = false;
     // Labels in scope.
     this.labels = [];
 
@@ -621,6 +631,25 @@
     this.lastTokEndLoc = this.endLoc;
     this.lastTokStartLoc = this.startLoc;
     this.nextToken();
+  };
+
+  var STATE_KEYS = ["lastTokStartLoc", "lastTokEndLoc", "lastTokStart", "lastTokEnd", "startLoc", "endLoc", "start", "pos", "end", "type", "value"];
+
+  pp.getState = function () {
+    var state = {};
+    for (var i = 0; i < STATE_KEYS.length; i++) {
+      var key = STATE_KEYS[i];
+      state[key] = this[key];
+    }
+    return state;
+  };
+
+  pp.lookahead = function() {
+    var old = this.getState();
+    this.next();
+    var curr = this.getState();
+    for (var key in old) this[key] = old[key];
+    return curr;
   };
 
   pp.getToken = function() {
@@ -964,6 +993,7 @@
     }
     if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
         this.input.charCodeAt(this.pos + 3) == 45) {
+      if (this.inModule) unexpected();
       // `<!--`, an XML-style comment that should be interpreted as a line comment
       this.skipLineComment(4);
       this.skipSpace();
@@ -1685,8 +1715,11 @@
         break;
 
       case "ObjectPattern":
-        for (var i = 0; i < param.properties.length; i++)
-          this.checkFunctionParam(param.properties[i].value, nameHash);
+        for (var i = 0; i < param.properties.length; i++) {
+          var prop = param.properties[i];
+          if (prop.type === "Property") prop = prop.value;
+          this.checkFunctionParam(prop, nameHash);
+        }
         break;
 
       case "ArrayPattern":
@@ -1696,6 +1729,7 @@
         }
         break;
 
+      case "SpreadProperty":
       case "RestElement":
         return this.checkFunctionParam(param.argument, nameHash);
     }
@@ -1791,6 +1825,9 @@
     }
 
     this.next();
+    if (this.options.ecmaVersion >= 6) {
+      node.sourceType = this.options.sourceType;
+    }
     return this.finishNode(node, "Program");
   };
 
@@ -1834,8 +1871,12 @@
     case tt.semi: return this.parseEmptyStatement(node);
     case tt._export:
     case tt._import:
-      if (!topLevel && !this.options.allowImportExportEverywhere)
-        this.raise(this.start, "'import' and 'export' may only appear at the top level");
+      if (!this.options.allowImportExportEverywhere) {
+        if (!topLevel)
+          this.raise(this.start, "'import' and 'export' may only appear at the top level");
+        if (!this.inModule)
+          this.raise(this.start, "'import' and 'export' may appear only with 'sourceType: module'");
+      }
       return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
 
     case tt.name:
@@ -2349,20 +2390,16 @@
   pp.parseExprAtom = function(refShorthandDefaultPos) {
     switch (this.type) {
     case tt._this:
+    case tt._super:
+      var type = this.type === tt._this ? "ThisExpression" : "SuperExpression";
       var node = this.startNode();
       this.next();
-      return this.finishNode(node, "ThisExpression");
+      return this.finishNode(node, type);
 
     case tt._yield:
       if (this.inGenerator) unexpected();
 
     case tt.name:
-      if (this.value === "super") {
-        var node = this.startNode();
-        this.next();
-        return this.finishNode(node, "SuperExpression");
-      }
-
       var start = this.currentPos();
       var node = this.startNode();
       var id = this.parseIdent(this.type !== tt.name);
@@ -2860,7 +2897,7 @@
     if (this.type === tt.name) {
       if (!liberal &&
           (!this.options.allowReserved &&
-           (this.options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(this.value) ||
+           this.isReservedWord(this.value) ||
            this.strict && isStrictReservedWord(this.value)) &&
           this.input.slice(this.start, this.end).indexOf("\\") == -1)
         this.raise(this.start, "The keyword '" + this.value + "' is reserved");
@@ -2898,7 +2935,7 @@
       return this.finishNode(node, "ExportDefaultDeclaration");
     }
     // export var|const|let|function|class ...;
-    if (this.type.keyword || (this.options.features["es7.asyncFunctions"] && this.isContextual("async"))) {
+    if (this.type.keyword || this.shouldParseExportDeclaration()) {
       node.declaration = this.parseStatement(true);
       node.specifiers = [];
       node.source = null;
@@ -2913,6 +2950,10 @@
       this.semicolon();
     }
     return this.finishNode(node, "ExportNamedDeclaration");
+  };
+
+  pp.shouldParseExportDeclaration = function () {
+    return this.options.features["es7.asyncFunctions"] && this.isContextual("async");
   };
 
   // Parses a comma-separated list of module exports.

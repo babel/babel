@@ -4381,6 +4381,7 @@ test("let {a:b} = {}", {
 
 test("var {a:b} = {}", {
   type: "Program",
+  sourceType: "script",
   body: [{
     type: "VariableDeclaration",
     declarations: [{
@@ -4452,6 +4453,7 @@ test("var {a:b} = {}", {
 
 test("export var document", {
   type: "Program",
+  sourceType: "module",
   body: [{
     type: "ExportNamedDeclaration",
     declaration: {
@@ -4491,6 +4493,7 @@ test("export var document", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4543,6 +4546,7 @@ test("export var document = { }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4588,6 +4592,7 @@ test("export let document", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4640,6 +4645,7 @@ test("export let document = { }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4692,6 +4698,7 @@ test("export const document = { }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4739,6 +4746,7 @@ test("export function parse() { }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4784,6 +4792,7 @@ test("export class Class {}", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4812,6 +4821,7 @@ test("export default 42", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4836,7 +4846,7 @@ test("export default function () {}", {
       }
     }
   }]
-}, {ecmaVersion: 6, ranges: true});
+}, {ecmaVersion: 6, sourceType: "module", ranges: true});
 
 test("export default function f() {}", {
   type: "Program",
@@ -4862,7 +4872,7 @@ test("export default function f() {}", {
       }
     }
   }]
-}, {ecmaVersion: 6, ranges: true});
+}, {ecmaVersion: 6, sourceType: "module", ranges: true});
 
 test("export default class {}", {
   type: "Program",
@@ -4882,7 +4892,7 @@ test("export default class {}", {
       }
     }
   }]
-}, {ecmaVersion: 6, ranges: true});
+}, {ecmaVersion: 6, sourceType: "module", ranges: true});
 
 test("export default class A {}", {
   type: "Program",
@@ -4906,9 +4916,9 @@ test("export default class A {}", {
       }
     }
   }]
-}, {ecmaVersion: 6, ranges: true});
+}, {ecmaVersion: 6, sourceType: "module", ranges: true});
 
-testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6});
+testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6, sourceType: "module"});
 
 test("export * from \"crypto\"", {
   type: "Program",
@@ -4934,6 +4944,7 @@ test("export * from \"crypto\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -4978,6 +4989,7 @@ test("export { encrypt }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5047,6 +5059,7 @@ test("export { encrypt, decrypt }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5091,6 +5104,7 @@ test("export { encrypt as default }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5160,6 +5174,7 @@ test("export { encrypt, decrypt as dec }", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5220,6 +5235,7 @@ test("export { default } from \"other\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5249,6 +5265,7 @@ test("import \"jquery\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5292,6 +5309,7 @@ test("import $ from \"jquery\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5368,6 +5386,7 @@ test("import { encrypt, decrypt } from \"crypto\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5419,6 +5438,7 @@ test("import { encrypt as enc } from \"crypto\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5510,11 +5530,12 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
   }]
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
 
-testFail("import default from \"foo\"", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("import default from \"foo\"", "Unexpected token (1:7)", {ecmaVersion: 6, sourceType: "module"});
 
 test("import { null as nil } from \"bar\"", {
   type: "Program",
@@ -5563,6 +5584,7 @@ test("import { null as nil } from \"bar\"", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5606,6 +5628,7 @@ test("import * as crypto from \"crypto\"", {
   }]
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5668,6 +5691,7 @@ test("(function* () { yield v })", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -5738,6 +5762,7 @@ test("(function* () { yield\nv })", {
   }
 }, {
   ecmaVersion: 6,
+  sourceType: "module",
   ranges: true,
   locations: true
 });
@@ -13899,7 +13924,7 @@ testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Definin
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
-testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, allowReserved: false});
+testFail("var super", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("var default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
@@ -13915,11 +13940,11 @@ testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecm
 
 testFail("for (let x = 42 of list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
-testFail("import foo", "Unexpected token (1:10)", {ecmaVersion: 6});
+testFail("import foo", "Unexpected token (1:10)", {ecmaVersion: 6, sourceType: "module"});
 
-testFail("import { foo, bar }", "Unexpected token (1:19)", {ecmaVersion: 6});
+testFail("import { foo, bar }", "Unexpected token (1:19)", {ecmaVersion: 6, sourceType: "module"});
 
-testFail("import foo from bar", "Unexpected token (1:16)", {ecmaVersion: 6});
+testFail("import foo from bar", "Unexpected token (1:16)", {ecmaVersion: 6, sourceType: "module"});
 
 testFail("((a)) => 42", "Unexpected token (1:1)", {ecmaVersion: 6});
 
@@ -14415,7 +14440,7 @@ test("import foo, * as bar from 'baz';", {
       raw: "'baz'"
     }
   }]
-}, {ecmaVersion: 6});
+}, {ecmaVersion: 6, sourceType: "module"});
 
 // https://github.com/marijnh/acorn/issues/173
 test("`{${x}}`, `}`", {
@@ -15404,3 +15429,5 @@ testFail("if (1) ; else class Cls {}", "Unexpected token (1:14)", {ecmaVersion: 
 
 testFail("'use strict'; [...eval] = arr", "Assigning to eval in strict mode (1:18)", {ecmaVersion: 6});
 testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict mode (1:16)", {ecmaVersion: 6});
+
+testFail("[...eval] = arr", "Assigning to eval in strict mode (1:4)", {ecmaVersion: 6, sourceType: "module"});

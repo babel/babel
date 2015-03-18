@@ -37,23 +37,15 @@ traverse.node = function (node, opts, scope, state, parentPath) {
   }
 };
 
+const CLEAR_KEYS = [
+  "trailingComments", "leadingComments", "_declarations", "extendedRange",
+  "_paths", "tokens", "range", "start", "end", "loc", "raw"
+];
+
 function clearNode(node) {
-  node._declarations = null;
-  node.extendedRange = null;
-  node._paths        = null;
-  node.tokens        = null;
-  node.range         = null;
-  node.start         = null;
-  node.end           = null;
-  node.loc           = null;
-  node.raw           = null;
-
-  if (Array.isArray(node.trailingComments)) {
-    clearComments(node.trailingComments);
-  }
-
-  if (Array.isArray(node.leadingComments)) {
-    clearComments(node.leadingComments);
+  for (var i = 0; i < CLEAR_KEYS.length; i++) {
+    var key = CLEAR_KEYS[i];
+    if (node[key] != null) node[key] = null;
   }
 
   for (var key in node) {

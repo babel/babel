@@ -13,6 +13,7 @@ export default function (opts, code, callback) {
       allowReturnOutsideFunction:  opts.looseModules,
       ecmaVersion:                 6,
       strictMode:                  opts.strictMode,
+      sourceType:                  opts.sourceType,
       onComment:                   comments,
       locations:                   true,
       features:                    opts.features || {},
@@ -21,8 +22,8 @@ export default function (opts, code, callback) {
       ranges:                      true
     };
 
-    parseOpts.plugins.flow = true;
     parseOpts.plugins.jsx = true;
+    parseOpts.plugins.flow = true;
 
     var ast = acorn.parse(code, parseOpts);
 

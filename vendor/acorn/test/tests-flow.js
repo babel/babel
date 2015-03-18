@@ -7734,8 +7734,7 @@ var fbTestFixture = {
       }
     },
     'export type Foo = number;': {
-      type: 'ExportDeclaration',
-      'default': false,
+      type: 'ExportNamedDeclaration',
       declaration: {
         type: 'TypeAlias',
         id: {
@@ -7762,7 +7761,7 @@ var fbTestFixture = {
           end: { line: 1, column: 25 }
         }
       },
-      specifiers: null,
+      specifiers: [],
       source: null,
       range: [0, 25],
       loc: {
@@ -11116,7 +11115,8 @@ for (var ns in fbTestFixture) {
       body: [ns[code]]
     }, {
       ecmaVersion: 7,
-      plugins: { flow: true, jsx: true },
+      sourceType: "module",
+      plugins: { jsx: true, flow: true },
       features: { "es7.asyncFunctions": true },
       locations: true,
       ranges: true
