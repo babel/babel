@@ -5,6 +5,9 @@
     driver = require("./driver.js");
     require("./tests.js");
     require("./tests-harmony.js");
+    require("./tests-flow.js");
+    require("./tests-babel.js");
+    require("./tests-jsx.js");
   } else {
     driver = window;
   }
@@ -48,17 +51,6 @@
     Normal: {
       config: {
         parse: (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse
-      }
-    },
-    Loose: {
-      config: {
-        parse: (typeof require === "undefined" ? window.acorn : require("../acorn_loose")).parse_dammit,
-        loose: true,
-        filter: function (test) {
-          var opts = test.options || {};
-          if (opts.loose === false) return false;
-          return (opts.ecmaVersion || 5) <= 6;
-        }
       }
     }
   };
