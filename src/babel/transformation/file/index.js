@@ -105,6 +105,7 @@ export default class File {
       let option = File.options[key];
 
       var val = opts[key];
+      if (!val && option.optional) continue;
       if (val == null) val = option.default || null;
 
       var optionParser = optionParsers[option.type];
@@ -131,8 +132,8 @@ export default class File {
 
     opts.basename = path.basename(opts.filename, path.extname(opts.filename));
 
-    opts.ignore   = util.arrayify(opts.ignore, util.regexify);
-    opts.only     = util.arrayify(opts.only, util.regexify);
+    opts.ignore = util.arrayify(opts.ignore, util.regexify);
+    opts.only   = util.arrayify(opts.only, util.regexify);
 
     defaults(opts, {
       moduleRoot: opts.sourceRoot
@@ -395,6 +396,7 @@ export default class File {
 
     parseOpts.looseModules = this.isLoose("es6.modules");
     parseOpts.strictMode = features.strict;
+    parseOpts.sourceType = "module";
 
     //
 

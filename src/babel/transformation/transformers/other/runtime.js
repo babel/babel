@@ -75,7 +75,7 @@ export var metadata = {
 };
 
 export function manipulateOptions(opts) {
-  if (opts.whitelist.length) opts.whitelist.push("es6.modules");
+  if (opts.whitelist) opts.whitelist.push("es6.modules");
 }
 
 export function Program(node, parent, scope, file) {

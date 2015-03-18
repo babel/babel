@@ -50,6 +50,7 @@
 
   "whitelist": {
     "type": "transformerList",
+    "optional": true,
     "description": "Whitelist of transformers to ONLY use",
     "shorthand": "l"
   },
