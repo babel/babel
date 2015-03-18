@@ -24,6 +24,7 @@ var container = function (parent, call, ret, file) {
 export function AssignmentExpression(node, parent, scope, file) {
   var left = node.left;
   if (!t.isVirtualPropertyExpression(left)) return;
+  console.error("Abstract references are deprecated and will be removed in 5.0.0");
 
   var value = node.right;
   var temp;
@@ -65,6 +66,7 @@ export function UnaryExpression(node, parent, scope, file) {
   var arg = node.argument;
   if (!t.isVirtualPropertyExpression(arg)) return;
   if (node.operator !== "delete") return;
+  console.error("Abstract references are deprecated and will be removed in 5.0.0");
 
   var call = util.template("abstract-expression-delete", {
     PROPERTY: arg.property,
@@ -77,6 +79,7 @@ export function UnaryExpression(node, parent, scope, file) {
 export function CallExpression(node, parent, scope) {
   var callee = node.callee;
   if (!t.isVirtualPropertyExpression(callee)) return;
+  console.error("Abstract references are deprecated and will be removed in 5.0.0");
 
   var temp = scope.generateTempBasedOnNode(callee.object);
 
@@ -98,6 +101,7 @@ export function CallExpression(node, parent, scope) {
 }
 
 export function VirtualPropertyExpression(node) {
+  console.error("Abstract references are deprecated and will be removed in 5.0.0");
   return util.template("abstract-expression-get", {
     PROPERTY: node.property,
     OBJECT:   node.object
@@ -105,6 +109,7 @@ export function VirtualPropertyExpression(node) {
 }
 
 export function PrivateDeclaration(node) {
+  console.error("Abstract references are deprecated and will be removed in 5.0.0");
   return t.variableDeclaration("const", node.declarations.map(function (id) {
     return t.variableDeclarator(id, t.newExpression(t.identifier("WeakMap"), []));
   }));

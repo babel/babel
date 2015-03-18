@@ -16,6 +16,7 @@ build(exports, {
   },
 
   build(node) {
+    console.error("The mallet operator is deprecated and will be removed in 5.0.0");
     return t.unaryExpression("!", node, true);
   }
 });
