@@ -8,13 +8,13 @@ export default {
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.react":                      require("./validation/react"),
 
+  // needs to be before `_aliasFunction`
+  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
+
   // this goes at the start so we only transform the original user code
   "spec.functionName":                     require("./spec/function-name"),
 
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
-
-  // needs to be before `_aliasFunction`
-  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
 
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),

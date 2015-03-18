@@ -3,7 +3,7 @@
 function one() {
   var _arguments = arguments;
 
-  var inner = function () {
+  var inner = function inner() {
     return _arguments;
   };
   return [].slice.call(inner());
@@ -13,14 +13,14 @@ one(1, 2);
 function two() {
   var _arguments = arguments;
 
-  var inner = function () {
+  var inner = function inner() {
     return _arguments;
   };
 
   var another = function another() {
     var _arguments2 = arguments;
 
-    var inner2 = function () {
+    var inner2 = function inner2() {
       return _arguments2;
     };
   };
@@ -32,7 +32,7 @@ two(1, 2);
 function three() {
   var _arguments = arguments;
 
-  var fn = function () {
+  var fn = function fn() {
     return _arguments[0] + "bar";
   };
   return fn();
@@ -42,7 +42,7 @@ three("foo");
 function four() {
   var _arguments = arguments;
 
-  var fn = function () {
+  var fn = function fn() {
     return _arguments[0].foo + "bar";
   };
   return fn();

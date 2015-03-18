@@ -3,7 +3,7 @@
 function b() {
   var _this = this;
 
-  var t = function (x) {
+  var t = function t(x) {
     return _this.x + x;
   };
 }

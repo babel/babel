@@ -1,6 +1,6 @@
 "use strict";
 
-var a = function (_ref) {
+var a = function a(_ref) {
   var target = _ref.target;
   return console.log(target);
 };

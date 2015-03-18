@@ -1,5 +1,5 @@
 "use strict";
 
-var t = function (i, x) {
+var t = function t(i, x) {
   return i * x;
 };
