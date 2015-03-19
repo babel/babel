@@ -1660,36 +1660,6 @@
     return this.finishNode(node, "AssignmentPattern");
   };
 
-  // Verify that argument names are not repeated, and it does not
-  // try to bind the words `eval` or `arguments`.
-
-  pp.checkFunctionParam = function(param, nameHash) {
-    switch (param.type) {
-      case "Identifier":
-        if (isStrictReservedWord(param.name) || isStrictBadIdWord(param.name))
-          this.raise(param.start, "Defining '" + param.name + "' in strict mode");
-        if (has(nameHash, param.name))
-          this.raise(param.start, "Argument name clash in strict mode");
-        nameHash[param.name] = true;
-        break;
-
-      case "ObjectPattern":
-        for (var i = 0; i < param.properties.length; i++)
-          this.checkFunctionParam(param.properties[i].value, nameHash);
-        break;
-
-      case "ArrayPattern":
-        for (var i = 0; i < param.elements.length; i++) {
-          var elem = param.elements[i];
-          if (elem) this.checkFunctionParam(elem, nameHash);
-        }
-        break;
-
-      case "RestElement":
-        return this.checkFunctionParam(param.argument, nameHash);
-    }
-  };
-
   // Check if property name clashes with already added.
   // Object/class getters and setters are not allowed to clash —
   // either with each other or with an init property — and in
@@ -1722,39 +1692,44 @@
   // Verify that a node is an lval — something that can be assigned
   // to.
 
-  pp.checkLVal = function(expr, isBinding) {
+  pp.checkLVal = function(expr, isBinding, checkClashes) {
     switch (expr.type) {
       case "Identifier":
         if (this.strict && (isStrictBadIdWord(expr.name) || isStrictReservedWord(expr.name)))
           this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
+        if (checkClashes) {
+          if (has(checkClashes, expr.name))
+            this.raise(expr.start, "Argument name clash in strict mode");
+          checkClashes[expr.name] = true;
+        }
         break;
 
       case "MemberExpression":
-        if (isBinding) this.raise(expr.start, "Binding to member expression");
+        if (isBinding) this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " member expression");
         break;
 
       case "ObjectPattern":
         for (var i = 0; i < expr.properties.length; i++)
-          this.checkLVal(expr.properties[i].value, isBinding);
+          this.checkLVal(expr.properties[i].value, isBinding, checkClashes);
         break;
 
       case "ArrayPattern":
         for (var i = 0; i < expr.elements.length; i++) {
           var elem = expr.elements[i];
-          if (elem) this.checkLVal(elem, isBinding);
+          if (elem) this.checkLVal(elem, isBinding, checkClashes);
         }
         break;
 
       case "AssignmentPattern":
-        this.checkLVal(expr.left);
+        this.checkLVal(expr.left, isBinding, checkClashes);
         break;
 
       case "RestElement":
-        this.checkLVal(expr.argument);
+        this.checkLVal(expr.argument, isBinding, checkClashes);
         break;
 
       default:
-        this.raise(expr.start, "Assigning to rvalue");
+        this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " rvalue");
     }
   };
 
@@ -2650,11 +2625,13 @@
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
     if (this.strict || !isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) {
-      var nameHash = {};
+      var nameHash = {}, oldStrict = this.strict;
+      this.strict = true;
       if (node.id)
-        this.checkFunctionParam(node.id, {});
+        this.checkLVal(node.id, true);
       for (var i = 0; i < node.params.length; i++)
-        this.checkFunctionParam(node.params[i], nameHash);
+        this.checkLVal(node.params[i], true, nameHash);
+      this.strict = oldStrict;
     }
   };
 

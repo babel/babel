@@ -13967,7 +13967,7 @@ testFail("x \n isnt y", "Unexpected token (2:6)", {ecmaVersion: 6});
 
 testFail("function default() {}", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Defining 'eval' in strict mode (1:44)", {ecmaVersion: 6});
+testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Binding eval in strict mode (1:44)", {ecmaVersion: 6});
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
@@ -13999,15 +13999,15 @@ testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; eval => 42", "Defining 'eval' in strict mode (1:14)", {ecmaVersion: 6});
+testFail("\"use strict\"; eval => 42", "Binding eval in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; arguments => 42", "Defining 'arguments' in strict mode (1:14)", {ecmaVersion: 6});
+testFail("\"use strict\"; arguments => 42", "Binding arguments in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (arguments, a) => 42", "Defining 'arguments' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (arguments, a) => 42", "Binding arguments in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a = 10) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a = 10) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (a, a) => 42", "Argument name clash in strict mode (1:18)", {ecmaVersion: 6});
 
@@ -14261,7 +14261,7 @@ testFail("[...{ a }] = b", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("[...a, b] = c", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
+testFail("({ t(eval) { \"use strict\"; } });", "Binding eval in strict mode (1:5)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; `${test}\\02`;", "Octal literal in strict mode (1:22)", {ecmaVersion: 6});
 
@@ -14330,9 +14330,9 @@ testFail("(b, ...a)", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:37)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
+testFail("(eval) => { \"use strict\"; 42 }", "Binding eval in strict mode (1:1)", {ecmaVersion: 6});
 
 testFail("({ get test() { } }) => 42", "Object pattern can't contain getter or setter (1:7)", {ecmaVersion: 6});
 

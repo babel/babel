@@ -27261,55 +27261,55 @@ testFail("function hello() {'use strict'; arguments--; }",
          "Assigning to arguments in strict mode (1:32)");
 
 testFail("function hello() {'use strict'; function eval() { } }",
-         "Defining 'eval' in strict mode (1:41)");
+         "Binding eval in strict mode (1:41)");
 
 testFail("function hello() {'use strict'; function arguments() { } }",
-         "Defining 'arguments' in strict mode (1:41)");
+         "Binding arguments in strict mode (1:41)");
 
 testFail("function eval() {'use strict'; }",
-         "Defining 'eval' in strict mode (1:9)");
+         "Binding eval in strict mode (1:9)");
 
 testFail("function arguments() {'use strict'; }",
-         "Defining 'arguments' in strict mode (1:9)");
+         "Binding arguments in strict mode (1:9)");
 
 testFail("function hello() {'use strict'; (function eval() { }()) }",
-         "Defining 'eval' in strict mode (1:42)");
+         "Binding eval in strict mode (1:42)");
 
 testFail("function hello() {'use strict'; (function arguments() { }()) }",
-         "Defining 'arguments' in strict mode (1:42)");
+         "Binding arguments in strict mode (1:42)");
 
 testFail("(function eval() {'use strict'; })()",
-         "Defining 'eval' in strict mode (1:10)");
+         "Binding eval in strict mode (1:10)");
 
 testFail("(function arguments() {'use strict'; })()",
-         "Defining 'arguments' in strict mode (1:10)");
+         "Binding arguments in strict mode (1:10)");
 
 testFail("function hello() {'use strict'; ({ s: function eval() { } }); }",
-         "Defining 'eval' in strict mode (1:47)");
+         "Binding eval in strict mode (1:47)");
 
 testFail("(function package() {'use strict'; })()",
-         "Defining 'package' in strict mode (1:10)");
+         "Binding package in strict mode (1:10)");
 
 testFail("function hello() {'use strict'; ({ i: 10, set s(eval) { } }); }",
-         "Defining 'eval' in strict mode (1:48)");
+         "Binding eval in strict mode (1:48)");
 
 testFail("function hello() {'use strict'; ({ set s(eval) { } }); }",
-         "Defining 'eval' in strict mode (1:41)");
+         "Binding eval in strict mode (1:41)");
 
 testFail("function hello() {'use strict'; ({ s: function s(eval) { } }); }",
-         "Defining 'eval' in strict mode (1:49)");
+         "Binding eval in strict mode (1:49)");
 
 testFail("function hello(eval) {'use strict';}",
-         "Defining 'eval' in strict mode (1:15)");
+         "Binding eval in strict mode (1:15)");
 
 testFail("function hello(arguments) {'use strict';}",
-         "Defining 'arguments' in strict mode (1:15)");
+         "Binding arguments in strict mode (1:15)");
 
 testFail("function hello() { 'use strict'; function inner(eval) {} }",
-         "Defining 'eval' in strict mode (1:48)");
+         "Binding eval in strict mode (1:48)");
 
 testFail("function hello() { 'use strict'; function inner(arguments) {} }",
-         "Defining 'arguments' in strict mode (1:48)");
+         "Binding arguments in strict mode (1:48)");
 
 testFail("function hello() { 'use strict'; \"\\1\"; }",
          "Octal literal in strict mode (1:34)");
@@ -27348,10 +27348,10 @@ testFail("function hello() { \"use strict\"; var static; }",
          "The keyword 'static' is reserved (1:37)");
 
 testFail("function hello(static) { \"use strict\"; }",
-         "Defining 'static' in strict mode (1:15)");
+         "Binding static in strict mode (1:15)");
 
 testFail("function static() { \"use strict\"; }",
-         "Defining 'static' in strict mode (1:9)");
+         "Binding static in strict mode (1:9)");
 
 testFail("\"use strict\"; function static() { }",
          "The keyword 'static' is reserved (1:23)");
@@ -27360,10 +27360,10 @@ testFail("function a(t, t) { \"use strict\"; }",
          "Argument name clash in strict mode (1:14)");
 
 testFail("function a(eval) { \"use strict\"; }",
-         "Defining 'eval' in strict mode (1:11)");
+         "Binding eval in strict mode (1:11)");
 
 testFail("function a(package) { \"use strict\"; }",
-         "Defining 'package' in strict mode (1:11)");
+         "Binding package in strict mode (1:11)");
 
 testFail("function a() { \"use strict\"; function b(t, t) { }; }",
          "Argument name clash in strict mode (1:43)");
@@ -27375,10 +27375,10 @@ testFail("function a() { \"use strict\"; (function b(t, t) { }); }",
          "Argument name clash in strict mode (1:44)");
 
 testFail("(function a(eval) { \"use strict\"; })",
-         "Defining 'eval' in strict mode (1:12)");
+         "Binding eval in strict mode (1:12)");
 
 testFail("(function a(package) { \"use strict\"; })",
-         "Defining 'package' in strict mode (1:12)");
+         "Binding package in strict mode (1:12)");
 
 testFail("\"use strict\";function foo(){\"use strict\";}function bar(){var v = 015}",
          "Invalid number (1:65)");
