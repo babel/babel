@@ -5989,6 +5989,53 @@ test("var x = { *test () { yield *v } };", {
   locations: true
 });
 
+test("function* foo() { console.log(yield); }", {
+  body: [
+    {
+      id: {
+        name: "foo",
+        type: "Identifier",
+      },
+      generator: true,
+      expression: false,
+      params: [],
+      body: {
+        body: [
+          {
+            expression: {
+              callee: {
+                object: {
+                  name: "console",
+                  type: "Identifier",
+                },
+                property: {
+                  name: "log",
+                  type: "Identifier",
+                },
+                computed: false,
+                type: "MemberExpression",
+              },
+              arguments: [
+                {
+                  delegate: false,
+                  argument: null,
+                  type: "YieldExpression",
+                }
+              ],
+              type: "CallExpression",
+            },
+            type: "ExpressionStatement",
+          }
+        ],
+        type: "BlockStatement",
+      },
+      type: "FunctionDeclaration",
+    }
+  ],
+  sourceType: "script",
+  type: "Program"
+}, {ecmaVersion: 6})
+
 test("function* t() {}", {
   type: "Program",
   body: [{

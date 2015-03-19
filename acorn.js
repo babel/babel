@@ -240,6 +240,7 @@
     this.label = label;
     this.keyword = conf.keyword;
     this.beforeExpr = !!conf.beforeExpr;
+    this.startsExpr = !!conf.startsExpr;
     this.isLoop = !!conf.isLoop;
     this.isAssign = !!conf.isAssign;
     this.prefix = !!conf.prefix;
@@ -251,21 +252,21 @@
   function binop(name, prec) {
     return new TokenType(name, {beforeExpr: true, binop: prec});
   }
-  var beforeExpr = {beforeExpr: true};
+  var beforeExpr = {beforeExpr: true}, startsExpr = {startsExpr: true};
 
   var tt = exports.tokTypes = {
-    num: new TokenType("num"),
-    regexp: new TokenType("regexp"),
-    string: new TokenType("string"),
-    name: new TokenType("name"),
+    num: new TokenType("num", startsExpr),
+    regexp: new TokenType("regexp", startsExpr),
+    string: new TokenType("string", startsExpr),
+    name: new TokenType("name", startsExpr),
     eof: new TokenType("eof"),
 
     // Punctuation token types.
-    bracketL: new TokenType("[", beforeExpr),
+    bracketL: new TokenType("[", {beforeExpr: true, startsExpr: true}),
     bracketR: new TokenType("]"),
-    braceL: new TokenType("{", beforeExpr),
+    braceL: new TokenType("{", {beforeExpr: true, startsExpr: true}),
     braceR: new TokenType("}"),
-    parenL: new TokenType("(", beforeExpr),
+    parenL: new TokenType("(", {beforeExpr: true, startsExpr: true}),
     parenR: new TokenType(")"),
     comma: new TokenType(",", beforeExpr),
     semi: new TokenType(";", beforeExpr),
@@ -275,8 +276,8 @@
     arrow: new TokenType("=>", beforeExpr),
     template: new TokenType("template"),
     ellipsis: new TokenType("...", beforeExpr),
-    backQuote: new TokenType("`"),
-    dollarBraceL: new TokenType("${", beforeExpr),
+    backQuote: new TokenType("`", startsExpr),
+    dollarBraceL: new TokenType("${", {beforeExpr: true, startsExpr: true}),
 
     // Operators. These carry several kinds of properties to help the
     // parser use them properly (the presence of these properties is
@@ -294,8 +295,8 @@
 
     eq: new TokenType("=", {beforeExpr: true, isAssign: true}),
     assign: new TokenType("_=", {beforeExpr: true, isAssign: true}),
-    incDec: new TokenType("++/--", {prefix: true, postfix: true}),
-    prefix: new TokenType("prefix", {beforeExpr: true, prefix: true}),
+    incDec: new TokenType("++/--", {prefix: true, postfix: true, startsExpr: true}),
+    prefix: new TokenType("prefix", {beforeExpr: true, prefix: true, startsExpr: true}),
     logicalOR: binop("||", 1),
     logicalAND: binop("&&", 2),
     bitwiseOR: binop("|", 3),
@@ -304,7 +305,7 @@
     equality: binop("==/!=", 6),
     relational: binop("</>", 7),
     bitShift: binop("<</>>", 8),
-    plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true}),
+    plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true, startsExpr: true}),
     modulo: binop("%", 10),
     star: binop("*", 10),
     slash: binop("/", 10)
@@ -342,22 +343,22 @@
   kw("const");
   kw("while", {isLoop: true});
   kw("with");
-  kw("new", beforeExpr);
-  kw("this");
-  kw("super");
+  kw("new", {beforeExpr: true, startsExpr: true});
+  kw("this", startsExpr);
+  kw("super", startsExpr);
   kw("class");
   kw("extends", beforeExpr);
   kw("export");
   kw("import");
-  kw("yield", beforeExpr);
-  kw("null");
-  kw("true");
-  kw("false");
+  kw("yield", {beforeExpr: true, startsExpr: true});
+  kw("null", startsExpr);
+  kw("true", startsExpr);
+  kw("false", startsExpr);
   kw("in", {beforeExpr: true, binop: 7});
   kw("instanceof", {beforeExpr: true, binop: 7});
-  kw("typeof", {beforeExpr: true, prefix: true});
-  kw("void", {beforeExpr: true, prefix: true});
-  kw("delete", {beforeExpr: true, prefix: true});
+  kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true});
+  kw("void", {beforeExpr: true, prefix: true, startsExpr: true});
+  kw("delete", {beforeExpr: true, prefix: true, startsExpr: true});
 
   // This is a trick taken from Esprima. It turns out that, on
   // non-Chrome browsers, to check whether a string is in a set, a
@@ -2871,7 +2872,7 @@
   pp.parseYield = function() {
     var node = this.startNode();
     this.next();
-    if (this.type == tt.semi || this.canInsertSemicolon()) {
+    if (this.type == tt.semi || this.canInsertSemicolon() || (this.type != tt.star && !this.type.startsExpr)) {
       node.delegate = false;
       node.argument = null;
     } else {

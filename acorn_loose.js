@@ -769,7 +769,7 @@
     case tt._yield:
       var node = this.startNode();
       this.next();
-      if (this.semicolon() || this.canInsertSemicolon()) {
+      if (this.semicolon() || this.canInsertSemicolon() || (this.tok.type != tt.star && !this.tok.type.startsExpr)) {
         node.delegate = false;
         node.argument = null;
       } else {
