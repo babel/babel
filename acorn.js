@@ -2737,10 +2737,10 @@
     if (liberal && this.options.allowReserved == "never") liberal = false;
     if (this.type === tt.name) {
       if (!liberal &&
-          (!this.options.allowReserved &&
-           this.isReservedWord(this.value) ||
-           this.strict && isStrictReservedWord(this.value)) &&
-          this.input.slice(this.start, this.end).indexOf("\\") == -1)
+          ((!this.options.allowReserved && this.isReservedWord(this.value)) ||
+           (this.strict && isStrictReservedWord(this.value)) &&
+           (this.options.ecmaVersion >= 6 || 
+            this.input.slice(this.start, this.end).indexOf("\\") == -1)))
         this.raise(this.start, "The keyword '" + this.value + "' is reserved");
       node.name = this.value;
     } else if (liberal && this.type.keyword) {
