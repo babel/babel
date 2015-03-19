@@ -1568,24 +1568,23 @@
   // Convert list of expression atoms to binding list.
 
   pp.toAssignableList = function(exprList, isBinding) {
-    if (exprList.length) {
-      for (var i = 0; i < exprList.length - 1; i++) {
-        this.toAssignable(exprList[i], isBinding);
+    var end = exprList.length;
+    if (end) {
+      var last = exprList[end - 1];
+      if (last && last.type == "RestElement") {
+        --end;
+      } else if (last && last.type == "SpreadElement") {
+        last.type = "RestElement";
+        var arg = last.argument;
+        this.toAssignable(arg, isBinding);
+        if (arg.type !== "Identifier" && arg.type !== "MemberExpression" && arg.type !== "ArrayPattern")
+          this.unexpected(arg.start);
+        --end;
       }
-      var last = exprList[exprList.length - 1];
-      switch (last.type) {
-        case "RestElement":
-          break;
-        case "SpreadElement":
-          last.type = "RestElement";
-          var arg = last.argument;
-          this.toAssignable(arg, isBinding);
-          if (arg.type !== "Identifier" && arg.type !== "MemberExpression" && arg.type !== "ArrayPattern")
-            this.unexpected(arg.start);
-          break;
-        default:
-          this.toAssignable(last, isBinding);
-      }
+    }
+    for (var i = 0; i < end; i++) {
+      var elt = exprList[i];
+      if (elt) this.toAssignable(elt, isBinding);
     }
     return exprList;
   };
