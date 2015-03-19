@@ -236,7 +236,7 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
   switch (this.type) {
   case tt._this:
   case tt._super:
-    let type = this.type === tt._this ? "ThisExpression" : "SuperExpression"
+    let type = this.type === tt._this ? "ThisExpression" : "Super"
     node = this.startNode()
     this.next()
     return this.finishNode(node, type)

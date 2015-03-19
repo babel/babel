@@ -179,7 +179,7 @@ lp.parseExprAtom = function() {
   switch (this.tok.type) {
   case tt._this:
   case tt._super:
-    let type = this.tok.type === tt._this ? "ThisExpression" : "SuperExpression"
+    let type = this.tok.type === tt._this ? "ThisExpression" : "Super"
     node = this.startNode()
     this.next()
     return this.finishNode(node, type)
