@@ -15508,3 +15508,5 @@ testFail("'use strict'; [...eval] = arr", "Assigning to eval in strict mode (1:1
 testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict mode (1:16)", {ecmaVersion: 6});
 
 testFail("[...eval] = arr", "Assigning to eval in strict mode (1:4)", {ecmaVersion: 6, sourceType: "module"});
+
+testFail("function* y({yield}) {}", "Binding yield (1:13)", {ecmaVersion: 6});

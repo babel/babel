@@ -2492,12 +2492,10 @@
       if (this.options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
-        if (isPattern || refShorthandDefaultPos) {
+        if (isPattern || refShorthandDefaultPos)
           start = this.currentPos();
-        }
-        if (!isPattern) {
+        if (!isPattern)
           isGenerator = this.eat(tt.star);
-        }
       }
       this.parsePropertyName(prop);
       if (this.eat(tt.colon)) {
@@ -2518,6 +2516,10 @@
       } else if (this.options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
         prop.kind = "init";
         if (isPattern) {
+          if (this.isKeyword(prop.key.name) ||
+              (this.strict && (isStrictBadIdWord(prop.key.name) || isStrictReservedWord(prop.key.name))) ||
+              (!this.options.allowReserved && this.isReservedWord(prop.key.name)))
+            this.raise(prop.key.start, "Binding " + prop.key.name);
           prop.value = this.parseMaybeDefault(start, prop.key);
         } else if (this.type === tt.eq && refShorthandDefaultPos) {
           if (!refShorthandDefaultPos.start)
