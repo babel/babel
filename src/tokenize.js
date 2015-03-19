@@ -31,20 +31,6 @@ export function isNewLine(code) {
 
 // ## Tokenizer
 
-// These are used when `options.locations` is on, for the
-// `startLoc` and `endLoc` properties.
-
-class Position {
-  constructor(line, col) {
-    this.line = line
-    this.column = col
-  }
-
-  offset(n) {
-    return new Position(this.line, this.column + n)
-  }
-}
-
 // Shorthand because we are going to be adding a _lot_ of methods to
 // this.
 const pp = Parser.prototype
@@ -215,10 +201,6 @@ pp.skipSpace = function() {
       break;
     }
   }
-};
-
-pp.curPosition = function() {
-  return new Position(this.curLine, this.pos - this.lineStart);
 };
 
 // Called at the end of every token. Sets `end`, `val`, and
@@ -703,22 +685,4 @@ pp.readWord = function() {
   if ((this.options.ecmaVersion >= 6 || !containsEsc) && this.isKeyword(word))
     type = keywordTypes[word];
   return this.finishToken(type, word);
-};
-
-// This function is used to raise exceptions on parse errors. It
-// takes an offset integer (into the current `input`) to indicate
-// the location of the error, attaches the position to the end
-// of the error message, and then raises a `SyntaxError` with that
-// message.
-
-pp.raise = function(pos, message) {
-  var loc = getLineInfo(this.input, pos);
-  message += " (" + loc.line + ":" + loc.column + ")";
-  var err = new SyntaxError(message);
-  err.pos = pos; err.loc = loc; err.raisedAt = this.pos;
-  throw err;
-};
-
-pp.currentPos = function() {
-  return this.options.locations ? [this.start, this.startLoc] : this.start;
 };

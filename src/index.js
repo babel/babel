@@ -20,7 +20,8 @@
 // [walk]: util/walk.js
 
 import {has, isArray} from "./util"
-import {types as tt, keywords as keywordTypes} from "./tokentype"
+import {lineBreak} from "./tokenize"
+import {getLineInfo as getLineInfo_, SourceLocation} from "./location"
 
 export const version = "0.12.1"
 
@@ -162,89 +163,6 @@ function parser(options, input) {
   return new Parser(getOptions(options), String(input))
 }
 
-// This function tries to parse a single expression at a given
-// offset in a string. Useful for parsing mixed-language formats
-// that embed JavaScript expressions.
-
-export function parseExpressionAt(input, pos, options) {
-  let p = parser(options, input, pos)
-  p.nextToken()
-  return p.parseExpression()
-}
-
-// The `getLineInfo` function is mostly useful when the
-// `locations` option is off (for performance reasons) and you
-// want to find the line/column position for a given character
-// offset. `input` should be the code string that the offset refers
-// into.
-
-export function getLineInfo(input, offset) {
-  for (let line = 1, cur = 0;;) {
-    lineBreak.lastIndex = cur
-    let match = lineBreak.exec(input)
-    if (match && match.index < offset) {
-      ++line
-      cur = match.index + match[0].length
-    } else {
-      return new Position(line, offset - cur)
-    }
-  }
-}
-
-// Acorn is organized as a tokenizer and a recursive-descent parser.
-// The `tokenize` export provides an interface to the tokenizer.
-// Because the tokenizer is optimized for being efficiently used by
-// the Acorn parser itself, this interface is somewhat crude and not
-// very modular.
-
-export function tokenizer(input, options) {
-  return parser(options, input)
-}
-
-// Object type used to represent tokens. Note that normally, tokens
-// simply exist as properties on the parser object. This is only
-// used for the onToken callback and the external tokenizer.
-
-class Token {
-  constructor(p) {
-    this.type = p.type;
-    this.value = p.value;
-    this.start = p.start;
-    this.end = p.end;
-    if (p.options.locations)
-      this.loc = new SourceLocation(p, p.startLoc, p.endLoc);
-    if (p.options.ranges)
-      this.range = [p.start, p.end];
-  }
-}
-
-// Whether a single character denotes a newline.
-
-var newline = exports.newline = /[\n\r\u2028\u2029]/;
-
-var isNewLine = exports.isNewLine = function(code) {
-  return code === 10 || code === 13 || code === 0x2028 || code == 0x2029;
-};
-
-// Matches a whole line break (where CRLF is considered a single
-// line break). Used to count lines.
-
-var lineBreak = exports.lineBreak = /\r\n|[\n\r\u2028\u2029]/g;
-
-// ## Tokenizer
-
-// These are used when `options.locations` is on, for the
-// `startLoc` and `endLoc` properties.
-
-function Position(line, col) {
-  this.line = line;
-  this.column = col;
-}
-
-Position.prototype.offset = function(n) {
-  return new Position(this.line, this.column + n);
-};
-
 // ## Parser
 
 // A recursive descent parser operates by defining functions for all
@@ -265,831 +183,31 @@ Position.prototype.offset = function(n) {
 //
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
-import {reservedWords, keywords, isIdentifierStart, isIdentifierChar} from "./identifier"
-
-var Parser = exports.Parser = function(options, input, startPos) {
-  this.options = options
-  this.loadPlugins(this.options.plugins)
-  this.sourceFile = this.options.sourceFile || null
-  this.isKeyword = keywords[this.options.ecmaVersion >= 6 ? 6 : 5]
-  this.isReservedWord = reservedWords[this.options.ecmaVersion]
-  this.input = input
-
-  // Set up token state
-
-  // The current position of the tokenizer in the input.
-  if (startPos) {
-    this.pos = startPos;
-    this.lineStart = Math.max(0, this.input.lastIndexOf("\n", startPos));
-    this.curLine = this.input.slice(0, this.lineStart).split(newline).length;
-  } else {
-    this.pos = this.lineStart = 0;
-    this.curLine = 1;
-  }
-
-  // Properties of the current token:
-  // Its type
-  this.type = tt.eof;
-  // For tokens that include more information than their type, the value
-  this.value = null;
-  // Its start and end offset
-  this.start = this.end = this.pos;
-  // And, if locations are used, the {line, column} object
-  // corresponding to those offsets
-  this.startLoc = this.endLoc = null;
-
-  // Position information for the previous token
-  this.lastTokEndLoc = this.lastTokStartLoc = null;
-  this.lastTokStart = this.lastTokEnd = this.pos;
-
-  // The context stack is used to superficially track syntactic
-  // context to predict whether a regular expression is allowed in a
-  // given position.
-  this.context = [tc.b_stat];
-  this.exprAllowed = true;
-
-  // Figure out if it's a module code.
-  this.strict = this.inModule = this.options.sourceType === "module";
-
-  // Flags to track whether we are in a function, a generator.
-  this.inFunction = this.inGenerator = false;
-  // Labels in scope.
-  this.labels = [];
-
-  // If enabled, skip leading hashbang line.
-  if (this.pos === 0 && this.options.allowHashBang && this.input.slice(0, 2) === '#!')
-    this.skipLineComment(2);
-};
-
-// Shorthand because we are going to be adding a _lot_ of methods to
-// this.
-var pp = Parser.prototype;
-
-pp.extend = function(name, f) {
-  this[name] = f(this[name]);
-};
-
-pp.loadPlugins = function(plugins) {
-  for (var name in plugins) {
-    var plugin = exports.plugins[name];
-    if (!plugin) throw new Error("Plugin '" + name + "' not found");
-    plugin(this, plugins[name]);
-  }
-};
-
-// Move to the next token
-
-pp.next = function() {
-  if (this.options.onToken)
-    this.options.onToken(new Token(this));
-
-  this.lastTokEnd = this.end;
-  this.lastTokStart = this.start;
-  this.lastTokEndLoc = this.endLoc;
-  this.lastTokStartLoc = this.startLoc;
-  this.nextToken();
-};
-
-pp.getToken = function() {
-  this.next();
-  return new Token(this);
-};
-
-// If we're in an ES6 environment, make parsers iterable
-if (typeof Symbol !== "undefined")
-  pp[Symbol.iterator] = function () {
-    var self = this;
-    return {next: function () {
-      var token = self.getToken();
-      return {
-        done: token.type === tt.eof,
-        value: token
-      };
-    }};
-  };
-
-// Toggle strict mode. Re-reads the next number or string to please
-// pedantic tests (`"use strict"; 010;` should fail).
-
-pp.setStrict = function(strict) {
-  this.strict = strict;
-  if (this.type !== tt.num && this.type !== tt.string) return;
-  this.pos = this.start;
-  if (this.options.locations) {
-    while (this.pos < this.lineStart) {
-      this.lineStart = this.input.lastIndexOf("\n", this.lineStart - 2) + 1;
-      --this.curLine;
-    }
-  }
-  this.nextToken();
-};
-
-pp.curContext = function() {
-  return this.context[this.context.length - 1];
-};
-
-// Read a single token, updating the parser object's token-related
-// properties.
-
-pp.nextToken = function() {
-  var curContext = this.curContext();
-  if (!curContext || !curContext.preserveSpace) this.skipSpace();
-
-  this.start = this.pos;
-  if (this.options.locations) this.startLoc = this.curPosition();
-  if (this.pos >= this.input.length) return this.finishToken(tt.eof);
-
-  if (curContext === tc.q_tmpl) return this.readTmplToken();
-
-  this.readToken(this.fullCharCodeAtPos());
-};
-
-pp.readToken = function(code) {
-  // Identifier or keyword. '\uXXXX' sequences are allowed in
-  // identifiers, so '\' also dispatches to that.
-  if (isIdentifierStart(code, this.options.ecmaVersion >= 6) || code === 92 /* '\' */)
-    return this.readWord();
-
-  return this.getTokenFromCode(code);
-};
-
-pp.fullCharCodeAtPos = function() {
-  var code = this.input.charCodeAt(this.pos);
-  if (code <= 0xd7ff || code >= 0xe000) return code;
-  var next = this.input.charCodeAt(this.pos + 1);
-  return (code << 10) + next - 0x35fdc00;
-};
-
-pp.skipBlockComment = function() {
-  var startLoc = this.options.onComment && this.options.locations && this.curPosition();
-  var start = this.pos, end = this.input.indexOf("*/", this.pos += 2);
-  if (end === -1) this.raise(this.pos - 2, "Unterminated comment");
-  this.pos = end + 2;
-  if (this.options.locations) {
-    lineBreak.lastIndex = start;
-    var match;
-    while ((match = lineBreak.exec(this.input)) && match.index < this.pos) {
-      ++this.curLine;
-      this.lineStart = match.index + match[0].length;
-    }
-  }
-  if (this.options.onComment)
-    this.options.onComment(true, this.input.slice(start + 2, end), start, this.pos,
-                           startLoc, this.options.locations && this.curPosition());
-};
-
-pp.skipLineComment = function(startSkip) {
-  var start = this.pos;
-  var startLoc = this.options.onComment && this.options.locations && this.curPosition();
-  var ch = this.input.charCodeAt(this.pos+=startSkip);
-  while (this.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
-    ++this.pos;
-    ch = this.input.charCodeAt(this.pos);
-  }
-  if (this.options.onComment)
-    this.options.onComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos,
-                           startLoc, this.options.locations && this.curPosition());
-};
-
-// Called at the start of the parse and after every token. Skips
-// whitespace and comments, and.
-
-pp.skipSpace = function() {
-  while (this.pos < this.input.length) {
-    var ch = this.input.charCodeAt(this.pos);
-    if (ch === 32) { // ' '
-      ++this.pos;
-    } else if (ch === 13) {
-      ++this.pos;
-      var next = this.input.charCodeAt(this.pos);
-      if (next === 10) {
-        ++this.pos;
-      }
-      if (this.options.locations) {
-        ++this.curLine;
-        this.lineStart = this.pos;
-      }
-    } else if (ch === 10 || ch === 8232 || ch === 8233) {
-      ++this.pos;
-      if (this.options.locations) {
-        ++this.curLine;
-        this.lineStart = this.pos;
-      }
-    } else if (ch > 8 && ch < 14) {
-      ++this.pos;
-    } else if (ch === 47) { // '/'
-      var next = this.input.charCodeAt(this.pos + 1);
-      if (next === 42) { // '*'
-        this.skipBlockComment();
-      } else if (next === 47) { // '/'
-        this.skipLineComment(2);
-      } else break;
-    } else if (ch === 160) { // '\xa0'
-      ++this.pos;
-    } else if (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
-      ++this.pos;
-    } else {
-      break;
-    }
-  }
-};
-
-pp.curPosition = function() {
-  return new Position(this.curLine, this.pos - this.lineStart);
-};
-
-// The algorithm used to determine whether a regexp can appear at a
-// given point in the program is loosely based on sweet.js' approach.
-// See https://github.com/mozilla/sweet.js/wiki/design
-
-var TokContext = exports.TokContext = function(token, isExpr, preserveSpace) {
-  this.token = token;
-  this.isExpr = isExpr;
-  this.preserveSpace = preserveSpace;
-};
-
-var tc = exports.tokContexts = {
-  b_stat: new TokContext("{", false),
-  b_expr: new TokContext("{", true),
-  b_tmpl: new TokContext("${", true),
-  p_stat: new TokContext("(", false),
-  p_expr: new TokContext("(", true),
-  q_tmpl: new TokContext("`", true, true),
-  f_expr: new TokContext("function", true)
-};
-
-pp.braceIsBlock = function(prevType) {
-  var parent;
-  if (prevType === tt.colon && (parent = this.curContext()).token == "{")
-    return !parent.isExpr;
-  if (prevType === tt._return)
-    return newline.test(this.input.slice(this.lastTokEnd, this.start));
-  if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof)
-    return true;
-  if (prevType == tt.braceL)
-    return this.curContext() === tc.b_stat;
-  return !this.exprAllowed;
-};
-
-// Called at the end of every token. Sets `end`, `val`, and
-// maintains `context` and `exprAllowed`, and skips the space after
-// the token, so that the next one's `start` will point at the
-// right position.
-
-pp.finishToken = function(type, val) {
-  this.end = this.pos;
-  if (this.options.locations) this.endLoc = this.curPosition();
-  var prevType = this.type;
-  this.type = type;
-  this.value = val;
-
-  this.updateContext(prevType);
-};
-
-pp.updateContext = function(prevType) {
-  var update, type = this.type;
-  if (type.keyword && prevType == tt.dot)
-    this.exprAllowed = false;
-  else if (update = type.updateContext)
-    update.call(this, prevType);
-  else
-    this.exprAllowed = type.beforeExpr;
-};
-
-// Token-specific context update code
-
-tt.parenR.updateContext = tt.braceR.updateContext = function() {
-  var out = this.context.pop();
-  if (out === tc.b_stat && this.curContext() === tc.f_expr) {
-    this.context.pop();
-    this.exprAllowed = false;
-  } else if (out === tc.b_tmpl) {
-    this.exprAllowed = true;
-  } else {
-    this.exprAllowed = !(out && out.isExpr);
-  }
-};
-
-tt.braceL.updateContext = function(prevType) {
-  this.context.push(this.braceIsBlock(prevType) ? tc.b_stat : tc.b_expr);
-  this.exprAllowed = true;
-};
-
-tt.dollarBraceL.updateContext = function() {
-  this.context.push(tc.b_tmpl);
-  this.exprAllowed = true;
-};
-
-tt.parenL.updateContext = function(prevType) {
-  var statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
-  this.context.push(statementParens ? tc.p_stat : tc.p_expr);
-  this.exprAllowed = true;
-};
-
-tt.incDec.updateContext = function() {
-  // tokExprAllowed stays unchanged
-};
-
-tt._function.updateContext = function() {
-  if (this.curContext() !== tc.b_stat)
-    this.context.push(tc.f_expr);
-  this.exprAllowed = false;
-};
-
-tt.backQuote.updateContext = function() {
-  if (this.curContext() === tc.q_tmpl)
-    this.context.pop();
-  else
-    this.context.push(tc.q_tmpl);
-  this.exprAllowed = false;
-};
-
-// ### Token reading
-
-// This is the function that is called to fetch the next token. It
-// is somewhat obscure, because it works in character codes rather
-// than characters, and because operator parsing has been inlined
-// into it.
-//
-// All in the name of speed.
-//
-pp.readToken_dot = function() {
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next >= 48 && next <= 57) return this.readNumber(true);
-  var next2 = this.input.charCodeAt(this.pos + 2);
-  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
-    this.pos += 3;
-    return this.finishToken(tt.ellipsis);
-  } else {
-    ++this.pos;
-    return this.finishToken(tt.dot);
-  }
-};
-
-pp.readToken_slash = function() { // '/'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (this.exprAllowed) {++this.pos; return this.readRegexp();}
-  if (next === 61) return this.finishOp(tt.assign, 2);
-  return this.finishOp(tt.slash, 1);
-};
-
-pp.readToken_mult_modulo = function(code) { // '%*'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === 61) return this.finishOp(tt.assign, 2);
-  return this.finishOp(code === 42 ? tt.star : tt.modulo, 1);
-};
-
-pp.readToken_pipe_amp = function(code) { // '|&'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
-  if (next === 61) return this.finishOp(tt.assign, 2);
-  return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
-};
-
-pp.readToken_caret = function() { // '^'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === 61) return this.finishOp(tt.assign, 2);
-  return this.finishOp(tt.bitwiseXOR, 1);
-};
-
-pp.readToken_plus_min = function(code) { // '+-'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === code) {
-    if (next == 45 && this.input.charCodeAt(this.pos + 2) == 62 &&
-        newline.test(this.input.slice(this.lastTokEnd, this.pos))) {
-      // A `-->` line comment
-      this.skipLineComment(3);
-      this.skipSpace();
-      return this.nextToken();
-    }
-    return this.finishOp(tt.incDec, 2);
-  }
-  if (next === 61) return this.finishOp(tt.assign, 2);
-  return this.finishOp(tt.plusMin, 1);
-};
-
-pp.readToken_lt_gt = function(code) { // '<>'
-  var next = this.input.charCodeAt(this.pos + 1);
-  var size = 1;
-  if (next === code) {
-    size = code === 62 && this.input.charCodeAt(this.pos + 2) === 62 ? 3 : 2;
-    if (this.input.charCodeAt(this.pos + size) === 61) return this.finishOp(tt.assign, size + 1);
-    return this.finishOp(tt.bitShift, size);
-  }
-  if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
-      this.input.charCodeAt(this.pos + 3) == 45) {
-    if (this.inModule) unexpected();
-    // `<!--`, an XML-style comment that should be interpreted as a line comment
-    this.skipLineComment(4);
-    this.skipSpace();
-    return this.nextToken();
-  }
-  if (next === 61)
-    size = this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2;
-  return this.finishOp(tt.relational, size);
-};
-
-pp.readToken_eq_excl = function(code) { // '=!'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
-  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
-    this.pos += 2;
-    return this.finishToken(tt.arrow);
-  }
-  return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
-};
-
-pp.getTokenFromCode = function(code) {
-  switch (code) {
-    // The interpretation of a dot depends on whether it is followed
-    // by a digit or another two dots.
-  case 46: // '.'
-    return this.readToken_dot();
-
-    // Punctuation tokens.
-  case 40: ++this.pos; return this.finishToken(tt.parenL);
-  case 41: ++this.pos; return this.finishToken(tt.parenR);
-  case 59: ++this.pos; return this.finishToken(tt.semi);
-  case 44: ++this.pos; return this.finishToken(tt.comma);
-  case 91: ++this.pos; return this.finishToken(tt.bracketL);
-  case 93: ++this.pos; return this.finishToken(tt.bracketR);
-  case 123: ++this.pos; return this.finishToken(tt.braceL);
-  case 125: ++this.pos; return this.finishToken(tt.braceR);
-  case 58: ++this.pos; return this.finishToken(tt.colon);
-  case 63: ++this.pos; return this.finishToken(tt.question);
-
-  case 96: // '`'
-    if (this.options.ecmaVersion < 6) break;
-    ++this.pos;
-    return this.finishToken(tt.backQuote);
-
-  case 48: // '0'
-    var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 120 || next === 88) return this.readRadixNumber(16); // '0x', '0X' - hex number
-    if (this.options.ecmaVersion >= 6) {
-      if (next === 111 || next === 79) return this.readRadixNumber(8); // '0o', '0O' - octal number
-      if (next === 98 || next === 66) return this.readRadixNumber(2); // '0b', '0B' - binary number
-    }
-    // Anything else beginning with a digit is an integer, octal
-    // number, or float.
-  case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
-    return this.readNumber(false);
-
-    // Quotes produce strings.
-  case 34: case 39: // '"', "'"
-    return this.readString(code);
-
-    // Operators are parsed inline in tiny state machines. '=' (61) is
-    // often referred to. `finishOp` simply skips the amount of
-    // characters it is given as second argument, and returns a token
-    // of the type given by its first argument.
-
-  case 47: // '/'
-    return this.readToken_slash();
-
-  case 37: case 42: // '%*'
-    return this.readToken_mult_modulo(code);
-
-  case 124: case 38: // '|&'
-    return this.readToken_pipe_amp(code);
-
-  case 94: // '^'
-    return this.readToken_caret();
-
-  case 43: case 45: // '+-'
-    return this.readToken_plus_min(code);
-
-  case 60: case 62: // '<>'
-    return this.readToken_lt_gt(code);
-
-  case 61: case 33: // '=!'
-    return this.readToken_eq_excl(code);
-
-  case 126: // '~'
-    return this.finishOp(tt.prefix, 1);
-  }
-
-  this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'");
-};
-
-pp.finishOp = function(type, size) {
-  var str = this.input.slice(this.pos, this.pos + size);
-  this.pos += size;
-  return this.finishToken(type, str);
-};
-
-var regexpUnicodeSupport = false;
-try { new RegExp("\uffff", "u"); regexpUnicodeSupport = true; }
-catch(e) {}
-
-// Parse a regular expression. Some context-awareness is necessary,
-// since a '/' inside a '[]' set does not end the expression.
-
-pp.readRegexp = function() {
-  var content = "", escaped, inClass, start = this.pos;
-  for (;;) {
-    if (this.pos >= this.input.length) this.raise(start, "Unterminated regular expression");
-    var ch = this.input.charAt(this.pos);
-    if (newline.test(ch)) this.raise(start, "Unterminated regular expression");
-    if (!escaped) {
-      if (ch === "[") inClass = true;
-      else if (ch === "]" && inClass) inClass = false;
-      else if (ch === "/" && !inClass) break;
-      escaped = ch === "\\";
-    } else escaped = false;
-    ++this.pos;
-  }
-  var content = this.input.slice(start, this.pos);
-  ++this.pos;
-  // Need to use `readWord1` because '\uXXXX' sequences are allowed
-  // here (don't ask).
-  var mods = this.readWord1();
-  var tmp = content;
-  if (mods) {
-    var validFlags = /^[gmsiy]*$/;
-    if (this.options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
-    if (!validFlags.test(mods)) this.raise(start, "Invalid regular expression flag");
-    if (mods.indexOf('u') >= 0 && !regexpUnicodeSupport) {
-      // Replace each astral symbol and every Unicode escape sequence that
-      // possibly represents an astral symbol or a paired surrogate with a
-      // single ASCII symbol to avoid throwing on regular expressions that
-      // are only valid in combination with the `/u` flag.
-      // Note: replacing with the ASCII symbol `x` might cause false
-      // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-      // perfectly valid pattern that is equivalent to `[a-b]`, but it would
-      // be replaced by `[x-b]` which throws an error.
-      tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|\\u\{([0-9a-fA-F]+)\}|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x")
-    }
-  }
-  // Detect invalid regular expressions.
-  try {
-    new RegExp(tmp);
-  } catch (e) {
-    if (e instanceof SyntaxError) this.raise(start, "Error parsing regular expression: " + e.message);
-    this.raise(e);
-  }
-  // Get a regular expression object for this pattern-flag pair, or `null` in
-  // case the current environment doesn't support the flags it uses.
-  try {
-    var value = new RegExp(content, mods);
-  } catch (err) {
-    value = null;
-  }
-  return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value});
-};
-
-// Read an integer in the given radix. Return null if zero digits
-// were read, the integer value otherwise. When `len` is given, this
-// will return `null` unless the integer has exactly `len` digits.
-
-pp.readInt = function(radix, len) {
-  var start = this.pos, total = 0;
-  for (var i = 0, e = len == null ? Infinity : len; i < e; ++i) {
-    var code = this.input.charCodeAt(this.pos), val;
-    if (code >= 97) val = code - 97 + 10; // a
-    else if (code >= 65) val = code - 65 + 10; // A
-    else if (code >= 48 && code <= 57) val = code - 48; // 0-9
-    else val = Infinity;
-    if (val >= radix) break;
-    ++this.pos;
-    total = total * radix + val;
-  }
-  if (this.pos === start || len != null && this.pos - start !== len) return null;
-
-  return total;
-};
-
-pp.readRadixNumber = function(radix) {
-  this.pos += 2; // 0x
-  var val = this.readInt(radix);
-  if (val == null) this.raise(this.start + 2, "Expected number in radix " + radix);
-  if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.pos, "Identifier directly after number");
-  return this.finishToken(tt.num, val);
-};
-
-// Read an integer, octal integer, or floating-point number.
-
-pp.readNumber = function(startsWithDot) {
-  var start = this.pos, isFloat = false, octal = this.input.charCodeAt(this.pos) === 48;
-  if (!startsWithDot && this.readInt(10) === null) this.raise(start, "Invalid number");
-  if (this.input.charCodeAt(this.pos) === 46) {
-    ++this.pos;
-    this.readInt(10);
-    isFloat = true;
-  }
-  var next = this.input.charCodeAt(this.pos);
-  if (next === 69 || next === 101) { // 'eE'
-    next = this.input.charCodeAt(++this.pos);
-    if (next === 43 || next === 45) ++this.pos; // '+-'
-    if (this.readInt(10) === null) this.raise(start, "Invalid number");
-    isFloat = true;
-  }
-  if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.pos, "Identifier directly after number");
-
-  var str = this.input.slice(start, this.pos), val;
-  if (isFloat) val = parseFloat(str);
-  else if (!octal || str.length === 1) val = parseInt(str, 10);
-  else if (/[89]/.test(str) || this.strict) this.raise(start, "Invalid number");
-  else val = parseInt(str, 8);
-  return this.finishToken(tt.num, val);
-};
-
-// Read a string value, interpreting backslash-escapes.
-
-pp.readCodePoint = function() {
-  var ch = this.input.charCodeAt(this.pos), code;
-
-  if (ch === 123) {
-    if (this.options.ecmaVersion < 6) this.unexpected();
-    ++this.pos;
-    code = this.readHexChar(this.input.indexOf('}', this.pos) - this.pos);
-    ++this.pos;
-    if (code > 0x10FFFF) this.unexpected();
-  } else {
-    code = this.readHexChar(4);
-  }
-  return code;
-};
-
-function codePointToString(code) {
-  // UTF-16 Decoding
-  if (code <= 0xFFFF) return String.fromCharCode(code);
-  return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800,
-                             ((code - 0x10000) & 1023) + 0xDC00);
+import {types as tt} from "./tokentype"
+import Parser from "./state"
+import {reservedWords} from "./identifier"
+
+// This function tries to parse a single expression at a given
+// offset in a string. Useful for parsing mixed-language formats
+// that embed JavaScript expressions.
+
+export function parseExpressionAt(input, pos, options) {
+  let p = parser(options, input, pos)
+  p.nextToken()
+  return p.parseExpression()
 }
 
-pp.readString = function(quote) {
-  var out = "", chunkStart = ++this.pos;
-  for (;;) {
-    if (this.pos >= this.input.length) this.raise(this.start, "Unterminated string constant");
-    var ch = this.input.charCodeAt(this.pos);
-    if (ch === quote) break;
-    if (ch === 92) { // '\'
-      out += this.input.slice(chunkStart, this.pos);
-      out += this.readEscapedChar();
-      chunkStart = this.pos;
-    } else {
-      if (isNewLine(ch)) this.raise(this.start, "Unterminated string constant");
-      ++this.pos;
-    }
-  }
-  out += this.input.slice(chunkStart, this.pos++);
-  return this.finishToken(tt.string, out);
-};
+// Acorn is organized as a tokenizer and a recursive-descent parser.
+// The `tokenize` export provides an interface to the tokenizer.
+// Because the tokenizer is optimized for being efficiently used by
+// the Acorn parser itself, this interface is somewhat crude and not
+// very modular.
 
-// Reads template string tokens.
+export function tokenizer(input, options) {
+  return parser(options, input)
+}
 
-pp.readTmplToken = function() {
-  var out = "", chunkStart = this.pos;
-  for (;;) {
-    if (this.pos >= this.input.length) this.raise(this.start, "Unterminated template");
-    var ch = this.input.charCodeAt(this.pos);
-    if (ch === 96 || ch === 36 && this.input.charCodeAt(this.pos + 1) === 123) { // '`', '${'
-      if (this.pos === this.start && this.type === tt.template) {
-        if (ch === 36) {
-          this.pos += 2;
-          return this.finishToken(tt.dollarBraceL);
-        } else {
-          ++this.pos;
-          return this.finishToken(tt.backQuote);
-        }
-      }
-      out += this.input.slice(chunkStart, this.pos);
-      return this.finishToken(tt.template, out);
-    }
-    if (ch === 92) { // '\'
-      out += this.input.slice(chunkStart, this.pos);
-      out += this.readEscapedChar();
-      chunkStart = this.pos;
-    } else if (isNewLine(ch)) {
-      out += this.input.slice(chunkStart, this.pos);
-      ++this.pos;
-      if (ch === 13 && this.input.charCodeAt(this.pos) === 10) {
-        ++this.pos;
-        out += "\n";
-      } else {
-        out += String.fromCharCode(ch);
-      }
-      if (this.options.locations) {
-        ++this.curLine;
-        this.lineStart = this.pos;
-      }
-      chunkStart = this.pos;
-    } else {
-      ++this.pos;
-    }
-  }
-};
-
-// Used to read escaped characters
-
-pp.readEscapedChar = function() {
-  var ch = this.input.charCodeAt(++this.pos);
-  var octal = /^[0-7]+/.exec(this.input.slice(this.pos, this.pos + 3));
-  if (octal) octal = octal[0];
-  while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, -1);
-  if (octal === "0") octal = null;
-  ++this.pos;
-  if (octal) {
-    if (this.strict) this.raise(this.pos - 2, "Octal literal in strict mode");
-    this.pos += octal.length - 1;
-    return String.fromCharCode(parseInt(octal, 8));
-  } else {
-    switch (ch) {
-    case 110: return "\n"; // 'n' -> '\n'
-    case 114: return "\r"; // 'r' -> '\r'
-    case 120: return String.fromCharCode(this.readHexChar(2)); // 'x'
-    case 117: return codePointToString(this.readCodePoint()); // 'u'
-    case 116: return "\t"; // 't' -> '\t'
-    case 98: return "\b"; // 'b' -> '\b'
-    case 118: return "\u000b"; // 'v' -> '\u000b'
-    case 102: return "\f"; // 'f' -> '\f'
-    case 48: return "\0"; // 0 -> '\0'
-    case 13: if (this.input.charCodeAt(this.pos) === 10) ++this.pos; // '\r\n'
-    case 10: // ' \n'
-      if (this.options.locations) { this.lineStart = this.pos; ++this.curLine; }
-      return "";
-    default: return String.fromCharCode(ch);
-    }
-  }
-};
-
-// Used to read character escape sequences ('\x', '\u', '\U').
-
-pp.readHexChar = function(len) {
-  var n = this.readInt(16, len);
-  if (n === null) this.raise(this.start, "Bad character escape sequence");
-  return n;
-};
-
-// Used to signal to callers of `readWord1` whether the word
-// contained any escape sequences. This is needed because words with
-// escape sequences must not be interpreted as keywords.
-
-var containsEsc;
-
-// Read an identifier, and return it as a string. Sets `containsEsc`
-// to whether the word contained a '\u' escape.
-//
-// Incrementally adds only escaped chars, adding other chunks as-is
-// as a micro-optimization.
-
-pp.readWord1 = function() {
-  containsEsc = false;
-  var word = "", first = true, chunkStart = this.pos;
-  var astral = this.options.ecmaVersion >= 6;
-  while (this.pos < this.input.length) {
-    var ch = this.fullCharCodeAtPos();
-    if (isIdentifierChar(ch, astral)) {
-      this.pos += ch <= 0xffff ? 1 : 2;
-    } else if (ch === 92) { // "\"
-      containsEsc = true;
-      word += this.input.slice(chunkStart, this.pos);
-      var escStart = this.pos;
-      if (this.input.charCodeAt(++this.pos) != 117) // "u"
-        this.raise(this.pos, "Expecting Unicode escape sequence \\uXXXX");
-      ++this.pos;
-      var esc = this.readCodePoint();
-      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, astral))
-        this.raise(escStart, "Invalid Unicode escape");
-      word += codePointToString(esc);
-      chunkStart = this.pos;
-    } else {
-      break;
-    }
-    first = false;
-  }
-  return word + this.input.slice(chunkStart, this.pos);
-};
-
-// Read an identifier or keyword token. Will check for reserved
-// words when necessary.
-
-pp.readWord = function() {
-  var word = this.readWord1();
-  var type = tt.name;
-  if ((this.options.ecmaVersion >= 6 || !containsEsc) && this.isKeyword(word))
-    type = keywordTypes[word];
-  return this.finishToken(type, word);
-};
-
-// This function is used to raise exceptions on parse errors. It
-// takes an offset integer (into the current `input`) to indicate
-// the location of the error, attaches the position to the end
-// of the error message, and then raises a `SyntaxError` with that
-// message.
-
-pp.raise = function(pos, message) {
-  var loc = getLineInfo(this.input, pos);
-  message += " (" + loc.line + ":" + loc.column + ")";
-  var err = new SyntaxError(message);
-  err.pos = pos; err.loc = loc; err.raisedAt = this.pos;
-  throw err;
-};
-
-pp.currentPos = function() {
-  return this.options.locations ? [this.start, this.startLoc] : this.start;
-};
+export const getLineInfo = getLineInfo_ // FIXME cleaner way?
 
 // ### Parser utilities
 
@@ -1097,11 +215,7 @@ pp.currentPos = function() {
 
 var Node = exports.Node = function() {};
 
-var SourceLocation = exports.SourceLocation = function(p, start, end) {
-  this.start = start;
-  this.end = end;
-  if (p.sourceFile !== null) this.source = p.sourceFile;
-};
+const pp = Parser.prototype
 
 pp.startNode = function() {
   var node = new Node;
@@ -1194,7 +308,7 @@ pp.expectContextual = function(name) {
 pp.canInsertSemicolon = function() {
   return this.type === tt.eof ||
     this.type === tt.braceR ||
-    newline.test(this.input.slice(this.lastTokEnd, this.start));
+    lineBreak.test(this.input.slice(this.lastTokEnd, this.start));
 };
 
 pp.insertSemicolon = function() {
@@ -1363,7 +477,7 @@ pp.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
 // Parses assignment pattern around given atom if possible.
 
 pp.parseMaybeDefault = function(startPos, left) {
-  startPos = startPos || this.currentPos();
+  startPos = startPos || this.markPosition();
   left = left || this.parseBindingAtom();
   if (!this.eat(tt.eq)) return left;
   var node = this.startNodeAt(startPos);
@@ -1408,7 +522,7 @@ pp.checkPropClash = function(prop, propHash) {
 pp.checkLVal = function(expr, isBinding, checkClashes) {
   switch (expr.type) {
   case "Identifier":
-    if (this.strict && (isStrictBadIdWord(expr.name) || isStrictReservedWord(expr.name)))
+    if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name)))
       this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
     if (checkClashes) {
       if (has(checkClashes, expr.name))
@@ -1672,7 +786,7 @@ pp.parseSwitchStatement = function(node) {
 
 pp.parseThrowStatement = function(node) {
   this.next();
-  if (newline.test(this.input.slice(this.lastTokEnd, this.start)))
+  if (lineBreak.test(this.input.slice(this.lastTokEnd, this.start)))
     this.raise(this.lastTokEnd, "Illegal newline after throw");
   node.argument = this.parseExpression();
   this.semicolon();
@@ -1853,7 +967,7 @@ pp.parseVar = function(node, noIn, kind) {
 // delayed syntax error at correct position).
 
 pp.parseExpression = function(noIn, refShorthandDefaultPos) {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var expr = this.parseMaybeAssign(noIn, refShorthandDefaultPos);
   if (this.type === tt.comma) {
     var node = this.startNodeAt(start);
@@ -1877,7 +991,7 @@ pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos) {
   } else {
     failOnShorthandAssign = false;
   }
-  var start = this.currentPos();
+  var start = this.markPosition();
   var left = this.parseMaybeConditional(noIn, refShorthandDefaultPos);
   if (this.type.isAssign) {
     var node = this.startNodeAt(start);
@@ -1897,7 +1011,7 @@ pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos) {
 // Parse a ternary conditional (`?:`) operator.
 
 pp.parseMaybeConditional = function(noIn, refShorthandDefaultPos) {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var expr = this.parseExprOps(noIn, refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
   if (this.eat(tt.question)) {
@@ -1914,7 +1028,7 @@ pp.parseMaybeConditional = function(noIn, refShorthandDefaultPos) {
 // Start the precedence parser.
 
 pp.parseExprOps = function(noIn, refShorthandDefaultPos) {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var expr = this.parseMaybeUnary(refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
   return this.parseExprOp(expr, start, -1, noIn);
@@ -1935,7 +1049,7 @@ pp.parseExprOp = function(left, leftStart, minPrec, noIn) {
       node.operator = this.value;
       var op = this.type;
       this.next();
-      var start = this.currentPos();
+      var start = this.markPosition();
       node.right = this.parseExprOp(this.parseMaybeUnary(), start, prec, noIn);
       this.finishNode(node, (op === tt.logicalOR || op === tt.logicalAND) ? "LogicalExpression" : "BinaryExpression");
       return this.parseExprOp(node, leftStart, minPrec, noIn);
@@ -1960,7 +1074,7 @@ pp.parseMaybeUnary = function(refShorthandDefaultPos) {
       this.raise(node.start, "Deleting local variable in strict mode");
     return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
   }
-  var start = this.currentPos();
+  var start = this.markPosition();
   var expr = this.parseExprSubscripts(refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
   while (this.type.postfix && !this.canInsertSemicolon()) {
@@ -1978,7 +1092,7 @@ pp.parseMaybeUnary = function(refShorthandDefaultPos) {
 // Parse call, dot, and `[]`-subscript expressions.
 
 pp.parseExprSubscripts = function(refShorthandDefaultPos) {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var expr = this.parseExprAtom(refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
   return this.parseSubscripts(expr, start);
@@ -2029,7 +1143,7 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     if (this.inGenerator) unexpected();
 
   case tt.name:
-    var start = this.currentPos();
+    var start = this.markPosition();
     var id = this.parseIdent(this.type !== tt.name);
     if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
       return this.parseArrowExpression(this.startNodeAt(start), [id]);
@@ -2096,7 +1210,7 @@ pp.parseLiteral = function(value) {
 };
 
 pp.parseParenAndDistinguishExpression = function() {
-  var start = this.currentPos(), val;
+  var start = this.markPosition(), val;
   if (this.options.ecmaVersion >= 6) {
     this.next();
 
@@ -2104,7 +1218,7 @@ pp.parseParenAndDistinguishExpression = function() {
       return this.parseComprehension(this.startNodeAt(start), true);
     }
 
-    var innerStart = this.currentPos(), exprList = [], first = true;
+    var innerStart = this.markPosition(), exprList = [], first = true;
     var refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart;
     while (this.type !== tt.parenR) {
       first ? first = false : this.expect(tt.comma);
@@ -2119,7 +1233,7 @@ pp.parseParenAndDistinguishExpression = function() {
         exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos));
       }
     }
-    var innerEnd = this.currentPos();
+    var innerEnd = this.markPosition();
     this.expect(tt.parenR);
 
     if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
@@ -2158,7 +1272,7 @@ pp.parseParenAndDistinguishExpression = function() {
 pp.parseNew = function() {
   var node = this.startNode();
   this.next();
-  var start = this.currentPos();
+  var start = this.markPosition();
   node.callee = this.parseSubscripts(this.parseExprAtom(), start, true);
   if (this.eat(tt.parenL)) node.arguments = this.parseExprList(tt.parenR, false);
   else node.arguments = empty;
@@ -2211,7 +1325,7 @@ pp.parseObj = function(isPattern, refShorthandDefaultPos) {
       prop.method = false;
       prop.shorthand = false;
       if (isPattern || refShorthandDefaultPos)
-        start = this.currentPos();
+        start = this.markPosition();
       if (!isPattern)
         isGenerator = this.eat(tt.star);
     }
@@ -2235,7 +1349,7 @@ pp.parseObj = function(isPattern, refShorthandDefaultPos) {
       prop.kind = "init";
       if (isPattern) {
         if (this.isKeyword(prop.key.name) ||
-            (this.strict && (isStrictBadIdWord(prop.key.name) || isStrictReservedWord(prop.key.name))) ||
+            (this.strict && (reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name))) ||
             (!this.options.allowReserved && this.isReservedWord(prop.key.name)))
           this.raise(prop.key.start, "Binding " + prop.key.name);
         prop.value = this.parseMaybeDefault(start, prop.key);
@@ -2435,7 +1549,7 @@ pp.parseIdent = function(liberal) {
   if (this.type === tt.name) {
     if (!liberal &&
         ((!this.options.allowReserved && this.isReservedWord(this.value)) ||
-         (this.strict && isStrictReservedWord(this.value)) &&
+         (this.strict && reservedWords.strict(this.value)) &&
          (this.options.ecmaVersion >= 6 || 
           this.input.slice(this.start, this.end).indexOf("\\") == -1)))
       this.raise(this.start, "The keyword '" + this.value + "' is reserved");
