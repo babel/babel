@@ -2134,6 +2134,8 @@
         decl.init = this.parseMaybeAssign(noIn);
       } else if (kind === tt._const && !(this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of")))) {
         this.unexpected();
+      } else if (decl.id.type != "Identifier") {
+        this.raise(this.lastTokEnd, "Complex binding patterns require an initialization value")
       } else {
         decl.init = null;
       }

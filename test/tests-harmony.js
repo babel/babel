@@ -15466,6 +15466,8 @@ test("let {x} = y", {
   "end": 11
 }, {ecmaVersion: 6})
 
+testFail("let [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
+testFail("var [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
 testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
 testFail("var 𫠞_ = 12;", "Unexpected character '𫠞' (1:4)", {ecmaVersion: 6});
 testFail("var 𫠝_ = 10;", "Unexpected character '𫠝' (1:4)", {ecmaVersion: 5});
