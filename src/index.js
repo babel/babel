@@ -19,14 +19,14 @@
 // [dammit]: acorn_loose.js
 // [walk]: util/walk.js
 
-import {Parser, plugins} from "./state"
+import {Parser} from "./state"
 import {getOptions} from "./options"
 import "./parseutil"
 import "./statement"
 import "./lval"
 import "./expression"
 
-export {Parser} from "./state"
+export {Parser, plugins} from "./state"
 export {defaultOptions} from "./options"
 export {SourceLocation} from "./location"
 export {getLineInfo} from "./location"
