@@ -364,7 +364,7 @@ pp.parseForIn = function(node, init) {
 
 // Parse a list of variable declarations.
 
-pp.parseVar = function(node, noIn, kind) {
+pp.parseVar = function(node, isFor, kind) {
   node.declarations = []
   node.kind = kind.keyword
   for (;;) {
@@ -372,10 +372,10 @@ pp.parseVar = function(node, noIn, kind) {
     decl.id = this.parseBindingAtom()
     this.checkLVal(decl.id, true)
     if (this.eat(tt.eq)) {
-      decl.init = this.parseMaybeAssign(noIn)
+      decl.init = this.parseMaybeAssign(isFor)
     } else if (kind === tt._const && !(this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of")))) {
       this.unexpected()
-    } else if (decl.id.type != "Identifier") {
+    } else if (decl.id.type != "Identifier" && !(isFor && (this.type === tt._in || this.isContextual("of")))) {
       this.raise(this.lastTokEnd, "Complex binding patterns require an initialization value")
     } else {
       decl.init = null
