@@ -1,7 +1,8 @@
 import {isIdentifierStart, isIdentifierChar} from "./identifier"
 import {types as tt, keywords as keywordTypes} from "./tokentype"
-import Parser from "./state"
-import "./tokencontext"
+import {Parser} from "./state"
+import {SourceLocation} from "./location"
+import {lineBreak, lineBreakG, isNewLine, nonASCIIwhitespace} from "./whitespace"
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -20,32 +21,9 @@ export class Token {
   }
 }
 
-// Matches a whole line break (where CRLF is considered a single
-// line break). Used to count lines.
-
-export const lineBreak = /\r\n?|\n|\u2028|\u2029/g
-
-export function isNewLine(code) {
-  return code === 10 || code === 13 || code === 0x2028 || code == 0x2029
-}
-
 // ## Tokenizer
 
-// Shorthand because we are going to be adding a _lot_ of methods to
-// this.
 const pp = Parser.prototype
-
-pp.extend = function(name, f) {
-  this[name] = f(this[name]);
-};
-
-pp.loadPlugins = function(plugins) {
-  for (var name in plugins) {
-    var plugin = exports.plugins[name];
-    if (!plugin) throw new Error("Plugin '" + name + "' not found");
-    plugin(this, plugins[name]);
-  }
-};
 
 // Move to the next token
 
@@ -135,9 +113,9 @@ pp.skipBlockComment = function() {
   if (end === -1) this.raise(this.pos - 2, "Unterminated comment");
   this.pos = end + 2;
   if (this.options.locations) {
-    lineBreak.lastIndex = start;
+    lineBreakG.lastIndex = start;
     var match;
-    while ((match = lineBreak.exec(this.input)) && match.index < this.pos) {
+    while ((match = lineBreakG.exec(this.input)) && match.index < this.pos) {
       ++this.curLine;
       this.lineStart = match.index + match[0].length;
     }

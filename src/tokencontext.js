@@ -2,8 +2,9 @@
 // given point in the program is loosely based on sweet.js' approach.
 // See https://github.com/mozilla/sweet.js/wiki/design
 
-import Parser from "./state"
+import {Parser} from "./state"
 import {types as tt} from "./tokentype"
+import {lineBreak} from "./whitespace"
 
 export class TokContext {
   constructor(token, isExpr, preserveSpace, override) {
@@ -17,10 +18,10 @@ export class TokContext {
 export const types = {
   b_stat: new TokContext("{", false),
   b_expr: new TokContext("{", true),
-  b_tmpl: new TokContext("${", true, null, p => p.readTmplToken()),
+  b_tmpl: new TokContext("${", true),
   p_stat: new TokContext("(", false),
   p_expr: new TokContext("(", true),
-  q_tmpl: new TokContext("`", true, true),
+  q_tmpl: new TokContext("`", true, true, p => p.readTmplToken()),
   f_expr: new TokContext("function", true)
 }
 

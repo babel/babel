@@ -1,4 +1,5 @@
-import Parser from "./state"
+import {Parser} from "./state"
+import {lineBreakG} from "./whitespace"
 
 // These are used when `options.locations` is on, for the
 // `startLoc` and `endLoc` properties.
@@ -30,8 +31,8 @@ export class SourceLocation {
 
 export function getLineInfo(input, offset) {
   for (let line = 1, cur = 0;;) {
-    lineBreak.lastIndex = cur
-    let match = lineBreak.exec(input)
+    lineBreakG.lastIndex = cur
+    let match = lineBreakG.exec(input)
     if (match && match.index < offset) {
       ++line
       cur = match.index + match[0].length

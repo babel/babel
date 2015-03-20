@@ -1,7 +1,7 @@
 import {reservedWords, keywords} from "./identifier"
-import {types as tt} from "./tokentype"
+import {types as tt, lineBreak} from "./tokentype"
 
-export default function Parser(options, input, startPos) {
+export function Parser(options, input, startPos) {
   this.options = options
   this.loadPlugins(this.options.plugins)
   this.sourceFile = this.options.sourceFile || null
@@ -13,28 +13,28 @@ export default function Parser(options, input, startPos) {
 
   // The current position of the tokenizer in the input.
   if (startPos) {
-    this.pos = startPos;
-    this.lineStart = Math.max(0, this.input.lastIndexOf("\n", startPos));
-    this.curLine = this.input.slice(0, this.lineStart).split(lineBreak).length;
+    this.pos = startPos
+    this.lineStart = Math.max(0, this.input.lastIndexOf("\n", startPos))
+    this.curLine = this.input.slice(0, this.lineStart).split(lineBreak).length
   } else {
-    this.pos = this.lineStart = 0;
-    this.curLine = 1;
+    this.pos = this.lineStart = 0
+    this.curLine = 1
   }
 
   // Properties of the current token:
   // Its type
-  this.type = tt.eof;
+  this.type = tt.eof
   // For tokens that include more information than their type, the value
-  this.value = null;
+  this.value = null
   // Its start and end offset
-  this.start = this.end = this.pos;
+  this.start = this.end = this.pos
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
-  this.startLoc = this.endLoc = null;
+  this.startLoc = this.endLoc = null
 
   // Position information for the previous token
-  this.lastTokEndLoc = this.lastTokStartLoc = null;
-  this.lastTokStart = this.lastTokEnd = this.pos;
+  this.lastTokEndLoc = this.lastTokStartLoc = null
+  this.lastTokStart = this.lastTokEnd = this.pos
 
   // The context stack is used to superficially track syntactic
   // context to predict whether a regular expression is allowed in a
@@ -43,14 +43,26 @@ export default function Parser(options, input, startPos) {
   this.exprAllowed = true
 
   // Figure out if it's a module code.
-  this.strict = this.inModule = this.options.sourceType === "module";
+  this.strict = this.inModule = this.options.sourceType === "module"
 
   // Flags to track whether we are in a function, a generator.
-  this.inFunction = this.inGenerator = false;
+  this.inFunction = this.inGenerator = false
   // Labels in scope.
-  this.labels = [];
+  this.labels = []
 
   // If enabled, skip leading hashbang line.
   if (this.pos === 0 && this.options.allowHashBang && this.input.slice(0, 2) === '#!')
-    this.skipLineComment(2);
+    this.skipLineComment(2)
+}
+
+Parser.prototype.extend = function(name, f) {
+  this[name] = f(this[name])
+}
+
+Parser.prototype.loadPlugins = function(plugins) {
+  for (let name in plugins) {
+    let plugin = exports.plugins[name]
+    if (!plugin) throw new Error("Plugin '" + name + "' not found")
+    plugin(this, plugins[name])
+  }
 }
