@@ -336,3 +336,44 @@ register the Babel require shim like this:
     require("babelify/node_modules/babel-core/register")
 
 That will allow you to directly `require` the ES6 modules.
+
+## Plugins
+
+Acorn is designed support allow plugins which, within reasonable
+bounds, redefine the way the parser works. Plugins can add new token
+types and new tokenizer contexts (if necessary), and extend methods in
+the parser object. This is not a clean, elegant API—using it requires
+an understanding of Acorn's internals, and plugins are likely to break
+whenever those internals are significantly changed. But still, it is
+_possible_, in this way, to create parsers for JavaScript dialects
+without forking all of Acorn. And in principle it is even possible to
+combine such plugins, so that if you have, for example, a plugin for
+parsing types and a plugin for parsing JSX-style XML literals, you
+could load them both and parse code with both JSX tags and types.
+
+A plugin should register itself by adding a property to
+`acorn.plugins`, which holds a function. Calling `acorn.parse`, a
+`plugin` option can be passed, holding an object mapping plugin names
+to configuration values (or just `true` for plugins that don't take
+options). After the parser object has been created, the initialization
+functions for the chosen plugins are called with `(parser,
+configValue)` arguments. They are expected to use the `parser.extend`
+method to extend parser methods. For example, the `readToken` method
+could be extended like this:
+
+```javascript
+parser.extend("readToken", function(nextMethod) {
+  return function(code) {
+    console.log("Reading a token!")
+    return nextMethod.call(this, code)
+  }
+})
+```
+
+The `nextMethod` argument passed to `extend`'s second argument is the
+previous value of this method, and should usually be called through to
+whenever the extended method does not handle the call itself.
+
+There is a proof-of-concept JSX plugin in the [`jsx`
+branch](https://github.com/marijnh/acorn/tree/jsx) branch of the
+Github repository.
