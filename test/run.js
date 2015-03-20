@@ -1,12 +1,16 @@
 (function() {
-  var driver;
+  var driver, acorn;
 
   if (typeof require !== "undefined") {
     driver = require("./driver.js");
     require("./tests.js");
     require("./tests-harmony.js");
+    require("babelify/node_modules/babel-core/register")
+    acorn = require("../src")
+    require("../src/loose")
   } else {
     driver = window;
+    acorn = window.acorn;
   }
 
   var htmlLog = typeof document === "object" && document.getElementById('log');
@@ -47,12 +51,12 @@
   var stats, modes = {
     Normal: {
       config: {
-        parse: (typeof require === "undefined" ? window.acorn : require("../acorn.js")).parse
+        parse: (typeof require === "undefined" ? window.acorn : require("../dist/acorn")).parse
       }
     },
     Loose: {
       config: {
-        parse: (typeof require === "undefined" ? window.acorn : require("../acorn_loose")).parse_dammit,
+        parse: (typeof require === "undefined" ? window.acorn : require("../dist/acorn_loose")).parse_dammit,
         loose: true,
         filter: function (test) {
           var opts = test.options || {};

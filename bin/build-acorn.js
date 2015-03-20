@@ -31,10 +31,18 @@ function acornShim(file) {
   return tr
 }
 
-browserify()
+browserify({standalone: "acorn.loose"})
   .transform(acornShim)
   .transform(babelify)
   .require("./src/loose/index.js", {entry: true})
   .bundle()
   .on("error", function (err) { console.log("Error: " + err.message) })
   .pipe(fs.createWriteStream("dist/acorn_loose.js"))
+
+browserify({standalone: "acorn.walk"})
+  .transform(acornShim)
+  .transform(babelify)
+  .require("./src/walk/index.js", {entry: true})
+  .bundle()
+  .on("error", function (err) { console.log("Error: " + err.message) })
+  .pipe(fs.createWriteStream("dist/walk.js"))

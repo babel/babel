@@ -1,45 +1,48 @@
 #!/usr/bin/env node
 
-var fs = require("fs");
+var fs = require("fs")
 
-var acornSrc = fs.readFileSync(require.resolve("../acorn"), "utf8");
-var acorn = require("../acorn"), walk = require("../util/walk");
+var acornSrc = fs.readFileSync(require.resolve("../dist/acorn"), "utf8")
+var acorn = require("../dist/acorn"), walk = require("../dist/walk")
 
-var ast = acorn.parse(acornSrc);
-var touchups = [], uses = [];
+var ast = acorn.parse(acornSrc)
+var touchups = [], uses = []
+
+var makePred
 
 walk.simple(ast, {
   FunctionDeclaration: function(node) {
-    if (node.id.name == "makePredicate")
-      touchups.push({text: "// Removed to create an eval-free library", from: node.start, to: node.end});
+    if (node.id.name == "makePredicate") {
+      makePred = node
+      touchups.push({text: "// Removed to create an eval-free library", from: node.start, to: node.end})
+    }
   },
-  VariableDeclaration: function(node) {
-    node.declarations.forEach(function(decl) {
-      if (decl.init && decl.init.type == "CallExpression" &&
-          decl.init.callee.name == "makePredicate")
-        uses.push(decl);
-    });
+  ObjectExpression: function(node) {
+    node.properties.forEach(function(prop) {
+      if (prop.value.type == "CallExpression" &&
+          prop.value.callee.name == "makePredicate")
+        uses.push(prop.value)
+    })
   }
-});
+})
 
-var results = Object.create(null);
-var functions = new Function("predicates", acornSrc.replace(
-  /\}\);\s*$/, uses.map(function(decl) {
-    return "predicates[" + JSON.stringify(decl.id.name) + "] = " + decl.id.name + ";";
-  }).join("") + "});"))(results);
+var results = []
+var dryRun = acornSrc.slice(0, makePred.end) + "; makePredicate = (function(mp) {" +
+    "return function(words) { var r = mp(words); predicates.push(r); return r }})(makePredicate);" +
+    acornSrc.slice(makePred.end)
+;(new Function("predicates", dryRun))(results)
 
-uses.forEach(function(decl) {
-  touchups.push({text: results[decl.id.name].toString(),
-                 from: decl.init.start, to: decl.init.end});
-});
+uses.forEach(function (node, i) {
+  touchups.push({text: results[i].toString(), from: node.start, to: node.end})
+})
 
-var result = "", pos = 0;
-touchups.sort(function(a, b) { return a.from - b.from; });
+var result = "", pos = 0
+touchups.sort(function(a, b) { return a.from - b.from })
 touchups.forEach(function(touchup) {
-  result += acornSrc.slice(pos, touchup.from);
-  result += touchup.text;
-  pos = touchup.to;
-});
-result += acornSrc.slice(pos);
+  result += acornSrc.slice(pos, touchup.from)
+  result += touchup.text
+  pos = touchup.to
+})
+result += acornSrc.slice(pos)
 
-process.stdout.write(result);
+process.stdout.write(result)
