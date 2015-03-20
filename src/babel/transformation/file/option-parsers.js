@@ -12,6 +12,10 @@ export function transformerList(key, val) {
 }
 
 export function boolean(key, val) {
+  return !!val;
+}
+
+export function booleanString(key, val) {
   return util.booleanify(val);
 }
 

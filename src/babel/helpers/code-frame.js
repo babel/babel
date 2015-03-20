@@ -3,15 +3,13 @@ import repeating from "repeating";
 import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
-import ary from "lodash/function/ary";
 
 var defs = {
   string:     chalk.red,
-  punctuator: chalk.white.bold,
+  punctuator: chalk.bold,
   curly:      chalk.green,
   parens:     chalk.blue.bold,
   square:     chalk.yellow,
-  name:       chalk.white,
   keyword:    chalk.cyan,
   number:     chalk.magenta,
   regex:      chalk.magenta,
@@ -19,50 +17,51 @@ var defs = {
   invalid:    chalk.inverse
 };
 
-var newline = /\r\n|[\n\r\u2028\u2029]/;
+const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
-var highlight = function (text) {
-  var tokenType = function (match) {
-    var token = jsTokens.matchToToken(match);
-    if (token.type === "name" && esutils.keyword.isReservedWordES6(token.value)) {
-      return "keyword";
+function getTokenType(match) {
+  var token = jsTokens.matchToToken(match);
+  if (token.type === "name" && esutils.keyword.isReservedWordES6(token.value)) {
+    return "keyword";
+  }
+
+  if (token.type === "punctuator") {
+    switch (token.value) {
+      case "{":
+      case "}":
+        return "curly";
+      case "(":
+      case ")":
+        return "parens";
+      case "[":
+      case "]":
+        return "square";
     }
+  }
 
-    if (token.type === "punctuator") {
-      switch (token.value) {
-        case "{":
-        case "}":
-          return "curly";
-        case "(":
-        case ")":
-          return "parens";
-        case "[":
-        case "]":
-          return "square";
-      }
+  return token.type;
+}
+
+function highlight(text) {
+  return text.replace(jsTokens, function (...args) {
+    var type = getTokenType(args);
+    var colorize = defs[type];
+    if (colorize) {
+      return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
+    } else {
+      return args[0];
     }
-
-    return token.type;
-  };
-
-  return text.replace(jsTokens, function (match) {
-    var type = tokenType(arguments);
-    if (type in defs) {
-      var colorize = ary(defs[type], 1);
-      return match.split(newline).map(colorize).join("\n");
-    }
-    return match;
   });
-};
+}
 
-export default function (lines: number, lineNumber: number, colNumber: number, color?): string {
+export default function (lines: number, lineNumber: number, colNumber: number, opts?): string {
   colNumber = Math.max(colNumber, 0);
 
-  if (color && chalk.supportsColor) {
+  if (opts.highlightCode && chalk.supportsColor) {
     lines = highlight(lines);
   }
 
-  lines = lines.split(newline);
+  lines = lines.split(NEWLINE);
 
   var start = Math.max(lineNumber - 3, 0);
   var end   = Math.min(lines.length, lineNumber + 3);
@@ -72,7 +71,7 @@ export default function (lines: number, lineNumber: number, colNumber: number, c
     end = lines.length;
   }
 
-  return "\n" + lineNumbers(lines.slice(start, end), {
+  return lineNumbers(lines.slice(start, end), {
     start: start + 1,
     before: "  ",
     after: " | ",

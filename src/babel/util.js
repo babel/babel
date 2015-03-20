@@ -1,5 +1,6 @@
 import "./patch";
 
+import escapeRegExp from "lodash/string/escapeRegExp";
 import buildDebug from "debug/node";
 import cloneDeep from "lodash/lang/cloneDeep";
 import isBoolean from "lodash/lang/isBoolean";
@@ -43,7 +44,7 @@ export function list(val: string): Array<string> {
 
 export function regexify(val: any): RegExp {
   if (!val) return new RegExp(/.^/);
-  if (Array.isArray(val)) val = val.join("|");
+  if (Array.isArray(val)) val = new RegExp(val.map(escapeRegExp).join("|"), "i");
   if (isString(val)) return minimatch.makeRe(val, { nocase: true });
   if (isRegExp(val)) return val;
   throw new TypeError("illegal type for regexify");

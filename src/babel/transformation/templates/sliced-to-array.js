@@ -1,5 +1,5 @@
 (function (arr, i) {
-  if (Array.isArray(arr)) {
+  if (arr && arr.constructor === Array) {
     return arr;
   } else if (Symbol.iterator in Object(arr)) {
     // this is an expanded form of `for...of` that properly supports abrupt completions of
@@ -17,9 +17,8 @@
     var _d = false;
     var _e = undefined;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n (_s = _i.next()).done); _n = true) {
-        var val = _s.value;
-        _arr.push(_step.value);
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
     } catch (err) {

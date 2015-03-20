@@ -5,7 +5,7 @@ transform.version = require("../../../package").version;
 transform.transform = transform;
 
 transform.run = function (code, opts = {}) {
-  opts.sourceMap = "inline";
+  opts.sourceMaps = "inline";
   return new Function(transform(code, opts).code)();
 };
 

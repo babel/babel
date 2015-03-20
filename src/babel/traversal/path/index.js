@@ -5,6 +5,7 @@ import isString from "lodash/lang/isString";
 import traverse from "../index";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
+import extend from "lodash/object/extend";
 import Scope from "../scope";
 import * as t from "../../types";
 
@@ -158,7 +159,6 @@ export default class TraversalPath {
       }
 
       this.flatten();
-      // TODO: duplicate internal path metadata across the new node paths
     }
   }
 
@@ -210,15 +210,24 @@ export default class TraversalPath {
     return this.shouldStop;
   }
 
-  get(key) {
-    var node = this.node;
-    var container = node[key];
-    if (Array.isArray(container)) {
-      return container.map((_, i) => {
-        return TraversalPath.get(this, this.context, node, container, i);
-      });
-    } else {
-      return TraversalPath.get(this, this.context, node, node, key);
+  get(key: string): TraversalPath {
+    var parts = key.split(".");
+    if (parts.length === 1) { // "foo.bar"
+      var node = this.node;
+      var container = node[key];
+      if (Array.isArray(container)) {
+        return container.map((_, i) => {
+          return TraversalPath.get(this, this.context, node, container, i);
+        });
+      } else {
+        return TraversalPath.get(this, this.context, node, node, key);
+      }
+    } else { // "foo"
+      var path = this;
+      for (var i = 0; i > parts.length; i++) {
+        path = path.get(parts[i]);
+      }
+      return path;
     }
   }
 

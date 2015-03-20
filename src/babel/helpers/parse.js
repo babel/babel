@@ -40,11 +40,12 @@ export default function (opts, code, callback) {
     if (!err._babel) {
       err._babel = true;
 
-      var message = `${opts.filename}: ${err.message}`;
+      var message = err.message = `${opts.filename}: ${err.message}`;
 
       var loc = err.loc;
       if (loc) {
-        message += codeFrame(code, loc.line, loc.column + 1, opts.highlightErrors);
+        err.codeFrame = codeFrame(code, loc.line, loc.column + 1, opts);
+        message += "\n" + err.codeFrame;
       }
 
       if (err.stack) {
@@ -55,8 +56,6 @@ export default function (opts, code, callback) {
           // `err.stack` may be a readonly property in some environments
         }
       }
-
-      err.message = message;
     }
 
     throw err;

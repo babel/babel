@@ -6,7 +6,7 @@ export default class SourceMap {
     this.position = position;
     this.opts     = opts;
 
-    if (opts.sourceMap) {
+    if (opts.sourceMaps) {
       this.map = new sourceMap.SourceMapGenerator({
         file: opts.sourceMapName,
         sourceRoot: opts.sourceRoot

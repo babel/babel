@@ -282,6 +282,7 @@ export function inheritsComments(child: Object, parent: Object): Object {
 
 export function inherits(child: Object, parent: Object): Object {
   child._declarations = parent._declarations;
+  child._scopeInfo    = parent._scopeInfo;
   child.range         = parent.range;
   child.start         = parent.start;
   child.loc           = parent.loc;

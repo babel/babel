@@ -1,6 +1,6 @@
 "use strict";
 
-for (var _iterator = arr, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+for (var _iterator = arr, _isArray = _iterator && _iterator.constructor === Array, _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
   var _ref;
 
   if (_isArray) {
@@ -15,7 +15,7 @@ for (var _iterator = arr, _isArray = Array.isArray(_iterator), _i = 0, _iterator
   var i = _ref;
 }
 
-for (var _iterator2 = numbers, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+for (var _iterator2 = numbers, _isArray2 = _iterator2 && _iterator2.constructor === Array, _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
   var _ref2;
 
   if (_isArray2) {

@@ -5989,6 +5989,53 @@ test("var x = { *test () { yield *v } };", {
   locations: true
 });
 
+test("function* foo() { console.log(yield); }", {
+  body: [
+    {
+      id: {
+        name: "foo",
+        type: "Identifier",
+      },
+      generator: true,
+      expression: false,
+      params: [],
+      body: {
+        body: [
+          {
+            expression: {
+              callee: {
+                object: {
+                  name: "console",
+                  type: "Identifier",
+                },
+                property: {
+                  name: "log",
+                  type: "Identifier",
+                },
+                computed: false,
+                type: "MemberExpression",
+              },
+              arguments: [
+                {
+                  delegate: false,
+                  argument: null,
+                  type: "YieldExpression",
+                }
+              ],
+              type: "CallExpression",
+            },
+            type: "ExpressionStatement",
+          }
+        ],
+        type: "BlockStatement",
+      },
+      type: "FunctionDeclaration",
+    }
+  ],
+  sourceType: "script",
+  type: "Program"
+}, {ecmaVersion: 6})
+
 test("function* t() {}", {
   type: "Program",
   body: [{
@@ -13814,6 +13861,34 @@ test("/[a-z]/u", {
   ecmaVersion: 6
 });
 
+test("/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Literal",
+        regex: {
+          pattern: "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
+          flags: "u"
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 33
+          }
+        }
+      }
+    }
+  ]
+}, {
+  locations: true,
+  ecmaVersion: 6
+});
 
 test("do {} while (false) foo();", {
   type: "Program",
@@ -15419,6 +15494,36 @@ test("let {x} = y", {
   "end": 11
 }, {ecmaVersion: 6})
 
+test("[x,,] = 1", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        operator: "=",
+        left: {
+          type: "ArrayPattern",
+          elements: [
+            {
+              type: "Identifier",
+              name: "x"
+            },
+            null
+          ]
+        },
+        right: {
+          type: "Literal",
+          value: 1,
+          raw: "1"
+        }
+      }
+    }
+  ]
+}, {ecmaVersion: 6});
+
+testFail("let [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
+testFail("var [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
 testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
 testFail("var 𫠞_ = 12;", "Unexpected character '𫠞' (1:4)", {ecmaVersion: 6});
 testFail("var 𫠝_ = 10;", "Unexpected character '𫠝' (1:4)", {ecmaVersion: 5});
@@ -15431,3 +15536,5 @@ testFail("'use strict'; [...eval] = arr", "Assigning to eval in strict mode (1:1
 testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict mode (1:16)", {ecmaVersion: 6});
 
 testFail("[...eval] = arr", "Assigning to eval in strict mode (1:4)", {ecmaVersion: 6, sourceType: "module"});
+
+testFail("function* y({yield}) {}", "Binding yield (1:13)", {ecmaVersion: 6});

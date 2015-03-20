@@ -294,6 +294,7 @@ export default class Scope {
     } else if (i) {
       args.push(t.literal(i));
       helperName = "sliced-to-array";
+      if (this.file.isLoose("es6.forOf")) helperName += "-loose";
     }
     return t.callExpression(file.addHelper(helperName), args);
   }
@@ -400,14 +401,14 @@ export default class Scope {
 
     //
 
-    var info = path.getData("scopeInfo");
+    var info = this.block._scopeInfo;
     if (info) return extend(this, info);
 
-    info = path.setData("scopeInfo", {
+    info = this.block._scopeInfo = {
       bindings: object(),
       globals:  object(),
       uids:     object()
-    });
+    };
 
     extend(this, info);
 

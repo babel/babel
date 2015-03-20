@@ -19,8 +19,12 @@
 
   },
 
-  "highlightErrors": {
-    "description": "ANSI syntax highlight error messages",
+  "highlightTheme": {
+    "hidden": true
+  },
+
+  "highlightCode": {
+    "description": "ANSI syntax highlight code frames",
     "type": "boolean",
     "default": true
   },
@@ -135,7 +139,12 @@
   },
 
   "sourceMap": {
-    "type": "string",
+    "alias": "sourceMaps",
+    "hidden": true
+  },
+
+  "sourceMaps": {
+    "type": "booleanString",
     "default": false,
     "shorthand": "s"
   },

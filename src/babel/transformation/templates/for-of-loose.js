@@ -1,5 +1,5 @@
 for (var LOOP_OBJECT = OBJECT,
-         IS_ARRAY = Array.isArray(LOOP_OBJECT),
+         IS_ARRAY = LOOP_OBJECT && LOOP_OBJECT.constructor === Array,
          INDEX = 0,
          LOOP_OBJECT = IS_ARRAY ? LOOP_OBJECT : LOOP_OBJECT[Symbol.iterator]();;) {
   var ID;

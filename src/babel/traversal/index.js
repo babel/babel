@@ -38,8 +38,9 @@ traverse.node = function (node, opts, scope, state, parentPath) {
 };
 
 const CLEAR_KEYS = [
-  "trailingComments", "leadingComments", "_declarations", "extendedRange",
-  "_paths", "tokens", "range", "start", "end", "loc", "raw"
+  "trailingComments", "leadingComments", "extendedRange",
+  "_declarations", "_scopeInfo" ,"_paths",
+  "tokens", "range", "start", "end", "loc", "raw"
 ];
 
 function clearNode(node) {

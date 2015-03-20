@@ -65,6 +65,7 @@ export default class File {
     "to-array",
     "to-consumable-array",
     "sliced-to-array",
+    "sliced-to-array-loose",
     "object-without-properties",
     "has-own",
     "slice",
@@ -111,11 +112,15 @@ export default class File {
       var optionParser = optionParsers[option.type];
       if (optionParser) val = optionParser(key, val);
 
-      opts[key] = val;
+      if (option.alias) {
+        opts[option.alias] ||= val;
+      } else {
+        opts[key] = val;
+      }
     }
 
     if (opts.inputSourceMap) {
-      opts.sourceMap = true;
+      opts.sourceMaps = true;
     }
 
     // normalize windows path separators to unix
@@ -382,9 +387,9 @@ export default class File {
     //
 
     var parseOpts = {
-      highlightErrors: opts.highlightErrors,
-      filename:        opts.filename,
-      plugins:         {}
+      highlightCode: opts.highlightCode,
+      filename:      opts.filename,
+      plugins:       {}
     };
 
     var features = parseOpts.features = {};
@@ -448,9 +453,8 @@ export default class File {
     var stack = this.transformerStack;
     for (var i = 0; i < stack.length; i++) {
       var transformer = stack[i].transformer;
-      if (transformer[key]) {
-        transformer[key](this);
-      }
+      var fn = transformer[key];
+      if (fn) fn(this);
     }
   }
 
@@ -527,11 +531,11 @@ export default class File {
 
     result.map = this.mergeSourceMap(result.map);
 
-    if (opts.sourceMap === "inline" || opts.sourceMap === "both") {
+    if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {
       result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
     }
 
-    if (opts.sourceMap === "inline") {
+    if (opts.sourceMaps === "inline") {
       result.map = null;
     }
 

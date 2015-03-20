@@ -1,3 +1,4 @@
 {
+  "externalHelpers": true,
   "blacklist": ["es6.tailCall"]
 }
