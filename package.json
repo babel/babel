@@ -1,9 +1,9 @@
 {
   "name": "acorn",
   "description": "ECMAScript parser",
-  "homepage": "http://marijnhaverbeke.nl/acorn/",
+  "homepage": "https://github.com/marijnh/acorn",
   "main": "dist/acorn.js",
-  "version": "0.12.1",
+  "version": "1.0.0",
   "engines": {
     "node": ">=0.4.0"
   },
@@ -12,16 +12,21 @@
       "name": "Marijn Haverbeke",
       "email": "marijnh@gmail.com",
       "web": "http://marijnhaverbeke.nl"
+    },
+    {
+      "name": "Ingvar Stepanyan",
+      "email": "me@rreverser.com",
+      "web": "http://rreverser.com/"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "http://marijnhaverbeke.nl/git/acorn"
+    "url": "https://github.com/marijnh/acorn.git"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://marijnhaverbeke.nl/acorn/LICENSE"
+      "url": "https://raw.githubusercontent.com/marijnh/acorn/master/LICENSE"
     }
   ],
   "scripts": {
@@ -34,7 +39,6 @@
   "devDependencies": {
     "babelify": "^5.0.4",
     "browserify": "^9.0.3",
-    "regenerate": "~0.6.2",
     "unicode-7.0.0": "~0.1.5"
   }
 }
