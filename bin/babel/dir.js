@@ -6,10 +6,6 @@ var fs             = require("fs");
 var _              = require("lodash");
 
 module.exports = function (commander, filenames, opts) {
-  if (commander.sourceMapsInline) {
-    opts.sourceMap = "inline";
-  }
-
   var write = function (src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
@@ -20,7 +16,7 @@ module.exports = function (commander, filenames, opts) {
       sourceFileName: path.relative(dest + "/..", src)
     });
 
-    if (commander.sourceMaps) {
+    if (commander.sourceMaps && commander.sourceMaps !== "inline") {
       var mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
       outputFileSync(mapLoc, JSON.stringify(data.map));

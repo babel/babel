@@ -91,12 +91,6 @@ if (commander.watch) {
   }
 }
 
-if (commander.sourceMaps) {
-  if (!commander.outFile && !commander.outDir) {
-    errors.push("--source-maps requires --out-file or --out-dir");
-  }
-}
-
 if (errors.length) {
   console.error(errors.join(". "));
   process.exit(2);

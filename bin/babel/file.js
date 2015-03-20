@@ -6,7 +6,11 @@ var util             = require("./util");
 var fs               = require("fs");
 var _                = require("lodash");
 
-module.exports = function (commander, filenames) {
+module.exports = function (commander, filenames, opts) {
+  if (commander.sourceMaps === "inline") {
+    opts.sourceMaps = true;
+  }
+
   var results = [];
 
   var buildResult = function () {
@@ -41,7 +45,7 @@ module.exports = function (commander, filenames) {
       }
     });
 
-    if (commander.sourceMapsInline || (!commander.outFile && commander.sourceMaps)) {
+    if (commander.sourceMaps === "inline" || (!commander.outFile && commander.sourceMaps)) {
       code += "\n" + convertSourceMap.fromObject(map).toComment();
     }
 
@@ -55,7 +59,7 @@ module.exports = function (commander, filenames) {
     var result = buildResult();
 
     if (commander.outFile) {
-      if (commander.sourceMaps) {
+      if (commander.sourceMaps && commander.sourceMaps !== "inline") {
         var mapLoc = commander.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
         fs.writeFileSync(mapLoc, JSON.stringify(result.map));
