@@ -27,7 +27,7 @@
       try {
         var ast = parse(test.code, testOpts);
       } catch(e) {
-        if (!(e instanceof SyntaxError)) throw e;
+        if (!(e instanceof SyntaxError)) { console.log(e.stack); throw e; }
         if (test.error) {
           if (e.message == test.error) callback("ok", test.code);
           else callback("fail", test.code,

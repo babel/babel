@@ -59,6 +59,10 @@ Parser.prototype.extend = function(name, f) {
   this[name] = f(this[name])
 }
 
+// Registered plugins
+
+export const plugins = {}
+
 Parser.prototype.loadPlugins = function(plugins) {
   for (let name in plugins) {
     let plugin = exports.plugins[name]

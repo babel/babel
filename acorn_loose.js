@@ -41,13 +41,13 @@
   acorn.defaultOptions.tabSize = 4;
 
   exports.parse_dammit = function(input, options) {
-    var p = new LooseParser(options, input);
+    var p = new LooseParser(input, options);
     p.next();
     return p.parseTopLevel();
   };
 
   var LooseParser = exports.LooseParser = function(input, options) {
-    this.toks = new acorn.Parser(input, options);
+    this.toks = acorn.tokenizer(input, options)
     this.options = this.toks.options;
     this.input = this.toks.input;
     this.tok = this.last = {type: tt.eof, start: 0, end: 0};
@@ -149,9 +149,9 @@
 
     if (this.options.locations) {
       this.toks.curLine = 1;
-      this.toks.lineStart = acorn.lineBreak.lastIndex = 0;
+      this.toks.lineStart = acorn.lineBreakG.lastIndex = 0;
       var match;
-      while ((match = acorn.lineBreak.exec(this.input)) && match.index < pos) {
+      while ((match = acorn.lineBreakG.exec(this.input)) && match.index < pos) {
         ++this.toks.curLine;
         this.toks.lineStart = match.index + match[0].length;
       }
@@ -273,7 +273,7 @@
 
   lp.canInsertSemicolon = function() {
     return this.tok.type === tt.eof || this.tok.type === tt.braceR ||
-      acorn.newline.test(this.input.slice(this.last.end, this.tok.start));
+      acorn.lineBreak.test(this.input.slice(this.last.end, this.tok.start));
   };
 
   lp.semicolon = function() {
