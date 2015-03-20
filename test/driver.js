@@ -69,7 +69,8 @@
 
   var misMatch = exports.misMatch = function(exp, act) {
     if (!exp || !act || (typeof exp != "object") || (typeof act != "object")) {
-      if (exp !== act) return ppJSON(exp) + " !== " + ppJSON(act);
+      if (exp !== act && typeof exp != "function")
+        return ppJSON(exp) + " !== " + ppJSON(act);
     } else if (exp instanceof RegExp || act instanceof RegExp) {
       var left = ppJSON(exp), right = ppJSON(act);
       if (left !== right) return left + " !== " + right;

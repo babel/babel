@@ -51,12 +51,12 @@
   var stats, modes = {
     Normal: {
       config: {
-        parse: (typeof require === "undefined" ? window.acorn : require("../dist/acorn")).parse
+        parse: acorn.parse
       }
     },
     Loose: {
       config: {
-        parse: (typeof require === "undefined" ? window.acorn : require("../dist/acorn_loose")).parse_dammit,
+        parse: acorn.parse_dammit,
         loose: true,
         filter: function (test) {
           var opts = test.options || {};
