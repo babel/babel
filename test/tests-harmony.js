@@ -15596,3 +15596,32 @@ test("new.target", {
 }, {ecmaVersion: 6});
 
 testFail("new.prop", "The only valid meta property for new is new.target (1:4)", {ecmaVersion: 6});
+
+test("export default function () {} false", {
+  body: [
+    {
+      declaration: {
+        id: null,
+        generator: false,
+        expression: false,
+        params: [],
+        body: {
+          body: [],
+          type: "BlockStatement"
+        },
+        type: "FunctionExpression"
+      },
+      type: "ExportDefaultDeclaration"
+    },
+    {
+      expression: {
+        value: false,
+        raw: "false",
+        type: "Literal"
+      },
+      type: "ExpressionStatement"
+    }
+  ],
+  sourceType: "module",
+  type: "Program"
+}, {ecmaVersion: 6, sourceType: "module"})

@@ -458,14 +458,14 @@ pp.parseExport = function(node) {
   }
   if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign()
-    if (expr.id) {
-      switch (expr.type) {
+    let needsSemi = false
+    if (expr.id) switch (expr.type) {
       case "FunctionExpression": expr.type = "FunctionDeclaration"; break
       case "ClassExpression": expr.type = "ClassDeclaration"; break
-      }
+      default: needsSemi = true
     }
     node.declaration = expr
-    this.semicolon()
+    if (needsSemi) this.semicolon()
     return this.finishNode(node, "ExportDefaultDeclaration")
   }
   // export var|const|let|function|class ...
