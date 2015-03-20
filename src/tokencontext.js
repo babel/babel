@@ -32,72 +32,72 @@ pp.initialContext = function() {
 }
 
 pp.braceIsBlock = function(prevType) {
-  var parent;
+  let parent
   if (prevType === tt.colon && (parent = this.curContext()).token == "{")
-    return !parent.isExpr;
+    return !parent.isExpr
   if (prevType === tt._return)
-    return lineBreak.test(this.input.slice(this.lastTokEnd, this.start));
+    return lineBreak.test(this.input.slice(this.lastTokEnd, this.start))
   if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof)
-    return true;
+    return true
   if (prevType == tt.braceL)
-    return this.curContext() === types.b_stat;
-  return !this.exprAllowed;
-};
+    return this.curContext() === types.b_stat
+  return !this.exprAllowed
+}
 
 pp.updateContext = function(prevType) {
-  var update, type = this.type;
+  let update, type = this.type
   if (type.keyword && prevType == tt.dot)
-    this.exprAllowed = false;
+    this.exprAllowed = false
   else if (update = type.updateContext)
-    update.call(this, prevType);
+    update.call(this, prevType)
   else
-    this.exprAllowed = type.beforeExpr;
-};
+    this.exprAllowed = type.beforeExpr
+}
 
 // Token-specific context update code
 
 tt.parenR.updateContext = tt.braceR.updateContext = function() {
-  var out = this.context.pop();
+  let out = this.context.pop()
   if (out === types.b_stat && this.curContext() === types.f_expr) {
-    this.context.pop();
-    this.exprAllowed = false;
+    this.context.pop()
+    this.exprAllowed = false
   } else if (out === types.b_tmpl) {
-    this.exprAllowed = true;
+    this.exprAllowed = true
   } else {
-    this.exprAllowed = !(out && out.isExpr);
+    this.exprAllowed = !(out && out.isExpr)
   }
-};
+}
 
 tt.braceL.updateContext = function(prevType) {
-  this.context.push(this.braceIsBlock(prevType) ? types.b_stat : types.b_expr);
-  this.exprAllowed = true;
-};
+  this.context.push(this.braceIsBlock(prevType) ? types.b_stat : types.b_expr)
+  this.exprAllowed = true
+}
 
 tt.dollarBraceL.updateContext = function() {
-  this.context.push(types.b_tmpl);
-  this.exprAllowed = true;
-};
+  this.context.push(types.b_tmpl)
+  this.exprAllowed = true
+}
 
 tt.parenL.updateContext = function(prevType) {
-  var statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
-  this.context.push(statementParens ? types.p_stat : types.p_expr);
-  this.exprAllowed = true;
-};
+  let statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while
+  this.context.push(statementParens ? types.p_stat : types.p_expr)
+  this.exprAllowed = true
+}
 
 tt.incDec.updateContext = function() {
   // tokExprAllowed stays unchanged
-};
+}
 
 tt._function.updateContext = function() {
   if (this.curContext() !== types.b_stat)
-    this.context.push(types.f_expr);
-  this.exprAllowed = false;
-};
+    this.context.push(types.f_expr)
+  this.exprAllowed = false
+}
 
 tt.backQuote.updateContext = function() {
   if (this.curContext() === types.q_tmpl)
-    this.context.pop();
+    this.context.pop()
   else
-    this.context.push(types.q_tmpl);
-  this.exprAllowed = false;
-};
+    this.context.push(types.q_tmpl)
+  this.exprAllowed = false
+}

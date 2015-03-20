@@ -51,17 +51,17 @@ const pp = Parser.prototype
 // message.
 
 pp.raise = function(pos, message) {
-  var loc = getLineInfo(this.input, pos);
-  message += " (" + loc.line + ":" + loc.column + ")";
-  var err = new SyntaxError(message);
-  err.pos = pos; err.loc = loc; err.raisedAt = this.pos;
-  throw err;
-};
+  let loc = getLineInfo(this.input, pos)
+  message += " (" + loc.line + ":" + loc.column + ")"
+  let err = new SyntaxError(message)
+  err.pos = pos; err.loc = loc; err.raisedAt = this.pos
+  throw err
+}
 
 pp.curPosition = function() {
-  return new Position(this.curLine, this.pos - this.lineStart);
-};
+  return new Position(this.curLine, this.pos - this.lineStart)
+}
 
 pp.markPosition = function() {
-  return this.options.locations ? [this.start, this.startLoc] : this.start;
-};
+  return this.options.locations ? [this.start, this.startLoc] : this.start
+}
