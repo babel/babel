@@ -15579,3 +15579,18 @@ testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict
 testFail("[...eval] = arr", "Assigning to eval in strict mode (1:4)", {ecmaVersion: 6, sourceType: "module"});
 
 testFail("function* y({yield}) {}", "Binding yield (1:13)", {ecmaVersion: 6});
+
+test("new.target", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "MetaProperty",
+      meta: {type: "Identifier", name: "new"},
+      property: {type: "Identifier", name: "target"}
+    }
+  }],
+  sourceType: "script"
+}, {ecmaVersion: 6});
+
+testFail("new.prop", "The only valid meta property for new is new.target (1:4)", {ecmaVersion: 6});

@@ -382,7 +382,14 @@ const empty = []
 
 pp.parseNew = function() {
   let node = this.startNode()
-  this.next()
+  let meta = this.parseIdent(true)
+  if (this.options.ecmaVersion >= 6 && this.eat(tt.dot)) {
+    node.meta = meta
+    node.property = this.parseIdent(true)
+    if (node.property.name !== "target")
+      this.raise(node.property.start, "The only valid meta property for new is new.target")
+    return this.finishNode(node, "MetaProperty")
+  }
   let start = this.markPosition()
   node.callee = this.parseSubscripts(this.parseExprAtom(), start, true)
   if (this.eat(tt.parenL)) node.arguments = this.parseExprList(tt.parenR, false)

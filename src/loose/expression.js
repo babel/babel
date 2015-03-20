@@ -269,7 +269,12 @@ lp.parseExprAtom = function() {
 
 lp.parseNew = function() {
   let node = this.startNode(), startIndent = this.curIndent, line = this.curLineStart
-  this.next()
+  let meta = this.parseIdent(true)
+  if (this.options.ecmaVersion >= 6 && this.eat(tt.dot)) {
+    node.meta = meta
+    node.property = this.parseIdent(true)
+    return this.finishNode(node, "MetaProperty")
+  }
   let start = this.storeCurrentPos()
   node.callee = this.parseSubscripts(this.parseExprAtom(), start, true, startIndent, line)
   if (this.tok.type == tt.parenL) {
