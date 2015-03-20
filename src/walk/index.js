@@ -227,7 +227,7 @@ base.Function = (node, st, c) => c(node.body, st, "ScopeBody")
 base.ScopeBody = (node, st, c) => c(node, st, "Statement")
 
 base.Expression = skipThrough
-base.ThisExpression = ignore
+base.ThisExpression = base.Super = base.MetaProperty = ignore
 base.ArrayExpression = base.ArrayPattern =  (node, st, c) => {
   for (let i = 0; i < node.elements.length; ++i) {
     let elt = node.elements[i]
