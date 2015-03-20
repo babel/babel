@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "test": "node test/run.js",
-    "prepublish": "node bin/prepublish.sh"
+    "prepublish": "bin/prepublish.sh"
   },
   "bin": {
     "acorn": "./bin/acorn"
