@@ -4,8 +4,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   experimental: true,
-  optional: true,
-  react: true
+  optional: true
 };
 
 export function manipulateOptions(opts) {
