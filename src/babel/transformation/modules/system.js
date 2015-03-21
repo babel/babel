@@ -42,7 +42,7 @@ var hoistVariablesVisitor = {
         }
 
         if (parent.init === node) {
-          return t.toSequenceExpression(nodes, scope);
+          return nodes;
         }
       }
 

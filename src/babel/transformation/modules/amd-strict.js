@@ -1,1 +1,3 @@
-module.exports = require("./_strict")(require("./amd"));
+import AMDFormatter from "./amd";
+import buildStrict from "./_strict";
+export default buildStrict(AMDFormatter);

@@ -54,7 +54,7 @@ function highlight(text) {
   });
 }
 
-export default function (lines: number, lineNumber: number, colNumber: number, opts?): string {
+export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
   colNumber = Math.max(colNumber, 0);
 
   if (opts.highlightCode && chalk.supportsColor) {

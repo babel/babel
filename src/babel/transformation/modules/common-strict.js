@@ -1,1 +1,3 @@
-module.exports = require("./_strict")(require("./common"));
+import CommonFormatter from "./common";
+import buildStrict from "./_strict";
+export default buildStrict(CommonFormatter);
