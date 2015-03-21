@@ -1,5 +1,6 @@
 export default {
   "es7.asyncFunctions":                    require("./es7/async-functions"),
+  "es7.decorators":                        require("./es7/decorators"),
 
   strict:                                  require("./other/strict"),
 

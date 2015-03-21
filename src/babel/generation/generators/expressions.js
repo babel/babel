@@ -61,6 +61,11 @@ export function Super() {
   this.push("super");
 }
 
+export function Decorator(node, print) {
+  this.push("@");
+  print(node.expression);
+}
+
 export function CallExpression(node, print) {
   print(node.callee);
 

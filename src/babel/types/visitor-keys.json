@@ -17,6 +17,7 @@
   "ComprehensionExpression":   ["filter", "blocks", "body"],
   "ConditionalExpression":     ["test", "consequent", "alternate"],
   "ContinueStatement":         ["label"],
+  "Decorator":                 ["expression"],
   "DebuggerStatement":         [],
   "DoWhileStatement":          ["body", "test"],
   "DoExpression":              ["body"],

@@ -51,6 +51,8 @@ export function Parser(options, input, startPos) {
   // Labels in scope.
   this.labels = []
 
+  this.decorators = []
+
   // If enabled, skip leading hashbang line.
   if (this.pos === 0 && this.options.allowHashBang && this.input.slice(0, 2) === '#!')
     this.skipLineComment(2)

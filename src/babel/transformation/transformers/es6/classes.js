@@ -67,6 +67,7 @@ class ClassTransformer {
 
     this.hasInstanceMutators = false;
     this.hasStaticMutators   = false;
+    this.hasDecorators       = false;
 
     this.instanceMutatorMap = {};
     this.staticMutatorMap   = {};
@@ -139,6 +140,16 @@ class ClassTransformer {
 
     this.buildBody();
 
+    var decorators = this.node.decorators;
+    if (decorators) {
+      for (var i = 0; i < decorators.length; i++) {
+        var decorator = decorators[i];
+        body.push(util.template("class-decorator", {
+          DECORATOR: decorator.expression,
+          CLASS_REF: classRef
+        }, true));
+      }
+    }
 
     if (this.className) {
       // named class with only a constructor
@@ -218,6 +229,7 @@ class ClassTransformer {
     var instanceProps;
     var staticProps;
     var classHelper = "create-class";
+    if (this.hasDecorators) classHelper = "create-decorated-class";
 
     if (this.hasInstanceMutators) {
       instanceProps = defineMap.toClassObject(this.instanceMutatorMap);
@@ -228,11 +240,8 @@ class ClassTransformer {
     }
 
     if (instanceProps || staticProps) {
-      if (defineMap.hasComputed(this.instanceMutatorMap) || defineMap.hasComputed(this.staticMutatorMap)) {
-        if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
-        if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
-        classHelper = "create-computed-class";
-      }
+      if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
+      if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
 
       instanceProps ||= t.literal(null);
 
@@ -300,6 +309,15 @@ class ClassTransformer {
     }
 
     defineMap.push(mutatorMap, methodName, kind, node.computed, node);
+
+    var decorators = node.decorators;
+    if (decorators && decorators.length) {
+      for (var i = 0; i < decorators.length; i++) {
+        decorators[i] = decorators[i].expression;
+      }
+      defineMap.push(mutatorMap, methodName, "decorators", node.computed, t.arrayExpression(decorators));
+      this.hasDecorators = true;
+    }
   }
 
   /**
