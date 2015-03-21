@@ -57,7 +57,7 @@ export function ThisExpression() {
   this.push("this");
 }
 
-export function SuperExpression() {
+export function Super() {
   this.push("super");
 }
 
@@ -157,3 +157,5 @@ export function MemberExpression(node, print) {
     print(node.property);
   }
 }
+
+export { MemberExpression as MetaProperty };

@@ -1,7 +1,7 @@
 import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
 import codeFrame from "./code-frame";
-import acorn from "../../../vendor/acorn";
+import * as acorn from "../../acorn";
 
 export default function (opts, code, callback) {
   try {

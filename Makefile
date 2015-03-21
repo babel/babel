@@ -11,13 +11,13 @@ export NODE_ENV = test
 .PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test
 
 build-core:
-	node $(BABEL_CMD) src/babel --out-dir lib/babel --copy-files
+	node $(BABEL_CMD) src --out-dir lib --copy-files
 
 build-core-test:
-	node $(BABEL_CMD) src/babel --out-dir lib/babel --copy-files --auxiliary-comment "istanbul ignore next"
+	node $(BABEL_CMD) src --out-dir lib --copy-files --auxiliary-comment "istanbul ignore next"
 
 watch-core:
-	node $(BABEL_CMD) src/babel --out-dir lib/babel --watch --copy-files
+	node $(BABEL_CMD) src --out-dir lib --watch --copy-files
 
 build:
 	mkdir -p dist
@@ -56,7 +56,7 @@ test-cov:
 	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
 
 test-parser:
-	node vendor/acorn/test/run.js
+	node lib/acorn/test/run.js
 
 test-travis: bootstrap build test
 

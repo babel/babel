@@ -1,12 +1,13 @@
 import isFunction from "lodash/lang/isFunction";
 import transform from "../transformation";
+import * as acorn from "../../acorn";
 import * as util from "../util";
 import fs from "fs";
 
 export { util };
 export { canCompile } from "../util";
 
-export { default as acorn } from "../../../vendor/acorn";
+export { acorn } from "../../acorn";
 export { default as Transformer } from "../transformation/transformer";
 export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";

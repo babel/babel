@@ -20,6 +20,11 @@ export function isReferenced(node: Object, parent: Object): boolean {
         return false;
       }
 
+    // no: new.NODE
+    // no: NODE.target
+    case "MetaProperty":
+      return false;
+
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     case "Property":
