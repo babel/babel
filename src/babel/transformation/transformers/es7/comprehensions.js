@@ -16,8 +16,7 @@ export function ComprehensionExpression(node, parent, scope, file) {
 
 function generator(node) {
   var body = [];
-  var container = t.functionExpression(null, [], t.blockStatement(body), true);
-  container._aliasFunction = true;
+  var container = t.shadowFunctionExpression(null, [], t.blockStatement(body), true);
 
   body.push(buildComprehension(node, function () {
     return t.expressionStatement(t.yieldExpression(node.body));
@@ -32,7 +31,7 @@ function array(node, parent, scope, file) {
   var container = util.template("array-comprehension-container", {
     KEY: uid
   });
-  container.callee._aliasFunction = true;
+  container.callee.type = "ShadowFunctionExpression";
 
   var block = container.callee.body;
   var body  = block.body;

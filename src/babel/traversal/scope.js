@@ -198,8 +198,8 @@ export default class Scope {
    * Description
    */
 
-  generateTempBasedOnNode(node: Object): ?Object {
-    if (t.isThisExpression(node) || t.isSuperExpression(node)) {
+  generateMemoisedReference(node: Object, dontPush?: boolean): ?Object {
+    if (t.isThisExpression(node) || t.isSuper(node)) {
       return null;
     }
 
@@ -208,10 +208,7 @@ export default class Scope {
     }
 
     var id = this.generateUidBasedOnNode(node);
-    this.push({
-      key: id.name,
-      id: id
-    });
+    if (!dontPush) this.push({ id });
     return id;
   }
 
@@ -513,7 +510,7 @@ export default class Scope {
 
   getFunctionParent() {
     var scope = this;
-    while (scope.parent && !t.isFunction(scope.block)) {
+    while (scope.parent && !t.isFunction(scope.block) && !t.isShadowFunctionExpression(scope.block)) {
       scope = scope.parent;
     }
     return scope;

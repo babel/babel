@@ -40,6 +40,6 @@ export default function (exports, opts) {
     // todo: duplicate expression node
     nodes.push(exploded.ref);
 
-    return t.toSequenceExpression(nodes, scope);
+    return nodes;
   };
 };

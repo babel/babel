@@ -104,8 +104,6 @@ export function ObjectExpression(node, parent, scope, file) {
   //
 
   var body = [];
-  var container = t.functionExpression(null, [], t.blockStatement(body));
-  container._aliasFunction = true;
 
   //
 
@@ -121,7 +119,7 @@ export function ObjectExpression(node, parent, scope, file) {
     t.variableDeclarator(objId, t.objectExpression(initProps))
   ]));
 
-  body.push(t.returnStatement(objId));
+  body.push(t.expressionStatement(objId));
 
-  return t.callExpression(container, []);
+  return body;
 }

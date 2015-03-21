@@ -82,7 +82,7 @@ export function CallExpression(node, parent, scope) {
   var callee = node.callee;
 
   if (this.get("callee").isMemberExpression()) {
-    var temp = scope.generateTempBasedOnNode(callee.object);
+    var temp = scope.generateMemoisedReference(callee.object);
     if (temp) {
       callee.object = t.assignmentExpression("=", temp, callee.object);
       contextLiteral = temp;

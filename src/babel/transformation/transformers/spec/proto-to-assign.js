@@ -24,13 +24,13 @@ export function AssignmentExpression(node, parent, scope, file) {
 
   var nodes = [];
   var left  = node.left.object;
-  var temp  = scope.generateTempBasedOnNode(node.left.object);
+  var temp  = scope.generateMemoisedReference(left);
 
   nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
   nodes.push(buildDefaultsCallExpression(node, temp, file));
   if (temp) nodes.push(temp);
 
-  return t.toSequenceExpression(nodes);
+  return nodes;
 }
 
 export function ExpressionStatement(node, parent, scope, file) {

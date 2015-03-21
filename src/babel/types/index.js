@@ -24,7 +24,6 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
-
 export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export var NATIVE_TYPE_NAMES       = ["Array", "Object", "Number", "Boolean", "Date", "Array", "String", "Promise", "Set", "Map", "WeakMap", "WeakSet", "Uint16Array", "ArrayBuffer", "DataView", "Int8Array", "Uint8Array", "Uint8ClampedArray", "Uint32Array", "Int32Array", "Float32Array", "Int16Array", "Float64Array"];
 export var FLATTENABLE_KEYS        = ["body", "expressions"];
@@ -65,25 +64,23 @@ export const TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_AL
 export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
   if (!node) return false;
 
-  var typeMatches = type === node.type;
+  var matches = isType(node.type, type);
+  if (!matches) return false;
 
-  if (!typeMatches && !skipAliasCheck) {
-    var aliases = t.FLIPPED_ALIAS_KEYS[type];
-
-    if (typeof aliases !== "undefined") {
-      typeMatches = aliases.indexOf(node.type) > -1;
-    }
-  }
-
-  if (!typeMatches) {
-    return false;
-  }
-
-  if (typeof opts !== "undefined") {
+  if (typeof opts === "undefined") {
+    return true;
+  } else {
     return t.shallowEqual(node, opts);
   }
+}
 
-  return true;
+export function isType(nodeType, targetType) {
+  if (nodeType === targetType) return true;
+
+  var aliases = t.FLIPPED_ALIAS_KEYS[targetType];
+  if (aliases) return aliases.indexOf(nodeType) > -1;
+
+  return false;
 }
 
 each(t.VISITOR_KEYS, function (keys, type) {

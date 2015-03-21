@@ -113,22 +113,13 @@ export function ExpressionStatement(node, parent, scope, file) {
   if (!t.isPattern(expr.left)) return;
   if (file.isConsequenceExpressionStatement(node)) return;
 
-  var nodes = [];
-
-  var ref = scope.generateUidIdentifier("ref");
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(ref, expr.right)
-  ]));
-
   var destructuring = new DestructuringTransformer({
     operator: expr.operator,
-    file: file,
-    scope: scope,
-    nodes: nodes
+    scope:    scope,
+    file:     file,
   });
-  destructuring.init(expr.left, ref);
 
-  return nodes;
+  return destructuring.init(expr.left, expr.right);
 }
 
 export function AssignmentExpression(node, parent, scope, file) {
@@ -138,7 +129,7 @@ export function AssignmentExpression(node, parent, scope, file) {
   scope.push({ id: ref });
 
   var nodes = [];
-  nodes.push(t.assignmentExpression("=", ref, node.right));
+  nodes.push(t.expressionStatement(t.assignmentExpression("=", ref, node.right)));
 
   var destructuring = new DestructuringTransformer({
     operator: node.operator,
@@ -148,9 +139,9 @@ export function AssignmentExpression(node, parent, scope, file) {
   });
   destructuring.init(node.left, ref);
 
-  nodes.push(ref);
+  nodes.push(t.expressionStatement(ref));
 
-  return t.toSequenceExpression(nodes, scope);
+  return nodes;
 }
 
 function variableDeclarationHasPattern(node) {
@@ -218,20 +209,29 @@ export function VariableDeclaration(node, parent, scope, file) {
   return nodes;
 }
 
-var hasRest = function (pattern) {
+function hasRest(pattern) {
   for (var i = 0; i < pattern.elements.length; i++) {
     if (t.isRestElement(pattern.elements[i])) {
       return true;
     }
   }
   return false;
+}
+
+var arrayUnpackVisitor = {
+  enter(node, parent, scope, state) {
+    if (this.isReferencedIdentifier() && state.bindings[node.name]) {
+      state.deopt = true;
+      this.stop();
+    }
+  }
 };
 
 class DestructuringTransformer {
   constructor(opts) {
     this.blockHoist = opts.blockHoist;
     this.operator   = opts.operator;
-    this.nodes      = opts.nodes;
+    this.nodes      = opts.nodes || [];
     this.scope      = opts.scope;
     this.file       = opts.file;
     this.kind       = opts.kind;
@@ -393,7 +393,11 @@ class DestructuringTransformer {
       if (!pattern.elements[i]) return false;
     }
 
-    return true;
+    // deopt on reference to left side identifiers
+    var bindings = t.getBindingIdentifiers(pattern);
+    var state = { deopt: false, bindings };
+    this.scope.traverse(arr, arrayUnpackVisitor, state);
+    return !state.deopt;
   }
 
   pushUnpackedArrayPattern(pattern, arr) {
@@ -474,14 +478,19 @@ class DestructuringTransformer {
     // trying to destructure a value that we can't evaluate more than once so we
     // need to save it to a variable
 
-    if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref) && !t.isIdentifier(ref)) {
-      var key = this.scope.generateUidBasedOnNode(ref);
-      this.nodes.push(this.buildVariableDeclaration(key, ref));
-      ref = key;
+    var shouldMemoise = true;
+    if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
+      var memo = this.scope.generateMemoisedReference(ref, true);
+      if (memo) {
+        this.nodes.push(this.buildVariableDeclaration(memo, ref));
+        ref = memo;
+      }
     }
 
     //
 
     this.push(pattern, ref);
+
+    return this.nodes;
   }
 }

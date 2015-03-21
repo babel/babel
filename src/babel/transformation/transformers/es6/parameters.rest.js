@@ -63,7 +63,7 @@ exports.Function = function (node, parent, scope, file) {
   var argsId = t.identifier("arguments");
 
   // otherwise `arguments` will be remapped in arrow functions
-  argsId._ignoreAliasFunctions = true;
+  argsId._shadowedFunctionLiteral = true;
 
   // support patterns
   if (t.isPattern(rest)) {

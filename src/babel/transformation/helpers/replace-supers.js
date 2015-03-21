@@ -5,7 +5,7 @@ import * as t from "../../types";
 
 
 function isIllegalBareSuper(node, parent) {
-  if (!t.isSuperExpression(node)) return false;
+  if (!t.isSuper(node)) return false;
   if (t.isMemberExpression(parent, { computed: false })) return false;
   if (t.isCallExpression(parent, { callee: node })) return false;
   return true;
@@ -189,13 +189,13 @@ export default class ReplaceSupers {
 
   looseHandle(path: TraversalPath, getThisReference: Function) {
     var node = path.node;
-    if (path.isSuperExpression()) {
+    if (path.isSuper()) {
       this.hasSuper = true;
       return this.getLooseSuperProperty(node, path.parent);
     } else if (path.isCallExpression()) {
       var callee = node.callee;
       if (!t.isMemberExpression(callee)) return;
-      if (!t.isSuperExpression(callee.object)) return;
+      if (!t.isSuper(callee.object)) return;
 
       // super.test(); -> objectRef.prototype.MethodName.call(this);
       this.hasSuper = true;
@@ -224,7 +224,7 @@ export default class ReplaceSupers {
 
     if (t.isCallExpression(node)) {
       var callee = node.callee;
-      if (t.isSuperExpression(callee)) {
+      if (t.isSuper(callee)) {
         // super(); -> _get(Object.getPrototypeOf(objectRef), "MethodName", this).call(this);
         property = methodNode.key;
         computed = methodNode.computed;
@@ -237,17 +237,17 @@ export default class ReplaceSupers {
           var methodName = methodNode.key.name || "METHOD_NAME";
           throw this.file.errorWithNode(node, messages.get("classesIllegalSuperCall", methodName));
         }
-      } else if (t.isMemberExpression(callee) && t.isSuperExpression(callee.object)) {
+      } else if (t.isMemberExpression(callee) && t.isSuper(callee.object)) {
         // super.test(); -> _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
         property = callee.property;
         computed = callee.computed;
         args = node.arguments;
       }
-    } else if (t.isMemberExpression(node) && t.isSuperExpression(node.object)) {
+    } else if (t.isMemberExpression(node) && t.isSuper(node.object)) {
       // super.name; -> _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
       property = node.property;
       computed = node.computed;
-    } else if (t.isAssignmentExpression(node) && t.isSuperExpression(node.left.object) && methodNode.kind === "set") {
+    } else if (t.isAssignmentExpression(node) && t.isSuper(node.left.object) && methodNode.kind === "set") {
       // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
       this.hasSuper = true;
       return this.setSuperProperty(node.left.property, node.right, node.left.computed, getThisReference());

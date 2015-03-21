@@ -2,11 +2,11 @@ import * as t from "../../../types";
 
 var functionChildrenVisitor = {
   enter(node, parent, scope, state) {
-    if (this.isFunction() && !node._aliasFunction) {
+    if (this.isFunction()) {
       return this.skip();
     }
 
-    if (node._ignoreAliasFunctions) return this.skip();
+    if (node._shadowedFunctionLiteral) return this.skip();
 
     var getId;
 
@@ -24,17 +24,17 @@ var functionChildrenVisitor = {
 
 var functionVisitor = {
   enter(node, parent, scope, state) {
-    if (!node._aliasFunction) {
-      if (this.isFunction()) {
-        // stop traversal of this node as it'll be hit again by this transformer
-        return this.skip();
-      } else {
-        return;
-      }
+    if (this.isFunction()) {
+      // stop traversal of this node as it'll be hit again by this transformer
+      return this.skip();
+    } else if (!this.isShadowFunctionExpression()) {
+      return;
     }
 
     // traverse all child nodes of this function and find `arguments` and `this`
     this.traverse(functionChildrenVisitor, state);
+
+    node.type = "FunctionExpression";
 
     return this.skip();
   }

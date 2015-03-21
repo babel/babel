@@ -8,9 +8,6 @@ export default {
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.react":                      require("./validation/react"),
 
-  // needs to be before `_aliasFunction`
-  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
-
   // this goes at the start so we only transform the original user code
   "spec.functionName":                     require("./spec/function-name"),
 
@@ -22,7 +19,7 @@ export default {
   _modules:                                require("./internal/modules"),
 
   // needs to be before `regenerator` due to generator comprehensions
-  // needs to be before `_aliasFunction`
+  // needs to be before `_shadowFunctions`
   "es7.comprehensions":                    require("./es7/comprehensions"),
 
   "es6.classes":                           require("./es6/classes"),
@@ -38,10 +35,10 @@ export default {
   "es5.properties.mutators":               require("./es5/properties.mutators"),
   "es6.properties.shorthand":              require("./es6/properties.shorthand"),
 
-  // needs to be before `_aliasFunction` due to define property closure
+  // needs to be before `_shadowFunctions` due to define property closure
   "es6.properties.computed":               require("./es6/properties.computed"),
 
-  "optimisation.es6.forOf":                require("./optimisation/flow.for-of"),
+  "optimisation.flow.forOf":               require("./optimisation/flow.for-of"),
   "es6.forOf":                             require("./es6/for-of"),
 
   "es6.regex.sticky":                      require("./es6/regex.sticky"),
@@ -61,7 +58,7 @@ export default {
   // needs to be before `es6.blockScoping` as let variables may be produced
   "es6.destructuring":                     require("./es6/destructuring"),
 
-  // needs to be before `_aliasFunction` due to block scopes sometimes being wrapped in a
+  // needs to be before `_shadowFunctions` due to block scopes sometimes being wrapped in a
   // closure
   "es6.blockScoping":                      require("./es6/block-scoping"),
 
@@ -88,7 +85,10 @@ export default {
 
   _declarations:                           require("./internal/declarations"),
 
-  _aliasFunctions:                         require("./internal/alias-functions"),
+  // needs to be before `_shadowFunctions`
+  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
+
+  _shadowFunctions:                        require("./internal/alias-functions"),
 
   "es6.symbols":                           require("./es6/symbols"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),

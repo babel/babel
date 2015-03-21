@@ -33,7 +33,7 @@ var verifyConstructorVisitor = traverse.explode({
 
   CallExpression: {
     enter(node, parent, scope, state) {
-      if (this.get("callee").isSuperExpression()) {
+      if (this.get("callee").isSuper()) {
         state.hasBareSuper = true;
 
         if (!state.hasSuper) {

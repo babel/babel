@@ -9,6 +9,36 @@ import extend from "lodash/object/extend";
 import Scope from "../scope";
 import * as t from "../../types";
 
+var hoistVariablesVisitor = {
+  enter(node, parent, scope ) {
+    if (this.isFunction()) {
+      return this.skip();
+    }
+
+    if (this.isVariableDeclaration() && node.kind === "var") {
+      var bindings = this.getBindingIdentifiers();
+      for (var key in bindings) {
+        scope.push({
+          id: bindings[key].identifiers
+        });
+      }
+
+      var exprs = [];
+
+      for (var i = 0; i < node.declarations.length; i++) {
+        var declar = node.declarations[i];
+        if (declar.init) {
+          exprs.push(t.expressionStatement(
+            t.assignmentExpression("=", declar.id, declar.init)
+          ));
+        }
+      }
+
+      return exprs;
+    }
+  }
+};
+
 export default class TraversalPath {
   constructor(parent, container) {
     this.container = container;
@@ -86,6 +116,8 @@ export default class TraversalPath {
     }
 
     this.setScope(file);
+
+    this.type = this.node && this.node.type;
   }
 
   remove() {
@@ -130,16 +162,28 @@ export default class TraversalPath {
   set node(replacement) {
     if (!replacement) return this.remove();
 
-    var oldNode      = this.node;
-    var isArray      = Array.isArray(replacement);
+    var oldNode = this.node;
+
+    var isArray = Array.isArray(replacement);
+    if (isArray && replacement.length === 1) {
+      isArray = false;
+      replacement = replacement[0];
+    }
+
     var replacements = isArray ? replacement : [replacement];
 
     // inherit comments from original node to the first replacement node
     var inheritTo = replacements[0];
     if (inheritTo) t.inheritsComments(inheritTo, oldNode);
 
+    //
+    if (t.isStatement(replacements[0]) && t.isType(this.type, "Expression")) {
+      return this.setStatementsToExpression(replacements);
+    }
+
     // replace the node
     this.container[this.key] = replacement;
+    this.type = replacement.type;
 
     // potentially create new scope
     this.setScope();
@@ -159,6 +203,50 @@ export default class TraversalPath {
       }
 
       this.flatten();
+    }
+  }
+
+  getLastStatements(): Array<TraversalPath> {
+    var paths = [];
+
+    var add = function (path) {
+      paths = paths.concat(path.getLastStatements());
+    };
+
+    if (this.isIfStatement()) {
+      add(this.get("consequent"));
+      add(this.get("alternate"));
+    } else if (this.isFor() || this.isWhile()) {
+      add(this.get("body"));
+    } else if (this.isProgram() || this.isBlockStatement()) {
+      add(this.get("body").pop());
+    }
+
+    return paths;
+  }
+
+  setStatementsToExpression(nodes: Array) {
+    var toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
+
+    if (toSequenceExpression) {
+      return this.node = toSequenceExpression;
+    } else {
+      var container = t.shadowFunctionExpression(null, [], t.blockStatement(nodes));
+
+      this.node = t.callExpression(container, []);
+
+      // add implicit returns to all ending expression statements
+      var last = this.getLastStatements();
+      for (var i = 0; i < last.length; i++) {
+        var lastNode = last[i];
+        if (lastNode.isExpressionStatement()) {
+          lastNode.node = t.returnStatement(lastNode.node.expression);
+        }
+      }
+
+      this.traverse(hoistVariablesVisitor);
+
+      return this.node;
     }
   }
 

@@ -33,8 +33,7 @@ export default function (exports, opts) {
     var nodes    = [];
     var exploded = explode(node.left, nodes, file, scope);
     nodes.push(buildAssignment(exploded.ref, opts.build(exploded.uid, node.right)));
-
-    return t.toSequenceExpression(nodes, scope);
+    return nodes;
   };
 
   exports.BinaryExpression = function (node) {

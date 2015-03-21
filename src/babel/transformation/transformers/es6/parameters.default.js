@@ -31,7 +31,7 @@ exports.Function = function (node, parent, scope, file) {
   var body = [];
 
   var argsIdentifier = t.identifier("arguments");
-  argsIdentifier._ignoreAliasFunctions = true;
+  argsIdentifier._shadowedFunctionLiteral = true;
 
   var lastNonDefaultParam = 0;
 
@@ -91,8 +91,7 @@ exports.Function = function (node, parent, scope, file) {
   node.params = node.params.slice(0, lastNonDefaultParam);
 
   if (state.iife) {
-    var container = t.functionExpression(null, [], node.body, node.generator);
-    container._aliasFunction = true;
+    var container = t.shadowFunctionExpression(null, [], node.body, node.generator);
 
     body.push(t.returnStatement(t.callExpression(container, [])));
 
