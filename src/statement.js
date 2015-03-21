@@ -51,9 +51,23 @@ pp.parseStatement = function(declaration, topLevel) {
   case tt._function:
     if (!declaration && this.options.ecmaVersion >= 6) this.unexpected()
     return this.parseFunctionStatement(node)
+
+  case tt.at:
+    while (this.type === tt.at) {
+      this.decorators.push(this.parseDecorator());
+    }
+    if (this.type !== tt._class) {
+      this.raise(this.start, "Leading decorators must be attached to a class declaration");
+    }
+
   case tt._class:
     if (!declaration) this.unexpected()
+    if (this.decorators.length) {
+      node.decorators = this.decorators
+      this.decorators = []
+    }
     return this.parseClass(node, true)
+
   case tt._if: return this.parseIfStatement(node)
   case tt._return: return this.parseReturnStatement(node)
   case tt._switch: return this.parseSwitchStatement(node)
@@ -97,6 +111,13 @@ pp.parseStatement = function(declaration, topLevel) {
       return this.parseLabeledStatement(node, maybeName, expr)
     else return this.parseExpressionStatement(node, expr)
   }
+}
+
+pp.parseDecorator = function() {
+  let node = this.startNode()
+  this.next()
+  node.expression = this.parseMaybeAssign()
+  return this.finishNode(node, "Decorator")
 }
 
 pp.parseBreakContinueStatement = function(node, keyword) {
@@ -425,59 +446,18 @@ pp.parseFunctionParams = function(node) {
 
 pp.parseClass = function(node, isStatement) {
   this.next()
-  node.id = this.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null
-  node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null
-  let classBody = this.startNode()
-  classBody.body = []
-  this.expect(tt.braceL)
-  while (!this.eat(tt.braceR)) {
-    if (this.eat(tt.semi)) continue
-    let method = this.startNode()
-    let isGenerator = this.eat(tt.star)
-    this.parsePropertyName(method)
-    if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
-        method.key.name === "static") {
-      if (isGenerator) this.unexpected()
-      method['static'] = true
-      isGenerator = this.eat(tt.star)
-      this.parsePropertyName(method)
-    } else {
-      method['static'] = false
-    }
-    if (this.options.features["es7.asyncFunctions"] && this.type !== tt.parenL &&
-        !method.computed && method.key.type === "Identifier" && method.key.name === "async") {
-      isAsync = true;
-      this.parsePropertyName(method);
-    }
-    method.kind = "method"
-    if (!method.computed && !isGenerator) {
-      if (method.key.type === "Identifier") {
-        if (this.type !== tt.parenL && (method.key.name === "get" || method.key.name === "set")) {
-          method.kind = method.key.name
-          this.parsePropertyName(method)
-        } else if (!method['static'] && method.key.name === "constructor") {
-          method.kind = "constructor"
-        }
-      } else if (!method['static'] && method.key.type === "Literal" && method.key.value === "constructor") {
-        method.kind = "constructor"
-      }
-    }
-    method.value = this.parseMethod(isGenerator)
-    classBody.body.push(this.finishNode(method, "MethodDefinition"))
-  }
-  node.body = this.finishNode(classBody, "ClassBody")
-  return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
-}
-
-pp.parseClass = function(node, isStatement) {
-  this.next()
   this.parseClassId(node, isStatement)
   this.parseClassSuper(node)
   var classBody = this.startNode()
   classBody.body = []
   this.expect(tt.braceL)
+  var decorators = []
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue
+    if (this.options.features["es7.decorators"] && this.type === tt.at) {
+      decorators.push(this.parseDecorator());
+      continue;
+    }
     var method = this.startNode()
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
@@ -508,7 +488,14 @@ pp.parseClass = function(node, isStatement) {
         method.kind = "constructor"
       }
     }
+    if (this.options.features["es7.decorators"] && decorators.length) {
+      method.decorators = decorators
+      decorators = []
+    }
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
+  }
+  if (decorators.length) {
+    raise(this.start, "You have trailing decorators with no method");
   }
   node.body = this.finishNode(classBody, "ClassBody")
   return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
@@ -540,11 +527,11 @@ pp.parseExport = function(node) {
   }
   if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign()
-    let needsSemi = false
+    let needsSemi = true
     if (expr.id) switch (expr.type) {
       case "FunctionExpression": expr.type = "FunctionDeclaration"; break
       case "ClassExpression": expr.type = "ClassDeclaration"; break
-      default: needsSemi = true
+      default: needsSemi = false
     }
     node.declaration = expr
     if (needsSemi) this.semicolon()

@@ -322,6 +322,7 @@ pp.getTokenFromCode = function(code) {
   case 125: ++this.pos; return this.finishToken(tt.braceR)
   case 58: ++this.pos; return this.finishToken(tt.colon)
   case 63: ++this.pos; return this.finishToken(tt.question)
+  case 64: ++this.pos; return this.finishToken(tt.at)
 
   case 96: // '`'
     if (this.options.ecmaVersion < 6) break

@@ -2056,3 +2056,5 @@ test('export async function foo(){}', {
   sourceType: "module",
   features: { "es7.asyncFunctions": true }
 });
+
+// ES7 decorators
