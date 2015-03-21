@@ -91,7 +91,8 @@ exports.Function = function (node, parent, scope, file) {
   node.params = node.params.slice(0, lastNonDefaultParam);
 
   if (state.iife) {
-    var container = t.shadowFunctionExpression(null, [], node.body, node.generator);
+    var container = t.functionExpression(null, [], node.body, node.generator);
+    container.shadow = true;
 
     body.push(t.returnStatement(t.callExpression(container, [])));
 

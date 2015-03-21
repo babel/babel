@@ -32,7 +32,6 @@
   "ForStatement":              ["init", "test", "update", "body"],
   "FunctionDeclaration":       ["id", "params", "defaults", "rest", "body", "returnType", "typeParameters"],
   "FunctionExpression":        ["id", "params", "defaults", "rest", "body", "returnType", "typeParameters"],
-  "ShadowFunctionExpression":  ["id", "params", "defaults", "rest", "body", "returnType", "typeParameters"],
   "Identifier":                ["typeAnnotation"],
   "IfStatement":               ["test", "consequent", "alternate"],
   "ImportDefaultSpecifier":    ["local"],

@@ -354,7 +354,8 @@ class BlockScoping {
     var params = values(outsideRefs);
 
     // build the closure that we're going to wrap the block with
-    var fn = t.shadowFunctionExpression(null, params, t.blockStatement(block.body));
+    var fn = t.functionExpression(null, params, t.blockStatement(block.body));
+    fn.shadow = true;
 
     // replace the current block body with the one we're going to build
     block.body = this.body;

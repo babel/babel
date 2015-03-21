@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 var functionChildrenVisitor = {
   enter(node, parent, scope, state) {
-    if (this.isFunction()) {
+    if (this.isFunction() && !node.shadow) {
       return this.skip();
     }
 
@@ -24,17 +24,19 @@ var functionChildrenVisitor = {
 
 var functionVisitor = {
   enter(node, parent, scope, state) {
-    if (this.isFunction()) {
-      // stop traversal of this node as it'll be hit again by this transformer
-      return this.skip();
-    } else if (!this.isShadowFunctionExpression()) {
-      return;
+   if (!node.shadow) {
+      if (this.isFunction()) {
+        // stop traversal of this node as it'll be hit again by this transformer
+        return this.skip();
+      } else {
+        return;
+      }
     }
 
     // traverse all child nodes of this function and find `arguments` and `this`
     this.traverse(functionChildrenVisitor, state);
 
-    node.type = "FunctionExpression";
+    node.shadow = false;
 
     return this.skip();
   }

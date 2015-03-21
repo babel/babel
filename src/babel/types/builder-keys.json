@@ -45,13 +45,6 @@
     "tokens": null
   },
 
-  "ShadowFunctionExpression": {
-    "id": null,
-    "params": null,
-    "body": null,
-    "generator": false
-  },
-
   "FunctionExpression": {
     "id": null,
     "params": null,
