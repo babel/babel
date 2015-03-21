@@ -19,6 +19,7 @@
   "ContinueStatement":         ["label"],
   "DebuggerStatement":         [],
   "DoWhileStatement":          ["body", "test"],
+  "DoExpression":              ["body"],
   "EmptyStatement":            [],
   "ExportAllDeclaration":      ["source"],
   "ExportDefaultDeclaration":  ["declaration"],

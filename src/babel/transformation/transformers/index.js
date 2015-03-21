@@ -90,6 +90,8 @@ export default {
 
   _shadowFunctions:                        require("./internal/alias-functions"),
 
+  "es7.doExpressions":                     require("./es7/do-expressions"),
+
   "es6.symbols":                           require("./es6/symbols"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
 
