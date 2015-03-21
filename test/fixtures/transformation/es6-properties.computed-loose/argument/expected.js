@@ -1,7 +1,5 @@
 "use strict";
 
-foo((function () {
-  var _foo = {};
-  _foo[bar] = "foobar";
-  return _foo;
-})());
+var _foo;
+
+foo((_foo = {}, _foo[bar] = "foobar", _foo));

@@ -1,5 +1,7 @@
 "use strict";
 
+var rect = {};
+
 var _rect$topLeft = babelHelpers.slicedToArray(rect.topLeft, 2);
 
 var x1 = _rect$topLeft[0];

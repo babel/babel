@@ -1,7 +1,5 @@
 "use strict";
 
-var obj = (function () {
-  var _obj = {};
-  _obj["x" + foo.bar] = "heh";
-  return _obj;
-})();
+var _obj;
+
+var obj = (_obj = {}, _obj["x" + foo.bar] = "heh", _obj);

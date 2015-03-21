@@ -1,7 +1,5 @@
 "use strict";
 
-var foo = (function () {
-  var _foo = {};
-  _foo[Symbol.iterator] = "foobar";
-  return _foo;
-})();
+var _foo;
+
+var foo = (_foo = {}, _foo[Symbol.iterator] = "foobar", _foo);

@@ -19,3 +19,6 @@ var b = _ref[1];
 var _ref2 = [1, 2, 3];
 var a = _ref2[0];
 var b = _ref2[1];
+var _ref3 = [a, b];
+var a = _ref3[0];
+var b = _ref3[1];

@@ -1,10 +1,10 @@
 "use strict";
 
-var _ref = f();
+var _f = f();
 
-var _ref2 = babelHelpers.slicedToArray(_ref, 2);
+var _f2 = babelHelpers.slicedToArray(_f, 2);
 
-a = _ref2[0];
-b = _ref2[1];
+a = _f2[0];
+b = _f2[1];
 
 ;
