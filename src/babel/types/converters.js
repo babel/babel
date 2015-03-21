@@ -28,50 +28,73 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
 
 export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object {
   var declars = [];
-  var exprs   = [];
+  var bailed  = false;
 
-  for (let i = 0; i < nodes.length; i++) {
-    var node = nodes[i];
-    if (t.isExpression(node)) {
-      exprs.push(node);
-    } else if (t.isExpressionStatement(node)) {
-      exprs.push(node.expression);
-    } else if (t.isVariableDeclaration(node)) {
-      if (node.kind !== "var") return; // bailed
-
-      each(node.declarations, function (declar) {
-        declars.push({
-          kind: node.kind,
-          id: declar.id
-        });
-        exprs.push(t.assignmentExpression("=", declar.id, declar.init));
-      });
-    } else if (t.isIfStatement(node)) {
-      exprs.push(t.conditionalExpression(
-        node.test,
-        node.consequent ? t.toSequenceExpression([node.consequent]) : t.identifier("undefined"),
-        node.alternate ? t.toSequenceExpression([node.alternate]) : t.identifier("undefined")
-      ));
-    } else if (t.isBlockStatement(node)) {
-      exprs.push(t.toSequenceExpression(node.body));
-    } else {
-      // bailed, we can't understand this
-      return;
-    }
-  }
-
-  //
+  var result = convert(nodes);
+  if (bailed) return;
 
   for (let i = 0; i < declars.length; i++) {
     scope.push(declars[i]);
   }
 
-  //
+  return result;
 
-  if (exprs.length === 1) {
-    return exprs[0];
-  } else {
-    return t.sequenceExpression(exprs);
+  function convert(nodes) {
+    var ensureLastUndefined = false;
+    var exprs   = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (t.isExpression(node)) {
+        exprs.push(node);
+      } else if (t.isExpressionStatement(node)) {
+        exprs.push(node.expression);
+      } else if (t.isVariableDeclaration(node)) {
+        if (node.kind !== "var") return bailed = true; // bailed
+
+        each(node.declarations, function (declar) {
+          var bindings = t.getBindingIdentifiers(declar);
+          for (var key in bindings) {
+            declars.push({
+              kind: node.kind,
+              id: bindings[key]
+            });
+          }
+
+          if (declar.init) {
+            exprs.push(t.assignmentExpression("=", declar.id, declar.init));
+          }
+        });
+
+        ensureLastUndefined = true;
+        continue;
+      } else if (t.isIfStatement(node)) {
+        var consequent = node.consequent ? convert([node.consequent]) : t.identifier("undefined");
+        var alternate = node.alternate ? convert([node.alternate]) : t.identifier("undefined");
+        if (!consequent || !alternate) return bailed = true;
+
+        exprs.push(t.conditionalExpression(node.test, consequent, alternate));
+      } else if (t.isBlockStatement(node)) {
+        exprs.push(convert(node.body));
+      } else {
+        // bailed, we can't understand this
+        return bailed = true;
+      }
+
+      ensureLastUndefined = false;
+    }
+
+    if (ensureLastUndefined) {
+      exprs.push(t.identifier("undefined"));
+    }
+
+    //
+
+    if (exprs.length === 1) {
+      return exprs[0];
+    } else {
+      return t.sequenceExpression(exprs);
+    }
   }
 }
 

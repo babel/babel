@@ -510,7 +510,7 @@ export default class Scope {
 
   getFunctionParent() {
     var scope = this;
-    while (scope.parent && !t.isFunction(scope.block) && !t.isShadowFunctionExpression(scope.block)) {
+    while (scope.parent && !t.isFunction(scope.block)) {
       scope = scope.parent;
     }
     return scope;
@@ -627,6 +627,7 @@ export default class Scope {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name)) return true;
+    if (this.uids[name]) return true;
     if (includes(Scope.globals, name)) return true;
     if (includes(Scope.contextVariables, name)) return true;
     return false;

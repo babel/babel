@@ -18,9 +18,7 @@ var hoistVariablesVisitor = {
     if (this.isVariableDeclaration() && node.kind === "var") {
       var bindings = this.getBindingIdentifiers();
       for (var key in bindings) {
-        scope.push({
-          id: bindings[key].identifiers
-        });
+        scope.push({ id: bindings[key] });
       }
 
       var exprs = [];
@@ -210,16 +208,18 @@ export default class TraversalPath {
     var paths = [];
 
     var add = function (path) {
-      paths = paths.concat(path.getLastStatements());
+      if (path) paths = paths.concat(path.getLastStatements());
     };
 
     if (this.isIfStatement()) {
       add(this.get("consequent"));
       add(this.get("alternate"));
-    } else if (this.isFor() || this.isWhile()) {
+    } else if (this.isDoExpression()) {
       add(this.get("body"));
     } else if (this.isProgram() || this.isBlockStatement()) {
       add(this.get("body").pop());
+    } else {
+      paths.push(this);
     }
 
     return paths;
@@ -231,9 +231,8 @@ export default class TraversalPath {
     if (toSequenceExpression) {
       return this.node = toSequenceExpression;
     } else {
-      var container = t.shadowFunctionExpression(null, [], t.blockStatement(nodes));
-
-      this.node = t.callExpression(container, []);
+      var container = t.functionExpression(null, [], t.blockStatement(nodes));
+      container.shadow = true;
 
       // add implicit returns to all ending expression statements
       var last = this.getLastStatements();
@@ -243,6 +242,8 @@ export default class TraversalPath {
           lastNode.node = t.returnStatement(lastNode.node.expression);
         }
       }
+
+      this.node = t.callExpression(container, []);
 
       this.traverse(hoistVariablesVisitor);
 

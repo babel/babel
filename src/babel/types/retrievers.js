@@ -72,8 +72,6 @@ export function getLastStatements(node: Object): Array<Object> {
   if (t.isIfStatement(node)) {
     add(node.consequent);
     add(node.alternate);
-  } else if (t.isFor(node) || t.isWhile(node)) {
-    add(node.body);
   } else if (t.isProgram(node) || t.isBlockStatement(node)) {
     add(node.body[node.body.length - 1]);
   } else if (node) {
