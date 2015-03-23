@@ -19,6 +19,12 @@ export function UnaryExpression(node, print) {
   print(node.argument);
 }
 
+export function DoExpression(node, print) {
+  this.push("do");
+  this.space();
+  print(node.body);
+}
+
 export function UpdateExpression(node, print) {
   if (node.prefix) {
     this.push(node.operator);

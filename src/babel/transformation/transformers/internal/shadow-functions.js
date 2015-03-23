@@ -2,6 +2,10 @@ import * as t from "../../../types";
 
 var functionChildrenVisitor = {
   enter(node, parent, scope, state) {
+    if (this.isClass(node)) {
+      return this.skip();
+    }
+
     if (this.isFunction() && !node.shadow) {
       return this.skip();
     }

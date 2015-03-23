@@ -710,27 +710,29 @@ acorn.plugins.flow = function (instance) {
     }
   })
 
+  instance.extend("parseClassProperty", function (inner) {
+    return function (node) {
+      if (this.type === tt.colon) {
+        node.typeAnnotation = this.flow_parseTypeAnnotation()
+      }
+      return inner.call(this, node)
+    }
+  })
+  instance.extend("isClassProperty", function (inner) {
+    return function () {
+      return this.type === tt.colon || inner.call(this)
+    }
+  })
+
   instance.extend("parseClassMethod", function (inner) {
     return function (classBody, method, isGenerator, isAsync) {
-      var classProperty = false
-
-      if (this.type === tt.colon) {
-        method.typeAnnotation = this.flow_parseTypeAnnotation()
-        classProperty = true
+      var typeParameters
+      if (this.isRelational("<")) {
+        typeParameters = this.flow_parseTypeParameterDeclaration()
       }
-
-      if (classProperty) {
-        this.semicolon()
-        classBody.body.push(this.finishNode(method, "ClassProperty"))
-      } else {
-        var typeParameters
-        if (this.isRelational("<")) {
-          typeParameters = this.flow_parseTypeParameterDeclaration()
-        }
-        method.value = this.parseMethod(isGenerator, isAsync)
-        method.value.typeParameters = typeParameters
-        classBody.body.push(this.finishNode(method, "MethodDefinition"))
-      }
+      method.value = this.parseMethod(isGenerator, isAsync)
+      method.value.typeParameters = typeParameters
+      classBody.body.push(this.finishNode(method, "MethodDefinition"))
     }
   })
 

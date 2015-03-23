@@ -5,6 +5,8 @@ export var metadata = {
   optional: true
 };
 
+export var check = t.isDoExpression;
+
 export function DoExpression(node) {
   var body = node.body.body;
   if (body.length) {

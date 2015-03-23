@@ -34,6 +34,7 @@ export default class TraversalContext {
       return;
     }
 
+    // todo: handle nodes popping in and out of existence
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i] && this.visitNode(node, nodes, i)) {
         return true;

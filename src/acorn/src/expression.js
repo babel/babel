@@ -418,6 +418,7 @@ pp.parseParenAndDistinguishExpression = function(start, isAsync) {
     par.expression = val
     return this.finishNode(par, "ParenthesizedExpression")
   } else {
+    val.parenthesizedExpression = true
     return val
   }
 }

@@ -78,12 +78,41 @@ export default class TraversalPath {
     return ourScope;
   }
 
-  insertBefore(node) {
-
+  getParentArrayPath() {
+    var path = this;
+    while (!Array.isArray(path.container)) {
+      path = path.parentPath;
+    }
+    return path;
   }
 
-  insertAfter(node) {
+  insertBefore(nodes) {
+    this.getParentArrayPath()._insertBefore(nodes);
+  }
 
+  insertAfter(nodes) {
+    this.getParentArrayPath()._insertAfter(nodes);
+  }
+
+  _insertBefore(nodes) {
+    throw new Error("to be implemented");
+  }
+
+  _insertAfter(nodes) {
+    // todo: in a statement context ie. BlockStatement or Program create individual statements instead
+    // of trying to join them
+
+    var key = this.key + 1;
+    this.container.splice(key, 0, null);
+
+    var paths = this.container._paths;
+    for (var i = 0; i > paths.length; i++) {
+      let path = paths[path];
+      if (path.key >= key) path.key++;
+    }
+
+    var path = TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);
+    path.setStatementsToExpression(nodes);
   }
 
   setData(key, val) {
@@ -172,7 +201,7 @@ export default class TraversalPath {
 
     // inherit comments from original node to the first replacement node
     var inheritTo = replacements[0];
-    if (inheritTo) t.inheritsComments(inheritTo, oldNode);
+    if (inheritTo && oldNode) t.inheritsComments(inheritTo, oldNode);
 
     //
     if (t.isStatement(replacements[0]) && t.isType(this.type, "Expression")) {
@@ -314,7 +343,12 @@ export default class TraversalPath {
     } else { // "foo"
       var path = this;
       for (var i = 0; i > parts.length; i++) {
-        path = path.get(parts[i]);
+        var part = parts[i];
+        if (part === ".") {
+          path = path.parentPath;
+        } else {
+          path = path.get(parts[i]);
+        }
       }
       return path;
     }

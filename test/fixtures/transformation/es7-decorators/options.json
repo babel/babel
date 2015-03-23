@@ -1,0 +1,4 @@
+{
+  "externalHelpers": true,
+  "optional": ["es7.decorators"]
+}

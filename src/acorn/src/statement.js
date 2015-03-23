@@ -150,10 +150,17 @@ pp.parseDebuggerStatement = function(node) {
 }
 
 pp.parseDoStatement = function(node) {
+  let start = this.markPosition()
   this.next()
   this.labels.push(loopLabel)
   node.body = this.parseStatement(false)
   this.labels.pop()
+  if (this.options.features["es7.doExpressions"] && this.type !== tt._while) {
+    let container = this.startNodeAt(start)
+    container.expression = this.finishNode(node, "DoExpression")
+    this.semicolon()
+    return this.finishNode(container, "ExpressionStatement")
+  }
   this.expect(tt._while)
   node.test = this.parseParenExpression()
   if (this.options.ecmaVersion >= 6)
@@ -455,13 +462,17 @@ pp.parseClass = function(node, isStatement) {
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue
     if (this.options.features["es7.decorators"] && this.type === tt.at) {
-      decorators.push(this.parseDecorator());
+      decorators.push(this.parseDecorator())
       continue;
     }
     var method = this.startNode()
+    if (this.options.features["es7.decorators"] && decorators.length) {
+      method.decorators = decorators
+      decorators = []
+    }
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
-    if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
+    if (this.options.features["es7.classProperties"] && this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
         method.key.name === "static") {
       if (isGenerator) this.unexpected()
       method['static'] = true
@@ -469,6 +480,10 @@ pp.parseClass = function(node, isStatement) {
       this.parsePropertyName(method)
     } else {
       method['static'] = false
+    }
+    if (!isGenerator && method.key.type === "Identifier" && !method.computed && this.isClassProperty()) {
+      classBody.body.push(this.parseClassProperty(method))
+      continue
     }
     if (this.options.features["es7.asyncFunctions"] && this.type !== tt.parenL &&
         !method.computed && method.key.type === "Identifier" && method.key.name === "async") {
@@ -488,9 +503,8 @@ pp.parseClass = function(node, isStatement) {
         method.kind = "constructor"
       }
     }
-    if (this.options.features["es7.decorators"] && decorators.length) {
-      method.decorators = decorators
-      decorators = []
+    if (method.kind === "constructor" && method.decorators) {
+      this.raise(method.start, "You can't attach decorators to a class constructor")
     }
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
   }
@@ -501,16 +515,32 @@ pp.parseClass = function(node, isStatement) {
   return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
 }
 
-pp.parseClassMethod = function (classBody, method, isGenerator, isAsync) {
+pp.isClassProperty = function() {
+  return this.type === tt.eq || (this.type === tt.semi || this.canInsertSemicolon())
+}
+
+pp.parseClassProperty = function(node) {
+  if (this.type === tt.eq) {
+    if (!this.options.features["es7.classProperties"]) this.unexpected()
+    this.next()
+    node.value = this.parseMaybeAssign();
+  } else {
+    node.value = null;
+  }
+  this.semicolon()
+  return this.finishNode(node, "ClassProperty")
+}
+
+pp.parseClassMethod = function(classBody, method, isGenerator, isAsync) {
   method.value = this.parseMethod(isGenerator, isAsync)
   classBody.body.push(this.finishNode(method, "MethodDefinition"))
 }
 
-pp.parseClassId = function (node, isStatement) {
+pp.parseClassId = function(node, isStatement) {
   node.id = this.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null
 }
 
-pp.parseClassSuper = function (node) {
+pp.parseClassSuper = function(node) {
   node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null
 }
 

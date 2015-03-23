@@ -51,7 +51,7 @@ export function toClassObject(mutatorMap) {
       if (key[0] === "_") return;
 
       var inheritNode = node;
-      if (t.isMethodDefinition(node)) node = node.value;
+      if (t.isMethodDefinition(node) || t.isClassProperty(node)) node = node.value;
 
       var prop = t.property("init", t.identifier(key), node);
       t.inheritsComments(prop, inheritNode);

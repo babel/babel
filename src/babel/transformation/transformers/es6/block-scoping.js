@@ -375,7 +375,7 @@ class BlockScoping {
     var hasAsync = traverse.hasType(fn.body, this.scope, "AwaitExpression", t.FUNCTION_TYPES);
     if (hasAsync) {
       fn.async = true;
-      call = t.awaitExpression(call, true);
+      call = t.awaitExpression(call);
     }
 
     this.build(ret, call);

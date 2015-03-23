@@ -13,6 +13,7 @@ export function FunctionExpression() {
 }
 
 export { FunctionExpression as FunctionDeclaration };
+export { FunctionExpression as Class };
 
 export function ThisExpression() {
   return t.identifier("undefined");

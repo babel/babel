@@ -1,4 +1,5 @@
 export default {
+  "es7.classProperties":                   require("./es7/class-properties"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
 
@@ -89,7 +90,7 @@ export default {
   // needs to be before `_shadowFunctions`
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
 
-  _shadowFunctions:                        require("./internal/alias-functions"),
+  _shadowFunctions:                        require("./internal/shadow-functions"),
 
   "es7.doExpressions":                     require("./es7/do-expressions"),
 

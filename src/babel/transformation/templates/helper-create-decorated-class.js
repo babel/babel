@@ -1,5 +1,5 @@
 (function() {
-  function defineProperties(target, descriptors) {
+  function defineProperties(target, descriptors, initializers) {
     for (var i = 0; i < descriptors.length; i ++) {
       var descriptor = descriptors[i];
       var decorators = descriptor.decorators;
@@ -23,15 +23,16 @@
             throw new TypeError("The decorator for method " + descriptor.key + " is of the invalid type " + typeof decorator);
           }
         }
+        initializers[key] = descriptor.initializer;
       }
 
       Object.defineProperty(target, key, descriptor);
     }
   }
 
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
+  return function (Constructor, protoProps, staticProps, protoInitializers, staticInitializers) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps, protoInitializers);
+    if (staticProps) defineProperties(Constructor, staticProps, staticInitializers);
     return Constructor;
   };
 })()
