@@ -1,3 +1,4 @@
+import callDelegate from "../../helpers/call-delegate";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
@@ -91,11 +92,7 @@ exports.Function = function (node, parent, scope, file) {
   node.params = node.params.slice(0, lastNonDefaultParam);
 
   if (state.iife) {
-    var container = t.functionExpression(null, [], node.body, node.generator);
-    container.shadow = true;
-
-    body.push(t.returnStatement(t.callExpression(container, [])));
-
+    body.push(callDelegate(node));
     node.body = t.blockStatement(body);
   } else {
     node.body.body = body.concat(node.body.body);
