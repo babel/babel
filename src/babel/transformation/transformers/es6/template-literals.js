@@ -1,8 +1,16 @@
 import * as t from "../../../types";
 
 var buildBinaryExpression = function (left, right) {
-  return t.binaryExpression("+", left, right);
+  return t.binaryExpression("+", coerce(left), coerce(right));
 };
+
+function coerce(node) {
+  if (t.isLiteral(node) && typeof node.value === "string") {
+    return node;
+  } else {
+    return t.callExpression(t.identifier("String"), [node]);
+  }
+}
 
 export function check(node) {
   return t.isTemplateLiteral(node) || t.isTaggedTemplateExpression(node);
