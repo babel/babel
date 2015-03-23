@@ -15,17 +15,17 @@ each(File.options, function (option, key) {
   var arg = kebabCase(key);
 
   if (option.type !== "boolean") {
-    arg += ` [${option.type || "string"}]`;
+    arg += " [" + (option.type || "string") + "]";
   }
 
   if (option.type === "boolean" && option.default === true) {
-    arg = `no-${key}`;
+    arg = "no-" + key;
   }
 
-  arg = `--${arg}`;
+  arg = "--" + arg;
 
   if (option.shorthand) {
-    arg = `-${option.shorthand}, ${arg}`;
+    arg = "-" + option.shorthand + ", " + arg;
   }
 
   commander.option(arg, option.description);
@@ -44,7 +44,7 @@ commander.on("--help", function () {
     each(keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
 
-      if (obj[key].optional) key = `[${key}]`;
+      if (obj[key].optional) key = "[" + key + "]";
 
       console.log("    - " + key);
     });
