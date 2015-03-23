@@ -99,20 +99,26 @@ export default class TraversalPath {
   }
 
   _insertAfter(nodes) {
-    // todo: in a statement context ie. BlockStatement or Program create individual statements instead
-    // of trying to join them
+    if (this.isStatement()) {
+      for (var i = 0; i < nodes.length; i++) {
+        let key = this.key + 1 + i;
+        this.container.splice(key, 0, nodes[i]);
+      }
+      this.incrementSiblingPaths(this.key + nodes.length, nodes.length);
+    } else {
+      let key = this.key + 1;
+      this.container.splice(key, 0, null);
+      this.incrementSiblingPaths(key, 1);
+      this.getSibling(key).setStatementsToExpression(nodes);
+    }
+  }
 
-    var key = this.key + 1;
-    this.container.splice(key, 0, null);
-
+  incrementSiblingPaths(fromIndex, incrementBy) {
     var paths = this.container._paths;
     for (var i = 0; i > paths.length; i++) {
       let path = paths[path];
-      if (path.key >= key) path.key++;
+      if (path.key >= fromIndex) path.key += incrementBy;
     }
-
-    var path = TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);
-    path.setStatementsToExpression(nodes);
   }
 
   setData(key, val) {
@@ -328,6 +334,10 @@ export default class TraversalPath {
     return this.shouldStop;
   }
 
+  getSibling(key) {
+    return TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);
+  }
+
   get(key: string): TraversalPath {
     var parts = key.split(".");
     if (parts.length === 1) { // "foo.bar"
@@ -335,10 +345,10 @@ export default class TraversalPath {
       var container = node[key];
       if (Array.isArray(container)) {
         return container.map((_, i) => {
-          return TraversalPath.get(this, this.context, node, container, i);
+          return TraversalPath.get(this, null, node, container, i);
         });
       } else {
-        return TraversalPath.get(this, this.context, node, node, key);
+        return TraversalPath.get(this, null, node, node, key);
       }
     } else { // "foo"
       var path = this;
