@@ -101,13 +101,7 @@ export function NewExpression(node, parent, scope, file) {
   var args = node.arguments;
   if (!hasSpread(args)) return;
 
-  var nativeType = this.get("callee").isIdentifier() && includes(t.NATIVE_TYPE_NAMES, node.callee.name);
-
   var nodes = build(args, scope);
-
-  if (nativeType) {
-    nodes.unshift(t.arrayExpression([t.literal(null)]));
-  }
 
   var first = nodes.shift();
 
@@ -117,15 +111,11 @@ export function NewExpression(node, parent, scope, file) {
     args = first;
   }
 
-  if (nativeType) {
-    return t.newExpression(
-      t.callExpression(
-        t.memberExpression(file.addHelper("bind"), t.identifier("apply")),
-        [node.callee, args]
-      ),
-      []
-    );
-  } else {
-    return t.callExpression(file.addHelper("apply-constructor"), [node.callee, args]);
-  }
+  return t.newExpression(
+    t.callExpression(
+      t.memberExpression(file.addHelper("bind"), t.identifier("apply")),
+      [node.callee, args]
+    ),
+    []
+  );
 }
