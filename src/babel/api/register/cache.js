@@ -13,14 +13,7 @@ export function load() {
   if (process.env.BABEL_DISABLE_CACHE) return;
 
   process.on("exit", save);
-
-  var sigint = function () {
-    process.removeListener("SIGINT", sigint);
-    save();
-    process.kill(process.pid, "SIGINT");
-  };
-
-  process.on("SIGINT", sigint);
+  process.nextTick(save);
 
   if (!fs.existsSync(FILENAME)) return;
 
