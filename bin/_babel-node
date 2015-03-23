@@ -40,9 +40,11 @@ babel.register({
 //
 
 var _eval = function (code, filename) {
+  if (!code) return undefined;
+
   code = babel.transform(code, {
     filename: filename,
-    blacklist: ["useStrict"].concat(program.blacklist || []),
+    blacklist: program.blacklist,
     whitelist: program.whitelist,
     optional: program.optional,
     experimental: program.experimental
