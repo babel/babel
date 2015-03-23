@@ -1,11 +1,11 @@
 import * as t from "../../../types";
 
-var buildBinaryExpression = function (left, right) {
-  return t.binaryExpression("+", coerce(left), coerce(right));
+var buildBinaryExpression = function (left, right, file) {
+  return t.binaryExpression("+", coerce(left, file), coerce(right, file));
 };
 
-function coerce(node) {
-  if (t.isLiteral(node) && typeof node.value === "string") {
+function coerce(node, file) {
+  if (file.isLoose("es7.templateLiterals") || (t.isLiteral(node) && typeof node.value === "string")) {
     return node;
   } else {
     return t.callExpression(t.identifier("String"), [node]);
@@ -41,7 +41,7 @@ export function TaggedTemplateExpression(node, parent, scope, file) {
   return t.callExpression(node.tag, args);
 }
 
-export function TemplateLiteral(node) {
+export function TemplateLiteral(node, parent, scope, file) {
   var nodes = [];
   var i;
 
@@ -59,10 +59,10 @@ export function TemplateLiteral(node) {
     var last = nodes[nodes.length - 1];
     if (t.isLiteral(last, { value: "" })) nodes.pop();
 
-    var root = buildBinaryExpression(nodes.shift(), nodes.shift());
+    var root = buildBinaryExpression(nodes.shift(), nodes.shift(), file);
 
     for (i = 0; i < nodes.length; i++) {
-      root = buildBinaryExpression(root, nodes[i]);
+      root = buildBinaryExpression(root, nodes[i], file);
     }
 
     return root;
