@@ -58,7 +58,6 @@ export default class File {
     "defaults",
     "create-class",
     "create-decorated-class",
-    "apply-constructor",
     "tagged-template-literal",
     "tagged-template-literal-loose",
     "interop-require",
@@ -324,7 +323,7 @@ export default class File {
       var id = t.identifier(t.toIdentifier(name));
       return t.memberExpression(runtime, id);
     } else {
-      var ref = util.template(name);
+      var ref = util.template("helper-" + name);
       ref._compact = true;
       var uid = this.scope.generateUidIdentifier(name);
       this.scope.push({
