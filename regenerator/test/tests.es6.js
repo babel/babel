@@ -1002,21 +1002,27 @@ describe("delegated yield", function() {
       var throwCalled = false;
       var returnCalled = false;
       var count = 0;
-      var g = gen({
+      var iterator = {
         next: function() {
           return { value: count++, done: false };
-        },
+        }
+      };
 
-        "throw": throwMethod && function() {
+      if (throwMethod) {
+        iterator["throw"] = function() {
           throwCalled = true;
           return throwMethod.apply(this, arguments);
-        },
+        };
+      }
 
-        "return": returnMethod && function() {
+      if (returnMethod) {
+        iterator["return"] = function() {
           returnCalled = true;
           return returnMethod.apply(this, arguments);
-        }
-      });
+        };
+      }
+
+      var g = gen(iterator);
 
       assert.deepEqual(g.next(), { value: 0, done: false });
       assert.deepEqual(g.next(), { value: 1, done: false });
