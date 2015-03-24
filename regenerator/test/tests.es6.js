@@ -10,6 +10,9 @@
 
 var assert = require("assert");
 var runningInTranslation = /\.wrap\(/.test(function*(){});
+var iteratorSymbol = typeof Symbol === "function"
+  && Symbol.iterator
+  || "@@iterator";
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
@@ -61,10 +64,6 @@ describe("regeneratorRuntime", function() {
 });
 
 (runningInTranslation ? describe : xdescribe)("@@iterator", function() {
-  var iteratorSymbol = typeof Symbol === "function"
-    && Symbol.iterator
-    || "@@iterator";
-
   it("is defined on Generator.prototype and returns this", function() {
     function *gen(){}
     var iterator = gen();
@@ -1006,6 +1005,10 @@ describe("delegated yield", function() {
         next: function() {
           return { value: count++, done: false };
         }
+      };
+
+      iterator[iteratorSymbol] = function() {
+        return this;
       };
 
       if (throwMethod) {
