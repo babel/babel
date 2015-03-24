@@ -1102,6 +1102,28 @@ describe("delegated yield", function() {
     assert.strictEqual(checkResult.returnCalled, false);
   });
 
+  it("should not be required to have a .return method", function() {
+    function *gen(delegate) {
+      return yield* delegate;
+    }
+
+    var inner = range(5);
+    var iterator = { next: inner.next.bind(inner) };
+    iterator[iteratorSymbol] = function() {
+      return this;
+    };
+
+    var g = gen(iterator);
+    assert.deepEqual(g.next(), { value: 0, done: false });
+    assert.deepEqual(g.next(), { value: 1, done: false });
+    assert.deepEqual(g.next(), { value: 2, done: false });
+
+    if (typeof g.return === "function") {
+      assert.deepEqual(g.return(-1), { value: -1, done: true });
+      assert.deepEqual(g.next(), { value: void 0, done: true });
+    }
+  });
+
   (runningInTranslation ? it : xit)
   ("should support any iterable argument", function() {
     function *gen() {

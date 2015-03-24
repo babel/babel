@@ -137,6 +137,14 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
+          if (method === "return" &&
+              delegate.iterator.return === undefined) {
+            // The delegate iterator is finished and needs no cleanup, so
+            // nullify it and continue with the outer .return invocation.
+            context.delegate = null;
+            continue;
+          }
+
           if (method === "throw" &&
               delegate.iterator.throw === undefined) {
             context.delegate = null;
