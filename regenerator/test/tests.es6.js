@@ -13,7 +13,7 @@ var runningInTranslation = /\.wrap\(/.test(function*(){});
 
 function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
-    var info = i > 0 ? g.next(i) : g.next();
+    var info = g.next(i);
     assert.deepEqual(info.value, yields[i]);
     assert.strictEqual(info.done, false);
   }
