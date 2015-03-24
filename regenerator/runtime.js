@@ -137,6 +137,24 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
+          if (method === "throw" &&
+              delegate.iterator.throw === undefined) {
+            context.delegate = null;
+            // NOTE: If iterator does not have a throw method, this throw
+            // is going to terminate the yield* loop. But first we need to
+            // give iterator a chance to clean up (14.4.14.6.b.iv.1).
+            var returnMethod = delegate.iterator.return;
+            if (returnMethod !== undefined) {
+              var returnRecord = tryCatch(returnMethod, delegate.iterator);
+              if (returnRecord.type === "throw") {
+                // If the return method threw an exception, let that
+                // exception override the originally .thrown arg.
+                arg = returnRecord.arg;
+                continue;
+              }
+            }
+          }
+
           var record = tryCatch(
             delegate.iterator[method],
             delegate.iterator,

@@ -306,7 +306,7 @@ describe("try-finally generator", function() {
     }
     return 5;
   }
-  
+
   it("should honor return", function() {
     check(usingAbrupt("return", null), [0, 1, 3], 2);
   });
@@ -318,7 +318,7 @@ describe("try-finally generator", function() {
   it("should honor continue", function() {
     check(usingAbrupt("continue", null), [0, 1, 3, 1, 3], 2);
   });
-  
+
   it("should override abrupt with return", function() {
     check(usingAbrupt("return", "return"), [0, 1, 3], 4);
     check(usingAbrupt("break", "return"), [0, 1, 3], 4);
@@ -983,6 +983,114 @@ describe("delegated yield", function() {
       value: "sent",
       done: true
     });
+  });
+
+  it("should call .return methods of delegate iterators", function() {
+    var throwee = new Error("argument to gen.throw");
+    var thrownFromThrow = new Error("thrown from throw method");
+    var thrownFromReturn = new Error("thrown from return method");
+
+    function *gen(delegate) {
+      try {
+        return yield* delegate;
+      } catch (err) {
+        return err;
+      }
+    }
+
+    function check(throwMethod, returnMethod) {
+      var throwCalled = false;
+      var returnCalled = false;
+      var count = 0;
+      var g = gen({
+        next: function() {
+          return { value: count++, done: false };
+        },
+
+        "throw": throwMethod && function() {
+          throwCalled = true;
+          return throwMethod.apply(this, arguments);
+        },
+
+        "return": returnMethod && function() {
+          returnCalled = true;
+          return returnMethod.apply(this, arguments);
+        }
+      });
+
+      assert.deepEqual(g.next(), { value: 0, done: false });
+      assert.deepEqual(g.next(), { value: 1, done: false });
+      assert.deepEqual(g.next(), { value: 2, done: false });
+      assert.deepEqual(g.next(), { value: 3, done: false });
+
+      assert.strictEqual(throwCalled, false);
+      assert.strictEqual(returnCalled, false);
+
+      var result = {};
+
+      result.throwResult = g.throw(throwee);
+      result.throwCalled = throwCalled;
+      result.returnCalled = returnCalled;
+
+      return result;
+    }
+
+    var checkResult = check(undefined, function() {
+      throw thrownFromReturn;
+    });
+    if (runningInTranslation) {
+      // BUG: Node v0.11 and v0.12 neglect to call .return here.
+      assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
+    } else {
+      // This is the TypeError that results from trying to call the
+      // undefined .throw method of the iterator.
+      assert.ok(checkResult.throwResult.value instanceof TypeError);
+    }
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, false);
+    // BUG: Node v0.11 and v0.12 neglect to call .return here.
+    assert.strictEqual(checkResult.returnCalled, runningInTranslation);
+
+    checkResult = check(undefined, function() {
+      return { value: "from return", done: true };
+    });
+    assert.notStrictEqual(checkResult.throwResult.value, throwee);
+    // This is the TypeError that results from trying to call the
+    // undefined .throw method of the iterator.
+    assert.ok(checkResult.throwResult.value instanceof TypeError);
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, false);
+    // BUG: Node v0.11 and v0.12 neglect to call .return here.
+    assert.strictEqual(checkResult.returnCalled, runningInTranslation);
+
+    var checkResult = check(function(thrown) {
+      return { value: "from throw", done: true };
+    }, function() {
+      throw thrownFromReturn;
+    });
+    assert.strictEqual(checkResult.throwResult.value, "from throw");
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, true);
+    assert.strictEqual(checkResult.returnCalled, false);
+
+    var checkResult = check(function(thrown) {
+      throw thrownFromThrow;
+    }, function() {
+      throw thrownFromReturn;
+    });
+    assert.strictEqual(checkResult.throwResult.value, thrownFromThrow);
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, true);
+    assert.strictEqual(checkResult.returnCalled, false);
+
+    var checkResult = check(undefined, undefined);
+    assert.notStrictEqual(checkResult.throwResult.value, throwee);
+    // This is the TypeError that results from trying to call the
+    // undefined .throw method of the iterator.
+    assert.ok(checkResult.throwResult.value instanceof TypeError);
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, false);
+    assert.strictEqual(checkResult.returnCalled, false);
   });
 
   (runningInTranslation ? it : xit)
