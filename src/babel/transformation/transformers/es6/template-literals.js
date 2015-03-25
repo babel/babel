@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 var buildBinaryExpression = function (left, right, file) {
-  return t.binaryExpression("+", coerce(left, file), coerce(right, file));
+  return t.binaryExpression("+", left, coerce(right, file));
 };
 
 function coerce(node, file) {
