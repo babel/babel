@@ -53,19 +53,11 @@ pp.parseStatement = function(declaration, topLevel) {
     return this.parseFunctionStatement(node)
 
   case tt.at:
-    while (this.type === tt.at) {
-      this.decorators.push(this.parseDecorator());
-    }
-    if (this.type !== tt._class) {
-      this.raise(this.start, "Leading decorators must be attached to a class declaration");
-    }
+    this.parseDecorators()
 
   case tt._class:
     if (!declaration) this.unexpected()
-    if (this.decorators.length) {
-      node.decorators = this.decorators
-      this.decorators = []
-    }
+    this.takeDecorators(node)
     return this.parseClass(node, true)
 
   case tt._if: return this.parseIfStatement(node)
@@ -90,14 +82,10 @@ pp.parseStatement = function(declaration, topLevel) {
     return starttype === tt._import ? this.parseImport(node) : this.parseExport(node)
 
   case tt.name:
-    if (this.options.features["es7.asyncFunctions"] && this.value === "async") {
-      // check to see if `function ` appears after this token, this is
-      // pretty hacky
-      if (this.lookahead().type === tt._function) {
-        this.next();
-        this.expect(tt._function);
-        return this.parseFunction(node, true, false, true);
-      }
+    if (this.options.features["es7.asyncFunctions"] && this.value === "async" && this.lookahead().type === tt._function) {
+      this.next();
+      this.expect(tt._function);
+      return this.parseFunction(node, true, false, true);
     }
 
     // If the statement does not start with a statement keyword or a
@@ -113,7 +101,26 @@ pp.parseStatement = function(declaration, topLevel) {
   }
 }
 
+pp.takeDecorators = function(node) {
+  if (this.decorators.length) {
+    node.decorators = this.decorators
+    this.decorators = []
+  }
+}
+
+pp.parseDecorators = function() {
+  while (this.type === tt.at) {
+    this.decorators.push(this.parseDecorator());
+  }
+  if (this.type !== tt._class) {
+    this.raise(this.start, "Leading decorators must be attached to a class declaration");
+  }
+}
+
 pp.parseDecorator = function() {
+  if (!this.options.features["es7.decorators"]) {
+    this.unexpected()
+  }
   let node = this.startNode()
   this.next()
   node.expression = this.parseMaybeAssign()
@@ -466,10 +473,7 @@ pp.parseClass = function(node, isStatement) {
       continue;
     }
     var method = this.startNode()
-    if (this.options.features["es7.decorators"] && decorators.length) {
-      method.decorators = decorators
-      decorators = []
-    }
+    this.takeDecorators(method)
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
     if (this.options.features["es7.classProperties"] && this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
@@ -509,7 +513,7 @@ pp.parseClass = function(node, isStatement) {
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
   }
   if (decorators.length) {
-    raise(this.start, "You have trailing decorators with no method");
+    this.raise(this.start, "You have trailing decorators with no method");
   }
   node.body = this.finishNode(classBody, "ClassBody")
   return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
