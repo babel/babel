@@ -335,8 +335,13 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     this.next()
     return this.parseFunction(node, false)
 
+  case tt.at:
+    this.parseDecorators()
+
   case tt._class:
-    return this.parseClass(this.startNode(), false)
+    node = this.startNode()
+    this.takeDecorators(node)
+    return this.parseClass(node, false)
 
   case tt._new:
     return this.parseNew()
