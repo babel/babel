@@ -8,13 +8,12 @@ class TestMethodOnly extends (class { method() {} }) {
 }
 
 class TestConstructorAndMethod extends (class {
-    constructor() {}
-    method() {}
+  constructor() {}
+  method() {}
 }) {
 }
 
 class TestMultipleMethods extends (class {
-    m1() {}
-    m2() {}
-}) {
-}
+  m1() {}
+  m2() {}
+}) {}

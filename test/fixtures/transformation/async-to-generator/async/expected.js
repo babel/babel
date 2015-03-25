@@ -5,12 +5,11 @@ var Foo = (function () {
     babelHelpers.classCallCheck(this, Foo);
   }
 
-  babelHelpers.createClass(Foo, {
-    foo: {
-      value: babelHelpers.asyncToGenerator(function* () {
-        var wat = yield bar();
-      })
-    }
-  });
+  babelHelpers.createClass(Foo, [{
+    key: "foo",
+    value: babelHelpers.asyncToGenerator(function* () {
+      var wat = yield bar();
+    })
+  }]);
   return Foo;
 })();

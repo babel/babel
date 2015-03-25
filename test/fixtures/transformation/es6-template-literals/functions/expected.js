@@ -1,3 +1,3 @@
 "use strict";
 
-var foo = "test " + _.test(foo) + " " + bar;
+var foo = "test " + String(_.test(foo)) + " " + String(bar);

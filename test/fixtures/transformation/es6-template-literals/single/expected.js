@@ -1,3 +1,3 @@
 "use strict";
 
-var foo = "test " + foo;
+var foo = "test " + String(foo);

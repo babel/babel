@@ -1,3 +1,3 @@
 "use strict";
 
-var t = "'" + foo + "' \"" + bar + "\"";
+var t = "'" + String(foo) + "' \"" + String(bar) + "\"";

@@ -1,4 +1,4 @@
 {
-  "whitelist": ["flow", "es7.asyncFunctions"],
+  "whitelist": ["flow", "es7.asyncFunctions", "es7.classProperties"],
   "noCheckAst": true
 }

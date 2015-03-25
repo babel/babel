@@ -5,15 +5,14 @@ var Test = (function () {
     babelHelpers.classCallCheck(this, Test);
   }
 
-  babelHelpers.createClass(Test, {
-    test: {
-      get: function () {
-        return 5 + 5;
-      },
-      set: function (val) {
-        this._test = val;
-      }
+  babelHelpers.createClass(Test, [{
+    key: "test",
+    get: function () {
+      return 5 + 5;
+    },
+    set: function (val) {
+      this._test = val;
     }
-  });
+  }]);
   return Test;
 })();

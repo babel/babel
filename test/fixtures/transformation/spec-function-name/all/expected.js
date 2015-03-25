@@ -74,6 +74,6 @@ var i = (function (_i) {
 
 // assignment to self
 var j = function j() {
-  var _ref = 5;
-  j = _ref.j;
+  var _ = 5;
+  j = _.j;
 };

@@ -21,12 +21,11 @@ var BaseView = (function () {
     babelHelpers.classCallCheck(this, _class2);
   };
 
-  babelHelpers.createClass(_class2, {
-    foo: {
-      value: function foo() {
-        this.autoRender = true;
-      }
+  babelHelpers.createClass(_class2, [{
+    key: "foo",
+    value: function foo() {
+      this.autoRender = true;
     }
-  });
+  }]);
   return _class2;
 })();

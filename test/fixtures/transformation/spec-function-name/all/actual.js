@@ -44,5 +44,5 @@ var i = function () {
 
 // assignment to self
 var j = function () {
-  ({ j }) = 5;
+  ({ j } = 5);
 };
