@@ -295,6 +295,8 @@ class ClassTransformer {
     //
     if (this.userConstructor) {
       constructorBody.body = constructorBody.body.concat(this.userConstructor.body.body);
+      t.inherits(this.constructor, this.userConstructor);
+      t.inherits(this.constructorBody, this.userConstructor.body);
     }
 
     var instanceProps;
@@ -360,7 +362,7 @@ class ClassTransformer {
     if (body.length) {
       // todo: check for scope conflicts and shift into a method
       if (this.hasSuper) {
-        if (this.bareSuper) {
+        if (this.hasConstructor) {
           this.bareSuper.insertAfter(body);
         } else {
           this.constructorBody.body = this.constructorBody.body.concat(body);
@@ -469,7 +471,6 @@ class ClassTransformer {
     this.userConstructor = fn;
     this.hasConstructor  = true;
 
-    t.inherits(construct, fn);
     t.inheritsComments(construct, method);
 
     construct._ignoreUserWhitespace = true;
