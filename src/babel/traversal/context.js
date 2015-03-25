@@ -1,24 +1,17 @@
 import TraversalPath from "./path";
-import flatten from "lodash/array/flatten";
 import compact from "lodash/array/compact";
 import * as t from "../types";
 
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
-    this.shouldFlatten = false;
-    this.parentPath    = parentPath;
-    this.scope         = scope;
-    this.state         = state;
-    this.opts          = opts;
+    this.parentPath = parentPath;
+    this.scope      = scope;
+    this.state      = state;
+    this.opts       = opts;
   }
 
-  flatten() {
-    this.shouldFlatten = true;
-  }
-
-  visitNode(node, obj, key) {
-    var iteration = TraversalPath.get(this.parentPath, this, node, obj, key);
-    return iteration.visit();
+  create(node, obj, key) {
+    return TraversalPath.get(this.parentPath, this, node, obj, key);
   }
 
   visit(node, key) {
@@ -26,7 +19,7 @@ export default class TraversalContext {
     if (!nodes) return;
 
     if (!Array.isArray(nodes)) {
-      return this.visitNode(node, node, key);
+      return this.create(node, node, key).visit();
     }
 
     // nothing to traverse!
@@ -34,19 +27,15 @@ export default class TraversalContext {
       return;
     }
 
-    // todo: handle nodes popping in and out of existence
-    for (var i = 0; i < nodes.length; i++) {
-      if (nodes[i] && this.visitNode(node, nodes, i)) {
-        return true;
-      }
+    var queue = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i]) queue.push(this.create(node, nodes, i));
     }
 
-    if (this.shouldFlatten) {
-      node[key] = flatten(node[key]);
-
-      if (t.FLATTENABLE_KEYS.indexOf(key) >= 0) {
-        // we can safely compact this
-        node[key] = compact(node[key]);
+    for (let i = 0; i < queue.length; i++) {
+      if (queue[i].visit()) {
+        return true;
       }
     }
   }

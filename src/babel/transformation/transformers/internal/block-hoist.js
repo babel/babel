@@ -19,7 +19,7 @@ export var BlockStatement = {
     if (!hasChange) return;
 
     var nodePriorities = groupBy(node.body, function (bodyNode) {
-      var priority = bodyNode._blockHoist;
+      var priority = bodyNode && bodyNode._blockHoist;
       if (priority == null) priority = 1;
       if (priority === true) priority = 2;
       return priority;

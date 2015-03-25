@@ -94,7 +94,7 @@ exports.Function = function (node, parent, scope, file) {
   if (state.canOptimise && state.candidates.length) {
     for (var i = 0; i < state.candidates.length; i++) {
       var candidate = state.candidates[i];
-      candidate.node = argsId;
+      candidate.replaceWith(argsId);
       optimizeMemberExpression(candidate.parent, node.params.length);
     }
     return;

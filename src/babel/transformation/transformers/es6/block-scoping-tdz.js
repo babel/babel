@@ -3,6 +3,7 @@ import * as t from "../../../types";
 var visitor = {
   enter(node, parent, scope, state) {
     if (!this.isReferencedIdentifier()) return;
+    if (t.isFor(parent) && parent.left === node) return;
 
     var declared = state.letRefs[node.name];
     if (!declared) return;
@@ -19,7 +20,7 @@ var visitor = {
 
     if (t.isAssignmentExpression(parent) || t.isUpdateExpression(parent)) {
       if (parent._ignoreBlockScopingTDZ) return;
-      this.parentPath.node = t.sequenceExpression([assert, parent]);
+      this.parentPath.replaceWith(t.sequenceExpression([assert, parent]));
     } else {
       return t.logicalExpression("&&", assert, node);
     }

@@ -78,46 +78,50 @@ export default class TraversalPath {
     return ourScope;
   }
 
-  getParentArrayPath() {
-    var path = this;
-    while (!Array.isArray(path.container)) {
-      path = path.parentPath;
-    }
-    return path;
-  }
-
   insertBefore(nodes) {
-    this.getParentArrayPath()._insertBefore(nodes);
+    this.checkNodes(nodes);
+
+    if (this.isPreviousType("Expression")) {
+      if (this.node) nodes.push(this.node);
+      this.replaceExpressionWithStatements(nodes);
+    } else {
+      throw new Error("no idea what to do with this");
+    }
   }
 
   insertAfter(nodes) {
-    this.getParentArrayPath()._insertAfter(nodes);
-  }
+    this.checkNodes(nodes);
 
-  _insertBefore(nodes) {
-    throw new Error("to be implemented");
-  }
-
-  _insertAfter(nodes) {
-    if (this.isStatement()) {
-      for (var i = 0; i < nodes.length; i++) {
-        let key = this.key + 1 + i;
-        this.container.splice(key, 0, nodes[i]);
+    if (this.isPreviousType("Statement")) {
+      if (Array.isArray(this.container)) {
+        for (var i = 0; i < nodes.length; i++) {
+          this.container.splice(this.key + 1 + i, 0, nodes[i]);
+        }
+        this.updateSiblingKeys(this.key + nodes.length, nodes.length);
+      } else if (includes(t.STATEMENT_OR_BLOCK_KEYS, this.key) && !t.isBlockStatement(this.container)) {
+        this.container[this.key] = t.blockStatement(nodes);
+      } else {
+        throw new Error("no idea what to do with this");
       }
-      this.incrementSiblingPaths(this.key + nodes.length, nodes.length);
+    } else if (this.isPreviousType("Expression")) {
+      if (this.node) {
+        var temp = this.scope.generateTemp();
+        nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
+        nodes.push(t.expressionStatement(temp));
+      }
+      this.replaceExpressionWithStatements(nodes);
     } else {
-      let key = this.key + 1;
-      this.container.splice(key, 0, null);
-      this.incrementSiblingPaths(key, 1);
-      this.getSibling(key).setStatementsToExpression(nodes);
+      throw new Error("no idea what to do with this");
     }
   }
 
-  incrementSiblingPaths(fromIndex, incrementBy) {
+  updateSiblingKeys(fromIndex, incrementBy) {
     var paths = this.container._paths;
-    for (var i = 0; i > paths.length; i++) {
-      let path = paths[path];
-      if (path.key >= fromIndex) path.key += incrementBy;
+    for (var i = 0; i < paths.length; i++) {
+      let path = paths[i];
+      if (path.key >= fromIndex) {
+        path.key += incrementBy;
+      }
     }
   }
 
@@ -138,6 +142,7 @@ export default class TraversalPath {
   setContext(parentPath, context, key, file?) {
     this.shouldSkip = false;
     this.shouldStop = false;
+    this.removed    = false;
 
     this.parentPath = parentPath || this.parentPath;
     this.key        = key;
@@ -153,10 +158,18 @@ export default class TraversalPath {
     this.type = this.node && this.node.type;
   }
 
+  _remove() {
+    if (Array.isArray(this.container)) {
+      this.container.splice(this.key, 1);
+      this.updateSiblingKeys(this.key, -1);
+    } else {
+      this.container[this.key] = null;
+    }
+  }
+
   remove() {
-    this._refresh(this.node, []);
-    this.container[this.key] = null;
-    this.flatten();
+    this._remove();
+    this.removed = true;
   }
 
   skip() {
@@ -168,19 +181,6 @@ export default class TraversalPath {
     this.shouldSkip = true;
   }
 
-  flatten() {
-    this.context.flatten();
-  }
-
-  _refresh(oldNode, newNodes) {
-    // todo
-  }
-
-  refresh() {
-    var node = this.node;
-    this._refresh(node, [node]);
-  }
-
   errorWithNode(msg, Error = SyntaxError) {
     var loc = this.node.loc.start;
     var err = new Error(`Line ${loc.line}: ${msg}`);
@@ -189,30 +189,57 @@ export default class TraversalPath {
   }
 
   get node() {
-    return this.container[this.key];
+    if (this.removed) {
+      return null;
+    } else {
+      return this.container[this.key];
+    }
   }
 
   set node(replacement) {
-    if (!replacement) return this.remove();
+    throw new Error("Don't use `path.node = newNode;`, use `path.replaceWith(newNode)` or `path.replaceWithMultiple([newNode])`");
+  }
 
-    var oldNode = this.node;
-
-    var isArray = Array.isArray(replacement);
-    if (isArray && replacement.length === 1) {
-      isArray = false;
-      replacement = replacement[0];
+  replaceWithMultiple(nodes: Array<Object>) {
+    if (nodes.indexOf(this.node) >= 0) {
+      // todo: check for inclusion of current node in `nodes` and yell at the user if it's in there and tell them to use `insertBefore` or `insertAfter`
     }
 
-    var replacements = isArray ? replacement : [replacement];
-
-    // inherit comments from original node to the first replacement node
-    var inheritTo = replacements[0];
-    if (inheritTo && oldNode) t.inheritsComments(inheritTo, oldNode);
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (!node) throw new Error(`Falsy node passed to \`path.replaceWithMultiple()\` with the index of ${i}`);
+    }
 
     //
-    if (t.isStatement(replacements[0]) && t.isType(this.type, "Expression")) {
-      return this.setStatementsToExpression(replacements);
+
+    this.container[this.key] = null;
+    this.insertAfter(nodes);
+    if (!this.node) this.remove();
+  }
+
+  replaceWith(replacement, arraysAllowed) {
+    if (this.removed) {
+      throw new Error("Trying to replace a node that we've removed");
     }
+
+    if (!replacement) {
+      throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
+    }
+
+    if (Array.isArray(replacement)) {
+      if (arraysAllowed) {
+        return this.replaceWithMultiple(replacement);
+      } else {
+        throw new Error("Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
+      }
+    }
+
+    if (this.isPreviousType("Expression") && t.isStatement(replacement)) {
+      return this.replaceExpressionWithStatements([replacement]);
+    }
+
+    var oldNode = this.node;
+    if (oldNode) t.inheritsComments(replacement, oldNode);
 
     // replace the node
     this.container[this.key] = replacement;
@@ -221,21 +248,16 @@ export default class TraversalPath {
     // potentially create new scope
     this.setScope();
 
-    var file = this.scope && this.scope.file;
-    if (file) {
-      for (var i = 0; i < replacements.length; i++) {
-        file.checkNode(replacements[i], this.scope);
-      }
-    }
+    this.checkNodes([replacement]);
+  }
 
-    // we're replacing a statement or block node with an array of statements so we better
-    // ensure that it's a block
-    if (isArray) {
-      if (includes(t.STATEMENT_OR_BLOCK_KEYS, this.key) && !t.isBlockStatement(this.container)) {
-        t.ensureBlock(this.container, this.key);
-      }
+  checkNodes(nodes) {
+    var scope = this.scope;
+    var file  = scope && scope.file;
+    if (!file) return;
 
-      this.flatten();
+    for (var i = 0; i < nodes.length; i++) {
+      file.checkNode(nodes[i], scope);
     }
   }
 
@@ -260,11 +282,11 @@ export default class TraversalPath {
     return paths;
   }
 
-  setStatementsToExpression(nodes: Array) {
+  replaceExpressionWithStatements(nodes: Array) {
     var toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
     if (toSequenceExpression) {
-      return this.node = toSequenceExpression;
+      return this.replaceWith(toSequenceExpression);
     } else {
       var container = t.functionExpression(null, [], t.blockStatement(nodes));
       container.shadow = true;
@@ -274,11 +296,11 @@ export default class TraversalPath {
       for (var i = 0; i < last.length; i++) {
         var lastNode = last[i];
         if (lastNode.isExpressionStatement()) {
-          lastNode.node = t.returnStatement(lastNode.node.expression);
+          lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
         }
       }
 
-      this.node = t.callExpression(container, []);
+      this.replaceWith(t.callExpression(container, []));
 
       this.traverse(hoistVariablesVisitor);
 
@@ -295,10 +317,7 @@ export default class TraversalPath {
     if (opts[node.type]) fn = opts[node.type][key] || fn;
 
     var replacement = fn.call(this, node, this.parent, this.scope, this.state);
-
-    if (replacement) {
-      this.node = replacement;
-    }
+    if (replacement) this.replaceWith(replacement, true);
   }
 
   isBlacklisted(): boolean {
@@ -511,6 +530,10 @@ export default class TraversalPath {
 
   isScope(): boolean {
     return t.isScope(this.node, this.parent);
+  }
+
+  isPreviousType(type: string): boolean {
+    return t.isType(this.type, type);
   }
 
   isTypeGeneric(genericName: string, opts = {}): boolean {
