@@ -263,11 +263,18 @@ export default class File {
     }
   }
 
+  resolveModuleSource(source: string): string {
+    var resolveModuleSource = this.opts.resolveModuleSource;
+    if (resolveModuleSource) source = resolveModuleSource(source, this.opts.filename);
+    return source;
+  }
+
   addImport(source: string, name?: string, noDefault?: boolean): Object {
     name ||= source;
     var id = this.dynamicImportIds[name];
 
     if (!id) {
+      source = this.resolveModuleSource(source);
       id = this.dynamicImportIds[name] = this.scope.generateUidIdentifier(name);
 
       var specifiers = [t.importDefaultSpecifier(id)];
