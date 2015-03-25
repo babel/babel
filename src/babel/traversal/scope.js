@@ -105,10 +105,7 @@ export default class Scope {
 
   generateTemp(name: string = "temp") {
     var id = this.generateUidIdentifier(name);
-    this.push({
-      key: id.name,
-      id: id
-    });
+    this.push({ id });
     return id;
   }
 
@@ -183,6 +180,11 @@ export default class Scope {
         parts.push(node.value);
       } else if (t.isCallExpression(node)) {
         add(node.callee);
+      } else if (t.isObjectExpression(node) || t.isObjectPattern(node)) {
+        for (var i = 0; i < node.properties.length; i++) {
+          var prop = node.properties[i];
+          add(prop.key || prop.argument);
+        }
       }
     };
 
@@ -224,7 +226,6 @@ export default class Scope {
     if (kind === "hoisted" && local.kind === "let") return;
 
     if (local.kind === "let" || local.kind === "const" || local.kind === "module" || local.kind === "param") {
-    if (local.kind === "let" || local.kind === "const" || local.kind === "module") {
       throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
