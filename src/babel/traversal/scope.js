@@ -223,6 +223,7 @@ export default class Scope {
     if (kind === "param") return;
     if (kind === "hoisted" && local.kind === "let") return;
 
+    if (local.kind === "let" || local.kind === "const" || local.kind === "module" || local.kind === "param") {
     if (local.kind === "let" || local.kind === "const" || local.kind === "module") {
       throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
