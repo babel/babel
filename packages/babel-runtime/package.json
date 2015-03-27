@@ -1,7 +1,7 @@
 {
   "name": "babel-runtime",
   "description": "babel selfContained runtime",
-  "version": "4.7.16",
+  "version": "5.0.0-beta1",
   "repository": "babel/babel",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
