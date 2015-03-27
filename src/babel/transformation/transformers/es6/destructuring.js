@@ -231,6 +231,7 @@ class DestructuringTransformer {
   constructor(opts) {
     this.blockHoist = opts.blockHoist;
     this.operator   = opts.operator;
+    this.arrays     = {};
     this.nodes      = opts.nodes || [];
     this.scope      = opts.scope;
     this.file       = opts.file;
@@ -273,6 +274,14 @@ class DestructuringTransformer {
       this.pushAssignmentPattern(id, init);
     } else {
       this.nodes.push(this.buildVariableAssignment(id, init));
+    }
+  }
+
+  toArray(node, count) {
+    if (this.file.isLoose("es6.destructuring") || (t.isIdentifier(node) && this.arrays[node.name])) {
+      return node;
+    } else {
+      return this.scope.toArray(node, count);
     }
   }
 
@@ -434,11 +443,7 @@ class DestructuringTransformer {
     // return a locally bound identifier if it's been inferred to be an array,
     // otherwise it'll be a call to a helper that will ensure it's one
 
-    var toArray = arrayRef;
-
-    if (!this.file.isLoose("es6.destructuring")) {
-      toArray = this.scope.toArray(arrayRef, count);
-    }
+    var toArray = this.toArray(arrayRef, count);
 
     if (t.isIdentifier(toArray)) {
       // we've been given an identifier so it must have been inferred to be an
@@ -446,8 +451,8 @@ class DestructuringTransformer {
       arrayRef = toArray;
     } else {
       arrayRef = this.scope.generateUidBasedOnNode(arrayRef);
+      this.arrays[arrayRef.name] = true;
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
-      //this.getBinding(arrayRef.name).assignTypeGeneric("Array");
     }
 
     //
@@ -461,11 +466,7 @@ class DestructuringTransformer {
       var elemRef;
 
       if (t.isRestElement(elem)) {
-        elemRef = arrayRef;
-
-        if (!this.file.isLoose("es6.destructuring")) {
-          elemRef = this.scope.toArray(arrayRef);
-        }
+        elemRef = this.toArray(arrayRef);
 
         if (i > 0) {
           elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.literal(i)]);
