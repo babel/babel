@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 
 var cache = {};
+var jsons = {};
 
 function exists(filename) {
   if (!fs.existsSync) return false;
@@ -23,7 +24,7 @@ export default function (loc, opts = {}) {
       var json;
 
       try {
-        json = JSON.parse(content);
+        json = jsons[content] ||= JSON.parse(content);
       } catch (err) {
         err.message = `${file}: ${err.message}`;
         throw err;
