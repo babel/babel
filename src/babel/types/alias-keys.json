@@ -60,6 +60,7 @@
   "Identifier":                ["Expression"],
   "Literal":                   ["Expression"],
   "MemberExpression":          ["Expression"],
+  "MetaProperty":              ["Expression"],
   "NewExpression":             ["Expression"],
   "ObjectExpression":          ["Expression"],
   "SequenceExpression":        ["Expression"],
