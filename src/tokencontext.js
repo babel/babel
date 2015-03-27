@@ -57,6 +57,10 @@ pp.updateContext = function(prevType) {
 // Token-specific context update code
 
 tt.parenR.updateContext = tt.braceR.updateContext = function() {
+  if (this.context.length == 1) {
+    this.exprAllowed = true
+    return
+  }
   let out = this.context.pop()
   if (out === types.b_stat && this.curContext() === types.f_expr) {
     this.context.pop()
@@ -64,7 +68,7 @@ tt.parenR.updateContext = tt.braceR.updateContext = function() {
   } else if (out === types.b_tmpl) {
     this.exprAllowed = true
   } else {
-    this.exprAllowed = !(out && out.isExpr)
+    this.exprAllowed = !out.isExpr
   }
 }
 

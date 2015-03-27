@@ -9,14 +9,6 @@ const pp = Parser.prototype
 // if possible.
 
 pp.toAssignable = function(node, isBinding) {
-  if (node.parenthesizedExpression) {
-    if (node.type === "ObjectExpression") {
-      this.raise(node.start, "You're trying to assign to a parenthesized expression, instead of `({ foo }) = {}` use `({ foo } = {})`");
-    } else {
-      this.raise(node.start, "Parenthesized left hand expressions are illegal");
-    }
-  }
-
   if (this.options.ecmaVersion >= 6 && node) {
     switch (node.type) {
     case "Identifier":
