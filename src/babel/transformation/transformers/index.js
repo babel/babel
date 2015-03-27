@@ -13,6 +13,9 @@ export default {
   // this goes at the start so we only transform the original user code
   "spec.functionName":                     require("./spec/function-name"),
 
+  // needs to be before `_shadowFunctions`
+  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
+
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
 
   reactCompat:                             require("./other/react-compat"),
@@ -86,9 +89,6 @@ export default {
   "spec.protoToAssign":                    require("./spec/proto-to-assign"),
 
   _declarations:                           require("./internal/declarations"),
-
-  // needs to be before `_shadowFunctions`
-  "es6.arrowFunctions":                    require("./es6/arrow-functions"),
 
   _shadowFunctions:                        require("./internal/shadow-functions"),
 
