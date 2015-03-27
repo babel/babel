@@ -4,10 +4,6 @@ node_js:
   - "0.12"
   - "iojs"
 
-branches:
-  except:
-   - experimental
-
 before_script: "npm install -g codeclimate-test-reporter"
 script: "make test-travis"
 
