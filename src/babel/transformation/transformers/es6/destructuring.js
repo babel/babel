@@ -434,7 +434,11 @@ class DestructuringTransformer {
     // return a locally bound identifier if it's been inferred to be an array,
     // otherwise it'll be a call to a helper that will ensure it's one
 
-    var toArray = this.scope.toArray(arrayRef, count);
+    var toArray = arrayRef;
+
+    if (!this.file.isLoose("es6.destructuring")) {
+      toArray = this.scope.toArray(arrayRef, count);
+    }
 
     if (t.isIdentifier(toArray)) {
       // we've been given an identifier so it must have been inferred to be an
@@ -457,7 +461,11 @@ class DestructuringTransformer {
       var elemRef;
 
       if (t.isRestElement(elem)) {
-        elemRef = this.scope.toArray(arrayRef);
+        elemRef = arrayRef;
+
+        if (!this.file.isLoose("es6.destructuring")) {
+          elemRef = this.scope.toArray(arrayRef);
+        }
 
         if (i > 0) {
           elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.literal(i)]);

@@ -2,7 +2,11 @@ import includes from "lodash/collection/includes";
 import * as t from "../../../types";
 
 function getSpreadLiteral(spread, scope) {
-  return scope.toArray(spread.argument, true);
+  if (scope.file.isLoose("es6.spread")) {
+    return spread.argument;
+  } else {
+    return scope.toArray(spread.argument, true);
+  }
 }
 
 function hasSpread(nodes) {
