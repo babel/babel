@@ -5,7 +5,7 @@ var Foo = (function () {
     babelHelpers.classCallCheck(this, Foo);
   }
 
-  babelHelpers.createComputedClass(Foo, [{
+  babelHelpers.createClass(Foo, [{
     key: "foo",
     value: function foo() {}
   }, {
