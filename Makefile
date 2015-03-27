@@ -86,7 +86,7 @@ publish:
 	node tools/cache-templates
 	test -f templates.json
 
-	npm publish
+	npm publish --tag beta
 
 	git push --follow-tags
 
@@ -99,14 +99,14 @@ publish-runtime:
 	cd packages; \
 	node build-runtime.js; \
 	cd babel-runtime; \
-	npm publish
+	npm publish --tag beta
 
 publish-core:
 	tools/generate-core-package-json >package2.json
 	mv package.json .package.json
 	mv package2.json package.json
 
-	npm publish
+	npm publish --tag beta
 
 	rm -rf package.json
 	mv .package.json package.json
