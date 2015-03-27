@@ -267,9 +267,11 @@ export function removeComments(child: Object): Object {
  */
 
 export function inheritsComments(child: Object, parent: Object): Object {
-  each(COMMENT_KEYS, function (key) {
-    child[key]  = uniq(compact([].concat(child[key], parent[key])));
-  });
+  if (child && parent) {
+    each(COMMENT_KEYS, function (key) {
+      child[key]  = uniq(compact([].concat(child[key], parent[key])));
+    });
+  }
   return child;
 }
 
