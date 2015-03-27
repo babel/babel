@@ -14,29 +14,47 @@ export default class TraversalContext {
     return TraversalPath.get(this.parentPath, this, node, obj, key);
   }
 
-  visit(node, key) {
-    var nodes = node[key];
-    if (!nodes) return;
-
-    if (!Array.isArray(nodes)) {
-      return this.create(node, node, key).visit();
-    }
-
+  visitMultiple(nodes, node, key) {
     // nothing to traverse!
-    if (nodes.length === 0) {
-      return;
-    }
+    if (nodes.length === 0) return false;
 
-    var queue = [];
+    var queue = this.queue = [];
+    var stop  = false;
+    var done  = [];
 
+    // build up initial queue
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i]) queue.push(this.create(node, nodes, i));
     }
 
+    // visit the queue
     for (let i = 0; i < queue.length; i++) {
       if (queue[i].visit()) {
-        return true;
+        stop = true;
+        break;
       }
+    }
+
+    // clear context from queued paths
+    for (let i = 0; i < queue.length; i++) {
+      //queue[i].clearContext();
+    }
+
+    return stop;
+  }
+
+  visitSingle(node, key) {
+    return this.create(node, node, key).visit();
+  }
+
+  visit(node, key) {
+    var nodes = node[key];
+    if (!nodes) return;
+
+    if (Array.isArray(nodes)) {
+      return this.visitMultiple(nodes, node, key);
+    } else {
+      return this.visitSingle(node, key);
     }
   }
 }

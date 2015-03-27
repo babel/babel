@@ -76,7 +76,7 @@ var templateVisitor = {
     }
     if (t.isIdentifier(node) && has(nodes, node.name)) {
       this.skip();
-      return nodes[node.name];
+      this.replaceInline(nodes[node.name]);
     }
   }
 };
