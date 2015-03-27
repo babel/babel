@@ -9,7 +9,6 @@ var arr = (function () {
   try {
     for (var _iterator = "abcdefgh".split("")[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var x = _step.value;
-
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;

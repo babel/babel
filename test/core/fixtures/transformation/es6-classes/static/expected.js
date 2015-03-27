@@ -5,14 +5,13 @@ var A = (function () {
     babelHelpers.classCallCheck(this, A);
   }
 
-  babelHelpers.createClass(A, null, {
-    a: {
-      value: function a() {}
-    },
-    b: {
-      get: function () {},
-      set: function (b) {}
-    }
-  });
+  babelHelpers.createClass(A, null, [{
+    key: "a",
+    value: function a() {}
+  }, {
+    key: "b",
+    get: function () {},
+    set: function (b) {}
+  }]);
   return A;
 })();
