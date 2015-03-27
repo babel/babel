@@ -107,13 +107,9 @@ export function NewExpression(node, parent, scope, file) {
 
   var nodes = build(args, scope);
 
-  var first = nodes.shift();
+  var context = t.arrayExpression([t.literal(null)]);
 
-  if (nodes.length) {
-    args = t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
-  } else {
-    args = first;
-  }
+  args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
 
   return t.newExpression(
     t.callExpression(
