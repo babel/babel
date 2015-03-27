@@ -37,6 +37,10 @@ const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"}
 // does not help.
 
 pp.parseStatement = function(declaration, topLevel) {
+  if (this.type === tt.at) {
+    this.parseDecorators(true)
+  }
+
   let starttype = this.type, node = this.startNode()
 
   // Most types of statements are recognized by the keyword they
@@ -51,9 +55,6 @@ pp.parseStatement = function(declaration, topLevel) {
   case tt._function:
     if (!declaration && this.options.ecmaVersion >= 6) this.unexpected()
     return this.parseFunctionStatement(node)
-
-  case tt.at:
-    this.parseDecorators()
 
   case tt._class:
     if (!declaration) this.unexpected()
@@ -108,16 +109,21 @@ pp.takeDecorators = function(node) {
   }
 }
 
-pp.parseDecorators = function() {
+pp.parseDecorators = function(allowExport) {
   while (this.type === tt.at) {
     this.decorators.push(this.parseDecorator());
   }
+
+  if (allowExport && this.type === tt._export) {
+    return;
+  }
+
   if (this.type !== tt._class) {
     this.raise(this.start, "Leading decorators must be attached to a class declaration");
   }
 }
 
-pp.parseDecorator = function() {
+pp.parseDecorator = function(allowExport) {
   if (!this.options.features["es7.decorators"]) {
     this.unexpected()
   }
@@ -465,11 +471,10 @@ pp.parseClass = function(node, isStatement) {
   var classBody = this.startNode()
   classBody.body = []
   this.expect(tt.braceL)
-  var decorators = []
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue
-    if (this.options.features["es7.decorators"] && this.type === tt.at) {
-      decorators.push(this.parseDecorator())
+    if (this.type === tt.at) {
+      this.parseDecorator()
       continue;
     }
     var method = this.startNode()
@@ -512,7 +517,7 @@ pp.parseClass = function(node, isStatement) {
     }
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
   }
-  if (decorators.length) {
+  if (this.decorators.length) {
     this.raise(this.start, "You have trailing decorators with no method");
   }
   node.body = this.finishNode(classBody, "ClassBody")
@@ -557,18 +562,24 @@ pp.parseExport = function(node) {
     this.expectContextual("from")
     node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected()
     this.semicolon()
+    this.checkExport(node)
     return this.finishNode(node, "ExportAllDeclaration")
   }
   if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign()
     let needsSemi = true
-    if (expr.id) switch (expr.type) {
-      case "FunctionExpression": expr.type = "FunctionDeclaration"; break
-      case "ClassExpression": expr.type = "ClassDeclaration"; break
-      default: needsSemi = false
+    if (expr.type == "FunctionExpression" ||
+        expr.type == "ClassExpression") {
+      needsSemi = false
+      if (expr.id) {
+        expr.type = expr.type == "FunctionExpression"
+          ? "FunctionDeclaration"
+          : "ClassDeclaration"
+      }
     }
     node.declaration = expr
     if (needsSemi) this.semicolon()
+    this.checkExport(node)
     return this.finishNode(node, "ExportDefaultDeclaration")
   }
   // export var|const|let|function|class ...
@@ -586,11 +597,22 @@ pp.parseExport = function(node) {
     }
     this.semicolon()
   }
+  this.checkExport(node)
   return this.finishNode(node, "ExportNamedDeclaration")
 }
 
-pp.shouldParseExportDeclaration = function () {
+pp.shouldParseExportDeclaration = function() {
   return this.options.features["es7.asyncFunctions"] && this.isContextual("async")
+}
+
+pp.checkExport = function(node) {
+  if (this.decorators.length) {
+    var isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression")
+    if (!node.declaration || !isClass) {
+      this.raise(node.start, "You can only use decorators on an export when exporting a class");
+    }
+    this.takeDecorators(node.declaration)
+  }
 }
 
 // Parses a comma-separated list of module exports.
