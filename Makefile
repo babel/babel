@@ -37,7 +37,7 @@ build:
 	rm -rf templates.json
 
 clean:
-	rm -rf coverage templates.json test/tmp dist
+	rm -rf coverage templates.json test/tmp dist lib
 
 test-clean:
 	rm -rf test/tmp
