@@ -1,7 +1,7 @@
 var assert = require("assert");
-var util   = require("../lib/babel/util");
-var parse  = require("../lib/babel/helpers/parse");
-var t      = require("../lib/babel/types");
+var util   = require("../../lib/babel/util");
+var parse  = require("../../lib/babel/helpers/parse");
+var t      = require("../../lib/babel/types");
 
 suite("util", function () {
   test("invalid template", function () {

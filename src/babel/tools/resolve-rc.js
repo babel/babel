@@ -5,6 +5,8 @@ import fs from "fs";
 var cache = {};
 
 function exists(filename) {
+  if (!fs.existsSync) return false;
+
   var cached = cache[filename];
   if (cached != null) return cached;
   return cache[filename] = fs.existsSync(filename);

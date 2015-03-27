@@ -1,4 +1,4 @@
-var traverse = require("../lib/babel/traversal");
+var traverse = require("../../lib/babel/traversal");
 var assert   = require("assert");
 var _        = require("lodash");
 

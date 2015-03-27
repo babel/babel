@@ -1,2 +1,2 @@
---reporter dot
+--reporter spec
 --ui tdd

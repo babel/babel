@@ -10,7 +10,7 @@ var regeneratorLoc = __dirname + "/../vendor/regenerator";
 
 suite("regenerator", function () {
   setup(function () {
-    require("../register")({
+    require("../../register")({
       blacklist: ["strict"],
       experimental: true
     });

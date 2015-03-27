@@ -101,6 +101,13 @@ pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos, afterLeftParse) {
     node.left = this.type === tt.eq ? this.toAssignable(left) : left
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
     this.checkLVal(left)
+    if (left.parenthesizedExpression) {
+      if (left.type === "ObjectPattern") {
+        this.raise(left.start, "You're trying to assign to a parenthesized expression, instead of `({ foo }) = {}` use `({ foo } = {})`");
+      } else {
+        this.raise(left.start, "Parenthesized left hand expressions are illegal");
+      }
+    }
     this.next()
     node.right = this.parseMaybeAssign(noIn)
     return this.finishNode(node, "AssignmentExpression")

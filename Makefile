@@ -43,7 +43,7 @@ test-clean:
 	rm -rf test/tmp
 
 test: test-parser
-	node $(MOCHA_CMD)
+	node $(MOCHA_CMD) test/core
 	make test-clean
 
 test-all:
@@ -53,10 +53,10 @@ test-all:
 test-cov:
 	rm -rf coverage
 	make build-core-test
-	node $(ISTANBUL_CMD) $(MOCHA_CMD) --
+	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- test/core
 
 test-parser:
-	node lib/acorn/test/run.js
+	node test/acorn/run.js
 
 test-travis: bootstrap build test
 
@@ -64,8 +64,8 @@ test-browser:
 	mkdir -p dist
 
 	node tools/cache-templates
-	node tools/cache-tests
-	node $(BROWSERIFY_CMD) -e test/_browser.js >dist/babel-test.js
+	node tools/build-tests
+	node $(BROWSERIFY_CMD) -e test/core/_browser.js >dist/babel-test.js
 	rm -rf templates.json tests.json
 
 	test -n "`which open`" && open test/browser.html

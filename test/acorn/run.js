@@ -9,7 +9,7 @@
     require("./tests-jsx.js");
     require("./tests-babel.js");
     require("babel/register")
-    acorn = require("../src")
+    acorn = require("../../lib/acorn")
   } else {
     driver = window;
     acorn = window.acorn;

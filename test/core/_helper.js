@@ -1,5 +1,5 @@
 var esvalid = require("esvalid");
-var util    = require("../lib/babel/util");
+var util    = require("../../lib/babel/util");
 var path    = require("path");
 var fs      = require("fs");
 var _       = require("lodash");
@@ -31,7 +31,7 @@ exports.esvalid = function (ast, code, loc) {
 };
 
 exports.assertVendor = function (name) {
-  if (!fs.existsSync(__dirname + "/../vendor/" + name)) {
+  if (!fs.existsSync(__dirname + "/../../vendor/" + name)) {
     console.error("No vendor/" + name + " - run `make bootstrap`");
     process.exit(1);
   }
@@ -147,7 +147,7 @@ exports.get = function (entryName, entryLoc) {
 };
 
 try {
-  exports.cache = require("../tests.json");
+  exports.cache = require("../../tests.json");
 } catch (err) {
   if (err.code !== "MODULE_NOT_FOUND") throw err;
 

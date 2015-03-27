@@ -1,17 +1,17 @@
 var genHelpers          = require("./_generator-helpers");
-var transform           = require("../lib/babel/transformation");
-var buildExernalHelpers = require("../lib/babel/tools/build-external-helpers");
+var transform           = require("../../lib/babel/transformation");
+var buildExernalHelpers = require("../../lib/babel/tools/build-external-helpers");
 var sourceMap           = require("source-map");
-var codeFrame           = require("../lib/babel/helpers/code-frame");
+var codeFrame           = require("../../lib/babel/helpers/code-frame");
 var Module              = require("module");
 var helper              = require("./_helper");
 var assert              = require("assert");
 var chai                = require("chai");
 var path                = require("path");
-var util                = require("../lib/babel/util");
+var util                = require("../../lib/babel/util");
 var _                   = require("lodash");
 
-require("../lib/babel/polyfill");
+require("../../lib/babel/polyfill");
 
 eval(buildExernalHelpers());
 
@@ -137,7 +137,7 @@ module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
 
     suite(suiteOpts.name + "/" + testSuite.title, function () {
       setup(function () {
-        require("../register")(taskOpts);
+        require("../../register")(taskOpts);
       });
 
       _.each(testSuite.tests, function (task) {
