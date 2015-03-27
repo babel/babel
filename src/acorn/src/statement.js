@@ -481,7 +481,7 @@ pp.parseClass = function(node, isStatement) {
     this.takeDecorators(method)
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
-    if (this.options.features["es7.classProperties"] && this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
+    if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
         method.key.name === "static") {
       if (isGenerator) this.unexpected()
       method['static'] = true
