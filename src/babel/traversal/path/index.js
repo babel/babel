@@ -97,6 +97,7 @@ export default class TraversalPath {
 
   _containerInsertAfter(nodes) {
     this.updateSiblingKeys(this.key + 1, nodes.length);
+
     for (var i = 0; i < nodes.length; i++) {
       var to = this.key + 1 + i;
       this.container.splice(to, 0, nodes[i]);
@@ -222,7 +223,7 @@ export default class TraversalPath {
   replaceInline(nodes) {
     if (Array.isArray(nodes)) {
       if (Array.isArray(this.container)) {
-        this._verifyNodeList("replaceInline", nodes);
+        this._verifyNodeList(nodes);
         this._containerInsertAfter(nodes);
         return this.remove();
       } else {
@@ -233,19 +234,15 @@ export default class TraversalPath {
     }
   }
 
-  _verifyNodeList(key, nodes) {
-    if (nodes.indexOf(this.node) >= 0) {
-      // todo: possibly check for inclusion of current node and yell at the user as it's an anti-pattern
-    }
-
+  _verifyNodeList(nodes) {
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
-      if (!node) throw new Error(`Falsy node passed to \`path.${key}()\` with the index of ${i}`);
+      if (!node) throw new Error(`Node list has falsy node with the index of ${i}`);
     }
   }
 
   replaceWithMultiple(nodes: Array<Object>) {
-    this._verifyNodeList("replaceWithMultiple", nodes);
+    this._verifyNodeList(nodes);
     t.inheritsComments(nodes[0], this.node);
     this.container[this.key] = null;
     this.insertAfter(nodes);

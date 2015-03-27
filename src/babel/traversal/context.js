@@ -18,9 +18,10 @@ export default class TraversalContext {
     // nothing to traverse!
     if (nodes.length === 0) return false;
 
+    var visited = [];
+
     var queue = this.queue = [];
     var stop  = false;
-    var done  = [];
 
     // build up initial queue
     for (let i = 0; i < nodes.length; i++) {
@@ -29,7 +30,12 @@ export default class TraversalContext {
 
     // visit the queue
     for (let i = 0; i < queue.length; i++) {
-      if (queue[i].visit()) {
+      var path = queue[i];
+      if (visited.indexOf(path.node) >= 0) continue;
+
+      visited.push(path.node);
+
+      if (path.visit()) {
         stop = true;
         break;
       }
