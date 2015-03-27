@@ -66,7 +66,7 @@ var assertTest = function (stdout, stderr, opts) {
 };
 
 var buildTest = function (binName, testName, opts) {
-  var binLoc = path.normalize(__dirname + "/../bin/" + binName);
+  var binLoc = path.normalize(__dirname + "/../../bin/" + binName);
 
   return function (callback) {
     this.timeout(5000);

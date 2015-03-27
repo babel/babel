@@ -1,10 +1,10 @@
 require("./_helper").assertVendor("compat-table");
 
-require("../polyfill");
+require("../../polyfill");
 
-var transform = require("../lib/babel/transformation");
+var transform = require("../../lib/babel/transformation");
 var assert    = require("assert");
-var data      = require("../vendor/compat-table/data-es6");
+var data      = require("../../vendor/compat-table/data-es6");
 var _         = require("lodash");
 
 

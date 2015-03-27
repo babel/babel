@@ -5,7 +5,7 @@ var _  = require("lodash");
 
 require("./_transformation-helper")({
   name: "traceur",
-  loc: __dirname + "/../vendor/traceur/test/feature",
+  loc: __dirname + "/../../vendor/traceur/test/feature",
 
   ignoreSuites: [
     // weird environmental issue make these hard to test
@@ -38,6 +38,9 @@ require("./_transformation-helper")({
   ],
 
   ignoreTasks: [
+    // TODO
+    "Syntax/StrictKeywordsInPattern",
+
     // broken test, see google/traceur-compiler#1797
     "Classes/NestedClassSuperAnimal",
 
