@@ -1,3 +1,4 @@
+MAKEFLAGS = -j1
 BROWSERIFY_CMD = node_modules/browserify/bin/cmd.js
 ISTANBUL_CMD = node_modules/istanbul/lib/cli.js cover
 UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
