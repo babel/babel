@@ -210,7 +210,7 @@ export default class TraversalPath {
       if (!node) throw new Error(`Falsy node passed to \`path.replaceWithMultiple()\` with the index of ${i}`);
     }
 
-    //
+    t.inherits(nodes[0], this.node);
 
     this.container[this.key] = null;
     this.insertAfter(nodes);
@@ -219,7 +219,7 @@ export default class TraversalPath {
 
   replaceWith(replacement, arraysAllowed) {
     if (this.removed) {
-      throw new Error("Trying to replace a node that we've removed");
+      throw new Error("You can't replace this node, we've already removed it");
     }
 
     if (!replacement) {
