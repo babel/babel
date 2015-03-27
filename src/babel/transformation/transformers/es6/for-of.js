@@ -33,7 +33,7 @@ export function ForOfStatement(node, parent, scope, file) {
 
   t.inherits(loop, node);
 
-  if (build.replaceParent) this.parentPath.replaceWith(build.node);
+  if (build.replaceParent) this.parentPath.replaceWithNodes(build.node);
   return build.node;
 }
 
