@@ -8,7 +8,7 @@ import * as t from "../types";
 function buildGlobal(namespace, builder) {
   var body      = [];
   var container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
-  var tree      = t.program([t.expressionStatement(t.callExpression(container, [util.template("self-global")]))]);
+  var tree      = t.program([t.expressionStatement(t.callExpression(container, [util.template("helper-self-global")]))]);
 
   body.push(t.variableDeclaration("var", [
     t.variableDeclarator(
@@ -56,7 +56,7 @@ function buildHelpers(body, namespace, whitelist = []) {
 
     var key = t.identifier(t.toIdentifier(name));
     body.push(t.expressionStatement(
-      t.assignmentExpression("=", t.memberExpression(namespace, key), util.template(name))
+      t.assignmentExpression("=", t.memberExpression(namespace, key), util.template("helper-" + name))
     ));
   });
 }
