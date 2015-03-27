@@ -47,7 +47,7 @@ var selfContainify = function (code) {
 var buildHelper = function (helperName) {
   var tree = t.program(
     util.template("self-contained-helpers-head", {
-      HELPER: util.template(helperName)
+      HELPER: util.template("helper-" + helperName)
     })
   );
 
