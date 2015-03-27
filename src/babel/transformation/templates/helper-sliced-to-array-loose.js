@@ -1,5 +1,5 @@
 (function (arr, i) {
-  if (arr && arr.constructor === Array) {
+  if (Array.isArray(arr)) {
     return arr;
   } else if (Symbol.iterator in Object(arr)) {
     var _arr = [];

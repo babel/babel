@@ -1,3 +1,3 @@
 (function (arr) {
-  return arr && arr.constructor === Array ? arr : Array.from(arr);
+  return Array.isArray(arr) ? arr : Array.from(arr);
 });

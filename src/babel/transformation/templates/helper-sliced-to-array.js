@@ -1,10 +1,10 @@
 (function (arr, i) {
-  if (arr && arr.constructor === Array) {
+  if (Array.isArray(arr)) {
     return arr;
   } else if (Symbol.iterator in Object(arr)) {
     // this is an expanded form of `for...of` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
-    // helper. sometimes spec compliancy is annoying :()
+    // helper. sometimes spec compliancy is annoying :(
     //
     // _n = _iteratorNormalCompletion
     // _d = _didIteratorError
