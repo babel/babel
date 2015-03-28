@@ -83,6 +83,13 @@
     "shorthand": "L"
   },
 
+  "jsxPragma": {
+    "type": "string",
+    "description": "Custom pragma to use with JSX (same functionality as @jsx comments)",
+    "default": "React.createElement",
+    "shorthand": "P"
+  },
+
   "ignore": {
     "type": "list"
   },
