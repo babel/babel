@@ -26,6 +26,7 @@ commander.option("-d, --out-dir [out]", "Compile an input directory of modules i
 commander.option("-c, --remove-comments", "Remove comments from the compiled code", false);
 commander.option("-M, --module-ids", "Insert module id in modules", false);
 commander.option("-R, --react-compat", "Makes the react transformer produce pre-v0.12 code");
+commander.option("-P, --jsx-pragma [name]", "Makes the react transformer use a custom pragma");
 commander.option("--keep-module-id-extensions", "Keep extensions when generating module ids", false);
 commander.option("-a, --auxiliary-comment [comment]", "Comment text to prepend to all auxiliary code");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
@@ -112,6 +113,7 @@ exports.opts = {
   blacklist:              commander.blacklist,
   whitelist:              commander.whitelist,
   sourceMap:              commander.sourceMaps || commander.sourceMapsInline,
+  jsxPragma:              commander.jsxPragma,
   optional:               commander.optional,
   comments:               !commander.removeComments,
   modules:                commander.modules,
