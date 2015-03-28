@@ -34,7 +34,15 @@
   runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
-    return new Generator(innerFn, outerFn, self || null, tryLocsList || []);
+    // If outerFn provided, then outerFn.prototype instanceof Generator.
+    var generator = Object.create((outerFn || Generator).prototype);
+
+    generator._invoke = makeInvokeMethod(
+      innerFn, self || null,
+      new Context(tryLocsList || [])
+    );
+
+    return generator;
   }
   runtime.wrap = wrap;
 
@@ -69,6 +77,7 @@
   // .constructor.prototype properties for functions that return Generator
   // objects. For full spec compliance, you may wish to configure your
   // minifier not to mangle the names of these two functions.
+  function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
 
@@ -96,11 +105,11 @@
   runtime.async = function(innerFn, outerFn, self, tryLocsList) {
     return new Promise(function(resolve, reject) {
       var generator = wrap(innerFn, outerFn, self, tryLocsList);
-      var callNext = step.bind(generator.next);
-      var callThrow = step.bind(generator["throw"]);
+      var callNext = step.bind(generator, "next");
+      var callThrow = step.bind(generator, "throw");
 
-      function step(arg) {
-        var record = tryCatch(this, null, arg);
+      function step(method, arg) {
+        var record = tryCatch(generator[method], generator, arg);
         if (record.type === "throw") {
           reject(record.arg);
           return;
@@ -118,12 +127,10 @@
     });
   };
 
-  function Generator(innerFn, outerFn, self, tryLocsList) {
-    var generator = outerFn ? Object.create(outerFn.prototype) : this;
-    var context = new Context(tryLocsList);
+  function makeInvokeMethod(innerFn, self, context) {
     var state = GenStateSuspendedStart;
 
-    function invoke(method, arg) {
+    return function invoke(method, arg) {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
       }
@@ -257,14 +264,17 @@
           }
         }
       }
-    }
-
-    generator.next = invoke.bind(generator, "next");
-    generator["throw"] = invoke.bind(generator, "throw");
-    generator["return"] = invoke.bind(generator, "return");
-
-    return generator;
+    };
   }
+
+  function defineGeneratorMethod(method) {
+    Gp[method] = function(arg) {
+      return this._invoke(method, arg);
+    };
+  }
+  defineGeneratorMethod("next");
+  defineGeneratorMethod("throw");
+  defineGeneratorMethod("return");
 
   Gp[iteratorSymbol] = function() {
     return this;
