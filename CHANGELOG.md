@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.0
+
+ * **New Feature**
+  * Decorators based on [@wycat's](https://github.com/wycats) [stage 1 proposal](https://github.com/wycats/javascript-decorators).
+  * Class property initializers based on [@jeffmo's](https://github.com/jeffmo) [stage 0 proposal](https://gist.github.com/jeffmo/054df782c05639da2adb).
+ * **Internal**
+ * **Breaking Changes**
+  * The Babel playground has been removed.
+  * ES7 Abstract References have been removed.
+
 ## 4.7.16
 
  * **Bug Fix**
