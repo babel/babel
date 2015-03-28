@@ -4,7 +4,7 @@ import * as t from "../../../types";
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
 export function Program(node, parent, scope, file) {
-  var id = "React.createElement";
+  var id = file.opts.jsxPragma;
 
   for (var i = 0; i < file.ast.comments.length; i++) {
     var comment = file.ast.comments[i];
