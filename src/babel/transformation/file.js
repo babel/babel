@@ -113,6 +113,8 @@ export default class File {
     "sourceRoot",
     "moduleRoot",
 
+    "jsxPragma",
+
     // legacy
     "format",
     "reactCompat",
@@ -147,6 +149,7 @@ export default class File {
       blacklist:              [],
       whitelist:              [],
       sourceMap:              false,
+      jsxPragma:              null,
       optional:               [],
       comments:               true,
       filename:               "unknown",
