@@ -87,7 +87,16 @@ export default class TraversalPath {
   insertBefore(nodes) {
     this.checkNodes(nodes);
 
-    if (this.isPreviousType("Expression")) {
+    if (this.isPreviousType("Statement")) {
+      if (Array.isArray(this.container)) {
+        this._containerInsertBefore(nodes);
+      } else if (this.isStatementOrBlock()) {
+        if (this.node) nodes.push(this.node);
+        this.container[this.key] = t.blockStatement(nodes);
+      } else {
+        throw new Error("no idea what to do with this");
+      }
+    } else if (this.isPreviousType("Expression")) {
       if (this.node) nodes.push(this.node);
       this.replaceExpressionWithStatements(nodes);
     } else {
@@ -95,11 +104,12 @@ export default class TraversalPath {
     }
   }
 
-  _containerInsertAfter(nodes) {
-    this.updateSiblingKeys(this.key + 1, nodes.length);
+
+  _containerInsert(from, nodes) {
+    this.updateSiblingKeys(from, nodes.length);
 
     for (var i = 0; i < nodes.length; i++) {
-      var to = this.key + 1 + i;
+      var to = from + i;
       this.container.splice(to, 0, nodes[i]);
 
       if (this.context) {
@@ -108,13 +118,26 @@ export default class TraversalPath {
     }
   }
 
+  _containerInsertBefore(nodes) {
+    this._containerInsert(this.key, nodes);
+  }
+
+  _containerInsertAfter(nodes) {
+    this._containerInsert(this.key + 1, nodes);
+  }
+
+  isStatementOrBlock() {
+    return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key) && !t.isBlockStatement(this.container);
+  }
+
   insertAfter(nodes) {
     this.checkNodes(nodes);
 
     if (this.isPreviousType("Statement")) {
       if (Array.isArray(this.container)) {
         this._containerInsertAfter(nodes);
-      } else if (includes(t.STATEMENT_OR_BLOCK_KEYS, this.key) && !t.isBlockStatement(this.container)) {
+      } else if (this.isStatementOrBlock()) {
+        if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
       } else {
         throw new Error("no idea what to do with this");
@@ -291,6 +314,24 @@ export default class TraversalPath {
     for (var i = 0; i < nodes.length; i++) {
       file.checkNode(nodes[i], scope);
     }
+  }
+
+  getStatementParent(): ?TraversalPath {
+    var path = this;
+
+    do {
+      if (!path.parentPath || (Array.isArray(path.container) && path.isStatement())) {
+        break;
+      } else {
+        path = path.parentPath;
+      }
+    } while (path);
+
+    if (path && (path.isProgram() || path.isFile())) {
+      throw new Error("File/Program node, we can't possibly find a statement parent to this");
+    }
+
+    return path;
   }
 
   getLastStatements(): Array<TraversalPath> {
