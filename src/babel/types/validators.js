@@ -173,6 +173,8 @@ export function isScope(node: Object, parent: Object): boolean {
  */
 
 export function isImmutable(node: Object): boolean {
+  if (t.isType(node.type, "Immutable")) return true;
+
   if (t.isLiteral(node)) {
     if (node.regex) {
       // regexes are mutable

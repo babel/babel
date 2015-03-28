@@ -105,14 +105,14 @@
   "UnionTypeAnnotation":         ["Flow"],
   "VoidTypeAnnotation":          ["Flow"],
 
-  "JSXAttribute":           ["JSX"],
-  "JSXClosingElement":      ["JSX"],
-  "JSXElement":             ["JSX", "Expression"],
-  "JSXEmptyExpression":     ["JSX"],
-  "JSXExpressionContainer": ["JSX"],
+  "JSXAttribute":           ["JSX", "Immutable"],
+  "JSXClosingElement":      ["JSX", "Immutable"],
+  "JSXElement":             ["JSX", "Immutable", "Expression"],
+  "JSXEmptyExpression":     ["JSX", "Immutable"],
+  "JSXExpressionContainer": ["JSX", "Immutable"],
   "JSXIdentifier":          ["JSX"],
   "JSXMemberExpression":    ["JSX"],
   "JSXNamespacedName":      ["JSX"],
-  "JSXOpeningElement":      ["JSX"],
+  "JSXOpeningElement":      ["JSX", "Immutable"],
   "JSXSpreadAttribute":     ["JSX"]
 }
