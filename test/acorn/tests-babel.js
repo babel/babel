@@ -2057,7 +2057,735 @@ test('export async function foo(){}', {
   features: { "es7.asyncFunctions": true }
 });
 
-// ES7 decorators
+// ES7 decorators - https://github.com/wycats/javascript-decorators
+
+test("@foo class Foo {}", {
+  "start": 0,
+  "body": [
+    {
+      "start": 5,
+      "decorators": [
+        {
+          "start": 0,
+          "expression": {
+            "start": 1,
+            "name": "foo",
+            "type": "Identifier",
+            "end": 4
+          },
+          "type": "Decorator",
+          "end": 4
+        }
+      ],
+      "id": {
+        "start": 11,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 14
+      },
+      "superClass": null,
+      "body": {
+        "start": 15,
+        "body": [],
+        "type": "ClassBody",
+        "end": 17
+      },
+      "type": "ClassDeclaration",
+      "end": 17
+    }
+  ],
+  "type": "Program",
+  "end": 17
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test("var Foo = @foo class Foo {}", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "name": "Foo",
+            "type": "Identifier",
+            "end": 7
+          },
+          "init": {
+            "start": 15,
+            "decorators": [
+              {
+                "start": 10,
+                "expression": {
+                  "start": 11,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 14
+                },
+                "type": "Decorator",
+                "end": 14
+              }
+            ],
+            "id": {
+              "start": 21,
+              "name": "Foo",
+              "type": "Identifier",
+              "end": 24
+            },
+            "superClass": null,
+            "body": {
+              "start": 25,
+              "body": [],
+              "type": "ClassBody",
+              "end": 27
+            },
+            "type": "ClassExpression",
+            "end": 27
+          },
+          "type": "VariableDeclarator",
+          "end": 27
+        }
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+      "end": 27
+    }
+  ],
+  "type": "Program",
+  "end": 27
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test("class Foo { @foo bar() {} }", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 17,
+              "name": "bar",
+              "type": "Identifier",
+              "end": 20
+            },
+            "static": false,
+            "kind": "method",
+            "value": {
+              "start": 20,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "start": 23,
+                "body": [],
+                "type": "BlockStatement",
+                "end": 25
+              },
+              "type": "FunctionExpression",
+              "end": 25
+            },
+            "type": "MethodDefinition",
+            "end": 25
+          }
+        ],
+        "type": "ClassBody",
+        "end": 27
+      },
+      "type": "ClassDeclaration",
+      "end": 27
+    }
+  ],
+  "type": "Program",
+  "end": 27
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test("class Foo { @foo set bar() {} }", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 21,
+              "name": "bar",
+              "type": "Identifier",
+              "end": 24
+            },
+            "static": false,
+            "kind": "set",
+            "value": {
+              "start": 24,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "start": 27,
+                "body": [],
+                "type": "BlockStatement",
+                "end": 29
+              },
+              "type": "FunctionExpression",
+              "end": 29
+            },
+            "type": "MethodDefinition",
+            "end": 29
+          }
+        ],
+        "type": "ClassBody",
+        "end": 31
+      },
+      "type": "ClassDeclaration",
+      "end": 31
+    }
+  ],
+  "type": "Program",
+  "end": 31
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test("class Foo { @foo get bar() {} }", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 21,
+              "name": "bar",
+              "type": "Identifier",
+              "end": 24
+            },
+            "static": false,
+            "kind": "get",
+            "value": {
+              "start": 24,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "start": 27,
+                "body": [],
+                "type": "BlockStatement",
+                "end": 29
+              },
+              "type": "FunctionExpression",
+              "end": 29
+            },
+            "type": "MethodDefinition",
+            "end": 29
+          }
+        ],
+        "type": "ClassBody",
+        "end": 31
+      },
+      "type": "ClassDeclaration",
+      "end": 31
+    }
+  ],
+  "type": "Program",
+  "end": 31
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test("class Foo { @foo @bar bar() {} }", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 22,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              },
+              {
+                "start": 17,
+                "expression": {
+                  "start": 18,
+                  "name": "bar",
+                  "type": "Identifier",
+                  "end": 21
+                },
+                "type": "Decorator",
+                "end": 21
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 22,
+              "name": "bar",
+              "type": "Identifier",
+              "end": 25
+            },
+            "static": false,
+            "kind": "method",
+            "value": {
+              "start": 25,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "start": 28,
+                "body": [],
+                "type": "BlockStatement",
+                "end": 30
+              },
+              "type": "FunctionExpression",
+              "end": 30
+            },
+            "type": "MethodDefinition",
+            "end": 30
+          }
+        ],
+        "type": "ClassBody",
+        "end": 32
+      },
+      "type": "ClassDeclaration",
+      "end": 32
+    }
+  ],
+  "type": "Program",
+  "end": 32
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+testFail("@foo function bar() {}", "Leading decorators must be attached to a class declaration (1:5)", {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+})
+
+testFail("class Foo { @foo }", "You have trailing decorators with no method (1:18)", {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+})
+
+// ES7 class property initializers - https://gist.github.com/jeffmo/054df782c05639da2adb
+
+test('class Foo { foo = "bar"; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 12,
+            "computed": false,
+            "key": {
+              "start": 12,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 15
+            },
+            "static": false,
+            "value": {
+              "start": 18,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 23
+            },
+            "type": "ClassProperty",
+            "end": 24
+          }
+        ],
+        "type": "ClassBody",
+        "end": 26
+      },
+      "type": "ClassDeclaration",
+      "end": 26
+    }
+  ],
+  "type": "Program",
+  "end": 26
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true }
+});
+
+test('class Foo { foo; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 12,
+            "computed": false,
+            "key": {
+              "start": 12,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 15
+            },
+            "static": false,
+            "value": null,
+            "type": "ClassProperty",
+            "end": 16
+          }
+        ],
+        "type": "ClassBody",
+        "end": 18
+      },
+      "type": "ClassDeclaration",
+      "end": 18
+    }
+  ],
+  "type": "Program",
+  "end": 18
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true }
+});
+
+test('class Foo { static foo; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 12,
+            "computed": false,
+            "key": {
+              "start": 19,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 22
+            },
+            "static": true,
+            "value": null,
+            "type": "ClassProperty",
+            "end": 23
+          }
+        ],
+        "type": "ClassBody",
+        "end": 25
+      },
+      "type": "ClassDeclaration",
+      "end": 25
+    }
+  ],
+  "type": "Program",
+  "end": 25
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true }
+});
+
+test('class Foo { static foo = "bar"; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 12,
+            "computed": false,
+            "key": {
+              "start": 19,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 22
+            },
+            "static": true,
+            "value": {
+              "start": 25,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 30
+            },
+            "type": "ClassProperty",
+            "end": 31
+          }
+        ],
+        "type": "ClassBody",
+        "end": 33
+      },
+      "type": "ClassDeclaration",
+      "end": 33
+    }
+  ],
+  "type": "Program",
+  "end": 33
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true }
+});
+
+test('class Foo { @bar foo = "bar"; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "bar",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 17,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 20
+            },
+            "static": false,
+            "value": {
+              "start": 23,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 28
+            },
+            "type": "ClassProperty",
+            "end": 29
+          }
+        ],
+        "type": "ClassBody",
+        "end": 31
+      },
+      "type": "ClassDeclaration",
+      "end": 31
+    }
+  ],
+  "type": "Program",
+  "end": 31
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true, "es7.decorators": true }
+});
+
+test('class Foo { @bar static foo = "bar"; }', {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "bar",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 24,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 27
+            },
+            "static": true,
+            "value": {
+              "start": 30,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 35
+            },
+            "type": "ClassProperty",
+            "end": 36
+          }
+        ],
+        "type": "ClassBody",
+        "end": 38
+      },
+      "type": "ClassDeclaration",
+      "end": 38
+    }
+  ],
+  "type": "Program",
+  "end": 38
+}, {
+  ecmaVersion: 6,
+  features: { "es7.classProperties": true, "es7.decorators": true }
+});
 
 // ES7 export extensions - https://github.com/leebyron/ecmascript-more-export-from
 
