@@ -2,7 +2,7 @@ interface A {};
 interface A extends B {};
 interface A<T> extends B<T>, C<T> {};
 interface A { foo(): number };
-interface Dictionary { length: number; [index: string]: string };
+interface Dictionary { length: number; [index: string]: string; };
 class Foo implements Bar {}
 class Foo extends Bar implements Bat, Man<number> {}
 class Foo extends class Bar implements Bat {} {}

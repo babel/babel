@@ -173,7 +173,13 @@ export function ObjectTypeAnnotation(node, print) {
 
     print.list(props, {
       separator: false,
-      indent: true
+      indent: true,
+      iterator: () => {
+        if (props.length !== 1) {
+          this.semicolon();
+          this.space();
+        }
+      }
     });
 
     this.space();
@@ -185,7 +191,6 @@ export function ObjectTypeAnnotation(node, print) {
 export function ObjectTypeCallProperty(node, print) {
   if (node.static) this.push("static ");
   print(node.value);
-  this.semicolon();
 }
 
 export function ObjectTypeIndexer(node, print) {
@@ -199,7 +204,6 @@ export function ObjectTypeIndexer(node, print) {
   this.push(":");
   this.space();
   print(node.value);
-  this.semicolon();
 }
 
 export function ObjectTypeProperty(node, print) {
@@ -211,7 +215,6 @@ export function ObjectTypeProperty(node, print) {
     this.space();
   }
   print(node.value);
-  this.semicolon();
 }
 
 export function QualifiedTypeIdentifier(node, print) {
