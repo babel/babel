@@ -11,6 +11,10 @@ export function transformerList(key, val) {
   return transform._ensureTransformerNames(key, val);
 }
 
+export function number(key, val) {
+  return +val;
+}
+
 export function boolean(key, val) {
   return !!val;
 }

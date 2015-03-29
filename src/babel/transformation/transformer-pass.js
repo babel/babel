@@ -32,8 +32,9 @@ export default class TransformerPass {
     var whitelist = opts.whitelist;
     if (whitelist) return includes(whitelist, key);
 
-    // experimental
-    if (transformer.metadata.experimental && opts.experimental) return true;
+    // stage
+    var stage = transformer.metadata.stage;
+    if (stage != null && stage >= opts.stage) return true;
 
     // optional
     if (transformer.metadata.optional && !includes(opts.optional, key)) return false;

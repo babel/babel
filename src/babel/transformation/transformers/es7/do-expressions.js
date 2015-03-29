@@ -2,7 +2,8 @@ import * as t from "../../../types";
 
 export var metadata = {
   experimental: true,
-  optional: true
+  optional: true,
+  stage: 0
 };
 
 export var check = t.isDoExpression;

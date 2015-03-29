@@ -4,8 +4,7 @@ import * as util from  "../../../util";
 import * as t from "../../../types";
 
 export var metadata = {
-  experimental: true,
-  optional: true
+  stage: 0
 };
 
 export function ComprehensionExpression(node, parent, scope, file) {

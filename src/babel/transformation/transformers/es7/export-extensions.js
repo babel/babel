@@ -2,6 +2,10 @@
 
 import * as t from "../../../types";
 
+export var metadata = {
+  stage: 0
+};
+
 export function check(node) {
   return t.isExportDefaultSpecifier(node) || t.isExportNamespaceSpecifier(node);
 }

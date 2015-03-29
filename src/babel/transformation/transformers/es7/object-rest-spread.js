@@ -3,8 +3,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  experimental: true,
-  optional: true
+  stage: 1
 };
 
 export function manipulateOptions(opts) {

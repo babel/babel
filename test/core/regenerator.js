@@ -12,7 +12,7 @@ suite("regenerator", function () {
   setup(function () {
     require("../../register")({
       blacklist: ["strict"],
-      experimental: true
+      stage: 0
     });
   });
 

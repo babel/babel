@@ -94,7 +94,7 @@ require("./_transformation-helper")({
   ]
 }, {
   optional: ["es6.symbols"],
-  experimental: true
+  stage: 0
 }, function (opts, task) {
   if (!_.contains(task.exec.loc, "module.js")) {
     opts.blacklist = ["strict"];

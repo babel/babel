@@ -1,4 +1,5 @@
 export var metadata = {
   experimental: true,
-  optional: true
+  optional: true,
+  stage: 1
 };

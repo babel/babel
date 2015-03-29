@@ -42,11 +42,11 @@
     "hidden": true
   },
 
-  "experimental": {
-    "description": "Enable all ES7+ transformers",
+  "stage": {
+    "description": "",
     "shorthand": "e",
-    "type": "boolean",
-    "default": false
+    "type": "number",
+    "default": 2
   },
 
   "blacklist": {

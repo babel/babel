@@ -30,6 +30,10 @@ export default class Transformer {
     this.post              = take("post");
     this.pre               = take("pre");
 
+    if (this.metadata.stage != null) {
+      this.metadata.optional = true;
+    }
+
     this.handlers = this.normalize(transformer);
     this.opts     ||= {};
     this.key      = transformerKey;
