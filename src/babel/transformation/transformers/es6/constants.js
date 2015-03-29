@@ -2,7 +2,7 @@ import * as messages from "../../../messages";
 import * as t from "../../../types";
 
 export function check(node) {
-  return t.isVariableDeclaration(node, { kind: "const" });
+  return t.isVariableDeclaration(node, { kind: "const" }) || t.isImportDeclaration(node);
 }
 
 var visitor = {
@@ -38,7 +38,7 @@ var visitor = {
 
 export function Scopable(node, parent, scope, file) {
   this.traverse(visitor, {
-    constants: scope.getAllBindingsOfKind("const"),
+    constants: scope.getAllBindingsOfKind("const", "module"),
     file:      file
   });
 }

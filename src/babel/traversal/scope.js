@@ -551,17 +551,20 @@ export default class Scope {
    * Walks the scope tree and gathers all declarations of `kind`.
    */
 
-  getAllBindingsOfKind(kind: string): Object {
+  getAllBindingsOfKind(): Object {
     var ids = object();
 
-    var scope = this;
-    do {
-      for (var name in scope.bindings) {
-        var binding = scope.bindings[name];
-        if (binding.kind === kind) ids[name] = binding;
-      }
-      scope = scope.parent;
-    } while (scope);
+    for (let i = 0; i < arguments.length; i++) {
+      var kind = arguments[i];
+      var scope = this;
+      do {
+        for (var name in scope.bindings) {
+          var binding = scope.bindings[name];
+          if (binding.kind === kind) ids[name] = binding;
+        }
+        scope = scope.parent;
+      } while (scope);
+    }
 
     return ids;
   }
