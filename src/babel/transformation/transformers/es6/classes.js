@@ -234,6 +234,8 @@ class ClassTransformer {
 
     if (node.kind === "get") kind = "get";
     if (node.kind === "set") kind = "set";
+
+    t.inheritsComments(node.value, node);
     map[kind] = node.value;
   }
 
