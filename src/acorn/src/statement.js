@@ -474,7 +474,7 @@ pp.parseClass = function(node, isStatement) {
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue
     if (this.type === tt.at) {
-      this.parseDecorator()
+      this.decorators.push(this.parseDecorator())
       continue;
     }
     var method = this.startNode()
