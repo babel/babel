@@ -21,7 +21,7 @@ export function ExportNamedDeclaration(node, parent, scope) {
     var uid = scope.generateUidIdentifier(specifier.exported.name);
     nodes.push(
       t.importDeclaration([t.importSpecifier(uid, specifier.exported)], node.source),
-      t.exportNamedDeclaration(null, [t.exportSpecifier(uid, specifier.exported)])
+      t.exportNamedDeclaration(null, [t.exportSpecifier(uid, t.identifier("default"))])
     );
   }
 

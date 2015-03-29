@@ -63,7 +63,10 @@ var exportsVisitor = traverse.explode({
       }
 
       if (!t.isExportDefaultDeclaration(node)) {
-        formatter.hasNonDefaultExports = true;
+        var onlyDefault = node.specifiers && t.isExportDefaultSpecifier(node.specifiers[0]) && node.specifiers.length === 1;
+        if (!onlyDefault) {
+          formatter.hasNonDefaultExports = true;
+        }
       }
 
       if (node.source) {
@@ -95,7 +98,7 @@ export default class DefaultFormatter {
   }
 
   doDefaultExportInterop(node) {
-    return t.isExportDefaultDeclaration(node) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
+    return (t.isExportDefaultDeclaration(node) || t.isSpecifierDefault(node)) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
 
   bumpImportOccurences(node) {

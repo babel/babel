@@ -61,6 +61,17 @@ export default class CommonJSFormatter extends DefaultFormatter {
     }, true));
   }
 
+  exportSpecifier(specifier, node, nodes) {
+    if (this.doDefaultExportInterop(specifier)) {
+      nodes.push(util.template("exports-default-assign", {
+        VALUE: specifier.local
+      }, true));
+      return;
+    } else {
+      DefaultFormatter.prototype.exportSpecifier.apply(this, arguments);
+    }
+  }
+
   exportDeclaration(node, nodes) {
     if (this.doDefaultExportInterop(node)) {
       var declar = node.declaration;
