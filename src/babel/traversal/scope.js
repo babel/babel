@@ -57,7 +57,7 @@ var blockVariableVisitor = {
   enter(node, parent, scope, state) {
     if (this.isFunctionDeclaration() || this.isBlockScoped()) {
       state.registerDeclaration(this);
-    } else if (t.isScope(node, parent)) {
+    } else if (this.isScope()) {
       this.skip();
     }
   }
@@ -71,11 +71,8 @@ export default class Scope {
    */
 
   constructor(path: TraversalPath, parent?: Scope, file?: File) {
-    var cached = path.getData("scope");
-    if (cached) {
-      return cached;
-    } else {
-      //path.setData("scope", this);
+    if (parent && parent.block === path.node) {
+      return parent;
     }
 
     this.parent = parent;
@@ -252,7 +249,7 @@ export default class Scope {
           for (var name in ids) {
             if (name === oldName) ids[name].name = newName;
           }
-        } else if (t.isScope(node, parent)) {
+        } else if (this.isScope()) {
           if (!scope.bindingIdentifierEquals(oldName, binding)) {
             this.skip();
           }
@@ -264,6 +261,18 @@ export default class Scope {
     scope.bindings[newName] = info;
 
     binding.name = newName;
+  }
+
+  /**
+   * Description
+   */
+
+  dump() {
+    var scope = this;
+    do {
+      console.log(scope.block.type, "Bindings:", Object.keys(scope.bindings));
+    } while(scope = scope.parent);
+    console.log("-------------");
   }
 
   /**

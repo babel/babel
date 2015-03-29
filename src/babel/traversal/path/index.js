@@ -1,3 +1,4 @@
+import PathHoister from "./hoister";
 import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
@@ -10,7 +11,7 @@ import Scope from "../scope";
 import * as t from "../../types";
 
 var hoistVariablesVisitor = {
-  enter(node, parent, scope ) {
+  enter(node, parent, scope) {
     if (this.isFunction()) {
       return this.skip();
     }
@@ -100,7 +101,7 @@ export default class TraversalPath {
       if (this.node) nodes.push(this.node);
       this.replaceExpressionWithStatements(nodes);
     } else {
-      throw new Error("no idea what to do with this");
+      throw new Error("no idea what to do with this ");
     }
   }
 
@@ -258,10 +259,16 @@ export default class TraversalPath {
   }
 
   _verifyNodeList(nodes) {
+    if (typeof nodes === "object") {
+      nodes = [nodes];
+    }
+
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
       if (!node) throw new Error(`Node list has falsy node with the index of ${i}`);
     }
+
+    return nodes;
   }
 
   replaceWithMultiple(nodes: Array<Object>) {
@@ -601,10 +608,6 @@ export default class TraversalPath {
     return t.isVar(this.node);
   }
 
-  isScope(): boolean {
-    return t.isScope(this.node, this.parent);
-  }
-
   isPreviousType(type: string): boolean {
     return t.isType(this.type, type);
   }
@@ -633,8 +636,9 @@ export default class TraversalPath {
     return t.getBindingIdentifiers(this.node);
   }
 
-  traverse(opts, state) {
-    traverse(this.node, opts, this.scope, state, this);
+  traverse(visitor, state) {
+    traverse(this.node, visitor, this.scope, state, this);
+  }
 
   /**
    * Description

@@ -65,10 +65,6 @@ export default class Transformer {
   }
 
   buildPass(file: File): TransformerPass {
-    if (!(file instanceof File)) {
-      throw new Error("Multiple versions of babel are interacting, this is either due to a version mismatch in a plugin or it was resolved incorrectly");
-    }
-
     return new TransformerPass(file, this);
   }
 }
