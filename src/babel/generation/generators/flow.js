@@ -167,17 +167,25 @@ export { TypeParameterInstantiation as TypeParameterDeclaration };
 export function ObjectTypeAnnotation(node, print) {
   this.push("{");
   var props = node.properties.concat(node.callProperties, node.indexers);
+
   if (props.length) {
     this.space();
-    print.list(props, { indent: true, separator: "; " });
+
+    print.list(props, {
+      separator: false,
+      indent: true
+    });
+
     this.space();
   }
+
   this.push("}");
 }
 
 export function ObjectTypeCallProperty(node, print) {
   if (node.static) this.push("static ");
   print(node.value);
+  this.semicolon();
 }
 
 export function ObjectTypeIndexer(node, print) {
@@ -191,6 +199,7 @@ export function ObjectTypeIndexer(node, print) {
   this.push(":");
   this.space();
   print(node.value);
+  this.semicolon();
 }
 
 export function ObjectTypeProperty(node, print) {
@@ -202,6 +211,7 @@ export function ObjectTypeProperty(node, print) {
     this.space();
   }
   print(node.value);
+  this.semicolon();
 }
 
 export function QualifiedTypeIdentifier(node, print) {

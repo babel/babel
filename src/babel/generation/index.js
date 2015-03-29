@@ -100,7 +100,7 @@ class CodeGenerator {
     };
 
     print.list = function (items, opts = {}) {
-      opts.separator ||= ", ";
+      if (opts.separator == null) opts.separator = ", ";
       print.join(items, opts);
     };
 

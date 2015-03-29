@@ -98,7 +98,7 @@
   "TypeCastExpression":          ["expression", "typeAnnotation"],
   "TypeParameterDeclaration":    ["params"],
   "TypeParameterInstantiation":  ["params"],
-  "ObjectTypeAnnotation":        ["key", "value"],
+  "ObjectTypeAnnotation":        ["properties", "indexers", "callProperties"],
   "ObjectTypeCallProperty":      ["value"],
   "ObjectTypeIndexer":           ["id", "key", "value"],
   "ObjectTypeProperty":          ["key", "value"],
