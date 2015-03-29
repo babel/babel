@@ -635,6 +635,14 @@ export default class TraversalPath {
 
   traverse(opts, state) {
     traverse(this.node, opts, this.scope, state, this);
+
+  /**
+   * Description
+   */
+
+  hoist() {
+    var hoister = new PathHoister(this);
+    return hoister.run();
   }
 
   /**

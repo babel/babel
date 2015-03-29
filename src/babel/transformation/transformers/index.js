@@ -18,6 +18,7 @@ export default {
 
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
 
+  "optimisation.react.constantElements":   require("./optimisation/react.constant-elements"),
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),
 

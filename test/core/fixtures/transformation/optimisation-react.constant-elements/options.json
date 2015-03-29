@@ -1,0 +1,5 @@
+{
+  "noCheckAst": true,
+  "optional": ["optimisation.react.constantElements"],
+  "blacklist": ["react"]
+}
