@@ -560,12 +560,22 @@ pp.parseExport = function(node) {
   // export * from '...'
   if (this.eat(tt.star)) {
     if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
-      node.exported = this.parseIdent()
+      let specifier = this.startNode()
+      specifier.exported = this.parseIdent()
+      node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")]
+      this.parseExportSpecifiersMaybe(node)
+      this.parseExportFrom(node)
+    } else {
+      this.parseExportFrom(node)
+      return this.finishNode(node, "ExportAllDeclaration")
     }
+  } else if (this.isExportDefaultSpecifier()) {
+    let specifier = this.startNode()
+    specifier.exported = this.parseIdent(true)
+    node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")]
+    this.parseExportSpecifiersMaybe(node)
     this.parseExportFrom(node)
-    return this.finishNode(node, "ExportAllDeclaration")
-  }
-  if (this.eat(tt._default)) { // export default ...
+  } else if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign()
     let needsSemi = true
     if (expr.type == "FunctionExpression" ||
@@ -581,16 +591,10 @@ pp.parseExport = function(node) {
     if (needsSemi) this.semicolon()
     this.checkExport(node)
     return this.finishNode(node, "ExportDefaultDeclaration")
-  }
-  // export var|const|let|function|class ...
-  if (this.type.keyword || this.shouldParseExportDeclaration()) {
+  } else if (this.type.keyword || this.shouldParseExportDeclaration()) {
     node.declaration = this.parseStatement(true)
     node.specifiers = []
     node.source = null
-  } else if (this.type === tt.name) {
-    node.exported = this.parseIdent()
-    this.parseExportFrom(node)
-    return this.finishNode(node, "ExportNamespaceDeclaration")
   } else { // export { x, y as z } [from '...']
     node.declaration = null
     node.specifiers = this.parseExportSpecifiers()
@@ -603,6 +607,25 @@ pp.parseExport = function(node) {
   }
   this.checkExport(node)
   return this.finishNode(node, "ExportNamedDeclaration")
+}
+
+pp.isExportDefaultSpecifier = function () {
+  if (this.type === tt.name) {
+    return this.value !== "type" && this.value !== "async"
+  }
+
+  if (this.type !== tt._default) {
+    return false
+  }
+
+  var lookahead = this.lookahead()
+  return lookahead.type === tt.comma || (lookahead.type === tt.name && lookahead.value === "from")
+}
+
+pp.parseExportSpecifiersMaybe = function (node) {
+  if (this.eat(tt.comma)) {
+    node.specifiers = node.specifiers.concat(this.parseExportSpecifiers())
+  }
 }
 
 pp.parseExportFrom = function(node) {
