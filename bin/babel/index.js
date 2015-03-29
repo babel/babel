@@ -19,7 +19,7 @@ each(File.options, function (option, key) {
   }
 
   if (option.type === "boolean" && option.default === true) {
-    arg = "no-" + key;
+    arg = "no-" + arg;
   }
 
   arg = "--" + arg;
