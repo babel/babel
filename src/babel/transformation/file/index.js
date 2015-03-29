@@ -80,7 +80,8 @@ export default class File {
     "object-destructuring-empty",
     "temporal-undefined",
     "temporal-assert-defined",
-    "self-global"
+    "self-global",
+    "default-props"
   ];
 
   static options = require("./options");

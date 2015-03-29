@@ -1,0 +1,5 @@
+{
+  "externalHelpers": true,
+  "noCheckAst": true,
+  "optional": ["optimisation.react.inlineElements"]
+}

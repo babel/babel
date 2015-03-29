@@ -147,89 +147,13 @@ export default function (exports, opts) {
     exit(node) {
       var callExpr = node.openingElement;
 
-      for (var i = 0; i < node.children.length; i++) {
-        var child = node.children[i];
-
-        if (t.isLiteral(child) && typeof child.value === "string") {
-          cleanJSXElementLiteralChild(child, callExpr.arguments);
-          continue;
-        } else if (t.isJSXEmptyExpression(child)) {
-          continue;
-        }
-
-        callExpr.arguments.push(child);
-      }
-
-      callExpr.arguments = flatten(callExpr.arguments);
+      callExpr.arguments = callExpr.arguments.concat(react.buildChildren(node));
 
       if (callExpr.arguments.length >= 3) {
         callExpr._prettyCall = true;
       }
 
       return t.inherits(callExpr, node);
-    }
-  };
-
-  var isStringLiteral = function (node) {
-    return t.isLiteral(node) && isString(node.value);
-  };
-
-  var flatten = function (args) {
-    var flattened = [];
-    var last;
-
-    for (var i = 0; i < args.length; i++) {
-      var arg = args[i];
-      if (isStringLiteral(arg) && isStringLiteral(last)) {
-        last.value += arg.value;
-      } else {
-        last = arg;
-        flattened.push(arg);
-      }
-    }
-
-    return flattened;
-  };
-
-  var cleanJSXElementLiteralChild = function (child, args) {
-    var lines = child.value.split(/\r\n|\n|\r/);
-
-    var lastNonEmptyLine = 0;
-    var i;
-
-    for (i = 0; i < lines.length; i++) {
-      if (lines[i].match(/[^ \t]/)) {
-        lastNonEmptyLine = i;
-      }
-    }
-
-    for (i = 0; i < lines.length; i++) {
-      var line = lines[i];
-
-      var isFirstLine = i === 0;
-      var isLastLine = i === lines.length - 1;
-      var isLastNonEmptyLine = i === lastNonEmptyLine;
-
-      // replace rendered whitespace tabs with spaces
-      var trimmedLine = line.replace(/\t/g, " ");
-
-      // trim whitespace touching a newline
-      if (!isFirstLine) {
-        trimmedLine = trimmedLine.replace(/^[ ]+/, "");
-      }
-
-      // trim whitespace touching an endline
-      if (!isLastLine) {
-        trimmedLine = trimmedLine.replace(/[ ]+$/, "");
-      }
-
-      if (trimmedLine) {
-        if (!isLastNonEmptyLine) {
-          trimmedLine += " ";
-        }
-
-        args.push(t.literal(trimmedLine));
-      }
     }
   };
 

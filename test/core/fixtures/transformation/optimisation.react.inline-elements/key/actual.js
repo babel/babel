@@ -1,0 +1,1 @@
+<Foo key="foo" />
