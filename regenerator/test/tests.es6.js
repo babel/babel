@@ -2282,4 +2282,60 @@ describe("generator return method", function() {
     assert.strictEqual(executedFinally, true);
     assertAlreadyFinished(g);
   });
+
+  it("should return both delegate and delegator", function() {
+    var checkpoints = [];
+
+    function* callee(errorToThrow) {
+      try {
+        yield 1;
+        yield 2;
+      } finally {
+        checkpoints.push("callee finally");
+        if (errorToThrow) {
+          throw errorToThrow;
+        }
+      }
+    }
+
+    function* caller(errorToThrow) {
+      try {
+        yield 0;
+        yield* callee(errorToThrow);
+        yield 3;
+      } finally {
+        checkpoints.push("caller finally");
+      }
+    }
+
+    var g1 = caller();
+
+    assert.deepEqual(g1.next(), { value: 0, done: false });
+    assert.deepEqual(g1.next(), { value: 1, done: false });
+    assert.deepEqual(g1.return(-1), { value: -1, done: true });
+    assert.deepEqual(checkpoints, [
+      "callee finally",
+      "caller finally"
+    ]);
+
+    var error = new Error("thrown from callee");
+    var g2 = caller(error);
+
+    assert.deepEqual(g2.next(), { value: 0, done: false });
+    assert.deepEqual(g2.next(), { value: 1, done: false });
+
+    try {
+      g2.return(-1);
+      assert.ok(false, "should have thrown an exception");
+    } catch (thrown) {
+      assert.strictEqual(thrown, error);
+    }
+
+    assert.deepEqual(checkpoints, [
+      "callee finally",
+      "caller finally",
+      "callee finally",
+      "caller finally"
+    ]);
+  });
 });

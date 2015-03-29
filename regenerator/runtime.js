@@ -144,29 +144,30 @@
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
-          if (method === "return" &&
-              delegate.iterator.return === undefined) {
-            // The delegate iterator is finished and needs no cleanup, so
-            // nullify it and continue with the outer .return invocation.
+          if (method === "return" ||
+              (method === "throw" && delegate.iterator.throw === undefined)) {
+            // A return or throw (when the delegate iterator has no throw
+            // method) always terminates the yield* loop.
             context.delegate = null;
-            continue;
-          }
 
-          if (method === "throw" &&
-              delegate.iterator.throw === undefined) {
-            context.delegate = null;
-            // NOTE: If iterator does not have a throw method, this throw
-            // is going to terminate the yield* loop. But first we need to
-            // give iterator a chance to clean up (14.4.14.6.b.iv.1).
+            // If the delegate iterator has a return method, give it a
+            // chance to clean up.
             var returnMethod = delegate.iterator.return;
-            if (returnMethod !== undefined) {
-              var returnRecord = tryCatch(returnMethod, delegate.iterator);
-              if (returnRecord.type === "throw") {
+            if (returnMethod) {
+              var record = tryCatch(returnMethod, delegate.iterator, arg);
+              if (record.type === "throw") {
                 // If the return method threw an exception, let that
-                // exception override the originally .thrown arg.
-                arg = returnRecord.arg;
+                // exception prevail over the original return or throw.
+                method = "throw";
+                arg = record.arg;
                 continue;
               }
+            }
+
+            if (method === "return") {
+              // Continue with the outer return, now that the delegate
+              // iterator has been terminated.
+              continue;
             }
           }
 
@@ -183,7 +184,6 @@
             // overhead of an extra function call.
             method = "throw";
             arg = record.arg;
-
             continue;
           }
 
@@ -256,12 +256,10 @@
 
         } else if (record.type === "throw") {
           state = GenStateCompleted;
-
-          if (method === "next") {
-            context.dispatchException(record.arg);
-          } else {
-            arg = record.arg;
-          }
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(arg) call above.
+          method = "throw";
+          arg = record.arg;
         }
       }
     };
