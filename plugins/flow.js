@@ -215,6 +215,7 @@ pp.flow_parseObjectTypeIndexer = function (node, isStatic) {
   this.expect(tt.colon)
   node.value = this.flow_parseType()
 
+  this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeIndexer")
 }
 
@@ -251,6 +252,7 @@ pp.flow_parseObjectTypeMethod = function (start, isStatic, key) {
   node.static = isStatic
   node.key = key
   node.optional = false
+  this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeProperty")
 }
 
@@ -258,6 +260,7 @@ pp.flow_parseObjectTypeCallProperty = function (node, isStatic) {
   var valueNode = this.startNode()
   node.static = isStatic
   node.value = this.flow_parseObjectTypeMethodish(valueNode)
+    this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeCallProperty")
 }
 
@@ -307,18 +310,21 @@ pp.flow_parseObjectType = function (allowStatic) {
         node.value = this.flow_parseType()
         node.optional = optional
         node.static = isStatic
+        this.flow_objectTypeSemicolon()
         nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"))
       }
-    }
-
-    if (!this.eat(tt.semi) && this.type !== tt.braceR) {
-      this.unexpected()
     }
   }
 
   this.expect(tt.braceR)
 
   return this.finishNode(nodeStart, "ObjectTypeAnnotation")
+}
+
+pp.flow_objectTypeSemicolon = function () {
+  if (!this.eat(tt.semi) && this.type !== tt.braceR) {
+    this.unexpected()
+  }
 }
 
 pp.flow_parseGenericType = function (start, id) {
