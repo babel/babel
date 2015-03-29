@@ -2713,10 +2713,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [8, 22],
+                range: [8, 23],
                 loc: {
                   start: { line: 1, column: 8 },
-                  end: { line: 1, column: 22 }
+                  end: { line: 1, column: 23 }
                 }
               }],
               indexers: [],
@@ -2784,10 +2784,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [8, 22],
+                range: [8, 23],
                 loc: {
                   start: { line: 1, column: 8 },
-                  end: { line: 1, column: 22 }
+                  end: { line: 1, column: 23 }
                 }
               }],
               indexers: [{
@@ -2966,10 +2966,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [8, 22],
+                range: [8, 23],
                 loc: {
                   start: { line: 1, column: 8 },
-                  end: { line: 1, column: 22 }
+                  end: { line: 1, column: 23 }
                 }
               }, {
                 type: 'ObjectTypeProperty',
@@ -3268,10 +3268,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [8, 22],
+                range: [8, 23],
                 loc: {
                   start: { line: 1, column: 8 },
-                  end: { line: 1, column: 22 }
+                  end: { line: 1, column: 23 }
                 }
               }, {
                 type: 'ObjectTypeProperty',
@@ -3364,10 +3364,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [8, 22],
+                range: [8, 23],
                 loc: {
                   start: { line: 1, column: 8 },
-                  end: { line: 1, column: 22 }
+                  end: { line: 1, column: 23 }
                 }
               }, {
                 type: 'ObjectTypeProperty',
@@ -3468,10 +3468,10 @@ var fbTestFixture = {
                     end: { line: 1, column: 28 }
                   }
                 },
-                range: [9, 28],
+                range: [9, 29],
                 loc: {
                   start: { line: 1, column: 9 },
-                  end: { line: 1, column: 28 }
+                  end: { line: 1, column: 29 }
                 }
               }, {
                 type: 'ObjectTypeIndexer',
@@ -3500,10 +3500,10 @@ var fbTestFixture = {
                     end: { line: 1, column: 49 }
                   }
                 },
-                range: [30, 49],
+                range: [30, 50],
                 loc: {
                   start: { line: 1, column: 30 },
-                  end: { line: 1, column: 49 }
+                  end: { line: 1, column: 50 }
                 }
               }],
               callProperties: [],
@@ -3798,10 +3798,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [9, 23],
+                range: [9, 24],
                 loc: {
                   start: { line: 1, column: 9 },
-                  end: { line: 1, column: 23 }
+                  end: { line: 1, column: 24 }
                 }
               }],
               indexers: [],
@@ -5238,10 +5238,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [10, 19],
+                range: [10, 20],
                 loc: {
                   start: { line: 1, column: 10 },
-                  end: { line: 1, column: 19 }
+                  end: { line: 1, column: 20 }
                 }
               }],
               indexers: [],
@@ -5614,10 +5614,10 @@ var fbTestFixture = {
                 }
               },
               optional: false,
-              range: [20, 29],
+              range: [20, 30],
               loc: {
                 start: { line: 1, column: 20 },
-                end: { line: 1, column: 29 }
+                end: { line: 1, column: 30 }
               }
             }],
             indexers: [],
@@ -8022,10 +8022,10 @@ var fbTestFixture = {
             }
           },
           optional: false,
-          range: [14, 31],
+          range: [14, 32],
           loc: {
             start: { line: 1, column: 14 },
-            end: { line: 1, column: 31 }
+            end: { line: 1, column: 32 }
           }
         }],
         indexers: [],
@@ -8077,10 +8077,10 @@ var fbTestFixture = {
             }
           },
           optional: false,
-          range: [48, 62],
+          range: [48, 63],
           loc: {
             start: { line: 1, column: 48 },
-            end: { line: 1, column: 62 }
+            end: { line: 1, column: 63 }
           }
         }],
         indexers: [{
@@ -8110,10 +8110,10 @@ var fbTestFixture = {
               end: { line: 1, column: 46 }
             }
           },
-          range: [23, 46],
+          range: [23, 47],
           loc: {
             start: { line: 1, column: 23 },
-            end: { line: 1, column: 46 }
+            end: { line: 1, column: 47 }
           }
         }],
         callProperties: [],
@@ -8783,10 +8783,10 @@ var fbTestFixture = {
                     end: { line: 1, column: 20 }
                   }
                 },
-                range: [10, 20],
+                range: [10, 21],
                 loc: {
                   start: { line: 1, column: 10 },
-                  end: { line: 1, column: 20 }
+                  end: { line: 1, column: 21 }
                 }
               }],
               range: [8, 23],
@@ -8852,10 +8852,10 @@ var fbTestFixture = {
                   }
                 },
                 optional: false,
-                range: [22, 31],
+                range: [22, 32],
                 loc: {
                   start: { line: 1, column: 22 },
-                  end: { line: 1, column: 31 }
+                  end: { line: 1, column: 32 }
                 }
               }],
               indexers: [],
@@ -8879,10 +8879,10 @@ var fbTestFixture = {
                     end: { line: 1, column: 20 }
                   }
                 },
-                range: [10, 20],
+                range: [10, 21],
                 loc: {
                   start: { line: 1, column: 10 },
-                  end: { line: 1, column: 20 }
+                  end: { line: 1, column: 21 }
                 }
               }, {
                 type: 'ObjectTypeCallProperty',
@@ -9051,10 +9051,10 @@ var fbTestFixture = {
                     end: { line: 1, column: 27 }
                   }
                 },
-                range: [10, 27],
+                range: [10, 28],
                 loc: {
                   start: { line: 1, column: 10 },
-                  end: { line: 1, column: 27 }
+                  end: { line: 1, column: 28 }
                 }
               }],
               range: [8, 30],
@@ -9126,10 +9126,10 @@ var fbTestFixture = {
             }
           },
           'static': false,
-          range: [14, 24],
+          range: [14, 25],
           loc: {
             start: { line: 1, column: 14 },
-            end: { line: 1, column: 24 }
+            end: { line: 1, column: 25 }
           }
         }],
         range: [12, 27],
@@ -10128,10 +10128,10 @@ var fbTestFixture = {
           },
           optional: false,
           'static': true,
-          range: [18, 38],
+          range: [18, 39],
           loc: {
             start: { line: 1, column: 18 },
-            end: { line: 1, column: 38 }
+            end: { line: 1, column: 39 }
           }
         }, {
           type: 'ObjectTypeProperty',
@@ -10532,10 +10532,10 @@ var fbTestFixture = {
                 }
               },
               optional: false,
-              range: [37, 50],
+              range: [37, 51],
               loc: {
                 start: { line: 1, column: 37 },
-                end: { line: 1, column: 50 }
+                end: { line: 1, column: 51 }
               }
             }],
             indexers: [],
@@ -10705,10 +10705,10 @@ var fbTestFixture = {
                 }
               },
               optional: false,
-              range: [24, 35],
+              range: [24, 36],
               loc: {
                 start: { line: 1, column: 24 },
-                end: { line: 1, column: 35 }
+                end: { line: 1, column: 36 }
               }
             }, {
               type: 'ObjectTypeProperty',
