@@ -28,6 +28,7 @@ _.each(helper.get("generation"), function (testSuite) {
 
         var actualAst  = parse({
           filename: actual.loc,
+          nonStandard: true,
           experimental: true,
           strictMode: false,
           sourceType: "module",

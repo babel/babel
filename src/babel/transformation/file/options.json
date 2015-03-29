@@ -15,8 +15,11 @@
     "hidden": true
   },
 
-  "moduleId": {
+  "moduleId": {},
 
+  "nonStandard": {
+    "type": "boolean",
+    "default": true
   },
 
   "highlightTheme": {

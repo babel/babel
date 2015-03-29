@@ -22,8 +22,10 @@ export default function (opts, code, callback) {
       ranges:                      true
     };
 
-    parseOpts.plugins.jsx = true;
-    parseOpts.plugins.flow = true;
+    if (opts.nonStandard) {
+      parseOpts.plugins.jsx = true;
+      parseOpts.plugins.flow = true;
+    }
 
     var ast = acorn.parse(code, parseOpts);
 

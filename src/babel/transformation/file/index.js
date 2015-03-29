@@ -395,6 +395,7 @@ export default class File {
 
     var parseOpts = {
       highlightCode: opts.highlightCode,
+      nonStandard:   opts.nonStandard,
       filename:      opts.filename,
       plugins:       {}
     };
