@@ -535,7 +535,9 @@ export default class File {
       result.code = `${this.shebang}\n${result.code}`;
     }
 
-    result.map = this.mergeSourceMap(result.map);
+    if (result.map) {
+      result.map = this.mergeSourceMap(result.map);
+    }
 
     if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {
       result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
