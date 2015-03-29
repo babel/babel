@@ -2789,18 +2789,89 @@ test('class Foo { @bar static foo = "bar"; }', {
 
 // ES7 export extensions - https://github.com/leebyron/ecmascript-more-export-from
 
+test('export foo, { bar } from "bar";', {
+  type: "Program",
+  body: [{
+    type: "ExportNamedDeclaration",
+    start: 0,
+    end: 31,
+    specifiers: [{
+      type: "ExportDefaultSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "foo",
+        start: 7,
+        end: 10,
+      }
+    }, {
+      type: "ExportSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "bar"
+      }
+    }],
+    source: {
+      type: "Literal",
+      value: "bar",
+      start: 25,
+      end: 30
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  sourceType: "module",
+  features: { "es7.exportExtensions": true }
+});
+
+test('export * as foo, { bar } from "bar";', {
+  type: "Program",
+  body: [{
+    type: "ExportNamedDeclaration",
+    start: 0,
+    end: 36,
+    specifiers: [{
+      type: "ExportNamespaceSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "foo",
+        start: 12,
+        end: 15,
+      }
+    }, {
+      type: "ExportSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "bar"
+      }
+    }],
+    source: {
+      type: "Literal",
+      value: "bar",
+      start: 30,
+      end: 35
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  sourceType: "module",
+  features: { "es7.exportExtensions": true }
+});
+
 test('export foo from "bar";', {
   type: "Program",
   body: [{
-    type: "ExportNamespaceDeclaration",
+    type: "ExportNamedDeclaration",
     start: 0,
     end: 22,
-    exported: {
-      type: "Identifier",
-      name: "foo",
-      start: 7,
-      end: 10,
-    },
+    specifiers: [{
+      type: "ExportDefaultSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "foo",
+        start: 7,
+        end: 10,
+      }
+    }],
     source: {
       type: "Literal",
       value: "bar",
@@ -2814,18 +2885,49 @@ test('export foo from "bar";', {
   features: { "es7.exportExtensions": true }
 });
 
+test('export default from "bar";', {
+  type: "Program",
+  body: [{
+    type: "ExportNamedDeclaration",
+    start: 0,
+    end: 26,
+    specifiers: [{
+      type: "ExportDefaultSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "default",
+        start: 7,
+        end: 14,
+      }
+    }],
+    source: {
+      type: "Literal",
+      value: "bar",
+      start: 20,
+      end: 25
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  sourceType: "module",
+  features: { "es7.exportExtensions": true }
+});
+
 test('export * as foo from "bar";', {
   type: "Program",
   body: [{
-    type: "ExportAllDeclaration",
+    type: "ExportNamedDeclaration",
     start: 0,
     end: 27,
-    exported: {
-      type: "Identifier",
-      name: "foo",
-      start: 12,
-      end: 15,
-    },
+    specifiers: [{
+      type: "ExportNamespaceSpecifier",
+      exported: {
+        type: "Identifier",
+        name: "foo",
+        start: 12,
+        end: 15,
+      }
+    }],
     source: {
       type: "Literal",
       value: "bar",

@@ -3,23 +3,33 @@
 import * as t from "../../../types";
 
 export function check(node) {
-  return t.isExportNamespaceDeclaration(node) || (t.isExportAllDeclaration(node) && node.exported);
+  return t.isExportDefaultSpecifier(node) || t.isExportNamespaceSpecifier(node);
 }
 
-export function ExportNamespaceDeclaration(node, parent, scope) {
-  var uid = scope.generateUidIdentifier("default");
-  return [
-    t.importDeclaration([t.importDefaultSpecifier(uid)], node.source),
-    t.exportDefaultDeclaration(uid)
-  ];
-}
+export function ExportNamedDeclaration(node, parent, scope) {
+  var nodes = [];
 
-export function ExportAllDeclaration(node, parent, scope) {
-  if (node.exported) {
-    var uid = scope.generateUidIdentifier(node.exported.name);
-    return [
+  if (t.isExportNamespaceSpecifier(node.specifiers[0])) {
+    var specifier = node.specifiers.shift();
+    var uid = scope.generateUidIdentifier(specifier.exported.name);
+    nodes.push(
       t.importDeclaration([t.importNamespaceSpecifier(uid)], node.source),
-      t.exportNamedDeclaration(null, [t.exportSpecifier(uid, node.exported)])
-    ];
+      t.exportNamedDeclaration(null, [t.exportSpecifier(uid, specifier.exported)])
+    );
+  } else if (t.isExportDefaultSpecifier(node.specifiers[0])) {
+    var specifier = node.specifiers.shift();
+    var uid = scope.generateUidIdentifier(specifier.exported.name);
+    nodes.push(
+      t.importDeclaration([t.importSpecifier(uid, specifier.exported)], node.source),
+      t.exportNamedDeclaration(null, [t.exportSpecifier(uid, specifier.exported)])
+    );
   }
+
+  if (!nodes.length) return;
+
+  if (node.specifiers.length > 1) {
+    nodes.push(node);
+  }
+
+  return nodes;
 }

@@ -15,7 +15,9 @@
   "LabeledStatement":         ["Statement"],
   "VariableDeclaration":      ["Statement", "Declaration"],
 
-  "ExportNamespaceDeclaration": ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportDefaultSpecifier":     ["ModuleSpecifier"],
+  "ExportNamespaceSpecifier":   ["ModuleSpecifier"],
+  "ExportDefaultFromSpecifier": ["ModuleSpecifier"],
   "ExportAllDeclaration":       ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ExportDefaultDeclaration":   ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ExportNamedDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],

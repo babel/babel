@@ -1,4 +1,4 @@
 "use strict";
 
-import _default from "bar";
-export default _default;
+import { foo as _foo } from "bar";
+export { _foo as foo };

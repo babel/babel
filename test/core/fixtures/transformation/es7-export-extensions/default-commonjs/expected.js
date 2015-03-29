@@ -1,5 +1,9 @@
 "use strict";
 
-var _default = babelHelpers.interopRequire(require("bar"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-module.exports = _default;
+var _foo = require("bar").foo;
+
+exports.foo = _foo;

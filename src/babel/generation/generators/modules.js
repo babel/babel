@@ -13,6 +13,10 @@ export function ImportDefaultSpecifier(node, print) {
   print(node.local);
 }
 
+export function ExportDefaultSpecifier(node, print) {
+  print(node.exported);
+}
+
 export function ExportSpecifier(node, print) {
   print(node.local);
   if (node.exported && node.local !== node.exported) {
@@ -21,12 +25,9 @@ export function ExportSpecifier(node, print) {
   }
 }
 
-export function ExportNamespaceDeclaration(node, print) {
-  this.push("export ");
+export function ExportNamespaceSpecifier(node, print) {
+  this.push("* as ");
   print(node.exported);
-  this.push(" from ");
-  print(node.source);
-  this.semicolon();
 }
 
 export function ExportAllDeclaration(node, print) {
@@ -54,16 +55,29 @@ function ExportDeclaration(node, print) {
   var specifiers = node.specifiers;
 
   if (node.declaration) {
-    print(node.declaration);
-    if (t.isStatement(node.declaration)) return;
+    var declar = node.declaration;
+    print(declar);
+    if (t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar)) return;
   } else {
-    this.push("{");
-    if (specifiers.length) {
-      this.space();
-      print.join(specifiers, { separator: ", " });
-      this.space();
+    var first = specifiers[0];
+    var hasSpecial = false;
+    if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
+      hasSpecial = true;
+      print(specifiers.shift());
+      if (specifiers.length) {
+        this.push(", ");
+      }
     }
-    this.push("}");
+
+    if (specifiers.length || (!specifiers.length && !hasSpecial)) {
+      this.push("{");
+      if (specifiers.length) {
+        this.space();
+        print.join(specifiers, { separator: ", " });
+        this.space();
+      }
+      this.push("}");
+    }
 
     if (node.source) {
       this.push(" from ");
@@ -83,25 +97,20 @@ export function ImportDeclaration(node, print) {
 
   var specfiers = node.specifiers;
   if (specfiers && specfiers.length) {
-    var foundImportSpecifier = false;
-
-    for (var i = 0; i < node.specifiers.length; i++) {
-      var spec = node.specifiers[i];
-
-      if (i > 0) {
+    var first = node.specifiers[0];
+    if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
+      print(node.specifiers.shift());
+      if (node.specifiers.length) {
         this.push(", ");
       }
-
-      if (!t.isImportDefaultSpecifier(spec) && !t.isImportNamespaceSpecifier(spec) && !foundImportSpecifier) {
-        foundImportSpecifier = true;
-        this.push("{ ");
-      }
-
-      print(spec);
     }
 
-    if (foundImportSpecifier) {
-      this.push(" }");
+    if (node.specifiers.length) {
+      this.push("{");
+      this.space()
+      print.join(node.specifiers, { separator: ", " });
+      this.space()
+      this.push("}");
     }
 
     this.push(" from ");

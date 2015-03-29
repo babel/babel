@@ -69,9 +69,10 @@
   "YieldExpression":           ["argument"],
 
   "ExportAllDeclaration":       ["source", "exported"],
-  "ExportNamespaceDeclaration": ["exported"],
   "ExportDefaultDeclaration":   ["declaration"],
   "ExportNamedDeclaration":     ["declaration", "specifiers", "source"],
+  "ExportDefaultSpecifier":     ["exported"],
+  "ExportNamespaceSpecifier":   ["exported"],
   "ExportSpecifier":            ["local", "exported"],
 
   "AnyTypeAnnotation":           [],
