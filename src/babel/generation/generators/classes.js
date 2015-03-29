@@ -1,8 +1,5 @@
 export function ClassDeclaration(node, print) {
-  if (node.decorators && node.decorators.length) {
-    print.list(node.decorators);
-  }
-
+  print.list(node.decorators);
   this.push("class");
 
   if (node.id) {
@@ -44,10 +41,24 @@ export function ClassBody(node, print) {
   }
 }
 
-export function MethodDefinition(node, print) {
-  if (node.decorators && node.decorators.length) {
-    print.list(node.decorators);
+
+export function ClassProperty(node, print) {
+  print.list(node.decorators);
+
+  if (node.static) this.push("static ");
+  print(node.key);
+  print(node.typeAnnotation);
+  if (node.value) {
+    this.space();
+    this.push("=");
+    this.space();
+    print(node.value);
   }
+  this.semicolon();
+}
+
+export function MethodDefinition(node, print) {
+  print.list(node.decorators);
 
   if (node.static) {
     this.push("static ");

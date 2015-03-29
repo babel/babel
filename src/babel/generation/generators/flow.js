@@ -14,13 +14,6 @@ export function BooleanTypeAnnotation(node) {
   this.push("bool");
 }
 
-export function ClassProperty(node, print) {
-  if (node.static) this.push("static ");
-  print(node.key);
-  print(node.typeAnnotation);
-  this.semicolon();
-}
-
 export function DeclareClass(node, print) {
   this.push("declare class ");
   this._interfaceish(node, print);
