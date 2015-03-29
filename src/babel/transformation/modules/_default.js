@@ -62,7 +62,7 @@ var exportsVisitor = traverse.explode({
         extend(formatter.localExports, declar.getBindingIdentifiers());
       }
 
-      if (!t.isExportDefaultDeclaration(node)) {
+      if (!t.isExportDefaultDeclaration(node) && !t.isExportNamespaceDeclaration(node)) {
         formatter.hasNonDefaultExports = true;
       }
 

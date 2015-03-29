@@ -14,10 +14,12 @@
   "EmptyStatement":           ["Statement"],
   "LabeledStatement":         ["Statement"],
   "VariableDeclaration":      ["Statement", "Declaration"],
-  "ExportAllDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
-  "ExportDefaultDeclaration": ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
-  "ExportNamedDeclaration":   ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
-  "ImportDeclaration":        ["Statement", "Declaration", "ModuleDeclaration"],
+
+  "ExportNamespaceDeclaration": ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportAllDeclaration":       ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportDefaultDeclaration":   ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ExportNamedDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
+  "ImportDeclaration":          ["Statement", "Declaration", "ModuleDeclaration"],
 
   "ArrowFunctionExpression": ["Scopable", "Function", "Expression"],
   "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Declaration"],

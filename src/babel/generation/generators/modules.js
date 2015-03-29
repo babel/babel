@@ -21,8 +21,21 @@ export function ExportSpecifier(node, print) {
   }
 }
 
+export function ExportNamespaceDeclaration(node, print) {
+  this.push("export ");
+  print(node.exported);
+  this.push(" from ");
+  print(node.source);
+  this.semicolon();
+}
+
 export function ExportAllDeclaration(node, print) {
-  this.push("export * from ");
+  this.push("export *");
+  if (node.exported) {
+    this.push(" as ");
+    print(node.exported);
+  }
+  this.push(" from ");
   print(node.source);
   this.semicolon();
 }

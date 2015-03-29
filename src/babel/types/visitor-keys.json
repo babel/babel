@@ -22,10 +22,6 @@
   "DoWhileStatement":          ["body", "test"],
   "DoExpression":              ["body"],
   "EmptyStatement":            [],
-  "ExportAllDeclaration":      ["source"],
-  "ExportDefaultDeclaration":  ["declaration"],
-  "ExportNamedDeclaration":    ["declaration", "specifiers", "source"],
-  "ExportSpecifier":           ["local", "exported"],
   "ExpressionStatement":       ["expression"],
   "File":                      ["program"],
   "ForInStatement":            ["left", "right", "body"],
@@ -71,6 +67,12 @@
   "WhileStatement":            ["test", "body"],
   "WithStatement":             ["object", "body"],
   "YieldExpression":           ["argument"],
+
+  "ExportAllDeclaration":       ["source", "exported"],
+  "ExportNamespaceDeclaration": ["exported"],
+  "ExportDefaultDeclaration":   ["declaration"],
+  "ExportNamedDeclaration":     ["declaration", "specifiers", "source"],
+  "ExportSpecifier":            ["local", "exported"],
 
   "AnyTypeAnnotation":           [],
   "ArrayTypeAnnotation":         ["elementType"],

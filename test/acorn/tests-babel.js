@@ -2058,3 +2058,55 @@ test('export async function foo(){}', {
 });
 
 // ES7 decorators
+
+// ES7 export extensions - https://github.com/leebyron/ecmascript-more-export-from
+
+test('export foo from "bar";', {
+  type: "Program",
+  body: [{
+    type: "ExportNamespaceDeclaration",
+    start: 0,
+    end: 22,
+    exported: {
+      type: "Identifier",
+      name: "foo",
+      start: 7,
+      end: 10,
+    },
+    source: {
+      type: "Literal",
+      value: "bar",
+      start: 16,
+      end: 21
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  sourceType: "module",
+  features: { "es7.exportExtensions": true }
+});
+
+test('export * as foo from "bar";', {
+  type: "Program",
+  body: [{
+    type: "ExportAllDeclaration",
+    start: 0,
+    end: 27,
+    exported: {
+      type: "Identifier",
+      name: "foo",
+      start: 12,
+      end: 15,
+    },
+    source: {
+      type: "Literal",
+      value: "bar",
+      start: 21,
+      end: 26
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  sourceType: "module",
+  features: { "es7.exportExtensions": true }
+});

@@ -559,10 +559,10 @@ pp.parseExport = function(node) {
   this.next()
   // export * from '...'
   if (this.eat(tt.star)) {
-    this.expectContextual("from")
-    node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected()
-    this.semicolon()
-    this.checkExport(node)
+    if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
+      node.exported = this.parseIdent()
+    }
+    this.parseExportFrom(node)
     return this.finishNode(node, "ExportAllDeclaration")
   }
   if (this.eat(tt._default)) { // export default ...
@@ -587,6 +587,10 @@ pp.parseExport = function(node) {
     node.declaration = this.parseStatement(true)
     node.specifiers = []
     node.source = null
+  } else if (this.type === tt.name) {
+    node.exported = this.parseIdent()
+    this.parseExportFrom(node)
+    return this.finishNode(node, "ExportNamespaceDeclaration")
   } else { // export { x, y as z } [from '...']
     node.declaration = null
     node.specifiers = this.parseExportSpecifiers()
@@ -599,6 +603,13 @@ pp.parseExport = function(node) {
   }
   this.checkExport(node)
   return this.finishNode(node, "ExportNamedDeclaration")
+}
+
+pp.parseExportFrom = function(node) {
+  this.expectContextual("from")
+  node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected()
+  this.semicolon()
+  this.checkExport(node)
 }
 
 pp.shouldParseExportDeclaration = function() {

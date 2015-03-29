@@ -84,6 +84,7 @@ export default {
   runtime:                                require("./other/runtime"),
 
   // needs to be before `_blockHoist` due to function hoisting etc
+  "es7.exportExtensions":                  require("./es7/export-extensions"),
   "es6.modules":                           require("./es6/modules"),
 
   _blockHoist:                             require("./internal/block-hoist"),
