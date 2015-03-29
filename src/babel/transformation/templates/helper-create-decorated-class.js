@@ -23,7 +23,7 @@
             throw new TypeError("The decorator for method " + descriptor.key + " is of the invalid type " + typeof decorator);
           }
         }
-        initializers[key] = descriptor.initializer;
+        if (initializers) initializers[key] = descriptor.initializer;
       }
 
       Object.defineProperty(target, key, descriptor);
