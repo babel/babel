@@ -28,6 +28,11 @@ def("RestElement")
   .build("argument")
   .field("argument", def("expression"));
 
+def("DoExpression")
+  .bases("Expression")
+  .build("body")
+  .field("body", [def("Statement")]);
+
 def("ExportDefaultDeclaration")
   .bases("Declaration")
   .build("declaration")
