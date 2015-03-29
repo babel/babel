@@ -7,6 +7,8 @@ export default class {}
 export default function foo() {}
 export default class Foo {}
 export * from "foo";
+export * as foo from "foo";
+export foo from "foo";
 export { foo } from "foo";
 export { foo, bar } from "foo";
 export { foo as bar } from "foo";

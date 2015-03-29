@@ -33,7 +33,8 @@ _.each(helper.get("generation"), function (testSuite) {
           sourceType: "module",
           features: {
             "es7.comprehensions": true,
-            "es7.asyncFunctions": true
+            "es7.asyncFunctions": true,
+            "es7.exportExtensions": true
           }
         }, actual.code);
         var actualCode = generate(actualAst, null, actual.code).code;
