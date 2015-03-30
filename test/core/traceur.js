@@ -93,7 +93,7 @@ require("./_transformation-helper")({
     "Syntax/StrictKeywords"
   ]
 }, {
-  optional: ["es6.symbols"],
+  optional: ["es6.spec.symbols"],
   stage: 0
 }, function (opts, task) {
   if (!_.contains(task.exec.loc, "module.js")) {
