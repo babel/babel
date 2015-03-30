@@ -1,3 +1,4 @@
 {
-  "useStrict": "strict"
+  "useStrict": "strict",
+  "runtimeES5": "runtime"
 }

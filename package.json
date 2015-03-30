@@ -41,7 +41,7 @@
     "chokidar": "^0.12.6",
     "commander": "^2.6.0",
     "convert-source-map": "^0.5.0",
-    "core-js": "^0.6.1",
+    "core-js": "^0.7.0",
     "debug": "^2.1.1",
     "detect-indent": "^3.0.0",
     "estraverse": "^1.9.1",

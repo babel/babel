@@ -1,24 +1,19 @@
 "use strict";
 
-var transform = require("../lib/babel/transformation");
-var each      = require("lodash/collection/each");
-var File      = require("../lib/babel/transformation/file");
-var util      = require("../lib/babel/util");
-var fs        = require("fs");
-var t         = require("../lib/babel/types");
-var _         = require("lodash");
+var outputFile = require("output-file-sync");
+var transform  = require("../lib/babel/transformation");
+var each       = require("lodash/collection/each");
+var File       = require("../lib/babel/transformation/file");
+var util       = require("../lib/babel/util");
+var fs         = require("fs");
+var t          = require("../lib/babel/types");
+var _          = require("lodash");
 
-var relative = function (filename) {
+function relative(filename) {
   return __dirname + "/babel-runtime/" + filename;
-};
+}
 
-var writeFile = function (filename, content) {
-  filename = relative(filename);
-  console.log(filename);
-  fs.writeFileSync(filename, content);
-};
-
-var readFile = function (filename, defaultify) {
+function readFile(filename, defaultify) {
   var file = fs.readFileSync(require.resolve(filename), "utf8");
 
   if (defaultify) {
@@ -26,41 +21,57 @@ var readFile = function (filename, defaultify) {
   }
 
   return file;
-};
+}
 
-var updatePackage = function () {
+function updatePackage() {
   var pkgLoc = relative("package.json");
   var pkg    = require(pkgLoc);
 
   var mainPkg = require("../package.json");
   pkg.version = mainPkg.version;
 
-  writeFile("package.json", JSON.stringify(pkg, null, 2));
-};
+  writeRootFile("package.json", JSON.stringify(pkg, null, 2));
+}
 
-var selfContainify = function (code) {
-  return transform(code, {
-    optional: ["runtime"]
-  }).code;
-};
+function writeRootFile(filename, content) {
+  filename = relative(filename);
+  console.log(filename);
+  outputFile(filename, content);
+}
 
-var buildHelper = function (helperName) {
-  var tree = t.program(
-    util.template("self-contained-helpers-head", {
-      HELPER: util.template("helper-" + helperName)
-    })
-  );
+function doVersion(version) {
+  var transformer = "runtime" + version.toUpperCase();
 
-  return transform.fromAst(tree, null, {
-    optional: ["runtime"]
-  }).code;
-};
+  function writeFile(filename, content) {
+    return writeRootFile(version + "/" + filename, content);
+  }
 
-each(File.helpers, function (helperName) {
-  writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
-});
+  function selfContainify(code) {
+    return transform(code, {
+      optional: [transformer]
+    }).code;
+  }
 
-writeFile("core-js.js", readFile("core-js/library", true));
-writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
-writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+  function buildHelper(helperName) {
+    var tree = t.program(
+      util.template("self-contained-helpers-head", {
+        HELPER: util.template("helper-" + helperName)
+      })
+    );
+
+    return transform.fromAst(tree, null, {
+      optional: [transformer]
+    }).code;
+  }
+
+  each(File.helpers, function (helperName) {
+    writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+  });
+
+  writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
+  writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+}
+
+doVersion("es3");
+doVersion("es5");
 updatePackage();
