@@ -37,6 +37,8 @@ export default {
   "es6.objectSuper":                       require("./es6/object-super"),
   "es7.objectRestSpread":                  require("./es7/object-rest-spread"),
   "es7.exponentiationOperator":            require("./es7/exponentiation-operator"),
+
+  "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
 
   "es5.properties.mutators":               require("./es5/properties.mutators"),
@@ -97,7 +99,7 @@ export default {
 
   "es7.doExpressions":                     require("./es7/do-expressions"),
 
-  "es6.symbols":                           require("./es6/symbols"),
+  "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
 
   _strict:                                 require("./internal/strict"),

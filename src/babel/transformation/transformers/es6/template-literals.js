@@ -1,16 +1,8 @@
 import * as t from "../../../types";
 
-var buildBinaryExpression = function (left, right, file) {
-  return t.binaryExpression("+", left, coerce(right, file));
+var buildBinaryExpression = function (left, right) {
+  return t.binaryExpression("+", left, right);
 };
-
-function coerce(node, file) {
-  if (file.isLoose("es7.templateLiterals") || (t.isLiteral(node) && typeof node.value === "string")) {
-    return node;
-  } else {
-    return t.callExpression(t.identifier("String"), [node]);
-  }
-}
 
 export function check(node) {
   return t.isTemplateLiteral(node) || t.isTaggedTemplateExpression(node);
@@ -59,10 +51,10 @@ export function TemplateLiteral(node, parent, scope, file) {
     var last = nodes[nodes.length - 1];
     if (t.isLiteral(last, { value: "" })) nodes.pop();
 
-    var root = buildBinaryExpression(nodes.shift(), nodes.shift(), file);
+    var root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
     for (i = 0; i < nodes.length; i++) {
-      root = buildBinaryExpression(root, nodes[i], file);
+      root = buildBinaryExpression(root, nodes[i]);
     }
 
     return root;
