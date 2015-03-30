@@ -1,7 +1,7 @@
 var x =
   <div>
     foo
-    {'bar'}
+    {"bar"}
     baz
     <div>
       buz

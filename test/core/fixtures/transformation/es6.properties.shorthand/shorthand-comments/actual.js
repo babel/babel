@@ -1,4 +1,4 @@
-const A = 'a';
+const A = "a";
 const o = {
   A // comment
 };

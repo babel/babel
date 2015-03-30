@@ -99,5 +99,12 @@ export function _stringLiteral(val) {
     return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
   });
 
+  if (this.format.quotes === "single") {
+    val = val.slice(1, -1);
+    val = val.replace(/\\"/g, '"');
+    val = val.replace(/'/g, "\\'");
+    val = `'${val}'`;
+  }
+
   this.push(val);
 }

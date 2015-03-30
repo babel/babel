@@ -16,7 +16,7 @@ class CodeGenerator {
 
     this.comments = ast.comments || [];
     this.tokens   = ast.tokens || [];
-    this.format   = CodeGenerator.normalizeOptions(code, opts);
+    this.format   = CodeGenerator.normalizeOptions(code, opts, this.tokens);
     this.opts     = opts;
     this.ast      = ast;
 
@@ -26,7 +26,7 @@ class CodeGenerator {
     this.buffer     = new Buffer(this.position, this.format);
   }
 
-  static normalizeOptions(code, opts) {
+  static normalizeOptions(code, opts, tokens) {
     var style = "  ";
     if (code) {
       var indent = detectIndent(code).indent;
@@ -36,6 +36,7 @@ class CodeGenerator {
     var format = {
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
+      quotes: CodeGenerator.findCommonStringDelimeter(code, tokens),
       indent: {
         adjustMultilineComment: true,
         style: style,
@@ -52,6 +53,36 @@ class CodeGenerator {
     }
 
     return format;
+  }
+
+  static findCommonStringDelimeter(code, tokens) {
+    var occurences = {
+      single: 0,
+      double: 0
+    };
+
+    var checked = 0;
+
+    for (var i = 0; i < tokens.length; i++) {
+      var token = tokens[i];
+      if (token.type.label !== "string") continue;
+      if (checked >= 3) continue;
+
+      var raw = code.slice(token.start, token.end);
+      if (raw[0] === "'") {
+        occurences.single++;
+      } else {
+        occurences.double++;
+      }
+
+      checked++;
+    }
+
+    if (occurences.single > occurences.double) {
+      return "single";
+    } else {
+      return "double";
+    }
   }
 
   static generators = {
