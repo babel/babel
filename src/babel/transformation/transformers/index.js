@@ -72,7 +72,7 @@ export default {
   "es6.blockScoping":                      require("./es6/block-scoping"),
 
   // needs to be after `es6.blockScoping` due to needing `letReferences` set on blocks
-  "es6.spec.blockScoping":                 require("./es6/block-scoping-tdz"),
+  "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
 
   // needs to be after `es6.parameters.*` and `es6.blockScoping` due to needing pure
   // identifiers in parameters and variable declarators
