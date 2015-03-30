@@ -122,12 +122,12 @@ var letReferenceFunctionVisitor = {
     // not a direct reference
     if (!this.isReferencedIdentifier()) return;
 
+    // not a part of our scope
+    if (!state.letReferences[node.name]) return;
+
     // this scope has a variable with the same name so it couldn't belong
     // to our let scope
     if (scope.hasOwnBinding(node.name)) return;
-
-    // not a part of our scope
-    if (!state.letReferences[node.name]) return;
 
     state.closurify = true;
   }
@@ -155,6 +155,18 @@ var loopLabelVisitor = {
   enter(node, parent, scope, state) {
     if (this.isLabeledStatement()) {
       state.innerLabels.push(node.label.name);
+    }
+  }
+};
+
+var continuationVisitor = {
+  enter(node, parent, scope, state) {
+    if (this.isAssignmentExpression() || this.isUpdateExpression()) {
+      var bindings = this.getBindingIdentifiers();
+      for (var name in bindings) {
+        if (state.outsideReferences[name] !== scope.getBindingIdentifier(name)) continue;
+        state.reassignments[name] = true;
+      }
     }
   }
 };
@@ -352,16 +364,20 @@ class BlockScoping {
 
     // turn outsideLetReferences into an array
     var params = values(outsideRefs);
+    var args   = values(outsideRefs);
 
     // build the closure that we're going to wrap the block with
     var fn = t.functionExpression(null, params, t.blockStatement(block.body));
     fn.shadow = true;
 
+    // continuation
+    this.addContinuations(fn);
+
     // replace the current block body with the one we're going to build
     block.body = this.body;
 
     // build a call and a unique id that we can assign the return value to
-    var call = t.callExpression(fn, params);
+    var call = t.callExpression(fn, args);
     var ret  = this.scope.generateUidIdentifier("ret");
 
     // handle generators
@@ -379,6 +395,36 @@ class BlockScoping {
     }
 
     this.build(ret, call);
+  }
+
+  /**
+   * If any of the outer let variables are reassigned then we need to rename them in
+   * the closure so we can get direct access to the outer variable to continue the
+   * iteration with bindings based on each iteration.
+   *
+   * Reference: https://github.com/babel/babel/issues/1078
+   */
+
+  addContinuations(fn) {
+    var state = {
+      reassignments: {},
+      outsideReferences: this.outsideLetReferences
+    };
+
+    this.scope.traverse(fn, continuationVisitor, state);
+
+    for (var i = 0; i < fn.params.length; i++) {
+      var param = fn.params[i];
+      if (!state.reassignments[param.name]) continue;
+
+      var newParam = this.scope.generateUidIdentifier(param.name);
+      fn.params[i] = newParam;
+
+      this.scope.rename(param.name, newParam.name, fn);
+
+      // assign outer reference as it's been modified internally and needs to be retained
+      fn.body.body.push(t.expressionStatement(t.assignmentExpression("=", param, newParam)));
+    }
   }
 
   /**
@@ -542,7 +588,7 @@ class BlockScoping {
           single.consequent[0]
         )));
       } else {
-        // #998
+        // https://github.com/babel/babel/issues/998
         for (var i = 0; i < cases.length; i++) {
           var caseConsequent = cases[i].consequent[0];
           if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {

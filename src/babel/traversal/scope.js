@@ -238,16 +238,16 @@ export default class Scope {
    * Description
    */
 
-  rename(oldName: string, newName: string) {
+  rename(oldName: string, newName: string, block?) {
     newName ||= this.generateUidIdentifier(oldName).name;
 
     var info = this.getBinding(oldName);
     if (!info) return;
 
     var binding = info.identifier;
-    var scope = info.scope;
+    var scope   = info.scope;
 
-    scope.traverse(scope.block, {
+    scope.traverse(block || scope.block, {
       enter(node, parent, scope) {
         if (t.isReferencedIdentifier(node, parent) && node.name === oldName) {
           node.name = newName;
@@ -264,10 +264,12 @@ export default class Scope {
       }
     });
 
-    scope.removeOwnBinding(oldName);
-    scope.bindings[newName] = info;
+    if (!block) {
+      scope.removeOwnBinding(oldName);
+      scope.bindings[newName] = info;
 
-    binding.name = newName;
+      binding.name = newName;
+    }
   }
 
   /**
