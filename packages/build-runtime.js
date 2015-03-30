@@ -40,7 +40,7 @@ function writeRootFile(filename, content) {
 }
 
 function doVersion(version) {
-  var transformer = "runtime" + version.toUpperCase();
+  var transformer = version + ".runtime";
 
   function writeFile(filename, content) {
     return writeRootFile(version + "/" + filename, content);

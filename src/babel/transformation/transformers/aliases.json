@@ -1,4 +1,5 @@
 {
   "useStrict": "strict",
-  "runtimeES5": "runtime"
+  "es5.runtime": "runtime",
+  "es6.runtime": "runtime"
 }
