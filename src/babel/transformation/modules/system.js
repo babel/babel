@@ -6,6 +6,10 @@ import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import * as t from "../../types";
 
+var canHoist = function (node, file) {
+  return node._blockHoist && !file.transformers.runtime.canTransform();
+}
+
 var hoistVariablesVisitor = {
   enter(node, parent, scope, hoistDeclarators) {
     if (t.isFunction(node)) {
@@ -20,7 +24,7 @@ var hoistVariablesVisitor = {
       }
 
       // ignore block hoisted nodes as these can be left in
-      if (node._blockHoist) return;
+      if (canHoist(node, scope.file)) return;
 
       var nodes = [];
 
@@ -55,7 +59,7 @@ var hoistFunctionsVisitor = {
   enter(node, parent, scope, handlerBody) {
     if (t.isFunction(node)) this.skip();
 
-    if (t.isFunctionDeclaration(node) || node._blockHoist) {
+    if (t.isFunctionDeclaration(node) || canHoist(node, scope.file)) {
       handlerBody.push(node);
       this.remove();
     }
