@@ -1,3 +1,0 @@
-#!/usr/bin/env node
-console.error("`6to5` has been renamed to `babel`");
-require("../babel");

@@ -11,9 +11,6 @@
     "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
   },
   "bin": {
-    "6to5": "./bin/deprecated/6to5",
-    "6to5-node": "./bin/deprecated/6to5-node",
-    "6to5-runtime": "./bin/deprecated/6to5-runtime",
     "babel": "./bin/babel/index.js",
     "babel-node": "./bin/babel-node",
     "babel-external-helpers": "./bin/babel-external-helpers"
