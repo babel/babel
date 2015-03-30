@@ -34,4 +34,5 @@
   };
 
   module.exports = Foo;
+  module.exports = foo;
 });

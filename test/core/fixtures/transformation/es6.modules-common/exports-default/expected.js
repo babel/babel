@@ -27,3 +27,4 @@ var Foo = function Foo() {
 };
 
 module.exports = Foo;
+module.exports = foo;

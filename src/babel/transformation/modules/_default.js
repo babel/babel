@@ -63,7 +63,7 @@ var exportsVisitor = traverse.explode({
       }
 
       if (!t.isExportDefaultDeclaration(node)) {
-        var onlyDefault = node.specifiers && t.isExportDefaultSpecifier(node.specifiers[0]) && node.specifiers.length === 1;
+        var onlyDefault = node.specifiers && node.specifiers.length === 1 && t.isSpecifierDefault(node.specifiers[0]);
         if (!onlyDefault) {
           formatter.hasNonDefaultExports = true;
         }

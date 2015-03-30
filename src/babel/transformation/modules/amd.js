@@ -91,6 +91,10 @@ export default class AMDFormatter extends DefaultFormatter {
     ]));
   }
 
+  exportSpecifier() {
+    CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
+  }
+
   exportDeclaration(node) {
     if (this.doDefaultExportInterop(node)) {
       this.passModuleArg = true;
