@@ -2,7 +2,11 @@ import path from "path";
 import os from "os";
 import fs from "fs";
 
-const FILENAME = process.env.BABEL_CACHE_PATH || path.join(os.tmpdir(), "babel.json");
+function getUserHome() {
+  return process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+}
+
+const FILENAME = process.env.BABEL_CACHE_PATH || path.join(getUserHome() || os.tmpdir(), "babel.json");
 var data = {};
 
 export function save() {

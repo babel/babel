@@ -64,7 +64,6 @@
     "slash": "^1.0.0",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.9",
-    "tmp": "0.0.25",
     "to-fast-properties": "^1.0.0",
     "trim-right": "^1.0.0"
   },
