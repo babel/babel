@@ -26,23 +26,6 @@ export function isCompatTag(tagName) {
   return tagName && /^[a-z]|\-/.test(tagName);
 }
 
-function flattenChildren(args) {
-  var flattened = [];
-  var last;
-
-  for (var i = 0; i < args.length; i++) {
-    var arg = args[i];
-    if (isStringLiteral(arg) && isStringLiteral(last)) {
-      last.value += arg.value;
-    } else {
-      last = arg;
-      flattened.push(arg);
-    }
-  }
-
-  return flattened;
-}
-
 function isStringLiteral(node) {
   return t.isLiteral(node) && isString(node.value);
 }
@@ -58,6 +41,8 @@ function cleanJSXElementLiteralChild(child, args) {
       lastNonEmptyLine = i;
     }
   }
+
+  var str = "";
 
   for (i = 0; i < lines.length; i++) {
     var line = lines[i];
@@ -84,9 +69,11 @@ function cleanJSXElementLiteralChild(child, args) {
         trimmedLine += " ";
       }
 
-      args.push(t.literal(trimmedLine));
+      str += trimmedLine;
     }
   }
+
+  if (str) args.push(t.literal(str));
 }
 
 export function buildChildren(node) {
@@ -106,5 +93,5 @@ export function buildChildren(node) {
     elems.push(child);
   }
 
-  return flattenChildren(elems);
+  return elems;
 }
