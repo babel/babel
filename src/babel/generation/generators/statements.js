@@ -199,9 +199,11 @@ export function VariableDeclaration(node, print, parent) {
 
   print.list(node.declarations, { separator: sep });
 
-  if (!t.isFor(parent)) {
-    this.semicolon();
+  if (t.isFor(parent)) {
+    if (parent.left === node || parent.init === node) return;
   }
+
+  this.semicolon();
 }
 
 export function VariableDeclarator(node, print) {
