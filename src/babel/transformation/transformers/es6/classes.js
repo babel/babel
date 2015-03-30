@@ -255,9 +255,11 @@ class ClassTransformer {
 
     for (var i = 0; i < classBody.length; i++) {
       var node = classBody[i];
+      var path = classBodyPaths[i];
+
       if (t.isMethodDefinition(node)) {
         var isConstructor = node.kind === "constructor";
-        if (isConstructor) this.verifyConstructor(classBodyPaths[i]);
+        if (isConstructor) this.verifyConstructor(path);
 
         var replaceSupers = new ReplaceSupers({
           methodNode: node,
@@ -272,7 +274,7 @@ class ClassTransformer {
         replaceSupers.replace();
 
         if (isConstructor) {
-          this.pushConstructor(node);
+          this.pushConstructor(node, path);
         } else {
           this.pushMethod(node);
         }
@@ -466,7 +468,13 @@ class ClassTransformer {
    * Replace the constructor body of our class.
    */
 
-  pushConstructor(method: { type: "MethodDefinition" }) {
+  pushConstructor(method: { type: "MethodDefinition" }, path: TraversalPath) {
+    // https://github.com/babel/babel/issues/1077
+    var fnPath = path.get("value");
+    if (fnPath.scope.hasOwnBinding(this.classRef.name)) {
+      fnPath.scope.rename(this.classRef.name);
+    }
+
     var construct = this.constructor;
     var fn        = method.value;
 
