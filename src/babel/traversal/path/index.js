@@ -88,7 +88,9 @@ export default class TraversalPath {
   insertBefore(nodes) {
     this.checkNodes(nodes);
 
-    if (this.isPreviousType("Statement")) {
+    if (this.parentPath.isExpressionStatement()) {
+      return this.parentPath.insertBefore(nodes);
+    } else if (this.isPreviousType("Statement")) {
       if (Array.isArray(this.container)) {
         this._containerInsertBefore(nodes);
       } else if (this.isStatementOrBlock()) {
@@ -134,7 +136,9 @@ export default class TraversalPath {
   insertAfter(nodes) {
     this.checkNodes(nodes);
 
-    if (this.isPreviousType("Statement")) {
+    if (this.parentPath.isExpressionStatement()) {
+      return this.parentPath.insertAfter(nodes);
+    } else if (this.isPreviousType("Statement")) {
       if (Array.isArray(this.container)) {
         this._containerInsertAfter(nodes);
       } else if (this.isStatementOrBlock()) {

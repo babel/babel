@@ -109,9 +109,9 @@
   "MethodDefinition": {
     "key": null,
     "value": null,
+    "kind": "method",
     "computed": false,
-    "static": false,
-    "kind": null
+    "static": false
   },
 
   "NewExpression": {

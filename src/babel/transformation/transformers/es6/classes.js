@@ -8,6 +8,8 @@ import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import * as t from "../../../types";
 
+const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
+
 export var check = t.isClass;
 
 export function ClassDeclaration(node, parent, scope, file) {
@@ -19,6 +21,20 @@ export function ClassDeclaration(node, parent, scope, file) {
 export function ClassExpression(node, parent, scope, file) {
   return new ClassTransformer(this, file).run();
 }
+
+var collectPropertyReferencesVisitor = {
+  Identifier: {
+    enter(node, parent, scope, state) {
+      if (this.parentPath.isClassProperty({ key: node })) {
+        return;
+      }
+
+      if (this.isReferenced() && scope.getBinding(node.name) === state.scope.getBinding(node.name)) {
+        state.references[node.name] = true;;
+      }
+    }
+  }
+};
 
 var verifyConstructorVisitor = traverse.explode({
   MethodDefinition: {
@@ -75,6 +91,7 @@ class ClassTransformer {
     this.staticMutatorMap   = {};
 
     this.instancePropBody = [];
+    this.instancePropRefs = {};
     this.staticPropBody   = [];
     this.body             = [];
 
@@ -363,8 +380,25 @@ class ClassTransformer {
 
   placePropertyInitializers() {
     var body = this.instancePropBody;
-    if (body.length) {
-      // todo: check for scope conflicts and shift into a method
+    if (!body.length) return;
+
+    if (this.hasPropertyCollision()) {
+      var call = t.expressionStatement(t.callExpression(
+        t.memberExpression(t.thisExpression(), t.identifier(PROPERTY_COLLISION_METHOD_NAME)),
+        []
+      ));
+
+      this.pushMethod(t.methodDefinition(
+        t.identifier(PROPERTY_COLLISION_METHOD_NAME),
+        t.functionExpression(null, [], t.blockStatement(body))
+      ), true);
+
+      if (this.hasSuper) {
+        this.bareSuper.insertAfter(call);
+      } else {
+        this.constructorBody.body.unshift(call);
+      }
+    } else {
       if (this.hasSuper) {
         if (this.hasConstructor) {
           this.bareSuper.insertAfter(body);
@@ -376,6 +410,22 @@ class ClassTransformer {
       }
     }
   }
+
+  /**
+   * Description
+   */
+
+   hasPropertyCollision(): boolean {
+    if (this.userConstructorPath) {
+      for (var name in this.instancePropRefs) {
+        if (this.userConstructorPath.scope.hasOwnBinding(name)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+   }
 
   /**
    * Description
@@ -402,7 +452,11 @@ class ClassTransformer {
    * Push a method to its respective mutatorMap.
    */
 
-  pushMethod(node: { type: "MethodDefinition" }) {
+  pushMethod(node: { type: "MethodDefinition" }, allowedIllegal?) {
+    if (!allowedIllegal && t.isLiteral(t.toComputedKey(node), { value: PROPERTY_COLLISION_METHOD_NAME })) {
+      throw this.file.errorWithNode(node, messages.get("illegalMethodName", PROPERTY_COLLISION_METHOD_NAME));
+    }
+
     if (node.kind === "method") {
       nameMethod.property(node, this.file, this.scope);
 
@@ -431,6 +485,11 @@ class ClassTransformer {
     if (!node.value && !node.decorators) return;
 
     var key;
+
+    this.scope.traverse(node, collectPropertyReferencesVisitor, {
+      references: this.instancePropRefs,
+      scope:      this.scope
+    });
 
     if (node.decorators) {
       var body = [];
@@ -478,8 +537,9 @@ class ClassTransformer {
     var construct = this.constructor;
     var fn        = method.value;
 
-    this.userConstructor = fn;
-    this.hasConstructor  = true;
+    this.userConstructorPath = fnPath;
+    this.userConstructor     = fn;
+    this.hasConstructor      = true;
 
     t.inheritsComments(construct, method);
 

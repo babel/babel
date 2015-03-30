@@ -21,7 +21,8 @@ export const MESSAGES = {
   evalInStrictMode: "eval is not allowed in strict mode",
   codeGeneratorDeopt: "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
   missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
-  unsupportedOutputType: "Unsupported output type $1"
+  unsupportedOutputType: "Unsupported output type $1",
+  illegalMethodName: "Illegal method name $1"
 };
 
 export function get(key: String, ...args) {
