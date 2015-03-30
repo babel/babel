@@ -75,6 +75,13 @@ export default class Scope {
       return parent;
     }
 
+    var cached = path.getData("scope");
+    if (cached && cached.parent === parent) {
+      return cached;
+    } else {
+      path.setData("scope", this);
+    }
+
     this.parent = parent;
     this.file   = parent ? parent.file : file;
 

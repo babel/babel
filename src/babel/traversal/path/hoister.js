@@ -12,6 +12,10 @@ var referenceVisitor = {
       if (this.isReferenced()) {
         var bindingInfo = scope.getBinding(node.name);
 
+        // this binding isn't accessible from the parent scope so we can safely ignore it
+        // eg. it's in a closure etc
+        if (bindingInfo !== state.scope.getBinding(node.name)) return;
+
         if (bindingInfo && bindingInfo.constant) {
           state.bindings[node.name] = bindingInfo;
         } else {
@@ -25,9 +29,10 @@ var referenceVisitor = {
 };
 
 export default class PathHoister {
-  constructor(path) {
+  constructor(path, scope) {
     this.foundIncompatible = false;
     this.bindings          = {};
+    this.scope             = scope;
     this.scopes            = [];
     this.path              = path;
   }

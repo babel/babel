@@ -644,8 +644,8 @@ export default class TraversalPath {
    * Description
    */
 
-  hoist() {
-    var hoister = new PathHoister(this);
+  hoist(scope = this.scope) {
+    var hoister = new PathHoister(this, scope);
     return hoister.run();
   }
 
