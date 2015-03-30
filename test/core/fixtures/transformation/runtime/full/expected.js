@@ -1,12 +1,12 @@
 "use strict";
 
-var _core = require("babel-runtime/core-js")["default"];
+var _core = require("babel-runtime/es5/core-js")["default"];
 
-var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
+var _regeneratorRuntime = require("babel-runtime/es5/regenerator")["default"];
 
-var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
+var _interopRequire = require("babel-runtime/es5/helpers/interop-require")["default"];
 
-var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
+var _interopRequireWildcard = require("babel-runtime/es5/helpers/interop-require-wildcard")["default"];
 
 var giveWord = _regeneratorRuntime.mark(function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {

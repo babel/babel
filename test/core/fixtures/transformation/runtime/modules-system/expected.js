@@ -1,11 +1,11 @@
-System.register(["babel-runtime/helpers/to-consumable-array", "babel-runtime/regenerator"], function (_export) {
+System.register(["babel-runtime/es5/helpers/to-consumable-array", "babel-runtime/es5/regenerator"], function (_export) {
   var _toConsumableArray, _regeneratorRuntime, generator;
 
   return {
-    setters: [function (_babelRuntimeHelpersToConsumableArray) {
-      _toConsumableArray = _babelRuntimeHelpersToConsumableArray["default"];
-    }, function (_babelRuntimeRegenerator) {
-      _regeneratorRuntime = _babelRuntimeRegenerator["default"];
+    setters: [function (_babelRuntimeEs5HelpersToConsumableArray) {
+      _toConsumableArray = _babelRuntimeEs5HelpersToConsumableArray["default"];
+    }, function (_babelRuntimeEs5Regenerator) {
+      _regeneratorRuntime = _babelRuntimeEs5Regenerator["default"];
     }],
     execute: function () {
       "use strict";

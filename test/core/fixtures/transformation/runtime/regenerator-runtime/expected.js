@@ -1,6 +1,6 @@
 "use strict";
 
-var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
+var _regeneratorRuntime = require("babel-runtime/es5/regenerator")["default"];
 
 void _regeneratorRuntime.mark(function callee$0$0() {
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {

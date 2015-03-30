@@ -1,6 +1,6 @@
 "use strict";
 
-var _core = require("babel-runtime/core-js")["default"];
+var _core = require("babel-runtime/es5/core-js")["default"];
 
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;

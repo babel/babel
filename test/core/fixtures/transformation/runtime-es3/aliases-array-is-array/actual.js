@@ -1,0 +1,1 @@
+Array.isArray(foo);
