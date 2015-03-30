@@ -3,8 +3,8 @@
 ({
   type: "div",
   ref: null,
-  children: [bar],
   props: {
+    children: [bar],
     className: "foo"
   },
   key: null

@@ -15,8 +15,9 @@ function render() {
   var _ref = {
     type: "foo",
     ref: null,
-    children: [text],
-    props: {},
+    props: {
+      children: [text]
+    },
     key: null
   };
   return function () {

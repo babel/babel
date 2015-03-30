@@ -3,7 +3,6 @@
 ({
   type: "foo",
   ref: null,
-  children: [],
   props: {
     bar: "foo"
   },

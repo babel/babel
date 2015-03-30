@@ -36,15 +36,19 @@ export function JSXElement(node, parent, scope, file) {
   }
 
   function pushElemProp(key, value) {
-    obj.properties.push(t.property("init", t.identifier(key), value));
+    pushProp(obj.properties, t.identifier(key), value);
+  }
+
+  function pushProp(objProps, key, value) {
+    objProps.push(t.property("init", key, value));
   }
 
   // metadata
   pushElemProp("type", type);
   pushElemProp("ref", t.literal(null));
 
-  if (!open.selfClosing) {
-    pushElemProp("children", t.arrayExpression(react.buildChildren(node)));
+  if (node.children.length) {
+    pushProp(props.properties, t.identifier("children"), t.arrayExpression(react.buildChildren(node)));
   }
 
   // props
@@ -53,7 +57,7 @@ export function JSXElement(node, parent, scope, file) {
     if (isJSXAttributeOfName(attr, "key")) {
       key = attr.value;
     } else {
-      props.properties.push(t.property("init", attr.name, attr.value));
+      pushProp(props.properties, attr.name, attr.value);
     }
   }
 
