@@ -5,11 +5,11 @@
 </p>
 
 <p align="center">
-  <strong>Babel</strong> is a transpiler for writing next generation JavaScript.
+  <strong>Babel</strong> is a compiler for writing next generation JavaScript.
 </p>
 
 <p align="center">
-  For questions and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> before creating an issue.
+  For questions and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> or <a href="stackoverflow.com">StackOverflow</a>. The Babel issue tracker is <strong>exclusively</strong> for bug reports and future requests.
 </p>
 
 <p align="center">
