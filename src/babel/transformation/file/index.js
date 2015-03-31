@@ -428,7 +428,7 @@ export default class File {
     this.scope = this.path.scope;
     this.ast   = ast;
 
-    /*this.path.traverse({
+    this.path.traverse({
       enter(node, parent, scope) {
         if (this.isScope()) {
           for (var key in scope.bindings) {
@@ -436,7 +436,7 @@ export default class File {
           }
         }
       }
-    });*/
+    });
   }
 
   transform(ast) {
