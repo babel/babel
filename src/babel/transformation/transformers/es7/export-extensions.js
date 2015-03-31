@@ -3,7 +3,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  stage: 0
+  stage: 1
 };
 
 export function check(node) {
