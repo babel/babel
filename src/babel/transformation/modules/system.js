@@ -94,7 +94,9 @@ export default class SystemFormatter extends AMDFormatter {
     DefaultFormatter.apply(this, arguments);
   }
 
-  init() {}
+  init() {
+    DefaultFormatter.prototype.init.call(this);
+  }
 
   _addImportSource(node, exportNode) {
     node._importSource = exportNode.source && exportNode.source.value;

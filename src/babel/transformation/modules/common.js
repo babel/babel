@@ -15,6 +15,8 @@ export default class CommonJSFormatter extends DefaultFormatter {
       if (this.file.isLoose("es6.modules")) templateName += "-loose";
       file.ast.program.body.unshift(util.template(templateName, true));
     }
+
+    DefaultFormatter.prototype.init.call(this);
   };
 
   importSpecifier(specifier, node, nodes) {

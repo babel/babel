@@ -93,7 +93,9 @@ export default class DefaultFormatter {
 
     this.getLocalExports();
     this.getLocalImports();
+  }
 
+  init() {
     this.remapAssignments();
   }
 
