@@ -104,12 +104,14 @@ export default class File {
 
     for (let key in File.options) {
       let option = File.options[key];
+
+      var val = opts[key];
+      if (!val && option.optional) continue;
+
       if (option.deprecated) {
         throw new Error("Deprecated option " + key + ": " + option.deprecated);
       }
 
-      var val = opts[key];
-      if (!val && option.optional) continue;
       if (val == null) val = option.default || val;
 
       var optionParser = optionParsers[option.type];
