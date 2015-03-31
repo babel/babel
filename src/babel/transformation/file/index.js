@@ -104,6 +104,9 @@ export default class File {
 
     for (let key in File.options) {
       let option = File.options[key];
+      if (option.deprecated) {
+        throw new Error("Deprecated option " + key + ": " + option.deprecated);
+      }
 
       var val = opts[key];
       if (!val && option.optional) continue;
@@ -423,7 +426,7 @@ export default class File {
     this.scope = this.path.scope;
     this.ast   = ast;
 
-    this.path.traverse({
+    /*this.path.traverse({
       enter(node, parent, scope) {
         if (this.isScope()) {
           for (var key in scope.bindings) {
@@ -431,7 +434,7 @@ export default class File {
           }
         }
       }
-    });
+    });*/
   }
 
   transform(ast) {

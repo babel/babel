@@ -28,7 +28,11 @@ each(File.options, function (option, key) {
     arg = "-" + option.shorthand + ", " + arg;
   }
 
-  commander.option(arg, option.description);
+  var desc = [];
+  if (option.deprecated) desc.push("[DEPRECATED] " + option.deprecated);
+  if (option.description) desc.push(option.description);
+
+  commander.option(arg, desc.join(" "));
 })
 
 commander.option("-w, --watch", "Recompile files on changes");
