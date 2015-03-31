@@ -108,7 +108,7 @@ export default class File {
       var val = opts[key];
       if (!val && option.optional) continue;
 
-      if (option.deprecated) {
+      if (val && option.deprecated) {
         throw new Error("Deprecated option " + key + ": " + option.deprecated);
       }
 
