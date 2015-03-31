@@ -102,6 +102,7 @@ export default {
 
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
+  "es1.ludicrous":                         require("./es1/ludicrous"),
 
   _strict:                                 require("./internal/strict"),
   _moduleFormatter:                        require("./internal/module-formatter"),
