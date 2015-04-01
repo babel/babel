@@ -127,7 +127,7 @@
   },
 
   "compact": {
-    "type": "booleanstring",
+    "type": "booleanString",
     "default": "auto",
     "description": "do not include superfluous whitespace characters and line terminators [true|false|auto]"
   },
