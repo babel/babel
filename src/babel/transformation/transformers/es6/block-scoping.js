@@ -70,13 +70,13 @@ export function Loop(node, parent, scope, file) {
     node.body._letDeclarators = [init];
   }
 
-  var blockScoping = new BlockScoping(this, node.body, parent, scope, file);
+  var blockScoping = new BlockScoping(this, this.get("body"), parent, scope, file);
   return blockScoping.run();
 }
 
 export function BlockStatement(block, parent, scope, file) {
   if (!t.isLoop(parent)) {
-    var blockScoping = new BlockScoping(null, block, parent, scope, file);
+    var blockScoping = new BlockScoping(null, this, parent, scope, file);
     blockScoping.run();
   }
 }
@@ -122,12 +122,14 @@ var letReferenceFunctionVisitor = {
     // not a direct reference
     if (!this.isReferencedIdentifier()) return;
 
+    var ref = state.letReferences[node.name];
+
     // not a part of our scope
-    if (!state.letReferences[node.name]) return;
+    if (!ref) return;
 
     // this scope has a variable with the same name so it couldn't belong
     // to our let scope
-    if (scope.hasOwnBinding(node.name)) return;
+    if (scope.getBindingIdentifier(node.name) !== ref) return;
 
     state.closurify = true;
   }
@@ -237,15 +239,17 @@ class BlockScoping {
    * Description
    */
 
-  constructor(loopPath?: TraversalPath, block: Object, parent: Object, scope: Scope, file: File) {
+  constructor(loopPath?: TraversalPath, blockPath: TraversalPath, parent: Object, scope: Scope, file: File) {
     this.parent = parent;
     this.scope  = scope;
-    this.block  = block;
     this.file   = file;
+
+    this.blockPath = blockPath;
+    this.block     = blockPath.node;
 
     this.outsideLetReferences = object();
     this.hasLetReferences     = false;
-    this.letReferences        = block._letReferences = object();
+    this.letReferences        = this.block._letReferences = object();
     this.body                 = [];
 
     if (loopPath) {
@@ -326,7 +330,7 @@ class BlockScoping {
       traverseReplace(loop.update, loop, scope, remaps);
     }
 
-    scope.traverse(this.block, replaceVisitor, remaps);
+    this.blockPath.traverse(replaceVisitor, remaps);
   }
 
   /**
@@ -474,7 +478,7 @@ class BlockScoping {
 
     // traverse through this block, stopping on functions and checking if they
     // contain any local let references
-    this.scope.traverse(this.block, letReferenceBlockVisitor, state);
+    this.blockPath.traverse(letReferenceBlockVisitor, state);
 
     return state.closurify;
   }
@@ -498,8 +502,8 @@ class BlockScoping {
       map:              {}
     };
 
-    this.scope.traverse(this.block, loopLabelVisitor, state);
-    this.scope.traverse(this.block, loopVisitor, state);
+    this.blockPath.traverse(loopLabelVisitor, state);
+    this.blockPath.traverse(loopVisitor, state);
 
     return state;
   }
@@ -510,7 +514,7 @@ class BlockScoping {
    */
 
   hoistVarDeclarations() {
-    traverse(this.block, hoistVarDeclarationsVisitor, this.scope, this);
+    this.blockPath.traverse(hoistVarDeclarationsVisitor, this);
   }
 
   /**

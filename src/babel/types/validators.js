@@ -157,14 +157,8 @@ export function isSpecifierDefault(specifier: Object): boolean {
  */
 
 export function isScope(node: Object, parent: Object): boolean {
-  if (t.isBlockStatement(node)) {
-    if (t.isLoop(parent, { body: node })) {
-      return false;
-    }
-
-    if (t.isFunction(parent, { body: node })) {
-      return false;
-    }
+  if (t.isBlockStatement(node) && t.isFunction(parent, { body: node })) {
+    return false;
   }
 
   return t.isScopable(node);

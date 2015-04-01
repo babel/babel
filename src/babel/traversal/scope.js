@@ -436,9 +436,6 @@ export default class Scope {
         var node = path.get(t.FOR_INIT_KEYS[i]);
         if (node.isBlockScoped()) this.registerBinding("let", node);
       }
-
-      var body = path.get("body");
-      if (body.isBlockStatement()) path = path.get("body");
     }
 
     // FunctionExpression - id

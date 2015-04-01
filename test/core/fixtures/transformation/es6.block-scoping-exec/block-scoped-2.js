@@ -1,4 +1,4 @@
-assert.equal(() => {
+assert.equal((() => {
   let sum = 0;
   let a = 0;
   {
@@ -9,4 +9,4 @@ assert.equal(() => {
     }
   }
   return sum;
-}(), 10);
+})(), 10);
