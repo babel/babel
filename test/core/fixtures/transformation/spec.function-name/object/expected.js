@@ -8,15 +8,15 @@ var obj = {
   },
 
   h: (function (_h) {
-    var _hWrapper = function h() {
+    function h() {
       return _h.apply(this, arguments);
+    }
+
+    h.toString = function () {
+      return h.toString();
     };
 
-    _hWrapper.toString = function () {
-      return _h.toString();
-    };
-
-    return _hWrapper;
+    return h;
   })(function () {
     console.log(h);
   }),

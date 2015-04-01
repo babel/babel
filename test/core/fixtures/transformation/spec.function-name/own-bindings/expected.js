@@ -5,27 +5,27 @@ var f = function f() {
 };
 
 var f = (function (_f) {
-  var _fWrapper = function f(_x) {
+  function f(_x) {
     return _f.apply(this, arguments);
+  }
+
+  f.toString = function () {
+    return f.toString();
   };
 
-  _fWrapper.toString = function () {
-    return _f.toString();
-  };
-
-  return _fWrapper;
+  return f;
 })(function (f) {});
 
 var obj = {
   f: (function (_f) {
-    var _fWrapper = function f(_x) {
+    function f(_x) {
       return _f.apply(this, arguments);
+    }
+
+    f.toString = function () {
+      return f.toString();
     };
 
-    _fWrapper.toString = function () {
-      return _f.toString();
-    };
-
-    return _fWrapper;
+    return f;
   })(function (f) {})
 };

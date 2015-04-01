@@ -25,13 +25,12 @@ var wrap = function (state, method, id, scope) {
     var template = util.template(templateName, {
       FUNCTION: method,
       FUNCTION_ID: id,
-      FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-      WRAPPER_KEY: scope.generateUidIdentifier(id.name + "Wrapper")
+      FUNCTION_KEY: scope.generateUidIdentifier(id.name)
     });
 
     // shim in dummy params to retain function arity, if you try to read the
     // source then you'll get the original since it's proxied so it's all good
-    var params = template.callee.body.body[0].declarations[0].init.params;
+    var params = template.callee.body.body[0].params;
     for (var i = 0, len = getFunctionArity(method); i < len; i++) {
       params.push(scope.generateUidIdentifier("x"));
     }

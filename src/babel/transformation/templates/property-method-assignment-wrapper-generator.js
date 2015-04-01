@@ -1,11 +1,11 @@
 (function (FUNCTION_KEY) {
-  var WRAPPER_KEY = function* FUNCTION_ID() {
-    return yield* FUNCTION_KEY.apply(this, arguments);
+  function* FUNCTION_ID() {
+    return yield* FUNCTION_ID.apply(this, arguments);
+  }
+
+  FUNCTION_ID.toString = function () {
+    return FUNCTION_ID.toString();
   };
 
-  WRAPPER_KEY.toString = function () {
-    return FUNCTION_KEY.toString();
-  };
-
-  return WRAPPER_KEY;
+  return FUNCTION_ID;
 })(FUNCTION)

@@ -1,15 +1,15 @@
 "use strict";
 
 var i = (function (_i) {
-  var _iWrapper = function i() {
+  function i() {
     return _i.apply(this, arguments);
+  }
+
+  i.toString = function () {
+    return i.toString();
   };
 
-  _iWrapper.toString = function () {
-    return _i.toString();
-  };
-
-  return _iWrapper;
+  return i;
 })(function () {
   i = 5;
 });
