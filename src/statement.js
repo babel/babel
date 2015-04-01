@@ -558,9 +558,10 @@ pp.parseClassSuper = function(node) {
 pp.parseExport = function(node) {
   this.next()
   // export * from '...'
-  if (this.eat(tt.star)) {
+  if (this.type === tt.star) {
+    let specifier = this.startNode()
+    this.next()
     if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
-      let specifier = this.startNode()
       specifier.exported = this.parseIdent()
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")]
       this.parseExportSpecifiersMaybe(node)
@@ -573,7 +574,16 @@ pp.parseExport = function(node) {
     let specifier = this.startNode()
     specifier.exported = this.parseIdent(true)
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")]
-    this.parseExportSpecifiersMaybe(node)
+    if (this.type === tt.comma && this.lookahead().type === tt.star) {
+      this.expect(tt.comma)
+      let specifier = this.startNode()
+      this.expect(tt.star)
+      this.expectContextual("as")
+      specifier.exported = this.parseIdent()
+      node.specifiers.push(this.finishNode(specifier, "ExportNamespaceSpecifier"))
+    } else {
+      this.parseExportSpecifiersMaybe(node)
+    }
     this.parseExportFrom(node)
   } else if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign()
