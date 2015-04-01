@@ -86,9 +86,10 @@ export default class TraversalPath {
   }
 
   insertBefore(nodes) {
+    nodes = this._verifyNodeList(nodes);
     this.checkNodes(nodes);
 
-    if (this.parentPath.isExpressionStatement()) {
+    if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertBefore(nodes);
     } else if (this.isPreviousType("Statement")) {
       if (Array.isArray(this.container)) {
@@ -97,13 +98,13 @@ export default class TraversalPath {
         if (this.node) nodes.push(this.node);
         this.container[this.key] = t.blockStatement(nodes);
       } else {
-        throw new Error("no idea what to do with this");
+        throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
     } else if (this.isPreviousType("Expression")) {
       if (this.node) nodes.push(this.node);
       this.replaceExpressionWithStatements(nodes);
     } else {
-      throw new Error("no idea what to do with this ");
+      throw new Error("No clue what to do with this node type.");
     }
   }
 
@@ -130,13 +131,18 @@ export default class TraversalPath {
   }
 
   isStatementOrBlock() {
-    return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key) && !t.isBlockStatement(this.container);
+    if (t.isLabeledStatement(this.parent) || t.isBlockStatement(this.container)) {
+      return false;
+    } else {
+      return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
+    }
   }
 
   insertAfter(nodes) {
+    nodes = this._verifyNodeList(nodes);
     this.checkNodes(nodes);
 
-    if (this.parentPath.isExpressionStatement()) {
+    if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertAfter(nodes);
     } else if (this.isPreviousType("Statement")) {
       if (Array.isArray(this.container)) {
@@ -145,7 +151,7 @@ export default class TraversalPath {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
       } else {
-        throw new Error("no idea what to do with this");
+        throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
     } else if (this.isPreviousType("Expression")) {
       if (this.node) {
@@ -155,7 +161,7 @@ export default class TraversalPath {
       }
       this.replaceExpressionWithStatements(nodes);
     } else {
-      throw new Error("no idea what to do with this");
+      throw new Error("No clue what to do with this node type.");
     }
   }
 
@@ -251,7 +257,7 @@ export default class TraversalPath {
   replaceInline(nodes) {
     if (Array.isArray(nodes)) {
       if (Array.isArray(this.container)) {
-        this._verifyNodeList(nodes);
+        nodes = this._verifyNodeList(nodes);
         this._containerInsertAfter(nodes);
         return this.remove();
       } else {
@@ -263,20 +269,26 @@ export default class TraversalPath {
   }
 
   _verifyNodeList(nodes) {
-    if (typeof nodes === "object") {
+    if (nodes.constructor !== Array) {
       nodes = [nodes];
     }
 
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
-      if (!node) throw new Error(`Node list has falsy node with the index of ${i}`);
+      if (!node) {
+        throw new Error(`Node list has falsy node with the index of ${i}`);
+      } else if (typeof node !== "object") {
+        throw new Error(`Node list contains a non-object node with the index of ${i}`);
+      } else if (!node.type) {
+        throw new Error(`Node list contains a node without a type with the index of ${i}`);
+      }
     }
 
     return nodes;
   }
 
   replaceWithMultiple(nodes: Array<Object>) {
-    this._verifyNodeList(nodes);
+    nodes = this._verifyNodeList(nodes);
     t.inheritsComments(nodes[0], this.node);
     this.container[this.key] = null;
     this.insertAfter(nodes);

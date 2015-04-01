@@ -255,6 +255,7 @@ class BlockScoping {
     if (loopPath) {
       this.loopParent = loopPath.parent;
       this.loopLabel  = t.isLabeledStatement(this.loopParent) && this.loopParent.label;
+      this.loopPath   = loopPath;
       this.loop       = loopPath.node;
     }
   }
@@ -380,8 +381,17 @@ class BlockScoping {
     // replace the current block body with the one we're going to build
     block.body = this.body;
 
+    var ref = fn;
+
+    if (this.loop) {
+      ref = this.scope.generateUidIdentifier("loop");
+      this.loopPath.insertBefore(t.variableDeclaration("var", [
+        t.variableDeclarator(ref, fn)
+      ]));
+    }
+
     // build a call and a unique id that we can assign the return value to
-    var call = t.callExpression(fn, args);
+    var call = t.callExpression(ref, args);
     var ret  = this.scope.generateUidIdentifier("ret");
 
     // handle generators
@@ -398,7 +408,20 @@ class BlockScoping {
       call = t.awaitExpression(call);
     }
 
-    this.build(ret, call);
+    this.buildClosure(ret, call);
+  }
+
+  /**
+   * Push the closure to the body.
+   */
+
+  buildClosure(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
+    var has = this.has;
+    if (has.hasReturn || has.hasBreakContinue) {
+      this.buildHas(ret, call);
+    } else {
+      this.body.push(t.expressionStatement(call));
+    }
   }
 
   /**
@@ -538,19 +561,6 @@ class BlockScoping {
     }
 
     return replace;
-  }
-
-  /**
-   * Push the closure to the body.
-   */
-
-  build(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
-    var has = this.has;
-    if (has.hasReturn || has.hasBreakContinue) {
-      this.buildHas(ret, call);
-    } else {
-      this.body.push(t.expressionStatement(call));
-    }
   }
 
   /**

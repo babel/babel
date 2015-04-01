@@ -5,17 +5,19 @@ var _didIteratorError = false;
 var _iteratorError = undefined;
 
 try {
+  var _loop = function () {
+    var i = _step.value;
+    x = 5;
+
+    fns.push(function () {
+      return i * x;
+    });
+  };
+
   for (var _iterator = nums[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
     var x;
 
-    (function () {
-      var i = _step.value;
-      x = 5;
-
-      fns.push(function () {
-        return i * x;
-      });
-    })();
+    _loop();
   }
 } catch (err) {
   _didIteratorError = true;

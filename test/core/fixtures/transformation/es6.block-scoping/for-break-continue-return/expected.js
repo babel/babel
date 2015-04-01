@@ -1,21 +1,23 @@
 "use strict";
 
 (function () {
+  var _loop = function (i) {
+    fns.push(function () {
+      return i;
+    });
+    if (i === 1) {
+      return "continue";
+    } else if (i === 2) {
+      return "break";
+    } else if (i === 3) {
+      return {
+        v: i
+      };
+    }
+  };
+
   _loop: for (var i in nums) {
-    var _ret = (function (i) {
-      fns.push(function () {
-        return i;
-      });
-      if (i === 1) {
-        return "continue";
-      } else if (i === 2) {
-        return "break";
-      } else if (i === 3) {
-        return {
-          v: i
-        };
-      }
-    })(i);
+    var _ret = _loop(i);
 
     switch (_ret) {
       case "continue":
