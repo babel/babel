@@ -74,6 +74,7 @@ var templateVisitor = {
     if (t.isExpressionStatement(node)) {
       node = node.expression;
     }
+
     if (t.isIdentifier(node) && has(nodes, node.name)) {
       this.skip();
       this.replaceInline(nodes[node.name]);
