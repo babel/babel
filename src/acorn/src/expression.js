@@ -272,11 +272,13 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
         // arrow functions
         if (this.type === tt.parenL) {
           let expr = this.parseParenAndDistinguishExpression(start, true)
-          if (expr.type === "ArrowFunctionExpression") {
+          if (expr && expr.type === "ArrowFunctionExpression") {
             return expr
           } else {
             node.callee = id
-            if (expr.type === "SequenceExpression") {
+            if (!expr) {
+              node.arguments = []
+            } else if (expr.type === "SequenceExpression") {
               node.arguments = expr.expressions
             } else {
               node.arguments = [expr]
@@ -410,7 +412,13 @@ pp.parseParenAndDistinguishExpression = function(start, isAsync) {
       return this.parseParenArrowList(start, exprList, isAsync)
     }
 
-    if (!exprList.length) this.unexpected(this.lastTokStart)
+    if (!exprList.length) {
+      if (isAsync) {
+        return
+      } else {
+        this.unexpected(this.lastTokStart)
+      }
+    }
     if (spreadStart) this.unexpected(spreadStart)
     if (refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start)
 
