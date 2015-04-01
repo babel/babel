@@ -1,10 +1,16 @@
-(function (factory) {
+(function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
     factory(exports, module);
+  } else {
+    var module = {
+      exports: {}
+    };
+    factory(module.exports, module);
+    global.actual = module.exports;
   }
-})(function (exports, module) {
+})(this, function (exports, module) {
   "use strict";
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };

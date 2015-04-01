@@ -10,7 +10,7 @@ export default class UMDFormatter extends AMDFormatter {
     // build an array of module names
 
     var names = [];
-    for (var name in this.ids) {
+    for (let name in this.ids) {
       names.push(t.literal(name));
     }
 
@@ -44,7 +44,13 @@ export default class UMDFormatter extends AMDFormatter {
 
     // globals
 
-    //var umdArgs = [];
+    var browserArgs = [t.memberExpression(t.identifier("module"), t.identifier("exports"))];
+    if (this.passModuleArg) browserArgs.push(t.identifier("module"));
+
+    for (let name in this.ids) {
+      var id = this.defaultIds[name] || t.identifier(t.toIdentifier(name));
+      browserArgs.push(t.memberExpression(t.identifier("global"), id));
+    }
 
     //
 
@@ -54,12 +60,15 @@ export default class UMDFormatter extends AMDFormatter {
     var runner = util.template("umd-runner-body", {
       AMD_ARGUMENTS: defineArgs,
       COMMON_TEST: commonTests,
-      COMMON_ARGUMENTS: commonArgs
+      COMMON_ARGUMENTS: commonArgs,
+      BROWSER_ARGUMENTS: browserArgs,
+      GLOBAL_ARG: t.identifier(t.toIdentifier(this.file.opts.basename))
     });
 
     //
 
-    var call = t.callExpression(runner, [factory]);
-    program.body = [t.expressionStatement(call)];
+    program.body = [t.expressionStatement(
+      t.callExpression(runner, [t.thisExpression(), factory])
+    )];
   }
 }

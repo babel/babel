@@ -1,10 +1,16 @@
-(function (factory) {
+(function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "./evens"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports, require("./evens"));
+  } else {
+    var module = {
+      exports: {}
+    };
+    factory(module.exports, global.evens);
+    global.actual = module.exports;
   }
-})(function (exports, _evens) {
+})(this, function (exports, _evens) {
   "use strict";
 
   exports.nextOdd = nextOdd;

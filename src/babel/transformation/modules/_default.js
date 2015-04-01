@@ -78,9 +78,10 @@ var exportsVisitor = traverse.explode({
 
 export default class DefaultFormatter {
   constructor(file) {
-    this.scope = file.scope;
-    this.file  = file;
-    this.ids   = object();
+    this.defaultIds = object();
+    this.scope      = file.scope;
+    this.file       = file;
+    this.ids        = object();
 
     this.hasNonDefaultExports = false;
 
