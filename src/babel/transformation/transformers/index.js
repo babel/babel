@@ -101,8 +101,8 @@ export default {
   "es7.doExpressions":                     require("./es7/do-expressions"),
 
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
+  ludicrous:                               require("./other/ludicrous"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
-  "es1.ludicrous":                         require("./es1/ludicrous"),
 
   _strict:                                 require("./internal/strict"),
   _moduleFormatter:                        require("./internal/module-formatter"),

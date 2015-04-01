@@ -1,0 +1,1 @@
+Object(RIGHT)[LEFT] !== undefined;
