@@ -81,14 +81,14 @@ export function buildChildren(node) {
 
   for (var i = 0; i < node.children.length; i++) {
     var child = node.children[i];
-    if (t.isJSXExpressionContainer(child)) child = child.expression;
 
     if (t.isLiteral(child) && typeof child.value === "string") {
       cleanJSXElementLiteralChild(child, elems);
       continue;
-    } else if (t.isJSXEmptyExpression(child)) {
-      continue;
     }
+
+    if (t.isJSXExpressionContainer(child)) child = child.expression;
+    if (t.isJSXEmptyExpression(child)) continue;
 
     elems.push(child);
   }

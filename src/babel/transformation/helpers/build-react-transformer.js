@@ -144,10 +144,14 @@ export default function (exports, opts) {
   };
 
   exports.JSXElement = {
+    enter(node) {
+      node.children = react.buildChildren(node);
+    },
+
     exit(node) {
       var callExpr = node.openingElement;
 
-      callExpr.arguments = callExpr.arguments.concat(react.buildChildren(node));
+      callExpr.arguments = callExpr.arguments.concat(node.children);
 
       if (callExpr.arguments.length >= 3) {
         callExpr._prettyCall = true;
