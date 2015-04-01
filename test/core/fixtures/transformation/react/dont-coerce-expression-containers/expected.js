@@ -1,5 +1,3 @@
-"use strict";
-
 React.createElement(
   Text,
   null,
