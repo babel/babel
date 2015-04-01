@@ -6,8 +6,6 @@ var _get = function get(object, property, receiver) { var desc = Object.getOwnPr
 
 var o = _obj = {
   m: function m() {
-    var _this = this;
-
     return _get(Object.getPrototypeOf(_obj), "x", this);
   }
 };

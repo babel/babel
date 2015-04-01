@@ -3,7 +3,7 @@ import * as t from "../../../types";
 
 export var check = t.isSuper;
 
-function Property(node, scope, getObjectRef, file) {
+function Property(path, node, scope, getObjectRef, file) {
   if (!node.method) return;
 
   var value = node.value;
@@ -13,6 +13,7 @@ function Property(node, scope, getObjectRef, file) {
     topLevelThisReference: thisExpr,
     getObjectRef:          getObjectRef,
     methodNode:            node,
+    methodPath:            path,
     isStatic:              true,
     scope:                 scope,
     file:                  file
@@ -33,8 +34,9 @@ export function ObjectExpression(node, parent, scope, file) {
   var objectRef;
   var getObjectRef = () => objectRef ||= scope.generateUidIdentifier("obj");
 
+  var propPaths = this.get("properties");
   for (var i = 0; i < node.properties.length; i++) {
-    Property(node.properties[i], scope, getObjectRef, file);
+    Property(propPaths[i], node.properties[i], scope, getObjectRef, file);
   }
 
   if (objectRef) {

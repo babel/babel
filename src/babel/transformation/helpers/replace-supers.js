@@ -1,14 +1,15 @@
-module.exports = ReplaceSupers;
-
 import * as messages from "../../messages";
 import * as t from "../../types";
-
 
 function isIllegalBareSuper(node, parent) {
   if (!t.isSuper(node)) return false;
   if (t.isMemberExpression(parent, { computed: false })) return false;
   if (t.isCallExpression(parent, { callee: node })) return false;
   return true;
+}
+
+function isMemberExpressionSuper(node) {
+  return t.isMemberExpression(node) && t.isSuper(node.object);
 }
 
 var visitor = {
@@ -18,7 +19,7 @@ var visitor = {
 
     if (t.isFunction(node) && !t.isArrowFunctionExpression(node)) {
       // we need to call traverseLevel again so we're context aware
-      self.traverseLevel(node, false);
+      self.traverseLevel(this, false);
       return this.skip();
     }
 
@@ -35,7 +36,10 @@ var visitor = {
 
     var callback = self.specHandle;
     if (self.isLoose) callback = self.looseHandle;
-    return callback.call(self, this, getThisReference);
+    var result = callback.call(self, this, getThisReference);
+    if (result) this.hasSuper = true;
+    if (result === true) return;
+    return result;
   }
 };
 
@@ -47,6 +51,7 @@ export default class ReplaceSupers {
 
   constructor(opts: Object, inClass?: boolean = false) {
     this.topLevelThisReference = opts.topLevelThisReference;
+    this.methodPath            = opts.methodPath;
     this.methodNode            = opts.methodNode;
     this.superRef              = opts.superRef;
     this.isStatic              = opts.isStatic;
@@ -118,16 +123,16 @@ export default class ReplaceSupers {
    */
 
   replace() {
-    this.traverseLevel(this.methodNode.value, true);
+    this.traverseLevel(this.methodPath.get("value"), true);
   }
 
   /**
    * Description
    */
 
-  traverseLevel(node: Object, topLevel: boolean) {
+  traverseLevel(path: TraversalPath, topLevel: boolean) {
     var state = { self: this, topLevel: topLevel };
-    this.scope.traverse(node, visitor, state);
+    path.traverse(visitor, state);
   }
 
   /**
@@ -190,7 +195,6 @@ export default class ReplaceSupers {
   looseHandle(path: TraversalPath, getThisReference: Function) {
     var node = path.node;
     if (path.isSuper()) {
-      this.hasSuper = true;
       return this.getLooseSuperProperty(node, path.parent);
     } else if (path.isCallExpression()) {
       var callee = node.callee;
@@ -198,9 +202,31 @@ export default class ReplaceSupers {
       if (!t.isSuper(callee.object)) return;
 
       // super.test(); -> objectRef.prototype.MethodName.call(this);
-      this.hasSuper = true;
       t.appendToMemberExpression(callee, t.identifier("call"));
       node.arguments.unshift(getThisReference());
+      return true;
+    }
+  }
+
+  /**
+   * Description
+   */
+
+  specHandleAssignmentExpression(ref, path, node, getThisReference) {
+    if (node.operator === "=") {
+      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      return this.setSuperProperty(node.left.property, node.right, node.left.computed, getThisReference());
+    } else {
+      // super.age += 2; -> var _ref = super.age; super.age = _ref + 2;
+      ref ||= path.scope.generateUidIdentifier("ref");
+      return [
+        t.variableDeclaration("var", [
+          t.variableDeclarator(ref, node.left)
+        ]),
+        t.expressionStatement(
+          t.assignmentExpression("=", node.left, t.binaryExpression(node.operator[0], ref, node.right))
+        )
+      ];
     }
   }
 
@@ -237,7 +263,7 @@ export default class ReplaceSupers {
           var methodName = methodNode.key.name || "METHOD_NAME";
           throw this.file.errorWithNode(node, messages.get("classesIllegalSuperCall", methodName));
         }
-      } else if (t.isMemberExpression(callee) && t.isSuper(callee.object)) {
+      } else if (isMemberExpressionSuper(callee)) {
         // super.test(); -> _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
         property = callee.property;
         computed = callee.computed;
@@ -247,15 +273,21 @@ export default class ReplaceSupers {
       // super.name; -> _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
       property = node.property;
       computed = node.computed;
-    } else if (t.isAssignmentExpression(node) && t.isSuper(node.left.object) && methodNode.kind === "set") {
-      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
-      this.hasSuper = true;
-      return this.setSuperProperty(node.left.property, node.right, node.left.computed, getThisReference());
+    } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
+      var binary = t.binaryExpression(node.operator[0], node.argument, t.literal(1))
+      if (node.prefix) {
+        // ++super.foo; -> super.foo += 1;
+        return this.specHandleAssignmentExpression(null, path, binary, getThisReference);
+      } else {
+        // super.foo++; -> var _ref = super.foo; super.foo = _ref + 1;
+        var ref = path.scope.generateUidIdentifier("ref");
+        return this.specHandleAssignmentExpression(ref, path, binary, getThisReference).concat(t.expressionStatement(ref));
+      }
+    } else if (t.isAssignmentExpression(node) && isMemberExpressionSuper(node.left)) {
+      return this.specHandleAssignmentExpression(null, path, node, getThisReference);
     }
 
     if (!property) return;
-
-    this.hasSuper = true;
 
     thisReference = getThisReference();
     var superProperty = this.getSuperProperty(property, computed, thisReference);

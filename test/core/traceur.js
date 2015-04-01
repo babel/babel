@@ -45,8 +45,6 @@ require("./_transformation-helper")({
     "Classes/NestedClassSuperAnimal",
 
     // TODO: #426
-    "Classes/SuperUnary",
-    "Classes/SuperPostfix",
 
     // TODO: investigate
     "Classes/SuperSet",

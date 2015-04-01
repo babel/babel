@@ -279,6 +279,7 @@ class ClassTransformer {
         if (isConstructor) this.verifyConstructor(path);
 
         var replaceSupers = new ReplaceSupers({
+          methodPath: path,
           methodNode: node,
           objectRef:  this.classRef,
           superRef:   this.superName,

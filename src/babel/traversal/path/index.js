@@ -92,6 +92,7 @@ export default class TraversalPath {
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertBefore(nodes);
     } else if (this.isPreviousType("Statement")) {
+      this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
         this._containerInsertBefore(nodes);
       } else if (this.isStatementOrBlock()) {
@@ -130,6 +131,13 @@ export default class TraversalPath {
     this._containerInsert(this.key + 1, nodes);
   }
 
+  _maybePopFromStatements(nodes) {
+    var last = nodes[nodes.length - 1];
+    if (t.isExpressionStatement(last) && t.isIdentifier(last.expression)) {
+      nodes.pop();
+    }
+  }
+
   isStatementOrBlock() {
     if (t.isLabeledStatement(this.parent) || t.isBlockStatement(this.container)) {
       return false;
@@ -145,6 +153,7 @@ export default class TraversalPath {
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertAfter(nodes);
     } else if (this.isPreviousType("Statement")) {
+      this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
         this._containerInsertAfter(nodes);
       } else if (this.isStatementOrBlock()) {
@@ -222,6 +231,13 @@ export default class TraversalPath {
   }
 
   remove() {
+    var removeParent = false;
+    if (this.parentPath) {
+      removeParent ||= this.parentPath.isExpressionStatement();
+      removeParent ||= this.parentPath.isSequenceExpression() && this.parent.expressions.length === 1
+      if (removeParent) return this.parentPath.remove();
+    }
+
     this._remove();
     this.removed = true;
   }

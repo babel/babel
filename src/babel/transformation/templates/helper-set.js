@@ -5,15 +5,17 @@
     var parent = Object.getPrototypeOf(object);
 
     if (parent !== null) {
-      return set(parent, property, value, receiver);
+      set(parent, property, value, receiver);
     }
   } else if ("value" in desc && desc.writable) {
-    return desc.value = value;
+    desc.value = value;
   } else {
     var setter = desc.set;
 
     if (setter !== undefined) {
-      return setter.call(receiver, value);
+      setter.call(receiver, value);
     }
   }
+
+  return value;
 });
