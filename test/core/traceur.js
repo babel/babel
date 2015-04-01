@@ -41,16 +41,15 @@ require("./_transformation-helper")({
     // TODO
     "Syntax/StrictKeywordsInPattern",
 
-    // broken test, see google/traceur-compiler#1797
-    "Classes/NestedClassSuperAnimal",
+    // babel has no way to check these :( TODO: add to caveats
+    "TemplateLiterals/TemplateObjectCaching.module",
 
-    // TODO: #426
+    // babel does function/class name inference which these tests don't take into consideration
+    "Classes/ClassNameBinding",
+    "PropertyMethodAssignment/PropertyMethodAssignment",
 
     // TODO: investigate
-    "Classes/SuperSet",
-    "Classes/PrototypeDescriptor",
     "Classes/ExtendStrange",
-    "Classes/ClassNameBinding",
 
     // these are the responsibility of core-js
     "Symbol/GetOwnPropertySymbols",
@@ -62,19 +61,19 @@ require("./_transformation-helper")({
     "Destructuring/Rest",
     "Destructuring/Empty",
 
+    // babel doesn't like non-closing comments :)
+    "Syntax/NoNewLineHereEndOfFile",
+
     // traceur uses an old version of regexpu
     "RegularExpression/Simple",
 
-    // class methods are still enumerable in traceur
+    // class methods are still enumerable in traceur...
+    "Classes/PrototypeDescriptor",
     "NumericLiteral/Simple",
     "Classes/Method",
 
     // Object.mixin didn't make it into ES6
     "ObjectMixin",
-
-    // traceur doesn't name methods and has an incorrect test asserting that
-    // they have no names
-    "PropertyMethodAssignment/PropertyMethodAssignment",
 
     // Babel assumes that all code transformed is a module so this isn't necessary
     "Strict",
@@ -91,7 +90,7 @@ require("./_transformation-helper")({
     "Syntax/StrictKeywords"
   ]
 }, {
-  optional: ["es6.spec.symbols"],
+  optional: ["es6.spec.symbols", "es6.spec.templateLiterals"],
   stage: 0
 }, function (opts, task) {
   if (!_.contains(task.exec.loc, "module.js")) {

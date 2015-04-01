@@ -1,12 +1,8 @@
 import * as t from "../../../types";
 
-export function BlockStatement(node, parent, scope, file) {
-  if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
-    return;
-  }
-
-  for (var i = 0; i < node.body.length; i++) {
-    var func = node.body[i];
+function statementList(key, node, file) {
+  for (var i = 0; i < node[key].length; i++) {
+    var func = node[key][i];
     if (!t.isFunctionDeclaration(func)) continue;
 
     var declar = t.variableDeclaration("let", [
@@ -19,8 +15,20 @@ export function BlockStatement(node, parent, scope, file) {
     // todo: name this
     func.id = null;
 
-    node.body[i] = declar;
+    node[key][i] = declar;
 
     file.checkNode(declar);
   }
+}
+
+export function BlockStatement(node, parent, scope, file) {
+  if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
+    return;
+  }
+
+  statementList("body", node, file);
+}
+
+export function SwitchCase(node, parent, scope, file) {
+  statementList("consequent", node, file);
 }
