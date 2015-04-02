@@ -205,7 +205,7 @@ export default class File {
     for (var i = 0; i < file.opts.plugins; i++) {
       this.addPlugin(file.opts.plugins[i]);
     }
-    stack = beforePlugins.concat(stack, afterPlugin);
+    stack = beforePlugins.concat(stack, afterPlugins);
 
     // register
     this.transformerStack = stack.concat(secondaryStack);
