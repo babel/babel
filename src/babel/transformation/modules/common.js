@@ -20,10 +20,6 @@ export default class CommonJSFormatter extends DefaultFormatter {
     }
   }
 
-  exportFromSepcifier() {
-
-  }
-
   importSpecifier(specifier, node, nodes) {
     var variableName = specifier.local;
 
@@ -31,19 +27,17 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
     // import foo from "foo";
     if (t.isSpecifierDefault(specifier)) {
-      if (!includes(this.file.dynamicImportedNoDefault, node)) {
-        if (this.noInteropRequireImport || includes(this.file.dynamicImported, node)) {
-          ref = t.memberExpression(ref, t.identifier("default"));
-        } else {
-          var uid = this.scope.generateUidIdentifier(variableName.name);
+      if (includes(this.file.dynamicImportedNoDefault, node)) {
+        this.internalRemap[variableName.name] = ref;
+      } else {
+        if (this.noInteropRequireImport) {
+          this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"))
+        } else if (!includes(this.file.dynamicImported, node)) {
           nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require"), [ref]))
+            t.variableDeclarator(variableName, t.callExpression(this.file.addHelper("interop-require"), [ref]))
           ]));
-          ref = uid;
         }
       }
-
-      this.internalRemap[variableName.name] = ref;
     } else {
       if (t.isImportNamespaceSpecifier(specifier)) {
         if (!this.noInteropRequireImport) {
@@ -100,9 +94,17 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
   _getExternalReference(node, nodes) {
     var source = node.source.value;
-    var call = t.callExpression(t.identifier("require"), [node.source]);
 
-    var uid = this.scope.generateUidBasedOnNode(node, "import");
+    var call = t.callExpression(t.identifier("require"), [node.source]);
+    var uid;
+
+    if (includes(this.file.dynamicImported, node) && !includes(this.file.dynamicImportedNoDefault, node)) {
+      call = t.memberExpression(call, t.identifier("default"));
+      uid = node.specifiers[0].local;
+    } else {
+      uid = this.scope.generateUidBasedOnNode(node, "import");
+    }
+
     var declar = t.variableDeclaration("var", [
       t.variableDeclarator(uid, call)
     ]);

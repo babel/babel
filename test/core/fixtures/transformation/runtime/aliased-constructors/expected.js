@@ -1,11 +1,11 @@
 "use strict";
 
-var _core2 = require("babel-runtime/es5/core-js");
+var _core = require("babel-runtime/es5/core-js")["default"];
 
 obj.constructor === Object;
-obj.constructor === _core2["default"].Promise;
+obj.constructor === _core.Promise;
 
-_core2["default"].Symbol();
-_core2["default"].Symbol("test");
+_core.Symbol();
+_core.Symbol("test");
 
-new _core2["default"].Map();
+new _core.Map();

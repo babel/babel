@@ -1,9 +1,9 @@
 "use strict";
 
-var _interopRequire2 = require("babel-runtime/es5/helpers/interop-require");
+var _interopRequire = require("babel-runtime/es5/helpers/interop-require")["default"];
 
 var _foo = require("foo");
 
-var _foo2 = _interopRequire2["default"](_foo);
+var foo = _interopRequire(_foo);
 
-_foo2;
+foo;

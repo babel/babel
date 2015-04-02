@@ -16,7 +16,7 @@ require("./directory/foo-bar");
 
 var _foo = require("foo2");
 
-var _foo2 = _interopRequire(_foo);
+var foo = _interopRequire(_foo);
 
 var _import = require("foo3");
 
@@ -32,4 +32,4 @@ var test = 5;
 exports.test = test;
 _bar.bar;
 _bar2.foo;
-_foo2;
+foo;

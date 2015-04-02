@@ -1,5 +1,5 @@
 "use strict";
 
-var _core2 = require("babel-runtime/es3/core-js");
+var _core = require("babel-runtime/es3/core-js")["default"];
 
-_core2["default"].Array.isArray(foo);
+_core.Array.isArray(foo);

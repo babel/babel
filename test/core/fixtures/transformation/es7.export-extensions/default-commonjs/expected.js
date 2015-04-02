@@ -2,6 +2,6 @@
 
 var _foo2 = require("bar");
 
-var _foo3 = babelHelpers.interopRequire(_foo2);
+var _foo = babelHelpers.interopRequire(_foo2);
 
-exports.foo = _foo3;
+exports.foo = _foo;
