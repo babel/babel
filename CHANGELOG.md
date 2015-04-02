@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.1
+
+ * **Bug Fix**
+  * Fix duplicate declaration regression.
+  * Fix not being able to call non-writable methods.
+
 ## 5.0.0
 
  * **New Feature**
