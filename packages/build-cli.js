@@ -6,6 +6,6 @@ var pkg    = require(pkgLoc);
 var mainPkg = require("../package.json");
 
 pkg.version = mainPkg.version;
-pkg.dependencies["babel-core"] = mainPkg.version;
+pkg.dependencies["babel-core"] = "^" + mainPkg.version;
 
 outputFile(pkgLoc, JSON.stringify(pkg, null, 2));
