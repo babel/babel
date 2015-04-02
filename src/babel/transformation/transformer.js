@@ -9,7 +9,7 @@ import each from "lodash/collection/each";
 
 /**
  * This is the class responsible for normalising a transformers handlers
- * as well as constructing a `TransformerPass` that is repsonsible for
+ * as well as constructing a `TransformerPass` that is responsible for
  * actually running the transformer over the provided `File`.
  */
 
@@ -69,6 +69,11 @@ export default class Transformer {
   }
 
   buildPass(file: File): TransformerPass {
+    // validate Transformer instance
+    if (!(file instanceof File)) {
+      throw new TypeError(`Transformer ${this.key} is resolving to a different Babel version to what is doing the actual transformation...`);
+    }
+
     return new TransformerPass(file, this);
   }
 }

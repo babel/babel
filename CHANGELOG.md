@@ -29,6 +29,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Add `jsxPragma` option.
   * Automatically generate CLI options based on internal API options.
   * Add support for `.babelrc` on absolute paths.
+  * Plugin API!
  * **Internal**
   * Export `options` in browser API.
   * Rewritten parser.
