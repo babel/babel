@@ -87,7 +87,7 @@ publish:
 	node tools/cache-templates
 	test -f templates.json
 
-	npm publish --tag beta
+	npm publish
 
 	git push --follow-tags
 
@@ -100,13 +100,13 @@ publish-runtime:
 	cd packages; \
 	node build-runtime.js; \
 	cd babel-runtime; \
-	npm publish --tag beta
+	npm publish
 
 publish-cli:
 	cd packages; \
 	node build-cli.js; \
 	cd babel-cli; \
-	npm publish --tag beta
+	npm publish
 
 bootstrap:
 	npm install
