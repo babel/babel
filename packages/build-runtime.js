@@ -39,39 +39,34 @@ function writeRootFile(filename, content) {
   outputFile(filename, content);
 }
 
-function doVersion(version) {
-  var transformer = version + ".runtime";
 
-  function writeFile(filename, content) {
-    return writeRootFile(version + "/" + filename, content);
-  }
-
-  function selfContainify(code) {
-    return transform(code, {
-      optional: [transformer]
-    }).code;
-  }
-
-  function buildHelper(helperName) {
-    var tree = t.program(
-      util.template("self-contained-helpers-head", {
-        HELPER: util.template("helper-" + helperName)
-      })
-    );
-
-    return transform.fromAst(tree, null, {
-      optional: [transformer]
-    }).code;
-  }
-
-  each(File.helpers, function (helperName) {
-    writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
-  });
-
-  writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
-  writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+function writeFile(filename, content) {
+  return writeRootFile(filename, content);
 }
 
-doVersion("es3");
-doVersion("es5");
+function selfContainify(code) {
+  return transform(code, {
+    optional: ["runtime"]
+  }).code;
+}
+
+function buildHelper(helperName) {
+  var tree = t.program(
+    util.template("self-contained-helpers-head", {
+      HELPER: util.template("helper-" + helperName)
+    })
+  );
+
+  return transform.fromAst(tree, null, {
+    optional: ["runtime"]
+  }).code;
+}
+
+each(File.helpers, function (helperName) {
+  writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+});
+
+writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
+writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+
 updatePackage();

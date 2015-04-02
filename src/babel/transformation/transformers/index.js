@@ -83,7 +83,6 @@ export default {
   // needs to be after `regenerator` due to needing `regeneratorRuntime` references
   // needs to be after `es6.forOf` due to needing `Symbol.iterator` references
   // needs to be before `es6.modules` due to dynamic imports
-  "es3.runtime":                          require("./es3/runtime"),
   runtime:                                require("./other/runtime"),
 
   // needs to be before `_blockHoist` due to function hoisting etc

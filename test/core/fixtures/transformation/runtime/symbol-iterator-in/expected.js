@@ -2,4 +2,4 @@
 
 var _core = require("babel-runtime/es5/core-js")["default"];
 
-_core.$for.isIterable(Object(arr));
+_core.isIterable(Object(arr));

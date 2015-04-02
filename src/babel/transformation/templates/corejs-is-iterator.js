@@ -1,1 +1,1 @@
-CORE_ID.$for.isIterable(VALUE);
+CORE_ID.isIterable(VALUE);

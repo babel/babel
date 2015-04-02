@@ -8,7 +8,7 @@ var _interopRequire = require("babel-runtime/es5/helpers/interop-require")["defa
 
 var _interopRequireWildcard = require("babel-runtime/es5/helpers/interop-require-wildcard")["default"];
 
-Object.defineProperty(exports, "__esModule", {
+_core.Object.defineProperty(exports, "__esModule", {
   value: true
 });
 

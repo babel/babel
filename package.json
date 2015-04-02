@@ -30,7 +30,7 @@
     "ast-types": "~0.7.0",
     "chalk": "^1.0.0",
     "convert-source-map": "^0.5.0",
-    "core-js": "^0.6.0",
+    "core-js": "^0.8.0",
     "debug": "^2.1.1",
     "detect-indent": "^3.0.0",
     "estraverse": "^1.9.1",

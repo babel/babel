@@ -1,1 +1,1 @@
-CORE_ID.$for.getIterator(VALUE);
+CORE_ID.getIterator(VALUE);
