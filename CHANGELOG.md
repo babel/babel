@@ -18,10 +18,42 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **New Feature**
   * Decorators based on [@wycat's](https://github.com/wycats) [stage 1 proposal](https://github.com/wycats/javascript-decorators).
   * Class property initializers based on [@jeffmo's](https://github.com/jeffmo) [stage 0 proposal](https://gist.github.com/jeffmo/054df782c05639da2adb).
+  * Export extensions based on [@leebyron's](https://github.com/leebyron) [stage 1 proposal](https://github.com/leebyron/ecmascript-more-export-from).
+  * UMD module formatter now supports globals.
+  * Add `es3.runtime`, `optimisation.react.inlineElements` and `optimisation.react.constantElements` transformers.
+  * Add stage option that replaces the experimental one.
+  * Allow ES7 transformer to be enabled via `optional` instead of only via `stage`.
+  * Infer string quotes to use in the code generator.
+  * Consider `export { foo as default  };` to be the same as `export default foo;`.
+  * Add `nonStandard` option that can be set to `false` to remove parser support for JSX and Flow.
+  * Add `jsxPragma` option.
+  * Automatically generate CLI options based on internal API options.
+  * Add support for `.babelrc` on absolute paths.
  * **Internal**
+  * Export `options` in browser API.
+  * Rewritten parser.
+  * Don't block hoist when runtime transformer is enabled in system module formatter.
+  * Rewritten the internal traversal and node replacement API to use "paths" that abstracts out node relationships.
+ * **Polish**
+  * JSX output is now more inline with the official JSX transformer.
+  * Hoist block scoping IIFE - this improves memory usage and performance.
+  * Better IIFE detection - references are now checked to see if they're referencing the binding we're searching for.
+  * Check for import reassignments in constants transformer.
+  * Make method definitions with expression bodies illegal.
+  * Save register cache on tick instead of `SIGINT`.
+  * Enable strict mode on babel-node eval flag.
+ * **Bug Fixes**
+  * Add support for live bindings. This change also increases the reliablity of export specifier renaming.
+  * Add support for super update and non equals assignment expressions.
+  * Rename shadow constructor binding in classes.
+  * Seed next iteration bindings with previous fresh bindings when reassinging loop block scoped variables.
+  * Fix new expression spread referencing the wrong constructor.
+  * Call `resolveModuleSource` on dynamic imports.
+  * Added `param` to list of duplicate declaration kinds.
  * **Breaking Changes**
   * The Babel playground has been removed.
   * ES7 Abstract References have been removed.
+  * Experimental option has been removed in favor of a stage option.
 
 ## 4.7.16
 
