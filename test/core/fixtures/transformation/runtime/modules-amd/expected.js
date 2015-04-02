@@ -1,7 +1,7 @@
-define(["exports", "foo", "babel-runtime/es5/helpers/interop-require"], function (exports, _foo, _babelRuntimeEs5HelpersInteropRequire) {
+define(["exports", "foo", "babel-runtime/helpers/interop-require"], function (exports, _foo, _babelRuntimeHelpersInteropRequire) {
   "use strict";
 
-  var _foo2 = _babelRuntimeEs5HelpersInteropRequire["default"](_foo);
+  var _foo2 = _babelRuntimeHelpersInteropRequire["default"](_foo);
 
   _foo2;
 });

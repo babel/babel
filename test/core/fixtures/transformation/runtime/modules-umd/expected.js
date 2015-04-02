@@ -1,8 +1,8 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "foo", "babel-runtime/es5/helpers/interop-require"], factory);
+    define(["exports", "foo", "babel-runtime/helpers/interop-require"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require("foo"), require("babel-runtime/es5/helpers/interop-require"));
+    factory(exports, require("foo"), require("babel-runtime/helpers/interop-require"));
   } else {
     var module = {
       exports: {}
@@ -10,8 +10,8 @@
     factory(module.exports, global.foo, global._interopRequire);
     global.actual = module.exports;
   }
-})(this, function (exports, _foo, _babelRuntimeEs5HelpersInteropRequire) {
+})(this, function (exports, _foo, _babelRuntimeHelpersInteropRequire) {
   "use strict";
 
-  var _foo2 = _babelRuntimeEs5HelpersInteropRequire["default"](_foo);
+  var _foo2 = _babelRuntimeHelpersInteropRequire["default"](_foo);
 });

@@ -1,8 +1,8 @@
 import core from "core-js/library";
 import includes from "lodash/collection/includes";
-import * as util from  "../../util";
+import * as util from  "../../../util";
 import has from "lodash/object/has";
-import * as t from "../../types";
+import * as t from "../../../types";
 
 var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
@@ -95,5 +95,4 @@ exports.Identifier = function (node, parent, scope, file) {
   if (this.isReferencedIdentifier({ name: "regeneratorRuntime" })) {
     return file.get("regeneratorIdentifier");
   }
-};
 };
