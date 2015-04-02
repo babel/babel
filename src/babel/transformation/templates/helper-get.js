@@ -9,7 +9,7 @@
     } else {
       return get(parent, property, receiver);
     }
-  } else if ("value" in desc && desc.writable) {
+  } else if ("value" in desc) {
     return desc.value;
   } else {
     var getter = desc.get;
