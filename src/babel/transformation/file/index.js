@@ -441,9 +441,10 @@ export default class File {
   parse(code: string) {
     if (this.shouldIgnore()) {
       return {
-        code: code,
-        map:  null,
-        ast:  null
+        metadata: {},
+        code:     code,
+        map:      null,
+        ast:      null
       };
     }
 
@@ -576,13 +577,14 @@ export default class File {
     var ast  = this.ast;
 
     var result = {
-      code: "",
-      map:  null,
-      ast:  null
+      metadata: {},
+      code:     "",
+      map:      null,
+      ast:      null
     };
 
-    if (this.opts.returnUsedHelpers) {
-      result.usedHelpers = Object.keys(this.usedHelpers);
+    if (this.opts.metadataUsedHelpers) {
+      result.metadata.usedHelpers = Object.keys(this.usedHelpers);
     }
 
     if (opts.ast) result.ast = ast;

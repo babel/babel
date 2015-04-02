@@ -158,7 +158,7 @@
     "description": "uses a reference to `babelHelpers` instead of placing helpers at the top of your code."
   },
 
-  "returnUsedHelpers": {
+  "metadataUsedHelpers": {
     "type": "boolean",
     "default": false,
     "hidden": true

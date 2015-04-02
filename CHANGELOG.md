@@ -55,6 +55,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * The Babel playground has been removed.
   * ES7 Abstract References have been removed.
   * Experimental option has been removed in favor of a stage option.
+  * Rename `returnUsedHelpers` to `metadataUsedHelpers`.
 
 ## 4.7.16
 
