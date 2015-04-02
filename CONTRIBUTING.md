@@ -23,15 +23,6 @@ $ make watch-core
 This will compile Babel and then sit in the background and on file modification
 recompile the necessary files.
 
-It's also recommended that you `npm link` the Babel packages:
-
-```sh
-$ cd babel
-$ npm link
-$ cd packages/babel-cli
-$ npm link
-```
-
 #### Running tests
 
 You can run tests via:

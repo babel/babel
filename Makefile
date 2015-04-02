@@ -110,6 +110,8 @@ publish-cli:
 
 bootstrap:
 	npm install
+	npm link
+	cd packages/babel-cli && npm install && npm link
 	git submodule update --init
 	cd vendor/regenerator && npm install
 	cd vendor/compat-table && npm install object-assign
