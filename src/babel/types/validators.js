@@ -106,7 +106,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
  */
 
 export function isReferencedIdentifier(node: Object, parent: Object, opts?: Object): boolean {
-  return t.isIdentifier(node, opts) && t.isReferenced(node, parent);
+  return (t.isIdentifier(node, opts) || t.isJSXIdentifier(node, opts)) && t.isReferenced(node, parent);
 }
 
 /**

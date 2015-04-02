@@ -292,6 +292,7 @@ export default class File {
 
       if (this.transformers["es6.modules"].canTransform()) {
         this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);
+        this.moduleFormatter.hasLocalImports = true;
       } else {
         this.dynamicImports.push(declar);
       }

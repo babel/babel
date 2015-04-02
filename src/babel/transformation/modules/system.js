@@ -94,12 +94,8 @@ export default class SystemFormatter extends AMDFormatter {
     DefaultFormatter.apply(this, arguments);
   }
 
-  init() {
-    DefaultFormatter.prototype.init.call(this);
-  }
-
   _addImportSource(node, exportNode) {
-    node._importSource = exportNode.source && exportNode.source.value;
+    if (node) node._importSource = exportNode.source && exportNode.source.value;
     return node;
   }
 
@@ -125,8 +121,12 @@ export default class SystemFormatter extends AMDFormatter {
     return this._addImportSource(call, node);
   }
 
-  remapExportAssignment(node) {
-    return this.buildExportCall(t.literal(node.left.name), node);
+  buildExportsFromAssignment() {
+    return this.buildExportsAssignment(...arguments);
+  }
+
+  remapExportAssignment(node, exported) {
+    return this.buildExportCall(t.literal(exported.name), node);
   }
 
   buildExportCall(id, init, isStatement) {
@@ -140,6 +140,15 @@ export default class SystemFormatter extends AMDFormatter {
 
   importSpecifier(specifier, node, nodes) {
     AMDFormatter.prototype.importSpecifier.apply(this, arguments);
+
+    for (var name in this.internalRemap) {
+      nodes.push(t.variableDeclaration("var", [
+        t.variableDeclarator(t.identifier(name), this.internalRemap[name])
+      ]));
+    }
+
+    this.internalRemap = {};
+
     this._addImportSource(last(nodes), node);
   }
 
@@ -160,6 +169,8 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   transform(program) {
+    DefaultFormatter.prototype.transform.apply(this, arguments);
+
     var hoistDeclarators = [];
     var moduleName = this.getModuleName();
     var moduleNameLiteral = t.literal(moduleName);

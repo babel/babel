@@ -7,3 +7,11 @@ test++;
   test = 3;
   test++;
 })();
+
+var a = 2;
+export { a };
+a = 3;
+
+var b = 2;
+export { b as c };
+b = 3;

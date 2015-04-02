@@ -3,10 +3,10 @@ define(["exports"], function (exports) {
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  exports.foo7 = foo7;
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.foo7 = foo7;
   var foo = 1;
   exports.foo = foo;
   var foo = 1,

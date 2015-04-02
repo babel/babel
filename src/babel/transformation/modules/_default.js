@@ -7,37 +7,51 @@ import * as t from "../../types";
 
 var remapVisitor = {
   enter(node, parent, scope, formatter) {
-    if (t.isUpdateExpression(node) && formatter.isLocalReference(node.argument, scope)) {
-      this.skip();
-
-      // expand to long file assignment expression
-      var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.literal(1));
-
-      // remap this assignment expression
-      var remapped = formatter.remapExportAssignment(assign);
-
-      // we don't need to change the result
-      if (t.isExpressionStatement(parent) || node.prefix) {
-        return remapped;
+    var remap = formatter.internalRemap[node.name];
+    if (this.isReferencedIdentifier() && remap) {
+      if (!scope.hasBinding(node.name) || scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
+        return remap;
       }
-
-      var nodes = [];
-      nodes.push(remapped);
-
-      var operator;
-      if (node.operator === "--") {
-        operator = "+";
-      } else { // "++"
-        operator = "-";
-      }
-      nodes.push(t.binaryExpression(operator, node.argument, t.literal(1)));
-
-      return t.sequenceExpression(nodes);
     }
 
-    if (t.isAssignmentExpression(node) && formatter.isLocalReference(node.left, scope)) {
-      this.skip();
-      return formatter.remapExportAssignment(node);
+    if (t.isUpdateExpression(node)) {
+      var exported = formatter.getLocalReference(node.argument, scope);
+
+      if (exported) {
+        this.skip();
+
+        // expand to long file assignment expression
+        var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.literal(1));
+
+        // remap this assignment expression
+        var remapped = formatter.remapExportAssignment(assign, exported);
+
+        // we don't need to change the result
+        if (t.isExpressionStatement(parent) || node.prefix) {
+          return remapped;
+        }
+
+        var nodes = [];
+        nodes.push(remapped);
+
+        var operator;
+        if (node.operator === "--") {
+          operator = "+";
+        } else { // "++"
+          operator = "-";
+        }
+        nodes.push(t.binaryExpression(operator, node.argument, t.literal(1)));
+
+        return t.sequenceExpression(nodes);
+      }
+    }
+
+    if (t.isAssignmentExpression(node)) {
+      var exported = formatter.getLocalReference(node.left, scope);
+      if (exported) {
+        this.skip();
+        return formatter.remapExportAssignment(node, exported);
+      }
     }
   }
 };
@@ -59,7 +73,27 @@ var exportsVisitor = traverse.explode({
 
       var declar = this.get("declaration");
       if (declar.isStatement()) {
-        extend(formatter.localExports, declar.getBindingIdentifiers());
+        var bindings = declar.getBindingIdentifiers()
+        for (var name in bindings) {
+          var binding = bindings[name];
+          formatter.localExports[name] = {
+            binding: binding,
+            exported: binding
+          };
+        }
+      }
+
+      if (this.isExportNamedDeclaration() && node.specifiers) {
+        for (var i = 0; i < node.specifiers.length; i++) {
+          var specifier = node.specifiers[i];
+          var local = specifier.local;
+          if (!local) continue;
+
+          formatter.localExports[local.name] = {
+            binding: scope.getBindingIdentifier(local.name),
+            exported: specifier.exported
+          };
+        }
       }
 
       if (!t.isExportDefaultDeclaration(node)) {
@@ -78,6 +112,8 @@ var exportsVisitor = traverse.explode({
 
 export default class DefaultFormatter {
   constructor(file) {
+    this.internalRemap = {};
+
     this.defaultIds = object();
     this.scope      = file.scope;
     this.file       = file;
@@ -96,7 +132,7 @@ export default class DefaultFormatter {
     this.getLocalImports();
   }
 
-  init() {
+  transform() {
     this.remapAssignments();
   }
 
@@ -127,27 +163,25 @@ export default class DefaultFormatter {
     }
   }
 
-  isLocalReference(node) {
-    var localImports = this.localImports;
-    return t.isIdentifier(node) && localImports[node.name] && localImports[node.name] !== node;
-  }
-
-  remapExportAssignment(node) {
+  remapExportAssignment(node, exported) {
     return t.assignmentExpression(
       "=",
       node.left,
       t.assignmentExpression(
         node.operator,
-        t.memberExpression(t.identifier("exports"), node.left),
+        t.memberExpression(t.identifier("exports"), exported),
         node.right
       )
     );
   }
 
-  isLocalReference(node, scope) {
-    var localExports = this.localExports;
-    var name = node.name;
-    return t.isIdentifier(node) && localExports[name] && localExports[name] === scope.getBindingIdentifier(name);
+  getLocalReference(node, scope) {
+    if (!t.isIdentifier(node)) return;
+
+    var local = this.localExports[node.name];
+    if (local && local.binding === scope.getBindingIdentifier(node.name)) {
+      return local.exported;
+    }
   }
 
   getModuleName() {
@@ -225,6 +259,10 @@ export default class DefaultFormatter {
     nodes.push(this.buildExportsWildcard(ref, node));
   }
 
+  isLoose() {
+    return this.file.isLoose("es6.modules");
+  }
+
   exportSpecifier(specifier, node, nodes) {
     if (node.source) {
       var ref = this.getExternalReference(node, nodes);
@@ -234,6 +272,11 @@ export default class DefaultFormatter {
         ref = t.callExpression(this.file.addHelper("interop-require"), [ref]);
       } else {
         ref = t.memberExpression(ref, specifier.local);
+
+        if (!this.isLoose()) {
+          nodes.push(this.buildExportsFromAssignment(specifier.exported, ref, node));
+          return;
+        }
       }
 
       // export { foo } from "test";
@@ -249,6 +292,14 @@ export default class DefaultFormatter {
       t.identifier("exports"),
       t.callExpression(this.file.addHelper("interop-require-wildcard"), [objectIdentifier])
     ]));
+  }
+
+  buildExportsFromAssignment(id, init) {
+    this.checkExportIdentifier(id);
+    return util.template("exports-from-assign", {
+      INIT: init,
+      ID:   t.literal(id.name)
+    }, true);
   }
 
   buildExportsAssignment(id, init) {

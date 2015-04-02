@@ -1,3 +1,5 @@
+import type from "foo";
+import type2, { foo3 } from "bar";
 function foo(numVal) {}
 function foo(numVal) {}
 function foo(numVal, strVal) {}
@@ -87,6 +89,3 @@ var a;
 var a;
 var identity;
 var identity;
-
-import type from "foo";
-import type2, { foo3 } from "bar";

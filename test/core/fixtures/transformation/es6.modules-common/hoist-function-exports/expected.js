@@ -1,19 +1,19 @@
 "use strict";
 
-exports.nextOdd = nextOdd;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.nextOdd = nextOdd;
 
-var isEven = require("./evens").isEven;
+var _isEven = require("./evens");
 
 function nextOdd(n) {
-  return isEven(n) ? n + 1 : n + 2;
+  return _isEven.isEven(n) ? n + 1 : n + 2;
 }
 
 var isOdd = (function (isEven) {
   return function (n) {
     return !isEven(n);
   };
-})(isEven);
+})(_isEven.isEven);
 exports.isOdd = isOdd;

@@ -8,3 +8,7 @@ import {foo as bar2} from "foo5";
 
 export {test};
 export var test = 5;
+
+bar;
+bar2;
+foo;

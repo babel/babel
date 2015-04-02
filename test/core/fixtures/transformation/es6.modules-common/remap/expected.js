@@ -13,3 +13,13 @@ test = exports.test += 1;
   test = 3;
   test++;
 })();
+
+var a = 2;
+exports.a = a;
+
+a = exports.a = 3;
+
+var b = 2;
+exports.c = b;
+
+b = exports.c = 3;

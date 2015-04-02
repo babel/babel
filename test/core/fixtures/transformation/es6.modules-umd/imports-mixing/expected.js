@@ -15,7 +15,7 @@
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-  var foo = _interopRequire(_foo);
+  var _foo2 = _interopRequire(_foo);
 
-  var xyz = _foo.baz;
+  _foo.baz;
 });

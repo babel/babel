@@ -1,5 +1,7 @@
 "use strict";
 
-var _foo = babelHelpers.interopRequire(require("bar"));
+var _foo2 = require("bar");
 
-exports.foo = _foo;
+var _foo3 = babelHelpers.interopRequire(_foo2);
+
+exports.foo = _foo3;

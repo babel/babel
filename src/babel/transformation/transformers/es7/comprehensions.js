@@ -26,7 +26,7 @@ function generator(node) {
 }
 
 function array(node, parent, scope, file) {
-  var uid = scope.generateUidBasedOnNode(parent, file);
+  var uid = scope.generateUidBasedOnNode(parent);
 
   var container = util.template("array-comprehension-container", {
     KEY: uid

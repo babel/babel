@@ -21,6 +21,8 @@ export default class AMDFormatter extends DefaultFormatter {
    */
 
   transform(program) {
+    DefaultFormatter.prototype.transform.apply(this, arguments);
+
     var body = program.body;
 
     // build an array of module names
@@ -83,7 +85,11 @@ export default class AMDFormatter extends DefaultFormatter {
       // import * as bar from "foo";
     } else if (!includes(this.file.dynamicImported, node) && t.isSpecifierDefault(specifier) && !this.noInteropRequireImport) {
       // import foo from "foo";
-      ref = t.callExpression(this.file.addHelper("interop-require"), [ref]);
+      var uid = this.scope.generateUidIdentifier(specifier.local.name);
+      nodes.push(t.variableDeclaration("var", [
+        t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require"), [ref]))
+      ]));
+      ref = uid;
     } else {
       // import { foo } from "foo";
       var imported = specifier.imported;
@@ -91,9 +97,7 @@ export default class AMDFormatter extends DefaultFormatter {
       ref = t.memberExpression(ref, imported);
     }
 
-    nodes.push(t.variableDeclaration("var", [
-      t.variableDeclarator(specifier.local, ref)
-    ]));
+    this.internalRemap[specifier.local.name] = ref;
   }
 
   exportSpecifier() {

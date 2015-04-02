@@ -1,5 +1,5 @@
 "use strict";
 
-var _core = require("babel-runtime/es5/core-js")["default"];
+var _core2 = require("babel-runtime/es5/core-js");
 
-_core.$for.isIterable(Object(arr));
+_core2["default"].$for.isIterable(Object(arr));

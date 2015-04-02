@@ -1,6 +1,6 @@
 "use strict";
 
-var _bluebird = require("bluebird");
+var _bluebird2 = require("bluebird");
 
 var Foo = (function () {
   function Foo() {
@@ -9,7 +9,7 @@ var Foo = (function () {
 
   babelHelpers.createClass(Foo, [{
     key: "foo",
-    value: _bluebird.coroutine(function* () {
+    value: _bluebird2.coroutine(function* () {
       var wat = yield bar();
     })
   }]);

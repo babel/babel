@@ -11,11 +11,46 @@ define(["exports", "foo"], function (exports, _foo) {
 
   _defaults(exports, _interopRequireWildcard(_foo));
 
-  exports.foo = _foo.foo;
-  exports.foo = _foo.foo;
-  exports.bar = _foo.bar;
-  exports.bar = _foo.foo;
-  exports["default"] = _foo.foo;
-  exports["default"] = _foo.foo;
-  exports.bar = _foo.bar;
+  Object.defineProperty(exports, "foo", {
+    enumerable: true,
+    get: function get() {
+      return _foo.foo;
+    }
+  });
+  Object.defineProperty(exports, "foo", {
+    enumerable: true,
+    get: function get() {
+      return _foo.foo;
+    }
+  });
+  Object.defineProperty(exports, "bar", {
+    enumerable: true,
+    get: function get() {
+      return _foo.bar;
+    }
+  });
+  Object.defineProperty(exports, "bar", {
+    enumerable: true,
+    get: function get() {
+      return _foo.foo;
+    }
+  });
+  Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function get() {
+      return _foo.foo;
+    }
+  });
+  Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function get() {
+      return _foo.foo;
+    }
+  });
+  Object.defineProperty(exports, "bar", {
+    enumerable: true,
+    get: function get() {
+      return _foo.bar;
+    }
+  });
 });

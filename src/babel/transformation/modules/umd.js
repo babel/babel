@@ -1,3 +1,4 @@
+import DefaultFormatter from "./_default";
 import AMDFormatter from "./amd";
 import values from "lodash/object/values";
 import * as util from  "../../util";
@@ -5,6 +6,8 @@ import * as t from "../../types";
 
 export default class UMDFormatter extends AMDFormatter {
   transform(program) {
+    DefaultFormatter.prototype.transform.apply(this, arguments);
+
     var body = program.body;
 
     // build an array of module names

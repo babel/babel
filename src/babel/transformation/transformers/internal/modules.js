@@ -78,3 +78,19 @@ export function ExportNamedDeclaration(node, parent, scope) {
     return [declar, t.exportNamedDeclaration(null, specifiers)];
   }
 }
+
+export function Program(node) {
+  var imports = [];
+  var rest = [];
+
+  for (var i = 0; i < node.body.length; i++) {
+    var bodyNode = node.body[i];
+    if (t.isImportDeclaration(bodyNode)) {
+      imports.push(bodyNode);
+    } else {
+      rest.push(bodyNode);
+    }
+  }
+
+  node.body = imports.concat(rest);
+}

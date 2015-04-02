@@ -161,7 +161,7 @@ export default class Scope {
    * Description
    */
 
-  generateUidBasedOnNode(parent: Object):  Object {
+  generateUidBasedOnNode(parent: Object, defaultName?: String):  Object {
     var node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -175,7 +175,17 @@ export default class Scope {
     var parts = [];
 
     var add = function (node) {
-      if (t.isMemberExpression(node)) {
+      if (t.isModuleDeclaration(node)) {
+        if (node.specifiers && node.specifiers.length) {
+          for (var i = 0; i < node.specifiers.length; i++) {
+            add(node.specifiers[i]);
+          }
+        } else {
+          add(node.source);
+        }
+      } else if (t.isModuleSpecifier(node)) {
+        add(node.local);
+      } else if (t.isMemberExpression(node)) {
         add(node.object);
         add(node.property);
       } else if (t.isIdentifier(node)) {
@@ -195,7 +205,7 @@ export default class Scope {
     add(node);
 
     var id = parts.join("$");
-    id = id.replace(/^_/, "") || "ref";
+    id = id.replace(/^_/, "") || defaultName || "ref";
 
     return this.generateUidIdentifier(id);
   }

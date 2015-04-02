@@ -14,14 +14,22 @@ require("foo-bar");
 
 require("./directory/foo-bar");
 
-var foo = _interopRequire(require("foo2"));
+var _foo = require("foo2");
 
-var foo2 = _interopRequireWildcard(require("foo3"));
+var _foo2 = _interopRequire(_foo);
 
-var bar = require("foo4").bar;
+var _import = require("foo3");
 
-var bar2 = require("foo5").foo;
+var foo2 = _interopRequireWildcard(_import);
+
+var _bar = require("foo4");
+
+var _bar2 = require("foo5");
 
 exports.test = test;
 var test = 5;
+
 exports.test = test;
+_bar.bar;
+_bar2.foo;
+_foo2;

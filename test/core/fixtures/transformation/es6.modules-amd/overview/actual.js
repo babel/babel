@@ -10,3 +10,8 @@ export {test};
 export var test2 = 5;
 
 export default test;
+
+foo;
+foo2;
+bar;
+bar2;

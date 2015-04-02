@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _foo = babelHelpers.interopRequireWildcard(require("bar"));
+var _import = require("bar");
+
+var _foo = babelHelpers.interopRequireWildcard(_import);
 
 exports.foo = _foo;

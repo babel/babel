@@ -19,14 +19,14 @@
     value: true
   });
 
-  var foo = _interopRequire(_foo);
+  var _foo2 = _interopRequire(_foo);
 
-  var foo2 = _foo;
-  var bar = _foo.bar;
-  var bar2 = _foo.foo;
   exports.test = test;
   var test2 = 5;
 
   exports.test2 = test2;
   exports["default"] = test;
+
+  _foo.bar;
+  _foo.foo;
 });

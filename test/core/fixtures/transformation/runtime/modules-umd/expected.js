@@ -13,7 +13,5 @@
 })(this, function (exports, _foo, _babelRuntimeEs5HelpersInteropRequire) {
   "use strict";
 
-  var _interopRequire = _babelRuntimeEs5HelpersInteropRequire["default"];
-
-  var foo = _interopRequire(_foo);
+  var _foo2 = _babelRuntimeEs5HelpersInteropRequire["default"](_foo);
 });

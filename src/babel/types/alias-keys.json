@@ -15,6 +15,9 @@
   "LabeledStatement":         ["Statement"],
   "VariableDeclaration":      ["Statement", "Declaration"],
 
+  "ImportSpecifier":            ["ModuleSpecifier"],
+  "ExportSpecifier":            ["ModuleSpecifier"],
+  "ImportDefaultSpecifier":     ["ModuleSpecifier"],
   "ExportDefaultSpecifier":     ["ModuleSpecifier"],
   "ExportNamespaceSpecifier":   ["ModuleSpecifier"],
   "ExportDefaultFromSpecifier": ["ModuleSpecifier"],
@@ -26,9 +29,6 @@
   "ArrowFunctionExpression": ["Scopable", "Function", "Expression"],
   "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Declaration"],
   "FunctionExpression":      ["Scopable", "Function", "Expression"],
-
-  "ImportSpecifier": ["ModuleSpecifier"],
-  "ExportSpecifier": ["ModuleSpecifier"],
 
   "BlockStatement": ["Scopable", "Statement"],
   "Program":        ["Scopable"],
