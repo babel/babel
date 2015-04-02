@@ -98,6 +98,11 @@
     "shorthand": "P"
   },
 
+  "plugins": {
+    "type": "list",
+    "description": ""
+  },
+
   "ignore": {
     "type": "list",
     "description": "list of glob paths to **not** compile"

@@ -6,6 +6,7 @@ import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
 import resolveRc from "../../tools/resolve-rc";
 import sourceMap from "source-map";
+import Transformer from "../transformer";
 import transform from "./../index";
 import generate from "../../generation";
 import defaults from "lodash/object/defaults";
@@ -173,10 +174,6 @@ export default class File {
     return includes(this.opts.loose, key);
   }
 
-  buildPlugins(stack) {
-
-  }
-
   buildTransformers() {
     var file = this;
 
@@ -185,8 +182,7 @@ export default class File {
     var secondaryStack = [];
     var stack = [];
 
-    this.buildPlugins(stack);
-
+    // build internal transformers
     each(transform.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
 
@@ -203,6 +199,15 @@ export default class File {
       }
     });
 
+    // init plugins!
+    var beforePlugins = [];
+    var afterPlugins = [];
+    for (var i = 0; i < file.opts.plugins; i++) {
+      this.addPlugin(file.opts.plugins[i]);
+    }
+    stack = beforePlugins.concat(stack, afterPlugin);
+
+    // register
     this.transformerStack = stack.concat(secondaryStack);
     this.transformers = transformers;
   }
@@ -222,8 +227,59 @@ export default class File {
     return new ModuleFormatter(this);
   }
 
-  addPlugin(name) {
-    var loc = util.resolveRelative(name);
+  addPlugin(name, before, after) {
+    var position = "before";
+    var plugin;
+
+    if (name) {
+      if (typeof name === "string") {
+        // this is a plugin in the form of "foobar" or "foobar:after"
+        // where the optional colon is the delimiter for plugin position in the transformer stack
+
+        [name, position = "before"] = name.split(":");
+
+        var loc = util.resolveRelative(name) || util.resolveRelative(`babel-plugin-${name}`);
+        if (loc) {
+          plugin = require(loc)
+        } else {
+          throw new ReferenceError(`Unknown plugin ${JSON.stringify(name)}`);
+        }
+      } else {
+        // not a string so we'll just assume that it's a direct Transformer instance, if not then
+        // the checks later on will complain
+        plugin = name;
+      }
+    } else {
+      throw new TypeError(`Ilegal kind ${typeof name} for plugin name ${JSON.stringify(name)}`);
+    }
+
+    // validate position
+    if (position !== "before" && position !== "after") {
+      throw new TypeError(`Plugin ${JSON.stringify(name)} has an illegal position of ${JSON.stringify(position)}`);
+    }
+
+    // validate Transformer instance
+    if (!(plugin instanceof Transformer)) {
+      if (plugin && plugin.constructor.name "Transformer") {
+        throw new TypeError(`Plugin ${JSON.stringify(name)} exported a Transformer instance but it resolved to a different version of Babel`);
+      } else {
+        throw new TypeError(`Plugin ${JSON.stringify(name)} didn't export default a Transformer instance`);
+      }
+    }
+
+    // validate transformer key
+    var key = plugin.key;
+    if (this.transformers[key]) {
+      throw new ReferenceError(`The key for plugin ${JSON.stringify(name)} of ${key} collides with an existing plugin`);
+    }
+
+    // build!
+    var pass = this.transformers[key] = plugin.buildPass(this);
+    if (pass.canTransform()) {
+      var stack = before;
+      if (position === "after") stack = after;
+      stack.push(pass);
+    }
   }
 
   parseInputSourceMap(code: string) {
