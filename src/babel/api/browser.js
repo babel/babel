@@ -1,5 +1,6 @@
 var transform = module.exports = require("../transformation");
 
+transform.options = require("../transformation/file/options");
 transform.version = require("../../../package").version;
 
 transform.transform = transform;
