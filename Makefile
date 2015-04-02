@@ -32,7 +32,7 @@ build:
 	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s babel >dist/babel.js
 	node $(UGLIFY_CMD) dist/babel.js >dist/babel.min.js
 
-	node bin/babel-external-helpers >dist/external-helpers.js
+	node packages/babel-cli/bin/babel-external-helpers >dist/external-helpers.js
 	node $(UGLIFY_CMD) dist/external-helpers.js >dist/external-helpers.min.js
 
 	rm -rf templates.json
