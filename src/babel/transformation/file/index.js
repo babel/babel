@@ -260,7 +260,7 @@ export default class File {
 
     // validate Transformer instance
     if (!(plugin instanceof Transformer)) {
-      if (plugin && plugin.constructor.name "Transformer") {
+      if (plugin && plugin.constructor.name === "Transformer") {
         throw new TypeError(`Plugin ${JSON.stringify(name)} exported a Transformer instance but it resolved to a different version of Babel`);
       } else {
         throw new TypeError(`Plugin ${JSON.stringify(name)} didn't export default a Transformer instance`);
