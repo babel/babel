@@ -33,5 +33,11 @@ suite("api", function () {
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
+
+    test("empty whitelist", function () {
+      var script = buildExternalHelpers([]);
+      assert.ok(script.indexOf("classCallCheck") === -1);
+      assert.ok(script.indexOf("inherits") === -1);
+    });
   });
 });

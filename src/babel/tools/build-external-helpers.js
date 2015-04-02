@@ -50,9 +50,9 @@ function buildVar(namespace, builder) {
   return t.program(body);
 }
 
-function buildHelpers(body, namespace, whitelist = []) {
+function buildHelpers(body, namespace, whitelist) {
   each(File.helpers, function (name) {
-    if (whitelist.length && whitelist.indexOf(name) === -1) return;
+    if (whitelist && whitelist.indexOf(name) === -1) return;
 
     var key = t.identifier(t.toIdentifier(name));
     body.push(t.expressionStatement(
