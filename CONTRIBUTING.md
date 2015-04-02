@@ -20,8 +20,17 @@ Then you need to run:
 $ make watch-core
 ```
 
-This will compile babel and then sit in the background and on file modification
+This will compile Babel and then sit in the background and on file modification
 recompile the necessary files.
+
+It's also recommended that you `npm link` the Babel packages:
+
+```sh
+$ cd babel
+$ npm link
+$ cd packages/babel-cli
+$ npm link
+```
 
 #### Running tests
 
@@ -31,8 +40,6 @@ You can run tests via:
 $ make test
 ```
 
-This will usually take around two minutes as it's compiling the entire
-[test262](https://github.com/tc39/test262) test suite and validating its AST.
 This is mostly overkill and you can limit the tests to a select few by directly
 running them with `mocha`:
 

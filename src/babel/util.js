@@ -10,6 +10,7 @@ import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
 import isRegExp from "lodash/lang/isRegExp";
+import Module from "module";
 import isEmpty from "lodash/lang/isEmpty";
 import parse from "./helpers/parse";
 import path from "path";
@@ -36,6 +37,17 @@ export function resolve(loc: string) {
   } catch (err) {
     return null;
   }
+}
+
+var relativeMod;
+
+export function resolveRelative(loc: string) {
+  if (!relativeMod) {
+    relativeMod = new Module;
+    relativeMod.paths = Module._nodeModulePaths(process.cwd());
+  }
+
+  return Module._resolveFilename(loc, relativeMod);
 }
 
 export function list(val: string): Array<string> {

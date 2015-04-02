@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 var commander = require("commander");
-var transform = require("../../lib/babel/transformation");
+var transform = require("babel-core").transform;
 var kebabCase = require("lodash/string/kebabCase");
-var File      = require("../../lib/babel/transformation/file");
-var util      = require("../../lib/babel/util");
+var options   = require("babel-core").options;
+var util      = require("babel-core").util;
 var each      = require("lodash/collection/each");
 var keys      = require("lodash/object/keys");
 var fs        = require("fs");
 
-each(File.options, function (option, key) {
+each(options, function (option, key) {
   if (option.hidden) return;
 
   var arg = kebabCase(key);
@@ -104,7 +104,7 @@ if (errors.length) {
 
 exports.opts = {};
 
-each(File.options, function (opt, key) {
+each(options, function (opt, key) {
   exports.opts[key] = commander[key];
 });
 

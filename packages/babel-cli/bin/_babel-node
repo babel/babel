@@ -3,10 +3,10 @@
 var pathIsAbsolute = require("path-is-absolute");
 var commander      = require("commander");
 var Module         = require("module");
-var babel          = require("../lib/babel/api/node");
+var babel          = require("babel-core");
 var path           = require("path");
 var repl           = require("repl");
-var util           = require("../lib/babel/util");
+var util           = require("babel-core").util;
 var vm             = require("vm");
 var _              = require("lodash");
 

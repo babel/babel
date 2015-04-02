@@ -1,19 +1,13 @@
 {
-  "name": "babel",
+  "name": "babel-core",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
   "version": "5.0.0-beta4",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "repository": "babel/babel",
-  "preferGlobal": true,
   "main": "lib/babel/api/node.js",
   "browser": {
     "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
-  },
-  "bin": {
-    "babel": "./bin/babel/index.js",
-    "babel-node": "./bin/babel-node",
-    "babel-external-helpers": "./bin/babel-external-helpers"
   },
   "keywords": [
     "harmony",
@@ -35,8 +29,6 @@
   "dependencies": {
     "ast-types": "~0.7.0",
     "chalk": "^1.0.0",
-    "chokidar": "^0.12.6",
-    "commander": "^2.6.0",
     "convert-source-map": "^0.5.0",
     "core-js": "^0.6.0",
     "debug": "^2.1.1",

@@ -91,7 +91,7 @@ publish:
 
 	git push --follow-tags
 
-	make publish-core
+	make publish-cli
 	make publish-runtime
 
 	rm -rf templates.json browser.js browser-polyfill.js external-helpers.js
@@ -102,15 +102,11 @@ publish-runtime:
 	cd babel-runtime; \
 	npm publish --tag beta
 
-publish-core:
-	tools/generate-core-package-json >package2.json
-	mv package.json .package.json
-	mv package2.json package.json
-
+publish-cli:
+	cd packages; \
+	node build-cli.js; \
+	cd babel-cli; \
 	npm publish --tag beta
-
-	rm -rf package.json
-	mv .package.json package.json
 
 bootstrap:
 	npm install

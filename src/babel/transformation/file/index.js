@@ -211,7 +211,7 @@ export default class File {
     var ModuleFormatter = isFunction(type) ? type : transform.moduleFormatters[type];
 
     if (!ModuleFormatter) {
-      var loc = util.resolve(type);
+      var loc = util.resolveRelative(type);
       if (loc) ModuleFormatter = require(loc);
     }
 
@@ -220,6 +220,10 @@ export default class File {
     }
 
     return new ModuleFormatter(this);
+  }
+
+  addPlugin(name) {
+    var loc = util.resolveRelative(name);
   }
 
   parseInputSourceMap(code: string) {
