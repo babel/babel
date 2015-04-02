@@ -47,7 +47,11 @@ export function resolveRelative(loc: string) {
     relativeMod.paths = Module._nodeModulePaths(process.cwd());
   }
 
-  return Module._resolveFilename(loc, relativeMod);
+  try {
+    return Module._resolveFilename(loc, relativeMod);
+  } catch (err) {
+    return null;
+  }
 }
 
 export function list(val: string): Array<string> {
