@@ -5,9 +5,9 @@ import * as t from "../types";
 export default function traverse(parent, opts, scope, state, parentPath) {
   if (!parent) return;
 
-  if (!opts.noScope && !scope) {
+  if (!opts.noScope && (!scope || !parentPath)) {
     if (parent.type !== "Program" && parent.type !== "File") {
-      throw new Error(`Must pass a scope unless traversing a Program/File got a ${parent.type} node`);
+      throw new Error(`Must pass a scope and parentPath unless traversing a Program/File got a ${parent.type} node`);
     }
   }
 

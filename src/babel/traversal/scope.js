@@ -57,7 +57,8 @@ var blockVariableVisitor = {
   enter(node, parent, scope, state) {
     if (this.isFunctionDeclaration() || this.isBlockScoped()) {
       state.registerDeclaration(this);
-    } else if (this.isScope()) {
+    }
+    if (this.isScope()) {
       this.skip();
     }
   }
@@ -100,7 +101,7 @@ export default class Scope {
    */
 
   traverse(node: Object, opts: Object, state?) {
-    traverse(node, opts, this, state);
+    traverse(node, opts, this, state, this.path);
   }
 
   /**

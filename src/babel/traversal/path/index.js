@@ -216,9 +216,9 @@ export default class TraversalPath {
       this.opts    = context.opts;
     }
 
-    this.setScope(file);
-
     this.type = this.node && this.node.type;
+
+    this.setScope(file);
   }
 
   _remove() {
