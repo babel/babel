@@ -126,7 +126,13 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   remapExportAssignment(node, exported) {
-    return this.buildExportCall(t.literal(exported.name), node);
+    var assign = node;
+
+    for (var i = 0; i < exported.length; i++) {
+      assign = this.buildExportCall(t.literal(exported[i].name), assign);
+    }
+
+    return assign;
   }
 
   buildExportCall(id, init, isStatement) {

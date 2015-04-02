@@ -15,3 +15,7 @@ a = 3;
 var b = 2;
 export { b as c };
 b = 3;
+
+var d = 3;
+export { d as e, d as f };
+d = 4;

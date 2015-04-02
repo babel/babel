@@ -18,8 +18,8 @@
   });
   var test = 2;
   exports.test = test;
-  test = exports.test = 5;
-  test = exports.test += 1;
+  exports.test = test = 5;
+  exports.test = test += 1;
 
   (function () {
     var test = 2;
@@ -30,10 +30,16 @@
   var a = 2;
   exports.a = a;
 
-  a = exports.a = 3;
+  exports.a = a = 3;
 
   var b = 2;
   exports.c = b;
 
-  b = exports.c = 3;
+  exports.c = b = 3;
+
+  var d = 3;
+  exports.e = d;
+  exports.f = d;
+
+  exports.f = exports.e = d = 4;
 });

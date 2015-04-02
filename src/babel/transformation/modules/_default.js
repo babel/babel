@@ -15,7 +15,7 @@ var remapVisitor = {
     }
 
     if (t.isUpdateExpression(node)) {
-      var exported = formatter.getLocalReference(node.argument, scope);
+      var exported = formatter.getExport(node.argument, scope);
 
       if (exported) {
         this.skip();
@@ -47,7 +47,7 @@ var remapVisitor = {
     }
 
     if (t.isAssignmentExpression(node)) {
-      var exported = formatter.getLocalReference(node.left, scope);
+      var exported = formatter.getExport(node.left, scope);
       if (exported) {
         this.skip();
         return formatter.remapExportAssignment(node, exported);
@@ -76,10 +76,7 @@ var exportsVisitor = traverse.explode({
         var bindings = declar.getBindingIdentifiers()
         for (var name in bindings) {
           var binding = bindings[name];
-          formatter.localExports[name] = {
-            binding: binding,
-            exported: binding
-          };
+          formatter._addExport(name, binding);
         }
       }
 
@@ -89,10 +86,7 @@ var exportsVisitor = traverse.explode({
           var local = specifier.local;
           if (!local) continue;
 
-          formatter.localExports[local.name] = {
-            binding: scope.getBindingIdentifier(local.name),
-            exported: specifier.exported
-          };
+          formatter._addExport(local.name, specifier.exported);
         }
       }
 
@@ -164,18 +158,28 @@ export default class DefaultFormatter {
   }
 
   remapExportAssignment(node, exported) {
-    return t.assignmentExpression(
-      "=",
-      node.left,
-      t.assignmentExpression(
-        node.operator,
-        t.memberExpression(t.identifier("exports"), exported),
-        node.right
-      )
-    );
+    var assign = node;
+
+    for (var i = 0; i < exported.length; i++) {
+      assign = t.assignmentExpression(
+        "=",
+        t.memberExpression(t.identifier("exports"), exported[i]),
+        assign
+      );
+    }
+
+    return assign;
   }
 
-  getLocalReference(node, scope) {
+  _addExport(name, exported) {
+    var info = this.localExports[name] ||= {
+      binding: this.scope.getBindingIdentifier(name),
+      exported: []
+    };
+    info.exported.push(exported);
+  }
+
+  getExport(node, scope) {
     if (!t.isIdentifier(node)) return;
 
     var local = this.localExports[node.name];
