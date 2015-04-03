@@ -194,5 +194,13 @@
   "moduleRoot": {
     "type": "string",
     "description": "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions"
+  },
+
+  "breakConfig": {
+    "type": "boolean",
+    "default": false,
+    "hidden": true,
+    "description": "stop trying to load .babelrc files"
   }
+
 }
