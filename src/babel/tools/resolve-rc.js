@@ -43,8 +43,11 @@ export default function (loc, opts = {}) {
       find(up, rel);
     }
   }
-
-  find(loc, rel);
+  
+  if (opts.breakConfig !== true) {
+    find(loc, rel);
+  }
+  
 
   return opts;
 };
