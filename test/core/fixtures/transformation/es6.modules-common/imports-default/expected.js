@@ -1,12 +1,12 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
 
 var _foo = require("foo");
 
-var foo = _interopRequire(_foo);
+var _foo2 = _interopRequireWildcard(_foo);
 
-var foo2 = _interopRequire(_foo);
+var _foo22 = _interopRequireWildcard(_foo);
 
-foo;
-foo2;
+_foo2["default"];
+_foo22["default"];

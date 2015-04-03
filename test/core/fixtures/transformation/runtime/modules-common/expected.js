@@ -1,9 +1,9 @@
 "use strict";
 
-var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
+var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
 var _foo = require("foo");
 
-var foo = _interopRequire(_foo);
+var _foo2 = _interopRequireWildcard(_foo);
 
-foo;
+_foo2["default"];

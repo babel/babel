@@ -6,7 +6,9 @@ import * as util from  "../../util";
 import * as t from "../../types";
 
 export default class AMDFormatter extends DefaultFormatter {
-  init = CommonFormatter.prototype.init;
+  init() {
+    CommonFormatter.prototype._init.call(this, this.hasNonDefaultExports);
+  }
 
   buildDependencyLiterals() {
     var names = [];
@@ -100,15 +102,34 @@ export default class AMDFormatter extends DefaultFormatter {
     this.internalRemap[specifier.local.name] = ref;
   }
 
-  exportSpecifier() {
-    CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
+  exportSpecifier(specifier, node, nodes) {
+    if (this.doDefaultExportInterop(specifier)) {
+      nodes.push(util.template("exports-default-assign", {
+        VALUE: specifier.local
+      }, true));
+    } else {
+      CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
+    }
   }
 
-  exportDeclaration(node) {
+  exportDeclaration(node, nodes) {
     if (this.doDefaultExportInterop(node)) {
       this.passModuleArg = true;
+
+      var declar = node.declaration;
+      var assign = util.template("exports-default-assign", {
+        VALUE: this._pushStatement(declar, nodes)
+      }, true);
+
+      if (t.isFunctionDeclaration(declar)) {
+        // we can hoist this assignment to the top of the file
+        assign._blockHoist = 3;
+      }
+
+      nodes.push(assign);
+      return;
     }
 
-    CommonFormatter.prototype.exportDeclaration.apply(this, arguments);
+    DefaultFormatter.prototype.exportDeclaration.apply(this, arguments);
   }
 }

@@ -5,18 +5,36 @@ import * as t from "../../types";
 
 export default class CommonJSFormatter extends DefaultFormatter {
   init() {
+    this._init(this.hasLocalExports);
+  }
+
+  _init(conditional) {
     var file  = this.file;
     var scope = file.scope;
 
     scope.rename("module");
     scope.rename("exports");
 
-    if (!this.noInteropRequireImport && this.hasNonDefaultExports) {
+    if (!this.noInteropRequireImport && conditional) {
       var templateName = "exports-module-declaration";
       if (this.file.isLoose("es6.modules")) templateName += "-loose";
       var declar = util.template(templateName, true);
       declar._blockHoist = 3;
       file.ast.program.body.unshift(declar);
+    }
+  }
+
+  transform(program) {
+    DefaultFormatter.prototype.transform.apply(this, arguments);
+
+    if (this.hasDefaultOnlyExport) {
+      program.body.push(
+        t.expressionStatement(t.assignmentExpression(
+          "=",
+          t.memberExpression(t.identifier("module"), t.identifier("exports")),
+          t.memberExpression(t.identifier("exports"), t.identifier("default"))
+        ))
+      );
     }
   }
 
@@ -31,11 +49,15 @@ export default class CommonJSFormatter extends DefaultFormatter {
         this.internalRemap[variableName.name] = ref;
       } else {
         if (this.noInteropRequireImport) {
-          this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"))
+          this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"));
         } else if (!includes(this.file.dynamicImported, node)) {
+          var uid = this.scope.generateUidBasedOnNode(node, "import");
+
           nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(variableName, t.callExpression(this.file.addHelper("interop-require"), [ref]))
+            t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-wildcard"), [ref]))
           ]));
+
+          this.internalRemap[variableName.name] = t.memberExpression(uid, t.identifier("default"));
         }
       }
     } else {
@@ -64,29 +86,15 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
   exportSpecifier(specifier, node, nodes) {
     if (this.doDefaultExportInterop(specifier)) {
-      nodes.push(util.template("exports-default-assign", {
-        VALUE: specifier.local
-      }, true));
-      return;
-    } else {
-      DefaultFormatter.prototype.exportSpecifier.apply(this, arguments);
+      this.hasDefaultOnlyExport = true;
     }
+
+    DefaultFormatter.prototype.exportSpecifier.apply(this, arguments);
   }
 
   exportDeclaration(node, nodes) {
     if (this.doDefaultExportInterop(node)) {
-      var declar = node.declaration;
-      var assign = util.template("exports-default-assign", {
-        VALUE: this._pushStatement(declar, nodes)
-      }, true);
-
-      if (t.isFunctionDeclaration(declar)) {
-        // we can hoist this assignment to the top of the file
-        assign._blockHoist = 3;
-      }
-
-      nodes.push(assign);
-      return;
+      this.hasDefaultOnlyExport = true;
     }
 
     DefaultFormatter.prototype.exportDeclaration.apply(this, arguments);

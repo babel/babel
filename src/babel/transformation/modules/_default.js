@@ -61,7 +61,6 @@ var importsVisitor = {
     enter(node, parent, scope, formatter) {
       formatter.hasLocalImports = true;
       extend(formatter.localImports, this.getBindingIdentifiers());
-      formatter.bumpImportOccurences(node);
     }
   }
 };
@@ -69,7 +68,7 @@ var importsVisitor = {
 var exportsVisitor = traverse.explode({
   ExportDeclaration: {
     enter(node, parent, scope, formatter) {
-      formatter.hasLocalImports = true;
+      formatter.hasLocalExports = true;
 
       var declar = this.get("declaration");
       if (declar.isStatement()) {
@@ -96,10 +95,6 @@ var exportsVisitor = traverse.explode({
           formatter.hasNonDefaultExports = true;
         }
       }
-
-      if (node.source) {
-        formatter.bumpImportOccurences(node);
-      }
     }
   }
 });
@@ -117,7 +112,6 @@ export default class DefaultFormatter {
     this.hasLocalExports = false;
     this.hasLocalImports = false;
 
-    this.localImportOccurences = object();
     this.localExports = object();
     this.localImports = object();
 
@@ -133,15 +127,6 @@ export default class DefaultFormatter {
     return (t.isExportDefaultDeclaration(node) || t.isSpecifierDefault(node)) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
 
-  bumpImportOccurences(node) {
-    var source = node.source.value;
-    var occurs = this.localImportOccurences;
-    occurs[source] ||= 0;
-    if (node.specifiers) {
-      occurs[source] += node.specifiers.length;
-    }
-  }
-
   getLocalExports() {
     this.file.path.traverse(exportsVisitor, this);
   }
@@ -151,7 +136,7 @@ export default class DefaultFormatter {
   }
 
   remapAssignments() {
-    if (this.hasLocalImports) {
+    if (this.hasLocalExports || this.hasLocalImports) {
       this.file.path.traverse(remapVisitor, this);
     }
   }

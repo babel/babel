@@ -2,13 +2,16 @@
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-module.exports = foo;
-module.exports = 42;
-module.exports = {};
-module.exports = [];
-module.exports = foo;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = foo;
+exports["default"] = 42;
+exports["default"] = {};
+exports["default"] = [];
+exports["default"] = foo;
 
-module.exports = function () {};
+exports["default"] = function () {};
 
 var _default = (function () {
   var _class = function _default() {
@@ -18,7 +21,7 @@ var _default = (function () {
   return _class;
 })();
 
-module.exports = _default;
+exports["default"] = _default;
 
 function foo() {}
 
@@ -26,5 +29,6 @@ var Foo = function Foo() {
   _classCallCheck(this, Foo);
 };
 
-module.exports = Foo;
-module.exports = foo;
+exports["default"] = Foo;
+exports["default"] = foo;
+module.exports = exports["default"];
