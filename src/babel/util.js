@@ -55,7 +55,13 @@ export function resolveRelative(loc: string) {
 }
 
 export function list(val: string): Array<string> {
-  return val ? val.split(",") : [];
+  if (!val) {
+    return [];
+  } else if (Array.isArray(val)) {
+    return val;
+  } else {
+    return val.split(",");
+  }
 }
 
 export function regexify(val: any): RegExp {

@@ -57,6 +57,7 @@ suite("util", function () {
     assert.deepEqual(util.list(""), []);
     assert.deepEqual(util.list("foo"), ["foo"]);
     assert.deepEqual(util.list("foo,bar"), ["foo", "bar"]);
+    assert.deepEqual(util.list(["foo", "bar"]), ["foo", "bar"]);
   });
 
   test("arrayify", function () {
