@@ -70,6 +70,7 @@ var buildTest = function (binName, testName, opts) {
 
   return function (callback) {
     this.timeout(5000);
+    clear();
     saveInFiles(opts.inFiles);
 
     var args  = [binLoc].concat(opts.args);
@@ -109,11 +110,11 @@ var buildTest = function (binName, testName, opts) {
   };
 };
 
-before(function () {
+var clear = function () {
   if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
-});
+};
 
 _.each(fs.readdirSync(fixtureLoc), function (binName) {
   if (binName[0] === ".") return;
