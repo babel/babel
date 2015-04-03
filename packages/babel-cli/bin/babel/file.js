@@ -107,6 +107,8 @@ module.exports = function (commander, filenames, opts) {
     });
 
     _.each(_filenames, function (filename) {
+      if (!util.shouldIgnore(filename)) return;
+
       results.push(util.compile(filename));
     });
 

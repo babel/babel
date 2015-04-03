@@ -28,6 +28,8 @@ module.exports = function (commander, filenames, opts) {
   };
 
   var handleFile = function (src, filename) {
+    if (util.shouldIgnore(src)) return;
+
     if (util.canCompile(filename)) {
       write(src, filename);
     } else if (commander.copyFiles) {

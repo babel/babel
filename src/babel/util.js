@@ -93,6 +93,21 @@ export function booleanify(val: any): boolean {
   return val;
 }
 
+export function shouldIgnore(filename, ignore, only) {
+  if (only.length) {
+    for (var i = 0; i < only.length; i++) {
+      if (only[i].test(filename)) return false;
+    }
+    return true;
+  } else if (ignore.length) {
+    for (var i = 0; i < ignore.length; i++) {
+      if (ignore[i].test(filename)) return true;
+    }
+  }
+
+  return false;
+}
+
 var templateVisitor = {
   enter(node, parent, scope, nodes) {
     if (t.isExpressionStatement(node)) {

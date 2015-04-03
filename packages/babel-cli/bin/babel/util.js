@@ -16,6 +16,10 @@ exports.readdir = readdir;
 
 exports.canCompile = util.canCompile;
 
+exports.shouldIgnore = function (loc) {
+  return util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
+};
+
 exports.addSourceMappingUrl = function (code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 };
@@ -23,6 +27,8 @@ exports.addSourceMappingUrl = function (code, loc) {
 exports.transform = function (filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;
+  opts.ignore = null;
+  opts.only = null;
 
   var result = babel.transform(code, opts);
   result.filename = filename;

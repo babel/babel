@@ -1,0 +1,1 @@
+src/bar/index.js -> lib/bar/index.js

@@ -422,23 +422,7 @@ export default class File {
 
   shouldIgnore() {
     var opts = this.opts;
-
-    var filename = opts.filename;
-    var ignore   = opts.ignore;
-    var only     = opts.only;
-
-    if (only.length) {
-      for (var i = 0; i < only.length; i++) {
-        if (only[i].test(filename)) return false;
-      }
-      return true;
-    } else if (ignore.length) {
-      for (var i = 0; i < ignore.length; i++) {
-        if (ignore[i].test(filename)) return true;
-      }
-    }
-
-    return false;
+    return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
   parse(code: string) {

@@ -102,11 +102,14 @@ if (errors.length) {
 
 //
 
-exports.opts = {};
+var opts = exports.opts = {};
 
 each(options, function (opt, key) {
-  exports.opts[key] = commander[key];
+  opts[key] = commander[key];
 });
+
+opts.ignore = util.arrayify(opts.ignore, util.regexify);
+opts.only   = util.arrayify(opts.only, util.regexify);
 
 var fn;
 
