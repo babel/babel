@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.4
+
+ * **Polish**
+  * Check for top level `breakConfig` in `resolveRc`.
+
 ## 5.0.3
 
  * **Bug Fix**
