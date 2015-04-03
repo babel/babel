@@ -43,8 +43,10 @@ export default function (loc, opts = {}) {
       find(up, rel);
     }
   }
-
-  find(loc, rel);
+  
+  if (opts.ignoreBabelrc !== true) {
+    find(loc, rel);
+  }
 
   return opts;
 };
