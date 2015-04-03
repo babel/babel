@@ -12,7 +12,7 @@ function render() {
 
 function render() {
   var text = getText();
-  var _ref = {
+  var _ref2 = {
     type: "foo",
     ref: null,
     props: {
@@ -21,6 +21,6 @@ function render() {
     key: null
   };
   return function () {
-    return _ref;
+    return _ref2;
   };
 }

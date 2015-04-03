@@ -11,9 +11,9 @@ function render(text) {
 var Foo2 = require("Foo");
 
 function createComponent(text) {
-  var _ref = <Foo2>{text}</Foo2>;
+  var _ref2 = <Foo2>{text}</Foo2>;
 
   return function render() {
-    return _ref;
+    return _ref2;
   };
 }

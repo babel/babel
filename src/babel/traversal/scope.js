@@ -135,7 +135,7 @@ export default class Scope {
       uid = this._generateUid(name, i);
       i++;
     } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasUid(uid));
-    this.getFunctionParent().uids[uid] = true;
+    this.file.uids[uid] = true;
     return uid;
   }
 
@@ -152,7 +152,7 @@ export default class Scope {
   hasUid(name): boolean {
     var scope = this;
     do {
-      if (scope.uids[name]) return true;
+      if (scope.file.uids[name]) return true;
       scope = scope.parent;
     } while (scope);
     return false;
@@ -434,8 +434,7 @@ export default class Scope {
 
     info = this.block._scopeInfo = {
       bindings: object(),
-      globals:  object(),
-      uids:     object()
+      globals:  object()
     };
 
     extend(this, info);
@@ -658,7 +657,7 @@ export default class Scope {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name)) return true;
-    if (this.uids[name]) return true;
+    if (this.file.uids[name]) return true;
     if (includes(Scope.globals, name)) return true;
     if (includes(Scope.contextVariables, name)) return true;
     return false;

@@ -16,7 +16,7 @@
     }
   };
 
-  _loop: for (var i in nums) {
+  _loop2: for (var i in nums) {
     var _ret = _loop(i);
 
     switch (_ret) {
@@ -24,7 +24,7 @@
         continue;
 
       case "break":
-        break _loop;
+        break _loop2;
 
       default:
         if (typeof _ret === "object") return _ret.v;

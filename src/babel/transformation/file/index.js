@@ -44,6 +44,7 @@ export default class File {
     this.usedHelpers = {};
     this.dynamicData = {};
     this.data        = {};
+    this.uids        = {};
 
     this.lastStatements = [];
     this.log            = new Logger(this, opts.filename || "unknown");

@@ -11,17 +11,17 @@ function one() {
 one(1, 2);
 
 function two() {
-  var _arguments = arguments;
+  var _arguments2 = arguments;
 
   var inner = function inner() {
-    return _arguments;
+    return _arguments2;
   };
 
   var another = function another() {
-    var _arguments2 = arguments;
+    var _arguments3 = arguments;
 
     var inner2 = function inner2() {
-      return _arguments2;
+      return _arguments3;
     };
   };
 
@@ -30,20 +30,20 @@ function two() {
 two(1, 2);
 
 function three() {
-  var _arguments = arguments;
+  var _arguments4 = arguments;
 
   var fn = function fn() {
-    return _arguments[0] + "bar";
+    return _arguments4[0] + "bar";
   };
   return fn();
 }
 three("foo");
 
 function four() {
-  var _arguments = arguments;
+  var _arguments5 = arguments;
 
   var fn = function fn() {
-    return _arguments[0].foo + "bar";
+    return _arguments5[0].foo + "bar";
   };
   return fn();
 }

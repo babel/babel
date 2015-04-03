@@ -7,9 +7,9 @@ var foo = function foo() {
 };
 
 var bar = function bar() {
-  var _this = this;
+  var _this2 = this;
 
   return function () {
-    return React.createElement(_this.foo, null);
+    return React.createElement(_this2.foo, null);
   };
 };

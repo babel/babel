@@ -6,8 +6,8 @@ function render() {
   return _ref;
 }
 
-var _ref = <div className="foo"><input type="checkbox" checked={true} /></div>;
+var _ref2 = <div className="foo"><input type="checkbox" checked={true} /></div>;
 
 function render() {
-  return _ref;
+  return _ref2;
 }

@@ -20,11 +20,11 @@ var Test = (function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   Test.prototype.test = function test() {
-    var _Foo$prototype$test, _Foo$prototype$test2;
+    var _Foo$prototype$test3, _Foo$prototype$test4;
 
     _Foo.prototype.test.call(this);
-    (_Foo$prototype$test = _Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(babelHelpers.slice.call(arguments)));
-    (_Foo$prototype$test2 = _Foo.prototype.test).call.apply(_Foo$prototype$test2, [this, "test"].concat(babelHelpers.slice.call(arguments)));
+    (_Foo$prototype$test3 = _Foo.prototype.test).call.apply(_Foo$prototype$test3, [this].concat(babelHelpers.slice.call(arguments)));
+    (_Foo$prototype$test4 = _Foo.prototype.test).call.apply(_Foo$prototype$test4, [this, "test"].concat(babelHelpers.slice.call(arguments)));
   };
 
   Test.foo = function foo() {
