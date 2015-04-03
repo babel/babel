@@ -58,6 +58,10 @@ suite("util", function () {
     assert.deepEqual(util.list("foo"), ["foo"]);
     assert.deepEqual(util.list("foo,bar"), ["foo", "bar"]);
     assert.deepEqual(util.list(["foo", "bar"]), ["foo", "bar"]);
+    assert.deepEqual(util.list(/foo/), [/foo/]);
+
+    var date = new Date;
+    assert.deepEqual(util.list(date), [date]);
   });
 
   test("arrayify", function () {

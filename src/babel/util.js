@@ -59,8 +59,10 @@ export function list(val: string): Array<string> {
     return [];
   } else if (Array.isArray(val)) {
     return val;
-  } else {
+  } else if (typeof val === "string") {
     return val.split(",");
+  } else {
+    return [val];
   }
 }
 
