@@ -89,8 +89,10 @@ export default class File {
   normalizeOptions(opts: Object) {
     opts = assign({}, opts);
 
-    if (opts.filename && isAbsolute(opts.filename)) {
-      opts = resolveRc(opts.filename, opts);
+    if (opts.filename) {
+      var rcFilename = opts.filename;
+      if (!isAbsolute(rcFilename)) rcFilename = path.join(process.cwd(), rcFilename);
+      opts = resolveRc(rcFilename, opts);
     }
 
     //
