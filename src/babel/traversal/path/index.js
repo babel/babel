@@ -547,6 +547,9 @@ export default class TraversalPath {
       var binding = this.scope.getBinding(this.node.name);
       if (!binding || !binding.constant) return;
 
+      // todo: take into consideration infinite recursion #1149
+      return;
+
       if (binding.path === this) {
         return this;
       } else {
