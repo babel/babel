@@ -199,6 +199,7 @@
   "breakConfig": {
     "type": "boolean",
     "default": false,
+    "hidden": true,
     "description": "stop trying to load .babelrc files"
   }
 
