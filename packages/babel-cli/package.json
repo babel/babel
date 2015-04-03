@@ -17,9 +17,6 @@
     "source-map": "^0.4.0",
     "path-is-absolute": "^1.0.0"
   },
-  "peerDependencies": {
-    "babel-core": "*"
-  },
   "bin": {
     "babel": "./bin/babel/index.js",
     "babel-node": "./bin/babel-node",
