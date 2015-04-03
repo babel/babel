@@ -3,7 +3,7 @@ import os from "os";
 import fs from "fs";
 
 function getUserHome() {
-  return process.env.HOME || process.env.USERPROFILE || process.env.HOMEPATH;
+  return process.env.HOME || process.env.USERPROFILE;
 }
 
 const FILENAME = process.env.BABEL_CACHE_PATH || path.join(getUserHome() || os.tmpdir(), ".babel.json");
