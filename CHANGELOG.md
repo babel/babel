@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.3
+
+ * **Bug Fix**
+  * Make relative location absolute before calling `resolveRc`.
+ * **Internal**
+  * Switch to global UID registry.
+  * Add `breakConfig` option to prevent Babel from erroring when hitting that option.
+
 ## 5.0.1
 
  * **Bug Fix**
