@@ -21,6 +21,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Remove `HOMEPATH` environment variable from home resolution in `babel/register` cache.
  * **Internal**
   * Disable WIP path resolution introducing infinite recursion in some code examples.
+ * **Polish**
+  * Add live binding to CommonJS default imports.
 
 ## 5.0.6
 
