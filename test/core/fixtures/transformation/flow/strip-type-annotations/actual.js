@@ -89,7 +89,7 @@ var a: Promise<bool>[]
 var a:(...rest:Array<number>) => number
 var identity: <T>(x: T) => T
 var identity: <T>(x: T, ...y:T[]) => T
-import type foo from "bar";
+import type foo4 from "bar";
 import type { foo2, bar } from "baz";
 import type { foo as bar2 } from "baz";
 import type from "foo";

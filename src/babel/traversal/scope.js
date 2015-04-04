@@ -237,11 +237,12 @@ export default class Scope {
     var local = this.getOwnBindingInfo(name);
     if (!local) return;
 
+
     if (kind === "param") return;
     if (kind === "hoisted" && local.kind === "let") return;
 
     var duplicate = false;
-    duplicate ||= local.kind === "let" || local.kind === "const" || local.kind === "module";
+    duplicate ||= kind === "let" || kind === "const" || local.kind === "let" || local.kind === "const" || local.kind === "module";
     duplicate ||= local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {

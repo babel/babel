@@ -452,7 +452,7 @@ class ClassTransformer {
       file:         this.file
     };
 
-    path.traverse(verifyConstructorVisitor, state);
+    path.get("value").traverse(verifyConstructorVisitor, state);
 
     this.bareSuper = state.bareSuper;
 
