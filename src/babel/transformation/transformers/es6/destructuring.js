@@ -332,7 +332,7 @@ class DestructuringTransformer {
       if (t.isSpreadProperty(prop)) continue;
 
       var key = prop.key;
-      if (t.isIdentifier(key)) key = t.literal(prop.key.name);
+      if (t.isIdentifier(key) && !prop.computed) key = t.literal(prop.key.name);
       keys.push(key);
     }
 
