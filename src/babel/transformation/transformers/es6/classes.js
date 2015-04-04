@@ -62,6 +62,18 @@ var verifyConstructorVisitor = traverse.explode({
     }
   },
 
+  FunctionDeclaration: {
+    enter() {
+      this.skip();
+    }
+  },
+
+  FunctionExpression: {
+    enter() {
+      this.skip();
+    }
+  },
+
   ThisExpression: {
     enter(node, parent, scope, state) {
       if (state.hasSuper && !state.hasBareSuper) {
