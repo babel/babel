@@ -240,7 +240,6 @@ export default class Scope {
     if (kind === "param") return;
     if (kind === "hoisted" && local.kind === "let") return;
 
-
     var duplicate = false;
     duplicate ||= local.kind === "let" || local.kind === "const" || local.kind === "module";
     duplicate ||= local.kind === "param" && (kind === "let" || kind === "const");
@@ -477,6 +476,15 @@ export default class Scope {
       this.traverse(path.get("body").node, blockVariableVisitor, this);
     }
 
+    // Program, Function - var variables
+
+    if (path.isProgram() || path.isFunction()) {
+      this.traverse(path.node, functionVariableVisitor, {
+        blockId: path.get("id").node,
+        scope:   this
+      });
+    }
+
     // Program, BlockStatement, Function - let variables
 
     if (path.isBlockStatement() || path.isProgram()) {
@@ -493,15 +501,6 @@ export default class Scope {
 
     if (path.isComprehensionExpression()) {
       this.registerBinding("let", path);
-    }
-
-    // Program, Function - var variables
-
-    if (path.isProgram() || path.isFunction()) {
-      this.traverse(path.node, functionVariableVisitor, {
-        blockId: path.get("id").node,
-        scope:   this
-      });
     }
 
     // Program
