@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.8
+
+ * **Bug Fix**
+  * Fix falsy static class properties not being writable.
+  * Fix block scoping collisions not properly detecting modules and function clashes.
+  * Skip `this` before `super` for derived constructors on functions.
+
 ## 5.0.7
 
  * **New Feature**
