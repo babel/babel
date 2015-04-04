@@ -1,8 +1,9 @@
 class Foo {
   static num = 0;
-  static str = "bar";
+  static str = "foo";
 }
 
-assert.equal(bar.num, 0);
-assert.equal(bar.num = 1, 1);
-assert.equal(bar.str, "bar");
+assert.equal(Foo.num, 0);
+assert.equal(Foo.num = 1, 1);
+assert.equal(Foo.str, "foo");
+assert.equal(Foo.str = "bar", "bar");
