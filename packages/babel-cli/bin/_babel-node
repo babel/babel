@@ -4,6 +4,7 @@ var pathIsAbsolute = require("path-is-absolute");
 var commander      = require("commander");
 var Module         = require("module");
 var babel          = require("babel-core");
+var inspect        = require("util").inspect;
 var path           = require("path");
 var repl           = require("repl");
 var util           = require("babel-core").util;
@@ -71,7 +72,10 @@ if (program.eval || program.print) {
   global.require = module.require.bind(module);
 
   var result = _eval(code, global.__filename);
-  if (program.print) console.log(result);
+  if (program.print) {
+    var output = _.isString(result) ? result : inspect(result);
+    process.stdout.write(output + "\n");
+  }
 } else {
   if (program.args.length) {
     // slice all arguments up to the first filename since they're babel args that we handle
