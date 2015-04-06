@@ -4,11 +4,11 @@
   } else if (typeof exports !== "undefined") {
     factory(exports, require("./evens"));
   } else {
-    var module = {
+    var mod = {
       exports: {}
     };
-    factory(module.exports, global.evens);
-    global.actual = module.exports;
+    factory(mod.exports, global.evens);
+    global.actual = mod.exports;
   }
 })(this, function (exports, _evens) {
   "use strict";

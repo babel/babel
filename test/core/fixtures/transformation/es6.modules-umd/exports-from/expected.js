@@ -4,11 +4,11 @@
   } else if (typeof exports !== "undefined") {
     factory(exports, require("foo"));
   } else {
-    var module = {
+    var mod = {
       exports: {}
     };
-    factory(module.exports, global.foo);
-    global.actual = module.exports;
+    factory(mod.exports, global.foo);
+    global.actual = mod.exports;
   }
 })(this, function (exports, _foo) {
   "use strict";

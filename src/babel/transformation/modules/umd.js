@@ -47,8 +47,8 @@ export default class UMDFormatter extends AMDFormatter {
 
     // globals
 
-    var browserArgs = [t.memberExpression(t.identifier("module"), t.identifier("exports"))];
-    if (this.passModuleArg) browserArgs.push(t.identifier("module"));
+    var browserArgs = [];
+    if (this.passModuleArg) browserArgs.push(t.identifier("mod"));
 
     for (let name in this.ids) {
       var id = this.defaultIds[name] || t.identifier(t.toIdentifier(name));
