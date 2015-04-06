@@ -2940,3 +2940,99 @@ test('export * as foo from "bar";', {
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
+
+// ES7: Trailing Function Commas
+
+test("log(n, '=', 2,);", {
+  type: "Program",
+  start: 0,
+  end: 16,
+  body: [{
+    type: "ExpressionStatement",
+    start: 0,
+    end: 16,
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "log",
+        start: 0,
+        end: 3
+      },
+      arguments: [{
+        type: "Identifier",
+        name: "n",
+        start: 4,
+        end: 5
+      }, {
+        type: "Literal",
+        value: "=",
+        raw: "'='",
+        start: 7,
+        end: 10
+      }, {
+        type: "Literal",
+        raw: "2",
+        value: 2,
+        start: 12,
+        end: 13
+      }]
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
+
+test("function log(n, op, val,) { }", {
+  type: "Program",
+  start: 0,
+  end: 29,
+  body: [{
+    type: "FunctionDeclaration",
+    id: {
+      type: "Identifier",
+      name: "log",
+      start: 9,
+      end: 12
+    },
+    start: 0,
+    end: 29,
+    expression: false,
+    params: [{
+      type: "Identifier",
+      name: "n",
+      start: 13,
+      end: 14
+    }, {
+      type: "Identifier",
+      name: "op",
+      start: 16,
+      end: 18
+    }, {
+      type: "Identifier",
+      name: "val",
+      start: 20,
+      end: 23
+    }],
+    body: {
+      type: "BlockStatement",
+      start: 26,
+      end: 29,
+      body: []
+    }
+  }]
+}, {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
+
+testFail("log(,);", "Unexpected token (1:4)", {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
+
+testFail("function log(,) { }", "Unexpected token (1:13)", {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
