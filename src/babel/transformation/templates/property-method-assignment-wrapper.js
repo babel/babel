@@ -4,7 +4,7 @@
   }
 
   FUNCTION_ID.toString = function () {
-    return FUNCTION_ID.toString();
+    return FUNCTION_KEY.toString();
   }
 
   return FUNCTION_ID;
