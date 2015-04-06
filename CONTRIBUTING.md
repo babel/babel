@@ -35,13 +35,13 @@ This is mostly overkill and you can limit the tests to a select few by directly
 running them with `mocha`:
 
 ```sh
-$ mocha test/transformation.js
+$ mocha test/core/transformation.js
 ```
 
 Use mocha's `--grep` option to run a subset of tests by name:
 
 ```sh
-$ mocha test/transformation.js --grep es7
+$ mocha test/core/transformation.js --grep es7
 ```
 
 #### Workflow
