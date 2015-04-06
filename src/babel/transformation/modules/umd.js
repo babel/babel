@@ -60,12 +60,17 @@ export default class UMDFormatter extends AMDFormatter {
     var moduleName = this.getModuleName();
     if (moduleName) defineArgs.unshift(t.literal(moduleName));
 
+    //
+    var globalArg = this.file.opts.basename;
+    if (moduleName) globalArg = moduleName;
+    globalArg = t.identifier(t.toIdentifier(globalArg));
+
     var runner = util.template("umd-runner-body", {
       AMD_ARGUMENTS: defineArgs,
       COMMON_TEST: commonTests,
       COMMON_ARGUMENTS: commonArgs,
       BROWSER_ARGUMENTS: browserArgs,
-      GLOBAL_ARG: t.identifier(t.toIdentifier(this.file.opts.basename))
+      GLOBAL_ARG: globalArg
     });
 
     //
