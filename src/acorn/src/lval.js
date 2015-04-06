@@ -125,7 +125,9 @@ pp.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
       this.expect(close)
       break
     } else {
-      elts.push(this.parseAssignableListItemTypes(this.parseMaybeDefault()))
+      var left = this.parseMaybeDefault()
+      this.parseAssignableListItemTypes(left)
+      elts.push(this.parseMaybeDefault(null, left))
     }
   }
   return elts
