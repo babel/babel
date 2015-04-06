@@ -13,7 +13,7 @@ var obj = {
     }
 
     h.toString = function () {
-      return h.toString();
+      return _h.toString();
     };
 
     return h;

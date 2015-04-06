@@ -10,7 +10,7 @@ var f = (function (_f) {
   }
 
   f.toString = function () {
-    return f.toString();
+    return _f.toString();
   };
 
   return f;
@@ -23,7 +23,7 @@ var obj = {
     }
 
     f.toString = function () {
-      return f.toString();
+      return _f2.toString();
     };
 
     return f;

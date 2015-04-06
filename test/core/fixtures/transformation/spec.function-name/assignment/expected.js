@@ -6,7 +6,7 @@ var i = (function (_i) {
   }
 
   i.toString = function () {
-    return i.toString();
+    return _i.toString();
   };
 
   return i;
