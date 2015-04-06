@@ -10959,7 +10959,7 @@ var fbTestFixture = {
       }
     },
   },
-    'Bounded Polymorphism': {
+  'Bounded Polymorphism': {
     'class A<T: Foo> {}': {
       type: 'ClassDeclaration',
       id: {
