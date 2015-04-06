@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.9
+
+ * **Polish**
+  * Use `moduleId` for UMD global name if available.
+ * **Bug Fix**
+  * Fix UMD global `module` variable shadowing the `amd`/`common` `module` variable.
+  * Fix Flow param type annotation regression.
+  * Fix function name collision `toString` wrapper. Thanks [@alawatthe](https://github.com/alawatthe)!
+
 ## 5.0.8
 
  * **Bug Fix**
