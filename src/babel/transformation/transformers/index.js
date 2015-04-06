@@ -1,5 +1,6 @@
 export default {
   "es7.classProperties":                   require("./es7/class-properties"),
+  "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
 
