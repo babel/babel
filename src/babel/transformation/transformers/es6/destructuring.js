@@ -65,7 +65,7 @@ exports.Function = function (node, parent, scope, file) {
     var ref = scope.generateUidIdentifier("ref");
 
     var destructuring = new DestructuringTransformer({
-      blockHoist: node.params.length - i,
+      blockHoist: 1,
       nodes:      nodes,
       scope:      scope,
       file:       file,
