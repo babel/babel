@@ -140,7 +140,7 @@ class ClassTransformer {
     var constructorBody = this.constructorBody = t.blockStatement([]);
     var constructor;
 
-    if (this.className && !this.node.decorators) {
+    if (this.className) {
       constructor = t.functionDeclaration(this.className, [], constructorBody);
       body.push(constructor);
     } else {
@@ -170,15 +170,27 @@ class ClassTransformer {
 
     this.buildBody();
 
+    var decorators = this.node.decorators;
+    var classCheckRef = classRef;
+
+    if (decorators) {
+      classCheckRef = this.scope.generateUidIdentifier(classRef);
+    }
+
     constructorBody.body.unshift(t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
       t.thisExpression(),
-      classRef
+      classCheckRef
     ])));
 
     //
 
-    var decorators = this.node.decorators;
     if (decorators) {
+      if (this.className) {
+        body.push(t.variableDeclaration("var", [
+          t.variableDeclarator(classCheckRef, classRef)
+        ]));
+      }
+
       for (var i = 0; i < decorators.length; i++) {
         var decorator = decorators[i];
         body.push(util.template("class-decorator", {
@@ -189,14 +201,6 @@ class ClassTransformer {
     }
 
     if (this.className) {
-      if (decorators) {
-        constructor = t.functionExpression(this.className, constructor.params, constructorBody);
-
-        body.unshift(t.variableDeclaration("var", [
-          t.variableDeclarator(classRef, constructor)
-        ]));
-      }
-
       // named class with only a constructor
       if (body.length === 1) return t.toExpression(body[0]);
     } else {
