@@ -1,18 +1,18 @@
 "use strict";
 
 var Foo = (function () {
-  function Foo() {
+  var Foo = function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-  }
+  };
 
   Foo = foo(Foo) || Foo;
   return Foo;
 })();
 
 var Bar = (function () {
-  function Bar() {
+  var Bar = function Bar() {
     babelHelpers.classCallCheck(this, Bar);
-  }
+  };
 
   Bar = foo(Bar) || Bar;
   Bar = bar(Bar) || Bar;
@@ -20,20 +20,31 @@ var Bar = (function () {
 })();
 
 var Foo2 = (function () {
-  function Foo() {
+  var Foo = function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-  }
+  };
 
   Foo = bar(Foo) || Foo;
   return Foo;
 })();
 
 var Bar2 = (function () {
-  function Bar() {
+  var Bar = function Bar() {
     babelHelpers.classCallCheck(this, Bar);
-  }
+  };
 
   Bar = foo(Bar) || Bar;
   Bar = bar(Bar) || Bar;
   return Bar;
+})();
+
+var Baz = (function () {
+  var Baz = function Baz(baz) {
+    babelHelpers.classCallCheck(this, Baz);
+
+    this.baz = baz;
+  };
+
+  Baz = foo(Baz) || Baz;
+  return Baz;
 })();
