@@ -181,10 +181,13 @@ class ClassTransformer {
     if (decorators) {
       for (var i = 0; i < decorators.length; i++) {
         var decorator = decorators[i];
-        body.push(util.template("class-decorator", {
+
+        var decoratorNode = util.template("class-decorator", {
           DECORATOR: decorator.expression,
           CLASS_REF: classRef
-        }, true));
+        }, true);
+        decoratorNode.expression._ignoreModulesRemap = true;
+        body.push(decoratorNode);
       }
     }
 
