@@ -46,7 +46,7 @@ var remapVisitor = {
       }
     }
 
-    if (t.isAssignmentExpression(node)) {
+    if (t.isAssignmentExpression(node) && !node._ignoreModulesRemap) {
       var exported = formatter.getExport(node.left, scope);
       if (exported) {
         this.skip();

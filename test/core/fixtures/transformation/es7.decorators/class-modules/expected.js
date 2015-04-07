@@ -10,9 +10,10 @@ var _foo2 = babelHelpers.interopRequireWildcard(_foo);
 
 var Foo = (function () {
   function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+    babelHelpers.classCallCheck(this, _Foo);
   }
 
+  var _Foo = Foo;
   Foo = _foo2["default"](Foo) || Foo;
   return Foo;
 })();
