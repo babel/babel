@@ -30,7 +30,7 @@ var collectPropertyReferencesVisitor = {
       }
 
       if (this.isReferenced() && scope.getBinding(node.name) === state.scope.getBinding(node.name)) {
-        state.references[node.name] = true;;
+        state.references[node.name] = true;
       }
     }
   }
@@ -170,15 +170,27 @@ class ClassTransformer {
 
     this.buildBody();
 
+    var decorators = this.node.decorators;
+    var classCheckRef = classRef;
+
+    if (decorators) {
+      classCheckRef = this.scope.generateUidIdentifier(classRef);
+    }
+
     constructorBody.body.unshift(t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
       t.thisExpression(),
-      classRef
+      classCheckRef
     ])));
 
     //
 
-    var decorators = this.node.decorators;
     if (decorators) {
+      if (this.className) {
+        body.push(t.variableDeclaration("var", [
+          t.variableDeclarator(classCheckRef, classRef)
+        ]));
+      }
+
       for (var i = 0; i < decorators.length; i++) {
         var decorator = decorators[i];
 
