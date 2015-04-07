@@ -30,7 +30,7 @@ var collectPropertyReferencesVisitor = {
       }
 
       if (this.isReferenced() && scope.getBinding(node.name) === state.scope.getBinding(node.name)) {
-        state.references[node.name] = true;;
+        state.references[node.name] = true;
       }
     }
   }
@@ -140,7 +140,7 @@ class ClassTransformer {
     var constructorBody = this.constructorBody = t.blockStatement([]);
     var constructor;
 
-    if (this.className) {
+    if (this.className && !this.node.decorators) {
       constructor = t.functionDeclaration(this.className, [], constructorBody);
       body.push(constructor);
     } else {
@@ -189,6 +189,14 @@ class ClassTransformer {
     }
 
     if (this.className) {
+      if (decorators) {
+        constructor = t.functionExpression(this.className, constructor.params, constructorBody);
+
+        body.unshift(t.variableDeclaration("var", [
+          t.variableDeclarator(classRef, constructor)
+        ]));
+      }
+
       // named class with only a constructor
       if (body.length === 1) return t.toExpression(body[0]);
     } else {
