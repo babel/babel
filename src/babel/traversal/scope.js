@@ -80,7 +80,7 @@ export default class Scope {
     if (cached && cached.parent === parent) {
       return cached;
     } else {
-      path.setData("scope", this);
+      //path.setData("scope", this);
     }
 
     this.parent = parent;
