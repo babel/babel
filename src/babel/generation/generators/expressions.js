@@ -169,4 +169,8 @@ export function MemberExpression(node, print) {
   }
 }
 
-export { MemberExpression as MetaProperty };
+export function MetaProperty(node, print) {
+  print(node.meta);
+  this.push(".");
+  print(node.property);
+}
