@@ -267,7 +267,7 @@ export default class File {
 
     // validate Transformer instance
     if (!plugin.buildPass || plugin.constructor.name !== "Transformer") {
-      throw new TypeError(`Plugin ${JSON.stringify(name)} didn't export default a Transformer instance`);
+      throw new TypeError(`Plugin ${JSON.stringify(name)} didn't export a default Transformer instance`);
     }
 
     // build!
