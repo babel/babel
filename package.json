@@ -65,7 +65,7 @@
     "esvalid": "^1.1.0",
     "istanbul": "^0.3.5",
     "matcha": "^0.6.0",
-    "mocha": "^2.1.0",
+    "mocha": "2.1.0",
     "rimraf": "^2.2.8",
     "uglify-js": "^2.4.16"
   }
