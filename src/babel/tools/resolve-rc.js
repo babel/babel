@@ -1,3 +1,4 @@
+import stripJsonComments from "strip-json-comments";
 import merge from "lodash/object/merge";
 import path from "path";
 import fs from "fs";
@@ -24,7 +25,7 @@ export default function (loc, opts = {}) {
       var json;
 
       try {
-        json = jsons[content] ||= JSON.parse(content);
+        json = jsons[content] ||= JSON.parse(stripJsonComments(content));
       } catch (err) {
         err.message = `${file}: ${err.message}`;
         throw err;
