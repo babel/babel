@@ -31,3 +31,4 @@ function foo() {
   }
 
   return output;
+}
