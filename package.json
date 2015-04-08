@@ -55,7 +55,8 @@
     "source-map-support": "^0.2.9",
     "strip-json-comments": "^1.0.2",
     "to-fast-properties": "^1.0.0",
-    "trim-right": "^1.0.0"
+    "trim-right": "^1.0.0",
+    "user-home": "^1.1.1"
   },
   "devDependencies": {
     "babel": "4.7.13",
