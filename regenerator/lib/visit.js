@@ -20,10 +20,6 @@ var NodePath = types.NodePath;
 var hoist = require("./hoist").hoist;
 var Emitter = require("./emit").Emitter;
 var runtimeProperty = require("./util").runtimeProperty;
-var runtimeWrapMethod = runtimeProperty("wrap");
-var runtimeMarkMethod = runtimeProperty("mark");
-var runtimeValuesMethod = runtimeProperty("values");
-var runtimeAsyncMethod = runtimeProperty("async");
 var getMarkInfo = require("private").makeAccessor();
 
 exports.transform = function transform(node, options) {
@@ -131,7 +127,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     }
 
     var wrapCall = b.callExpression(
-      shouldTransformAsync ? runtimeAsyncMethod : runtimeWrapMethod,
+      runtimeProperty(shouldTransformAsync ? "async" : "wrap"),
       wrapArgs
     );
 
@@ -144,7 +140,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     }
 
     if (n.Expression.check(node)) {
-      return b.callExpression(runtimeMarkMethod, [node]);
+      return b.callExpression(runtimeProperty("mark"), [node]);
     }
   },
 
@@ -156,7 +152,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var tempIterDecl = b.variableDeclarator(
       tempIterId,
       b.callExpression(
-        runtimeValuesMethod,
+        runtimeProperty("values"),
         [node.right]
       )
     );

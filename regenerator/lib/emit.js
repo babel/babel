@@ -16,7 +16,7 @@ var n = types.namedTypes;
 var leap = require("./leap");
 var meta = require("./meta");
 var util = require("./util");
-var runtimeKeysMethod = util.runtimeProperty("keys");
+var runtimeProperty = util.runtimeProperty;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -558,7 +558,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.emitAssign(
       keyIterNextFn,
       b.callExpression(
-        runtimeKeysMethod,
+        runtimeProperty("keys"),
         [self.explodeExpression(path.get("right"))]
       )
     );
