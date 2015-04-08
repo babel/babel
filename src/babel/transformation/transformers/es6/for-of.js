@@ -17,9 +17,6 @@ export function ForOfStatement(node, parent, scope, file) {
   var loop   = build.loop;
   var block  = loop.body;
 
-  // inherit comments from the original loop
-  t.inheritsComments(loop, node);
-
   // ensure that it's a block so we can take all its statements
   t.ensureBlock(node);
 
@@ -32,6 +29,7 @@ export function ForOfStatement(node, parent, scope, file) {
   block.body = block.body.concat(node.body.body);
 
   t.inherits(loop, node);
+  t.inherits(loop.body, node.body);
 
   if (build.replaceParent) {
     this.parentPath.replaceWithMultiple(build.node);
