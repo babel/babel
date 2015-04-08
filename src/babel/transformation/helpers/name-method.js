@@ -27,6 +27,7 @@ var wrap = function (state, method, id, scope) {
       FUNCTION_ID: id,
       FUNCTION_KEY: scope.generateUidIdentifier(id.name)
     });
+    template.callee._skipModulesRemap = true;
 
     // shim in dummy params to retain function arity, if you try to read the
     // source then you'll get the original since it's proxied so it's all good
