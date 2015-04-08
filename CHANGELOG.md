@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.0.10
+
+ * **Bug Fix**
+  * Fix new `for...of` loops not properly inheriting their original loop.
+ * **Internal**
+  * Disable scope instance cache.
+ * **Polish**
+  * Allow comments in `.babelrc` JSON.
+
 ## 5.0.9
 
  * **Polish**
