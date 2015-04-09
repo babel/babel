@@ -1,36 +1,36 @@
-var tokTypes = require("babel-core").acorn.tokTypes;
 var traverse = require("babel-core").traverse;
+var tt       = require("babel-core").acorn.tokTypes;
 var t        = require("babel-core").types;
 
 exports.toToken = function (token) {
   var type = token.type;
 
-  if (type === tokTypes.name) {
+  if (type === tt.name) {
     token.type = "Identifier";
-  } else if (type === tokTypes.semi || type === tokTypes.comma ||
-             type === tokTypes.parenL || type === tokTypes.parenR ||
-             type === tokTypes.braceL || type === tokTypes.braceR ||
-             type === tokTypes.slash || type === tokTypes.dot ||
-             type === tokTypes.bracketL || type === tokTypes.bracketR ||
-             type === tokTypes.ellipsis || type === tokTypes.arrow ||
-             type === tokTypes.star ||
+  } else if (type === tt.semi || type === tt.comma ||
+             type === tt.parenL || type === tt.parenR ||
+             type === tt.braceL || type === tt.braceR ||
+             type === tt.slash || type === tt.dot ||
+             type === tt.bracketL || type === tt.bracketR ||
+             type === tt.ellipsis || type === tt.arrow ||
+             type === tt.star ||
              type.isAssign) {
     token.type = "Punctuator";
-    if (!token.value) token.value = type.type;
-  } else if (type === tokTypes.jsxTagStart) {
+    if (!token.value) token.value = type.label;
+  } else if (type === tt.jsxTagStart) {
     token.type = "Punctuator";
     token.value = "<";
-  } else if (type === tokTypes.jsxTagEnd) {
+  } else if (type === tt.jsxTagEnd) {
     token.type = "Punctuator";
     token.value = ">";
-  } else if (type === tokTypes.jsxName) {
+  } else if (type === tt.jsxName) {
     token.type = "JSXIdentifier";
   } else if (type.keyword) {
     token.type = "Keyword";
-  } else if (type === tokTypes.num) {
+  } else if (type === tt.num) {
     token.type = "Numeric";
     token.value = String(token.value);
-  } else if (type === tokTypes.string) {
+  } else if (type === tt.string) {
     token.type = "String";
     token.value = JSON.stringify(token.value);
   }
@@ -62,14 +62,6 @@ var astTransformVisitor = {
       return node.argument;
     }
 
-    // playground
-
-    if (t.isAssignmentExpression(node)) {
-      if (node.operator === "||=" || node.operator === "?=") {
-        node.operator = "+=";
-      }
-    }
-
     // modules
 
     if (t.isImportDeclaration(node)) {
@@ -77,49 +69,11 @@ var astTransformVisitor = {
     }
 
     if (t.isExportDeclaration(node)) {
-      if (node.default) {
-        delete node.specifiers;
-        delete node.source;
-        node.type = "ExportDefaultDeclaration";
-        if (node.declaration.type === "FunctionExpression") {
-          node.declaration.type = "FunctionDeclaration";
-        } else if (node.declaration.type === "ClassExpression") {
-          node.declaration.type = "ClassDeclaration";
-        }
-      } else if (node.specifiers && t.isExportBatchSpecifier(node.specifiers[0])) {
-        node.type = "ExportAllDeclaration";
-        delete node.specifiers;
-        delete node.declaration;
-      } else {
-        node.type = "ExportNamedDeclaration";
+      if (t.isClassExpression(node.declaration)) {
+        node.declaration.type = "ClassDeclaration";
+      } else if (t.isFunctionExpression(node.declaration)) {
+        node.declaration.type = "FunctionDeclaration";
       }
-      delete node.default;
-    }
-
-    if (t.isExportSpecifier(node)) {
-      node.local = node.id;
-      node.exported = node.name || node.id;
-      delete node.id;
-      delete node.name;
-    }
-
-    if (t.isImportSpecifier(node)) {
-      node.local = node.name || node.id;
-      if (node.default) {
-        node.type = "ImportDefaultSpecifier";
-      } else {
-        node.imported = node.id;
-      }
-      delete node.id;
-      delete node.name;
-      delete node.default;
-    }
-
-    if (t.isImportBatchSpecifier(node)) {
-      // ImportBatchSpecifier<name> => ImportNamespaceSpecifier<id>
-      node.type = "ImportNamespaceSpecifier";
-      node.local = node.name;
-      delete node.name;
     }
 
     // classes
@@ -136,18 +90,6 @@ var astTransformVisitor = {
     // functions
 
     if (t.isFunction(node)) {
-      node.defaults = [];
-      node.params = node.params.map(function (param) {
-        if (t.isAssignmentPattern(param)) {
-          node.defaults.push(param.right);
-          return param.left;
-        } else {
-          node.defaults.push(null);
-          return param;
-        }
-      });
-
-      node.rest = null;
       if (node.async) node.generator = true;
       delete node.async;
     }

@@ -51,15 +51,6 @@ describe("verify", function () {
     );
   });
 
-  it("Unused vars in JSX (issue #5)", function () {
-    verifyAndAssertMessages(
-      "var App = require('./App');\n" +
-      "module.exports = <App />;",
-      { "no-unused-vars": 1 },
-      []
-    );
-  });
-
   it("Modules support (issue #5)", function () {
     verifyAndAssertMessages(
       "import Foo from 'foo';\n" +

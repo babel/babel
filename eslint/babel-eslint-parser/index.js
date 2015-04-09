@@ -53,11 +53,26 @@ exports.parse = function (code) {
     process.exit(1);
   }
 
-  var opts = {};
-  opts.ecmaVersion = 7;
-  opts.playground = true;
-  opts.locations = true;
-  opts.ranges = true;
+  var opts = {
+    ecmaVersion: 7,
+    locations: true,
+    ranges: true,
+    sourceType: "module",
+    plugins: {
+      jsx: true,
+      flow: true
+    },
+    features: {
+      "es7.asyncFunctions": true,
+      "es7.classProperties": true,
+      "es7.comprehensions": true,
+      "es7.decorators": true,
+      "es7.doExpressions": true,
+      "es7.exponentiationOperator": true,
+      "es7.exportExtensions": true,
+      "es7.objectRestSpread": true
+    }
+  };
 
   var comments = opts.onComment = [];
   var tokens = opts.onToken = [];
