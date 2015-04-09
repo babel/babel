@@ -41,7 +41,13 @@ function monkeypatch() {
   escope.analyze = function (ast, opts) {
     opts.ecmaVersion = 6;
     opts.sourceType = "module";
-    return analyze.call(this, ast, opts)
+    // Don't visit TypeAlias when analyzing scope, but retain them for other
+    // eslint rules.
+    var TypeAliasKeys = estraverse.VisitorKeys.TypeAlias;
+    estraverse.VisitorKeys.TypeAlias = [];
+    var results = analyze.call(this, ast, opts);
+    estraverse.VisitorKeys.TypeAlias = TypeAliasKeys;
+    return results;
   };
 }
 
