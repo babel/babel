@@ -7,8 +7,8 @@
   "repository": "babel/babel",
   "preferGlobal": true,
   "dependencies": {
-    "chokidar": "^0.12.6",
     "babel-core": "^5.0.12",
+    "chokidar": "^1.0.0",
     "commander": "^2.6.0",
     "fs-readdir-recursive": "^0.1.0",
     "output-file-sync": "^1.1.0",
