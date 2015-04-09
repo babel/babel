@@ -115,7 +115,7 @@ export function isReferencedIdentifier(node: Object, parent: Object, opts?: Obje
  */
 
 export function isValidIdentifier(name: string): boolean {
-  return isString(name) && esutils.keyword.isIdentifierName(name) && !esutils.keyword.isReservedWordES6(name, true);
+  return isString(name) && esutils.keyword.isIdentifierNameES6(name) && !esutils.keyword.isReservedWordES6(name, true);
 }
 
 /**
