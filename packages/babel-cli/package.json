@@ -7,7 +7,7 @@
   "repository": "babel/babel",
   "preferGlobal": true,
   "dependencies": {
-    "chokidar": "^0.12.6",
+    "chokidar": "^1.0.0",
     "babel-core": "^5.0.11",
     "commander": "^2.6.0",
     "fs-readdir-recursive": "^0.1.0",
