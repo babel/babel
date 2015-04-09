@@ -7,7 +7,7 @@
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.foo, global.fooBar, global.directoryFooBar);
+    factory(mod.exports, global.foo, global.fooBar, global.fooBar);
     global.actual = mod.exports;
   }
 })(this, function (exports, _foo, _fooBar, _directoryFooBar) {

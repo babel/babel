@@ -1,6 +1,7 @@
 import DefaultFormatter from "./_default";
 import AMDFormatter from "./amd";
 import values from "lodash/object/values";
+import path from "path";
 import * as util from  "../../util";
 import * as t from "../../types";
 
@@ -51,7 +52,7 @@ export default class UMDFormatter extends AMDFormatter {
     if (this.passModuleArg) browserArgs.push(t.identifier("mod"));
 
     for (let name in this.ids) {
-      var id = this.defaultIds[name] || t.identifier(t.toIdentifier(name));
+      var id = this.defaultIds[name] || t.identifier(t.toIdentifier(path.basename(name, path.extname(name))));
       browserArgs.push(t.memberExpression(t.identifier("global"), id));
     }
 
