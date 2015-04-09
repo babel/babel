@@ -92,7 +92,7 @@ exports.Function = function (node, parent, scope, file) {
   node.params = node.params.slice(0, lastNonDefaultParam);
 
   if (state.iife) {
-    body.push(callDelegate(node));
+    body.push(callDelegate(node, scope));
     node.body = t.blockStatement(body);
   } else {
     node.body.body = body.concat(node.body.body);
