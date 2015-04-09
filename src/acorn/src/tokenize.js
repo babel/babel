@@ -28,7 +28,7 @@ const pp = Parser.prototype
 // Move to the next token
 
 pp.next = function() {
-  if (this.options.onToken)
+  if (this.options.onToken && !this.isLookahead)
     this.options.onToken(new Token(this))
 
   this.lastTokEnd = this.end
