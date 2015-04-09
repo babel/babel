@@ -29,6 +29,7 @@
   "dependencies": {
     "ast-types": "~0.7.0",
     "chalk": "^1.0.0",
+    "chokidar": "^1.0.0",
     "convert-source-map": "^0.5.0",
     "core-js": "^0.8.1",
     "debug": "^2.1.1",
