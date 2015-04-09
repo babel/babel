@@ -19,7 +19,7 @@ export default function (exports, opts) {
   exports.JSXIdentifier = function (node, parent) {
     if (node.name === "this" && t.isReferenced(node, parent)) {
       return t.thisExpression();
-    } else if (esutils.keyword.isIdentifierName(node.name)) {
+    } else if (esutils.keyword.isIdentifierNameES6(node.name)) {
       node.type = "Identifier";
     } else {
       return t.literal(node.name);
