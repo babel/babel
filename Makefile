@@ -109,7 +109,7 @@ publish-cli:
 	npm publish
 
 bootstrap:
-	npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel
+	npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true
 	npm install
 	npm link
 	cd packages/babel-cli && npm install && npm link && npm link babel-core
