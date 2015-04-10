@@ -727,7 +727,7 @@ pp.parseAwait = function (node) {
     this.unexpected()
   }
   node.all = this.eat(tt.star)
-  node.argument = this.parseMaybeAssign(true)
+  node.argument = this.parseMaybeUnary()
   return this.finishNode(node, "AwaitExpression")
 };
 
