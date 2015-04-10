@@ -273,7 +273,7 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
       if (id.name === "async") {
         // arrow functions
         if (this.type === tt.parenL) {
-          let expr = this.parseParenAndDistinguishExpression(start, true)
+          let expr = this.parseParenAndDistinguishExpression(start, true, true)
           if (expr && expr.type === "ArrowFunctionExpression") {
             return expr
           } else {
