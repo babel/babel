@@ -57,7 +57,8 @@
     "id": null,
     "params": null,
     "body": null,
-    "generator": false
+    "generator": false,
+    "async": false
   },
 
   "GenericTypeAnnotation": {

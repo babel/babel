@@ -46,6 +46,9 @@ export function Parser(options, input, startPos) {
   this.inModule = this.options.sourceType === "module"
   this.strict = this.options.strictMode === false ? false : this.inModule
 
+  // Used to signify the start of a potential arrow function
+  this.potentialArrowAt = -1
+
   // Flags to track whether we are in a function, a generator.
   this.inFunction = this.inGenerator = false
   // Labels in scope.

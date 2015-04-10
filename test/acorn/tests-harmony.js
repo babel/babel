@@ -1714,6 +1714,8 @@ test("([a, , b]) => 42", {
 
 testFail("([a.a]) => 42", "Assigning to rvalue (1:2)", {ecmaVersion: 6});
 
+testFail("console.log(typeof () => {});", "Unexpected token (1:20)", {ecmaVersion: 6});
+
 test("(x=1) => x * x", {
   type: "Program",
   body: [{
