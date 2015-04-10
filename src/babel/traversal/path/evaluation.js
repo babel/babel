@@ -57,7 +57,7 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isLiteral()) {
-      if (node.regex && node.value === null) {
+      if (node.regex) {
         // we have a regex and we can't represent it natively
       } else {
         return node.value;
