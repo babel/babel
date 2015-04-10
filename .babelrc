@@ -1,6 +1,5 @@
 {
   "experimental": true,
-  "playground": true,
   "loose": true,
   "blacklist": ["es6.tailCall"]
 }
