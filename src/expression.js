@@ -93,13 +93,15 @@ pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos, afterLeftParse) {
     failOnShorthandAssign = false
   }
   let start = this.markPosition()
+  if (this.type == tt.parenL || this.type == tt.name)
+    this.potentialArrowAt = this.start
   let left = this.parseMaybeConditional(noIn, refShorthandDefaultPos)
   if (afterLeftParse) left = afterLeftParse.call(this, left, start)
   if (this.type.isAssign) {
     let node = this.startNodeAt(start)
     node.operator = this.value
     node.left = this.type === tt.eq ? this.toAssignable(left) : left
-    refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
+    refShorthandDefaultPos.start = 0 // reset because shorthand default was used correctly
     this.checkLVal(left)
     if (left.parenthesizedExpression) {
       if (left.type === "ObjectPattern") {
@@ -240,7 +242,7 @@ pp.parseSubscripts = function(base, start, noCalls) {
 // or `{}`.
 
 pp.parseExprAtom = function(refShorthandDefaultPos) {
-  let node
+  let node, canBeArrow = this.potentialArrowAt == this.start
   switch (this.type) {
   case tt._this:
   case tt._super:
@@ -302,9 +304,8 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     }
     //
 
-    if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
+    if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow))
       return this.parseArrowExpression(this.startNodeAt(start), [id])
-    }
     return id
 
   case tt.regexp:
@@ -324,7 +325,7 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     return this.finishNode(node, "Literal")
 
   case tt.parenL:
-    return this.parseParenAndDistinguishExpression()
+    return this.parseParenAndDistinguishExpression(null, null, canBeArrow)
 
   case tt.bracketL:
     node = this.startNode()
@@ -378,7 +379,7 @@ pp.parseParenExpression = function() {
   return val
 }
 
-pp.parseParenAndDistinguishExpression = function(start, isAsync) {
+pp.parseParenAndDistinguishExpression = function(start, isAsync, canBeArrow) {
   start = start || this.markPosition()
   let val
   if (this.options.ecmaVersion >= 6) {
@@ -407,7 +408,7 @@ pp.parseParenAndDistinguishExpression = function(start, isAsync) {
     let innerEnd = this.markPosition()
     this.expect(tt.parenR)
 
-    if (!this.canInsertSemicolon() && this.eat(tt.arrow)) {
+    if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
       if (innerParenStart) this.unexpected(innerParenStart)
       return this.parseParenArrowList(start, exprList, isAsync)
     }
