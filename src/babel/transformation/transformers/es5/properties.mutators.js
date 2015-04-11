@@ -5,14 +5,14 @@ export function check(node) {
   return t.isProperty(node) && (node.kind === "get" || node.kind === "set");
 }
 
-export function ObjectExpression(node) {
+export function ObjectExpression(node, parent, scope, file) {
   var mutatorMap = {};
   var hasAny = false;
 
   node.properties = node.properties.filter(function (prop) {
     if (prop.kind === "get" || prop.kind === "set") {
       hasAny = true;
-      defineMap.push(mutatorMap, prop.key, prop.kind, prop.computed, prop.value);
+      defineMap.push(mutatorMap, prop, prop.kind, file);
       return false;
     } else {
       return true;

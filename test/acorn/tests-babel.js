@@ -2787,6 +2787,66 @@ test('class Foo { @bar static foo = "bar"; }', {
   features: { "es7.classProperties": true, "es7.decorators": true }
 });
 
+test("var obj = { @foo bar: 'wow' };", {
+  "start": 0,
+  "body": [{
+    "start": 0,
+    "declarations": [{
+      "start": 4,
+      "id": {
+        "start": 4,
+        "name": "obj",
+        "type": "Identifier",
+        "end": 7
+      },
+      "init": {
+        "start": 10,
+        "properties": [{
+          "start": 17,
+          "key": {
+            "start": 17,
+            "name": "bar",
+            "type": "Identifier",
+            "end": 20
+          },
+          "value": {
+            "start": 22,
+            "value": "wow",
+            "raw": "'wow'",
+            "type": "Literal",
+            "end": 27
+          },
+          "kind": "init",
+          "decorators": [{
+            "start": 12,
+            "expression": {
+              "start": 13,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 16
+            },
+            "type": "Decorator",
+            "end": 16
+          }],
+          "type": "Property",
+          "end": 27
+        }],
+        "type": "ObjectExpression",
+        "end": 29
+      },
+      "type": "VariableDeclarator",
+      "end": 29
+    }],
+    "kind": "var",
+    "type": "VariableDeclaration",
+    "end": 30
+  }],
+  "type": "Program",
+  "end": 30
+}, {
+  features: { "es7.decorators": true }
+});
+
 // ES7 export extensions - https://github.com/leebyron/ecmascript-more-export-from
 
 test('export foo, { bar } from "bar";', {

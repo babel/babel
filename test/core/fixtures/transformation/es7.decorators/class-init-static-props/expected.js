@@ -9,11 +9,11 @@ var Foo = (function () {
 
   babelHelpers.createDecoratedClass(Foo, null, [{
     key: "foo",
-    enumerable: true,
     decorators: [bar],
     initializer: function () {
       return "Bar";
-    }
+    },
+    enumerable: true
   }], null, _staticInitializers);
   Foo.foo = _staticInitializers.foo.call(Foo);
   return Foo;

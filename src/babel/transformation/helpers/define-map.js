@@ -4,17 +4,43 @@ import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import * as t from "../../types";
 
-export function push(mutatorMap, key, kind, computed, value) {
-  var alias = t.toKeyAlias({ computed }, key);
+export function push(mutatorMap, node, kind, file) {
+  var alias = t.toKeyAlias(node);
+
+  //
 
   var map = {};
   if (has(mutatorMap, alias)) map = mutatorMap[alias];
   mutatorMap[alias] = map;
 
-  map._key = key;
-  if (computed) map._computed = true;
+  //
 
-  map[kind] = value;
+  map._inherits ||= [];
+  map._inherits.push(node);
+
+  map._key = node.key;
+
+  if (node.computed) {
+    map._computed = true;
+  }
+
+  if (node.decorators) {
+    var decorators = map.decorators ||= t.arrayExpression([]);
+    decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression));
+  }
+
+  if (map.value || map.initializer) {
+    throw file.errorWithNode(node, "Key conflict with sibling node");
+  }
+
+  if (node.kind === "init") kind = "value";
+  if (node.kind === "get") kind = "get";
+  if (node.kind === "set") kind = "set";
+
+  t.inheritsComments(node.value, node);
+  map[kind] = node.value;
+
+  return map;
 }
 
 export function hasComputed(mutatorMap) {

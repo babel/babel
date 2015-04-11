@@ -243,44 +243,15 @@ class ClassTransformer {
       mutatorMap = this.instanceMutatorMap;
     }
 
-    var alias = t.toKeyAlias(node);
-
-    //
-
-    var map = {};
-    if (has(mutatorMap, alias)) map = mutatorMap[alias];
-    mutatorMap[alias] = map;
-
-    //
-
-    map._inherits ||= [];
-    map._inherits.push(node);
-
-    map._key = node.key;
+    var map = defineMap.push(mutatorMap, node, kind, this.file);
 
     if (enumerable) {
       map.enumerable = t.literal(true)
     }
 
-    if (node.computed) {
-      map._computed = true;
-    }
-
-    if (node.decorators) {
+    if (map.decorators) {
       this.hasDecorators = true;
-      var decorators = map.decorators ||= t.arrayExpression([]);
-      decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression));
     }
-
-    if (map.value || map.initializer) {
-      throw this.file.errorWithNode(node, "Key conflict with sibling node");
-    }
-
-    if (node.kind === "get") kind = "get";
-    if (node.kind === "set") kind = "set";
-
-    t.inheritsComments(node.value, node);
-    map[kind] = node.value;
   }
 
   /**

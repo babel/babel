@@ -59,6 +59,7 @@ export default class File {
     "defaults",
     "create-class",
     "create-decorated-class",
+    "create-decorated-object",
     "tagged-template-literal",
     "tagged-template-literal-loose",
     "interop-require",
