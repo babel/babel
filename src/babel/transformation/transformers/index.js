@@ -2,6 +2,7 @@ export default {
   "es7.classProperties":                   require("./es7/class-properties"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
+  "es6.proxies":                           require("./es6/proxies"),
 
   strict:                                  require("./other/strict"),
 

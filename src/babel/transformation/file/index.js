@@ -85,6 +85,8 @@ export default class File {
     "default-props"
   ];
 
+    "proxy-create",
+    "proxy-directory"
   static options = require("./options");
 
   normalizeOptions(opts: Object) {
