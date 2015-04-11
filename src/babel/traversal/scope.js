@@ -449,7 +449,7 @@ export default class Scope {
     if (path.isLoop()) {
       for (let i = 0; i < t.FOR_INIT_KEYS.length; i++) {
         var node = path.get(t.FOR_INIT_KEYS[i]);
-        if (node.isBlockScoped()) this.registerBinding("let", node);
+        if (node.isBlockScoped()) this.registerBinding(node.node.kind, node);
       }
     }
 
