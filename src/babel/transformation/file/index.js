@@ -85,8 +85,11 @@ export default class File {
     "default-props"
   ];
 
+  static soloHelpers = [
     "proxy-create",
     "proxy-directory"
+  ];
+
   static options = require("./options");
 
   normalizeOptions(opts: Object) {
@@ -377,7 +380,9 @@ export default class File {
   }
 
   addHelper(name: string): Object {
-    if (!includes(File.helpers, name)) {
+    var isSolo = includes(File.soloHelpers, name);
+
+    if (!isSolo && !includes(File.helpers, name)) {
       throw new ReferenceError(`Unknown helper ${name}`);
     }
 
@@ -388,24 +393,26 @@ export default class File {
 
     this.usedHelpers[name] = true;
 
-    var generator = this.get("helperGenerator");
-    var runtime   = this.get("helpersNamespace");
-    if (generator) {
-      return generator(name);
-    } else if (runtime) {
-      var id = t.identifier(t.toIdentifier(name));
-      return t.memberExpression(runtime, id);
-    } else {
-      var ref = util.template("helper-" + name);
-      ref._compact = true;
-      var uid = this.scope.generateUidIdentifier(name);
-      this.scope.push({
-        key: name,
-        id: uid,
-        init: ref
-      });
-      return uid;
+    if (!isSolo) {
+      var generator = this.get("helperGenerator");
+      var runtime   = this.get("helpersNamespace");
+      if (generator) {
+        return generator(name);
+      } else if (runtime) {
+        var id = t.identifier(t.toIdentifier(name));
+        return t.memberExpression(runtime, id);
+      }
     }
+
+    var ref = util.template("helper-" + name);
+    ref._compact = true;
+    var uid = this.scope.generateUidIdentifier(name);
+    this.scope.push({
+      key: name,
+      id: uid,
+      init: ref
+    });
+    return uid;
   }
 
   errorWithNode(node, msg, Error = SyntaxError) {
