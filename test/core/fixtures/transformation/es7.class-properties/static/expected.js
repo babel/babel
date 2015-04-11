@@ -7,8 +7,8 @@ var Foo = (function () {
 
   babelHelpers.createClass(Foo, null, [{
     key: "bar",
-    enumerable: true,
-    value: "foo"
+    value: "foo",
+    enumerable: true
   }]);
   return Foo;
 })();
