@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  For questions and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>. The Babel issue tracker is <strong>exclusively</strong> for bug reports and future requests.
+  For questions and support please visit the <a href="https://gitter.im/babel/babel">gitter room</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>. The Babel issue tracker is <strong>exclusively</strong> for bug reports and feature requests.
 </p>
 
 <p align="center">
