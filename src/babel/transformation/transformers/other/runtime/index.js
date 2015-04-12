@@ -8,10 +8,6 @@ var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
 const RUNTIME_MODULE_NAME = "babel-runtime";
 
-function getForPath(file) {
-  return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/$for`, "iterator", true);
-}
-
 var astVisitor = {
   enter(node, parent, scope, file) {
     var prop;
@@ -46,10 +42,7 @@ var astVisitor = {
       prop = callee.property;
       if (!isSymbolIterator(prop)) return false;
 
-      return util.template("corejs-iterator", {
-        CORE_ID: getForPath(file),
-        VALUE:   callee.object
-      });
+      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", true), [callee.object]);
     } else if (this.isBinaryExpression()) {
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
 
@@ -58,10 +51,7 @@ var astVisitor = {
       var left = node.left;
       if (!isSymbolIterator(left)) return;
 
-      return util.template("corejs-is-iterator", {
-        CORE_ID: getForPath(file),
-        VALUE:   node.right
-      });
+      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterator`, "isIterable", true), [node.right]);
     }
   }
 };
