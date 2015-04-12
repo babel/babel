@@ -86,6 +86,17 @@ var visitor = types.PathVisitor.fromMethodsObject({
       awaitVisitor.visit(path.get("body"));
     }
 
+    var outerBody = [];
+    var bodyBlock = path.value.body;
+    bodyBlock.body = bodyBlock.body.filter(function (node) {
+      if (node && node._blockHoist != null) {
+        outerBody.push(node);
+        return false;
+      } else {
+        return true;
+      }
+    });
+
     var outerFnExpr = getOuterFnExpr(path);
     // Note that getOuterFnExpr has the side-effect of ensuring that the
     // function has a name (so node.id will always be an Identifier), even
@@ -106,8 +117,6 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var emitter = new Emitter(contextId);
     emitter.explode(path.get("body"));
-
-    var outerBody = [];
 
     if (vars && vars.declarations.length > 0) {
       outerBody.push(vars);
