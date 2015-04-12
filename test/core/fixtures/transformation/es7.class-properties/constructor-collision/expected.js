@@ -12,6 +12,10 @@ var Foo = (function () {
   }
 
   babelHelpers.createClass(Foo, [{
+    key: "bar",
+    value: undefined,
+    enumerable: true
+  }, {
     key: "__initializeProperties",
     value: function __initializeProperties() {
       this.bar = foo;

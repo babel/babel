@@ -33,12 +33,14 @@ export function push(mutatorMap, node, kind, file) {
     throw file.errorWithNode(node, "Key conflict with sibling node");
   }
 
-  if (node.kind === "init") kind = "value";
-  if (node.kind === "get") kind = "get";
-  if (node.kind === "set") kind = "set";
+  if (node.value) {
+    if (node.kind === "init") kind = "value";
+    if (node.kind === "get") kind = "get";
+    if (node.kind === "set") kind = "set";
 
-  t.inheritsComments(node.value, node);
-  map[kind] = node.value;
+    t.inheritsComments(node.value, node);
+    map[kind] = node.value;
+  }
 
   return map;
 }

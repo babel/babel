@@ -517,8 +517,6 @@ class ClassTransformer {
    */
 
   pushProperty(node: { type: "ClassProperty" }) {
-    if (!node.value && !node.decorators) return;
-
     var key;
 
     this.scope.traverse(node, collectPropertyReferencesVisitor, {
@@ -545,16 +543,17 @@ class ClassTransformer {
         }, true));
       }
     } else {
-      if (node.static) {
-        // can just be added to the static map
-        this.pushToMap(node, true);
-      } else {
+      if (!node.static && node.value) {
         // add this to the instancePropBody which will be added after the super call in a derived constructor
         // or at the start of a constructor for a non-derived constructor
         this.instancePropBody.push(t.expressionStatement(
           t.assignmentExpression("=", t.memberExpression(t.thisExpression(), node.key), node.value)
         ));
+        node.value = t.identifier("undefined");
       }
+
+      // can just be added to the static map
+      this.pushToMap(node, true);
     }
   }
 
