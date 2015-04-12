@@ -204,6 +204,8 @@ class ClassTransformer {
         ]));
       }
 
+      decorators = decorators.reverse();
+
       for (var i = 0; i < decorators.length; i++) {
         var decorator = decorators[i];
 

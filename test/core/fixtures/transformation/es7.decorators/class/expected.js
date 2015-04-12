@@ -1,4 +1,3 @@
-"use strict";
 
 var Foo = (function () {
   function Foo() {
@@ -16,8 +15,8 @@ var Bar = (function () {
   }
 
   var _Bar = Bar;
-  Bar = foo(Bar) || Bar;
   Bar = bar(Bar) || Bar;
+  Bar = foo(Bar) || Bar;
   return Bar;
 })();
 
@@ -37,8 +36,8 @@ var Bar2 = (function () {
   }
 
   var _Bar2 = Bar;
-  Bar = foo(Bar) || Bar;
   Bar = bar(Bar) || Bar;
+  Bar = foo(Bar) || Bar;
   return Bar;
 })();
 
