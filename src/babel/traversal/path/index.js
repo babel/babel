@@ -91,6 +91,9 @@ export default class TraversalPath {
 
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertBefore(nodes);
+    } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+      if (this.node) nodes.push(this.node);
+      this.replaceExpressionWithStatements(nodes);
     } else if (this.isPreviousType("Statement")) {
       this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
@@ -101,14 +104,10 @@ export default class TraversalPath {
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
-    } else if (this.isPreviousType("Expression")) {
-      if (this.node) nodes.push(this.node);
-      this.replaceExpressionWithStatements(nodes);
     } else {
       throw new Error("No clue what to do with this node type.");
     }
   }
-
 
   _containerInsert(from, nodes) {
     this.updateSiblingKeys(from, nodes.length);
@@ -152,6 +151,13 @@ export default class TraversalPath {
 
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertAfter(nodes);
+    } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+      if (this.node) {
+        var temp = this.scope.generateTemp();
+        nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
+        nodes.push(t.expressionStatement(temp));
+      }
+      this.replaceExpressionWithStatements(nodes);
     } else if (this.isPreviousType("Statement")) {
       this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
@@ -159,16 +165,10 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
+        this.replaceExpressionWithStatements(nodes);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
-    } else if (this.isPreviousType("Expression")) {
-      if (this.node) {
-        var temp = this.scope.generateTemp();
-        nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
-        nodes.push(t.expressionStatement(temp));
-      }
-      this.replaceExpressionWithStatements(nodes);
     } else {
       throw new Error("No clue what to do with this node type.");
     }
