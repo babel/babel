@@ -179,7 +179,7 @@ class TailCallTransformer {
     if (this.vars.length > 0) {
       var declarations = flatten(map(this.vars, function (decl) {
         return decl.declarations;
-      }, this));
+      }));
       var assignment = reduceRight(declarations, function (expr, decl) {
         return t.assignmentExpression("=", decl.id, expr);
       }, t.identifier("undefined"));
