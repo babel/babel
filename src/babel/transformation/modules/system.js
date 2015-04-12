@@ -6,12 +6,8 @@ import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import * as t from "../../types";
 
-var canHoist = function (node, file) {
-  return node._blockHoist && !file.transformers.runtime.canTransform();
-}
-
 var hoistVariablesVisitor = {
-  enter(node, parent, scope, hoistDeclarators) {
+  enter(node, parent, scope, state) {
     if (t.isFunction(node)) {
       // nothing inside is accessible
       return this.skip();
@@ -24,13 +20,13 @@ var hoistVariablesVisitor = {
       }
 
       // ignore block hoisted nodes as these can be left in
-      if (canHoist(node, scope.file)) return;
+      if (state.formatter.canHoist(node)) return;
 
       var nodes = [];
 
       for (var i = 0; i < node.declarations.length; i++) {
         var declar = node.declarations[i];
-        hoistDeclarators.push(t.variableDeclarator(declar.id));
+        state.hoistDeclarators.push(t.variableDeclarator(declar.id));
         if (declar.init) {
           // no initializer so we can just hoist it as-is
           var assign = t.expressionStatement(t.assignmentExpression("=", declar.id, declar.init));
@@ -56,11 +52,11 @@ var hoistVariablesVisitor = {
 };
 
 var hoistFunctionsVisitor = {
-  enter(node, parent, scope, handlerBody) {
+  enter(node, parent, scope, state) {
     if (t.isFunction(node)) this.skip();
 
-    if (t.isFunctionDeclaration(node) || canHoist(node, scope.file)) {
-      handlerBody.push(node);
+    if (t.isFunctionDeclaration(node) || state.formatter.canHoist(node)) {
+      state.handlerBody.push(node);
       this.remove();
     }
   }
@@ -174,6 +170,10 @@ export default class SystemFormatter extends AMDFormatter {
     }));
   }
 
+  canHoist(node) {
+    return node._blockHoist && !this.file.dynamicImports.length;
+  }
+
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
 
@@ -197,7 +197,10 @@ export default class SystemFormatter extends AMDFormatter {
     var returnStatement = handlerBody.pop();
 
     // hoist up all variable declarations
-    this.file.scope.traverse(block, hoistVariablesVisitor, hoistDeclarators);
+    this.file.scope.traverse(block, hoistVariablesVisitor, {
+      formatter: this,
+      hoistDeclarators: hoistDeclarators
+    });
 
     if (hoistDeclarators.length) {
       var hoistDeclar = t.variableDeclaration("var", hoistDeclarators);
@@ -206,7 +209,10 @@ export default class SystemFormatter extends AMDFormatter {
     }
 
     // hoist up function declarations for circular references
-    this.file.scope.traverse(block, hoistFunctionsVisitor, handlerBody);
+    this.file.scope.traverse(block, hoistFunctionsVisitor, {
+      formatter: this,
+      handlerBody: handlerBody
+    });
 
     handlerBody.push(returnStatement);
 

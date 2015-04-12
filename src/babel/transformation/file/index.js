@@ -36,10 +36,9 @@ function checkNode(stack, node, scope) {
 
 export default class File {
   constructor(opts = {}) {
-    this.dynamicImportedNoDefault = [];
-    this.dynamicImportIds         = {};
-    this.dynamicImported          = [];
-    this.dynamicImports           = [];
+    this.dynamicImportAbsoluteDefaults = [];
+    this.dynamicImportIds              = {};
+    this.dynamicImports                = [];
 
     this.usedHelpers = {};
     this.dynamicData = {};
@@ -335,7 +334,7 @@ export default class File {
     return source;
   }
 
-  addImport(source: string, name?: string, noDefault?: boolean): Object {
+  addImport(source: string, name?: string, absoluteDefault?: boolean): Object {
     name ||= source;
     var id = this.dynamicImportIds[name];
 
@@ -346,9 +345,7 @@ export default class File {
       var specifiers = [t.importDefaultSpecifier(id)];
       var declar = t.importDeclaration(specifiers, t.literal(source));
       declar._blockHoist = 3;
-
-      this.dynamicImported.push(declar);
-      if (noDefault) this.dynamicImportedNoDefault.push(declar);
+      if (absoluteDefault) this.dynamicImportAbsoluteDefaults.push(declar);
 
       if (this.transformers["es6.modules"].canTransform()) {
         this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports);

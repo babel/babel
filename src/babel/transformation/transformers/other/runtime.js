@@ -79,15 +79,15 @@ exports.Program = function (node, parent, scope, file) {
 
 exports.pre = function (file) {
   file.set("helperGenerator", function (name) {
-    return file.addImport(`babel-runtime/helpers/${name}`, name);
+    return file.addImport(`babel-runtime/helpers/${name}`, name, true);
   });
 
   file.setDynamic("coreIdentifier", function () {
-    return file.addImport("babel-runtime/core-js", "core");
+    return file.addImport("babel-runtime/core-js", "core", true);
   });
 
   file.setDynamic("regeneratorIdentifier", function () {
-    return file.addImport("babel-runtime/regenerator", "regeneratorRuntime");
+    return file.addImport("babel-runtime/regenerator", "regeneratorRuntime", true);
   });
 };
 

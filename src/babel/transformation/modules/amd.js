@@ -80,9 +80,10 @@ export default class AMDFormatter extends DefaultFormatter {
       this.defaultIds[key] = specifier.local;
     }
 
-    if (includes(this.file.dynamicImportedNoDefault, node)) {
-      // Prevent unnecessary renaming of dynamic imports.
+    if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
+      // prevent unnecessary renaming of dynamic imports
       this.ids[node.source.value] = ref;
+      ref = t.memberExpression(ref, t.identifier("default"));
     } else if (t.isImportNamespaceSpecifier(specifier)) {
       // import * as bar from "foo";
     } else if (!includes(this.file.dynamicImported, node) && t.isSpecifierDefault(specifier) && !this.noInteropRequireImport) {

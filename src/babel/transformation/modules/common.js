@@ -45,20 +45,18 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
     // import foo from "foo";
     if (t.isSpecifierDefault(specifier)) {
-      if (includes(this.file.dynamicImportedNoDefault, node)) {
+      if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
         this.internalRemap[variableName.name] = ref;
+      } else if (this.noInteropRequireImport) {
+        this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"));
       } else {
-        if (this.noInteropRequireImport) {
-          this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"));
-        } else if (!includes(this.file.dynamicImported, node)) {
-          var uid = this.scope.generateUidBasedOnNode(node, "import");
+        var uid = this.scope.generateUidBasedOnNode(node, "import");
 
-          nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-wildcard"), [ref]))
-          ]));
+        nodes.push(t.variableDeclaration("var", [
+          t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-wildcard"), [ref]))
+        ]));
 
-          this.internalRemap[variableName.name] = t.memberExpression(uid, t.identifier("default"));
-        }
+        this.internalRemap[variableName.name] = t.memberExpression(uid, t.identifier("default"));
       }
     } else {
       if (t.isImportNamespaceSpecifier(specifier)) {
@@ -106,7 +104,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
     var call = t.callExpression(t.identifier("require"), [node.source]);
     var uid;
 
-    if (includes(this.file.dynamicImported, node) && !includes(this.file.dynamicImportedNoDefault, node)) {
+    if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
       call = t.memberExpression(call, t.identifier("default"));
       uid = node.specifiers[0].local;
     } else {
