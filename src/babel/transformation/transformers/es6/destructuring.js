@@ -126,10 +126,11 @@ export function AssignmentExpression(node, parent, scope, file) {
   if (!t.isPattern(node.left)) return;
 
   var ref = scope.generateUidIdentifier("temp");
-  scope.push({ id: ref });
 
   var nodes = [];
-  nodes.push(t.expressionStatement(t.assignmentExpression("=", ref, node.right)));
+  nodes.push(t.variableDeclaration("var", [
+    t.variableDeclarator(ref, node.right)
+  ]));
 
   var destructuring = new DestructuringTransformer({
     operator: node.operator,
@@ -137,6 +138,11 @@ export function AssignmentExpression(node, parent, scope, file) {
     scope: scope,
     nodes: nodes
   });
+
+  if (t.isArrayExpression(node.right)) {
+    destructuring.arrays[ref.name] = true;
+  }
+
   destructuring.init(node.left, ref);
 
   nodes.push(t.expressionStatement(ref));

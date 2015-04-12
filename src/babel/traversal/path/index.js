@@ -132,9 +132,22 @@ export default class TraversalPath {
 
   _maybePopFromStatements(nodes) {
     var last = nodes[nodes.length - 1];
-    if (t.isExpressionStatement(last) && t.isIdentifier(last.expression)) {
+    if (t.isExpressionStatement(last) && t.isIdentifier(last.expression) && !this.isCompletionRecord()) {
       nodes.pop();
     }
+  }
+
+  isCompletionRecord() {
+    var path = this;
+
+    do {
+      var container = path.container;
+      if (Array.isArray(container) && path.key !== container.length - 1) {
+        return false;
+      }
+    } while (path = path.parentPath && !path.isProgram());
+
+    return true;
   }
 
   isStatementOrBlock() {
