@@ -1,5 +1,5 @@
 "use strict";
 
-var _core = require("babel-runtime/core-js")["default"];
+var _iterator = require("babel-runtime/core-js/$for")["default"];
 
-_core.isIterable(Object(arr));
+_iterator.isIterable(Object(arr));

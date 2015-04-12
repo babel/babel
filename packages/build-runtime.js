@@ -13,14 +13,18 @@ function relative(filename) {
   return __dirname + "/babel-runtime/" + filename;
 }
 
-function readFile(filename, defaultify) {
+function readFile(filename, shouldDefaultify) {
   var file = fs.readFileSync(require.resolve(filename), "utf8");
 
-  if (defaultify) {
-    file += '\nmodule.exports = { "default": module.exports, __esModule: true };\n';
+  if (shouldDefaultify) {
+    file += "\n" + defaultify("module.exports") + "\n";
   }
 
   return file;
+}
+
+function defaultify(name) {
+  return 'module.exports = { "default": ' + name + ', __esModule: true };';
 }
 
 function updatePackage() {
@@ -68,5 +72,27 @@ each(File.helpers, function (helperName) {
 
 writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+
+//
+
+var coreDefinitions = require("../lib/babel/transformation/transformers/other/runtime/definitions");
+
+var paths = [];
+
+each(coreDefinitions.builtins, function (path) {
+  paths.push(path);
+});
+
+each(coreDefinitions.methods, function (props) {
+  each(props, function (path) {
+    paths.push(path);
+  });
+});
+
+each(paths, function (path) {
+  writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
+});
+
+//
 
 updatePackage();

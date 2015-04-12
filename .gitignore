@@ -11,6 +11,7 @@ test/core/tmp
 coverage
 dist
 .package.json
+packages/babel-runtime/core-js
 packages/babel-runtime/helpers/*.js
 packages/babel-runtime/regenerator/*.js
 lib

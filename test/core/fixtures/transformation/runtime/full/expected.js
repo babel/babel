@@ -1,15 +1,14 @@
 "use strict";
 
-var _core = require("babel-runtime/core-js")["default"];
+var _Symbol = require("babel-runtime/core-js/symbol")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
-_core.Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.giveWord = giveWord;
 var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
 
@@ -19,7 +18,7 @@ var _foo2 = _interopRequireWildcard(_foo);
 
 var bar = _interopRequireWildcard(_foo);
 
-var myWord = _core.Symbol("abc");
+var myWord = _Symbol("abc");
 exports.myWord = myWord;
 
 function giveWord() {

@@ -1,22 +1,15 @@
-import core from "core-js/library";
 import includes from "lodash/collection/includes";
-import * as util from  "../../../util";
+import * as util from  "../../../../util";
 import has from "lodash/object/has";
-import * as t from "../../../types";
+import * as t from "../../../../types";
+import definitions from "./definitions";
 
 var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
-var ALIASABLE_CONSTRUCTORS = [
-"Symbol",
-"Promise",
-"Map",
-"WeakMap",
-"Set",
-"WeakSet"
-];
+const RUNTIME_MODULE_NAME = "babel-runtime";
 
-function coreHas(node) {
-  return node.name !== "_" && has(core, node.name);
+function getForPath(file) {
+  return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/$for`, "iterator", true);
 }
 
 var astVisitor = {
@@ -30,13 +23,17 @@ var astVisitor = {
 
       if (!t.isReferenced(obj, node)) return;
 
-      if (!node.computed && coreHas(obj) && has(core[obj.name], prop.name) && !scope.getBindingIdentifier(obj.name)) {
-        this.skip();
-        return t.prependToMemberExpression(node, file.get("coreIdentifier"));
-      }
-    } else if (this.isReferencedIdentifier() && !t.isMemberExpression(parent) && includes(ALIASABLE_CONSTRUCTORS, node.name) && !scope.getBindingIdentifier(node.name)) {
+      if (node.computed) return;
+      if (!has(definitions.methods, obj.name)) return;
+      if (!has(definitions.methods[obj.name], prop.name)) return;
+      if (scope.getBindingIdentifier(obj.name)) return;
+
+      var modulePath = definitions.methods[obj.name][prop.name];
+      return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}$${prop.name}`, true);
+    } else if (this.isReferencedIdentifier() && !t.isMemberExpression(parent) && has(definitions.builtins, node.name) && !scope.getBindingIdentifier(node.name)) {
       // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
-      return t.memberExpression(file.get("coreIdentifier"), node);
+      var modulePath = definitions.builtins[node.name];
+      return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, true);
     } else if (this.isCallExpression()) {
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
 
@@ -50,7 +47,7 @@ var astVisitor = {
       if (!isSymbolIterator(prop)) return false;
 
       return util.template("corejs-iterator", {
-        CORE_ID: file.get("coreIdentifier"),
+        CORE_ID: getForPath(file),
         VALUE:   callee.object
       });
     } else if (this.isBinaryExpression()) {
@@ -62,7 +59,7 @@ var astVisitor = {
       if (!isSymbolIterator(left)) return;
 
       return util.template("corejs-is-iterator", {
-        CORE_ID: file.get("coreIdentifier"),
+        CORE_ID: getForPath(file),
         VALUE:   node.right
       });
     }
@@ -79,15 +76,11 @@ exports.Program = function (node, parent, scope, file) {
 
 exports.pre = function (file) {
   file.set("helperGenerator", function (name) {
-    return file.addImport(`babel-runtime/helpers/${name}`, name, true);
-  });
-
-  file.setDynamic("coreIdentifier", function () {
-    return file.addImport("babel-runtime/core-js", "core", true);
+    return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, name, true);
   });
 
   file.setDynamic("regeneratorIdentifier", function () {
-    return file.addImport("babel-runtime/regenerator", "regeneratorRuntime", true);
+    return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "regeneratorRuntime", true);
   });
 };
 

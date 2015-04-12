@@ -1,6 +1,6 @@
 "use strict";
 
-var _core = require("babel-runtime/core-js")["default"];
+var _iterator2 = require("babel-runtime/core-js/$for")["default"];
 
 var arr = (function () {
   var _arr = [];
@@ -9,7 +9,7 @@ var arr = (function () {
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = _core.getIterator(nums), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (var _iterator = _iterator2.getIterator(nums), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var i = _step.value;
 
       _arr.push(i * i);
