@@ -99,6 +99,7 @@ export function property(node, file, scope) {
   if (!t.isLiteral(key)) return node; // we can't set a function id with this
 
   var name = t.toIdentifier(key.value);
+  if (name === "eval" || name === "arguments") name = "_" + name;
   var id = t.identifier(name);
 
   var method = node.value;
