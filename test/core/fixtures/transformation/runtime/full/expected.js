@@ -10,7 +10,19 @@ _core.Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var giveWord = _regeneratorRuntime.mark(function giveWord() {
+exports.giveWord = giveWord;
+var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
+
+var _foo = require("someModule");
+
+var _foo2 = _interopRequireWildcard(_foo);
+
+var bar = _interopRequireWildcard(_foo);
+
+var myWord = _core.Symbol("abc");
+exports.myWord = myWord;
+
+function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
@@ -21,19 +33,8 @@ var giveWord = _regeneratorRuntime.mark(function giveWord() {
       case "end":
         return context$1$0.stop();
     }
-  }, giveWord, this);
-});
-
-exports.giveWord = giveWord;
-
-var _foo = require("someModule");
-
-var _foo2 = _interopRequireWildcard(_foo);
-
-var bar = _interopRequireWildcard(_foo);
-
-var myWord = _core.Symbol("abc");
-exports.myWord = myWord;
+  }, marked0$0[0], this);
+}
 
 _foo2["default"];
 bar;

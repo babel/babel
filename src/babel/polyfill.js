@@ -4,4 +4,4 @@ if (global._babelPolyfill) {
 global._babelPolyfill = true;
 
 import "core-js/shim";
-import "regenerator-babel/runtime";
+import "regenerator/runtime";

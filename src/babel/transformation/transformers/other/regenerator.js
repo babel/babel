@@ -1,4 +1,4 @@
-import regenerator from "regenerator-babel";
+import regenerator from "regenerator";
 import * as t from "../../../types";
 
 export function check(node) {

@@ -7,15 +7,15 @@ import * as t from "./types";
 
 extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
-// regenerator-babel/ast-types
+// regenerator/ast-types
 
 var def = types.Type.def;
 var or  = types.Type.or;
 
-def("File")
-  .bases("Node")
-  .build("program")
-  .field("program", def("Program"));
+//def("File")
+//  .bases("Node")
+//  .build("program")
+//  .field("program", def("Program"));
 
 def("AssignmentPattern")
   .bases("Pattern")
