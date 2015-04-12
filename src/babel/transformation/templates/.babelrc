@@ -1,4 +1,4 @@
 {
-  "blacklist": ["useStrict", "es6.blockScoping", "regenerator"],
+  "blacklist": ["useStrict", "es6.blockScoping", "regenerator", "es6.spread"],
   "loose": ["es6.modules"]
 }
