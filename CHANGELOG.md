@@ -40,6 +40,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **New Feature**
   * Add [trailing function comma proposal](https://github.com/jeffmo/es-trailing-function-commas). Thanks [@AluisioASG](https://github.com/AluisioASG)!
   * Add support for object literal decorators.
+  * Make core-js modular when using the `runtime` transformer.
 
 ## 5.0.12
 
