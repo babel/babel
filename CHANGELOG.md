@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.3
+
+ * **Internal**
+  * Switch entirely to vanilla regenerator.
+  * Clean up and make the parsing of decorators stateless.
+ * **Bug Fix**
+  * Don't do TCO on generators and async functions.
+  * Add missing `core-js` runtime definitions.
+
 ## 5.1.2
 
  * **Bug Fix**
