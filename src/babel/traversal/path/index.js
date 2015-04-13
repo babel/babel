@@ -713,6 +713,11 @@ export default class TraversalPath {
     var search = [this.node];
     var i = 0;
 
+    function matches(name) {
+      var part = parts[i];
+      return part === "*" || name === part;
+    }
+
     while (search.length) {
       var node = search.shift();
 
@@ -722,10 +727,10 @@ export default class TraversalPath {
 
       if (t.isIdentifier(node)) {
         // this part doesn't match
-        if (parts[i] !== node.name) return false;
+        if (!matches(node.name)) return false;
       } else if (t.isLiteral(node)) {
         // this part doesn't match
-        if (parts[i] !== node.value) return false;
+        if (!matches(node.value)) return false;
       } else if (t.isMemberExpression(node)) {
         if (node.computed && !t.isLiteral(node.property)) {
           // we can't deal with this

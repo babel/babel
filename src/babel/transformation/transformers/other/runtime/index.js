@@ -42,7 +42,7 @@ var astVisitor = {
       prop = callee.property;
       if (!isSymbolIterator(prop)) return false;
 
-      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", true), [callee.object]);
+      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterable`, "getIterator", true), [callee.object]);
     } else if (this.isBinaryExpression()) {
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
 
