@@ -6,10 +6,13 @@ var transform = require("..").transform;
 
 describe("_blockHoist nodes", function() {
   it("should be hoisted to the outer body", function() {
+    var foo;
+    var names = [];
     var ast = recast.parse([
       "function *foo(doNotHoistMe, hoistMe) {",
-      "  yield doNotHoistMe();",
+      "  var sent = yield doNotHoistMe();",
       "  hoistMe();",
+      "  names.push(sent);",
       "  return 123;",
       "}"
     ].join("\n"));
@@ -22,15 +25,11 @@ describe("_blockHoist nodes", function() {
 
     hoistMeStmt._blockHoist = 1;
 
-    transform(ast);
-
-    var foo;
-    eval(recast.print(ast).code);
+    eval(recast.print(transform(ast)).code);
 
     assert.strictEqual(typeof foo, "function");
     assert.ok(regeneratorRuntime.isGeneratorFunction(foo));
-
-    var names = [];
+    assert.strictEqual(names.length, 0);
 
     var g = foo(function doNotHoistMe() {
       names.push("doNotHoistMe");
@@ -42,7 +41,7 @@ describe("_blockHoist nodes", function() {
     assert.deepEqual(names, ["hoistMe"]);
     assert.deepEqual(g.next(), { value: "yielded", done: false });
     assert.deepEqual(names, ["hoistMe", "doNotHoistMe"]);
-    assert.deepEqual(g.next(), { value: 123, done: true });
-    assert.deepEqual(names, ["hoistMe", "doNotHoistMe"]);
+    assert.deepEqual(g.next("oyez"), { value: 123, done: true });
+    assert.deepEqual(names, ["hoistMe", "doNotHoistMe", "oyez"]);
   });
 });
