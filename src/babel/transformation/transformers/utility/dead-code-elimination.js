@@ -34,6 +34,7 @@ export var IfStatement = {
   exit(node, parent, scope) {
     var consequent = node.consequent;
     var alternate  = node.alternate;
+    var test = node.test;
 
     var evaluateTest = this.get("test").evaluateTruthy();
 
