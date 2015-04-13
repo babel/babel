@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.8
+
+ * **Bug Fix**
+  * Only make parenthesized object pattern LHS illegal.
+
 ## 5.1.7
 
  * **Internal**
