@@ -226,7 +226,7 @@ pp.parseSubscripts = function(base, start, noCalls) {
   } else if (!noCalls && this.eat(tt.parenL)) {
     let node = this.startNodeAt(start)
     node.callee = base
-    node.arguments = this.parseExprList(tt.parenR, false)
+    node.arguments = this.parseExprList(tt.parenR, this.options.features["es7.trailingFunctionCommas"])
     return this.parseSubscripts(this.finishNode(node, "CallExpression"), start, noCalls)
   } else if (this.type === tt.backQuote) {
     let node = this.startNodeAt(start)

@@ -458,7 +458,7 @@ pp.parseFunction = function(node, isStatement, allowExpressionBody, isAsync) {
 
 pp.parseFunctionParams = function(node) {
   this.expect(tt.parenL)
-  node.params = this.parseBindingList(tt.parenR, false, false)
+  node.params = this.parseBindingList(tt.parenR, false, this.options.features["es7.trailingFunctionCommas"])
 }
 
 // Parse a class declaration or literal (depending on the
