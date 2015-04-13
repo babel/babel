@@ -81,6 +81,7 @@ var astVisitor = traverse.explode({
       var obj  = node.object;
 
       if (!has(definitions.builtins, obj.name)) return;
+      if (scope.getBindingIdentifier(obj.name)) return;
 
       var modulePath = definitions.builtins[obj.name];
       return t.memberExpression(
