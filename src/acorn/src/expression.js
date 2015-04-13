@@ -509,22 +509,24 @@ pp.parseTemplate = function() {
 pp.parseObj = function(isPattern, refShorthandDefaultPos) {
   let node = this.startNode(), first = true, propHash = {}
   node.properties = []
+  let decorators = []
   this.next()
   while (!this.eat(tt.braceR)) {
     if (!first) {
       this.expect(tt.comma)
       if (this.afterTrailingComma(tt.braceR)) break
     } else first = false
-
     while (this.type === tt.at) {
-      this.decorators.push(this.parseDecorator())
+      decorators.push(this.parseDecorator())
     }
-
     let prop = this.startNode(), isGenerator = false, isAsync = false, start
+    if (decorators.length) {
+      prop.decorators = decorators
+      decorators = []
+    }
     if (this.options.features["es7.objectRestSpread"] && this.type === tt.ellipsis) {
       prop = this.parseSpread()
       prop.type = "SpreadProperty"
-      this.takeDecorators(prop)
       node.properties.push(prop)
       continue
     }
@@ -550,10 +552,9 @@ pp.parseObj = function(isPattern, refShorthandDefaultPos) {
     }
     this.parseObjPropValue(prop, start, isGenerator, isAsync, isPattern, refShorthandDefaultPos);
     this.checkPropClash(prop, propHash)
-    this.takeDecorators(prop)
     node.properties.push(this.finishNode(prop, "Property"))
   }
-  if (this.decorators.length) {
+  if (decorators.length) {
     this.raise(this.start, "You have trailing decorators with no property");
   }
   return this.finishNode(node, isPattern ? "ObjectPattern" : "ObjectExpression")

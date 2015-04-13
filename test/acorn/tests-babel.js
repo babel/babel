@@ -2461,6 +2461,166 @@ test("class Foo { @foo @bar bar() {} }", {
   features: { "es7.decorators": true }
 });
 
+test('@foo({ @bar foo: "bar" }) @bar class Foo {}', {
+  "start": 0,
+  "body": [{
+    "start": 31,
+    "decorators": [{
+      "start": 0,
+      "expression": {
+        "start": 1,
+        "callee": {
+          "start": 1,
+          "name": "foo",
+          "type": "Identifier",
+          "end": 4
+        },
+        "arguments": [{
+          "start": 5,
+          "properties": [{
+            "start": 12,
+            "decorators": [{
+              "start": 7,
+              "expression": {
+                "start": 8,
+                "name": "bar",
+                "type": "Identifier",
+                "end": 11
+              },
+              "type": "Decorator",
+              "end": 11
+            }],
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "key": {
+              "start": 12,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 15
+            },
+            "value": {
+              "start": 17,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 22
+            },
+            "kind": "init",
+            "type": "Property",
+            "end": 22
+          }],
+          "type": "ObjectExpression",
+          "end": 24
+        }],
+        "type": "CallExpression",
+        "end": 25
+      },
+      "type": "Decorator",
+      "end": 25
+    },
+    {
+      "start": 26,
+      "expression": {
+        "start": 27,
+        "name": "bar",
+        "type": "Identifier",
+        "end": 30
+      },
+      "type": "Decorator",
+      "end": 30
+    }],
+    "id": {
+      "start": 37,
+      "name": "Foo",
+      "type": "Identifier",
+      "end": 40
+    },
+    "superClass": null,
+    "body": {
+      "start": 41,
+      "body": [],
+      "type": "ClassBody",
+      "end": 43
+    },
+    "type": "ClassDeclaration",
+    "end": 43
+  }],
+  "sourceType": "script",
+  "type": "Program",
+  "end": 43
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
+test('@bar class Foo extends @foo class Bar {} {}', {
+  "start": 0,
+  "body": [{
+    "start": 5,
+    "decorators": [{
+      "start": 0,
+      "expression": {
+        "start": 1,
+        "name": "bar",
+        "type": "Identifier",
+        "end": 4
+      },
+      "type": "Decorator",
+      "end": 4
+    }],
+    "id": {
+      "start": 11,
+      "name": "Foo",
+      "type": "Identifier",
+      "end": 14
+    },
+    "superClass": {
+      "start": 28,
+      "decorators": [{
+        "start": 23,
+        "expression": {
+          "start": 24,
+          "name": "foo",
+          "type": "Identifier",
+          "end": 27
+        },
+        "type": "Decorator",
+        "end": 27
+      }],
+      "id": {
+        "start": 34,
+        "name": "Bar",
+        "type": "Identifier",
+        "end": 37
+      },
+      "superClass": null,
+      "body": {
+        "start": 38,
+        "body": [],
+        "type": "ClassBody",
+        "end": 40
+      },
+      "type": "ClassExpression",
+      "end": 40
+    },
+    "body": {
+      "start": 41,
+      "body": [],
+      "type": "ClassBody",
+      "end": 43
+    },
+    "type": "ClassDeclaration",
+    "end": 43
+  }],
+  "sourceType": "script",
+  "type": "Program",
+  "end": 43
+}, {
+  ecmaVersion: 6,
+  features: { "es7.decorators": true }
+});
+
 testFail("@foo function bar() {}", "Leading decorators must be attached to a class declaration (1:5)", {
   ecmaVersion: 6,
   features: { "es7.decorators": true }
