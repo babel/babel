@@ -13,6 +13,28 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.0
+
+ * **Bug Fix**
+  * Fix super reference when using decorators.
+  * Don't do array unpack optimisation when member expressions are present.
+  * Add missing descriptors for undecorated class properties.
+  * Don't consider `arguments` and `eval` valid function names when doing function name inferrence.
+  * Fix scope tracking of constants in loop heads.
+  * Parse `AwaitExpression` as a unary instead of an assignment.
+  * Fix regex evaluation when attempting static evaluation.
+  * Don't emit tokens when doing a lookahead.
+ * **Internal**
+  * Upgrade `regenerator` to the latest and use my branch with the hope of eventually switching to vanilla regenerator.
+  * Add support for the replacement of for loop `init`s with statements.
+  * Upgrade dependencies.
+ * **Polish**
+  * When adding the scope IIFE when using default parameters, don't shadow the function expression, just `apply` `this` and `arguments` if necessary.
+  * Use path basename as non-default import fallback.
+ * **New Feature**
+  * Add [trailing function comma proposal](https://github.com/jeffmo/es-trailing-function-commas). Thanks [@AluisioASG](https://github.com/AluisioASG)!
+  * Add support for object literal decorators.
+
 ## 5.0.12
 
  * **Bug Fix**
