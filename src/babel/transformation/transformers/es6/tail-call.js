@@ -6,6 +6,7 @@ import map from "lodash/collection/map";
 import * as t from "../../../types";
 
 exports.Function = function (node, parent, scope, file) {
+  if (node.generator || node.async) return;
   var tailCall = new TailCallTransformer(this, scope, file);
   tailCall.run();
 };
