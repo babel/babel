@@ -159,7 +159,7 @@
       "ownKeys": "reflect/own-keys",
       "preventExtensions": "reflect/prevent-extensions",
       "setPrototypeOf": "reflect/set-prototype-of",
-      "set": "reflect/set",
+      "set": "reflect/set"
     }
   }
 }
