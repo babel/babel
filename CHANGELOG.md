@@ -24,6 +24,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Parse `AwaitExpression` as a unary instead of an assignment.
   * Fix regex evaluation when attempting static evaluation.
   * Don't emit tokens when doing a lookahead.
+  * Add missing `test` declaration to `utility.deadCodeElimination` transformer.
  * **Internal**
   * Upgrade `regenerator` to the latest and use my branch with the hope of eventually switching to vanilla regenerator.
   * Add support for the replacement of for loop `init`s with statements.
