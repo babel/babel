@@ -2,11 +2,11 @@ var test = require("./driver.js").test;
 var testFail = require("./driver.js").testFail;
 var testAssert = require("./driver.js").testAssert;
 
-testFail("({a}) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = {})` (1:1)", {
+testFail("({a}) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:1)", {
   ecmaVersion: 6
 });
 
-testFail("([a]) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `([a]) = 0` use `([a] = {})` (1:1)", {
+testFail("([a]) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `([a]) = 0` use `([a] = 0)` (1:1)", {
   ecmaVersion: 6
 });
 
