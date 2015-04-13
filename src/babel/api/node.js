@@ -55,7 +55,8 @@ export function transformFileSync(filename: string, opts?: Object = {}) {
 }
 
 export function parse(code, opts = {}) {
-  opts.ecmaVersion = 6;
+  opts.sourceType = "module";
+  opts.ecmaVersion = Infinity;
   opts.plugins = {
     flow: true,
     jsx:  true
