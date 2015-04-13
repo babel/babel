@@ -87,15 +87,23 @@ var visitor = types.PathVisitor.fromMethodsObject({
     }
 
     var outerBody = [];
-    var bodyBlock = path.value.body;
-    bodyBlock.body = bodyBlock.body.filter(function (node) {
+    var innerBody = [];
+    var bodyPath = path.get("body", "body");
+
+    bodyPath.each(function(childPath) {
+      var node = childPath.value;
       if (node && node._blockHoist != null) {
         outerBody.push(node);
-        return false;
       } else {
-        return true;
+        innerBody.push(node);
       }
     });
+
+    if (outerBody.length > 0) {
+      // Only replace the inner body if we actually hoisted any statements
+      // to the outer body.
+      bodyPath.replace(innerBody);
+    }
 
     var outerFnExpr = getOuterFnExpr(path);
     // Note that getOuterFnExpr has the side-effect of ensuring that the

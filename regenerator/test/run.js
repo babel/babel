@@ -124,7 +124,8 @@ enqueue("mocha", [
   "--reporter", "spec",
   "--require", "./runtime",
   "./test/tests.es5.js",
-  "./test/async.es5.js"
+  "./test/async.es5.js",
+  "./test/tests.transform.js"
 ]);
 
 // Run command-line tool with available options to make sure it works.
