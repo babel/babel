@@ -168,7 +168,6 @@ class ClassTransformer {
     var closureArgs = [];
 
     //
-
     if (this.hasSuper) {
       closureArgs.push(superName);
 
@@ -180,30 +179,30 @@ class ClassTransformer {
     }
 
     //
-
-    this.buildBody();
-
     var decorators = this.node.decorators;
-    var classCheckRef = classRef;
-
     if (decorators) {
-      classCheckRef = this.scope.generateUidIdentifier(classRef);
+      // create a class reference to use later on
+      this.classRef = this.scope.generateUidIdentifier(classRef);
+
+      // this is so super calls and the decorators have access to the raw function
+      body.unshift(t.variableDeclaration("var", [
+        t.variableDeclarator(this.classRef, classRef)
+      ]));
     }
 
+    //
+    this.buildBody();
+
+    // make sure this class isn't directly called
     constructorBody.body.unshift(t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
       t.thisExpression(),
-      classCheckRef
+      this.classRef
     ])));
 
     //
 
     if (decorators) {
-      if (this.className) {
-        body.push(t.variableDeclaration("var", [
-          t.variableDeclarator(classCheckRef, classRef)
-        ]));
-      }
-
+      // reverse the decorators so we execute them in the right order
       decorators = decorators.reverse();
 
       for (var i = 0; i < decorators.length; i++) {
@@ -219,6 +218,8 @@ class ClassTransformer {
     }
 
     if (this.isNativeSuper) {
+      // we've determined this is inheriting from a native class so return the constructed
+      // instance
       constructorBody.body.push(t.returnStatement(this.nativeSuperRef));
     }
 
