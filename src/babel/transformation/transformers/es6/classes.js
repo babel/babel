@@ -185,7 +185,7 @@ class ClassTransformer {
       this.classRef = this.scope.generateUidIdentifier(classRef);
 
       // this is so super calls and the decorators have access to the raw function
-      body.unshift(t.variableDeclaration("var", [
+      body.push(t.variableDeclaration("var", [
         t.variableDeclarator(this.classRef, classRef)
       ]));
     }
