@@ -7,6 +7,7 @@
     "Set": "set",
     "WeakSet": "weak-set"
   },
+
   "methods": {
     "Array": {
       "concat": "array/concat",
@@ -94,6 +95,21 @@
       "addLocale": "date/add-locale",
       "formatUTC": "date/format-utc",
       "format": "date/format"
+    },
+    "Symbol": {
+      "for": "symbol/for",
+      "hasInstance": "symbol/for-instance",
+      "is-concat-spreadable": "symbol/is-concat-spreadable",
+      "iterator": "symbol/iterator",
+      "keyFor": "symbol/key-for",
+      "match": "symbol/match",
+      "replace": "symbol/replace",
+      "search": "symbol/search",
+      "species": "symbol/species",
+      "split": "symbol/split",
+      "toPrimitive": "symbol/to-primitive",
+      "toStringTag": "symbol/to-string-tag",
+      "unscopables": "symbol/unscopables"
     }
   }
 }
