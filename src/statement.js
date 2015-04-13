@@ -471,14 +471,18 @@ pp.parseClass = function(node, isStatement) {
   var classBody = this.startNode()
   classBody.body = []
   this.expect(tt.braceL)
+  let decorators = []
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue
     if (this.type === tt.at) {
-      this.decorators.push(this.parseDecorator())
+      decorators.push(this.parseDecorator())
       continue
     }
     var method = this.startNode()
-    this.takeDecorators(method)
+    if (decorators.length) {
+      method.decorators = decorators
+      decorators = []
+    }
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
     if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
@@ -517,7 +521,7 @@ pp.parseClass = function(node, isStatement) {
     }
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
   }
-  if (this.decorators.length) {
+  if (decorators.length) {
     this.raise(this.start, "You have trailing decorators with no method");
   }
   node.body = this.finishNode(classBody, "ClassBody")
