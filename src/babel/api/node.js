@@ -4,12 +4,11 @@ import * as acorn from "../../acorn";
 import * as util from "../util";
 import fs from "fs";
 
-export { util, acorn };
+export { util, acorn, transform };
 export { canCompile } from "../util";
 
 export { default as options } from "../transformation/file/options";
 export { default as Transformer } from "../transformation/transformer";
-export { default as transform } from "../transformation";
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { version } from "../../../package";
@@ -53,4 +52,19 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
+}
+
+export function parse(code, opts = {}) {
+  opts.ecmaVersion = 6;
+  opts.plugins = {
+    flow: true,
+    jsx:  true
+  };
+  opts.features = {};
+
+  for (var key in transform.transformers) {
+    opts.features[key] = true;
+  }
+
+  return acorn.parse(code, opts);
 }
