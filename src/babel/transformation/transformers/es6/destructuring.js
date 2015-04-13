@@ -403,9 +403,14 @@ class DestructuringTransformer {
     if (pattern.elements.length > arr.elements.length) return;
     if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
 
-    // deopt on holes
     for (var i = 0; i < pattern.elements.length; i++) {
-      if (!pattern.elements[i]) return false;
+      var elem = pattern.elements[i];
+
+      // deopt on holes
+      if (!elem) return false;
+
+      // deopt on member expressions
+      if (t.isMemberExpression(elem)) return false;
     }
 
     // deopt on reference to left side identifiers
