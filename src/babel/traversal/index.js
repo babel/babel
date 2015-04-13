@@ -78,6 +78,9 @@ traverse.removeProperties = function (tree) {
 traverse.explode = function (obj) {
   for (var type in obj) {
     var fns = obj[type];
+    if (typeof fns === "function") {
+      obj[type] = fns = { enter: fns };
+    }
 
     var aliases = t.FLIPPED_ALIAS_KEYS[type];
     if (aliases) {

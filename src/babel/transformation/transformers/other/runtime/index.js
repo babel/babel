@@ -1,4 +1,5 @@
 import includes from "lodash/collection/includes";
+import traverse from "../../../../traversal";
 import * as util from  "../../../../util";
 import has from "lodash/object/has";
 import * as t from "../../../../types";
@@ -8,53 +9,87 @@ var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
 const RUNTIME_MODULE_NAME = "babel-runtime";
 
-var astVisitor = {
-  enter(node, parent, scope, file) {
-    var prop;
+var astVisitor = traverse.explode({
+  Identifier(node, parent, scope, file) {
+    if (!this.isReferenced()) return;
+    if (t.isMemberExpression(parent)) return;
+    if (!has(definitions.builtins, node.name)) return;
+    if (scope.getBindingIdentifier(node.name)) return;
 
-    if (this.isMemberExpression() && this.isReferenced()) {
+    // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
+    var modulePath = definitions.builtins[node.name];
+    return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, true);
+  },
+
+  CallExpression(node, parent, scope, file) {
+    // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
+
+    var callee = node.callee;
+    if (node.arguments.length) return;
+
+    if (!t.isMemberExpression(callee)) return;
+    if (!callee.computed) return;
+
+    var prop = callee.property;
+    if (!isSymbolIterator(prop)) return;
+
+    return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", true), [callee.object]);
+  },
+
+  BinaryExpression(node, parent, scope, file) {
+    // Symbol.iterator in arr -> core.$for.isIterable(arr)
+
+    if (node.operator !== "in") return;
+
+    var left = node.left;
+    if (!isSymbolIterator(left)) return;
+
+    return t.callExpression(
+      file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterable`, "isIterable", true),
+      [node.right]
+    );
+  },
+
+  MemberExpression: {
+    enter(node, parent, scope, file) {
       // Array.from -> _core.Array.from
+
+      if (!this.isReferenced()) return;
+
       var obj = node.object;
-      prop = node.property;
+      var prop = node.property;
 
       if (!t.isReferenced(obj, node)) return;
 
       if (node.computed) return;
+
       if (!has(definitions.methods, obj.name)) return;
-      if (!has(definitions.methods[obj.name], prop.name)) return;
+
+      var methods = definitions.methods[obj.name];
+      if (!has(methods, prop.name)) return;
+
       if (scope.getBindingIdentifier(obj.name)) return;
 
-      var modulePath = definitions.methods[obj.name][prop.name];
+      var modulePath = methods[prop.name];
       return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}$${prop.name}`, true);
-    } else if (this.isReferencedIdentifier() && !t.isMemberExpression(parent) && has(definitions.builtins, node.name) && !scope.getBindingIdentifier(node.name)) {
-      // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
-      var modulePath = definitions.builtins[node.name];
-      return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, true);
-    } else if (this.isCallExpression()) {
-      // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
+    },
 
-      var callee = node.callee;
-      if (node.arguments.length) return false;
+    exit(node, parent, scope, file) {
+      if (!this.isReferenced()) return;
 
-      if (!t.isMemberExpression(callee)) return false;
-      if (!callee.computed) return false;
+      var prop = node.property;
+      var obj  = node.object;
 
-      prop = callee.property;
-      if (!isSymbolIterator(prop)) return false;
+      if (!has(definitions.builtins, obj.name)) return;
 
-      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", true), [callee.object]);
-    } else if (this.isBinaryExpression()) {
-      // Symbol.iterator in arr -> core.$for.isIterable(arr)
-
-      if (node.operator !== "in") return;
-
-      var left = node.left;
-      if (!isSymbolIterator(left)) return;
-
-      return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterable`, "isIterable", true), [node.right]);
+      var modulePath = definitions.builtins[obj.name];
+      return t.memberExpression(
+        file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}`, true),
+        prop
+      );
     }
   }
-};
+});
 
 exports.metadata = {
   optional: true
