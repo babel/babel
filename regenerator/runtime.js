@@ -145,14 +145,14 @@
         var delegate = context.delegate;
         if (delegate) {
           if (method === "return" ||
-              (method === "throw" && delegate.iterator.throw === undefined)) {
+              (method === "throw" && delegate.iterator[method] === undefined)) {
             // A return or throw (when the delegate iterator has no throw
             // method) always terminates the yield* loop.
             context.delegate = null;
 
             // If the delegate iterator has a return method, give it a
             // chance to clean up.
-            var returnMethod = delegate.iterator.return;
+            var returnMethod = delegate.iterator["return"];
             if (returnMethod) {
               var record = tryCatch(returnMethod, delegate.iterator, arg);
               if (record.type === "throw") {
