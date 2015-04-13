@@ -44,11 +44,10 @@ export default function (loc, opts = {}) {
       find(up, rel);
     }
   }
-  
+
   if (opts.breakConfig !== true) {
     find(loc, rel);
   }
-  
 
   return opts;
 };
