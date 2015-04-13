@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.7
+
+ * **Internal**
+  * Add `parse` node API.
+
+## 5.1.6
+
+ * **Bug Fix**
+  * Fix `runtime` built-in catchall not properly checking for local variables.
+
 ## 5.1.5
 
  * **Internal**
