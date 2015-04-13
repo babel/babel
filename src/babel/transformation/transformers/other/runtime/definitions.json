@@ -41,6 +41,7 @@
       "unshift": "array/unshift",
       "values": "array/values"
     },
+
     "Object": {
       "assign": "object/assign",
       "classof": "object/classof",
@@ -65,13 +66,16 @@
       "setPrototypeOf": "object/set-prototype-of",
       "values": "object/values"
     },
+
     "RegExp": {
       "escape": "regexp/escape"
     },
+
     "Function": {
       "only": "function/only",
       "part": "function/part"
     },
+
     "Math": {
       "acosh": "math/acosh",
       "asinh": "math/asinh",
@@ -92,11 +96,13 @@
       "tanh": "math/tanh",
       "trunc": "math/trunc"
     },
+
     "Date": {
       "addLocale": "date/add-locale",
       "formatUTC": "date/format-utc",
       "format": "date/format"
     },
+
     "Symbol": {
       "for": "symbol/for",
       "hasInstance": "symbol/for-instance",
@@ -112,6 +118,7 @@
       "toStringTag": "symbol/to-string-tag",
       "unscopables": "symbol/unscopables"
     },
+
     "String": {
       "at": "string/at",
       "codePointAt": "string/code-point-at",
@@ -124,8 +131,9 @@
       "startsWith": "string/starts-with",
       "unescapeHTML": "string/unescape-html"
     },
+
     "Number": {
-      "epsilon": "number/epsilon",
+      "EPSILON": "number/epsilon",
       "isFinite": "number/is-finite",
       "isInteger": "number/is-integer",
       "isNaN": "number/is-nan",
@@ -135,6 +143,23 @@
       "parseFloat": "number/parse-float",
       "parseInt": "number/parse-int",
       "random": "number/random"
+    },
+
+    "Reflect": {
+      "apply": "reflect/apply",
+      "construct": "reflect/construct",
+      "defineProperty": "reflect/define-property",
+      "deleteProperty": "reflect/delete-property",
+      "enumerate": "reflect/enumerate",
+      "getOwnPropertyDescriptor": "reflect/get-own-property-descriptor",
+      "getPrototypeOf": "reflect/get-prototype-of",
+      "get": "reflect/get",
+      "has": "reflect/has",
+      "isExtensible": "reflect/is-extensible",
+      "ownKeys": "reflect/own-keys",
+      "preventExtensions": "reflect/prevent-extensions",
+      "setPrototypeOf": "reflect/set-prototype-of",
+      "set": "reflect/set",
     }
   }
 }
