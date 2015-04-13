@@ -103,8 +103,16 @@ pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos, afterLeftParse) {
     node.left = this.type === tt.eq ? this.toAssignable(left) : left
     refShorthandDefaultPos.start = 0 // reset because shorthand default was used correctly
     this.checkLVal(left)
-    if (left.parenthesizedExpression && (left.type === "ObjectPattern" || left.type === "ArrayPattern")) {
-      this.raise(left.start, "You're trying to assign to a parenthesized expression, instead of `({ foo }) = {}` use `({ foo } = {})`");
+    if (left.parenthesizedExpression) {
+      let errorMsg
+      if (left.type === "ObjectPattern") {
+        errorMsg = "`({a}) = 0` use `({a} = 0)`"
+      } else if (left.type === "ArrayPattern") {
+        errorMsg = "`([a]) = 0` use `([a] = 0)`"
+      }
+      if (errorMsg) {
+        this.raise(left.start, `You're trying to assign to a parenthesized expression, eg. instead of ${errorMsg}`)
+      }
     }
     this.next()
     node.right = this.parseMaybeAssign(noIn)
