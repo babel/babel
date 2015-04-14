@@ -49,11 +49,12 @@ var remapVisitor = {
     if (node._skipModulesRemap) {
       return this.skip();
     }
+  },
 
+  exit(node, parent, scope, formatter) {
     if (t.isAssignmentExpression(node) && !node._ignoreModulesRemap) {
       var exported = formatter.getExport(node.left, scope);
       if (exported) {
-        this.skip();
         return formatter.remapExportAssignment(node, exported);
       }
     }
