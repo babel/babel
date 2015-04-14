@@ -5,7 +5,6 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "repository": "babel/babel",
-  "main": "lib/babel/api/node.js",
   "browser": {
     "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
   },
