@@ -1,6 +1,6 @@
 (function (FUNCTION_KEY) {
   function* FUNCTION_ID() {
-    return yield* FUNCTION_ID.apply(this, arguments);
+    return yield* FUNCTION_KEY.apply(this, arguments);
   }
 
   FUNCTION_ID.toString = function () {
