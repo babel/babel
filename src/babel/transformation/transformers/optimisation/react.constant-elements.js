@@ -29,14 +29,11 @@ var immutabilityVisitor = {
 };
 
 export function JSXElement(node, parent, scope, file) {
-  if (node._ignoreConstant) return;
+  if (node._hoisted) return;
 
   var state = { isImmutable: true };
   this.traverse(immutabilityVisitor, state);
   this.skip();
 
-  if (state.isImmutable) {
-    this.hoist();
-    node._ignoreConstant = true;
-  }
+  if (state.isImmutable) this.hoist();
 }

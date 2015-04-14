@@ -465,14 +465,14 @@ class BlockScoping {
     var declar;
 
     //
-    for (var i = 0; i < declarators.length; i++) {
+    for (let i = 0; i < declarators.length; i++) {
       declar = declarators[i];
       extend(this.outsideLetReferences, t.getBindingIdentifiers(declar));
     }
 
     //
     if (block.body) {
-      for (i = 0; i < block.body.length; i++) {
+      for (let i = 0; i < block.body.length; i++) {
         declar = block.body[i];
         if (isLet(declar, block)) {
           declarators = declarators.concat(declar.declarations);
@@ -481,7 +481,7 @@ class BlockScoping {
     }
 
     //
-    for (i = 0; i < declarators.length; i++) {
+    for (let i = 0; i < declarators.length; i++) {
       declar = declarators[i];
       var keys = t.getBindingIdentifiers(declar);
       extend(this.letReferences, keys);
