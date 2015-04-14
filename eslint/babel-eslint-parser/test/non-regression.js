@@ -131,4 +131,12 @@ describe("verify", function () {
       []
     );
   });
+
+  it("class properties", function () {
+    verifyAndAssertMessages(
+      "class Lol { foo = 'bar'; }",
+      { "no-undef": 1 },
+      []
+    );
+  });
 });

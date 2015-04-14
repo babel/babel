@@ -58,6 +58,10 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
+    if (t.isFlow(node)) {
+      return this.remove();
+    }
+
     if (t.isRestElement(node)) {
       return node.argument;
     }
@@ -80,6 +84,10 @@ var astTransformVisitor = {
 
     if (t.isReferencedIdentifier(node, parent, { name: "super" })) {
       return t.inherits(t.thisExpression(), node);
+    }
+
+    if (t.isClassProperty(node)) {
+      delete node.key;
     }
 
     // functions
