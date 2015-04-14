@@ -2,7 +2,7 @@ var acornToEsprima = require("./acorn-to-esprima");
 var traverse       = require("babel-core").traverse;
 var assign         = require("lodash.assign");
 var Module         = require("module");
-var acorn          = require("babel-core").acorn;
+var parse          = require("babel-core").parse;
 var path           = require("path");
 var t              = require("babel-core").types;
 
@@ -60,24 +60,8 @@ exports.parse = function (code) {
   }
 
   var opts = {
-    ecmaVersion: 7,
     locations: true,
     ranges: true,
-    sourceType: "module",
-    plugins: {
-      jsx: true,
-      flow: true
-    },
-    features: {
-      "es7.asyncFunctions": true,
-      "es7.classProperties": true,
-      "es7.comprehensions": true,
-      "es7.decorators": true,
-      "es7.doExpressions": true,
-      "es7.exponentiationOperator": true,
-      "es7.exportExtensions": true,
-      "es7.objectRestSpread": true
-    }
   };
 
   var comments = opts.onComment = [];
@@ -85,7 +69,7 @@ exports.parse = function (code) {
 
   var ast;
   try {
-    ast = acorn.parse(code, opts);
+    ast = parse(code, opts);
   } catch (err) {
     if (err instanceof SyntaxError) {
       err.lineNumber = err.loc.line;

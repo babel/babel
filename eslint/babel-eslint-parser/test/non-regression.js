@@ -100,14 +100,6 @@ describe("verify", function () {
     );
   });
 
-  it("Variables in JSX should be used (issues #15, #17, #21, #29)", function () {
-    verifyAndAssertMessages(
-      "import App from './App'; export default (<App />);",
-      { "no-unused-vars": 1, "no-undef": 1 },
-      []
-    );
-  });
-
   it("Multiple destructured assignment with compound properties (issue #16)", function () {
     verifyAndAssertMessages(
       "module.exports = { ...a.a, ...a.b };",

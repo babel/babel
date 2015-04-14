@@ -82,11 +82,6 @@ var astTransformVisitor = {
       return t.inherits(t.thisExpression(), node);
     }
 
-    if (t.isClassProperty(node)) {
-      // eslint doesn't like these
-      this.remove();
-    }
-
     // functions
 
     if (t.isFunction(node)) {
