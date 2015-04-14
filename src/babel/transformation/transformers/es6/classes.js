@@ -552,6 +552,11 @@ class ClassTransformer {
         this.instancePropBody.push(t.expressionStatement(
           t.assignmentExpression("=", t.memberExpression(t.thisExpression(), node.key), node.value)
         ));
+
+        node.value = null;
+      }
+
+      if (!node.value) {
         node.value = t.identifier("undefined");
       }
 
