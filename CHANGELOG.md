@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.9
+
+ * **Bug Fix**
+  * Fix class property initializers with `undefined` values not being correctly writable.
+  * Fix self inferring generators incorrectly causing a stack error.
+ * **Internal**
+  * Upgrade to latest `acorn`.
+ * **Polish**
+  * Make invalid LHS pattern error messages nicer.
+
 ## 5.1.8
 
  * **Bug Fix**
