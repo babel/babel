@@ -36,4 +36,6 @@ export function JSXElement(node, parent, scope, file) {
   this.skip();
 
   if (state.isImmutable) this.hoist();
+
+  node._hoisted = true;
 }
