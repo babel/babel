@@ -18,6 +18,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **Bug Fix**
   * Fix class property initializers with `undefined` values not being correctly writable.
   * Fix self inferring generators incorrectly causing a stack error.
+  * Fix default export specifiers not triggering AMD `module` argument inclusion.
+  * Fix assignments not having their module references properly remapped.
  * **Internal**
   * Upgrade to latest `acorn`.
  * **Polish**
