@@ -105,6 +105,7 @@ export default class AMDFormatter extends DefaultFormatter {
 
   exportSpecifier(specifier, node, nodes) {
     if (this.doDefaultExportInterop(specifier)) {
+      this.passModuleArg = true;
       nodes.push(util.template("exports-default-assign", {
         VALUE: specifier.local
       }, true));
