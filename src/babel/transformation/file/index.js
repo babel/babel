@@ -85,7 +85,10 @@ export default class File {
     "default-props"
   ];
 
-  static soloHelpers = [];
+  static soloHelpers = [
+    "proxy-create",
+    "proxy-directory"
+  ];
 
   static options = require("./options");
 

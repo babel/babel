@@ -91,7 +91,7 @@ export default class PathHoister {
   run() {
     var node = this.path.node;
     if (node._hoisted) return;
-    this.path._hoisted = true;
+    node._hoisted = true;
 
     this.path.traverse(referenceVisitor, this);
     if (this.foundIncompatible) return;
