@@ -15,8 +15,9 @@
     "hidden": true
   },
 
-  "pluginOptions": {
-    "hidden": true
+  "extra": {
+    "hidden": true,
+    "default": {}
   },
 
   "moduleId": {

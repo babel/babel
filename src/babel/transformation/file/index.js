@@ -16,6 +16,7 @@ import Logger from "./logger";
 import parse from "../../helpers/parse";
 import Scope from "../../traversal/scope";
 import slash from "slash";
+import clone from "lodash/lang/clone";
 import * as util from  "../../util";
 import path from "path";
 import each from "lodash/collection/each";
@@ -120,7 +121,9 @@ export default class File {
         throw new Error("Deprecated option " + key + ": " + option.deprecated);
       }
 
-      if (val == null) val = option.default || val;
+      if (val == null) {
+        val = clone(option.default);
+      }
 
       var optionParser = optionParsers[option.type];
       if (optionParser) val = optionParser(key, val);
