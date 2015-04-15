@@ -87,8 +87,8 @@ export default class File {
   ];
 
   static soloHelpers = [
-    "proxy-create",
-    "proxy-directory"
+    "ludicrous-proxy-create",
+    "ludicrous-proxy-directory"
   ];
 
   static options = require("./options");
