@@ -178,7 +178,6 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
-        this.replaceExpressionWithStatements(nodes);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
