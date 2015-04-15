@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.10
+
+ * **Bug Fix**
+  * Remove `makePredicate` from acorn in favor of an `indexOf`.
+  * Remove statements to expression explosion when inserting a block statement.
+ * **Internal**
+  * Remove runtime compatibility check.
+
 ## 5.1.9
 
  * **Bug Fix**
