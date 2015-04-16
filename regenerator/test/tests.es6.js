@@ -422,6 +422,23 @@ describe("try-finally generator", function() {
       assert.strictEqual(err, right);
     }
   });
+
+  it("should run finally after break within try", function() {
+    function *gen() {
+      try {
+        yield 0;
+        while (true) {
+          yield 1;
+          break;
+        }
+      } finally {
+        yield 2;
+      }
+      yield 3;
+    }
+
+    check(gen(), [0, 1, 2, 3]);
+  });
 });
 
 describe("try-catch-finally generator", function() {
