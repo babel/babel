@@ -44,7 +44,7 @@ test-clean:
 	rm -rf test/tmp
 
 test: test-parser
-	node $(MOCHA_CMD) test/core
+	node $(MOCHA_CMD) test/core/$(TEST)
 	make test-clean
 
 test-all:
