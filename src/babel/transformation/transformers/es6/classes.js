@@ -50,7 +50,7 @@ var verifyConstructorVisitor = traverse.explode({
   },
 
   CallExpression: {
-    enter(node, parent, scope, state) {
+    exit(node, parent, scope, state) {
       if (this.get("callee").isSuper()) {
         state.hasBareSuper = true;
         state.bareSuper = this;
