@@ -71,7 +71,7 @@ export var ForInStatement = buildForXStatement("in");
 export var ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node, print) {
-  this.keyword("do");
+  this.push("do ");
   print(node.body);
   this.space();
   this.keyword("while");
