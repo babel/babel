@@ -1,6 +1,6 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.regenerator=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.regenerator = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-},{}],2:[function(_dereq_,module,exports){
+},{}],2:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
@@ -28,7 +28,7 @@
 // when used in node, this will actually load the util module we depend on
 // versus loading the builtin util module as happens otherwise
 // this is a bug in node module loading as far as I am concerned
-var util = _dereq_('util/');
+var util = require('util/');
 
 var pSlice = Array.prototype.slice;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -89,7 +89,7 @@ function replacer(key, value) {
   if (util.isUndefined(value)) {
     return '' + value;
   }
-  if (util.isNumber(value) && (isNaN(value) || !isFinite(value))) {
+  if (util.isNumber(value) && !isFinite(value)) {
     return value.toString();
   }
   if (util.isFunction(value) || util.isRegExp(value)) {
@@ -228,23 +228,22 @@ function objEquiv(a, b) {
     return false;
   // an identical 'prototype' property.
   if (a.prototype !== b.prototype) return false;
-  //~~~I've managed to break Object.keys through screwy arguments passing.
-  //   Converting to array solves the problem.
-  if (isArguments(a)) {
-    if (!isArguments(b)) {
-      return false;
-    }
+  // if one is a primitive, the other must be same
+  if (util.isPrimitive(a) || util.isPrimitive(b)) {
+    return a === b;
+  }
+  var aIsArgs = isArguments(a),
+      bIsArgs = isArguments(b);
+  if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
+    return false;
+  if (aIsArgs) {
     a = pSlice.call(a);
     b = pSlice.call(b);
     return _deepEqual(a, b);
   }
-  try {
-    var ka = objectKeys(a),
-        kb = objectKeys(b),
-        key, i;
-  } catch (e) {//happens when one is a string literal and the other isn't
-    return false;
-  }
+  var ka = objectKeys(a),
+      kb = objectKeys(b),
+      key, i;
   // having the same number of owned properties (keys incorporates
   // hasOwnProperty)
   if (ka.length != kb.length)
@@ -362,14 +361,4488 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-},{"util/":4}],3:[function(_dereq_,module,exports){
+},{"util/":27}],3:[function(require,module,exports){
+arguments[4][1][0].apply(exports,arguments)
+},{"dup":1}],4:[function(require,module,exports){
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+var base64 = require('base64-js')
+var ieee754 = require('ieee754')
+var isArray = require('is-array')
+
+exports.Buffer = Buffer
+exports.SlowBuffer = SlowBuffer
+exports.INSPECT_MAX_BYTES = 50
+Buffer.poolSize = 8192 // not used by this implementation
+
+var kMaxLength = 0x3fffffff
+var rootParent = {}
+
+/**
+ * If `Buffer.TYPED_ARRAY_SUPPORT`:
+ *   === true    Use Uint8Array implementation (fastest)
+ *   === false   Use Object implementation (most compatible, even IE6)
+ *
+ * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+ * Opera 11.6+, iOS 4.2+.
+ *
+ * Note:
+ *
+ * - Implementation must support adding new properties to `Uint8Array` instances.
+ *   Firefox 4-29 lacked support, fixed in Firefox 30+.
+ *   See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *
+ *  - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *
+ *  - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *    incorrect length in some situations.
+ *
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they will
+ * get the Object implementation, which is slower but will work correctly.
+ */
+Buffer.TYPED_ARRAY_SUPPORT = (function () {
+  try {
+    var buf = new ArrayBuffer(0)
+    var arr = new Uint8Array(buf)
+    arr.foo = function () { return 42 }
+    return arr.foo() === 42 && // typed array instances can be augmented
+        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
+        new Uint8Array(1).subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+  } catch (e) {
+    return false
+  }
+})()
+
+/**
+ * Class: Buffer
+ * =============
+ *
+ * The Buffer constructor returns instances of `Uint8Array` that are augmented
+ * with function properties for all the node `Buffer` API functions. We use
+ * `Uint8Array` so that square bracket notation works as expected -- it returns
+ * a single octet.
+ *
+ * By augmenting the instances, we can avoid modifying the `Uint8Array`
+ * prototype.
+ */
+function Buffer (subject, encoding) {
+  var self = this
+  if (!(self instanceof Buffer)) return new Buffer(subject, encoding)
+
+  var type = typeof subject
+  var length
+
+  if (type === 'number') {
+    length = +subject
+  } else if (type === 'string') {
+    length = Buffer.byteLength(subject, encoding)
+  } else if (type === 'object' && subject !== null) {
+    // assume object is array-like
+    if (subject.type === 'Buffer' && isArray(subject.data)) subject = subject.data
+    length = +subject.length
+  } else {
+    throw new TypeError('must start with number, buffer, array or string')
+  }
+
+  if (length > kMaxLength) {
+    throw new RangeError('Attempt to allocate Buffer larger than maximum size: 0x' +
+      kMaxLength.toString(16) + ' bytes')
+  }
+
+  if (length < 0) length = 0
+  else length >>>= 0 // coerce to uint32
+
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Preferred: Return an augmented `Uint8Array` instance for best performance
+    self = Buffer._augment(new Uint8Array(length)) // eslint-disable-line consistent-this
+  } else {
+    // Fallback: Return THIS instance of Buffer (created by `new`)
+    self.length = length
+    self._isBuffer = true
+  }
+
+  var i
+  if (Buffer.TYPED_ARRAY_SUPPORT && typeof subject.byteLength === 'number') {
+    // Speed optimization -- use set if we're copying from a typed array
+    self._set(subject)
+  } else if (isArrayish(subject)) {
+    // Treat array-ish objects as a byte array
+    if (Buffer.isBuffer(subject)) {
+      for (i = 0; i < length; i++) {
+        self[i] = subject.readUInt8(i)
+      }
+    } else {
+      for (i = 0; i < length; i++) {
+        self[i] = ((subject[i] % 256) + 256) % 256
+      }
+    }
+  } else if (type === 'string') {
+    self.write(subject, 0, encoding)
+  } else if (type === 'number' && !Buffer.TYPED_ARRAY_SUPPORT) {
+    for (i = 0; i < length; i++) {
+      self[i] = 0
+    }
+  }
+
+  if (length > 0 && length <= Buffer.poolSize) self.parent = rootParent
+
+  return self
+}
+
+function SlowBuffer (subject, encoding) {
+  if (!(this instanceof SlowBuffer)) return new SlowBuffer(subject, encoding)
+
+  var buf = new Buffer(subject, encoding)
+  delete buf.parent
+  return buf
+}
+
+Buffer.isBuffer = function isBuffer (b) {
+  return !!(b != null && b._isBuffer)
+}
+
+Buffer.compare = function compare (a, b) {
+  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
+    throw new TypeError('Arguments must be Buffers')
+  }
+
+  if (a === b) return 0
+
+  var x = a.length
+  var y = b.length
+  for (var i = 0, len = Math.min(x, y); i < len && a[i] === b[i]; i++) {}
+  if (i !== len) {
+    x = a[i]
+    y = b[i]
+  }
+  if (x < y) return -1
+  if (y < x) return 1
+  return 0
+}
+
+Buffer.isEncoding = function isEncoding (encoding) {
+  switch (String(encoding).toLowerCase()) {
+    case 'hex':
+    case 'utf8':
+    case 'utf-8':
+    case 'ascii':
+    case 'binary':
+    case 'base64':
+    case 'raw':
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return true
+    default:
+      return false
+  }
+}
+
+Buffer.concat = function concat (list, totalLength) {
+  if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
+
+  if (list.length === 0) {
+    return new Buffer(0)
+  } else if (list.length === 1) {
+    return list[0]
+  }
+
+  var i
+  if (totalLength === undefined) {
+    totalLength = 0
+    for (i = 0; i < list.length; i++) {
+      totalLength += list[i].length
+    }
+  }
+
+  var buf = new Buffer(totalLength)
+  var pos = 0
+  for (i = 0; i < list.length; i++) {
+    var item = list[i]
+    item.copy(buf, pos)
+    pos += item.length
+  }
+  return buf
+}
+
+Buffer.byteLength = function byteLength (str, encoding) {
+  var ret
+  str = str + ''
+  switch (encoding || 'utf8') {
+    case 'ascii':
+    case 'binary':
+    case 'raw':
+      ret = str.length
+      break
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      ret = str.length * 2
+      break
+    case 'hex':
+      ret = str.length >>> 1
+      break
+    case 'utf8':
+    case 'utf-8':
+      ret = utf8ToBytes(str).length
+      break
+    case 'base64':
+      ret = base64ToBytes(str).length
+      break
+    default:
+      ret = str.length
+  }
+  return ret
+}
+
+// pre-set for values that may exist in the future
+Buffer.prototype.length = undefined
+Buffer.prototype.parent = undefined
+
+// toString(encoding, start=0, end=buffer.length)
+Buffer.prototype.toString = function toString (encoding, start, end) {
+  var loweredCase = false
+
+  start = start >>> 0
+  end = end === undefined || end === Infinity ? this.length : end >>> 0
+
+  if (!encoding) encoding = 'utf8'
+  if (start < 0) start = 0
+  if (end > this.length) end = this.length
+  if (end <= start) return ''
+
+  while (true) {
+    switch (encoding) {
+      case 'hex':
+        return hexSlice(this, start, end)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Slice(this, start, end)
+
+      case 'ascii':
+        return asciiSlice(this, start, end)
+
+      case 'binary':
+        return binarySlice(this, start, end)
+
+      case 'base64':
+        return base64Slice(this, start, end)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return utf16leSlice(this, start, end)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = (encoding + '').toLowerCase()
+        loweredCase = true
+    }
+  }
+}
+
+Buffer.prototype.equals = function equals (b) {
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return true
+  return Buffer.compare(this, b) === 0
+}
+
+Buffer.prototype.inspect = function inspect () {
+  var str = ''
+  var max = exports.INSPECT_MAX_BYTES
+  if (this.length > 0) {
+    str = this.toString('hex', 0, max).match(/.{2}/g).join(' ')
+    if (this.length > max) str += ' ... '
+  }
+  return '<Buffer ' + str + '>'
+}
+
+Buffer.prototype.compare = function compare (b) {
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return 0
+  return Buffer.compare(this, b)
+}
+
+Buffer.prototype.indexOf = function indexOf (val, byteOffset) {
+  if (byteOffset > 0x7fffffff) byteOffset = 0x7fffffff
+  else if (byteOffset < -0x80000000) byteOffset = -0x80000000
+  byteOffset >>= 0
+
+  if (this.length === 0) return -1
+  if (byteOffset >= this.length) return -1
+
+  // Negative offsets start from the end of the buffer
+  if (byteOffset < 0) byteOffset = Math.max(this.length + byteOffset, 0)
+
+  if (typeof val === 'string') {
+    if (val.length === 0) return -1 // special case: looking for empty string always fails
+    return String.prototype.indexOf.call(this, val, byteOffset)
+  }
+  if (Buffer.isBuffer(val)) {
+    return arrayIndexOf(this, val, byteOffset)
+  }
+  if (typeof val === 'number') {
+    if (Buffer.TYPED_ARRAY_SUPPORT && Uint8Array.prototype.indexOf === 'function') {
+      return Uint8Array.prototype.indexOf.call(this, val, byteOffset)
+    }
+    return arrayIndexOf(this, [ val ], byteOffset)
+  }
+
+  function arrayIndexOf (arr, val, byteOffset) {
+    var foundIndex = -1
+    for (var i = 0; byteOffset + i < arr.length; i++) {
+      if (arr[byteOffset + i] === val[foundIndex === -1 ? 0 : i - foundIndex]) {
+        if (foundIndex === -1) foundIndex = i
+        if (i - foundIndex + 1 === val.length) return byteOffset + foundIndex
+      } else {
+        foundIndex = -1
+      }
+    }
+    return -1
+  }
+
+  throw new TypeError('val must be string, number or Buffer')
+}
+
+// `get` will be removed in Node 0.13+
+Buffer.prototype.get = function get (offset) {
+  console.log('.get() is deprecated. Access using array indexes instead.')
+  return this.readUInt8(offset)
+}
+
+// `set` will be removed in Node 0.13+
+Buffer.prototype.set = function set (v, offset) {
+  console.log('.set() is deprecated. Access using array indexes instead.')
+  return this.writeUInt8(v, offset)
+}
+
+function hexWrite (buf, string, offset, length) {
+  offset = Number(offset) || 0
+  var remaining = buf.length - offset
+  if (!length) {
+    length = remaining
+  } else {
+    length = Number(length)
+    if (length > remaining) {
+      length = remaining
+    }
+  }
+
+  // must be an even number of digits
+  var strLen = string.length
+  if (strLen % 2 !== 0) throw new Error('Invalid hex string')
+
+  if (length > strLen / 2) {
+    length = strLen / 2
+  }
+  for (var i = 0; i < length; i++) {
+    var parsed = parseInt(string.substr(i * 2, 2), 16)
+    if (isNaN(parsed)) throw new Error('Invalid hex string')
+    buf[offset + i] = parsed
+  }
+  return i
+}
+
+function utf8Write (buf, string, offset, length) {
+  var charsWritten = blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+  return charsWritten
+}
+
+function asciiWrite (buf, string, offset, length) {
+  var charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
+  return charsWritten
+}
+
+function binaryWrite (buf, string, offset, length) {
+  return asciiWrite(buf, string, offset, length)
+}
+
+function base64Write (buf, string, offset, length) {
+  var charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
+  return charsWritten
+}
+
+function utf16leWrite (buf, string, offset, length) {
+  var charsWritten = blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+  return charsWritten
+}
+
+Buffer.prototype.write = function write (string, offset, length, encoding) {
+  // Support both (string, offset, length, encoding)
+  // and the legacy (string, encoding, offset, length)
+  if (isFinite(offset)) {
+    if (!isFinite(length)) {
+      encoding = length
+      length = undefined
+    }
+  } else {  // legacy
+    var swap = encoding
+    encoding = offset
+    offset = length
+    length = swap
+  }
+
+  offset = Number(offset) || 0
+
+  if (length < 0 || offset < 0 || offset > this.length) {
+    throw new RangeError('attempt to write outside buffer bounds')
+  }
+
+  var remaining = this.length - offset
+  if (!length) {
+    length = remaining
+  } else {
+    length = Number(length)
+    if (length > remaining) {
+      length = remaining
+    }
+  }
+  encoding = String(encoding || 'utf8').toLowerCase()
+
+  var ret
+  switch (encoding) {
+    case 'hex':
+      ret = hexWrite(this, string, offset, length)
+      break
+    case 'utf8':
+    case 'utf-8':
+      ret = utf8Write(this, string, offset, length)
+      break
+    case 'ascii':
+      ret = asciiWrite(this, string, offset, length)
+      break
+    case 'binary':
+      ret = binaryWrite(this, string, offset, length)
+      break
+    case 'base64':
+      ret = base64Write(this, string, offset, length)
+      break
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      ret = utf16leWrite(this, string, offset, length)
+      break
+    default:
+      throw new TypeError('Unknown encoding: ' + encoding)
+  }
+  return ret
+}
+
+Buffer.prototype.toJSON = function toJSON () {
+  return {
+    type: 'Buffer',
+    data: Array.prototype.slice.call(this._arr || this, 0)
+  }
+}
+
+function base64Slice (buf, start, end) {
+  if (start === 0 && end === buf.length) {
+    return base64.fromByteArray(buf)
+  } else {
+    return base64.fromByteArray(buf.slice(start, end))
+  }
+}
+
+function utf8Slice (buf, start, end) {
+  var res = ''
+  var tmp = ''
+  end = Math.min(buf.length, end)
+
+  for (var i = start; i < end; i++) {
+    if (buf[i] <= 0x7F) {
+      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
+      tmp = ''
+    } else {
+      tmp += '%' + buf[i].toString(16)
+    }
+  }
+
+  return res + decodeUtf8Char(tmp)
+}
+
+function asciiSlice (buf, start, end) {
+  var ret = ''
+  end = Math.min(buf.length, end)
+
+  for (var i = start; i < end; i++) {
+    ret += String.fromCharCode(buf[i] & 0x7F)
+  }
+  return ret
+}
+
+function binarySlice (buf, start, end) {
+  var ret = ''
+  end = Math.min(buf.length, end)
+
+  for (var i = start; i < end; i++) {
+    ret += String.fromCharCode(buf[i])
+  }
+  return ret
+}
+
+function hexSlice (buf, start, end) {
+  var len = buf.length
+
+  if (!start || start < 0) start = 0
+  if (!end || end < 0 || end > len) end = len
+
+  var out = ''
+  for (var i = start; i < end; i++) {
+    out += toHex(buf[i])
+  }
+  return out
+}
+
+function utf16leSlice (buf, start, end) {
+  var bytes = buf.slice(start, end)
+  var res = ''
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
+  }
+  return res
+}
+
+Buffer.prototype.slice = function slice (start, end) {
+  var len = this.length
+  start = ~~start
+  end = end === undefined ? len : ~~end
+
+  if (start < 0) {
+    start += len
+    if (start < 0) start = 0
+  } else if (start > len) {
+    start = len
+  }
+
+  if (end < 0) {
+    end += len
+    if (end < 0) end = 0
+  } else if (end > len) {
+    end = len
+  }
+
+  if (end < start) end = start
+
+  var newBuf
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    newBuf = Buffer._augment(this.subarray(start, end))
+  } else {
+    var sliceLen = end - start
+    newBuf = new Buffer(sliceLen, undefined)
+    for (var i = 0; i < sliceLen; i++) {
+      newBuf[i] = this[i + start]
+    }
+  }
+
+  if (newBuf.length) newBuf.parent = this.parent || this
+
+  return newBuf
+}
+
+/*
+ * Need to make sure that buffer isn't trying to write out of bounds.
+ */
+function checkOffset (offset, ext, length) {
+  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
+  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+}
+
+Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var val = this[offset]
+  var mul = 1
+  var i = 0
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul
+  }
+
+  return val
+}
+
+Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) {
+    checkOffset(offset, byteLength, this.length)
+  }
+
+  var val = this[offset + --byteLength]
+  var mul = 1
+  while (byteLength > 0 && (mul *= 0x100)) {
+    val += this[offset + --byteLength] * mul
+  }
+
+  return val
+}
+
+Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length)
+  return this[offset]
+}
+
+Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  return this[offset] | (this[offset + 1] << 8)
+}
+
+Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  return (this[offset] << 8) | this[offset + 1]
+}
+
+Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return ((this[offset]) |
+      (this[offset + 1] << 8) |
+      (this[offset + 2] << 16)) +
+      (this[offset + 3] * 0x1000000)
+}
+
+Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset] * 0x1000000) +
+    ((this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    this[offset + 3])
+}
+
+Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var val = this[offset]
+  var mul = 1
+  var i = 0
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul
+  }
+  mul *= 0x80
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength)
+
+  return val
+}
+
+Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var i = byteLength
+  var mul = 1
+  var val = this[offset + --i]
+  while (i > 0 && (mul *= 0x100)) {
+    val += this[offset + --i] * mul
+  }
+  mul *= 0x80
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength)
+
+  return val
+}
+
+Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length)
+  if (!(this[offset] & 0x80)) return (this[offset])
+  return ((0xff - this[offset] + 1) * -1)
+}
+
+Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  var val = this[offset] | (this[offset + 1] << 8)
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+}
+
+Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  var val = this[offset + 1] | (this[offset] << 8)
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+}
+
+Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset]) |
+    (this[offset + 1] << 8) |
+    (this[offset + 2] << 16) |
+    (this[offset + 3] << 24)
+}
+
+Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset] << 24) |
+    (this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    (this[offset + 3])
+}
+
+Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+  return ieee754.read(this, offset, true, 23, 4)
+}
+
+Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+  return ieee754.read(this, offset, false, 23, 4)
+}
+
+Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length)
+  return ieee754.read(this, offset, true, 52, 8)
+}
+
+Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length)
+  return ieee754.read(this, offset, false, 52, 8)
+}
+
+function checkInt (buf, value, offset, ext, max, min) {
+  if (!Buffer.isBuffer(buf)) throw new TypeError('buffer must be a Buffer instance')
+  if (value > max || value < min) throw new RangeError('value is out of bounds')
+  if (offset + ext > buf.length) throw new RangeError('index out of range')
+}
+
+Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+
+  var mul = 1
+  var i = 0
+  this[offset] = value & 0xFF
+  while (++i < byteLength && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) >>> 0 & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
+  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+
+  var i = byteLength - 1
+  var mul = 1
+  this[offset + i] = value & 0xFF
+  while (--i >= 0 && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) >>> 0 & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
+  this[offset] = value
+  return offset + 1
+}
+
+function objectWriteUInt16 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffff + value + 1
+  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; i++) {
+    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
+      (littleEndian ? i : 1 - i) * 8
+  }
+}
+
+Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+  } else {
+    objectWriteUInt16(this, value, offset, true)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8)
+    this[offset + 1] = value
+  } else {
+    objectWriteUInt16(this, value, offset, false)
+  }
+  return offset + 2
+}
+
+function objectWriteUInt32 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffffffff + value + 1
+  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; i++) {
+    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
+  }
+}
+
+Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset + 3] = (value >>> 24)
+    this[offset + 2] = (value >>> 16)
+    this[offset + 1] = (value >>> 8)
+    this[offset] = value
+  } else {
+    objectWriteUInt32(this, value, offset, true)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24)
+    this[offset + 1] = (value >>> 16)
+    this[offset + 2] = (value >>> 8)
+    this[offset + 3] = value
+  } else {
+    objectWriteUInt32(this, value, offset, false)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) {
+    checkInt(
+      this, value, offset, byteLength,
+      Math.pow(2, 8 * byteLength - 1) - 1,
+      -Math.pow(2, 8 * byteLength - 1)
+    )
+  }
+
+  var i = 0
+  var mul = 1
+  var sub = value < 0 ? 1 : 0
+  this[offset] = value & 0xFF
+  while (++i < byteLength && (mul *= 0x100)) {
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) {
+    checkInt(
+      this, value, offset, byteLength,
+      Math.pow(2, 8 * byteLength - 1) - 1,
+      -Math.pow(2, 8 * byteLength - 1)
+    )
+  }
+
+  var i = byteLength - 1
+  var mul = 1
+  var sub = value < 0 ? 1 : 0
+  this[offset + i] = value & 0xFF
+  while (--i >= 0 && (mul *= 0x100)) {
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
+  if (value < 0) value = 0xff + value + 1
+  this[offset] = value
+  return offset + 1
+}
+
+Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+  } else {
+    objectWriteUInt16(this, value, offset, true)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8)
+    this[offset + 1] = value
+  } else {
+    objectWriteUInt16(this, value, offset, false)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+    this[offset + 2] = (value >>> 16)
+    this[offset + 3] = (value >>> 24)
+  } else {
+    objectWriteUInt32(this, value, offset, true)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+  value = +value
+  offset = offset >>> 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (value < 0) value = 0xffffffff + value + 1
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24)
+    this[offset + 1] = (value >>> 16)
+    this[offset + 2] = (value >>> 8)
+    this[offset + 3] = value
+  } else {
+    objectWriteUInt32(this, value, offset, false)
+  }
+  return offset + 4
+}
+
+function checkIEEE754 (buf, value, offset, ext, max, min) {
+  if (value > max || value < min) throw new RangeError('value is out of bounds')
+  if (offset + ext > buf.length) throw new RangeError('index out of range')
+  if (offset < 0) throw new RangeError('index out of range')
+}
+
+function writeFloat (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38)
+  }
+  ieee754.write(buf, value, offset, littleEndian, 23, 4)
+  return offset + 4
+}
+
+Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, true, noAssert)
+}
+
+Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, false, noAssert)
+}
+
+function writeDouble (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308)
+  }
+  ieee754.write(buf, value, offset, littleEndian, 52, 8)
+  return offset + 8
+}
+
+Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, true, noAssert)
+}
+
+Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, false, noAssert)
+}
+
+// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+Buffer.prototype.copy = function copy (target, target_start, start, end) {
+  if (!start) start = 0
+  if (!end && end !== 0) end = this.length
+  if (target_start >= target.length) target_start = target.length
+  if (!target_start) target_start = 0
+  if (end > 0 && end < start) end = start
+
+  // Copy 0 bytes; we're done
+  if (end === start) return 0
+  if (target.length === 0 || this.length === 0) return 0
+
+  // Fatal error conditions
+  if (target_start < 0) {
+    throw new RangeError('targetStart out of bounds')
+  }
+  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
+  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+
+  // Are we oob?
+  if (end > this.length) end = this.length
+  if (target.length - target_start < end - start) {
+    end = target.length - target_start + start
+  }
+
+  var len = end - start
+
+  if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+    for (var i = 0; i < len; i++) {
+      target[i + target_start] = this[i + start]
+    }
+  } else {
+    target._set(this.subarray(start, start + len), target_start)
+  }
+
+  return len
+}
+
+// fill(value, start=0, end=buffer.length)
+Buffer.prototype.fill = function fill (value, start, end) {
+  if (!value) value = 0
+  if (!start) start = 0
+  if (!end) end = this.length
+
+  if (end < start) throw new RangeError('end < start')
+
+  // Fill 0 bytes; we're done
+  if (end === start) return
+  if (this.length === 0) return
+
+  if (start < 0 || start >= this.length) throw new RangeError('start out of bounds')
+  if (end < 0 || end > this.length) throw new RangeError('end out of bounds')
+
+  var i
+  if (typeof value === 'number') {
+    for (i = start; i < end; i++) {
+      this[i] = value
+    }
+  } else {
+    var bytes = utf8ToBytes(value.toString())
+    var len = bytes.length
+    for (i = start; i < end; i++) {
+      this[i] = bytes[i % len]
+    }
+  }
+
+  return this
+}
+
+/**
+ * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
+ * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
+ */
+Buffer.prototype.toArrayBuffer = function toArrayBuffer () {
+  if (typeof Uint8Array !== 'undefined') {
+    if (Buffer.TYPED_ARRAY_SUPPORT) {
+      return (new Buffer(this)).buffer
+    } else {
+      var buf = new Uint8Array(this.length)
+      for (var i = 0, len = buf.length; i < len; i += 1) {
+        buf[i] = this[i]
+      }
+      return buf.buffer
+    }
+  } else {
+    throw new TypeError('Buffer.toArrayBuffer not supported in this browser')
+  }
+}
+
+// HELPER FUNCTIONS
+// ================
+
+var BP = Buffer.prototype
+
+/**
+ * Augment a Uint8Array *instance* (not the Uint8Array class!) with Buffer methods
+ */
+Buffer._augment = function _augment (arr) {
+  arr.constructor = Buffer
+  arr._isBuffer = true
+
+  // save reference to original Uint8Array set method before overwriting
+  arr._set = arr.set
+
+  // deprecated, will be removed in node 0.13+
+  arr.get = BP.get
+  arr.set = BP.set
+
+  arr.write = BP.write
+  arr.toString = BP.toString
+  arr.toLocaleString = BP.toString
+  arr.toJSON = BP.toJSON
+  arr.equals = BP.equals
+  arr.compare = BP.compare
+  arr.indexOf = BP.indexOf
+  arr.copy = BP.copy
+  arr.slice = BP.slice
+  arr.readUIntLE = BP.readUIntLE
+  arr.readUIntBE = BP.readUIntBE
+  arr.readUInt8 = BP.readUInt8
+  arr.readUInt16LE = BP.readUInt16LE
+  arr.readUInt16BE = BP.readUInt16BE
+  arr.readUInt32LE = BP.readUInt32LE
+  arr.readUInt32BE = BP.readUInt32BE
+  arr.readIntLE = BP.readIntLE
+  arr.readIntBE = BP.readIntBE
+  arr.readInt8 = BP.readInt8
+  arr.readInt16LE = BP.readInt16LE
+  arr.readInt16BE = BP.readInt16BE
+  arr.readInt32LE = BP.readInt32LE
+  arr.readInt32BE = BP.readInt32BE
+  arr.readFloatLE = BP.readFloatLE
+  arr.readFloatBE = BP.readFloatBE
+  arr.readDoubleLE = BP.readDoubleLE
+  arr.readDoubleBE = BP.readDoubleBE
+  arr.writeUInt8 = BP.writeUInt8
+  arr.writeUIntLE = BP.writeUIntLE
+  arr.writeUIntBE = BP.writeUIntBE
+  arr.writeUInt16LE = BP.writeUInt16LE
+  arr.writeUInt16BE = BP.writeUInt16BE
+  arr.writeUInt32LE = BP.writeUInt32LE
+  arr.writeUInt32BE = BP.writeUInt32BE
+  arr.writeIntLE = BP.writeIntLE
+  arr.writeIntBE = BP.writeIntBE
+  arr.writeInt8 = BP.writeInt8
+  arr.writeInt16LE = BP.writeInt16LE
+  arr.writeInt16BE = BP.writeInt16BE
+  arr.writeInt32LE = BP.writeInt32LE
+  arr.writeInt32BE = BP.writeInt32BE
+  arr.writeFloatLE = BP.writeFloatLE
+  arr.writeFloatBE = BP.writeFloatBE
+  arr.writeDoubleLE = BP.writeDoubleLE
+  arr.writeDoubleBE = BP.writeDoubleBE
+  arr.fill = BP.fill
+  arr.inspect = BP.inspect
+  arr.toArrayBuffer = BP.toArrayBuffer
+
+  return arr
+}
+
+var INVALID_BASE64_RE = /[^+\/0-9A-z\-]/g
+
+function base64clean (str) {
+  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  // Node converts strings with length < 2 to ''
+  if (str.length < 2) return ''
+  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+  while (str.length % 4 !== 0) {
+    str = str + '='
+  }
+  return str
+}
+
+function stringtrim (str) {
+  if (str.trim) return str.trim()
+  return str.replace(/^\s+|\s+$/g, '')
+}
+
+function isArrayish (subject) {
+  return isArray(subject) || Buffer.isBuffer(subject) ||
+      subject && typeof subject === 'object' &&
+      typeof subject.length === 'number'
+}
+
+function toHex (n) {
+  if (n < 16) return '0' + n.toString(16)
+  return n.toString(16)
+}
+
+function utf8ToBytes (string, units) {
+  units = units || Infinity
+  var codePoint
+  var length = string.length
+  var leadSurrogate = null
+  var bytes = []
+  var i = 0
+
+  for (; i < length; i++) {
+    codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+      // last char was a lead
+      if (leadSurrogate) {
+        // 2 leads in a row
+        if (codePoint < 0xDC00) {
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+          leadSurrogate = codePoint
+          continue
+        } else {
+          // valid surrogate pair
+          codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+          leadSurrogate = null
+        }
+      } else {
+        // no lead yet
+
+        if (codePoint > 0xDBFF) {
+          // unexpected trail
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+          continue
+        } else if (i + 1 === length) {
+          // unpaired lead
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+          continue
+        } else {
+          // valid lead
+          leadSurrogate = codePoint
+          continue
+        }
+      }
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+      leadSurrogate = null
+    }
+
+    // encode utf8
+    if (codePoint < 0x80) {
+      if ((units -= 1) < 0) break
+      bytes.push(codePoint)
+    } else if (codePoint < 0x800) {
+      if ((units -= 2) < 0) break
+      bytes.push(
+        codePoint >> 0x6 | 0xC0,
+        codePoint & 0x3F | 0x80
+      )
+    } else if (codePoint < 0x10000) {
+      if ((units -= 3) < 0) break
+      bytes.push(
+        codePoint >> 0xC | 0xE0,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      )
+    } else if (codePoint < 0x200000) {
+      if ((units -= 4) < 0) break
+      bytes.push(
+        codePoint >> 0x12 | 0xF0,
+        codePoint >> 0xC & 0x3F | 0x80,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      )
+    } else {
+      throw new Error('Invalid code point')
+    }
+  }
+
+  return bytes
+}
+
+function asciiToBytes (str) {
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    // Node's code seems to be doing this and not & 0x7F..
+    byteArray.push(str.charCodeAt(i) & 0xFF)
+  }
+  return byteArray
+}
+
+function utf16leToBytes (str, units) {
+  var c, hi, lo
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    if ((units -= 2) < 0) break
+
+    c = str.charCodeAt(i)
+    hi = c >> 8
+    lo = c % 256
+    byteArray.push(lo)
+    byteArray.push(hi)
+  }
+
+  return byteArray
+}
+
+function base64ToBytes (str) {
+  return base64.toByteArray(base64clean(str))
+}
+
+function blitBuffer (src, dst, offset, length) {
+  for (var i = 0; i < length; i++) {
+    if ((i + offset >= dst.length) || (i >= src.length)) break
+    dst[i + offset] = src[i]
+  }
+  return i
+}
+
+function decodeUtf8Char (str) {
+  try {
+    return decodeURIComponent(str)
+  } catch (err) {
+    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
+  }
+}
+
+},{"base64-js":5,"ieee754":6,"is-array":7}],5:[function(require,module,exports){
+var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+;(function (exports) {
+	'use strict';
+
+  var Arr = (typeof Uint8Array !== 'undefined')
+    ? Uint8Array
+    : Array
+
+	var PLUS   = '+'.charCodeAt(0)
+	var SLASH  = '/'.charCodeAt(0)
+	var NUMBER = '0'.charCodeAt(0)
+	var LOWER  = 'a'.charCodeAt(0)
+	var UPPER  = 'A'.charCodeAt(0)
+	var PLUS_URL_SAFE = '-'.charCodeAt(0)
+	var SLASH_URL_SAFE = '_'.charCodeAt(0)
+
+	function decode (elt) {
+		var code = elt.charCodeAt(0)
+		if (code === PLUS ||
+		    code === PLUS_URL_SAFE)
+			return 62 // '+'
+		if (code === SLASH ||
+		    code === SLASH_URL_SAFE)
+			return 63 // '/'
+		if (code < NUMBER)
+			return -1 //no match
+		if (code < NUMBER + 10)
+			return code - NUMBER + 26 + 26
+		if (code < UPPER + 26)
+			return code - UPPER
+		if (code < LOWER + 26)
+			return code - LOWER + 26
+	}
+
+	function b64ToByteArray (b64) {
+		var i, j, l, tmp, placeHolders, arr
+
+		if (b64.length % 4 > 0) {
+			throw new Error('Invalid string. Length must be a multiple of 4')
+		}
+
+		// the number of equal signs (place holders)
+		// if there are two placeholders, than the two characters before it
+		// represent one byte
+		// if there is only one, then the three characters before it represent 2 bytes
+		// this is just a cheap hack to not do indexOf twice
+		var len = b64.length
+		placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
+
+		// base64 is 4/3 + up to two characters of the original data
+		arr = new Arr(b64.length * 3 / 4 - placeHolders)
+
+		// if there are placeholders, only get up to the last complete 4 chars
+		l = placeHolders > 0 ? b64.length - 4 : b64.length
+
+		var L = 0
+
+		function push (v) {
+			arr[L++] = v
+		}
+
+		for (i = 0, j = 0; i < l; i += 4, j += 3) {
+			tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
+			push((tmp & 0xFF0000) >> 16)
+			push((tmp & 0xFF00) >> 8)
+			push(tmp & 0xFF)
+		}
+
+		if (placeHolders === 2) {
+			tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
+			push(tmp & 0xFF)
+		} else if (placeHolders === 1) {
+			tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
+			push((tmp >> 8) & 0xFF)
+			push(tmp & 0xFF)
+		}
+
+		return arr
+	}
+
+	function uint8ToBase64 (uint8) {
+		var i,
+			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+			output = "",
+			temp, length
+
+		function encode (num) {
+			return lookup.charAt(num)
+		}
+
+		function tripletToBase64 (num) {
+			return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
+		}
+
+		// go through the array every three bytes, we'll deal with trailing stuff later
+		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+			output += tripletToBase64(temp)
+		}
+
+		// pad the end with zeros, but make sure to not forget the extra bytes
+		switch (extraBytes) {
+			case 1:
+				temp = uint8[uint8.length - 1]
+				output += encode(temp >> 2)
+				output += encode((temp << 4) & 0x3F)
+				output += '=='
+				break
+			case 2:
+				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
+				output += encode(temp >> 10)
+				output += encode((temp >> 4) & 0x3F)
+				output += encode((temp << 2) & 0x3F)
+				output += '='
+				break
+		}
+
+		return output
+	}
+
+	exports.toByteArray = b64ToByteArray
+	exports.fromByteArray = uint8ToBase64
+}(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
+
+},{}],6:[function(require,module,exports){
+exports.read = function(buffer, offset, isLE, mLen, nBytes) {
+  var e, m,
+      eLen = nBytes * 8 - mLen - 1,
+      eMax = (1 << eLen) - 1,
+      eBias = eMax >> 1,
+      nBits = -7,
+      i = isLE ? (nBytes - 1) : 0,
+      d = isLE ? -1 : 1,
+      s = buffer[offset + i];
+
+  i += d;
+
+  e = s & ((1 << (-nBits)) - 1);
+  s >>= (-nBits);
+  nBits += eLen;
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8);
+
+  m = e & ((1 << (-nBits)) - 1);
+  e >>= (-nBits);
+  nBits += mLen;
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8);
+
+  if (e === 0) {
+    e = 1 - eBias;
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity);
+  } else {
+    m = m + Math.pow(2, mLen);
+    e = e - eBias;
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
+};
+
+exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c,
+      eLen = nBytes * 8 - mLen - 1,
+      eMax = (1 << eLen) - 1,
+      eBias = eMax >> 1,
+      rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
+      i = isLE ? 0 : (nBytes - 1),
+      d = isLE ? 1 : -1,
+      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
+
+  value = Math.abs(value);
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0;
+    e = eMax;
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2);
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--;
+      c *= 2;
+    }
+    if (e + eBias >= 1) {
+      value += rt / c;
+    } else {
+      value += rt * Math.pow(2, 1 - eBias);
+    }
+    if (value * c >= 2) {
+      e++;
+      c /= 2;
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0;
+      e = eMax;
+    } else if (e + eBias >= 1) {
+      m = (value * c - 1) * Math.pow(2, mLen);
+      e = e + eBias;
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+      e = 0;
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8);
+
+  e = (e << mLen) | m;
+  eLen += mLen;
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
+
+  buffer[offset + i - d] |= s * 128;
+};
+
+},{}],7:[function(require,module,exports){
+
+/**
+ * isArray
+ */
+
+var isArray = Array.isArray;
+
+/**
+ * toString
+ */
+
+var str = Object.prototype.toString;
+
+/**
+ * Whether or not the given `val`
+ * is an array.
+ *
+ * example:
+ *
+ *        isArray([]);
+ *        // > true
+ *        isArray(arguments);
+ *        // > false
+ *        isArray('');
+ *        // > false
+ *
+ * @param {mixed} val
+ * @return {bool}
+ */
+
+module.exports = isArray || function (val) {
+  return !! val && '[object Array]' == str.call(val);
+};
+
+},{}],8:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+function EventEmitter() {
+  this._events = this._events || {};
+  this._maxListeners = this._maxListeners || undefined;
+}
+module.exports = EventEmitter;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+EventEmitter.defaultMaxListeners = 10;
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function(n) {
+  if (!isNumber(n) || n < 0 || isNaN(n))
+    throw TypeError('n must be a positive number');
+  this._maxListeners = n;
+  return this;
+};
+
+EventEmitter.prototype.emit = function(type) {
+  var er, handler, len, args, i, listeners;
+
+  if (!this._events)
+    this._events = {};
+
+  // If there is no 'error' event listener then throw.
+  if (type === 'error') {
+    if (!this._events.error ||
+        (isObject(this._events.error) && !this._events.error.length)) {
+      er = arguments[1];
+      if (er instanceof Error) {
+        throw er; // Unhandled 'error' event
+      }
+      throw TypeError('Uncaught, unspecified "error" event.');
+    }
+  }
+
+  handler = this._events[type];
+
+  if (isUndefined(handler))
+    return false;
+
+  if (isFunction(handler)) {
+    switch (arguments.length) {
+      // fast cases
+      case 1:
+        handler.call(this);
+        break;
+      case 2:
+        handler.call(this, arguments[1]);
+        break;
+      case 3:
+        handler.call(this, arguments[1], arguments[2]);
+        break;
+      // slower
+      default:
+        len = arguments.length;
+        args = new Array(len - 1);
+        for (i = 1; i < len; i++)
+          args[i - 1] = arguments[i];
+        handler.apply(this, args);
+    }
+  } else if (isObject(handler)) {
+    len = arguments.length;
+    args = new Array(len - 1);
+    for (i = 1; i < len; i++)
+      args[i - 1] = arguments[i];
+
+    listeners = handler.slice();
+    len = listeners.length;
+    for (i = 0; i < len; i++)
+      listeners[i].apply(this, args);
+  }
+
+  return true;
+};
+
+EventEmitter.prototype.addListener = function(type, listener) {
+  var m;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events)
+    this._events = {};
+
+  // To avoid recursion in the case that type === "newListener"! Before
+  // adding it to the listeners, first emit "newListener".
+  if (this._events.newListener)
+    this.emit('newListener', type,
+              isFunction(listener.listener) ?
+              listener.listener : listener);
+
+  if (!this._events[type])
+    // Optimize the case of one listener. Don't need the extra array object.
+    this._events[type] = listener;
+  else if (isObject(this._events[type]))
+    // If we've already got an array, just append.
+    this._events[type].push(listener);
+  else
+    // Adding the second element, need to change to array.
+    this._events[type] = [this._events[type], listener];
+
+  // Check for listener leak
+  if (isObject(this._events[type]) && !this._events[type].warned) {
+    var m;
+    if (!isUndefined(this._maxListeners)) {
+      m = this._maxListeners;
+    } else {
+      m = EventEmitter.defaultMaxListeners;
+    }
+
+    if (m && m > 0 && this._events[type].length > m) {
+      this._events[type].warned = true;
+      console.error('(node) warning: possible EventEmitter memory ' +
+                    'leak detected. %d listeners added. ' +
+                    'Use emitter.setMaxListeners() to increase limit.',
+                    this._events[type].length);
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
+    }
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function(type, listener) {
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  var fired = false;
+
+  function g() {
+    this.removeListener(type, g);
+
+    if (!fired) {
+      fired = true;
+      listener.apply(this, arguments);
+    }
+  }
+
+  g.listener = listener;
+  this.on(type, g);
+
+  return this;
+};
+
+// emits a 'removeListener' event iff the listener was removed
+EventEmitter.prototype.removeListener = function(type, listener) {
+  var list, position, length, i;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events || !this._events[type])
+    return this;
+
+  list = this._events[type];
+  length = list.length;
+  position = -1;
+
+  if (list === listener ||
+      (isFunction(list.listener) && list.listener === listener)) {
+    delete this._events[type];
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+
+  } else if (isObject(list)) {
+    for (i = length; i-- > 0;) {
+      if (list[i] === listener ||
+          (list[i].listener && list[i].listener === listener)) {
+        position = i;
+        break;
+      }
+    }
+
+    if (position < 0)
+      return this;
+
+    if (list.length === 1) {
+      list.length = 0;
+      delete this._events[type];
+    } else {
+      list.splice(position, 1);
+    }
+
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.removeAllListeners = function(type) {
+  var key, listeners;
+
+  if (!this._events)
+    return this;
+
+  // not listening for removeListener, no need to emit
+  if (!this._events.removeListener) {
+    if (arguments.length === 0)
+      this._events = {};
+    else if (this._events[type])
+      delete this._events[type];
+    return this;
+  }
+
+  // emit removeListener for all listeners on all events
+  if (arguments.length === 0) {
+    for (key in this._events) {
+      if (key === 'removeListener') continue;
+      this.removeAllListeners(key);
+    }
+    this.removeAllListeners('removeListener');
+    this._events = {};
+    return this;
+  }
+
+  listeners = this._events[type];
+
+  if (isFunction(listeners)) {
+    this.removeListener(type, listeners);
+  } else {
+    // LIFO order
+    while (listeners.length)
+      this.removeListener(type, listeners[listeners.length - 1]);
+  }
+  delete this._events[type];
+
+  return this;
+};
+
+EventEmitter.prototype.listeners = function(type) {
+  var ret;
+  if (!this._events || !this._events[type])
+    ret = [];
+  else if (isFunction(this._events[type]))
+    ret = [this._events[type]];
+  else
+    ret = this._events[type].slice();
+  return ret;
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  var ret;
+  if (!emitter._events || !emitter._events[type])
+    ret = 0;
+  else if (isFunction(emitter._events[type]))
+    ret = 1;
+  else
+    ret = emitter._events[type].length;
+  return ret;
+};
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+
+},{}],9:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],10:[function(require,module,exports){
+module.exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
+
+},{}],11:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+},{"_process":12}],12:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    draining = true;
+    var currentQueue;
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        var i = -1;
+        while (++i < len) {
+            currentQueue[i]();
+        }
+        len = queue.length;
+    }
+    draining = false;
+}
+process.nextTick = function (fun) {
+    queue.push(fun);
+    if (!draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],13:[function(require,module,exports){
+module.exports = require("./lib/_stream_duplex.js")
+
+},{"./lib/_stream_duplex.js":14}],14:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// a duplex stream is just a stream that is both readable and writable.
+// Since JS doesn't have multiple prototypal inheritance, this class
+// prototypally inherits from Readable, and then parasitically from
+// Writable.
+
+module.exports = Duplex;
+
+/*<replacement>*/
+var objectKeys = Object.keys || function (obj) {
+  var keys = [];
+  for (var key in obj) keys.push(key);
+  return keys;
+}
+/*</replacement>*/
+
+
+/*<replacement>*/
+var util = require('core-util-is');
+util.inherits = require('inherits');
+/*</replacement>*/
+
+var Readable = require('./_stream_readable');
+var Writable = require('./_stream_writable');
+
+util.inherits(Duplex, Readable);
+
+forEach(objectKeys(Writable.prototype), function(method) {
+  if (!Duplex.prototype[method])
+    Duplex.prototype[method] = Writable.prototype[method];
+});
+
+function Duplex(options) {
+  if (!(this instanceof Duplex))
+    return new Duplex(options);
+
+  Readable.call(this, options);
+  Writable.call(this, options);
+
+  if (options && options.readable === false)
+    this.readable = false;
+
+  if (options && options.writable === false)
+    this.writable = false;
+
+  this.allowHalfOpen = true;
+  if (options && options.allowHalfOpen === false)
+    this.allowHalfOpen = false;
+
+  this.once('end', onend);
+}
+
+// the no-half-open enforcer
+function onend() {
+  // if we allow half-open state, or if the writable side ended,
+  // then we're ok.
+  if (this.allowHalfOpen || this._writableState.ended)
+    return;
+
+  // no more data can be written.
+  // But allow more writes to happen in this tick.
+  process.nextTick(this.end.bind(this));
+}
+
+function forEach (xs, f) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    f(xs[i], i);
+  }
+}
+
+}).call(this,require('_process'))
+},{"./_stream_readable":16,"./_stream_writable":18,"_process":12,"core-util-is":19,"inherits":9}],15:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// a passthrough stream.
+// basically just the most minimal sort of Transform stream.
+// Every written chunk gets output as-is.
+
+module.exports = PassThrough;
+
+var Transform = require('./_stream_transform');
+
+/*<replacement>*/
+var util = require('core-util-is');
+util.inherits = require('inherits');
+/*</replacement>*/
+
+util.inherits(PassThrough, Transform);
+
+function PassThrough(options) {
+  if (!(this instanceof PassThrough))
+    return new PassThrough(options);
+
+  Transform.call(this, options);
+}
+
+PassThrough.prototype._transform = function(chunk, encoding, cb) {
+  cb(null, chunk);
+};
+
+},{"./_stream_transform":17,"core-util-is":19,"inherits":9}],16:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+module.exports = Readable;
+
+/*<replacement>*/
+var isArray = require('isarray');
+/*</replacement>*/
+
+
+/*<replacement>*/
+var Buffer = require('buffer').Buffer;
+/*</replacement>*/
+
+Readable.ReadableState = ReadableState;
+
+var EE = require('events').EventEmitter;
+
+/*<replacement>*/
+if (!EE.listenerCount) EE.listenerCount = function(emitter, type) {
+  return emitter.listeners(type).length;
+};
+/*</replacement>*/
+
+var Stream = require('stream');
+
+/*<replacement>*/
+var util = require('core-util-is');
+util.inherits = require('inherits');
+/*</replacement>*/
+
+var StringDecoder;
+
+
+/*<replacement>*/
+var debug = require('util');
+if (debug && debug.debuglog) {
+  debug = debug.debuglog('stream');
+} else {
+  debug = function () {};
+}
+/*</replacement>*/
+
+
+util.inherits(Readable, Stream);
+
+function ReadableState(options, stream) {
+  var Duplex = require('./_stream_duplex');
+
+  options = options || {};
+
+  // the point at which it stops calling _read() to fill the buffer
+  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+  var hwm = options.highWaterMark;
+  var defaultHwm = options.objectMode ? 16 : 16 * 1024;
+  this.highWaterMark = (hwm || hwm === 0) ? hwm : defaultHwm;
+
+  // cast to ints.
+  this.highWaterMark = ~~this.highWaterMark;
+
+  this.buffer = [];
+  this.length = 0;
+  this.pipes = null;
+  this.pipesCount = 0;
+  this.flowing = null;
+  this.ended = false;
+  this.endEmitted = false;
+  this.reading = false;
+
+  // a flag to be able to tell if the onwrite cb is called immediately,
+  // or on a later tick.  We set this to true at first, because any
+  // actions that shouldn't happen until "later" should generally also
+  // not happen before the first write call.
+  this.sync = true;
+
+  // whenever we return null, then we set a flag to say
+  // that we're awaiting a 'readable' event emission.
+  this.needReadable = false;
+  this.emittedReadable = false;
+  this.readableListening = false;
+
+
+  // object stream flag. Used to make read(n) ignore n and to
+  // make all the buffer merging and length checks go away
+  this.objectMode = !!options.objectMode;
+
+  if (stream instanceof Duplex)
+    this.objectMode = this.objectMode || !!options.readableObjectMode;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+  // when piping, we only care about 'readable' events that happen
+  // after read()ing all the bytes and not getting any pushback.
+  this.ranOut = false;
+
+  // the number of writers that are awaiting a drain event in .pipe()s
+  this.awaitDrain = 0;
+
+  // if true, a maybeReadMore has been scheduled
+  this.readingMore = false;
+
+  this.decoder = null;
+  this.encoding = null;
+  if (options.encoding) {
+    if (!StringDecoder)
+      StringDecoder = require('string_decoder/').StringDecoder;
+    this.decoder = new StringDecoder(options.encoding);
+    this.encoding = options.encoding;
+  }
+}
+
+function Readable(options) {
+  var Duplex = require('./_stream_duplex');
+
+  if (!(this instanceof Readable))
+    return new Readable(options);
+
+  this._readableState = new ReadableState(options, this);
+
+  // legacy
+  this.readable = true;
+
+  Stream.call(this);
+}
+
+// Manually shove something into the read() buffer.
+// This returns true if the highWaterMark has not been hit yet,
+// similar to how Writable.write() returns true if you should
+// write() some more.
+Readable.prototype.push = function(chunk, encoding) {
+  var state = this._readableState;
+
+  if (util.isString(chunk) && !state.objectMode) {
+    encoding = encoding || state.defaultEncoding;
+    if (encoding !== state.encoding) {
+      chunk = new Buffer(chunk, encoding);
+      encoding = '';
+    }
+  }
+
+  return readableAddChunk(this, state, chunk, encoding, false);
+};
+
+// Unshift should *always* be something directly out of read()
+Readable.prototype.unshift = function(chunk) {
+  var state = this._readableState;
+  return readableAddChunk(this, state, chunk, '', true);
+};
+
+function readableAddChunk(stream, state, chunk, encoding, addToFront) {
+  var er = chunkInvalid(state, chunk);
+  if (er) {
+    stream.emit('error', er);
+  } else if (util.isNullOrUndefined(chunk)) {
+    state.reading = false;
+    if (!state.ended)
+      onEofChunk(stream, state);
+  } else if (state.objectMode || chunk && chunk.length > 0) {
+    if (state.ended && !addToFront) {
+      var e = new Error('stream.push() after EOF');
+      stream.emit('error', e);
+    } else if (state.endEmitted && addToFront) {
+      var e = new Error('stream.unshift() after end event');
+      stream.emit('error', e);
+    } else {
+      if (state.decoder && !addToFront && !encoding)
+        chunk = state.decoder.write(chunk);
+
+      if (!addToFront)
+        state.reading = false;
+
+      // if we want the data now, just emit it.
+      if (state.flowing && state.length === 0 && !state.sync) {
+        stream.emit('data', chunk);
+        stream.read(0);
+      } else {
+        // update the buffer info.
+        state.length += state.objectMode ? 1 : chunk.length;
+        if (addToFront)
+          state.buffer.unshift(chunk);
+        else
+          state.buffer.push(chunk);
+
+        if (state.needReadable)
+          emitReadable(stream);
+      }
+
+      maybeReadMore(stream, state);
+    }
+  } else if (!addToFront) {
+    state.reading = false;
+  }
+
+  return needMoreData(state);
+}
+
+
+
+// if it's past the high water mark, we can push in some more.
+// Also, if we have no data yet, we can stand some
+// more bytes.  This is to work around cases where hwm=0,
+// such as the repl.  Also, if the push() triggered a
+// readable event, and the user called read(largeNumber) such that
+// needReadable was set, then we ought to push more, so that another
+// 'readable' event will be triggered.
+function needMoreData(state) {
+  return !state.ended &&
+         (state.needReadable ||
+          state.length < state.highWaterMark ||
+          state.length === 0);
+}
+
+// backwards compatibility.
+Readable.prototype.setEncoding = function(enc) {
+  if (!StringDecoder)
+    StringDecoder = require('string_decoder/').StringDecoder;
+  this._readableState.decoder = new StringDecoder(enc);
+  this._readableState.encoding = enc;
+  return this;
+};
+
+// Don't raise the hwm > 128MB
+var MAX_HWM = 0x800000;
+function roundUpToNextPowerOf2(n) {
+  if (n >= MAX_HWM) {
+    n = MAX_HWM;
+  } else {
+    // Get the next highest power of 2
+    n--;
+    for (var p = 1; p < 32; p <<= 1) n |= n >> p;
+    n++;
+  }
+  return n;
+}
+
+function howMuchToRead(n, state) {
+  if (state.length === 0 && state.ended)
+    return 0;
+
+  if (state.objectMode)
+    return n === 0 ? 0 : 1;
+
+  if (isNaN(n) || util.isNull(n)) {
+    // only flow one buffer at a time
+    if (state.flowing && state.buffer.length)
+      return state.buffer[0].length;
+    else
+      return state.length;
+  }
+
+  if (n <= 0)
+    return 0;
+
+  // If we're asking for more than the target buffer level,
+  // then raise the water mark.  Bump up to the next highest
+  // power of 2, to prevent increasing it excessively in tiny
+  // amounts.
+  if (n > state.highWaterMark)
+    state.highWaterMark = roundUpToNextPowerOf2(n);
+
+  // don't have that much.  return null, unless we've ended.
+  if (n > state.length) {
+    if (!state.ended) {
+      state.needReadable = true;
+      return 0;
+    } else
+      return state.length;
+  }
+
+  return n;
+}
+
+// you can override either this method, or the async _read(n) below.
+Readable.prototype.read = function(n) {
+  debug('read', n);
+  var state = this._readableState;
+  var nOrig = n;
+
+  if (!util.isNumber(n) || n > 0)
+    state.emittedReadable = false;
+
+  // if we're doing read(0) to trigger a readable event, but we
+  // already have a bunch of data in the buffer, then just trigger
+  // the 'readable' event and move on.
+  if (n === 0 &&
+      state.needReadable &&
+      (state.length >= state.highWaterMark || state.ended)) {
+    debug('read: emitReadable', state.length, state.ended);
+    if (state.length === 0 && state.ended)
+      endReadable(this);
+    else
+      emitReadable(this);
+    return null;
+  }
+
+  n = howMuchToRead(n, state);
+
+  // if we've ended, and we're now clear, then finish it up.
+  if (n === 0 && state.ended) {
+    if (state.length === 0)
+      endReadable(this);
+    return null;
+  }
+
+  // All the actual chunk generation logic needs to be
+  // *below* the call to _read.  The reason is that in certain
+  // synthetic stream cases, such as passthrough streams, _read
+  // may be a completely synchronous operation which may change
+  // the state of the read buffer, providing enough data when
+  // before there was *not* enough.
+  //
+  // So, the steps are:
+  // 1. Figure out what the state of things will be after we do
+  // a read from the buffer.
+  //
+  // 2. If that resulting state will trigger a _read, then call _read.
+  // Note that this may be asynchronous, or synchronous.  Yes, it is
+  // deeply ugly to write APIs this way, but that still doesn't mean
+  // that the Readable class should behave improperly, as streams are
+  // designed to be sync/async agnostic.
+  // Take note if the _read call is sync or async (ie, if the read call
+  // has returned yet), so that we know whether or not it's safe to emit
+  // 'readable' etc.
+  //
+  // 3. Actually pull the requested chunks out of the buffer and return.
+
+  // if we need a readable event, then we need to do some reading.
+  var doRead = state.needReadable;
+  debug('need readable', doRead);
+
+  // if we currently have less than the highWaterMark, then also read some
+  if (state.length === 0 || state.length - n < state.highWaterMark) {
+    doRead = true;
+    debug('length less than watermark', doRead);
+  }
+
+  // however, if we've ended, then there's no point, and if we're already
+  // reading, then it's unnecessary.
+  if (state.ended || state.reading) {
+    doRead = false;
+    debug('reading or ended', doRead);
+  }
+
+  if (doRead) {
+    debug('do read');
+    state.reading = true;
+    state.sync = true;
+    // if the length is currently zero, then we *need* a readable event.
+    if (state.length === 0)
+      state.needReadable = true;
+    // call internal read method
+    this._read(state.highWaterMark);
+    state.sync = false;
+  }
+
+  // If _read pushed data synchronously, then `reading` will be false,
+  // and we need to re-evaluate how much data we can return to the user.
+  if (doRead && !state.reading)
+    n = howMuchToRead(nOrig, state);
+
+  var ret;
+  if (n > 0)
+    ret = fromList(n, state);
+  else
+    ret = null;
+
+  if (util.isNull(ret)) {
+    state.needReadable = true;
+    n = 0;
+  }
+
+  state.length -= n;
+
+  // If we have nothing in the buffer, then we want to know
+  // as soon as we *do* get something into the buffer.
+  if (state.length === 0 && !state.ended)
+    state.needReadable = true;
+
+  // If we tried to read() past the EOF, then emit end on the next tick.
+  if (nOrig !== n && state.ended && state.length === 0)
+    endReadable(this);
+
+  if (!util.isNull(ret))
+    this.emit('data', ret);
+
+  return ret;
+};
+
+function chunkInvalid(state, chunk) {
+  var er = null;
+  if (!util.isBuffer(chunk) &&
+      !util.isString(chunk) &&
+      !util.isNullOrUndefined(chunk) &&
+      !state.objectMode) {
+    er = new TypeError('Invalid non-string/buffer chunk');
+  }
+  return er;
+}
+
+
+function onEofChunk(stream, state) {
+  if (state.decoder && !state.ended) {
+    var chunk = state.decoder.end();
+    if (chunk && chunk.length) {
+      state.buffer.push(chunk);
+      state.length += state.objectMode ? 1 : chunk.length;
+    }
+  }
+  state.ended = true;
+
+  // emit 'readable' now to make sure it gets picked up.
+  emitReadable(stream);
+}
+
+// Don't emit readable right away in sync mode, because this can trigger
+// another read() call => stack overflow.  This way, it might trigger
+// a nextTick recursion warning, but that's not so bad.
+function emitReadable(stream) {
+  var state = stream._readableState;
+  state.needReadable = false;
+  if (!state.emittedReadable) {
+    debug('emitReadable', state.flowing);
+    state.emittedReadable = true;
+    if (state.sync)
+      process.nextTick(function() {
+        emitReadable_(stream);
+      });
+    else
+      emitReadable_(stream);
+  }
+}
+
+function emitReadable_(stream) {
+  debug('emit readable');
+  stream.emit('readable');
+  flow(stream);
+}
+
+
+// at this point, the user has presumably seen the 'readable' event,
+// and called read() to consume some data.  that may have triggered
+// in turn another _read(n) call, in which case reading = true if
+// it's in progress.
+// However, if we're not ended, or reading, and the length < hwm,
+// then go ahead and try to read some more preemptively.
+function maybeReadMore(stream, state) {
+  if (!state.readingMore) {
+    state.readingMore = true;
+    process.nextTick(function() {
+      maybeReadMore_(stream, state);
+    });
+  }
+}
+
+function maybeReadMore_(stream, state) {
+  var len = state.length;
+  while (!state.reading && !state.flowing && !state.ended &&
+         state.length < state.highWaterMark) {
+    debug('maybeReadMore read 0');
+    stream.read(0);
+    if (len === state.length)
+      // didn't get any data, stop spinning.
+      break;
+    else
+      len = state.length;
+  }
+  state.readingMore = false;
+}
+
+// abstract method.  to be overridden in specific implementation classes.
+// call cb(er, data) where data is <= n in length.
+// for virtual (non-string, non-buffer) streams, "length" is somewhat
+// arbitrary, and perhaps not very meaningful.
+Readable.prototype._read = function(n) {
+  this.emit('error', new Error('not implemented'));
+};
+
+Readable.prototype.pipe = function(dest, pipeOpts) {
+  var src = this;
+  var state = this._readableState;
+
+  switch (state.pipesCount) {
+    case 0:
+      state.pipes = dest;
+      break;
+    case 1:
+      state.pipes = [state.pipes, dest];
+      break;
+    default:
+      state.pipes.push(dest);
+      break;
+  }
+  state.pipesCount += 1;
+  debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
+
+  var doEnd = (!pipeOpts || pipeOpts.end !== false) &&
+              dest !== process.stdout &&
+              dest !== process.stderr;
+
+  var endFn = doEnd ? onend : cleanup;
+  if (state.endEmitted)
+    process.nextTick(endFn);
+  else
+    src.once('end', endFn);
+
+  dest.on('unpipe', onunpipe);
+  function onunpipe(readable) {
+    debug('onunpipe');
+    if (readable === src) {
+      cleanup();
+    }
+  }
+
+  function onend() {
+    debug('onend');
+    dest.end();
+  }
+
+  // when the dest drains, it reduces the awaitDrain counter
+  // on the source.  This would be more elegant with a .once()
+  // handler in flow(), but adding and removing repeatedly is
+  // too slow.
+  var ondrain = pipeOnDrain(src);
+  dest.on('drain', ondrain);
+
+  function cleanup() {
+    debug('cleanup');
+    // cleanup event handlers once the pipe is broken
+    dest.removeListener('close', onclose);
+    dest.removeListener('finish', onfinish);
+    dest.removeListener('drain', ondrain);
+    dest.removeListener('error', onerror);
+    dest.removeListener('unpipe', onunpipe);
+    src.removeListener('end', onend);
+    src.removeListener('end', cleanup);
+    src.removeListener('data', ondata);
+
+    // if the reader is waiting for a drain event from this
+    // specific writer, then it would cause it to never start
+    // flowing again.
+    // So, if this is awaiting a drain, then we just call it now.
+    // If we don't know, then assume that we are waiting for one.
+    if (state.awaitDrain &&
+        (!dest._writableState || dest._writableState.needDrain))
+      ondrain();
+  }
+
+  src.on('data', ondata);
+  function ondata(chunk) {
+    debug('ondata');
+    var ret = dest.write(chunk);
+    if (false === ret) {
+      debug('false write response, pause',
+            src._readableState.awaitDrain);
+      src._readableState.awaitDrain++;
+      src.pause();
+    }
+  }
+
+  // if the dest has an error, then stop piping into it.
+  // however, don't suppress the throwing behavior for this.
+  function onerror(er) {
+    debug('onerror', er);
+    unpipe();
+    dest.removeListener('error', onerror);
+    if (EE.listenerCount(dest, 'error') === 0)
+      dest.emit('error', er);
+  }
+  // This is a brutally ugly hack to make sure that our error handler
+  // is attached before any userland ones.  NEVER DO THIS.
+  if (!dest._events || !dest._events.error)
+    dest.on('error', onerror);
+  else if (isArray(dest._events.error))
+    dest._events.error.unshift(onerror);
+  else
+    dest._events.error = [onerror, dest._events.error];
+
+
+
+  // Both close and finish should trigger unpipe, but only once.
+  function onclose() {
+    dest.removeListener('finish', onfinish);
+    unpipe();
+  }
+  dest.once('close', onclose);
+  function onfinish() {
+    debug('onfinish');
+    dest.removeListener('close', onclose);
+    unpipe();
+  }
+  dest.once('finish', onfinish);
+
+  function unpipe() {
+    debug('unpipe');
+    src.unpipe(dest);
+  }
+
+  // tell the dest that it's being piped to
+  dest.emit('pipe', src);
+
+  // start the flow if it hasn't been started already.
+  if (!state.flowing) {
+    debug('pipe resume');
+    src.resume();
+  }
+
+  return dest;
+};
+
+function pipeOnDrain(src) {
+  return function() {
+    var state = src._readableState;
+    debug('pipeOnDrain', state.awaitDrain);
+    if (state.awaitDrain)
+      state.awaitDrain--;
+    if (state.awaitDrain === 0 && EE.listenerCount(src, 'data')) {
+      state.flowing = true;
+      flow(src);
+    }
+  };
+}
+
+
+Readable.prototype.unpipe = function(dest) {
+  var state = this._readableState;
+
+  // if we're not piping anywhere, then do nothing.
+  if (state.pipesCount === 0)
+    return this;
+
+  // just one destination.  most common case.
+  if (state.pipesCount === 1) {
+    // passed in one, but it's not the right one.
+    if (dest && dest !== state.pipes)
+      return this;
+
+    if (!dest)
+      dest = state.pipes;
+
+    // got a match.
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+    if (dest)
+      dest.emit('unpipe', this);
+    return this;
+  }
+
+  // slow case. multiple pipe destinations.
+
+  if (!dest) {
+    // remove all.
+    var dests = state.pipes;
+    var len = state.pipesCount;
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+
+    for (var i = 0; i < len; i++)
+      dests[i].emit('unpipe', this);
+    return this;
+  }
+
+  // try to find the right one.
+  var i = indexOf(state.pipes, dest);
+  if (i === -1)
+    return this;
+
+  state.pipes.splice(i, 1);
+  state.pipesCount -= 1;
+  if (state.pipesCount === 1)
+    state.pipes = state.pipes[0];
+
+  dest.emit('unpipe', this);
+
+  return this;
+};
+
+// set up data events if they are asked for
+// Ensure readable listeners eventually get something
+Readable.prototype.on = function(ev, fn) {
+  var res = Stream.prototype.on.call(this, ev, fn);
+
+  // If listening to data, and it has not explicitly been paused,
+  // then call resume to start the flow of data on the next tick.
+  if (ev === 'data' && false !== this._readableState.flowing) {
+    this.resume();
+  }
+
+  if (ev === 'readable' && this.readable) {
+    var state = this._readableState;
+    if (!state.readableListening) {
+      state.readableListening = true;
+      state.emittedReadable = false;
+      state.needReadable = true;
+      if (!state.reading) {
+        var self = this;
+        process.nextTick(function() {
+          debug('readable nexttick read 0');
+          self.read(0);
+        });
+      } else if (state.length) {
+        emitReadable(this, state);
+      }
+    }
+  }
+
+  return res;
+};
+Readable.prototype.addListener = Readable.prototype.on;
+
+// pause() and resume() are remnants of the legacy readable stream API
+// If the user uses them, then switch into old mode.
+Readable.prototype.resume = function() {
+  var state = this._readableState;
+  if (!state.flowing) {
+    debug('resume');
+    state.flowing = true;
+    if (!state.reading) {
+      debug('resume read 0');
+      this.read(0);
+    }
+    resume(this, state);
+  }
+  return this;
+};
+
+function resume(stream, state) {
+  if (!state.resumeScheduled) {
+    state.resumeScheduled = true;
+    process.nextTick(function() {
+      resume_(stream, state);
+    });
+  }
+}
+
+function resume_(stream, state) {
+  state.resumeScheduled = false;
+  stream.emit('resume');
+  flow(stream);
+  if (state.flowing && !state.reading)
+    stream.read(0);
+}
+
+Readable.prototype.pause = function() {
+  debug('call pause flowing=%j', this._readableState.flowing);
+  if (false !== this._readableState.flowing) {
+    debug('pause');
+    this._readableState.flowing = false;
+    this.emit('pause');
+  }
+  return this;
+};
+
+function flow(stream) {
+  var state = stream._readableState;
+  debug('flow', state.flowing);
+  if (state.flowing) {
+    do {
+      var chunk = stream.read();
+    } while (null !== chunk && state.flowing);
+  }
+}
+
+// wrap an old-style stream as the async data source.
+// This is *not* part of the readable stream interface.
+// It is an ugly unfortunate mess of history.
+Readable.prototype.wrap = function(stream) {
+  var state = this._readableState;
+  var paused = false;
+
+  var self = this;
+  stream.on('end', function() {
+    debug('wrapped end');
+    if (state.decoder && !state.ended) {
+      var chunk = state.decoder.end();
+      if (chunk && chunk.length)
+        self.push(chunk);
+    }
+
+    self.push(null);
+  });
+
+  stream.on('data', function(chunk) {
+    debug('wrapped data');
+    if (state.decoder)
+      chunk = state.decoder.write(chunk);
+    if (!chunk || !state.objectMode && !chunk.length)
+      return;
+
+    var ret = self.push(chunk);
+    if (!ret) {
+      paused = true;
+      stream.pause();
+    }
+  });
+
+  // proxy all the other methods.
+  // important when wrapping filters and duplexes.
+  for (var i in stream) {
+    if (util.isFunction(stream[i]) && util.isUndefined(this[i])) {
+      this[i] = function(method) { return function() {
+        return stream[method].apply(stream, arguments);
+      }}(i);
+    }
+  }
+
+  // proxy certain important events.
+  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
+  forEach(events, function(ev) {
+    stream.on(ev, self.emit.bind(self, ev));
+  });
+
+  // when we try to consume some more bytes, simply unpause the
+  // underlying stream.
+  self._read = function(n) {
+    debug('wrapped _read', n);
+    if (paused) {
+      paused = false;
+      stream.resume();
+    }
+  };
+
+  return self;
+};
+
+
+
+// exposed for testing purposes only.
+Readable._fromList = fromList;
+
+// Pluck off n bytes from an array of buffers.
+// Length is the combined lengths of all the buffers in the list.
+function fromList(n, state) {
+  var list = state.buffer;
+  var length = state.length;
+  var stringMode = !!state.decoder;
+  var objectMode = !!state.objectMode;
+  var ret;
+
+  // nothing in the list, definitely empty.
+  if (list.length === 0)
+    return null;
+
+  if (length === 0)
+    ret = null;
+  else if (objectMode)
+    ret = list.shift();
+  else if (!n || n >= length) {
+    // read it all, truncate the array.
+    if (stringMode)
+      ret = list.join('');
+    else
+      ret = Buffer.concat(list, length);
+    list.length = 0;
+  } else {
+    // read just some of it.
+    if (n < list[0].length) {
+      // just take a part of the first list item.
+      // slice is the same for buffers and strings.
+      var buf = list[0];
+      ret = buf.slice(0, n);
+      list[0] = buf.slice(n);
+    } else if (n === list[0].length) {
+      // first list is a perfect match
+      ret = list.shift();
+    } else {
+      // complex case.
+      // we have enough to cover it, but it spans past the first buffer.
+      if (stringMode)
+        ret = '';
+      else
+        ret = new Buffer(n);
+
+      var c = 0;
+      for (var i = 0, l = list.length; i < l && c < n; i++) {
+        var buf = list[0];
+        var cpy = Math.min(n - c, buf.length);
+
+        if (stringMode)
+          ret += buf.slice(0, cpy);
+        else
+          buf.copy(ret, c, 0, cpy);
+
+        if (cpy < buf.length)
+          list[0] = buf.slice(cpy);
+        else
+          list.shift();
+
+        c += cpy;
+      }
+    }
+  }
+
+  return ret;
+}
+
+function endReadable(stream) {
+  var state = stream._readableState;
+
+  // If we get here before consuming all the bytes, then that is a
+  // bug in node.  Should never happen.
+  if (state.length > 0)
+    throw new Error('endReadable called on non-empty stream');
+
+  if (!state.endEmitted) {
+    state.ended = true;
+    process.nextTick(function() {
+      // Check that we didn't get one last unshift.
+      if (!state.endEmitted && state.length === 0) {
+        state.endEmitted = true;
+        stream.readable = false;
+        stream.emit('end');
+      }
+    });
+  }
+}
+
+function forEach (xs, f) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    f(xs[i], i);
+  }
+}
+
+function indexOf (xs, x) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    if (xs[i] === x) return i;
+  }
+  return -1;
+}
+
+}).call(this,require('_process'))
+},{"./_stream_duplex":14,"_process":12,"buffer":4,"core-util-is":19,"events":8,"inherits":9,"isarray":10,"stream":24,"string_decoder/":25,"util":3}],17:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// a transform stream is a readable/writable stream where you do
+// something with the data.  Sometimes it's called a "filter",
+// but that's not a great name for it, since that implies a thing where
+// some bits pass through, and others are simply ignored.  (That would
+// be a valid example of a transform, of course.)
+//
+// While the output is causally related to the input, it's not a
+// necessarily symmetric or synchronous transformation.  For example,
+// a zlib stream might take multiple plain-text writes(), and then
+// emit a single compressed chunk some time in the future.
+//
+// Here's how this works:
+//
+// The Transform stream has all the aspects of the readable and writable
+// stream classes.  When you write(chunk), that calls _write(chunk,cb)
+// internally, and returns false if there's a lot of pending writes
+// buffered up.  When you call read(), that calls _read(n) until
+// there's enough pending readable data buffered up.
+//
+// In a transform stream, the written data is placed in a buffer.  When
+// _read(n) is called, it transforms the queued up data, calling the
+// buffered _write cb's as it consumes chunks.  If consuming a single
+// written chunk would result in multiple output chunks, then the first
+// outputted bit calls the readcb, and subsequent chunks just go into
+// the read buffer, and will cause it to emit 'readable' if necessary.
+//
+// This way, back-pressure is actually determined by the reading side,
+// since _read has to be called to start processing a new chunk.  However,
+// a pathological inflate type of transform can cause excessive buffering
+// here.  For example, imagine a stream where every byte of input is
+// interpreted as an integer from 0-255, and then results in that many
+// bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
+// 1kb of data being output.  In this case, you could write a very small
+// amount of input, and end up with a very large amount of output.  In
+// such a pathological inflating mechanism, there'd be no way to tell
+// the system to stop doing the transform.  A single 4MB write could
+// cause the system to run out of memory.
+//
+// However, even in such a pathological case, only a single written chunk
+// would be consumed, and then the rest would wait (un-transformed) until
+// the results of the previous transformed chunk were consumed.
+
+module.exports = Transform;
+
+var Duplex = require('./_stream_duplex');
+
+/*<replacement>*/
+var util = require('core-util-is');
+util.inherits = require('inherits');
+/*</replacement>*/
+
+util.inherits(Transform, Duplex);
+
+
+function TransformState(options, stream) {
+  this.afterTransform = function(er, data) {
+    return afterTransform(stream, er, data);
+  };
+
+  this.needTransform = false;
+  this.transforming = false;
+  this.writecb = null;
+  this.writechunk = null;
+}
+
+function afterTransform(stream, er, data) {
+  var ts = stream._transformState;
+  ts.transforming = false;
+
+  var cb = ts.writecb;
+
+  if (!cb)
+    return stream.emit('error', new Error('no writecb in Transform class'));
+
+  ts.writechunk = null;
+  ts.writecb = null;
+
+  if (!util.isNullOrUndefined(data))
+    stream.push(data);
+
+  if (cb)
+    cb(er);
+
+  var rs = stream._readableState;
+  rs.reading = false;
+  if (rs.needReadable || rs.length < rs.highWaterMark) {
+    stream._read(rs.highWaterMark);
+  }
+}
+
+
+function Transform(options) {
+  if (!(this instanceof Transform))
+    return new Transform(options);
+
+  Duplex.call(this, options);
+
+  this._transformState = new TransformState(options, this);
+
+  // when the writable side finishes, then flush out anything remaining.
+  var stream = this;
+
+  // start out asking for a readable event once data is transformed.
+  this._readableState.needReadable = true;
+
+  // we have implemented the _read method, and done the other things
+  // that Readable wants before the first _read call, so unset the
+  // sync guard flag.
+  this._readableState.sync = false;
+
+  this.once('prefinish', function() {
+    if (util.isFunction(this._flush))
+      this._flush(function(er) {
+        done(stream, er);
+      });
+    else
+      done(stream);
+  });
+}
+
+Transform.prototype.push = function(chunk, encoding) {
+  this._transformState.needTransform = false;
+  return Duplex.prototype.push.call(this, chunk, encoding);
+};
+
+// This is the part where you do stuff!
+// override this function in implementation classes.
+// 'chunk' is an input chunk.
+//
+// Call `push(newChunk)` to pass along transformed output
+// to the readable side.  You may call 'push' zero or more times.
+//
+// Call `cb(err)` when you are done with this chunk.  If you pass
+// an error, then that'll put the hurt on the whole operation.  If you
+// never call cb(), then you'll never get another chunk.
+Transform.prototype._transform = function(chunk, encoding, cb) {
+  throw new Error('not implemented');
+};
+
+Transform.prototype._write = function(chunk, encoding, cb) {
+  var ts = this._transformState;
+  ts.writecb = cb;
+  ts.writechunk = chunk;
+  ts.writeencoding = encoding;
+  if (!ts.transforming) {
+    var rs = this._readableState;
+    if (ts.needTransform ||
+        rs.needReadable ||
+        rs.length < rs.highWaterMark)
+      this._read(rs.highWaterMark);
+  }
+};
+
+// Doesn't matter what the args are here.
+// _transform does all the work.
+// That we got here means that the readable side wants more data.
+Transform.prototype._read = function(n) {
+  var ts = this._transformState;
+
+  if (!util.isNull(ts.writechunk) && ts.writecb && !ts.transforming) {
+    ts.transforming = true;
+    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+  } else {
+    // mark that we need a transform, so that any data that comes in
+    // will get processed, now that we've asked for it.
+    ts.needTransform = true;
+  }
+};
+
+
+function done(stream, er) {
+  if (er)
+    return stream.emit('error', er);
+
+  // if there's nothing in the write buffer, then that means
+  // that nothing more will ever be provided
+  var ws = stream._writableState;
+  var ts = stream._transformState;
+
+  if (ws.length)
+    throw new Error('calling transform done when ws.length != 0');
+
+  if (ts.transforming)
+    throw new Error('calling transform done when still transforming');
+
+  return stream.push(null);
+}
+
+},{"./_stream_duplex":14,"core-util-is":19,"inherits":9}],18:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// A bit simpler than readable streams.
+// Implement an async ._write(chunk, cb), and it'll handle all
+// the drain event emission and buffering.
+
+module.exports = Writable;
+
+/*<replacement>*/
+var Buffer = require('buffer').Buffer;
+/*</replacement>*/
+
+Writable.WritableState = WritableState;
+
+
+/*<replacement>*/
+var util = require('core-util-is');
+util.inherits = require('inherits');
+/*</replacement>*/
+
+var Stream = require('stream');
+
+util.inherits(Writable, Stream);
+
+function WriteReq(chunk, encoding, cb) {
+  this.chunk = chunk;
+  this.encoding = encoding;
+  this.callback = cb;
+}
+
+function WritableState(options, stream) {
+  var Duplex = require('./_stream_duplex');
+
+  options = options || {};
+
+  // the point at which write() starts returning false
+  // Note: 0 is a valid value, means that we always return false if
+  // the entire buffer is not flushed immediately on write()
+  var hwm = options.highWaterMark;
+  var defaultHwm = options.objectMode ? 16 : 16 * 1024;
+  this.highWaterMark = (hwm || hwm === 0) ? hwm : defaultHwm;
+
+  // object stream flag to indicate whether or not this stream
+  // contains buffers or objects.
+  this.objectMode = !!options.objectMode;
+
+  if (stream instanceof Duplex)
+    this.objectMode = this.objectMode || !!options.writableObjectMode;
+
+  // cast to ints.
+  this.highWaterMark = ~~this.highWaterMark;
+
+  this.needDrain = false;
+  // at the start of calling end()
+  this.ending = false;
+  // when end() has been called, and returned
+  this.ended = false;
+  // when 'finish' is emitted
+  this.finished = false;
+
+  // should we decode strings into buffers before passing to _write?
+  // this is here so that some node-core streams can optimize string
+  // handling at a lower level.
+  var noDecode = options.decodeStrings === false;
+  this.decodeStrings = !noDecode;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+  // not an actual buffer we keep track of, but a measurement
+  // of how much we're waiting to get pushed to some underlying
+  // socket or file.
+  this.length = 0;
+
+  // a flag to see when we're in the middle of a write.
+  this.writing = false;
+
+  // when true all writes will be buffered until .uncork() call
+  this.corked = 0;
+
+  // a flag to be able to tell if the onwrite cb is called immediately,
+  // or on a later tick.  We set this to true at first, because any
+  // actions that shouldn't happen until "later" should generally also
+  // not happen before the first write call.
+  this.sync = true;
+
+  // a flag to know if we're processing previously buffered items, which
+  // may call the _write() callback in the same tick, so that we don't
+  // end up in an overlapped onwrite situation.
+  this.bufferProcessing = false;
+
+  // the callback that's passed to _write(chunk,cb)
+  this.onwrite = function(er) {
+    onwrite(stream, er);
+  };
+
+  // the callback that the user supplies to write(chunk,encoding,cb)
+  this.writecb = null;
+
+  // the amount that is being written when _write is called.
+  this.writelen = 0;
+
+  this.buffer = [];
+
+  // number of pending user-supplied write callbacks
+  // this must be 0 before 'finish' can be emitted
+  this.pendingcb = 0;
+
+  // emit prefinish if the only thing we're waiting for is _write cbs
+  // This is relevant for synchronous Transform streams
+  this.prefinished = false;
+
+  // True if the error was already emitted and should not be thrown again
+  this.errorEmitted = false;
+}
+
+function Writable(options) {
+  var Duplex = require('./_stream_duplex');
+
+  // Writable ctor is applied to Duplexes, though they're not
+  // instanceof Writable, they're instanceof Readable.
+  if (!(this instanceof Writable) && !(this instanceof Duplex))
+    return new Writable(options);
+
+  this._writableState = new WritableState(options, this);
+
+  // legacy.
+  this.writable = true;
+
+  Stream.call(this);
+}
+
+// Otherwise people can pipe Writable streams, which is just wrong.
+Writable.prototype.pipe = function() {
+  this.emit('error', new Error('Cannot pipe. Not readable.'));
+};
+
+
+function writeAfterEnd(stream, state, cb) {
+  var er = new Error('write after end');
+  // TODO: defer error events consistently everywhere, not just the cb
+  stream.emit('error', er);
+  process.nextTick(function() {
+    cb(er);
+  });
+}
+
+// If we get something that is not a buffer, string, null, or undefined,
+// and we're not in objectMode, then that's an error.
+// Otherwise stream chunks are all considered to be of length=1, and the
+// watermarks determine how many objects to keep in the buffer, rather than
+// how many bytes or characters.
+function validChunk(stream, state, chunk, cb) {
+  var valid = true;
+  if (!util.isBuffer(chunk) &&
+      !util.isString(chunk) &&
+      !util.isNullOrUndefined(chunk) &&
+      !state.objectMode) {
+    var er = new TypeError('Invalid non-string/buffer chunk');
+    stream.emit('error', er);
+    process.nextTick(function() {
+      cb(er);
+    });
+    valid = false;
+  }
+  return valid;
+}
+
+Writable.prototype.write = function(chunk, encoding, cb) {
+  var state = this._writableState;
+  var ret = false;
+
+  if (util.isFunction(encoding)) {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (util.isBuffer(chunk))
+    encoding = 'buffer';
+  else if (!encoding)
+    encoding = state.defaultEncoding;
+
+  if (!util.isFunction(cb))
+    cb = function() {};
+
+  if (state.ended)
+    writeAfterEnd(this, state, cb);
+  else if (validChunk(this, state, chunk, cb)) {
+    state.pendingcb++;
+    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+  }
+
+  return ret;
+};
+
+Writable.prototype.cork = function() {
+  var state = this._writableState;
+
+  state.corked++;
+};
+
+Writable.prototype.uncork = function() {
+  var state = this._writableState;
+
+  if (state.corked) {
+    state.corked--;
+
+    if (!state.writing &&
+        !state.corked &&
+        !state.finished &&
+        !state.bufferProcessing &&
+        state.buffer.length)
+      clearBuffer(this, state);
+  }
+};
+
+function decodeChunk(state, chunk, encoding) {
+  if (!state.objectMode &&
+      state.decodeStrings !== false &&
+      util.isString(chunk)) {
+    chunk = new Buffer(chunk, encoding);
+  }
+  return chunk;
+}
+
+// if we're already writing something, then just put this
+// in the queue, and wait our turn.  Otherwise, call _write
+// If we return false, then we need a drain event, so set that flag.
+function writeOrBuffer(stream, state, chunk, encoding, cb) {
+  chunk = decodeChunk(state, chunk, encoding);
+  if (util.isBuffer(chunk))
+    encoding = 'buffer';
+  var len = state.objectMode ? 1 : chunk.length;
+
+  state.length += len;
+
+  var ret = state.length < state.highWaterMark;
+  // we must ensure that previous needDrain will not be reset to false.
+  if (!ret)
+    state.needDrain = true;
+
+  if (state.writing || state.corked)
+    state.buffer.push(new WriteReq(chunk, encoding, cb));
+  else
+    doWrite(stream, state, false, len, chunk, encoding, cb);
+
+  return ret;
+}
+
+function doWrite(stream, state, writev, len, chunk, encoding, cb) {
+  state.writelen = len;
+  state.writecb = cb;
+  state.writing = true;
+  state.sync = true;
+  if (writev)
+    stream._writev(chunk, state.onwrite);
+  else
+    stream._write(chunk, encoding, state.onwrite);
+  state.sync = false;
+}
+
+function onwriteError(stream, state, sync, er, cb) {
+  if (sync)
+    process.nextTick(function() {
+      state.pendingcb--;
+      cb(er);
+    });
+  else {
+    state.pendingcb--;
+    cb(er);
+  }
+
+  stream._writableState.errorEmitted = true;
+  stream.emit('error', er);
+}
+
+function onwriteStateUpdate(state) {
+  state.writing = false;
+  state.writecb = null;
+  state.length -= state.writelen;
+  state.writelen = 0;
+}
+
+function onwrite(stream, er) {
+  var state = stream._writableState;
+  var sync = state.sync;
+  var cb = state.writecb;
+
+  onwriteStateUpdate(state);
+
+  if (er)
+    onwriteError(stream, state, sync, er, cb);
+  else {
+    // Check if we're actually ready to finish, but don't emit yet
+    var finished = needFinish(stream, state);
+
+    if (!finished &&
+        !state.corked &&
+        !state.bufferProcessing &&
+        state.buffer.length) {
+      clearBuffer(stream, state);
+    }
+
+    if (sync) {
+      process.nextTick(function() {
+        afterWrite(stream, state, finished, cb);
+      });
+    } else {
+      afterWrite(stream, state, finished, cb);
+    }
+  }
+}
+
+function afterWrite(stream, state, finished, cb) {
+  if (!finished)
+    onwriteDrain(stream, state);
+  state.pendingcb--;
+  cb();
+  finishMaybe(stream, state);
+}
+
+// Must force callback to be called on nextTick, so that we don't
+// emit 'drain' before the write() consumer gets the 'false' return
+// value, and has a chance to attach a 'drain' listener.
+function onwriteDrain(stream, state) {
+  if (state.length === 0 && state.needDrain) {
+    state.needDrain = false;
+    stream.emit('drain');
+  }
+}
+
+
+// if there's something in the buffer waiting, then process it
+function clearBuffer(stream, state) {
+  state.bufferProcessing = true;
+
+  if (stream._writev && state.buffer.length > 1) {
+    // Fast case, write everything using _writev()
+    var cbs = [];
+    for (var c = 0; c < state.buffer.length; c++)
+      cbs.push(state.buffer[c].callback);
+
+    // count the one we are adding, as well.
+    // TODO(isaacs) clean this up
+    state.pendingcb++;
+    doWrite(stream, state, true, state.length, state.buffer, '', function(err) {
+      for (var i = 0; i < cbs.length; i++) {
+        state.pendingcb--;
+        cbs[i](err);
+      }
+    });
+
+    // Clear buffer
+    state.buffer = [];
+  } else {
+    // Slow case, write chunks one-by-one
+    for (var c = 0; c < state.buffer.length; c++) {
+      var entry = state.buffer[c];
+      var chunk = entry.chunk;
+      var encoding = entry.encoding;
+      var cb = entry.callback;
+      var len = state.objectMode ? 1 : chunk.length;
+
+      doWrite(stream, state, false, len, chunk, encoding, cb);
+
+      // if we didn't call the onwrite immediately, then
+      // it means that we need to wait until it does.
+      // also, that means that the chunk and cb are currently
+      // being processed, so move the buffer counter past them.
+      if (state.writing) {
+        c++;
+        break;
+      }
+    }
+
+    if (c < state.buffer.length)
+      state.buffer = state.buffer.slice(c);
+    else
+      state.buffer.length = 0;
+  }
+
+  state.bufferProcessing = false;
+}
+
+Writable.prototype._write = function(chunk, encoding, cb) {
+  cb(new Error('not implemented'));
+
+};
+
+Writable.prototype._writev = null;
+
+Writable.prototype.end = function(chunk, encoding, cb) {
+  var state = this._writableState;
+
+  if (util.isFunction(chunk)) {
+    cb = chunk;
+    chunk = null;
+    encoding = null;
+  } else if (util.isFunction(encoding)) {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (!util.isNullOrUndefined(chunk))
+    this.write(chunk, encoding);
+
+  // .end() fully uncorks
+  if (state.corked) {
+    state.corked = 1;
+    this.uncork();
+  }
+
+  // ignore unnecessary end() calls.
+  if (!state.ending && !state.finished)
+    endWritable(this, state, cb);
+};
+
+
+function needFinish(stream, state) {
+  return (state.ending &&
+          state.length === 0 &&
+          !state.finished &&
+          !state.writing);
+}
+
+function prefinish(stream, state) {
+  if (!state.prefinished) {
+    state.prefinished = true;
+    stream.emit('prefinish');
+  }
+}
+
+function finishMaybe(stream, state) {
+  var need = needFinish(stream, state);
+  if (need) {
+    if (state.pendingcb === 0) {
+      prefinish(stream, state);
+      state.finished = true;
+      stream.emit('finish');
+    } else
+      prefinish(stream, state);
+  }
+  return need;
+}
+
+function endWritable(stream, state, cb) {
+  state.ending = true;
+  finishMaybe(stream, state);
+  if (cb) {
+    if (state.finished)
+      process.nextTick(cb);
+    else
+      stream.once('finish', cb);
+  }
+  state.ended = true;
+}
+
+}).call(this,require('_process'))
+},{"./_stream_duplex":14,"_process":12,"buffer":4,"core-util-is":19,"inherits":9,"stream":24}],19:[function(require,module,exports){
+(function (Buffer){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+function isBuffer(arg) {
+  return Buffer.isBuffer(arg);
+}
+exports.isBuffer = isBuffer;
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+}).call(this,require("buffer").Buffer)
+},{"buffer":4}],20:[function(require,module,exports){
+module.exports = require("./lib/_stream_passthrough.js")
+
+},{"./lib/_stream_passthrough.js":15}],21:[function(require,module,exports){
+exports = module.exports = require('./lib/_stream_readable.js');
+exports.Stream = require('stream');
+exports.Readable = exports;
+exports.Writable = require('./lib/_stream_writable.js');
+exports.Duplex = require('./lib/_stream_duplex.js');
+exports.Transform = require('./lib/_stream_transform.js');
+exports.PassThrough = require('./lib/_stream_passthrough.js');
+
+},{"./lib/_stream_duplex.js":14,"./lib/_stream_passthrough.js":15,"./lib/_stream_readable.js":16,"./lib/_stream_transform.js":17,"./lib/_stream_writable.js":18,"stream":24}],22:[function(require,module,exports){
+module.exports = require("./lib/_stream_transform.js")
+
+},{"./lib/_stream_transform.js":17}],23:[function(require,module,exports){
+module.exports = require("./lib/_stream_writable.js")
+
+},{"./lib/_stream_writable.js":18}],24:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+module.exports = Stream;
+
+var EE = require('events').EventEmitter;
+var inherits = require('inherits');
+
+inherits(Stream, EE);
+Stream.Readable = require('readable-stream/readable.js');
+Stream.Writable = require('readable-stream/writable.js');
+Stream.Duplex = require('readable-stream/duplex.js');
+Stream.Transform = require('readable-stream/transform.js');
+Stream.PassThrough = require('readable-stream/passthrough.js');
+
+// Backwards-compat with node 0.4.x
+Stream.Stream = Stream;
+
+
+
+// old-style streams.  Note that the pipe method (the only relevant
+// part of this class) is overridden in the Readable class.
+
+function Stream() {
+  EE.call(this);
+}
+
+Stream.prototype.pipe = function(dest, options) {
+  var source = this;
+
+  function ondata(chunk) {
+    if (dest.writable) {
+      if (false === dest.write(chunk) && source.pause) {
+        source.pause();
+      }
+    }
+  }
+
+  source.on('data', ondata);
+
+  function ondrain() {
+    if (source.readable && source.resume) {
+      source.resume();
+    }
+  }
+
+  dest.on('drain', ondrain);
+
+  // If the 'end' option is not supplied, dest.end() will be called when
+  // source gets the 'end' or 'close' events.  Only dest.end() once.
+  if (!dest._isStdio && (!options || options.end !== false)) {
+    source.on('end', onend);
+    source.on('close', onclose);
+  }
+
+  var didOnEnd = false;
+  function onend() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    dest.end();
+  }
+
+
+  function onclose() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    if (typeof dest.destroy === 'function') dest.destroy();
+  }
+
+  // don't leave dangling pipes when there are errors.
+  function onerror(er) {
+    cleanup();
+    if (EE.listenerCount(this, 'error') === 0) {
+      throw er; // Unhandled stream error in pipe.
+    }
+  }
+
+  source.on('error', onerror);
+  dest.on('error', onerror);
+
+  // remove all the event listeners that were added.
+  function cleanup() {
+    source.removeListener('data', ondata);
+    dest.removeListener('drain', ondrain);
+
+    source.removeListener('end', onend);
+    source.removeListener('close', onclose);
+
+    source.removeListener('error', onerror);
+    dest.removeListener('error', onerror);
+
+    source.removeListener('end', cleanup);
+    source.removeListener('close', cleanup);
+
+    dest.removeListener('close', cleanup);
+  }
+
+  source.on('end', cleanup);
+  source.on('close', cleanup);
+
+  dest.on('close', cleanup);
+
+  dest.emit('pipe', source);
+
+  // Allow for unix-like usage: A.pipe(B).pipe(C)
+  return dest;
+};
+
+},{"events":8,"inherits":9,"readable-stream/duplex.js":13,"readable-stream/passthrough.js":20,"readable-stream/readable.js":21,"readable-stream/transform.js":22,"readable-stream/writable.js":23}],25:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var Buffer = require('buffer').Buffer;
+
+var isBufferEncoding = Buffer.isEncoding
+  || function(encoding) {
+       switch (encoding && encoding.toLowerCase()) {
+         case 'hex': case 'utf8': case 'utf-8': case 'ascii': case 'binary': case 'base64': case 'ucs2': case 'ucs-2': case 'utf16le': case 'utf-16le': case 'raw': return true;
+         default: return false;
+       }
+     }
+
+
+function assertEncoding(encoding) {
+  if (encoding && !isBufferEncoding(encoding)) {
+    throw new Error('Unknown encoding: ' + encoding);
+  }
+}
+
+// StringDecoder provides an interface for efficiently splitting a series of
+// buffers into a series of JS strings without breaking apart multi-byte
+// characters. CESU-8 is handled as part of the UTF-8 encoding.
+//
+// @TODO Handling all encodings inside a single object makes it very difficult
+// to reason about this code, so it should be split up in the future.
+// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code
+// points as used by CESU-8.
+var StringDecoder = exports.StringDecoder = function(encoding) {
+  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
+  assertEncoding(encoding);
+  switch (this.encoding) {
+    case 'utf8':
+      // CESU-8 represents each of Surrogate Pair by 3-bytes
+      this.surrogateSize = 3;
+      break;
+    case 'ucs2':
+    case 'utf16le':
+      // UTF-16 represents each of Surrogate Pair by 2-bytes
+      this.surrogateSize = 2;
+      this.detectIncompleteChar = utf16DetectIncompleteChar;
+      break;
+    case 'base64':
+      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
+      this.surrogateSize = 3;
+      this.detectIncompleteChar = base64DetectIncompleteChar;
+      break;
+    default:
+      this.write = passThroughWrite;
+      return;
+  }
+
+  // Enough space to store all bytes of a single character. UTF-8 needs 4
+  // bytes, but CESU-8 may require up to 6 (3 bytes per surrogate).
+  this.charBuffer = new Buffer(6);
+  // Number of bytes received for the current incomplete multi-byte character.
+  this.charReceived = 0;
+  // Number of bytes expected for the current incomplete multi-byte character.
+  this.charLength = 0;
+};
+
+
+// write decodes the given buffer and returns it as JS string that is
+// guaranteed to not contain any partial multi-byte characters. Any partial
+// character found at the end of the buffer is buffered up, and will be
+// returned when calling write again with the remaining bytes.
+//
+// Note: Converting a Buffer containing an orphan surrogate to a String
+// currently works, but converting a String to a Buffer (via `new Buffer`, or
+// Buffer#write) will replace incomplete surrogates with the unicode
+// replacement character. See https://codereview.chromium.org/121173009/ .
+StringDecoder.prototype.write = function(buffer) {
+  var charStr = '';
+  // if our last write ended with an incomplete multibyte character
+  while (this.charLength) {
+    // determine how many remaining bytes this buffer has to offer for this char
+    var available = (buffer.length >= this.charLength - this.charReceived) ?
+        this.charLength - this.charReceived :
+        buffer.length;
+
+    // add the new bytes to the char buffer
+    buffer.copy(this.charBuffer, this.charReceived, 0, available);
+    this.charReceived += available;
+
+    if (this.charReceived < this.charLength) {
+      // still not enough chars in this buffer? wait for more ...
+      return '';
+    }
+
+    // remove bytes belonging to the current character from the buffer
+    buffer = buffer.slice(available, buffer.length);
+
+    // get the character that was split
+    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
+
+    // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+    var charCode = charStr.charCodeAt(charStr.length - 1);
+    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+      this.charLength += this.surrogateSize;
+      charStr = '';
+      continue;
+    }
+    this.charReceived = this.charLength = 0;
+
+    // if there are no more bytes in this buffer, just emit our char
+    if (buffer.length === 0) {
+      return charStr;
+    }
+    break;
+  }
+
+  // determine and set charLength / charReceived
+  this.detectIncompleteChar(buffer);
+
+  var end = buffer.length;
+  if (this.charLength) {
+    // buffer the incomplete character bytes we got
+    buffer.copy(this.charBuffer, 0, buffer.length - this.charReceived, end);
+    end -= this.charReceived;
+  }
+
+  charStr += buffer.toString(this.encoding, 0, end);
+
+  var end = charStr.length - 1;
+  var charCode = charStr.charCodeAt(end);
+  // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+    var size = this.surrogateSize;
+    this.charLength += size;
+    this.charReceived += size;
+    this.charBuffer.copy(this.charBuffer, size, 0, size);
+    buffer.copy(this.charBuffer, 0, 0, size);
+    return charStr.substring(0, end);
+  }
+
+  // or just emit the charStr
+  return charStr;
+};
+
+// detectIncompleteChar determines if there is an incomplete UTF-8 character at
+// the end of the given buffer. If so, it sets this.charLength to the byte
+// length that character, and sets this.charReceived to the number of bytes
+// that are available for this character.
+StringDecoder.prototype.detectIncompleteChar = function(buffer) {
+  // determine how many bytes we have to check at the end of this buffer
+  var i = (buffer.length >= 3) ? 3 : buffer.length;
+
+  // Figure out if one of the last i bytes of our buffer announces an
+  // incomplete char.
+  for (; i > 0; i--) {
+    var c = buffer[buffer.length - i];
+
+    // See http://en.wikipedia.org/wiki/UTF-8#Description
+
+    // 110XXXXX
+    if (i == 1 && c >> 5 == 0x06) {
+      this.charLength = 2;
+      break;
+    }
+
+    // 1110XXXX
+    if (i <= 2 && c >> 4 == 0x0E) {
+      this.charLength = 3;
+      break;
+    }
+
+    // 11110XXX
+    if (i <= 3 && c >> 3 == 0x1E) {
+      this.charLength = 4;
+      break;
+    }
+  }
+  this.charReceived = i;
+};
+
+StringDecoder.prototype.end = function(buffer) {
+  var res = '';
+  if (buffer && buffer.length)
+    res = this.write(buffer);
+
+  if (this.charReceived) {
+    var cr = this.charReceived;
+    var buf = this.charBuffer;
+    var enc = this.encoding;
+    res += buf.slice(0, cr).toString(enc);
+  }
+
+  return res;
+};
+
+function passThroughWrite(buffer) {
+  return buffer.toString(this.encoding);
+}
+
+function utf16DetectIncompleteChar(buffer) {
+  this.charReceived = buffer.length % 2;
+  this.charLength = this.charReceived ? 2 : 0;
+}
+
+function base64DetectIncompleteChar(buffer) {
+  this.charReceived = buffer.length % 3;
+  this.charLength = this.charReceived ? 3 : 0;
+}
+
+},{"buffer":4}],26:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],4:[function(_dereq_,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -896,7 +5369,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = _dereq_('./support/isBuffer');
+exports.isBuffer = require('./support/isBuffer');
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -940,7 +5413,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = _dereq_('inherits');
+exports.inherits = require('inherits');
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -958,3915 +5431,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":3,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"inherits":9}],5:[function(_dereq_,module,exports){
-/**
- * The buffer module from node.js, for the browser.
- *
- * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * License:  MIT
- *
- * `npm install buffer`
- */
-
-var base64 = _dereq_('base64-js')
-var ieee754 = _dereq_('ieee754')
-
-exports.Buffer = Buffer
-exports.SlowBuffer = Buffer
-exports.INSPECT_MAX_BYTES = 50
-Buffer.poolSize = 8192
-
-/**
- * If `Buffer._useTypedArrays`:
- *   === true    Use Uint8Array implementation (fastest)
- *   === false   Use Object implementation (compatible down to IE6)
- */
-Buffer._useTypedArrays = (function () {
-   // Detect if browser supports Typed Arrays. Supported browsers are IE 10+,
-   // Firefox 4+, Chrome 7+, Safari 5.1+, Opera 11.6+, iOS 4.2+.
-  if (typeof Uint8Array !== 'function' || typeof ArrayBuffer !== 'function')
-    return false
-
-  // Does the browser support adding properties to `Uint8Array` instances? If
-  // not, then that's the same as no `Uint8Array` support. We need to be able to
-  // add all the node Buffer API methods.
-  // Bug in Firefox 4-29, now fixed: https://bugzilla.mozilla.org/show_bug.cgi?id=695438
-  try {
-    var arr = new Uint8Array(0)
-    arr.foo = function () { return 42 }
-    return 42 === arr.foo() &&
-        typeof arr.subarray === 'function' // Chrome 9-10 lack `subarray`
-  } catch (e) {
-    return false
-  }
-})()
-
-/**
- * Class: Buffer
- * =============
- *
- * The Buffer constructor returns instances of `Uint8Array` that are augmented
- * with function properties for all the node `Buffer` API functions. We use
- * `Uint8Array` so that square bracket notation works as expected -- it returns
- * a single octet.
- *
- * By augmenting the instances, we can avoid modifying the `Uint8Array`
- * prototype.
- */
-function Buffer (subject, encoding, noZero) {
-  if (!(this instanceof Buffer))
-    return new Buffer(subject, encoding, noZero)
-
-  var type = typeof subject
-
-  // Workaround: node's base64 implementation allows for non-padded strings
-  // while base64-js does not.
-  if (encoding === 'base64' && type === 'string') {
-    subject = stringtrim(subject)
-    while (subject.length % 4 !== 0) {
-      subject = subject + '='
-    }
-  }
-
-  // Find the length
-  var length
-  if (type === 'number')
-    length = coerce(subject)
-  else if (type === 'string')
-    length = Buffer.byteLength(subject, encoding)
-  else if (type === 'object')
-    length = coerce(subject.length) // Assume object is an array
-  else
-    throw new Error('First argument needs to be a number, array or string.')
-
-  var buf
-  if (Buffer._useTypedArrays) {
-    // Preferred: Return an augmented `Uint8Array` instance for best performance
-    buf = augment(new Uint8Array(length))
-  } else {
-    // Fallback: Return THIS instance of Buffer (created by `new`)
-    buf = this
-    buf.length = length
-    buf._isBuffer = true
-  }
-
-  var i
-  if (Buffer._useTypedArrays && typeof Uint8Array === 'function' &&
-      subject instanceof Uint8Array) {
-    // Speed optimization -- use set if we're copying from a Uint8Array
-    buf._set(subject)
-  } else if (isArrayish(subject)) {
-    // Treat array-ish objects as a byte array
-    for (i = 0; i < length; i++) {
-      if (Buffer.isBuffer(subject))
-        buf[i] = subject.readUInt8(i)
-      else
-        buf[i] = subject[i]
-    }
-  } else if (type === 'string') {
-    buf.write(subject, 0, encoding)
-  } else if (type === 'number' && !Buffer._useTypedArrays && !noZero) {
-    for (i = 0; i < length; i++) {
-      buf[i] = 0
-    }
-  }
-
-  return buf
-}
-
-// STATIC METHODS
-// ==============
-
-Buffer.isEncoding = function (encoding) {
-  switch (String(encoding).toLowerCase()) {
-    case 'hex':
-    case 'utf8':
-    case 'utf-8':
-    case 'ascii':
-    case 'binary':
-    case 'base64':
-    case 'raw':
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      return true
-    default:
-      return false
-  }
-}
-
-Buffer.isBuffer = function (b) {
-  return !!(b !== null && b !== undefined && b._isBuffer)
-}
-
-Buffer.byteLength = function (str, encoding) {
-  var ret
-  str = str + ''
-  switch (encoding || 'utf8') {
-    case 'hex':
-      ret = str.length / 2
-      break
-    case 'utf8':
-    case 'utf-8':
-      ret = utf8ToBytes(str).length
-      break
-    case 'ascii':
-    case 'binary':
-    case 'raw':
-      ret = str.length
-      break
-    case 'base64':
-      ret = base64ToBytes(str).length
-      break
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = str.length * 2
-      break
-    default:
-      throw new Error('Unknown encoding')
-  }
-  return ret
-}
-
-Buffer.concat = function (list, totalLength) {
-  assert(isArray(list), 'Usage: Buffer.concat(list, [totalLength])\n' +
-      'list should be an Array.')
-
-  if (list.length === 0) {
-    return new Buffer(0)
-  } else if (list.length === 1) {
-    return list[0]
-  }
-
-  var i
-  if (typeof totalLength !== 'number') {
-    totalLength = 0
-    for (i = 0; i < list.length; i++) {
-      totalLength += list[i].length
-    }
-  }
-
-  var buf = new Buffer(totalLength)
-  var pos = 0
-  for (i = 0; i < list.length; i++) {
-    var item = list[i]
-    item.copy(buf, pos)
-    pos += item.length
-  }
-  return buf
-}
-
-// BUFFER INSTANCE METHODS
-// =======================
-
-function _hexWrite (buf, string, offset, length) {
-  offset = Number(offset) || 0
-  var remaining = buf.length - offset
-  if (!length) {
-    length = remaining
-  } else {
-    length = Number(length)
-    if (length > remaining) {
-      length = remaining
-    }
-  }
-
-  // must be an even number of digits
-  var strLen = string.length
-  assert(strLen % 2 === 0, 'Invalid hex string')
-
-  if (length > strLen / 2) {
-    length = strLen / 2
-  }
-  for (var i = 0; i < length; i++) {
-    var byte = parseInt(string.substr(i * 2, 2), 16)
-    assert(!isNaN(byte), 'Invalid hex string')
-    buf[offset + i] = byte
-  }
-  Buffer._charsWritten = i * 2
-  return i
-}
-
-function _utf8Write (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(utf8ToBytes(string), buf, offset, length)
-  return charsWritten
-}
-
-function _asciiWrite (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(asciiToBytes(string), buf, offset, length)
-  return charsWritten
-}
-
-function _binaryWrite (buf, string, offset, length) {
-  return _asciiWrite(buf, string, offset, length)
-}
-
-function _base64Write (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(base64ToBytes(string), buf, offset, length)
-  return charsWritten
-}
-
-function _utf16leWrite (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(utf16leToBytes(string), buf, offset, length)
-  return charsWritten
-}
-
-Buffer.prototype.write = function (string, offset, length, encoding) {
-  // Support both (string, offset, length, encoding)
-  // and the legacy (string, encoding, offset, length)
-  if (isFinite(offset)) {
-    if (!isFinite(length)) {
-      encoding = length
-      length = undefined
-    }
-  } else {  // legacy
-    var swap = encoding
-    encoding = offset
-    offset = length
-    length = swap
-  }
-
-  offset = Number(offset) || 0
-  var remaining = this.length - offset
-  if (!length) {
-    length = remaining
-  } else {
-    length = Number(length)
-    if (length > remaining) {
-      length = remaining
-    }
-  }
-  encoding = String(encoding || 'utf8').toLowerCase()
-
-  var ret
-  switch (encoding) {
-    case 'hex':
-      ret = _hexWrite(this, string, offset, length)
-      break
-    case 'utf8':
-    case 'utf-8':
-      ret = _utf8Write(this, string, offset, length)
-      break
-    case 'ascii':
-      ret = _asciiWrite(this, string, offset, length)
-      break
-    case 'binary':
-      ret = _binaryWrite(this, string, offset, length)
-      break
-    case 'base64':
-      ret = _base64Write(this, string, offset, length)
-      break
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = _utf16leWrite(this, string, offset, length)
-      break
-    default:
-      throw new Error('Unknown encoding')
-  }
-  return ret
-}
-
-Buffer.prototype.toString = function (encoding, start, end) {
-  var self = this
-
-  encoding = String(encoding || 'utf8').toLowerCase()
-  start = Number(start) || 0
-  end = (end !== undefined)
-    ? Number(end)
-    : end = self.length
-
-  // Fastpath empty strings
-  if (end === start)
-    return ''
-
-  var ret
-  switch (encoding) {
-    case 'hex':
-      ret = _hexSlice(self, start, end)
-      break
-    case 'utf8':
-    case 'utf-8':
-      ret = _utf8Slice(self, start, end)
-      break
-    case 'ascii':
-      ret = _asciiSlice(self, start, end)
-      break
-    case 'binary':
-      ret = _binarySlice(self, start, end)
-      break
-    case 'base64':
-      ret = _base64Slice(self, start, end)
-      break
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = _utf16leSlice(self, start, end)
-      break
-    default:
-      throw new Error('Unknown encoding')
-  }
-  return ret
-}
-
-Buffer.prototype.toJSON = function () {
-  return {
-    type: 'Buffer',
-    data: Array.prototype.slice.call(this._arr || this, 0)
-  }
-}
-
-// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
-Buffer.prototype.copy = function (target, target_start, start, end) {
-  var source = this
-
-  if (!start) start = 0
-  if (!end && end !== 0) end = this.length
-  if (!target_start) target_start = 0
-
-  // Copy 0 bytes; we're done
-  if (end === start) return
-  if (target.length === 0 || source.length === 0) return
-
-  // Fatal error conditions
-  assert(end >= start, 'sourceEnd < sourceStart')
-  assert(target_start >= 0 && target_start < target.length,
-      'targetStart out of bounds')
-  assert(start >= 0 && start < source.length, 'sourceStart out of bounds')
-  assert(end >= 0 && end <= source.length, 'sourceEnd out of bounds')
-
-  // Are we oob?
-  if (end > this.length)
-    end = this.length
-  if (target.length - target_start < end - start)
-    end = target.length - target_start + start
-
-  // copy!
-  for (var i = 0; i < end - start; i++)
-    target[i + target_start] = this[i + start]
-}
-
-function _base64Slice (buf, start, end) {
-  if (start === 0 && end === buf.length) {
-    return base64.fromByteArray(buf)
-  } else {
-    return base64.fromByteArray(buf.slice(start, end))
-  }
-}
-
-function _utf8Slice (buf, start, end) {
-  var res = ''
-  var tmp = ''
-  end = Math.min(buf.length, end)
-
-  for (var i = start; i < end; i++) {
-    if (buf[i] <= 0x7F) {
-      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
-      tmp = ''
-    } else {
-      tmp += '%' + buf[i].toString(16)
-    }
-  }
-
-  return res + decodeUtf8Char(tmp)
-}
-
-function _asciiSlice (buf, start, end) {
-  var ret = ''
-  end = Math.min(buf.length, end)
-
-  for (var i = start; i < end; i++)
-    ret += String.fromCharCode(buf[i])
-  return ret
-}
-
-function _binarySlice (buf, start, end) {
-  return _asciiSlice(buf, start, end)
-}
-
-function _hexSlice (buf, start, end) {
-  var len = buf.length
-
-  if (!start || start < 0) start = 0
-  if (!end || end < 0 || end > len) end = len
-
-  var out = ''
-  for (var i = start; i < end; i++) {
-    out += toHex(buf[i])
-  }
-  return out
-}
-
-function _utf16leSlice (buf, start, end) {
-  var bytes = buf.slice(start, end)
-  var res = ''
-  for (var i = 0; i < bytes.length; i += 2) {
-    res += String.fromCharCode(bytes[i] + bytes[i+1] * 256)
-  }
-  return res
-}
-
-Buffer.prototype.slice = function (start, end) {
-  var len = this.length
-  start = clamp(start, len, 0)
-  end = clamp(end, len, len)
-
-  if (Buffer._useTypedArrays) {
-    return augment(this.subarray(start, end))
-  } else {
-    var sliceLen = end - start
-    var newBuf = new Buffer(sliceLen, undefined, true)
-    for (var i = 0; i < sliceLen; i++) {
-      newBuf[i] = this[i + start]
-    }
-    return newBuf
-  }
-}
-
-// `get` will be removed in Node 0.13+
-Buffer.prototype.get = function (offset) {
-  console.log('.get() is deprecated. Access using array indexes instead.')
-  return this.readUInt8(offset)
-}
-
-// `set` will be removed in Node 0.13+
-Buffer.prototype.set = function (v, offset) {
-  console.log('.set() is deprecated. Access using array indexes instead.')
-  return this.writeUInt8(v, offset)
-}
-
-Buffer.prototype.readUInt8 = function (offset, noAssert) {
-  if (!noAssert) {
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < this.length, 'Trying to read beyond buffer length')
-  }
-
-  if (offset >= this.length)
-    return
-
-  return this[offset]
-}
-
-function _readUInt16 (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 1 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  var val
-  if (littleEndian) {
-    val = buf[offset]
-    if (offset + 1 < len)
-      val |= buf[offset + 1] << 8
-  } else {
-    val = buf[offset] << 8
-    if (offset + 1 < len)
-      val |= buf[offset + 1]
-  }
-  return val
-}
-
-Buffer.prototype.readUInt16LE = function (offset, noAssert) {
-  return _readUInt16(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readUInt16BE = function (offset, noAssert) {
-  return _readUInt16(this, offset, false, noAssert)
-}
-
-function _readUInt32 (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  var val
-  if (littleEndian) {
-    if (offset + 2 < len)
-      val = buf[offset + 2] << 16
-    if (offset + 1 < len)
-      val |= buf[offset + 1] << 8
-    val |= buf[offset]
-    if (offset + 3 < len)
-      val = val + (buf[offset + 3] << 24 >>> 0)
-  } else {
-    if (offset + 1 < len)
-      val = buf[offset + 1] << 16
-    if (offset + 2 < len)
-      val |= buf[offset + 2] << 8
-    if (offset + 3 < len)
-      val |= buf[offset + 3]
-    val = val + (buf[offset] << 24 >>> 0)
-  }
-  return val
-}
-
-Buffer.prototype.readUInt32LE = function (offset, noAssert) {
-  return _readUInt32(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readUInt32BE = function (offset, noAssert) {
-  return _readUInt32(this, offset, false, noAssert)
-}
-
-Buffer.prototype.readInt8 = function (offset, noAssert) {
-  if (!noAssert) {
-    assert(offset !== undefined && offset !== null,
-        'missing offset')
-    assert(offset < this.length, 'Trying to read beyond buffer length')
-  }
-
-  if (offset >= this.length)
-    return
-
-  var neg = this[offset] & 0x80
-  if (neg)
-    return (0xff - this[offset] + 1) * -1
-  else
-    return this[offset]
-}
-
-function _readInt16 (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 1 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  var val = _readUInt16(buf, offset, littleEndian, true)
-  var neg = val & 0x8000
-  if (neg)
-    return (0xffff - val + 1) * -1
-  else
-    return val
-}
-
-Buffer.prototype.readInt16LE = function (offset, noAssert) {
-  return _readInt16(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readInt16BE = function (offset, noAssert) {
-  return _readInt16(this, offset, false, noAssert)
-}
-
-function _readInt32 (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  var val = _readUInt32(buf, offset, littleEndian, true)
-  var neg = val & 0x80000000
-  if (neg)
-    return (0xffffffff - val + 1) * -1
-  else
-    return val
-}
-
-Buffer.prototype.readInt32LE = function (offset, noAssert) {
-  return _readInt32(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readInt32BE = function (offset, noAssert) {
-  return _readInt32(this, offset, false, noAssert)
-}
-
-function _readFloat (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  return ieee754.read(buf, offset, littleEndian, 23, 4)
-}
-
-Buffer.prototype.readFloatLE = function (offset, noAssert) {
-  return _readFloat(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readFloatBE = function (offset, noAssert) {
-  return _readFloat(this, offset, false, noAssert)
-}
-
-function _readDouble (buf, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset + 7 < buf.length, 'Trying to read beyond buffer length')
-  }
-
-  return ieee754.read(buf, offset, littleEndian, 52, 8)
-}
-
-Buffer.prototype.readDoubleLE = function (offset, noAssert) {
-  return _readDouble(this, offset, true, noAssert)
-}
-
-Buffer.prototype.readDoubleBE = function (offset, noAssert) {
-  return _readDouble(this, offset, false, noAssert)
-}
-
-Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < this.length, 'trying to write beyond buffer length')
-    verifuint(value, 0xff)
-  }
-
-  if (offset >= this.length) return
-
-  this[offset] = value
-}
-
-function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 1 < buf.length, 'trying to write beyond buffer length')
-    verifuint(value, 0xffff)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  for (var i = 0, j = Math.min(len - offset, 2); i < j; i++) {
-    buf[offset + i] =
-        (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
-            (littleEndian ? i : 1 - i) * 8
-  }
-}
-
-Buffer.prototype.writeUInt16LE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeUInt16BE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, false, noAssert)
-}
-
-function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 3 < buf.length, 'trying to write beyond buffer length')
-    verifuint(value, 0xffffffff)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  for (var i = 0, j = Math.min(len - offset, 4); i < j; i++) {
-    buf[offset + i] =
-        (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
-  }
-}
-
-Buffer.prototype.writeUInt32LE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeUInt32BE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, false, noAssert)
-}
-
-Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < this.length, 'Trying to write beyond buffer length')
-    verifsint(value, 0x7f, -0x80)
-  }
-
-  if (offset >= this.length)
-    return
-
-  if (value >= 0)
-    this.writeUInt8(value, offset, noAssert)
-  else
-    this.writeUInt8(0xff + value + 1, offset, noAssert)
-}
-
-function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 1 < buf.length, 'Trying to write beyond buffer length')
-    verifsint(value, 0x7fff, -0x8000)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  if (value >= 0)
-    _writeUInt16(buf, value, offset, littleEndian, noAssert)
-  else
-    _writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert)
-}
-
-Buffer.prototype.writeInt16LE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeInt16BE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, false, noAssert)
-}
-
-function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 3 < buf.length, 'Trying to write beyond buffer length')
-    verifsint(value, 0x7fffffff, -0x80000000)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  if (value >= 0)
-    _writeUInt32(buf, value, offset, littleEndian, noAssert)
-  else
-    _writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert)
-}
-
-Buffer.prototype.writeInt32LE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeInt32BE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, false, noAssert)
-}
-
-function _writeFloat (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 3 < buf.length, 'Trying to write beyond buffer length')
-    verifIEEE754(value, 3.4028234663852886e+38, -3.4028234663852886e+38)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  ieee754.write(buf, value, offset, littleEndian, 23, 4)
-}
-
-Buffer.prototype.writeFloatLE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeFloatBE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, false, noAssert)
-}
-
-function _writeDouble (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
-    assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
-    assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset + 7 < buf.length,
-        'Trying to write beyond buffer length')
-    verifIEEE754(value, 1.7976931348623157E+308, -1.7976931348623157E+308)
-  }
-
-  var len = buf.length
-  if (offset >= len)
-    return
-
-  ieee754.write(buf, value, offset, littleEndian, 52, 8)
-}
-
-Buffer.prototype.writeDoubleLE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, true, noAssert)
-}
-
-Buffer.prototype.writeDoubleBE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, false, noAssert)
-}
-
-// fill(value, start=0, end=buffer.length)
-Buffer.prototype.fill = function (value, start, end) {
-  if (!value) value = 0
-  if (!start) start = 0
-  if (!end) end = this.length
-
-  if (typeof value === 'string') {
-    value = value.charCodeAt(0)
-  }
-
-  assert(typeof value === 'number' && !isNaN(value), 'value is not a number')
-  assert(end >= start, 'end < start')
-
-  // Fill 0 bytes; we're done
-  if (end === start) return
-  if (this.length === 0) return
-
-  assert(start >= 0 && start < this.length, 'start out of bounds')
-  assert(end >= 0 && end <= this.length, 'end out of bounds')
-
-  for (var i = start; i < end; i++) {
-    this[i] = value
-  }
-}
-
-Buffer.prototype.inspect = function () {
-  var out = []
-  var len = this.length
-  for (var i = 0; i < len; i++) {
-    out[i] = toHex(this[i])
-    if (i === exports.INSPECT_MAX_BYTES) {
-      out[i + 1] = '...'
-      break
-    }
-  }
-  return '<Buffer ' + out.join(' ') + '>'
-}
-
-/**
- * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
- * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
- */
-Buffer.prototype.toArrayBuffer = function () {
-  if (typeof Uint8Array === 'function') {
-    if (Buffer._useTypedArrays) {
-      return (new Buffer(this)).buffer
-    } else {
-      var buf = new Uint8Array(this.length)
-      for (var i = 0, len = buf.length; i < len; i += 1)
-        buf[i] = this[i]
-      return buf.buffer
-    }
-  } else {
-    throw new Error('Buffer.toArrayBuffer not supported in this browser')
-  }
-}
-
-// HELPER FUNCTIONS
-// ================
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
-}
-
-var BP = Buffer.prototype
-
-/**
- * Augment the Uint8Array *instance* (not the class!) with Buffer methods
- */
-function augment (arr) {
-  arr._isBuffer = true
-
-  // save reference to original Uint8Array get/set methods before overwriting
-  arr._get = arr.get
-  arr._set = arr.set
-
-  // deprecated, will be removed in node 0.13+
-  arr.get = BP.get
-  arr.set = BP.set
-
-  arr.write = BP.write
-  arr.toString = BP.toString
-  arr.toLocaleString = BP.toString
-  arr.toJSON = BP.toJSON
-  arr.copy = BP.copy
-  arr.slice = BP.slice
-  arr.readUInt8 = BP.readUInt8
-  arr.readUInt16LE = BP.readUInt16LE
-  arr.readUInt16BE = BP.readUInt16BE
-  arr.readUInt32LE = BP.readUInt32LE
-  arr.readUInt32BE = BP.readUInt32BE
-  arr.readInt8 = BP.readInt8
-  arr.readInt16LE = BP.readInt16LE
-  arr.readInt16BE = BP.readInt16BE
-  arr.readInt32LE = BP.readInt32LE
-  arr.readInt32BE = BP.readInt32BE
-  arr.readFloatLE = BP.readFloatLE
-  arr.readFloatBE = BP.readFloatBE
-  arr.readDoubleLE = BP.readDoubleLE
-  arr.readDoubleBE = BP.readDoubleBE
-  arr.writeUInt8 = BP.writeUInt8
-  arr.writeUInt16LE = BP.writeUInt16LE
-  arr.writeUInt16BE = BP.writeUInt16BE
-  arr.writeUInt32LE = BP.writeUInt32LE
-  arr.writeUInt32BE = BP.writeUInt32BE
-  arr.writeInt8 = BP.writeInt8
-  arr.writeInt16LE = BP.writeInt16LE
-  arr.writeInt16BE = BP.writeInt16BE
-  arr.writeInt32LE = BP.writeInt32LE
-  arr.writeInt32BE = BP.writeInt32BE
-  arr.writeFloatLE = BP.writeFloatLE
-  arr.writeFloatBE = BP.writeFloatBE
-  arr.writeDoubleLE = BP.writeDoubleLE
-  arr.writeDoubleBE = BP.writeDoubleBE
-  arr.fill = BP.fill
-  arr.inspect = BP.inspect
-  arr.toArrayBuffer = BP.toArrayBuffer
-
-  return arr
-}
-
-// slice(start, end)
-function clamp (index, len, defaultValue) {
-  if (typeof index !== 'number') return defaultValue
-  index = ~~index;  // Coerce to integer.
-  if (index >= len) return len
-  if (index >= 0) return index
-  index += len
-  if (index >= 0) return index
-  return 0
-}
-
-function coerce (length) {
-  // Coerce length to a number (possibly NaN), round up
-  // in case it's fractional (e.g. 123.456) then do a
-  // double negate to coerce a NaN to 0. Easy, right?
-  length = ~~Math.ceil(+length)
-  return length < 0 ? 0 : length
-}
-
-function isArray (subject) {
-  return (Array.isArray || function (subject) {
-    return Object.prototype.toString.call(subject) === '[object Array]'
-  })(subject)
-}
-
-function isArrayish (subject) {
-  return isArray(subject) || Buffer.isBuffer(subject) ||
-      subject && typeof subject === 'object' &&
-      typeof subject.length === 'number'
-}
-
-function toHex (n) {
-  if (n < 16) return '0' + n.toString(16)
-  return n.toString(16)
-}
-
-function utf8ToBytes (str) {
-  var byteArray = []
-  for (var i = 0; i < str.length; i++) {
-    var b = str.charCodeAt(i)
-    if (b <= 0x7F)
-      byteArray.push(str.charCodeAt(i))
-    else {
-      var start = i
-      if (b >= 0xD800 && b <= 0xDFFF) i++
-      var h = encodeURIComponent(str.slice(start, i+1)).substr(1).split('%')
-      for (var j = 0; j < h.length; j++)
-        byteArray.push(parseInt(h[j], 16))
-    }
-  }
-  return byteArray
-}
-
-function asciiToBytes (str) {
-  var byteArray = []
-  for (var i = 0; i < str.length; i++) {
-    // Node's code seems to be doing this and not & 0x7F..
-    byteArray.push(str.charCodeAt(i) & 0xFF)
-  }
-  return byteArray
-}
-
-function utf16leToBytes (str) {
-  var c, hi, lo
-  var byteArray = []
-  for (var i = 0; i < str.length; i++) {
-    c = str.charCodeAt(i)
-    hi = c >> 8
-    lo = c % 256
-    byteArray.push(lo)
-    byteArray.push(hi)
-  }
-
-  return byteArray
-}
-
-function base64ToBytes (str) {
-  return base64.toByteArray(str)
-}
-
-function blitBuffer (src, dst, offset, length) {
-  var pos
-  for (var i = 0; i < length; i++) {
-    if ((i + offset >= dst.length) || (i >= src.length))
-      break
-    dst[i + offset] = src[i]
-  }
-  return i
-}
-
-function decodeUtf8Char (str) {
-  try {
-    return decodeURIComponent(str)
-  } catch (err) {
-    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
-  }
-}
-
-/*
- * We have to make sure that the value is a valid integer. This means that it
- * is non-negative. It has no fractional component and that it does not
- * exceed the maximum allowed value.
- */
-function verifuint (value, max) {
-  assert(typeof value === 'number', 'cannot write a non-number as a number')
-  assert(value >= 0, 'specified a negative value for writing an unsigned value')
-  assert(value <= max, 'value is larger than maximum value for type')
-  assert(Math.floor(value) === value, 'value has a fractional component')
-}
-
-function verifsint (value, max, min) {
-  assert(typeof value === 'number', 'cannot write a non-number as a number')
-  assert(value <= max, 'value larger than maximum allowed value')
-  assert(value >= min, 'value smaller than minimum allowed value')
-  assert(Math.floor(value) === value, 'value has a fractional component')
-}
-
-function verifIEEE754 (value, max, min) {
-  assert(typeof value === 'number', 'cannot write a non-number as a number')
-  assert(value <= max, 'value larger than maximum allowed value')
-  assert(value >= min, 'value smaller than minimum allowed value')
-}
-
-function assert (test, message) {
-  if (!test) throw new Error(message || 'Failed assertion')
-}
-
-},{"base64-js":6,"ieee754":7}],6:[function(_dereq_,module,exports){
-var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-;(function (exports) {
-	'use strict';
-
-  var Arr = (typeof Uint8Array !== 'undefined')
-    ? Uint8Array
-    : Array
-
-	var ZERO   = '0'.charCodeAt(0)
-	var PLUS   = '+'.charCodeAt(0)
-	var SLASH  = '/'.charCodeAt(0)
-	var NUMBER = '0'.charCodeAt(0)
-	var LOWER  = 'a'.charCodeAt(0)
-	var UPPER  = 'A'.charCodeAt(0)
-
-	function decode (elt) {
-		var code = elt.charCodeAt(0)
-		if (code === PLUS)
-			return 62 // '+'
-		if (code === SLASH)
-			return 63 // '/'
-		if (code < NUMBER)
-			return -1 //no match
-		if (code < NUMBER + 10)
-			return code - NUMBER + 26 + 26
-		if (code < UPPER + 26)
-			return code - UPPER
-		if (code < LOWER + 26)
-			return code - LOWER + 26
-	}
-
-	function b64ToByteArray (b64) {
-		var i, j, l, tmp, placeHolders, arr
-
-		if (b64.length % 4 > 0) {
-			throw new Error('Invalid string. Length must be a multiple of 4')
-		}
-
-		// the number of equal signs (place holders)
-		// if there are two placeholders, than the two characters before it
-		// represent one byte
-		// if there is only one, then the three characters before it represent 2 bytes
-		// this is just a cheap hack to not do indexOf twice
-		var len = b64.length
-		placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
-
-		// base64 is 4/3 + up to two characters of the original data
-		arr = new Arr(b64.length * 3 / 4 - placeHolders)
-
-		// if there are placeholders, only get up to the last complete 4 chars
-		l = placeHolders > 0 ? b64.length - 4 : b64.length
-
-		var L = 0
-
-		function push (v) {
-			arr[L++] = v
-		}
-
-		for (i = 0, j = 0; i < l; i += 4, j += 3) {
-			tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
-			push((tmp & 0xFF0000) >> 16)
-			push((tmp & 0xFF00) >> 8)
-			push(tmp & 0xFF)
-		}
-
-		if (placeHolders === 2) {
-			tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
-			push(tmp & 0xFF)
-		} else if (placeHolders === 1) {
-			tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
-			push((tmp >> 8) & 0xFF)
-			push(tmp & 0xFF)
-		}
-
-		return arr
-	}
-
-	function uint8ToBase64 (uint8) {
-		var i,
-			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-			output = "",
-			temp, length
-
-		function encode (num) {
-			return lookup.charAt(num)
-		}
-
-		function tripletToBase64 (num) {
-			return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
-		}
-
-		// go through the array every three bytes, we'll deal with trailing stuff later
-		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
-			output += tripletToBase64(temp)
-		}
-
-		// pad the end with zeros, but make sure to not forget the extra bytes
-		switch (extraBytes) {
-			case 1:
-				temp = uint8[uint8.length - 1]
-				output += encode(temp >> 2)
-				output += encode((temp << 4) & 0x3F)
-				output += '=='
-				break
-			case 2:
-				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
-				output += encode(temp >> 10)
-				output += encode((temp >> 4) & 0x3F)
-				output += encode((temp << 2) & 0x3F)
-				output += '='
-				break
-		}
-
-		return output
-	}
-
-	module.exports.toByteArray = b64ToByteArray
-	module.exports.fromByteArray = uint8ToBase64
-}())
-
-},{}],7:[function(_dereq_,module,exports){
-exports.read = function(buffer, offset, isLE, mLen, nBytes) {
-  var e, m,
-      eLen = nBytes * 8 - mLen - 1,
-      eMax = (1 << eLen) - 1,
-      eBias = eMax >> 1,
-      nBits = -7,
-      i = isLE ? (nBytes - 1) : 0,
-      d = isLE ? -1 : 1,
-      s = buffer[offset + i];
-
-  i += d;
-
-  e = s & ((1 << (-nBits)) - 1);
-  s >>= (-nBits);
-  nBits += eLen;
-  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8);
-
-  m = e & ((1 << (-nBits)) - 1);
-  e >>= (-nBits);
-  nBits += mLen;
-  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8);
-
-  if (e === 0) {
-    e = 1 - eBias;
-  } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity);
-  } else {
-    m = m + Math.pow(2, mLen);
-    e = e - eBias;
-  }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
-};
-
-exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c,
-      eLen = nBytes * 8 - mLen - 1,
-      eMax = (1 << eLen) - 1,
-      eBias = eMax >> 1,
-      rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
-      i = isLE ? 0 : (nBytes - 1),
-      d = isLE ? 1 : -1,
-      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
-
-  value = Math.abs(value);
-
-  if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0;
-    e = eMax;
-  } else {
-    e = Math.floor(Math.log(value) / Math.LN2);
-    if (value * (c = Math.pow(2, -e)) < 1) {
-      e--;
-      c *= 2;
-    }
-    if (e + eBias >= 1) {
-      value += rt / c;
-    } else {
-      value += rt * Math.pow(2, 1 - eBias);
-    }
-    if (value * c >= 2) {
-      e++;
-      c /= 2;
-    }
-
-    if (e + eBias >= eMax) {
-      m = 0;
-      e = eMax;
-    } else if (e + eBias >= 1) {
-      m = (value * c - 1) * Math.pow(2, mLen);
-      e = e + eBias;
-    } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-      e = 0;
-    }
-  }
-
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8);
-
-  e = (e << mLen) | m;
-  eLen += mLen;
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
-
-  buffer[offset + i - d] |= s * 128;
-};
-
-},{}],8:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-function EventEmitter() {
-  this._events = this._events || {};
-  this._maxListeners = this._maxListeners || undefined;
-}
-module.exports = EventEmitter;
-
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
-
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._maxListeners = undefined;
-
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-EventEmitter.defaultMaxListeners = 10;
-
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!isNumber(n) || n < 0 || isNaN(n))
-    throw TypeError('n must be a positive number');
-  this._maxListeners = n;
-  return this;
-};
-
-EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
-
-  if (!this._events)
-    this._events = {};
-
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
-      er = arguments[1];
-      if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
-      } else {
-        throw TypeError('Uncaught, unspecified "error" event.');
-      }
-      return false;
-    }
-  }
-
-  handler = this._events[type];
-
-  if (isUndefined(handler))
-    return false;
-
-  if (isFunction(handler)) {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        len = arguments.length;
-        args = new Array(len - 1);
-        for (i = 1; i < len; i++)
-          args[i - 1] = arguments[i];
-        handler.apply(this, args);
-    }
-  } else if (isObject(handler)) {
-    len = arguments.length;
-    args = new Array(len - 1);
-    for (i = 1; i < len; i++)
-      args[i - 1] = arguments[i];
-
-    listeners = handler.slice();
-    len = listeners.length;
-    for (i = 0; i < len; i++)
-      listeners[i].apply(this, args);
-  }
-
-  return true;
-};
-
-EventEmitter.prototype.addListener = function(type, listener) {
-  var m;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events)
-    this._events = {};
-
-  // To avoid recursion in the case that type === "newListener"! Before
-  // adding it to the listeners, first emit "newListener".
-  if (this._events.newListener)
-    this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
-
-  if (!this._events[type])
-    // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  else if (isObject(this._events[type]))
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  else
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-
-  // Check for listener leak
-  if (isObject(this._events[type]) && !this._events[type].warned) {
-    var m;
-    if (!isUndefined(this._maxListeners)) {
-      m = this._maxListeners;
-    } else {
-      m = EventEmitter.defaultMaxListeners;
-    }
-
-    if (m && m > 0 && this._events[type].length > m) {
-      this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
-      console.trace();
-    }
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.once = function(type, listener) {
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  var fired = false;
-
-  function g() {
-    this.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
-    }
-  }
-
-  g.listener = listener;
-  this.on(type, g);
-
-  return this;
-};
-
-// emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events || !this._events[type])
-    return this;
-
-  list = this._events[type];
-  length = list.length;
-  position = -1;
-
-  if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
-    delete this._events[type];
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-
-  } else if (isObject(list)) {
-    for (i = length; i-- > 0;) {
-      if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0)
-      return this;
-
-    if (list.length === 1) {
-      list.length = 0;
-      delete this._events[type];
-    } else {
-      list.splice(position, 1);
-    }
-
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
-
-  if (!this._events)
-    return this;
-
-  // not listening for removeListener, no need to emit
-  if (!this._events.removeListener) {
-    if (arguments.length === 0)
-      this._events = {};
-    else if (this._events[type])
-      delete this._events[type];
-    return this;
-  }
-
-  // emit removeListener for all listeners on all events
-  if (arguments.length === 0) {
-    for (key in this._events) {
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-    this.removeAllListeners('removeListener');
-    this._events = {};
-    return this;
-  }
-
-  listeners = this._events[type];
-
-  if (isFunction(listeners)) {
-    this.removeListener(type, listeners);
-  } else {
-    // LIFO order
-    while (listeners.length)
-      this.removeListener(type, listeners[listeners.length - 1]);
-  }
-  delete this._events[type];
-
-  return this;
-};
-
-EventEmitter.prototype.listeners = function(type) {
-  var ret;
-  if (!this._events || !this._events[type])
-    ret = [];
-  else if (isFunction(this._events[type]))
-    ret = [this._events[type]];
-  else
-    ret = this._events[type].slice();
-  return ret;
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  var ret;
-  if (!emitter._events || !emitter._events[type])
-    ret = 0;
-  else if (isFunction(emitter._events[type]))
-    ret = 1;
-  else
-    ret = emitter._events[type].length;
-  return ret;
-};
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-
-},{}],9:[function(_dereq_,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],10:[function(_dereq_,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-
-process.nextTick = (function () {
-    var canSetImmediate = typeof window !== 'undefined'
-    && window.setImmediate;
-    var canPost = typeof window !== 'undefined'
-    && window.postMessage && window.addEventListener
-    ;
-
-    if (canSetImmediate) {
-        return function (f) { return window.setImmediate(f) };
-    }
-
-    if (canPost) {
-        var queue = [];
-        window.addEventListener('message', function (ev) {
-            var source = ev.source;
-            if ((source === window || source === null) && ev.data === 'process-tick') {
-                ev.stopPropagation();
-                if (queue.length > 0) {
-                    var fn = queue.shift();
-                    fn();
-                }
-            }
-        }, true);
-
-        return function nextTick(fn) {
-            queue.push(fn);
-            window.postMessage('process-tick', '*');
-        };
-    }
-
-    return function nextTick(fn) {
-        setTimeout(fn, 0);
-    };
-})();
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-}
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-
-},{}],11:[function(_dereq_,module,exports){
-(function (process){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
-  }
-
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
-}
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (typeof path !== 'string') {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(filter(paths, function(p, index) {
-    if (typeof p !== 'string') {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-function filter (xs, f) {
-    if (xs.filter) return xs.filter(f);
-    var res = [];
-    for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
-    }
-    return res;
-}
-
-// String.prototype.substr - negative index don't work in IE8
-var substr = 'ab'.substr(-1) === 'b'
-    ? function (str, start, len) { return str.substr(start, len) }
-    : function (str, start, len) {
-        if (start < 0) start = str.length + start;
-        return str.substr(start, len);
-    }
-;
-
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10}],12:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// a duplex stream is just a stream that is both readable and writable.
-// Since JS doesn't have multiple prototypal inheritance, this class
-// prototypally inherits from Readable, and then parasitically from
-// Writable.
-
-module.exports = Duplex;
-var inherits = _dereq_('inherits');
-var setImmediate = _dereq_('process/browser.js').nextTick;
-var Readable = _dereq_('./readable.js');
-var Writable = _dereq_('./writable.js');
-
-inherits(Duplex, Readable);
-
-Duplex.prototype.write = Writable.prototype.write;
-Duplex.prototype.end = Writable.prototype.end;
-Duplex.prototype._write = Writable.prototype._write;
-
-function Duplex(options) {
-  if (!(this instanceof Duplex))
-    return new Duplex(options);
-
-  Readable.call(this, options);
-  Writable.call(this, options);
-
-  if (options && options.readable === false)
-    this.readable = false;
-
-  if (options && options.writable === false)
-    this.writable = false;
-
-  this.allowHalfOpen = true;
-  if (options && options.allowHalfOpen === false)
-    this.allowHalfOpen = false;
-
-  this.once('end', onend);
-}
-
-// the no-half-open enforcer
-function onend() {
-  // if we allow half-open state, or if the writable side ended,
-  // then we're ok.
-  if (this.allowHalfOpen || this._writableState.ended)
-    return;
-
-  // no more data can be written.
-  // But allow more writes to happen in this tick.
-  var self = this;
-  setImmediate(function () {
-    self.end();
-  });
-}
-
-},{"./readable.js":16,"./writable.js":18,"inherits":9,"process/browser.js":14}],13:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-module.exports = Stream;
-
-var EE = _dereq_('events').EventEmitter;
-var inherits = _dereq_('inherits');
-
-inherits(Stream, EE);
-Stream.Readable = _dereq_('./readable.js');
-Stream.Writable = _dereq_('./writable.js');
-Stream.Duplex = _dereq_('./duplex.js');
-Stream.Transform = _dereq_('./transform.js');
-Stream.PassThrough = _dereq_('./passthrough.js');
-
-// Backwards-compat with node 0.4.x
-Stream.Stream = Stream;
-
-
-
-// old-style streams.  Note that the pipe method (the only relevant
-// part of this class) is overridden in the Readable class.
-
-function Stream() {
-  EE.call(this);
-}
-
-Stream.prototype.pipe = function(dest, options) {
-  var source = this;
-
-  function ondata(chunk) {
-    if (dest.writable) {
-      if (false === dest.write(chunk) && source.pause) {
-        source.pause();
-      }
-    }
-  }
-
-  source.on('data', ondata);
-
-  function ondrain() {
-    if (source.readable && source.resume) {
-      source.resume();
-    }
-  }
-
-  dest.on('drain', ondrain);
-
-  // If the 'end' option is not supplied, dest.end() will be called when
-  // source gets the 'end' or 'close' events.  Only dest.end() once.
-  if (!dest._isStdio && (!options || options.end !== false)) {
-    source.on('end', onend);
-    source.on('close', onclose);
-  }
-
-  var didOnEnd = false;
-  function onend() {
-    if (didOnEnd) return;
-    didOnEnd = true;
-
-    dest.end();
-  }
-
-
-  function onclose() {
-    if (didOnEnd) return;
-    didOnEnd = true;
-
-    if (typeof dest.destroy === 'function') dest.destroy();
-  }
-
-  // don't leave dangling pipes when there are errors.
-  function onerror(er) {
-    cleanup();
-    if (EE.listenerCount(this, 'error') === 0) {
-      throw er; // Unhandled stream error in pipe.
-    }
-  }
-
-  source.on('error', onerror);
-  dest.on('error', onerror);
-
-  // remove all the event listeners that were added.
-  function cleanup() {
-    source.removeListener('data', ondata);
-    dest.removeListener('drain', ondrain);
-
-    source.removeListener('end', onend);
-    source.removeListener('close', onclose);
-
-    source.removeListener('error', onerror);
-    dest.removeListener('error', onerror);
-
-    source.removeListener('end', cleanup);
-    source.removeListener('close', cleanup);
-
-    dest.removeListener('close', cleanup);
-  }
-
-  source.on('end', cleanup);
-  source.on('close', cleanup);
-
-  dest.on('close', cleanup);
-
-  dest.emit('pipe', source);
-
-  // Allow for unix-like usage: A.pipe(B).pipe(C)
-  return dest;
-};
-
-},{"./duplex.js":12,"./passthrough.js":15,"./readable.js":16,"./transform.js":17,"./writable.js":18,"events":8,"inherits":9}],14:[function(_dereq_,module,exports){
-module.exports=_dereq_(10)
-},{}],15:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// a passthrough stream.
-// basically just the most minimal sort of Transform stream.
-// Every written chunk gets output as-is.
-
-module.exports = PassThrough;
-
-var Transform = _dereq_('./transform.js');
-var inherits = _dereq_('inherits');
-inherits(PassThrough, Transform);
-
-function PassThrough(options) {
-  if (!(this instanceof PassThrough))
-    return new PassThrough(options);
-
-  Transform.call(this, options);
-}
-
-PassThrough.prototype._transform = function(chunk, encoding, cb) {
-  cb(null, chunk);
-};
-
-},{"./transform.js":17,"inherits":9}],16:[function(_dereq_,module,exports){
-(function (process){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-module.exports = Readable;
-Readable.ReadableState = ReadableState;
-
-var EE = _dereq_('events').EventEmitter;
-var Stream = _dereq_('./index.js');
-var Buffer = _dereq_('buffer').Buffer;
-var setImmediate = _dereq_('process/browser.js').nextTick;
-var StringDecoder;
-
-var inherits = _dereq_('inherits');
-inherits(Readable, Stream);
-
-function ReadableState(options, stream) {
-  options = options || {};
-
-  // the point at which it stops calling _read() to fill the buffer
-  // Note: 0 is a valid value, means "don't call _read preemptively ever"
-  var hwm = options.highWaterMark;
-  this.highWaterMark = (hwm || hwm === 0) ? hwm : 16 * 1024;
-
-  // cast to ints.
-  this.highWaterMark = ~~this.highWaterMark;
-
-  this.buffer = [];
-  this.length = 0;
-  this.pipes = null;
-  this.pipesCount = 0;
-  this.flowing = false;
-  this.ended = false;
-  this.endEmitted = false;
-  this.reading = false;
-
-  // In streams that never have any data, and do push(null) right away,
-  // the consumer can miss the 'end' event if they do some I/O before
-  // consuming the stream.  So, we don't emit('end') until some reading
-  // happens.
-  this.calledRead = false;
-
-  // a flag to be able to tell if the onwrite cb is called immediately,
-  // or on a later tick.  We set this to true at first, becuase any
-  // actions that shouldn't happen until "later" should generally also
-  // not happen before the first write call.
-  this.sync = true;
-
-  // whenever we return null, then we set a flag to say
-  // that we're awaiting a 'readable' event emission.
-  this.needReadable = false;
-  this.emittedReadable = false;
-  this.readableListening = false;
-
-
-  // object stream flag. Used to make read(n) ignore n and to
-  // make all the buffer merging and length checks go away
-  this.objectMode = !!options.objectMode;
-
-  // Crypto is kind of old and crusty.  Historically, its default string
-  // encoding is 'binary' so we have to make this configurable.
-  // Everything else in the universe uses 'utf8', though.
-  this.defaultEncoding = options.defaultEncoding || 'utf8';
-
-  // when piping, we only care about 'readable' events that happen
-  // after read()ing all the bytes and not getting any pushback.
-  this.ranOut = false;
-
-  // the number of writers that are awaiting a drain event in .pipe()s
-  this.awaitDrain = 0;
-
-  // if true, a maybeReadMore has been scheduled
-  this.readingMore = false;
-
-  this.decoder = null;
-  this.encoding = null;
-  if (options.encoding) {
-    if (!StringDecoder)
-      StringDecoder = _dereq_('string_decoder').StringDecoder;
-    this.decoder = new StringDecoder(options.encoding);
-    this.encoding = options.encoding;
-  }
-}
-
-function Readable(options) {
-  if (!(this instanceof Readable))
-    return new Readable(options);
-
-  this._readableState = new ReadableState(options, this);
-
-  // legacy
-  this.readable = true;
-
-  Stream.call(this);
-}
-
-// Manually shove something into the read() buffer.
-// This returns true if the highWaterMark has not been hit yet,
-// similar to how Writable.write() returns true if you should
-// write() some more.
-Readable.prototype.push = function(chunk, encoding) {
-  var state = this._readableState;
-
-  if (typeof chunk === 'string' && !state.objectMode) {
-    encoding = encoding || state.defaultEncoding;
-    if (encoding !== state.encoding) {
-      chunk = new Buffer(chunk, encoding);
-      encoding = '';
-    }
-  }
-
-  return readableAddChunk(this, state, chunk, encoding, false);
-};
-
-// Unshift should *always* be something directly out of read()
-Readable.prototype.unshift = function(chunk) {
-  var state = this._readableState;
-  return readableAddChunk(this, state, chunk, '', true);
-};
-
-function readableAddChunk(stream, state, chunk, encoding, addToFront) {
-  var er = chunkInvalid(state, chunk);
-  if (er) {
-    stream.emit('error', er);
-  } else if (chunk === null || chunk === undefined) {
-    state.reading = false;
-    if (!state.ended)
-      onEofChunk(stream, state);
-  } else if (state.objectMode || chunk && chunk.length > 0) {
-    if (state.ended && !addToFront) {
-      var e = new Error('stream.push() after EOF');
-      stream.emit('error', e);
-    } else if (state.endEmitted && addToFront) {
-      var e = new Error('stream.unshift() after end event');
-      stream.emit('error', e);
-    } else {
-      if (state.decoder && !addToFront && !encoding)
-        chunk = state.decoder.write(chunk);
-
-      // update the buffer info.
-      state.length += state.objectMode ? 1 : chunk.length;
-      if (addToFront) {
-        state.buffer.unshift(chunk);
-      } else {
-        state.reading = false;
-        state.buffer.push(chunk);
-      }
-
-      if (state.needReadable)
-        emitReadable(stream);
-
-      maybeReadMore(stream, state);
-    }
-  } else if (!addToFront) {
-    state.reading = false;
-  }
-
-  return needMoreData(state);
-}
-
-
-
-// if it's past the high water mark, we can push in some more.
-// Also, if we have no data yet, we can stand some
-// more bytes.  This is to work around cases where hwm=0,
-// such as the repl.  Also, if the push() triggered a
-// readable event, and the user called read(largeNumber) such that
-// needReadable was set, then we ought to push more, so that another
-// 'readable' event will be triggered.
-function needMoreData(state) {
-  return !state.ended &&
-         (state.needReadable ||
-          state.length < state.highWaterMark ||
-          state.length === 0);
-}
-
-// backwards compatibility.
-Readable.prototype.setEncoding = function(enc) {
-  if (!StringDecoder)
-    StringDecoder = _dereq_('string_decoder').StringDecoder;
-  this._readableState.decoder = new StringDecoder(enc);
-  this._readableState.encoding = enc;
-};
-
-// Don't raise the hwm > 128MB
-var MAX_HWM = 0x800000;
-function roundUpToNextPowerOf2(n) {
-  if (n >= MAX_HWM) {
-    n = MAX_HWM;
-  } else {
-    // Get the next highest power of 2
-    n--;
-    for (var p = 1; p < 32; p <<= 1) n |= n >> p;
-    n++;
-  }
-  return n;
-}
-
-function howMuchToRead(n, state) {
-  if (state.length === 0 && state.ended)
-    return 0;
-
-  if (state.objectMode)
-    return n === 0 ? 0 : 1;
-
-  if (isNaN(n) || n === null) {
-    // only flow one buffer at a time
-    if (state.flowing && state.buffer.length)
-      return state.buffer[0].length;
-    else
-      return state.length;
-  }
-
-  if (n <= 0)
-    return 0;
-
-  // If we're asking for more than the target buffer level,
-  // then raise the water mark.  Bump up to the next highest
-  // power of 2, to prevent increasing it excessively in tiny
-  // amounts.
-  if (n > state.highWaterMark)
-    state.highWaterMark = roundUpToNextPowerOf2(n);
-
-  // don't have that much.  return null, unless we've ended.
-  if (n > state.length) {
-    if (!state.ended) {
-      state.needReadable = true;
-      return 0;
-    } else
-      return state.length;
-  }
-
-  return n;
-}
-
-// you can override either this method, or the async _read(n) below.
-Readable.prototype.read = function(n) {
-  var state = this._readableState;
-  state.calledRead = true;
-  var nOrig = n;
-
-  if (typeof n !== 'number' || n > 0)
-    state.emittedReadable = false;
-
-  // if we're doing read(0) to trigger a readable event, but we
-  // already have a bunch of data in the buffer, then just trigger
-  // the 'readable' event and move on.
-  if (n === 0 &&
-      state.needReadable &&
-      (state.length >= state.highWaterMark || state.ended)) {
-    emitReadable(this);
-    return null;
-  }
-
-  n = howMuchToRead(n, state);
-
-  // if we've ended, and we're now clear, then finish it up.
-  if (n === 0 && state.ended) {
-    if (state.length === 0)
-      endReadable(this);
-    return null;
-  }
-
-  // All the actual chunk generation logic needs to be
-  // *below* the call to _read.  The reason is that in certain
-  // synthetic stream cases, such as passthrough streams, _read
-  // may be a completely synchronous operation which may change
-  // the state of the read buffer, providing enough data when
-  // before there was *not* enough.
-  //
-  // So, the steps are:
-  // 1. Figure out what the state of things will be after we do
-  // a read from the buffer.
-  //
-  // 2. If that resulting state will trigger a _read, then call _read.
-  // Note that this may be asynchronous, or synchronous.  Yes, it is
-  // deeply ugly to write APIs this way, but that still doesn't mean
-  // that the Readable class should behave improperly, as streams are
-  // designed to be sync/async agnostic.
-  // Take note if the _read call is sync or async (ie, if the read call
-  // has returned yet), so that we know whether or not it's safe to emit
-  // 'readable' etc.
-  //
-  // 3. Actually pull the requested chunks out of the buffer and return.
-
-  // if we need a readable event, then we need to do some reading.
-  var doRead = state.needReadable;
-
-  // if we currently have less than the highWaterMark, then also read some
-  if (state.length - n <= state.highWaterMark)
-    doRead = true;
-
-  // however, if we've ended, then there's no point, and if we're already
-  // reading, then it's unnecessary.
-  if (state.ended || state.reading)
-    doRead = false;
-
-  if (doRead) {
-    state.reading = true;
-    state.sync = true;
-    // if the length is currently zero, then we *need* a readable event.
-    if (state.length === 0)
-      state.needReadable = true;
-    // call internal read method
-    this._read(state.highWaterMark);
-    state.sync = false;
-  }
-
-  // If _read called its callback synchronously, then `reading`
-  // will be false, and we need to re-evaluate how much data we
-  // can return to the user.
-  if (doRead && !state.reading)
-    n = howMuchToRead(nOrig, state);
-
-  var ret;
-  if (n > 0)
-    ret = fromList(n, state);
-  else
-    ret = null;
-
-  if (ret === null) {
-    state.needReadable = true;
-    n = 0;
-  }
-
-  state.length -= n;
-
-  // If we have nothing in the buffer, then we want to know
-  // as soon as we *do* get something into the buffer.
-  if (state.length === 0 && !state.ended)
-    state.needReadable = true;
-
-  // If we happened to read() exactly the remaining amount in the
-  // buffer, and the EOF has been seen at this point, then make sure
-  // that we emit 'end' on the very next tick.
-  if (state.ended && !state.endEmitted && state.length === 0)
-    endReadable(this);
-
-  return ret;
-};
-
-function chunkInvalid(state, chunk) {
-  var er = null;
-  if (!Buffer.isBuffer(chunk) &&
-      'string' !== typeof chunk &&
-      chunk !== null &&
-      chunk !== undefined &&
-      !state.objectMode &&
-      !er) {
-    er = new TypeError('Invalid non-string/buffer chunk');
-  }
-  return er;
-}
-
-
-function onEofChunk(stream, state) {
-  if (state.decoder && !state.ended) {
-    var chunk = state.decoder.end();
-    if (chunk && chunk.length) {
-      state.buffer.push(chunk);
-      state.length += state.objectMode ? 1 : chunk.length;
-    }
-  }
-  state.ended = true;
-
-  // if we've ended and we have some data left, then emit
-  // 'readable' now to make sure it gets picked up.
-  if (state.length > 0)
-    emitReadable(stream);
-  else
-    endReadable(stream);
-}
-
-// Don't emit readable right away in sync mode, because this can trigger
-// another read() call => stack overflow.  This way, it might trigger
-// a nextTick recursion warning, but that's not so bad.
-function emitReadable(stream) {
-  var state = stream._readableState;
-  state.needReadable = false;
-  if (state.emittedReadable)
-    return;
-
-  state.emittedReadable = true;
-  if (state.sync)
-    setImmediate(function() {
-      emitReadable_(stream);
-    });
-  else
-    emitReadable_(stream);
-}
-
-function emitReadable_(stream) {
-  stream.emit('readable');
-}
-
-
-// at this point, the user has presumably seen the 'readable' event,
-// and called read() to consume some data.  that may have triggered
-// in turn another _read(n) call, in which case reading = true if
-// it's in progress.
-// However, if we're not ended, or reading, and the length < hwm,
-// then go ahead and try to read some more preemptively.
-function maybeReadMore(stream, state) {
-  if (!state.readingMore) {
-    state.readingMore = true;
-    setImmediate(function() {
-      maybeReadMore_(stream, state);
-    });
-  }
-}
-
-function maybeReadMore_(stream, state) {
-  var len = state.length;
-  while (!state.reading && !state.flowing && !state.ended &&
-         state.length < state.highWaterMark) {
-    stream.read(0);
-    if (len === state.length)
-      // didn't get any data, stop spinning.
-      break;
-    else
-      len = state.length;
-  }
-  state.readingMore = false;
-}
-
-// abstract method.  to be overridden in specific implementation classes.
-// call cb(er, data) where data is <= n in length.
-// for virtual (non-string, non-buffer) streams, "length" is somewhat
-// arbitrary, and perhaps not very meaningful.
-Readable.prototype._read = function(n) {
-  this.emit('error', new Error('not implemented'));
-};
-
-Readable.prototype.pipe = function(dest, pipeOpts) {
-  var src = this;
-  var state = this._readableState;
-
-  switch (state.pipesCount) {
-    case 0:
-      state.pipes = dest;
-      break;
-    case 1:
-      state.pipes = [state.pipes, dest];
-      break;
-    default:
-      state.pipes.push(dest);
-      break;
-  }
-  state.pipesCount += 1;
-
-  var doEnd = (!pipeOpts || pipeOpts.end !== false) &&
-              dest !== process.stdout &&
-              dest !== process.stderr;
-
-  var endFn = doEnd ? onend : cleanup;
-  if (state.endEmitted)
-    setImmediate(endFn);
-  else
-    src.once('end', endFn);
-
-  dest.on('unpipe', onunpipe);
-  function onunpipe(readable) {
-    if (readable !== src) return;
-    cleanup();
-  }
-
-  function onend() {
-    dest.end();
-  }
-
-  // when the dest drains, it reduces the awaitDrain counter
-  // on the source.  This would be more elegant with a .once()
-  // handler in flow(), but adding and removing repeatedly is
-  // too slow.
-  var ondrain = pipeOnDrain(src);
-  dest.on('drain', ondrain);
-
-  function cleanup() {
-    // cleanup event handlers once the pipe is broken
-    dest.removeListener('close', onclose);
-    dest.removeListener('finish', onfinish);
-    dest.removeListener('drain', ondrain);
-    dest.removeListener('error', onerror);
-    dest.removeListener('unpipe', onunpipe);
-    src.removeListener('end', onend);
-    src.removeListener('end', cleanup);
-
-    // if the reader is waiting for a drain event from this
-    // specific writer, then it would cause it to never start
-    // flowing again.
-    // So, if this is awaiting a drain, then we just call it now.
-    // If we don't know, then assume that we are waiting for one.
-    if (!dest._writableState || dest._writableState.needDrain)
-      ondrain();
-  }
-
-  // if the dest has an error, then stop piping into it.
-  // however, don't suppress the throwing behavior for this.
-  // check for listeners before emit removes one-time listeners.
-  var errListeners = EE.listenerCount(dest, 'error');
-  function onerror(er) {
-    unpipe();
-    if (errListeners === 0 && EE.listenerCount(dest, 'error') === 0)
-      dest.emit('error', er);
-  }
-  dest.once('error', onerror);
-
-  // Both close and finish should trigger unpipe, but only once.
-  function onclose() {
-    dest.removeListener('finish', onfinish);
-    unpipe();
-  }
-  dest.once('close', onclose);
-  function onfinish() {
-    dest.removeListener('close', onclose);
-    unpipe();
-  }
-  dest.once('finish', onfinish);
-
-  function unpipe() {
-    src.unpipe(dest);
-  }
-
-  // tell the dest that it's being piped to
-  dest.emit('pipe', src);
-
-  // start the flow if it hasn't been started already.
-  if (!state.flowing) {
-    // the handler that waits for readable events after all
-    // the data gets sucked out in flow.
-    // This would be easier to follow with a .once() handler
-    // in flow(), but that is too slow.
-    this.on('readable', pipeOnReadable);
-
-    state.flowing = true;
-    setImmediate(function() {
-      flow(src);
-    });
-  }
-
-  return dest;
-};
-
-function pipeOnDrain(src) {
-  return function() {
-    var dest = this;
-    var state = src._readableState;
-    state.awaitDrain--;
-    if (state.awaitDrain === 0)
-      flow(src);
-  };
-}
-
-function flow(src) {
-  var state = src._readableState;
-  var chunk;
-  state.awaitDrain = 0;
-
-  function write(dest, i, list) {
-    var written = dest.write(chunk);
-    if (false === written) {
-      state.awaitDrain++;
-    }
-  }
-
-  while (state.pipesCount && null !== (chunk = src.read())) {
-
-    if (state.pipesCount === 1)
-      write(state.pipes, 0, null);
-    else
-      forEach(state.pipes, write);
-
-    src.emit('data', chunk);
-
-    // if anyone needs a drain, then we have to wait for that.
-    if (state.awaitDrain > 0)
-      return;
-  }
-
-  // if every destination was unpiped, either before entering this
-  // function, or in the while loop, then stop flowing.
-  //
-  // NB: This is a pretty rare edge case.
-  if (state.pipesCount === 0) {
-    state.flowing = false;
-
-    // if there were data event listeners added, then switch to old mode.
-    if (EE.listenerCount(src, 'data') > 0)
-      emitDataEvents(src);
-    return;
-  }
-
-  // at this point, no one needed a drain, so we just ran out of data
-  // on the next readable event, start it over again.
-  state.ranOut = true;
-}
-
-function pipeOnReadable() {
-  if (this._readableState.ranOut) {
-    this._readableState.ranOut = false;
-    flow(this);
-  }
-}
-
-
-Readable.prototype.unpipe = function(dest) {
-  var state = this._readableState;
-
-  // if we're not piping anywhere, then do nothing.
-  if (state.pipesCount === 0)
-    return this;
-
-  // just one destination.  most common case.
-  if (state.pipesCount === 1) {
-    // passed in one, but it's not the right one.
-    if (dest && dest !== state.pipes)
-      return this;
-
-    if (!dest)
-      dest = state.pipes;
-
-    // got a match.
-    state.pipes = null;
-    state.pipesCount = 0;
-    this.removeListener('readable', pipeOnReadable);
-    state.flowing = false;
-    if (dest)
-      dest.emit('unpipe', this);
-    return this;
-  }
-
-  // slow case. multiple pipe destinations.
-
-  if (!dest) {
-    // remove all.
-    var dests = state.pipes;
-    var len = state.pipesCount;
-    state.pipes = null;
-    state.pipesCount = 0;
-    this.removeListener('readable', pipeOnReadable);
-    state.flowing = false;
-
-    for (var i = 0; i < len; i++)
-      dests[i].emit('unpipe', this);
-    return this;
-  }
-
-  // try to find the right one.
-  var i = indexOf(state.pipes, dest);
-  if (i === -1)
-    return this;
-
-  state.pipes.splice(i, 1);
-  state.pipesCount -= 1;
-  if (state.pipesCount === 1)
-    state.pipes = state.pipes[0];
-
-  dest.emit('unpipe', this);
-
-  return this;
-};
-
-// set up data events if they are asked for
-// Ensure readable listeners eventually get something
-Readable.prototype.on = function(ev, fn) {
-  var res = Stream.prototype.on.call(this, ev, fn);
-
-  if (ev === 'data' && !this._readableState.flowing)
-    emitDataEvents(this);
-
-  if (ev === 'readable' && this.readable) {
-    var state = this._readableState;
-    if (!state.readableListening) {
-      state.readableListening = true;
-      state.emittedReadable = false;
-      state.needReadable = true;
-      if (!state.reading) {
-        this.read(0);
-      } else if (state.length) {
-        emitReadable(this, state);
-      }
-    }
-  }
-
-  return res;
-};
-Readable.prototype.addListener = Readable.prototype.on;
-
-// pause() and resume() are remnants of the legacy readable stream API
-// If the user uses them, then switch into old mode.
-Readable.prototype.resume = function() {
-  emitDataEvents(this);
-  this.read(0);
-  this.emit('resume');
-};
-
-Readable.prototype.pause = function() {
-  emitDataEvents(this, true);
-  this.emit('pause');
-};
-
-function emitDataEvents(stream, startPaused) {
-  var state = stream._readableState;
-
-  if (state.flowing) {
-    // https://github.com/isaacs/readable-stream/issues/16
-    throw new Error('Cannot switch to old mode now.');
-  }
-
-  var paused = startPaused || false;
-  var readable = false;
-
-  // convert to an old-style stream.
-  stream.readable = true;
-  stream.pipe = Stream.prototype.pipe;
-  stream.on = stream.addListener = Stream.prototype.on;
-
-  stream.on('readable', function() {
-    readable = true;
-
-    var c;
-    while (!paused && (null !== (c = stream.read())))
-      stream.emit('data', c);
-
-    if (c === null) {
-      readable = false;
-      stream._readableState.needReadable = true;
-    }
-  });
-
-  stream.pause = function() {
-    paused = true;
-    this.emit('pause');
-  };
-
-  stream.resume = function() {
-    paused = false;
-    if (readable)
-      setImmediate(function() {
-        stream.emit('readable');
-      });
-    else
-      this.read(0);
-    this.emit('resume');
-  };
-
-  // now make it start, just in case it hadn't already.
-  stream.emit('readable');
-}
-
-// wrap an old-style stream as the async data source.
-// This is *not* part of the readable stream interface.
-// It is an ugly unfortunate mess of history.
-Readable.prototype.wrap = function(stream) {
-  var state = this._readableState;
-  var paused = false;
-
-  var self = this;
-  stream.on('end', function() {
-    if (state.decoder && !state.ended) {
-      var chunk = state.decoder.end();
-      if (chunk && chunk.length)
-        self.push(chunk);
-    }
-
-    self.push(null);
-  });
-
-  stream.on('data', function(chunk) {
-    if (state.decoder)
-      chunk = state.decoder.write(chunk);
-    if (!chunk || !state.objectMode && !chunk.length)
-      return;
-
-    var ret = self.push(chunk);
-    if (!ret) {
-      paused = true;
-      stream.pause();
-    }
-  });
-
-  // proxy all the other methods.
-  // important when wrapping filters and duplexes.
-  for (var i in stream) {
-    if (typeof stream[i] === 'function' &&
-        typeof this[i] === 'undefined') {
-      this[i] = function(method) { return function() {
-        return stream[method].apply(stream, arguments);
-      }}(i);
-    }
-  }
-
-  // proxy certain important events.
-  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
-  forEach(events, function(ev) {
-    stream.on(ev, function (x) {
-      return self.emit.apply(self, ev, x);
-    });
-  });
-
-  // when we try to consume some more bytes, simply unpause the
-  // underlying stream.
-  self._read = function(n) {
-    if (paused) {
-      paused = false;
-      stream.resume();
-    }
-  };
-
-  return self;
-};
-
-
-
-// exposed for testing purposes only.
-Readable._fromList = fromList;
-
-// Pluck off n bytes from an array of buffers.
-// Length is the combined lengths of all the buffers in the list.
-function fromList(n, state) {
-  var list = state.buffer;
-  var length = state.length;
-  var stringMode = !!state.decoder;
-  var objectMode = !!state.objectMode;
-  var ret;
-
-  // nothing in the list, definitely empty.
-  if (list.length === 0)
-    return null;
-
-  if (length === 0)
-    ret = null;
-  else if (objectMode)
-    ret = list.shift();
-  else if (!n || n >= length) {
-    // read it all, truncate the array.
-    if (stringMode)
-      ret = list.join('');
-    else
-      ret = Buffer.concat(list, length);
-    list.length = 0;
-  } else {
-    // read just some of it.
-    if (n < list[0].length) {
-      // just take a part of the first list item.
-      // slice is the same for buffers and strings.
-      var buf = list[0];
-      ret = buf.slice(0, n);
-      list[0] = buf.slice(n);
-    } else if (n === list[0].length) {
-      // first list is a perfect match
-      ret = list.shift();
-    } else {
-      // complex case.
-      // we have enough to cover it, but it spans past the first buffer.
-      if (stringMode)
-        ret = '';
-      else
-        ret = new Buffer(n);
-
-      var c = 0;
-      for (var i = 0, l = list.length; i < l && c < n; i++) {
-        var buf = list[0];
-        var cpy = Math.min(n - c, buf.length);
-
-        if (stringMode)
-          ret += buf.slice(0, cpy);
-        else
-          buf.copy(ret, c, 0, cpy);
-
-        if (cpy < buf.length)
-          list[0] = buf.slice(cpy);
-        else
-          list.shift();
-
-        c += cpy;
-      }
-    }
-  }
-
-  return ret;
-}
-
-function endReadable(stream) {
-  var state = stream._readableState;
-
-  // If we get here before consuming all the bytes, then that is a
-  // bug in node.  Should never happen.
-  if (state.length > 0)
-    throw new Error('endReadable called on non-empty stream');
-
-  if (!state.endEmitted && state.calledRead) {
-    state.ended = true;
-    setImmediate(function() {
-      // Check that we didn't get one last unshift.
-      if (!state.endEmitted && state.length === 0) {
-        state.endEmitted = true;
-        stream.readable = false;
-        stream.emit('end');
-      }
-    });
-  }
-}
-
-function forEach (xs, f) {
-  for (var i = 0, l = xs.length; i < l; i++) {
-    f(xs[i], i);
-  }
-}
-
-function indexOf (xs, x) {
-  for (var i = 0, l = xs.length; i < l; i++) {
-    if (xs[i] === x) return i;
-  }
-  return -1;
-}
-
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./index.js":13,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"buffer":5,"events":8,"inherits":9,"process/browser.js":14,"string_decoder":19}],17:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// a transform stream is a readable/writable stream where you do
-// something with the data.  Sometimes it's called a "filter",
-// but that's not a great name for it, since that implies a thing where
-// some bits pass through, and others are simply ignored.  (That would
-// be a valid example of a transform, of course.)
-//
-// While the output is causally related to the input, it's not a
-// necessarily symmetric or synchronous transformation.  For example,
-// a zlib stream might take multiple plain-text writes(), and then
-// emit a single compressed chunk some time in the future.
-//
-// Here's how this works:
-//
-// The Transform stream has all the aspects of the readable and writable
-// stream classes.  When you write(chunk), that calls _write(chunk,cb)
-// internally, and returns false if there's a lot of pending writes
-// buffered up.  When you call read(), that calls _read(n) until
-// there's enough pending readable data buffered up.
-//
-// In a transform stream, the written data is placed in a buffer.  When
-// _read(n) is called, it transforms the queued up data, calling the
-// buffered _write cb's as it consumes chunks.  If consuming a single
-// written chunk would result in multiple output chunks, then the first
-// outputted bit calls the readcb, and subsequent chunks just go into
-// the read buffer, and will cause it to emit 'readable' if necessary.
-//
-// This way, back-pressure is actually determined by the reading side,
-// since _read has to be called to start processing a new chunk.  However,
-// a pathological inflate type of transform can cause excessive buffering
-// here.  For example, imagine a stream where every byte of input is
-// interpreted as an integer from 0-255, and then results in that many
-// bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
-// 1kb of data being output.  In this case, you could write a very small
-// amount of input, and end up with a very large amount of output.  In
-// such a pathological inflating mechanism, there'd be no way to tell
-// the system to stop doing the transform.  A single 4MB write could
-// cause the system to run out of memory.
-//
-// However, even in such a pathological case, only a single written chunk
-// would be consumed, and then the rest would wait (un-transformed) until
-// the results of the previous transformed chunk were consumed.
-
-module.exports = Transform;
-
-var Duplex = _dereq_('./duplex.js');
-var inherits = _dereq_('inherits');
-inherits(Transform, Duplex);
-
-
-function TransformState(options, stream) {
-  this.afterTransform = function(er, data) {
-    return afterTransform(stream, er, data);
-  };
-
-  this.needTransform = false;
-  this.transforming = false;
-  this.writecb = null;
-  this.writechunk = null;
-}
-
-function afterTransform(stream, er, data) {
-  var ts = stream._transformState;
-  ts.transforming = false;
-
-  var cb = ts.writecb;
-
-  if (!cb)
-    return stream.emit('error', new Error('no writecb in Transform class'));
-
-  ts.writechunk = null;
-  ts.writecb = null;
-
-  if (data !== null && data !== undefined)
-    stream.push(data);
-
-  if (cb)
-    cb(er);
-
-  var rs = stream._readableState;
-  rs.reading = false;
-  if (rs.needReadable || rs.length < rs.highWaterMark) {
-    stream._read(rs.highWaterMark);
-  }
-}
-
-
-function Transform(options) {
-  if (!(this instanceof Transform))
-    return new Transform(options);
-
-  Duplex.call(this, options);
-
-  var ts = this._transformState = new TransformState(options, this);
-
-  // when the writable side finishes, then flush out anything remaining.
-  var stream = this;
-
-  // start out asking for a readable event once data is transformed.
-  this._readableState.needReadable = true;
-
-  // we have implemented the _read method, and done the other things
-  // that Readable wants before the first _read call, so unset the
-  // sync guard flag.
-  this._readableState.sync = false;
-
-  this.once('finish', function() {
-    if ('function' === typeof this._flush)
-      this._flush(function(er) {
-        done(stream, er);
-      });
-    else
-      done(stream);
-  });
-}
-
-Transform.prototype.push = function(chunk, encoding) {
-  this._transformState.needTransform = false;
-  return Duplex.prototype.push.call(this, chunk, encoding);
-};
-
-// This is the part where you do stuff!
-// override this function in implementation classes.
-// 'chunk' is an input chunk.
-//
-// Call `push(newChunk)` to pass along transformed output
-// to the readable side.  You may call 'push' zero or more times.
-//
-// Call `cb(err)` when you are done with this chunk.  If you pass
-// an error, then that'll put the hurt on the whole operation.  If you
-// never call cb(), then you'll never get another chunk.
-Transform.prototype._transform = function(chunk, encoding, cb) {
-  throw new Error('not implemented');
-};
-
-Transform.prototype._write = function(chunk, encoding, cb) {
-  var ts = this._transformState;
-  ts.writecb = cb;
-  ts.writechunk = chunk;
-  ts.writeencoding = encoding;
-  if (!ts.transforming) {
-    var rs = this._readableState;
-    if (ts.needTransform ||
-        rs.needReadable ||
-        rs.length < rs.highWaterMark)
-      this._read(rs.highWaterMark);
-  }
-};
-
-// Doesn't matter what the args are here.
-// _transform does all the work.
-// That we got here means that the readable side wants more data.
-Transform.prototype._read = function(n) {
-  var ts = this._transformState;
-
-  if (ts.writechunk && ts.writecb && !ts.transforming) {
-    ts.transforming = true;
-    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
-  } else {
-    // mark that we need a transform, so that any data that comes in
-    // will get processed, now that we've asked for it.
-    ts.needTransform = true;
-  }
-};
-
-
-function done(stream, er) {
-  if (er)
-    return stream.emit('error', er);
-
-  // if there's nothing in the write buffer, then that means
-  // that nothing more will ever be provided
-  var ws = stream._writableState;
-  var rs = stream._readableState;
-  var ts = stream._transformState;
-
-  if (ws.length)
-    throw new Error('calling transform done when ws.length != 0');
-
-  if (ts.transforming)
-    throw new Error('calling transform done when still transforming');
-
-  return stream.push(null);
-}
-
-},{"./duplex.js":12,"inherits":9}],18:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// A bit simpler than readable streams.
-// Implement an async ._write(chunk, cb), and it'll handle all
-// the drain event emission and buffering.
-
-module.exports = Writable;
-Writable.WritableState = WritableState;
-
-var isUint8Array = typeof Uint8Array !== 'undefined'
-  ? function (x) { return x instanceof Uint8Array }
-  : function (x) {
-    return x && x.constructor && x.constructor.name === 'Uint8Array'
-  }
-;
-var isArrayBuffer = typeof ArrayBuffer !== 'undefined'
-  ? function (x) { return x instanceof ArrayBuffer }
-  : function (x) {
-    return x && x.constructor && x.constructor.name === 'ArrayBuffer'
-  }
-;
-
-var inherits = _dereq_('inherits');
-var Stream = _dereq_('./index.js');
-var setImmediate = _dereq_('process/browser.js').nextTick;
-var Buffer = _dereq_('buffer').Buffer;
-
-inherits(Writable, Stream);
-
-function WriteReq(chunk, encoding, cb) {
-  this.chunk = chunk;
-  this.encoding = encoding;
-  this.callback = cb;
-}
-
-function WritableState(options, stream) {
-  options = options || {};
-
-  // the point at which write() starts returning false
-  // Note: 0 is a valid value, means that we always return false if
-  // the entire buffer is not flushed immediately on write()
-  var hwm = options.highWaterMark;
-  this.highWaterMark = (hwm || hwm === 0) ? hwm : 16 * 1024;
-
-  // object stream flag to indicate whether or not this stream
-  // contains buffers or objects.
-  this.objectMode = !!options.objectMode;
-
-  // cast to ints.
-  this.highWaterMark = ~~this.highWaterMark;
-
-  this.needDrain = false;
-  // at the start of calling end()
-  this.ending = false;
-  // when end() has been called, and returned
-  this.ended = false;
-  // when 'finish' is emitted
-  this.finished = false;
-
-  // should we decode strings into buffers before passing to _write?
-  // this is here so that some node-core streams can optimize string
-  // handling at a lower level.
-  var noDecode = options.decodeStrings === false;
-  this.decodeStrings = !noDecode;
-
-  // Crypto is kind of old and crusty.  Historically, its default string
-  // encoding is 'binary' so we have to make this configurable.
-  // Everything else in the universe uses 'utf8', though.
-  this.defaultEncoding = options.defaultEncoding || 'utf8';
-
-  // not an actual buffer we keep track of, but a measurement
-  // of how much we're waiting to get pushed to some underlying
-  // socket or file.
-  this.length = 0;
-
-  // a flag to see when we're in the middle of a write.
-  this.writing = false;
-
-  // a flag to be able to tell if the onwrite cb is called immediately,
-  // or on a later tick.  We set this to true at first, becuase any
-  // actions that shouldn't happen until "later" should generally also
-  // not happen before the first write call.
-  this.sync = true;
-
-  // a flag to know if we're processing previously buffered items, which
-  // may call the _write() callback in the same tick, so that we don't
-  // end up in an overlapped onwrite situation.
-  this.bufferProcessing = false;
-
-  // the callback that's passed to _write(chunk,cb)
-  this.onwrite = function(er) {
-    onwrite(stream, er);
-  };
-
-  // the callback that the user supplies to write(chunk,encoding,cb)
-  this.writecb = null;
-
-  // the amount that is being written when _write is called.
-  this.writelen = 0;
-
-  this.buffer = [];
-}
-
-function Writable(options) {
-  // Writable ctor is applied to Duplexes, though they're not
-  // instanceof Writable, they're instanceof Readable.
-  if (!(this instanceof Writable) && !(this instanceof Stream.Duplex))
-    return new Writable(options);
-
-  this._writableState = new WritableState(options, this);
-
-  // legacy.
-  this.writable = true;
-
-  Stream.call(this);
-}
-
-// Otherwise people can pipe Writable streams, which is just wrong.
-Writable.prototype.pipe = function() {
-  this.emit('error', new Error('Cannot pipe. Not readable.'));
-};
-
-
-function writeAfterEnd(stream, state, cb) {
-  var er = new Error('write after end');
-  // TODO: defer error events consistently everywhere, not just the cb
-  stream.emit('error', er);
-  setImmediate(function() {
-    cb(er);
-  });
-}
-
-// If we get something that is not a buffer, string, null, or undefined,
-// and we're not in objectMode, then that's an error.
-// Otherwise stream chunks are all considered to be of length=1, and the
-// watermarks determine how many objects to keep in the buffer, rather than
-// how many bytes or characters.
-function validChunk(stream, state, chunk, cb) {
-  var valid = true;
-  if (!Buffer.isBuffer(chunk) &&
-      'string' !== typeof chunk &&
-      chunk !== null &&
-      chunk !== undefined &&
-      !state.objectMode) {
-    var er = new TypeError('Invalid non-string/buffer chunk');
-    stream.emit('error', er);
-    setImmediate(function() {
-      cb(er);
-    });
-    valid = false;
-  }
-  return valid;
-}
-
-Writable.prototype.write = function(chunk, encoding, cb) {
-  var state = this._writableState;
-  var ret = false;
-
-  if (typeof encoding === 'function') {
-    cb = encoding;
-    encoding = null;
-  }
-
-  if (!Buffer.isBuffer(chunk) && isUint8Array(chunk))
-    chunk = new Buffer(chunk);
-  if (isArrayBuffer(chunk) && typeof Uint8Array !== 'undefined')
-    chunk = new Buffer(new Uint8Array(chunk));
-  
-  if (Buffer.isBuffer(chunk))
-    encoding = 'buffer';
-  else if (!encoding)
-    encoding = state.defaultEncoding;
-
-  if (typeof cb !== 'function')
-    cb = function() {};
-
-  if (state.ended)
-    writeAfterEnd(this, state, cb);
-  else if (validChunk(this, state, chunk, cb))
-    ret = writeOrBuffer(this, state, chunk, encoding, cb);
-
-  return ret;
-};
-
-function decodeChunk(state, chunk, encoding) {
-  if (!state.objectMode &&
-      state.decodeStrings !== false &&
-      typeof chunk === 'string') {
-    chunk = new Buffer(chunk, encoding);
-  }
-  return chunk;
-}
-
-// if we're already writing something, then just put this
-// in the queue, and wait our turn.  Otherwise, call _write
-// If we return false, then we need a drain event, so set that flag.
-function writeOrBuffer(stream, state, chunk, encoding, cb) {
-  chunk = decodeChunk(state, chunk, encoding);
-  var len = state.objectMode ? 1 : chunk.length;
-
-  state.length += len;
-
-  var ret = state.length < state.highWaterMark;
-  state.needDrain = !ret;
-
-  if (state.writing)
-    state.buffer.push(new WriteReq(chunk, encoding, cb));
-  else
-    doWrite(stream, state, len, chunk, encoding, cb);
-
-  return ret;
-}
-
-function doWrite(stream, state, len, chunk, encoding, cb) {
-  state.writelen = len;
-  state.writecb = cb;
-  state.writing = true;
-  state.sync = true;
-  stream._write(chunk, encoding, state.onwrite);
-  state.sync = false;
-}
-
-function onwriteError(stream, state, sync, er, cb) {
-  if (sync)
-    setImmediate(function() {
-      cb(er);
-    });
-  else
-    cb(er);
-
-  stream.emit('error', er);
-}
-
-function onwriteStateUpdate(state) {
-  state.writing = false;
-  state.writecb = null;
-  state.length -= state.writelen;
-  state.writelen = 0;
-}
-
-function onwrite(stream, er) {
-  var state = stream._writableState;
-  var sync = state.sync;
-  var cb = state.writecb;
-
-  onwriteStateUpdate(state);
-
-  if (er)
-    onwriteError(stream, state, sync, er, cb);
-  else {
-    // Check if we're actually ready to finish, but don't emit yet
-    var finished = needFinish(stream, state);
-
-    if (!finished && !state.bufferProcessing && state.buffer.length)
-      clearBuffer(stream, state);
-
-    if (sync) {
-      setImmediate(function() {
-        afterWrite(stream, state, finished, cb);
-      });
-    } else {
-      afterWrite(stream, state, finished, cb);
-    }
-  }
-}
-
-function afterWrite(stream, state, finished, cb) {
-  if (!finished)
-    onwriteDrain(stream, state);
-  cb();
-  if (finished)
-    finishMaybe(stream, state);
-}
-
-// Must force callback to be called on nextTick, so that we don't
-// emit 'drain' before the write() consumer gets the 'false' return
-// value, and has a chance to attach a 'drain' listener.
-function onwriteDrain(stream, state) {
-  if (state.length === 0 && state.needDrain) {
-    state.needDrain = false;
-    stream.emit('drain');
-  }
-}
-
-
-// if there's something in the buffer waiting, then process it
-function clearBuffer(stream, state) {
-  state.bufferProcessing = true;
-
-  for (var c = 0; c < state.buffer.length; c++) {
-    var entry = state.buffer[c];
-    var chunk = entry.chunk;
-    var encoding = entry.encoding;
-    var cb = entry.callback;
-    var len = state.objectMode ? 1 : chunk.length;
-
-    doWrite(stream, state, len, chunk, encoding, cb);
-
-    // if we didn't call the onwrite immediately, then
-    // it means that we need to wait until it does.
-    // also, that means that the chunk and cb are currently
-    // being processed, so move the buffer counter past them.
-    if (state.writing) {
-      c++;
-      break;
-    }
-  }
-
-  state.bufferProcessing = false;
-  if (c < state.buffer.length)
-    state.buffer = state.buffer.slice(c);
-  else
-    state.buffer.length = 0;
-}
-
-Writable.prototype._write = function(chunk, encoding, cb) {
-  cb(new Error('not implemented'));
-};
-
-Writable.prototype.end = function(chunk, encoding, cb) {
-  var state = this._writableState;
-
-  if (typeof chunk === 'function') {
-    cb = chunk;
-    chunk = null;
-    encoding = null;
-  } else if (typeof encoding === 'function') {
-    cb = encoding;
-    encoding = null;
-  }
-
-  if (typeof chunk !== 'undefined' && chunk !== null)
-    this.write(chunk, encoding);
-
-  // ignore unnecessary end() calls.
-  if (!state.ending && !state.finished)
-    endWritable(this, state, cb);
-};
-
-
-function needFinish(stream, state) {
-  return (state.ending &&
-          state.length === 0 &&
-          !state.finished &&
-          !state.writing);
-}
-
-function finishMaybe(stream, state) {
-  var need = needFinish(stream, state);
-  if (need) {
-    state.finished = true;
-    stream.emit('finish');
-  }
-  return need;
-}
-
-function endWritable(stream, state, cb) {
-  state.ending = true;
-  finishMaybe(stream, state);
-  if (cb) {
-    if (state.finished)
-      setImmediate(cb);
-    else
-      stream.once('finish', cb);
-  }
-  state.ended = true;
-}
-
-},{"./index.js":13,"buffer":5,"inherits":9,"process/browser.js":14}],19:[function(_dereq_,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var Buffer = _dereq_('buffer').Buffer;
-
-function assertEncoding(encoding) {
-  if (encoding && !Buffer.isEncoding(encoding)) {
-    throw new Error('Unknown encoding: ' + encoding);
-  }
-}
-
-var StringDecoder = exports.StringDecoder = function(encoding) {
-  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
-  assertEncoding(encoding);
-  switch (this.encoding) {
-    case 'utf8':
-      // CESU-8 represents each of Surrogate Pair by 3-bytes
-      this.surrogateSize = 3;
-      break;
-    case 'ucs2':
-    case 'utf16le':
-      // UTF-16 represents each of Surrogate Pair by 2-bytes
-      this.surrogateSize = 2;
-      this.detectIncompleteChar = utf16DetectIncompleteChar;
-      break;
-    case 'base64':
-      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
-      this.surrogateSize = 3;
-      this.detectIncompleteChar = base64DetectIncompleteChar;
-      break;
-    default:
-      this.write = passThroughWrite;
-      return;
-  }
-
-  this.charBuffer = new Buffer(6);
-  this.charReceived = 0;
-  this.charLength = 0;
-};
-
-
-StringDecoder.prototype.write = function(buffer) {
-  var charStr = '';
-  var offset = 0;
-
-  // if our last write ended with an incomplete multibyte character
-  while (this.charLength) {
-    // determine how many remaining bytes this buffer has to offer for this char
-    var i = (buffer.length >= this.charLength - this.charReceived) ?
-                this.charLength - this.charReceived :
-                buffer.length;
-
-    // add the new bytes to the char buffer
-    buffer.copy(this.charBuffer, this.charReceived, offset, i);
-    this.charReceived += (i - offset);
-    offset = i;
-
-    if (this.charReceived < this.charLength) {
-      // still not enough chars in this buffer? wait for more ...
-      return '';
-    }
-
-    // get the character that was split
-    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
-
-    // lead surrogate (D800-DBFF) is also the incomplete character
-    var charCode = charStr.charCodeAt(charStr.length - 1);
-    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
-      this.charLength += this.surrogateSize;
-      charStr = '';
-      continue;
-    }
-    this.charReceived = this.charLength = 0;
-
-    // if there are no more bytes in this buffer, just emit our char
-    if (i == buffer.length) return charStr;
-
-    // otherwise cut off the characters end from the beginning of this buffer
-    buffer = buffer.slice(i, buffer.length);
-    break;
-  }
-
-  var lenIncomplete = this.detectIncompleteChar(buffer);
-
-  var end = buffer.length;
-  if (this.charLength) {
-    // buffer the incomplete character bytes we got
-    buffer.copy(this.charBuffer, 0, buffer.length - lenIncomplete, end);
-    this.charReceived = lenIncomplete;
-    end -= lenIncomplete;
-  }
-
-  charStr += buffer.toString(this.encoding, 0, end);
-
-  var end = charStr.length - 1;
-  var charCode = charStr.charCodeAt(end);
-  // lead surrogate (D800-DBFF) is also the incomplete character
-  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
-    var size = this.surrogateSize;
-    this.charLength += size;
-    this.charReceived += size;
-    this.charBuffer.copy(this.charBuffer, size, 0, size);
-    this.charBuffer.write(charStr.charAt(charStr.length - 1), this.encoding);
-    return charStr.substring(0, end);
-  }
-
-  // or just emit the charStr
-  return charStr;
-};
-
-StringDecoder.prototype.detectIncompleteChar = function(buffer) {
-  // determine how many bytes we have to check at the end of this buffer
-  var i = (buffer.length >= 3) ? 3 : buffer.length;
-
-  // Figure out if one of the last i bytes of our buffer announces an
-  // incomplete char.
-  for (; i > 0; i--) {
-    var c = buffer[buffer.length - i];
-
-    // See http://en.wikipedia.org/wiki/UTF-8#Description
-
-    // 110XXXXX
-    if (i == 1 && c >> 5 == 0x06) {
-      this.charLength = 2;
-      break;
-    }
-
-    // 1110XXXX
-    if (i <= 2 && c >> 4 == 0x0E) {
-      this.charLength = 3;
-      break;
-    }
-
-    // 11110XXX
-    if (i <= 3 && c >> 3 == 0x1E) {
-      this.charLength = 4;
-      break;
-    }
-  }
-
-  return i;
-};
-
-StringDecoder.prototype.end = function(buffer) {
-  var res = '';
-  if (buffer && buffer.length)
-    res = this.write(buffer);
-
-  if (this.charReceived) {
-    var cr = this.charReceived;
-    var buf = this.charBuffer;
-    var enc = this.encoding;
-    res += buf.slice(0, cr).toString(enc);
-  }
-
-  return res;
-};
-
-function passThroughWrite(buffer) {
-  return buffer.toString(this.encoding);
-}
-
-function utf16DetectIncompleteChar(buffer) {
-  var incomplete = this.charReceived = buffer.length % 2;
-  this.charLength = incomplete ? 2 : 0;
-  return incomplete;
-}
-
-function base64DetectIncompleteChar(buffer) {
-  var incomplete = this.charReceived = buffer.length % 3;
-  this.charLength = incomplete ? 3 : 0;
-  return incomplete;
-}
-
-},{"buffer":5}],20:[function(_dereq_,module,exports){
-module.exports=_dereq_(3)
-},{}],21:[function(_dereq_,module,exports){
-module.exports=_dereq_(4)
-},{"./support/isBuffer":20,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"inherits":9}],22:[function(_dereq_,module,exports){
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":26,"_process":12,"inherits":9}],28:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -4877,15 +5443,15 @@ module.exports=_dereq_(4)
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var types = _dereq_("recast").types;
+var assert = require("assert");
+var types = require("recast").types;
 var isArray = types.builtInTypes.array;
 var b = types.builders;
 var n = types.namedTypes;
-var leap = _dereq_("./leap");
-var meta = _dereq_("./meta");
-var util = _dereq_("./util");
-var runtimeKeysMethod = util.runtimeProperty("keys");
+var leap = require("./leap");
+var meta = require("./meta");
+var util = require("./util");
+var runtimeProperty = util.runtimeProperty;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
@@ -5427,7 +5993,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.emitAssign(
       keyIterNextFn,
       b.callExpression(
-        runtimeKeysMethod,
+        runtimeProperty("keys"),
         [self.explodeExpression(path.get("right"))]
       )
     );
@@ -6059,7 +6625,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
   }
 };
 
-},{"./leap":24,"./meta":25,"./util":26,"assert":2,"recast":56}],23:[function(_dereq_,module,exports){
+},{"./leap":30,"./meta":31,"./util":32,"assert":2,"recast":62}],29:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6070,8 +6636,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var types = _dereq_("recast").types;
+var assert = require("assert");
+var types = require("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -6214,7 +6780,7 @@ exports.hoist = function(funPath) {
   return b.variableDeclaration("var", declarations);
 };
 
-},{"assert":2,"recast":56}],24:[function(_dereq_,module,exports){
+},{"assert":2,"recast":62}],30:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6225,11 +6791,11 @@ exports.hoist = function(funPath) {
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var types = _dereq_("recast").types;
+var assert = require("assert");
+var types = require("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
-var inherits = _dereq_("util").inherits;
+var inherits = require("util").inherits;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function Entry() {
@@ -6342,7 +6908,7 @@ exports.LabeledEntry = LabeledEntry;
 function LeapManager(emitter) {
   assert.ok(this instanceof LeapManager);
 
-  var Emitter = _dereq_("./emit").Emitter;
+  var Emitter = require("./emit").Emitter;
   assert.ok(emitter instanceof Emitter);
 
   this.emitter = emitter;
@@ -6393,7 +6959,7 @@ LMp.getContinueLoc = function(label) {
   return this._findLeapLocation("continueLoc", label);
 };
 
-},{"./emit":22,"assert":2,"recast":56,"util":21}],25:[function(_dereq_,module,exports){
+},{"./emit":28,"assert":2,"recast":62,"util":27}],31:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6404,9 +6970,9 @@ LMp.getContinueLoc = function(label) {
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var m = _dereq_("private").makeAccessor();
-var types = _dereq_("recast").types;
+var assert = require("assert");
+var m = require("private").makeAccessor();
+var types = require("recast").types;
 var isArray = types.builtInTypes.array;
 var n = types.namedTypes;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -6495,7 +7061,7 @@ for (var type in leapTypes) {
 exports.hasSideEffects = makePredicate("hasSideEffects", sideEffectTypes);
 exports.containsLeap = makePredicate("containsLeap", leapTypes);
 
-},{"assert":2,"private":45,"recast":56}],26:[function(_dereq_,module,exports){
+},{"assert":2,"private":51,"recast":62}],32:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6506,8 +7072,8 @@ exports.containsLeap = makePredicate("containsLeap", leapTypes);
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var types = _dereq_("recast").types;
+var assert = require("assert");
+var types = require("recast").types;
 var n = types.namedTypes;
 var b = types.builders;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -6597,7 +7163,7 @@ exports.isReference = function(path, name) {
   }
 };
 
-},{"assert":2,"recast":56}],27:[function(_dereq_,module,exports){
+},{"assert":2,"recast":62}],33:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -6608,22 +7174,19 @@ exports.isReference = function(path, name) {
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var fs = _dereq_("fs");
-var recast = _dereq_("recast");
+var assert = require("assert");
+var fs = require("fs");
+var recast = require("recast");
 var types = recast.types;
 var n = types.namedTypes;
 var b = types.builders;
 var isArray = types.builtInTypes.array;
 var isObject = types.builtInTypes.object;
 var NodePath = types.NodePath;
-var hoist = _dereq_("./hoist").hoist;
-var Emitter = _dereq_("./emit").Emitter;
-var runtimeProperty = _dereq_("./util").runtimeProperty;
-var runtimeWrapMethod = runtimeProperty("wrap");
-var runtimeMarkMethod = runtimeProperty("mark");
-var runtimeValuesMethod = runtimeProperty("values");
-var runtimeAsyncMethod = runtimeProperty("async");
+var hoist = require("./hoist").hoist;
+var Emitter = require("./emit").Emitter;
+var runtimeProperty = require("./util").runtimeProperty;
+var getMarkInfo = require("private").makeAccessor();
 
 exports.transform = function transform(node, options) {
   options = options || {};
@@ -6647,7 +7210,7 @@ function injectRuntime(program) {
 
   // Include the runtime by modifying the AST rather than by concatenating
   // strings. This technique will allow for more accurate source mapping.
-  var runtimePath = _dereq_("..").runtime.path;
+  var runtimePath = require("..").runtime.path;
   var runtime = fs.readFileSync(runtimePath, "utf8");
   var runtimeBody = recast.parse(runtime, {
     sourceFileName: runtimePath
@@ -6689,10 +7252,30 @@ var visitor = types.PathVisitor.fromMethodsObject({
       awaitVisitor.visit(path.get("body"));
     }
 
-    var outerFnId = node.id || (
-      node.id = path.scope.parent.declareTemporary("callee$")
-    );
+    var outerBody = [];
+    var innerBody = [];
+    var bodyPath = path.get("body", "body");
 
+    bodyPath.each(function(childPath) {
+      var node = childPath.value;
+      if (node && node._blockHoist != null) {
+        outerBody.push(node);
+      } else {
+        innerBody.push(node);
+      }
+    });
+
+    if (outerBody.length > 0) {
+      // Only replace the inner body if we actually hoisted any statements
+      // to the outer body.
+      bodyPath.replace(innerBody);
+    }
+
+    var outerFnExpr = getOuterFnExpr(path);
+    // Note that getOuterFnExpr has the side-effect of ensuring that the
+    // function has a name (so node.id will always be an Identifier), even
+    // if a temporary name has to be synthesized.
+    n.Identifier.assert(node.id);
     var innerFnId = b.identifier(node.id.name + "$");
     var contextId = path.scope.declareTemporary("context$");
     var argsId = path.scope.declareTemporary("args$");
@@ -6709,8 +7292,6 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var emitter = new Emitter(contextId);
     emitter.explode(path.get("body"));
 
-    var outerBody = [];
-
     if (vars && vars.declarations.length > 0) {
       outerBody.push(vars);
     }
@@ -6719,7 +7300,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
       emitter.getContextFunction(innerFnId),
       // Async functions don't care about the outer function because they
       // don't need it to be marked and don't inherit from its .prototype.
-      shouldTransformAsync ? b.literal(null) : outerFnId,
+      shouldTransformAsync ? b.literal(null) : outerFnExpr,
       b.thisExpression()
     ];
 
@@ -6729,7 +7310,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     }
 
     var wrapCall = b.callExpression(
-      shouldTransformAsync ? runtimeAsyncMethod : runtimeWrapMethod,
+      runtimeProperty(shouldTransformAsync ? "async" : "wrap"),
       wrapArgs
     );
 
@@ -6741,96 +7322,8 @@ var visitor = types.PathVisitor.fromMethodsObject({
       return;
     }
 
-    if (n.FunctionDeclaration.check(node)) {
-      var pp = path.parent;
-
-      while (pp && !(n.BlockStatement.check(pp.value) ||
-                     n.Program.check(pp.value))) {
-        pp = pp.parent;
-      }
-
-      if (!pp) {
-        return;
-      }
-
-      // Here we turn the FunctionDeclaration into a named
-      // FunctionExpression that will be assigned to a variable of the
-      // same name at the top of the enclosing block. This is important
-      // for a very subtle reason: named function expressions can refer to
-      // themselves by name without fear that the binding may change due
-      // to code executing outside the function, whereas function
-      // declarations are vulnerable to the following rebinding:
-      //
-      //   function f() { return f }
-      //   var g = f;
-      //   f = "asdf";
-      //   g(); // "asdf"
-      //
-      // One way to prevent the problem illustrated above is to transform
-      // the function declaration thus:
-      //
-      //   var f = function f() { return f };
-      //   var g = f;
-      //   f = "asdf";
-      //   g(); // f
-      //   g()()()()(); // f
-      //
-      // In the code below, we transform generator function declarations
-      // in the following way:
-      //
-      //   gen().next(); // { value: gen, done: true }
-      //   function *gen() {
-      //     return gen;
-      //   }
-      //
-      // becomes something like
-      //
-      //   var gen = runtime.mark(function *gen() {
-      //     return gen;
-      //   });
-      //   gen().next(); // { value: gen, done: true }
-      //
-      // which ensures that the generator body can always reliably refer
-      // to gen by name.
-
-      // Remove the FunctionDeclaration so that we can add it back as a
-      // FunctionExpression passed to runtime.mark.
-      path.replace();
-
-      // Change the type of the function to be an expression instead of a
-      // declaration. Note that all the other fields are the same.
-      node.type = "FunctionExpression";
-
-      var varDecl = b.variableDeclaration("var", [
-        b.variableDeclarator(
-          node.id,
-          b.callExpression(runtimeMarkMethod, [node])
-        )
-      ]);
-
-      if (node.comments) {
-        // Copy any comments preceding the function declaration to the
-        // variable declaration, to avoid weird formatting consequences.
-        varDecl.comments = node.comments;
-        node.comments = null;
-      }
-
-      var bodyPath = pp.get("body");
-      var bodyLen = bodyPath.value.length;
-
-      for (var i = 0; i < bodyLen; ++i) {
-        var firstStmtPath = bodyPath.get(i);
-        if (!shouldNotHoistAbove(firstStmtPath)) {
-          firstStmtPath.insertBefore(varDecl);
-          return;
-        }
-      }
-
-      bodyPath.push(varDecl);
-
-    } else {
-      n.FunctionExpression.assert(node);
-      return b.callExpression(runtimeMarkMethod, [node]);
+    if (n.Expression.check(node)) {
+      return b.callExpression(runtimeProperty("mark"), [node]);
     }
   },
 
@@ -6842,7 +7335,7 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var tempIterDecl = b.variableDeclarator(
       tempIterId,
       b.callExpression(
-        runtimeValuesMethod,
+        runtimeProperty("values"),
         [node.right]
       )
     );
@@ -6912,30 +7405,91 @@ var visitor = types.PathVisitor.fromMethodsObject({
   }
 });
 
+// Given a NodePath for a Function, return an Expression node that can be
+// used to refer reliably to the function object from inside the function.
+// This expression is essentially a replacement for arguments.callee, with
+// the key advantage that it works in strict mode.
+function getOuterFnExpr(funPath) {
+  var node = funPath.value;
+  n.Function.assert(node);
+
+  if (!node.async && // Async functions don't need to be marked.
+      n.FunctionDeclaration.check(node)) {
+    var pp = funPath.parent;
+
+    while (pp && !(n.BlockStatement.check(pp.value) ||
+                   n.Program.check(pp.value))) {
+      pp = pp.parent;
+    }
+
+    if (!pp) {
+      return node.id;
+    }
+
+    var markDecl = getRuntimeMarkDecl(pp);
+    var markedArray = markDecl.declarations[0].id;
+    var funDeclIdArray = markDecl.declarations[0].init.callee.object;
+    n.ArrayExpression.assert(funDeclIdArray);
+
+    var index = funDeclIdArray.elements.length;
+    funDeclIdArray.elements.push(node.id);
+
+    return b.memberExpression(
+      markedArray,
+      b.literal(index),
+      true
+    );
+  }
+
+  return node.id || (
+    node.id = funPath.scope.parent.declareTemporary("callee$")
+  );
+}
+
+function getRuntimeMarkDecl(blockPath) {
+  assert.ok(blockPath instanceof NodePath);
+  var block = blockPath.node;
+  isArray.assert(block.body);
+
+  var info = getMarkInfo(block);
+  if (info.decl) {
+    return info.decl;
+  }
+
+  info.decl = b.variableDeclaration("var", [
+    b.variableDeclarator(
+      blockPath.scope.declareTemporary("marked"),
+      b.callExpression(
+        b.memberExpression(
+          b.arrayExpression([]),
+          b.identifier("map"),
+          false
+        ),
+        [runtimeProperty("mark")]
+      )
+    )
+  ]);
+
+  for (var i = 0; i < block.body.length; ++i) {
+    if (!shouldNotHoistAbove(blockPath.get("body", i))) {
+      break;
+    }
+  }
+
+  blockPath.get("body").insertAt(i, info.decl);
+
+  return info.decl;
+}
+
 function shouldNotHoistAbove(stmtPath) {
   var value = stmtPath.value;
   n.Statement.assert(value);
 
   // If the first statement is a "use strict" declaration, make sure to
   // insert hoisted declarations afterwards.
-  if (n.ExpressionStatement.check(value) &&
-      n.Literal.check(value.expression) &&
-      value.expression.value === "use strict") {
-    return true;
-  }
-
-  if (n.VariableDeclaration.check(value)) {
-    for (var i = 0; i < value.declarations.length; ++i) {
-      var decl = value.declarations[i];
-      if (n.CallExpression.check(decl.init) &&
-          types.astNodesAreEquivalent(decl.init.callee,
-                                      runtimeMarkMethod)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
+  return n.ExpressionStatement.check(value) &&
+    n.Literal.check(value.expression) &&
+    value.expression.value === "use strict";
 }
 
 function renameArguments(funcPath, argsId) {
@@ -7004,7 +7558,7 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
   }
 });
 
-},{"..":28,"./emit":22,"./hoist":23,"./util":26,"assert":2,"fs":1,"recast":56}],28:[function(_dereq_,module,exports){
+},{"..":34,"./emit":28,"./hoist":29,"./util":32,"assert":2,"fs":1,"private":51,"recast":62}],34:[function(require,module,exports){
 (function (__dirname){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -7016,13 +7570,13 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
  * the same directory.
  */
 
-var assert = _dereq_("assert");
-var path = _dereq_("path");
-var fs = _dereq_("fs");
-var through = _dereq_("through");
-var transform = _dereq_("./lib/visit").transform;
-var utils = _dereq_("./lib/util");
-var recast = _dereq_("recast");
+var assert = require("assert");
+var path = require("path");
+var fs = require("fs");
+var through = require("through");
+var transform = require("./lib/visit").transform;
+var utils = require("./lib/util");
+var recast = require("recast");
 var types = recast.types;
 var genOrAsyncFunExp = /\bfunction\s*\*|\basync\b/;
 var blockBindingExp = /\b(let|const)\s+/;
@@ -7048,7 +7602,7 @@ module.exports = exports;
 // To include the runtime globally in the current node process, call
 // require("regenerator").runtime().
 function runtime() {
-  _dereq_("./runtime");
+  require("./runtime");
 }
 exports.runtime = runtime;
 runtime.path = path.join(__dirname, "runtime.js");
@@ -7087,7 +7641,7 @@ function normalizeOptions(options) {
   });
 
   if (!options.esprima) {
-    options.esprima = _dereq_("esprima-fb");
+    options.esprima = require("esprima-fb");
   }
 
   assert.ok(
@@ -7139,7 +7693,7 @@ function varify(source, options) {
 function varifyAst(ast) {
   types.namedTypes.Program.assert(ast);
 
-  var defsResult = _dereq_("defs")(ast, {
+  var defsResult = require("defs")(ast, {
     ast: true,
     disallowUnknownReferences: false,
     disallowDuplicated: false,
@@ -7165,23 +7719,23 @@ exports.compile = compile;
 exports.transform = transform;
 
 }).call(this,"/")
-},{"./lib/util":26,"./lib/visit":27,"./runtime":86,"assert":2,"defs":29,"esprima-fb":44,"fs":1,"path":11,"recast":56,"through":85}],29:[function(_dereq_,module,exports){
+},{"./lib/util":32,"./lib/visit":33,"./runtime":90,"assert":2,"defs":35,"esprima-fb":50,"fs":1,"path":11,"recast":62,"through":89}],35:[function(require,module,exports){
 "use strict";
 
-var assert = _dereq_("assert");
-var is = _dereq_("simple-is");
-var fmt = _dereq_("simple-fmt");
-var stringmap = _dereq_("stringmap");
-var stringset = _dereq_("stringset");
-var alter = _dereq_("alter");
-var traverse = _dereq_("ast-traverse");
-var breakable = _dereq_("breakable");
-var Scope = _dereq_("./scope");
-var error = _dereq_("./error");
+var assert = require("assert");
+var is = require("simple-is");
+var fmt = require("simple-fmt");
+var stringmap = require("stringmap");
+var stringset = require("stringset");
+var alter = require("alter");
+var traverse = require("ast-traverse");
+var breakable = require("breakable");
+var Scope = require("./scope");
+var error = require("./error");
 var getline = error.getline;
-var options = _dereq_("./options");
-var Stats = _dereq_("./stats");
-var jshint_vars = _dereq_("./jshint_globals/vars.js");
+var options = require("./options");
+var Stats = require("./stats");
+var jshint_vars = require("./jshint_globals/vars.js");
 
 
 function isConstLet(kind) {
@@ -7847,11 +8401,11 @@ function run(src, config) {
 
 module.exports = run;
 
-},{"./error":30,"./jshint_globals/vars.js":31,"./options":32,"./scope":33,"./stats":34,"alter":35,"assert":2,"ast-traverse":37,"breakable":38,"simple-fmt":40,"simple-is":41,"stringmap":42,"stringset":43}],30:[function(_dereq_,module,exports){
+},{"./error":36,"./jshint_globals/vars.js":37,"./options":38,"./scope":39,"./stats":40,"alter":41,"assert":2,"ast-traverse":43,"breakable":44,"simple-fmt":46,"simple-is":47,"stringmap":48,"stringset":49}],36:[function(require,module,exports){
 "use strict";
 
-var fmt = _dereq_("simple-fmt");
-var assert = _dereq_("assert");
+var fmt = require("simple-fmt");
+var assert = require("assert");
 
 function error(line, var_args) {
     assert(arguments.length >= 2);
@@ -7877,7 +8431,7 @@ error.reset();
 
 module.exports = error;
 
-},{"assert":2,"simple-fmt":40}],31:[function(_dereq_,module,exports){
+},{"assert":2,"simple-fmt":46}],37:[function(require,module,exports){
 // jshint -W001
 
 "use strict";
@@ -8274,27 +8828,27 @@ exports.yui = {
 };
 
 
-},{}],32:[function(_dereq_,module,exports){
+},{}],38:[function(require,module,exports){
 // default configuration
 
 module.exports = {
     disallowVars: false,
     disallowDuplicated: true,
     disallowUnknownReferences: true,
-    parse: _dereq_("esprima-fb").parse,
+    parse: require("esprima-fb").parse,
 };
 
-},{"esprima-fb":39}],33:[function(_dereq_,module,exports){
+},{"esprima-fb":45}],39:[function(require,module,exports){
 "use strict";
 
-var assert = _dereq_("assert");
-var stringmap = _dereq_("stringmap");
-var stringset = _dereq_("stringset");
-var is = _dereq_("simple-is");
-var fmt = _dereq_("simple-fmt");
-var error = _dereq_("./error");
+var assert = require("assert");
+var stringmap = require("stringmap");
+var stringset = require("stringset");
+var is = require("simple-is");
+var fmt = require("simple-fmt");
+var error = require("./error");
 var getline = error.getline;
-var options = _dereq_("./options");
+var options = require("./options");
 
 function Scope(args) {
     assert(is.someof(args.kind, ["hoist", "block", "catch-block"]));
@@ -8510,10 +9064,10 @@ Scope.prototype.traverse = function(options) {
 
 module.exports = Scope;
 
-},{"./error":30,"./options":32,"assert":2,"simple-fmt":40,"simple-is":41,"stringmap":42,"stringset":43}],34:[function(_dereq_,module,exports){
-var fmt = _dereq_("simple-fmt");
-var is = _dereq_("simple-is");
-var assert = _dereq_("assert");
+},{"./error":36,"./options":38,"assert":2,"simple-fmt":46,"simple-is":47,"stringmap":48,"stringset":49}],40:[function(require,module,exports){
+var fmt = require("simple-fmt");
+var is = require("simple-is");
+var assert = require("assert");
 
 function Stats() {
     this.lets = 0;
@@ -8562,13 +9116,13 @@ Stats.prototype.toString = function() {
 
 module.exports = Stats;
 
-},{"assert":2,"simple-fmt":40,"simple-is":41}],35:[function(_dereq_,module,exports){
+},{"assert":2,"simple-fmt":46,"simple-is":47}],41:[function(require,module,exports){
 // alter.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
 
-var assert = _dereq_("assert");
-var stableSort = _dereq_("stable");
+var assert = require("assert");
+var stableSort = require("stable");
 
 // fragments is a list of {start: index, end: index, str: string to replace with}
 function alter(str, fragments) {
@@ -8609,7 +9163,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = alter;
 }
 
-},{"assert":2,"stable":36}],36:[function(_dereq_,module,exports){
+},{"assert":2,"stable":42}],42:[function(require,module,exports){
 //! stable.js 0.1.5, https://github.com/Two-Screen/stable
 //! © 2014 Angry Bytes and contributors. MIT licensed.
 
@@ -8722,7 +9276,7 @@ else {
 
 })();
 
-},{}],37:[function(_dereq_,module,exports){
+},{}],43:[function(require,module,exports){
 function traverse(root, options) {
     "use strict";
 
@@ -8771,7 +9325,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = traverse;
 }
 
-},{}],38:[function(_dereq_,module,exports){
+},{}],44:[function(require,module,exports){
 // breakable.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013-2014 Olov Lassus <olov.lassus@gmail.com>
@@ -8809,7 +9363,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = breakable;
 }
 
-},{}],39:[function(_dereq_,module,exports){
+},{}],45:[function(require,module,exports){
 /*
   Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
@@ -16427,7 +16981,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],40:[function(_dereq_,module,exports){
+},{}],46:[function(require,module,exports){
 // simple-fmt.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -16462,7 +17016,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = fmt;
 }
 
-},{}],41:[function(_dereq_,module,exports){
+},{}],47:[function(require,module,exports){
 // simple-is.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -16520,7 +17074,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = is;
 }
 
-},{}],42:[function(_dereq_,module,exports){
+},{}],48:[function(require,module,exports){
 // stringmap.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -16766,7 +17320,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = StringMap;
 }
 
-},{}],43:[function(_dereq_,module,exports){
+},{}],49:[function(require,module,exports){
 // stringset.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -16949,7 +17503,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = StringSet;
 }
 
-},{}],44:[function(_dereq_,module,exports){
+},{}],50:[function(require,module,exports){
 /*
   Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
@@ -16980,32 +17534,6 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-/*jslint bitwise:true plusplus:true */
-/*global esprima:true, define:true, exports:true, window: true,
-throwErrorTolerant: true,
-throwError: true, generateStatement: true, peek: true,
-parseAssignmentExpression: true, parseBlock: true,
-parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
-parseDeclareClass: true, parseDeclareFunction: true,
-parseDeclareModule: true, parseDeclareVariable: true,
-parseForStatement: true,
-parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseFunctionSourceElements: true, parseVariableIdentifier: true,
-parseImportSpecifier: true, parseInterface: true,
-parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
-parseSpreadOrAssignmentExpression: true,
-parseStatement: true, parseSourceElement: true, parseConciseBody: true,
-advanceXJSChild: true, isXJSIdentifierStart: true, isXJSIdentifierPart: true,
-scanXJSStringLiteral: true, scanXJSIdentifier: true,
-parseXJSAttributeValue: true, parseXJSChild: true, parseXJSElement: true, parseXJSExpressionContainer: true, parseXJSEmptyExpression: true,
-parseFunctionTypeParam: true,
-parsePrimaryType: true,
-parseTypeAlias: true,
-parseType: true, parseTypeAnnotatableIdentifier: true, parseTypeAnnotation: true,
-parseTypeParameterDeclaration: true,
-parseYieldExpression: true, parseAwaitExpression: true
 */
 
 (function (root, factory) {
@@ -17057,8 +17585,8 @@ parseYieldExpression: true, parseAwaitExpression: true
         StringLiteral: 8,
         RegularExpression: 9,
         Template: 10,
-        XJSIdentifier: 11,
-        XJSText: 12
+        JSXIdentifier: 11,
+        JSXText: 12
     };
 
     TokenName = {};
@@ -17070,8 +17598,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     TokenName[Token.NumericLiteral] = 'Numeric';
     TokenName[Token.Punctuator] = 'Punctuator';
     TokenName[Token.StringLiteral] = 'String';
-    TokenName[Token.XJSIdentifier] = 'XJSIdentifier';
-    TokenName[Token.XJSText] = 'XJSText';
+    TokenName[Token.JSXIdentifier] = 'JSXIdentifier';
+    TokenName[Token.JSXText] = 'JSXText';
     TokenName[Token.RegularExpression] = 'RegularExpression';
 
     // A function following one of those tokens is an expression.
@@ -17170,6 +17698,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         TryStatement: 'TryStatement',
         TypeAlias: 'TypeAlias',
         TypeAnnotation: 'TypeAnnotation',
+        TypeCastExpression: 'TypeCastExpression',
         TypeofTypeAnnotation: 'TypeofTypeAnnotation',
         TypeParameterDeclaration: 'TypeParameterDeclaration',
         TypeParameterInstantiation: 'TypeParameterInstantiation',
@@ -17181,17 +17710,17 @@ parseYieldExpression: true, parseAwaitExpression: true
         VoidTypeAnnotation: 'VoidTypeAnnotation',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement',
-        XJSIdentifier: 'XJSIdentifier',
-        XJSNamespacedName: 'XJSNamespacedName',
-        XJSMemberExpression: 'XJSMemberExpression',
-        XJSEmptyExpression: 'XJSEmptyExpression',
-        XJSExpressionContainer: 'XJSExpressionContainer',
-        XJSElement: 'XJSElement',
-        XJSClosingElement: 'XJSClosingElement',
-        XJSOpeningElement: 'XJSOpeningElement',
-        XJSAttribute: 'XJSAttribute',
-        XJSSpreadAttribute: 'XJSSpreadAttribute',
-        XJSText: 'XJSText',
+        JSXIdentifier: 'JSXIdentifier',
+        JSXNamespacedName: 'JSXNamespacedName',
+        JSXMemberExpression: 'JSXMemberExpression',
+        JSXEmptyExpression: 'JSXEmptyExpression',
+        JSXExpressionContainer: 'JSXExpressionContainer',
+        JSXElement: 'JSXElement',
+        JSXClosingElement: 'JSXClosingElement',
+        JSXOpeningElement: 'JSXOpeningElement',
+        JSXAttribute: 'JSXAttribute',
+        JSXSpreadAttribute: 'JSXSpreadAttribute',
+        JSXText: 'JSXText',
         YieldExpression: 'YieldExpression',
         AwaitExpression: 'AwaitExpression'
     };
@@ -17209,32 +17738,33 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     // Error messages should be identical to V8.
     Messages = {
-        UnexpectedToken:  'Unexpected token %0',
-        UnexpectedNumber:  'Unexpected number',
-        UnexpectedString:  'Unexpected string',
-        UnexpectedIdentifier:  'Unexpected identifier',
-        UnexpectedReserved:  'Unexpected reserved word',
-        UnexpectedTemplate:  'Unexpected quasi %0',
-        UnexpectedEOS:  'Unexpected end of input',
-        NewlineAfterThrow:  'Illegal newline after throw',
+        UnexpectedToken: 'Unexpected token %0',
+        UnexpectedNumber: 'Unexpected number',
+        UnexpectedString: 'Unexpected string',
+        UnexpectedIdentifier: 'Unexpected identifier',
+        UnexpectedReserved: 'Unexpected reserved word',
+        UnexpectedTemplate: 'Unexpected quasi %0',
+        UnexpectedEOS: 'Unexpected end of input',
+        NewlineAfterThrow: 'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
-        UnterminatedRegExp:  'Invalid regular expression: missing /',
-        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
-        InvalidLHSInFormalsList:  'Invalid left-hand side in formals list',
-        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
+        UnterminatedRegExp: 'Invalid regular expression: missing /',
+        InvalidLHSInAssignment: 'Invalid left-hand side in assignment',
+        InvalidLHSInFormalsList: 'Invalid left-hand side in formals list',
+        InvalidLHSInForIn: 'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
-        NoCatchOrFinally:  'Missing catch or finally after try',
+        NoCatchOrFinally: 'Missing catch or finally after try',
         UnknownLabel: 'Undefined label \'%0\'',
         Redeclaration: '%0 \'%1\' has already been declared',
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalDuplicateClassProperty: 'Illegal duplicate property in class definition',
+        IllegalClassConstructorProperty: 'Illegal constructor property in class definition',
         IllegalReturn: 'Illegal return statement',
         IllegalSpread: 'Illegal spread element',
-        StrictModeWith:  'Strict mode code may not include a with statement',
-        StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
-        StrictVarName:  'Variable name may not be eval or arguments in strict mode',
-        StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
+        StrictModeWith: 'Strict mode code may not include a with statement',
+        StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
+        StrictVarName: 'Variable name may not be eval or arguments in strict mode',
+        StrictParamName: 'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
         DefaultRestParameter: 'Rest parameter can not have a default value',
@@ -17242,28 +17772,28 @@ parseYieldExpression: true, parseAwaitExpression: true
         PropertyAfterSpreadProperty: 'A rest property must be the final property of an object literal',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
-        StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
-        StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
-        StrictDelete:  'Delete of an unqualified identifier in strict mode.',
-        StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
-        StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
-        StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictReservedWord:  'Use of future reserved word in strict mode',
+        StrictFunctionName: 'Function name may not be eval or arguments in strict mode',
+        StrictOctalLiteral: 'Octal literals are not allowed in strict mode.',
+        StrictDelete: 'Delete of an unqualified identifier in strict mode.',
+        StrictDuplicateProperty: 'Duplicate data property in object literal not allowed in strict mode',
+        AccessorDataProperty: 'Object literal may not have data and accessor property with the same name',
+        AccessorGetSet: 'Object literal may not have multiple get/set accessors with the same name',
+        StrictLHSAssignment: 'Assignment to eval or arguments is not allowed in strict mode',
+        StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictReservedWord: 'Use of future reserved word in strict mode',
         MissingFromClause: 'Missing from clause',
         NoAsAfterImportNamespace: 'Missing as after import *',
         InvalidModuleSpecifier: 'Invalid module specifier',
         IllegalImportDeclaration: 'Illegal import declaration',
         IllegalExportDeclaration: 'Illegal export declaration',
-        NoUnintializedConst: 'Const must be initialized',
+        NoUninitializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
-        ComprehensionError:  'Comprehension Error',
-        EachNotAllowed:  'Each is not supported',
-        InvalidXJSAttributeValue: 'XJS value should be either an expression or a quoted XJS text',
-        ExpectedXJSClosingTag: 'Expected corresponding XJS closing tag for %0',
-        AdjacentXJSElements: 'Adjacent XJS elements must be wrapped in an enclosing tag',
+        ComprehensionError: 'Comprehension Error',
+        EachNotAllowed: 'Each is not supported',
+        InvalidJSXAttributeValue: 'JSX value should be either an expression or a quoted JSX text',
+        ExpectedJSXClosingTag: 'Expected corresponding JSX closing tag for %0',
+        AdjacentJSXElements: 'Adjacent JSX elements must be wrapped in an enclosing tag',
         ConfusedAboutFunctionType: 'Unexpected token =>. It looks like ' +
             'you are trying to write a function type, but you ended up ' +
             'writing a grouped type followed by an =>, which is a syntax ' +
@@ -17311,7 +17841,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         return Object.prototype.hasOwnProperty.call(this.$data, key);
     };
 
-    StringMap.prototype['delete'] = function (key) {
+    StringMap.prototype.delete = function (key) {
         key = '$' + key;
         return delete this.$data[key];
     };
@@ -17443,69 +17973,134 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     // 7.4 Comments
 
-    function skipComment() {
-        var ch, blockComment, lineComment;
+    function addComment(type, value, start, end, loc) {
+        var comment;
+        assert(typeof start === 'number', 'Comment must have valid position');
 
-        blockComment = false;
-        lineComment = false;
+        // Because the way the actual token is scanned, often the comments
+        // (if any) are skipped twice during the lexical analysis.
+        // Thus, we need to skip adding a comment if the comment array already
+        // handled it.
+        if (state.lastCommentStart >= start) {
+            return;
+        }
+        state.lastCommentStart = start;
+
+        comment = {
+            type: type,
+            value: value
+        };
+        if (extra.range) {
+            comment.range = [start, end];
+        }
+        if (extra.loc) {
+            comment.loc = loc;
+        }
+        extra.comments.push(comment);
+        if (extra.attachComment) {
+            extra.leadingComments.push(comment);
+            extra.trailingComments.push(comment);
+        }
+    }
+
+    function skipSingleLineComment() {
+        var start, loc, ch, comment;
+
+        start = index - 2;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart - 2
+            }
+        };
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            ++index;
+            if (isLineTerminator(ch)) {
+                if (extra.comments) {
+                    comment = source.slice(start + 2, index - 1);
+                    loc.end = {
+                        line: lineNumber,
+                        column: index - lineStart - 1
+                    };
+                    addComment('Line', comment, start, index - 1, loc);
+                }
+                if (ch === 13 && source.charCodeAt(index) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                lineStart = index;
+                return;
+            }
+        }
+
+        if (extra.comments) {
+            comment = source.slice(start + 2, index);
+            loc.end = {
+                line: lineNumber,
+                column: index - lineStart
+            };
+            addComment('Line', comment, start, index, loc);
+        }
+    }
+
+    function skipMultiLineComment() {
+        var start, loc, ch, comment;
+
+        if (extra.comments) {
+            start = index - 2;
+            loc = {
+                start: {
+                    line: lineNumber,
+                    column: index - lineStart - 2
+                }
+            };
+        }
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                ++index;
+                lineStart = index;
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else if (ch === 42) {
+                // Block comment ends with '*/' (char #42, char #47).
+                if (source.charCodeAt(index + 1) === 47) {
+                    ++index;
+                    ++index;
+                    if (extra.comments) {
+                        comment = source.slice(start + 2, index - 2);
+                        loc.end = {
+                            line: lineNumber,
+                            column: index - lineStart
+                        };
+                        addComment('Block', comment, start, index, loc);
+                    }
+                    return;
+                }
+                ++index;
+            } else {
+                ++index;
+            }
+        }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+    }
+
+    function skipComment() {
+        var ch;
 
         while (index < length) {
             ch = source.charCodeAt(index);
 
-            if (lineComment) {
-                ++index;
-                if (isLineTerminator(ch)) {
-                    lineComment = false;
-                    if (ch === 13 && source.charCodeAt(index) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch)) {
-                    if (ch === 13) {
-                        ++index;
-                    }
-                    if (ch !== 13 || source.charCodeAt(index) === 10) {
-                        ++lineNumber;
-                        ++index;
-                        lineStart = index;
-                        if (index >= length) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                } else {
-                    ch = source.charCodeAt(index++);
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    // Block comment ends with '*/' (char #42, char #47).
-                    if (ch === 42) {
-                        ch = source.charCodeAt(index);
-                        if (ch === 47) {
-                            ++index;
-                            blockComment = false;
-                        }
-                    }
-                }
-            } else if (ch === 47) {
-                ch = source.charCodeAt(index + 1);
-                // Line comment starts with '//' (char #47, char #47).
-                if (ch === 47) {
-                    index += 2;
-                    lineComment = true;
-                } else if (ch === 42) {
-                    // Block comment starts with '/*' (char #47, char #42).
-                    index += 2;
-                    blockComment = true;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch)) {
+            if (isWhiteSpace(ch)) {
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
@@ -17514,6 +18109,19 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
                 ++lineNumber;
                 lineStart = index;
+            } else if (ch === 47) { // 47 is '/'
+                ch = source.charCodeAt(index + 1);
+                if (ch === 47) {
+                    ++index;
+                    ++index;
+                    skipSingleLineComment();
+                } else if (ch === 42) {  // 42 is '*'
+                    ++index;
+                    ++index;
+                    skipMultiLineComment();
+                } else {
+                    break;
+                }
             } else {
                 break;
             }
@@ -17675,6 +18283,23 @@ parseYieldExpression: true, parseAwaitExpression: true
             ch2,
             ch3,
             ch4;
+
+        if (state.inJSXTag || state.inJSXChild) {
+            // Don't need to check for '{' and '}' as it's already handled
+            // correctly by default.
+            switch (code) {
+            case 60:  // <
+            case 62:  // >
+                ++index;
+                return {
+                    type: Token.Punctuator,
+                    value: String.fromCharCode(code),
+                    lineNumber: lineNumber,
+                    lineStart: lineStart,
+                    range: [start, index]
+                };
+            }
+        }
 
         switch (code) {
         // Check for most common single-character punctuators.
@@ -17899,6 +18524,41 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
+    function scanBinaryLiteral(start) {
+        var ch, number;
+
+        number = '';
+
+        while (index < length) {
+            ch = source[index];
+            if (ch !== '0' && ch !== '1') {
+                break;
+            }
+            number += source[index++];
+        }
+
+        if (number.length === 0) {
+            // only 0b or 0B
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        if (index < length) {
+            ch = source.charCodeAt(index);
+            /* istanbul ignore else */
+            if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            }
+        }
+
+        return {
+            type: Token.NumericLiteral,
+            value: parseInt(number, 2),
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
     function scanOctalLiteral(prefix, start) {
         var number, octal;
 
@@ -17938,7 +18598,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function scanNumericLiteral() {
-        var number, start, ch, octal;
+        var number, start, ch;
 
         ch = source[index];
         assert(isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
@@ -17961,35 +18621,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
                 if (ch === 'b' || ch === 'B') {
                     ++index;
-                    number = '';
-
-                    while (index < length) {
-                        ch = source[index];
-                        if (ch !== '0' && ch !== '1') {
-                            break;
-                        }
-                        number += source[index++];
-                    }
-
-                    if (number.length === 0) {
-                        // only 0b or 0B
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-
-                    if (index < length) {
-                        ch = source.charCodeAt(index);
-                        /* istanbul ignore else */
-                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                    return {
-                        type: Token.NumericLiteral,
-                        value: parseInt(number, 2),
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        range: [start, index]
-                    };
+                    return scanBinaryLiteral(start);
                 }
                 if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
                     return scanOctalLiteral(ch, start);
@@ -18130,7 +18762,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     lineStart = index;
@@ -18247,14 +18879,14 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     lineStart = index;
                 }
             } else if (isLineTerminator(ch.charCodeAt(0))) {
                 ++lineNumber;
-                if (ch ===  '\r' && source[index] === '\n') {
+                if (ch === '\r' && source[index] === '\n') {
                     ++index;
                 }
                 lineStart = index;
@@ -18301,86 +18933,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         return template;
     }
 
-    function scanRegExp() {
-        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false, tmp;
+    function testRegExp(pattern, flags) {
+        var tmp = pattern,
+            value;
 
-        lookahead = null;
-        skipComment();
-
-        start = index;
-        ch = source[index];
-        assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = source[index++];
-
-        while (index < length) {
-            ch = source[index++];
-            str += ch;
-            if (classMarker) {
-                if (ch === ']') {
-                    classMarker = false;
-                }
-            } else {
-                if (ch === '\\') {
-                    ch = source[index++];
-                    // ECMA-262 7.8.5
-                    if (isLineTerminator(ch.charCodeAt(0))) {
-                        throwError({}, Messages.UnterminatedRegExp);
-                    }
-                    str += ch;
-                } else if (ch === '/') {
-                    terminated = true;
-                    break;
-                } else if (ch === '[') {
-                    classMarker = true;
-                } else if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
-                }
-            }
-        }
-
-        if (!terminated) {
-            throwError({}, Messages.UnterminatedRegExp);
-        }
-
-        // Exclude leading and trailing slash.
-        pattern = str.substr(1, str.length - 2);
-
-        flags = '';
-        while (index < length) {
-            ch = source[index];
-            if (!isIdentifierPart(ch.charCodeAt(0))) {
-                break;
-            }
-
-            ++index;
-            if (ch === '\\' && index < length) {
-                ch = source[index];
-                if (ch === 'u') {
-                    ++index;
-                    restore = index;
-                    ch = scanHexEscape('u');
-                    /* istanbul ignore else */
-                    if (ch) {
-                        flags += ch;
-                        for (str += '\\u'; restore < index; ++restore) {
-                            str += source[restore];
-                        }
-                    } else {
-                        index = restore;
-                        flags += 'u';
-                        str += '\\u';
-                    }
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
-                } else {
-                    str += '\\';
-                }
-            } else {
-                flags += ch;
-                str += ch;
-            }
-        }
-
-        tmp = pattern;
         if (flags.indexOf('u') >= 0) {
             // Replace each astral symbol and every Unicode code point
             // escape sequence with a single ASCII symbol to avoid throwing on
@@ -18411,30 +18967,135 @@ parseYieldExpression: true, parseAwaitExpression: true
         // `null` in case the current environment doesn't support the flags it
         // uses.
         try {
-            value = new RegExp(pattern, flags);
+            return new RegExp(pattern, flags);
         } catch (exception) {
-            value = null;
+            return null;
         }
+    }
+
+    function scanRegExpBody() {
+        var ch, str, classMarker, terminated, body;
+
+        ch = source[index];
+        assert(ch === '/', 'Regular expression literal must start with a slash');
+        str = source[index++];
+
+        classMarker = false;
+        terminated = false;
+        while (index < length) {
+            ch = source[index++];
+            str += ch;
+            if (ch === '\\') {
+                ch = source[index++];
+                // ECMA-262 7.8.5
+                if (isLineTerminator(ch.charCodeAt(0))) {
+                    throwError({}, Messages.UnterminatedRegExp);
+                }
+                str += ch;
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                throwError({}, Messages.UnterminatedRegExp);
+            } else if (classMarker) {
+                if (ch === ']') {
+                    classMarker = false;
+                }
+            } else {
+                if (ch === '/') {
+                    terminated = true;
+                    break;
+                } else if (ch === '[') {
+                    classMarker = true;
+                }
+            }
+        }
+
+        if (!terminated) {
+            throwError({}, Messages.UnterminatedRegExp);
+        }
+
+        // Exclude leading and trailing slash.
+        body = str.substr(1, str.length - 2);
+        return {
+            value: body,
+            literal: str
+        };
+    }
+
+    function scanRegExpFlags() {
+        var ch, str, flags, restore;
+
+        str = '';
+        flags = '';
+        while (index < length) {
+            ch = source[index];
+            if (!isIdentifierPart(ch.charCodeAt(0))) {
+                break;
+            }
+
+            ++index;
+            if (ch === '\\' && index < length) {
+                ch = source[index];
+                if (ch === 'u') {
+                    ++index;
+                    restore = index;
+                    ch = scanHexEscape('u');
+                    if (ch) {
+                        flags += ch;
+                        for (str += '\\u'; restore < index; ++restore) {
+                            str += source[restore];
+                        }
+                    } else {
+                        index = restore;
+                        flags += 'u';
+                        str += '\\u';
+                    }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                } else {
+                    str += '\\';
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else {
+                flags += ch;
+                str += ch;
+            }
+        }
+
+        return {
+            value: flags,
+            literal: str
+        };
+    }
+
+    function scanRegExp() {
+        var start, body, flags, value;
+
+        lookahead = null;
+        skipComment();
+        start = index;
+
+        body = scanRegExpBody();
+        flags = scanRegExpFlags();
+        value = testRegExp(body.value, flags.value);
 
         if (extra.tokenize) {
             return {
                 type: Token.RegularExpression,
                 value: value,
                 regex: {
-                    pattern: pattern,
-                    flags: flags
+                    pattern: body.value,
+                    flags: flags.value
                 },
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
             };
         }
+
         return {
-            literal: str,
+            literal: body.literal + flags.literal,
             value: value,
             regex: {
-                pattern: pattern,
-                flags: flags
+                pattern: body.value,
+                flags: flags.value
             },
             range: [start, index]
         };
@@ -18501,7 +19162,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
             return scanRegExp();
         }
-        if (prevToken.type === 'Keyword') {
+        if (prevToken.type === 'Keyword' && prevToken.value !== 'this') {
             return scanRegExp();
         }
         return scanPunctuator();
@@ -18510,7 +19171,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     function advance() {
         var ch;
 
-        if (!state.inXJSChild) {
+        if (!state.inJSXChild) {
             skipComment();
         }
 
@@ -18523,8 +19184,8 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         }
 
-        if (state.inXJSChild) {
-            return advanceXJSChild();
+        if (state.inJSXChild) {
+            return advanceJSXChild();
         }
 
         ch = source.charCodeAt(index);
@@ -18536,14 +19197,14 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         // String literal starts with single quote (#39) or double quote (#34).
         if (ch === 39 || ch === 34) {
-            if (state.inXJSTag) {
-                return scanXJSStringLiteral();
+            if (state.inJSXTag) {
+                return scanJSXStringLiteral();
             }
             return scanStringLiteral();
         }
 
-        if (state.inXJSTag && isXJSIdentifierStart(ch)) {
-            return scanXJSIdentifier();
+        if (state.inJSXTag && isJSXIdentifierStart(ch)) {
+            return scanJSXIdentifier();
         }
 
         if (ch === 96) {
@@ -18931,6 +19592,14 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
+        createTypeCast: function (expression, typeAnnotation) {
+            return {
+                type: Syntax.TypeCastExpression,
+                expression: expression,
+                typeAnnotation: typeAnnotation
+            };
+        },
+
         createFunctionTypeAnnotation: function (params, returnType, rest, typeParameters) {
             return {
                 type: Syntax.FunctionTypeAnnotation,
@@ -19146,78 +19815,78 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createXJSAttribute: function (name, value) {
+        createJSXAttribute: function (name, value) {
             return {
-                type: Syntax.XJSAttribute,
+                type: Syntax.JSXAttribute,
                 name: name,
                 value: value || null
             };
         },
 
-        createXJSSpreadAttribute: function (argument) {
+        createJSXSpreadAttribute: function (argument) {
             return {
-                type: Syntax.XJSSpreadAttribute,
+                type: Syntax.JSXSpreadAttribute,
                 argument: argument
             };
         },
 
-        createXJSIdentifier: function (name) {
+        createJSXIdentifier: function (name) {
             return {
-                type: Syntax.XJSIdentifier,
+                type: Syntax.JSXIdentifier,
                 name: name
             };
         },
 
-        createXJSNamespacedName: function (namespace, name) {
+        createJSXNamespacedName: function (namespace, name) {
             return {
-                type: Syntax.XJSNamespacedName,
+                type: Syntax.JSXNamespacedName,
                 namespace: namespace,
                 name: name
             };
         },
 
-        createXJSMemberExpression: function (object, property) {
+        createJSXMemberExpression: function (object, property) {
             return {
-                type: Syntax.XJSMemberExpression,
+                type: Syntax.JSXMemberExpression,
                 object: object,
                 property: property
             };
         },
 
-        createXJSElement: function (openingElement, closingElement, children) {
+        createJSXElement: function (openingElement, closingElement, children) {
             return {
-                type: Syntax.XJSElement,
+                type: Syntax.JSXElement,
                 openingElement: openingElement,
                 closingElement: closingElement,
                 children: children
             };
         },
 
-        createXJSEmptyExpression: function () {
+        createJSXEmptyExpression: function () {
             return {
-                type: Syntax.XJSEmptyExpression
+                type: Syntax.JSXEmptyExpression
             };
         },
 
-        createXJSExpressionContainer: function (expression) {
+        createJSXExpressionContainer: function (expression) {
             return {
-                type: Syntax.XJSExpressionContainer,
+                type: Syntax.JSXExpressionContainer,
                 expression: expression
             };
         },
 
-        createXJSOpeningElement: function (name, attributes, selfClosing) {
+        createJSXOpeningElement: function (name, attributes, selfClosing) {
             return {
-                type: Syntax.XJSOpeningElement,
+                type: Syntax.JSXOpeningElement,
                 name: name,
                 selfClosing: selfClosing,
                 attributes: attributes
             };
         },
 
-        createXJSClosingElement: function (name) {
+        createJSXClosingElement: function (name) {
             return {
-                type: Syntax.XJSClosingElement,
+                type: Syntax.JSXClosingElement,
                 name: name
             };
         },
@@ -19558,13 +20227,13 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createExportDeclaration: function (isDefault, declaration, specifiers, source) {
+        createExportDeclaration: function (isDefault, declaration, specifiers, src) {
             return {
                 type: Syntax.ExportDeclaration,
                 'default': !!isDefault,
                 declaration: declaration,
                 specifiers: specifiers,
-                source: source
+                source: src
             };
         },
 
@@ -19576,19 +20245,20 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createImportDeclaration: function (specifiers, source) {
+        createImportDeclaration: function (specifiers, src, isType) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
-                source: source
+                source: src,
+                isType: isType
             };
         },
 
-        createYieldExpression: function (argument, delegate) {
+        createYieldExpression: function (argument, dlg) {
             return {
                 type: Syntax.YieldExpression,
                 argument: argument,
-                delegate: delegate
+                delegate: dlg
             };
         },
 
@@ -19634,9 +20304,9 @@ parseYieldExpression: true, parseAwaitExpression: true
             args = Array.prototype.slice.call(arguments, 2),
             msg = messageFormat.replace(
                 /%(\d)/g,
-                function (whole, index) {
-                    assert(index < args.length, 'Message reference must be in range');
-                    return args[index];
+                function (whole, idx) {
+                    assert(idx < args.length, 'Message reference must be in range');
+                    return args[idx];
                 }
             );
 
@@ -19680,7 +20350,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             throwError(token, Messages.UnexpectedNumber);
         }
 
-        if (token.type === Token.StringLiteral || token.type === Token.XJSText) {
+        if (token.type === Token.StringLiteral || token.type === Token.JSXText) {
             throwError(token, Messages.UnexpectedString);
         }
 
@@ -19843,7 +20513,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true, body,
+        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true,
             marker = markerCreate();
 
         expect('[');
@@ -19999,7 +20669,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param, expr, computed,
+        var token, key, id, param, computed,
             marker = markerCreate(), returnType, typeParameters;
 
         token = lookahead;
@@ -20289,13 +20959,23 @@ parseYieldExpression: true, parseAwaitExpression: true
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
-        var expr;
+        var expr, marker, typeAnnotation;
 
         expect('(');
 
         ++state.parenthesizedCount;
 
+        marker = markerCreate();
+
         expr = parseExpression();
+
+        if (match(':')) {
+            typeAnnotation = parseTypeAnnotation();
+            expr = markerApply(marker, delegate.createTypeCast(
+                expr,
+                typeAnnotation
+            ));
+        }
 
         expect(')');
 
@@ -20395,7 +21075,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
 
         if (match('<')) {
-            return parseXJSElement();
+            return parseJSXElement();
         }
 
         throwUnexpected(lex());
@@ -20938,7 +21618,8 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseAssignmentExpression() {
         var marker, expr, token, params, oldParenthesizedCount,
-            backtrackToken = lookahead, possiblyAsync = false;
+            startsWithParen = false, backtrackToken = lookahead,
+            possiblyAsync = false;
 
         if (matchYield()) {
             return parseYieldExpression();
@@ -20975,6 +21656,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 params.async = possiblyAsync;
                 return parseArrowFunctionExpression(params, marker);
             }
+            startsWithParen = true;
         }
 
         token = lookahead;
@@ -20993,6 +21675,13 @@ parseYieldExpression: true, parseAwaitExpression: true
                 (state.parenthesizedCount === oldParenthesizedCount ||
                 state.parenthesizedCount === (oldParenthesizedCount + 1))) {
             if (expr.type === Syntax.Identifier) {
+                params = reinterpretAsCoverFormalsList([ expr ]);
+            } else if (expr.type === Syntax.AssignmentExpression ||
+                    expr.type === Syntax.ArrayExpression ||
+                    expr.type === Syntax.ObjectExpression) {
+                if (!startsWithParen) {
+                    throwUnexpected(lex());
+                }
                 params = reinterpretAsCoverFormalsList([ expr ]);
             } else if (expr.type === Syntax.SequenceExpression) {
                 params = reinterpretAsCoverFormalsList(expr.expressions);
@@ -21034,9 +21723,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var marker, expr, expressions, sequence, coverFormalsList, spreadFound, oldParenthesizedCount;
-
-        oldParenthesizedCount = state.parenthesizedCount;
+        var marker, expr, expressions, sequence, spreadFound;
 
         marker = markerCreate();
         expr = parseAssignmentExpression();
@@ -21062,18 +21749,6 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
 
             sequence = markerApply(marker, delegate.createSequenceExpression(expressions));
-        }
-
-        if (match('=>')) {
-            // Do not allow nested parentheses on the LHS of the =>.
-            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                expr = expr.type === Syntax.SequenceExpression ? expr.expressions : expressions;
-                coverFormalsList = reinterpretAsCoverFormalsList(expr);
-                if (coverFormalsList) {
-                    return parseArrowFunctionExpression(coverFormalsList, marker);
-                }
-            }
-            throwUnexpected(lex());
         }
 
         if (spreadFound && lookahead2().value !== '=>') {
@@ -21226,14 +21901,19 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseObjectType(allowStatic) {
         var callProperties = [], indexers = [], marker, optional = false,
-            properties = [], property, propertyKey, propertyTypeAnnotation,
-            token, isStatic;
+            properties = [], propertyKey, propertyTypeAnnotation,
+            token, isStatic, matchStatic;
 
         expect('{');
 
         while (!match('}')) {
             marker = markerCreate();
-            if (allowStatic && matchContextualKeyword('static')) {
+            matchStatic =
+                   strict
+                   ? matchKeyword('static')
+                   : matchContextualKeyword('static');
+
+            if (allowStatic && matchStatic) {
                 token = lex();
                 isStatic = true;
             }
@@ -21285,9 +21965,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseGenericType() {
-        var marker = markerCreate(), returnType = null,
-            typeParameters = null, typeIdentifier,
-            typeIdentifierMarker = markerCreate;
+        var marker = markerCreate(),
+            typeParameters = null, typeIdentifier;
 
         typeIdentifier = parseVariableIdentifier();
 
@@ -21377,7 +22056,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // primary types are kind of like primary expressions...they're the
     // primitives with which other types are constructed.
     function parsePrimaryType() {
-        var typeIdentifier = null, params = null, returnType = null,
+        var params = null, returnType = null,
             marker = markerCreate(), rest = null, tmp,
             typeParameters, token, type, isGroupedType = false;
 
@@ -21623,7 +22302,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         if (kind === 'const') {
             if (!match('=')) {
-                throwError({}, Messages.NoUnintializedConst);
+                throwError({}, Messages.NoUninitializedConst);
             }
             expect('=');
             init = parseAssignmentExpression();
@@ -21715,7 +22394,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseExportDeclaration() {
-        var backtrackToken, id, previousAllowKeyword, declaration = null,
+        var declaration = null,
+            possibleIdentifierToken, sourceElement,
             isExportFromIdentifier,
             src = null, specifiers = [],
             marker = markerCreate();
@@ -21727,20 +22407,17 @@ parseYieldExpression: true, parseAwaitExpression: true
             // export default ...
             lex();
             if (matchKeyword('function') || matchKeyword('class')) {
-                backtrackToken = lookahead;
-                lex();
-                if (isIdentifierName(lookahead)) {
+                possibleIdentifierToken = lookahead2();
+                if (isIdentifierName(possibleIdentifierToken)) {
                     // covers:
                     // export default function foo () {}
                     // export default class foo {}
-                    id = parseNonComputedProperty();
-                    rewind(backtrackToken);
-                    return markerApply(marker, delegate.createExportDeclaration(true, parseSourceElement(), [id], null));
+                    sourceElement = parseSourceElement();
+                    return markerApply(marker, delegate.createExportDeclaration(true, sourceElement, [sourceElement.id], null));
                 }
                 // covers:
                 // export default function () {}
                 // export default class {}
-                rewind(backtrackToken);
                 switch (lookahead.value) {
                 case 'class':
                     return markerApply(marker, delegate.createExportDeclaration(true, parseClassExpression(), [], null));
@@ -21768,10 +22445,11 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
 
         // non-default export
-        if (lookahead.type === Token.Keyword) {
+        if (lookahead.type === Token.Keyword || matchContextualKeyword('type')) {
             // covers:
             // export var f = 1;
             switch (lookahead.value) {
+            case 'type':
             case 'let':
             case 'const':
             case 'var':
@@ -21877,9 +22555,20 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseImportDeclaration() {
-        var specifiers, src, marker = markerCreate();
+        var specifiers, src, marker = markerCreate(), isType = false, token2;
 
         expectKeyword('import');
+
+        if (matchContextualKeyword('type')) {
+            token2 = lookahead2();
+            if ((token2.type === Token.Identifier && token2.value !== 'from') ||
+                    (token2.type === Token.Punctuator &&
+                        (token2.value === '{' || token2.value === '*'))) {
+                isType = true;
+                lex();
+            }
+        }
+
         specifiers = [];
 
         if (lookahead.type === Token.StringLiteral) {
@@ -21887,7 +22576,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             // import "foo";
             src = parseModuleSpecifier();
             consumeSemicolon();
-            return markerApply(marker, delegate.createImportDeclaration(specifiers, src));
+            return markerApply(marker, delegate.createImportDeclaration(specifiers, src, isType));
         }
 
         if (!matchKeyword('default') && isIdentifierName(lookahead)) {
@@ -21919,7 +22608,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         src = parseModuleSpecifier();
         consumeSemicolon();
 
-        return markerApply(marker, delegate.createImportDeclaration(specifiers, src));
+        return markerApply(marker, delegate.createImportDeclaration(specifiers, src, isType));
     }
 
     // 12.3 Empty Statement
@@ -22486,7 +23175,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
             state.labelSet.set(expr.name, true);
             labeledBody = parseStatement();
-            state.labelSet['delete'](expr.name);
+            state.labelSet.delete(expr.name);
             return markerApply(marker, delegate.createLabeledStatement(expr, labeledBody));
         }
 
@@ -22887,54 +23576,24 @@ parseYieldExpression: true, parseAwaitExpression: true
         return markerApply(marker, delegate.createAwaitExpression(expr));
     }
 
-    // 14 Classes
+    // 14 Functions and classes
 
-    function validateDuplicateProp(propMap, key, accessor) {
-        var propInfo, reversed, name, isValidDuplicateProp;
+    // 14.1 Functions is defined above (13 in ES5)
+    // 14.2 Arrow Functions Definitions is defined in (7.3 assignments)
 
-        name = getFieldName(key);
-
-        if (propMap.has(name)) {
-            propInfo = propMap.get(name);
-            if (accessor === 'data') {
-                isValidDuplicateProp = false;
-            } else {
-                if (accessor === 'get') {
-                    reversed = 'set';
-                } else {
-                    reversed = 'get';
-                }
-
-                isValidDuplicateProp =
-                    // There isn't already a specified accessor for this prop
-                    propInfo[accessor] === undefined
-                    // There isn't already a data prop by this name
-                    && propInfo.data === undefined
-                    // The only existing prop by this name is a reversed accessor
-                    && propInfo[reversed] !== undefined;
-            }
-            if (!isValidDuplicateProp) {
-                throwError(key, Messages.IllegalDuplicateClassProperty);
-            }
-        } else {
-            propInfo = {
-                get: undefined,
-                set: undefined,
-                data: undefined
-            };
-            propMap.set(name, propInfo);
-        }
-        propInfo[accessor] = true;
+    // 14.3 Method Definitions
+    // 14.3.7
+    function specialMethod(methodDefinition) {
+        return methodDefinition.kind === 'get' ||
+               methodDefinition.kind === 'set' ||
+               methodDefinition.value.generator;
     }
 
-    function parseMethodDefinition(existingPropNames, key, isStatic, generator, computed) {
-        var token, param, propType, isValidDuplicateProp = false,
-            isAsync, typeParameters, tokenValue, returnType,
-            annotationMarker, propMap;
+    function parseMethodDefinition(key, isStatic, generator, computed) {
+        var token, param, propType,
+            isAsync, typeParameters, tokenValue, returnType;
 
         propType = isStatic ? ClassPropertyType.static : ClassPropertyType.prototype;
-
-        propMap = existingPropNames[propType];
 
         if (generator) {
             return delegate.createMethodDefinition(
@@ -22951,12 +23610,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         if (tokenValue === 'get' && !match('(')) {
             key = parseObjectPropertyKey();
 
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a setter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'get');
-            }
-
             expect('(');
             expect(')');
             if (match(':')) {
@@ -22972,12 +23625,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
         if (tokenValue === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
-
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a getter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'set');
-            }
 
             expect('(');
             token = lookahead;
@@ -23009,12 +23656,6 @@ parseYieldExpression: true, parseAwaitExpression: true
             key = parseObjectPropertyKey();
         }
 
-        // It is a syntax error if any other properties have the same name as a
-        // non-getter, non-setter method
-        if (!computed) {
-            validateDuplicateProp(propMap, key, 'data');
-        }
-
         return delegate.createMethodDefinition(
             propType,
             '',
@@ -23028,7 +23669,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         );
     }
 
-    function parseClassProperty(existingPropNames, key, computed, isStatic) {
+    function parseClassProperty(key, computed, isStatic) {
         var typeAnnotation;
 
         typeAnnotation = parseTypeAnnotation();
@@ -23042,12 +23683,12 @@ parseYieldExpression: true, parseAwaitExpression: true
         );
     }
 
-    function parseClassElement(existingProps) {
+    function parseClassElement() {
         var computed = false, generator = false, key, marker = markerCreate(),
             isStatic = false, possiblyOpenBracketToken;
         if (match(';')) {
             lex();
-            return;
+            return undefined;
         }
 
         if (lookahead.value === 'static') {
@@ -23073,11 +23714,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         key = parseObjectPropertyKey();
 
         if (!generator && lookahead.value === ':') {
-            return markerApply(marker, parseClassProperty(existingProps, key, computed, isStatic));
+            return markerApply(marker, parseClassProperty(key, computed, isStatic));
         }
 
         return markerApply(marker, parseMethodDefinition(
-            existingProps,
             key,
             isStatic,
             generator,
@@ -23086,7 +23726,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseClassBody() {
-        var classElement, classElements = [], existingProps = {}, marker = markerCreate();
+        var classElement, classElements = [], existingProps = {},
+            marker = markerCreate(), propName, propType;
 
         existingProps[ClassPropertyType.static] = new StringMap();
         existingProps[ClassPropertyType.prototype] = new StringMap();
@@ -23101,6 +23742,25 @@ parseYieldExpression: true, parseAwaitExpression: true
 
             if (typeof classElement !== 'undefined') {
                 classElements.push(classElement);
+
+                propName = !classElement.computed && getFieldName(classElement.key);
+                if (propName !== false) {
+                    propType = classElement.static ?
+                                ClassPropertyType.static :
+                                ClassPropertyType.prototype;
+
+                    if (classElement.type === Syntax.MethodDefinition) {
+                        if (propName === 'constructor' && !classElement.static) {
+                            if (specialMethod(classElement)) {
+                                throwError(classElement, Messages.IllegalClassConstructorProperty);
+                            }
+                            if (existingProps[ClassPropertyType.prototype].has('constructor')) {
+                                throwError(classElement.key, Messages.IllegalDuplicateClassProperty);
+                            }
+                        }
+                        existingProps[propType].set(propName, true);
+                    }
+                }
             }
         }
 
@@ -23111,7 +23771,11 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseClassImplements() {
         var id, implemented = [], marker, typeParameters;
-        expectContextualKeyword('implements');
+        if (strict) {
+            expectKeyword('implements');
+        } else {
+            expectContextualKeyword('implements');
+        }
         while (index < length) {
             marker = markerCreate();
             id = parseVariableIdentifier();
@@ -23134,11 +23798,17 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseClassExpression() {
         var id, implemented, previousYieldAllowed, superClass = null,
-            superTypeParameters, marker = markerCreate(), typeParameters;
+            superTypeParameters, marker = markerCreate(), typeParameters,
+            matchImplements;
 
         expectKeyword('class');
 
-        if (!matchKeyword('extends') && !matchContextualKeyword('implements') && !match('{')) {
+        matchImplements =
+                strict
+                ? matchKeyword('implements')
+                : matchContextualKeyword('implements');
+
+        if (!matchKeyword('extends') && !matchImplements && !match('{')) {
             id = parseVariableIdentifier();
         }
 
@@ -23157,7 +23827,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        if (matchContextualKeyword('implements')) {
+        if (strict ? matchKeyword('implements') : matchContextualKeyword('implements')) {
             implemented = parseClassImplements();
         }
 
@@ -23194,7 +23864,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        if (matchContextualKeyword('implements')) {
+        if (strict ? matchKeyword('implements') : matchContextualKeyword('implements')) {
             implemented = parseClassImplements();
         }
 
@@ -23225,6 +23895,11 @@ parseYieldExpression: true, parseAwaitExpression: true
             case 'import':
                 throwErrorTolerant({}, Messages.IllegalImportDeclaration);
                 return parseImportDeclaration();
+            case 'interface':
+                if (lookahead2().type === Token.Identifier) {
+                    return parseInterface();
+                }
+                return parseStatement();
             default:
                 return parseStatement();
             }
@@ -23263,7 +23938,9 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseProgramElement() {
-        if (extra.isModule && lookahead.type === Token.Keyword) {
+        var isModule = extra.sourceType === 'module' || extra.sourceType === 'nonStrictModule';
+
+        if (isModule && lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'export':
                 return parseExportDeclaration();
@@ -23315,170 +23992,13 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseProgram() {
         var body, marker = markerCreate();
-        strict = !!extra.isModule;
+        strict = extra.sourceType === 'module';
         peek();
         body = parseProgramElements();
         return markerApply(marker, delegate.createProgram(body));
     }
 
-    // The following functions are needed only when the option to preserve
-    // the comments is active.
-
-    function addComment(type, value, start, end, loc) {
-        var comment;
-
-        assert(typeof start === 'number', 'Comment must have valid position');
-
-        // Because the way the actual token is scanned, often the comments
-        // (if any) are skipped twice during the lexical analysis.
-        // Thus, we need to skip adding a comment if the comment array already
-        // handled it.
-        if (state.lastCommentStart >= start) {
-            return;
-        }
-        state.lastCommentStart = start;
-
-        comment = {
-            type: type,
-            value: value
-        };
-        if (extra.range) {
-            comment.range = [start, end];
-        }
-        if (extra.loc) {
-            comment.loc = loc;
-        }
-        extra.comments.push(comment);
-        if (extra.attachComment) {
-            extra.leadingComments.push(comment);
-            extra.trailingComments.push(comment);
-        }
-    }
-
-    function scanComment() {
-        var comment, ch, loc, start, blockComment, lineComment;
-
-        comment = '';
-        blockComment = false;
-        lineComment = false;
-
-        while (index < length) {
-            ch = source[index];
-
-            if (lineComment) {
-                ch = source[index++];
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    loc.end = {
-                        line: lineNumber,
-                        column: index - lineStart - 1
-                    };
-                    lineComment = false;
-                    addComment('Line', comment, start, index - 1, loc);
-                    if (ch === '\r' && source[index] === '\n') {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                    comment = '';
-                } else if (index >= length) {
-                    lineComment = false;
-                    comment += ch;
-                    loc.end = {
-                        line: lineNumber,
-                        column: length - lineStart
-                    };
-                    addComment('Line', comment, start, length, loc);
-                } else {
-                    comment += ch;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    if (ch === '\r') {
-                        ++index;
-                        comment += '\r';
-                    }
-                    if (ch !== '\r' || source[index] === '\n') {
-                        comment += source[index];
-                        ++lineNumber;
-                        ++index;
-                        lineStart = index;
-                        if (index >= length) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                } else {
-                    ch = source[index++];
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    comment += ch;
-                    if (ch === '*') {
-                        ch = source[index];
-                        if (ch === '/') {
-                            comment = comment.substr(0, comment.length - 1);
-                            blockComment = false;
-                            ++index;
-                            loc.end = {
-                                line: lineNumber,
-                                column: index - lineStart
-                            };
-                            addComment('Block', comment, start, index, loc);
-                            comment = '';
-                        }
-                    }
-                }
-            } else if (ch === '/') {
-                ch = source[index + 1];
-                if (ch === '/') {
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart
-                        }
-                    };
-                    start = index;
-                    index += 2;
-                    lineComment = true;
-                    if (index >= length) {
-                        loc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        lineComment = false;
-                        addComment('Line', comment, start, index, loc);
-                    }
-                } else if (ch === '*') {
-                    start = index;
-                    index += 2;
-                    blockComment = true;
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart - 2
-                        }
-                    };
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch.charCodeAt(0))) {
-                ++index;
-            } else if (isLineTerminator(ch.charCodeAt(0))) {
-                ++index;
-                if (ch ===  '\r' && source[index] === '\n') {
-                    ++index;
-                }
-                ++lineNumber;
-                lineStart = index;
-            } else {
-                break;
-            }
-        }
-    }
-
-    // 16 XJS
+    // 16 JSX
 
     XHTMLEntities = {
         quot: '\u0022',
@@ -23736,48 +24256,48 @@ parseYieldExpression: true, parseAwaitExpression: true
         diams: '\u2666'
     };
 
-    function getQualifiedXJSName(object) {
-        if (object.type === Syntax.XJSIdentifier) {
+    function getQualifiedJSXName(object) {
+        if (object.type === Syntax.JSXIdentifier) {
             return object.name;
         }
-        if (object.type === Syntax.XJSNamespacedName) {
+        if (object.type === Syntax.JSXNamespacedName) {
             return object.namespace.name + ':' + object.name.name;
         }
         /* istanbul ignore else */
-        if (object.type === Syntax.XJSMemberExpression) {
+        if (object.type === Syntax.JSXMemberExpression) {
             return (
-                getQualifiedXJSName(object.object) + '.' +
-                getQualifiedXJSName(object.property)
+                getQualifiedJSXName(object.object) + '.' +
+                getQualifiedJSXName(object.property)
             );
         }
         /* istanbul ignore next */
         throwUnexpected(object);
     }
 
-    function isXJSIdentifierStart(ch) {
+    function isJSXIdentifierStart(ch) {
         // exclude backslash (\)
         return (ch !== 92) && isIdentifierStart(ch);
     }
 
-    function isXJSIdentifierPart(ch) {
+    function isJSXIdentifierPart(ch) {
         // exclude backslash (\) and add hyphen (-)
         return (ch !== 92) && (ch === 45 || isIdentifierPart(ch));
     }
 
-    function scanXJSIdentifier() {
+    function scanJSXIdentifier() {
         var ch, start, value = '';
 
         start = index;
         while (index < length) {
             ch = source.charCodeAt(index);
-            if (!isXJSIdentifierPart(ch)) {
+            if (!isJSXIdentifierPart(ch)) {
                 break;
             }
             value += source[index++];
         }
 
         return {
-            type: Token.XJSIdentifier,
+            type: Token.JSXIdentifier,
             value: value,
             lineNumber: lineNumber,
             lineStart: lineStart,
@@ -23785,7 +24305,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
-    function scanXJSEntity() {
+    function scanJSXEntity() {
         var ch, str = '', start = index, count = 0, code;
         ch = source[index];
         assert(ch === '&', 'Entity must start with an ampersand');
@@ -23823,7 +24343,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         return '&';
     }
 
-    function scanXJSText(stopChars) {
+    function scanJSXText(stopChars) {
         var ch, str = '', start;
         start = index;
         while (index < length) {
@@ -23832,7 +24352,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 break;
             }
             if (ch === '&') {
-                str += scanXJSEntity();
+                str += scanJSXEntity();
             } else {
                 index++;
                 if (ch === '\r' && source[index] === '\n') {
@@ -23848,7 +24368,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
         }
         return {
-            type: Token.XJSText,
+            type: Token.JSXText,
             value: str,
             lineNumber: lineNumber,
             lineStart: lineStart,
@@ -23856,7 +24376,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
-    function scanXJSStringLiteral() {
+    function scanJSXStringLiteral() {
         var innerToken, quote, start;
 
         quote = source[index];
@@ -23866,7 +24386,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         start = index;
         ++index;
 
-        innerToken = scanXJSText([quote]);
+        innerToken = scanJSXText([quote]);
 
         if (quote !== source[index]) {
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -23880,254 +24400,256 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     /**
-     * Between XJS opening and closing tags (e.g. <foo>HERE</foo>), anything that
-     * is not another XJS tag and is not an expression wrapped by {} is text.
+     * Between JSX opening and closing tags (e.g. <foo>HERE</foo>), anything that
+     * is not another JSX tag and is not an expression wrapped by {} is text.
      */
-    function advanceXJSChild() {
+    function advanceJSXChild() {
         var ch = source.charCodeAt(index);
 
-        // { (123) and < (60)
-        if (ch !== 123 && ch !== 60) {
-            return scanXJSText(['<', '{']);
+        // '<' 60, '>' 62, '{' 123, '}' 125
+        if (ch !== 60 && ch !== 62 && ch !== 123 && ch !== 125) {
+            return scanJSXText(['<', '>', '{', '}']);
         }
 
         return scanPunctuator();
     }
 
-    function parseXJSIdentifier() {
+    function parseJSXIdentifier() {
         var token, marker = markerCreate();
 
-        if (lookahead.type !== Token.XJSIdentifier) {
+        if (lookahead.type !== Token.JSXIdentifier) {
             throwUnexpected(lookahead);
         }
 
         token = lex();
-        return markerApply(marker, delegate.createXJSIdentifier(token.value));
+        return markerApply(marker, delegate.createJSXIdentifier(token.value));
     }
 
-    function parseXJSNamespacedName() {
+    function parseJSXNamespacedName() {
         var namespace, name, marker = markerCreate();
 
-        namespace = parseXJSIdentifier();
+        namespace = parseJSXIdentifier();
         expect(':');
-        name = parseXJSIdentifier();
+        name = parseJSXIdentifier();
 
-        return markerApply(marker, delegate.createXJSNamespacedName(namespace, name));
+        return markerApply(marker, delegate.createJSXNamespacedName(namespace, name));
     }
 
-    function parseXJSMemberExpression() {
+    function parseJSXMemberExpression() {
         var marker = markerCreate(),
-            expr = parseXJSIdentifier();
+            expr = parseJSXIdentifier();
 
         while (match('.')) {
             lex();
-            expr = markerApply(marker, delegate.createXJSMemberExpression(expr, parseXJSIdentifier()));
+            expr = markerApply(marker, delegate.createJSXMemberExpression(expr, parseJSXIdentifier()));
         }
 
         return expr;
     }
 
-    function parseXJSElementName() {
+    function parseJSXElementName() {
         if (lookahead2().value === ':') {
-            return parseXJSNamespacedName();
+            return parseJSXNamespacedName();
         }
         if (lookahead2().value === '.') {
-            return parseXJSMemberExpression();
+            return parseJSXMemberExpression();
         }
 
-        return parseXJSIdentifier();
+        return parseJSXIdentifier();
     }
 
-    function parseXJSAttributeName() {
+    function parseJSXAttributeName() {
         if (lookahead2().value === ':') {
-            return parseXJSNamespacedName();
+            return parseJSXNamespacedName();
         }
 
-        return parseXJSIdentifier();
+        return parseJSXIdentifier();
     }
 
-    function parseXJSAttributeValue() {
+    function parseJSXAttributeValue() {
         var value, marker;
         if (match('{')) {
-            value = parseXJSExpressionContainer();
-            if (value.expression.type === Syntax.XJSEmptyExpression) {
+            value = parseJSXExpressionContainer();
+            if (value.expression.type === Syntax.JSXEmptyExpression) {
                 throwError(
                     value,
-                    'XJS attributes must only be assigned a non-empty ' +
+                    'JSX attributes must only be assigned a non-empty ' +
                         'expression'
                 );
             }
         } else if (match('<')) {
-            value = parseXJSElement();
-        } else if (lookahead.type === Token.XJSText) {
+            value = parseJSXElement();
+        } else if (lookahead.type === Token.JSXText) {
             marker = markerCreate();
             value = markerApply(marker, delegate.createLiteral(lex()));
         } else {
-            throwError({}, Messages.InvalidXJSAttributeValue);
+            throwError({}, Messages.InvalidJSXAttributeValue);
         }
         return value;
     }
 
-    function parseXJSEmptyExpression() {
+    function parseJSXEmptyExpression() {
         var marker = markerCreatePreserveWhitespace();
         while (source.charAt(index) !== '}') {
             index++;
         }
-        return markerApply(marker, delegate.createXJSEmptyExpression());
+        return markerApply(marker, delegate.createJSXEmptyExpression());
     }
 
-    function parseXJSExpressionContainer() {
-        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXExpressionContainer() {
+        var expression, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = false;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = false;
 
         expect('{');
 
         if (match('}')) {
-            expression = parseXJSEmptyExpression();
+            expression = parseJSXEmptyExpression();
         } else {
             expression = parseExpression();
         }
 
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
 
         expect('}');
 
-        return markerApply(marker, delegate.createXJSExpressionContainer(expression));
+        return markerApply(marker, delegate.createJSXExpressionContainer(expression));
     }
 
-    function parseXJSSpreadAttribute() {
-        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXSpreadAttribute() {
+        var expression, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = false;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = false;
 
         expect('{');
         expect('...');
 
         expression = parseAssignmentExpression();
 
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
 
         expect('}');
 
-        return markerApply(marker, delegate.createXJSSpreadAttribute(expression));
+        return markerApply(marker, delegate.createJSXSpreadAttribute(expression));
     }
 
-    function parseXJSAttribute() {
+    function parseJSXAttribute() {
         var name, marker;
 
         if (match('{')) {
-            return parseXJSSpreadAttribute();
+            return parseJSXSpreadAttribute();
         }
 
         marker = markerCreate();
 
-        name = parseXJSAttributeName();
+        name = parseJSXAttributeName();
 
         // HTML empty attribute
         if (match('=')) {
             lex();
-            return markerApply(marker, delegate.createXJSAttribute(name, parseXJSAttributeValue()));
+            return markerApply(marker, delegate.createJSXAttribute(name, parseJSXAttributeValue()));
         }
 
-        return markerApply(marker, delegate.createXJSAttribute(name));
+        return markerApply(marker, delegate.createJSXAttribute(name));
     }
 
-    function parseXJSChild() {
+    function parseJSXChild() {
         var token, marker;
         if (match('{')) {
-            token = parseXJSExpressionContainer();
-        } else if (lookahead.type === Token.XJSText) {
+            token = parseJSXExpressionContainer();
+        } else if (lookahead.type === Token.JSXText) {
             marker = markerCreatePreserveWhitespace();
             token = markerApply(marker, delegate.createLiteral(lex()));
+        } else if (match('<')) {
+            token = parseJSXElement();
         } else {
-            token = parseXJSElement();
+            throwUnexpected(lookahead);
         }
         return token;
     }
 
-    function parseXJSClosingElement() {
-        var name, origInXJSChild, origInXJSTag, marker = markerCreate();
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = true;
+    function parseJSXClosingElement() {
+        var name, origInJSXChild, origInJSXTag, marker = markerCreate();
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = true;
         expect('<');
         expect('/');
-        name = parseXJSElementName();
+        name = parseJSXElementName();
         // Because advance() (called by lex() called by expect()) expects there
         // to be a valid token after >, it needs to know whether to look for a
-        // standard JS token or an XJS text node
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        // standard JS token or an JSX text node
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
         expect('>');
-        return markerApply(marker, delegate.createXJSClosingElement(name));
+        return markerApply(marker, delegate.createJSXClosingElement(name));
     }
 
-    function parseXJSOpeningElement() {
-        var name, attribute, attributes = [], selfClosing = false, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXOpeningElement() {
+        var name, attributes = [], selfClosing = false, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = true;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = true;
 
         expect('<');
 
-        name = parseXJSElementName();
+        name = parseJSXElementName();
 
         while (index < length &&
                 lookahead.value !== '/' &&
                 lookahead.value !== '>') {
-            attributes.push(parseXJSAttribute());
+            attributes.push(parseJSXAttribute());
         }
 
-        state.inXJSTag = origInXJSTag;
+        state.inJSXTag = origInJSXTag;
 
         if (lookahead.value === '/') {
             expect('/');
             // Because advance() (called by lex() called by expect()) expects
             // there to be a valid token after >, it needs to know whether to
-            // look for a standard JS token or an XJS text node
-            state.inXJSChild = origInXJSChild;
+            // look for a standard JS token or an JSX text node
+            state.inJSXChild = origInJSXChild;
             expect('>');
             selfClosing = true;
         } else {
-            state.inXJSChild = true;
+            state.inJSXChild = true;
             expect('>');
         }
-        return markerApply(marker, delegate.createXJSOpeningElement(name, attributes, selfClosing));
+        return markerApply(marker, delegate.createJSXOpeningElement(name, attributes, selfClosing));
     }
 
-    function parseXJSElement() {
-        var openingElement, closingElement = null, children = [], origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXElement() {
+        var openingElement, closingElement = null, children = [], origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        openingElement = parseXJSOpeningElement();
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        openingElement = parseJSXOpeningElement();
 
         if (!openingElement.selfClosing) {
             while (index < length) {
-                state.inXJSChild = false; // Call lookahead2() with inXJSChild = false because </ should not be considered in the child
+                state.inJSXChild = false; // Call lookahead2() with inJSXChild = false because </ should not be considered in the child
                 if (lookahead.value === '<' && lookahead2().value === '/') {
                     break;
                 }
-                state.inXJSChild = true;
-                children.push(parseXJSChild());
+                state.inJSXChild = true;
+                children.push(parseJSXChild());
             }
-            state.inXJSChild = origInXJSChild;
-            state.inXJSTag = origInXJSTag;
-            closingElement = parseXJSClosingElement();
-            if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
-                throwError({}, Messages.ExpectedXJSClosingTag, getQualifiedXJSName(openingElement.name));
+            state.inJSXChild = origInJSXChild;
+            state.inJSXTag = origInJSXTag;
+            closingElement = parseJSXClosingElement();
+            if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
+                throwError({}, Messages.ExpectedJSXClosingTag, getQualifiedJSXName(openingElement.name));
             }
         }
 
@@ -24136,15 +24658,15 @@ parseYieldExpression: true, parseAwaitExpression: true
         //     var x = <div>one</div><div>two</div>;
         //
         // the default error message is a bit incomprehensible. Since it's
-        // rarely (never?) useful to write a less-than sign after an XJS
+        // rarely (never?) useful to write a less-than sign after an JSX
         // element, we disallow it here in the parser in order to provide a
         // better error message. (In the rare case that the less-than operator
         // was intended, the left tag can be wrapped in parentheses.)
-        if (!origInXJSChild && match('<')) {
-            throwError(lookahead, Messages.AdjacentXJSElements);
+        if (!origInJSXChild && match('<')) {
+            throwError(lookahead, Messages.AdjacentJSXElements);
         }
 
-        return markerApply(marker, delegate.createXJSElement(openingElement, closingElement, children));
+        return markerApply(marker, delegate.createJSXElement(openingElement, closingElement, children));
     }
 
     function parseTypeAlias() {
@@ -24207,10 +24729,14 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseInterface() {
-        var body, bodyMarker, extended = [], id, marker = markerCreate(),
-            typeParameters = null;
+        var marker = markerCreate();
 
-        expectContextualKeyword('interface');
+        if (strict) {
+            expectKeyword('interface');
+        } else {
+            expectContextualKeyword('interface');
+        }
+
         return parseInterfaceish(marker, /* allowStatic */false);
     }
 
@@ -24321,14 +24847,13 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function collectToken() {
-        var start, loc, token, range, value, entry;
+        var loc, token, range, value, entry;
 
         /* istanbul ignore else */
-        if (!state.inXJSChild) {
+        if (!state.inJSXChild) {
             skipComment();
         }
 
-        start = index;
         loc = {
             start: {
                 line: lineNumber,
@@ -24434,11 +24959,6 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function patch() {
-        if (extra.comments) {
-            extra.skipComment = skipComment;
-            skipComment = scanComment;
-        }
-
         if (typeof extra.tokens !== 'undefined') {
             extra.advance = advance;
             extra.scanRegExp = scanRegExp;
@@ -24449,10 +24969,6 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function unpatch() {
-        if (typeof extra.skipComment === 'function') {
-            skipComment = extra.skipComment;
-        }
-
         if (typeof extra.scanRegExp === 'function') {
             advance = extra.advance;
             scanRegExp = extra.scanRegExp;
@@ -24596,8 +25112,8 @@ parseYieldExpression: true, parseAwaitExpression: true
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            inXJSChild: false,
-            inXJSTag: false,
+            inJSXChild: false,
+            inJSXTag: false,
             inType: false,
             lastCommentStart: -1,
             yieldAllowed: false,
@@ -24619,9 +25135,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 });
             }
 
-            if (options.sourceType === 'module') {
-                extra.isModule = true;
-            }
+            extra.sourceType = options.sourceType;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
@@ -24664,7 +25178,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '10001.1.0-dev-harmony-fb';
+    exports.version = '13001.1.0-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 
@@ -24695,7 +25209,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],45:[function(_dereq_,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 var originalObject = Object;
@@ -24826,19 +25340,19 @@ function makeAccessor(secretCreatorFn) {
 
 defProp(exports, "makeAccessor", makeAccessor);
 
-},{}],46:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{}],52:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var n = types.namedTypes;
 var isArray = types.builtInTypes.array;
 var isObject = types.builtInTypes.object;
-var linesModule = _dereq_("./lines");
+var linesModule = require("./lines");
 var fromString = linesModule.fromString;
 var Lines = linesModule.Lines;
 var concat = linesModule.concat;
-var util = _dereq_("./util");
+var util = require("./util");
 var comparePos = util.comparePos;
-var childNodesCacheKey = _dereq_("private").makeUniqueKey();
+var childNodesCacheKey = require("private").makeUniqueKey();
 
 // TODO Move a non-caching implementation of this function into ast-types,
 // and implement a caching wrapper function here.
@@ -25178,9 +25692,9 @@ exports.printComments = function(path, print) {
     return concat(leadingParts);
 };
 
-},{"./lines":48,"./types":54,"./util":55,"assert":2,"private":45}],47:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"./lines":54,"./types":60,"./util":61,"assert":2,"private":51}],53:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var n = types.namedTypes;
 var Node = n.Node;
 var isArray = types.builtInTypes.array;
@@ -25242,31 +25756,25 @@ FPp.getValue = function getValue() {
     return s[s.length - 1];
 };
 
-FPp.getNode = function getNode() {
-    var s = this.stack;
+function getNodeHelper(path, count) {
+    var s = path.stack;
 
     for (var i = s.length - 1; i >= 0; i -= 2) {
         var value = s[i];
-        if (n.Node.check(value)) {
+        if (n.Node.check(value) && --count < 0) {
             return value;
         }
     }
 
     return null;
+}
+
+FPp.getNode = function getNode(count) {
+    return getNodeHelper(this, ~~count);
 };
 
-FPp.getParentNode = function getParentNode() {
-    var s = this.stack;
-    var count = 0;
-
-    for (var i = s.length - 1; i >= 0; i -= 2) {
-        var value = s[i];
-        if (n.Node.check(value) && count++ > 0) {
-            return value;
-        }
-    }
-
-    return null;
+FPp.getParentNode = function getParentNode(count) {
+    return getNodeHelper(this, ~~count + 1);
 };
 
 // The length of the stack can be either even or odd, depending on whether
@@ -25371,6 +25879,13 @@ FPp.needsParens = function(assumeExpressionContext) {
 
     var name = this.getName();
     var node = this.getNode();
+
+    // If the value of this path is some child of a Node and not a Node
+    // itself, then it doesn't need parentheses. Only Node objects (in
+    // fact, only Expression nodes) need parentheses.
+    if (this.getValue() !== node) {
+        return false;
+    }
 
     // Only expressions need parentheses.
     if (!n.Expression.check(node)) {
@@ -25492,6 +26007,15 @@ FPp.needsParens = function(assumeExpressionContext) {
 
         default:
             return false;
+        }
+
+    case "ArrowFunctionExpression":
+        return isBinary(parent);
+
+    case "ObjectExpression":
+        if (parent.type === "ArrowFunctionExpression" &&
+            name === "body") {
+            return true;
         }
 
     default:
@@ -25638,15 +26162,15 @@ FPp.firstInStatement = function() {
     return true;
 };
 
-},{"./types":54,"assert":2}],48:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var sourceMap = _dereq_("source-map");
-var normalizeOptions = _dereq_("./options").normalize;
-var secretKey = _dereq_("private").makeUniqueKey();
-var types = _dereq_("./types");
+},{"./types":60,"assert":2}],54:[function(require,module,exports){
+var assert = require("assert");
+var sourceMap = require("source-map");
+var normalizeOptions = require("./options").normalize;
+var secretKey = require("private").makeUniqueKey();
+var types = require("./types");
 var isString = types.builtInTypes.string;
-var comparePos = _dereq_("./util").comparePos;
-var Mapping = _dereq_("./mapping");
+var comparePos = require("./util").comparePos;
+var Mapping = require("./mapping");
 
 // Goals:
 // 1. Minimize new string creation.
@@ -26486,15 +27010,15 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":49,"./options":50,"./types":54,"./util":55,"assert":2,"private":45,"source-map":72}],49:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"./mapping":55,"./options":56,"./types":60,"./util":61,"assert":2,"private":51,"source-map":78}],55:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var isString = types.builtInTypes.string;
 var isNumber = types.builtInTypes.number;
 var SourceLocation = types.namedTypes.SourceLocation;
 var Position = types.namedTypes.Position;
-var linesModule = _dereq_("./lines");
-var comparePos = _dereq_("./util").comparePos;
+var linesModule = require("./lines");
+var comparePos = require("./util").comparePos;
 
 function Mapping(sourceLines, sourceLoc, targetLoc) {
     assert.ok(this instanceof Mapping);
@@ -26765,12 +27289,12 @@ function skipChars(
     return sourceCursor;
 }
 
-},{"./lines":48,"./types":54,"./util":55,"assert":2}],50:[function(_dereq_,module,exports){
+},{"./lines":54,"./types":60,"./util":61,"assert":2}],56:[function(require,module,exports){
 var defaults = {
     // If you want to use a different branch of esprima, or any other
     // module that supports a .parse function, pass that module object to
     // recast.parse as options.esprima.
-    esprima: _dereq_("esprima-fb"),
+    esprima: require("esprima-fb"),
 
     // Number of spaces the pretty-printer should use per tab for
     // indentation. If you do not pass this option explicitly, it will be
@@ -26852,19 +27376,19 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima-fb":71}],51:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"esprima-fb":77}],57:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var n = types.namedTypes;
 var b = types.builders;
 var isObject = types.builtInTypes.object;
 var isArray = types.builtInTypes.array;
 var isFunction = types.builtInTypes.function;
-var Patcher = _dereq_("./patcher").Patcher;
-var normalizeOptions = _dereq_("./options").normalize;
-var fromString = _dereq_("./lines").fromString;
-var attachComments = _dereq_("./comments").attach;
-var util = _dereq_("./util");
+var Patcher = require("./patcher").Patcher;
+var normalizeOptions = require("./options").normalize;
+var fromString = require("./lines").fromString;
+var attachComments = require("./comments").attach;
+var util = require("./util");
 
 exports.parse = function parse(source, options) {
     options = normalizeOptions(options);
@@ -26885,6 +27409,12 @@ exports.parse = function parse(source, options) {
         sourceType: 'module'
     });
 
+    // Expand the Program node's .loc to include all comments, since
+    // typically its .loc.start and .loc.end will coincide with those of
+    // the first and last statements, respectively, excluding any comments
+    // that fall outside that region.
+    program.loc = util.getTrueLoc(program);
+
     var comments = program.comments;
     delete program.comments;
 
@@ -26898,7 +27428,13 @@ exports.parse = function parse(source, options) {
         end: lines.lastPos()
     };
 
-    attachComments(comments, file, lines);
+    // Passing file.program here instead of just file means that initial
+    // comments will be attached to program.body[0] instead of program.
+    attachComments(
+        comments,
+        program.body.length ? file.program : file,
+        lines
+    );
 
     // Return a copy of the original AST so that any changes made may be
     // compared to the original.
@@ -26968,20 +27504,21 @@ TCp.copy = function(node) {
     return copy;
 };
 
-},{"./comments":46,"./lines":48,"./options":50,"./patcher":52,"./types":54,"./util":55,"assert":2}],52:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var linesModule = _dereq_("./lines");
-var types = _dereq_("./types");
+},{"./comments":52,"./lines":54,"./options":56,"./patcher":58,"./types":60,"./util":61,"assert":2}],58:[function(require,module,exports){
+var assert = require("assert");
+var linesModule = require("./lines");
+var types = require("./types");
 var getFieldValue = types.getFieldValue;
 var Printable = types.namedTypes.Printable;
 var Expression = types.namedTypes.Expression;
 var SourceLocation = types.namedTypes.SourceLocation;
-var util = _dereq_("./util");
+var util = require("./util");
 var comparePos = util.comparePos;
-var FastPath = _dereq_("./fast-path");
+var FastPath = require("./fast-path");
 var isObject = types.builtInTypes.object;
 var isArray = types.builtInTypes.array;
 var isString = types.builtInTypes.string;
+var riskyAdjoiningCharExp = /[0-9a-z_$]/i;
 
 function Patcher(lines) {
     assert.ok(this instanceof Patcher);
@@ -27158,15 +27695,32 @@ exports.getReprinter = function(path) {
                 patcher.deleteComments(oldNode);
             }
 
+            var pos = util.copyPos(oldNode.loc.start);
+            var needsLeadingSpace = lines.prevPos(pos) &&
+                riskyAdjoiningCharExp.test(lines.charAt(pos));
+
             var newLines = print(
                 reprint.newPath,
                 needToPrintNewPathWithComments
-            );
+            ).indentTail(oldNode.loc.indent);
 
-            patcher.replace(
-                oldNode.loc,
-                newLines.indentTail(oldNode.loc.indent)
-            );
+            var needsTrailingSpace =
+                riskyAdjoiningCharExp.test(lines.charAt(oldNode.loc.end));
+
+            // If we try to replace the argument of a ReturnStatement like
+            // return"asdf" with e.g. a literal null expression, we run
+            // the risk of ending up with returnnull, so we need to add an
+            // extra leading space in situations where that might
+            // happen. Likewise for "asdf"in obj. See #170.
+            if (needsLeadingSpace || needsTrailingSpace) {
+                var newParts = [];
+                needsLeadingSpace && newParts.push(" ");
+                newParts.push(newLines);
+                needsTrailingSpace && newParts.push(" ");
+                newLines = linesModule.concat(newParts);
+            }
+
+            patcher.replace(oldNode.loc, newLines);
         });
 
         // Recall that origLoc is the .loc of an ancestor node that is
@@ -27258,12 +27812,6 @@ function findObjectReprints(newPath, oldPath, reprints) {
             return false;
         }
 
-        if (!oldNode.loc) {
-            // If we have no .loc information for oldNode, then we won't
-            // be able to reprint it.
-            return false;
-        }
-
         // Here we need to decide whether the reprinted code for newNode
         // is appropriate for patching into the location of oldNode.
 
@@ -27272,18 +27820,25 @@ function findObjectReprints(newPath, oldPath, reprints) {
 
             if (findChildReprints(newPath, oldPath, childReprints)) {
                 reprints.push.apply(reprints, childReprints);
-            } else {
+            } else if (oldNode.loc) {
+                // If we have no .loc information for oldNode, then we
+                // won't be able to reprint it.
                 reprints.push({
                     oldPath: oldPath.copy(),
                     newPath: newPath.copy()
                 });
+            } else {
+                return false;
             }
 
             return true;
         }
 
         if (Expression.check(newNode) &&
-            Expression.check(oldNode)) {
+            Expression.check(oldNode) &&
+            // If we have no .loc information for oldNode, then we won't
+            // be able to reprint it.
+            oldNode.loc) {
 
             // If both nodes are subtypes of Expression, then we should be
             // able to fill the location occupied by the old node with
@@ -27308,6 +27863,7 @@ function findObjectReprints(newPath, oldPath, reprints) {
 // This object is reused in hasOpeningParen and hasClosingParen to avoid
 // having to allocate a temporary object.
 var reusablePos = { line: 1, column: 0 };
+var nonSpaceExp = /\S/;
 
 function hasOpeningParen(oldPath) {
     var oldNode = oldPath.getValue();
@@ -27329,7 +27885,7 @@ function hasOpeningParen(oldPath) {
                 return comparePos(oldPath.getRootValue().loc.start, pos) <= 0;
             }
 
-            if (ch !== " ") {
+            if (nonSpaceExp.test(ch)) {
                 return false;
             }
         }
@@ -27358,7 +27914,7 @@ function hasClosingParen(oldPath) {
                 return comparePos(pos, oldPath.getRootValue().loc.end) <= 0;
             }
 
-            if (ch !== " ") {
+            if (nonSpaceExp.test(ch)) {
                 return false;
             }
 
@@ -27430,21 +27986,21 @@ function findChildReprints(newPath, oldPath, reprints) {
     return true;
 }
 
-},{"./fast-path":47,"./lines":48,"./types":54,"./util":55,"assert":2}],53:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var sourceMap = _dereq_("source-map");
-var printComments = _dereq_("./comments").printComments;
-var linesModule = _dereq_("./lines");
+},{"./fast-path":53,"./lines":54,"./types":60,"./util":61,"assert":2}],59:[function(require,module,exports){
+var assert = require("assert");
+var sourceMap = require("source-map");
+var printComments = require("./comments").printComments;
+var linesModule = require("./lines");
 var fromString = linesModule.fromString;
 var concat = linesModule.concat;
-var normalizeOptions = _dereq_("./options").normalize;
-var getReprinter = _dereq_("./patcher").getReprinter;
-var types = _dereq_("./types");
+var normalizeOptions = require("./options").normalize;
+var getReprinter = require("./patcher").getReprinter;
+var types = require("./types");
 var namedTypes = types.namedTypes;
 var isString = types.builtInTypes.string;
 var isObject = types.builtInTypes.object;
-var FastPath = _dereq_("./fast-path");
-var util = _dereq_("./util");
+var FastPath = require("./fast-path");
+var util = require("./util");
 
 function PrintResult(code, sourceMap) {
     assert.ok(this instanceof PrintResult);
@@ -27618,13 +28174,22 @@ function genericPrintNoParens(path, options, print) {
             path.call(print, "right")
         ]);
 
+    case "AssignmentPattern":
+        return concat([
+            path.call(print, "left"),
+            "=",
+            path.call(print, "right")
+        ]);
+
     case "MemberExpression":
         var parts = [path.call(print, "object")];
 
-        if (n.computed)
-            parts.push("[", path.call(print, "property"), "]");
-        else
-            parts.push(".", path.call(print, "property"));
+        var property = path.call(print, "property");
+        if (n.computed) {
+            parts.push("[", property, "]");
+        } else {
+            parts.push(".", property);
+        }
 
         return concat(parts);
 
@@ -27632,12 +28197,16 @@ function genericPrintNoParens(path, options, print) {
         return fromString(".").join(n.body);
 
     case "Identifier":
-        return fromString(n.name, options);
+        return concat([
+            fromString(n.name, options),
+            path.call(print, "typeAnnotation")
+        ]);
 
     case "SpreadElement":
     case "SpreadElementPattern":
     case "SpreadProperty":
     case "SpreadPropertyPattern":
+    case "RestElement":
         return concat(["...", path.call(print, "argument")]);
 
     case "FunctionDeclaration":
@@ -27652,13 +28221,20 @@ function genericPrintNoParens(path, options, print) {
         if (n.generator)
             parts.push("*");
 
-        if (n.id)
-            parts.push(" ", path.call(print, "id"));
+        if (n.id) {
+            parts.push(
+                " ",
+                path.call(print, "id"),
+                path.call(print, "typeParameters")
+            );
+        }
 
         parts.push(
             "(",
             printFunctionParams(path, options, print),
-            ") ",
+            ")",
+            path.call(print, "returnType"),
+            " ",
             path.call(print, "body")
         );
 
@@ -27670,7 +28246,7 @@ function genericPrintNoParens(path, options, print) {
         if (n.async)
             parts.push("async ");
 
-        if (n.params.length === 1) {
+        if (n.params.length === 1 && !n.rest) {
             parts.push(path.call(print, "params", 0));
         } else {
             parts.push(
@@ -27850,8 +28426,10 @@ function genericPrintNoParens(path, options, print) {
         if (n.argument) {
             var argLines = path.call(print, "argument");
             if (argLines.length > 1 &&
-                namedTypes.XJSElement &&
-                namedTypes.XJSElement.check(n.argument)) {
+                (namedTypes.XJSElement &&
+                 namedTypes.XJSElement.check(n.argument) ||
+                 namedTypes.JSXElement &&
+                 namedTypes.JSXElement.check(n.argument))) {
                 parts.push(
                     " (\n",
                     argLines.indent(options.tabWidth),
@@ -27874,32 +28452,56 @@ function genericPrintNoParens(path, options, print) {
 
     case "ObjectExpression":
     case "ObjectPattern":
-        var allowBreak = false,
-            len = n.properties.length,
-            parts = [len > 0 ? "{\n" : "{"];
+    case "ObjectTypeAnnotation":
+        var allowBreak = false;
+        var isTypeAnnotation = n.type === "ObjectTypeAnnotation";
+        var separator = isTypeAnnotation ? ';' : ',';
+        var fields = [];
 
-        path.map(function(childPath) {
-            var i = childPath.getName();
-            var prop = childPath.getValue();
-            var lines = print(childPath).indent(options.tabWidth);
+        if (isTypeAnnotation) {
+            fields.push("indexers", "callProperties");
+        }
 
-            var multiLine = lines.length > 1;
-            if (multiLine && allowBreak) {
-                // Similar to the logic for BlockStatement.
-                parts.push("\n");
-            }
+        fields.push("properties");
 
-            parts.push(lines);
+        var len = 0;
+        fields.forEach(function(field) {
+            len += n[field].length;
+        });
 
-            if (i < len - 1) {
-                // Add an extra line break if the previous object property
-                // had a multi-line value.
-                parts.push(multiLine ? ",\n\n" : ",\n");
-                allowBreak = !multiLine;
-            }
-        }, "properties");
+        var oneLine = (isTypeAnnotation && len === 1) || len === 0;
+        var parts = [oneLine ? "{" : "{\n"];
 
-        parts.push(len > 0 ? "\n}" : "}");
+        fields.forEach(function(field) {
+            path.map(function(childPath) {
+                var i = childPath.getName();
+                var prop = childPath.getValue();
+                var lines = print(childPath);
+
+                if (!oneLine) {
+                    lines = lines.indent(options.tabWidth);
+                }
+
+                var multiLine = !isTypeAnnotation && lines.length > 1;
+                if (multiLine && allowBreak) {
+                    // Similar to the logic for BlockStatement.
+                    parts.push("\n");
+                }
+
+                parts.push(lines);
+
+                if (i < len - 1) {
+                    // Add an extra line break if the previous object property
+                    // had a multi-line value.
+                    parts.push(separator + (multiLine ? "\n\n" : "\n"));
+                    allowBreak = !multiLine;
+                } else if (len !== 1 && isTypeAnnotation) {
+                    parts.push(separator);
+                }
+            }, field);
+        });
+
+        parts.push(oneLine ? "}" : "\n}");
 
         return concat(parts);
 
@@ -27915,15 +28517,16 @@ function genericPrintNoParens(path, options, print) {
             return printMethod(path, options, print);
         }
 
-        if (n.shorthand) {
-            return path.call(print, "key");
+        var key = path.call(print, "key");
+        if (n.computed) {
+            key = concat(["[", key, "]"]);
         }
 
-        return concat([
-            path.call(print, "key"),
-            ": ",
-            path.call(print, "value")
-        ]);
+        if (n.shorthand) {
+            return key;
+        }
+
+        return concat([key, ": ", path.call(print, "value")]);
 
     case "ArrayExpression":
     case "ArrayPattern":
@@ -27967,8 +28570,7 @@ function genericPrintNoParens(path, options, print) {
         // intentionally fall through...
 
     case "ModuleSpecifier":
-        // A ModuleSpecifier is a string-valued Literal.
-        return fromString(nodeStr(n, options), options);
+        return fromString(nodeStr(n.value, options), options);
 
     case "UnaryExpression":
         var parts = [n.operator];
@@ -28152,12 +28754,17 @@ function genericPrintNoParens(path, options, print) {
             path.call(print, "block")
         ];
 
-        path.each(function(handlerPath) {
-            parts.push(" ", print(handlerPath));
-        }, "handlers");
+        if (n.handler) {
+            parts.push(" ", path.call(print, "handler"));
+        } else if (n.handlers) {
+            path.each(function(handlerPath) {
+                parts.push(" ", print(handlerPath));
+            }, "handlers");
+        }
 
-        if (n.finalizer)
+        if (n.finalizer) {
             parts.push(" finally ", path.call(print, "finalizer"));
+        }
 
         return concat(parts);
 
@@ -28205,36 +28812,43 @@ function genericPrintNoParens(path, options, print) {
     case "DebuggerStatement":
         return fromString("debugger;");
 
-    // XJS extensions below.
+    // JSX extensions below.
 
     case "XJSAttribute":
+    case "JSXAttribute":
         var parts = [path.call(print, "name")];
         if (n.value)
             parts.push("=", path.call(print, "value"));
         return concat(parts);
 
     case "XJSIdentifier":
+    case "JSXIdentifier":
         return fromString(n.name, options);
 
     case "XJSNamespacedName":
+    case "JSXNamespacedName":
         return fromString(":").join([
             path.call(print, "namespace"),
             path.call(print, "name")
         ]);
 
     case "XJSMemberExpression":
+    case "JSXMemberExpression":
         return fromString(".").join([
             path.call(print, "object"),
             path.call(print, "property")
         ]);
 
     case "XJSSpreadAttribute":
+    case "JSXSpreadAttribute":
         return concat(["{...", path.call(print, "argument"), "}"]);
 
     case "XJSExpressionContainer":
+    case "JSXExpressionContainer":
         return concat(["{", path.call(print, "expression"), "}"]);
 
     case "XJSElement":
+    case "JSXElement":
         var openingLines = path.call(print, "openingElement");
 
         if (n.openingElement.selfClosing) {
@@ -28268,6 +28882,7 @@ function genericPrintNoParens(path, options, print) {
         ]);
 
     case "XJSOpeningElement":
+    case "JSXOpeningElement":
         var parts = ["<", path.call(print, "name")];
         var attrParts = [];
 
@@ -28298,12 +28913,15 @@ function genericPrintNoParens(path, options, print) {
         return concat(parts);
 
     case "XJSClosingElement":
+    case "JSXClosingElement":
         return concat(["</", path.call(print, "name"), ">"]);
 
     case "XJSText":
+    case "JSXText":
         return fromString(n.value, options);
 
     case "XJSEmptyExpression":
+    case "JSXEmptyExpression":
         return fromString("");
 
     case "TypeAnnotatedIdentifier":
@@ -28333,17 +28951,38 @@ function genericPrintNoParens(path, options, print) {
         return concat(parts);
 
     case "ClassProperty":
-        return concat([path.call(print, "id"), ";"]);
+        return concat([
+            path.call(print, "key"),
+            path.call(print, "typeAnnotation"),
+            ";"
+        ]);
 
     case "ClassDeclaration":
     case "ClassExpression":
         var parts = ["class"];
 
-        if (n.id)
-            parts.push(" ", path.call(print, "id"));
+        if (n.id) {
+            parts.push(
+                " ",
+                path.call(print, "id"),
+                path.call(print, "typeParameters")
+            );
+        }
 
-        if (n.superClass)
-            parts.push(" extends ", path.call(print, "superClass"));
+        if (n.superClass) {
+            parts.push(
+                " extends ",
+                path.call(print, "superClass"),
+                path.call(print, "superTypeParameters")
+            );
+        }
+
+        if (n["implements"]) {
+            parts.push(
+                " implements ",
+                fromString(", ").join(path.map(print, "implements"))
+            );
+        }
 
         parts.push(" ", path.call(print, "body"));
 
@@ -28363,6 +29002,9 @@ function genericPrintNoParens(path, options, print) {
     case "Specifier":
     case "NamedSpecifier":
     case "Comment": // Supertype of Block and Line.
+    case "MemberTypeAnnotation": // Flow
+    case "TupleTypeAnnotation": // Flow
+    case "Type": // Flow
         throw new Error("unprintable type: " + JSON.stringify(n.type));
 
     case "Block": // Block comment.
@@ -28371,10 +29013,220 @@ function genericPrintNoParens(path, options, print) {
     case "Line": // Line comment.
         return concat(["//", fromString(n.value, options)]);
 
+    // Type Annotations for Facebook Flow, typically stripped out or
+    // transformed away before printing.
+    case "TypeAnnotation":
+        var parts = [];
+
+        if (n.typeAnnotation) {
+            if (n.typeAnnotation.type !== "FunctionTypeAnnotation") {
+                parts.push(": ");
+            }
+            parts.push(path.call(print, "typeAnnotation"));
+            return concat(parts);
+        }
+
+        return fromString("");
+
+    case "AnyTypeAnnotation":
+        return fromString("any", options);
+
+    case "ArrayTypeAnnotation":
+        return concat([
+            path.call(print, "elementType"),
+            "[]"
+        ]);
+
+    case "BooleanTypeAnnotation":
+        return fromString("boolean", options);
+
+    case "DeclareClass":
+        return concat([
+            fromString("declare class ", options),
+            path.call(print, "id"),
+            " ",
+            path.call(print, "body"),
+        ]);
+
+    case "DeclareFunction":
+        return concat([
+            fromString("declare function ", options),
+            path.call(print, "id")
+        ]);
+
+    case "DeclareModule":
+        return concat([
+            fromString("declare module ", options),
+            path.call(print, "id"),
+            " ",
+            path.call(print, "body"),
+        ]);
+
+    case "DeclareVariable":
+        return concat([
+            fromString("declare var ", options),
+            path.call(print, "id")
+        ]);
+
+    case "FunctionTypeAnnotation":
+        // FunctionTypeAnnotation is ambiguous:
+        // declare function(a: B): void; OR
+        // var A: (a: B) => void;
+        var parts = [];
+        var parent = path.getParentNode(0);
+        var isArrowFunctionTypeAnnotation = !(
+            namedTypes.ObjectTypeCallProperty.check(parent) ||
+            namedTypes.DeclareFunction.check(path.getParentNode(2))
+        );
+
+        var needsColon =
+            isArrowFunctionTypeAnnotation &&
+            !namedTypes.FunctionTypeParam.check(parent);
+
+        if (needsColon) {
+            parts.push(": ");
+        }
+
+        parts.push(
+            "(",
+            fromString(", ").join(path.map(print, "params")),
+            ")"
+        );
+
+        // The returnType is not wrapped in a TypeAnnotation, so the colon
+        // needs to be added separately.
+        if (n.returnType) {
+            parts.push(
+                isArrowFunctionTypeAnnotation ? " => " : ": ",
+                path.call(print, "returnType")
+            );
+        }
+
+        return concat(parts);
+
+    case "FunctionTypeParam":
+        return concat([
+            path.call(print, "name"),
+            ": ",
+            path.call(print, "typeAnnotation"),
+        ]);
+
+    case "GenericTypeAnnotation":
+        return concat([
+            path.call(print, "id"),
+            path.call(print, "typeParameters")
+        ]);
+
+    case "InterfaceDeclaration":
+        var parts = [
+            fromString("interface ", options),
+            path.call(print, "id"),
+            path.call(print, "typeParameters"),
+            " "
+        ];
+
+        if (n["extends"]) {
+            parts.push(
+                "extends ",
+                fromString(", ").join(path.map(print, "extends"))
+            );
+        }
+
+        parts.push(path.call(print, "body"));
+
+        return concat(parts);
+
+    case "ClassImplements":
+    case "InterfaceExtends":
+        return concat([
+            path.call(print, "id"),
+            path.call(print, "typeParameters")
+        ]);
+
+    case "IntersectionTypeAnnotation":
+        return fromString(" & ").join(path.map(print, "types"));
+
+    case "NullableTypeAnnotation":
+        return concat([
+            "?",
+            path.call(print, "typeAnnotation")
+        ]);
+
+    case "NumberTypeAnnotation":
+        return fromString("number", options);
+
+    case "ObjectTypeCallProperty":
+        return path.call(print, "value");
+
+    case "ObjectTypeIndexer":
+        return concat([
+            "[",
+            path.call(print, "id"),
+            ": ",
+            path.call(print, "key"),
+            "]: ",
+            path.call(print, "value")
+        ]);
+
+    case "ObjectTypeProperty":
+        return concat([
+            path.call(print, "key"),
+            ": ",
+            path.call(print, "value")
+        ]);
+
+    case "QualifiedTypeIdentifier":
+        return concat([
+            path.call(print, "qualification"),
+            ".",
+            path.call(print, "id")
+        ]);
+
+    case "StringLiteralTypeAnnotation":
+        return fromString(nodeStr(n.value, options), options);
+
+    case "StringTypeAnnotation":
+        return fromString("string", options);
+
+    case "TypeAlias":
+        return concat([
+            "type ",
+            path.call(print, "id"),
+            " = ",
+            path.call(print, "right")
+        ]);
+
+    case "TypeCastExpression":
+        return concat([
+            "(",
+            path.call(print, "expression"),
+            path.call(print, "typeAnnotation"),
+            ")"
+        ]);
+
+    case "TypeParameterDeclaration":
+    case "TypeParameterInstantiation":
+        return concat([
+            "<",
+            fromString(", ").join(path.map(print, "params")),
+            ">"
+        ]);
+
+    case "TypeofTypeAnnotation":
+        return concat([
+            fromString("typeof ", options),
+            path.call(print, "argument")
+        ]);
+
+    case "UnionTypeAnnotation":
+        return fromString(" | ").join(path.map(print, "types"));
+
+    case "VoidTypeAnnotation":
+        return fromString("void", options);
+
     // Unhandled types below. If encountered, nodes of these types should
     // be either left alone or desugared into AST types that are fully
     // supported by the pretty-printer.
-
     case "ClassHeritage": // TODO
     case "ComprehensionBlock": // TODO
     case "ComprehensionExpression": // TODO
@@ -28387,43 +29239,6 @@ function genericPrintNoParens(path, options, print) {
     case "LetExpression": // TODO
     case "GraphExpression": // TODO
     case "GraphIndexExpression": // TODO
-
-    // Type Annotations for Facebook Flow, typically stripped out or
-    // transformed away before printing.
-    case "AnyTypeAnnotation": // TODO
-    case "ArrayTypeAnnotation": // TODO
-    case "BooleanTypeAnnotation": // TODO
-    case "ClassImplements": // TODO
-    case "DeclareClass": // TODO
-    case "DeclareFunction": // TODO
-    case "DeclareModule": // TODO
-    case "DeclareVariable": // TODO
-    case "FunctionTypeAnnotation": // TODO
-    case "FunctionTypeParam": // TODO
-    case "GenericTypeAnnotation": // TODO
-    case "InterfaceDeclaration": // TODO
-    case "InterfaceExtends": // TODO
-    case "IntersectionTypeAnnotation": // TODO
-    case "MemberTypeAnnotation": // TODO
-    case "NullableTypeAnnotation": // TODO
-    case "NumberTypeAnnotation": // TODO
-    case "ObjectTypeAnnotation": // TODO
-    case "ObjectTypeCallProperty": // TODO
-    case "ObjectTypeIndexer": // TODO
-    case "ObjectTypeProperty": // TODO
-    case "QualifiedTypeIdentifier": // TODO
-    case "StringLiteralTypeAnnotation": // TODO
-    case "StringTypeAnnotation": // TODO
-    case "TupleTypeAnnotation": // TODO
-    case "Type": // TODO
-    case "TypeAlias": // TODO
-    case "TypeAnnotation": // TODO
-    case "TypeCastExpression": // TODO
-    case "TypeParameterDeclaration": // TODO
-    case "TypeParameterInstantiation": // TODO
-    case "TypeofTypeAnnotation": // TODO
-    case "UnionTypeAnnotation": // TODO
-    case "VoidTypeAnnotation": // TODO
 
     // XML types that nobody cares about or needs to print.
     case "XMLDefaultDeclaration":
@@ -28516,7 +29331,7 @@ function printStatementSequence(path, options, print) {
             printed = maybeAddSemicolon(printed);
         }
 
-        var trueLoc = options.reuseWhitespace && getTrueLoc(stmt);
+        var trueLoc = options.reuseWhitespace && util.getTrueLoc(stmt);
         var lines = trueLoc && trueLoc.lines;
 
         if (notFirst) {
@@ -28558,44 +29373,6 @@ function printStatementSequence(path, options, print) {
     });
 
     return concat(parts);
-}
-
-function getTrueLoc(node) {
-    // It's possible that node is newly-created (not parsed by Esprima),
-    // in which case it probably won't have a .loc property (or an
-    // .original property for that matter). That's fine; we'll just
-    // pretty-print it as usual.
-    if (!node.loc) {
-        return null;
-    }
-
-    if (!node.comments) {
-        // If the node has no comments, regard node.loc as true.
-        return node.loc;
-    }
-
-    var start = node.loc.start;
-    var end = node.loc.end;
-
-    // If the node has any comments, their locations might contribute to
-    // the true start/end positions of the node.
-    node.comments.forEach(function(comment) {
-        if (comment.loc) {
-            if (util.comparePos(comment.loc.start, start) < 0) {
-                start = comment.loc.start;
-            }
-
-            if (util.comparePos(end, comment.loc.end) < 0) {
-                end = comment.loc.end;
-            }
-        }
-    });
-
-    return {
-        lines: node.loc.lines,
-        start: start,
-        end: end
-    };
 }
 
 function maxSpace(s1, s2) {
@@ -28641,13 +29418,21 @@ function printMethod(path, options, print) {
         parts.push(kind, " ");
     }
 
+    var key = path.call(print, "key");
+    if (node.computed) {
+        key = concat(["[", key, "]"]);
+    }
+
     parts.push(
-        path.call(print, "key"),
+        key,
+        path.call(print, "value", "typeParameters"),
         "(",
         path.call(function(valuePath) {
             return printFunctionParams(valuePath, options, print);
         }, "value"),
-        ") ",
+        ")",
+        path.call(print, "value", "returnType"),
+        " ",
         path.call(print, "value", "body")
     );
 
@@ -28725,19 +29510,18 @@ function swapQuotes(str) {
     });
 }
 
-function nodeStr(n, options) {
-    namedTypes.Literal.assert(n);
-    isString.assert(n.value);
+function nodeStr(str, options) {
+    isString.assert(str);
     switch (options.quote) {
     case "auto":
-        var double = JSON.stringify(n.value);
-        var single = swapQuotes(JSON.stringify(swapQuotes(n.value)));
+        var double = JSON.stringify(str);
+        var single = swapQuotes(JSON.stringify(swapQuotes(str)));
         return double.length > single.length ? single : double;
     case "single":
-        return swapQuotes(JSON.stringify(swapQuotes(n.value)));
+        return swapQuotes(JSON.stringify(swapQuotes(str)));
     case "double":
     default:
-        return JSON.stringify(n.value);
+        return JSON.stringify(str);
     }
 }
 
@@ -28748,8 +29532,8 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":46,"./fast-path":47,"./lines":48,"./options":50,"./patcher":52,"./types":54,"./util":55,"assert":2,"source-map":72}],54:[function(_dereq_,module,exports){
-var types = _dereq_("ast-types");
+},{"./comments":52,"./fast-path":53,"./lines":54,"./options":56,"./patcher":58,"./types":60,"./util":61,"assert":2,"source-map":78}],60:[function(require,module,exports){
+var types = require("ast-types");
 var def = types.Type.def;
 
 def("File")
@@ -28761,12 +29545,12 @@ types.finalize();
 
 module.exports = types;
 
-},{"ast-types":70}],55:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"ast-types":76}],61:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var getFieldValue = types.getFieldValue;
 var n = types.namedTypes;
-var sourceMap = _dereq_("source-map");
+var sourceMap = require("source-map");
 var SourceMapConsumer = sourceMap.SourceMapConsumer;
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -28789,6 +29573,14 @@ function comparePos(pos1, pos2) {
     return (pos1.line - pos2.line) || (pos1.column - pos2.column);
 }
 exports.comparePos = comparePos;
+
+function copyPos(pos) {
+    return {
+        line: pos.line,
+        column: pos.column
+    };
+}
+exports.copyPos = copyPos;
 
 exports.composeSourceMaps = function(formerMap, latterMap) {
     if (formerMap) {
@@ -28821,10 +29613,7 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
 
         smg.addMapping({
             source: sourceName,
-            original: {
-                line: origPos.line,
-                column: origPos.column
-            },
+            original: copyPos(origPos),
             generated: {
                 line: mapping.generatedLine,
                 column: mapping.generatedColumn
@@ -28840,6 +29629,44 @@ exports.composeSourceMaps = function(formerMap, latterMap) {
     });
 
     return smg.toJSON();
+};
+
+exports.getTrueLoc = function(node) {
+    // It's possible that node is newly-created (not parsed by Esprima),
+    // in which case it probably won't have a .loc property (or an
+    // .original property for that matter). That's fine; we'll just
+    // pretty-print it as usual.
+    if (!node.loc) {
+        return null;
+    }
+
+    if (!node.comments) {
+        // If the node has no comments, regard node.loc as true.
+        return node.loc;
+    }
+
+    var start = node.loc.start;
+    var end = node.loc.end;
+
+    // If the node has any comments, their locations might contribute to
+    // the true start/end positions of the node.
+    node.comments.forEach(function(comment) {
+        if (comment.loc) {
+            if (comparePos(comment.loc.start, start) < 0) {
+                start = comment.loc.start;
+            }
+
+            if (comparePos(end, comment.loc.end) < 0) {
+                end = comment.loc.end;
+            }
+        }
+    });
+
+    return {
+        lines: node.loc.lines,
+        start: start,
+        end: end
+    };
 };
 
 exports.fixFaultyLocations = function(node) {
@@ -28872,11 +29699,11 @@ exports.fixFaultyLocations = function(node) {
     }
 };
 
-},{"./types":54,"assert":2,"source-map":72}],56:[function(_dereq_,module,exports){
+},{"./types":60,"assert":2,"source-map":78}],62:[function(require,module,exports){
 (function (process){
-var types = _dereq_("./lib/types");
-var parse = _dereq_("./lib/parser").parse;
-var Printer = _dereq_("./lib/printer").Printer;
+var types = require("./lib/types");
+var parse = require("./lib/parser").parse;
+var Printer = require("./lib/printer").Printer;
 
 function print(node, options) {
     return new Printer(options).print(node);
@@ -28891,7 +29718,7 @@ function run(transformer, options) {
 }
 
 function runFile(path, transformer, options) {
-    _dereq_("fs").readFile(path, "utf-8", function(err, code) {
+    require("fs").readFile(path, "utf-8", function(err, code) {
         if (err) {
             console.error(err);
             return;
@@ -28974,9 +29801,9 @@ Object.defineProperties(exports, {
     }
 });
 
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/parser":51,"./lib/printer":53,"./lib/types":54,"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"fs":1}],57:[function(_dereq_,module,exports){
-var types = _dereq_("../lib/types");
+}).call(this,require('_process'))
+},{"./lib/parser":57,"./lib/printer":59,"./lib/types":60,"_process":12,"fs":1}],63:[function(require,module,exports){
+var types = require("../lib/types");
 var Type = types.Type;
 var def = Type.def;
 var or = Type.or;
@@ -28985,7 +29812,7 @@ var isString = builtin.string;
 var isNumber = builtin.number;
 var isBoolean = builtin.boolean;
 var isRegExp = builtin.RegExp;
-var shared = _dereq_("../lib/shared");
+var shared = require("../lib/shared");
 var defaults = shared.defaults;
 var geq = shared.geq;
 
@@ -29025,7 +29852,7 @@ def("Function")
     .bases("Node")
     .field("id", or(def("Identifier"), null), defaults["null"])
     .field("params", [def("Pattern")])
-    .field("body", or(def("BlockStatement"), def("Expression")));
+    .field("body", def("BlockStatement"));
 
 def("Statement").bases("Node");
 
@@ -29288,7 +30115,7 @@ def("MemberExpression")
     .build("object", "property", "computed")
     .field("object", def("Expression"))
     .field("property", or(def("Identifier"), def("Expression")))
-    .field("computed", isBoolean);
+    .field("computed", isBoolean, defaults["false"]);
 
 def("Pattern").bases("Node");
 
@@ -29332,7 +30159,24 @@ def("Literal")
         null, // isNull would also work here.
         isNumber,
         isRegExp
-    ));
+    ))
+    .field("regex", or({
+        pattern: isString,
+        flags: isString
+    }, null), function() {
+        if (!isRegExp.check(this.value))
+            return null;
+
+        var flags = "";
+        if (this.value.ignoreCase) flags += "i";
+        if (this.value.multiline) flags += "m";
+        if (this.value.global) flags += "g";
+
+        return {
+            pattern: this.value.source,
+            flags: flags
+        };
+    });
 
 // Abstract (non-buildable) comment supertype. Not a Node.
 def("Comment")
@@ -29358,9 +30202,9 @@ def("Line")
     .bases("Comment")
     .build("value", /*optional:*/ "leading", "trailing");
 
-},{"../lib/shared":68,"../lib/types":69}],58:[function(_dereq_,module,exports){
-_dereq_("./core");
-var types = _dereq_("../lib/types");
+},{"../lib/shared":74,"../lib/types":75}],64:[function(require,module,exports){
+require("./core");
+var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
@@ -29447,16 +30291,16 @@ def("XMLProcessingInstruction")
     .field("target", isString)
     .field("contents", or(isString, null));
 
-},{"../lib/types":69,"./core":57}],59:[function(_dereq_,module,exports){
-_dereq_("./core");
-var types = _dereq_("../lib/types");
+},{"../lib/types":75,"./core":63}],65:[function(require,module,exports){
+require("./core");
+var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isBoolean = builtin.boolean;
 var isObject = builtin.object;
 var isString = builtin.string;
-var defaults = _dereq_("../lib/shared").defaults;
+var defaults = require("../lib/shared").defaults;
 
 def("Function")
     .field("generator", isBoolean, defaults["false"])
@@ -29479,9 +30323,11 @@ def("ArrowFunctionExpression")
     // The forced null value here is compatible with the overridden
     // definition of the "id" field in the Function interface.
     .field("id", null, defaults["null"])
+    // Arrow function bodies are allowed to be expressions.
+    .field("body", or(def("BlockStatement"), def("Expression")))
     // The current spec forbids arrow generators, so I have taken the
     // liberty of enforcing that. TODO Report this.
-    .field("generator", false);
+    .field("generator", false, defaults["false"]);
 
 def("YieldExpression")
     .bases("Expression")
@@ -29528,11 +30374,12 @@ def("PropertyPattern")
 
 def("MethodDefinition")
     .bases("Declaration")
-    .build("kind", "key", "value")
+    .build("kind", "key", "value", "static")
     .field("kind", or("init", "get", "set", ""))
     .field("key", or(def("Literal"), def("Identifier"), def("Expression")))
     .field("value", def("Function"))
-    .field("computed", isBoolean, defaults["false"]);
+    .field("computed", isBoolean, defaults["false"])
+    .field("static", isBoolean, defaults["false"]);
 
 def("SpreadElement")
     .bases("Node")
@@ -29588,7 +30435,7 @@ def("ClassBody")
 def("ClassDeclaration")
     .bases("Declaration")
     .build("id", "body", "superClass")
-    .field("id", def("Identifier"))
+    .field("id", or(def("Identifier"), null))
     .field("body", def("ClassBody"))
     .field("superClass", or(def("Expression"), null), defaults["null"]);
 
@@ -29657,7 +30504,11 @@ def("ExportDeclaration")
         def("ExportSpecifier"),
         def("ExportBatchSpecifier")
     )], defaults.emptyArray)
-    .field("source", or(def("ModuleSpecifier"), null), defaults["null"]);
+    .field("source", or(
+        def("Literal"),
+        def("ModuleSpecifier"),
+        null
+    ), defaults["null"]);
 
 def("ImportDeclaration")
     .bases("Declaration")
@@ -29667,7 +30518,10 @@ def("ImportDeclaration")
         def("ImportNamespaceSpecifier"),
         def("ImportDefaultSpecifier")
     )], defaults.emptyArray)
-    .field("source", def("ModuleSpecifier"));
+    .field("source", or(
+        def("Literal"),
+        def("ModuleSpecifier")
+    ));
 
 def("TaggedTemplateExpression")
     .bases("Expression")
@@ -29686,14 +30540,14 @@ def("TemplateElement")
     .field("value", {"cooked": isString, "raw": isString})
     .field("tail", isBoolean);
 
-},{"../lib/shared":68,"../lib/types":69,"./core":57}],60:[function(_dereq_,module,exports){
-_dereq_("./core");
-var types = _dereq_("../lib/types");
+},{"../lib/shared":74,"../lib/types":75,"./core":63}],66:[function(require,module,exports){
+require("./core");
+var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isBoolean = builtin.boolean;
-var defaults = _dereq_("../lib/shared").defaults;
+var defaults = require("../lib/shared").defaults;
 
 def("Function")
     .field("async", isBoolean, defaults["false"]);
@@ -29726,77 +30580,77 @@ def("AwaitExpression")
     .field("argument", or(def("Expression"), null))
     .field("all", isBoolean, defaults["false"]);
 
-},{"../lib/shared":68,"../lib/types":69,"./core":57}],61:[function(_dereq_,module,exports){
-_dereq_("./core");
-var types = _dereq_("../lib/types");
+},{"../lib/shared":74,"../lib/types":75,"./core":63}],67:[function(require,module,exports){
+require("./core");
+var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
 var builtin = types.builtInTypes;
 var isString = builtin.string;
 var isBoolean = builtin.boolean;
-var defaults = _dereq_("../lib/shared").defaults;
+var defaults = require("../lib/shared").defaults;
 
-def("XJSAttribute")
+def("JSXAttribute")
     .bases("Node")
     .build("name", "value")
-    .field("name", or(def("XJSIdentifier"), def("XJSNamespacedName")))
+    .field("name", or(def("JSXIdentifier"), def("JSXNamespacedName")))
     .field("value", or(
         def("Literal"), // attr="value"
-        def("XJSExpressionContainer"), // attr={value}
+        def("JSXExpressionContainer"), // attr={value}
         null // attr= or just attr
     ), defaults["null"]);
 
-def("XJSIdentifier")
-    .bases("Node")
+def("JSXIdentifier")
+    .bases("Identifier")
     .build("name")
     .field("name", isString);
 
-def("XJSNamespacedName")
+def("JSXNamespacedName")
     .bases("Node")
     .build("namespace", "name")
-    .field("namespace", def("XJSIdentifier"))
-    .field("name", def("XJSIdentifier"));
+    .field("namespace", def("JSXIdentifier"))
+    .field("name", def("JSXIdentifier"));
 
-def("XJSMemberExpression")
+def("JSXMemberExpression")
     .bases("MemberExpression")
     .build("object", "property")
-    .field("object", or(def("XJSIdentifier"), def("XJSMemberExpression")))
-    .field("property", def("XJSIdentifier"))
+    .field("object", or(def("JSXIdentifier"), def("JSXMemberExpression")))
+    .field("property", def("JSXIdentifier"))
     .field("computed", isBoolean, defaults.false);
 
-var XJSElementName = or(
-    def("XJSIdentifier"),
-    def("XJSNamespacedName"),
-    def("XJSMemberExpression")
+var JSXElementName = or(
+    def("JSXIdentifier"),
+    def("JSXNamespacedName"),
+    def("JSXMemberExpression")
 );
 
-def("XJSSpreadAttribute")
+def("JSXSpreadAttribute")
     .bases("Node")
     .build("argument")
     .field("argument", def("Expression"));
 
-var XJSAttributes = [or(
-    def("XJSAttribute"),
-    def("XJSSpreadAttribute")
+var JSXAttributes = [or(
+    def("JSXAttribute"),
+    def("JSXSpreadAttribute")
 )];
 
-def("XJSExpressionContainer")
+def("JSXExpressionContainer")
     .bases("Expression")
     .build("expression")
     .field("expression", def("Expression"));
 
-def("XJSElement")
+def("JSXElement")
     .bases("Expression")
     .build("openingElement", "closingElement", "children")
-    .field("openingElement", def("XJSOpeningElement"))
-    .field("closingElement", or(def("XJSClosingElement"), null), defaults["null"])
+    .field("openingElement", def("JSXOpeningElement"))
+    .field("closingElement", or(def("JSXClosingElement"), null), defaults["null"])
     .field("children", [or(
-        def("XJSElement"),
-        def("XJSExpressionContainer"),
-        def("XJSText"),
-        def("Literal") // TODO Esprima should return XJSText instead.
+        def("JSXElement"),
+        def("JSXExpressionContainer"),
+        def("JSXText"),
+        def("Literal") // TODO Esprima should return JSXText instead.
     )], defaults.emptyArray)
-    .field("name", XJSElementName, function() {
+    .field("name", JSXElementName, function() {
         // Little-known fact: the `this` object inside a default function
         // is none other than the partially-built object itself, and any
         // fields initialized directly from builder function arguments
@@ -29807,28 +30661,28 @@ def("XJSElement")
     .field("selfClosing", isBoolean, function() {
         return this.openingElement.selfClosing;
     })
-    .field("attributes", XJSAttributes, function() {
+    .field("attributes", JSXAttributes, function() {
         return this.openingElement.attributes;
     });
 
-def("XJSOpeningElement")
-    .bases("Node") // TODO Does this make sense? Can't really be an XJSElement.
+def("JSXOpeningElement")
+    .bases("Node") // TODO Does this make sense? Can't really be an JSXElement.
     .build("name", "attributes", "selfClosing")
-    .field("name", XJSElementName)
-    .field("attributes", XJSAttributes, defaults.emptyArray)
+    .field("name", JSXElementName)
+    .field("attributes", JSXAttributes, defaults.emptyArray)
     .field("selfClosing", isBoolean, defaults["false"]);
 
-def("XJSClosingElement")
+def("JSXClosingElement")
     .bases("Node") // TODO Same concern.
     .build("name")
-    .field("name", XJSElementName);
+    .field("name", JSXElementName);
 
-def("XJSText")
+def("JSXText")
     .bases("Literal")
     .build("value")
     .field("value", isString);
 
-def("XJSEmptyExpression").bases("Expression").build();
+def("JSXEmptyExpression").bases("Expression").build();
 
 // Type Annotations
 def("Type")
@@ -29879,7 +30733,7 @@ def("FunctionTypeParam")
   .field("name", def("Identifier"))
   .field("typeAnnotation", def("Type"))
   .field("optional", isBoolean);
-  
+
 def("ArrayTypeAnnotation")
   .bases("Type")
   .build("elementType")
@@ -29990,7 +30844,7 @@ def("TypeAlias")
   .field("id", def("Identifier"))
   .field("typeParameters", or(def("TypeParameterDeclaration"), null))
   .field("right", def("Type"));
-  
+
 def("TypeCastExpression")
   .bases("Expression")
   .build("expression", "typeAnnotation")
@@ -30022,12 +30876,16 @@ def("DeclareModule")
   .field("id", or(def("Identifier"), def("Literal")))
   .field("body", def("BlockStatement"));
 
-},{"../lib/shared":68,"../lib/types":69,"./core":57}],62:[function(_dereq_,module,exports){
-_dereq_("./core");
-var types = _dereq_("../lib/types");
+},{"../lib/shared":74,"../lib/types":75,"./core":63}],68:[function(require,module,exports){
+require("./core");
+var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
-var geq = _dereq_("../lib/shared").geq;
+var geq = require("../lib/shared").geq;
+
+def("Function")
+    // SpiderMonkey allows expression closures: function(x) x+1
+    .field("body", or(def("BlockStatement"), def("Expression")));
 
 def("ForOfStatement")
     .bases("Statement")
@@ -30063,9 +30921,9 @@ def("GraphIndexExpression")
     .build("index")
     .field("index", geq(0));
 
-},{"../lib/shared":68,"../lib/types":69,"./core":57}],63:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("../main");
+},{"../lib/shared":74,"../lib/types":75,"./core":63}],69:[function(require,module,exports){
+var assert = require("assert");
+var types = require("../main");
 var getFieldNames = types.getFieldNames;
 var getFieldValue = types.getFieldValue;
 var isArray = types.builtInTypes.array;
@@ -30243,22 +31101,22 @@ function objectsAreEquivalent(a, b, problemPath) {
 
 module.exports = astNodesAreEquivalent;
 
-},{"../main":70,"assert":2}],64:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"../main":76,"assert":2}],70:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var n = types.namedTypes;
 var b = types.builders;
 var isNumber = types.builtInTypes.number;
 var isArray = types.builtInTypes.array;
-var Path = _dereq_("./path");
-var Scope = _dereq_("./scope");
+var Path = require("./path");
+var Scope = require("./scope");
 
 function NodePath(value, parentPath, name) {
     assert.ok(this instanceof NodePath);
     Path.call(this, value, parentPath, name);
 }
 
-_dereq_("util").inherits(NodePath, Path);
+require("util").inherits(NodePath, Path);
 var NPp = NodePath.prototype;
 
 Object.defineProperties(NPp, {
@@ -30694,11 +31552,11 @@ function cleanUpIfStatementAfterPrune(ifStatement) {
 
 module.exports = NodePath;
 
-},{"./path":66,"./scope":67,"./types":69,"assert":2,"util":21}],65:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
-var NodePath = _dereq_("./node-path");
-var Node = types.namedTypes.Node;
+},{"./path":72,"./scope":73,"./types":75,"assert":2,"util":27}],71:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
+var NodePath = require("./node-path");
+var Printable = types.namedTypes.Printable;
 var isArray = types.builtInTypes.array;
 var isObject = types.builtInTypes.object;
 var isFunction = types.builtInTypes.function;
@@ -30710,7 +31568,12 @@ function PathVisitor() {
 
     // Permanent state.
     this._reusableContextStack = [];
+
     this._methodNameTable = computeMethodNameTable(this);
+    this._shouldVisitComments =
+        hasOwn.call(this._methodNameTable, "Block") ||
+        hasOwn.call(this._methodNameTable, "Line");
+
     this.Context = makeContextConstructor(this);
 
     // State reset every time PathVisitor.prototype.visit is called.
@@ -30865,7 +31728,7 @@ PVp.visitWithoutReset = function(path) {
     assert.ok(path instanceof NodePath);
     var value = path.value;
 
-    var methodName = Node.check(value) && this._methodNameTable[value.type];
+    var methodName = Printable.check(value) && this._methodNameTable[value.type];
     if (methodName) {
         var context = this.acquireContext(path);
         try {
@@ -30893,6 +31756,16 @@ function visitChildren(path, visitor) {
         // No children to visit.
     } else {
         var childNames = types.getFieldNames(value);
+
+        // The .comments field of the Node type is hidden, so we only
+        // visit it if the visitor defines visitBlock or visitLine, and
+        // value.comments is defined.
+        if (visitor._shouldVisitComments &&
+            value.comments &&
+            childNames.indexOf("comments") < 0) {
+            childNames.push("comments");
+        }
+
         var childCount = childNames.length;
         var childPaths = [];
 
@@ -31051,11 +31924,11 @@ sharedContextProtoMethods.abort = function abort() {
 
 module.exports = PathVisitor;
 
-},{"./node-path":64,"./types":69,"assert":2}],66:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
+},{"./node-path":70,"./types":75,"assert":2}],72:[function(require,module,exports){
+var assert = require("assert");
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;
-var types = _dereq_("./types");
+var types = require("./types");
 var isArray = types.builtInTypes.array;
 var isNumber = types.builtInTypes.number;
 var Ap = Array.prototype;
@@ -31401,9 +32274,9 @@ Pp.replace = function replace(replacement) {
 
 module.exports = Path;
 
-},{"./types":69,"assert":2}],67:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
-var types = _dereq_("./types");
+},{"./types":75,"assert":2}],73:[function(require,module,exports){
+var assert = require("assert");
+var types = require("./types");
 var Type = types.Type;
 var namedTypes = types.namedTypes;
 var Node = namedTypes.Node;
@@ -31414,7 +32287,7 @@ var b = types.builders;
 
 function Scope(path, parentScope) {
     assert.ok(this instanceof Scope);
-    assert.ok(path instanceof _dereq_("./node-path"));
+    assert.ok(path instanceof require("./node-path"));
     ScopeType.assert(path.value);
 
     var depth;
@@ -31569,7 +32442,12 @@ function recursiveScanScope(path, bindings) {
                node.type === "ImportNamespaceSpecifier" ||
                node.type === "ImportDefaultSpecifier") {
         addPattern(
-            node.name ? path.get("name") : path.get("id"),
+            // Esprima used to use the .name field to refer to the local
+            // binding identifier for ImportSpecifier nodes, but .id for
+            // ImportNamespaceSpecifier and ImportDefaultSpecifier nodes.
+            // ESTree/Acorn/ESpree use .local for all three node types.
+            path.get(node.local ? "local" :
+                     node.name ? "name" : "id"),
             bindings
         );
 
@@ -31684,8 +32562,8 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./node-path":64,"./types":69,"assert":2}],68:[function(_dereq_,module,exports){
-var types = _dereq_("../lib/types");
+},{"./node-path":70,"./types":75,"assert":2}],74:[function(require,module,exports){
+var types = require("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
 var isNumber = builtin.number;
@@ -31727,8 +32605,8 @@ exports.isPrimitive = new Type(function(value) {
              type === "function");
 }, naiveIsPrimitive.toString());
 
-},{"../lib/types":69}],69:[function(_dereq_,module,exports){
-var assert = _dereq_("assert");
+},{"../lib/types":75}],75:[function(require,module,exports){
+var assert = require("assert");
 var Ap = Array.prototype;
 var slice = Ap.slice;
 var map = Ap.map;
@@ -32459,20 +33337,20 @@ exports.finalize = function() {
     });
 };
 
-},{"assert":2}],70:[function(_dereq_,module,exports){
-var types = _dereq_("./lib/types");
+},{"assert":2}],76:[function(require,module,exports){
+var types = require("./lib/types");
 
 // This core module of AST types captures ES5 as it is parsed today by
 // git://github.com/ariya/esprima.git#master.
-_dereq_("./def/core");
+require("./def/core");
 
 // Feel free to add to or remove from this list of extension modules to
 // configure the precise type hierarchy that you need.
-_dereq_("./def/es6");
-_dereq_("./def/es7");
-_dereq_("./def/mozilla");
-_dereq_("./def/e4x");
-_dereq_("./def/fb-harmony");
+require("./def/es6");
+require("./def/es7");
+require("./def/mozilla");
+require("./def/e4x");
+require("./def/fb-harmony");
 
 types.finalize();
 
@@ -32486,13 +33364,13 @@ exports.getFieldValue = types.getFieldValue;
 exports.eachField = types.eachField;
 exports.someField = types.someField;
 exports.getSupertypeNames = types.getSupertypeNames;
-exports.astNodesAreEquivalent = _dereq_("./lib/equiv");
+exports.astNodesAreEquivalent = require("./lib/equiv");
 exports.finalize = types.finalize;
-exports.NodePath = _dereq_("./lib/node-path");
-exports.PathVisitor = _dereq_("./lib/path-visitor");
+exports.NodePath = require("./lib/node-path");
+exports.PathVisitor = require("./lib/path-visitor");
 exports.visit = exports.PathVisitor.visit;
 
-},{"./def/core":57,"./def/e4x":58,"./def/es6":59,"./def/es7":60,"./def/fb-harmony":61,"./def/mozilla":62,"./lib/equiv":63,"./lib/node-path":64,"./lib/path-visitor":65,"./lib/types":69}],71:[function(_dereq_,module,exports){
+},{"./def/core":63,"./def/e4x":64,"./def/es6":65,"./def/es7":66,"./def/fb-harmony":67,"./def/mozilla":68,"./lib/equiv":69,"./lib/node-path":70,"./lib/path-visitor":71,"./lib/types":75}],77:[function(require,module,exports){
 /*
   Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
@@ -32523,32 +33401,6 @@ exports.visit = exports.PathVisitor.visit;
   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-/*jslint bitwise:true plusplus:true */
-/*global esprima:true, define:true, exports:true, window: true,
-throwErrorTolerant: true,
-throwError: true, generateStatement: true, peek: true,
-parseAssignmentExpression: true, parseBlock: true,
-parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
-parseDeclareClass: true, parseDeclareFunction: true,
-parseDeclareModule: true, parseDeclareVariable: true,
-parseForStatement: true,
-parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseFunctionSourceElements: true, parseVariableIdentifier: true,
-parseImportSpecifier: true, parseInterface: true,
-parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
-parseSpreadOrAssignmentExpression: true,
-parseStatement: true, parseSourceElement: true, parseConciseBody: true,
-advanceXJSChild: true, isXJSIdentifierStart: true, isXJSIdentifierPart: true,
-scanXJSStringLiteral: true, scanXJSIdentifier: true,
-parseXJSAttributeValue: true, parseXJSChild: true, parseXJSElement: true, parseXJSExpressionContainer: true, parseXJSEmptyExpression: true,
-parseFunctionTypeParam: true,
-parsePrimaryType: true,
-parseTypeAlias: true,
-parseType: true, parseTypeAnnotatableIdentifier: true, parseTypeAnnotation: true,
-parseTypeParameterDeclaration: true,
-parseYieldExpression: true, parseAwaitExpression: true
 */
 
 (function (root, factory) {
@@ -32600,8 +33452,8 @@ parseYieldExpression: true, parseAwaitExpression: true
         StringLiteral: 8,
         RegularExpression: 9,
         Template: 10,
-        XJSIdentifier: 11,
-        XJSText: 12
+        JSXIdentifier: 11,
+        JSXText: 12
     };
 
     TokenName = {};
@@ -32613,9 +33465,10 @@ parseYieldExpression: true, parseAwaitExpression: true
     TokenName[Token.NumericLiteral] = 'Numeric';
     TokenName[Token.Punctuator] = 'Punctuator';
     TokenName[Token.StringLiteral] = 'String';
-    TokenName[Token.XJSIdentifier] = 'XJSIdentifier';
-    TokenName[Token.XJSText] = 'XJSText';
+    TokenName[Token.JSXIdentifier] = 'JSXIdentifier';
+    TokenName[Token.JSXText] = 'JSXText';
     TokenName[Token.RegularExpression] = 'RegularExpression';
+    TokenName[Token.Template] = 'Template';
 
     // A function following one of those tokens is an expression.
     FnExprTokens = ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
@@ -32683,7 +33536,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
         MethodDefinition: 'MethodDefinition',
-        ModuleSpecifier: 'ModuleSpecifier',
         NewExpression: 'NewExpression',
         NullableTypeAnnotation: 'NullableTypeAnnotation',
         NumberTypeAnnotation: 'NumberTypeAnnotation',
@@ -32725,17 +33577,17 @@ parseYieldExpression: true, parseAwaitExpression: true
         VoidTypeAnnotation: 'VoidTypeAnnotation',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement',
-        XJSIdentifier: 'XJSIdentifier',
-        XJSNamespacedName: 'XJSNamespacedName',
-        XJSMemberExpression: 'XJSMemberExpression',
-        XJSEmptyExpression: 'XJSEmptyExpression',
-        XJSExpressionContainer: 'XJSExpressionContainer',
-        XJSElement: 'XJSElement',
-        XJSClosingElement: 'XJSClosingElement',
-        XJSOpeningElement: 'XJSOpeningElement',
-        XJSAttribute: 'XJSAttribute',
-        XJSSpreadAttribute: 'XJSSpreadAttribute',
-        XJSText: 'XJSText',
+        JSXIdentifier: 'JSXIdentifier',
+        JSXNamespacedName: 'JSXNamespacedName',
+        JSXMemberExpression: 'JSXMemberExpression',
+        JSXEmptyExpression: 'JSXEmptyExpression',
+        JSXExpressionContainer: 'JSXExpressionContainer',
+        JSXElement: 'JSXElement',
+        JSXClosingElement: 'JSXClosingElement',
+        JSXOpeningElement: 'JSXOpeningElement',
+        JSXAttribute: 'JSXAttribute',
+        JSXSpreadAttribute: 'JSXSpreadAttribute',
+        JSXText: 'JSXText',
         YieldExpression: 'YieldExpression',
         AwaitExpression: 'AwaitExpression'
     };
@@ -32753,32 +33605,33 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     // Error messages should be identical to V8.
     Messages = {
-        UnexpectedToken:  'Unexpected token %0',
-        UnexpectedNumber:  'Unexpected number',
-        UnexpectedString:  'Unexpected string',
-        UnexpectedIdentifier:  'Unexpected identifier',
-        UnexpectedReserved:  'Unexpected reserved word',
-        UnexpectedTemplate:  'Unexpected quasi %0',
-        UnexpectedEOS:  'Unexpected end of input',
-        NewlineAfterThrow:  'Illegal newline after throw',
+        UnexpectedToken: 'Unexpected token %0',
+        UnexpectedNumber: 'Unexpected number',
+        UnexpectedString: 'Unexpected string',
+        UnexpectedIdentifier: 'Unexpected identifier',
+        UnexpectedReserved: 'Unexpected reserved word',
+        UnexpectedTemplate: 'Unexpected quasi %0',
+        UnexpectedEOS: 'Unexpected end of input',
+        NewlineAfterThrow: 'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
-        UnterminatedRegExp:  'Invalid regular expression: missing /',
-        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
-        InvalidLHSInFormalsList:  'Invalid left-hand side in formals list',
-        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
+        UnterminatedRegExp: 'Invalid regular expression: missing /',
+        InvalidLHSInAssignment: 'Invalid left-hand side in assignment',
+        InvalidLHSInFormalsList: 'Invalid left-hand side in formals list',
+        InvalidLHSInForIn: 'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
-        NoCatchOrFinally:  'Missing catch or finally after try',
+        NoCatchOrFinally: 'Missing catch or finally after try',
         UnknownLabel: 'Undefined label \'%0\'',
         Redeclaration: '%0 \'%1\' has already been declared',
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalDuplicateClassProperty: 'Illegal duplicate property in class definition',
+        IllegalClassConstructorProperty: 'Illegal constructor property in class definition',
         IllegalReturn: 'Illegal return statement',
         IllegalSpread: 'Illegal spread element',
-        StrictModeWith:  'Strict mode code may not include a with statement',
-        StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
-        StrictVarName:  'Variable name may not be eval or arguments in strict mode',
-        StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
+        StrictModeWith: 'Strict mode code may not include a with statement',
+        StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
+        StrictVarName: 'Variable name may not be eval or arguments in strict mode',
+        StrictParamName: 'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
         DefaultRestParameter: 'Rest parameter can not have a default value',
@@ -32786,28 +33639,28 @@ parseYieldExpression: true, parseAwaitExpression: true
         PropertyAfterSpreadProperty: 'A rest property must be the final property of an object literal',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
-        StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
-        StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
-        StrictDelete:  'Delete of an unqualified identifier in strict mode.',
-        StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
-        StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
-        StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictReservedWord:  'Use of future reserved word in strict mode',
+        StrictFunctionName: 'Function name may not be eval or arguments in strict mode',
+        StrictOctalLiteral: 'Octal literals are not allowed in strict mode.',
+        StrictDelete: 'Delete of an unqualified identifier in strict mode.',
+        StrictDuplicateProperty: 'Duplicate data property in object literal not allowed in strict mode',
+        AccessorDataProperty: 'Object literal may not have data and accessor property with the same name',
+        AccessorGetSet: 'Object literal may not have multiple get/set accessors with the same name',
+        StrictLHSAssignment: 'Assignment to eval or arguments is not allowed in strict mode',
+        StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictReservedWord: 'Use of future reserved word in strict mode',
         MissingFromClause: 'Missing from clause',
         NoAsAfterImportNamespace: 'Missing as after import *',
         InvalidModuleSpecifier: 'Invalid module specifier',
         IllegalImportDeclaration: 'Illegal import declaration',
         IllegalExportDeclaration: 'Illegal export declaration',
-        NoUnintializedConst: 'Const must be initialized',
+        NoUninitializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
-        ComprehensionError:  'Comprehension Error',
-        EachNotAllowed:  'Each is not supported',
-        InvalidXJSAttributeValue: 'XJS value should be either an expression or a quoted XJS text',
-        ExpectedXJSClosingTag: 'Expected corresponding XJS closing tag for %0',
-        AdjacentXJSElements: 'Adjacent XJS elements must be wrapped in an enclosing tag',
+        ComprehensionError: 'Comprehension Error',
+        EachNotAllowed: 'Each is not supported',
+        InvalidJSXAttributeValue: 'JSX value should be either an expression or a quoted JSX text',
+        ExpectedJSXClosingTag: 'Expected corresponding JSX closing tag for %0',
+        AdjacentJSXElements: 'Adjacent JSX elements must be wrapped in an enclosing tag',
         ConfusedAboutFunctionType: 'Unexpected token =>. It looks like ' +
             'you are trying to write a function type, but you ended up ' +
             'writing a grouped type followed by an =>, which is a syntax ' +
@@ -32855,7 +33708,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         return Object.prototype.hasOwnProperty.call(this.$data, key);
     };
 
-    StringMap.prototype['delete'] = function (key) {
+    StringMap.prototype.delete = function (key) {
         key = '$' + key;
         return delete this.$data[key];
     };
@@ -32987,69 +33840,134 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     // 7.4 Comments
 
-    function skipComment() {
-        var ch, blockComment, lineComment;
+    function addComment(type, value, start, end, loc) {
+        var comment;
+        assert(typeof start === 'number', 'Comment must have valid position');
 
-        blockComment = false;
-        lineComment = false;
+        // Because the way the actual token is scanned, often the comments
+        // (if any) are skipped twice during the lexical analysis.
+        // Thus, we need to skip adding a comment if the comment array already
+        // handled it.
+        if (state.lastCommentStart >= start) {
+            return;
+        }
+        state.lastCommentStart = start;
+
+        comment = {
+            type: type,
+            value: value
+        };
+        if (extra.range) {
+            comment.range = [start, end];
+        }
+        if (extra.loc) {
+            comment.loc = loc;
+        }
+        extra.comments.push(comment);
+        if (extra.attachComment) {
+            extra.leadingComments.push(comment);
+            extra.trailingComments.push(comment);
+        }
+    }
+
+    function skipSingleLineComment() {
+        var start, loc, ch, comment;
+
+        start = index - 2;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart - 2
+            }
+        };
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            ++index;
+            if (isLineTerminator(ch)) {
+                if (extra.comments) {
+                    comment = source.slice(start + 2, index - 1);
+                    loc.end = {
+                        line: lineNumber,
+                        column: index - lineStart - 1
+                    };
+                    addComment('Line', comment, start, index - 1, loc);
+                }
+                if (ch === 13 && source.charCodeAt(index) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                lineStart = index;
+                return;
+            }
+        }
+
+        if (extra.comments) {
+            comment = source.slice(start + 2, index);
+            loc.end = {
+                line: lineNumber,
+                column: index - lineStart
+            };
+            addComment('Line', comment, start, index, loc);
+        }
+    }
+
+    function skipMultiLineComment() {
+        var start, loc, ch, comment;
+
+        if (extra.comments) {
+            start = index - 2;
+            loc = {
+                start: {
+                    line: lineNumber,
+                    column: index - lineStart - 2
+                }
+            };
+        }
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                ++index;
+                lineStart = index;
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else if (ch === 42) {
+                // Block comment ends with '*/' (char #42, char #47).
+                if (source.charCodeAt(index + 1) === 47) {
+                    ++index;
+                    ++index;
+                    if (extra.comments) {
+                        comment = source.slice(start + 2, index - 2);
+                        loc.end = {
+                            line: lineNumber,
+                            column: index - lineStart
+                        };
+                        addComment('Block', comment, start, index, loc);
+                    }
+                    return;
+                }
+                ++index;
+            } else {
+                ++index;
+            }
+        }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+    }
+
+    function skipComment() {
+        var ch;
 
         while (index < length) {
             ch = source.charCodeAt(index);
 
-            if (lineComment) {
-                ++index;
-                if (isLineTerminator(ch)) {
-                    lineComment = false;
-                    if (ch === 13 && source.charCodeAt(index) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch)) {
-                    if (ch === 13) {
-                        ++index;
-                    }
-                    if (ch !== 13 || source.charCodeAt(index) === 10) {
-                        ++lineNumber;
-                        ++index;
-                        lineStart = index;
-                        if (index >= length) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                } else {
-                    ch = source.charCodeAt(index++);
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    // Block comment ends with '*/' (char #42, char #47).
-                    if (ch === 42) {
-                        ch = source.charCodeAt(index);
-                        if (ch === 47) {
-                            ++index;
-                            blockComment = false;
-                        }
-                    }
-                }
-            } else if (ch === 47) {
-                ch = source.charCodeAt(index + 1);
-                // Line comment starts with '//' (char #47, char #47).
-                if (ch === 47) {
-                    index += 2;
-                    lineComment = true;
-                } else if (ch === 42) {
-                    // Block comment starts with '/*' (char #47, char #42).
-                    index += 2;
-                    blockComment = true;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch)) {
+            if (isWhiteSpace(ch)) {
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
@@ -33058,6 +33976,19 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
                 ++lineNumber;
                 lineStart = index;
+            } else if (ch === 47) { // 47 is '/'
+                ch = source.charCodeAt(index + 1);
+                if (ch === 47) {
+                    ++index;
+                    ++index;
+                    skipSingleLineComment();
+                } else if (ch === 42) {  // 42 is '*'
+                    ++index;
+                    ++index;
+                    skipMultiLineComment();
+                } else {
+                    break;
+                }
             } else {
                 break;
             }
@@ -33220,7 +34151,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             ch3,
             ch4;
 
-        if (state.inXJSTag || state.inXJSChild) {
+        if (state.inJSXTag || state.inJSXChild) {
             // Don't need to check for '{' and '}' as it's already handled
             // correctly by default.
             switch (code) {
@@ -33243,21 +34174,43 @@ parseYieldExpression: true, parseAwaitExpression: true
         case 41:   // ) close bracket
         case 59:   // ; semicolon
         case 44:   // , comma
-        case 123:  // { open curly brace
-        case 125:  // } close curly brace
         case 91:   // [
         case 93:   // ]
         case 58:   // :
         case 63:   // ?
         case 126:  // ~
             ++index;
-            if (extra.tokenize) {
-                if (code === 40) {
-                    extra.openParenToken = extra.tokens.length;
-                } else if (code === 123) {
-                    extra.openCurlyToken = extra.tokens.length;
+            if (extra.tokenize && code === 40) {
+                extra.openParenToken = extra.tokens.length;
+            }
+
+            return {
+                type: Token.Punctuator,
+                value: String.fromCharCode(code),
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
+
+        case 123:  // { open curly brace
+        case 125:  // } close curly brace
+            ++index;
+            if (extra.tokenize && code === 123) {
+                extra.openCurlyToken = extra.tokens.length;
+            }
+
+            // lookahead2 function can cause tokens to be scanned twice and in doing so
+            // would wreck the curly stack by pushing the same token onto the stack twice.
+            // curlyLastIndex ensures each token is pushed or popped exactly once
+            if (index > state.curlyLastIndex) {
+                state.curlyLastIndex = index;
+                if (code === 123) {
+                    state.curlyStack.push('{');
+                } else {
+                    state.curlyStack.pop();
                 }
             }
+
             return {
                 type: Token.Punctuator,
                 value: String.fromCharCode(code),
@@ -33336,7 +34289,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         // 3-character punctuators: === !== >>> <<= >>=
 
-        if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
+        if (ch1 === '>' && ch2 === '>' && ch3 === '>' && !state.inType) {
             index += 3;
             return {
                 type: Token.Punctuator,
@@ -33460,6 +34413,41 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
+    function scanBinaryLiteral(start) {
+        var ch, number;
+
+        number = '';
+
+        while (index < length) {
+            ch = source[index];
+            if (ch !== '0' && ch !== '1') {
+                break;
+            }
+            number += source[index++];
+        }
+
+        if (number.length === 0) {
+            // only 0b or 0B
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        if (index < length) {
+            ch = source.charCodeAt(index);
+            /* istanbul ignore else */
+            if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            }
+        }
+
+        return {
+            type: Token.NumericLiteral,
+            value: parseInt(number, 2),
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
     function scanOctalLiteral(prefix, start) {
         var number, octal;
 
@@ -33499,7 +34487,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function scanNumericLiteral() {
-        var number, start, ch, octal;
+        var number, start, ch;
 
         ch = source[index];
         assert(isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
@@ -33522,35 +34510,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
                 if (ch === 'b' || ch === 'B') {
                     ++index;
-                    number = '';
-
-                    while (index < length) {
-                        ch = source[index];
-                        if (ch !== '0' && ch !== '1') {
-                            break;
-                        }
-                        number += source[index++];
-                    }
-
-                    if (number.length === 0) {
-                        // only 0b or 0B
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-
-                    if (index < length) {
-                        ch = source.charCodeAt(index);
-                        /* istanbul ignore else */
-                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                    return {
-                        type: Token.NumericLiteral,
-                        value: parseInt(number, 2),
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        range: [start, index]
-                    };
+                    return scanBinaryLiteral(start);
                 }
                 if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
                     return scanOctalLiteral(ch, start);
@@ -33691,7 +34651,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     lineStart = index;
@@ -33718,11 +34678,12 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function scanTemplate() {
-        var cooked = '', ch, start, terminated, tail, restore, unescaped, code, octal;
+        var cooked = '', ch, start, terminated, head, tail, restore, unescaped, code, octal;
 
         terminated = false;
         tail = false;
         start = index;
+        head = (source[index] === '`');
 
         ++index;
 
@@ -33808,14 +34769,14 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     lineStart = index;
                 }
             } else if (isLineTerminator(ch.charCodeAt(0))) {
                 ++lineNumber;
-                if (ch ===  '\r' && source[index] === '\n') {
+                if (ch === '\r' && source[index] === '\n') {
                     ++index;
                 }
                 lineStart = index;
@@ -33829,12 +34790,24 @@ parseYieldExpression: true, parseAwaitExpression: true
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
+        if (index > state.curlyLastIndex) {
+            state.curlyLastIndex = index;
+            if (!tail) {
+                state.curlyStack.push('template');
+            }
+
+            if (!head) {
+                state.curlyStack.pop();
+            }
+        }
+
         return {
             type: Token.Template,
             value: {
                 cooked: cooked,
                 raw: source.slice(start + 1, index - ((tail) ? 1 : 2))
             },
+            head: head,
             tail: tail,
             octal: octal,
             lineNumber: lineNumber,
@@ -33843,105 +34816,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
-    function scanTemplateElement(option) {
-        var startsWith, template;
+    function testRegExp(pattern, flags) {
+        var tmp = pattern,
+            value;
 
-        lookahead = null;
-        skipComment();
-
-        startsWith = (option.head) ? '`' : '}';
-
-        if (source[index] !== startsWith) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-        }
-
-        template = scanTemplate();
-
-        peek();
-
-        return template;
-    }
-
-    function scanRegExp() {
-        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false, tmp;
-
-        lookahead = null;
-        skipComment();
-
-        start = index;
-        ch = source[index];
-        assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = source[index++];
-
-        while (index < length) {
-            ch = source[index++];
-            str += ch;
-            if (classMarker) {
-                if (ch === ']') {
-                    classMarker = false;
-                }
-            } else {
-                if (ch === '\\') {
-                    ch = source[index++];
-                    // ECMA-262 7.8.5
-                    if (isLineTerminator(ch.charCodeAt(0))) {
-                        throwError({}, Messages.UnterminatedRegExp);
-                    }
-                    str += ch;
-                } else if (ch === '/') {
-                    terminated = true;
-                    break;
-                } else if (ch === '[') {
-                    classMarker = true;
-                } else if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
-                }
-            }
-        }
-
-        if (!terminated) {
-            throwError({}, Messages.UnterminatedRegExp);
-        }
-
-        // Exclude leading and trailing slash.
-        pattern = str.substr(1, str.length - 2);
-
-        flags = '';
-        while (index < length) {
-            ch = source[index];
-            if (!isIdentifierPart(ch.charCodeAt(0))) {
-                break;
-            }
-
-            ++index;
-            if (ch === '\\' && index < length) {
-                ch = source[index];
-                if (ch === 'u') {
-                    ++index;
-                    restore = index;
-                    ch = scanHexEscape('u');
-                    /* istanbul ignore else */
-                    if (ch) {
-                        flags += ch;
-                        for (str += '\\u'; restore < index; ++restore) {
-                            str += source[restore];
-                        }
-                    } else {
-                        index = restore;
-                        flags += 'u';
-                        str += '\\u';
-                    }
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
-                } else {
-                    str += '\\';
-                }
-            } else {
-                flags += ch;
-                str += ch;
-            }
-        }
-
-        tmp = pattern;
         if (flags.indexOf('u') >= 0) {
             // Replace each astral symbol and every Unicode code point
             // escape sequence with a single ASCII symbol to avoid throwing on
@@ -33972,30 +34850,135 @@ parseYieldExpression: true, parseAwaitExpression: true
         // `null` in case the current environment doesn't support the flags it
         // uses.
         try {
-            value = new RegExp(pattern, flags);
+            return new RegExp(pattern, flags);
         } catch (exception) {
-            value = null;
+            return null;
         }
+    }
+
+    function scanRegExpBody() {
+        var ch, str, classMarker, terminated, body;
+
+        ch = source[index];
+        assert(ch === '/', 'Regular expression literal must start with a slash');
+        str = source[index++];
+
+        classMarker = false;
+        terminated = false;
+        while (index < length) {
+            ch = source[index++];
+            str += ch;
+            if (ch === '\\') {
+                ch = source[index++];
+                // ECMA-262 7.8.5
+                if (isLineTerminator(ch.charCodeAt(0))) {
+                    throwError({}, Messages.UnterminatedRegExp);
+                }
+                str += ch;
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                throwError({}, Messages.UnterminatedRegExp);
+            } else if (classMarker) {
+                if (ch === ']') {
+                    classMarker = false;
+                }
+            } else {
+                if (ch === '/') {
+                    terminated = true;
+                    break;
+                } else if (ch === '[') {
+                    classMarker = true;
+                }
+            }
+        }
+
+        if (!terminated) {
+            throwError({}, Messages.UnterminatedRegExp);
+        }
+
+        // Exclude leading and trailing slash.
+        body = str.substr(1, str.length - 2);
+        return {
+            value: body,
+            literal: str
+        };
+    }
+
+    function scanRegExpFlags() {
+        var ch, str, flags, restore;
+
+        str = '';
+        flags = '';
+        while (index < length) {
+            ch = source[index];
+            if (!isIdentifierPart(ch.charCodeAt(0))) {
+                break;
+            }
+
+            ++index;
+            if (ch === '\\' && index < length) {
+                ch = source[index];
+                if (ch === 'u') {
+                    ++index;
+                    restore = index;
+                    ch = scanHexEscape('u');
+                    if (ch) {
+                        flags += ch;
+                        for (str += '\\u'; restore < index; ++restore) {
+                            str += source[restore];
+                        }
+                    } else {
+                        index = restore;
+                        flags += 'u';
+                        str += '\\u';
+                    }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                } else {
+                    str += '\\';
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else {
+                flags += ch;
+                str += ch;
+            }
+        }
+
+        return {
+            value: flags,
+            literal: str
+        };
+    }
+
+    function scanRegExp() {
+        var start, body, flags, value;
+
+        lookahead = null;
+        skipComment();
+        start = index;
+
+        body = scanRegExpBody();
+        flags = scanRegExpFlags();
+        value = testRegExp(body.value, flags.value);
 
         if (extra.tokenize) {
             return {
                 type: Token.RegularExpression,
                 value: value,
                 regex: {
-                    pattern: pattern,
-                    flags: flags
+                    pattern: body.value,
+                    flags: flags.value
                 },
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
             };
         }
+
         return {
-            literal: str,
+            literal: body.literal + flags.literal,
             value: value,
             regex: {
-                pattern: pattern,
-                flags: flags
+                pattern: body.value,
+                flags: flags.value
             },
             range: [start, index]
         };
@@ -34062,7 +35045,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
             return scanRegExp();
         }
-        if (prevToken.type === 'Keyword') {
+        if (prevToken.type === 'Keyword' && prevToken.value !== 'this') {
             return scanRegExp();
         }
         return scanPunctuator();
@@ -34071,7 +35054,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     function advance() {
         var ch;
 
-        if (!state.inXJSChild) {
+        if (!state.inJSXChild) {
             skipComment();
         }
 
@@ -34084,8 +35067,8 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         }
 
-        if (state.inXJSChild) {
-            return advanceXJSChild();
+        if (state.inJSXChild) {
+            return advanceJSXChild();
         }
 
         ch = source.charCodeAt(index);
@@ -34097,17 +35080,19 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         // String literal starts with single quote (#39) or double quote (#34).
         if (ch === 39 || ch === 34) {
-            if (state.inXJSTag) {
-                return scanXJSStringLiteral();
+            if (state.inJSXTag) {
+                return scanJSXStringLiteral();
             }
             return scanStringLiteral();
         }
 
-        if (state.inXJSTag && isXJSIdentifierStart(ch)) {
-            return scanXJSIdentifier();
+        if (state.inJSXTag && isJSXIdentifierStart(ch)) {
+            return scanJSXIdentifier();
         }
 
-        if (ch === 96) {
+        // Template literals start with backtick (#96) for template head
+        // or close curly (#125) for template middle or template tail.
+        if (ch === 96 || (ch === 125 && state.curlyStack[state.curlyStack.length - 1] === 'template')) {
             return scanTemplate();
         }
         if (isIdentifierStart(ch)) {
@@ -34715,78 +35700,78 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createXJSAttribute: function (name, value) {
+        createJSXAttribute: function (name, value) {
             return {
-                type: Syntax.XJSAttribute,
+                type: Syntax.JSXAttribute,
                 name: name,
                 value: value || null
             };
         },
 
-        createXJSSpreadAttribute: function (argument) {
+        createJSXSpreadAttribute: function (argument) {
             return {
-                type: Syntax.XJSSpreadAttribute,
+                type: Syntax.JSXSpreadAttribute,
                 argument: argument
             };
         },
 
-        createXJSIdentifier: function (name) {
+        createJSXIdentifier: function (name) {
             return {
-                type: Syntax.XJSIdentifier,
+                type: Syntax.JSXIdentifier,
                 name: name
             };
         },
 
-        createXJSNamespacedName: function (namespace, name) {
+        createJSXNamespacedName: function (namespace, name) {
             return {
-                type: Syntax.XJSNamespacedName,
+                type: Syntax.JSXNamespacedName,
                 namespace: namespace,
                 name: name
             };
         },
 
-        createXJSMemberExpression: function (object, property) {
+        createJSXMemberExpression: function (object, property) {
             return {
-                type: Syntax.XJSMemberExpression,
+                type: Syntax.JSXMemberExpression,
                 object: object,
                 property: property
             };
         },
 
-        createXJSElement: function (openingElement, closingElement, children) {
+        createJSXElement: function (openingElement, closingElement, children) {
             return {
-                type: Syntax.XJSElement,
+                type: Syntax.JSXElement,
                 openingElement: openingElement,
                 closingElement: closingElement,
                 children: children
             };
         },
 
-        createXJSEmptyExpression: function () {
+        createJSXEmptyExpression: function () {
             return {
-                type: Syntax.XJSEmptyExpression
+                type: Syntax.JSXEmptyExpression
             };
         },
 
-        createXJSExpressionContainer: function (expression) {
+        createJSXExpressionContainer: function (expression) {
             return {
-                type: Syntax.XJSExpressionContainer,
+                type: Syntax.JSXExpressionContainer,
                 expression: expression
             };
         },
 
-        createXJSOpeningElement: function (name, attributes, selfClosing) {
+        createJSXOpeningElement: function (name, attributes, selfClosing) {
             return {
-                type: Syntax.XJSOpeningElement,
+                type: Syntax.JSXOpeningElement,
                 name: name,
                 selfClosing: selfClosing,
                 attributes: attributes
             };
         },
 
-        createXJSClosingElement: function (name) {
+        createJSXClosingElement: function (name) {
             return {
-                type: Syntax.XJSClosingElement,
+                type: Syntax.JSXClosingElement,
                 name: name
             };
         },
@@ -35091,14 +36076,6 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createModuleSpecifier: function (token) {
-            return {
-                type: Syntax.ModuleSpecifier,
-                value: token.value,
-                raw: source.slice(token.range[0], token.range[1])
-            };
-        },
-
         createExportSpecifier: function (id, name) {
             return {
                 type: Syntax.ExportSpecifier,
@@ -35127,13 +36104,13 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createExportDeclaration: function (isDefault, declaration, specifiers, source) {
+        createExportDeclaration: function (isDefault, declaration, specifiers, src) {
             return {
                 type: Syntax.ExportDeclaration,
                 'default': !!isDefault,
                 declaration: declaration,
                 specifiers: specifiers,
-                source: source
+                source: src
             };
         },
 
@@ -35145,20 +36122,20 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createImportDeclaration: function (specifiers, source, isType) {
+        createImportDeclaration: function (specifiers, src, isType) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
-                source: source,
+                source: src,
                 isType: isType
             };
         },
 
-        createYieldExpression: function (argument, delegate) {
+        createYieldExpression: function (argument, dlg) {
             return {
                 type: Syntax.YieldExpression,
                 argument: argument,
-                delegate: delegate
+                delegate: dlg
             };
         },
 
@@ -35204,9 +36181,9 @@ parseYieldExpression: true, parseAwaitExpression: true
             args = Array.prototype.slice.call(arguments, 2),
             msg = messageFormat.replace(
                 /%(\d)/g,
-                function (whole, index) {
-                    assert(index < args.length, 'Message reference must be in range');
-                    return args[index];
+                function (whole, idx) {
+                    assert(idx < args.length, 'Message reference must be in range');
+                    return args[idx];
                 }
             );
 
@@ -35250,7 +36227,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             throwError(token, Messages.UnexpectedNumber);
         }
 
-        if (token.type === Token.StringLiteral || token.type === Token.XJSText) {
+        if (token.type === Token.StringLiteral || token.type === Token.JSXText) {
             throwError(token, Messages.UnexpectedString);
         }
 
@@ -35413,7 +36390,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true, body,
+        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true,
             marker = markerCreate();
 
         expect('[');
@@ -35569,7 +36546,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param, expr, computed,
+        var token, key, id, param, computed,
             marker = markerCreate(), returnType, typeParameters;
 
         token = lookahead;
@@ -35832,8 +36809,15 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseTemplateElement(option) {
-        var marker = markerCreate(),
-            token = scanTemplateElement(option);
+        var marker, token;
+
+        if (lookahead.type !== Token.Template || (option.head && !lookahead.head)) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        marker = markerCreate();
+        token = lex();
+
         if (strict && token.octal) {
             throwError(token, Messages.StrictOctalLiteral);
         }
@@ -35975,7 +36959,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
 
         if (match('<')) {
-            return parseXJSElement();
+            return parseJSXElement();
         }
 
         throwUnexpected(lex());
@@ -35993,13 +36977,22 @@ parseYieldExpression: true, parseAwaitExpression: true
                 arg = parseSpreadOrAssignmentExpression();
                 args.push(arg);
 
-                if (match(')')) {
-                    break;
-                } else if (arg.type === Syntax.SpreadElement) {
-                    throwError({}, Messages.ElementAfterSpreadElement);
+                if (arg.type === Syntax.SpreadElement) {
+                    if (match(')')) {
+                        break;
+                    } else {
+                        throwError({}, Messages.ElementAfterSpreadElement);
+                    }
                 }
 
-                expect(',');
+                if (match(')')) {
+                    break;
+                } else {
+                    expect(',');
+                    if (match(')')) {
+                        break;
+                    }
+                }
             }
         }
 
@@ -36061,7 +37054,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || match('(') || lookahead.type === Token.Template) {
+        while (match('.') || match('[') || match('(') || (lookahead.type === Token.Template && lookahead.head)) {
             if (match('(')) {
                 args = parseArguments();
                 expr = markerApply(marker, delegate.createCallExpression(expr, args));
@@ -36082,7 +37075,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || lookahead.type === Token.Template) {
+        while (match('.') || match('[') || (lookahead.type === Token.Template && lookahead.head)) {
             if (match('[')) {
                 expr = markerApply(marker, delegate.createMemberExpression('[', expr, parseComputedMember()));
             } else if (match('.')) {
@@ -36623,9 +37616,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var marker, expr, expressions, sequence, coverFormalsList, spreadFound, oldParenthesizedCount;
-
-        oldParenthesizedCount = state.parenthesizedCount;
+        var marker, expr, expressions, sequence, spreadFound, possibleArrow;
 
         marker = markerCreate();
         expr = parseAssignmentExpression();
@@ -36638,6 +37629,17 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
 
                 lex();
+
+                if (match(')')) {
+                    possibleArrow = lookahead2();
+                    if (
+                        possibleArrow.type === Token.Punctuator &&
+                        possibleArrow.value === '=>'
+                    ) {
+                        break;
+                    }
+                }
+
                 expr = parseSpreadOrAssignmentExpression();
                 expressions.push(expr);
 
@@ -36650,7 +37652,9 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
             }
 
-            sequence = markerApply(marker, delegate.createSequenceExpression(expressions));
+            if (expressions.length > 1) {
+                sequence = markerApply(marker, delegate.createSequenceExpression(expressions));
+            }
         }
 
         if (spreadFound && lookahead2().value !== '=>') {
@@ -36699,7 +37703,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         expect('<');
         while (!match('>')) {
-            paramTypes.push(parseVariableIdentifier());
+            paramTypes.push(parseTypeAnnotatableIdentifier());
             if (!match('>')) {
                 expect(',');
             }
@@ -36803,7 +37807,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function parseObjectType(allowStatic) {
         var callProperties = [], indexers = [], marker, optional = false,
-            properties = [], property, propertyKey, propertyTypeAnnotation,
+            properties = [], propertyKey, propertyTypeAnnotation,
             token, isStatic, matchStatic;
 
         expect('{');
@@ -36850,7 +37854,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
             }
 
-            if (match(';')) {
+            if (match(';') || match(',')) {
                 lex();
             } else if (!match('}')) {
                 throwUnexpected(lookahead);
@@ -36867,9 +37871,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseGenericType() {
-        var marker = markerCreate(), returnType = null,
-            typeParameters = null, typeIdentifier,
-            typeIdentifierMarker = markerCreate;
+        var marker = markerCreate(),
+            typeParameters = null, typeIdentifier;
 
         typeIdentifier = parseVariableIdentifier();
 
@@ -36959,7 +37962,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     // primary types are kind of like primary expressions...they're the
     // primitives with which other types are constructed.
     function parsePrimaryType() {
-        var typeIdentifier = null, params = null, returnType = null,
+        var params = null, returnType = null,
             marker = markerCreate(), rest = null, tmp,
             typeParameters, token, type, isGroupedType = false;
 
@@ -37205,7 +38208,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         if (kind === 'const') {
             if (!match('=')) {
-                throwError({}, Messages.NoUnintializedConst);
+                throwError({}, Messages.NoUninitializedConst);
             }
             expect('=');
             init = parseAssignmentExpression();
@@ -37268,8 +38271,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         if (lookahead.type !== Token.StringLiteral) {
             throwError({}, Messages.InvalidModuleSpecifier);
         }
-        specifier = delegate.createModuleSpecifier(lookahead);
-        lex();
+        specifier = delegate.createLiteral(lex());
         return markerApply(marker, specifier);
     }
 
@@ -37280,7 +38282,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseExportSpecifier() {
-        var id, name = null, marker = markerCreate(), from;
+        var id, name = null, marker = markerCreate();
         if (matchKeyword('default')) {
             lex();
             id = markerApply(marker, delegate.createIdentifier('default'));
@@ -37297,7 +38299,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseExportDeclaration() {
-        var backtrackToken, id, previousAllowKeyword, declaration = null,
+        var declaration = null,
+            possibleIdentifierToken, sourceElement,
             isExportFromIdentifier,
             src = null, specifiers = [],
             marker = markerCreate();
@@ -37309,20 +38312,17 @@ parseYieldExpression: true, parseAwaitExpression: true
             // export default ...
             lex();
             if (matchKeyword('function') || matchKeyword('class')) {
-                backtrackToken = lookahead;
-                lex();
-                if (isIdentifierName(lookahead)) {
+                possibleIdentifierToken = lookahead2();
+                if (isIdentifierName(possibleIdentifierToken)) {
                     // covers:
                     // export default function foo () {}
                     // export default class foo {}
-                    id = parseNonComputedProperty();
-                    rewind(backtrackToken);
-                    return markerApply(marker, delegate.createExportDeclaration(true, parseSourceElement(), [id], null));
+                    sourceElement = parseSourceElement();
+                    return markerApply(marker, delegate.createExportDeclaration(true, sourceElement, [sourceElement.id], null));
                 }
                 // covers:
                 // export default function () {}
                 // export default class {}
-                rewind(backtrackToken);
                 switch (lookahead.value) {
                 case 'class':
                     return markerApply(marker, delegate.createExportDeclaration(true, parseClassExpression(), [], null));
@@ -38080,7 +39080,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
             state.labelSet.set(expr.name, true);
             labeledBody = parseStatement();
-            state.labelSet['delete'](expr.name);
+            state.labelSet.delete(expr.name);
             return markerApply(marker, delegate.createLabeledStatement(expr, labeledBody));
         }
 
@@ -38274,6 +39274,9 @@ parseYieldExpression: true, parseAwaitExpression: true
                     break;
                 }
                 expect(',');
+                if (!options.rest && match(')')) {
+                    break;
+                }
             }
         }
 
@@ -38481,54 +39484,24 @@ parseYieldExpression: true, parseAwaitExpression: true
         return markerApply(marker, delegate.createAwaitExpression(expr));
     }
 
-    // 14 Classes
+    // 14 Functions and classes
 
-    function validateDuplicateProp(propMap, key, accessor) {
-        var propInfo, reversed, name, isValidDuplicateProp;
+    // 14.1 Functions is defined above (13 in ES5)
+    // 14.2 Arrow Functions Definitions is defined in (7.3 assignments)
 
-        name = getFieldName(key);
-
-        if (propMap.has(name)) {
-            propInfo = propMap.get(name);
-            if (accessor === 'data') {
-                isValidDuplicateProp = false;
-            } else {
-                if (accessor === 'get') {
-                    reversed = 'set';
-                } else {
-                    reversed = 'get';
-                }
-
-                isValidDuplicateProp =
-                    // There isn't already a specified accessor for this prop
-                    propInfo[accessor] === undefined
-                    // There isn't already a data prop by this name
-                    && propInfo.data === undefined
-                    // The only existing prop by this name is a reversed accessor
-                    && propInfo[reversed] !== undefined;
-            }
-            if (!isValidDuplicateProp) {
-                throwError(key, Messages.IllegalDuplicateClassProperty);
-            }
-        } else {
-            propInfo = {
-                get: undefined,
-                set: undefined,
-                data: undefined
-            };
-            propMap.set(name, propInfo);
-        }
-        propInfo[accessor] = true;
+    // 14.3 Method Definitions
+    // 14.3.7
+    function specialMethod(methodDefinition) {
+        return methodDefinition.kind === 'get' ||
+               methodDefinition.kind === 'set' ||
+               methodDefinition.value.generator;
     }
 
-    function parseMethodDefinition(existingPropNames, key, isStatic, generator, computed) {
-        var token, param, propType, isValidDuplicateProp = false,
-            isAsync, typeParameters, tokenValue, returnType,
-            annotationMarker, propMap;
+    function parseMethodDefinition(key, isStatic, generator, computed) {
+        var token, param, propType,
+            isAsync, typeParameters, tokenValue, returnType;
 
         propType = isStatic ? ClassPropertyType.static : ClassPropertyType.prototype;
-
-        propMap = existingPropNames[propType];
 
         if (generator) {
             return delegate.createMethodDefinition(
@@ -38545,12 +39518,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         if (tokenValue === 'get' && !match('(')) {
             key = parseObjectPropertyKey();
 
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a setter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'get');
-            }
-
             expect('(');
             expect(')');
             if (match(':')) {
@@ -38566,12 +39533,6 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
         if (tokenValue === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
-
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a getter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'set');
-            }
 
             expect('(');
             token = lookahead;
@@ -38603,12 +39564,6 @@ parseYieldExpression: true, parseAwaitExpression: true
             key = parseObjectPropertyKey();
         }
 
-        // It is a syntax error if any other properties have the same name as a
-        // non-getter, non-setter method
-        if (!computed) {
-            validateDuplicateProp(propMap, key, 'data');
-        }
-
         return delegate.createMethodDefinition(
             propType,
             '',
@@ -38622,7 +39577,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         );
     }
 
-    function parseClassProperty(existingPropNames, key, computed, isStatic) {
+    function parseClassProperty(key, computed, isStatic) {
         var typeAnnotation;
 
         typeAnnotation = parseTypeAnnotation();
@@ -38636,12 +39591,12 @@ parseYieldExpression: true, parseAwaitExpression: true
         );
     }
 
-    function parseClassElement(existingProps) {
+    function parseClassElement() {
         var computed = false, generator = false, key, marker = markerCreate(),
             isStatic = false, possiblyOpenBracketToken;
         if (match(';')) {
             lex();
-            return;
+            return undefined;
         }
 
         if (lookahead.value === 'static') {
@@ -38667,11 +39622,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         key = parseObjectPropertyKey();
 
         if (!generator && lookahead.value === ':') {
-            return markerApply(marker, parseClassProperty(existingProps, key, computed, isStatic));
+            return markerApply(marker, parseClassProperty(key, computed, isStatic));
         }
 
         return markerApply(marker, parseMethodDefinition(
-            existingProps,
             key,
             isStatic,
             generator,
@@ -38680,7 +39634,8 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseClassBody() {
-        var classElement, classElements = [], existingProps = {}, marker = markerCreate();
+        var classElement, classElements = [], existingProps = {},
+            marker = markerCreate(), propName, propType;
 
         existingProps[ClassPropertyType.static] = new StringMap();
         existingProps[ClassPropertyType.prototype] = new StringMap();
@@ -38695,6 +39650,25 @@ parseYieldExpression: true, parseAwaitExpression: true
 
             if (typeof classElement !== 'undefined') {
                 classElements.push(classElement);
+
+                propName = !classElement.computed && getFieldName(classElement.key);
+                if (propName !== false) {
+                    propType = classElement.static ?
+                                ClassPropertyType.static :
+                                ClassPropertyType.prototype;
+
+                    if (classElement.type === Syntax.MethodDefinition) {
+                        if (propName === 'constructor' && !classElement.static) {
+                            if (specialMethod(classElement)) {
+                                throwError(classElement, Messages.IllegalClassConstructorProperty);
+                            }
+                            if (existingProps[ClassPropertyType.prototype].has('constructor')) {
+                                throwError(classElement.key, Messages.IllegalDuplicateClassProperty);
+                            }
+                        }
+                        existingProps[propType].set(propName, true);
+                    }
+                }
             }
         }
 
@@ -38932,164 +39906,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         return markerApply(marker, delegate.createProgram(body));
     }
 
-    // The following functions are needed only when the option to preserve
-    // the comments is active.
-
-    function addComment(type, value, start, end, loc) {
-        var comment;
-
-        assert(typeof start === 'number', 'Comment must have valid position');
-
-        // Because the way the actual token is scanned, often the comments
-        // (if any) are skipped twice during the lexical analysis.
-        // Thus, we need to skip adding a comment if the comment array already
-        // handled it.
-        if (state.lastCommentStart >= start) {
-            return;
-        }
-        state.lastCommentStart = start;
-
-        comment = {
-            type: type,
-            value: value
-        };
-        if (extra.range) {
-            comment.range = [start, end];
-        }
-        if (extra.loc) {
-            comment.loc = loc;
-        }
-        extra.comments.push(comment);
-        if (extra.attachComment) {
-            extra.leadingComments.push(comment);
-            extra.trailingComments.push(comment);
-        }
-    }
-
-    function scanComment() {
-        var comment, ch, loc, start, blockComment, lineComment;
-
-        comment = '';
-        blockComment = false;
-        lineComment = false;
-
-        while (index < length) {
-            ch = source[index];
-
-            if (lineComment) {
-                ch = source[index++];
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    loc.end = {
-                        line: lineNumber,
-                        column: index - lineStart - 1
-                    };
-                    lineComment = false;
-                    addComment('Line', comment, start, index - 1, loc);
-                    if (ch === '\r' && source[index] === '\n') {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                    comment = '';
-                } else if (index >= length) {
-                    lineComment = false;
-                    comment += ch;
-                    loc.end = {
-                        line: lineNumber,
-                        column: length - lineStart
-                    };
-                    addComment('Line', comment, start, length, loc);
-                } else {
-                    comment += ch;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    if (ch === '\r') {
-                        ++index;
-                        comment += '\r';
-                    }
-                    if (ch !== '\r' || source[index] === '\n') {
-                        comment += source[index];
-                        ++lineNumber;
-                        ++index;
-                        lineStart = index;
-                        if (index >= length) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                } else {
-                    ch = source[index++];
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    comment += ch;
-                    if (ch === '*') {
-                        ch = source[index];
-                        if (ch === '/') {
-                            comment = comment.substr(0, comment.length - 1);
-                            blockComment = false;
-                            ++index;
-                            loc.end = {
-                                line: lineNumber,
-                                column: index - lineStart
-                            };
-                            addComment('Block', comment, start, index, loc);
-                            comment = '';
-                        }
-                    }
-                }
-            } else if (ch === '/') {
-                ch = source[index + 1];
-                if (ch === '/') {
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart
-                        }
-                    };
-                    start = index;
-                    index += 2;
-                    lineComment = true;
-                    if (index >= length) {
-                        loc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        lineComment = false;
-                        addComment('Line', comment, start, index, loc);
-                    }
-                } else if (ch === '*') {
-                    start = index;
-                    index += 2;
-                    blockComment = true;
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart - 2
-                        }
-                    };
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch.charCodeAt(0))) {
-                ++index;
-            } else if (isLineTerminator(ch.charCodeAt(0))) {
-                ++index;
-                if (ch ===  '\r' && source[index] === '\n') {
-                    ++index;
-                }
-                ++lineNumber;
-                lineStart = index;
-            } else {
-                break;
-            }
-        }
-    }
-
-    // 16 XJS
+    // 16 JSX
 
     XHTMLEntities = {
         quot: '\u0022',
@@ -39347,48 +40164,48 @@ parseYieldExpression: true, parseAwaitExpression: true
         diams: '\u2666'
     };
 
-    function getQualifiedXJSName(object) {
-        if (object.type === Syntax.XJSIdentifier) {
+    function getQualifiedJSXName(object) {
+        if (object.type === Syntax.JSXIdentifier) {
             return object.name;
         }
-        if (object.type === Syntax.XJSNamespacedName) {
+        if (object.type === Syntax.JSXNamespacedName) {
             return object.namespace.name + ':' + object.name.name;
         }
         /* istanbul ignore else */
-        if (object.type === Syntax.XJSMemberExpression) {
+        if (object.type === Syntax.JSXMemberExpression) {
             return (
-                getQualifiedXJSName(object.object) + '.' +
-                getQualifiedXJSName(object.property)
+                getQualifiedJSXName(object.object) + '.' +
+                getQualifiedJSXName(object.property)
             );
         }
         /* istanbul ignore next */
         throwUnexpected(object);
     }
 
-    function isXJSIdentifierStart(ch) {
+    function isJSXIdentifierStart(ch) {
         // exclude backslash (\)
         return (ch !== 92) && isIdentifierStart(ch);
     }
 
-    function isXJSIdentifierPart(ch) {
+    function isJSXIdentifierPart(ch) {
         // exclude backslash (\) and add hyphen (-)
         return (ch !== 92) && (ch === 45 || isIdentifierPart(ch));
     }
 
-    function scanXJSIdentifier() {
+    function scanJSXIdentifier() {
         var ch, start, value = '';
 
         start = index;
         while (index < length) {
             ch = source.charCodeAt(index);
-            if (!isXJSIdentifierPart(ch)) {
+            if (!isJSXIdentifierPart(ch)) {
                 break;
             }
             value += source[index++];
         }
 
         return {
-            type: Token.XJSIdentifier,
+            type: Token.JSXIdentifier,
             value: value,
             lineNumber: lineNumber,
             lineStart: lineStart,
@@ -39396,7 +40213,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
-    function scanXJSEntity() {
+    function scanJSXEntity() {
         var ch, str = '', start = index, count = 0, code;
         ch = source[index];
         assert(ch === '&', 'Entity must start with an ampersand');
@@ -39434,7 +40251,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         return '&';
     }
 
-    function scanXJSText(stopChars) {
+    function scanJSXText(stopChars) {
         var ch, str = '', start;
         start = index;
         while (index < length) {
@@ -39443,7 +40260,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 break;
             }
             if (ch === '&') {
-                str += scanXJSEntity();
+                str += scanJSXEntity();
             } else {
                 index++;
                 if (ch === '\r' && source[index] === '\n') {
@@ -39459,7 +40276,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
         }
         return {
-            type: Token.XJSText,
+            type: Token.JSXText,
             value: str,
             lineNumber: lineNumber,
             lineStart: lineStart,
@@ -39467,7 +40284,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         };
     }
 
-    function scanXJSStringLiteral() {
+    function scanJSXStringLiteral() {
         var innerToken, quote, start;
 
         quote = source[index];
@@ -39477,7 +40294,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         start = index;
         ++index;
 
-        innerToken = scanXJSText([quote]);
+        innerToken = scanJSXText([quote]);
 
         if (quote !== source[index]) {
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -39491,256 +40308,266 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     /**
-     * Between XJS opening and closing tags (e.g. <foo>HERE</foo>), anything that
-     * is not another XJS tag and is not an expression wrapped by {} is text.
+     * Between JSX opening and closing tags (e.g. <foo>HERE</foo>), anything that
+     * is not another JSX tag and is not an expression wrapped by {} is text.
      */
-    function advanceXJSChild() {
+    function advanceJSXChild() {
         var ch = source.charCodeAt(index);
 
         // '<' 60, '>' 62, '{' 123, '}' 125
         if (ch !== 60 && ch !== 62 && ch !== 123 && ch !== 125) {
-            return scanXJSText(['<', '>', '{', '}']);
+            return scanJSXText(['<', '>', '{', '}']);
         }
 
         return scanPunctuator();
     }
 
-    function parseXJSIdentifier() {
+    function parseJSXIdentifier() {
         var token, marker = markerCreate();
 
-        if (lookahead.type !== Token.XJSIdentifier) {
+        if (lookahead.type !== Token.JSXIdentifier) {
             throwUnexpected(lookahead);
         }
 
         token = lex();
-        return markerApply(marker, delegate.createXJSIdentifier(token.value));
+        return markerApply(marker, delegate.createJSXIdentifier(token.value));
     }
 
-    function parseXJSNamespacedName() {
+    function parseJSXNamespacedName() {
         var namespace, name, marker = markerCreate();
 
-        namespace = parseXJSIdentifier();
+        namespace = parseJSXIdentifier();
         expect(':');
-        name = parseXJSIdentifier();
+        name = parseJSXIdentifier();
 
-        return markerApply(marker, delegate.createXJSNamespacedName(namespace, name));
+        return markerApply(marker, delegate.createJSXNamespacedName(namespace, name));
     }
 
-    function parseXJSMemberExpression() {
+    function parseJSXMemberExpression() {
         var marker = markerCreate(),
-            expr = parseXJSIdentifier();
+            expr = parseJSXIdentifier();
 
         while (match('.')) {
             lex();
-            expr = markerApply(marker, delegate.createXJSMemberExpression(expr, parseXJSIdentifier()));
+            expr = markerApply(marker, delegate.createJSXMemberExpression(expr, parseJSXIdentifier()));
         }
 
         return expr;
     }
 
-    function parseXJSElementName() {
+    function parseJSXElementName() {
         if (lookahead2().value === ':') {
-            return parseXJSNamespacedName();
+            return parseJSXNamespacedName();
         }
         if (lookahead2().value === '.') {
-            return parseXJSMemberExpression();
+            return parseJSXMemberExpression();
         }
 
-        return parseXJSIdentifier();
+        return parseJSXIdentifier();
     }
 
-    function parseXJSAttributeName() {
+    function parseJSXAttributeName() {
         if (lookahead2().value === ':') {
-            return parseXJSNamespacedName();
+            return parseJSXNamespacedName();
         }
 
-        return parseXJSIdentifier();
+        return parseJSXIdentifier();
     }
 
-    function parseXJSAttributeValue() {
+    function parseJSXAttributeValue() {
         var value, marker;
         if (match('{')) {
-            value = parseXJSExpressionContainer();
-            if (value.expression.type === Syntax.XJSEmptyExpression) {
+            value = parseJSXExpressionContainer();
+            if (value.expression.type === Syntax.JSXEmptyExpression) {
                 throwError(
                     value,
-                    'XJS attributes must only be assigned a non-empty ' +
+                    'JSX attributes must only be assigned a non-empty ' +
                         'expression'
                 );
             }
         } else if (match('<')) {
-            value = parseXJSElement();
-        } else if (lookahead.type === Token.XJSText) {
+            value = parseJSXElement();
+        } else if (lookahead.type === Token.JSXText) {
             marker = markerCreate();
             value = markerApply(marker, delegate.createLiteral(lex()));
         } else {
-            throwError({}, Messages.InvalidXJSAttributeValue);
+            throwError({}, Messages.InvalidJSXAttributeValue);
         }
         return value;
     }
 
-    function parseXJSEmptyExpression() {
-        var marker = markerCreatePreserveWhitespace();
-        while (source.charAt(index) !== '}') {
-            index++;
+    function parseJSXEmptyExpression() {
+        var ch, marker = markerCreatePreserveWhitespace();
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (ch === 125) {
+                break;
+            } else if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                lineStart = index;
+            }
+            ++index;
         }
-        return markerApply(marker, delegate.createXJSEmptyExpression());
+        return markerApply(marker, delegate.createJSXEmptyExpression());
     }
 
-    function parseXJSExpressionContainer() {
-        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXExpressionContainer() {
+        var expression, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = false;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = false;
 
         expect('{');
 
         if (match('}')) {
-            expression = parseXJSEmptyExpression();
+            expression = parseJSXEmptyExpression();
         } else {
             expression = parseExpression();
         }
 
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
 
         expect('}');
 
-        return markerApply(marker, delegate.createXJSExpressionContainer(expression));
+        return markerApply(marker, delegate.createJSXExpressionContainer(expression));
     }
 
-    function parseXJSSpreadAttribute() {
-        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXSpreadAttribute() {
+        var expression, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = false;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = false;
 
         expect('{');
         expect('...');
 
         expression = parseAssignmentExpression();
 
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
 
         expect('}');
 
-        return markerApply(marker, delegate.createXJSSpreadAttribute(expression));
+        return markerApply(marker, delegate.createJSXSpreadAttribute(expression));
     }
 
-    function parseXJSAttribute() {
+    function parseJSXAttribute() {
         var name, marker;
 
         if (match('{')) {
-            return parseXJSSpreadAttribute();
+            return parseJSXSpreadAttribute();
         }
 
         marker = markerCreate();
 
-        name = parseXJSAttributeName();
+        name = parseJSXAttributeName();
 
         // HTML empty attribute
         if (match('=')) {
             lex();
-            return markerApply(marker, delegate.createXJSAttribute(name, parseXJSAttributeValue()));
+            return markerApply(marker, delegate.createJSXAttribute(name, parseJSXAttributeValue()));
         }
 
-        return markerApply(marker, delegate.createXJSAttribute(name));
+        return markerApply(marker, delegate.createJSXAttribute(name));
     }
 
-    function parseXJSChild() {
+    function parseJSXChild() {
         var token, marker;
         if (match('{')) {
-            token = parseXJSExpressionContainer();
-        } else if (lookahead.type === Token.XJSText) {
+            token = parseJSXExpressionContainer();
+        } else if (lookahead.type === Token.JSXText) {
             marker = markerCreatePreserveWhitespace();
             token = markerApply(marker, delegate.createLiteral(lex()));
         } else if (match('<')) {
-            token = parseXJSElement();
+            token = parseJSXElement();
         } else {
             throwUnexpected(lookahead);
         }
         return token;
     }
 
-    function parseXJSClosingElement() {
-        var name, origInXJSChild, origInXJSTag, marker = markerCreate();
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = true;
+    function parseJSXClosingElement() {
+        var name, origInJSXChild, origInJSXTag, marker = markerCreate();
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = true;
         expect('<');
         expect('/');
-        name = parseXJSElementName();
+        name = parseJSXElementName();
         // Because advance() (called by lex() called by expect()) expects there
         // to be a valid token after >, it needs to know whether to look for a
-        // standard JS token or an XJS text node
-        state.inXJSChild = origInXJSChild;
-        state.inXJSTag = origInXJSTag;
+        // standard JS token or an JSX text node
+        state.inJSXChild = origInJSXChild;
+        state.inJSXTag = origInJSXTag;
         expect('>');
-        return markerApply(marker, delegate.createXJSClosingElement(name));
+        return markerApply(marker, delegate.createJSXClosingElement(name));
     }
 
-    function parseXJSOpeningElement() {
-        var name, attribute, attributes = [], selfClosing = false, origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXOpeningElement() {
+        var name, attributes = [], selfClosing = false, origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        state.inXJSChild = false;
-        state.inXJSTag = true;
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        state.inJSXChild = false;
+        state.inJSXTag = true;
 
         expect('<');
 
-        name = parseXJSElementName();
+        name = parseJSXElementName();
 
         while (index < length &&
                 lookahead.value !== '/' &&
                 lookahead.value !== '>') {
-            attributes.push(parseXJSAttribute());
+            attributes.push(parseJSXAttribute());
         }
 
-        state.inXJSTag = origInXJSTag;
+        state.inJSXTag = origInJSXTag;
 
         if (lookahead.value === '/') {
             expect('/');
             // Because advance() (called by lex() called by expect()) expects
             // there to be a valid token after >, it needs to know whether to
-            // look for a standard JS token or an XJS text node
-            state.inXJSChild = origInXJSChild;
+            // look for a standard JS token or an JSX text node
+            state.inJSXChild = origInJSXChild;
             expect('>');
             selfClosing = true;
         } else {
-            state.inXJSChild = true;
+            state.inJSXChild = true;
             expect('>');
         }
-        return markerApply(marker, delegate.createXJSOpeningElement(name, attributes, selfClosing));
+        return markerApply(marker, delegate.createJSXOpeningElement(name, attributes, selfClosing));
     }
 
-    function parseXJSElement() {
-        var openingElement, closingElement = null, children = [], origInXJSChild, origInXJSTag, marker = markerCreate();
+    function parseJSXElement() {
+        var openingElement, closingElement = null, children = [], origInJSXChild, origInJSXTag, marker = markerCreate();
 
-        origInXJSChild = state.inXJSChild;
-        origInXJSTag = state.inXJSTag;
-        openingElement = parseXJSOpeningElement();
+        origInJSXChild = state.inJSXChild;
+        origInJSXTag = state.inJSXTag;
+        openingElement = parseJSXOpeningElement();
 
         if (!openingElement.selfClosing) {
             while (index < length) {
-                state.inXJSChild = false; // Call lookahead2() with inXJSChild = false because </ should not be considered in the child
+                state.inJSXChild = false; // Call lookahead2() with inJSXChild = false because </ should not be considered in the child
                 if (lookahead.value === '<' && lookahead2().value === '/') {
                     break;
                 }
-                state.inXJSChild = true;
-                children.push(parseXJSChild());
+                state.inJSXChild = true;
+                children.push(parseJSXChild());
             }
-            state.inXJSChild = origInXJSChild;
-            state.inXJSTag = origInXJSTag;
-            closingElement = parseXJSClosingElement();
-            if (getQualifiedXJSName(closingElement.name) !== getQualifiedXJSName(openingElement.name)) {
-                throwError({}, Messages.ExpectedXJSClosingTag, getQualifiedXJSName(openingElement.name));
+            state.inJSXChild = origInJSXChild;
+            state.inJSXTag = origInJSXTag;
+            closingElement = parseJSXClosingElement();
+            if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
+                throwError({}, Messages.ExpectedJSXClosingTag, getQualifiedJSXName(openingElement.name));
             }
         }
 
@@ -39749,15 +40576,15 @@ parseYieldExpression: true, parseAwaitExpression: true
         //     var x = <div>one</div><div>two</div>;
         //
         // the default error message is a bit incomprehensible. Since it's
-        // rarely (never?) useful to write a less-than sign after an XJS
+        // rarely (never?) useful to write a less-than sign after an JSX
         // element, we disallow it here in the parser in order to provide a
         // better error message. (In the rare case that the less-than operator
         // was intended, the left tag can be wrapped in parentheses.)
-        if (!origInXJSChild && match('<')) {
-            throwError(lookahead, Messages.AdjacentXJSElements);
+        if (!origInJSXChild && match('<')) {
+            throwError(lookahead, Messages.AdjacentJSXElements);
         }
 
-        return markerApply(marker, delegate.createXJSElement(openingElement, closingElement, children));
+        return markerApply(marker, delegate.createJSXElement(openingElement, closingElement, children));
     }
 
     function parseTypeAlias() {
@@ -39820,8 +40647,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function parseInterface() {
-        var body, bodyMarker, extended = [], id, marker = markerCreate(),
-            typeParameters = null, previousStrict;
+        var marker = markerCreate();
 
         if (strict) {
             expectKeyword('interface');
@@ -39939,14 +40765,13 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function collectToken() {
-        var start, loc, token, range, value, entry;
+        var loc, token, range, value, entry;
 
         /* istanbul ignore else */
-        if (!state.inXJSChild) {
+        if (!state.inJSXChild) {
             skipComment();
         }
 
-        start = index;
         loc = {
             start: {
                 line: lineNumber,
@@ -40052,11 +40877,6 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function patch() {
-        if (extra.comments) {
-            extra.skipComment = skipComment;
-            skipComment = scanComment;
-        }
-
         if (typeof extra.tokens !== 'undefined') {
             extra.advance = advance;
             extra.scanRegExp = scanRegExp;
@@ -40067,10 +40887,6 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     function unpatch() {
-        if (typeof extra.skipComment === 'function') {
-            skipComment = extra.skipComment;
-        }
-
         if (typeof extra.scanRegExp === 'function') {
             advance = extra.advance;
             scanRegExp = extra.scanRegExp;
@@ -40123,7 +40939,9 @@ parseYieldExpression: true, parseAwaitExpression: true
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1
+            lastCommentStart: -1,
+            curlyStack: [],
+            curlyLastIndex: 0
         };
 
         extra = {};
@@ -40214,12 +41032,15 @@ parseYieldExpression: true, parseAwaitExpression: true
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            inXJSChild: false,
-            inXJSTag: false,
+            inJSXChild: false,
+            inJSXTag: false,
             inType: false,
             lastCommentStart: -1,
             yieldAllowed: false,
-            awaitAllowed: false
+            awaitAllowed: false,
+            curlyPosition: 0,
+            curlyStack: [],
+            curlyLastIndex: 0
         };
 
         extra = {};
@@ -40280,7 +41101,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '12001.1.0-dev-harmony-fb';
+    exports.version = '14001.1.0-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 
@@ -40311,17 +41132,17 @@ parseYieldExpression: true, parseAwaitExpression: true
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],72:[function(_dereq_,module,exports){
+},{}],78:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-exports.SourceMapGenerator = _dereq_('./source-map/source-map-generator').SourceMapGenerator;
-exports.SourceMapConsumer = _dereq_('./source-map/source-map-consumer').SourceMapConsumer;
-exports.SourceNode = _dereq_('./source-map/source-node').SourceNode;
+exports.SourceMapGenerator = require('./source-map/source-map-generator').SourceMapGenerator;
+exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
+exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":80,"./source-map/source-map-generator":81,"./source-map/source-node":82}],73:[function(_dereq_,module,exports){
+},{"./source-map/source-map-consumer":84,"./source-map/source-map-generator":85,"./source-map/source-node":86}],79:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -40329,11 +41150,11 @@ exports.SourceNode = _dereq_('./source-map/source-node').SourceNode;
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
-  var util = _dereq_('./util');
+  var util = require('./util');
 
   /**
    * A data structure which is a combination of an array and a set. Adding a new
@@ -40420,7 +41241,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./util":83,"amdefine":84}],74:[function(_dereq_,module,exports){
+},{"./util":87,"amdefine":88}],80:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -40458,11 +41279,11 @@ define(function (_dereq_, exports, module) {
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
-  var base64 = _dereq_('./base64');
+  var base64 = require('./base64');
 
   // A single base 64 digit can contain 6 bits of data. For the base 64 variable
   // length quantities we use in the source map spec, the first bit is the sign,
@@ -40540,18 +41361,17 @@ define(function (_dereq_, exports, module) {
    * Decodes the next base 64 VLQ value from the given string and returns the
    * value and the rest of the string via the out parameter.
    */
-  exports.decode = function base64VLQ_decode(aStr, aOutParam) {
-    var i = 0;
+  exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
     var strLen = aStr.length;
     var result = 0;
     var shift = 0;
     var continuation, digit;
 
     do {
-      if (i >= strLen) {
+      if (aIndex >= strLen) {
         throw new Error("Expected more digits in base 64 VLQ value.");
       }
-      digit = base64.decode(aStr.charAt(i++));
+      digit = base64.decode(aStr.charAt(aIndex++));
       continuation = !!(digit & VLQ_CONTINUATION_BIT);
       digit &= VLQ_BASE_MASK;
       result = result + (digit << shift);
@@ -40559,12 +41379,12 @@ define(function (_dereq_, exports, module) {
     } while (continuation);
 
     aOutParam.value = fromVLQSigned(result);
-    aOutParam.rest = aStr.slice(i);
+    aOutParam.rest = aIndex;
   };
 
 });
 
-},{"./base64":75,"amdefine":84}],75:[function(_dereq_,module,exports){
+},{"./base64":81,"amdefine":88}],81:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -40572,9 +41392,9 @@ define(function (_dereq_, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
   var charToIntMap = {};
   var intToCharMap = {};
@@ -40608,7 +41428,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":84}],76:[function(_dereq_,module,exports){
+},{"amdefine":88}],82:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -40616,15 +41436,436 @@ define(function (_dereq_, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
-  var util = _dereq_('./util');
-  var binarySearch = _dereq_('./binary-search');
-  var ArraySet = _dereq_('./array-set').ArraySet;
-  var base64VLQ = _dereq_('./base64-vlq');
-  var SourceMapConsumer = _dereq_('./source-map-consumer').SourceMapConsumer;
+  exports.GREATEST_LOWER_BOUND = 1;
+  exports.LEAST_UPPER_BOUND = 2;
+
+  /**
+   * Recursive implementation of binary search.
+   *
+   * @param aLow Indices here and lower do not contain the needle.
+   * @param aHigh Indices here and higher do not contain the needle.
+   * @param aNeedle The element being searched for.
+   * @param aHaystack The non-empty array being searched.
+   * @param aCompare Function which takes two elements and returns -1, 0, or 1.
+   * @param aBias Either 'binarySearch.GREATEST_LOWER_BOUND' or
+   *     'binarySearch.LEAST_UPPER_BOUND'. Specifies whether to return the
+   *     closest element that is smaller than or greater than the one we are
+   *     searching for, respectively, if the exact element cannot be found.
+   */
+  function recursiveSearch(aLow, aHigh, aNeedle, aHaystack, aCompare, aBias) {
+    // This function terminates when one of the following is true:
+    //
+    //   1. We find the exact element we are looking for.
+    //
+    //   2. We did not find the exact element, but we can return the index of
+    //      the next-closest element.
+    //
+    //   3. We did not find the exact element, and there is no next-closest
+    //      element than the one we are searching for, so we return -1.
+    var mid = Math.floor((aHigh - aLow) / 2) + aLow;
+    var cmp = aCompare(aNeedle, aHaystack[mid], true);
+    if (cmp === 0) {
+      // Found the element we are looking for.
+      return mid;
+    }
+    else if (cmp > 0) {
+      // Our needle is greater than aHaystack[mid].
+      if (aHigh - mid > 1) {
+        // The element is in the upper half.
+        return recursiveSearch(mid, aHigh, aNeedle, aHaystack, aCompare, aBias);
+      }
+
+      // The exact needle element was not found in this haystack. Determine if
+      // we are in termination case (3) or (2) and return the appropriate thing.
+      if (aBias == exports.LEAST_UPPER_BOUND) {
+        return aHigh < aHaystack.length ? aHigh : -1;
+      } else {
+        return mid;
+      }
+    }
+    else {
+      // Our needle is less than aHaystack[mid].
+      if (mid - aLow > 1) {
+        // The element is in the lower half.
+        return recursiveSearch(aLow, mid, aNeedle, aHaystack, aCompare, aBias);
+      }
+
+      // we are in termination case (3) or (2) and return the appropriate thing.
+      if (aBias == exports.LEAST_UPPER_BOUND) {
+        return mid;
+      } else {
+        return aLow < 0 ? -1 : aLow;
+      }
+    }
+  }
+
+  /**
+   * This is an implementation of binary search which will always try and return
+   * the index of the closest element if there is no exact hit. This is because
+   * mappings between original and generated line/col pairs are single points,
+   * and there is an implicit region between each of them, so a miss just means
+   * that you aren't on the very start of a region.
+   *
+   * @param aNeedle The element you are looking for.
+   * @param aHaystack The array that is being searched.
+   * @param aCompare A function which takes the needle and an element in the
+   *     array and returns -1, 0, or 1 depending on whether the needle is less
+   *     than, equal to, or greater than the element, respectively.
+   * @param aBias Either 'binarySearch.GREATEST_LOWER_BOUND' or
+   *     'binarySearch.LEAST_UPPER_BOUND'. Specifies whether to return the
+   *     closest element that is smaller than or greater than the one we are
+   *     searching for, respectively, if the exact element cannot be found.
+   *     Defaults to 'binarySearch.GREATEST_LOWER_BOUND'.
+   */
+  exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
+    if (aHaystack.length === 0) {
+      return -1;
+    }
+
+    var index = recursiveSearch(-1, aHaystack.length, aNeedle, aHaystack,
+                                aCompare, aBias || exports.GREATEST_LOWER_BOUND);
+    if (index < 0) {
+      return -1;
+    }
+
+    // We have found either the exact element, or the next-closest element than
+    // the one we are searching for. However, there may be more than one such
+    // element. Make sure we always return the smallest of these.
+    while (index - 1 >= 0) {
+      if (aCompare(aHaystack[index], aHaystack[index - 1], true) !== 0) {
+        break;
+      }
+      --index;
+    }
+
+    return index;
+  };
+
+});
+
+},{"amdefine":88}],83:[function(require,module,exports){
+/* -*- Mode: js; js-indent-level: 2; -*- */
+/*
+ * Copyright 2014 Mozilla Foundation and contributors
+ * Licensed under the New BSD license. See LICENSE or:
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module, require);
+}
+define(function (require, exports, module) {
+
+  var util = require('./util');
+
+  /**
+   * Determine whether mappingB is after mappingA with respect to generated
+   * position.
+   */
+  function generatedPositionAfter(mappingA, mappingB) {
+    // Optimized for most common case
+    var lineA = mappingA.generatedLine;
+    var lineB = mappingB.generatedLine;
+    var columnA = mappingA.generatedColumn;
+    var columnB = mappingB.generatedColumn;
+    return lineB > lineA || lineB == lineA && columnB >= columnA ||
+           util.compareByGeneratedPositions(mappingA, mappingB) <= 0;
+  }
+
+  /**
+   * A data structure to provide a sorted view of accumulated mappings in a
+   * performance conscious manner. It trades a neglibable overhead in general
+   * case for a large speedup in case of mappings being added in order.
+   */
+  function MappingList() {
+    this._array = [];
+    this._sorted = true;
+    // Serves as infimum
+    this._last = {generatedLine: -1, generatedColumn: 0};
+  }
+
+  /**
+   * Iterate through internal items. This method takes the same arguments that
+   * `Array.prototype.forEach` takes.
+   *
+   * NOTE: The order of the mappings is NOT guaranteed.
+   */
+  MappingList.prototype.unsortedForEach =
+    function MappingList_forEach(aCallback, aThisArg) {
+      this._array.forEach(aCallback, aThisArg);
+    };
+
+  /**
+   * Add the given source mapping.
+   *
+   * @param Object aMapping
+   */
+  MappingList.prototype.add = function MappingList_add(aMapping) {
+    var mapping;
+    if (generatedPositionAfter(this._last, aMapping)) {
+      this._last = aMapping;
+      this._array.push(aMapping);
+    } else {
+      this._sorted = false;
+      this._array.push(aMapping);
+    }
+  };
+
+  /**
+   * Returns the flat, sorted array of mappings. The mappings are sorted by
+   * generated position.
+   *
+   * WARNING: This method returns internal data without copying, for
+   * performance. The return value must NOT be mutated, and should be treated as
+   * an immutable borrow. If you want to take ownership, you must make your own
+   * copy.
+   */
+  MappingList.prototype.toArray = function MappingList_toArray() {
+    if (!this._sorted) {
+      this._array.sort(util.compareByGeneratedPositions);
+      this._sorted = true;
+    }
+    return this._array;
+  };
+
+  exports.MappingList = MappingList;
+
+});
+
+},{"./util":87,"amdefine":88}],84:[function(require,module,exports){
+/* -*- Mode: js; js-indent-level: 2; -*- */
+/*
+ * Copyright 2011 Mozilla Foundation and contributors
+ * Licensed under the New BSD license. See LICENSE or:
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module, require);
+}
+define(function (require, exports, module) {
+
+  var util = require('./util');
+  var binarySearch = require('./binary-search');
+  var ArraySet = require('./array-set').ArraySet;
+  var base64VLQ = require('./base64-vlq');
+
+  function SourceMapConsumer(aSourceMap) {
+    var sourceMap = aSourceMap;
+    if (typeof aSourceMap === 'string') {
+      sourceMap = JSON.parse(aSourceMap.replace(/^\)\]\}'/, ''));
+    }
+
+    return sourceMap.sections != null
+      ? new IndexedSourceMapConsumer(sourceMap)
+      : new BasicSourceMapConsumer(sourceMap);
+  }
+
+  SourceMapConsumer.fromSourceMap = function(aSourceMap) {
+    return BasicSourceMapConsumer.fromSourceMap(aSourceMap);
+  }
+
+  /**
+   * The version of the source mapping spec that we are consuming.
+   */
+  SourceMapConsumer.prototype._version = 3;
+
+  // `__generatedMappings` and `__originalMappings` are arrays that hold the
+  // parsed mapping coordinates from the source map's "mappings" attribute. They
+  // are lazily instantiated, accessed via the `_generatedMappings` and
+  // `_originalMappings` getters respectively, and we only parse the mappings
+  // and create these arrays once queried for a source location. We jump through
+  // these hoops because there can be many thousands of mappings, and parsing
+  // them is expensive, so we only want to do it if we must.
+  //
+  // Each object in the arrays is of the form:
+  //
+  //     {
+  //       generatedLine: The line number in the generated code,
+  //       generatedColumn: The column number in the generated code,
+  //       source: The path to the original source file that generated this
+  //               chunk of code,
+  //       originalLine: The line number in the original source that
+  //                     corresponds to this chunk of generated code,
+  //       originalColumn: The column number in the original source that
+  //                       corresponds to this chunk of generated code,
+  //       name: The name of the original symbol which generated this chunk of
+  //             code.
+  //     }
+  //
+  // All properties except for `generatedLine` and `generatedColumn` can be
+  // `null`.
+  //
+  // `_generatedMappings` is ordered by the generated positions.
+  //
+  // `_originalMappings` is ordered by the original positions.
+
+  SourceMapConsumer.prototype.__generatedMappings = null;
+  Object.defineProperty(SourceMapConsumer.prototype, '_generatedMappings', {
+    get: function () {
+      if (!this.__generatedMappings) {
+        this.__generatedMappings = [];
+        this.__originalMappings = [];
+        this._parseMappings(this._mappings, this.sourceRoot);
+      }
+
+      return this.__generatedMappings;
+    }
+  });
+
+  SourceMapConsumer.prototype.__originalMappings = null;
+  Object.defineProperty(SourceMapConsumer.prototype, '_originalMappings', {
+    get: function () {
+      if (!this.__originalMappings) {
+        this.__generatedMappings = [];
+        this.__originalMappings = [];
+        this._parseMappings(this._mappings, this.sourceRoot);
+      }
+
+      return this.__originalMappings;
+    }
+  });
+
+  SourceMapConsumer.prototype._nextCharIsMappingSeparator =
+    function SourceMapConsumer_nextCharIsMappingSeparator(aStr, index) {
+      var c = aStr.charAt(index);
+      return c === ";" || c === ",";
+    };
+
+  /**
+   * Parse the mappings in a string in to a data structure which we can easily
+   * query (the ordered arrays in the `this.__generatedMappings` and
+   * `this.__originalMappings` properties).
+   */
+  SourceMapConsumer.prototype._parseMappings =
+    function SourceMapConsumer_parseMappings(aStr, aSourceRoot) {
+      throw new Error("Subclasses must implement _parseMappings");
+    };
+
+  SourceMapConsumer.GENERATED_ORDER = 1;
+  SourceMapConsumer.ORIGINAL_ORDER = 2;
+
+  SourceMapConsumer.GREATEST_LOWER_BOUND = 1;
+  SourceMapConsumer.LEAST_UPPER_BOUND = 2;
+
+  /**
+   * Iterate over each mapping between an original source/line/column and a
+   * generated line/column in this source map.
+   *
+   * @param Function aCallback
+   *        The function that is called with each mapping.
+   * @param Object aContext
+   *        Optional. If specified, this object will be the value of `this` every
+   *        time that `aCallback` is called.
+   * @param aOrder
+   *        Either `SourceMapConsumer.GENERATED_ORDER` or
+   *        `SourceMapConsumer.ORIGINAL_ORDER`. Specifies whether you want to
+   *        iterate over the mappings sorted by the generated file's line/column
+   *        order or the original's source/line/column order, respectively. Defaults to
+   *        `SourceMapConsumer.GENERATED_ORDER`.
+   */
+  SourceMapConsumer.prototype.eachMapping =
+    function SourceMapConsumer_eachMapping(aCallback, aContext, aOrder) {
+      var context = aContext || null;
+      var order = aOrder || SourceMapConsumer.GENERATED_ORDER;
+
+      var mappings;
+      switch (order) {
+      case SourceMapConsumer.GENERATED_ORDER:
+        mappings = this._generatedMappings;
+        break;
+      case SourceMapConsumer.ORIGINAL_ORDER:
+        mappings = this._originalMappings;
+        break;
+      default:
+        throw new Error("Unknown order of iteration.");
+      }
+
+      var sourceRoot = this.sourceRoot;
+      mappings.map(function (mapping) {
+        var source = mapping.source;
+        if (source != null && sourceRoot != null) {
+          source = util.join(sourceRoot, source);
+        }
+        return {
+          source: source,
+          generatedLine: mapping.generatedLine,
+          generatedColumn: mapping.generatedColumn,
+          originalLine: mapping.originalLine,
+          originalColumn: mapping.originalColumn,
+          name: mapping.name
+        };
+      }).forEach(aCallback, context);
+    };
+
+  /**
+   * Returns all generated line and column information for the original source,
+   * line, and column provided. If no column is provided, returns all mappings
+   * corresponding to a single line. Otherwise, returns all mappings
+   * corresponding to a single line and column.
+   *
+   * The only argument is an object with the following properties:
+   *
+   *   - source: The filename of the original source.
+   *   - line: The line number in the original source.
+   *   - column: Optional. the column number in the original source.
+   *
+   * and an array of objects is returned, each with the following properties:
+   *
+   *   - line: The line number in the generated source, or null.
+   *   - column: The column number in the generated source, or null.
+   */
+  SourceMapConsumer.prototype.allGeneratedPositionsFor =
+    function SourceMapConsumer_allGeneratedPositionsFor(aArgs) {
+      // When there is no exact match, BasicSourceMapConsumer.prototype._findMapping
+      // returns the index of the closest mapping less than the needle. By
+      // setting needle.originalColumn to 0, we thus find the last mapping for
+      // the given line, provided such a mapping exists.
+      var needle = {
+        source: util.getArg(aArgs, 'source'),
+        originalLine: util.getArg(aArgs, 'line'),
+        originalColumn: util.getArg(aArgs, 'column', 0)
+      };
+
+      if (this.sourceRoot != null) {
+        needle.source = util.relative(this.sourceRoot, needle.source);
+      }
+
+      var mappings = [];
+
+      var index = this._findMapping(needle,
+                                    this._originalMappings,
+                                    "originalLine",
+                                    "originalColumn",
+                                    util.compareByOriginalPositions,
+                                    binarySearch.LEAST_UPPER_BOUND);
+      if (index >= 0) {
+        var mapping = this._originalMappings[index];
+        var originalLine = mapping.originalLine;
+        var originalColumn = mapping.originalColumn;
+
+        // Iterate until either we run out of mappings, or we run into
+        // a mapping for a different line. Since mappings are sorted, this is
+        // guaranteed to find all mappings for the line we are searching for.
+        while (mapping && mapping.originalLine === originalLine &&
+               (aArgs.column === undefined ||
+                mapping.originalColumn === originalColumn)) {
+          mappings.push({
+            line: util.getArg(mapping, 'generatedLine', null),
+            column: util.getArg(mapping, 'generatedColumn', null),
+            lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
+          });
+
+          mapping = this._originalMappings[++index];
+        }
+      }
+
+      return mappings;
+    };
+
+  exports.SourceMapConsumer = SourceMapConsumer;
 
   /**
    * A BasicSourceMapConsumer instance represents a parsed source map which we can
@@ -40753,62 +41994,80 @@ define(function (_dereq_, exports, module) {
       var previousOriginalColumn = 0;
       var previousSource = 0;
       var previousName = 0;
-      var str = aStr;
+      var length = aStr.length;
+      var index = 0;
+      var cachedValues = {};
       var temp = {};
-      var mapping;
+      var mapping, str, values, end, value;
 
-      while (str.length > 0) {
-        if (str.charAt(0) === ';') {
+      while (index < length) {
+        if (aStr.charAt(index) === ';') {
           generatedLine++;
-          str = str.slice(1);
+          ++index;
           previousGeneratedColumn = 0;
         }
-        else if (str.charAt(0) === ',') {
-          str = str.slice(1);
+        else if (aStr.charAt(index) === ',') {
+          ++index;
         }
         else {
           mapping = {};
           mapping.generatedLine = generatedLine;
 
-          // Generated column.
-          base64VLQ.decode(str, temp);
-          mapping.generatedColumn = previousGeneratedColumn + temp.value;
-          previousGeneratedColumn = mapping.generatedColumn;
-          str = temp.rest;
+          // Because each offset is encoded relative to the previous one,
+          // many segments often have the same encoding. We can exploit this
+          // fact by caching the parsed variable length fields of each segment,
+          // allowing us to avoid a second parse if we encounter the same
+          // segment again.
+          for (end = index; end < length; ++end) {
+            if (this._nextCharIsMappingSeparator(aStr, end)) {
+              break;
+            }
+          }
+          str = aStr.slice(index, end);
 
-          if (str.length > 0 && !this._nextCharIsMappingSeparator(str)) {
+          values = cachedValues[str];
+          if (values) {
+            index += str.length;
+          } else {
+            values = [];
+            while (index < end) {
+              base64VLQ.decode(aStr, index, temp);
+              value = temp.value;
+              index = temp.rest;
+              values.push(value);
+            }
+            cachedValues[str] = values;
+          }
+
+          // Generated column.
+          mapping.generatedColumn = previousGeneratedColumn + values[0];
+          previousGeneratedColumn = mapping.generatedColumn;
+
+          if (values.length > 1) {
             // Original source.
-            base64VLQ.decode(str, temp);
-            mapping.source = this._sources.at(previousSource + temp.value);
-            previousSource += temp.value;
-            str = temp.rest;
-            if (str.length === 0 || this._nextCharIsMappingSeparator(str)) {
+            mapping.source = this._sources.at(previousSource + values[1]);
+            previousSource += values[1];
+            if (values.length === 2) {
               throw new Error('Found a source, but no line and column');
             }
 
             // Original line.
-            base64VLQ.decode(str, temp);
-            mapping.originalLine = previousOriginalLine + temp.value;
+            mapping.originalLine = previousOriginalLine + values[2];
             previousOriginalLine = mapping.originalLine;
             // Lines are stored 0-based
             mapping.originalLine += 1;
-            str = temp.rest;
-            if (str.length === 0 || this._nextCharIsMappingSeparator(str)) {
+            if (values.length === 3) {
               throw new Error('Found a source and line, but no column');
             }
 
             // Original column.
-            base64VLQ.decode(str, temp);
-            mapping.originalColumn = previousOriginalColumn + temp.value;
+            mapping.originalColumn = previousOriginalColumn + values[3];
             previousOriginalColumn = mapping.originalColumn;
-            str = temp.rest;
 
-            if (str.length > 0 && !this._nextCharIsMappingSeparator(str)) {
+            if (values.length > 4) {
               // Original name.
-              base64VLQ.decode(str, temp);
-              mapping.name = this._names.at(previousName + temp.value);
-              previousName += temp.value;
-              str = temp.rest;
+              mapping.name = this._names.at(previousName + values[4]);
+              previousName += values[4];
             }
           }
 
@@ -40829,7 +42088,7 @@ define(function (_dereq_, exports, module) {
    */
   BasicSourceMapConsumer.prototype._findMapping =
     function SourceMapConsumer_findMapping(aNeedle, aMappings, aLineName,
-                                           aColumnName, aComparator) {
+                                           aColumnName, aComparator, aBias) {
       // To return the position we are searching for, we must first find the
       // mapping for the given position and then return the opposite position it
       // points to. Because the mappings are sorted, we can use binary search to
@@ -40844,7 +42103,7 @@ define(function (_dereq_, exports, module) {
                             + aNeedle[aColumnName]);
       }
 
-      return binarySearch.search(aNeedle, aMappings, aComparator);
+      return binarySearch.search(aNeedle, aMappings, aComparator, aBias);
     };
 
   /**
@@ -40881,6 +42140,11 @@ define(function (_dereq_, exports, module) {
    *
    *   - line: The line number in the generated source.
    *   - column: The column number in the generated source.
+   *   - bias: Either 'SourceMapConsumer.GREATEST_LOWER_BOUND' or
+   *     'SourceMapConsumer.LEAST_UPPER_BOUND'. Specifies whether to return the
+   *     closest element that is smaller than or greater than the one we are
+   *     searching for, respectively, if the exact element cannot be found.
+   *     Defaults to 'SourceMapConsumer.GREATEST_LOWER_BOUND'.
    *
    * and an object is returned with the following properties:
    *
@@ -40896,11 +42160,14 @@ define(function (_dereq_, exports, module) {
         generatedColumn: util.getArg(aArgs, 'column')
       };
 
-      var index = this._findMapping(needle,
-                                    this._generatedMappings,
-                                    "generatedLine",
-                                    "generatedColumn",
-                                    util.compareByGeneratedPositions);
+      var index = this._findMapping(
+        needle,
+        this._generatedMappings,
+        "generatedLine",
+        "generatedColumn",
+        util.compareByGeneratedPositions,
+        util.getArg(aArgs, 'bias', SourceMapConsumer.GREATEST_LOWER_BOUND)
+      );
 
       if (index >= 0) {
         var mapping = this._generatedMappings[index];
@@ -40985,6 +42252,11 @@ define(function (_dereq_, exports, module) {
    *   - source: The filename of the original source.
    *   - line: The line number in the original source.
    *   - column: The column number in the original source.
+   *   - bias: Either 'SourceMapConsumer.GREATEST_LOWER_BOUND' or
+   *     'SourceMapConsumer.LEAST_UPPER_BOUND'. Specifies whether to return the
+   *     closest element that is smaller than or greater than the one we are
+   *     searching for, respectively, if the exact element cannot be found.
+   *     Defaults to 'SourceMapConsumer.GREATEST_LOWER_BOUND'.
    *
    * and an object is returned with the following properties:
    *
@@ -41003,20 +42275,25 @@ define(function (_dereq_, exports, module) {
         needle.source = util.relative(this.sourceRoot, needle.source);
       }
 
-      var index = this._findMapping(needle,
-                                    this._originalMappings,
-                                    "originalLine",
-                                    "originalColumn",
-                                    util.compareByOriginalPositions);
+      var index = this._findMapping(
+        needle,
+        this._originalMappings,
+        "originalLine",
+        "originalColumn",
+        util.compareByOriginalPositions,
+        util.getArg(aArgs, 'bias', SourceMapConsumer.GREATEST_LOWER_BOUND)
+      );
 
       if (index >= 0) {
         var mapping = this._originalMappings[index];
 
-        return {
-          line: util.getArg(mapping, 'generatedLine', null),
-          column: util.getArg(mapping, 'generatedColumn', null),
-          lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
-        };
+        if (mapping.source === needle.source) {
+          return {
+            line: util.getArg(mapping, 'generatedLine', null),
+            column: util.getArg(mapping, 'generatedColumn', null),
+            lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
+          };
+        }
       }
 
       return {
@@ -41027,127 +42304,6 @@ define(function (_dereq_, exports, module) {
     };
 
   exports.BasicSourceMapConsumer = BasicSourceMapConsumer;
-
-});
-
-},{"./array-set":73,"./base64-vlq":74,"./binary-search":77,"./source-map-consumer":80,"./util":83,"amdefine":84}],77:[function(_dereq_,module,exports){
-/* -*- Mode: js; js-indent-level: 2; -*- */
-/*
- * Copyright 2011 Mozilla Foundation and contributors
- * Licensed under the New BSD license. See LICENSE or:
- * http://opensource.org/licenses/BSD-3-Clause
- */
-if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
-}
-define(function (_dereq_, exports, module) {
-  /**
-   * Recursive implementation of binary search.
-   *
-   * @param aLow Indices here and lower do not contain the needle.
-   * @param aHigh Indices here and higher do not contain the needle.
-   * @param aNeedle The element being searched for.
-   * @param aHaystack The non-empty array being searched.
-   * @param aCompare Function which takes two elements and returns -1, 0, or 1.
-   * @param aBias Either 'binarySearch.LEAST_UPPER_BOUND' or
-   *     'binarySearch.GREATEST_LOWER_BOUND'. Specifies whether to return the
-   *     closest element that is smaller than or greater than the element we are
-   *     searching for if the exact element cannot be found.
-   */
-  function recursiveSearch(aLow, aHigh, aNeedle, aHaystack, aCompare, aBias) {
-    // This function terminates when one of the following is true:
-    //
-    //   1. We find the exact element we are looking for.
-    //
-    //   2. We did not find the exact element, but we can return the index of
-    //      the next closest element.
-    //
-    //   3. We did not find the exact element, and there is no next-closest
-    //      element than the one we are searching for, so we return -1.
-    var mid = Math.floor((aHigh - aLow) / 2) + aLow;
-    var cmp = aCompare(aNeedle, aHaystack[mid], true);
-    if (cmp === 0) {
-      // Found the element we are looking for.
-      return mid;
-    }
-    else if (cmp > 0) {
-      // Our needle is greater than aHaystack[mid].
-      if (aHigh - mid > 1) {
-        // The element is in the upper half.
-        return recursiveSearch(mid, aHigh, aNeedle, aHaystack, aCompare, aBias);
-      }
-      // The exact needle element was not found in this haystack. Determine if
-      // we are in termination case (3) or (2) and return the appropriate thing.
-      if (aBias == exports.LEAST_UPPER_BOUND) {
-        return aHigh < aHaystack.length ? aHigh : -1;
-      } else {
-        return mid;
-      }
-    }
-    else {
-      // Our needle is less than aHaystack[mid].
-      if (mid - aLow > 1) {
-        // The element is in the lower half.
-        return recursiveSearch(aLow, mid, aNeedle, aHaystack, aCompare, aBias);
-      }
-      // The exact needle element was not found in this haystack. Determine if
-      // we are in termination case (3) or (2) and return the appropriate thing.
-      if (aBias == exports.LEAST_UPPER_BOUND) {
-        return mid;
-      } else {
-        return aLow < 0 ? -1 : aLow;
-      }
-    }
-  }
-
-  exports.LEAST_UPPER_BOUND = 1;
-  exports.GREATEST_LOWER_BOUND = 2;
-
-  /**
-   * This is an implementation of binary search which will always try and return
-   * the index of next highest value checked if there is no exact hit. This is
-   * because mappings between original and generated line/col pairs are single
-   * points, and there is an implicit region between each of them, so a miss
-   * just means that you aren't on the very start of a region.
-   *
-   * @param aNeedle The element you are looking for.
-   * @param aHaystack The array that is being searched.
-   * @param aCompare A function which takes the needle and an element in the
-   *     array and returns -1, 0, or 1 depending on whether the needle is less
-   *     than, equal to, or greater than the element, respectively.
-   * @param aBias Either 'exports.LEAST_UPPER_BOUND' or
-   *     'exports.GREATEST_LOWER_BOUND'. Specifies whether to return the
-   *     closest element that is smaller than or greater than the element we are
-   *     searching for if the exact element cannot be found. Defaults to
-   *     'exports.LEAST_UPPER_BOUND'.
-   */
-  exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
-    var aBias = aBias || exports.LEAST_UPPER_BOUND;
-
-    if (aHaystack.length === 0) {
-      return -1;
-    }
-    return recursiveSearch(-1, aHaystack.length, aNeedle, aHaystack, aCompare, aBias)
-  };
-
-});
-
-},{"amdefine":84}],78:[function(_dereq_,module,exports){
-/* -*- Mode: js; js-indent-level: 2; -*- */
-/*
- * Copyright 2011 Mozilla Foundation and contributors
- * Licensed under the New BSD license. See LICENSE or:
- * http://opensource.org/licenses/BSD-3-Clause
- */
-if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
-}
-define(function (_dereq_, exports, module) {
-
-  var util = _dereq_('./util');
-  var binarySearch = _dereq_('./binary-search');
-  var SourceMapConsumer = _dereq_('./source-map-consumer').SourceMapConsumer;
-  var BasicSourceMapConsumer = _dereq_('./basic-source-map-consumer').BasicSourceMapConsumer;
 
   /**
    * An IndexedSourceMapConsumer instance represents a parsed source map which
@@ -41295,7 +42451,7 @@ define(function (_dereq_, exports, module) {
 
           return (needle.generatedColumn -
                   section.generatedOffset.generatedColumn);
-        }, binarySearch.GREATEST_LOWER_BOUND);
+        });
       var section = this._sections[sectionIndex];
 
       if (!section) {
@@ -41313,7 +42469,8 @@ define(function (_dereq_, exports, module) {
         column: needle.generatedColumn -
           (section.generatedOffset.generatedLine === needle.generatedLine
            ? section.generatedOffset.generatedColumn - 1
-           : 0)
+           : 0),
+        bias: aArgs.bias
       });
     };
 
@@ -41435,97 +42592,10 @@ define(function (_dereq_, exports, module) {
   };
 
   exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
-});
-
-},{"./basic-source-map-consumer":76,"./binary-search":77,"./source-map-consumer":80,"./util":83,"amdefine":84}],79:[function(_dereq_,module,exports){
-/* -*- Mode: js; js-indent-level: 2; -*- */
-/*
- * Copyright 2014 Mozilla Foundation and contributors
- * Licensed under the New BSD license. See LICENSE or:
- * http://opensource.org/licenses/BSD-3-Clause
- */
-if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
-}
-define(function (_dereq_, exports, module) {
-
-  var util = _dereq_('./util');
-
-  /**
-   * Determine whether mappingB is after mappingA with respect to generated
-   * position.
-   */
-  function generatedPositionAfter(mappingA, mappingB) {
-    // Optimized for most common case
-    var lineA = mappingA.generatedLine;
-    var lineB = mappingB.generatedLine;
-    var columnA = mappingA.generatedColumn;
-    var columnB = mappingB.generatedColumn;
-    return lineB > lineA || lineB == lineA && columnB >= columnA ||
-           util.compareByGeneratedPositions(mappingA, mappingB) <= 0;
-  }
-
-  /**
-   * A data structure to provide a sorted view of accumulated mappings in a
-   * performance conscious manner. It trades a neglibable overhead in general
-   * case for a large speedup in case of mappings being added in order.
-   */
-  function MappingList() {
-    this._array = [];
-    this._sorted = true;
-    // Serves as infimum
-    this._last = {generatedLine: -1, generatedColumn: 0};
-  }
-
-  /**
-   * Iterate through internal items. This method takes the same arguments that
-   * `Array.prototype.forEach` takes.
-   *
-   * NOTE: The order of the mappings is NOT guaranteed.
-   */
-  MappingList.prototype.unsortedForEach =
-    function MappingList_forEach(aCallback, aThisArg) {
-      this._array.forEach(aCallback, aThisArg);
-    };
-
-  /**
-   * Add the given source mapping.
-   *
-   * @param Object aMapping
-   */
-  MappingList.prototype.add = function MappingList_add(aMapping) {
-    var mapping;
-    if (generatedPositionAfter(this._last, aMapping)) {
-      this._last = aMapping;
-      this._array.push(aMapping);
-    } else {
-      this._sorted = false;
-      this._array.push(aMapping);
-    }
-  };
-
-  /**
-   * Returns the flat, sorted array of mappings. The mappings are sorted by
-   * generated position.
-   *
-   * WARNING: This method returns internal data without copying, for
-   * performance. The return value must NOT be mutated, and should be treated as
-   * an immutable borrow. If you want to take ownership, you must make your own
-   * copy.
-   */
-  MappingList.prototype.toArray = function MappingList_toArray() {
-    if (!this._sorted) {
-      this._array.sort(util.compareByGeneratedPositions);
-      this._sorted = true;
-    }
-    return this._array;
-  };
-
-  exports.MappingList = MappingList;
 
 });
 
-},{"./util":83,"amdefine":84}],80:[function(_dereq_,module,exports){
+},{"./array-set":79,"./base64-vlq":80,"./binary-search":82,"./util":87,"amdefine":88}],85:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -41533,240 +42603,14 @@ define(function (_dereq_, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
-  var util = _dereq_('./util');
-
-  function SourceMapConsumer(aSourceMap) {
-    var sourceMap = aSourceMap;
-    if (typeof aSourceMap === 'string') {
-      sourceMap = JSON.parse(aSourceMap.replace(/^\)\]\}'/, ''));
-    }
-
-    // We do late requires because the subclasses require() this file.
-    if (sourceMap.sections != null) {
-      var indexedSourceMapConsumer = _dereq_('./indexed-source-map-consumer');
-      return new indexedSourceMapConsumer.IndexedSourceMapConsumer(sourceMap);
-    } else {
-      var basicSourceMapConsumer = _dereq_('./basic-source-map-consumer');
-      return new basicSourceMapConsumer.BasicSourceMapConsumer(sourceMap);
-    }
-  }
-
-  SourceMapConsumer.fromSourceMap = function(aSourceMap) {
-    var basicSourceMapConsumer = _dereq_('./basic-source-map-consumer');
-    return basicSourceMapConsumer.BasicSourceMapConsumer
-            .fromSourceMap(aSourceMap);
-  }
-
-  /**
-   * The version of the source mapping spec that we are consuming.
-   */
-  SourceMapConsumer.prototype._version = 3;
-
-
-  // `__generatedMappings` and `__originalMappings` are arrays that hold the
-  // parsed mapping coordinates from the source map's "mappings" attribute. They
-  // are lazily instantiated, accessed via the `_generatedMappings` and
-  // `_originalMappings` getters respectively, and we only parse the mappings
-  // and create these arrays once queried for a source location. We jump through
-  // these hoops because there can be many thousands of mappings, and parsing
-  // them is expensive, so we only want to do it if we must.
-  //
-  // Each object in the arrays is of the form:
-  //
-  //     {
-  //       generatedLine: The line number in the generated code,
-  //       generatedColumn: The column number in the generated code,
-  //       source: The path to the original source file that generated this
-  //               chunk of code,
-  //       originalLine: The line number in the original source that
-  //                     corresponds to this chunk of generated code,
-  //       originalColumn: The column number in the original source that
-  //                       corresponds to this chunk of generated code,
-  //       name: The name of the original symbol which generated this chunk of
-  //             code.
-  //     }
-  //
-  // All properties except for `generatedLine` and `generatedColumn` can be
-  // `null`.
-  //
-  // `_generatedMappings` is ordered by the generated positions.
-  //
-  // `_originalMappings` is ordered by the original positions.
-
-  SourceMapConsumer.prototype.__generatedMappings = null;
-  Object.defineProperty(SourceMapConsumer.prototype, '_generatedMappings', {
-    get: function () {
-      if (!this.__generatedMappings) {
-        this.__generatedMappings = [];
-        this.__originalMappings = [];
-        this._parseMappings(this._mappings, this.sourceRoot);
-      }
-
-      return this.__generatedMappings;
-    }
-  });
-
-  SourceMapConsumer.prototype.__originalMappings = null;
-  Object.defineProperty(SourceMapConsumer.prototype, '_originalMappings', {
-    get: function () {
-      if (!this.__originalMappings) {
-        this.__generatedMappings = [];
-        this.__originalMappings = [];
-        this._parseMappings(this._mappings, this.sourceRoot);
-      }
-
-      return this.__originalMappings;
-    }
-  });
-
-  SourceMapConsumer.prototype._nextCharIsMappingSeparator =
-    function SourceMapConsumer_nextCharIsMappingSeparator(aStr) {
-      var c = aStr.charAt(0);
-      return c === ";" || c === ",";
-    };
-
-  /**
-   * Parse the mappings in a string in to a data structure which we can easily
-   * query (the ordered arrays in the `this.__generatedMappings` and
-   * `this.__originalMappings` properties).
-   */
-  SourceMapConsumer.prototype._parseMappings =
-    function SourceMapConsumer_parseMappings(aStr, aSourceRoot) {
-      throw new Error("Subclasses must implement _parseMappings");
-    };
-
-  SourceMapConsumer.GENERATED_ORDER = 1;
-  SourceMapConsumer.ORIGINAL_ORDER = 2;
-
-  SourceMapConsumer.LEAST_UPPER_BOUND = 1;
-  SourceMapConsumer.GREATEST_LOWER_BOUND = 2;
-
-  /**
-   * Iterate over each mapping between an original source/line/column and a
-   * generated line/column in this source map.
-   *
-   * @param Function aCallback
-   *        The function that is called with each mapping.
-   * @param Object aContext
-   *        Optional. If specified, this object will be the value of `this` every
-   *        time that `aCallback` is called.
-   * @param aOrder
-   *        Either `SourceMapConsumer.GENERATED_ORDER` or
-   *        `SourceMapConsumer.ORIGINAL_ORDER`. Specifies whether you want to
-   *        iterate over the mappings sorted by the generated file's line/column
-   *        order or the original's source/line/column order, respectively. Defaults to
-   *        `SourceMapConsumer.GENERATED_ORDER`.
-   */
-  SourceMapConsumer.prototype.eachMapping =
-    function SourceMapConsumer_eachMapping(aCallback, aContext, aOrder) {
-      var context = aContext || null;
-      var order = aOrder || SourceMapConsumer.GENERATED_ORDER;
-
-      var mappings;
-      switch (order) {
-      case SourceMapConsumer.GENERATED_ORDER:
-        mappings = this._generatedMappings;
-        break;
-      case SourceMapConsumer.ORIGINAL_ORDER:
-        mappings = this._originalMappings;
-        break;
-      default:
-        throw new Error("Unknown order of iteration.");
-      }
-
-      var sourceRoot = this.sourceRoot;
-      mappings.map(function (mapping) {
-        var source = mapping.source;
-        if (source != null && sourceRoot != null) {
-          source = util.join(sourceRoot, source);
-        }
-        return {
-          source: source,
-          generatedLine: mapping.generatedLine,
-          generatedColumn: mapping.generatedColumn,
-          originalLine: mapping.originalLine,
-          originalColumn: mapping.originalColumn,
-          name: mapping.name
-        };
-      }).forEach(aCallback, context);
-    };
-
-  /**
-   * Returns all generated line and column information for the original source
-   * and line provided. The only argument is an object with the following
-   * properties:
-   *
-   *   - source: The filename of the original source.
-   *   - line: The line number in the original source.
-   *
-   * and an array of objects is returned, each with the following properties:
-   *
-   *   - line: The line number in the generated source, or null.
-   *   - column: The column number in the generated source, or null.
-   */
-  SourceMapConsumer.prototype.allGeneratedPositionsFor =
-    function SourceMapConsumer_allGeneratedPositionsFor(aArgs) {
-      var needle = {
-        source: util.getArg(aArgs, 'source'),
-        originalLine: util.getArg(aArgs, 'line'),
-        originalColumn: 0
-      };
-
-      if (this.sourceRoot != null) {
-        needle.source = util.relative(this.sourceRoot, needle.source);
-      }
-
-      var mappings = [];
-
-      var index = this._findMapping(needle,
-                                    this._originalMappings,
-                                    "originalLine",
-                                    "originalColumn",
-                                    util.compareByOriginalPositions);
-      if (index >= 0) {
-        var mapping = this._originalMappings[index];
-
-        // Iterate until either we run out of mappings, or we run into
-        // a mapping for a different line. Since mappings are sorted, this is
-        // guaranteed to find all mappings for the line we are interested in.
-        while (mapping && mapping.originalLine === needle.originalLine) {
-          mappings.push({
-            line: util.getArg(mapping, 'generatedLine', null),
-            column: util.getArg(mapping, 'generatedColumn', null),
-            lastColumn: util.getArg(mapping, 'lastGeneratedColumn', null)
-          });
-
-          mapping = this._originalMappings[++index];
-        }
-      }
-
-      return mappings;
-    };
-
-  exports.SourceMapConsumer = SourceMapConsumer;
-
-});
-
-},{"./basic-source-map-consumer":76,"./indexed-source-map-consumer":78,"./util":83,"amdefine":84}],81:[function(_dereq_,module,exports){
-/* -*- Mode: js; js-indent-level: 2; -*- */
-/*
- * Copyright 2011 Mozilla Foundation and contributors
- * Licensed under the New BSD license. See LICENSE or:
- * http://opensource.org/licenses/BSD-3-Clause
- */
-if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
-}
-define(function (_dereq_, exports, module) {
-
-  var base64VLQ = _dereq_('./base64-vlq');
-  var util = _dereq_('./util');
-  var ArraySet = _dereq_('./array-set').ArraySet;
-  var MappingList = _dereq_('./mapping-list').MappingList;
+  var base64VLQ = require('./base64-vlq');
+  var util = require('./util');
+  var ArraySet = require('./array-set').ArraySet;
+  var MappingList = require('./mapping-list').MappingList;
 
   /**
    * An instance of the SourceMapGenerator represents a source map which is
@@ -42153,7 +42997,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./array-set":73,"./base64-vlq":74,"./mapping-list":79,"./util":83,"amdefine":84}],82:[function(_dereq_,module,exports){
+},{"./array-set":79,"./base64-vlq":80,"./mapping-list":83,"./util":87,"amdefine":88}],86:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -42161,12 +43005,12 @@ define(function (_dereq_, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
-  var SourceMapGenerator = _dereq_('./source-map-generator').SourceMapGenerator;
-  var util = _dereq_('./util');
+  var SourceMapGenerator = require('./source-map-generator').SourceMapGenerator;
+  var util = require('./util');
 
   // Matches a Windows-style `\r\n` newline or a `\n` newline used by all other
   // operating systems these days (capturing the result).
@@ -42569,7 +43413,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"./source-map-generator":81,"./util":83,"amdefine":84}],83:[function(_dereq_,module,exports){
+},{"./source-map-generator":85,"./util":87,"amdefine":88}],87:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -42577,9 +43421,9 @@ define(function (_dereq_, exports, module) {
  * http://opensource.org/licenses/BSD-3-Clause
  */
 if (typeof define !== 'function') {
-    var define = _dereq_('amdefine')(module, _dereq_);
+    var define = require('amdefine')(module, require);
 }
-define(function (_dereq_, exports, module) {
+define(function (require, exports, module) {
 
   /**
    * This is a helper function for getting values from parameter/options
@@ -42833,7 +43677,7 @@ define(function (_dereq_, exports, module) {
       return cmp;
     }
 
-    cmp = strcmp(mappingA.name, mappingB.name);
+    cmp = mappingA.generatedColumn - mappingB.generatedColumn;
     if (cmp) {
       return cmp;
     }
@@ -42843,7 +43687,7 @@ define(function (_dereq_, exports, module) {
       return cmp;
     }
 
-    return mappingA.generatedColumn - mappingB.generatedColumn;
+    return strcmp(mappingA.name, mappingB.name);
   };
   exports.compareByOriginalPositions = compareByOriginalPositions;
 
@@ -42890,7 +43734,7 @@ define(function (_dereq_, exports, module) {
 
 });
 
-},{"amdefine":84}],84:[function(_dereq_,module,exports){
+},{"amdefine":88}],88:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
@@ -42917,7 +43761,7 @@ function amdefine(module, requireFn) {
     var defineCache = {},
         loaderCache = {},
         alreadyCalled = false,
-        path = _dereq_('path'),
+        path = require('path'),
         makeRequire, stringRequire;
 
     /**
@@ -43192,10 +44036,10 @@ function amdefine(module, requireFn) {
 
 module.exports = amdefine;
 
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
-},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"path":11}],85:[function(_dereq_,module,exports){
+}).call(this,require('_process'),"/node_modules/recast/node_modules/source-map/node_modules/amdefine/amdefine.js")
+},{"_process":12,"path":11}],89:[function(require,module,exports){
 (function (process){
-var Stream = _dereq_('stream')
+var Stream = require('stream')
 
 // through
 //
@@ -43237,7 +44081,7 @@ function through (write, end, opts) {
   stream.queue = stream.push = function (data) {
 //    console.error(ended)
     if(_ended) return stream
-    if(data == null) _ended = true
+    if(data === null) _ended = true
     buffer.push(data)
     drain()
     return stream
@@ -43304,8 +44148,8 @@ function through (write, end, opts) {
 }
 
 
-}).call(this,_dereq_("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":10,"stream":13}],86:[function(_dereq_,module,exports){
+}).call(this,require('_process'))
+},{"_process":12,"stream":24}],90:[function(require,module,exports){
 (function (global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -43343,7 +44187,15 @@ function through (write, end, opts) {
   runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
-    return new Generator(innerFn, outerFn, self || null, tryLocsList || []);
+    // If outerFn provided, then outerFn.prototype instanceof Generator.
+    var generator = Object.create((outerFn || Generator).prototype);
+
+    generator._invoke = makeInvokeMethod(
+      innerFn, self || null,
+      new Context(tryLocsList || [])
+    );
+
+    return generator;
   }
   runtime.wrap = wrap;
 
@@ -43378,6 +44230,7 @@ function through (write, end, opts) {
   // .constructor.prototype properties for functions that return Generator
   // objects. For full spec compliance, you may wish to configure your
   // minifier not to mangle the names of these two functions.
+  function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
 
@@ -43405,11 +44258,11 @@ function through (write, end, opts) {
   runtime.async = function(innerFn, outerFn, self, tryLocsList) {
     return new Promise(function(resolve, reject) {
       var generator = wrap(innerFn, outerFn, self, tryLocsList);
-      var callNext = step.bind(generator.next);
-      var callThrow = step.bind(generator["throw"]);
+      var callNext = step.bind(generator, "next");
+      var callThrow = step.bind(generator, "throw");
 
-      function step(arg) {
-        var record = tryCatch(this, null, arg);
+      function step(method, arg) {
+        var record = tryCatch(generator[method], generator, arg);
         if (record.type === "throw") {
           reject(record.arg);
           return;
@@ -43427,12 +44280,10 @@ function through (write, end, opts) {
     });
   };
 
-  function Generator(innerFn, outerFn, self, tryLocsList) {
-    var generator = outerFn ? Object.create(outerFn.prototype) : this;
-    var context = new Context(tryLocsList);
+  function makeInvokeMethod(innerFn, self, context) {
     var state = GenStateSuspendedStart;
 
-    function invoke(method, arg) {
+    return function invoke(method, arg) {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
       }
@@ -43446,6 +44297,33 @@ function through (write, end, opts) {
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
+          if (method === "return" ||
+              (method === "throw" && delegate.iterator[method] === undefined)) {
+            // A return or throw (when the delegate iterator has no throw
+            // method) always terminates the yield* loop.
+            context.delegate = null;
+
+            // If the delegate iterator has a return method, give it a
+            // chance to clean up.
+            var returnMethod = delegate.iterator["return"];
+            if (returnMethod) {
+              var record = tryCatch(returnMethod, delegate.iterator, arg);
+              if (record.type === "throw") {
+                // If the return method threw an exception, let that
+                // exception prevail over the original return or throw.
+                method = "throw";
+                arg = record.arg;
+                continue;
+              }
+            }
+
+            if (method === "return") {
+              // Continue with the outer return, now that the delegate
+              // iterator has been terminated.
+              continue;
+            }
+          }
+
           var record = tryCatch(
             delegate.iterator[method],
             delegate.iterator,
@@ -43459,7 +44337,6 @@ function through (write, end, opts) {
             // overhead of an extra function call.
             method = "throw";
             arg = record.arg;
-
             continue;
           }
 
@@ -43482,14 +44359,6 @@ function through (write, end, opts) {
         }
 
         if (method === "next") {
-          if (state === GenStateSuspendedStart &&
-              typeof arg !== "undefined") {
-            // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-            throw new TypeError(
-              "attempt to send " + JSON.stringify(arg) + " to newborn generator"
-            );
-          }
-
           if (state === GenStateSuspendedYield) {
             context.sent = arg;
           } else {
@@ -43540,22 +44409,23 @@ function through (write, end, opts) {
 
         } else if (record.type === "throw") {
           state = GenStateCompleted;
-
-          if (method === "next") {
-            context.dispatchException(record.arg);
-          } else {
-            arg = record.arg;
-          }
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(arg) call above.
+          method = "throw";
+          arg = record.arg;
         }
       }
-    }
-
-    generator.next = invoke.bind(generator, "next");
-    generator["throw"] = invoke.bind(generator, "throw");
-    generator["return"] = invoke.bind(generator, "return");
-
-    return generator;
+    };
   }
+
+  function defineGeneratorMethod(method) {
+    Gp[method] = function(arg) {
+      return this._invoke(method, arg);
+    };
+  }
+  defineGeneratorMethod("next");
+  defineGeneratorMethod("throw");
+  defineGeneratorMethod("return");
 
   Gp[iteratorSymbol] = function() {
     return this;
@@ -43763,7 +44633,7 @@ function through (write, end, opts) {
           (type === "break" ||
            type === "continue") &&
           finallyEntry.tryLoc <= arg &&
-          arg < finallyEntry.finallyLoc) {
+          arg <= finallyEntry.finallyLoc) {
         // Ignore the finally entry if control is not jumping to a
         // location outside the try/catch block.
         finallyEntry = null;
@@ -43842,10 +44712,10 @@ function through (write, end, opts) {
   // object, this seems to be the most reliable technique that does not
   // use indirect eval (which violates Content Security Policy).
   typeof global === "object" ? global :
-  typeof window === "object" ? window : this
+  typeof window === "object" ? window :
+  typeof self === "object" ? self : this
 );
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[28])
-(28)
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}]},{},[34])(34)
 });
