@@ -70,8 +70,8 @@ each(File.helpers, function (helperName) {
   writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
 });
 
-writeFile("regenerator/index.js", readFile("regenerator-babel/runtime-module", true));
-writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator-babel/runtime")));
+writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
+writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime")));
 
 //
 
