@@ -6,7 +6,7 @@
   "DoWhileStatement":         ["Statement", "Loop", "While", "Scopable"],
   "IfStatement":              ["Statement"],
   "ReturnStatement":          ["Statement"],
-  "SwitchStatement":          ["Statement"],
+  "SwitchStatement":          ["Statement", "Scopable"],
   "ThrowStatement":           ["Statement"],
   "TryStatement":             ["Statement"],
   "WhileStatement":           ["Statement", "Loop", "While", "Scopable"],
