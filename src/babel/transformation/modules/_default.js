@@ -124,6 +124,11 @@ export default class DefaultFormatter {
     this.getLocalImports();
   }
 
+  isModuleType(node, type) {
+    var modules = this.file.dynamicImportTypes[type];
+    return modules && modules.indexOf(node) >= 0;
+  }
+
   transform() {
     this.remapAssignments();
   }

@@ -18,7 +18,7 @@ var astVisitor = traverse.explode({
 
     // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
     var modulePath = definitions.builtins[node.name];
-    return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, true);
+    return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, "absoluteDefault");
   },
 
   CallExpression(node, parent, scope, file) {
@@ -33,7 +33,7 @@ var astVisitor = traverse.explode({
     var prop = callee.property;
     if (!isSymbolIterator(prop)) return;
 
-    return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", true), [callee.object]);
+    return t.callExpression(file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", "absoluteDefault"), [callee.object]);
   },
 
   BinaryExpression(node, parent, scope, file) {
@@ -45,7 +45,7 @@ var astVisitor = traverse.explode({
     if (!isSymbolIterator(left)) return;
 
     return t.callExpression(
-      file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterable`, "isIterable", true),
+      file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterable`, "isIterable", "absoluteDefault"),
       [node.right]
     );
   },
@@ -71,7 +71,7 @@ var astVisitor = traverse.explode({
       if (scope.getBindingIdentifier(obj.name)) return;
 
       var modulePath = methods[prop.name];
-      return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}$${prop.name}`, true);
+      return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}$${prop.name}`, "absoluteDefault");
     },
 
     exit(node, parent, scope, file) {
@@ -85,7 +85,7 @@ var astVisitor = traverse.explode({
 
       var modulePath = definitions.builtins[obj.name];
       return t.memberExpression(
-        file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}`, true),
+        file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}`, "absoluteDefault"),
         prop
       );
     }
@@ -102,11 +102,11 @@ exports.Program = function (node, parent, scope, file) {
 
 exports.pre = function (file) {
   file.set("helperGenerator", function (name) {
-    return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, name, true);
+    return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, name, "absoluteDefault");
   });
 
   file.setDynamic("regeneratorIdentifier", function () {
-    return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "regeneratorRuntime", true);
+    return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "regeneratorRuntime", "absoluteDefault");
   });
 };
 

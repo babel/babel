@@ -45,7 +45,9 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
     // import foo from "foo";
     if (t.isSpecifierDefault(specifier)) {
-      if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
+      if (this.isModuleType(node, "absolute")) {
+        // absolute module reference
+      } else if (this.isModuleType(node, "absoluteDefault")) {
         this.internalRemap[variableName.name] = ref;
       } else if (this.noInteropRequireImport) {
         this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"));
@@ -104,12 +106,15 @@ export default class CommonJSFormatter extends DefaultFormatter {
     var call = t.callExpression(t.identifier("require"), [node.source]);
     var uid;
 
-    if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
+    if (this.isModuleType(node, "absolute")) {
+      // absolute module reference
+    } else if (this.isModuleType(node, "absoluteDefault")) {
       call = t.memberExpression(call, t.identifier("default"));
-      uid = node.specifiers[0].local;
     } else {
       uid = this.scope.generateUidBasedOnNode(node, "import");
     }
+
+    uid ||= node.specifiers[0].local;
 
     var declar = t.variableDeclaration("var", [
       t.variableDeclarator(uid, call)

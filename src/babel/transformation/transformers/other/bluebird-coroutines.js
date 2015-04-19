@@ -15,7 +15,7 @@ exports.Function = function (node, parent, scope, file) {
 
   return remapAsyncToGenerator(
     node,
-    t.memberExpression(file.addImport("bluebird"), t.identifier("coroutine")),
+    t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine")),
     scope
   );
 };

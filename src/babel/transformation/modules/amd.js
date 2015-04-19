@@ -80,7 +80,9 @@ export default class AMDFormatter extends DefaultFormatter {
       this.defaultIds[key] = specifier.local;
     }
 
-    if (includes(this.file.dynamicImportAbsoluteDefaults, node)) {
+    if (this.isModuleType(node, "absolute")) {
+      // absolute module reference
+    } else if (this.isModuleType(node, "absoluteDefault")) {
       // prevent unnecessary renaming of dynamic imports
       this.ids[node.source.value] = ref;
       ref = t.memberExpression(ref, t.identifier("default"));
