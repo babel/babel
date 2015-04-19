@@ -241,7 +241,10 @@ export default class File {
     var plugin;
 
     if (name) {
-      if (typeof name === "string") {
+      if (typeof name === "object" && name.transformer) {
+        plugin = name.transformer;
+        position ||= name.position;
+      } else if (typeof name === "string") {
         // this is a plugin in the form of "foobar" or "foobar:after"
         // where the optional colon is the delimiter for plugin position in the transformer stack
 
