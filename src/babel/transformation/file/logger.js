@@ -7,7 +7,7 @@ export default class Logger {
   }
 
   _buildMessage(msg: string): string {
-    var parts = this.filename;
+    var parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
   }
@@ -18,7 +18,7 @@ export default class Logger {
 
   deprecate(msg) {
     if (!this.file.opts.suppressDeprecationMessages) {
-      console.error(msg);
+      console.error(this._buildMessage(msg));
     }
   }
 
