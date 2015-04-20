@@ -1,3 +1,4 @@
+import memoiseDecorators from "../../helpers/memoise-decorators";
 import ReplaceSupers from "../../helpers/replace-supers";
 import * as nameMethod from "../../helpers/name-method";
 import * as defineMap from "../../helpers/define-map";
@@ -291,6 +292,10 @@ class ClassTransformer {
     for (var i = 0; i < classBody.length; i++) {
       var node = classBody[i];
       var path = classBodyPaths[i];
+
+      if (node.decorators) {
+        memoiseDecorators(node.decorators, this.scope);
+      }
 
       if (t.isMethodDefinition(node)) {
         var isConstructor = node.kind === "constructor";

@@ -1,3 +1,4 @@
+import memoiseDecorators from "../../helpers/memoise-decorators";
 import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
@@ -24,7 +25,9 @@ export function ObjectExpression(node, parent, scope, file) {
   var mutatorMap = {};
 
   for (var i = 0; i < node.properties.length; i++) {
-    defineMap.push(mutatorMap, node.properties[i], null, file);
+    var prop = node.properties[i];
+    if (prop.decorators) memoiseDecorators(prop.decorators, scope);
+    defineMap.push(mutatorMap, prop, null, file);
   }
 
   var obj = defineMap.toClassObject(mutatorMap);
