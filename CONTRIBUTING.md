@@ -1,17 +1,16 @@
 <p align="center">
-<b><a href="#setup">Setup</a></b>
-|
-<b><a href="#running-tests">Running tests</a></b>
-|
-<b><a href="#workflow">Workflow</a></b>
-|
-<b><a href="#dependencies">Dependencies</a></b>
-|
-<b><a href="#code-standards">Code Standards</a></b>
+   <strong><a href="#setup">Setup</a></strong>
+   |
+   <strong><a href="#running-tests">Running tests</a></strong>
+   |
+   <strong><a href="#workflow">Workflow</a></strong>
+   |
+   <strong><a href="#dependencies">Dependencies</a></strong>
+   |
+   <strong><a href="#code-standards">Code Standards</a></strong>
 </p>
 
-<hr>
-
+----
 
 # Contributing
 
