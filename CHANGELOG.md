@@ -13,6 +13,17 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.11
+
+ * **Bug Fix**
+  * Memoise and bind member expression decorators.
+  * Move JSX children cleaning to opening element visitor. Fixes elements not being cleaned in certain scenarios.
+  * Consider `SwitchStatement`s to be `Scopable`.
+  * Fix `bluebirdCoroutines` calling `interopRequireWildcard` before it's defined.
+  * Add space to `do...while` code generation.
+ * **Polish**
+  * Add Babel name to logger.
+
 ## 5.1.10
 
  * **Bug Fix**
