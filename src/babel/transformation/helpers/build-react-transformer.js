@@ -57,6 +57,8 @@ export default function (exports, opts) {
 
   exports.JSXOpeningElement = {
     exit(node, parent, scope, file) {
+      parent.children = react.buildChildren(parent);
+
       var tagExpr = node.name;
       var args = [];
 
@@ -144,10 +146,6 @@ export default function (exports, opts) {
   };
 
   exports.JSXElement = {
-    enter(node) {
-      node.children = react.buildChildren(node);
-    },
-
     exit(node) {
       var callExpr = node.openingElement;
 

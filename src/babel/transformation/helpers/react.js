@@ -34,9 +34,8 @@ function cleanJSXElementLiteralChild(child, args) {
   var lines = child.value.split(/\r\n|\n|\r/);
 
   var lastNonEmptyLine = 0;
-  var i;
 
-  for (i = 0; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     if (lines[i].match(/[^ \t]/)) {
       lastNonEmptyLine = i;
     }
@@ -44,7 +43,7 @@ function cleanJSXElementLiteralChild(child, args) {
 
   var str = "";
 
-  for (i = 0; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     var line = lines[i];
 
     var isFirstLine = i === 0;
