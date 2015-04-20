@@ -21,6 +21,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Consider `SwitchStatement`s to be `Scopable`.
   * Fix `bluebirdCoroutines` calling `interopRequireWildcard` before it's defined.
   * Add space to `do...while` code generation.
+  * Validate `super` use before `this` on `super` exit rather than entrance.
  * **Polish**
   * Add Babel name to logger.
 
