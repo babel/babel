@@ -57,7 +57,7 @@ export function JSXElement(node, parent, scope, file) {
     if (isJSXAttributeOfName(attr, "key")) {
       key = attr.value;
     } else {
-      pushProp(props.properties, attr.name, attr.value);
+      pushProp(props.properties, attr.name, attr.value || t.identifier("true"));
     }
   }
 
