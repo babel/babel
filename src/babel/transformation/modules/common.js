@@ -55,7 +55,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
         var uid = this.scope.generateUidBasedOnNode(node, "import");
 
         nodes.push(t.variableDeclaration("var", [
-          t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-wildcard"), [ref]))
+          t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-default"), [ref]))
         ]));
 
         this.internalRemap[variableName.name] = t.memberExpression(uid, t.identifier("default"));

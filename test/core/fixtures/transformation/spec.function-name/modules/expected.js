@@ -2,7 +2,7 @@
 
 var _events2 = require("events");
 
-var _events3 = babelHelpers.interopRequireWildcard(_events2);
+var _events3 = babelHelpers.interopRequireDefault(_events2);
 
 var Template = (function () {
   function Template() {

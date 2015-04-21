@@ -62,7 +62,6 @@ export default class File {
     "create-decorated-object",
     "tagged-template-literal",
     "tagged-template-literal-loose",
-    "interop-require",
     "to-array",
     "to-consumable-array",
     "sliced-to-array",
@@ -74,6 +73,7 @@ export default class File {
     "define-property",
     "async-to-generator",
     "interop-require-wildcard",
+    "interop-require-default",
     "typeof",
     "extends",
     "get",
@@ -83,7 +83,10 @@ export default class File {
     "temporal-undefined",
     "temporal-assert-defined",
     "self-global",
-    "default-props"
+    "default-props",
+
+    // legacy
+    "interop-require",
   ];
 
   static soloHelpers = [

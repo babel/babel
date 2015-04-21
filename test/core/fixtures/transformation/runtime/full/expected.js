@@ -4,6 +4,8 @@ var _Symbol = require("babel-runtime/core-js/symbol")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
+var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
+
 var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
 Object.defineProperty(exports, "__esModule", {
@@ -14,7 +16,7 @@ var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
 
 var _foo = require("someModule");
 
-var _foo2 = _interopRequireWildcard(_foo);
+var _foo2 = _interopRequireDefault(_foo);
 
 var bar = _interopRequireWildcard(_foo);
 

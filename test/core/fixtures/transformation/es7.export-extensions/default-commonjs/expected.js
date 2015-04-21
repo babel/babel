@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _foo2 = require("bar");
 
-var _foo3 = babelHelpers.interopRequireWildcard(_foo2);
+var _foo3 = babelHelpers.interopRequireDefault(_foo2);
 
 exports.foo = _foo3["default"];

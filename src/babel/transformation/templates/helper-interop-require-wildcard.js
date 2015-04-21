@@ -2,15 +2,13 @@
   if (obj && obj.__esModule) {
     return obj;
   } else {
-    var hop = Object.prototype.hasOwnProperty;
-    var es_obj = { "default": obj };
+    var newObj = {};
     if (typeof obj === "object" && obj !== null) {
       for (var key in obj) {
-        if (key !== "default" && hop.call(obj, key)) {
-          es_obj[key] = obj[key];
-        }
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
       }
     }
-    return es_obj;
+    newObj.default = obj;
+    return newObj;
   }
 })

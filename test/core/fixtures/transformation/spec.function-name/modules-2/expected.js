@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _last2 = require("lodash/array/last");
 
-var _last3 = babelHelpers.interopRequireWildcard(_last2);
+var _last3 = babelHelpers.interopRequireDefault(_last2);
 
 var Container = (function () {
   function Container() {
