@@ -21,6 +21,7 @@ pp.toAssignable = function(node, isBinding) {
       node.type = "ObjectPattern"
       for (let i = 0; i < node.properties.length; i++) {
         let prop = node.properties[i]
+        if (prop.type === "SpreadProperty") continue;
         if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter")
         this.toAssignable(prop.value, isBinding)
       }
