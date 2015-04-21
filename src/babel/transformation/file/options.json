@@ -157,7 +157,7 @@
   },
 
   "externalHelpers": {
-    "type": "string",
+    "type": "boolean",
     "default": false,
     "shorthand": "r",
     "description": "uses a reference to `babelHelpers` instead of placing helpers at the top of your code."
