@@ -13,7 +13,7 @@
     "fs-readdir-recursive": "^0.1.0",
     "output-file-sync": "^1.1.0",
     "lodash": "^3.2.0",
-    "convert-source-map": "^0.5.0",
+    "convert-source-map": "^1.1.0",
     "source-map": "^0.4.0",
     "path-is-absolute": "^1.0.0"
   },
