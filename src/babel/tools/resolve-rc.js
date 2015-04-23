@@ -17,8 +17,16 @@ function exists(filename) {
 export default function (loc, opts = {}) {
   var rel = ".babelrc";
 
+  if (!opts.babelrc) {
+    opts.babelrc = [];
+  }
+
   function find(start, rel) {
     var file = path.join(start, rel);
+
+    if (opts.babelrc.indexOf(file) >= 0) {
+      return;
+    }
 
     if (exists(file)) {
       var content = fs.readFileSync(file, "utf8");
@@ -31,10 +39,18 @@ export default function (loc, opts = {}) {
         throw err;
       }
 
+      opts.babelrc.push(file);
+
       if (json.breakConfig) return;
       merge(opts, json, function(a, b) {
         if (Array.isArray(a)) {
-          return a.concat(b);
+          var c = a.slice(0);
+          for (var v of b) {
+            if (a.indexOf(v) < 0) {
+              c.push(v); 
+            }
+          }
+          return c;
         }
       });
     }
@@ -45,7 +61,7 @@ export default function (loc, opts = {}) {
     }
   }
 
-  if (opts.breakConfig !== true) {
+  if (opts.babelrc.indexOf(loc) < 0 && opts.breakConfig !== true) {
     find(loc, rel);
   }
 
