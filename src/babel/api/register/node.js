@@ -8,6 +8,8 @@ import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
 
+var isWindows = process.platform === 'win32';
+
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
   retrieveSourceMap(source) {
@@ -76,6 +78,9 @@ var compile = function (filename) {
 };
 
 var shouldIgnore = function (filename) {
+  if (isWindows) {
+    filename = filename.split("\\").join("/");
+  }
   return (ignoreRegex && ignoreRegex.test(filename)) || (onlyRegex && !onlyRegex.test(filename));
 };
 

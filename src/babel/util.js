@@ -19,6 +19,8 @@ import has from "lodash/object/has";
 import fs from "fs";
 import * as t from "./types";
 
+var isWindows = process.platform === 'win32';
+
 export { inherits, inspect } from "util";
 
 export var debug = buildDebug("babel");
@@ -94,6 +96,9 @@ export function booleanify(val: any): boolean {
 }
 
 export function shouldIgnore(filename, ignore, only) {
+  if (isWindows) {
+    filename = filename.split("\\").join("/");
+  }
   if (only.length) {
     for (var i = 0; i < only.length; i++) {
       if (only[i].test(filename)) return false;
