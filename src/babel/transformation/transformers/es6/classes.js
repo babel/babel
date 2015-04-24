@@ -37,6 +37,22 @@ var collectPropertyReferencesVisitor = {
   }
 };
 
+var constructorVisitor = traverse.explode({
+  ThisExpression: {
+    enter(node, parent, scope, ref) {
+      return ref;
+    }
+  },
+
+  Function: {
+    enter(node) {
+      if (!node.shadow) {
+        this.skip();
+      }
+    }
+  }
+});
+
 var verifyConstructorVisitor = traverse.explode({
   MethodDefinition: {
     enter() {
@@ -579,6 +595,10 @@ class ClassTransformer {
     var fnPath = path.get("value");
     if (fnPath.scope.hasOwnBinding(this.classRef.name)) {
       fnPath.scope.rename(this.classRef.name);
+    }
+
+    if (this.isNativeSuper) {
+      fnPath.traverse(constructorVisitor, this.nativeSuperRef);
     }
 
     var construct = this.constructor;

@@ -8,3 +8,10 @@ class Bar extends Array {
     this.foo = "bar";
   }
 }
+
+class Baz extends Array {
+  constructor() {
+    super();
+    (() => this)
+  }
+}

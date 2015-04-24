@@ -33,3 +33,21 @@ var Bar = (function (_Array2) {
   babelHelpers.inherits(Bar, _Array2);
   return Bar;
 })(Array);
+
+var Baz = (function (_Array3) {
+  function Baz() {
+    babelHelpers.classCallCheck(this, Baz);
+
+    var _this3 = new _Array3();
+
+    _this3.__proto__ = Baz.prototype;
+
+    (function () {
+      return _this3;
+    });
+    return _this3;
+  }
+
+  babelHelpers.inherits(Baz, _Array3);
+  return Baz;
+})(Array);
