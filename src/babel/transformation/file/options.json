@@ -206,6 +206,11 @@
     "default": false,
     "hidden": true,
     "description": "stop trying to load .babelrc files"
+  },
+
+  "babelrc": {
+    "hidden": true,
+    "description": "do not load the same .babelrc file twice"
   }
 
 }
