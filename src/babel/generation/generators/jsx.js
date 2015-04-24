@@ -45,7 +45,7 @@ export function JSXElement(node, print) {
   this.indent();
   each(node.children, (child) => {
     if (t.isLiteral(child)) {
-      this.push(child.value);
+      this.push(child.value, true);
     } else {
       print(child);
     }
