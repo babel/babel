@@ -7,6 +7,7 @@ import * as babel from "../node";
 import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
+import slash from "slash";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -76,6 +77,7 @@ var compile = function (filename) {
 };
 
 var shouldIgnore = function (filename) {
+  filename = slash(filename);
   return (ignoreRegex && ignoreRegex.test(filename)) || (onlyRegex && !onlyRegex.test(filename));
 };
 
