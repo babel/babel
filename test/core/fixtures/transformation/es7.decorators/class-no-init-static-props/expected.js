@@ -13,6 +13,6 @@ var Foo = (function () {
     initializer: function () {},
     enumerable: true
   }], null, _staticInitializers);
-  Foo.foo = _staticInitializers.foo.call(Foo);
+  babelHelpers.defineDecoratedPropertyDescriptor(Foo, "foo", _staticInitializers);
   return Foo;
 })();

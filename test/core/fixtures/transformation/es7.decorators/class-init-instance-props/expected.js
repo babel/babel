@@ -5,7 +5,7 @@ var Foo = (function () {
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    this.foo = _instanceInitializers.foo.call(this);
+    babelHelpers.defineDecoratedPropertyDescriptor(this, "foo", _instanceInitializers);
   }
 
   babelHelpers.createDecoratedClass(Foo, [{

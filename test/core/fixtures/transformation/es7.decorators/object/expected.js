@@ -3,12 +3,18 @@
 var obj = babelHelpers.createDecoratedObject([{
   key: "bar",
   decorators: [foo],
-  value: function value() {}
+  initializer: function initializer() {
+    return function () {};
+  }
 }, {
   key: "foo",
   decorators: [bar],
-  value: "lol"
+  initializer: function initializer() {
+    return "lol";
+  }
 }, {
   key: "yes",
-  value: "wow"
+  initializer: function initializer() {
+    return "wow";
+  }
 }]);

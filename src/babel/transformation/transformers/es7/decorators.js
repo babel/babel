@@ -27,7 +27,16 @@ export function ObjectExpression(node, parent, scope, file) {
   for (var i = 0; i < node.properties.length; i++) {
     var prop = node.properties[i];
     if (prop.decorators) memoiseDecorators(prop.decorators, scope);
-    defineMap.push(mutatorMap, prop, null, file);
+
+
+    if (prop.kind === "init") {
+      prop.kind = "";
+      prop.value = t.functionExpression(null, [], t.blockStatement([
+        t.returnStatement(prop.value)
+      ]));
+    }
+
+    defineMap.push(mutatorMap, prop, "initializer", file);
   }
 
   var obj = defineMap.toClassObject(mutatorMap);

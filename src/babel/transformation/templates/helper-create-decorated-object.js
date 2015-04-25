@@ -13,7 +13,7 @@
 
     descriptor.enumerable = true;
     descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
+    descriptor.writable = true;
 
     if (decorators) {
       for (var f = 0; f < decorators.length; f++) {
@@ -25,6 +25,8 @@
         }
       }
     }
+
+    descriptor.value = descriptor.initializer();
 
     Object.defineProperty(target, key, descriptor);
   }

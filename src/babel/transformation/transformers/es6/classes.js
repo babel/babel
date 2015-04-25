@@ -554,35 +554,39 @@ class ClassTransformer {
       node.value = t.functionExpression(null, [], t.blockStatement(body));
       this.pushToMap(node, true, "initializer");
 
+      var initializers;
+      var body;
+      var target;
       if (node.static) {
-        this.staticPropBody.push(util.template("call-static-decorator", {
-          INITIALIZERS: this.staticInitializersId ||= this.scope.generateUidIdentifier("staticInitializers"),
-          CONSTRUCTOR:  this.classRef,
-          KEY:          node.key,
-        }, true));
+        initializers = this.staticInitializersId ||= this.scope.generateUidIdentifier("staticInitializers");
+        body = this.staticPropBody;
+        target = this.classRef;
       } else {
-        this.instancePropBody.push(util.template("call-instance-decorator", {
-          INITIALIZERS: this.instanceInitializersId ||= this.scope.generateUidIdentifier("instanceInitializers"),
-          KEY:          node.key
-        }, true));
+        initializers = this.instanceInitializersId ||= this.scope.generateUidIdentifier("instanceInitializers");
+        body = this.instancePropBody;
+        target = t.thisExpression();
       }
+
+      body.push(t.expressionStatement(
+        t.callExpression(this.file.addHelper("define-decorated-property-descriptor"), [
+          target,
+          t.literal(node.key.name),
+          initializers
+        ])
+      ));
     } else {
-      if (!node.static && node.value) {
+      node.value ||= t.identifier("undefined");
+
+      if (node.static) {
+        // can just be added to the static map
+        this.pushToMap(node, true);
+      } else if (node.value) {
         // add this to the instancePropBody which will be added after the super call in a derived constructor
         // or at the start of a constructor for a non-derived constructor
         this.instancePropBody.push(t.expressionStatement(
           t.assignmentExpression("=", t.memberExpression(t.thisExpression(), node.key), node.value)
         ));
-
-        node.value = null;
       }
-
-      if (!node.value) {
-        node.value = t.identifier("undefined");
-      }
-
-      // can just be added to the static map
-      this.pushToMap(node, true);
     }
   }
 

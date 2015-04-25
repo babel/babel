@@ -12,10 +12,5 @@ var Foo = (function (_Bar) {
   }
 
   babelHelpers.inherits(Foo, _Bar);
-  babelHelpers.createClass(Foo, [{
-    key: "bar",
-    value: undefined,
-    enumerable: true
-  }]);
   return Foo;
 })(Bar);

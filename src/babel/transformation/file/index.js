@@ -60,6 +60,7 @@ export default class File {
     "create-class",
     "create-decorated-class",
     "create-decorated-object",
+    "define-decorated-property-descriptor",
     "tagged-template-literal",
     "tagged-template-literal-loose",
     "to-array",
