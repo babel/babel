@@ -5,6 +5,6 @@
   "repository": "babel/babel",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
-    "core-js": "^0.8.0"
+    "core-js": "^0.9.0"
   }
 }

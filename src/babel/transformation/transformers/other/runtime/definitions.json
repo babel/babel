@@ -45,7 +45,10 @@
     "Object": {
       "assign": "object/assign",
       "classof": "object/classof",
+      "create": "object/create",
       "define": "object/define",
+      "defineProperties": "object/define-properties",
+      "defineProperty": "object/define-property",
       "entries": "object/entries",
       "freeze": "object/freeze",
       "getOwnPropertyDescriptor": "object/get-own-property-descriptor",
