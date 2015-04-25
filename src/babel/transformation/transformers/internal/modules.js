@@ -16,6 +16,8 @@ export function ImportDeclaration(node, parent, scope, file) {
   }
 }
 
+export { ImportDeclaration as ExportAllDeclaration };
+
 export function ExportDefaultDeclaration(node, parent, scope) {
   ImportDeclaration.apply(this, arguments);
 
