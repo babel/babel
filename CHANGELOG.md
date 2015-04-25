@@ -13,6 +13,19 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.1.12
+
+ * **Bug Fix**
+  * Fix `resolveModuleSource` not being ran on `ExportAllDeclaration`s.
+  * Fix `.babelrc` being resolved multiple times when using the require hook.
+  * Fix parse error on spread properties in assignment position.
+  * Fix `externalHelpers` option being incorrectly listed as type `string`.
+ * **Internal**
+  * Upgrade `core-js` to `0.9.0`.
+ * **Spec Compliancy**
+  * Fix object decorators not using the `initializer` pattern.
+  * Remove property initializer descriptor reflection.
+
 ## 5.1.11
 
  * **Bug Fix**
