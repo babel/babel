@@ -508,7 +508,7 @@ export default class File {
     this.log.debug("End set AST");
 
     this.log.debug("Start prepass");
-    //this.checkPath(this.path);
+    this.checkPath(this.path);
     this.log.debug("End prepass");
 
     this.log.debug("Start module formatter init");

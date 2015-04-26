@@ -26,7 +26,11 @@ export default function (decorators, scope) {
       [ref]
     ));
 
-    decorator.expression = t.sequenceExpression(nodes);
+    if (nodes.length === 1) {
+      decorator.expression = nodes[0];
+    } else {
+      decorator.expression = t.sequenceExpression(nodes);
+    }
   }
 
   return decorators;

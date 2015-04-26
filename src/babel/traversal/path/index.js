@@ -253,15 +253,32 @@ export default class TraversalPath {
   }
 
   remove() {
-    var removeParent = false;
-    if (this.parentPath) {
-      removeParent ||= this.parentPath.isExpressionStatement();
-      removeParent ||= this.parentPath.isSequenceExpression() && this.parent.expressions.length === 1;
-      if (removeParent) return this.parentPath.remove();
-    }
-
     this._remove();
     this.removed = true;
+
+    var parentPath = this.parentPath;
+    var parent = this.parent;
+    if (!parentPath) return;
+
+    // we're the child of an expression statement so we should remove the parent
+    if (parentPath.isExpressionStatement()) {
+      return parentPath.remove();
+    }
+
+    // we've just removed the second element of a sequence expression so let's turn that sequence
+    // expression into a regular expression
+    if (parentPath.isSequenceExpression() && parent.expressions.length === 1) {
+      parentPath.replaceWith(parent.expressions[0]);
+    }
+
+    // we're in a binary expression, better remove it and replace it with the last expression
+    if (parentPath.isBinary()) {
+      if (this.key === "left") {
+        parentPath.replaceWith(parent.right);
+      } else { // key === "right"
+        parentPath.replaceWith(parent.left);
+      }
+    }
   }
 
   skip() {

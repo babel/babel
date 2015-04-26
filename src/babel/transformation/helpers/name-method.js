@@ -39,7 +39,6 @@ var wrap = function (state, method, id, scope) {
     return template;
   } else {
     method.id = id;
-    return method;
   }
 };
 
@@ -96,7 +95,7 @@ export function custom(node, id, scope) {
 
 export function property(node, file, scope) {
   var key = t.toComputedKey(node, node.key);
-  if (!t.isLiteral(key)) return node; // we can't set a function id with this
+  if (!t.isLiteral(key)) return; // we can't set a function id with this
 
   var name = t.toIdentifier(key.value);
   if (name === "eval" || name === "arguments") name = "_" + name;
@@ -109,7 +108,7 @@ export function property(node, file, scope) {
 
 export function bare(node, parent, scope) {
   // has an `id` so we don't need to infer one
-  if (node.id) return node;
+  if (node.id) return;
 
   var id;
   if (t.isProperty(parent) && parent.kind === "init" && (!parent.computed || t.isLiteral(parent.key))) {
@@ -119,7 +118,7 @@ export function bare(node, parent, scope) {
     // var foo = function () {};
     id = parent.id;
   } else {
-    return node;
+    return;
   }
 
   var name;
@@ -128,7 +127,7 @@ export function bare(node, parent, scope) {
   } else if (t.isIdentifier(id)) {
     name = id.name;
   } else {
-    return node;
+    return;
   }
 
   name = t.toIdentifier(name);

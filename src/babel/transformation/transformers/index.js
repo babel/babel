@@ -115,6 +115,5 @@ export default {
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
   "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
 
-  flow:                                    require("./other/flow"),
-  _cleanUp:                                require("./internal/cleanup")
+  flow:                                    require("./other/flow")
 };

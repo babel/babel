@@ -23,6 +23,16 @@ function statementList(key, path, file) {
   }
 }
 
+export function shouldVisit(node) {
+  if (node.type !== "BlockStatement") return false;
+
+  for (var i = 0; i < node.body.length; i++) {
+    if (node.body[i].type === "FunctionDeclaration") return true;
+  }
+
+  return false;
+}
+
 export function BlockStatement(node, parent, scope, file) {
   if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
     return;

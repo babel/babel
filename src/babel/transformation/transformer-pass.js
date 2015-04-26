@@ -8,11 +8,12 @@ import traverse from "../traversal";
 
 export default class TransformerPass {
   constructor(file: File, transformer: Transformer) {
-    this.transformer = transformer;
-    this.handlers    = transformer.handlers;
-    this.skipKey     = transformer.skipKey;
-    this.file        = file;
-    this.ran         = false;
+    this.shouldTransform = !transformer.shouldVisit;
+    this.transformer     = transformer;
+    this.handlers        = transformer.handlers;
+    this.skipKey         = transformer.skipKey;
+    this.file            = file;
+    this.ran             = false;
   }
 
   canTransform(): boolean {
@@ -43,12 +44,14 @@ export default class TransformerPass {
   }
 
   checkPath(path: TraversalPath): boolean {
-    var shouldVisit = this.transformer.shouldVisit;
-    if (!shouldVisit) return;
+    if (this.shouldTransform || this.ran) return;
 
+    this.shouldTransform = this.transformer.shouldVisit(path.node);
   }
 
   transform() {
+    if (!this.shouldTransform) return;
+
     var file = this.file;
 
     file.log.debug(`Start transformer ${this.transformer.key}`);

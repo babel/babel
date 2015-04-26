@@ -245,7 +245,7 @@ class ClassTransformer {
       if (body.length === 1) return t.toExpression(body[0]);
     } else {
       // infer class name if this is a nameless class expression
-      constructor = nameMethod.bare(constructor, this.parent, this.scope);
+      constructor = nameMethod.bare(constructor, this.parent, this.scope) || constructor;
 
       body.unshift(t.variableDeclaration("var", [
         t.variableDeclarator(classRef, constructor)

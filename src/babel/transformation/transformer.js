@@ -26,7 +26,6 @@ export default class Transformer {
     this.manipulateOptions = take("manipulateOptions");
     this.shouldVisit       = take("shouldVisit");
     this.metadata          = take("metadata") || {};
-    this.skipKey           = `transformer:${transformerKey}:skip`;
     this.parser            = take("parser");
     this.post              = take("post");
     this.pre               = take("pre");
@@ -48,7 +47,10 @@ export default class Transformer {
     if (!this.shouldVisit) {
       var types = Object.keys(this.handlers);
       this.shouldVisit = function (node) {
-        return types.indexOf(node.type) >= 0;
+        for (var i = 0; i < types.length; i++) {
+          if (node.type === types[i]) return true;
+        }
+        return false;
       };
     }
   }
@@ -78,10 +80,6 @@ export default class Transformer {
 
       transformer[type] = fns;
     });
-
-    transformer.shouldSkip = (path) => {
-      return path.getData(this.skipKey) === true;
-    };
 
     return transformer;
   }

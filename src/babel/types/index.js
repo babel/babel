@@ -78,7 +78,11 @@ export function isType(nodeType, targetType) {
   if (nodeType === targetType) return true;
 
   var aliases = t.FLIPPED_ALIAS_KEYS[targetType];
-  if (aliases) return aliases.indexOf(nodeType) > -1;
+  if (aliases) {
+    for (var i = 0; i < aliases.length; i++) {
+      if (nodeType === aliases[i]) return true;
+    }
+  }
 
   return false;
 }
