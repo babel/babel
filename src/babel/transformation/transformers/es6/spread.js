@@ -44,7 +44,7 @@ function build(props, scope) {
   return nodes;
 }
 
-export var check = t.isSpreadElement;
+export var shouldVisit = t.isSpreadElement;
 
 export function ArrayExpression(node, parent, scope) {
   var elements = node.elements;

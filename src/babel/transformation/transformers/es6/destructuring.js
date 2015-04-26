@@ -1,7 +1,7 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
-export var check = t.isPattern;
+export var shouldVisit = t.isPattern;
 
 export function ForOfStatement(node, parent, scope, file) {
   var left = node.left;
@@ -111,7 +111,7 @@ export function ExpressionStatement(node, parent, scope, file) {
   var expr = node.expression;
   if (expr.type !== "AssignmentExpression") return;
   if (!t.isPattern(expr.left)) return;
-  if (file.isConsequenceExpressionStatement(node)) return;
+  if (this.isCompletionRecord()) return;
 
   var destructuring = new DestructuringTransformer({
     operator: expr.operator,

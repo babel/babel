@@ -1,6 +1,10 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
+export var metadata = {
+  readOnly: true
+};
+
 export function shouldVisit(node) {
   return t.isModuleDeclaration(node) || (t.isCallExpression(node) && t.isIdentifier(node.callee, { name: "require" }));
 }

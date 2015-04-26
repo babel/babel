@@ -73,6 +73,7 @@ export default class TraversalPath {
 
     // we're entering a new scope so let's construct it!
     if (path.isScope()) {
+      var log = path.isProgram();
       ourScope = new Scope(path, scope, file);
     }
 
@@ -236,7 +237,10 @@ export default class TraversalPath {
 
     this.type = this.node && this.node.type;
 
+    var log = file && this.type === "Program";
+    if (log) file.log.debug("Start scope building");
     this.setScope(file);
+    if (log) file.log.debug("End scope building");
   }
 
   _remove() {
@@ -252,7 +256,7 @@ export default class TraversalPath {
     var removeParent = false;
     if (this.parentPath) {
       removeParent ||= this.parentPath.isExpressionStatement();
-      removeParent ||= this.parentPath.isSequenceExpression() && this.parent.expressions.length === 1
+      removeParent ||= this.parentPath.isSequenceExpression() && this.parent.expressions.length === 1;
       if (removeParent) return this.parentPath.remove();
     }
 

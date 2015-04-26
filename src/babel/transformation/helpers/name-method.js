@@ -82,7 +82,7 @@ var visit = function (node, name, scope) {
       // so we can safely just set the id and move along as it shadows the
       // bound function id
     }
-  } else {
+  } else if (state.outerDeclar || scope.hasGlobal(name)) {
     scope.traverse(node, visitor, state);
   }
 
@@ -104,7 +104,7 @@ export function property(node, file, scope) {
 
   var method = node.value;
   var state  = visit(method, name, scope);
-  node.value = wrap(state, method, id, scope);
+  node.value = wrap(state, method, id, scope) || method;
 }
 
 export function bare(node, parent, scope) {
@@ -128,7 +128,7 @@ export function bare(node, parent, scope) {
   } else if (t.isIdentifier(id)) {
     name = id.name;
   } else {
-    return;
+    return node;
   }
 
   name = t.toIdentifier(name);

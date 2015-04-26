@@ -1,7 +1,7 @@
 import ReplaceSupers from "../../helpers/replace-supers";
 import * as t from "../../../types";
 
-export var check = t.isSuper;
+export var shouldVisit = t.isSuper;
 
 function Property(path, node, scope, getObjectRef, file) {
   if (!node.method) return;

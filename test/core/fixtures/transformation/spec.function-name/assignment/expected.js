@@ -17,4 +17,6 @@ var i = (function (_i) {
 var j = function j() {
   var _ = 5;
   j = _.j;
+
+  ;
 };

@@ -8,7 +8,7 @@ export default function (exports, opts) {
 
   exports.ExpressionStatement = function (node, parent, scope, file) {
     // hit the `AssignmentExpression` one below
-    if (file.isConsequenceExpressionStatement(node)) return;
+    if (this.isCompletionRecord()) return;
 
     var expr = node.expression;
     if (!opts.is(expr, file)) return;

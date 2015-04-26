@@ -4,4 +4,5 @@ var i = function () {
 
 var j = function () {
   ({ j } = 5);
+  ;
 };

@@ -11,7 +11,7 @@ import * as t from "../../../types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
 
-export var check = t.isClass;
+export var shouldVisit = t.isClass;
 
 export function ClassDeclaration(node, parent, scope, file) {
   return t.variableDeclaration("let", [

@@ -681,7 +681,7 @@ export default class Scope {
    */
 
   removeOwnBinding(name: string) {
-    this.bindings[name] = null;
+    delete this.bindings[name];
   }
 
   /**

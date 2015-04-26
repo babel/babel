@@ -46,20 +46,16 @@ export default class TransformerPass {
     var shouldVisit = this.transformer.shouldVisit;
     if (!shouldVisit) return;
 
-    var shouldSkip = !shouldVisit(path.node);
-    do {
-      if (path.getData(this.skipKey) !== false) {
-        path.setData(this.skipKey, shouldSkip);
-      }
-    } while(path = path.parentPath);
   }
 
   transform() {
     var file = this.file;
 
-    file.log.debug(`Running transformer ${this.transformer.key}`);
+    file.log.debug(`Start transformer ${this.transformer.key}`);
 
     traverse(file.ast, this.handlers, file.scope, file);
+
+    file.log.debug(`Finish transformer ${this.transformer.key}`);
 
     this.ran = true;
   }

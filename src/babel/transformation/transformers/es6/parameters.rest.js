@@ -2,7 +2,7 @@ import isNumber from "lodash/lang/isNumber";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export var check = t.isRestElement;
+export var shouldVisit = t.isRestElement;
 
 var memberExpressionOptimisationVisitor = {
   enter(node, parent, scope, state) {

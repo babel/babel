@@ -2,7 +2,8 @@ import levenshtein from "leven";
 import * as messages from "../../../messages";
 
 export var metadata = {
-  optional: true
+  optional: true,
+  readOnly: true
 };
 
 export function Identifier(node, parent, scope, file) {

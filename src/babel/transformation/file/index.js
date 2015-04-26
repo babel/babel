@@ -46,10 +46,9 @@ export default class File {
     this.data        = {};
     this.uids        = {};
 
-    this.lastStatements = [];
-    this.log            = new Logger(this, opts.filename || "unknown");
-    this.opts           = this.normalizeOptions(opts);
-    this.ast            = {};
+    this.log  = new Logger(this, opts.filename || "unknown");
+    this.opts = this.normalizeOptions(opts);
+    this.ast  = {};
 
     this.buildTransformers();
   }
@@ -375,10 +374,6 @@ export default class File {
     return id;
   }
 
-  isConsequenceExpressionStatement(node: Object): boolean {
-    return t.isExpressionStatement(node) && this.lastStatements.indexOf(node) >= 0;
-  }
-
   attachAuxiliaryComment(node: Object): Object {
     var comment = this.opts.auxiliaryComment;
     if (comment) {
@@ -479,9 +474,12 @@ export default class File {
     parseOpts.strictMode = features.strict;
     parseOpts.sourceType = "module";
 
+    this.log.debug("Parse start");
+
     //
 
     return parse(parseOpts, code, (tree) => {
+      this.log.debug("Parse stop");
       this.transform(tree);
       return this.generate();
     });
@@ -504,25 +502,25 @@ export default class File {
   }
 
   transform(ast) {
-    this.log.debug();
-
+    this.log.debug("Start set AST");
     this.setAst(ast);
+    this.log.debug("End set AST");
 
-    this.lastStatements = t.getLastStatements(ast.program);
+    this.log.debug("Start prepass");
+    //this.checkPath(this.path);
+    this.log.debug("End prepass");
 
+    this.log.debug("Start module formatter init");
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
       modFormatter.init();
     }
-
-    this.checkPath(this.path);
+    this.log.debug("End module formatter init");
 
     this.call("pre");
-
     each(this.transformerStack, function (pass) {
       pass.transform();
     });
-
     this.call("post");
   }
 
@@ -597,9 +595,13 @@ export default class File {
     if (opts.ast) result.ast = ast;
     if (!opts.code) return result;
 
+    this.log.debug("Generation start");
+
     var _result = generate(ast, opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
+
+    this.log.debug("Generation end");
 
     if (this.shebang) {
       // add back shebang
