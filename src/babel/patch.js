@@ -55,4 +55,18 @@ def("ExportNamedDeclaration")
   )])
   .field("source", or(def("ModuleSpecifier"), null));
 
+def("ExportNamespaceSpecifier")
+  .bases("Specifier")
+  .field("exported", def("Identifier"));
+
+def("ExportDefaultSpecifier")
+  .bases("Specifier")
+  .field("exported", def("Identifier"));
+
+def("ExportAllDeclaration")
+  .bases("Declaration")
+  .build("exported", "source")
+  .field("exported", def("Identifier"))
+  .field("source", def("Literal"));
+
 types.finalize();
