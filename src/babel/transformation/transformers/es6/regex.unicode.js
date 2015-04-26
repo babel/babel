@@ -1,7 +1,7 @@
 import rewritePattern from "regexpu/rewrite-pattern";
 import * as regex from "../../helpers/regex";
 
-export function check(node) {
+export function shouldVisit(node) {
   return regex.is(node, "u");
 }
 

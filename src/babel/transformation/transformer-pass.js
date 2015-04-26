@@ -9,8 +9,8 @@ import traverse from "../traversal";
 export default class TransformerPass {
   constructor(file: File, transformer: Transformer) {
     this.transformer = transformer;
-    this.shouldRun   = !transformer.check;
     this.handlers    = transformer.handlers;
+    this.skipKey     = transformer.skipKey;
     this.file        = file;
     this.ran         = false;
   }
@@ -42,18 +42,19 @@ export default class TransformerPass {
     return true;
   }
 
-  checkNode(node: Object): boolean {
-    var check = this.transformer.check;
-    if (check) {
-      return this.shouldRun = check(node);
-    } else {
-      return true;
-    }
+  checkPath(path: TraversalPath): boolean {
+    var shouldVisit = this.transformer.shouldVisit;
+    if (!shouldVisit) return;
+
+    var shouldSkip = !shouldVisit(path.node);
+    do {
+      if (path.getData(this.skipKey) !== false) {
+        path.setData(this.skipKey, shouldSkip);
+      }
+    } while(path = path.parentPath);
   }
 
   transform() {
-    if (!this.shouldRun) return;
-
     var file = this.file;
 
     file.log.debug(`Running transformer ${this.transformer.key}`);

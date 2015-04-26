@@ -82,6 +82,10 @@ function aliasFunction(getBody, path, scope) {
   }
 };
 
+export function shouldVisit(node) {
+  return true;
+}
+
 export function Program(node, parent, scope) {
   aliasFunction(function () {
     return node.body;

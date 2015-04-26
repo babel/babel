@@ -2,6 +2,6 @@ export var metadata = {
   stage: 0
 };
 
-export function check() {
+export function shouldVisit() {
   return false;
 }

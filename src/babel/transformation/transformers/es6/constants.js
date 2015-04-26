@@ -1,7 +1,7 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isVariableDeclaration(node, { kind: "const" }) || t.isImportDeclaration(node);
 }
 

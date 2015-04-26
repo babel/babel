@@ -1,6 +1,6 @@
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isProperty(node) && (node.method || node.shorthand);
 }
 

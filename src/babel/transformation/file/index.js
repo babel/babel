@@ -23,15 +23,15 @@ import each from "lodash/collection/each";
 import * as t from "../../types";
 
 var checkTransformerVisitor = {
-  enter(node, parent, scope, state) {
-    checkNode(state.stack, node, scope);
+  exit(node, parent, scope, state) {
+    checkPath(state.stack, this);
   }
 };
 
-function checkNode(stack, node, scope) {
+function checkPath(stack, path) {
   each(stack, function (pass) {
     if (pass.shouldRun || pass.ran) return;
-    pass.checkNode(node, scope);
+    pass.checkPath(path);
   });
 }
 
@@ -515,7 +515,7 @@ export default class File {
       modFormatter.init();
     }
 
-    this.checkNode(ast);
+    this.checkPath(this.path);
 
     this.call("pre");
 
@@ -535,20 +535,19 @@ export default class File {
     }
   }
 
-  checkNode(node, scope) {
-    if (Array.isArray(node)) {
-      for (var i = 0; i < node.length; i++) {
-        this.checkNode(node[i], scope);
+  checkPath(path) {
+    if (Array.isArray(path)) {
+      for (var i = 0; i < path.length; i++) {
+        this.checkPath(path[i]);
       }
       return;
     }
 
     var stack = this.transformerStack;
-    scope ||= this.scope;
 
-    checkNode(stack, node, scope);
+    checkPath(stack, path);
 
-    scope.traverse(node, checkTransformerVisitor, {
+    path.traverse(checkTransformerVisitor, {
       stack: stack
     });
   }

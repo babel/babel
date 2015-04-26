@@ -78,11 +78,11 @@ exports.Function = function (node, parent, scope, file) {
 
   if (!hasDestructuring) return;
 
-  file.checkNode(nodes);
   t.ensureBlock(node);
 
   var block = node.body;
   block.body = nodes.concat(block.body);
+  return node;
 };
 
 export function CatchClause(node, parent, scope, file) {

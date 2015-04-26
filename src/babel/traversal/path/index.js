@@ -87,7 +87,6 @@ export default class TraversalPath {
 
   insertBefore(nodes) {
     nodes = this._verifyNodeList(nodes);
-    this.checkNodes(nodes);
 
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertBefore(nodes);
@@ -101,6 +100,7 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.push(this.node);
         this.container[this.key] = t.blockStatement(nodes);
+        this.checkPaths(this);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -112,14 +112,20 @@ export default class TraversalPath {
   _containerInsert(from, nodes) {
     this.updateSiblingKeys(from, nodes.length);
 
+    var paths = [];
+
     for (var i = 0; i < nodes.length; i++) {
       var to = from + i;
       this.container.splice(to, 0, nodes[i]);
 
       if (this.context) {
-        this.queueNode(this.context.create(this.parent, this.container, to));
+        var path = this.context.create(this.parent, this.container, to);
+        paths.push(path);
+        this.queueNode(path);
       }
     }
+
+    this.checkPaths(paths);
   }
 
   _containerInsertBefore(nodes) {
@@ -160,7 +166,6 @@ export default class TraversalPath {
 
   insertAfter(nodes) {
     nodes = this._verifyNodeList(nodes);
-    this.checkNodes(nodes);
 
     if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
       return this.parentPath.insertAfter(nodes);
@@ -178,6 +183,7 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
+        this.checkPaths(this);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -354,17 +360,13 @@ export default class TraversalPath {
     // potentially create new scope
     this.setScope();
 
-    this.checkNodes([replacement]);
+    this.checkPaths(this);
   }
 
-  checkNodes(nodes) {
+  checkPaths(paths) {
     var scope = this.scope;
     var file  = scope && scope.file;
-    if (!file) return;
-
-    for (var i = 0; i < nodes.length; i++) {
-      file.checkNode(nodes[i], scope);
-    }
+    if (file) file.checkPath(paths);
   }
 
   getStatementParent(): ?TraversalPath {
@@ -451,6 +453,7 @@ export default class TraversalPath {
 
   visit(): boolean {
     if (this.isBlacklisted()) return false;
+    if (this.opts.shouldSkip(this)) return false;
 
     this.call("enter");
 

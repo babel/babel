@@ -7,7 +7,7 @@ export var metadata = {
   stage: 1
 };
 
-export function check(node) {
+export function shouldVisit(node) {
   return !!node.decorators;
 }
 

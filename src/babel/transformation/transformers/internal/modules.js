@@ -6,7 +6,7 @@
 
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isImportDeclaration(node) || t.isExportDeclaration(node);
 }
 

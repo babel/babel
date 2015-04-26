@@ -15,6 +15,7 @@ export default function traverse(parent, opts, scope, state, parentPath) {
   if (!opts) opts = {};
   if (!opts.enter) opts.enter = function () { };
   if (!opts.exit) opts.exit = function () { };
+  if (!opts.shouldSkip) opts.shouldSkip = function () { return false; };
 
   traverse.verify(opts);
 
@@ -29,7 +30,7 @@ export default function traverse(parent, opts, scope, state, parentPath) {
 }
 
 /**
- * Quickly iterate over some traversal options and validate it.
+ * Quickly iterate over some traversal options and validate them.
  */
 
 traverse.verify = function (opts) {
@@ -47,7 +48,7 @@ traverse.verify = function (opts) {
 
     if (typeof opt === "function") {
       // it's all good, it's fine for this key to be a function
-      if (key === "enter" || key === "exit") continue;
+      if (key === "enter" || key === "exit" || key === "shouldSkip") continue;
 
       throw new Error(messages.get("traverseVerifyVisitorFunction", key));
     } else if (typeof opt === "object") {

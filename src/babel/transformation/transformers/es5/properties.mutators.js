@@ -1,7 +1,7 @@
 import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isProperty(node) && (node.kind === "get" || node.kind === "set");
 }
 

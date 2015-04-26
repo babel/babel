@@ -1,7 +1,7 @@
 import * as regex from "../../helpers/regex";
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return regex.is(node, "y");
 }
 

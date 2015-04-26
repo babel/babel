@@ -14,7 +14,7 @@ import each from "lodash/collection/each";
  */
 
 export default class Transformer {
-  constructor(transformerKey: key, transformer: Object, opts: Object) {
+  constructor(transformerKey: string, transformer: Object, opts: Object) {
     transformer = assign({}, transformer);
 
     var take = function (key) {
@@ -24,19 +24,33 @@ export default class Transformer {
     };
 
     this.manipulateOptions = take("manipulateOptions");
+    this.shouldVisit       = take("shouldVisit");
     this.metadata          = take("metadata") || {};
+    this.skipKey           = `transformer:${transformerKey}:skip`;
     this.parser            = take("parser");
-    this.check             = take("check");
     this.post              = take("post");
     this.pre               = take("pre");
+
+    //
 
     if (this.metadata.stage != null) {
       this.metadata.optional = true;
     }
 
+    //
+
     this.handlers = this.normalize(transformer);
     this.opts     ||= {};
     this.key      = transformerKey;
+
+    //
+
+    if (!this.shouldVisit) {
+      var types = Object.keys(this.handlers);
+      this.shouldVisit = function (node) {
+        return types.indexOf(node.type) >= 0;
+      };
+    }
   }
 
   normalize(transformer: Object): Object {
@@ -64,6 +78,10 @@ export default class Transformer {
 
       transformer[type] = fns;
     });
+
+    transformer.shouldSkip = (path) => {
+      return path.getData(this.skipKey) === true;
+    };
 
     return transformer;
   }

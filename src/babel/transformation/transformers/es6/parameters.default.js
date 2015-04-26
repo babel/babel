@@ -2,7 +2,7 @@ import callDelegate from "../../helpers/call-delegate";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isFunction(node) && hasDefaults(node);
 }
 
@@ -45,7 +45,6 @@ exports.Function = function (node, parent, scope, file) {
       ARGUMENT_KEY:  t.literal(i),
       ARGUMENTS:     argsIdentifier
     }, true);
-    file.checkNode(defNode);
     defNode._blockHoist = node.params.length - i;
     body.push(defNode);
   };
@@ -97,4 +96,6 @@ exports.Function = function (node, parent, scope, file) {
   } else {
     node.body.body = body.concat(node.body.body);
   }
+
+  return node;
 };

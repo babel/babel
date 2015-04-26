@@ -74,7 +74,6 @@ exports.Function = function (node, parent, scope, file) {
       var accessExpr = t.memberExpression(rest, t.literal(index), true);
       return t.variableDeclarator(elem, accessExpr);
     }));
-    file.checkNode(declar);
     node.body.body.unshift(declar);
   }
 
@@ -97,7 +96,7 @@ exports.Function = function (node, parent, scope, file) {
       candidate.replaceWith(argsId);
       optimizeMemberExpression(candidate.parent, node.params.length);
     }
-    return;
+    return node;
   }
 
   //
@@ -138,4 +137,5 @@ exports.Function = function (node, parent, scope, file) {
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);
+  return node;
 };

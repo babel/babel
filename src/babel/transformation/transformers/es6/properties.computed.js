@@ -84,7 +84,7 @@ function spec(node, body, objId, initProps, file) {
   }
 }
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isProperty(node) && node.computed;
 }
 

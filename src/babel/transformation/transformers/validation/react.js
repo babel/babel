@@ -1,6 +1,10 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
+export function shouldVisit(node) {
+  return t.isModuleDeclaration(node) || (t.isCallExpression(node) && t.isIdentifier(node.callee, { name: "require" }));
+}
+
 // check if the input Literal `source` is an alternate casing of "react"
 function check(source, file) {
   if (t.isLiteral(source)) {

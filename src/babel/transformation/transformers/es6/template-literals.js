@@ -4,7 +4,7 @@ var buildBinaryExpression = function (left, right) {
   return t.binaryExpression("+", left, right);
 };
 
-export function check(node) {
+export function shouldVisit(node) {
   return t.isTemplateLiteral(node) || t.isTaggedTemplateExpression(node);
 }
 
