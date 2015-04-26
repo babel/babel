@@ -94,8 +94,6 @@ export default {
 
   "spec.protoToAssign":                    require("./spec/proto-to-assign"),
 
-  _declarations:                           require("./internal/declarations"),
-
   _shadowFunctions:                        require("./internal/shadow-functions"),
 
   "es7.doExpressions":                     require("./es7/do-expressions"),

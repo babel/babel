@@ -21,3 +21,7 @@ export function UnaryExpression(node, parent, scope, file) {
     }
   }
 }
+
+export function VariableDeclaration(node) {
+  if (node._generated) this.skip();
+}

@@ -76,7 +76,7 @@ traverse.node = function (node, opts, scope, state, parentPath) {
 
 const CLEAR_KEYS = [
   "trailingComments", "leadingComments", "extendedRange",
-  "_declarations", "_scopeInfo" ,"_paths",
+  "_scopeInfo" ,"_paths",
   "tokens", "range", "start", "end", "loc", "raw"
 ];
 

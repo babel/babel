@@ -41,10 +41,11 @@ export default class File {
     this.dynamicImportIds   = {};
     this.dynamicImports     = [];
 
-    this.usedHelpers = {};
-    this.dynamicData = {};
-    this.data        = {};
-    this.uids        = {};
+    this.declarations = {};
+    this.usedHelpers  = {};
+    this.dynamicData  = {};
+    this.data         = {};
+    this.uids         = {};
 
     this.log  = new Logger(this, opts.filename || "unknown");
     this.opts = this.normalizeOptions(opts);
@@ -395,8 +396,8 @@ export default class File {
 
     var program = this.ast.program;
 
-    var declar = program._declarations && program._declarations[name];
-    if (declar) return declar.id;
+    var declar = this.declarations[name];
+    if (declar) return declar;
 
     this.usedHelpers[name] = true;
 
@@ -413,11 +414,11 @@ export default class File {
 
     var ref = util.template("helper-" + name);
     ref._compact = true;
-    var uid = this.scope.generateUidIdentifier(name);
+    var uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
     this.scope.push({
-      key: name,
       id: uid,
-      init: ref
+      init: ref,
+      unique: true
     });
     return uid;
   }

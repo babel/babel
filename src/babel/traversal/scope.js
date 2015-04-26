@@ -516,23 +516,35 @@ export default class Scope {
    */
 
   push(opts: Object) {
-    var block = this.block;
+    var path = this.path;
 
-    if (t.isLoop(block) || t.isCatchClause(block) || t.isFunction(block)) {
-      t.ensureBlock(block);
-      block = block.body;
+    if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
+      t.ensureBlock(path.node);
+      path = path.get("body");
     }
 
-    if (!t.isBlockStatement(block) && !t.isProgram(block)) {
-      block = this.getBlockParent().block;
+    if (!path.isBlockStatement() && !path.isProgram()) {
+      path = this.getBlockParent().path;
     }
 
-    block._declarations ||= {};
-    block._declarations[opts.key || opts.id.name] = {
-      kind: opts.kind || "var",
-      id: opts.id,
-      init: opts.init
-    };
+    var unique = opts.unique;
+    var kind   = opts.kind || "var";
+
+    var dataKey = `declaration:${kind}`;
+    var declar  = !unique && path.getData(dataKey);
+
+    if (!declar) {
+      declar = t.variableDeclaration(opts.kind || "var", []);
+      declar._generated = true;
+      declar._blockHoist = 2;
+
+      this.file.attachAuxiliaryComment(declar);
+
+      path.get("body")[0]._containerInsertBefore([declar]);
+      if (!unique) path.setData(dataKey, declar);
+    }
+
+    declar.declarations.push(t.variableDeclarator(opts.id, opts.init));
   }
 
   /**
