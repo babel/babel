@@ -48,7 +48,7 @@ class CodeGenerator {
       format.compact = code.length > 100000; // 100KB
 
       if (format.compact) {
-        console.error(messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
+        console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
       }
     }
 
