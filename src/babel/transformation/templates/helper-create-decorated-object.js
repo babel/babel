@@ -26,7 +26,7 @@
       }
     }
 
-    descriptor.value = descriptor.initializer();
+    descriptor.value = descriptor.initializer.call(target);
 
     Object.defineProperty(target, key, descriptor);
   }
