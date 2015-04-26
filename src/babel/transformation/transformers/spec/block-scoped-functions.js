@@ -24,12 +24,17 @@ function statementList(key, path, file) {
 }
 
 export function shouldVisit(node) {
-  if (node.type !== "BlockStatement") return false;
-
-  for (var i = 0; i < node.body.length; i++) {
-    if (node.body[i].type === "FunctionDeclaration") return true;
+  var body;
+  if (node.type === "SwitchCase") {
+    body = node.consequent;
+  } else if (node.type === "BlockStatement") {
+    body = node.body;
   }
-
+  if (body) {
+    for (var i = 0; i < body.length; i++) {
+      if (body[i].type === "FunctionDeclaration") return true;
+    }
+  }
   return false;
 }
 
