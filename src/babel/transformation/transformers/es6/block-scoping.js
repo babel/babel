@@ -139,7 +139,12 @@ var hoistVarDeclarationsVisitor = {
   enter(node, parent, scope, self) {
     if (this.isForStatement()) {
       if (isVar(node.init, node)) {
-        node.init = t.sequenceExpression(self.pushDeclar(node.init));
+        var nodes = self.pushDeclar(node.init);
+        if (nodes.length === 1) {
+          node.init = nodes[0];
+        } else {
+          node.init = t.sequenceExpression(nodes);
+        }
       }
     } else if (this.isFor()) {
       if (isVar(node.left, node)) {
