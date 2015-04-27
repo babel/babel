@@ -9,16 +9,19 @@ BABEL_CMD = node_modules/babel/bin/babel
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test clean-core
 
-build-core:
+build-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --copy-files
 
-build-core-test:
+build-core-test: clean-core
 	node $(BABEL_CMD) src --out-dir lib --copy-files --auxiliary-comment "istanbul ignore next"
 
-watch-core:
+watch-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --watch --copy-files
+
+clean-core:
+	rm -rf lib
 
 build:
 	mkdir -p dist
