@@ -347,7 +347,7 @@ class ClassTransformer {
       if (this.isNativeSuper) helperName = "class-super-native-constructor-call";
       constructorBody.body.push(util.template(helperName, {
         NATIVE_REF: this.nativeSuperRef,
-        CLASS_NAME: className,
+        CLASS_NAME: this.classRef,
         SUPER_NAME: this.superName
       }, true));
     }
