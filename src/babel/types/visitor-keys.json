@@ -79,7 +79,7 @@
   "ArrayTypeAnnotation":         ["elementType"],
   "BooleanTypeAnnotation":       [],
   "ClassImplements":             ["id", "typeParameters"],
-  "ClassProperty":               ["key", "value", "typeAnnotation"],
+  "ClassProperty":               ["key", "value", "typeAnnotation", "decorators"],
   "DeclareClass":                ["id", "typeParameters", "extends", "body"],
   "DeclareFunction":             ["id"],
   "DeclareModule":               ["id", "body"],
