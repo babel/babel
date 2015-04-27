@@ -29,16 +29,19 @@ $ cd babel
 $ make bootstrap
 ```
 
-Then you need to run:
+Then you can either run:
+
+```sh
+$ make build-core
+```
+
+to build Babel **once** or:
 
 ```sh
 $ make watch-core
 ```
 
-This will compile Babel and then sit in the background and on file modification
-recompile the necessary files. Babel itself is written in ES6. The source files
-reside in `src/` and transpile to `lib/`
-
+to have Babel build itself then incrementally build files on change.
 
 #### Running tests
 

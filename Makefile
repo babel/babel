@@ -118,3 +118,4 @@ bootstrap:
 	cd packages/babel-cli && npm install && npm link && npm link babel-core
 	git submodule update --init
 	cd vendor/compat-table && npm install object-assign
+	make build
