@@ -99,7 +99,7 @@ export default class Buffer {
     this._newline(removeLast);
   }
 
-  _newline(removeLast, force) {
+  _newline(removeLast) {
     // never allow more than two lines
     if (this.endsWith("\n\n")) return;
 
