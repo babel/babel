@@ -242,7 +242,7 @@ class ClassTransformer {
 
     if (this.className) {
       // named class with only a constructor
-      if (body.length === 1) return t.toExpression(body[0]);
+      if (!this.file.opts.ie8Safe && (body.length === 1)) return t.toExpression(body[0]);
     } else {
       // infer class name if this is a nameless class expression
       constructor = nameMethod.bare(constructor, this.parent, this.scope) || constructor;
