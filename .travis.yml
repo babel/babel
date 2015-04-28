@@ -1,4 +1,4 @@
-sudo: false
+#sudo: false
 language: node_js
 cache:
   directories:
