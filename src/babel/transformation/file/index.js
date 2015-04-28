@@ -134,7 +134,7 @@ export default class File {
       if (optionParser) val = optionParser(key, val);
 
       if (option.alias) {
-        opts[option.alias] ||= val;
+        opts[option.alias] = opts[option.alias] || val;
       } else {
         opts[key] = val;
       }
@@ -349,7 +349,7 @@ export default class File {
   }
 
   addImport(source: string, name?: string, type?: string): Object {
-    name ||= source;
+    name = name || source;
     var id = this.dynamicImportIds[name];
 
     if (!id) {
@@ -361,7 +361,7 @@ export default class File {
       declar._blockHoist = 3;
 
       if (type) {
-        var modules = this.dynamicImportTypes[type] ||= [];
+        var modules = this.dynamicImportTypes[type] = this.dynamicImportTypes[type] || [];
         modules.push(declar);
       }
 
@@ -379,7 +379,7 @@ export default class File {
   attachAuxiliaryComment(node: Object): Object {
     var comment = this.opts.auxiliaryComment;
     if (comment) {
-      node.leadingComments ||= [];
+      node.leadingComments = node.leadingComments || [];
       node.leadingComments.push({
         type: "Line",
         value: " " + comment

@@ -32,7 +32,7 @@ function Property(path, node, scope, getObjectRef, file) {
 
 export function ObjectExpression(node, parent, scope, file) {
   var objectRef;
-  var getObjectRef = () => objectRef ||= scope.generateUidIdentifier("obj");
+  var getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");
 
   var propPaths = this.get("properties");
   for (var i = 0; i < node.properties.length; i++) {

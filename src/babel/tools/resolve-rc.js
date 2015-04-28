@@ -33,7 +33,7 @@ export default function (loc, opts = {}) {
       var json;
 
       try {
-        json = jsons[content] ||= JSON.parse(stripJsonComments(content));
+        json = jsons[content] = jsons[content] || JSON.parse(stripJsonComments(content));
       } catch (err) {
         err.message = `${file}: ${err.message}`;
         throw err;
@@ -47,7 +47,7 @@ export default function (loc, opts = {}) {
           var c = a.slice(0);
           for (var v of b) {
             if (a.indexOf(v) < 0) {
-              c.push(v); 
+              c.push(v);
             }
           }
           return c;

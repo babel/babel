@@ -2,7 +2,7 @@
   "name": "acorn",
   "description": "ECMAScript parser",
   "homepage": "https://github.com/marijnh/acorn",
-  "main": "src/index.js",
+  "main": "index.js",
   "version": "1.0.0",
   "engines": {
     "node": ">=0.4.0"

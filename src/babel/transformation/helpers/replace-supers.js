@@ -218,7 +218,7 @@ export default class ReplaceSupers {
       return this.setSuperProperty(node.left.property, node.right, node.left.computed, getThisReference());
     } else {
       // super.age += 2; -> var _ref = super.age; super.age = _ref + 2;
-      ref ||= path.scope.generateUidIdentifier("ref");
+      ref = ref || path.scope.generateUidIdentifier("ref");
       return [
         t.variableDeclaration("var", [
           t.variableDeclarator(ref, node.left)

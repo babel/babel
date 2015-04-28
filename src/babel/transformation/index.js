@@ -60,7 +60,7 @@ import rawTransformers from "./transformers";
 each(rawTransformers, function (transformer, key) {
   var namespace = key.split(".")[0];
 
-  transform.namespaces[namespace] ||= [];
+  transform.namespaces[namespace] = transform.namespaces[namespace] || [];
   transform.namespaces[namespace].push(key);
   transform.transformerNamespaces[key] = namespace;
 

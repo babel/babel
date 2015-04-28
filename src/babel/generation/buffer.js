@@ -77,7 +77,7 @@ export default class Buffer {
       return;
     }
 
-    removeLast ||= false;
+    removeLast = removeLast || false;
 
     if (isNumber(i)) {
       i = Math.min(2, i);

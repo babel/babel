@@ -1,4 +1,4 @@
-var acorn = require("..")
+var acorn = require("../src/index")
 
 var pp = acorn.Parser.prototype
 var tt = acorn.tokTypes

@@ -166,7 +166,7 @@ export default class DefaultFormatter {
   }
 
   _addExport(name, exported) {
-    var info = this.localExports[name] ||= {
+    var info = this.localExports[name] = this.localExports[name] || {
       binding: this.scope.getBindingIdentifier(name),
       exported: []
     };

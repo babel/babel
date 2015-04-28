@@ -17,7 +17,7 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 
   t[`assert${type}`] = function (node, opts) {
-    opts ||= {};
+    opts = opts || {};
     if (!is(node, opts)) {
       throw new Error(`Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`);
     }
@@ -42,7 +42,7 @@ each(t.VISITOR_KEYS, function (keys, type) {
 
 each(t.ALIAS_KEYS, function (aliases, type) {
   each(aliases, function (alias) {
-    var types = t.FLIPPED_ALIAS_KEYS[alias] ||= [];
+    var types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [];
     types.push(type);
   });
 });

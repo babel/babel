@@ -558,11 +558,11 @@ class ClassTransformer {
       var body;
       var target;
       if (node.static) {
-        initializers = this.staticInitializersId ||= this.scope.generateUidIdentifier("staticInitializers");
+        initializers = this.staticInitializersId = this.staticInitializersId || this.scope.generateUidIdentifier("staticInitializers");
         body = this.staticPropBody;
         target = this.classRef;
       } else {
-        initializers = this.instanceInitializersId ||= this.scope.generateUidIdentifier("instanceInitializers");
+        initializers = this.instanceInitializersId = this.instanceInitializersId || this.scope.generateUidIdentifier("instanceInitializers");
         body = this.instancePropBody;
         target = t.thisExpression();
       }
@@ -575,7 +575,7 @@ class ClassTransformer {
         ])
       ));
     } else {
-      node.value ||= t.identifier("undefined");
+      node.value = node.value || t.identifier("undefined");
 
       if (node.static) {
         // can just be added to the static map

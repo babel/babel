@@ -59,7 +59,7 @@
     "user-home": "^1.1.1"
   },
   "devDependencies": {
-    "babel": "4.7.13",
+    "babel": "5.1.13",
     "browserify": "^9.0.8",
     "chai": "^2.2.0",
     "eslint": "^0.18.0",

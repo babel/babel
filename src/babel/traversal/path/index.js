@@ -47,7 +47,7 @@ export default class TraversalPath {
 
   static get(parentPath: TraversalPath, context?: TraversalContext, parent, container, key, file?: File) {
     var targetNode = container[key];
-    var paths = container._paths ||= [];
+    var paths = container._paths = container._paths || [];
     var path;
 
     for (var i = 0; i < paths.length; i++) {
@@ -613,7 +613,7 @@ export default class TraversalPath {
         var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
 
         // { "foo": "obj" } or { ["foo"]: "obj" }
-        match ||= key.isLiteral({ value: targetName });
+        match = match || key.isLiteral({ value: targetName });
 
         if (match) return prop.get("value");
       }

@@ -16,7 +16,7 @@ function crawl(node, state = {}) {
   } else if (t.isFunction(node)) {
     state.hasFunction = true;
   } else if (t.isIdentifier(node)) {
-    state.hasHelper ||= isHelper(node.callee);
+    state.hasHelper = state.hasHelper || isHelper(node.callee);
   }
 
   return state;

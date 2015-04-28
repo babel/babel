@@ -242,8 +242,8 @@ export default class Scope {
     if (kind === "hoisted" && local.kind === "let") return;
 
     var duplicate = false;
-    duplicate ||= kind === "let" || kind === "const" || local.kind === "let" || local.kind === "const" || local.kind === "module";
-    duplicate ||= local.kind === "param" && (kind === "let" || kind === "const");
+    if (!duplicate) duplicate = kind === "let" || kind === "const" || local.kind === "let" || local.kind === "const" || local.kind === "module";
+    if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
       throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
@@ -255,7 +255,7 @@ export default class Scope {
    */
 
   rename(oldName: string, newName: string, block?) {
-    newName ||= this.generateUidIdentifier(oldName).name;
+    newName = newName || this.generateUidIdentifier(oldName).name;
 
     var info = this.getBinding(oldName);
     if (!info) return;

@@ -1,4 +1,4 @@
-var acorn = require("..")
+var acorn = require("../src/index")
 
 var tt = acorn.tokTypes;
 var tc = acorn.tokContexts;

@@ -21,7 +21,7 @@ export function MethodDefinition(node) {
     var isConstructor = !node.computed && t.isIdentifier(node.key, { name: "constructor" });
 
     // get ["constructor"]() {}
-    isConstructor ||= t.isLiteral(node.key, { value: "constructor" });
+    isConstructor = isConstructor || t.isLiteral(node.key, { value: "constructor" });
 
     if (isConstructor) {
       throw this.errorWithNode(messages.get("classesIllegalConstructorKind"));

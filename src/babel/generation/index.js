@@ -12,7 +12,7 @@ import * as t from "../types";
 
 class CodeGenerator {
   constructor(ast, opts, code) {
-    opts ||= {};
+    opts = opts || {};
 
     this.comments = ast.comments || [];
     this.tokens   = ast.tokens || [];

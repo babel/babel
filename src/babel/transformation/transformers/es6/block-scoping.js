@@ -14,7 +14,7 @@ function isLet(node, parent) {
   if (isLetInitable(node, parent)) {
     for (var i = 0; i < node.declarations.length; i++) {
       var declar = node.declarations[i];
-      declar.init ||= t.identifier("undefined");
+      declar.init = declar.init || t.identifier("undefined");
     }
   }
 
@@ -611,7 +611,7 @@ class BlockScoping {
         for (var i = 0; i < cases.length; i++) {
           var caseConsequent = cases[i].consequent[0];
           if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-            caseConsequent.label = this.loopLabel ||= this.file.scope.generateUidIdentifier("loop");
+            caseConsequent.label = this.loopLabel = this.loopLabel || this.file.scope.generateUidIdentifier("loop");
           }
         }
 

@@ -15,7 +15,7 @@ export function push(mutatorMap, node, kind, file) {
 
   //
 
-  map._inherits ||= [];
+  map._inherits = map._inherits || [];
   map._inherits.push(node);
 
   map._key = node.key;
@@ -25,7 +25,7 @@ export function push(mutatorMap, node, kind, file) {
   }
 
   if (node.decorators) {
-    var decorators = map.decorators ||= t.arrayExpression([]);
+    var decorators = map.decorators = map.decorators || t.arrayExpression([]);
     decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression));
   }
 

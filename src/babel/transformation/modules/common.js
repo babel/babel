@@ -114,7 +114,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
       uid = this.scope.generateUidBasedOnNode(node, "import");
     }
 
-    uid ||= node.specifiers[0].local;
+    uid = uid || node.specifiers[0].local;
 
     var declar = t.variableDeclaration("var", [
       t.variableDeclarator(uid, call)

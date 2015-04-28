@@ -39,7 +39,7 @@ export default class Transformer {
     //
 
     this.handlers = this.normalize(transformer);
-    this.opts     ||= {};
+    this.opts     = this.opts || {};
     this.key      = transformerKey;
 
     //

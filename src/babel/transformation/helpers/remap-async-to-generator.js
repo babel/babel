@@ -20,7 +20,7 @@ var referenceVisitor = {
   enter(node, parent, scope, state) {
     var name = state.id.name;
     if (t.isReferencedIdentifier(node, parent, { name: name }) && scope.bindingIdentifierEquals(name, state.id)) {
-      return state.ref ||= scope.generateUidIdentifier(name);
+      return state.ref = state.ref || scope.generateUidIdentifier(name);
     }
   }
 };

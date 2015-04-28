@@ -101,23 +101,23 @@ class TailCallTransformer {
   }
 
   getArgumentsId() {
-    return this.argumentsId ||= this.scope.generateUidIdentifier("arguments");
+    return this.argumentsId = this.argumentsId || this.scope.generateUidIdentifier("arguments");
   }
 
   getThisId() {
-    return this.thisId ||= this.scope.generateUidIdentifier("this");
+    return this.thisId = this.thisId || this.scope.generateUidIdentifier("this");
   }
 
   getLeftId() {
-    return this.leftId ||= this.scope.generateUidIdentifier("left");
+    return this.leftId = this.leftId || this.scope.generateUidIdentifier("left");
   }
 
   getFunctionId() {
-    return this.functionId ||= this.scope.generateUidIdentifier("function");
+    return this.functionId = this.functionId || this.scope.generateUidIdentifier("function");
   }
 
   getAgainId() {
-    return this.againId ||= this.scope.generateUidIdentifier("again");
+    return this.againId = this.againId || this.scope.generateUidIdentifier("again");
   }
 
   getParams() {

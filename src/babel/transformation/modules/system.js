@@ -77,11 +77,11 @@ var runnerSettersVisitor = {
 
 export default class SystemFormatter extends AMDFormatter {
   constructor(file) {
+    super(file);
+
     this.exportIdentifier = file.scope.generateUidIdentifier("export");
     this.noInteropRequireExport = true;
     this.noInteropRequireImport = true;
-
-    DefaultFormatter.apply(this, arguments);
   }
 
   _addImportSource(node, exportNode) {

@@ -38,9 +38,6 @@ export {isIdentifierChar, isIdentifierStart} from "./identifier"
 export {Token} from "./tokenize"
 export {isNewLine, lineBreak, lineBreakG} from "./whitespace"
 
-import "../plugins/flow";
-import "../plugins/jsx";
-
 export const version = "1.0.0"
 
 // The main exported interface (under `self.acorn` when in the
