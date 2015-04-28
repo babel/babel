@@ -212,5 +212,4 @@
     "hidden": true,
     "description": "do not load the same .babelrc file twice"
   }
-
 }
