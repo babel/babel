@@ -13,9 +13,7 @@
 })(this, function (exports, _foo) {
   "use strict";
 
-  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-  var _foo2 = _interopRequire(_foo);
+  var _foo2 = babelHelpers.interopRequire(_foo);
 
   _foo.baz;
 });

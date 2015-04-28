@@ -17,9 +17,7 @@
     value: true
   });
 
-  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-  var _foo2 = _interopRequire(_foo);
+  var _foo2 = babelHelpers.interopRequire(_foo);
 
   exports.test = test;
   var test2 = 5;
