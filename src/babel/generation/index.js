@@ -34,6 +34,7 @@ class CodeGenerator {
     }
 
     var format = {
+      retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
       quotes: CodeGenerator.findCommonStringDelimeter(code, tokens),
@@ -148,6 +149,13 @@ class CodeGenerator {
 
   print(node, parent, opts = {}) {
     if (!node) return;
+
+    // catch up to this nodes newline if we're behind
+    if (node.loc && this.format.retainLines) {
+      while (this.position.line < node.loc.start.line) {
+        this._push("\n");
+      }
+    }
 
     if (parent && parent._compact) {
       node._compact = true;

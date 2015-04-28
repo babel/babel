@@ -70,7 +70,7 @@ export default class Buffer {
   }
 
   newline(i, removeLast) {
-    if (this.format.compact) return;
+    if (this.format.compact || this.format.retainLines) return;
 
     if (this.format.concise) {
       this.space();
@@ -99,7 +99,7 @@ export default class Buffer {
     this._newline(removeLast);
   }
 
-  _newline(removeLast) {
+  _newline(removeLast, force) {
     // never allow more than two lines
     if (this.endsWith("\n\n")) return;
 
