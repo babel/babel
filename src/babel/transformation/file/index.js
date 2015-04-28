@@ -1,5 +1,6 @@
 import convertSourceMap from "convert-source-map";
 import * as optionParsers from "./option-parsers";
+import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import TraversalPath from "../../traversal/path";
 import isFunction from "lodash/lang/isFunction";
@@ -18,6 +19,7 @@ import Scope from "../../traversal/scope";
 import slash from "slash";
 import clone from "lodash/lang/clone";
 import * as util from  "../../util";
+import * as api from  "../../api/node";
 import path from "path";
 import each from "lodash/collection/each";
 import * as t from "../../types";
@@ -217,8 +219,9 @@ export default class File {
     // init plugins!
     var beforePlugins = [];
     var afterPlugins = [];
+    var pluginManager = new PluginManager(this.transformers, beforePlugins, afterPlugins);
     for (var i = 0; i < file.opts.plugins.length; i++) {
-      this.addPlugin(file.opts.plugins[i], beforePlugins, afterPlugins);
+      pluginManager.add(file.opts.plugins[i]);
     }
     stack = beforePlugins.concat(stack, afterPlugins);
 
@@ -239,60 +242,6 @@ export default class File {
     }
 
     return new ModuleFormatter(this);
-  }
-
-  addPlugin(name, before, after) {
-    var position = "before";
-    var plugin;
-
-    if (name) {
-      if (typeof name === "object" && name.transformer) {
-        plugin = name.transformer;
-        position = name.position || position;
-      } else if (typeof name === "string") {
-        // this is a plugin in the form of "foobar" or "foobar:after"
-        // where the optional colon is the delimiter for plugin position in the transformer stack
-
-        [name, position = "before"] = name.split(":");
-
-        var loc = util.resolveRelative(name) || util.resolveRelative(`babel-plugin-${name}`);
-        if (loc) {
-          plugin = require(loc)
-        } else {
-          throw new ReferenceError(`Unknown plugin ${JSON.stringify(name)}`);
-        }
-      } else {
-        // not a string so we'll just assume that it's a direct Transformer instance, if not then
-        // the checks later on will complain
-        plugin = name;
-      }
-    } else {
-      throw new TypeError(`Ilegal kind ${typeof name} for plugin name ${JSON.stringify(name)}`);
-    }
-
-    // validate position
-    if (position !== "before" && position !== "after") {
-      throw new TypeError(`Plugin ${JSON.stringify(name)} has an illegal position of ${JSON.stringify(position)}`);
-    }
-
-    // validate transformer key
-    var key = plugin.key;
-    if (this.transformers[key]) {
-      throw new ReferenceError(`The key for plugin ${JSON.stringify(name)} of ${key} collides with an existing plugin`);
-    }
-
-    // validate Transformer instance
-    if (!plugin.buildPass || plugin.constructor.name !== "Transformer") {
-      throw new TypeError(`Plugin ${JSON.stringify(name)} didn't export a default Transformer instance`);
-    }
-
-    // build!
-    var pass = this.transformers[key] = plugin.buildPass(this);
-    if (pass.canTransform()) {
-      var stack = before;
-      if (position === "after") stack = after;
-      stack.push(pass);
-    }
   }
 
   parseInputSourceMap(code: string) {

@@ -26,7 +26,15 @@ export const MESSAGES = {
   traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
   traverseVerifyVisitorFunction: "Hey! You passed \`traverse()\` a visitor object with the key $1 that's a straight up `Function` instead of `{ enter: Function }`. You need to normalise it with `traverse.explode(visitor)`.",
-  traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2"
+  traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
+
+  pluginIllegalKind: "Illegal kind $1 for plugin $2",
+  pluginIllegalPosition: "Illegal position $1 for plugin $2",
+  pluginKeyCollision: "The plugin $1 collides with another of the same name",
+  pluginNotTransformer: "The plugin $1 didn't export a Transformer instance",
+  pluginUnknown: "Unknown plugin $1",
+
+  transformerNotFile: "Transformer $1 is resolving to a different Babel version to what is doing the actual transformation..."
 };
 
 export function get(key: String, ...args) {

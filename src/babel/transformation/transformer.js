@@ -87,7 +87,7 @@ export default class Transformer {
   buildPass(file: File): TransformerPass {
     // validate Transformer instance
     if (!(file instanceof File)) {
-      throw new TypeError(`Transformer ${this.key} is resolving to a different Babel version to what is doing the actual transformation...`);
+      throw new TypeError(messages.get("transformerNotFile", this.key));
     }
 
     return new TransformerPass(file, this);
