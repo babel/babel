@@ -85,6 +85,7 @@ export default class File {
     "temporal-assert-defined",
     "self-global",
     "default-props",
+    "instanceof",
 
     // legacy
     "interop-require",
