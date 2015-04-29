@@ -115,5 +115,6 @@ export default {
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
   "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
 
+  jscript:                                 require("./other/jscript"),
   flow:                                    require("./other/flow")
 };
