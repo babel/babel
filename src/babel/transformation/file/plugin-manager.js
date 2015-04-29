@@ -1,4 +1,5 @@
 import * as messages from "../../messages";
+import * as util from  "../../util";
 
 export default class PluginManager {
   static memoisedPlugins = [];
@@ -17,8 +18,9 @@ export default class PluginManager {
     return transformer;
   }
 
-  constructor(transformers, before, after) {
+  constructor(file, transformers, before, after) {
     this.transformers = transformers;
+    this.file         = file;
     this.before       = before;
     this.after        = after;
   }
@@ -90,7 +92,7 @@ export default class PluginManager {
     this.validate(plugin);
 
     // build!
-    var pass = this.transformers[key] = plugin.buildPass(this);
+    var pass = this.transformers[plugin.key] = plugin.buildPass(this.file);
     if (pass.canTransform()) {
       var stack = position === "before" ? this.before : this.after;
       stack.push(pass);
