@@ -37,7 +37,7 @@ _.each(helper.get("generation"), function (testSuite) {
             "es7.exportExtensions": true
           }
         }, actual.code);
-        var actualCode = generate(actualAst, null, actual.code).code;
+        var actualCode = generate(actualAst, task.options, actual.code).code;
 
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
       });
