@@ -38,6 +38,12 @@
     "description": "enable support for JSX and Flow"
   },
 
+  "ie8Safe": {
+    "type": "boolean",
+    "default": false,
+    "description": "try to generate IE8 compatible output"
+  },
+
   "experimental": {
     "deprecated": "use `--stage 0`/`{ stage: 0 }` instead"
   },
