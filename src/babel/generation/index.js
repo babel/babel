@@ -147,15 +147,17 @@ class CodeGenerator {
     return print;
   }
 
-  print(node, parent, opts = {}) {
-    if (!node) return;
-
+  catchUp(node) {
     // catch up to this nodes newline if we're behind
-    if (node.loc && this.format.retainLines) {
+    if (node.loc && this.format.retainLines && this.buffer.buf) {
       while (this.position.line < node.loc.start.line) {
         this._push("\n");
       }
     }
+  }
+
+  print(node, parent, opts = {}) {
+    if (!node) return;
 
     if (parent && parent._compact) {
       node._compact = true;
@@ -204,6 +206,8 @@ class CodeGenerator {
       if (needsNoLineTermParens) this.indent();
 
       this.printLeadingComments(node, parent);
+
+      this.catchUp(node);
 
       newline(true);
 
@@ -336,6 +340,8 @@ class CodeGenerator {
 
       if (skip) return;
 
+      this.catchUp(comment);
+
       // whitespace before
       this.newline(this.whitespace.getNewlinesBefore(comment));
 
@@ -348,7 +354,6 @@ class CodeGenerator {
       }
 
       //
-
       if (comment.type === "Block" && this.format.indent.adjustMultilineComment) {
         var offset = comment.loc.start.column;
         if (offset) {
@@ -365,7 +370,6 @@ class CodeGenerator {
       }
 
       //
-
       this._push(val);
 
       // whitespace after
