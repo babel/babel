@@ -45,6 +45,10 @@ export default class TraversalPath {
     this.data      = {};
   }
 
+  /**
+   * Description
+   */
+
   static get(parentPath: TraversalPath, context?: TraversalContext, parent, container, key, file?: File) {
     var targetNode = container[key];
     var paths = container._paths = container._paths || [];
@@ -68,6 +72,10 @@ export default class TraversalPath {
     return path;
   }
 
+  /**
+   * Description
+   */
+
   static getScope(path: TraversalPath, scope: Scope, file?: File) {
     var ourScope = scope;
 
@@ -79,11 +87,19 @@ export default class TraversalPath {
     return ourScope;
   }
 
+  /**
+   * Description
+   */
+
   queueNode(path) {
     if (this.context) {
       this.context.queue.push(path);
     }
   }
+
+  /**
+   * Description
+   */
 
   insertBefore(nodes) {
     nodes = this._verifyNodeList(nodes);
@@ -146,6 +162,10 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   isCompletionRecord() {
     var path = this;
 
@@ -159,6 +179,10 @@ export default class TraversalPath {
     return true;
   }
 
+  /**
+   * Description
+   */
+
   isStatementOrBlock() {
     if (t.isLabeledStatement(this.parent) || t.isBlockStatement(this.container)) {
       return false;
@@ -166,6 +190,10 @@ export default class TraversalPath {
       return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
     }
   }
+
+  /**
+   * Description
+   */
 
   insertAfter(nodes) {
     nodes = this._verifyNodeList(nodes);
@@ -195,6 +223,10 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   updateSiblingKeys(fromIndex, incrementBy) {
     var paths = this.container._paths;
     for (var i = 0; i < paths.length; i++) {
@@ -205,9 +237,17 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   setData(key, val) {
     return this.data[key] = val;
   }
+
+  /**
+   * Description
+   */
 
   getData(key, def) {
     var val = this.data[key];
@@ -215,14 +255,26 @@ export default class TraversalPath {
     return val;
   }
 
+  /**
+   * Description
+   */
+
   setScope(file?) {
     var target = this.context || this.parentPath;
     this.scope = TraversalPath.getScope(this, target && target.scope, file);
   }
 
+  /**
+   * Description
+   */
+
   clearContext() {
     this.context = null;
   }
+
+  /**
+   * Description
+   */
 
   setContext(parentPath, context, key, file?) {
     this.shouldSkip = false;
@@ -255,6 +307,10 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   remove() {
     this._remove();
     this.removed = true;
@@ -284,14 +340,26 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   skip() {
     this.shouldSkip = true;
   }
+
+  /**
+   * Description
+   */
 
   stop() {
     this.shouldStop = true;
     this.shouldSkip = true;
   }
+
+  /**
+   * Description
+   */
 
   errorWithNode(msg, Error = SyntaxError) {
     var loc = this.node.loc.start;
@@ -312,6 +380,10 @@ export default class TraversalPath {
     throw new Error("Don't use `path.node = newNode;`, use `path.replaceWith(newNode)` or `path.replaceWithMultiple([newNode])`");
   }
 
+  /**
+   * Description
+   */
+
   replaceInline(nodes) {
     if (Array.isArray(nodes)) {
       if (Array.isArray(this.container)) {
@@ -325,6 +397,10 @@ export default class TraversalPath {
       return this.replaceWith(nodes);
     }
   }
+
+  /**
+   * Description
+   */
 
   _verifyNodeList(nodes) {
     if (nodes.constructor !== Array) {
@@ -345,18 +421,42 @@ export default class TraversalPath {
     return nodes;
   }
 
+  /**
+   * Description
+   */
+
   insertOntoContainerStart(containerKey, nodes) {
     nodes = this._verifyNodeList(nodes);
+
+    // get the first path and insert our nodes before it, if it doesn't exist then it
+    // doesn't matter, our nodes will be inserted anyway
+
     var container = this.node[containerKey];
-    return TraversalPath.get(this, null, this.node, container, 0).insertBefore(nodes);
+    var path      = TraversalPath.get(this, null, this.node, container, 0);
+
+    return path.insertBefore(nodes);
   }
+
+  /**
+   * Description
+   */
 
   insertOntoContainerEnd(containerKey, nodes) {
     nodes = this._verifyNodeList(nodes);
+
+    // get an invisible path that represents the last node + 1 and replace it with our
+    // nodes, effectively inlining it
+
     var container = this.node[containerKey];
-    var i = container.length;
-    return TraversalPath.get(this, null, this.node, container, i).replaceWith(nodes, true);
+    var i         = container.length;
+    var path      = TraversalPath.get(this, null, this.node, container, i);
+
+    return path.replaceWith(nodes, true);
   }
+
+  /**
+   * Description
+   */
 
   replaceWithMultiple(nodes: Array<Object>) {
     nodes = this._verifyNodeList(nodes);
@@ -365,6 +465,10 @@ export default class TraversalPath {
     this.insertAfter(nodes);
     if (!this.node) this.remove();
   }
+
+  /**
+   * Description
+   */
 
   replaceWith(replacement, arraysAllowed) {
     if (this.removed) {
@@ -400,11 +504,19 @@ export default class TraversalPath {
     this.checkPaths(this);
   }
 
+  /**
+   * Description
+   */
+
   checkPaths(paths) {
     var scope = this.scope;
     var file  = scope && scope.file;
     if (file) file.checkPath(paths);
   }
+
+  /**
+   * Description
+   */
 
   getStatementParent(): ?TraversalPath {
     var path = this;
@@ -423,6 +535,10 @@ export default class TraversalPath {
 
     return path;
   }
+
+  /**
+   * Description
+   */
 
   getLastStatements(): Array<TraversalPath> {
     var paths = [];
@@ -444,6 +560,10 @@ export default class TraversalPath {
 
     return paths;
   }
+
+  /**
+   * Description
+   */
 
   replaceExpressionWithStatements(nodes: Array) {
     var toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
@@ -471,6 +591,10 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   call(key) {
     var node = this.node;
     if (!node) return;
@@ -479,14 +603,23 @@ export default class TraversalPath {
     var fn   = opts[key] || opts;
     if (opts[node.type]) fn = opts[node.type][key] || fn;
 
+    // call the function with the params (node, parent, scope, state)
     var replacement = fn.call(this, node, this.parent, this.scope, this.state);
     if (replacement) this.replaceWith(replacement, true);
   }
+
+  /**
+   * Description
+   */
 
   isBlacklisted(): boolean {
     var blacklist = this.opts.blacklist;
     return blacklist && blacklist.indexOf(this.node.type) > -1;
   }
+
+  /**
+   * Description
+   */
 
   visit(): boolean {
     if (this.isBlacklisted()) return false;
@@ -521,43 +654,81 @@ export default class TraversalPath {
     return TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);
   }
 
+  /**
+   * Description
+   */
+
   get(key: string): TraversalPath {
     var parts = key.split(".");
-    if (parts.length === 1) { // "foo.bar"
-      var node = this.node;
-      var container = node[key];
-      if (Array.isArray(container)) {
-        return container.map((_, i) => {
-          return TraversalPath.get(this, null, node, container, i);
-        });
-      } else {
-        return TraversalPath.get(this, null, node, node, key);
-      }
-    } else { // "foo"
-      var path = this;
-      for (var i = 0; i > parts.length; i++) {
-        var part = parts[i];
-        if (part === ".") {
-          path = path.parentPath;
-        } else {
-          path = path.get(parts[i]);
-        }
-      }
-      return path;
+    if (parts.length === 1) { // "foo"
+      return this._getKey(key);
+    } else { // "foo.bar"
+      return this._getPattern(parts);
     }
   }
+
+  /**
+   * Description
+   */
+
+  _getKey(key) {
+    var node      = this.node;
+    var container = node[key];
+
+    if (Array.isArray(container)) {
+      // requested a container so give them all the paths
+      return container.map((_, i) => {
+        return TraversalPath.get(this, null, node, container, i);
+      });
+    } else {
+      return TraversalPath.get(this, null, node, node, key);
+    }
+  }
+
+  /**
+   * Description
+   */
+
+  _getPattern(parts) {
+    var path = this;
+    for (var i = 0; i > parts.length; i++) {
+      var part = parts[i];
+      if (part === ".") {
+        path = path.parentPath;
+      } else {
+        path = path.get(parts[i]);
+      }
+    }
+    return path;
+  }
+
+  /**
+   * Description
+   */
 
   has(key): boolean {
     return !!this.node[key];
   }
 
+  /**
+   * Description
+   */
+
   is(key): boolean {
     return this.has(key);
   }
 
+  /**
+   * Description
+   */
+
   isnt(key): boolean {
     return !this.has(key);
   }
+
+  /**
+   * Description
+   */
 
   getTypeAnnotation(): {
     inferred: boolean;
@@ -586,6 +757,10 @@ export default class TraversalPath {
 
     return info;
   }
+
+  /**
+   * Description
+   */
 
   resolve(): ?TraversalPath {
     if (this.isVariableDeclarator()) {
@@ -638,6 +813,10 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   inferType(path: TraversalPath): ?Object {
     path = path.resolve();
     if (!path) return;
@@ -675,29 +854,57 @@ export default class TraversalPath {
     }
   }
 
+  /**
+   * Description
+   */
+
   isScope(): boolean {
     return t.isScope(this.node, this.parent);
   }
+
+  /**
+   * Description
+   */
 
   isReferencedIdentifier(opts): boolean {
     return t.isReferencedIdentifier(this.node, this.parent, opts);
   }
 
+  /**
+   * Description
+   */
+
   isReferenced(): boolean {
     return t.isReferenced(this.node, this.parent);
   }
+
+  /**
+   * Description
+   */
 
   isBlockScoped(): boolean {
     return t.isBlockScoped(this.node);
   }
 
+  /**
+   * Description
+   */
+
   isVar(): boolean {
     return t.isVar(this.node);
   }
 
+  /**
+   * Description
+   */
+
   isPreviousType(type: string): boolean {
     return t.isType(this.type, type);
   }
+
+  /**
+   * Description
+   */
 
   isTypeGeneric(genericName: string, opts = {}): boolean {
     var typeInfo = this.getTypeAnnotation();
@@ -719,9 +926,17 @@ export default class TraversalPath {
     return true;
   }
 
+  /**
+   * Description
+   */
+
   getBindingIdentifiers() {
     return t.getBindingIdentifiers(this.node);
   }
+
+  /**
+   * Description
+   */
 
   traverse(visitor, state) {
     traverse(this.node, visitor, this.scope, state, this);
