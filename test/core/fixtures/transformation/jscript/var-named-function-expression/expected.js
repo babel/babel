@@ -8,6 +8,8 @@ var IdenticalName = (function () {
   return IdenticalName;
 })();
 
-var DifferentNameA = function DifferentNameB(x) {
-  return x;
-};
+(function () {
+  function foo() {}
+
+  return foo;
+})();
