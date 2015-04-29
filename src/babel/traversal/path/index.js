@@ -73,7 +73,6 @@ export default class TraversalPath {
 
     // we're entering a new scope so let's construct it!
     if (path.isScope()) {
-      var log = path.isProgram();
       ourScope = new Scope(path, scope, file);
     }
 
@@ -94,7 +93,7 @@ export default class TraversalPath {
     } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
       if (this.node) nodes.push(this.node);
       this.replaceExpressionWithStatements(nodes);
-    } else if (this.isPreviousType("Statement")) {
+    } else if (this.isPreviousType("Statement") || !this.type) {
       this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
         this._containerInsertBefore(nodes);
@@ -117,12 +116,15 @@ export default class TraversalPath {
 
     for (var i = 0; i < nodes.length; i++) {
       var to = from + i;
-      this.container.splice(to, 0, nodes[i]);
+      var node = nodes[i];
+      this.container.splice(to, 0, node);
 
       if (this.context) {
         var path = this.context.create(this.parent, this.container, to);
         paths.push(path);
         this.queueNode(path);
+      } else {
+        paths.push(TraversalPath.get(this, null, node, this.container, to));
       }
     }
 
@@ -177,7 +179,7 @@ export default class TraversalPath {
         nodes.push(t.expressionStatement(temp));
       }
       this.replaceExpressionWithStatements(nodes);
-    } else if (this.isPreviousType("Statement")) {
+    } else if (this.isPreviousType("Statement") || !this.type) {
       this._maybePopFromStatements(nodes);
       if (Array.isArray(this.container)) {
         this._containerInsertAfter(nodes);
@@ -214,7 +216,8 @@ export default class TraversalPath {
   }
 
   setScope(file?) {
-    this.scope = TraversalPath.getScope(this, this.context && this.context.scope, file);
+    var target = this.context || this.parentPath;
+    this.scope = TraversalPath.getScope(this, target && target.scope, file);
   }
 
   clearContext() {
@@ -340,6 +343,19 @@ export default class TraversalPath {
     }
 
     return nodes;
+  }
+
+  insertOntoContainerStart(containerKey, nodes) {
+    nodes = this._verifyNodeList(nodes);
+    var container = this.node[containerKey];
+    return TraversalPath.get(this, null, this.node, container, 0).insertBefore(nodes);
+  }
+
+  insertOntoContainerEnd(containerKey, nodes) {
+    nodes = this._verifyNodeList(nodes);
+    var container = this.node[containerKey];
+    var i = container.length;
+    return TraversalPath.get(this, null, this.node, container, i).replaceWith(nodes, true);
   }
 
   replaceWithMultiple(nodes: Array<Object>) {

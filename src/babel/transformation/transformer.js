@@ -1,4 +1,5 @@
 import TransformerPass from "./transformer-pass";
+import * as messages from "../messages";
 import isFunction from "lodash/lang/isFunction";
 import traverse from "../traversal";
 import isObject from "lodash/lang/isObject";
