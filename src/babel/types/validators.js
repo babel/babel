@@ -26,10 +26,11 @@ export function isReferenced(node: Object, parent: Object): boolean {
       return false;
 
     // yes: { [NODE]: "" }
+    // yes: { NODE }
     // no: { NODE: "" }
     case "Property":
       if (parent.key === node) {
-        return parent.computed;
+        return parent.computed || parent.shorthand;
       }
 
     // no: var NODE = init;
