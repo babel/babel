@@ -6,6 +6,7 @@
   for (var _key in _descriptor) descriptor[_key] = _descriptor[_key];
 
   // initialize it
+  if (!descriptor.initializer) return;
   descriptor.value = descriptor.initializer.call(target);
 
   Object.defineProperty(target, key, descriptor);

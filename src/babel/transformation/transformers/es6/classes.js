@@ -550,8 +550,12 @@ class ClassTransformer {
 
     if (node.decorators) {
       var body = [];
-      if (node.value) body.push(t.returnStatement(node.value));
-      node.value = t.functionExpression(null, [], t.blockStatement(body));
+      if (node.value) {
+        body.push(t.returnStatement(node.value));
+        node.value = t.functionExpression(null, [], t.blockStatement(body));
+      } else {
+        node.value = t.literal(null);
+      }
       this.pushToMap(node, true, "initializer");
 
       var initializers;
@@ -575,7 +579,7 @@ class ClassTransformer {
         ])
       ));
     } else {
-      node.value = node.value || t.identifier("undefined");
+      if (!node.value && !node.decorators) return;
 
       if (node.static) {
         // can just be added to the static map

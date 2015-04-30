@@ -24,7 +24,7 @@
           }
         }
 
-        if (descriptor.initializer) {
+        if (descriptor.initializer !== undefined) {
           initializers[key] = descriptor;
           continue;
         }

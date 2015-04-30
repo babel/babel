@@ -11,7 +11,7 @@ var Foo = (function () {
   babelHelpers.createDecoratedClass(Foo, [{
     key: "foo",
     decorators: [bar],
-    initializer: function () {},
+    initializer: null,
     enumerable: true
   }], null, _instanceInitializers);
   return Foo;
