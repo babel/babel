@@ -1,4 +1,3 @@
-import "../../polyfill";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import resolveRc from "../../tools/resolve-rc";

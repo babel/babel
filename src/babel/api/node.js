@@ -17,7 +17,7 @@ import * as t from "../types";
 export { t as types };
 
 export function register(opts?: Object) {
-  var callback = require("./register/node");
+  var callback = require("./register/node-polyfill");
   if (opts != null) callback(opts);
   return callback;
 }
