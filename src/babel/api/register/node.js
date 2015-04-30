@@ -31,8 +31,10 @@ var cache = registerCache.get();
 //
 
 var transformOpts = {};
-var ignoreRegex   = /node_modules/;
-var onlyRegex;
+
+var ignore;
+var only;
+
 var oldHandlers   = {};
 var maps          = {};
 
@@ -76,7 +78,11 @@ var compile = function (filename) {
 };
 
 var shouldIgnore = function (filename) {
-  return util.shouldIgnore(filename, ignoreRegex || [], onlyRegex || []);
+  if (!ignore && !only) {
+    return /node_modules/.test(filename);
+  } else {
+    return util.shouldIgnore(filename, ignore || [], only || []);
+  }
 };
 
 var istanbulMonkey = {};
@@ -142,8 +148,8 @@ var hookExtensions = function (_exts) {
 hookExtensions(util.canCompile.EXTENSIONS);
 
 export default function (opts = {}) {
-  if (opts.only != null) onlyRegex = util.arrayify(opts.only, util.regexify);
-  if (opts.ignore != null) ignoreRegex = util.arrayify(opts.ignore, util.regexify);
+  if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
+  if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
 
   if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
 
