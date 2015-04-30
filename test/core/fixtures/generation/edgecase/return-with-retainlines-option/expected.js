@@ -1,2 +1,3 @@
 function foo(l) {
-  return l;}
+  return (
+  l);}
