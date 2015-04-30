@@ -147,13 +147,22 @@ class CodeGenerator {
     return print;
   }
 
-  catchUp(node) {
+  catchUp(node, parent) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buffer.buf) {
+      var needsParens = false;
+      if (parent && (this.position.line < node.loc.start.line) &&
+          (t.isContinueStatement(parent) || t.isBreakStatement(parent) ||
+           t.isReturnStatement(parent) || t.isThrowStatement(parent))) {
+        needsParens = true;
+        this._push("(");
+      }
       while (this.position.line < node.loc.start.line) {
         this._push("\n");
       }
+      return needsParens;
     }
+    return false;
   }
 
   print(node, parent, opts = {}) {
@@ -207,7 +216,7 @@ class CodeGenerator {
 
       this.printLeadingComments(node, parent);
 
-      this.catchUp(node);
+      var needsParensFromCatchup = this.catchUp(node, parent);
 
       newline(true);
 
@@ -220,7 +229,7 @@ class CodeGenerator {
         this.newline();
         this.dedent();
       }
-      if (needsParens) this.push(")");
+      if (needsParens || needsParensFromCatchup) this.push(")");
 
       this.map.mark(node, "end");
       if (opts.after) opts.after();
