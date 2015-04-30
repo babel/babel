@@ -85,16 +85,7 @@ export default class Node {
       return false;
     }
 
-    if (t.isYieldExpression(parent) || t.isAwaitExpression(parent)) {
-      return true;
-    }
-
-    if (t.isContinueStatement(parent) || t.isBreakStatement(parent) ||
-        t.isReturnStatement(parent) || t.isThrowStatement(parent)) {
-      return true;
-    }
-
-    return false;
+    return t.isTerminatorless(parent);
   }
 }
 

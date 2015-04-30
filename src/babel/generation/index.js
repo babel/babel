@@ -151,9 +151,7 @@ class CodeGenerator {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buffer.buf) {
       var needsParens = false;
-      if (parent && (this.position.line < node.loc.start.line) &&
-          (t.isContinueStatement(parent) || t.isBreakStatement(parent) ||
-           t.isReturnStatement(parent) || t.isThrowStatement(parent))) {
+      if (parent && (this.position.line < node.loc.start.line) && t.isTerminatorless(parent)) {
         needsParens = true;
         this._push("(");
       }
