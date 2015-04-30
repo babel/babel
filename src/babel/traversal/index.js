@@ -14,10 +14,6 @@ export default function traverse(parent, opts, scope, state, parentPath) {
   }
 
   if (!opts) opts = {};
-  if (!opts.enter) opts.enter = function () { };
-  if (!opts.exit) opts.exit = function () { };
-  if (!opts.shouldSkip) opts.shouldSkip = function () { return false; };
-
   traverse.verify(opts);
 
   // array of nodes
@@ -40,6 +36,10 @@ traverse.verify = function (opts) {
   if (typeof opts === "function") {
     throw new Error(messages.get("traverseVerifyRootFunction"));
   }
+
+  if (!opts.enter) opts.enter = function () { };
+  if (!opts.exit) opts.exit = function () { };
+  if (!opts.shouldSkip) opts.shouldSkip = function () { return false; };
 
   for (var key in opts) {
     // it's all good

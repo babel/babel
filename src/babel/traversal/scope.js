@@ -68,7 +68,12 @@ var blockVariableVisitor = {
 var renameVisitor = explode({
   Identifier(node, parent, scope, state) {
     if (this.isReferenced() && node.name === state.oldName) {
-      node.name = state.newName;
+      if (this.parentPath.isProperty() && this.key === "key" && parent.shorthand) {
+        parent.shorthand = false;
+        parent.value = t.identifier(state.newName);
+      } else {
+        node.name = state.newName;
+      }
     }
   },
 
