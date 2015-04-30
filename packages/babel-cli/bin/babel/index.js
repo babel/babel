@@ -8,6 +8,7 @@ var util      = require("babel-core").util;
 var each      = require("lodash/collection/each");
 var keys      = require("lodash/object/keys");
 var fs        = require("fs");
+var glob      = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
@@ -69,7 +70,9 @@ commander.parse(process.argv);
 
 var errors = [];
 
-var filenames = commander.args;
+var filenames = commander.args.reduce(function (globbed, input) {
+  return globbed.concat(glob.sync(input));
+}, []);
 
 each(filenames, function (filename) {
   if (!fs.existsSync(filename)) {
