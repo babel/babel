@@ -25,6 +25,20 @@ suite("api", function () {
     }, /Unknown helper foob/);
   });
 
+  test("resolveModuleSource", function () {
+    var actual = 'import foo from "foo-import-default";\nimport "foo-import-bare";\nexport { foo } from "foo-export-named";';
+    var expected = 'import foo from "resolved/foo-import-default";\nimport "resolved/foo-import-bare";\nexport { foo } from "resolved/foo-export-named";';
+
+    actual = transform(actual, {
+      blacklist: ["es6.modules", "strict"],
+      resolveModuleSource: function (originalSource) {
+        return "resolved/" + originalSource;
+      }
+    }).code.trim();
+
+    assert.equal(actual, expected);
+  });
+
   test("extra options", function () {
     var file1 = new File({ extra: { foo: "bar" } });
     assert.equal(file1.opts.extra.foo, "bar");

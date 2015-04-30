@@ -31,7 +31,7 @@ export default class PluginManager {
     // this is a plugin in the form of "foobar" or "foobar:after"
     // where the optional colon is the delimiter for plugin position in the transformer stack
 
-    var match = key.match(/^(.*?):(after|before)$/);
+    var match = name.match(/^(.*?):(after|before)$/);
     if (match) [, name, position] = match;
 
     var loc = util.resolveRelative(name) || util.resolveRelative(`babel-plugin-${name}`);

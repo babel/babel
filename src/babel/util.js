@@ -43,6 +43,9 @@ export function resolve(loc: string) {
 var relativeMod;
 
 export function resolveRelative(loc: string) {
+  // we're in the browser, probably
+  if (typeof Module === "object") return null;
+
   if (!relativeMod) {
     relativeMod = new Module;
     relativeMod.paths = Module._nodeModulePaths(process.cwd());
