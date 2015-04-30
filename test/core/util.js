@@ -72,10 +72,7 @@ suite("util", function () {
     assert.deepEqual(util.arrayify("foo"), ["foo"]);
     assert.deepEqual(util.arrayify("foo,bar"), ["foo", "bar"]);
     assert.deepEqual(util.arrayify(["foo", "bar"]), ["foo", "bar"]);
-
-    assert.throws(function () {
-      util.arrayify({});
-    }, /illegal type for arrayify/);
+    assert.deepEqual(util.arrayify({ foo: "bar" }), [{ foo: "bar" }]);
   });
 
   test("regexify", function () {

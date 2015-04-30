@@ -88,7 +88,7 @@ export function arrayify(val: any, mapFn?: Function): Array {
     return val;
   }
 
-  throw new TypeError("illegal type for arrayify");
+  return [val];
 }
 
 export function booleanify(val: any): boolean {

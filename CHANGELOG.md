@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.2
+
+ * **Internal**
+  * Allow `util.arrayify` to take arbitrary types and coerce it into an array.
+
 ## 5.2.1
 
  * **Bug Fix**
