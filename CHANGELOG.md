@@ -32,6 +32,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **New Feature**
   * Add `jscript` transformer that turns named function expressions into function declarations to get around [JScript's horribly broken function expression semantics](https://kangax.github.io/nfe/#jscript-bugs). Thanks [@kondi](https://github.com/kondi)!
   * Add `@@hasInstance` support to objects when using the `es6.spec.symbols` transformer.
+  * Add `retainLines` option that retains the line (but not the columns!) of the input code.
 
 ## 5.1.13
 
