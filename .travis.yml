@@ -17,3 +17,11 @@ notifications:
     on_success: always
     on_failure: always
     on_start: false
+
+addons:
+  sauce_connect: true
+
+env:
+  global:
+    - secure: LaM3YfrdUC/TJlu/q84Q3+vVHloJxnOKeHDFXGfd7/qxhpZ08aBZl5a5gRFNqwXQMZ5/tKaqocMRi+IwRuBz21bvnsY5ED77kqkq2D9FAAmDetZWtgjwm4PwOFkOBvPP5+rZ0p3fDo8lp++x7WmYLc+v0Y+VbsAIehMEUY7Qv4k=
+    - secure: OY1wQAeZ43XVTirWKi0mihIrtCMi8xg+6tF/Q/4KanU32//EC1jHiE40uAkoJx8cANCkEvcWQW3wBz5/xu1e3Y2bD1h/59mwol6jolBy3rDBow+tTK+ELeqm/0LmBWfVxsrypSTXbjA7gOsp2xYmYMzZ+VxLxaiOqG11pr0xC3o=
