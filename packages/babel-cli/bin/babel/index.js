@@ -8,7 +8,7 @@ var util      = require("babel-core").util;
 var each      = require("lodash/collection/each");
 var keys      = require("lodash/object/keys");
 var fs        = require("fs");
-var glob = require('glob');
+var glob      = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
