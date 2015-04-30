@@ -13,7 +13,7 @@ export function BlockStatement(node, print) {
     this.push("{");
     this.newline();
     print.sequence(node.body, { indent: true });
-    this.removeLast("\n");
+    if (!this.format.retainLines) this.removeLast("\n");
     this.rightBrace();
   }
 }

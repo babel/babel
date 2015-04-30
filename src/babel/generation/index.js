@@ -376,6 +376,12 @@ class CodeGenerator {
         val = this.getIndent() + val;
       }
 
+      // force a newline for line comments when retainLines is set in case the next printed node
+      // doesn't catch up
+      if (this.format.retainLines && comment.type === "Line") {
+        val += "\n";
+      }
+
       //
       this._push(val);
 
