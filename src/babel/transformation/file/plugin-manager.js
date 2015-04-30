@@ -18,18 +18,18 @@ export default class PluginManager {
     return transformer;
   }
 
-  constructor(file, transformers, before, after) {
+  constructor({ file, transformers, before, after } = { transformers: {}, before: [], after: [] }) {
     this.transformers = transformers;
     this.file         = file;
     this.before       = before;
     this.after        = after;
   }
 
-  subnormaliseString(name) {
+  subnormaliseString(key, _position) {
     // this is a plugin in the form of "foobar" or "foobar:after"
     // where the optional colon is the delimiter for plugin position in the transformer stack
 
-    var [name, position] = name.split(":");
+    var [name, position = _position] = key.split(":");
 
     var loc = util.resolveRelative(name) || util.resolveRelative(`babel-plugin-${name}`);
     if (loc) {
@@ -42,7 +42,7 @@ export default class PluginManager {
     }
   }
 
-  validate(plugin) {
+  validate(name, plugin) {
     // validate transformer key
     var key = plugin.key;
     if (this.transformers[key]) {
@@ -69,7 +69,7 @@ export default class PluginManager {
       }
 
       if (typeof name === "string") {
-        ({ plugin, position } = this.subnormaliseString(name));
+        ({ plugin, position } = this.subnormaliseString(name, position));
       }
     } else {
       throw new TypeError(messages.get("pluginIllegalKind", typeof name, name));
@@ -89,7 +89,7 @@ export default class PluginManager {
     }
 
     //
-    this.validate(plugin);
+    this.validate(name, plugin);
 
     // build!
     var pass = this.transformers[plugin.key] = plugin.buildPass(this.file);

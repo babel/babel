@@ -1,6 +1,8 @@
 require("../../lib/babel/api/node");
 
 var buildExternalHelpers = require("../../lib/babel/tools/build-external-helpers");
+var PluginManager        = require("../../lib/babel/transformation/file/plugin-manager");
+var Transformer          = require("../../lib/babel/transformation/transformer");
 var transform            = require("../../lib/babel/transformation");
 var assert               = require("assert");
 var File                 = require("../../lib/babel/transformation/file");
@@ -50,5 +52,41 @@ suite("api", function () {
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
+  });
+
+  suite("plugins", function () {
+    test("unknown plugin", function () {
+      assert.throws(function () {
+        new PluginManager().subnormaliseString("foo bar");
+      }, /Unknown plugin/);
+    });
+
+    test("key collision", function () {
+      assert.throws(function () {
+        new PluginManager({
+          transformers: { "es6.arrowFunctions": true }
+        }).validate("foobar", { key: "es6.arrowFunctions" });
+      }, /collides with another/);
+    });
+
+    test("not transformer", function () {
+      assert.throws(function () {
+        new PluginManager().validate("foobar", {});
+      }, /didn't export a Transformer instance/);
+
+      assert.throws(function () {
+        new PluginManager().validate("foobar", "");
+      }, /didn't export a Transformer instance/);
+
+      assert.throws(function () {
+        new PluginManager().validate("foobar", []);
+      }, /didn't export a Transformer instance/);
+    });
+
+    test("object request");
+
+    test("string request");
+
+    test("transformer request");
   });
 });

@@ -219,7 +219,12 @@ export default class File {
     // init plugins!
     var beforePlugins = [];
     var afterPlugins = [];
-    var pluginManager = new PluginManager(this, this.transformers, beforePlugins, afterPlugins);
+    var pluginManager = new PluginManager({
+      file: this,
+      transformers: this.transformers,
+      before: beforePlugins,
+      after: afterPlugins
+    });
     for (var i = 0; i < file.opts.plugins.length; i++) {
       pluginManager.add(file.opts.plugins[i]);
     }
