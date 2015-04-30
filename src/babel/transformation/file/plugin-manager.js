@@ -18,6 +18,8 @@ export default class PluginManager {
     return transformer;
   }
 
+  static positions = ["before", "after"];
+
   constructor({ file, transformers, before, after } = { transformers: {}, before: [], after: [] }) {
     this.transformers = transformers;
     this.file         = file;
@@ -25,7 +27,7 @@ export default class PluginManager {
     this.after        = after;
   }
 
-  subnormaliseString(key, _position) {
+  subnormaliseString(name, position) {
     // this is a plugin in the form of "foobar" or "foobar:after"
     // where the optional colon is the delimiter for plugin position in the transformer stack
 
@@ -80,7 +82,7 @@ export default class PluginManager {
     position = position || "before";
 
     // validate position
-    if (position !== "before" && position !== "after") {
+    if (PluginManager.positions.indexOf(position) < 0) {
       throw new TypeError(messages.get("pluginIllegalPosition", position, name));
     }
 
