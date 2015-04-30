@@ -171,4 +171,10 @@ export function ConditionalExpression(node, parent) {
   return false;
 }
 
-export { ConditionalExpression as AssignmentExpression };
+export function AssignmentExpression(node) {
+  if (t.isObjectPattern(node.left)) {
+    return true;
+  } else {
+    return ConditionalExpression(...arguments);
+  }
+}
