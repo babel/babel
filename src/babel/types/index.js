@@ -79,8 +79,8 @@ export function isType(nodeType, targetType) {
 
   var aliases = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
-    for (var i = 0; i < aliases.length; i++) {
-      if (nodeType === aliases[i]) return true;
+    for (var alias of (aliases: Array)) {
+      if (nodeType === alias) return true;
     }
   }
 
@@ -122,9 +122,7 @@ each(t.BUILDER_KEYS, function (keys, type) {
 export function shallowEqual(actual: Object, expected: Object): boolean {
   var keys = Object.keys(expected);
 
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-
+  for (var key of (keys: Array)) {
     if (actual[key] !== expected[key]) {
       return false;
     }

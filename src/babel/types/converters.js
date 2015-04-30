@@ -43,8 +43,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
     var ensureLastUndefined = false;
     var exprs   = [];
 
-    for (let i = 0; i < nodes.length; i++) {
-      var node = nodes[i];
+    for (let node of (nodes: Array)) {
       if (t.isExpression(node)) {
         exprs.push(node);
       } else if (t.isExpressionStatement(node)) {

@@ -32,7 +32,6 @@ export default class TraversalContext {
     for (let i = 0; i < queue.length; i++) {
       var path = queue[i];
       if (visited.indexOf(path.node) >= 0) continue;
-
       visited.push(path.node);
 
       if (path.visit()) {

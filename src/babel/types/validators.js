@@ -42,8 +42,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (var i = 0; i < parent.params.length; i++) {
-        var param = parent.params[i];
+      for (var param of (parent.params: Array)) {
         if (param === node) return false;
       }
 
