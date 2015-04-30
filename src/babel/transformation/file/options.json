@@ -25,6 +25,10 @@
     "type": "string"
   },
 
+  "getModuleName": {
+    "hidden": true
+  },
+
   "retainLines": {
     "hidden": true,
     "type": "boolean",
