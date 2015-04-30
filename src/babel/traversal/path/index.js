@@ -425,7 +425,7 @@ export default class TraversalPath {
    * Description
    */
 
-  insertOntoContainerStart(containerKey, nodes) {
+  unshiftContainer(containerKey, nodes) {
     nodes = this._verifyNodeList(nodes);
 
     // get the first path and insert our nodes before it, if it doesn't exist then it
@@ -441,7 +441,7 @@ export default class TraversalPath {
    * Description
    */
 
-  insertOntoContainerEnd(containerKey, nodes) {
+  pushContainer(containerKey, nodes) {
     nodes = this._verifyNodeList(nodes);
 
     // get an invisible path that represents the last node + 1 and replace it with our

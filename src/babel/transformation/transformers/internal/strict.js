@@ -13,6 +13,6 @@ export function Program(program, parent, scope, file) {
       }
     }
 
-    program.body.unshift(directive);
+    this.unshiftContainer("body", [directive]);
   }
 }

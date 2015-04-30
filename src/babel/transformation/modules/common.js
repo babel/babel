@@ -20,7 +20,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
       if (this.file.isLoose("es6.modules")) templateName += "-loose";
       var declar = util.template(templateName, true);
       declar._blockHoist = 3;
-      file.ast.program.body.unshift(declar);
+      file.path.unshiftContainer("body", [declar]);
     }
   }
 
