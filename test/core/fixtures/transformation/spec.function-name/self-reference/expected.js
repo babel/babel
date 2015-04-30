@@ -1,15 +1,7 @@
 "use strict";
 
-var f = (function (_f) {
-  function f() {
-    return _f.apply(this, arguments);
-  }
+var _f = function f() {
+  console.log(_f, g);
+};
 
-  f.toString = function () {
-    return _f.toString();
-  };
-
-  return f;
-})(function () {
-  console.log(f, g);
-});
+_f = null;

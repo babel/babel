@@ -18,19 +18,9 @@ var Login = (function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
   babelHelpers.createClass(Login, [{
     key: "getForm",
-    value: (function (_getForm) {
-      function getForm() {
-        return _getForm.apply(this, arguments);
-      }
-
-      getForm.toString = function () {
-        return _getForm.toString();
-      };
-
-      return getForm;
-    })(function () {
+    value: function getForm() {
       return _getForm2.getForm().toJS();
-    })
+    }
   }]);
   return Login;
 })(React.Component);

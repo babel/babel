@@ -2,8 +2,12 @@ var f = function () {
   var f = 2;
 };
 
-var f = function (f) {};
+var g = function (g) {
+  g;
+};
 
 var obj = {
-  f: function (f) {}
+  f: function (f) {
+    f;
+  }
 };

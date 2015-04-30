@@ -1,4 +1,5 @@
 import TraversalContext from "./context";
+import explode from "./explode";
 import * as messages from "../messages";
 import includes from "lodash/collection/includes";
 import * as t from "../types";
@@ -112,23 +113,7 @@ traverse.removeProperties = function (tree) {
   return tree;
 };
 
-traverse.explode = function (obj) {
-  for (var type in obj) {
-    var fns = obj[type];
-    if (typeof fns === "function") {
-      obj[type] = fns = { enter: fns };
-    }
-
-    var aliases = t.FLIPPED_ALIAS_KEYS[type];
-    if (aliases) {
-      for (var i = 0; i < aliases.length; i++) {
-        var alias = aliases[i];
-        obj[alias] = obj[alias] || fns;
-      }
-    }
-  }
-  return obj;
-};
+traverse.explode = explode;
 
 function hasBlacklistedType(node, parent, scope, state) {
   if (node.type === state.type) {

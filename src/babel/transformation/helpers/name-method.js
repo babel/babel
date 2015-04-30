@@ -20,26 +20,32 @@ var visitor = {
 
 var wrap = function (state, method, id, scope) {
   if (state.selfReference) {
-    var templateName = "property-method-assignment-wrapper";
-    if (method.generator) templateName += "-generator";
-    var template = util.template(templateName, {
-      FUNCTION: method,
-      FUNCTION_ID: id,
-      FUNCTION_KEY: scope.generateUidIdentifier(id.name)
-    });
-    template.callee._skipModulesRemap = true;
+    if (scope.hasBinding(id.name)) {
+      // we can just munge the local binding
+      scope.rename(id.name);
+    } else {
+      // need to add a wrapper since we can't change the references
+      var templateName = "property-method-assignment-wrapper";
+      if (method.generator) templateName += "-generator";
+      var template = util.template(templateName, {
+        FUNCTION: method,
+        FUNCTION_ID: id,
+        FUNCTION_KEY: scope.generateUidIdentifier(id.name)
+      });
+      template.callee._skipModulesRemap = true;
 
-    // shim in dummy params to retain function arity, if you try to read the
-    // source then you'll get the original since it's proxied so it's all good
-    var params = template.callee.body.body[0].params;
-    for (var i = 0, len = getFunctionArity(method); i < len; i++) {
-      params.push(scope.generateUidIdentifier("x"));
+      // shim in dummy params to retain function arity, if you try to read the
+      // source then you'll get the original since it's proxied so it's all good
+      var params = template.callee.body.body[0].params;
+      for (var i = 0, len = getFunctionArity(method); i < len; i++) {
+        params.push(scope.generateUidIdentifier("x"));
+      }
+
+      return template;
     }
-
-    return template;
-  } else {
-    method.id = id;
   }
+
+  method.id = id;
 };
 
 var visit = function (node, name, scope) {
@@ -117,6 +123,15 @@ export function bare(node, parent, scope) {
   } else if (t.isVariableDeclarator(parent)) {
     // var foo = function () {};
     id = parent.id;
+
+    if (t.isIdentifier(id)) {
+      var bindingInfo = scope.parent.getBinding(id.name);
+      if (bindingInfo && bindingInfo.constant && scope.getBinding(id.name) === bindingInfo) {
+        // always going to reference this method
+        node.id = id;
+        return;
+      }
+    }
   } else {
     return;
   }

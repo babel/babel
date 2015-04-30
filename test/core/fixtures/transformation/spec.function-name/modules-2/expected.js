@@ -15,20 +15,13 @@ var Container = (function () {
 
   babelHelpers.createClass(Container, [{
     key: "last",
-    value: (function (_last) {
-      function last(_x) {
-        return _last.apply(this, arguments);
+    value: function last(key) {
+      if (!this.has(key)) {
+        return;
       }
 
-      last.toString = function () {
-        return _last.toString();
-      };
-
-      return last;
-    })(function (key) {
-      if (!this.has(key)) return;
       return _last3["default"](this.tokens.get(key));
-    })
+    }
   }]);
   return Container;
 })();

@@ -696,7 +696,11 @@ export default class TraversalPath {
       if (part === ".") {
         path = path.parentPath;
       } else {
-        path = path.get(parts[i]);
+        if (Array.isArray(path)) {
+          path = path[part];
+        } else {
+          path = path.get(part);
+        }
       }
     }
     return path;
@@ -707,7 +711,12 @@ export default class TraversalPath {
    */
 
   has(key): boolean {
-    return !!this.node[key];
+    var val = this.node[key];
+    if (val && Array.isArray(val)) {
+      return !!val.length;
+    } else {
+      return !!val;
+    }
   }
 
   /**
