@@ -1,3 +1,4 @@
+import * as node from  "../../api/node";
 import * as messages from "../../messages";
 import * as util from  "../../util";
 
