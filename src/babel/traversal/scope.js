@@ -74,8 +74,15 @@ var renameVisitor = explode({
   Identifier(node, parent, scope, state) {
     if (this.isReferenced() && node.name === state.oldName) {
       if (this.parentPath.isProperty() && this.key === "key" && parent.shorthand) {
+        var value = t.identifier(state.newName);;
+
+        if (parent.value === state.binding) {
+          state.info.identifier = state.binding = value;
+        }
+
         parent.shorthand = false;
-        parent.value = t.identifier(state.newName);
+        parent.value = value;
+        parent.key = t.identifier(state.oldName);
       } else {
         node.name = state.newName;
       }
