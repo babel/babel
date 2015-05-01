@@ -37,7 +37,7 @@ class CodeGenerator {
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
-      quotes: CodeGenerator.findCommonStringDelimeter(code, tokens),
+      quotes: CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
         style: style,
@@ -56,7 +56,7 @@ class CodeGenerator {
     return format;
   }
 
-  static findCommonStringDelimeter(code, tokens) {
+  static findCommonStringDelimiter(code, tokens) {
     var occurences = {
       single: 0,
       double: 0
