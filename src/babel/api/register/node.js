@@ -87,7 +87,7 @@ var shouldIgnore = function (filename) {
 
 var istanbulMonkey = {};
 
-if (process.env.running_under_istanbul) { // jshint ignore:line
+if (process.env.running_under_istanbul) {
   // we need to monkey patch fs.readFileSync so we can hook into
   // what istanbul gets, it's extremely dirty but it's the only way
   var _readFileSync = fs.readFileSync;
@@ -117,7 +117,7 @@ var registerExtension = function (ext) {
   var old = oldHandlers[ext] || oldHandlers[".js"];
 
   var loader = normalLoader;
-  if (process.env.running_under_istanbul) loader = istanbulLoader; // jshint ignore:line
+  if (process.env.running_under_istanbul) loader = istanbulLoader;
 
   require.extensions[ext] = function (m, filename) {
     if (shouldIgnore(filename)) {
