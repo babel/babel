@@ -16,27 +16,13 @@ function loose(node, body, objId) {
 
 function spec(node, body, objId, initProps, file) {
   var props = node.properties;
-  var prop, key;
-
-  // normalize key
-
-  for (var i = 0; i < props.length; i++) {
-    prop = props[i];
-    if (prop.kind !== "init") continue;
-
-    key = prop.key;
-
-    if (!prop.computed && t.isIdentifier(key)) {
-      prop.key = t.literal(key.name);
-    }
-  }
 
   // add all non-computed properties and `__proto__` properties to the initializer
 
   var broken = false;
 
-  for (i = 0; i < props.length; i++) {
-    prop = props[i];
+  for (let i = 0; i < props.length; i++) {
+    let prop = props[i];
 
     if (prop.computed) {
       broken = true;
@@ -51,23 +37,16 @@ function spec(node, body, objId, initProps, file) {
   // add a simple assignment for all Symbol member expressions due to symbol polyfill limitations
   // otherwise use Object.defineProperty
 
-  for (i = 0; i < props.length; i++) {
-    prop = props[i];
+  for (let i = 0; i < props.length; i++) {
+    let prop = props[i];
     if (!prop) continue;
 
-    key = prop.key;
-    var bodyNode;
-
-    if (prop.computed && t.isMemberExpression(key) && t.isIdentifier(key.object, { name: "Symbol" })) {
-      // { [Symbol.iterator]: "foo" }
-      bodyNode = t.assignmentExpression(
-        "=",
-        t.memberExpression(objId, key, true),
-        prop.value
-      );
-    } else {
-      bodyNode = t.callExpression(file.addHelper("define-property"), [objId, key, prop.value]);
+    let key = prop.key;
+    if (t.isIdentifier(key) && !prop.computed) {
+      key = t.literal(key.name);
     }
+
+    var bodyNode = t.callExpression(file.addHelper("define-property"), [objId, key, prop.value]);
 
     body.push(t.expressionStatement(bodyNode));
   }

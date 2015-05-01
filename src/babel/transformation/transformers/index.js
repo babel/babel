@@ -113,7 +113,10 @@ export default {
 
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
-  "utility.deadCodeElimination":           require("./utility/dead-code-elimination"),
+
+  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
+  "minification.memberExpressionLiterals": require("./minification/member-expression-literals"),
+  "minification.propertyLiterals":         require("./minification/property-literals"),
 
   jscript:                                 require("./other/jscript"),
   flow:                                    require("./other/flow")

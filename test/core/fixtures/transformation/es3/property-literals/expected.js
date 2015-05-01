@@ -1,7 +1,7 @@
 "use strict";
 
 var obj = {
-  test: "foob",
+  "test": "foob",
   "!@#$": "foob",
   "33rd": "foob",
   fooBar: "foob"
