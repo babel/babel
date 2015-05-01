@@ -15,7 +15,7 @@ pipeline.addDeprecated(deprecated);
 //
 
 import aliases from "./transformers/aliases";
-pipeline.addDeprecated(aliases);
+pipeline.addAliases(aliases);
 
 //
 
