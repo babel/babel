@@ -81,7 +81,7 @@ export default class TransformerPipeline {
         keys.push(aliasKey);
       } else if (deprecatedKey) {
         // deprecated key, remap it to the new one
-        console.error(`The transformer ${key} has been renamed to ${deprecatedKey}`);
+        console.error(`[BABEL] The transformer ${key} has been renamed to ${deprecatedKey}`);
         rawKeys.push(deprecatedKey);
       } else if (this.transformers[key]) {
         // valid key
