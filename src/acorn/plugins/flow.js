@@ -322,7 +322,7 @@ pp.flow_parseObjectType = function (allowStatic) {
 }
 
 pp.flow_objectTypeSemicolon = function () {
-  if (!this.eat(tt.semi) && this.type !== tt.braceR) {
+  if (!this.eat(tt.semi) && !this.eat(tt.comma) && this.type !== tt.braceR) {
     this.unexpected()
   }
 }
