@@ -1,5 +1,6 @@
 export default {
   _modules:                                require("./internal/modules"),
+  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
 
   "es7.classProperties":                   require("./es7/class-properties"),
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
@@ -114,7 +115,6 @@ export default {
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
 
-  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   "minification.memberExpressionLiterals": require("./minification/member-expression-literals"),
   "minification.propertyLiterals":         require("./minification/property-literals"),
 
