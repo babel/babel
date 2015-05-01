@@ -9,6 +9,9 @@ module.exports = function (commander, filenames, opts) {
   var write = function (src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
+    
+    // remove original path if exists
+    relative = relative.replace(/(.*[\/\\]).+/, "");
 
     var dest = path.join(commander.outDir, relative);
 
