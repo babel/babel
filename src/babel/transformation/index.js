@@ -1,68 +1,34 @@
-import normalizeAst from "../helpers/normalize-ast";
-import Transformer from "./transformer";
-import object from "../helpers/object";
-import File from "./file";
-import each from "lodash/collection/each";
+import Pipeline from "./transformer-pipeline";
 
-export default function transform(code: string, opts?: Object) {
-  var file = new File(opts);
-  return file.parse(code);
-}
+var pipeline = new Pipeline;
 
-transform.fromAst = function (ast, code, opts) {
-  ast = normalizeAst(ast);
+//
 
-  var file = new File(opts);
-  file.addCode(code);
-  file.transform(ast);
-  return file.generate();
-};
+import transformers from "./transformers";
+pipeline.addTransformers(transformers);
 
-transform._ensureTransformerNames = function (type: string, rawKeys: Array<string>) {
-  var keys = [];
+//
 
-  for (var i = 0; i < rawKeys.length; i++) {
-    var key = rawKeys[i];
+import deprecated from "./transformers/deprecated";
+pipeline.addDeprecated(deprecated);
 
-    var deprecatedKey = transform.deprecatedTransformerMap[key];
-    var aliasKey = transform.aliasTransformerMap[key];
-    if (aliasKey) {
-      keys.push(aliasKey);
-    } else if (deprecatedKey) {
-      // deprecated key, remap it to the new one
-      console.error(`The transformer ${key} has been renamed to ${deprecatedKey}`);
-      rawKeys.push(deprecatedKey);
-    } else if (transform.transformers[key]) {
-      // valid key
-      keys.push(key);
-    } else if (transform.namespaces[key]) {
-      // namespace, append all transformers within this namespace
-      keys = keys.concat(transform.namespaces[key]);
-    } else {
-      // invalid key
-      throw new ReferenceError(`Unknown transformer ${key} specified in ${type}`);
-    }
-  }
+//
 
-  return keys;
-};
+import aliases from "./transformers/aliases";
+pipeline.addDeprecated(aliases);
 
-transform.transformerNamespaces = object();
-transform.transformers          = object();
-transform.namespaces            = object();
+//
 
-transform.deprecatedTransformerMap = require("./transformers/deprecated");
-transform.aliasTransformerMap = require("./transformers/aliases");
-transform.moduleFormatters = require("./modules");
+import * as filters from "./transformers/filters";
+pipeline.addFilter(filters.internal);
+pipeline.addFilter(filters.blacklist);
+pipeline.addFilter(filters.whitelist);
+pipeline.addFilter(filters.stage);
+pipeline.addFilter(filters.optional);
 
-import rawTransformers from "./transformers";
+//
 
-each(rawTransformers, function (transformer, key) {
-  var namespace = key.split(".")[0];
-
-  transform.namespaces[namespace] = transform.namespaces[namespace] || [];
-  transform.namespaces[namespace].push(key);
-  transform.transformerNamespaces[key] = namespace;
-
-  transform.transformers[key] = new Transformer(key, transformer);
-});
+var transform = pipeline.transform.bind(pipeline);
+transform.fromAst = pipeline.transformFromAst.bind(pipeline);
+transform.pipeline = pipeline;
+export default transform;

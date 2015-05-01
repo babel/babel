@@ -15,7 +15,7 @@ import each from "lodash/collection/each";
  */
 
 export default class Transformer {
-  constructor(transformerKey: string, transformer: Object, opts: Object) {
+  constructor(transformerKey: string, transformer: Object) {
     transformer = assign({}, transformer);
 
     var take = function (key) {
@@ -40,7 +40,6 @@ export default class Transformer {
     //
 
     this.handlers = this.normalize(transformer);
-    this.opts     = this.opts || {};
     this.key      = transformerKey;
 
     //

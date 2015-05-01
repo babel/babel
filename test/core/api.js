@@ -19,7 +19,7 @@ suite("api", function () {
   });
 
   test("addHelper unknown", function () {
-    var file = new File;
+    var file = new File({}, transform.pipeline);
     assert.throws(function () {
       file.addHelper("foob");
     }, /Unknown helper foob/);
@@ -40,11 +40,11 @@ suite("api", function () {
   });
 
   test("extra options", function () {
-    var file1 = new File({ extra: { foo: "bar" } });
+    var file1 = new File({ extra: { foo: "bar" } }, transform.pipeline);
     assert.equal(file1.opts.extra.foo, "bar");
 
-    var file2 = new File;
-    var file3 = new File;
+    var file2 = new File({}, transform.pipeline);
+    var file3 = new File({}, transform.pipeline);
     assert.ok(file2.opts.extra !== file3.opts.extra);
   });
 

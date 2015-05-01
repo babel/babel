@@ -9,6 +9,7 @@ export { canCompile } from "../util";
 
 export { default as options } from "../transformation/file/options";
 export { default as Transformer } from "../transformation/transformer";
+export { default as Pipeline } from "../transformation/transformer-pipeline";
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { version } from "../../../package";

@@ -1,5 +1,6 @@
 import convertSourceMap from "convert-source-map";
 import * as optionParsers from "./option-parsers";
+import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import TraversalPath from "../../traversal/path";
@@ -38,7 +39,7 @@ function checkPath(stack, path) {
 }
 
 export default class File {
-  constructor(opts = {}) {
+  constructor(opts = {}, pipeline) {
     this.dynamicImportTypes = {};
     this.dynamicImportIds   = {};
     this.dynamicImports     = [];
@@ -49,9 +50,10 @@ export default class File {
     this.data         = {};
     this.uids         = {};
 
-    this.log  = new Logger(this, opts.filename || "unknown");
-    this.opts = this.normalizeOptions(opts);
-    this.ast  = {};
+    this.pipeline = pipeline;
+    this.log      = new Logger(this, opts.filename || "unknown");
+    this.opts     = this.normalizeOptions(opts);
+    this.ast      = {};
 
     this.buildTransformers();
   }
@@ -133,7 +135,7 @@ export default class File {
       }
 
       var optionParser = optionParsers[option.type];
-      if (optionParser) val = optionParser(key, val);
+      if (optionParser) val = optionParser(key, val, this.pipeline);
 
       if (option.alias) {
         opts[option.alias] = opts[option.alias] || val;
@@ -200,7 +202,7 @@ export default class File {
     var stack = [];
 
     // build internal transformers
-    each(transform.transformers, function (transformer, key) {
+    each(this.pipeline.transformers, function (transformer, key) {
       var pass = transformers[key] = transformer.buildPass(file);
 
       if (pass.canTransform()) {
@@ -235,7 +237,7 @@ export default class File {
   }
 
   getModuleFormatter(type: string) {
-    var ModuleFormatter = isFunction(type) ? type : transform.moduleFormatters[type];
+    var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
 
     if (!ModuleFormatter) {
       var loc = util.resolveRelative(type);

@@ -1,14 +1,13 @@
-import transform from "./../index";
 import * as util from  "../../util";
 
-export function transformerList(key, val) {
+export function transformerList(key, val, pipeline) {
   val = util.arrayify(val);
 
   if (val.indexOf("all") >= 0 || val.indexOf(true) >= 0) {
-    val = Object.keys(transform.transformers);
+    val = Object.keys(pipeline.transformers);
   }
 
-  return transform._ensureTransformerNames(key, val);
+  return pipeline._ensureTransformerNames(key, val);
 }
 
 export function number(key, val) {

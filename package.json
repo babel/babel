@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "ast-types": "~0.7.0",
+    "bluebird": "^2.9.25",
     "chalk": "^1.0.0",
     "convert-source-map": "^1.1.0",
     "core-js": "^0.9.0",
@@ -49,6 +50,7 @@
     "regenerator": "^0.8.20",
     "regexpu": "^1.1.2",
     "repeating": "^1.1.2",
+    "resolve": "^1.1.6",
     "shebang-regex": "^1.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.4.0",
