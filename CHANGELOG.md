@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.3
+
+ * **Bug Fix**
+  * Fix plugin containers being called with an undefined import. Thanks [@timbur](https://github.com/timbur)!
+  * Allow Flow object separators to be commas. Thanks [@monsanto](https://github.com/monsanto)!
+  * Add missing `Statement` and `Declaration` node aliases to flow types.
+
 ## 5.2.2
 
  * **Internal**
