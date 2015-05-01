@@ -42,8 +42,11 @@ var programReferenceVisitor = {
   enter(node, parent, scope, state) {
     if (t.isReferencedIdentifier(node, parent)) {
       var bindingInfo = scope.getBinding(node.name);
-      if (bindingInfo) bindingInfo.reference();
-      state.addGlobal(node);
+      if (bindingInfo) {
+        bindingInfo.reference();
+      } else {
+        state.addGlobal(node);
+      }
     } else if (t.isLabeledStatement(node)) {
       state.addGlobal(node);
     } else if (t.isAssignmentExpression(node)) {
