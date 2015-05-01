@@ -3,6 +3,8 @@ import * as t from "../types";
 export default class Binding {
   constructor({ identifier, scope, path, kind }) {
     this.identifier = identifier;
+    this.references = 0;
+    this.referenced = false;
     this.constant   = true;
     this.scope      = scope;
     this.path       = path;
@@ -56,6 +58,15 @@ export default class Binding {
       // destroy the inferred typeAnnotation
       this.typeAnnotation = null;
     }
+  }
+
+  /**
+   * Description
+   */
+
+  reference() {
+    this.referenced = true;
+    this.references++;
   }
 
   /**
