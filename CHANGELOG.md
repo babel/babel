@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.4
+
+ * **Bug Fix**
+  * Fix race condition with the Node API being loaded awkwardly and not being able to initialise itself when used in the browser.
+ * **Internal**
+  * Expose `transform.pipeline`.
+
 ## 5.2.3
 
  * **Bug Fix**
