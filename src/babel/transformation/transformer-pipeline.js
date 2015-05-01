@@ -1,6 +1,5 @@
 import Transformer from "./transformer";
 import normalizeAst from "../helpers/normalize-ast";
-import Bundler from "./bundler";
 import assign from "lodash/object/assign";
 import object from "../helpers/object";
 import File from "./file";
@@ -68,10 +67,6 @@ export default class TransformerPipeline {
     file.addCode(code);
     file.transform(ast);
     return file.generate();
-  }
-
-  createBundler() {
-    return new Bundler(this);
   }
 
   _ensureTransformerNames(type: string, rawKeys: Array<string>) {
