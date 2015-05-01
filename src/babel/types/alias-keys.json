@@ -26,9 +26,9 @@
   "ExportNamedDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ImportDeclaration":          ["Statement", "Declaration", "ModuleDeclaration"],
 
-  "ArrowFunctionExpression": ["Scopable", "Function", "Expression", "Pure"],
-  "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Pure", "Declaration"],
-  "FunctionExpression":      ["Scopable", "Function", "Expression", "Pure"],
+  "ArrowFunctionExpression": ["Scopable", "Function", "Expression"],
+  "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Declaration"],
+  "FunctionExpression":      ["Scopable", "Function", "Expression"],
 
   "BlockStatement": ["Scopable", "Statement"],
   "Program":        ["Scopable"],
@@ -41,8 +41,8 @@
   "SpreadProperty":  ["UnaryLike"],
   "SpreadElement":   ["UnaryLike"],
 
-  "ClassDeclaration": ["Scopable", "Class", "Pure", "Statement", "Declaration"],
-  "ClassExpression":  ["Scopable", "Class", "Pure", "Expression"],
+  "ClassDeclaration": ["Scopable", "Class", "Statement", "Declaration"],
+  "ClassExpression":  ["Scopable", "Class", "Expression"],
 
   "ForOfStatement": ["Scopable", "Statement", "For", "Loop"],
   "ForInStatement": ["Scopable", "Statement", "For", "Loop"],
@@ -62,7 +62,7 @@
   "ConditionalExpression":     ["Expression"],
   "DoExpression":              ["Expression"],
   "Identifier":                ["Expression"],
-  "Literal":                   ["Expression", "Pure"],
+  "Literal":                   ["Expression"],
   "MemberExpression":          ["Expression"],
   "MetaProperty":              ["Expression"],
   "NewExpression":             ["Expression"],

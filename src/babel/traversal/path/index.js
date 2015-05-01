@@ -319,12 +319,6 @@ export default class TraversalPath {
     var parent = this.parent;
     if (!parentPath) return;
 
-    // we've just removed the last declarator of a variable declaration so there's no point in
-    // keeping it
-    if (parentPath.isVariableDeclaration() && parent.declarations.length === 0) {
-      return parentPath.remove();
-    }
-
     // we're the child of an expression statement so we should remove the parent
     if (parentPath.isExpressionStatement()) {
       return parentPath.remove();
@@ -655,10 +649,6 @@ export default class TraversalPath {
 
     return this.shouldStop;
   }
-
-  /**
-   * Description
-   */
 
   getSibling(key) {
     return TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);

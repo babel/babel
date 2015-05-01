@@ -40,12 +40,8 @@ var functionVariableVisitor = {
 
 var programReferenceVisitor = {
   enter(node, parent, scope, state) {
-    if (t.isReferencedIdentifier(node, parent)) {
-      var bindingInfo = scope.getBinding(node.name);
-      if (bindingInfo) {
-        state.addGlobal(node);
-        bindingInfo.reference();
-      }
+    if (t.isReferencedIdentifier(node, parent) && !scope.hasBinding(node.name)) {
+      state.addGlobal(node);
     } else if (t.isLabeledStatement(node)) {
       state.addGlobal(node);
     } else if (t.isAssignmentExpression(node)) {
@@ -484,19 +480,6 @@ export default class Scope {
   recrawl() {
     this.path.setData("scopeInfo", null);
     this.crawl();
-  }
-
-  /**
-   * Description
-   */
-
-  isPure(node) {
-    if (t.isIdentifier(node)) {
-      var bindingInfo = this.getBinding(node.name);
-      return bindingInfo.constant;
-    } else {
-      return t.isPure(node);
-    }
   }
 
   /**

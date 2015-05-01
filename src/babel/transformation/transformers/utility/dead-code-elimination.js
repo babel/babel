@@ -21,38 +21,6 @@ export var metadata = {
   optional: true
 };
 
-export function Identifier(node, parent, scope) {
-  if (!this.isReferenced()) return;
-
-  var binding = scope.getBinding(node.name);
-  if (!binding || binding.references > 1 || !binding.constant) return;
-
-  var replacement = binding.path.node;
-  if (t.isVariableDeclarator(replacement)) {
-    replacement = replacement.init;
-  }
-  t.toExpression(replacement);
-
-  scope.removeBinding(node.name);
-
-  binding.path.remove();
-  return replacement;
-}
-
-export function FunctionDeclaration(node, parent, scope) {
-  var bindingInfo = scope.getBinding(node.id.name);
-  if (bindingInfo && !bindingInfo.referenced) {
-    this.remove();
-  }
-}
-
-export { FunctionDeclaration as ClassDeclaration };
-
-export function VariableDeclarator(node, parent, scope) {
-  if (!t.isIdentifier(node.id) || !scope.isPure(node.init)) return;
-  FunctionDeclaration.apply(this, arguments);
-}
-
 export function ConditionalExpression(node, parent, scope) {
   var evaluateTest = this.get("test").evaluateTruthy();
   if (evaluateTest === true) {
