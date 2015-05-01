@@ -18,15 +18,7 @@ function returnBlock(expr) {
 // looks for and replaces tail recursion calls
 var firstPass = {
   enter(node, parent, scope, state) {
-    if (this.isIfStatement()) {
-      if (this.get("alternate").isReturnStatement()) {
-        t.ensureBlock(node, "alternate");
-      }
-
-      if (this.get("consequent").isReturnStatement()) {
-        t.ensureBlock(node, "consequent");
-      }
-    } else if (this.isReturnStatement()) {
+    if (this.isReturnStatement()) {
       this.skip();
       return state.subTransform(node.argument);
     } else if (t.isTryStatement(parent)) {
