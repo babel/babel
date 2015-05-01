@@ -65,7 +65,7 @@ export function parse(code, opts = {}) {
   };
   opts.features = {};
 
-  for (var key in transform.transformers) {
+  for (var key in transform.pipeline.transformers) {
     opts.features[key] = true;
   }
 
