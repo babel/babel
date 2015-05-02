@@ -1,6 +1,4 @@
-import groupBy from "lodash/collection/groupBy";
-import flatten from "lodash/array/flatten";
-import values from "lodash/object/values";
+import sortBy from "lodash/collection/sortBy";
 
 // Priority:
 //
@@ -18,14 +16,14 @@ export var BlockStatement = {
     }
     if (!hasChange) return;
 
-    var nodePriorities = groupBy(node.body, function (bodyNode) {
+    node.body = sortBy(node.body, function(bodyNode){
       var priority = bodyNode && bodyNode._blockHoist;
       if (priority == null) priority = 1;
       if (priority === true) priority = 2;
-      return priority;
-    });
 
-    node.body = flatten(values(nodePriorities).reverse());
+      // Higher priorities should move toward the top.
+      return -1 * priority;
+    });
   }
 };
 
