@@ -85,7 +85,7 @@
 
   "modules": {
     "type": "string",
-    "description": "module formatter type to use [common]",
+    "description": "module formatter type to use [common|amd]",
     "default": "common",
     "shorthand": "m"
   },
