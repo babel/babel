@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-var commander = require("commander");
-var transform = require("babel-core").transform;
-var kebabCase = require("lodash/string/kebabCase");
-var options   = require("babel-core").options;
-var util      = require("babel-core").util;
-var each      = require("lodash/collection/each");
-var keys      = require("lodash/object/keys");
-var fs        = require("fs");
-var glob      = require("glob");
+var moduleFormatters = require("babel-core/lib/babel/transformation/modules");
+var commander        = require("commander");
+var transform        = require("babel-core").transform;
+var kebabCase        = require("lodash/string/kebabCase");
+var options          = require("babel-core").options;
+var util             = require("babel-core").util;
+var each             = require("lodash/collection/each");
+var keys             = require("lodash/object/keys");
+var fs               = require("fs");
+var glob             = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
@@ -57,8 +58,8 @@ commander.on("--help", function () {
     console.log();
   };
 
-  outKeys("Transformers", transform.transformers);
-  outKeys("Module formatters", transform.moduleFormatters);
+  outKeys("Transformers", transform.pipeline.transformers);
+  outKeys("Module formatters", moduleFormatters);
 });
 
 var pkg = require("../../package.json");
