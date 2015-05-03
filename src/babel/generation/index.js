@@ -232,14 +232,14 @@ class CodeGenerator {
       this.map.mark(node, "end");
       if (opts.after) opts.after();
 
+      this.format.concise = oldConcise;
+
       newline(false);
 
       this.printTrailingComments(node, parent);
     } else {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
-
-    this.format.concise = oldConcise;
   }
 
   printJoin(print, nodes, opts = {}) {

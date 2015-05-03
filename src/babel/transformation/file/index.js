@@ -370,13 +370,23 @@ export default class File {
     }
 
     var ref = util.template("helper-" + name);
-    ref._compact = true;
+
     var uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
-    this.scope.push({
-      id: uid,
-      init: ref,
-      unique: true
-    });
+
+    if (t.isFunctionExpression(ref) && !ref.id) {
+      ref.body._compact = true;
+      ref._generated = true;
+      ref.id = uid;
+      ref.type = "FunctionDeclaration";
+      this.path.unshiftContainer("body", ref);
+    } else {
+      ref._compact = true;
+      this.scope.push({
+        id: uid,
+        init: ref,
+        unique: true
+      });
+    }
     return uid;
   }
 
