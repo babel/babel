@@ -96,10 +96,6 @@ var verifyConstructorVisitor = traverse.explode({
       if (state.hasSuper && !state.hasBareSuper) {
         throw this.errorWithNode("'this' is not allowed before super()");
       }
-
-      if (state.isNativeSuper) {
-        return state.nativeSuperRef;
-      }
     }
   }
 });
@@ -151,15 +147,6 @@ class ClassTransformer {
     var classBody = this.node.body.body;
     var classRef  = this.classRef;
     var file      = this.file;
-
-    //
-
-    var superClass = this.node.superClass;
-    this.isNativeSuper = superClass && t.isIdentifier(superClass) && t.NATIVE_TYPE_NAMES.indexOf(superClass.name) >= 0;
-
-    if (this.isNativeSuper) {
-      this.nativeSuperRef = this.scope.generateUidIdentifier("this");
-    }
 
     //
 
@@ -232,12 +219,6 @@ class ClassTransformer {
         decoratorNode.expression._ignoreModulesRemap = true;
         body.push(decoratorNode);
       }
-    }
-
-    if (this.isNativeSuper) {
-      // we've determined this is inheriting from a native class so return the constructed
-      // instance
-      constructorBody.body.push(t.returnStatement(this.nativeSuperRef));
     }
 
     if (this.className) {
@@ -344,9 +325,7 @@ class ClassTransformer {
     if (!this.hasConstructor && this.hasSuper) {
       var helperName = "class-super-constructor-call";
       if (this.isLoose) helperName += "-loose";
-      if (this.isNativeSuper) helperName = "class-super-native-constructor-call";
       constructorBody.body.push(util.template(helperName, {
-        NATIVE_REF: this.nativeSuperRef,
         CLASS_NAME: this.classRef,
         SUPER_NAME: this.superName
       }, true));
@@ -475,12 +454,10 @@ class ClassTransformer {
 
    verifyConstructor(path: TraversalPath) {
     var state = {
-      nativeSuperRef: this.nativeSuperRef,
-      isNativeSuper:  this.isNativeSuper,
-      hasBareSuper:   false,
-      bareSuper:      null,
-      hasSuper:       this.hasSuper,
-      file:           this.file
+      hasBareSuper: false,
+      bareSuper:    null,
+      hasSuper:     this.hasSuper,
+      file:         this.file
     };
 
     path.get("value").traverse(verifyConstructorVisitor, state);
@@ -490,22 +467,7 @@ class ClassTransformer {
     if (!state.hasBareSuper && this.hasSuper) {
       throw path.errorWithNode("Derived constructor must call super()");
     }
-
-    if (this.isNativeSuper && this.bareSuper) {
-      this.bareSuper.replaceWithMultiple([
-        t.variableDeclaration("var", [
-          t.variableDeclarator(this.nativeSuperRef, t.newExpression(this.superName, this.bareSuper.node.arguments))
-        ]),
-
-        t.expressionStatement(t.assignmentExpression(
-          "=",
-          t.memberExpression(this.nativeSuperRef, t.identifier("__proto__")),
-          t.memberExpression(this.classRef, t.identifier("prototype"))
-        )),
-        t.expressionStatement(this.nativeSuperRef)
-      ]);
-    }
-   }
+  }
 
   /**
    * Push a method to its respective mutatorMap.
@@ -603,10 +565,6 @@ class ClassTransformer {
     var fnPath = path.get("value");
     if (fnPath.scope.hasOwnBinding(this.classRef.name)) {
       fnPath.scope.rename(this.classRef.name);
-    }
-
-    if (this.isNativeSuper) {
-      fnPath.traverse(constructorVisitor, this.nativeSuperRef);
     }
 
     var construct = this.constructor;
