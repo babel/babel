@@ -1,9 +1,9 @@
 System.register([], function (_export) {
   var foo, foo2, foo3, foo4, foo5, foo6, foo8;
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
   _export("foo7", foo7);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   function foo7() {}
 
