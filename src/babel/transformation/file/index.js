@@ -435,7 +435,7 @@ export default class File {
     parseOpts.sourceType = "module";
 
     this.log.debug("Parse start");
-    var tree = parse(parseOpts, code);
+    var tree = parse(code, parseOpts);
     this.log.debug("Parse stop");
     return tree;
   }

@@ -1,7 +1,7 @@
 var generate = require("../../lib/babel/generation");
 var assert   = require("assert");
 var helper   = require("./_helper");
-var parse    = require("../../lib/babel/helpers/parse");
+var parse    = require("../../lib/babel/helpers/parse").default;
 var chai     = require("chai");
 var t        = require("../../lib/babel/types");
 var _        = require("lodash");
@@ -26,7 +26,7 @@ _.each(helper.get("generation"), function (testSuite) {
         var expect = task.expect;
         var actual = task.actual;
 
-        var actualAst  = parse({
+        var actualAst  = parse(actual.code, {
           filename: actual.loc,
           nonStandard: true,
           strictMode: false,
@@ -36,7 +36,7 @@ _.each(helper.get("generation"), function (testSuite) {
             "es7.asyncFunctions": true,
             "es7.exportExtensions": true
           }
-        }, actual.code);
+        });
         var actualCode = generate(actualAst, task.options, actual.code).code;
 
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);

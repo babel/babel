@@ -155,7 +155,7 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
 }
 
 export function parseTemplate(loc: string, code: string): Object {
-  var ast = parse({ filename: loc, looseModules: true }, code).program;
+  var ast = parse(code, { filename: loc, looseModules: true }).program;
   ast = traverse.removeProperties(ast);
   return ast;
 }

@@ -2,7 +2,7 @@ import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
-export default function (opts, code, callback) {
+export default function (code, opts = {}) {
   var comments = [];
   var tokens   = [];
 
