@@ -14,6 +14,7 @@ export { default as TransformerPipeline } from "../transformation/transformer-pi
 export { default as traverse } from "../traversal";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { version } from "../../../package";
+export { all as parse } from "../helpers/parse";
 
 import * as t from "../types";
 export { t as types };
@@ -54,20 +55,4 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename), opts);
-}
-
-export function parse(code, opts = {}) {
-  opts.sourceType = "module";
-  opts.ecmaVersion = Infinity;
-  opts.plugins = {
-    flow: true,
-    jsx:  true
-  };
-  opts.features = {};
-
-  for (var key in transform.pipeline.transformers) {
-    opts.features[key] = true;
-  }
-
-  return acorn.parse(code, opts);
 }

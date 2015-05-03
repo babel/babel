@@ -3,6 +3,7 @@ import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
+import * as parse from "../../helpers/parse";
 import traverse from "../index";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
@@ -476,7 +477,21 @@ export default class TraversalPath {
    * Description
    */
 
-  replaceWith(replacement, arraysAllowed) {
+  replaceWithSourceString(replacement) {
+    replacement = parse.all(`(${replacement})`, {
+      filename: "custom string",
+      errorMessage: "make sure this is an expression"
+    }).body[0].expression;
+
+    traverse.removeProperties(replacement);
+    return this.replaceWith(replacement);
+  }
+
+  /**
+   * Description
+   */
+
+  replaceWith(replacement, whateverAllowed) {
     if (this.removed) {
       throw new Error("You can't replace this node, we've already removed it");
     }
@@ -486,13 +501,27 @@ export default class TraversalPath {
     }
 
     if (Array.isArray(replacement)) {
-      if (arraysAllowed) {
+      if (whateverAllowed) {
         return this.replaceWithMultiple(replacement);
       } else {
         throw new Error("Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
       }
     }
 
+    if (typeof replacement === "string") {
+      if (whateverAllowed) {
+        return this.replaceWithSourceString(replacement);
+      } else {
+        throw new Error("Don't use `path.replaceWith()` with a string, use `path.replaceWithSourceString()`");
+      }
+    }
+
+    // replacing a statement with an expression so wrap it in an expression statement
+    if (this.isPreviousType("Statement") && t.isExpression(replacement)) {
+      replacement = t.expressionStatement(replacement);
+    }
+
+    // replacing an expression with a statement so let's explode it
     if (this.isPreviousType("Expression") && t.isStatement(replacement)) {
       return this.replaceExpressionWithStatements([replacement]);
     }
