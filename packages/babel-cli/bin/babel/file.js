@@ -27,9 +27,14 @@ module.exports = function (commander, filenames, opts) {
 
       if (result.map) {
         var consumer = new sourceMap.SourceMapConsumer(result.map);
+        var sourceFilename = filename;
 
-        map._sources.add(filename);
-        map.setSourceContent(filename, result.actual);
+        if (commander.outFile) {
+          sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
+        }
+
+        map._sources.add(sourceFilename);
+        map.setSourceContent(sourceFilename, result.actual);
 
         consumer.eachMapping(function (mapping) {
           map._mappings.add({
@@ -37,7 +42,7 @@ module.exports = function (commander, filenames, opts) {
             generatedColumn: mapping.generatedColumn,
             originalLine: mapping.originalLine,
             originalColumn: mapping.originalColumn,
-            source: filename
+            source: sourceFilename
           });
         });
 
