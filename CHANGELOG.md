@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.7
+
+ * **Bug Fix**
+  * Move `utility.deadCodeElimination` transformer up to avoid race conditions.
+  * Fix shorthand property scope binding renaming.
+ * **Polish**
+  * Turn helper variable declarations into function declarations if possible.
+ * **Internal**
+  * Removed native inheritance support from classes.
+  * Added `replaceWithSourceString` path API.
+  * Split up `es3.propertyLiterals` and `es3.memberExpressionLiterals` transformers to `minfication.propertyLiterals` and `es3.memberExpressionLiterals`.
+
 ## 5.2.6
 
  * **Internal**
