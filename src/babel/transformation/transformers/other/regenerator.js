@@ -9,6 +9,6 @@ export var Program = {
   enter(ast) {
     regenerator.transform(ast);
     this.stop();
-    return ast; // force a checkPath, this really needs to be optimised
+    this.checkSelf();
   }
 };

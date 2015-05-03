@@ -118,7 +118,7 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.push(this.node);
         this.container[this.key] = t.blockStatement(nodes);
-        this.checkPaths(this);
+        this.checkSelf();
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -216,7 +216,7 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
-        this.checkPaths(this);
+        this.checkSelf();
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -509,6 +509,11 @@ export default class TraversalPath {
       throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
     }
 
+    // normalise inserting an entire AST
+    if (t.isProgram(replacement)) {
+      replacement = replacement.body;
+    }
+
     if (Array.isArray(replacement)) {
       if (whateverAllowed) {
         return this.replaceWithMultiple(replacement);
@@ -545,6 +550,14 @@ export default class TraversalPath {
     // potentially create new scope
     this.setScope();
 
+    this.checkSelf();
+  }
+
+  /**
+   * Description
+   */
+
+  checkSelf() {
     this.checkPaths(this);
   }
 
