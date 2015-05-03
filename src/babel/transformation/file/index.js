@@ -10,6 +10,7 @@ import resolveRc from "../../tools/resolve-rc";
 import sourceMap from "source-map";
 import transform from "./../index";
 import generate from "../../generation";
+import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
@@ -236,48 +237,6 @@ export default class File {
     this.transformerStack = stack.concat(secondaryStack);
   }
 
-  getModuleFormatter(type: string) {
-    var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
-
-    if (!ModuleFormatter) {
-      var loc = util.resolveRelative(type);
-      if (loc) ModuleFormatter = require(loc);
-    }
-
-    if (!ModuleFormatter) {
-      throw new ReferenceError(`Unknown module formatter type ${JSON.stringify(type)}`);
-    }
-
-    return new ModuleFormatter(this);
-  }
-
-  parseInputSourceMap(code: string) {
-    var opts = this.opts;
-
-    if (opts.inputSourceMap !== false) {
-      var inputMap = convertSourceMap.fromSource(code);
-      if (inputMap) {
-        opts.inputSourceMap = inputMap.toObject();
-        code = convertSourceMap.removeComments(code);
-      }
-    }
-
-    return code;
-  }
-
-  parseShebang(code: string) {
-    var shebangMatch = shebangRegex.exec(code);
-
-    if (shebangMatch) {
-      this.shebang = shebangMatch[0];
-
-      // remove shebang
-      code = code.replace(shebangRegex, "");
-    }
-
-    return code;
-  }
-
   set(key: string, val): any {
     return this.data[key] = val;
   };
@@ -398,110 +357,6 @@ export default class File {
     return err;
   }
 
-  addCode(code: string) {
-    code = (code || "") + "";
-    code = this.parseInputSourceMap(code);
-    this.code = code;
-    return this.parseShebang(code);
-  }
-
-  shouldIgnore() {
-    var opts = this.opts;
-    return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
-  }
-
-  parse(code: string) {
-    if (this.shouldIgnore()) {
-      return {
-        metadata: {},
-        code:     code,
-        map:      null,
-        ast:      null
-      };
-    }
-
-    code = this.addCode(code);
-
-    var opts = this.opts;
-
-    //
-
-    var parseOpts = {
-      highlightCode: opts.highlightCode,
-      nonStandard:   opts.nonStandard,
-      filename:      opts.filename,
-      plugins:       {}
-    };
-
-    var features = parseOpts.features = {};
-    for (var key in this.transformers) {
-      var transformer = this.transformers[key];
-      features[key] = transformer.canTransform();
-    }
-
-    parseOpts.looseModules = this.isLoose("es6.modules");
-    parseOpts.strictMode = features.strict;
-    parseOpts.sourceType = "module";
-
-    this.log.debug("Parse start");
-
-    //
-
-    return parse(parseOpts, code, (tree) => {
-      this.log.debug("Parse stop");
-      this.transform(tree);
-      return this.generate();
-    });
-  }
-
-  setAst(ast) {
-    this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
-    this.scope = this.path.scope;
-    this.ast   = ast;
-
-    this.path.traverse({
-      enter(node, parent, scope) {
-        if (this.isScope()) {
-          for (var key in scope.bindings) {
-            scope.bindings[key].setTypeAnnotation();
-          }
-        }
-      }
-    });
-  }
-
-  transform(ast) {
-    this.log.debug("Start set AST");
-    this.setAst(ast);
-    this.log.debug("End set AST");
-
-    this.log.debug("Start prepass");
-    this.checkPath(this.path);
-    this.log.debug("End prepass");
-
-    this.log.debug("Start module formatter init");
-    var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
-      modFormatter.init();
-    }
-    this.log.debug("End module formatter init");
-
-    this.call("pre");
-    each(this.transformerStack, function (pass) {
-      pass.transform();
-    });
-    this.call("post");
-  }
-
-  call(key: string) {
-    var stack = this.transformerStack;
-    for (var i = 0; i < stack.length; i++) {
-      var transformer = stack[i].transformer;
-      var fn = transformer[key];
-      if (fn) fn(this);
-    }
-  }
-
   checkPath(path) {
     if (Array.isArray(path)) {
       for (var i = 0; i < path.length; i++) {
@@ -539,6 +394,178 @@ export default class File {
     }
 
     return map;
+  }
+
+
+  getModuleFormatter(type: string) {
+    var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
+
+    if (!ModuleFormatter) {
+      var loc = util.resolveRelative(type);
+      if (loc) ModuleFormatter = require(loc);
+    }
+
+    if (!ModuleFormatter) {
+      throw new ReferenceError(`Unknown module formatter type ${JSON.stringify(type)}`);
+    }
+
+    return new ModuleFormatter(this);
+  }
+
+  parse(code: string) {
+    var opts = this.opts;
+
+    //
+
+    var parseOpts = {
+      highlightCode: opts.highlightCode,
+      nonStandard:   opts.nonStandard,
+      filename:      opts.filename,
+      plugins:       {}
+    };
+
+    var features = parseOpts.features = {};
+    for (var key in this.transformers) {
+      var transformer = this.transformers[key];
+      features[key] = transformer.canTransform();
+    }
+
+    parseOpts.looseModules = this.isLoose("es6.modules");
+    parseOpts.strictMode = features.strict;
+    parseOpts.sourceType = "module";
+
+    this.log.debug("Parse start");
+    var tree = parse(parseOpts, code);
+    this.log.debug("Parse stop");
+    return tree;
+  }
+
+  _addAst(ast) {
+    this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
+    this.scope = this.path.scope;
+    this.ast   = ast;
+
+    this.path.traverse({
+      enter(node, parent, scope) {
+        if (this.isScope()) {
+          for (var key in scope.bindings) {
+            scope.bindings[key].setTypeAnnotation();
+          }
+        }
+      }
+    });
+  }
+
+  addAst(ast) {
+    this.log.debug("Start set AST");
+    this._addAst(ast);
+    this.log.debug("End set AST");
+
+    this.log.debug("Start prepass");
+    this.checkPath(this.path);
+    this.log.debug("End prepass");
+
+    this.log.debug("Start module formatter init");
+    var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
+    if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
+      modFormatter.init();
+    }
+    this.log.debug("End module formatter init");
+
+    this.call("pre");
+    each(this.transformerStack, function (pass) {
+      pass.transform();
+    });
+    this.call("post");
+  }
+
+  wrap(code, callback) {
+    try {
+      if (this.shouldIgnore()) {
+        return {
+          metadata: {},
+          code:     code,
+          map:      null,
+          ast:      null
+        };
+      }
+
+      callback();
+
+      return this.generate();
+    } catch (err) {
+      if (err._babel) {
+        throw err;
+      } else {
+        err._babel = true;
+      }
+
+      var message = err.message = `${this.opts.filename}: ${err.message}`;
+
+      var loc = err.loc;
+      if (loc) {
+        err.codeFrame = codeFrame(code, loc.line, loc.column + 1, this.opts);
+        message += "\n" + err.codeFrame;
+      }
+
+      if (err.stack) {
+        var newStack = err.stack.replace(err.message, message);
+        try {
+          err.stack = newStack;
+        } catch (e) {
+          // `err.stack` may be a readonly property in some environments
+        }
+      }
+
+      throw err;
+    }
+  }
+
+  addCode(code: string, parseCode?) {
+    code = (code || "") + "";
+    code = this.parseInputSourceMap(code);
+    this.code = code;
+
+    if (parseCode) {
+      this.parseShebang();
+      this.addAst(this.parse(this.code));
+    }
+  }
+
+  shouldIgnore() {
+    var opts = this.opts;
+    return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
+  }
+
+  call(key: string) {
+    var stack = this.transformerStack;
+    for (var i = 0; i < stack.length; i++) {
+      var transformer = stack[i].transformer;
+      var fn = transformer[key];
+      if (fn) fn(this);
+    }
+  }
+
+  parseInputSourceMap(code: string) {
+    var opts = this.opts;
+
+    if (opts.inputSourceMap !== false) {
+      var inputMap = convertSourceMap.fromSource(code);
+      if (inputMap) {
+        opts.inputSourceMap = inputMap.toObject();
+        code = convertSourceMap.removeComments(code);
+      }
+    }
+
+    return code;
+  }
+
+  parseShebang() {
+    var shebangMatch = shebangRegex.exec(this.code);
+    if (shebangMatch) {
+      this.shebang = shebangMatch[0];
+      this.code = this.code.replace(shebangRegex, "");
+    }
   }
 
   generate(): {

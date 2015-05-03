@@ -3,7 +3,8 @@ import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
-import * as parse from "../../helpers/parse";
+import codeFrame from "../../helpers/code-frame";
+import { all as parse } from "../../helpers/parse";
 import traverse from "../index";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
@@ -478,11 +479,19 @@ export default class TraversalPath {
    */
 
   replaceWithSourceString(replacement) {
-    replacement = parse.all(`(${replacement})`, {
-      filename: "custom string",
-      errorMessage: "make sure this is an expression"
-    }).body[0].expression;
+    try {
+      replacement = `(${replacement})`;
+      replacement = parse(code);
+    } catch (err) {
+      var loc = err.loc;
+      if (loc) {
+        err.message += " - make sure this is an expression.";
+        err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
+      }
+      throw err;
+    }
 
+    replacement = replacement.body[0].expression;
     traverse.removeProperties(replacement);
     return this.replaceWith(replacement);
   }

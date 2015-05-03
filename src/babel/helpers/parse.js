@@ -1,56 +1,23 @@
 import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
-import codeFrame from "./code-frame";
 import * as acorn from "../../acorn";
 
-function parseCatch(code, opts) {
-  var comments = opts.onComment = [];
-  var tokens   = opts.onToken = [];
-
-  try {
-    return acorn.parse(code, opts);
-  } catch (err) {
-    if (err._babel) {
-      throw err;
-    } else {
-      err._babel = true;
-    }
-
-    if (opts.errorMessage) {
-      err.message += ` - ${opts.errorMessage}`;
-    }
-
-    var message = err.message = `${opts.filename || "unknown"}: ${err.message}`;
-
-    var loc = err.loc;
-    if (loc) {
-      err.codeFrame = codeFrame(code, loc.line, loc.column + 1, opts);
-      message += "\n" + err.codeFrame;
-    }
-
-    if (err.stack) {
-      var newStack = err.stack.replace(err.message, message);
-      try {
-        err.stack = newStack;
-      } catch (e) {
-        // `err.stack` may be a readonly property in some environments
-      }
-    }
-
-    throw err;
-  }
-}
-
 export default function (opts, code, callback) {
+  var comments = [];
+  var tokens   = [];
+
   var parseOpts = {
     allowImportExportEverywhere: opts.looseModules,
     allowReturnOutsideFunction:  opts.looseModules,
+    allowHashBang:               true,
     ecmaVersion:                 6,
     strictMode:                  opts.strictMode,
     sourceType:                  opts.sourceType,
     locations:                   true,
+    onComment:                   comments,
     features:                    opts.features || {},
     plugins:                     opts.plugins || {},
+    onToken:                     tokens,
     ranges:                      true
   };
 
@@ -59,19 +26,15 @@ export default function (opts, code, callback) {
     parseOpts.plugins.flow = true;
   }
 
-  var ast = parseCatch(code, parseOpts);
+  var ast = acorn.parse(code, parseOpts);
 
-  estraverse.attachComments(ast, parseOpts.onComment, parseOpts.onToken);
-  ast = normalizeAst(ast, parseOpts.onComment, parseOpts.onToken);
-
-  if (callback) {
-    return callback(ast);
-  } else {
-    return ast;
-  }
+  estraverse.attachComments(ast, comments, tokens);
+  ast = normalizeAst(ast, comments, tokens);
+  return ast;
 }
 
 export function all(code, opts = {}) {
+  opts.allowHashBang = true;
   opts.sourceType = "module";
   opts.ecmaVersion = Infinity;
   opts.plugins = {
@@ -84,5 +47,5 @@ export function all(code, opts = {}) {
     opts.features[key] = true;
   }
 
-  return parseCatch(code, opts);
+  return acorn.parse(code, opts);
 }
