@@ -387,6 +387,7 @@ export default class File {
         unique: true
       });
     }
+
     return uid;
   }
 
