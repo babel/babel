@@ -8,7 +8,8 @@ import * as t from "../../types";
 var remapVisitor = {
   enter(node, parent, scope, formatter) {
     var remap = formatter.internalRemap[node.name];
-    if (this.isReferencedIdentifier() && remap) {
+
+    if (this.isReferencedIdentifier() && remap && node !== remap) {
       if (!scope.hasBinding(node.name) || scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
         return remap;
       }

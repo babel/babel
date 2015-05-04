@@ -8,6 +8,4 @@ export function ArrowFunctionExpression(node) {
   node.expression = false;
   node.type = "FunctionExpression";
   node.shadow = true;
-
-  return node;
 }

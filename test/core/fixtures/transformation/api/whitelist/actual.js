@@ -1,5 +1,5 @@
 class Test {
   constructor() {
-  arr.map(x => x * x);
+    arr.map(x => x * x);
   }
 }

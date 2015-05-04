@@ -96,7 +96,8 @@ exports.Function = function (node, parent, scope, file) {
       candidate.replaceWith(argsId);
       optimizeMemberExpression(candidate.parent, node.params.length);
     }
-    return node;
+    this.checkSelf();
+    return;
   }
 
   //
@@ -137,5 +138,5 @@ exports.Function = function (node, parent, scope, file) {
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);
-  return node;
+  this.checkSelf();
 };

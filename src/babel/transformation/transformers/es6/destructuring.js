@@ -82,7 +82,7 @@ exports.Function = function (node, parent, scope, file) {
 
   var block = node.body;
   block.body = nodes.concat(block.body);
-  return node;
+  this.checkSelf();
 };
 
 export function CatchClause(node, parent, scope, file) {

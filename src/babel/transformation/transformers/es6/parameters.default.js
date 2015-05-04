@@ -97,5 +97,5 @@ exports.Function = function (node, parent, scope, file) {
     node.body.body = body.concat(node.body.body);
   }
 
-  return node;
+  this.checkSelf();
 };
