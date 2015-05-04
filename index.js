@@ -1,3 +1,6 @@
 export * from "./src/index";
 import "./plugins/flow";
-import "./plugins/jsx";
+
+import inject from "acorn-jsx/inject";
+import * as acorn from "./src/index";
+inject(acorn);
