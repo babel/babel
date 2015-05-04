@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _getForm2 = require("./store");
+var _store = require("./store");
 
 var Login = (function (_React$Component) {
   function Login() {
@@ -19,7 +19,7 @@ var Login = (function (_React$Component) {
   babelHelpers.createClass(Login, [{
     key: "getForm",
     value: function getForm() {
-      return _getForm2.getForm().toJS();
+      return _store.getForm().toJS();
     }
   }]);
   return Login;

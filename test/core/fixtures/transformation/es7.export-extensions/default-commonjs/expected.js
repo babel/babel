@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _foo2 = require("bar");
+var _bar = require("bar");
 
-var _foo3 = babelHelpers.interopRequireDefault(_foo2);
+var _bar2 = babelHelpers.interopRequireDefault(_bar);
 
-exports.foo = _foo3["default"];
+exports.foo = _bar2["default"];

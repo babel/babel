@@ -17,11 +17,11 @@ _Object$defineProperty(exports, "__esModule", {
 exports.giveWord = giveWord;
 var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
 
-var _foo = require("someModule");
+var _someModule = require("someModule");
 
-var _foo2 = _interopRequireDefault(_foo);
+var _someModule2 = _interopRequireDefault(_someModule);
 
-var bar = _interopRequireWildcard(_foo);
+var bar = _interopRequireWildcard(_someModule);
 
 var myWord = _Symbol("abc");
 exports.myWord = myWord;
@@ -40,5 +40,5 @@ function giveWord() {
   }, marked0$0[0], this);
 }
 
-_foo2["default"];
+_someModule2["default"];
 bar;

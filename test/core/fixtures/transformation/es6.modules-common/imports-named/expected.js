@@ -1,10 +1,10 @@
 "use strict";
 
-var _bar = require("foo");
+var _foo = require("foo");
 
-_bar.bar;
-_bar.bar2;
-_bar.baz;
-_bar.bar;
-_bar.bar;
-_bar.xyz;
+_foo.bar;
+_foo.bar2;
+_foo.baz;
+_foo.bar;
+_foo.bar;
+_foo.xyz;

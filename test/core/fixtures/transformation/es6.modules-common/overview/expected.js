@@ -10,22 +10,22 @@ require("foo-bar");
 
 require("./directory/foo-bar");
 
-var _foo = require("foo2");
+var _foo2 = require("foo2");
 
-var _foo2 = babelHelpers.interopRequireDefault(_foo);
+var _foo22 = babelHelpers.interopRequireDefault(_foo2);
 
-var _import = require("foo3");
+var _foo3 = require("foo3");
 
-var foo2 = babelHelpers.interopRequireWildcard(_import);
+var foo2 = babelHelpers.interopRequireWildcard(_foo3);
 
-var _bar = require("foo4");
+var _foo4 = require("foo4");
 
-var _bar2 = require("foo5");
+var _foo5 = require("foo5");
 
 exports.test = test;
 var test = 5;
 
 exports.test = test;
-_bar.bar;
-_bar2.foo;
-_foo2["default"];
+_foo4.bar;
+_foo5.foo;
+_foo22["default"];

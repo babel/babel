@@ -1,7 +1,7 @@
 "use strict";
 
-var _toString = require("foo");
+var _foo = require("foo");
 
-var _toString2 = babelHelpers.interopRequireDefault(_toString);
+var _foo2 = babelHelpers.interopRequireDefault(_foo);
 
-_toString2["default"];
+_foo2["default"];

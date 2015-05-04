@@ -5,15 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.nextOdd = nextOdd;
 
-var _isEven = require("./evens");
+var _evens = require("./evens");
 
 function nextOdd(n) {
-  return _isEven.isEven(n) ? n + 1 : n + 2;
+  return _evens.isEven(n) ? n + 1 : n + 2;
 }
 
 var isOdd = (function (isEven) {
   return function (n) {
     return !isEven(n);
   };
-})(_isEven.isEven);
+})(_evens.isEven);
 exports.isOdd = isOdd;

@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _last2 = require("lodash/array/last");
+var _lodashArrayLast = require("lodash/array/last");
 
-var _last3 = babelHelpers.interopRequireDefault(_last2);
+var _lodashArrayLast2 = babelHelpers.interopRequireDefault(_lodashArrayLast);
 
 var Container = (function () {
   function Container() {
@@ -20,7 +20,7 @@ var Container = (function () {
         return;
       }
 
-      return _last3["default"](this.tokens.get(key));
+      return _lodashArrayLast2["default"](this.tokens.get(key));
     }
   }]);
   return Container;

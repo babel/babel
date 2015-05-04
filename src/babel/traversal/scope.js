@@ -244,12 +244,14 @@ export default class Scope {
 
     var add = function (node) {
       if (t.isModuleDeclaration(node)) {
-        if (node.specifiers && node.specifiers.length) {
+        if (node.source) {
+          add(node.source);
+        } else if (node.specifiers && node.specifiers.length) {
           for (var i = 0; i < node.specifiers.length; i++) {
             add(node.specifiers[i]);
           }
-        } else {
-          add(node.source);
+        } else if (node.declaration) {
+          add(node.declaration);
         }
       } else if (t.isModuleSpecifier(node)) {
         add(node.local);
