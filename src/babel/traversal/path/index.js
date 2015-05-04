@@ -509,9 +509,14 @@ export default class TraversalPath {
       throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
     }
 
+    if (this.node === replacement) {
+      throw new Error("You're trying to replace a node with itself which isn't allowed. If you're trying to do a transformer recache then use `this.checkSelf()`");
+    }
+
     // normalise inserting an entire AST
     if (t.isProgram(replacement)) {
       replacement = replacement.body;
+      whateverAllowed = true;
     }
 
     if (Array.isArray(replacement)) {
