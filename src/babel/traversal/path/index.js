@@ -481,7 +481,7 @@ export default class TraversalPath {
   replaceWithSourceString(replacement) {
     try {
       replacement = `(${replacement})`;
-      replacement = parse(code);
+      replacement = parse(replacement);
     } catch (err) {
       var loc = err.loc;
       if (loc) {
@@ -491,7 +491,7 @@ export default class TraversalPath {
       throw err;
     }
 
-    replacement = replacement.body[0].expression;
+    replacement = replacement.program.body[0].expression;
     traverse.removeProperties(replacement);
     return this.replaceWith(replacement);
   }
