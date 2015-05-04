@@ -185,8 +185,8 @@ export default class DefaultFormatter {
 
   getModuleName() {
     var opts = this.file.opts;
-    // moduleId is n/a if a `getModuleName()` is provided
-    if (opts.moduleId && !opts.getModuleName) {
+    // moduleId is n/a if a `getModuleId()` is provided
+    if (opts.moduleId && !opts.getModuleId) {
       return opts.moduleId;
     }
 
@@ -217,10 +217,9 @@ export default class DefaultFormatter {
     // normalize path separators
     moduleName = moduleName.replace(/\\/g, "/");
 
-    if (opts.getModuleName) {
-      // If return is falsy, assume they want us to use
-      // our generated default name
-      return opts.getModuleName(moduleName) || moduleName;
+    if (opts.getModuleId) {
+      // If return is falsy, assume they want us to use our generated default name
+      return opts.getModuleId(moduleName) || moduleName;
     } else {
       return moduleName;
     }

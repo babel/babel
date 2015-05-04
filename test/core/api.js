@@ -18,8 +18,8 @@ suite("api", function () {
     assert.ok(!result.ast);
   });
 
-  suite("getModuleName() {} option", function () {
-    // As of this commit, `getModuleName` is the only option that isn't JSON
+  suite("getModuleId() {} option", function () {
+    // As of this commit, `getModuleId` is the only option that isn't JSON
     // compatible which is why it's not inside /test/core/fixtures/transformation
 
     function getModuleNameTest(moduleFormat, expected) {
@@ -27,7 +27,7 @@ suite("api", function () {
         filename: "foo/bar/index",
         modules: moduleFormat,
         moduleIds: true,
-        getModuleName: function (name) {
+        getModuleId: function (name) {
           return name.replace(/\/index$/, "");
         }
       });

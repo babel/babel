@@ -25,7 +25,7 @@
     "type": "string"
   },
 
-  "getModuleName": {
+  "getModuleId": {
     "hidden": true
   },
 
