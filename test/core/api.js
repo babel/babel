@@ -18,6 +18,77 @@ suite("api", function () {
     assert.ok(!result.ast);
   });
 
+  suite("getModuleName() {} option", function () {
+    // As of this commit, `getModuleName` is the only option that isn't JSON
+    // compatible which is why it's not inside /test/core/fixtures/transformation
+
+    function getModuleNameTest(moduleFormat, expected) {
+      var result = transform("foo('bar');", {
+        filename: "foo/bar/index",
+        modules: moduleFormat,
+        moduleIds: true,
+        getModuleName: function (name) {
+          return name.replace(/\/index$/, "");
+        }
+      });
+
+      assert.equal(result.code, expected);
+    }
+
+    test("{ modules: \"amd\" }", function () {
+      var expected = [
+        "define('foo/bar', ['exports'], function (exports) {",
+        "  'use strict';",
+        "",
+        "  foo('bar');",
+        "});"
+      ].join("\n");
+
+      getModuleNameTest("amd", expected);
+    });
+
+    test("{ modules: \"umd\" }", function () {
+      var expected = [
+        "(function (global, factory) {",
+        "  if (typeof define === 'function' && define.amd) {",
+        "    define('foo/bar', ['exports'], factory);",
+        "  } else if (typeof exports !== 'undefined') {",
+        "    factory(exports);",
+        "  } else {",
+        "    var mod = {",
+        "      exports: {}",
+        "    };",
+        "    factory(mod.exports);",
+        "    global.fooBar = mod.exports;",
+        "  }",
+        "})(this, function (exports) {",
+        "  'use strict';",
+        "",
+        "  foo('bar');",
+        "});",
+      ].join("\n");
+
+      getModuleNameTest("umd", expected);
+    });
+
+    test("{ modules: \"system\" }", function () {
+      var expected = [
+        "System.register('foo/bar', [], function (_export) {",
+        "  return {",
+        "    setters: [],",
+        "    execute: function () {",
+        "      'use strict';",
+        "",
+        "      foo('bar');",
+        "    }",
+        "  };",
+        "});",
+      ].join("\n");
+
+      getModuleNameTest("system", expected);
+    });
+  });
+
   test("addHelper unknown", function () {
     var file = new File({}, transform.pipeline);
     assert.throws(function () {
