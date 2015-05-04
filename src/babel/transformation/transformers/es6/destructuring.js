@@ -104,7 +104,7 @@ export function CatchClause(node, parent, scope, file) {
 
   node.body.body = nodes.concat(node.body.body);
 
-  return node;
+  this.checkSelf();
 }
 
 export function ExpressionStatement(node, parent, scope, file) {
