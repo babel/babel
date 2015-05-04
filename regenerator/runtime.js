@@ -121,7 +121,7 @@
         }
       };
 
-      if (process.domain) {
+      if (process && process.domain) {
         step = process.domain.bind(step);
       }
 
