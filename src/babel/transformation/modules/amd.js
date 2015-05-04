@@ -23,7 +23,7 @@ export default class AMDFormatter extends DefaultFormatter {
    */
 
   transform(program) {
-    DefaultFormatter.prototype.transform.apply(this, arguments);
+    CommonFormatter.prototype.transform.apply(this, arguments);
 
     var body = program.body;
 
@@ -108,12 +108,16 @@ export default class AMDFormatter extends DefaultFormatter {
   exportSpecifier(specifier, node, nodes) {
     if (this.doDefaultExportInterop(specifier)) {
       this.passModuleArg = true;
-      nodes.push(util.template("exports-default-assign", {
-        VALUE: specifier.local
-      }, true));
-    } else {
-      CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
+
+      if (specifier.exported !== specifier.local && !node.source) {
+        nodes.push(util.template("exports-default-assign", {
+          VALUE: specifier.local
+        }, true));
+        return;
+      }
     }
+
+    CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
   }
 
   exportDeclaration(node, nodes) {
