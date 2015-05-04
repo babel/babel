@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.12
+
+ * **Polish**
+  * Make UID generation based on module declarations **much** nicer.
+ * **Internal**
+  * Remove internal check for traversal path replacement of self. This is a pattern that **could** come up in the wild and it could lead to pretty nasty code and may lead to internal regressions as the test coverage isn't 100% :( Instead, just put it in the fast path.
+
 ## 5.2.11
 
  * **Internal**
