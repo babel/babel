@@ -1,4 +1,5 @@
 import normalizeAst from "./normalize-ast";
+import transform from "../transformation";
 import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
