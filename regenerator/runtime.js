@@ -121,7 +121,7 @@
         }
       };
 
-      if (process && process.domain) {
+      if (typeof process !== "undefined" && process.domain) {
         step = process.domain.bind(step);
       }
 
