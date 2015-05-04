@@ -27,6 +27,7 @@
     "test": "make test"
   },
   "dependencies": {
+    "acorn-jsx": "^1.0.0",
     "ast-types": "~0.7.0",
     "bluebird": "^2.9.25",
     "chalk": "^1.0.0",
