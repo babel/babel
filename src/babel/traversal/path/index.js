@@ -510,7 +510,7 @@ export default class TraversalPath {
     }
 
     if (this.node === replacement) {
-      throw new Error("You're trying to replace a node with itself which doesn't make any sense. If you're trying to do a transformer recache then use `this.checkSelf()`");
+      return this.checkSelf();
     }
 
     // normalise inserting an entire AST
