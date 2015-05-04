@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.9
+
+ * **Bug Fix**
+  * Fix `_blockHoist` transformer incorrectly sorting nodes on shitty environments that aren't spec compliant in their key order.
+  * Fix broken `parse` API method reference to an undeclared import.
+
 ## 5.2.7
 
  * **Bug Fix**

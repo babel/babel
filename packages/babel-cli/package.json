@@ -1,13 +1,13 @@
 {
   "name": "babel",
   "description": "Turn ES6 code into readable vanilla ES5 with source maps",
-  "version": "5.2.7",
+  "version": "5.2.9",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "repository": "babel/babel",
   "preferGlobal": true,
   "dependencies": {
-    "babel-core": "^5.2.7",
+    "babel-core": "^5.2.9",
     "chokidar": "^1.0.0",
     "commander": "^2.6.0",
     "convert-source-map": "^1.1.0",
