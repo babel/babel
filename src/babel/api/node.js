@@ -53,7 +53,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 
 export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
-  return transform(fs.readFileSync(filename), opts);
+  return transform(fs.readFileSync(filename, "utf8"), opts);
 }
 
 export function parse(code, opts = {}) {

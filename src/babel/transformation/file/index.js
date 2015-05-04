@@ -480,6 +480,8 @@ export default class File {
   }
 
   wrap(code, callback) {
+    code = code + "";
+
     try {
       if (this.shouldIgnore()) {
         return {
