@@ -1,6 +1,6 @@
 var assert = require("assert");
 var util   = require("../../lib/babel/util");
-var parse  = require("../../lib/babel/helpers/parse").default;
+var parse  = require("../../lib/babel/helpers/parse");
 var t      = require("../../lib/babel/types");
 
 suite("util", function () {

@@ -1,5 +1,4 @@
 import normalizeAst from "./normalize-ast";
-import transform from "../transformation";
 import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
@@ -32,21 +31,4 @@ export default function (code, opts = {}) {
   estraverse.attachComments(ast, comments, tokens);
   ast = normalizeAst(ast, comments, tokens);
   return ast;
-}
-
-export function all(code, opts = {}) {
-  opts.allowHashBang = true;
-  opts.sourceType = "module";
-  opts.ecmaVersion = Infinity;
-  opts.plugins = {
-    flow: true,
-    jsx:  true
-  };
-  opts.features = {};
-
-  for (var key in transform.pipeline.transformers) {
-    opts.features[key] = true;
-  }
-
-  return acorn.parse(code, opts);
 }

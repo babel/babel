@@ -4,7 +4,7 @@ import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
 import codeFrame from "../../helpers/code-frame";
-import { all as parse } from "../../helpers/parse";
+import parse from "../../helpers/parse";
 import traverse from "../index";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
