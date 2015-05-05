@@ -84,9 +84,11 @@ module.exports = function (commander, filenames, opts) {
             if (fs.existsSync(dest + '.map'))
               fs.unlink(dest + '.map');
           } else {
+            var statsMtime;
+            if (stats) statsMtime = stats.mtime.getTime();
             var mtime = cache[filename];
-            if (!mtime || !stats || mtime !== stats.mtime.getTime()) {
-              cache[filename] = stats.mtime.getTime();
+            if (!mtime || mtime !== statsMtime) {
+              cache[filename] = statsMtime;
               try {
                 handleFile(filename, relative);
               } catch (err) {
