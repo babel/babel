@@ -82,10 +82,6 @@ each(filenames, function (filename) {
   }
 });
 
-if (commander.outDir && !filenames.length) {
-  errors.push("filenames required for --out-dir");
-}
-
 if (commander.outFile && commander.outDir) {
   errors.push("cannot have --out-file and --out-dir");
 }
@@ -96,7 +92,7 @@ if (commander.watch) {
   }
 
   if (!filenames.length) {
-    errors.push("--watch requires filenames");
+    console.log("warning: --watch specified but no files to build yet...");
   }
 }
 

@@ -1,10 +1,12 @@
 var convertSourceMap = require("convert-source-map");
 var sourceMap        = require("source-map");
 var chokidar         = require("chokidar");
+var glob             = require("glob");
 var path             = require("path");
 var util             = require("./util");
 var fs               = require("fs");
 var _                = require("lodash");
+
 
 module.exports = function (commander, filenames, opts) {
   if (commander.sourceMaps === "inline") {
@@ -92,7 +94,7 @@ module.exports = function (commander, filenames, opts) {
     });
   };
 
-  var walk = function () {
+  var walk = function (filenames) {
     var _filenames = [];
     results = [];
 
@@ -121,19 +123,32 @@ module.exports = function (commander, filenames, opts) {
   };
 
   var files = function () {
-    walk();
+    walk(filenames);
 
     if (commander.watch) {
-      chokidar.watch(filenames, {
+      var cache = {};
+
+      chokidar.watch(commander.args, {
         persistent: true,
         ignoreInitial: true
-      }).on("all", function (type, filename) {
-        if (type === "add" || type === "change") {
-          console.log(type, filename);
-          try {
-            walk();
-          } catch (err) {
-            console.error(err.stack);
+      }).on("all", function (type, filename, stats) {
+        if (type === "add" || type === "change" || type === 'unlink') {
+          var statsMtime;
+          // no stats with unlink
+          if (stats) statsMtime = stats.mtime.getTime();
+
+          var mtime = cache[filename];
+          if (!mtime || !stats || mtime !== statsMtime) {
+            cache[filename] = statsMtime;
+            console.log(type, filename);
+            try {
+              var files = commander.args.reduce(function (globbed, input) {
+                return globbed.concat(glob.sync(input));
+              }, []);
+              walk(files);
+            } catch (err) {
+              console.error(err.stack);
+            }
           }
         }
       });

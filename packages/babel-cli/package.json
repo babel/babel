@@ -13,6 +13,7 @@
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^0.1.0",
     "glob": "^5.0.5",
+    "glob-parent": "^1.2.0",
     "lodash": "^3.2.0",
     "output-file-sync": "^1.1.0",
     "path-is-absolute": "^1.0.0",
