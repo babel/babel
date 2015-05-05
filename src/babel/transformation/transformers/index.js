@@ -1,6 +1,4 @@
 export default {
-  _modules:                                require("./internal/modules"),
-
   "utility.removeDebugger":                require("./utility/remove-debugger"),
   "utility.removeConsole":                 require("./utility/remove-console"),
 
@@ -8,6 +6,8 @@ export default {
   "utility.inlineExpressions":             require("./utility/inline-expressions"),
 
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
+
+  _modules:                                require("./internal/modules"),
 
   "es7.classProperties":                   require("./es7/class-properties"),
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
