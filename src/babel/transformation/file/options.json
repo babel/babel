@@ -30,7 +30,6 @@
   },
 
   "retainLines": {
-    "hidden": true,
     "type": "boolean",
     "default": false,
     "description": "retain line numbers - will result in really ugly code"
