@@ -15,7 +15,7 @@ export default class Binding {
    * Description
    */
 
-   setTypeAnnotation() {
+  setTypeAnnotation() {
     var typeInfo = this.path.getTypeAnnotation();
     this.typeAnnotationInferred = typeInfo.inferred;
     this.typeAnnotation         = typeInfo.annotation;

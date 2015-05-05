@@ -1,5 +1,6 @@
 import callDelegate from "../../helpers/call-delegate";
 import * as util from  "../../../util";
+import traverse from  "../../../traversal";
 import * as t from "../../../types";
 
 export function shouldVisit(node) {
@@ -13,16 +14,15 @@ var hasDefaults = function (node) {
   return false;
 };
 
-var iifeVisitor = {
-  enter(node, parent, scope, state) {
-    if (!this.isReferencedIdentifier()) return;
+var iifeVisitor = traverse.explode({
+  ReferencedIdentifier(node, parent, scope, state) {
     if (!state.scope.hasOwnBinding(node.name)) return;
     if (state.scope.bindingIdentifierEquals(node.name, node)) return;
 
     state.iife = true;
     this.stop();
   }
-};
+});
 
 exports.Function = function (node, parent, scope, file) {
   if (!hasDefaults(node)) return;

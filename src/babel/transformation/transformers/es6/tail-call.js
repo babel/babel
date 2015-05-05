@@ -1,6 +1,7 @@
 import reduceRight from "lodash/collection/reduceRight";
 import * as messages from "../../../messages";
 import flatten from "lodash/array/flatten";
+import traverse from "../../../traversal";
 import * as util from  "../../../util";
 import map from "lodash/collection/map";
 import * as t from "../../../types";
@@ -16,54 +17,61 @@ function returnBlock(expr) {
 }
 
 // looks for and replaces tail recursion calls
-var firstPass = {
+var firstPass = traverse.explode({
   enter(node, parent, scope, state) {
-    if (this.isReturnStatement()) {
-      this.skip();
-      return state.subTransform(node.argument);
-    } else if (t.isTryStatement(parent)) {
+    if (t.isTryStatement(parent)) {
       if (node === parent.block) {
         this.skip();
       } else if (parent.finalizer && node !== parent.finalizer) {
         this.skip();
       }
-    } else if (this.isFunction()) {
-      this.skip();
-    } else if (this.isVariableDeclaration()) {
-      this.skip();
-      state.vars.push(node);
     }
+  },
+
+  ReturnStatement(node, parent, scope, state) {
+    this.skip();
+    return state.subTransform(node.argument);
+  },
+
+  Function(node, parent, scope, state) {
+    this.skip();
+  },
+
+  VariableDeclaration(node, parent, scope, state) {
+    this.skip();
+    state.vars.push(node);
   }
-};
+});
 
 // hoists up function declarations, replaces `this` and `arguments` and marks
 // them as needed
-var secondPass = {
-  enter(node, parent, scope, state) {
-    if (this.isThisExpression()) {
-      state.needsThis = true;
-      return state.getThisId();
-    } else if (this.isReferencedIdentifier({ name: "arguments" })) {
-      state.needsArguments = true;
-      return state.getArgumentsId();
-    } else if (this.isFunction()) {
-      this.skip();
-      if (this.isFunctionDeclaration()) {
-        node = t.variableDeclaration("var", [
-          t.variableDeclarator(node.id, t.toExpression(node))
-        ]);
-        node._blockHoist = 2;
-        return node;
-      }
+var secondPass = traverse.explode({
+  ThisExpression(node, parent, scope, state) {
+    state.needsThis = true;
+    return state.getThisId();
+  },
+
+  ReferencedIdentifier(node, parent, scope, state) {
+    if (node.name !== "arguments") return;
+    state.needsArguments = true;
+    return state.getArgumentsId();
+  },
+
+  Function(node, parent, scope, state) {
+    this.skip();
+    if (this.isFunctionDeclaration()) {
+      node = t.variableDeclaration("var", [
+        t.variableDeclarator(node.id, t.toExpression(node))
+      ]);
+      node._blockHoist = 2;
+      return node;
     }
   }
-};
+});
 
 // optimizes recursion by removing `this` and `arguments` if they aren't used
-var thirdPass = {
-  enter(node, parent, scope, state) {
-    if (!this.isExpressionStatement()) return;
-
+var thirdPass = traverse.explode({
+  ExpressionStatement(node, parent, scope, state) {
     var expr = node.expression;
     if (!t.isAssignmentExpression(expr)) return;
 
@@ -75,7 +83,7 @@ var thirdPass = {
       });
     }
   }
-};
+});
 
 class TailCallTransformer {
   constructor(path, scope, file) {

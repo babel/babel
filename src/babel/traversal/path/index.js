@@ -1,10 +1,12 @@
 import PathHoister from "./hoister";
+import * as virtualTypes from "./virtual-types";
 import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
 import codeFrame from "../../helpers/code-frame";
 import parse from "../../helpers/parse";
+import { explode } from "../visitors";
 import traverse from "../index";
 import includes from "lodash/collection/includes";
 import assign from "lodash/object/assign";
@@ -12,33 +14,33 @@ import extend from "lodash/object/extend";
 import Scope from "../scope";
 import * as t from "../../types";
 
-var hoistVariablesVisitor = {
-  enter(node, parent, scope) {
-    if (this.isFunction()) {
-      return this.skip();
-    }
+var hoistVariablesVisitor = explode({
+  Function() {
+    this.skip();
+  },
 
-    if (this.isVariableDeclaration() && node.kind === "var") {
+  VariableDeclaration(node, parent, scope) {
+    if (node.kind !== "var") return;
+
       var bindings = this.getBindingIdentifiers();
-      for (var key in bindings) {
-        scope.push({ id: bindings[key] });
-      }
-
-      var exprs = [];
-
-      for (var i = 0; i < node.declarations.length; i++) {
-        var declar = node.declarations[i];
-        if (declar.init) {
-          exprs.push(t.expressionStatement(
-            t.assignmentExpression("=", declar.id, declar.init)
-          ));
-        }
-      }
-
-      return exprs;
+    for (var key in bindings) {
+      scope.push({ id: bindings[key] });
     }
+
+    var exprs = [];
+
+    for (var i = 0; i < node.declarations.length; i++) {
+      var declar = node.declarations[i];
+      if (declar.init) {
+        exprs.push(t.expressionStatement(
+          t.assignmentExpression("=", declar.id, declar.init)
+        ));
+      }
+    }
+
+    return exprs;
   }
-};
+});
 
 export default class TraversalPath {
   constructor(parent, container) {
@@ -942,46 +944,6 @@ export default class TraversalPath {
    * Description
    */
 
-  isScope(): boolean {
-    return t.isScope(this.node, this.parent);
-  }
-
-  /**
-   * Description
-   */
-
-  isReferencedIdentifier(opts): boolean {
-    return t.isReferencedIdentifier(this.node, this.parent, opts);
-  }
-
-  /**
-   * Description
-   */
-
-  isReferenced(): boolean {
-    return t.isReferenced(this.node, this.parent);
-  }
-
-  /**
-   * Description
-   */
-
-  isBlockScoped(): boolean {
-    return t.isBlockScoped(this.node);
-  }
-
-  /**
-   * Description
-   */
-
-  isVar(): boolean {
-    return t.isVar(this.node);
-  }
-
-  /**
-   * Description
-   */
-
   isPreviousType(type: string): boolean {
     return t.isType(this.type, type);
   }
@@ -1096,8 +1058,15 @@ export default class TraversalPath {
 assign(TraversalPath.prototype, require("./evaluation"));
 assign(TraversalPath.prototype, require("./conversion"));
 
-for (var i = 0; i < t.TYPES.length; i++) {
-  let type = t.TYPES[i];
+for (let type in virtualTypes) {
+  if (type[0] === "_") continue;
+
+  TraversalPath.prototype[`is${type}`] = function (opts) {
+    return virtualTypes[type].checkPath(this, opts);
+  };
+}
+
+for (let type of (t.TYPES: Array)) {
   let typeKey = `is${type}`;
   TraversalPath.prototype[typeKey] = function (opts) {
     return t[typeKey](this.node, opts);

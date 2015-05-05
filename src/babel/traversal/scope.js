@@ -65,33 +65,34 @@ var programReferenceVisitor = explode({
   }
 });
 
-var blockVariableVisitor = {
+var blockVariableVisitor = explode({
+  Scope() {
+    this.skip();
+  },
+
   enter(node, parent, scope, state) {
     if (this.isFunctionDeclaration() || this.isBlockScoped()) {
       state.registerDeclaration(this);
     }
-    if (this.isScope()) {
-      this.skip();
-    }
   }
-};
+});
 
 var renameVisitor = explode({
-  Identifier(node, parent, scope, state) {
-    if (this.isReferenced() && node.name === state.oldName) {
-      if (this.parentPath.isProperty() && this.key === "key" && parent.shorthand) {
-        var value = t.identifier(state.newName);;
+  ReferencedIdentifier(node, parent, scope, state) {
+    if (node.name !== state.oldName) return;
 
-        if (parent.value === state.binding) {
-          state.info.identifier = state.binding = value;
-        }
+    if (this.parentPath.isProperty() && this.key === "key" && parent.shorthand) {
+      var value = t.identifier(state.newName);;
 
-        parent.shorthand = false;
-        parent.value = value;
-        parent.key = t.identifier(state.oldName);
-      } else {
-        node.name = state.newName;
+      if (parent.value === state.binding) {
+        state.info.identifier = state.binding = value;
       }
+
+      parent.shorthand = false;
+      parent.value = value;
+      parent.key = t.identifier(state.oldName);
+    } else {
+      node.name = state.newName;
     }
   },
 

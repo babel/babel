@@ -19,7 +19,7 @@ var awaitVisitor = {
 var referenceVisitor = {
   enter(node, parent, scope, state) {
     var name = state.id.name;
-    if (t.isReferencedIdentifier(node, parent, { name: name }) && scope.bindingIdentifierEquals(name, state.id)) {
+    if (this.isReferencedIdentifier({ name: name }) && scope.bindingIdentifierEquals(name, state.id)) {
       return state.ref = state.ref || scope.generateUidIdentifier(name);
     }
   }

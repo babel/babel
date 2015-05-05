@@ -1,8 +1,8 @@
+import traverse from "../../../traversal";
 import * as t from "../../../types";
 
-var visitor = {
-  enter(node, parent, scope, state) {
-    if (!this.isReferencedIdentifier()) return;
+var visitor = traverse.explode({
+  ReferencedIdentifier(node, parent, scope, state) {
     if (t.isFor(parent) && parent.left === node) return;
 
     var declared = state.letRefs[node.name];
@@ -25,7 +25,7 @@ var visitor = {
       return t.logicalExpression("&&", assert, node);
     }
   }
-};
+});
 
 export var metadata = {
   optional: true
