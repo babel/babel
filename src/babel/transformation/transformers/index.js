@@ -1,5 +1,12 @@
 export default {
   _modules:                                require("./internal/modules"),
+
+  "utility.removeDebugger":                require("./utility/remove-debugger"),
+  "utility.removeConsole":                 require("./utility/remove-console"),
+
+  "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
+  "utility.inlineExpressions":             require("./utility/inline-expressions"),
+
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
 
   "es7.classProperties":                   require("./es7/class-properties"),
@@ -108,12 +115,6 @@ export default {
 
   "es3.propertyLiterals":                  require("./es3/property-literals"),
   "es3.memberExpressionLiterals":          require("./es3/member-expression-literals"),
-
-  "utility.removeDebugger":                require("./utility/remove-debugger"),
-  "utility.removeConsole":                 require("./utility/remove-console"),
-
-  "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
-  "utility.inlineExpressions":             require("./utility/inline-expressions"),
 
   "minification.memberExpressionLiterals": require("./minification/member-expression-literals"),
   "minification.propertyLiterals":         require("./minification/property-literals"),
