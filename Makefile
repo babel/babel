@@ -102,7 +102,7 @@ publish:
 	make publish-cli
 	make publish-runtime
 
-	rm -rf templates.json browser.js browser.min.js browser-polyfill.js browser-poolyfill.min.js external-helpers.js external-helpers.min.js
+	rm -rf templates.json browser.js browser.min.js browser-polyfill.js browser-polyfill.min.js external-helpers.js external-helpers.min.js
 
 publish-runtime:
 	cd packages; \
