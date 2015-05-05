@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.13
+
+ * **Bug Fix**
+  * Fix `ExportDeclaration`s being incorrectly removed when using the `utility.deadCodeElimination` transformer.
+  * Fix position of `utility` transformers.
+ * **New Feature**
+  * Add built-in `esquery` support.
+ * **Internal**
+  * Consolidate notion of "virtual types".
+
 ## 5.2.12
 
  * **Polish**
