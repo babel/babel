@@ -28,8 +28,9 @@
 
     if (descriptor.initializer) {
       descriptor.value = descriptor.initializer.call(target);
-      Object.defineProperty(target, key, descriptor);
     }
+
+    Object.defineProperty(target, key, descriptor);
   }
 
   return target;
