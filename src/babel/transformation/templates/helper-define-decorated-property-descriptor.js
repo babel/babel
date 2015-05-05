@@ -1,5 +1,6 @@
 (function (target, key, descriptors) {
   var _descriptor = descriptors[key];
+  if (!_descriptor) return;
 
   // clone it
   var descriptor = {};
