@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.14
+
+ * **Bug Fix**
+  * Fix bug with initializer decorators where the descriptors weren't being defined if there was no `initializer` property.
+ * **Internal**
+  * Expose `retainLines` option to CLI.
+  * Fix `retainLines` option not being taken into consideration when doing multiple variable declaration declarators generation.
+  * Expose minified and unminified copies of dist scripts.
+
 ## 5.2.13
 
  * **Bug Fix**
