@@ -95,6 +95,22 @@ export default class TraversalPath {
    * Description
    */
 
+  getAncestry() {
+    var ancestry = [];
+
+    var path = this.parentPath;
+    while (path) {
+      ancestry.push(path.node);
+      path = path.parentPath;
+    }
+
+    return ancestry;
+  }
+
+  /**
+   * Description
+   */
+
   queueNode(path) {
     if (this.context) {
       this.context.queue.push(path);
@@ -664,7 +680,7 @@ export default class TraversalPath {
     if (!node) return;
 
     var opts = this.opts;
-    var fns  = [opts[key]];
+    var fns  = [].concat(opts[key]);
 
     if (opts[node.type]) {
       fns = fns.concat(opts[node.type][key]);

@@ -1,22 +1,21 @@
 import * as virtualTypes from "./path/virtual-types";
 import * as messages from "../messages";
 import * as t from "../types";
+import esquery from "esquery";
 
 export function explode(visitor, mergeConflicts) {
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
   delete visitor.__esModule;
 
-  // ensure visitors are objects
-  for (let nodeType in visitor) {
-    if (shouldIgnoreKey(nodeType)) continue;
-
-    var fns = visitor[nodeType];
-
-    if (typeof fns === "function") {
-      visitor[nodeType] = { enter: fns };
-    }
+  if (visitor.queries) {
+    ensureEntranceObjects(visitor.queries);
+    addQueries(visitor);
+    delete visitor.queries;
   }
+
+  // ensure visitors are objects
+  ensureEntranceObjects(visitor);
 
   // add type wrappers
   for (let nodeType in visitor) {
@@ -62,7 +61,7 @@ export function explode(visitor, mergeConflicts) {
       var existing = visitor[alias];
       if (existing) {
         if (mergeConflicts) {
-          merge(fns, existing);
+          merge(existing, fns);
         }
       } else {
         visitor[alias] = fns;
@@ -106,6 +105,39 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
+function ensureEntranceObjects(obj) {
+  for (let key in obj) {
+    if (shouldIgnoreKey(key)) continue;
+
+    var fns = obj[key];
+    if (typeof fns === "function") {
+      obj[key] = { enter: fns };
+    }
+  }
+}
+
+function addQueries(visitor) {
+  for (var selector in visitor.queries) {
+    var fns = visitor.queries[selector];
+    addSelector(visitor, selector, fns);
+  }
+}
+
+function addSelector(visitor, selector, fns) {
+  selector = esquery.parse(selector);
+
+  for (var key in fns) {
+    let fn = fns[key];
+    fns[key] = function (node) {
+      if (esquery.matches(node, selector, this.getAncestry())) {
+        return fn.apply(this, arguments);
+      }
+    };
+  }
+
+  merge(visitor, fns);
+}
+
 function wrapCheck(wrapper, fn) {
   return function () {
     if (wrapper.checkPath(this)) {
@@ -127,8 +159,8 @@ function shouldIgnoreKey(key) {
   return false;
 }
 
-function merge(visitor1, visitor2) {
-  for (var key in visitor1) {
-    visitor2[key] = (visitor2[alias] || []).concat(visitor1[key]);
+function merge(dest, src) {
+  for (var key in src) {
+    dest[key] = (dest[key] || []).concat(src[key]);
   }
 }

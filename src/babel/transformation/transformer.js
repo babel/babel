@@ -44,7 +44,7 @@ export default class Transformer {
 
     //
 
-    if (!this.shouldVisit) {
+    if (!this.shouldVisit && !this.handlers.enter && !this.handlers.exit) {
       var types = Object.keys(this.handlers);
       this.shouldVisit = function (node) {
         for (var i = 0; i < types.length; i++) {
