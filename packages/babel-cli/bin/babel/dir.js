@@ -1,6 +1,6 @@
 var outputFileSync = require("output-file-sync");
 var chokidar       = require("chokidar");
-var globparent     = require('glob-parent');
+var globparent     = require("glob-parent");
 var path           = require("path");
 var util           = require("./util");
 var fs             = require("fs");
@@ -12,7 +12,7 @@ module.exports = function (commander, filenames, opts) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
     return path.join(commander.outDir, relative);
-  }
+  };
 
   var write = function (src, relative) {
     var dest = destFilePath(relative);
@@ -75,14 +75,14 @@ module.exports = function (commander, filenames, opts) {
         watcher.on(type, function (filename, stats) {
           var relative = path.relative(globroot, filename) || filename;
 
-          if (type === 'unlink') {
+          if (type === "unlink") {
             cache[filename] = undefined;
             var dest = destFilePath(relative);
-            console.log('unlink %s', dest);
-            if (fs.existsSync(dest)) 
+            console.log("unlink %s", dest);
+            if (fs.existsSync(dest))
               fs.unlink(dest);
-            if (fs.existsSync(dest + '.map'))
-              fs.unlink(dest + '.map');
+            if (fs.existsSync(dest + ".map"))
+              fs.unlink(dest + ".map");
           } else {
             var statsMtime;
             if (stats) statsMtime = stats.mtime.getTime();

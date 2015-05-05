@@ -132,7 +132,7 @@ module.exports = function (commander, filenames, opts) {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename, stats) {
-        if (type === "add" || type === "change" || type === 'unlink') {
+        if (type === "add" || type === "change" || type === "unlink") {
           var statsMtime;
           // no stats with unlink
           if (stats) statsMtime = stats.mtime.getTime();
