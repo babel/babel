@@ -1,5 +1,5 @@
 import includes from "lodash/collection/includes";
-import explode from "./explode";
+import { explode } from "./visitors";
 import traverse from "./index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../messages";
@@ -38,26 +38,32 @@ var functionVariableVisitor = {
   }
 };
 
-var programReferenceVisitor = {
-  enter(node, parent, scope, state) {
-    if (t.isReferencedIdentifier(node, parent)) {
-      var bindingInfo = scope.getBinding(node.name);
-      if (bindingInfo) {
-        bindingInfo.reference();
-      } else {
-        state.addGlobal(node);
-      }
-    } else if (t.isLabeledStatement(node)) {
+var programReferenceVisitor = explode({
+  ReferencedIdentifier(node, parent, scope, state) {
+    var bindingInfo = scope.getBinding(node.name);
+    if (bindingInfo) {
+      bindingInfo.reference();
+    } else {
       state.addGlobal(node);
-    } else if (t.isAssignmentExpression(node)) {
-      scope.registerConstantViolation(this.get("left"), this.get("right"));
-    } else if (t.isUpdateExpression(node)) {
-      scope.registerConstantViolation(this.get("argument"), null);
-    } else if (t.isUnaryExpression(node) && node.operator === "delete") {
-      scope.registerConstantViolation(this.get("left"), null);
     }
+  },
+
+  LabeledStatement(node, parent, scope, state) {
+    state.addGlobal(node);
+  },
+
+  AssignmentExpression(node, parent, scope, state) {
+    scope.registerConstantViolation(this.get("left"), this.get("right"));
+  },
+
+  UpdateExpression(node, parent, scope, state) {
+    scope.registerConstantViolation(this.get("argument"), null);
+  },
+
+  UnaryExpression(node, parent, scope, state) {
+    if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
   }
-};
+});
 
 var blockVariableVisitor = {
   enter(node, parent, scope, state) {

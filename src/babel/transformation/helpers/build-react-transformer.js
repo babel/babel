@@ -10,7 +10,7 @@ import * as react from "./react";
 import * as t from "../../types";
 
 export default function (exports, opts) {
-  exports.check = function (node) {
+  exports.shouldVisit = function (node) {
     if (t.isJSX(node)) return true;
     if (react.isCreateClass(node)) return true;
     return false;

@@ -662,12 +662,21 @@ export default class TraversalPath {
     if (!node) return;
 
     var opts = this.opts;
-    var fn   = opts[key] || opts;
-    if (opts[node.type]) fn = opts[node.type][key] || fn;
+    var fns  = [opts[key]];
 
-    // call the function with the params (node, parent, scope, state)
-    var replacement = fn.call(this, node, this.parent, this.scope, this.state);
-    if (replacement) this.replaceWith(replacement, true);
+    if (opts[node.type]) {
+      fns = fns.concat(opts[node.type][key]);
+    }
+
+    for (var fn of (fns: Array)) {
+      if (!fn) continue;
+
+      // call the function with the params (node, parent, scope, state)
+      var replacement = fn.call(this, node, this.parent, this.scope, this.state);
+      if (replacement) this.replaceWith(replacement, true);
+
+      if (this.shouldStop) break;
+    }
   }
 
   /**

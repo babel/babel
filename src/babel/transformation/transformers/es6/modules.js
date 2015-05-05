@@ -1,6 +1,6 @@
 import * as t from "../../../types";
 
-export { check } from "../internal/modules";
+export { shouldVisit } from "../internal/modules";
 
 function keepBlockHoist(node, nodes) {
   if (node._blockHoist) {

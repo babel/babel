@@ -23,10 +23,12 @@ export const MESSAGES = {
   missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
+
   traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
-  traverseVerifyVisitorFunction: "Hey! You passed \`traverse()\` a visitor object with the key $1 that's a straight up `Function` instead of `{ enter: Function }`. You need to normalise it with `traverse.explode(visitor)`.",
+  traverseVerifyVisitorFunction: "You passed \`traverse()\` a visitor object with the key $1 that's a `Function` instead of `{ enter: Function }`. You need to normalise your visitor with `traverse.explode(visitor)`.",
   traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
+  traverseVerifyNodeType: "You gave us a visitor for the node type $1 but it's not a valid type",
 
   pluginIllegalKind: "Illegal kind $1 for plugin $2",
   pluginIllegalPosition: "Illegal position $1 for plugin $2",
