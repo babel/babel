@@ -48,6 +48,17 @@ var programReferenceVisitor = explode({
     }
   },
 
+  ExportDeclaration(node, parent, scope, state) {
+    var declar = node.declaration;
+    if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
+      scope.getBinding(declar.id.name).reference();
+    } else if (t.isVariableDeclaration(declar)) {
+      for (var decl of (declar.declarations: Array)) {
+        scope.getBinding(decl.id.name).reference();
+      }
+    }
+  },
+
   LabeledStatement(node, parent, scope, state) {
     state.addGlobal(node);
   },
