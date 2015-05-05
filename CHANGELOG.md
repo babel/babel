@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.15
+
+ * **Bug Fix**
+  * Fix initializer descriptor add attempt if it doesn't exist.
+
 ## 5.2.14
 
  * **Bug Fix**
