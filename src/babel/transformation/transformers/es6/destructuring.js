@@ -63,6 +63,7 @@ exports.Function = function (node, parent, scope, file) {
 
     hasDestructuring = true;
     var ref = scope.generateUidIdentifier("ref");
+    t.inherits(ref, pattern);
 
     var destructuring = new DestructuringTransformer({
       blockHoist: node.params.length - i,
