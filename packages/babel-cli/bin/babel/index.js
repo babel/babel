@@ -4,12 +4,12 @@ var moduleFormatters = require("babel-core/lib/babel/transformation/modules");
 var commander        = require("commander");
 var transform        = require("babel-core").transform;
 var kebabCase        = require("lodash/string/kebabCase");
+var globParent       = require("glob-parent");
 var options          = require("babel-core").options;
 var util             = require("babel-core").util;
 var each             = require("lodash/collection/each");
 var keys             = require("lodash/object/keys");
 var fs               = require("fs");
-var glob             = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
@@ -35,7 +35,7 @@ each(options, function (option, key) {
   if (option.description) desc.push(option.description);
 
   commander.option(arg, desc.join(" "));
-})
+});
 
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
@@ -72,8 +72,8 @@ commander.parse(process.argv);
 
 var errors = [];
 
-var filenames = commander.args.reduce(function (globbed, input) {
-  return globbed.concat(glob.sync(input));
+var filenames = commander.args.reduce(function (parent, input) {
+  return parent.concat(globParent(input));
 }, []);
 
 each(filenames, function (filename) {
@@ -120,4 +120,4 @@ if (commander.outDir) {
   fn = require("./file");
 }
 
-fn(commander, filenames, exports.opts);
+fn(commander, exports.opts);

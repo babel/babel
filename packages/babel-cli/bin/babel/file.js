@@ -8,7 +8,7 @@ var fs               = require("fs");
 var _                = require("lodash");
 
 
-module.exports = function (commander, filenames, opts) {
+module.exports = function (commander, opts) {
   if (commander.sourceMaps === "inline") {
     opts.sourceMaps = true;
   }
@@ -94,23 +94,27 @@ module.exports = function (commander, filenames, opts) {
     });
   };
 
-  var walk = function (filenames) {
+  var walk = function () {
     var _filenames = [];
     results = [];
 
-    _.each(filenames, function (filename) {
-      if (!fs.existsSync(filename)) return;
+    _.each(commander.args, function (arg) {
+      var filenames = glob.sync(arg);
 
-      var stat = fs.statSync(filename);
-      if (stat.isDirectory()) {
-        var dirname = filename;
+      _.each(filenames, function (filename) {
+        if (!fs.existsSync(filename)) return;
 
-        _.each(util.readdirFilter(filename), function (filename) {
-          _filenames.push(path.join(dirname, filename));
-        });
-      } else {
-        _filenames.push(filename);
-      }
+        var stat = fs.statSync(filename);
+        if (stat.isDirectory()) {
+          var dirname = filename;
+
+          _.each(util.readdirFilter(filename), function (filename) {
+            _filenames.push(path.join(dirname, filename));
+          });
+        } else {
+          _filenames.push(filename);
+        }
+      });
     });
 
     _.each(_filenames, function (filename) {
@@ -123,7 +127,7 @@ module.exports = function (commander, filenames, opts) {
   };
 
   var files = function () {
-    walk(filenames);
+    walk();
 
     if (commander.watch) {
       var cache = {};
@@ -142,10 +146,7 @@ module.exports = function (commander, filenames, opts) {
             cache[filename] = statsMtime;
             console.log(type, filename);
             try {
-              var files = commander.args.reduce(function (globbed, input) {
-                return globbed.concat(glob.sync(input));
-              }, []);
-              walk(files);
+              walk();
             } catch (err) {
               console.error(err.stack);
             }
@@ -155,7 +156,7 @@ module.exports = function (commander, filenames, opts) {
     }
   };
 
-  if (filenames.length) {
+  if (commander.args.length) {
     files();
   } else {
     stdin();

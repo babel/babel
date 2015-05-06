@@ -1,17 +1,18 @@
 var outputFileSync = require("output-file-sync");
 var chokidar       = require("chokidar");
-var globparent     = require("glob-parent");
+var globParent     = require("glob-parent");
 var path           = require("path");
 var util           = require("./util");
+var glob           = require("glob");
 var fs             = require("fs");
 var _              = require("lodash");
 
-module.exports = function (commander, filenames, opts) {
+module.exports = function (commander, opts) {
 
-  var destFilePath = function(relative) {
+  var destFilePath = function(filename) {
     // remove extension and then append back on .js
-    relative = relative.replace(/\.(\w*?)$/, "") + ".js";
-    return path.join(commander.outDir, relative);
+    filename = filename.replace(/\.(\w*?)$/, "") + ".js";
+    return path.join(commander.outDir, filename);
   };
 
   var write = function (src, relative) {
@@ -42,25 +43,30 @@ module.exports = function (commander, filenames, opts) {
     }
   };
 
-  var handle = function (filename) {
-    if (!fs.existsSync(filename)) return;
+  // first pass compile
+  _.each(commander.args, function(arg) {
+    var root = globParent(arg);
+    var filenames = glob.sync(arg);
 
-    var stat = fs.statSync(filename);
+    _.each(filenames, function(filename) {
 
-    if (stat.isDirectory(filename)) {
-      var dirname = filename;
+      var stat = fs.statSync(filename);
 
-      _.each(util.readdir(dirname), function (filename) {
-        var src = path.join(dirname, filename);
-        handleFile(src, filename);
-      });
-    } else {
-      write(filename, filename);
-    }
-  };
+      if (stat.isDirectory(filename)) {
+        var dirname = filename;
 
-  _.each(filenames, handle);
+        _.each(util.readdir(dirname), function (filename) {
+          var src = path.join(dirname, filename);
+          handleFile(src, filename);
+        });
+      } else {
+        var relative = path.relative(root, filename) || filename;
+        handleFile(filename, relative);
+      }
+    });
+  });
 
+  // setup watch
   if (commander.watch) {
     var cache = {};
 
@@ -70,10 +76,10 @@ module.exports = function (commander, filenames, opts) {
         ignoreInitial: true
       });
 
-      var globroot = globparent(glob);
+      var root = globParent(glob);
       _.each(["add", "change", "unlink"], function (type) {
         watcher.on(type, function (filename, stats) {
-          var relative = path.relative(globroot, filename) || filename;
+          var relative = path.relative(root, filename) || filename;
 
           if (type === "unlink") {
             cache[filename] = undefined;
