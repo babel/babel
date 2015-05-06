@@ -26,7 +26,7 @@ export function push(mutatorMap, node, kind, file) {
 
   if (node.decorators) {
     var decorators = map.decorators = map.decorators || t.arrayExpression([]);
-    decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression));
+    decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression).reverse());
   }
 
   if (map.value || map.initializer) {
