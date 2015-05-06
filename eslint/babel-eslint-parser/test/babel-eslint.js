@@ -2,45 +2,32 @@ var babelEslint = require("..");
 var espree      = require("espree");
 var util        = require("util");
 
-function assertSameAST(a, b, path) {
+// Checks if the source ast implements the target ast. Ignores extra keys on source ast
+function assertImplementsAST(target, source, path) {
   if (!path) {
     path = [];
   }
 
   function error(text) {
-    throw new Error("At " + path.join(".") + ": " + text + ":\n" + util.inspect(a) + "\n" + util.inspect(b));
+    var err = new Error("At " + path.join(".") + ": " + text + ":");
+    err.depth = path.length + 1;
+    throw err;
   }
 
-  var typeA = a === null ? "null" : typeof a;
-  var typeB = b === null ? "null" : typeof b;
+  var typeA = target === null ? "null" : typeof target;
+  var typeB = source === null ? "null" : typeof source;
   if (typeA !== typeB) {
-    error("have not the same type (" + typeA + " !== " + typeB + ")");
+    error("have different types (" + typeA + " !== " + typeB + ")");
   } else if (typeA === "object") {
-    var keysA = Object.keys(a);
-    var keysB = Object.keys(b);
-    keysA.sort();
-    keysB.sort();
-    while (true) {
-      var keyA = keysA.shift();
-      if (keyA && keyA[0] === "_") continue;
-
-      // Exception: ignore "end" and "start" outside "loc" properties
-      if ((keyA === "end" || keyA === "start") && path[path.length - 1] !== "loc") continue;
-      
-      // Exception: ignore root "comments" property
-      if (keyA === "comments" && path.length === 0) continue;
-
-      var keyB = keysB.shift();
-
-      if (keyA === undefined && keyB === undefined) break;
-      if (keyA === undefined || keyA > keyB) error('first does not have key "' + keyB + '"');
-      if (keyB === undefined || keyA < keyB) error('second does not have key "' + keyA + '"');
-      path.push(keyA);
-      assertSameAST(a[keyA], b[keyB], path);
+    var keysTarget = Object.keys(target);
+    for(var i in keysTarget) {
+      var key = keysTarget[i];
+      path.push(key);
+      assertImplementsAST(target[key], source[key], path);
       path.pop();
     }
-  } else if (a !== b) {
-    error("are different (" + JSON.stringify(a) + " !== " + JSON.stringify(b) + ")");
+  } else if (target !== source) {
+    error("are different (" + JSON.stringify(target) + " !== " + JSON.stringify(source) + ")");
   }
 }
 
@@ -53,10 +40,21 @@ function parseAndAssertSame(code) {
     },
     tokens: true,
     loc: true,
-    range: true
+    range: true,
+    comment: true,
+    attachComment: true
   });
   var acornAST = babelEslint.parse(code);
-  assertSameAST(acornAST, esAST);
+  try {
+    assertImplementsAST(esAST, acornAST);
+  } catch(err) {
+    err.message +=
+      "\nespree:\n" +
+      util.inspect(esAST, {depth: err.depth}) +
+      "\nbabel-eslint:\n" +
+      util.inspect(acornAST, {depth: err.depth});
+    throw err;
+  }
 }
 
 describe("acorn-to-esprima", function () {
@@ -130,5 +128,32 @@ describe("acorn-to-esprima", function () {
 
   it("export named alias", function () {
     parseAndAssertSame("export { foo as bar };");
+  });
+
+  it("empty program with line comment", function () {
+    parseAndAssertSame("// single comment");
+  });
+
+  it("empty program with block comment", function () {
+    parseAndAssertSame("  /* multiline\n * comment\n*/");
+  });
+
+  it("line comments", function () {
+    parseAndAssertSame([
+      "  // single comment",
+      "var foo = 15; // comment next to statement",
+      "// second comment after statement"
+    ].join("\n"));
+  });
+
+  it("block comments", function () {
+    parseAndAssertSame([
+      "  /* single comment */ ",
+      "var foo = 15; /* comment next to statement */",
+      "/*",
+      " * multiline",
+      " * comment",
+      " */"
+    ].join("\n"));
   });
 });
