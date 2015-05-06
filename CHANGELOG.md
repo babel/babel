@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.16
+
+ * **Bug Fix**
+  * Fix plugins being disabled when using the whitelist.
+  * Fix correct function scope being passed to `nameMethod.property` when inferring the function name for class methods.
+  * Fix incorrect extensions reference causing weird issues when using the Babel CLI.
+  * Fix destructuring param reference replacements not inheriting from their original param.
+ * **Spec Compliancy**
+  * Fix order that method decorators are ran in.
+
 ## 5.2.15
 
  * **Bug Fix**
