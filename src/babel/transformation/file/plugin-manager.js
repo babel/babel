@@ -57,6 +57,9 @@ export default class PluginManager {
     if (!plugin.buildPass || plugin.constructor.name !== "Transformer") {
       throw new TypeError(messages.get("pluginNotTransformer", name));
     }
+
+    // register as a plugin
+    plugin.metadata.plugin = true;
   }
 
   add(name) {

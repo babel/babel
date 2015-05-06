@@ -47,6 +47,8 @@ export default class TransformerPipeline {
   }
 
   canTransform(transformer, fileOpts) {
+    if (transformer.metadata.plugin) return true;
+
     for (var filter of (this.filters: Array)) {
       var result = filter(transformer, fileOpts);
       if (result != null) return result;
