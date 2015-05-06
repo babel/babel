@@ -314,7 +314,7 @@ class ClassTransformer {
         if (isConstructor) {
           this.pushConstructor(node, path);
         } else {
-          this.pushMethod(node);
+          this.pushMethod(node, path);
         }
       } else if (t.isClassProperty(node)) {
         this.pushProperty(node);
@@ -412,7 +412,7 @@ class ClassTransformer {
       this.pushMethod(t.methodDefinition(
         t.identifier(PROPERTY_COLLISION_METHOD_NAME),
         t.functionExpression(null, [], t.blockStatement(body))
-      ), true);
+      ), null, true);
 
       if (this.hasSuper) {
         this.bareSuper.insertAfter(call);
@@ -473,13 +473,13 @@ class ClassTransformer {
    * Push a method to its respective mutatorMap.
    */
 
-  pushMethod(node: { type: "MethodDefinition" }, allowedIllegal?) {
+  pushMethod(node: { type: "MethodDefinition" }, path?: TraversalPath, allowedIllegal?) {
     if (!allowedIllegal && t.isLiteral(t.toComputedKey(node), { value: PROPERTY_COLLISION_METHOD_NAME })) {
       throw this.file.errorWithNode(node, messages.get("illegalMethodName", PROPERTY_COLLISION_METHOD_NAME));
     }
 
     if (node.kind === "method") {
-      nameMethod.property(node, this.file, this.scope);
+      nameMethod.property(node, this.file, path ? path.get("value").scope : this.scope);
 
       if (this.isLoose) {
         // use assignments instead of define properties for loose classes
