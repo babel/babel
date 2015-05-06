@@ -1,12 +1,14 @@
 var convertSourceMap = require("convert-source-map");
 var sourceMap        = require("source-map");
 var chokidar         = require("chokidar");
+var glob             = require("glob");
 var path             = require("path");
 var util             = require("./util");
 var fs               = require("fs");
 var _                = require("lodash");
 
-module.exports = function (commander, filenames, opts) {
+
+module.exports = function (commander, opts) {
   if (commander.sourceMaps === "inline") {
     opts.sourceMaps = true;
   }
@@ -96,19 +98,23 @@ module.exports = function (commander, filenames, opts) {
     var _filenames = [];
     results = [];
 
-    _.each(filenames, function (filename) {
-      if (!fs.existsSync(filename)) return;
+    _.each(commander.args, function (arg) {
+      var filenames = glob.sync(arg);
 
-      var stat = fs.statSync(filename);
-      if (stat.isDirectory()) {
-        var dirname = filename;
+      _.each(filenames, function (filename) {
+        if (!fs.existsSync(filename)) return;
 
-        _.each(util.readdirFilter(filename), function (filename) {
-          _filenames.push(path.join(dirname, filename));
-        });
-      } else {
-        _filenames.push(filename);
-      }
+        var stat = fs.statSync(filename);
+        if (stat.isDirectory()) {
+          var dirname = filename;
+
+          _.each(util.readdirFilter(filename), function (filename) {
+            _filenames.push(path.join(dirname, filename));
+          });
+        } else {
+          _filenames.push(filename);
+        }
+      });
     });
 
     _.each(_filenames, function (filename) {
@@ -124,23 +130,33 @@ module.exports = function (commander, filenames, opts) {
     walk();
 
     if (commander.watch) {
-      chokidar.watch(filenames, {
+      var cache = {};
+
+      chokidar.watch(commander.args, {
         persistent: true,
         ignoreInitial: true
-      }).on("all", function (type, filename) {
-        if (type === "add" || type === "change") {
-          console.log(type, filename);
-          try {
-            walk();
-          } catch (err) {
-            console.error(err.stack);
+      }).on("all", function (type, filename, stats) {
+        if (type === "add" || type === "change" || type === "unlink") {
+          var statsMtime;
+          // no stats with unlink
+          if (stats) statsMtime = stats.mtime.getTime();
+
+          var mtime = cache[filename];
+          if (!mtime || !stats || mtime !== statsMtime) {
+            cache[filename] = statsMtime;
+            console.log(type, filename);
+            try {
+              walk();
+            } catch (err) {
+              console.error(err.stack);
+            }
           }
         }
       });
     }
   };
 
-  if (filenames.length) {
+  if (commander.args.length) {
     files();
   } else {
     stdin();

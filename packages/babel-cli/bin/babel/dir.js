@@ -1,16 +1,22 @@
 var outputFileSync = require("output-file-sync");
 var chokidar       = require("chokidar");
+var globParent     = require("glob-parent");
 var path           = require("path");
 var util           = require("./util");
+var glob           = require("glob");
 var fs             = require("fs");
 var _              = require("lodash");
 
-module.exports = function (commander, filenames, opts) {
-  var write = function (src, relative) {
-    // remove extension and then append back on .js
-    relative = relative.replace(/\.(\w*?)$/, "") + ".js";
+module.exports = function (commander, opts) {
 
-    var dest = path.join(commander.outDir, relative);
+  var destFilePath = function(filename) {
+    // remove extension and then append back on .js
+    filename = filename.replace(/\.(\w*?)$/, "") + ".js";
+    return path.join(commander.outDir, filename);
+  };
+
+  var write = function (src, relative) {
+    var dest = destFilePath(relative);
 
     var data = util.compile(src, {
       sourceFileName: path.relative(dest + "/..", src)
@@ -37,39 +43,64 @@ module.exports = function (commander, filenames, opts) {
     }
   };
 
-  var handle = function (filename) {
-    if (!fs.existsSync(filename)) return;
+  // first pass compile
+  _.each(commander.args, function(arg) {
+    var root = globParent(arg);
+    var filenames = glob.sync(arg);
 
-    var stat = fs.statSync(filename);
+    _.each(filenames, function(filename) {
 
-    if (stat.isDirectory(filename)) {
-      var dirname = filename;
+      var stat = fs.statSync(filename);
 
-      _.each(util.readdir(dirname), function (filename) {
-        var src = path.join(dirname, filename);
-        handleFile(src, filename);
-      });
-    } else {
-      write(filename, filename);
-    }
-  };
+      if (stat.isDirectory(filename)) {
+        var dirname = filename;
 
-  _.each(filenames, handle);
+        _.each(util.readdir(dirname), function (filename) {
+          var src = path.join(dirname, filename);
+          handleFile(src, filename);
+        });
+      } else {
+        var relative = path.relative(root, filename) || filename;
+        handleFile(filename, relative);
+      }
+    });
+  });
 
+  // setup watch
   if (commander.watch) {
-    _.each(filenames, function (dirname) {
-      var watcher = chokidar.watch(dirname, {
+    var cache = {};
+
+    _.each(commander.args, function (glob) {
+      var watcher = chokidar.watch(glob, {
         persistent: true,
         ignoreInitial: true
       });
 
-      _.each(["add", "change"], function (type) {
-        watcher.on(type, function (filename) {
-          var relative = path.relative(dirname, filename) || filename;
-          try {
-            handleFile(filename, relative);
-          } catch (err) {
-            console.error(err.stack);
+      var root = globParent(glob);
+      _.each(["add", "change", "unlink"], function (type) {
+        watcher.on(type, function (filename, stats) {
+          var relative = path.relative(root, filename) || filename;
+
+          if (type === "unlink") {
+            cache[filename] = undefined;
+            var dest = destFilePath(relative);
+            console.log("unlink %s", dest);
+            if (fs.existsSync(dest))
+              fs.unlink(dest);
+            if (fs.existsSync(dest + ".map"))
+              fs.unlink(dest + ".map");
+          } else {
+            var statsMtime;
+            if (stats) statsMtime = stats.mtime.getTime();
+            var mtime = cache[filename];
+            if (!mtime || mtime !== statsMtime) {
+              cache[filename] = statsMtime;
+              try {
+                handleFile(filename, relative);
+              } catch (err) {
+                console.error(err.stack);
+              }
+            }
           }
         });
       });
