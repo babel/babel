@@ -1,0 +1,1 @@
+class X { async constructor() {} }
