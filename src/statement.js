@@ -504,7 +504,7 @@ pp.parseClass = function(node, isStatement) {
       this.parsePropertyName(method)
     }
     method.kind = "method"
-    if (!method.computed && !isGenerator) {
+    if (!method.computed && !isGenerator && !isAsync) {
       if (method.key.type === "Identifier") {
         if (this.type !== tt.parenL && (method.key.name === "get" || method.key.name === "set")) {
           method.kind = method.key.name
