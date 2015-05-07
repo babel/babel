@@ -31,14 +31,16 @@ export var metadata = {
   optional: true
 };
 
-export function BlockStatement(node, parent, scope, file) {
-  var letRefs = node._letReferences;
-  if (!letRefs) return;
+export var BlockStatement = {
+  exit(node, parent, scope, file) {
+    var letRefs = node._letReferences;
+    if (!letRefs) return;
 
-  this.traverse(visitor, {
-    letRefs: letRefs,
-    file:    file
-  });
-}
+    this.traverse(visitor, {
+      letRefs: letRefs,
+      file:    file
+    });
+  }
+};
 
 export { BlockStatement as Program, BlockStatement as Loop };
