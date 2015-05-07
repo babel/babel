@@ -8,8 +8,8 @@ var Foo = (function () {
   babelHelpers.createDecoratedClass(Foo, [{
     key: "foo",
     decorators: [bar, foo],
-    get: function () {},
-    set: function (bar) {}
+    get: function get() {},
+    set: function set(bar) {}
   }]);
   return Foo;
 })();
