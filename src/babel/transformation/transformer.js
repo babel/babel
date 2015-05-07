@@ -26,6 +26,7 @@ export default class Transformer {
 
     this.manipulateOptions = take("manipulateOptions");
     this.metadata          = take("metadata") || {};
+    this.dependencies      = this.metadata.dependencies || [];
     this.parser            = take("parser");
     this.post              = take("post");
     this.pre               = take("pre");

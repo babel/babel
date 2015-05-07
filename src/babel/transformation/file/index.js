@@ -29,6 +29,8 @@ import * as t from "../../types";
 
 export default class File {
   constructor(opts = {}, pipeline) {
+    this.transformerDependencies = {};
+
     this.dynamicImportTypes = {};
     this.dynamicImportIds   = {};
     this.dynamicImports     = [];
@@ -221,13 +223,21 @@ export default class File {
     }
     stack = beforePlugins.concat(stack, afterPlugins);
 
-    // register
-    this.transformerStack = this.mergeStack(stack.concat(secondaryStack));
+    // build transformer stack
+    stack = stack.concat(secondaryStack);
 
+    // build dependency graph
+    for (var pass of (stack: Array)) {
+      for (var dep of (pass.transformer.dependencies: Array)) {
+        this.transformerDependencies[dep] = pass.key;
+      }
+    }
 
+    // collapse stack categories
+    this.transformerStack = this.collapseStack(stack);
   }
 
-  mergeStack(_stack) {
+  collapseStack(_stack) {
     var stack  = [];
     var ignore = [];
 

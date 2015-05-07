@@ -3,12 +3,9 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  stage: 1
+  stage: 1,
+  dependencies: ["es6.destructuring"]
 };
-
-export function manipulateOptions(opts) {
-  if (opts.whitelist) opts.whitelist.push("es6.destructuring");
-}
 
 var hasSpread = function (node) {
   for (var i = 0; i < node.properties.length; i++) {

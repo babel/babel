@@ -3,6 +3,7 @@ import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
 export var metadata = {
+  dependencies: ["es6.classes"],
   optional: true,
   stage: 1
 };

@@ -10,23 +10,24 @@ export default class TransformerPass {
   constructor(file: File, transformer: Transformer) {
     this.transformer = transformer;
     this.handlers    = transformer.handlers;
-    this.skipKey     = transformer.skipKey;
     this.file        = file;
     this.ran         = false;
+    this.key         = transformer.key;
   }
 
   canTransform(): boolean {
-    return this.file.pipeline.canTransform(this.transformer, this.file.opts);
+    return this.file.transformerDependencies[this.key] ||
+           this.file.pipeline.canTransform(this.transformer, this.file.opts);
   }
 
   transform() {
     var file = this.file;
 
-    file.log.debug(`Start transformer ${this.transformer.key}`);
+    file.log.debug(`Start transformer ${this.key}`);
 
     traverse(file.ast, this.handlers, file.scope, file);
 
-    file.log.debug(`Finish transformer ${this.transformer.key}`);
+    file.log.debug(`Finish transformer ${this.key}`);
 
     this.ran = true;
   }
