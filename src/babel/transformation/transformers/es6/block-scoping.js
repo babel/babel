@@ -37,10 +37,6 @@ function standardizeLets(declars) {
   }
 }
 
-export function shouldVisit(node) {
-  return t.isVariableDeclaration(node) && (node.kind === "let" || node.kind === "const");
-}
-
 export function VariableDeclaration(node, parent, scope, file) {
   if (!isLet(node, parent)) return;
 

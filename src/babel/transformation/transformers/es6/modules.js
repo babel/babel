@@ -1,7 +1,5 @@
 import * as t from "../../../types";
 
-export { shouldVisit } from "../internal/modules";
-
 function keepBlockHoist(node, nodes) {
   if (node._blockHoist) {
     for (let i = 0; i < nodes.length; i++) {

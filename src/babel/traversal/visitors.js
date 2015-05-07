@@ -36,12 +36,12 @@ export function explode(visitor, mergeConflicts) {
     if (wrapper.type) {
       // merge the visitor if necessary or just put it back in
       if (visitor[wrapper.type]) {
-        merge(visitor[wrapper.type], fns);
+        mergePair(visitor[wrapper.type], fns);
       } else {
         visitor[wrapper.type] = fns;
       }
     } else {
-      merge(visitor, fns);
+      mergePair(visitor, fns);
     }
   }
 
@@ -61,7 +61,7 @@ export function explode(visitor, mergeConflicts) {
       var existing = visitor[alias];
       if (existing) {
         if (mergeConflicts) {
-          merge(existing, fns);
+          mergePair(existing, fns);
         }
       } else {
         visitor[alias] = fns;
@@ -105,6 +105,19 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
+export function merge(visitors) {
+  var rootVisitor = {};
+
+  for (var visitor of (visitors: Array)) {
+    for (var type in visitor) {
+      var nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
+      mergePair(nodeVisitor, visitor[type]);
+    }
+  }
+
+  return rootVisitor;
+}
+
 function ensureEntranceObjects(obj) {
   for (let key in obj) {
     if (shouldIgnoreKey(key)) continue;
@@ -135,7 +148,7 @@ function addSelector(visitor, selector, fns) {
     };
   }
 
-  merge(visitor, fns);
+  mergePair(visitor, fns);
 }
 
 function wrapCheck(wrapper, fn) {
@@ -159,7 +172,7 @@ function shouldIgnoreKey(key) {
   return false;
 }
 
-function merge(dest, src) {
+function mergePair(dest, src) {
   for (var key in src) {
     dest[key] = (dest[key] || []).concat(src[key]);
   }

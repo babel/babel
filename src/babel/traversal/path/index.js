@@ -111,8 +111,39 @@ export default class TraversalPath {
    * Description
    */
 
+  inType(types) {
+    if (!Array.isArray(types)) types = [types];
+
+    var path = this;
+    while (path) {
+      for (var type of (types: Array)) {
+        if (path.node.type === type) return true;
+      }
+      path = path.parentPath;
+    }
+
+    return false;
+  }
+
+  /**
+   * Description
+   */
+
+  findParent(callback) {
+    var path = this;
+    while (path) {
+      if (callback(path.node)) return path.node;
+      path = path.parentPath;
+    }
+    return null;
+  }
+
+  /**
+   * Description
+   */
+
   queueNode(path) {
-    if (this.context) {
+    if (this.context && this.context.queue) {
       this.context.queue.push(path);
     }
   }
@@ -136,7 +167,6 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.push(this.node);
         this.container[this.key] = t.blockStatement(nodes);
-        this.checkSelf();
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -163,8 +193,6 @@ export default class TraversalPath {
         paths.push(TraversalPath.get(this, null, node, this.container, to));
       }
     }
-
-    this.checkPaths(paths);
   }
 
   _containerInsertBefore(nodes) {
@@ -234,7 +262,6 @@ export default class TraversalPath {
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
         this.container[this.key] = t.blockStatement(nodes);
-        this.checkSelf();
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -528,7 +555,7 @@ export default class TraversalPath {
     }
 
     if (this.node === replacement) {
-      return this.checkSelf();
+      return;
     }
 
     // normalise inserting an entire AST
@@ -572,26 +599,6 @@ export default class TraversalPath {
 
     // potentially create new scope
     this.setScope();
-
-    this.checkSelf();
-  }
-
-  /**
-   * Description
-   */
-
-  checkSelf() {
-    this.checkPaths(this);
-  }
-
-  /**
-   * Description
-   */
-
-  checkPaths(paths) {
-    var scope = this.scope;
-    var file  = scope && scope.file;
-    if (file) file.checkPath(paths);
   }
 
   /**
@@ -691,9 +698,13 @@ export default class TraversalPath {
 
       // call the function with the params (node, parent, scope, state)
       var replacement = fn.call(this, node, this.parent, this.scope, this.state);
-      if (replacement) this.replaceWith(replacement, true);
+      if (replacement) {
+        this.replaceWith(replacement, true);
+        this.queueNode(this);
+        break;
+      }
 
-      if (this.shouldStop) break;
+      if (this.shouldStop || this.removed) break;
     }
   }
 

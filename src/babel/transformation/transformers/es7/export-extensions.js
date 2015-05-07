@@ -6,10 +6,6 @@ export var metadata = {
   stage: 1
 };
 
-export function shouldVisit(node) {
-  return t.isExportDefaultSpecifier(node) || t.isExportNamespaceSpecifier(node);
-}
-
 function build(node, nodes, scope) {
   var first = node.specifiers[0];
   if (!t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)) return;

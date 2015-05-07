@@ -1,9 +1,5 @@
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return t.isProperty(node) && (node.method || node.shorthand);
-}
-
 export function Property(node) {
   if (node.method) {
     node.method = false;

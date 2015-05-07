@@ -10,12 +10,6 @@ import * as react from "./react";
 import * as t from "../../types";
 
 export default function (exports, opts) {
-  exports.shouldVisit = function (node) {
-    if (t.isJSX(node)) return true;
-    if (react.isCreateClass(node)) return true;
-    return false;
-  };
-
   exports.JSXIdentifier = function (node, parent) {
     if (node.name === "this" && this.isReferenced()) {
       return t.thisExpression();

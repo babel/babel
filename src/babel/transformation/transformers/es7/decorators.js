@@ -7,10 +7,6 @@ export var metadata = {
   stage: 1
 };
 
-export function shouldVisit(node) {
-  return !!node.decorators;
-}
-
 export function ObjectExpression(node, parent, scope, file) {
   var hasDecorators = false;
   for (var i = 0; i < node.properties.length; i++) {

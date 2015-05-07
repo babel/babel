@@ -2,8 +2,6 @@ import * as messages from "../../../messages";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export var shouldVisit = t.isForOfStatement;
-
 export function ForOfStatement(node, parent, scope, file) {
   if (this.get("right").isArrayExpression()) {
     return _ForOfStatementArray.call(this, node, scope, file);

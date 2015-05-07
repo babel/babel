@@ -1,9 +1,5 @@
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return node.isType || node.optional || node.implements || node.typeAnnotation || t.isFlow(node);
-}
-
 export function Flow(node) {
   this.remove();
 }

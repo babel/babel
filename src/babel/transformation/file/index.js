@@ -4,6 +4,7 @@ import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import TraversalPath from "../../traversal/path";
+import Transformer from "../transformer";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
 import resolveRc from "../../tools/resolve-rc";
@@ -25,19 +26,6 @@ import * as api from  "../../api/node";
 import path from "path";
 import each from "lodash/collection/each";
 import * as t from "../../types";
-
-var checkTransformerVisitor = {
-  exit(node, parent, scope, state) {
-    checkPath(state.stack, this);
-  }
-};
-
-function checkPath(stack, path) {
-  each(stack, function (pass) {
-    if (pass.shouldRun || pass.ran) return;
-    pass.checkPath(path);
-  });
-}
 
 export default class File {
   constructor(opts = {}, pipeline) {
@@ -234,7 +222,46 @@ export default class File {
     stack = beforePlugins.concat(stack, afterPlugins);
 
     // register
-    this.transformerStack = stack.concat(secondaryStack);
+    this.transformerStack = this.mergeStack(stack.concat(secondaryStack));
+
+
+  }
+
+  mergeStack(_stack) {
+    var stack  = [];
+    var ignore = [];
+
+    for (let pass of (_stack: Array)) {
+      // been merged
+      if (ignore.indexOf(pass) >= 0) continue;
+
+      var category = pass.transformer.metadata.category;
+
+      // can't merge
+      if (!pass.canTransform() || !category) {
+        stack.push(pass);
+        continue;
+      }
+
+      var mergeStack = [];
+      for (let pass of (_stack: Array)) {
+        if (pass.transformer.metadata.category === category) {
+          mergeStack.push(pass);
+          ignore.push(pass);
+        }
+      }
+
+      var visitors = [];
+      for (let pass of (mergeStack: Array)) {
+        visitors.push(pass.handlers);
+      }
+      var visitor = traverse.visitors.merge(visitors);
+      var mergeTransformer = new Transformer(category, visitor);
+      //console.log(mergeTransformer);
+      stack.push(mergeTransformer.buildPass(this));
+    }
+
+    return stack;
   }
 
   set(key: string, val): any {
@@ -357,23 +384,6 @@ export default class File {
     return err;
   }
 
-  checkPath(path) {
-    if (Array.isArray(path)) {
-      for (var i = 0; i < path.length; i++) {
-        this.checkPath(path[i]);
-      }
-      return;
-    }
-
-    var stack = this.transformerStack;
-
-    checkPath(stack, path);
-
-    path.traverse(checkTransformerVisitor, {
-      stack: stack
-    });
-  }
-
   mergeSourceMap(map: Object) {
     var opts = this.opts;
 
@@ -460,10 +470,6 @@ export default class File {
     this.log.debug("Start set AST");
     this._addAst(ast);
     this.log.debug("End set AST");
-
-    this.log.debug("Start prepass");
-    this.checkPath(this.path);
-    this.log.debug("End prepass");
 
     this.log.debug("Start module formatter init");
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);

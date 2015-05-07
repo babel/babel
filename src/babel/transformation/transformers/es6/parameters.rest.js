@@ -2,8 +2,6 @@ import isNumber from "lodash/lang/isNumber";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export var shouldVisit = t.isRestElement;
-
 var memberExpressionOptimisationVisitor = {
   enter(node, parent, scope, state) {
     // check if this scope has a local binding that will shadow the rest parameter
@@ -96,7 +94,6 @@ exports.Function = function (node, parent, scope, file) {
       candidate.replaceWith(argsId);
       optimizeMemberExpression(candidate.parent, node.params.length);
     }
-    this.checkSelf();
     return;
   }
 
@@ -138,5 +135,4 @@ exports.Function = function (node, parent, scope, file) {
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);
-  this.checkSelf();
 };

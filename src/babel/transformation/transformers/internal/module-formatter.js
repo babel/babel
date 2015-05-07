@@ -1,8 +1,6 @@
 import * as strict from "../../helpers/strict";
 
 export function Program(program, parent, scope, file) {
-  this.stop();
-
   strict.wrap(program, function () {
     program.body = file.dynamicImports.concat(program.body);
   });

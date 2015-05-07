@@ -1,8 +1,6 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
-export var shouldVisit = t.isPattern;
-
 export function ForOfStatement(node, parent, scope, file) {
   var left = node.left;
 
@@ -83,7 +81,6 @@ exports.Function = function (node, parent, scope, file) {
 
   var block = node.body;
   block.body = nodes.concat(block.body);
-  this.checkSelf();
 };
 
 export function CatchClause(node, parent, scope, file) {
@@ -104,8 +101,6 @@ export function CatchClause(node, parent, scope, file) {
   destructuring.init(pattern, ref);
 
   node.body.body = nodes.concat(node.body.body);
-
-  this.checkSelf();
 }
 
 export function ExpressionStatement(node, parent, scope, file) {

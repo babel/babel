@@ -82,21 +82,24 @@ function aliasFunction(getBody, path, scope) {
   }
 };
 
-export function shouldVisit(node) {
-  return true;
-}
+// todo: on all `this` and `arguments`, walk UP the tree instead of
+// crawling the entire function tree
 
-export function Program(node, parent, scope) {
-  aliasFunction(function () {
-    return node.body;
-  }, this, scope);
+export var Program = {
+  exit(node, parent, scope) {
+    aliasFunction(function () {
+      return node.body;
+    }, this, scope);
+  }
 };
 
-export function FunctionDeclaration(node, parent, scope) {
-  aliasFunction(function () {
-    t.ensureBlock(node);
-    return node.body.body;
-  }, this, scope);
-}
+export var FunctionDeclaration = {
+  exit(node, parent, scope) {
+    aliasFunction(function () {
+      t.ensureBlock(node);
+      return node.body.body;
+    }, this, scope);
+  }
+};
 
 export { FunctionDeclaration as FunctionExpression };

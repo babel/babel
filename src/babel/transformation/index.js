@@ -5,6 +5,13 @@ var pipeline = new Pipeline;
 //
 
 import transformers from "./transformers";
+
+for (var key in transformers) {
+  var transformer = transformers[key];
+  var metadata = transformer.metadata = transformer.metadata || {};
+  metadata.category = metadata.category || "builtin";
+}
+
 pipeline.addTransformers(transformers);
 
 //
