@@ -30,7 +30,12 @@ module.exports = function (commander, filenames, opts) {
   var handleFile = function (src, filename) {
     if (util.shouldIgnore(src)) return;
 
-    if (util.canCompile(filename, opts.extensions)) {
+    var altExts;
+    if (commander.extensions) {
+      altExts = commander.extensions.split(',');
+    }
+
+    if (util.canCompile(filename, altExts)) {
       write(src, filename);
     } else if (commander.copyFiles) {
       outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
