@@ -15,4 +15,5 @@ export function Program(program, parent, scope, file) {
 
     this.unshiftContainer("body", [directive]);
   }
+  this.stop();
 }
