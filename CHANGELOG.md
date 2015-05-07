@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.17
+
+ * **Bug Fix**
+  * Fix auxiliary comments not properly being attached to function declaration helpers.
+  * Add `Super` node type to `ast-types` patch.
+  * Ignore parameter bindings when attempting to inline them in the `minification.deadCodeElimination` transformer.
+  * Correct `extensions` arguments when using the Babel CLI.
+
 ## 5.2.16
 
  * **Bug Fix**
