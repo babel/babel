@@ -26,6 +26,7 @@ export function Identifier(node, parent, scope) {
 
   var binding = scope.getBinding(node.name);
   if (!binding || binding.references > 1 || !binding.constant) return;
+  if (binding.kind === "param") return;
 
   var replacement = binding.path.node;
   if (t.isVariableDeclarator(replacement)) {
