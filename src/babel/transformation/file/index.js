@@ -465,12 +465,14 @@ export default class File {
     this.checkPath(this.path);
     this.log.debug("End prepass");
 
-    this.log.debug("Start module formatter init");
-    var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
-      modFormatter.init();
+    if (this.transformers["es6.modules"].canTransform()) {
+      this.log.debug("Start module formatter init");
+      var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
+      if (modFormatter.init) {
+        modFormatter.init();
+      }
+      this.log.debug("End module formatter init");
     }
-    this.log.debug("End module formatter init");
 
     this.call("pre");
     each(this.transformerStack, function (pass) {
