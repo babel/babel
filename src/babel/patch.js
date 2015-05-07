@@ -33,6 +33,9 @@ def("DoExpression")
   .build("body")
   .field("body", [def("Statement")]);
 
+def("Super")
+  .bases("Expression");
+
 def("ExportDefaultDeclaration")
   .bases("Declaration")
   .build("declaration")
