@@ -337,6 +337,7 @@ export default class File {
       ref._generated = true;
       ref.id = uid;
       ref.type = "FunctionDeclaration";
+      this.attachAuxiliaryComment(ref);
       this.path.unshiftContainer("body", ref);
     } else {
       ref._compact = true;

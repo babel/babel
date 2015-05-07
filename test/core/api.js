@@ -18,6 +18,16 @@ suite("api", function () {
     assert.ok(!result.ast);
   });
 
+  test("{ auxiliaryComment }", function () {
+    assert.ok(transform("class Foo {}", {
+      auxiliaryComment: "foobar"
+    }).code.indexOf("foobar") >= 0);
+
+    assert.ok(transform("for (let i in bar) { foo(function () { i; }); break; continue; }", {
+      auxiliaryComment: "foobar"
+    }).code.indexOf("foobar") >= 0);
+  });
+
   suite("getModuleId() {} option", function () {
     // As of this commit, `getModuleId` is the only option that isn't JSON
     // compatible which is why it's not inside /test/core/fixtures/transformation
