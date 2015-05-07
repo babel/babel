@@ -36,6 +36,10 @@ function monkeypatch() {
   estraverse = escopeMod.require("estraverse");
   assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
+  // monkeypatch estraverse-fb
+  var estraverseFb = eslintMod.require("estraverse-fb");
+  assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
+
   // monkeypatch escope
   var escope  = require(escopeLoc);
   var analyze = escope.analyze;
