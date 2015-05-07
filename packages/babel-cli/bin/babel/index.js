@@ -70,6 +70,12 @@ commander.parse(process.argv);
 
 //
 
+if (commander.extensions) {
+  commander.extensions = util.arrayify(commander.extensions);
+}
+
+//
+
 var errors = [];
 
 var filenames = commander.args.reduce(function (globbed, input) {
