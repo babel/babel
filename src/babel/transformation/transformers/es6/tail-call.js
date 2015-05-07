@@ -181,9 +181,11 @@ class TailCallTransformer {
       var declarations = flatten(map(this.vars, function (decl) {
         return decl.declarations;
       }));
+
       var assignment = reduceRight(declarations, function (expr, decl) {
         return t.assignmentExpression("=", decl.id, expr);
       }, t.identifier("undefined"));
+
       var statement = t.expressionStatement(assignment);
       statement._blockHoist = Infinity;
       body.unshift(statement);
@@ -191,7 +193,9 @@ class TailCallTransformer {
 
     var paramDecls = this.paramDecls;
     if (paramDecls.length > 0) {
-      body.unshift(t.variableDeclaration("var", paramDecls));
+      var paramDecl = t.variableDeclaration("var", paramDecls);
+      paramDecl._blockHoist = Infinity;
+      body.unshift(paramDecl);
     }
 
     body.unshift(t.expressionStatement(

@@ -6,8 +6,8 @@
   var _again = true;
 
   _function: while (_again) {
-    _again = false;
     var n = _x;
+    _again = false;
     if (n <= 0) {
       return "foo";
     } else {
