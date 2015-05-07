@@ -364,7 +364,7 @@ export default class Scope {
     }
 
     var file = this.file;
-    if (file) {
+    if (file && file.moduleFormatter) {
       this._renameFromMap(file.moduleFormatter.localImports, oldName, newName, state.binding);
       //this._renameFromMap(file.moduleFormatter.localExports, oldName, newName);
     }
