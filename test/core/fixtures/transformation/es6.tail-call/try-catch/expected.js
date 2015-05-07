@@ -14,8 +14,8 @@
   var _again = true;
 
   _function: while (_again) {
-    _again = false;
     var n = _x;
+    _again = false;
 
     if (n <= 0) {
       return "foo";
@@ -47,8 +47,8 @@
   var _again2 = true;
 
   _function2: while (_again2) {
-    _again2 = false;
     var n = _x2;
+    _again2 = false;
 
     if (n <= 0) {
       return "foo";
