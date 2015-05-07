@@ -696,6 +696,9 @@ export default class TraversalPath {
     for (var fn of (fns: Array)) {
       if (!fn) continue;
 
+      var node = this.node;
+      if (!node) return;
+
       // call the function with the params (node, parent, scope, state)
       var replacement = fn.call(this, node, this.parent, this.scope, this.state);
       if (replacement) {
@@ -703,11 +706,11 @@ export default class TraversalPath {
         this.replaceWith(replacement, true);
         if (this.type !== previousType) {
           this.queueNode(this);
-          break;
+          return;
         }
       }
 
-      if (this.shouldStop || this.removed) break;
+      if (this.shouldStop || this.removed) return;
     }
   }
 
