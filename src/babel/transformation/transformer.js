@@ -25,8 +25,8 @@ export default class Transformer {
     };
 
     this.manipulateOptions = take("manipulateOptions");
-    this.shouldVisit       = take("shouldVisit");
     this.metadata          = take("metadata") || {};
+    this.dependencies      = this.metadata.dependencies || [];
     this.parser            = take("parser");
     this.post              = take("post");
     this.pre               = take("pre");
@@ -41,18 +41,6 @@ export default class Transformer {
 
     this.handlers = this.normalize(transformer);
     this.key      = transformerKey;
-
-    //
-
-    if (!this.shouldVisit && !this.handlers.enter && !this.handlers.exit) {
-      var types = Object.keys(this.handlers);
-      this.shouldVisit = function (node) {
-        for (var i = 0; i < types.length; i++) {
-          if (node.type === types[i]) return true;
-        }
-        return false;
-      };
-    }
   }
 
   normalize(transformer: Object): Object {

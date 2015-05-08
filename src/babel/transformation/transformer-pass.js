@@ -8,34 +8,26 @@ import traverse from "../traversal";
 
 export default class TransformerPass {
   constructor(file: File, transformer: Transformer) {
-    this.shouldTransform = !transformer.shouldVisit;
-    this.transformer     = transformer;
-    this.handlers        = transformer.handlers;
-    this.skipKey         = transformer.skipKey;
-    this.file            = file;
-    this.ran             = false;
+    this.transformer = transformer;
+    this.handlers    = transformer.handlers;
+    this.file        = file;
+    this.ran         = false;
+    this.key         = transformer.key;
   }
 
   canTransform(): boolean {
-    return this.file.pipeline.canTransform(this.transformer, this.file.opts);
-  }
-
-  checkPath(path: TraversalPath): boolean {
-    if (this.shouldTransform || this.ran) return;
-
-    this.shouldTransform = this.transformer.shouldVisit(path.node);
+    return this.file.transformerDependencies[this.key] ||
+           this.file.pipeline.canTransform(this.transformer, this.file.opts);
   }
 
   transform() {
-    if (!this.shouldTransform) return;
-
     var file = this.file;
 
-    file.log.debug(`Start transformer ${this.transformer.key}`);
+    file.log.debug(`Start transformer ${this.key}`);
 
     traverse(file.ast, this.handlers, file.scope, file);
 
-    file.log.debug(`Finish transformer ${this.transformer.key}`);
+    file.log.debug(`Finish transformer ${this.key}`);
 
     this.ran = true;
   }

@@ -1,7 +1,6 @@
 import { _ForOfStatementArray } from "../es6/for-of";
 import * as t from "../../../types";
 
-export var shouldVisit = t.isForOfStatement;
 export var metadata = {
   optional: true
 };

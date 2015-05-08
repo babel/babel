@@ -1,10 +1,6 @@
 import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return t.isProperty(node) && (node.kind === "get" || node.kind === "set");
-}
-
 export function ObjectExpression(node, parent, scope, file) {
   var mutatorMap = {};
   var hasAny = false;

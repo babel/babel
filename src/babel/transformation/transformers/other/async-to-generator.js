@@ -3,7 +3,8 @@ import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 export { manipulateOptions } from "./bluebird-coroutines";
 
 export var metadata = {
-  optional: true
+  optional: true,
+  dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
 exports.Function = function (node, parent, scope, file) {

@@ -2,12 +2,12 @@ import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 import * as t from "../../../types";
 
 export function manipulateOptions(opts) {
-  opts.optional.push("es7.asyncFunctions");
   opts.blacklist.push("regenerator");
 }
 
 export var metadata = {
-  optional: true
+  optional: true,
+  dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
 exports.Function = function (node, parent, scope, file) {

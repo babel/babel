@@ -18,7 +18,8 @@ function toStatements(node) {
 }
 
 export var metadata = {
-  optional: true
+  optional: true,
+  group: "builtin-setup"
 };
 
 export function Identifier(node, parent, scope) {

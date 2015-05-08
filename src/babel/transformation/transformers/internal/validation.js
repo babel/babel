@@ -2,7 +2,7 @@ import * as messages from "../../../messages";
 import * as t from "../../../types";
 
 export var metadata = {
-  readOnly: true
+  group: "builtin-setup"
 };
 
 export function ForOfStatement(node, parent, scope, file) {
@@ -43,16 +43,3 @@ export function Property(node, parent, scope, file) {
     }
   }
 }
-
-export function BlockStatement(node) {
-  for (var i = 0; i < node.body.length; i++) {
-    var bodyNode = node.body[i];
-    if (t.isExpressionStatement(bodyNode) && t.isLiteral(bodyNode.expression)) {
-      bodyNode._blockHoist = Infinity;
-    } else {
-      return;
-    }
-  }
-}
-
-export { BlockStatement as Program };

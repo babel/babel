@@ -37,9 +37,9 @@ function standardizeLets(declars) {
   }
 }
 
-export function shouldVisit(node) {
-  return t.isVariableDeclaration(node) && (node.kind === "let" || node.kind === "const");
-}
+export var metadata = {
+  group: "builtin-advanced"
+};
 
 export function VariableDeclaration(node, parent, scope, file) {
   if (!isLet(node, parent)) return;
@@ -233,6 +233,7 @@ var loopVisitor = {
 
     if (replace) {
       replace = t.returnStatement(replace);
+      this.skip();
       return t.inherits(replace, node);
     }
   }

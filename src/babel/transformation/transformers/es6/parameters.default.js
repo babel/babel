@@ -3,10 +3,6 @@ import * as util from  "../../../util";
 import traverse from  "../../../traversal";
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return t.isFunction(node) && hasDefaults(node);
-}
-
 var hasDefaults = function (node) {
   for (var i = 0; i < node.params.length; i++) {
     if (!t.isIdentifier(node.params[i])) return true;
@@ -96,6 +92,4 @@ exports.Function = function (node, parent, scope, file) {
   } else {
     node.body.body = body.concat(node.body.body);
   }
-
-  this.checkSelf();
 };

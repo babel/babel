@@ -63,42 +63,40 @@ function spec(node, body, objId, initProps, file) {
   }
 }
 
-export function shouldVisit(node) {
-  return t.isProperty(node) && node.computed;
-}
+export var ObjectExpression = {
+  exit(node, parent, scope, file) {
+    var hasComputed = false;
 
-export function ObjectExpression(node, parent, scope, file) {
-  var hasComputed = false;
+    for (var prop of (node.properties: Array)) {
+      hasComputed = t.isProperty(prop, { computed: true, kind: "init" });
+      if (hasComputed) break;
+    }
 
-  for (var i = 0; i < node.properties.length; i++) {
-    hasComputed = t.isProperty(node.properties[i], { computed: true, kind: "init" });
-    if (hasComputed) break;
+    if (!hasComputed) return;
+
+    var initProps = [];
+    var objId = scope.generateUidBasedOnNode(parent);
+
+    //
+
+    var body = [];
+
+    //
+
+    var callback = spec;
+    if (file.isLoose("es6.properties.computed")) callback = loose;
+
+    var result = callback(node, body, objId, initProps, file);
+    if (result) return result;
+
+    //
+
+    body.unshift(t.variableDeclaration("var", [
+      t.variableDeclarator(objId, t.objectExpression(initProps))
+    ]));
+
+    body.push(t.expressionStatement(objId));
+
+    return body;
   }
-
-  if (!hasComputed) return;
-
-  var initProps = [];
-  var objId = scope.generateUidBasedOnNode(parent);
-
-  //
-
-  var body = [];
-
-  //
-
-  var callback = spec;
-  if (file.isLoose("es6.properties.computed")) callback = loose;
-
-  var result = callback(node, body, objId, initProps, file);
-  if (result) return result;
-
-  //
-
-  body.unshift(t.variableDeclaration("var", [
-    t.variableDeclarator(objId, t.objectExpression(initProps))
-  ]));
-
-  body.push(t.expressionStatement(objId));
-
-  return body;
-}
+};

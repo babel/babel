@@ -5,8 +5,6 @@ export var metadata = {
   stage: 0
 };
 
-export var shouldVisit = t.isDoExpression;
-
 export function DoExpression(node) {
   var body = node.body.body;
   if (body.length) {

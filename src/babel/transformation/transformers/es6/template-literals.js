@@ -4,10 +4,6 @@ var buildBinaryExpression = function (left, right) {
   return t.binaryExpression("+", left, right);
 };
 
-export function shouldVisit(node) {
-  return t.isTemplateLiteral(node) || t.isTaggedTemplateExpression(node);
-}
-
 export function TaggedTemplateExpression(node, parent, scope, file) {
   var quasi = node.quasi;
   var args  = [];

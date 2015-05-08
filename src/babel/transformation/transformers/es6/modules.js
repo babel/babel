@@ -1,7 +1,5 @@
 import * as t from "../../../types";
 
-export { shouldVisit } from "../internal/modules";
-
 function keepBlockHoist(node, nodes) {
   if (node._blockHoist) {
     for (let i = 0; i < nodes.length; i++) {
@@ -9,6 +7,10 @@ function keepBlockHoist(node, nodes) {
     }
   }
 }
+
+export var metadata = {
+  group: "builtin-modules"
+};
 
 export function ImportDeclaration(node, parent, scope, file) {
   // flow type

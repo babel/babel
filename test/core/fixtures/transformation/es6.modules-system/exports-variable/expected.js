@@ -1,4 +1,6 @@
 System.register([], function (_export) {
+  "use strict";
+
   var foo, foo2, foo3, foo4, foo5, foo6, foo8;
 
   _export("foo7", foo7);
@@ -10,8 +12,6 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
-      "use strict";
-
       foo = 1;
 
       _export("foo", foo);

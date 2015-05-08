@@ -1,5 +1,5 @@
 import TraversalContext from "./context";
-import { explode, verify } from "./visitors";
+import * as visitors from "./visitors";
 import * as messages from "../messages";
 import includes from "lodash/collection/includes";
 import * as t from "../types";
@@ -14,7 +14,7 @@ export default function traverse(parent, opts, scope, state, parentPath) {
   }
 
   if (!opts) opts = {};
-  verify(opts);
+  visitors.verify(opts);
 
   // array of nodes
   if (Array.isArray(parent)) {
@@ -26,8 +26,9 @@ export default function traverse(parent, opts, scope, state, parentPath) {
   }
 }
 
-traverse.verify = verify;
-traverse.explode = explode;
+traverse.visitors = visitors;
+traverse.verify = visitors.verify;
+traverse.explode = visitors.explode;
 
 traverse.node = function (node, opts, scope, state, parentPath) {
   var keys = t.VISITOR_KEYS[node.type];

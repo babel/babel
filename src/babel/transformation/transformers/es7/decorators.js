@@ -3,13 +3,10 @@ import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
 export var metadata = {
+  dependencies: ["es6.classes"],
   optional: true,
   stage: 1
 };
-
-export function shouldVisit(node) {
-  return !!node.decorators;
-}
 
 export function ObjectExpression(node, parent, scope, file) {
   var hasDecorators = false;

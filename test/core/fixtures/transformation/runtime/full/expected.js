@@ -1,10 +1,10 @@
 "use strict";
 
+var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
+
 var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
 
 var _Symbol = require("babel-runtime/core-js/symbol")["default"];
-
-var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
 

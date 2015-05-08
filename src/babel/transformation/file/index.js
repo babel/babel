@@ -4,6 +4,7 @@ import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import TraversalPath from "../../traversal/path";
+import Transformer from "../transformer";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
 import resolveRc from "../../tools/resolve-rc";
@@ -26,21 +27,10 @@ import path from "path";
 import each from "lodash/collection/each";
 import * as t from "../../types";
 
-var checkTransformerVisitor = {
-  exit(node, parent, scope, state) {
-    checkPath(state.stack, this);
-  }
-};
-
-function checkPath(stack, path) {
-  each(stack, function (pass) {
-    if (pass.shouldRun || pass.ran) return;
-    pass.checkPath(path);
-  });
-}
-
 export default class File {
   constructor(opts = {}, pipeline) {
+    this.transformerDependencies = {};
+
     this.dynamicImportTypes = {};
     this.dynamicImportIds   = {};
     this.dynamicImports     = [];
@@ -96,10 +86,7 @@ export default class File {
     "interop-require",
   ];
 
-  static soloHelpers = [
-    "ludicrous-proxy-create",
-    "ludicrous-proxy-directory"
-  ];
+  static soloHelpers = [];
 
   static options = require("./options");
 
@@ -233,8 +220,55 @@ export default class File {
     }
     stack = beforePlugins.concat(stack, afterPlugins);
 
-    // register
-    this.transformerStack = stack.concat(secondaryStack);
+    // build transformer stack
+    this.uncollapsedTransformerStack = stack = stack.concat(secondaryStack);
+
+    // build dependency graph
+    for (var pass of (stack: Array)) {
+      for (var dep of (pass.transformer.dependencies: Array)) {
+        this.transformerDependencies[dep] = pass.key;
+      }
+    }
+
+    // collapse stack categories
+    this.transformerStack = this.collapseStack(stack);
+  }
+
+  collapseStack(_stack) {
+    var stack  = [];
+    var ignore = [];
+
+    for (let pass of (_stack: Array)) {
+      // been merged
+      if (ignore.indexOf(pass) >= 0) continue;
+
+      var group = pass.transformer.metadata.group;
+
+      // can't merge
+      if (!pass.canTransform() || !group) {
+        stack.push(pass);
+        continue;
+      }
+
+      var mergeStack = [];
+      for (let pass of (_stack: Array)) {
+        if (pass.transformer.metadata.group === group) {
+          mergeStack.push(pass);
+          ignore.push(pass);
+        }
+      }
+
+      var visitors = [];
+      for (let pass of (mergeStack: Array)) {
+        visitors.push(pass.handlers);
+      }
+      var visitor = traverse.visitors.merge(visitors);
+      var mergeTransformer = new Transformer(group, visitor);
+      //console.log(mergeTransformer);
+      stack.push(mergeTransformer.buildPass(this));
+    }
+
+    return stack;
   }
 
   set(key: string, val): any {
@@ -358,23 +392,6 @@ export default class File {
     return err;
   }
 
-  checkPath(path) {
-    if (Array.isArray(path)) {
-      for (var i = 0; i < path.length; i++) {
-        this.checkPath(path[i]);
-      }
-      return;
-    }
-
-    var stack = this.transformerStack;
-
-    checkPath(stack, path);
-
-    path.traverse(checkTransformerVisitor, {
-      stack: stack
-    });
-  }
-
   mergeSourceMap(map: Object) {
     var opts = this.opts;
 
@@ -462,10 +479,6 @@ export default class File {
     this._addAst(ast);
     this.log.debug("End set AST");
 
-    this.log.debug("Start prepass");
-    this.checkPath(this.path);
-    this.log.debug("End prepass");
-
     this.log.debug("Start module formatter init");
     var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
@@ -541,10 +554,8 @@ export default class File {
   }
 
   call(key: string) {
-    var stack = this.transformerStack;
-    for (var i = 0; i < stack.length; i++) {
-      var transformer = stack[i].transformer;
-      var fn = transformer[key];
+    for (var pass of (this.uncollapsedTransformerStack: Array)) {
+      var fn = pass.transformer[key];
       if (fn) fn(this);
     }
   }

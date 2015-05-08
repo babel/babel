@@ -1,16 +1,11 @@
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return node.isType || node.optional || node.implements || node.typeAnnotation || t.isFlow(node);
-}
-
 export function Flow(node) {
   this.remove();
 }
 
 export function ClassProperty(node) {
   node.typeAnnotation = null;
-  if (!node.value) this.remove();
 }
 
 export function Class(node) {

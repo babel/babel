@@ -1,4 +1,6 @@
 System.register(["foo"], function (_export) {
+  "use strict";
+
   return {
     setters: [function (_foo) {
       for (var _key in _foo) {
@@ -19,8 +21,6 @@ System.register(["foo"], function (_export) {
 
       _export("bar", _foo.bar);
     }],
-    execute: function () {
-      "use strict";
-    }
+    execute: function () {}
   };
 });

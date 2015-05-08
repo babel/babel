@@ -1,5 +1,9 @@
 import sortBy from "lodash/collection/sortBy";
 
+export var metadata = {
+  group: "builtin-trailing"
+};
+
 // Priority:
 //
 //  - 0 We want this to be at the **very** bottom

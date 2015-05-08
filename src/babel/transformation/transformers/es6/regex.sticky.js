@@ -1,10 +1,6 @@
 import * as regex from "../../helpers/regex";
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return regex.is(node, "y");
-}
-
 export function Literal(node) {
   if (!regex.is(node, "y")) return;
   return t.newExpression(t.identifier("RegExp"), [

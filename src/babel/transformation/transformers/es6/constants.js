@@ -1,10 +1,6 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return t.isVariableDeclaration(node, { kind: "const" }) || t.isImportDeclaration(node);
-}
-
 var visitor = {
   enter(node, parent, scope, state) {
     if (this.isAssignmentExpression() || this.isUpdateExpression()) {

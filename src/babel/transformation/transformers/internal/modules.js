@@ -6,9 +6,9 @@
 
 import * as t from "../../../types";
 
-export function shouldVisit(node) {
-  return t.isImportDeclaration(node) || t.isExportDeclaration(node);
-}
+export var metadata = {
+  group: "builtin-setup"
+};
 
 export function ImportDeclaration(node, parent, scope, file) {
   if (node.source) {
