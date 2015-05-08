@@ -68,7 +68,7 @@ export default class PluginManager {
 
     if (name) {
       if (typeof name === "object" && name.transformer) {
-        ({ plugin: name, position } = name);
+        ({ transformer: plugin, position } = name);
       } else if (typeof name !== "string") {
         // not a string so we'll just assume that it's a direct Transformer instance, if not then
         // the checks later on will complain
