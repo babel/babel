@@ -85,6 +85,10 @@ function aliasFunction(getBody, path, scope) {
 // todo: on all `this` and `arguments`, walk UP the tree instead of
 // crawling the entire function tree
 
+export var metadata = {
+  category: "builtin-cleanup"
+};
+
 export var Program = {
   exit(node, parent, scope) {
     aliasFunction(function () {
