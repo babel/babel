@@ -1,6 +1,6 @@
 var obj = {
   @foo
-  set foo() {
+  set foo(bar) {
 
   }
 };

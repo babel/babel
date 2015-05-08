@@ -1,9 +1,9 @@
 System.register([], function (_export) {
+  "use strict";
+
   return {
     setters: [],
     execute: function () {
-      "use strict";
-
       _export("foo", foo);
 
       _export("foo", foo);
