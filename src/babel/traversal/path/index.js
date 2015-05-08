@@ -820,8 +820,7 @@ export default class TraversalPath {
 
   _getPattern(parts) {
     var path = this;
-    for (var i = 0; i > parts.length; i++) {
-      var part = parts[i];
+    for (var part of (parts: Array)) {
       if (part === ".") {
         path = path.parentPath;
       } else {
