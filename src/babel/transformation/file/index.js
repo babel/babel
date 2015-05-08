@@ -86,10 +86,7 @@ export default class File {
     "interop-require",
   ];
 
-  static soloHelpers = [
-    "ludicrous-proxy-create",
-    "ludicrous-proxy-directory"
-  ];
+  static soloHelpers = [];
 
   static options = require("./options");
 
@@ -224,7 +221,7 @@ export default class File {
     stack = beforePlugins.concat(stack, afterPlugins);
 
     // build transformer stack
-    stack = stack.concat(secondaryStack);
+    this.uncollapsedTransformerStack = stack = stack.concat(secondaryStack);
 
     // build dependency graph
     for (var pass of (stack: Array)) {
@@ -557,10 +554,8 @@ export default class File {
   }
 
   call(key: string) {
-    var stack = this.transformerStack;
-    for (var i = 0; i < stack.length; i++) {
-      var transformer = stack[i].transformer;
-      var fn = transformer[key];
+    for (var pass of (this.uncollapsedTransformerStack: Array)) {
+      var fn = pass.transformer[key];
       if (fn) fn(this);
     }
   }
