@@ -86,7 +86,7 @@ function aliasFunction(getBody, path, scope) {
 // crawling the entire function tree
 
 export var metadata = {
-  category: "builtin-cleanup"
+  category: "builtin-trailing"
 };
 
 export var Program = {

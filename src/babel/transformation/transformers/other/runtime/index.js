@@ -11,10 +11,10 @@ const RUNTIME_MODULE_NAME = "babel-runtime";
 
 export var metadata = {
   optional: true,
-  category: "builtin-modules"
+  category: "builtin-post-modules"
 };
 
-export function Program(node, parent, scope, file) {
+export function pre(file) {
   file.set("helperGenerator", function (name) {
     return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, name, "absoluteDefault");
   });

@@ -6,6 +6,10 @@ import * as util from  "../../../util";
 import map from "lodash/collection/map";
 import * as t from "../../../types";
 
+export var metadata = {
+  category: "builtin-trailing"
+};
+
 exports.Function = function (node, parent, scope, file) {
   if (node.generator || node.async) return;
   var tailCall = new TailCallTransformer(this, scope, file);

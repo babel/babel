@@ -1,7 +1,7 @@
 import sortBy from "lodash/collection/sortBy";
 
 export var metadata = {
-  category: "builtin-cleanup"
+  category: "builtin-trailing"
 };
 
 // Priority:

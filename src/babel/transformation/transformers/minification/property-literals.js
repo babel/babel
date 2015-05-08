@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   optional: true,
-  category: "builtin-cleanup"
+  category: "builtin-trailing"
 };
 
 export var Property = {

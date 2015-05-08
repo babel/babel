@@ -1,6 +1,10 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
+export var metadata = {
+  category: "builtin-setup"
+};
+
 export function ForOfStatement(node, parent, scope, file) {
   var left = node.left;
   if (t.isVariableDeclaration(left)) {

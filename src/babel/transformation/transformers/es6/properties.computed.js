@@ -67,8 +67,8 @@ export var ObjectExpression = {
   exit(node, parent, scope, file) {
     var hasComputed = false;
 
-    for (var i = 0; i < node.properties.length; i++) {
-      hasComputed = t.isProperty(node.properties[i], { computed: true, kind: "init" });
+    for (var prop of (node.properties: Array)) {
+      hasComputed = t.isProperty(prop, { computed: true, kind: "init" });
       if (hasComputed) break;
     }
 

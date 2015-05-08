@@ -6,6 +6,10 @@
 
 import * as t from "../../../types";
 
+export var metadata = {
+  category: "builtin-setup"
+};
+
 export function ImportDeclaration(node, parent, scope, file) {
   if (node.source) {
     node.source.value = file.resolveModuleSource(node.source.value);
