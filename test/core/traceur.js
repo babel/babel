@@ -79,6 +79,7 @@ require("./_transformation-helper")({
     "Strict",
     "Syntax/UseStrictEscapeSequence",
     "Syntax/UseStrictLineContinuation",
+    "ObjectInitializerShorthand/StrictKeyword",
 
     // experimental es7 - the spec hasn't been finalized yet
     // these both fail because of filters between blocks
