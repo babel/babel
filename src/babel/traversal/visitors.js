@@ -4,6 +4,9 @@ import * as t from "../types";
 import esquery from "esquery";
 
 export function explode(visitor, mergeConflicts) {
+  if (visitor._exploded) return visitor;
+  visitor._exploded = true;
+
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
   delete visitor.__esModule;
@@ -86,15 +89,12 @@ export function verify(visitor) {
   for (var nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    if (t.TYPES.indexOf(nodeType) < 0) {
+    if (t.TYPES.indexOf(nodeType) < 0 && !virtualTypes[nodeType]) {
       throw new Error(messages.get("traverseVerifyNodeType", nodeType));
     }
 
     var visitors = visitor[nodeType];
-
-    if (typeof visitors === "function") {
-      throw new Error(messages.get("traverseVerifyVisitorFunction", nodeType));
-    } else if (typeof visitors === "object") {
+    if (typeof visitors === "object") {
       for (var visitorKey in visitors) {
         if (visitorKey === "enter" || visitorKey === "exit") continue;
         throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));

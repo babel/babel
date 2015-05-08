@@ -5,7 +5,7 @@ import object from "../../helpers/object";
 import * as util from  "../../util";
 import * as t from "../../types";
 
-var remapVisitor = traverse.explode({
+var remapVisitor = {
   enter(node, parent, scope, formatter) {
     if (node._skipModulesRemap) {
       return this.skip();
@@ -63,7 +63,7 @@ var remapVisitor = traverse.explode({
 
     return t.sequenceExpression(nodes);
   }
-});
+};
 
 var importsVisitor = {
   ImportDeclaration: {
@@ -74,7 +74,7 @@ var importsVisitor = {
   }
 };
 
-var exportsVisitor = traverse.explode({
+var exportsVisitor = {
   ExportDeclaration: {
     enter(node, parent, scope, formatter) {
       formatter.hasLocalExports = true;
@@ -106,7 +106,7 @@ var exportsVisitor = traverse.explode({
       }
     }
   }
-});
+};
 
 export default class DefaultFormatter {
   constructor(file) {

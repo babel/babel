@@ -10,7 +10,7 @@ var hasDefaults = function (node) {
   return false;
 };
 
-var iifeVisitor = traverse.explode({
+var iifeVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
     if (!state.scope.hasOwnBinding(node.name)) return;
     if (state.scope.bindingIdentifierEquals(node.name, node)) return;
@@ -18,7 +18,7 @@ var iifeVisitor = traverse.explode({
     state.iife = true;
     this.stop();
   }
-});
+};
 
 exports.Function = function (node, parent, scope, file) {
   if (!hasDefaults(node)) return;

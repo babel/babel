@@ -35,7 +35,7 @@ var collectPropertyReferencesVisitor = {
   }
 };
 
-var constructorVisitor = traverse.explode({
+var constructorVisitor = {
   ThisExpression: {
     enter(node, parent, scope, ref) {
       return ref;
@@ -49,9 +49,9 @@ var constructorVisitor = traverse.explode({
       }
     }
   }
-});
+};
 
-var verifyConstructorVisitor = traverse.explode({
+var verifyConstructorVisitor = {
   MethodDefinition: {
     enter() {
       this.skip();
@@ -96,7 +96,7 @@ var verifyConstructorVisitor = traverse.explode({
       }
     }
   }
-});
+};
 
 class ClassTransformer {
 

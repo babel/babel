@@ -26,7 +26,6 @@ export const MESSAGES = {
 
   traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
-  traverseVerifyVisitorFunction: "You passed \`traverse()\` a visitor object with the key $1 that's a `Function` instead of `{ enter: Function }`. You need to normalise your visitor with `traverse.explode(visitor)`.",
   traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
   traverseVerifyNodeType: "You gave us a visitor for the node type $1 but it's not a valid type",
 

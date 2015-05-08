@@ -21,7 +21,7 @@ function returnBlock(expr) {
 }
 
 // looks for and replaces tail recursion calls
-var firstPass = traverse.explode({
+var firstPass = {
   enter(node, parent, scope, state) {
     if (t.isTryStatement(parent)) {
       if (node === parent.block) {
@@ -45,11 +45,11 @@ var firstPass = traverse.explode({
     this.skip();
     state.vars.push(node);
   }
-});
+};
 
 // hoists up function declarations, replaces `this` and `arguments` and marks
 // them as needed
-var secondPass = traverse.explode({
+var secondPass = {
   ThisExpression(node, parent, scope, state) {
     state.needsThis = true;
     return state.getThisId();
@@ -71,10 +71,10 @@ var secondPass = traverse.explode({
       return node;
     }
   }
-});
+};
 
 // optimizes recursion by removing `this` and `arguments` if they aren't used
-var thirdPass = traverse.explode({
+var thirdPass = {
   ExpressionStatement(node, parent, scope, state) {
     var expr = node.expression;
     if (!t.isAssignmentExpression(expr)) return;
@@ -87,7 +87,7 @@ var thirdPass = traverse.explode({
       });
     }
   }
-});
+};
 
 class TailCallTransformer {
   constructor(path, scope, file) {
