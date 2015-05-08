@@ -84,11 +84,11 @@ suite("api", function () {
     test("{ modules: \"system\" }", function () {
       var expected = [
         "System.register('foo/bar', [], function (_export) {",
+        "  'use strict';",
+        "",
         "  return {",
         "    setters: [],",
         "    execute: function () {",
-        "      'use strict';",
-        "",
         "      foo('bar');",
         "    }",
         "  };",
