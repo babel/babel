@@ -191,7 +191,7 @@ export function VariableDeclaration(node, print, parent) {
   }
 
   var sep = ",";
-  if (!this.format.compact && hasInits && !this.format.retainLines) {
+  if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
     sep += `\n${repeating(" ", node.kind.length + 1)}`;
   } else {
     sep += " ";
