@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+export var metadata = {
+  category: "builtin-cleanup"
+};
+
 export var Property = {
   exit(node) {
     var key = node.key;

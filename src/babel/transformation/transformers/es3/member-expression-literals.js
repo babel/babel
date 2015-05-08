@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+export var metadata = {
+  category: "builtin-cleanup"
+};
+
 export var MemberExpression = {
   exit(node) {
     var prop = node.property;

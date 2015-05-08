@@ -1,7 +1,8 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  optional: true
+  optional: true,
+  category: "builtin-cleanup"
 };
 
 export var MemberExpression = {

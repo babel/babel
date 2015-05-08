@@ -8,6 +8,10 @@ function keepBlockHoist(node, nodes) {
   }
 }
 
+export var metadata = {
+  category: "builtin-modules"
+};
+
 export function ImportDeclaration(node, parent, scope, file) {
   // flow type
   if (node.isType) return;

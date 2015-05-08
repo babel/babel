@@ -37,6 +37,10 @@ function standardizeLets(declars) {
   }
 }
 
+export var metadata = {
+  category: "builtin-advanced"
+};
+
 export function VariableDeclaration(node, parent, scope, file) {
   if (!isLet(node, parent)) return;
 

@@ -1,4 +1,5 @@
 export default {
+  // builtin-basic
   "utility.removeDebugger":                require("./utility/remove-debugger"),
   "utility.removeConsole":                 require("./utility/remove-console"),
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
@@ -41,26 +42,32 @@ export default {
   "es6.spread":                            require("./es6/spread"),
   "es6.parameters.default":                require("./es6/parameters.default"),
   "es6.destructuring":                     require("./es6/destructuring"),
-  "es6.blockScoping":                      require("./es6/block-scoping"),
-  "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
   "es6.tailCall":                          require("./es6/tail-call"),
-  regenerator:                             require("./other/regenerator"),
-  runtime:                                 require("./other/runtime"),
   "es7.exportExtensions":                  require("./es7/export-extensions"),
-  "es6.modules":                           require("./es6/modules"),
   "spec.protoToAssign":                    require("./spec/proto-to-assign"),
   _shadowFunctions:                        require("./internal/shadow-functions"),
   "es7.doExpressions":                     require("./es7/do-expressions"),
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   ludicrous:                               require("./other/ludicrous"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
+  jscript:                                 require("./other/jscript"),
+  flow:                                    require("./other/flow"),
+  _hoistDirectives:                        require("./internal/hoist-directives"),
+
+  // builtin-modules
+  "es6.modules":                           require("./es6/modules"),
+  regenerator:                             require("./other/regenerator"),
+  runtime:                                 require("./other/runtime"),
   _moduleFormatter:                        require("./internal/module-formatter"),
+
+  // builtin-advanced
+  "es6.blockScoping":                      require("./es6/block-scoping"),
+  "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
+
+  // builtin-cleanup
   "es3.propertyLiterals":                  require("./es3/property-literals"),
   "es3.memberExpressionLiterals":          require("./es3/member-expression-literals"),
   "minification.memberExpressionLiterals": require("./minification/member-expression-literals"),
   "minification.propertyLiterals":         require("./minification/property-literals"),
-  jscript:                                 require("./other/jscript"),
-  flow:                                    require("./other/flow"),
-  _hoistDirectives:                        require("./internal/hoist-directives"),
-  _blockHoist:                             require("./internal/block-hoist")
+  _blockHoist:                             require("./internal/block-hoist"),
 };

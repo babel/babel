@@ -28,7 +28,8 @@ var visitor = traverse.explode({
 });
 
 export var metadata = {
-  optional: true
+  optional: true,
+  category: "builtin-advanced"
 };
 
 export var BlockStatement = {

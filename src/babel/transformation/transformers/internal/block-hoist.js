@@ -1,5 +1,9 @@
 import sortBy from "lodash/collection/sortBy";
 
+export var metadata = {
+  category: "builtin-cleanup"
+};
+
 // Priority:
 //
 //  - 0 We want this to be at the **very** bottom

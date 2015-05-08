@@ -6,7 +6,6 @@ export function Flow(node) {
 
 export function ClassProperty(node) {
   node.typeAnnotation = null;
-  if (!node.value) this.remove();
 }
 
 export function Class(node) {

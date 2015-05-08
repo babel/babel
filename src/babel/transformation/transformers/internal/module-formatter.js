@@ -1,5 +1,9 @@
 import * as strict from "../../helpers/strict";
 
+export var metadata = {
+  category: "builtin-modules"
+};
+
 export var Program = {
   exit(program, parent, scope, file) {
     strict.wrap(program, function () {
