@@ -17,11 +17,9 @@ export function ClassDeclaration(node, parent, scope, file) {
   ]);
 }
 
-export var ClassExpression = {
-  exit(node, parent, scope, file) {
-    return new ClassTransformer(this, file).run();
-  }
-};
+export function ClassExpression(node, parent, scope, file) {
+  return new ClassTransformer(this, file).run();
+}
 
 var collectPropertyReferencesVisitor = {
   Identifier: {
