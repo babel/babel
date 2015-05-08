@@ -717,19 +717,18 @@ export default class TraversalPath {
 
       // call the function with the params (node, parent, scope, state)
       var replacement = fn.call(this, node, this.parent, this.scope, this.state);
+      var previousType = this.type;
 
       if (replacement) {
-        var previousType = this.type;
-
         this.replaceWith(replacement, true);
-
-        if (previousType !== this.type) {
-          this.queueNode(this);
-          return;
-        }
       }
 
       if (this.shouldStop || this.shouldSkip || this.removed) return;
+
+      if (replacement && previousType !== this.type) {
+        this.queueNode(this);
+        return;
+      }
     }
   }
 
