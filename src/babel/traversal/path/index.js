@@ -361,12 +361,44 @@ export default class TraversalPath {
     if (log) file.log.debug("End scope building");
   }
 
-  _remove() {
-    if (Array.isArray(this.container)) {
-      this.container.splice(this.key, 1);
-      this.updateSiblingKeys(this.key, -1);
+  /**
+   * Share comments amongst siblings.
+   */
+
+  shareCommentsWithSiblings() {
+    var node = this.node;
+    if (!node) return;
+
+    var trailing = node.trailingComments;
+    var leading  = node.leadingComments;
+    if (!trailing && !leading) return;
+
+    var prev = this.getSibling(this.key - 1);
+    var next = this.getSibling(this.key + 1);
+
+    if (!prev.node) prev = next;
+    if (!next.node) next = prev;
+
+    prev.giveComments("trailing", leading);
+    next.giveComments("leading", trailing);
+  }
+
+  /**
+   * Give node `comments` of the specified `type`.
+   */
+
+  giveComments(type: string, comments: Array) {
+    if (!comments) return;
+
+    var node = this.node;
+    if (!node) return;
+
+    var key = `${type}Comments`;
+
+    if (node[key]) {
+      node[key] = node[key].concat(comments);
     } else {
-      this.container[this.key] = null;
+      node[key] = comments;
     }
   }
 
@@ -375,6 +407,7 @@ export default class TraversalPath {
    */
 
   remove() {
+    this.shareCommentsWithSiblings();
     this._remove();
     this.removed = true;
 
@@ -406,6 +439,15 @@ export default class TraversalPath {
       } else { // key === "right"
         parentPath.replaceWith(parent.left);
       }
+    }
+  }
+
+  _remove() {
+    if (Array.isArray(this.container)) {
+      this.container.splice(this.key, 1);
+      this.updateSiblingKeys(this.key, -1);
+    } else {
+      this.container[this.key] = null;
     }
   }
 
