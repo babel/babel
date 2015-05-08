@@ -1,11 +1,5 @@
 "use strict";
 
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.giveWord = giveWord;
-
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
@@ -16,6 +10,11 @@ var _interopRequireDefault = require("babel-runtime/helpers/interop-require-defa
 
 var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.giveWord = giveWord;
 var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
 
 var _someModule = require("someModule");

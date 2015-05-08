@@ -7,6 +7,11 @@ export var metadata = {
 export var Program = {
   exit(program, parent, scope, file) {
     strict.wrap(program, function () {
+      // ensure that these are at the top, just like normal imports
+      for (var node of (file.dynamicImports: Array)) {
+        node._blockHoist = 3;
+      }
+
       program.body = file.dynamicImports.concat(program.body);
     });
 
