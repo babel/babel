@@ -7,7 +7,7 @@ var Test = (function () {
 
   babelHelpers.createClass(Test, [{
     key: "bar",
-    get: function () {
+    get: function get() {
       throw new Error("wow");
     }
   }]);
