@@ -233,6 +233,7 @@ var loopVisitor = {
 
     if (replace) {
       replace = t.returnStatement(replace);
+      this.skip();
       return t.inherits(replace, node);
     }
   }
