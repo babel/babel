@@ -11,17 +11,17 @@ function one() {
 one(1, 2);
 
 function two() {
-  var _arguments3 = arguments;
+  var _arguments2 = arguments;
 
   var inner = function inner() {
-    return _arguments3;
+    return _arguments2;
   };
 
   var another = function another() {
-    var _arguments2 = arguments;
+    var _arguments3 = arguments;
 
     var inner2 = function inner2() {
-      return _arguments2;
+      return _arguments3;
     };
   };
 

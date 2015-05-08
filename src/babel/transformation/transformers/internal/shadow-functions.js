@@ -89,21 +89,17 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-export var Program = {
-  exit(node, parent, scope) {
-    aliasFunction(function () {
-      return node.body;
-    }, this, scope);
-  }
-};
+export function Program(node, parent, scope) {
+  aliasFunction(function () {
+    return node.body;
+  }, this, scope);
+}
 
-export var FunctionDeclaration = {
-  exit(node, parent, scope) {
-    aliasFunction(function () {
-      t.ensureBlock(node);
-      return node.body.body;
-    }, this, scope);
-  }
-};
+export function FunctionDeclaration(node, parent, scope) {
+  aliasFunction(function () {
+    t.ensureBlock(node);
+    return node.body.body;
+  }, this, scope);
+}
 
 export { FunctionDeclaration as FunctionExpression };
