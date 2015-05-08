@@ -1,1 +1,0 @@
-Object(RIGHT)[LEFT] !== undefined;
