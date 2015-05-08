@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+export var metadata = {
+  group: "builtin-setup"
+};
+
 export var BlockStatement = {
   exit(node) {
     for (var i = 0; i < node.body.length; i++) {

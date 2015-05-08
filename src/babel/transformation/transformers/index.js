@@ -1,6 +1,7 @@
 export default {
   //- builtin-setup
   _validation:                             require("./internal/validation"),
+  _hoistDirectives:                        require("./internal/hoist-directives"),
   "utility.removeDebugger":                require("./utility/remove-debugger"),
   "utility.removeConsole":                 require("./utility/remove-console"),
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
@@ -52,7 +53,6 @@ export default {
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
   jscript:                                 require("./other/jscript"),
   flow:                                    require("./other/flow"),
-  _hoistDirectives:                        require("./internal/hoist-directives"),
 
   //- builtin-advanced
   "es6.destructuring":                     require("./es6/destructuring"),
