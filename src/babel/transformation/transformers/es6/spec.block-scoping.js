@@ -29,7 +29,7 @@ var visitor = traverse.explode({
 
 export var metadata = {
   optional: true,
-  category: "builtin-advanced"
+  group: "builtin-advanced"
 };
 
 export var BlockStatement = {

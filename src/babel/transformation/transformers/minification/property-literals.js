@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   optional: true,
-  category: "builtin-trailing"
+  group: "builtin-trailing"
 };
 
 export var Property = {

@@ -242,17 +242,17 @@ export default class File {
       // been merged
       if (ignore.indexOf(pass) >= 0) continue;
 
-      var category = pass.transformer.metadata.category;
+      var group = pass.transformer.metadata.group;
 
       // can't merge
-      if (!pass.canTransform() || !category) {
+      if (!pass.canTransform() || !group) {
         stack.push(pass);
         continue;
       }
 
       var mergeStack = [];
       for (let pass of (_stack: Array)) {
-        if (pass.transformer.metadata.category === category) {
+        if (pass.transformer.metadata.group === group) {
           mergeStack.push(pass);
           ignore.push(pass);
         }
@@ -263,7 +263,7 @@ export default class File {
         visitors.push(pass.handlers);
       }
       var visitor = traverse.visitors.merge(visitors);
-      var mergeTransformer = new Transformer(category, visitor);
+      var mergeTransformer = new Transformer(group, visitor);
       //console.log(mergeTransformer);
       stack.push(mergeTransformer.buildPass(this));
     }

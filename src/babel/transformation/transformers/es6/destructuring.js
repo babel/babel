@@ -2,7 +2,7 @@ import * as messages from "../../../messages";
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "builtin-advanced"
+  group: "builtin-advanced"
 };
 
 export function ForOfStatement(node, parent, scope, file) {

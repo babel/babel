@@ -7,7 +7,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "builtin-setup"
+  group: "builtin-setup"
 };
 
 export function ImportDeclaration(node, parent, scope, file) {

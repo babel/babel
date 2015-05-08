@@ -11,7 +11,7 @@ const RUNTIME_MODULE_NAME = "babel-runtime";
 
 export var metadata = {
   optional: true,
-  category: "builtin-post-modules"
+  group: "builtin-post-modules"
 };
 
 export function pre(file) {

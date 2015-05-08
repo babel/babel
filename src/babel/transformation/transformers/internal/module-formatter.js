@@ -1,7 +1,7 @@
 import * as strict from "../../helpers/strict";
 
 export var metadata = {
-  category: "builtin-modules"
+  group: "builtin-modules"
 };
 
 export var Program = {

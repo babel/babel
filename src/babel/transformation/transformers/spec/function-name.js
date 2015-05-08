@@ -1,5 +1,5 @@
 export var metadata = {
-  category: "builtin-setup"
+  group: "builtin-setup"
 };
 
 export {

@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "builtin-trailing"
+  group: "builtin-trailing"
 };
 
 export var MemberExpression = {

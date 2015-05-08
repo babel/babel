@@ -7,7 +7,7 @@ import map from "lodash/collection/map";
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "builtin-trailing"
+  group: "builtin-trailing"
 };
 
 exports.Function = function (node, parent, scope, file) {

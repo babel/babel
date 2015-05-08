@@ -2,7 +2,7 @@ import regenerator from "regenerator";
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "regenerator"
+  group: "regenerator"
 };
 
 export function Program(ast) {

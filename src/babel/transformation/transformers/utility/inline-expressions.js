@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   optional: true,
-  category: "builtin-setup"
+  group: "builtin-setup"
 };
 
 export function Expression(node, parent, scope) {

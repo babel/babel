@@ -9,7 +9,7 @@ function keepBlockHoist(node, nodes) {
 }
 
 export var metadata = {
-  category: "builtin-modules"
+  group: "builtin-modules"
 };
 
 export function ImportDeclaration(node, parent, scope, file) {

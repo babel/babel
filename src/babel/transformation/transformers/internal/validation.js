@@ -2,7 +2,7 @@ import * as messages from "../../../messages";
 import * as t from "../../../types";
 
 export var metadata = {
-  category: "builtin-setup"
+  group: "builtin-setup"
 };
 
 export function ForOfStatement(node, parent, scope, file) {

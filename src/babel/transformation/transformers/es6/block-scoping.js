@@ -38,7 +38,7 @@ function standardizeLets(declars) {
 }
 
 export var metadata = {
-  category: "builtin-advanced"
+  group: "builtin-advanced"
 };
 
 export function VariableDeclaration(node, parent, scope, file) {
