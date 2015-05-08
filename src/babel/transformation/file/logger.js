@@ -1,4 +1,7 @@
-import * as util from  "../../util";
+import buildDebug from "debug/node";
+
+var verboseDebug = buildDebug("babel:verbose");
+var generalDebug = buildDebug("babel");
 
 export default class Logger {
   constructor(file: File, filename: string) {
@@ -22,11 +25,15 @@ export default class Logger {
     }
   }
 
+  verbose(msg: string) {
+    if (verboseDebug.enabled) verboseDebug(this._buildMessage(msg));
+  }
+
   debug(msg: string) {
-    util.debug(this._buildMessage(msg));
+    if (generalDebug.enabled) generalDebug(this._buildMessage(msg));
   }
 
   deopt(node: Object, msg: string) {
-    util.debug(this._buildMessage(msg));
+    this.debug(msg);
   }
 }

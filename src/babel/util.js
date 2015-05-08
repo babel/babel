@@ -1,7 +1,7 @@
 import "./patch";
 
 import escapeRegExp from "lodash/string/escapeRegExp";
-import buildDebug from "debug/node";
+
 import cloneDeep from "lodash/lang/cloneDeep";
 import isBoolean from "lodash/lang/isBoolean";
 import * as messages from "./messages";
@@ -21,8 +21,6 @@ import * as t from "./types";
 import slash from "slash";
 
 export { inherits, inspect } from "util";
-
-export var debug = buildDebug("babel");
 
 export function canCompile(filename: string, altExts?: Array<string>) {
   var exts = altExts || canCompile.EXTENSIONS;
