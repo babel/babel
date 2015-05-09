@@ -474,7 +474,10 @@ pp.parseNew = function() {
   }
   let start = this.markPosition()
   node.callee = this.parseSubscripts(this.parseExprAtom(), start, true)
-  if (this.eat(tt.parenL)) node.arguments = this.parseExprList(tt.parenR, false)
+  if (this.eat(tt.parenL)) node.arguments = this.parseExprList(
+    tt.parenR,
+    this.options.features["es7.trailingFunctionCommas"]
+  )
   else node.arguments = empty
   return this.finishNode(node, "NewExpression")
 }
