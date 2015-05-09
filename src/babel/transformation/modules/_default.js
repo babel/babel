@@ -12,10 +12,10 @@ var remapVisitor = {
     }
   },
 
-  Identifier(node, parent, scope, formatter) {
+  ReferencedIdentifier(node, parent, scope, formatter) {
     var remap = formatter.internalRemap[node.name];
 
-    if (this.isReferencedIdentifier() && remap && node !== remap) {
+    if (remap && node !== remap) {
       if (!scope.hasBinding(node.name) || scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
         return remap;
       }

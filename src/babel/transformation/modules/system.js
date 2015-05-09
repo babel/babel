@@ -1,5 +1,6 @@
 import DefaultFormatter from "./_default";
 import AMDFormatter from "./amd";
+import object from  "../../helpers/object";
 import * as util from  "../../util";
 import last from "lodash/array/last";
 import each from "lodash/collection/each";
@@ -143,7 +144,7 @@ export default class SystemFormatter extends AMDFormatter {
       ]));
     }
 
-    this.internalRemap = {};
+    this.internalRemap = object();
 
     this._addImportSource(last(nodes), node);
   }
