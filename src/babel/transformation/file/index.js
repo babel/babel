@@ -24,7 +24,6 @@ import clone from "lodash/lang/clone";
 import * as util from  "../../util";
 import * as api from  "../../api/node";
 import path from "path";
-import each from "lodash/collection/each";
 import * as t from "../../types";
 
 export default class File {
@@ -190,7 +189,8 @@ export default class File {
     var stack = [];
 
     // build internal transformers
-    each(this.pipeline.transformers, function (transformer, key) {
+    for (var key in this.pipeline.transformers) {
+      var transformer = this.pipeline.transformers[key];
       var pass = transformers[key] = transformer.buildPass(file);
 
       if (pass.canTransform()) {
@@ -204,7 +204,7 @@ export default class File {
           transformer.manipulateOptions(file.opts, file);
         }
       }
-    });
+    }
 
     // init plugins!
     var beforePlugins = [];
@@ -487,9 +487,9 @@ export default class File {
     this.log.debug("End module formatter init");
 
     this.call("pre");
-    each(this.transformerStack, function (pass) {
+    for (var pass of (this.transformerStack: Array)) {
       pass.transform();
-    });
+    }
     this.call("post");
   }
 

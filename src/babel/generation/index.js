@@ -106,9 +106,9 @@ class CodeGenerator {
     this.print(ast);
 
     var comments = [];
-    each(ast.comments, function (comment) {
+    for (var comment of (ast.comments: Array)) {
       if (!comment._displayed) comments.push(comment);
-    });
+    }
     this._printComments(comments);
 
     return {
@@ -249,7 +249,8 @@ class CodeGenerator {
 
     if (opts.indent) this.indent();
 
-    each(nodes, (node, i) => {
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
       print(node, {
         statement: opts.statement,
         addNewlines: opts.addNewlines,
@@ -314,9 +315,9 @@ class CodeGenerator {
       nodes.push(node.argument);
     }
 
-    each(nodes, (node) => {
+    for (var node of (nodes: Array)) {
       comments = comments.concat(this._getComments(key, node));
-    });
+    }
 
     return comments;
   }
@@ -331,19 +332,19 @@ class CodeGenerator {
     if (!this.format.comments) return;
     if (!comments || !comments.length) return;
 
-    each(comments, (comment) => {
+    for (var comment of comments, (comment) => {
       var skip = false;
 
       // find the original comment in the ast and set it as displayed
-      each(this.ast.comments, function (origComment) {
+      for (var origComment of (this.ast.comments: Array)) {
         if (origComment.start === comment.start) {
           // comment has already been output
           if (origComment._displayed) skip = true;
 
           origComment._displayed = true;
-          return false;
+          break;
         }
-      });
+      }
 
       if (skip) return;
 
@@ -387,7 +388,7 @@ class CodeGenerator {
 
       // whitespace after
       this.newline(this.whitespace.getNewlinesAfter(comment));
-    });
+    }
   }
 }
 

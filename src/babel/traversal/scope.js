@@ -14,10 +14,10 @@ import * as t from "../types";
 var functionVariableVisitor = {
   enter(node, parent, scope, state) {
     if (t.isFor(node)) {
-      each(t.FOR_INIT_KEYS, (key) => {
+      for (var key of (t.FOR_INIT_KEYS: Array)) {
         var declar = this.get(key);
         if (declar.isVar()) state.scope.registerBinding("var", declar);
-      });
+      }
     }
 
     // this block is a function so we'll stop since none of the variables

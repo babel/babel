@@ -60,12 +60,12 @@ var runnerSettersVisitor = {
   enter(node, parent, scope, state) {
     if (node._importSource === state.source) {
       if (t.isVariableDeclaration(node)) {
-        each(node.declarations, function (declar) {
+        for (var declar of (node.declarations: Array)) {
           state.hoistDeclarators.push(t.variableDeclarator(declar.id));
           state.nodes.push(t.expressionStatement(
             t.assignmentExpression("=", declar.id, declar.init)
           ));
-        });
+        }
       } else {
         state.nodes.push(node);
       }

@@ -22,7 +22,7 @@ var hoistVariablesVisitor = explode({
   VariableDeclaration(node, parent, scope) {
     if (node.kind !== "var") return;
 
-      var bindings = this.getBindingIdentifiers();
+    var bindings = this.getBindingIdentifiers();
     for (var key in bindings) {
       scope.push({ id: bindings[key] });
     }

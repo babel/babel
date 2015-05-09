@@ -15,15 +15,15 @@ export function TemplateLiteral(node, print) {
   var quasis = node.quasis;
   var len    = quasis.length;
 
-  each(quasis, (quasi, i) => {
-    print(quasi);
+  for (var i = 0; i < len; i++) {
+    print(quasis[i]);
 
     if (i + 1 < len) {
       this.push("${ ");
       print(node.expressions[i]);
       this.push(" }");
     }
-  });
+  }
 
   this._push("`");
 }

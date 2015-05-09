@@ -54,7 +54,8 @@ export function ArrayExpression(node, print) {
 
   this.push("[");
 
-  each(elems, (elem, i) => {
+  for (var i = 0; i < elems.length; i++) {
+    var elem = elems[i];
     if (!elem) {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
@@ -67,7 +68,7 @@ export function ArrayExpression(node, print) {
       print(elem);
       if (i < len - 1) this.push(",");
     }
-  });
+  }
 
   this.push("]");
 }

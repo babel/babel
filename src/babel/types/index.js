@@ -258,9 +258,9 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
  */
 
 export function removeComments(child: Object): Object {
-  each(COMMENT_KEYS, function (key) {
+  for (var key of (COMMENT_KEYS: Array)) {
     delete child[key];
-  });
+  }
   return child;
 }
 
@@ -270,9 +270,9 @@ export function removeComments(child: Object): Object {
 
 export function inheritsComments(child: Object, parent: Object): Object {
   if (child && parent) {
-    each(COMMENT_KEYS, function (key) {
+    for (var key of (COMMENT_KEYS: Array)) {
       child[key]  = uniq(compact([].concat(child[key], parent[key])));
-    });
+    }
   }
   return child;
 }

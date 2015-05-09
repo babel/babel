@@ -43,13 +43,13 @@ export function JSXElement(node, print) {
   if (open.selfClosing) return;
 
   this.indent();
-  each(node.children, (child) => {
+  for (var child of (node.children: Array)) {
     if (t.isLiteral(child)) {
       this.push(child.value, true);
     } else {
       print(child);
     }
-  });
+  }
   this.dedent();
 
   print(node.closingElement);

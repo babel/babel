@@ -51,7 +51,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
       } else if (t.isVariableDeclaration(node)) {
         if (node.kind !== "var") return bailed = true; // bailed
 
-        each(node.declarations, function (declar) {
+        for (var declar of (node.declarations: Array)) {
           var bindings = t.getBindingIdentifiers(declar);
           for (var key in bindings) {
             declars.push({
@@ -63,7 +63,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
           if (declar.init) {
             exprs.push(t.assignmentExpression("=", declar.id, declar.init));
           }
-        });
+        }
 
         ensureLastUndefined = true;
         continue;

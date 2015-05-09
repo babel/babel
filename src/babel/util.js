@@ -14,7 +14,6 @@ import Module from "module";
 import isEmpty from "lodash/lang/isEmpty";
 import parse from "./helpers/parse";
 import path from "path";
-import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import fs from "fs";
 import * as t from "./types";
@@ -166,7 +165,7 @@ function loadTemplates() {
     throw new ReferenceError(messages.get("missingTemplatesDirectory"));
   }
 
-  each(fs.readdirSync(templatesLoc), function (name) {
+  for (var name of (fs.readdirSync(templatesLoc): Array)) {
     if (name[0] === ".") return;
 
     var key  = path.basename(name, path.extname(name));
@@ -174,7 +173,7 @@ function loadTemplates() {
     var code = fs.readFileSync(loc, "utf8");
 
     templates[key] = parseTemplate(loc, code);
-  });
+  }
 
   return templates;
 }

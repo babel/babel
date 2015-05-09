@@ -1,4 +1,3 @@
-import isString from "lodash/lang/isString";
 import esutils from "esutils";
 import * as t from "./index";
 
@@ -115,8 +114,11 @@ export function isReferencedIdentifier(node: Object, parent: Object, opts?: Obje
  */
 
 export function isValidIdentifier(name: string): boolean {
-  if (!isString(name) || esutils.keyword.isReservedWordES6(name, true)) return false;
-  return esutils.keyword.isIdentifierNameES6(name);
+  if (typeof name !== "string" || esutils.keyword.isReservedWordES6(name, true)) {
+    return false;
+  } else {
+    return esutils.keyword.isIdentifierNameES6(name);
+  }
 }
 
 /**
