@@ -745,11 +745,10 @@ export default class TraversalPath {
     if (!node) return;
 
     var opts = this.opts;
-    var fns  = [].concat(opts[key]);
+    if (!opts[key] && !opts[node.type]) return;
 
-    if (opts[node.type]) {
-      fns = fns.concat(opts[node.type][key]);
-    }
+    var fns = [].concat(opts[key]);
+    if (opts[node.type]) fns = fns.concat(opts[node.type][key]);
 
     for (var fn of (fns: Array)) {
       if (!fn) continue;
@@ -789,7 +788,7 @@ export default class TraversalPath {
 
   visit(): boolean {
     if (this.isBlacklisted()) return false;
-    if (this.opts.shouldSkip(this)) return false;
+    if (this.opts.shouldSkip && this.opts.shouldSkip(this)) return false;
 
     this.call("enter");
 

@@ -82,10 +82,6 @@ export function verify(visitor) {
     throw new Error(messages.get("traverseVerifyRootFunction"));
   }
 
-  if (!visitor.enter) visitor.enter = function () { };
-  if (!visitor.exit) visitor.exit = function () { };
-  if (!visitor.shouldSkip) visitor.shouldSkip = function () { return false; };
-
   for (var nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
