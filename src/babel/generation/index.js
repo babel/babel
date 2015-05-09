@@ -264,7 +264,7 @@ class CodeGenerator {
           }
         }
       });
-    });
+    }
 
     if (opts.indent) this.dedent();
   }
@@ -332,7 +332,7 @@ class CodeGenerator {
     if (!this.format.comments) return;
     if (!comments || !comments.length) return;
 
-    for (var comment of comments, (comment) => {
+    for (var comment of (comments: Array)) {
       var skip = false;
 
       // find the original comment in the ast and set it as displayed
