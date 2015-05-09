@@ -2,10 +2,10 @@ export default {
   //- builtin-setup
   _validation:                             require("./internal/validation"),
   _hoistDirectives:                        require("./internal/hoist-directives"),
-  "utility.removeDebugger":                require("./utility/remove-debugger"),
-  "utility.removeConsole":                 require("./utility/remove-console"),
+  "minification.removeDebugger":           require("./minification/remove-debugger"),
+  "minification.removeConsole":            require("./minification/remove-console"),
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
-  "utility.inlineExpressions":             require("./utility/inline-expressions"),
+  "minification.inlineExpressions":        require("./minification/inline-expressions"),
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "spec.functionName":                     require("./spec/function-name"),

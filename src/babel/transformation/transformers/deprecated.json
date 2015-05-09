@@ -5,7 +5,8 @@
   "es6.symbols": "es6.spec.symbols",
   "es6.blockScopingTDZ": "es6.spec.blockScoping",
 
+  "utility.inlineExpressions": "minification.inlineExpressions",
   "utility.deadCodeElimination": "minification.deadCodeElimination",
-  "minification.removeConsoleCalls": "utility.removeConsole",
-  "minification.removeDebugger": "utility.removeDebugger"
+  "utility.removeConsoleCalls": "minification.removeConsole",
+  "utility.removeDebugger": "minification.removeDebugger"
 }
