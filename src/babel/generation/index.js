@@ -105,11 +105,13 @@ class CodeGenerator {
 
     this.print(ast);
 
-    var comments = [];
-    for (var comment of (ast.comments: Array)) {
-      if (!comment._displayed) comments.push(comment);
+    if (ast.comments) {
+      var comments = [];
+      for (var comment of (ast.comments: Array)) {
+        if (!comment._displayed) comments.push(comment);
+      }
+      this._printComments(comments);
     }
-    this._printComments(comments);
 
     return {
       map:  this.map.get(),
