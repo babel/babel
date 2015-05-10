@@ -337,14 +337,16 @@ class CodeGenerator {
     for (var comment of (comments: Array)) {
       var skip = false;
 
-      // find the original comment in the ast and set it as displayed
-      for (var origComment of (this.ast.comments: Array)) {
-        if (origComment.start === comment.start) {
-          // comment has already been output
-          if (origComment._displayed) skip = true;
+      if (this.ast.comments) {
+        // find the original comment in the ast and set it as displayed
+        for (var origComment of (this.ast.comments: Array)) {
+          if (origComment.start === comment.start) {
+            // comment has already been output
+            if (origComment._displayed) skip = true;
 
-          origComment._displayed = true;
-          break;
+            origComment._displayed = true;
+            break;
+          }
         }
       }
 
