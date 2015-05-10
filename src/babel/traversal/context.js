@@ -10,6 +10,10 @@ export default class TraversalContext {
     this.opts       = opts;
   }
 
+  shouldVisit(node) {
+    return !!(this.opts.enter || this.opts[node.type] || t.VISITOR_KEYS[node.type]);
+  }
+
   create(node, obj, key) {
     return TraversalPath.get(this.parentPath, this, node, obj, key);
   }
@@ -25,7 +29,10 @@ export default class TraversalContext {
 
     // build up initial queue
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i]) queue.push(this.create(node, nodes, i));
+      var node = nodes[i];
+      if (node && this.shouldVisit(node)) {
+        queue.push(this.create(node, nodes, i));
+      }
     }
 
     // visit the queue
@@ -42,16 +49,13 @@ export default class TraversalContext {
       }
     }
 
-    // clear context from queued paths
-    for (let i = 0; i < queue.length; i++) {
-      //queue[i].clearContext();
-    }
-
     return stop;
   }
 
   visitSingle(node, key) {
-    return this.create(node, node, key).visit();
+    if (this.shouldVisit(node[key])) {
+      return this.create(node, node, key).visit();
+    }
   }
 
   visit(node, key) {
