@@ -29,9 +29,3 @@ export function ThisExpression() {
     return t.identifier("undefined");
   }
 }
-
-export function CallExpression(node, parent, scope, file) {
-  if (t.isIdentifier(node.callee, { name: "eval" })) {
-    throw file.errorWithNode(node, messages.get("evalInStrictMode"));
-  }
-}
