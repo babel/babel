@@ -29,7 +29,7 @@ var hoistVariablesVisitor = explode({
 
     var exprs = [];
 
-    for (var i = 0; i < node.declarations.length; i++) {
+    for (var declar of (node.declarations: Array)) {
       var declar = node.declarations[i];
       if (declar.init) {
         exprs.push(t.expressionStatement(

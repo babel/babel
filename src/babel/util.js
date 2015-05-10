@@ -97,13 +97,13 @@ export function booleanify(val: any): boolean {
 export function shouldIgnore(filename, ignore, only) {
   filename = slash(filename);
   if (only.length) {
-    for (var i = 0; i < only.length; i++) {
-      if (only[i].test(filename)) return false;
+    for (var pattern of (only: Array)) {
+      if (pattern.test(filename)) return false;
     }
     return true;
   } else if (ignore.length) {
-    for (var i = 0; i < ignore.length; i++) {
-      if (ignore[i].test(filename)) return true;
+    for (var pattern of (ignore: Array)) {
+      if (pattern.test(filename)) return true;
     }
   }
 

@@ -182,8 +182,8 @@ export function VariableDeclaration(node, print, parent) {
   var hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (var i = 0; i < node.declarations.length; i++) {
-      if (node.declarations[i].init) {
+    for (var declar of (node.declarations: Array)) {
+      if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
       }

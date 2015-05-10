@@ -265,8 +265,8 @@ export default class Scope {
         if (node.source) {
           add(node.source);
         } else if (node.specifiers && node.specifiers.length) {
-          for (var i = 0; i < node.specifiers.length; i++) {
-            add(node.specifiers[i]);
+          for (var specifier of (node.specifiers: Array)) {
+            add(specifier);
           }
         } else if (node.declaration) {
           add(node.declaration);
@@ -283,8 +283,7 @@ export default class Scope {
       } else if (t.isCallExpression(node)) {
         add(node.callee);
       } else if (t.isObjectExpression(node) || t.isObjectPattern(node)) {
-        for (var i = 0; i < node.properties.length; i++) {
-          var prop = node.properties[i];
+        for (var prop of (node.properties: Array)) {
           add(prop.key || prop.argument);
         }
       }
