@@ -10,7 +10,7 @@ export var metadata = {
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-exports.Function = function (node, parent, scope, file) {
+export function Func(node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
   return remapAsyncToGenerator(
@@ -18,4 +18,4 @@ exports.Function = function (node, parent, scope, file) {
     t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine")),
     scope
   );
-};
+}

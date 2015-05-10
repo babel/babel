@@ -55,7 +55,7 @@ export function ForOfStatement(node, parent, scope, file) {
 
 export { ForOfStatement as ForInStatement };
 
-exports.Function = function (node, parent, scope, file) {
+export function Func(node, parent, scope, file) {
   var nodes = [];
 
   var hasDestructuring = false;
@@ -85,7 +85,7 @@ exports.Function = function (node, parent, scope, file) {
 
   var block = node.body;
   block.body = nodes.concat(block.body);
-};
+}
 
 export function CatchClause(node, parent, scope, file) {
   var pattern = node.param;

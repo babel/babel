@@ -1,7 +1,9 @@
 import explode from "./explode-assignable-expression";
 import * as t from "../../types";
 
-export default function (exports, opts) {
+export default function (opts) {
+  var exports = {};
+
   var isAssignment = function (node) {
     return node.operator === opts.operator + "=";
   };
@@ -40,4 +42,6 @@ export default function (exports, opts) {
     if (node.operator !== opts.operator) return;
     return opts.build(node.left, node.right);
   };
+
+  return exports;
 };

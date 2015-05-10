@@ -26,9 +26,9 @@
   "ExportNamedDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ImportDeclaration":          ["Statement", "Declaration", "ModuleDeclaration"],
 
-  "ArrowFunctionExpression": ["Scopable", "Function", "Expression", "Pure"],
-  "FunctionDeclaration":     ["Scopable", "Function", "Statement", "Pure", "Declaration"],
-  "FunctionExpression":      ["Scopable", "Function", "Expression", "Pure"],
+  "ArrowFunctionExpression": ["Scopable", "Function", "Func", "Expression", "Pure"],
+  "FunctionDeclaration":     ["Scopable", "Function", "Func", "Statement", "Pure", "Declaration"],
+  "FunctionExpression":      ["Scopable", "Function", "Func", "Expression", "Pure"],
 
   "BlockStatement": ["Scopable", "Statement"],
   "Program":        ["Scopable"],

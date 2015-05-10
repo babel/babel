@@ -79,6 +79,8 @@ export function isType(nodeType, targetType) {
 
   var aliases = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
+    if (aliases[0] === nodeType) return true;
+
     for (var alias of (aliases: Array)) {
       if (nodeType === alias) return true;
     }

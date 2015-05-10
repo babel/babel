@@ -53,7 +53,7 @@ var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
 
-exports.Function = function (node, parent, scope, file) {
+export function Func(node, parent, scope, file) {
   if (!hasRest(node)) return;
 
   var rest = node.params.pop().argument;
@@ -135,4 +135,4 @@ exports.Function = function (node, parent, scope, file) {
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);
-};
+}

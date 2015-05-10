@@ -20,7 +20,7 @@ var iifeVisitor = {
   }
 };
 
-exports.Function = function (node, parent, scope, file) {
+export function Func(node, parent, scope, file) {
   if (!hasDefaults(node)) return;
 
   t.ensureBlock(node);
@@ -92,4 +92,4 @@ exports.Function = function (node, parent, scope, file) {
   } else {
     node.body.body = body.concat(node.body.body);
   }
-};
+}
