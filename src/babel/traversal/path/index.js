@@ -1048,7 +1048,7 @@ export default class TraversalPath {
     var type     = typeInfo.annotation;
     if (!type) return false;
 
-    if (type.inferred && opts.inference === false) {
+    if (typeInfo.inferred && opts.inference === false) {
       return false;
     }
 

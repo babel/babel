@@ -397,7 +397,7 @@ export default class Scope {
 
     if (t.isIdentifier(node)) {
       var binding = this.getBinding(node.name);
-      if (binding && binding.isTypeGeneric("Array", { inference: false })) return node;
+      if (binding && binding.constant && binding.isTypeGeneric("Array")) return node;
     }
 
     if (t.isArrayExpression(node)) {
