@@ -56,6 +56,7 @@ babelArgs.forEach(function(arg){
     case "--harmony_object_literals":
     case "--harmony_templates":
     case "--harmony_rest_parameters":
+    case "--harmony_generators":
     case "--compiled_keyed_generic_loads":
     case "--pretenuring_call_new":
     case "--allocation_site_pretenuring":
