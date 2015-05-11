@@ -14,7 +14,11 @@ var STATE_KEYS = [
   "pos",
   "end",
   "type",
-  "value"
+  "value",
+  "exprAllowed",
+  "potentialArrowAt",
+  "currLine",
+  "input"
 ];
 
 pp.getState = function () {
@@ -23,6 +27,7 @@ pp.getState = function () {
     var key = STATE_KEYS[i]
     state[key] = this[key]
   }
+  state.context = this.context.slice()
   return state
 };
 
