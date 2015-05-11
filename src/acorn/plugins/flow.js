@@ -153,9 +153,14 @@ pp.flow_parseTypeAlias = function (node) {
     node.typeParameters = null
   }
 
+  var oldInType = this.inType;
+  this.inType = true;
+
   this.expect(tt.eq)
 
   node.right = this.flow_parseType()
+
+  this.inType = oldInType;
 
   this.semicolon()
 
