@@ -126,6 +126,25 @@ export default class TraversalPath {
   }
 
   /**
+   * Description
+   */
+
+  inShadow() {
+    var path = this;
+    while (path) {
+      if (path.isFunction()) {
+        if (path.node.shadow) {
+          return path;
+        } else {
+          return null;
+        }
+      }
+      path = path.parentPath;
+    }
+    return null;
+  }
+
+  /**
    * Check whether this node was a part of the original AST.
    */
 
@@ -148,7 +167,7 @@ export default class TraversalPath {
   findParent(callback) {
     var path = this;
     while (path) {
-      if (callback(path.node)) return path.node;
+      if (callback(path.node, path)) return path;
       path = path.parentPath;
     }
     return null;
