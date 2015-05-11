@@ -90,50 +90,13 @@ var blockVariableVisitor = explode({
 
 var renameVisitor = explode({
   ReferencedIdentifier(node, parent, scope, state) {
-    if (node.name !== state.oldName) return;
-
-    if (this.parentPath.isProperty() && this.key === "key" && parent.shorthand) {
-      var value = t.identifier(state.newName);;
-
-      if (parent.value === state.binding) {
-        state.info.identifier = state.binding = value;
-      }
-
-      parent.shorthand = false;
-      parent.value = value;
-      parent.key = t.identifier(state.oldName);
-    } else {
+    if (node.name === state.oldName) {
       node.name = state.newName;
     }
   },
 
   Declaration(node, parent, scope, state) {
-    var ids = {};
-
-    var matchesLocal = (node, key) => {
-      return node.local === node[key] && (node.local.name === state.oldName || node.local.name === state.newName);
-    };
-
-    if (this.isExportDeclaration() && this.has("specifiers")) {
-      var specifiers = this.get("specifiers");
-      for (var specifier of (specifiers: Array)) {
-        if (specifier.isExportSpecifier() && matchesLocal(specifier.node, "exported")) {
-          specifier.get("exported").replaceWith(t.identifier(state.oldName));
-        }
-      }
-    } else if (this.isImportDeclaration() && this.has("specifiers")) {
-      var specifiers = this.get("specifiers");
-      for (var specifier of (specifiers: Array)) {
-        if (specifier.isImportSpecifier() && matchesLocal(specifier.node, "imported")) {
-          state.binding = state.info.identifier = t.identifier(state.newName);
-          specifier.get("local").replaceWith(state.binding);
-        } else {
-          extend(ids, specifier.getBindingIdentifiers());
-        }
-      }
-    } else {
-      ids = this.getBindingIdentifiers();
-    }
+    var ids = this.getBindingIdentifiers();;
 
     for (var name in ids) {
       if (name === state.oldName) ids[name].name = state.newName;

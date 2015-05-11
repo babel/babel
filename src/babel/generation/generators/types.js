@@ -1,4 +1,5 @@
 import each from "lodash/collection/each";
+import * as t from "../../types";
 
 export function Identifier(node) {
   this.push(node.name);
@@ -39,7 +40,14 @@ export function Property(node, print) {
       this.push("]");
     } else {
       print(node.key);
-      if (node.shorthand) return;
+
+      // shorthand!
+      if (node.shorthand &&
+        (t.isIdentifier(node.key) &&
+         t.isIdentifier(node.value) &&
+         node.key.name === node.value.name)) {
+        return;
+      }
     }
 
     this.push(":");

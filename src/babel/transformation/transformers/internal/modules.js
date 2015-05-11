@@ -4,6 +4,7 @@
 // a generator function as a default then regenerator will destroy the export
 // declaration and leave a variable declaration in it's place... yeah, handy.
 
+import clone from "lodash/lang/clone";
 import * as t from "../../../types";
 
 export var metadata = {
@@ -75,7 +76,7 @@ export function ExportNamedDeclaration(node, parent, scope) {
     var bindings = this.get("declaration").getBindingIdentifiers();
     for (var key in bindings) {
       var id = bindings[key];
-      specifiers.push(t.exportSpecifier(id, id));
+      specifiers.push(t.exportSpecifier(clone(id), clone(id)));
     }
     return [declar, t.exportNamedDeclaration(null, specifiers)];
   }

@@ -1,5 +1,6 @@
 export default {
   //- builtin-setup
+  _explode:                                require("./internal/explode"),
   _validation:                             require("./internal/validation"),
   _hoistDirectives:                        require("./internal/hoist-directives"),
   "minification.removeDebugger":           require("./minification/remove-debugger"),

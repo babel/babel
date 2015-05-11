@@ -3,7 +3,7 @@ import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {
   print(node.imported);
-  if (node.local && node.local !== node.imported) {
+  if (node.local && node.local.name !== node.imported.name) {
     this.push(" as ");
     print(node.local);
   }
@@ -19,7 +19,7 @@ export function ExportDefaultSpecifier(node, print) {
 
 export function ExportSpecifier(node, print) {
   print(node.local);
-  if (node.exported && node.local !== node.exported) {
+  if (node.exported && node.local.name !== node.exported.name) {
     this.push(" as ");
     print(node.exported);
   }

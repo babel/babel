@@ -29,7 +29,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     // no: { NODE: "" }
     case "Property":
       if (parent.key === node) {
-        return parent.computed || parent.shorthand;
+        return parent.computed;
       }
 
     // no: var NODE = init;
