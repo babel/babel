@@ -430,8 +430,8 @@ export default class Scope {
       this.registerBinding("hoisted", path);
     } else if (t.isVariableDeclaration(node)) {
       var declarations = path.get("declarations");
-      for (var i = 0; i < declarations.length; i++) {
-        this.registerBinding(node.kind, declarations[i]);
+      for (var declar of (declarations: Array)) {
+        this.registerBinding(node.kind, declar);
       }
     } else if (t.isClassDeclaration(node)) {
       this.registerBinding("let", path);
@@ -548,8 +548,8 @@ export default class Scope {
     // ForStatement - left, init
 
     if (path.isLoop()) {
-      for (let i = 0; i < t.FOR_INIT_KEYS.length; i++) {
-        var node = path.get(t.FOR_INIT_KEYS[i]);
+      for (let key of (t.FOR_INIT_KEYS: Array)) {
+        var node = path.get(key);
         if (node.isBlockScoped()) this.registerBinding(node.node.kind, node);
       }
     }
@@ -572,8 +572,8 @@ export default class Scope {
 
     if (path.isFunction()) {
       var params = path.get("params");
-      for (let i = 0; i < params.length; i++) {
-        this.registerBinding("param", params[i]);
+      for (let param of (params: Array)) {
+        this.registerBinding("param", param);
       }
       this.traverse(path.get("body").node, blockVariableVisitor, this);
     }
@@ -697,8 +697,7 @@ export default class Scope {
   getAllBindingsOfKind(): Object {
     var ids = object();
 
-    for (let i = 0; i < arguments.length; i++) {
-      var kind = arguments[i];
+    for (let kind of (arguments: Array)) {
       var scope = this;
       do {
         for (var name in scope.bindings) {
@@ -787,6 +786,19 @@ export default class Scope {
 
   parentHasBinding(name: string) {
     return this.parent && this.parent.hasBinding(name);
+  }
+
+  /**
+   * Move a binding of `name` to another `scope`.
+   */
+
+  moveBindingTo(name, scope) {
+    var info = this.getBinding(name);
+    if (info) {
+      info.scope.removeOwnBinding(name);
+      info.scope = scope;
+      scope.bindings[name] = info;
+    }
   }
 
   /**

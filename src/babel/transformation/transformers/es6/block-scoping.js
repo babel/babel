@@ -32,8 +32,8 @@ function isVar(node, parent) {
 }
 
 function standardizeLets(declars) {
-  for (var i = 0; i < declars.length; i++) {
-    delete declars[i]._let;
+  for (var declar of (declars: Array)) {
+    delete declar._let;
   }
 }
 
@@ -109,19 +109,14 @@ function traverseReplace(node, parent, scope, remaps) {
 }
 
 var letReferenceBlockVisitor = {
-  enter(node, parent, scope, state) {
-    if (this.isFunction()) {
-      this.traverse(letReferenceFunctionVisitor, state);
-      return this.skip();
-    }
+  Function(node, parent, scope, state) {
+    this.traverse(letReferenceFunctionVisitor, state);
+    return this.skip();
   }
 };
 
 var letReferenceFunctionVisitor = {
-  enter(node, parent, scope, state) {
-    // not a direct reference
-    if (!this.isReferencedIdentifier()) return;
-
+  ReferencedIdentifier(node, parent, scope, state) {
     var ref = state.letReferences[node.name];
 
     // not a part of our scope
@@ -159,10 +154,8 @@ var hoistVarDeclarationsVisitor = {
 };
 
 var loopLabelVisitor = {
-  enter(node, parent, scope, state) {
-    if (this.isLabeledStatement()) {
-      state.innerLabels.push(node.label.name);
-    }
+  LabeledStatement(node, parent, scope, state) {
+    state.innerLabels.push(node.label.name);
   }
 };
 
