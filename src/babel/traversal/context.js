@@ -11,7 +11,8 @@ export default class TraversalContext {
   }
 
   shouldVisit(node) {
-    return !!(this.opts.enter || this.opts[node.type] || t.VISITOR_KEYS[node.type]);
+    var keys = t.VISITOR_KEYS[node.type];
+    return !!(this.opts.enter || this.opts[node.type] || (keys && keys.length));
   }
 
   create(node, obj, key) {
@@ -29,8 +30,8 @@ export default class TraversalContext {
 
     // build up initial queue
     for (let i = 0; i < nodes.length; i++) {
-      var node = nodes[i];
-      if (node && this.shouldVisit(node)) {
+      var self = nodes[i];
+      if (self && this.shouldVisit(self)) {
         queue.push(this.create(node, nodes, i));
       }
     }
