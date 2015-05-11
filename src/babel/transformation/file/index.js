@@ -38,7 +38,6 @@ export default class File {
     this.usedHelpers  = {};
     this.dynamicData  = {};
     this.data         = {};
-    this.uids         = {};
 
     this.pipeline = pipeline;
     this.log      = new Logger(this, opts.filename || "unknown");

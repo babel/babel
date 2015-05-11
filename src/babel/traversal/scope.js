@@ -48,6 +48,12 @@ var programReferenceVisitor = explode({
     }
   },
 
+  Scopable(node, parent, scope, state) {
+    for (var name in scope.bindings) {
+      state.references[name] = true;
+    }
+  },
+
   ExportDeclaration(node, parent, scope, state) {
     var declar = node.declaration;
     if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
@@ -182,8 +188,13 @@ export default class Scope {
     do {
       uid = this._generateUid(name, i);
       i++;
-    } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasUid(uid));
-    this.file.uids[uid] = true;
+    } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
+
+
+    var program = this.getProgramParent();
+    program.references[uid] = true;
+    program.uids[uid] = true;
+
     return uid;
   }
 
@@ -191,19 +202,6 @@ export default class Scope {
     var id = name;
     if (i > 1) id += i;
     return `_${id}`;
-  }
-
-  /**
-   * Description
-   */
-
-  hasUid(name): boolean {
-    var scope = this;
-    do {
-      if (scope.file.uids[name]) return true;
-      scope = scope.parent;
-    } while (scope);
-    return false;
   }
 
   /*
@@ -457,11 +455,39 @@ export default class Scope {
    * Description
    */
 
+  hasUid(name): boolean {
+    var scope = this;
+
+    do {
+      if (scope.uids[name]) return true;
+    } while (scope = scope.parent);
+
+    return false;
+  }
+
+  /**
+   * Description
+   */
+
   hasGlobal(name: string): boolean {
     var scope = this;
 
     do {
       if (scope.globals[name]) return true;
+    } while (scope = scope.parent);
+
+    return false;
+  }
+
+  /**
+   * Description
+   */
+
+  hasReference(name: string): boolean {
+    var scope = this;
+
+    do {
+      if (scope.references[name]) return true;
     } while (scope = scope.parent);
 
     return false;
@@ -502,8 +528,10 @@ export default class Scope {
     if (info) return extend(this, info);
 
     info = this.block._scopeInfo = {
-      bindings: object(),
-      globals:  object()
+      references: object(),
+      bindings:   object(),
+      globals:    object(),
+      uids:       object(),
     };
 
     extend(this, info);
@@ -609,6 +637,18 @@ export default class Scope {
     }
 
     declar.declarations.push(t.variableDeclarator(opts.id, opts.init));
+  }
+
+  /**
+   * Walk up to the top of the scope tree and get the `Program`.
+   */
+
+  getProgramParent() {
+    var scope = this;
+    while (scope.parent) {
+      scope = scope.parent;
+    }
+    return scope;
   }
 
   /**
@@ -737,7 +777,7 @@ export default class Scope {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name)) return true;
-    if (this.file.uids[name]) return true;
+    if (this.hasUid(name)) return true;
     if (includes(Scope.globals, name)) return true;
     if (includes(Scope.contextVariables, name)) return true;
     return false;
