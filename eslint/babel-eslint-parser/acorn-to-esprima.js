@@ -13,7 +13,16 @@ exports.toToken = function (token) {
              type === tt.slash || type === tt.dot ||
              type === tt.bracketL || type === tt.bracketR ||
              type === tt.ellipsis || type === tt.arrow ||
-             type === tt.star ||
+             type === tt.star || type === tt.incDec ||
+             type === tt.colon || type === tt.question ||
+             type === tt.template || type === tt.backQuote ||
+             type === tt.dollarBraceL || type === tt.at ||
+             type === tt.logicalOR || type === tt.logicalAND ||
+             type === tt.bitwiseOR || type === tt.bitwiseXOR ||
+             type === tt.bitwiseAND || type === tt.equality ||
+             type === tt.relational || type === tt.bitShift ||
+             type === tt.plusMin || type === tt.modulo ||
+             type === tt.exponent || type === tt.prefix ||
              type.isAssign) {
     token.type = "Punctuator";
     if (!token.value) token.value = type.label;
