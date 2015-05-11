@@ -479,7 +479,7 @@ class ClassTransformer {
     if (node.kind === "method") {
       nameMethod.property(node, this.file, path ? path.get("value").scope : this.scope);
 
-      if (this.isLoose) {
+      if (this.isLoose && !node.decorators) {
         // use assignments instead of define properties for loose classes
 
         var classRef = this.classRef;
