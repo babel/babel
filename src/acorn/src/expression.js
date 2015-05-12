@@ -635,7 +635,7 @@ pp.parseMethod = function(isGenerator, isAsync) {
   let node = this.startNode()
   this.initFunction(node, isAsync)
   this.expect(tt.parenL)
-  node.params = this.parseBindingList(tt.parenR, false, false)
+  node.params = this.parseBindingList(tt.parenR, false, this.options.features["es7.trailingFunctionCommas"])
   if (this.options.ecmaVersion >= 6) {
     node.generator = isGenerator
   }
