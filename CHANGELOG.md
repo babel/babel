@@ -13,6 +13,26 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.3.0
+
+**Speeeeeeed**
+
+![gifs lol](https://31.media.tumblr.com/568205a0e37ae15eca510fa639589a59/tumblr_n8kw8kpcSb1sg6cg8o1_500.gif)
+
+ * **Spec Compliancy**
+  * Allow trailing param commas for methods when using the `es7.trailingCommas` transformer.
+ * **Bug Fix**
+  * Fix `es6.blockScoping` transformer not properly ignoring `break` in `SwitchCase`.
+  * Fix lookahead context saving to avoid weird tokenizer state.
+  * Explode duplicate identifiers in export/import specifiers and property shorthand to create unique objects.
+  * Skip loose mode for class methods when they have decorators.
+  * When removing nodes, share their comments with their siblings.
+  * Properly hoist temp param declarations when doing TCO.
+ * **Internal**
+  * Add `--harmony_generators` flag to `$ babel-node`.
+ * **Polish**
+  * Move many `utility` transformers to `minification`.
+
 ## 5.2.17
 
  * **Bug Fix**
