@@ -180,19 +180,28 @@ var loopNodeTo = function (node) {
 };
 
 var loopVisitor = {
+  Loop(node, parent, scope, state) {
+    var oldIgnoreLabeless = state.ignoreLabeless;
+    state.ignoreLabeless = true;
+    this.traverse(loopVisitor, state);
+    state.ignoreLabeless = oldIgnoreLabeless;
+    this.skip();
+  },
+
+  Function() {
+    this.skip();
+  },
+
+  SwitchCase(node, parent, scope, state) {
+    var oldInSwitchCase = state.inSwitchCase;
+    state.inSwitchCase = true;
+    this.traverse(loopVisitor, state);
+    state.inSwitchCase = oldInSwitchCase;
+    this.skip();
+  },
+
   enter(node, parent, scope, state) {
     var replace;
-
-    if (this.isLoop()) {
-      state.ignoreLabeless = true;
-      this.traverse(loopVisitor, state);
-      state.ignoreLabeless = false;
-    }
-
-    if (this.isFunction() || this.isLoop()) {
-      return this.skip();
-    }
-
     var loopText = loopNodeTo(node);
 
     if (loopText) {
@@ -207,6 +216,9 @@ var loopVisitor = {
         // we shouldn't be transforming these statements because
         // they don't refer to the actual loop we're scopifying
         if (state.ignoreLabeless) return;
+
+        //
+        if (state.inSwitchCase) return;
 
         // break statements mean something different in this context
         if (t.isBreakStatement(node) && t.isSwitchCase(parent)) return;
@@ -517,6 +529,7 @@ class BlockScoping {
     var state = {
       hasBreakContinue: false,
       ignoreLabeless:   false,
+      inSwitchCase:     false,
       innerLabels:      [],
       hasReturn:        false,
       isLoop:           !!this.loop,
