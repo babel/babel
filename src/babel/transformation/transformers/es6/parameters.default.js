@@ -12,8 +12,10 @@ var hasDefaults = function (node) {
 
 var iifeVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
-    if (!state.scope.hasOwnBinding(node.name)) return;
-    if (state.scope.bindingIdentifierEquals(node.name, node)) return;
+    if (node.name !== "eval") {
+      if (!state.scope.hasOwnBinding(node.name)) return;
+      if (state.scope.bindingIdentifierEquals(node.name, node)) return;
+    }
 
     state.iife = true;
     this.stop();
