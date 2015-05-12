@@ -283,7 +283,7 @@ pp.readToken_lt_gt = function(code) { // '<>'
   }
   if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
       this.input.charCodeAt(this.pos + 3) == 45) {
-    if (this.inModule) unexpected()
+    if (this.inModule) this.unexpected()
     // `<!--`, an XML-style comment that should be interpreted as a line comment
     this.skipLineComment(4)
     this.skipSpace()
