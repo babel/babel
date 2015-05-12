@@ -34,6 +34,10 @@ exports.toToken = function (token) {
     token.value = ">";
   } else if (type === tt.jsxName) {
     token.type = "JSXIdentifier";
+  } else if (type.keyword === "null") {
+    token.type = "Null";
+  } else if (type.keyword === "false" || token.keyword === "true") {
+    token.type = "Boolean";
   } else if (type.keyword) {
     token.type = "Keyword";
   } else if (type === tt.num) {
@@ -42,6 +46,8 @@ exports.toToken = function (token) {
   } else if (type === tt.string) {
     token.type = "String";
     token.value = JSON.stringify(token.value);
+  } else if (type === tt.regexp) {
+    token.type = "RegularExpression";
   }
 
   return token;
