@@ -14,7 +14,11 @@ var hadRuntime = g.regeneratorRuntime &&
 var oldRuntime = hadRuntime && g.regeneratorRuntime;
 
 // Force reevalutation of runtime.js.
-delete g.regeneratorRuntime;
+try {
+  delete g.regeneratorRuntime;
+} catch(e) {
+  g.regeneratorRuntime = undefined;
+}
 
 module.exports = require("./runtime");
 
