@@ -75,14 +75,11 @@ var secondPass = {
 
 // optimizes recursion by removing `this` and `arguments` if they aren't used
 var thirdPass = {
-  ExpressionStatement(node, parent, scope, state) {
-    var expr = node.expression;
-    if (!t.isAssignmentExpression(expr)) return;
-
-    if (!state.needsThis && expr.left === state.getThisId()) {
+  AssignmentExpression(node, parent, scope, state) {
+    if (!state.needsThis && node.left === state.getThisId()) {
       this.remove();
-    } else if (!state.needsArguments && expr.left === state.getArgumentsId() && t.isArrayExpression(expr.right)) {
-      return map(expr.right.elements, function (elem) {
+    } else if (!state.needsArguments && node.left === state.getArgumentsId() && t.isArrayExpression(node.right)) {
+      return map(node.right.elements, function (elem) {
         return t.expressionStatement(elem);
       });
     }
