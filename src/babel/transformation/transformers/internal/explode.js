@@ -13,6 +13,18 @@ function buildClone(bindingKey, refKey) {
   };
 }
 
+function buildListClone(listKey, bindingKey, refKey) {
+  var clone = buildClone(bindingKey, refKey);
+
+  return function (node) {
+    if (!node[listKey]) return;
+
+    for (var subNode of (node[listKey]: Array)) {
+      clone(subNode);
+    }
+  };
+}
+
 export var Property = buildClone("value", "key");
-export var ExportSpecifier = buildClone("local", "exported");
-export var ImportSpecifier = buildClone("local", "imported");
+export var ExportDeclaration = buildListClone("specifiers", "local", "exported");
+export var ImportDeclaration = buildListClone("specifiers", "local", "imported");

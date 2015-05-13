@@ -49,6 +49,10 @@ export function ExportDefaultDeclaration(node, parent, scope) {
   }
 }
 
+function buildExportSpecifier(id) {
+  return t.exportSpecifier(clone(id), clone(id));
+}
+
 export function ExportNamedDeclaration(node, parent, scope) {
   ImportDeclaration.apply(this, arguments);
 
@@ -61,12 +65,12 @@ export function ExportNamedDeclaration(node, parent, scope) {
 
   if (t.isClassDeclaration(declar)) {
     // export class Foo {}
-    node.specifiers  = [t.exportSpecifier(declar.id, declar.id)];
+    node.specifiers  = [buildExportSpecifier(declar.id)];
     node.declaration = null;
     return [getDeclar(), node];
   } else if (t.isFunctionDeclaration(declar)) {
     // export function Foo() {}
-    node.specifiers  = [t.exportSpecifier(declar.id, declar.id)];
+    node.specifiers  = [buildExportSpecifier(declar.id)];
     node.declaration = null;
     node._blockHoist = 2;
     return [getDeclar(), node];
@@ -75,8 +79,7 @@ export function ExportNamedDeclaration(node, parent, scope) {
     var specifiers = [];
     var bindings = this.get("declaration").getBindingIdentifiers();
     for (var key in bindings) {
-      var id = bindings[key];
-      specifiers.push(t.exportSpecifier(clone(id), clone(id)));
+      specifiers.push(buildExportSpecifier(bindings[key]));
     }
     return [declar, t.exportNamedDeclaration(null, specifiers)];
   }
