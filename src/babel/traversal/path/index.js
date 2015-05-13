@@ -926,6 +926,14 @@ export default class TraversalPath {
    * Description
    */
 
+  equals(key, value): boolean {
+    return this.node[key] === value;
+  }
+
+  /**
+   * Description
+   */
+
   getTypeAnnotation(): {
     inferred: boolean;
     annotation: ?Object;
