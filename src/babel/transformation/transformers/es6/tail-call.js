@@ -20,7 +20,6 @@ function returnBlock(expr) {
   return t.blockStatement([t.returnStatement(expr)]);
 }
 
-// looks for and replaces tail recursion calls
 var visitor = {
   enter(node, parent, scope, state) {
     if (t.isTryStatement(parent)) {
