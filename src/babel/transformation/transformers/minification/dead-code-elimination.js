@@ -31,10 +31,10 @@ export function ReferencedIdentifier(node, parent, scope) {
   if (t.isVariableDeclarator(replacement)) {
     replacement = replacement.init;
   }
+  if (!replacement) return;
+
   t.toExpression(replacement);
-
   scope.removeBinding(node.name);
-
   binding.path.remove();
   return replacement;
 }
