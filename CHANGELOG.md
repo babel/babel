@@ -17,6 +17,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
  * **Bug Fix**
   * Fix unique export specifiers not being cloned when exploding class and function exports,
+ * **Polish**
+  * Turn import remaps to sequence expressions to remove their context and improve performance.
 
 ## 5.3.0
 
