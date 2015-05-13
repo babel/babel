@@ -981,7 +981,7 @@ export default class TraversalPath {
       if (!binding || !binding.constant) return;
 
       // todo: take into consideration infinite recursion #1149
-      //return;
+      return;
 
       if (binding.path === this) {
         return this;
