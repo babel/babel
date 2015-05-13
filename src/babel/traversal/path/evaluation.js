@@ -92,6 +92,7 @@ export function evaluate(): { confident: boolean; value: any } {
         case "!": return !arg;
         case "+": return +arg;
         case "-": return -arg;
+        case "~": return ~arg;
       }
     }
 
