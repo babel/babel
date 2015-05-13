@@ -49,12 +49,27 @@ export function isReferenced(node: Object, parent: Object): boolean {
       return parent.id !== node;
 
     // no: export { foo as NODE };
+    // yes: export { NODE as foo };
+    // no: export { NODE as foo } from "foo";
     case "ExportSpecifier":
-      return parent.exported !== node;
+      if (parent.source) {
+        return false;
+      } else {
+        return parent.local === node;
+      }
+
+    // no: import NODE from "foo";
+    case "ImportDefaultSpecifier":
+      return false;
+
+    // no: import * as NODE from "foo";
+    case "ImportNamespaceSpecifier":
+      return false;
 
     // no: import { NODE as foo } from "foo";
+    // no: import { foo as NODE } from "foo";
     case "ImportSpecifier":
-      return parent.imported !== node;
+      return false;
 
     // no: class NODE {}
     case "ClassDeclaration":
