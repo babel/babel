@@ -22,9 +22,7 @@ export var metadata = {
   group: "builtin-setup"
 };
 
-export function Identifier(node, parent, scope) {
-  if (!this.isReferenced()) return;
-
+export function ReferencedIdentifier(node, parent, scope) {
   var binding = scope.getBinding(node.name);
   if (!binding || binding.references > 1 || !binding.constant) return;
   if (binding.kind === "param") return;
