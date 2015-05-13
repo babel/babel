@@ -8,6 +8,8 @@ try {
   var _loop = function () {
     var i = _step.value;
     x = 5;
+    var _f = { f: 2 };
+    f = _f.f;
 
     fns.push(function () {
       return i * x;
@@ -16,6 +18,7 @@ try {
 
   for (var _iterator = nums[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
     var x;
+    var f;
 
     _loop();
   }

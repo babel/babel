@@ -557,9 +557,13 @@ class BlockScoping {
    */
 
   pushDeclar(node: { type: "VariableDeclaration" }): Array<Object> {
-    this.body.push(t.variableDeclaration(node.kind, node.declarations.map(function (declar) {
-      return t.variableDeclarator(declar.id);
-    })));
+    var declars = [];
+    var names = t.getBindingIdentifiers(node);
+    for (var name in names) {
+      declars.push(t.variableDeclarator(names[name]));
+    }
+
+    this.body.push(t.variableDeclaration(node.kind, declars));
 
     var replace = [];
 

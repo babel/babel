@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.3.2
+
+ * **Bug Fix**
+  * Fix patterns not being considered when hoisting variables in the `es6.blockScoping` transformer.
+
 ## 5.3.1
 
  * **Bug Fix**

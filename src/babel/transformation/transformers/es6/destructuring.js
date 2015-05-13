@@ -179,7 +179,7 @@ export function VariableDeclaration(node, parent, scope, file) {
       file:  file
     });
 
-    if (t.isPattern(pattern) && patternId) {
+    if (t.isPattern(pattern)) {
       destructuring.init(pattern, patternId);
 
       if (+i !== node.declarations.length - 1) {
