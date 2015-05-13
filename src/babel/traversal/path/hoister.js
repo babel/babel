@@ -16,11 +16,13 @@ var referenceVisitor = {
         // eg. it's in a closure etc
         if (bindingInfo !== state.scope.getBinding(node.name)) return;
 
-        if (bindingInfo && bindingInfo.constant) {
-          state.bindings[node.name] = bindingInfo;
-        } else {
-          state.foundIncompatible = true;
-          this.stop();
+        if (bindingInfo) {
+          if (bindingInfo.constant) {
+            state.bindings[node.name] = bindingInfo;
+          } else {
+            state.foundIncompatible = true;
+            this.stop();
+          }
         }
       }
     }
