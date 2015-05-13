@@ -25,7 +25,7 @@ export var metadata = {
 export function ReferencedIdentifier(node, parent, scope) {
   var binding = scope.getBinding(node.name);
   if (!binding || binding.references > 1 || !binding.constant) return;
-  if (binding.kind === "param") return;
+  if (binding.kind === "param" || binding.kind === "module") return;
 
   var replacement = binding.path.node;
   if (t.isVariableDeclarator(replacement)) {
