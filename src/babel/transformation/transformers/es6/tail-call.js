@@ -1,4 +1,3 @@
-import blockScopedFunctions from "../spec/block-scoped-functions";
 import reduceRight from "lodash/collection/reduceRight";
 import * as messages from "../../../messages";
 import flatten from "lodash/array/flatten";
@@ -47,13 +46,13 @@ var visitor = {
 
   ThisExpression(node, parent, scope, state) {
     state.needsThis = true;
-    state.thises.push(this);
+    state.thisPaths.push(this);
   },
 
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name === "arguments") {
       state.needsArguments = true;
-      state.arguments.push(this);
+      state.argumentsPaths.push(this);
     }
   }
 };
@@ -63,11 +62,11 @@ class TailCallTransformer {
     this.hasTailRecursion = false;
 
     this.needsArguments = false;
+    this.argumentsPaths = [];
     this.setsArguments  = false;
-    this.arguments      = [];
 
     this.needsThis = false;
-    this.thises    = [];
+    this.thisPaths = [];
 
     this.ownerId = path.node.id;
     this.vars    = [];
@@ -195,7 +194,7 @@ class TailCallTransformer {
     var topVars = [];
 
     if (this.needsThis) {
-      for (var path of (this.thises: Array)) {
+      for (var path of (this.thisPaths: Array)) {
         path.replaceWith(this.getThisId());
       }
 
@@ -203,7 +202,7 @@ class TailCallTransformer {
     }
 
     if (this.needsArguments || this.setsArguments) {
-      for (var path of (this.arguments: Array)) {
+      for (var path of (this.argumentsPaths: Array)) {
         path.replaceWith(this.argumentsId);
       }
 
