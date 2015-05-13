@@ -7,4 +7,5 @@ export var metadata = {
 
 export function Program(ast) {
   regenerator.transform(ast);
+  this.stop();
 }
