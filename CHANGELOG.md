@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 3.5.3
+## 5.3.3
 
  * **Bug Fix**
   * Fix `minification.deadCodeElimination` transformer incorrectly trying to inline import declarations.
