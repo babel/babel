@@ -17,7 +17,11 @@ var remapVisitor = {
 
     if (remap && node !== remap) {
       if (!scope.hasBinding(node.name) || scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
-        return remap;
+        if (this.key === "callee" && this.parentPath.isCallExpression()) {
+          return t.sequenceExpression([t.literal(0), remap]);
+        } else {
+          return remap;
+        }
       }
     }
   },
