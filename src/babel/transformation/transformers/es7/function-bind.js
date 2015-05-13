@@ -7,9 +7,6 @@ export var metadata = {
   stage: 0
 };
 
-var CALL = t.identifier("call");
-var BIND = t.identifier("bind");
-
 function inferBindContext(bindExpr, scope) {
   // nothing to infer
   if (bindExpr.object) return bindExpr.object;
@@ -27,11 +24,11 @@ export function CallExpression(node, parent, scope, file) {
   var bindExpr = node.callee;
   if (!t.isBindExpression(bindExpr)) return;
   var bindCtx = inferBindContext(bindExpr, scope);
-  node.callee = t.memberExpression(bindExpr.callee, CALL, false);
+  node.callee = t.memberExpression(bindExpr.callee, t.identifier("call"));
   node.arguments.unshift(bindCtx);
 }
 
 export function BindExpression(node, parent, scope, file) {
   var bindCtx = inferBindContext(node, scope);
-  return t.callExpression(t.memberExpression(node.callee, BIND, false), [bindCtx]);
+  return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [bindCtx]);
 }
