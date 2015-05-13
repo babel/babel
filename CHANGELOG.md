@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 3.5.3
+
+ * **Bug Fix**
+  * Fix `minification.deadCodeElimination` transformer incorrectly trying to inline import declarations.
+  * Fix `minification.inlineExpression` transformer getting into an infinite loop.
+
 ## 5.3.2
 
  * **Bug Fix**
@@ -42,6 +48,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Properly hoist temp param declarations when doing TCO.
  * **Internal**
   * Add `--harmony_generators` flag to `$ babel-node`.
+  * Internal AST traversals have been minimised **drastically**. Transformers have been grouped together which means entire tree traversals are much fewer. Visiting nodes is now also skipped if the traversal context can detect that the handler is a noop. This sames precious cycles as it avoids constructing traversal paths and creating a new traversal context. See issues [#1472](https://github.com/babel/babel/issues/1472) and [#1486](https://github.com/babel/babel/issues/1486) for related discussion.
  * **Polish**
   * Move many `utility` transformers to `minification`.
 
