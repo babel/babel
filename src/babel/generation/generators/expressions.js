@@ -133,6 +133,12 @@ export function AssignmentExpression(node, print) {
   print(node.right);
 }
 
+export function BindExpression(node, print) {
+  print(node.object);
+  this.push("::");
+  print(node.callee);
+}
+
 export {
   AssignmentExpression as BinaryExpression,
   AssignmentExpression as LogicalExpression,

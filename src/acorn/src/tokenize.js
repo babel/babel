@@ -320,7 +320,13 @@ pp.getTokenFromCode = function(code) {
   case 93: ++this.pos; return this.finishToken(tt.bracketR)
   case 123: ++this.pos; return this.finishToken(tt.braceL)
   case 125: ++this.pos; return this.finishToken(tt.braceR)
-  case 58: ++this.pos; return this.finishToken(tt.colon)
+
+  case 58:
+    if (this.options.features["es7.functionBind"] && this.input.charCodeAt(this.pos + 1) === 58)
+      return this.finishOp(tt.doubleColon, 2)
+    ++this.pos
+    return this.finishToken(tt.colon)
+
   case 63: ++this.pos; return this.finishToken(tt.question)
   case 64: ++this.pos; return this.finishToken(tt.at)
 

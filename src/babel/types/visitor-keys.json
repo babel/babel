@@ -6,6 +6,7 @@
   "AssignmentPattern":         ["left", "right"],
   "AwaitExpression":           ["argument"],
   "BinaryExpression":          ["left", "right"],
+  "BindExpression":            ["object", "callee"],
   "BlockStatement":            ["body"],
   "BreakStatement":            ["label"],
   "CallExpression":            ["callee", "arguments"],

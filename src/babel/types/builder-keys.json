@@ -20,6 +20,11 @@
     "right": null
   },
 
+  "BindExpression": {
+    "object": null,
+    "callee": null
+  },
+
   "BlockStatement": {
     "body": null
   },
