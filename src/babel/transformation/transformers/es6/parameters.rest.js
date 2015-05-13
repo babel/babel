@@ -56,7 +56,8 @@ var hasRest = function (node) {
 export function Func(node, parent, scope, file) {
   if (!hasRest(node)) return;
 
-  var rest = node.params.pop().argument;
+  var restParam = node.params.pop();
+  var rest = restParam.argument;
 
   var argsId = t.identifier("arguments");
 
@@ -125,13 +126,14 @@ export function Func(node, parent, scope, file) {
   }
 
   var loop = util.template("rest", {
-    ARGUMENTS: argsId,
-    ARRAY_KEY: arrKey,
-    ARRAY_LEN: arrLen,
-    START:     start,
-    ARRAY:     rest,
-    KEY:       key,
-    LEN:       len
+    ARRAY_TYPE: restParam.typeAnnotation,
+    ARGUMENTS:  argsId,
+    ARRAY_KEY:  arrKey,
+    ARRAY_LEN:  arrLen,
+    START:      start,
+    ARRAY:      rest,
+    KEY:        key,
+    LEN:        len
   });
   loop._blockHoist = node.params.length + 1;
   node.body.body.unshift(loop);

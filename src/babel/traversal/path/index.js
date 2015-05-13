@@ -947,7 +947,7 @@ export default class TraversalPath {
       annotation: null
     };
 
-    var type = this.node.typeAnnotation;
+    var type = this.node && this.node.typeAnnotation;
 
     if (!type) {
       info.inferred = true;
@@ -979,7 +979,7 @@ export default class TraversalPath {
       if (!binding || !binding.constant) return;
 
       // todo: take into consideration infinite recursion #1149
-      return;
+      //return;
 
       if (binding.path === this) {
         return this;
@@ -1025,36 +1025,36 @@ export default class TraversalPath {
     path = path.resolve();
     if (!path) return;
 
-    if (path.isRestElement() || path.parentPath.isRestElement() || path.isArrayExpression()) {
+    if (path.isPreviousType("RestElement") || path.parentPath.isPreviousType("RestElement") || path.isPreviousType("ArrayExpression")) {
       return t.genericTypeAnnotation(t.identifier("Array"));
     }
 
-    if (path.parentPath.isTypeCastExpression()) {
+    if (path.parentPath.isPreviousType("TypeCastExpression")) {
       return path.parentPath.node.typeAnnotation;
     }
 
-    if (path.isTypeCastExpression()) {
+    if (path.isPreviousType("TypeCastExpression")) {
       return path.node.typeAnnotation;
     }
 
-    if (path.isObjectExpression()) {
+    if (path.isPreviousType("ObjectExpression")) {
       return t.genericTypeAnnotation(t.identifier("Object"));
     }
 
-    if (path.isFunction()) {
+    if (path.isPreviousType("Function")) {
       return t.identifier("Function");
     }
 
-    if (path.isLiteral()) {
+    if (path.isPreviousType("Literal")) {
       var value = path.node.value;
       if (isString(value)) return t.stringTypeAnnotation();
       if (isNumber(value)) return t.numberTypeAnnotation();
       if (isBoolean(value)) return t.booleanTypeAnnotation();
     }
 
-    if (path.isCallExpression()) {
+    if (path.isPreviousType("CallExpression")) {
       var callee = path.get("callee").resolve();
-      if (callee && callee.isFunction()) return callee.node.returnType;
+      if (callee && callee.isPreviousType("Function")) return callee.node.returnType;
     }
   }
 

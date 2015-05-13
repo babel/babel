@@ -73,6 +73,15 @@ export default class Binding {
    * Description
    */
 
+  dereference() {
+    this.references--;
+    this.referenced = !!this.references;
+  }
+
+  /**
+   * Description
+   */
+
   isCompatibleWithType(newType): boolean {
     return false;
   }
