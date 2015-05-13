@@ -723,6 +723,35 @@ describe("for-in loop generator", function() {
 
     check(gen(), [0, 1, "callee", "foo", "bar"]);
   });
+
+  it("should allow non-Identifier left-hand expressions", function() {
+    var obj = {};
+    var baz = { a: 1, b: 2, c: 3 };
+    var markers = [];
+
+    function foo() {
+      markers.push("called foo");
+      return obj;
+    }
+
+    function *gen() {
+      for (foo().bar in baz) {
+        markers.push(obj.bar);
+        yield obj.bar;
+      }
+    }
+
+    check(gen(), ["a", "b", "c"]);
+
+    assert.deepEqual(markers, [
+      "called foo",
+      "a",
+      "called foo",
+      "b",
+      "called foo",
+      "c"
+    ]);
+  });
 });
 
 describe("yield chain", function() {

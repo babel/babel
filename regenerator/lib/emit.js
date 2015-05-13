@@ -549,8 +549,6 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "ForInStatement":
-    n.Identifier.assert(stmt.left);
-
     var head = loc();
     var after = loc();
 
