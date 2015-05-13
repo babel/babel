@@ -14,7 +14,7 @@ var Foo = (function () {
   }
 
   var _Foo = Foo;
-  Foo = _foo2["default"](Foo) || Foo;
+  Foo = (0, _foo2["default"])(Foo) || Foo;
   return Foo;
 })();
 

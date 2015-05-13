@@ -20,7 +20,7 @@ var Container = (function () {
         return;
       }
 
-      return _lodashArrayLast2["default"](this.tokens.get(key));
+      return (0, _lodashArrayLast2["default"])(this.tokens.get(key));
     }
   }]);
   return Container;

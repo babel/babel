@@ -19,7 +19,7 @@ var Login = (function (_React$Component) {
   babelHelpers.createClass(Login, [{
     key: "getForm",
     value: function getForm() {
-      return _store.getForm().toJS();
+      return (0, _store.getForm)().toJS();
     }
   }]);
   return Login;
