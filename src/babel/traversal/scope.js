@@ -631,13 +631,14 @@ export default class Scope {
     var declar  = !unique && path.getData(dataKey);
 
     if (!declar) {
-      declar = t.variableDeclaration(opts.kind || "var", []);
+      declar = t.variableDeclaration(kind, []);
       declar._generated = true;
       declar._blockHoist = 2;
 
       this.file.attachAuxiliaryComment(declar);
 
-      path.get("body")[0]._containerInsertBefore([declar]);
+      var [declarPath] = path.get("body")[0]._containerInsertBefore([declar]);
+      this.registerBinding(kind, declarPath);
       if (!unique) path.setData(dataKey, declar);
     }
 

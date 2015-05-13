@@ -228,14 +228,16 @@ export default class TraversalPath {
         paths.push(TraversalPath.get(this, null, node, this.container, to));
       }
     }
+
+    return paths;
   }
 
   _containerInsertBefore(nodes) {
-    this._containerInsert(this.key, nodes);
+    return this._containerInsert(this.key, nodes);
   }
 
   _containerInsertAfter(nodes) {
-    this._containerInsert(this.key + 1, nodes);
+    return this._containerInsert(this.key + 1, nodes);
   }
 
   _maybePopFromStatements(nodes) {
