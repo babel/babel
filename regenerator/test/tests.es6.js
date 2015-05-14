@@ -549,6 +549,48 @@ describe("try-catch-finally generator", function() {
 
     check(gen(), [0, 1, 2, 5, 0, 1, 3, 4, 5, 7]);
   });
+
+  it("should handle loop continue statements properly", function() {
+    var error = new Error("thrown");
+    var markers = [];
+
+    function *gen() {
+      var c = 2;
+      while (c > 0) {
+        try {
+          markers.push("try");
+          yield c;
+        } catch (e) {
+          assert.strictEqual(e, error);
+          markers.push("catch");
+          continue;
+        } finally {
+          markers.push("finally");
+        }
+        markers.push("decrement");
+        --c;
+      }
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.next(), { value: 2, done: false });
+    assert.deepEqual(g.throw(error), { value: 2, done: false });
+    assert.deepEqual(g.next(), { value: 1, done: false });
+    assert.deepEqual(g.next(), { value: void 0, done: true });
+
+    assert.deepEqual(markers, [
+      "try",
+      "catch",
+      "finally",
+      "try",
+      "finally",
+      "decrement",
+      "try",
+      "finally",
+      "decrement"
+    ]);
+  });
 });
 
 describe("dynamic exception", function() {
