@@ -264,17 +264,33 @@ export default class Scope {
   }
 
   /**
+   * Determine whether evaluating the specific input `node` is a consequenceless reference. ie.
+   * evaluating it wont result in potentially arbitrary code from being ran. The following are
+   * whitelisted and determined not cause side effects:
+   *
+   *  - `this` expressions
+   *  - `super` expressions
+   *  - Bound identifiers
+   */
+
+  isStatic(node: Object): boolean {
+    if (t.isThisExpression(node) || t.isSuper(node)) {
+      return true;
+    }
+
+    if (t.isIdentifier(node) && this.hasBinding(node.name)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Description
    */
 
   generateMemoisedReference(node: Object, dontPush?: boolean): ?Object {
-    if (t.isThisExpression(node) || t.isSuper(node)) {
-      return null;
-    }
-
-    if (t.isIdentifier(node) && this.hasBinding(node.name)) {
-      return null;
-    }
+    if (this.isStatic(node)) return null;
 
     var id = this.generateUidBasedOnNode(node);
     if (!dontPush) this.push({ id });

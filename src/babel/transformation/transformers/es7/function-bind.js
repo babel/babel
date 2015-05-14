@@ -10,11 +10,23 @@ export var metadata = {
 function getTempId(scope) {
   var id = scope.path.getData("functionBind");
   if (id) return id;
+
   id = scope.generateTemp("context");
   return scope.path.setData("functionBind", id);
 }
 
+function getStaticContext(bind, scope) {
+  if (bind.object) {
+    return scope.isStatic(bind.object) && bind.object;
+  } else {
+    return scope.isStatic(bind.callee.object) && bind.callee.object;
+  }
+}
+
 function inferBindContext(bind, scope) {
+  var staticContext = getStaticContext(bind, scope);
+  if (staticContext) return staticContext;
+
   var tempId = getTempId(scope);
   if (bind.object) {
     bind.callee = t.sequenceExpression([
@@ -30,6 +42,7 @@ function inferBindContext(bind, scope) {
 export function CallExpression(node, parent, scope, file) {
   var bind = node.callee;
   if (!t.isBindExpression(bind)) return;
+
   var context = inferBindContext(bind, scope);
   node.callee = t.memberExpression(bind.callee, t.identifier("call"));
   node.arguments.unshift(context);
