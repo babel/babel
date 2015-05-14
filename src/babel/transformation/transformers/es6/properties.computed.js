@@ -75,7 +75,7 @@ export var ObjectExpression = {
     if (!hasComputed) return;
 
     var initProps = [];
-    var objId = scope.generateUidBasedOnNode(parent);
+    var objId = scope.generateUidIdentifierBasedOnNode(parent);
 
     //
 

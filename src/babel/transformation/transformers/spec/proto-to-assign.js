@@ -24,7 +24,7 @@ export function AssignmentExpression(node, parent, scope, file) {
 
   var nodes = [];
   var left  = node.left.object;
-  var temp  = scope.generateMemoisedReference(left);
+  var temp  = scope.maybeGenerateMemoised(left);
 
   nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
   nodes.push(buildDefaultsCallExpression(node, temp, file));

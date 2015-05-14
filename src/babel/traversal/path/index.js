@@ -287,7 +287,7 @@ export default class TraversalPath {
       return this.parentPath.insertAfter(nodes);
     } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
       if (this.node) {
-        var temp = this.scope.generateTemp();
+        var temp = this.scope.generateDeclaredUidIdentifier();
         nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
         nodes.push(t.expressionStatement(temp));
       }

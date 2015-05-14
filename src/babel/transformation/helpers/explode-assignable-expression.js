@@ -26,7 +26,7 @@ var getObjRef = function (node, nodes, file, scope) {
     throw new Error(`We can't explode this node type ${node.type}`);
   }
 
-  var temp = scope.generateUidBasedOnNode(ref);
+  var temp = scope.generateUidIdentifierBasedOnNode(ref);
   nodes.push(t.variableDeclaration("var", [
     t.variableDeclarator(temp, ref)
   ]));
@@ -38,7 +38,7 @@ var getPropRef = function (node, nodes, file, scope) {
   var key = t.toComputedKey(node, prop);
   if (t.isLiteral(key)) return key;
 
-  var temp = scope.generateUidBasedOnNode(prop);
+  var temp = scope.generateUidIdentifierBasedOnNode(prop);
   nodes.push(t.variableDeclaration("var", [
     t.variableDeclarator(temp, prop)
   ]));

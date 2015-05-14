@@ -52,7 +52,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
       } else if (this.noInteropRequireImport) {
         this.internalRemap[variableName.name] = t.memberExpression(ref, t.identifier("default"));
       } else {
-        var uid = this.scope.generateUidBasedOnNode(node, "import");
+        var uid = this.scope.generateUidIdentifierBasedOnNode(node, "import");
 
         nodes.push(t.variableDeclaration("var", [
           t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-default"), [ref]))
@@ -111,7 +111,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
     } else if (this.isModuleType(node, "absoluteDefault")) {
       call = t.memberExpression(call, t.identifier("default"));
     } else {
-      uid = this.scope.generateUidBasedOnNode(node, "import");
+      uid = this.scope.generateUidIdentifierBasedOnNode(node, "import");
     }
 
     uid = uid || node.specifiers[0].local;

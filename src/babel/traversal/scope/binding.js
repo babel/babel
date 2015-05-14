@@ -1,4 +1,4 @@
-import * as t from "../types";
+import * as t from "../../types";
 
 export default class Binding {
   constructor({ identifier, scope, path, kind }) {

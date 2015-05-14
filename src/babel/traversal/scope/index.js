@@ -1,15 +1,15 @@
 import includes from "lodash/collection/includes";
-import { explode } from "./visitors";
-import traverse from "./index";
+import { explode } from "../visitors";
+import traverse from "../index";
 import defaults from "lodash/object/defaults";
-import * as messages from "../messages";
+import * as messages from "../../messages";
 import Binding from "./binding";
 import globals from "globals";
 import flatten from "lodash/array/flatten";
 import extend from "lodash/object/extend";
-import object from "../helpers/object";
+import object from "../../helpers/object";
 import each from "lodash/collection/each";
-import * as t from "../types";
+import * as t from "../../types";
 
 var functionVariableVisitor = {
   enter(node, parent, scope, state) {
@@ -167,7 +167,7 @@ export default class Scope {
    * Description
    */
 
-  generateTemp(name: string = "temp") {
+  generateDeclaredUidIdentifier(name: string = "temp") {
     var id = this.generateUidIdentifier(name);
     this.push({ id });
     return id;
@@ -213,7 +213,7 @@ export default class Scope {
    * Description
    */
 
-  generateUidBasedOnNode(parent: Object, defaultName?: String):  Object {
+  generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String):  Object {
     var node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -289,12 +289,14 @@ export default class Scope {
    * Description
    */
 
-  generateMemoisedReference(node: Object, dontPush?: boolean): ?Object {
-    if (this.isStatic(node)) return null;
-
-    var id = this.generateUidBasedOnNode(node);
-    if (!dontPush) this.push({ id });
-    return id;
+  maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
+    if (this.isStatic(node)) {
+      return null;
+    } else {
+      var id = this.generateUidIdentifierBasedOnNode(node);
+      if (!dontPush) this.push({ id });
+      return id;
+    }
   }
 
   /**

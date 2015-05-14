@@ -6,7 +6,7 @@ export default function (decorators, scope) {
     var expression = decorator.expression;
     if (!t.isMemberExpression(expression)) continue;
 
-    var temp = scope.generateMemoisedReference(expression.object);
+    var temp = scope.maybeGenerateMemoised(expression.object);
     var ref;
 
     var nodes = [];

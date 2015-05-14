@@ -173,7 +173,7 @@ class ClassTransformer {
     if (this.hasSuper) {
       closureArgs.push(superName);
 
-      superName = this.scope.generateUidBasedOnNode(superName);
+      superName = this.scope.generateUidIdentifierBasedOnNode(superName);
       closureParams.push(superName);
 
       this.superName = superName;

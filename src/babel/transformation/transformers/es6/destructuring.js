@@ -295,7 +295,7 @@ class DestructuringTransformer {
     // we need to assign the current value of the assignment to avoid evaluating
     // it more than once
 
-    var tempValueRef = this.scope.generateUidBasedOnNode(valueRef);
+    var tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
 
     var declar = t.variableDeclaration("var", [
       t.variableDeclarator(tempValueRef, valueRef)
@@ -377,7 +377,7 @@ class DestructuringTransformer {
     // only evaluated once
 
     if (pattern.properties.length > 1 && t.isMemberExpression(objRef)) {
-      var temp = this.scope.generateUidBasedOnNode(objRef, this.file);
+      var temp = this.scope.generateUidIdentifierBasedOnNode(objRef, this.file);
       this.nodes.push(this.buildVariableDeclaration(temp, objRef));
       objRef = temp;
     }
@@ -461,7 +461,7 @@ class DestructuringTransformer {
       // array
       arrayRef = toArray;
     } else {
-      arrayRef = this.scope.generateUidBasedOnNode(arrayRef);
+      arrayRef = this.scope.generateUidIdentifierBasedOnNode(arrayRef);
       this.arrays[arrayRef.name] = true;
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
     }
@@ -500,7 +500,7 @@ class DestructuringTransformer {
 
     var shouldMemoise = true;
     if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
-      var memo = this.scope.generateMemoisedReference(ref, true);
+      var memo = this.scope.maybeGenerateMemoised(ref, true);
       if (memo) {
         this.nodes.push(this.buildVariableDeclaration(memo, ref));
         ref = memo;
