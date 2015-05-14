@@ -16,13 +16,13 @@ function getTempId(scope) {
 
 function inferBindContext(bind, scope) {
   var tempId = getTempId(scope);
-  if (!bind.object) {
-    bind.callee.object = t.assignmentExpression("=", tempId, bind.callee.object);
-  } else {
+  if (bind.object) {
     bind.callee = t.sequenceExpression([
       t.assignmentExpression("=", tempId, bind.object),
       bind.callee
     ]);
+  } else {
+    bind.callee.object = t.assignmentExpression("=", tempId, bind.callee.object);
   }
   return tempId;
 }
