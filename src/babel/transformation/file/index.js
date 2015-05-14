@@ -38,6 +38,7 @@ export default class File {
     this.declarations = {};
     this.usedHelpers  = {};
     this.dynamicData  = {};
+    this.metadata     = {};
     this.data         = {};
 
     this.pipeline = pipeline;
@@ -492,7 +493,7 @@ export default class File {
     try {
       if (this.shouldIgnore()) {
         return {
-          metadata: {},
+          metadata: this.metadata,
           ignored:  true,
           code:     code,
           map:      null,
@@ -586,7 +587,7 @@ export default class File {
     var ast  = this.ast;
 
     var result = {
-      metadata: {},
+      metadata: this.metadata,
       code:     "",
       map:      null,
       ast:      null
