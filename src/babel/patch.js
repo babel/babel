@@ -72,4 +72,10 @@ def("ExportAllDeclaration")
   .field("exported", def("Identifier"))
   .field("source", def("Literal"));
 
+def("BindExpression")
+  .bases("Expression")
+  .build("object", "callee")
+  .field("object", or(def("Expression"), null))
+  .field("callee", def("Expression"));
+
 types.finalize();

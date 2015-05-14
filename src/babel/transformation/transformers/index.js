@@ -51,6 +51,7 @@ export default {
   "spec.protoToAssign":                    require("./spec/proto-to-assign"),
   "es7.doExpressions":                     require("./es7/do-expressions"),
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
+  "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
   jscript:                                 require("./other/jscript"),
   flow:                                    require("./other/flow"),

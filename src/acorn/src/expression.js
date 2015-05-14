@@ -214,7 +214,12 @@ pp.parseExprSubscripts = function(refShorthandDefaultPos) {
 }
 
 pp.parseSubscripts = function(base, start, noCalls) {
-  if (this.eat(tt.dot)) {
+  if (!noCalls && this.eat(tt.doubleColon)) {
+    let node = this.startNodeAt(start)
+    node.object = base
+    node.callee = this.parseNoCallExpr()
+    return this.parseSubscripts(this.finishNode(node, "BindExpression"), start, noCalls)
+  } else if (this.eat(tt.dot)) {
     let node = this.startNodeAt(start)
     node.object = base
     node.property = this.parseIdent(true)
@@ -238,6 +243,13 @@ pp.parseSubscripts = function(base, start, noCalls) {
     node.quasi = this.parseTemplate()
     return this.parseSubscripts(this.finishNode(node, "TaggedTemplateExpression"), start, noCalls)
   } return base
+}
+
+// Parse a no-call expression (like argument of `new` or `::` operators).
+
+pp.parseNoCallExpr = function() {
+  let start = this.markPosition()
+  return this.parseSubscripts(this.parseExprAtom(), start, true)
 }
 
 // Parse an atomic expression — either a single token that is an
@@ -363,6 +375,15 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
   case tt.backQuote:
     return this.parseTemplate()
 
+  case tt.doubleColon:
+    node = this.startNode()
+    this.next()
+    node.object = null
+    let callee = node.callee = this.parseNoCallExpr()
+    if (callee.type !== "MemberExpression")
+      this.raise(callee.start, "Binding should be performed on object property.")
+    return this.finishNode(node, "BindExpression")
+
   default:
     this.unexpected()
   }
@@ -472,8 +493,7 @@ pp.parseNew = function() {
       this.raise(node.property.start, "The only valid meta property for new is new.target")
     return this.finishNode(node, "MetaProperty")
   }
-  let start = this.markPosition()
-  node.callee = this.parseSubscripts(this.parseExprAtom(), start, true)
+  node.callee = this.parseNoCallExpr()
   if (this.eat(tt.parenL)) node.arguments = this.parseExprList(
     tt.parenR,
     this.options.features["es7.trailingFunctionCommas"]

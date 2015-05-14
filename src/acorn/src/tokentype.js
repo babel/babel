@@ -54,6 +54,7 @@ export const types = {
   comma: new TokenType(",", beforeExpr),
   semi: new TokenType(";", beforeExpr),
   colon: new TokenType(":", beforeExpr),
+  doubleColon: new TokenType("::", beforeExpr),
   dot: new TokenType("."),
   question: new TokenType("?", beforeExpr),
   arrow: new TokenType("=>", beforeExpr),

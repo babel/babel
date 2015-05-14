@@ -34,7 +34,8 @@ _.each(helper.get("generation"), function (testSuite) {
           features: {
             "es7.comprehensions": true,
             "es7.asyncFunctions": true,
-            "es7.exportExtensions": true
+            "es7.exportExtensions": true,
+            "es7.functionBind": true
           }
         });
         var actualCode = generate(actualAst, task.options, actual.code).code;
