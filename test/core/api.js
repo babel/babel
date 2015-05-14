@@ -99,6 +99,36 @@ suite("api", function () {
     });
   });
 
+  suite("env option", function () {
+    test("default", function () {
+      assert.equal(transform("foo;", {
+        env: {
+          development: { blacklist: "strict" }
+        }
+      }).code, "foo;");
+    });
+
+    test("BABEL_ENV", function () {
+      process.env.BABEL_ENV = "foo";
+      assert.equal(transform("foo;", {
+        env: {
+          foo: { blacklist: "strict" }
+        }
+      }).code, "foo;");
+      delete process.env.BABEL_ENV;
+    });
+
+    test("NODE_ENV", function () {
+      process.env.NODE_ENV = "foo";
+      assert.equal(transform("foo;", {
+        env: {
+          foo: { blacklist: "strict" }
+        }
+      }).code, "foo;");
+      delete process.env.NODE_ENV;
+    });
+  });
+
   test("addHelper unknown", function () {
     var file = new File({}, transform.pipeline);
     assert.throws(function () {

@@ -20,6 +20,11 @@
     "default": {}
   },
 
+  "env": {
+    "hidden": true,
+    "default": {}
+  },
+
   "moduleId": {
     "description": "specify a custom name for module ids",
     "type": "string"

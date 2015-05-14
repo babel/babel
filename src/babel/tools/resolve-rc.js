@@ -1,5 +1,5 @@
 import stripJsonComments from "strip-json-comments";
-import merge from "lodash/object/merge";
+import merge from "../helpers/merge";
 import path from "path";
 import fs from "fs";
 
@@ -42,17 +42,7 @@ export default function (loc, opts = {}) {
       opts.babelrc.push(file);
 
       if (json.breakConfig) return;
-      merge(opts, json, function(a, b) {
-        if (Array.isArray(a)) {
-          var c = a.slice(0);
-          for (var v of b) {
-            if (a.indexOf(v) < 0) {
-              c.push(v);
-            }
-          }
-          return c;
-        }
-      });
+      merge(opts, json);
     }
 
     var up = path.dirname(start);

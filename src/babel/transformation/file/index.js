@@ -19,6 +19,7 @@ import assign from "lodash/object/assign";
 import Logger from "./logger";
 import parse from "../../helpers/parse";
 import Scope from "../../traversal/scope";
+import merge from "../../helpers/merge";
 import slash from "slash";
 import clone from "lodash/lang/clone";
 import * as util from  "../../util";
@@ -105,6 +106,9 @@ export default class File {
       let option = File.options[key];
       if (!option) this.log.error(`Unknown option: ${key}`, ReferenceError);
     }
+
+    var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
+    if (opts.env) merge(opts, opts.env[envKey]);
 
     for (let key in File.options) {
       let option = File.options[key];
