@@ -2,5 +2,5 @@
 
 var _context;
 
-var f = ns.obj.func.bind(ctx);
+var f = (_context = ctx, ns.obj.func).bind(_context);
 var g = (_context = ns.obj).func.bind(_context);

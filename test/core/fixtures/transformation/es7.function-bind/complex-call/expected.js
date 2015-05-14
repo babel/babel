@@ -1,11 +1,13 @@
 "use strict";
 
+var _context;
+
 var _iterlib = require("iterlib");
 
-_iterlib.forEach.call(_iterlib.takeWhile.call(_iterlib.map.call(getPlayers(), function (x) {
+(_context = (_context = (_context = getPlayers(), _iterlib.map).call(_context, function (x) {
   return x.character();
-}), function (x) {
+}), _iterlib.takeWhile).call(_context, function (x) {
   return x.strength > 100;
-}), function (x) {
+}), _iterlib.forEach).call(_context, function (x) {
   return console.log(x);
 });

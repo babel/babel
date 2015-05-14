@@ -7,28 +7,35 @@ export var metadata = {
   stage: 0
 };
 
-function inferBindContext(bindExpr, scope) {
-  // nothing to infer
-  if (bindExpr.object) return bindExpr.object;
-
+function getTempId(scope) {
   var id = scope.path.getData("functionBind");
-  if (!id) {
-    id = scope.generateTemp("context");
-    scope.path.setData("functionBind", id);
+  if (id) return id;
+  id = scope.generateTemp("context");
+  return scope.path.setData("functionBind", id);
+}
+
+function inferBindContext(bind, scope) {
+  var tempId = getTempId(scope);
+  if (!bind.object) {
+    bind.callee.object = t.assignmentExpression("=", tempId, bind.callee.object);
+  } else {
+    bind.callee = t.sequenceExpression([
+      t.assignmentExpression("=", tempId, bind.object),
+      bind.callee
+    ]);
   }
-  bindExpr.callee.object = t.assignmentExpression("=", id, bindExpr.callee.object);
-  return id;
+  return tempId;
 }
 
 export function CallExpression(node, parent, scope, file) {
-  var bindExpr = node.callee;
-  if (!t.isBindExpression(bindExpr)) return;
-  var bindCtx = inferBindContext(bindExpr, scope);
-  node.callee = t.memberExpression(bindExpr.callee, t.identifier("call"));
-  node.arguments.unshift(bindCtx);
+  var bind = node.callee;
+  if (!t.isBindExpression(bind)) return;
+  var context = inferBindContext(bind, scope);
+  node.callee = t.memberExpression(bind.callee, t.identifier("call"));
+  node.arguments.unshift(context);
 }
 
 export function BindExpression(node, parent, scope, file) {
-  var bindCtx = inferBindContext(node, scope);
-  return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [bindCtx]);
+  var context = inferBindContext(node, scope);
+  return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]);
 }
