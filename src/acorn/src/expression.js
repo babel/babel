@@ -214,7 +214,7 @@ pp.parseExprSubscripts = function(refShorthandDefaultPos) {
 }
 
 pp.parseSubscripts = function(base, start, noCalls) {
-  if (this.eat(tt.doubleColon)) {
+  if (!noCalls && this.eat(tt.doubleColon)) {
     let node = this.startNodeAt(start)
     node.object = base
     node.callee = this.parseNoCallExpr()
