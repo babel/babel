@@ -100,6 +100,19 @@ suite("api", function () {
   });
 
   suite("env option", function () {
+    var oldBabelEnv = process.env.BABEL_ENV;
+    var oldNodeEnv = process.env.NODE_ENV;
+
+    before(function () {
+      delete process.env.BABEL_ENV;
+      delete process.env.NODE_ENV;
+    });
+
+    after(function () {
+      process.env.BABEL_ENV = oldBabelEnv;
+      process.env.NODE_ENV = oldNodeEnv;
+    });
+
     test("default", function () {
       assert.equal(transform("foo;", {
         env: {
@@ -115,7 +128,6 @@ suite("api", function () {
           foo: { blacklist: "strict" }
         }
       }).code, "foo;");
-      delete process.env.BABEL_ENV;
     });
 
     test("NODE_ENV", function () {
@@ -125,7 +137,6 @@ suite("api", function () {
           foo: { blacklist: "strict" }
         }
       }).code, "foo;");
-      delete process.env.NODE_ENV;
     });
   });
 
