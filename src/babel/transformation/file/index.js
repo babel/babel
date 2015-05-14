@@ -493,6 +493,7 @@ export default class File {
       if (this.shouldIgnore()) {
         return {
           metadata: {},
+          ignored:  true,
           code:     code,
           map:      null,
           ast:      null

@@ -16,6 +16,7 @@ module.exports = function (commander, filenames, opts) {
     var data = util.compile(src, {
       sourceFileName: slash(path.relative(dest + "/..", src))
     });
+    if (data.ignored) return;
 
     if (commander.sourceMaps && commander.sourceMaps !== "inline") {
       var mapLoc = dest + ".map";

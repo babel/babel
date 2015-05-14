@@ -116,7 +116,9 @@ module.exports = function (commander, filenames, opts) {
     _.each(_filenames, function (filename) {
       if (util.shouldIgnore(filename)) return;
 
-      results.push(util.compile(filename));
+      var data = util.compile(filename);
+      if (data.ignored) return;
+      results.push(data);
     });
 
     output();
