@@ -53,7 +53,7 @@ var hasRest = function (node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 };
 
-export function Func(node, parent, scope, file) {
+export function Func/*tion*/(node, parent, scope, file) {
   if (!hasRest(node)) return;
 
   var restParam = node.params.pop();

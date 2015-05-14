@@ -55,7 +55,7 @@ export function ForOfStatement(node, parent, scope, file) {
 
 export { ForOfStatement as ForInStatement };
 
-export function Func(node, parent, scope, file) {
+export function Func/*tion*/(node, parent, scope, file) {
   var nodes = [];
 
   var hasDestructuring = false;

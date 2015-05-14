@@ -10,7 +10,7 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-export function Func(node, parent, scope, file) {
+export function Func/*tion*/(node, parent, scope, file) {
   if (node.generator || node.async) return;
   var tailCall = new TailCallTransformer(this, scope, file);
   tailCall.run();

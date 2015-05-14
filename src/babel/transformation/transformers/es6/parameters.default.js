@@ -22,7 +22,7 @@ var iifeVisitor = {
   }
 };
 
-export function Func(node, parent, scope, file) {
+export function Func/*tion*/(node, parent, scope, file) {
   if (!hasDefaults(node)) return;
 
   t.ensureBlock(node);

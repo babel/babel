@@ -12,7 +12,7 @@ export function Class(node) {
   node.implements = null;
 }
 
-export function Func(node) {
+export function Func/*tion*/(node) {
   for (var i = 0; i < node.params.length; i++) {
     var param = node.params[i];
     param.optional = false;
