@@ -1,6 +1,7 @@
 var convertSourceMap = require("convert-source-map");
 var sourceMap        = require("source-map");
 var chokidar         = require("chokidar");
+var slash            = require("slash");
 var path             = require("path");
 var util             = require("./util");
 var fs               = require("fs");
@@ -15,7 +16,7 @@ module.exports = function (commander, filenames, opts) {
 
   var buildResult = function () {
     var map = new sourceMap.SourceMapGenerator({
-      file: commander.outFile || "stdout"
+      file: slash(commander.outFile || "stdout")
     });
 
     var code = "";
@@ -27,11 +28,12 @@ module.exports = function (commander, filenames, opts) {
 
       if (result.map) {
         var consumer = new sourceMap.SourceMapConsumer(result.map);
-        var sourceFilename = filename;
 
+        var sourceFilename = filename;
         if (commander.outFile) {
           sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
         }
+        sourceFilename = slash(sourceFilename);
 
         map._sources.add(sourceFilename);
         map.setSourceContent(sourceFilename, result.actual);

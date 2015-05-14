@@ -1,5 +1,6 @@
 var outputFileSync = require("output-file-sync");
 var chokidar       = require("chokidar");
+var slash          = require("slash");
 var path           = require("path");
 var util           = require("./util");
 var fs             = require("fs");
@@ -13,7 +14,7 @@ module.exports = function (commander, filenames, opts) {
     var dest = path.join(commander.outDir, relative);
 
     var data = util.compile(src, {
-      sourceFileName: path.relative(dest + "/..", src)
+      sourceFileName: slash(path.relative(dest + "/..", src))
     });
 
     if (commander.sourceMaps && commander.sourceMaps !== "inline") {
