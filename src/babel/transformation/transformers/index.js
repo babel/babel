@@ -1,5 +1,6 @@
 export default {
   //- builtin-setup
+  strict:                                  require("./other/strict"),
   _explode:                                require("./internal/explode"),
   _validation:                             require("./internal/validation"),
   _hoistDirectives:                        require("./internal/hoist-directives"),
@@ -18,7 +19,6 @@ export default {
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
-  strict:                                  require("./other/strict"),
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.react":                      require("./validation/react"),
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),

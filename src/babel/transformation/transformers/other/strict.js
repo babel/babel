@@ -1,6 +1,10 @@
 import * as messages from "../../../messages";
 import * as t from "../../../types";
 
+export var metadata = {
+  group: "builtin-setup"
+};
+
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassExpression", "ClassDeclaration"];
 
 export var Program = {
