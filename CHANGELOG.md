@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.0
+
+ * **New Feature**
+  * Added [function bind syntax](https://github.com/zenparsing/es-function-bind) behind stage 0. Thanks [@RReverser](https://github.com/rreverser)!
+  * Added `env` option. Especially handy when using the `.babelrc`.
+ * **Bug Fix**
+  * Fix files not properly being ignored when `babel.transform` ignores them when using `$ babel`.
+  * Fix scope tracking registering loop head bindings to their `VariableDeclaration` instead of `VariableDeclarator`.
+ * **Polish**
+  * Normalise path separators for souce map paths when using `$ babel`.
+  * Rework `PathHoister` to ignore global references and to not deopt on reassignments to referenced bindings, instead it tries to hoist to the highest scope.
+  * Added missing exponential operator inlining. Thanks [@nkt](https://github.com/nkt)!
+  * Optimise `regenerator` transformer. Thanks [@benjamn](https://github.com/benjamn)!
+
 ## 5.3.3
 
  * **Bug Fix**
