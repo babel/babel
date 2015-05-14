@@ -463,6 +463,14 @@ export default class Scope {
   registerBinding(kind: string, path: TraversalPath) {
     if (!kind) throw new ReferenceError("no `kind`");
 
+    if (path.isVariableDeclaration()) {
+      var declarators = path.get("declarations");
+      for (var declar of (declarators: Array)) {
+        this.registerBinding(kind, declar);
+      }
+      return;
+    }
+
     var ids = path.getBindingIdentifiers();
 
     for (var name in ids) {
