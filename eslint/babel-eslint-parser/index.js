@@ -56,7 +56,7 @@ function monkeypatch() {
   };
 }
 
-exports.attachComments = function(ast, comments, tokens) {
+exports.attachComments = function (ast, comments, tokens) {
   estraverse.attachComments(ast, comments, tokens);
 
   if (comments.length) {
@@ -82,7 +82,7 @@ exports.attachComments = function(ast, comments, tokens) {
         node.leadingComments = [];
         var firstTokenStart = token.range[0];
         var len = comments.length;
-        for(var i = 0; i < len && comments[i].start < firstTokenStart; i++ ) {
+        for (var i = 0; i < len && comments[i].start < firstTokenStart; i++) {
           node.leadingComments.push(comments[i]);
         }
       }
@@ -138,7 +138,7 @@ exports.parse = function (code) {
   tokens.pop();
 
   // convert tokens
-  ast.tokens = tokens.map(acornToEsprima.toToken);
+  ast.tokens = acornToEsprima.toTokens(tokens);
 
   // add comments
   ast.comments = comments;

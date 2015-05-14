@@ -139,4 +139,14 @@ describe("verify", function () {
       []
     );
   });
+
+  it("template strings #31", function () {
+    verifyAndAssertMessages(
+      "console.log(`${a}, b`);",
+      { "comma-spacing": 1 },
+      []
+    );
+  });
+
+
 });

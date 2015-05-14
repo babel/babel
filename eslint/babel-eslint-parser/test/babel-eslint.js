@@ -20,7 +20,7 @@ function assertImplementsAST(target, source, path) {
     error("have different types (" + typeA + " !== " + typeB + ")");
   } else if (typeA === "object") {
     var keysTarget = Object.keys(target);
-    for(var i in keysTarget) {
+    for (var i in keysTarget) {
       var key = keysTarget[i];
       path.push(key);
       assertImplementsAST(target[key], source[key], path);
@@ -34,6 +34,7 @@ function assertImplementsAST(target, source, path) {
 function parseAndAssertSame(code) {
   var esAST = espree.parse(code, {
     ecmaFeatures: {
+      templateStrings: true,
       modules: true,
       classes: true,
       jsx: true
@@ -50,14 +51,60 @@ function parseAndAssertSame(code) {
   } catch(err) {
     err.message +=
       "\nespree:\n" +
-      util.inspect(esAST, {depth: err.depth}) +
+      util.inspect(esAST, {depth: err.depth, colors: true}) +
       "\nbabel-eslint:\n" +
-      util.inspect(acornAST, {depth: err.depth});
+      util.inspect(acornAST, {depth: err.depth, colors: true});
     throw err;
   }
 }
 
 describe("acorn-to-esprima", function () {
+  describe("templates", function () {
+    it("empty template string", function () {
+      parseAndAssertSame("``");
+    });
+
+    it("template string", function () {
+      parseAndAssertSame("`test`");
+    });
+
+    it("template string using $", function () {
+      parseAndAssertSame("`$`");
+    });
+
+    it("template string with expression", function () {
+      parseAndAssertSame("`${a}`");
+    });
+
+    it("template string with multiple expressions", function () {
+      parseAndAssertSame("`${a}${b}${c}`");
+    });
+
+    it("template string with expression and strings", function () {
+      parseAndAssertSame("`a${a}a`");
+    });
+
+    it("template string with binary expression", function () {
+      parseAndAssertSame("`a${a + b}a`");
+    });
+
+    it("tagged template", function () {
+      parseAndAssertSame("jsx`<Button>Click</Button>`");
+    });
+
+    it("tagged template with expression", function () {
+      parseAndAssertSame("jsx`<Button>Hi ${name}</Button>`");
+    });
+
+    it("tagged template with new operator", function () {
+      parseAndAssertSame("new raw`42`");
+    });
+
+    it("template with nested function/object", function () {
+      parseAndAssertSame("`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`");
+    });
+  });
+
   it("simple expression", function () {
     parseAndAssertSame("a = 1");
   });

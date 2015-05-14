@@ -58,8 +58,80 @@ exports.toAST = function (ast) {
   traverse(ast, astTransformVisitor);
 };
 
+exports.toTokens = function (tokens) {
+  // transform tokens to type "Template"
+  convertTemplateType(tokens);
+
+  return tokens.map(exports.toToken);
+};
+
 function isCompatTag(tagName) {
   return tagName && /^[a-z]|\-/.test(tagName);
+}
+
+function convertTemplateType(tokens) {
+  var startingToken = 0;
+  var currentToken  = 0;
+  var numBraces     = 0;
+
+  function isTemplateStarter(token) {
+    return tokens[token].type === tt.backQuote ||
+           tokens[token].type === tt.braceR;
+  }
+
+  function isTemplateEnder(token) {
+    return tokens[token].type === tt.dollarBraceL ||
+           tokens[token].type === tt.backQuote;
+  }
+
+  function createTemplateValue(start, end) {
+    var value = "";
+    while (start <= end) {
+      if (tokens[start].value) {
+        value += tokens[start].value;
+      } else if (tokens[start].type !== tt.template) {
+        value += tokens[start].type.label;
+      }
+      start++;
+    }
+    return value;
+  }
+
+  function replaceWithTemplateType(start, end) {
+    var templateToken = {
+      type: 'Template',
+      value: createTemplateValue(start, end),
+      range: [tokens[start].start, tokens[end].end],
+      loc: {
+        start: tokens[start].loc.start,
+        end: tokens[end].loc.end
+      }
+    }
+    tokens.splice(start, end - start + 1, templateToken);
+  }
+
+  function checkNumBraces(token) {
+    if (tokens[token].type === tt.braceL) {
+      numBraces++;
+    } else if (tokens[token].type === tt.braceR) {
+      numBraces--;
+    }
+  }
+
+  while (startingToken < tokens.length) {
+    if (isTemplateStarter(startingToken) && numBraces === 0) {
+      currentToken = startingToken + 1;
+      while (currentToken < tokens.length - 1 && !isTemplateEnder(currentToken)) {
+        checkNumBraces(currentToken);
+        currentToken++;
+      }
+      replaceWithTemplateType(startingToken, currentToken);
+      startingToken++;
+    } else {
+      checkNumBraces(startingToken);
+      startingToken++;
+    }
+  }
 }
 
 var astTransformVisitor = {
@@ -116,6 +188,25 @@ var astTransformVisitor = {
       node.type = "YieldExpression";
       node.delegate = node.all;
       delete node.all;
+    }
+
+    // template strings
+
+    if (t.isTemplateLiteral(node)) {
+      node.quasis.forEach(function (q) {
+        q.range[0] -= 1;
+        if (q.tail) {
+          q.range[1] += 1;
+        } else {
+          q.range[1] += 2;
+        }
+        q.loc.start.column -= 1;
+        if (q.tail) {
+          q.loc.end.column += 1;
+        } else {
+          q.loc.end.column += 2;
+        }
+      });
     }
   }
 };
