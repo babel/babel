@@ -21,7 +21,7 @@ var hoistVariablesVisitor = {
       }
 
       // ignore block hoisted nodes as these can be left in
-      if (state.formatter.canHoist(node)) return;
+      if (state.formatter._canHoist(node)) return;
 
       var nodes = [];
 
@@ -50,7 +50,7 @@ var hoistFunctionsVisitor = {
   enter(node, parent, scope, state) {
     if (t.isFunction(node)) this.skip();
 
-    if (t.isFunctionDeclaration(node) || state.formatter.canHoist(node)) {
+    if (t.isFunctionDeclaration(node) || state.formatter._canHoist(node)) {
       state.handlerBody.push(node);
       this.remove();
     }
@@ -101,14 +101,14 @@ export default class SystemFormatter extends AMDFormatter {
     var right = objectIdentifier;
 
     var block = t.blockStatement([
-      t.expressionStatement(this.buildExportCall(leftIdentifier, valIdentifier))
+      t.expressionStatement(this._buildExportCall(leftIdentifier, valIdentifier))
     ]);
 
     return this._addImportSource(t.forInStatement(left, right, block), node);
   }
 
   buildExportsAssignment(id, init, node) {
-    var call = this.buildExportCall(t.literal(id.name), init, true);
+    var call = this._buildExportCall(t.literal(id.name), init, true);
     return this._addImportSource(call, node);
   }
 
@@ -120,13 +120,13 @@ export default class SystemFormatter extends AMDFormatter {
     var assign = node;
 
     for (var i = 0; i < exported.length; i++) {
-      assign = this.buildExportCall(t.literal(exported[i].name), assign);
+      assign = this._buildExportCall(t.literal(exported[i].name), assign);
     }
 
     return assign;
   }
 
-  buildExportCall(id, init, isStatement) {
+  _buildExportCall(id, init, isStatement) {
     var call = t.callExpression(this.exportIdentifier, [id, init]);
     if (isStatement) {
       return t.expressionStatement(call);
@@ -149,7 +149,7 @@ export default class SystemFormatter extends AMDFormatter {
     this._addImportSource(last(nodes), node);
   }
 
-  buildRunnerSetters(block, hoistDeclarators) {
+  _buildRunnerSetters(block, hoistDeclarators) {
     var scope = this.file.scope;
 
     return t.arrayExpression(map(this.ids, function (uid, source) {
@@ -165,7 +165,7 @@ export default class SystemFormatter extends AMDFormatter {
     }));
   }
 
-  canHoist(node) {
+  _canHoist(node) {
     return node._blockHoist && !this.file.dynamicImports.length;
   }
 
@@ -182,7 +182,7 @@ export default class SystemFormatter extends AMDFormatter {
       MODULE_DEPENDENCIES: t.arrayExpression(this.buildDependencyLiterals()),
       EXPORT_IDENTIFIER:   this.exportIdentifier,
       MODULE_NAME:         moduleNameLiteral,
-      SETTERS:             this.buildRunnerSetters(block, hoistDeclarators),
+      SETTERS:             this._buildRunnerSetters(block, hoistDeclarators),
       EXECUTE:             t.functionExpression(null, [], block)
     }, true);
 
