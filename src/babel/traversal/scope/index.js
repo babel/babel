@@ -163,6 +163,17 @@ export default class Scope {
     traverse(node, opts, this, state, this.path);
   }
 
+
+  /**
+   * Since `Scope` instances are unique to their traversal we need some other
+   * way to compare if scopes are the same. Here we just compare `this.bindings`
+   * as it will be the same across all instances.
+   */
+
+  is(scope) {
+    return this.bindings === scope.bindings;
+  }
+
   /**
    * Description
    */
@@ -435,11 +446,13 @@ export default class Scope {
     for (var name in ids) {
       var binding = this.getBinding(name);
       if (!binding) continue;
+
       if (right) {
         var rightType = right.typeAnnotation;
         if (rightType && binding.isCompatibleWithType(rightType)) continue;
       }
-      binding.reassign();
+
+      binding.reassign(left, right);
     }
   }
 

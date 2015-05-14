@@ -25,8 +25,6 @@ export default {
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
   "optimisation.react.constantElements":   require("./optimisation/react.constant-elements"),
   "optimisation.react.inlineElements":     require("./optimisation/react.inline-elements"),
-  reactCompat:                             require("./other/react-compat"),
-  react:                                   require("./other/react"),
   "es7.comprehensions":                    require("./es7/comprehensions"),
   "es6.classes":                           require("./es6/classes"),
   asyncToGenerator:                        require("./other/async-to-generator"),
@@ -60,6 +58,8 @@ export default {
   "es6.destructuring":                     require("./es6/destructuring"),
   "es6.blockScoping":                      require("./es6/block-scoping"),
   "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
+  reactCompat:                             require("./other/react-compat"),
+  react:                                   require("./other/react"),
 
   // es6 syntax transformation is **forbidden** past this point since regenerator will chuck a massive
   // hissy fit

@@ -3,6 +3,10 @@ import * as t from "../../../types";
 
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
+export var metadata = {
+  group: "builtin-advanced"
+};
+
 export function Program(node, parent, scope, file) {
   var id = file.opts.jsxPragma;
 

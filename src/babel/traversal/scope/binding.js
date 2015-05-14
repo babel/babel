@@ -2,10 +2,13 @@ import * as t from "../../types";
 
 export default class Binding {
   constructor({ identifier, scope, path, kind }) {
+    this.constantViolations = [];
+    this.constant           = true;
+
     this.identifier = identifier;
     this.references = 0;
     this.referenced = false;
-    this.constant   = true;
+
     this.scope      = scope;
     this.path       = path;
     this.kind       = kind;
@@ -51,8 +54,9 @@ export default class Binding {
    * Description
    */
 
-  reassign() {
+  reassign(path) {
     this.constant = false;
+    this.constantViolations.push(path);
 
     if (this.typeAnnotationInferred) {
       // destroy the inferred typeAnnotation

@@ -2,28 +2,24 @@ import * as react from "../../transformation/helpers/react";
 import * as t from "../../types";
 
 var referenceVisitor = {
-  enter(node, parent, scope, state) {
+  ReferencedIdentifier(node, parent, scope, state) {
     if (this.isJSXIdentifier() && react.isCompatTag(node.name)) {
       return;
     }
 
-    if (this.isJSXIdentifier() || this.isIdentifier()) {
-      // direct references that we need to track to hoist this to the highest scope we can
-      if (this.isReferenced()) {
-        var bindingInfo = scope.getBinding(node.name);
+    // direct references that we need to track to hoist this to the highest scope we can
+    var bindingInfo = scope.getBinding(node.name);
+    if (!bindingInfo) return;
 
-        // this binding isn't accessible from the parent scope so we can safely ignore it
-        // eg. it's in a closure etc
-        if (bindingInfo !== state.scope.getBinding(node.name)) return;
+    // this binding isn't accessible from the parent scope so we can safely ignore it
+    // eg. it's in a closure etc
+    if (bindingInfo !== state.scope.getBinding(node.name)) return;
 
-        if (bindingInfo) {
-          if (bindingInfo.constant) {
-            state.bindings[node.name] = bindingInfo;
-          } else {
-            state.foundIncompatible = true;
-            this.stop();
-          }
-        }
+    if (bindingInfo.constant) {
+      state.bindings[node.name] = bindingInfo;
+    } else {
+      for (var violationPath of (bindingInfo.constantViolations: Array)) {
+        state.breakOnScopePaths.push(violationPath.scope.path);
       }
     }
   }
@@ -31,10 +27,10 @@ var referenceVisitor = {
 
 export default class PathHoister {
   constructor(path, scope) {
-    this.foundIncompatible = false;
+    this.breakOnScopePaths = [];
     this.bindings          = {};
-    this.scope             = scope;
     this.scopes            = [];
+    this.scope             = scope;
     this.path              = path;
   }
 
@@ -45,32 +41,41 @@ export default class PathHoister {
         return false;
       }
     }
+
     return true;
   }
 
   getCompatibleScopes() {
-    var checkScope = this.path.scope;
+    var scope = this.path.scope;
     do {
-      if (this.isCompatibleScope(checkScope)) {
-        this.scopes.push(checkScope);
+      if (this.isCompatibleScope(scope)) {
+        this.scopes.push(scope);
       } else {
         break;
       }
-    } while(checkScope = checkScope.parent);
+
+      if (this.breakOnScopePaths.indexOf(scope.path) >= 0) {
+        break;
+      }
+    } while(scope = scope.parent);
   }
 
   getAttachmentPath() {
     var scopes = this.scopes;
 
     var scope = scopes.pop();
+    if (!scope) return;
 
     if (scope.path.isFunction()) {
-      if (this.hasNonParamBindings()) {
-        // can't be attached to this scope
-        return this.getNextScopeStatementParent();
-      } else {
+      if (this.hasOwnParamBindings(scope)) {
+        // should ignore this scope since it's ourselves
+        if (this.scope.is(scope)) return;
+
         // needs to be attached to the body
         return scope.path.get("body").get("body")[0];
+      } else {
+        // doesn't need to be be attached to this scope
+        return this.getNextScopeStatementParent();
       }
     } else if (scope.path.isProgram()) {
       return this.getNextScopeStatementParent();
@@ -82,10 +87,12 @@ export default class PathHoister {
     if (scope) return scope.path.getStatementParent();
   }
 
-  hasNonParamBindings() {
+  hasOwnParamBindings(scope) {
     for (var name in this.bindings) {
+      if (!scope.hasOwnBinding(name)) continue
+
       var binding = this.bindings[name];
-      if (binding.kind !== "param") return true;
+      if (binding.kind === "param") return true;
     }
     return false;
   }
@@ -96,7 +103,6 @@ export default class PathHoister {
     node._hoisted = true;
 
     this.path.traverse(referenceVisitor, this);
-    if (this.foundIncompatible) return;
 
     this.getCompatibleScopes();
 
@@ -119,6 +125,6 @@ export default class PathHoister {
       uid = t.jSXExpressionContainer(uid);
     }
 
-    this.path.replaceWith(uid);
+    return uid;
   }
 }
