@@ -16,11 +16,8 @@ function getTempId(scope) {
 }
 
 function getStaticContext(bind, scope) {
-  if (bind.object) {
-    return scope.isStatic(bind.object) && bind.object;
-  } else {
-    return scope.isStatic(bind.callee.object) && bind.callee.object;
-  }
+  var object = bind.object || bind.callee.object;
+  return scope.isStatic(object) && object;
 }
 
 function inferBindContext(bind, scope) {
