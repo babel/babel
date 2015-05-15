@@ -76,8 +76,9 @@ export function regexify(val: any): RegExp {
     // normalise path separators
     val = slash(val);
 
-    // remove relative separator if present
-    if (startsWith(val, "./")) val = val.slice(2);
+    // remove starting wildcards or relative separator if present
+    if (startsWith(val, "./") || startsWith(val, "*/")) val = val.slice(2);
+    if (startsWith(val, "**/")) val = val.slice(3);
 
     var regex = minimatch.makeRe(val, { nocase: true });
     return new RegExp(regex.source.slice(1, -1), "i");
