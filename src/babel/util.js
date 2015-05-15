@@ -95,7 +95,26 @@ export function booleanify(val: any): boolean {
 }
 
 export function shouldIgnore(filename, ignore, only) {
+  if (!ignore.length && !only.length) return false;
+
   filename = slash(filename);
+
+  // try and match each section of the path
+  var parts = filename.split("/");
+  for (var i = 0; i < parts.length; i++) {
+    var part = parts[i];
+    if (!part) continue;
+
+    if (_shouldIgnore(part, ignore, only) ||
+        _shouldIgnore(parts.slice(0, i + 1).join("/"), ignore, only)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function _shouldIgnore(filename, ignore, only) {
   if (only.length) {
     for (var pattern of (only: Array)) {
       if (pattern.test(filename)) return false;
