@@ -147,6 +147,4 @@ describe("verify", function () {
       []
     );
   });
-
-
 });

@@ -36,7 +36,7 @@ exports.toToken = function (token) {
     token.type = "JSXIdentifier";
   } else if (type.keyword === "null") {
     token.type = "Null";
-  } else if (type.keyword === "false" || token.keyword === "true") {
+  } else if (type.keyword === "false" || type.keyword === "true") {
     token.type = "Boolean";
   } else if (type.keyword) {
     token.type = "Keyword";
@@ -48,6 +48,11 @@ exports.toToken = function (token) {
     token.value = JSON.stringify(token.value);
   } else if (type === tt.regexp) {
     token.type = "RegularExpression";
+    token.regex = {
+      pattern: token.value.pattern,
+      flags: token.value.flags
+    };
+    token.value = String(token.value.value);
   }
 
   return token;
@@ -70,20 +75,26 @@ function isCompatTag(tagName) {
 }
 
 function convertTemplateType(tokens) {
-  var startingToken = 0;
-  var currentToken  = 0;
-  var numBraces     = 0;
+  var startingToken    = 0;
+  var currentToken     = 0;
+  var numBraces        = 0;
+  var hasTemplateEnded = true;
+
+  function isBackQuote(token) {
+    return tokens[token].type === tt.backQuote;
+  }
 
   function isTemplateStarter(token) {
-    return tokens[token].type === tt.backQuote ||
+    return isBackQuote(token) ||
            tokens[token].type === tt.braceR;
   }
 
   function isTemplateEnder(token) {
-    return tokens[token].type === tt.dollarBraceL ||
-           tokens[token].type === tt.backQuote;
+    return isBackQuote(token) ||
+           tokens[token].type === tt.dollarBraceL;
   }
 
+  // append the values between start and end
   function createTemplateValue(start, end) {
     var value = "";
     while (start <= end) {
@@ -97,6 +108,7 @@ function convertTemplateType(tokens) {
     return value;
   }
 
+  // create Template token
   function replaceWithTemplateType(start, end) {
     var templateToken = {
       type: 'Template',
@@ -107,10 +119,12 @@ function convertTemplateType(tokens) {
         end: tokens[end].loc.end
       }
     }
+
+    // put new token in place of old tokens
     tokens.splice(start, end - start + 1, templateToken);
   }
 
-  function checkNumBraces(token) {
+  function trackNumBraces(token) {
     if (tokens[token].type === tt.braceL) {
       numBraces++;
     } else if (tokens[token].type === tt.braceR) {
@@ -119,18 +133,30 @@ function convertTemplateType(tokens) {
   }
 
   while (startingToken < tokens.length) {
+    // template start: check if ` or }
     if (isTemplateStarter(startingToken) && numBraces === 0) {
       currentToken = startingToken + 1;
-      while (currentToken < tokens.length - 1 && !isTemplateEnder(currentToken)) {
-        checkNumBraces(currentToken);
+
+      // check if token after template start is "template"
+      if (currentToken >= tokens.length - 1 || tokens[currentToken].type !== tt.template) {
+        break;
+      }
+
+      // template end: find ` or ${
+      while (!isTemplateEnder(currentToken)) {
+        if (currentToken >= tokens.length - 1) {
+          break;
+        }
         currentToken++;
       }
+
+      hasTemplateEnded = isBackQuote(currentToken);
+      // template start and end found: create new token
       replaceWithTemplateType(startingToken, currentToken);
-      startingToken++;
-    } else {
-      checkNumBraces(startingToken);
-      startingToken++;
+    } else if (!hasTemplateEnded) {
+      trackNumBraces(startingToken);
     }
+    startingToken++;
   }
 }
 
