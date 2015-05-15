@@ -111,25 +111,30 @@ export function shouldIgnore(filename, ignore, only) {
     filenames.push(parts.slice(0, i + 1).join("/"));
   }
 
-  for (let filename of (filenames: Array)) {
-    var should = _shouldIgnore(filename, ignore, only);
-    if (should != null) return should;
+  if (only.length) {
+    for (var pattern of (only: Array)) {
+      var matches = false;
+
+      for (let filename of (filenames: Array)) {
+        if (pattern.test(filename)) {
+          matches = true;
+          break;
+        }
+      }
+
+      if (!matches) return false;
+    }
+
+    return true;
+  } else if (ignore.length) {
+    for (let filename of (filenames: Array)) {
+      for (var pattern of (ignore: Array)) {
+        if (pattern.test(filename)) return true;
+      }
+    }
   }
 
   return false;
-}
-
-function _shouldIgnore(filename, ignore, only) {
-  if (only.length) {
-    for (var pattern of (only: Array)) {
-      if (pattern.test(filename)) return false;
-    }
-    return true;
-  } else if (ignore.length) {
-    for (var pattern of (ignore: Array)) {
-      if (pattern.test(filename)) return true;
-    }
-  }
 }
 
 var templateVisitor = {
