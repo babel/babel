@@ -52,6 +52,22 @@ suite("traverse", function () {
 
   var body = ast.body;
 
+  test("traverse replace", function () {
+    var replacement = {
+      type: "Literal",
+      value: "foo"
+    };
+    var ast2 = _.cloneDeep(ast);
+
+    traverse(ast2, {
+      enter: function (node) {
+        if (node.type === "ThisExpression") return replacement;
+      }
+    });
+
+    assert.equal(ast2.body[1].expression.left.object, replacement);
+  });
+
   test("traverse", function () {
     var expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
@@ -93,22 +109,6 @@ suite("traverse", function () {
     });
 
     assert.deepEqual(actual, expect);
-  });
-
-  test("traverse replace", function () {
-    var replacement = {
-      type: "Literal",
-      value: "foo"
-    };
-    var ast2 = _.cloneDeep(ast);
-
-    traverse(ast2, {
-      enter: function (node) {
-        if (node.type === "ThisExpression") return replacement;
-      }
-    });
-
-    assert.equal(ast2.body[1].expression.left.object, replacement);
   });
 
   test("hasType", function () {
