@@ -53,6 +53,9 @@ var compile = function (filename) {
 
   var cacheKey = `${filename}:${JSON.stringify(opts)}:${babel.version}`;
 
+  var env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  if (env) cacheKey += `:${env}`;
+
   if (cache) {
     var cached = cache[cacheKey];
     if (cached && cached.mtime === mtime(filename)) {
