@@ -553,7 +553,7 @@ export default class Scope {
   isPure(node) {
     if (t.isIdentifier(node)) {
       var bindingInfo = this.getBinding(node.name);
-      return bindingInfo.constant;
+      return bindingInfo && bindingInfo.constant;
     } else {
       return t.isPure(node);
     }
