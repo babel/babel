@@ -33,6 +33,10 @@ export function ReferencedIdentifier(node, parent, scope) {
   }
   if (!replacement) return;
 
+  if (this.findParent((node) => replacement)) {
+    return;
+  }
+
   t.toExpression(replacement);
   scope.removeBinding(node.name);
   binding.path.remove();
