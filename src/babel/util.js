@@ -1,7 +1,7 @@
 import "./patch";
 
 import escapeRegExp from "lodash/string/escapeRegExp";
-
+import startsWith from "lodash/string/startsWith";
 import cloneDeep from "lodash/lang/cloneDeep";
 import isBoolean from "lodash/lang/isBoolean";
 import * as messages from "./messages";
@@ -69,9 +69,22 @@ export function list(val: string): Array<string> {
 
 export function regexify(val: any): RegExp {
   if (!val) return new RegExp(/.^/);
+
   if (Array.isArray(val)) val = new RegExp(val.map(escapeRegExp).join("|"), "i");
-  if (isString(val)) return minimatch.makeRe(val, { nocase: true });
+
+  if (isString(val)) {
+    // normalise path separators
+    val = slash(val);
+
+    // remove relative separator if present
+    if (startsWith(val, "./")) val = val.slice(2);
+
+    var regex = minimatch.makeRe(val, { nocase: true });
+    return new RegExp(regex.source.slice(1, -1), "i");
+  }
+
   if (isRegExp(val)) return val;
+
   throw new TypeError("illegal type for regexify");
 }
 
@@ -95,40 +108,16 @@ export function booleanify(val: any): boolean {
 }
 
 export function shouldIgnore(filename, ignore, only) {
-  if (!ignore.length && !only.length) return false;
-
   filename = slash(filename);
 
-  var filenames = [];
-
-  // try and match each section of the path
-  var parts = filename.split("/");
-  for (var i = 0; i < parts.length; i++) {
-    var part = parts[i];
-    if (!part) continue;
-
-    filenames.push(part);
-    filenames.push(parts.slice(0, i + 1).join("/"));
-  }
-
   if (only.length) {
-    var matches = false;
-
-    for (let filename of (filenames: Array)) {
-      for (var pattern of (only: Array)) {
-        if (pattern.test(filename)) {
-          matches = true;
-          break;
-        }
-      }
+    for (var pattern of (only: Array)) {
+      if (pattern.test(filename)) return false;
     }
-
-    return !matches;
+    return true;
   } else if (ignore.length) {
-    for (let filename of (filenames: Array)) {
-      for (var pattern of (ignore: Array)) {
-        if (pattern.test(filename)) return true;
-      }
+    for (var pattern of (ignore: Array)) {
+      if (pattern.test(filename)) return true;
     }
   }
 

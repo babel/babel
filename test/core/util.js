@@ -80,8 +80,15 @@ suite("util", function () {
     assert.deepEqual(util.regexify(null), /.^/);
     assert.deepEqual(util.regexify(""), /.^/);
     assert.deepEqual(util.regexify(["foo", "bar"]), /foo|bar/i);
-    assert.deepEqual(util.regexify("foobar"), /^(?:(?=.)foobar)$/i);
+    assert.deepEqual(util.regexify("foobar"), /(?:(?=.)foobar)/i);
     assert.deepEqual(util.regexify(/foobar/), /foobar/);
+
+    assert.ok(util.regexify("foo/bar").test("bar/foo/bar"));
+    assert.ok(util.regexify("foo/*").test("foo/bar.js"));
+    assert.ok(util.regexify("*.js").test("bar.js"));
+    assert.ok(util.regexify("./foo").test("foo"));
+    assert.ok(util.regexify("./foo/bar.js").test("foo/bar.js"));
+    assert.ok(util.regexify("foobar").test("foobar"));
 
     assert.throws(function () {
       util.regexify({});
