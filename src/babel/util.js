@@ -112,20 +112,18 @@ export function shouldIgnore(filename, ignore, only) {
   }
 
   if (only.length) {
-    for (var pattern of (only: Array)) {
-      var matches = false;
+    var matches = false;
 
+    patternLoop: for (var pattern of (only: Array)) {
       for (let filename of (filenames: Array)) {
         if (pattern.test(filename)) {
           matches = true;
-          break;
+          break patternLoop;
         }
       }
-
-      if (!matches) return false;
     }
 
-    return true;
+    return matches;
   } else if (ignore.length) {
     for (let filename of (filenames: Array)) {
       for (var pattern of (ignore: Array)) {
