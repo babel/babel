@@ -201,7 +201,7 @@ export default class TraversalPath {
         this._containerInsertBefore(nodes);
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.push(this.node);
-        this.container[this.key] = t.blockStatement(nodes);
+        this.node = this.container[this.key] = t.blockStatement(nodes);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -298,7 +298,7 @@ export default class TraversalPath {
         this._containerInsertAfter(nodes);
       } else if (this.isStatementOrBlock()) {
         if (this.node) nodes.unshift(this.node);
-        this.container[this.key] = t.blockStatement(nodes);
+        this.node = this.container[this.key] = t.blockStatement(nodes);
       } else {
         throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
       }
@@ -374,6 +374,7 @@ export default class TraversalPath {
       this.opts    = context.opts;
     }
 
+    this.node = this.container[this.key];
     this.type = this.node && this.node.type;
 
     var log = file && this.type === "Program";
@@ -470,6 +471,7 @@ export default class TraversalPath {
     } else {
       this.container[this.key] = null;
     }
+    this.node = null;
   }
 
   /**
@@ -498,18 +500,6 @@ export default class TraversalPath {
     var err = new Error(`Line ${loc.line}: ${msg}`);
     err.loc = loc;
     return err;
-  }
-
-  get node() {
-    if (this.removed) {
-      return null;
-    } else {
-      return this.container[this.key];
-    }
-  }
-
-  set node(replacement) {
-    throw new Error("Don't use `path.node = newNode;`, use `path.replaceWith(newNode)` or `path.replaceWithMultiple([newNode])`");
   }
 
   /**
@@ -593,7 +583,7 @@ export default class TraversalPath {
   replaceWithMultiple(nodes: Array<Object>) {
     nodes = this._verifyNodeList(nodes);
     t.inheritsComments(nodes[0], this.node);
-    this.container[this.key] = null;
+    this.node = this.container[this.key] = null;
     this.insertAfter(nodes);
     if (!this.node) this.remove();
   }
@@ -673,7 +663,7 @@ export default class TraversalPath {
     if (oldNode) t.inheritsComments(replacement, oldNode);
 
     // replace the node
-    this.container[this.key] = replacement;
+    this.node = this.container[this.key] = replacement;
     this.type = replacement.type;
 
     // potentially create new scope
