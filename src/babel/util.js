@@ -114,11 +114,11 @@ export function shouldIgnore(filename, ignore, only) {
   if (only.length) {
     var matches = false;
 
-    patternLoop: for (var pattern of (only: Array)) {
+    for (var pattern of (only: Array)) {
       for (let filename of (filenames: Array)) {
         if (pattern.test(filename)) {
           matches = true;
-          break patternLoop;
+          break;
         }
       }
     }
