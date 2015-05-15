@@ -99,16 +99,21 @@ export function shouldIgnore(filename, ignore, only) {
 
   filename = slash(filename);
 
+  var filenames = [];
+
   // try and match each section of the path
   var parts = filename.split("/");
   for (var i = 0; i < parts.length; i++) {
     var part = parts[i];
     if (!part) continue;
 
-    if (_shouldIgnore(part, ignore, only) ||
-        _shouldIgnore(parts.slice(0, i + 1).join("/"), ignore, only)) {
-      return true;
-    }
+    filenames.push(part);
+    filenames.push(parts.slice(0, i + 1).join("/"));
+  }
+
+  for (let filename of (filenames: Array)) {
+    var should = _shouldIgnore(filename, ignore, only);
+    if (should != null) return should;
   }
 
   return false;
@@ -125,8 +130,6 @@ function _shouldIgnore(filename, ignore, only) {
       if (pattern.test(filename)) return true;
     }
   }
-
-  return false;
 }
 
 var templateVisitor = {
