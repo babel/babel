@@ -330,7 +330,6 @@ class CodeGenerator {
 
   _printComments(comments) {
     if (this.format.compact) return;
-
     if (!this.format.comments) return;
     if (!comments || !comments.length) return;
 

@@ -117,8 +117,9 @@ export default class Buffer {
 
   _removeSpacesAfterLastNewline() {
     var lastNewlineIndex = this.buf.lastIndexOf("\n");
-    if (lastNewlineIndex === -1)
+    if (lastNewlineIndex === -1) {
       return;
+    }
 
     var index = this.buf.length - 1;
     while (index > lastNewlineIndex) {
