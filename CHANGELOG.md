@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.1
+
+ * **Bug Fix**
+  * Add missing `slash` dependency. Thanks [@browncolyn](https://github.com/browncolyn)!
+ * **Polish**
+  * Clean up `shouldIgnore` algorithm to work how you'd expect rather than being a hacky piece of shit.
+
 ## 5.4.0
 
  * **New Feature**
