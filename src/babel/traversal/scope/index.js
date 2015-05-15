@@ -599,8 +599,13 @@ export default class Scope {
 
     // Class
 
-    if (path.isClass() && path.has("id")) {
-      this.registerBinding("var", path.get("id"));
+    if (path.isClassDeclaration()) {
+      var name = path.node.id.name;
+      this.bindings[name] = this.parent.bindings[name];
+    }
+
+    if (path.isClassExpression() && path.has("id")) {
+      this.registerBinding("var", path);
     }
 
     // Function - params, rest
