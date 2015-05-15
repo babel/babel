@@ -18,7 +18,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **Bug Fix**
   * Add missing `slash` dependency. Thanks [@browncolyn](https://github.com/browncolyn)!
  * **Polish**
-  * Clean up `shouldIgnore` algorithm to work how you'd expect rather than being a hacky piece of shit.
+  * Clean up `shouldIgnore` algorithm to work how you'd expect rather than being a hacky piece of shit. It now crawls the entire path, checking each section of it against the input ignore/only patterns. This means that the pattern `foo` will ignore the paths `foo/bar.js`, `bar/foo` etc.
 
 ## 5.4.0
 
