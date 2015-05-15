@@ -33,7 +33,7 @@ export function ForOfStatement(node, parent, scope, file) {
     this.parentPath.replaceWithMultiple(build.node);
     this.remove();
   } else {
-    this.replaceWithMultiple(build.node);
+    return build.node;
   }
 }
 
