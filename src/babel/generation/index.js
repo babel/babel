@@ -149,11 +149,12 @@ class CodeGenerator {
     return print;
   }
 
-  catchUp(node, parent) {
+  catchUp(node, parent, leftParenPrinted) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buffer.buf) {
       var needsParens = false;
-      if (parent && this.position.line < node.loc.start.line && t.isTerminatorless(parent)) {
+      if (!leftParenPrinted && parent &&
+          this.position.line < node.loc.start.line && t.isTerminatorless(parent)) {
         needsParens = true;
         this._push("(");
       }
@@ -216,7 +217,7 @@ class CodeGenerator {
 
       this.printLeadingComments(node, parent);
 
-      var needsParensFromCatchup = this.catchUp(node, parent);
+      var needsParensFromCatchup = this.catchUp(node, parent, needsParens);
 
       newline(true);
 
