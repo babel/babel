@@ -114,8 +114,8 @@ export function shouldIgnore(filename, ignore, only) {
   if (only.length) {
     var matches = false;
 
-    for (var pattern of (only: Array)) {
-      for (let filename of (filenames: Array)) {
+    for (let filename of (filenames: Array)) {
+      for (var pattern of (only: Array)) {
         if (pattern.test(filename)) {
           matches = true;
           break;
@@ -123,7 +123,7 @@ export function shouldIgnore(filename, ignore, only) {
       }
     }
 
-    return matches;
+    return !matches;
   } else if (ignore.length) {
     for (let filename of (filenames: Array)) {
       for (var pattern of (ignore: Array)) {
