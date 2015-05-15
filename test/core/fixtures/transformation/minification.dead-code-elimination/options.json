@@ -1,0 +1,6 @@
+{
+  "externalHelpers": true,
+  "noCheckAst": true,
+  "blacklist": ["regenerator"],
+  "optional": ["minification.deadCodeElimination"]
+}
