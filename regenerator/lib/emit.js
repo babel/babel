@@ -23,6 +23,9 @@ function Emitter(contextId) {
   assert.ok(this instanceof Emitter);
   n.Identifier.assert(contextId);
 
+  // Used to generate unique temporary names.
+  this.nextTempId = 0;
+
   Object.defineProperties(this, {
     // In order to make sure the context object does not collide with
     // anything in the local scope, we might have to rename it, so we
@@ -227,9 +230,8 @@ Ep.jumpIfNot = function(test, toLoc) {
 // the context object, which is presumed to coexist peacefully with all
 // other local variables, and since we just increment `nextTempId`
 // monotonically, uniqueness is assured.
-var nextTempId = 0;
 Ep.makeTempVar = function() {
-  return this.contextProperty("t" + nextTempId++);
+  return this.contextProperty("t" + this.nextTempId++);
 };
 
 Ep.getContextFunction = function(id) {
