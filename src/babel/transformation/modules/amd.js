@@ -6,8 +6,8 @@ import * as util from  "../../util";
 import * as t from "../../types";
 
 export default class AMDFormatter extends DefaultFormatter {
-  init() {
-    CommonFormatter.prototype._init.call(this, this.hasNonDefaultExports);
+  setup() {
+    CommonFormatter.prototype._setup.call(this, this.hasNonDefaultExports);
   }
 
   buildDependencyLiterals() {

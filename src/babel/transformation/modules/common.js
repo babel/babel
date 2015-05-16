@@ -4,11 +4,11 @@ import * as util from  "../../util";
 import * as t from "../../types";
 
 export default class CommonJSFormatter extends DefaultFormatter {
-  init() {
-    this._init(this.hasLocalExports);
+  setup() {
+    this._setup(this.hasLocalExports);
   }
 
-  _init(conditional) {
+  _setup(conditional) {
     var file  = this.file;
     var scope = file.scope;
 

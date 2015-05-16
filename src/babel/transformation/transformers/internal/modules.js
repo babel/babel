@@ -85,18 +85,28 @@ export function ExportNamedDeclaration(node, parent, scope) {
   }
 }
 
-export function Program(node) {
-  var imports = [];
-  var rest = [];
+export var Program = {
+  enter(node) {
+    var imports = [];
+    var rest = [];
 
-  for (var i = 0; i < node.body.length; i++) {
-    var bodyNode = node.body[i];
-    if (t.isImportDeclaration(bodyNode)) {
-      imports.push(bodyNode);
-    } else {
-      rest.push(bodyNode);
+    for (var i = 0; i < node.body.length; i++) {
+      var bodyNode = node.body[i];
+      if (t.isImportDeclaration(bodyNode)) {
+        imports.push(bodyNode);
+      } else {
+        rest.push(bodyNode);
+      }
+    }
+
+    node.body = imports.concat(rest);
+  },
+
+  exit(node, parent, scope, file) {
+    if (!file.transformers["es6.modules"].canTransform()) return;
+
+    if (file.moduleFormatter.setup) {
+      file.moduleFormatter.setup();
     }
   }
-
-  node.body = imports.concat(rest);
-}
+};
