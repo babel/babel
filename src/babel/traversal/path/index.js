@@ -1,5 +1,6 @@
 import PathHoister from "./hoister";
 import * as virtualTypes from "./virtual-types";
+import * as messages from "../../messages";
 import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
@@ -400,7 +401,7 @@ export default class TraversalPath {
       }
     }
 
-    throw new Error("Where did we go?!?!?!");
+    throw new Error(messages.get("lostTrackNodePath"));
   }
 
   /**

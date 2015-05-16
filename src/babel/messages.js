@@ -22,6 +22,7 @@ export const MESSAGES = {
   missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
+  lostTrackNodePath: "We lost track of this nodes position, likely because the AST was directly manipulated",
 
   traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
