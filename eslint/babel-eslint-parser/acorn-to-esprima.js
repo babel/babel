@@ -171,6 +171,10 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
+    if (t.isTypeCastExpression(node)) {
+      return node.expression;
+    }
+
     if (t.isFlow(node)) {
       return this.remove();
     }

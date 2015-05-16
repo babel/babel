@@ -124,6 +124,14 @@ describe("verify", function () {
     );
   });
 
+  it("type cast expression", function () {
+    verifyAndAssertMessages(
+      "for (let a of (a: Array)) {}",
+      {},
+      []
+    );
+  });
+
   it("class usage", function () {
     verifyAndAssertMessages(
       "class Lol {} module.exports = Lol;",
