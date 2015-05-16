@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.3
+
+ * **Bug Fix**
+  * Fix `module` being incorrectly rewritten when used as in an export declaration.
+  * When performing single-reference inlining, ensure that the single reference isn't a child of the binding itself.
+  * Fix a bug in `minification.deadCodeElimination` where a new binding instance was being created for local class bindings instead of just inheriting the parent one.
+  * Fix bug with paren printing in `compact` and `retainLines` mode where a left paren was already printed before catching up.
+ * **Internal**
+  * Handle contexts for paths much better. This will ensure that the path node location info is in sync.
+
 ## 5.4.2
 
  * **Polish**
