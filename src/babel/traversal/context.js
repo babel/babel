@@ -16,7 +16,9 @@ export default class TraversalContext {
   }
 
   create(node, obj, key) {
-    return TraversalPath.get(this.parentPath, this, node, obj, key);
+    var path = TraversalPath.get(this.parentPath, node, obj, key);
+    path.unshiftContext(this);
+    return path;
   }
 
   visitMultiple(nodes, node, key) {
@@ -37,12 +39,11 @@ export default class TraversalContext {
     }
 
     // visit the queue
-    for (let i = 0; i < queue.length; i++) {
-      var path = queue[i];
+    for (let path of (queue: Array)) {
+      path.update();
+
       if (visited.indexOf(path.node) >= 0) continue;
       visited.push(path.node);
-
-      path.setContext(this.parentPath, this, path.key);
 
       if (path.visit()) {
         stop = true;
@@ -50,12 +51,20 @@ export default class TraversalContext {
       }
     }
 
+    for (let path of (queue: Array)) {
+      path.shiftContext();
+    }
+
+    this.queue = null;
+
     return stop;
   }
 
   visitSingle(node, key) {
     if (this.shouldVisit(node[key])) {
-      return this.create(node, node, key).visit();
+      var path = this.create(node, node, key);
+      path.visit();
+      path.shiftContext();
     }
   }
 

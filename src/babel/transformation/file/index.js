@@ -463,7 +463,7 @@ export default class File {
   }
 
   _addAst(ast) {
-    this.path  = TraversalPath.get(null, null, ast, ast, "program", this);
+    this.path  = TraversalPath.get(null, ast, ast, "program", this).setContext(null, this);
     this.scope = this.path.scope;
     this.ast   = ast;
   }

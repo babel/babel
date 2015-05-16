@@ -35,7 +35,7 @@ export function JSXElement(node, parent, scope, file) {
   this.traverse(immutabilityVisitor, state);
 
   if (state.isImmutable) {
-    return this.hoist();
+    this.hoist();
   } else {
     node._hoisted = true;
   }

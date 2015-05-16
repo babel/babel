@@ -45,6 +45,7 @@ var hoistVariablesVisitor = explode({
 export default class TraversalPath {
   constructor(parent, container) {
     this.container = container;
+    this.contexts  = [];
     this.parent    = parent;
     this.data      = {};
   }
@@ -53,7 +54,7 @@ export default class TraversalPath {
    * Description
    */
 
-  static get(parentPath: TraversalPath, context?: TraversalContext, parent, container, key, file?: File) {
+  static get(parentPath: TraversalPath, parent, container, key) {
     var targetNode = container[key];
     var paths = container._paths = container._paths || [];
     var path;
@@ -71,7 +72,7 @@ export default class TraversalPath {
       paths.push(path);
     }
 
-    path.setContext(parentPath, context, key, file);
+    path.setup(parentPath, key);
 
     return path;
   }
@@ -178,8 +179,10 @@ export default class TraversalPath {
    */
 
   queueNode(path) {
-    if (this.context && this.context.queue) {
-      this.context.queue.push(path);
+    for (var context of (this.contexts: Array)) {
+      if (context.queue) {
+        context.queue.push(path);
+      }
     }
   }
 
@@ -225,7 +228,7 @@ export default class TraversalPath {
         paths.push(path);
         this.queueNode(path);
       } else {
-        paths.push(TraversalPath.get(this, null, node, this.container, to));
+        paths.push(TraversalPath.get(this, node, this.container, to));
       }
     }
 
@@ -344,6 +347,8 @@ export default class TraversalPath {
    */
 
   setScope(file?) {
+    if (this.opts && this.opts.noScope) return;
+
     var target = this.context || this.parentPath;
     this.scope = TraversalPath.getScope(this, target && target.scope, file);
   }
@@ -352,21 +357,10 @@ export default class TraversalPath {
    * Description
    */
 
-  clearContext() {
-    this.context = null;
-  }
-
-  /**
-   * Description
-   */
-
-  setContext(parentPath, context, key, file?) {
+  setContext(context, file) {
     this.shouldSkip = false;
     this.shouldStop = false;
     this.removed    = false;
-
-    this.parentPath = parentPath || this.parentPath;
-    this.key        = key;
 
     if (context) {
       this.context = context;
@@ -374,13 +368,76 @@ export default class TraversalPath {
       this.opts    = context.opts;
     }
 
-    this.node = this.container[this.key];
-    this.type = this.node && this.node.type;
-
     var log = file && this.type === "Program";
     if (log) file.log.debug("Start scope building");
     this.setScope(file);
     if (log) file.log.debug("End scope building");
+
+    return this;
+  }
+
+  /**
+   * Description
+   */
+
+  update() {
+    if (this.node === this.container[this.key]) return;
+
+    // grrr, path key is out of sync. this is likely due to a modification to the AST
+    // not through our path APIs
+
+    if (Array.isArray(this.container)) {
+      for (var i = 0; i < this.container.length; i++) {
+        if (this.container[i] === this.node) {
+          return this.setKey(i);
+        }
+      }
+    } else {
+      for (var key in this.container) {
+        if (this.container[key] === this.node) {
+          return this.setKey(key);
+        }
+      }
+    }
+
+    throw new Error("Where did we go?!?!?!");
+  }
+
+  /**
+   * Description
+   */
+
+  shiftContext() {
+    this.contexts.shift();
+    this.setContext(this.contexts[0]);
+  }
+
+  /**
+   * Description
+   */
+
+  unshiftContext(context) {
+    this.contexts.unshift(context);
+    this.setContext(context);
+  }
+
+  /**
+   * Description
+   */
+
+  setup(parentPath, key) {
+    this.parentPath = parentPath || this.parentPath;
+    this.setKey(key);
+  }
+
+  /**
+   * Description
+   */
+
+  setKey(key) {
+    this.key  = key;
+    this.node = this.container[this.key];
+    this.type = this.node && this.node.type;
   }
 
   /**
@@ -554,7 +611,7 @@ export default class TraversalPath {
     // doesn't matter, our nodes will be inserted anyway
 
     var container = this.node[containerKey];
-    var path      = TraversalPath.get(this, null, this.node, container, 0);
+    var path      = TraversalPath.get(this, this.node, container, 0);
 
     return path.insertBefore(nodes);
   }
@@ -571,7 +628,7 @@ export default class TraversalPath {
 
     var container = this.node[containerKey];
     var i         = container.length;
-    var path      = TraversalPath.get(this, null, this.node, container, i);
+    var path      = TraversalPath.get(this, this.node, container, i);
 
     return path.replaceWith(nodes, true);
   }
@@ -767,9 +824,10 @@ export default class TraversalPath {
       var node = this.node;
       if (!node) return;
 
+      var previousType = this.type;
+
       // call the function with the params (node, parent, scope, state)
       var replacement = fn.call(this, node, this.parent, this.scope, this.state);
-      var previousType = this.type;
 
       if (replacement) {
         this.replaceWith(replacement, true);
@@ -777,7 +835,7 @@ export default class TraversalPath {
 
       if (this.shouldStop || this.shouldSkip || this.removed) return;
 
-      if (replacement && previousType !== this.type) {
+      if (previousType !== this.type) {
         this.queueNode(this);
         return;
       }
@@ -831,7 +889,7 @@ export default class TraversalPath {
    */
 
   getSibling(key) {
-    return TraversalPath.get(this.parentPath, null, this.parent, this.container, key, this.file);
+    return TraversalPath.get(this.parentPath, this.parent, this.container, key, this.file);
   }
 
   /**
@@ -858,10 +916,10 @@ export default class TraversalPath {
     if (Array.isArray(container)) {
       // requested a container so give them all the paths
       return container.map((_, i) => {
-        return TraversalPath.get(this, null, node, container, i);
+        return TraversalPath.get(this, node, container, i).setContext();
       });
     } else {
-      return TraversalPath.get(this, null, node, node, key);
+      return TraversalPath.get(this, node, node, key).setContext();
     }
   }
 
@@ -1095,6 +1153,7 @@ export default class TraversalPath {
    */
 
   traverse(visitor, state) {
+    if (!this.scope) console.log(this.contexts);
     traverse(this.node, visitor, this.scope, state, this);
   }
 
