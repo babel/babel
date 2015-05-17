@@ -34,6 +34,8 @@ exports.toToken = function (token) {
     token.value = ">";
   } else if (type === tt.jsxName) {
     token.type = "JSXIdentifier";
+  } else if (type === tt.jsxText) {
+    token.type = "JSXText";
   } else if (type.keyword === "null") {
     token.type = "Null";
   } else if (type.keyword === "false" || type.keyword === "true") {

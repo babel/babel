@@ -154,6 +154,22 @@ describe("acorn-to-esprima", function () {
     parseAndAssertSame("<foo.bar />");
   });
 
+  it("jsx expression with spread", function () {
+    parseAndAssertSame("var myDivElement = <div {...this.props} />;");
+  });
+
+  it("empty jsx text", function () {
+    parseAndAssertSame("<a></a>");
+  });
+
+  it("jsx text with content", function () {
+    parseAndAssertSame("<a>Hello, world!</a>");
+  });
+
+  it("nested jsx", function () {
+    parseAndAssertSame("<div>\n<h1>Wat</h1>\n</div>");
+  });
+
   it("default import", function () {
     parseAndAssertSame('import foo from "foo";');
   });
