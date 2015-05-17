@@ -124,7 +124,15 @@ describe("verify", function () {
     );
   });
 
-  it("type cast expression", function () {
+  it("flow type", function () {
+    verifyAndAssertMessages(
+      "type SomeNewType = any;",
+      {},
+      []
+    );
+  });
+
+  it("type cast expression #102", function () {
     verifyAndAssertMessages(
       "for (let a of (a: Array)) {}",
       {},
