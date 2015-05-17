@@ -23,6 +23,7 @@ exports.toToken = function (token) {
              type === tt.relational || type === tt.bitShift ||
              type === tt.plusMin || type === tt.modulo ||
              type === tt.exponent || type === tt.prefix ||
+             type === tt.doubleColon ||
              type.isAssign) {
     token.type = "Punctuator";
     if (!token.value) token.value = type.label;
