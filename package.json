@@ -41,6 +41,7 @@
     "esutils": "^2.0.0",
     "fs-readdir-recursive": "^0.1.0",
     "globals": "^6.4.0",
+    "home-or-tmp": "^1.0.0",
     "is-integer": "^1.0.4",
     "js-tokens": "1.0.0",
     "leven": "^1.0.1",
@@ -60,8 +61,7 @@
     "source-map-support": "^0.2.10",
     "strip-json-comments": "^1.0.2",
     "to-fast-properties": "^1.0.0",
-    "trim-right": "^1.0.0",
-    "user-home": "^1.1.1"
+    "trim-right": "^1.0.0"
   },
   "devDependencies": {
     "babel": "5.3.1",
