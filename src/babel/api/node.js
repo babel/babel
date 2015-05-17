@@ -61,8 +61,8 @@ export function parse(code, opts = {}) {
   opts.sourceType = "module";
   opts.ecmaVersion = Infinity;
   opts.plugins = {
-    flow: true,
-    jsx:  true
+    jsx:  true,
+    flow: true
   };
   opts.features = {};
 
