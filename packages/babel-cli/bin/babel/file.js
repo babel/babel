@@ -33,7 +33,7 @@ module.exports = function (commander, filenames, opts) {
         var sourceFilename = filename;
         if (commander.outFile) {
           sourceFilename = opts.sourceRoot ? 
-              sourceFilename.replace(/^\.[\\/]/, "") :
+              sourceFilename :
               path.relative(path.dirname(commander.outFile), sourceFilename);
         }
         sourceFilename = slash(sourceFilename);
