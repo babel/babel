@@ -1,9 +1,9 @@
 import path from "path";
 import os from "os";
 import fs from "fs";
-import userHome from "user-home";
+import homeOrTmp from "home-or-tmp";
 
-const FILENAME = process.env.BABEL_CACHE_PATH || path.join(userHome || os.tmpdir(), ".babel.json");
+const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
 var data = {};
 
 export function save() {
