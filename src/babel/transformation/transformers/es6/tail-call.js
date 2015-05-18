@@ -44,12 +44,14 @@ var visitor = {
   },
 
   ThisExpression(node, parent, scope, state) {
-    state.needsThis = true;
-    state.thisPaths.push(this);
+    if (!state.isShadowed) {
+      state.needsThis = true;
+      state.thisPaths.push(this);
+    }
   },
 
   ReferencedIdentifier(node, parent, scope, state) {
-    if (node.name === "arguments") {
+    if (node.name === "arguments" && !state.isShadowed) {
       state.needsArguments = true;
       state.argumentsPaths.push(this);
     }
@@ -67,8 +69,9 @@ class TailCallTransformer {
     this.needsThis = false;
     this.thisPaths = [];
 
-    this.ownerId = path.node.id;
-    this.vars    = [];
+    this.isShadowed = path.isArrowFunctionExpression() || path.is("shadow");
+    this.ownerId    = path.node.id;
+    this.vars       = [];
 
     this.scope = scope;
     this.path  = path;
