@@ -16,7 +16,8 @@ module.exports = function (commander, filenames, opts) {
 
   var buildResult = function () {
     var map = new sourceMap.SourceMapGenerator({
-      file: slash(commander.outFile || "stdout")
+      file: path.basename(commander.outFile) || "stdout",
+      sourceRoot: opts.sourceRoot
     });
 
     var code = "";
@@ -31,7 +32,9 @@ module.exports = function (commander, filenames, opts) {
 
         var sourceFilename = filename;
         if (commander.outFile) {
-          sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
+          sourceFilename = opts.sourceRoot ? 
+              sourceFilename :
+              path.relative(path.dirname(commander.outFile), sourceFilename);
         }
         sourceFilename = slash(sourceFilename);
 
