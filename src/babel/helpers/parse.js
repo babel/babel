@@ -27,7 +27,6 @@ export default function (code, opts = {}) {
   }
 
   var ast = acorn.parse(code, parseOpts);
-
   estraverse.attachComments(ast, comments, tokens);
   ast = normalizeAst(ast, comments, tokens);
   return ast;

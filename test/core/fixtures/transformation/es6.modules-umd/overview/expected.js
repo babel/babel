@@ -17,7 +17,7 @@
     value: true
   });
 
-  var _foo2 = babelHelpers.interopRequire(_foo);
+  var _foo2 = babelHelpers.interopRequireDefault(_foo);
 
   exports.test = test;
   var test2 = 5;
