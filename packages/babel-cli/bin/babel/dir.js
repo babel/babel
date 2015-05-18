@@ -13,7 +13,7 @@ module.exports = function (commander, filenames, opts) {
 
     var dest = path.join(commander.outDir, relative);
 
-    var sourceFileName = opts.sourceRoot ? src.replace(/^\.[\\/]/, '') : path.relative(dest + "/..", src);
+    var sourceFileName = opts.sourceRoot ? src.replace(/^\.[\\/]/, "") : path.relative(dest + "/..", src);
 
     var data = util.compile(src, {
       sourceFileName:  slash(sourceFileName),
