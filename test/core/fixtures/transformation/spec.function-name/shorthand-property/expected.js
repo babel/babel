@@ -11,3 +11,16 @@ var bar = {
     _get(arg, "baz");
   }
 };
+
+var f = function f(_ref) {
+  var _ref$foo = _ref.foo;
+
+  var _foo = _ref$foo === undefined ? "bar" : _ref$foo;
+
+  var obj = {
+    // same name as parameter
+    foo: function foo() {
+      _foo;
+    }
+  };
+};

@@ -5,9 +5,9 @@ export var metadata = {
   group: "builtin-setup"
 };
 
-function buildClone(bindingKey, refKey) {
+function buildClone(bindingKey, refKey, check?) {
   return function (node) {
-    if (node[bindingKey] === node[refKey]) {
+    if (node[bindingKey] === node[refKey] || (check && check(node))) {
       node[refKey] = t.removeComments(clone(node[refKey]));
     }
   };
@@ -25,6 +25,9 @@ function buildListClone(listKey, bindingKey, refKey) {
   };
 }
 
-export var Property = buildClone("value", "key");
+export var Property = buildClone("value", "key", function (node) {
+  return t.isAssignmentPattern(node.value) && node.value.left === node.key;
+});
+
 export var ExportDeclaration = buildListClone("specifiers", "local", "exported");
 export var ImportDeclaration = buildListClone("specifiers", "local", "imported");
