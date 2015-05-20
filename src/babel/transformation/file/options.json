@@ -197,6 +197,11 @@
   },
 
   "sourceMapName": {
+    "alias": "sourceMapTarget",
+    "description": "DEPRECATED - Please use sourceMapTarget"
+  },
+
+  "sourceMapTarget": {
     "type": "string",
     "description": "set `file` on returned source map"
   },

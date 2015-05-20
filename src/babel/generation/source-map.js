@@ -8,7 +8,7 @@ export default class SourceMap {
 
     if (opts.sourceMaps) {
       this.map = new sourceMap.SourceMapGenerator({
-        file: opts.sourceMapName,
+        file: opts.sourceMapTarget,
         sourceRoot: opts.sourceRoot
       });
 

@@ -168,7 +168,7 @@ export default class File {
 
     defaults(opts, {
       sourceFileName: opts.filenameRelative,
-      sourceMapName:  opts.filenameRelative
+      sourceMapTarget:  opts.filenameRelative
     });
 
     //
