@@ -6,6 +6,8 @@ export function nextOdd(n) {
 
 export var p = 5;
 
+for (var a in b) ;
+
 export var isOdd = (function (isEven) {
   return function (n) {
     return !isEven(n);
