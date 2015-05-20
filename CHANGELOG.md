@@ -13,6 +13,21 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.4
+
+ * **Bug Fix**
+  * Fix bug where replacing variable declarations in the head of a `for` loop would turn them into `ExpressionStatement`s.
+  * Fix renaming of assignment expressions that were non-identifiers ie. patterns.
+  * Force space before `class` `id` to avoid breaking named classes when using `compact` mode.
+  * Add assignment pattern explosion to avoid initial duplicate nodes.
+  * Ignore this and arguments when performing TCO on shadowed functions.
+ * **Polish**
+  * Rename `sourceMapName` option to `sourceMapTarget`. Thanks [@getify](https://github.com/getify)!
+  * Better detection of completion records, ignore those in `Function`s.
+  * Clarified descriptions of the options that are enabled by default.
+  * Resolve `\`babel-plugin-${name}\`` plugin names **before** just checking the `name`. Thanks [@jquense](https://github.com/jquense)!
+  * Update AMD module formatter to add import default remapping.
+
 ## 5.4.3
 
  * **Bug Fix**
