@@ -8,41 +8,39 @@ import map from "lodash/collection/map";
 import * as t from "../../types";
 
 var hoistVariablesVisitor = {
-  enter(node, parent, scope, state) {
-    if (t.isFunction(node)) {
-      // nothing inside is accessible
-      return this.skip();
+  Function() {
+    // nothing inside is accessible
+    this.skip();
+  },
+
+  VariableDeclaration(node, parent, scope, state) {
+    if (node.kind !== "var" && !t.isProgram(parent)) { // let, const
+      // can't be accessed
+      return;
     }
 
-    if (t.isVariableDeclaration(node)) {
-      if (node.kind !== "var" && !t.isProgram(parent)) { // let, const
-        // can't be accessed
-        return;
+    // ignore block hoisted nodes as these can be left in
+    if (state.formatter._canHoist(node)) return;
+
+    var nodes = [];
+
+    for (var i = 0; i < node.declarations.length; i++) {
+      var declar = node.declarations[i];
+      state.hoistDeclarators.push(t.variableDeclarator(declar.id));
+      if (declar.init) {
+        // no initializer so we can just hoist it as-is
+        var assign = t.expressionStatement(t.assignmentExpression("=", declar.id, declar.init));
+        nodes.push(assign);
       }
-
-      // ignore block hoisted nodes as these can be left in
-      if (state.formatter._canHoist(node)) return;
-
-      var nodes = [];
-
-      for (var i = 0; i < node.declarations.length; i++) {
-        var declar = node.declarations[i];
-        state.hoistDeclarators.push(t.variableDeclarator(declar.id));
-        if (declar.init) {
-          // no initializer so we can just hoist it as-is
-          var assign = t.expressionStatement(t.assignmentExpression("=", declar.id, declar.init));
-          nodes.push(assign);
-        }
-      }
-
-      // for (var i in test)
-      // for (var i = 0;;)
-      if (t.isFor(parent) && parent.left === node) {
-        return node.declarations[0].id;
-      }
-
-      return nodes;
     }
+
+    // for (var i in test)
+    // for (var i = 0;;)
+    if (t.isFor(parent) && (parent.left === node || parent.init === node)) {
+      return node.declarations[0].id;
+    }
+
+    return nodes;
   }
 };
 

@@ -708,7 +708,7 @@ export default class TraversalPath {
     }
 
     // replacing a statement with an expression so wrap it in an expression statement
-    if (this.isPreviousType("Statement") && t.isExpression(replacement)) {
+    if (this.isPreviousType("Statement") && t.isExpression(replacement) && !this.canHaveVariableDeclarationOrExpression()) {
       replacement = t.expressionStatement(replacement);
     }
 
@@ -727,6 +727,20 @@ export default class TraversalPath {
     // potentially create new scope
     this.setScope();
   }
+
+  /**
+   * This checks whether or now we're in one of the following positions:
+   *
+   *   for (KEY in right);
+   *   for (KEY;;);
+   *
+   * This is because these spots allow VariableDeclarations AND normal expressions so we need to tell the
+   * path replacement that it's ok to replace this with an expression.
+   */
+
+   canHaveVariableDeclarationOrExpression() {
+      return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+   }
 
   /**
    * Description
