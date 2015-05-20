@@ -39,6 +39,12 @@ export function Property(node, print) {
       print(node.key);
       this.push("]");
     } else {
+      // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
+      if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
+        print(node.value);
+        return;
+      }
+
       print(node.key);
 
       // shorthand!
