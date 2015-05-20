@@ -113,7 +113,8 @@ var istanbulLoader = function (m, filename, old) {
 };
 
 var normalLoader = function (m, filename) {
-  m._compile(compile(filename), filename);
+  var compiledName = filename.replace(/(.*)\.(.*)$/, '$1.compiled.$2');
+  m._compile(compile(filename), compiledName);
 };
 
 var registerExtension = function (ext) {
