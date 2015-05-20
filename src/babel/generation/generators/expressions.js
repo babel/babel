@@ -106,7 +106,7 @@ var buildYieldAwait = function (keyword) {
     }
 
     if (node.argument) {
-      this.space();
+      this.push(" ");
       print(node.argument);
     }
   };
