@@ -3,7 +3,7 @@ export function ClassDeclaration(node, print) {
   this.push("class");
 
   if (node.id) {
-    this.space();
+    this.push(" ");
     print(node.id);
   }
 
