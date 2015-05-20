@@ -16,7 +16,8 @@ module.exports = function (commander, filenames, opts) {
 
   var buildResult = function () {
     var map = new sourceMap.SourceMapGenerator({
-      file: slash(commander.outFile || "stdout")
+      file: path.basename(commander.outFile) || "stdout",
+      sourceRoot: opts.sourceRoot
     });
 
     var code = "";

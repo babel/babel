@@ -14,7 +14,8 @@ module.exports = function (commander, filenames, opts) {
     var dest = path.join(commander.outDir, relative);
 
     var data = util.compile(src, {
-      sourceFileName: slash(path.relative(dest + "/..", src))
+      sourceFileName: slash(path.relative(dest + "/..", src)),
+      sourceMapName: path.basename(relative)
     });
     if (data.ignored) return;
 
