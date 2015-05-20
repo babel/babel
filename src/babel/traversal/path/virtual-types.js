@@ -1,14 +1,14 @@
 import * as t from "../../types";
 
 export var ReferencedIdentifier = {
-  type: "Identifier",
+  types: ["Identifier", "JSXIdentifier"],
   checkPath(path, opts) {
     return t.isReferencedIdentifier(path.node, path.parent, opts);
   }
 };
 
 export var Scope = {
-  type: "Scopable",
+  types: ["Scopable"],
   checkPath(path) {
     return t.isScope(path.node, path.parent);
   }
@@ -27,7 +27,7 @@ export var BlockScoped = {
 };
 
 export var Var = {
-  type: "VariableDeclaration",
+  types: ["VariableDeclaration"],
   checkPath(path) {
     return t.isVar(path.node);
   }

@@ -29,19 +29,21 @@ export function explode(visitor, mergeConflicts) {
 
     // wrap all the functions
     var fns = visitor[nodeType];
-    for (var type in fns) {
+    for (let type in fns) {
       fns[type] = wrapCheck(wrapper, fns[type]);
     }
 
     // clear it from the visitor
     delete visitor[nodeType];
 
-    if (wrapper.type) {
-      // merge the visitor if necessary or just put it back in
-      if (visitor[wrapper.type]) {
-        mergePair(visitor[wrapper.type], fns);
-      } else {
-        visitor[wrapper.type] = fns;
+    if (wrapper.types) {
+      for (let type of (wrapper.types: Array)) {
+        // merge the visitor if necessary or just put it back in
+        if (visitor[type]) {
+          mergePair(visitor[type], fns);
+        } else {
+          visitor[type] = fns;
+        }
       }
     } else {
       mergePair(visitor, fns);
