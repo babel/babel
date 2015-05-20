@@ -260,10 +260,15 @@ export default class TraversalPath {
 
     do {
       var container = path.container;
+
+      if (path.isFunction()) {
+        return false;
+      }
+
       if (Array.isArray(container) && path.key !== container.length - 1) {
         return false;
       }
-    } while (path = path.parentPath && !path.isProgram());
+    } while ((path = path.parentPath) && !path.isProgram());
 
     return true;
   }
