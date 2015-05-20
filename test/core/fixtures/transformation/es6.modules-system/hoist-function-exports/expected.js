@@ -16,9 +16,9 @@ System.register(["./evens"], function (_export) {
     execute: function () {
       p = 5;
 
-      for (a in b) ;
-
       _export("p", p);
+
+      for (a in b) ;
 
       isOdd = (function (isEven) {
         return function (n) {
