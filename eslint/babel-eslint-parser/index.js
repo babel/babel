@@ -54,6 +54,41 @@ function monkeypatch() {
     estraverse.VisitorKeys.TypeAlias = TypeAliasKeys;
     return results;
   };
+
+  // monkeypatch escope/referencer
+  var referencerLoc;
+  try {
+    var referencerLoc = Module._resolveFilename("./referencer", escopeMod);
+  } catch (err) {
+    throw new ReferenceError("couldn't resolve escope/referencer");
+  }
+  var referencer = require(referencerLoc);
+
+  // if there are decotators, then visit each
+  function visitDecorators(node) {
+    if (!node.decorators) {
+      return;
+    }
+    for (var i = 0; i < node.decorators.length; i++) {
+      if (node.decorators[i].expression) {
+        this.visit(node.decorators[i]);
+      }
+    }
+  }
+
+  // monkeypatch referencer methods to visit decorators
+  var visitClass = referencer.prototype.visitClass;
+  referencer.prototype.visitClass = function (node) {
+    // visit decorators that are in: Class Declaration
+    visitDecorators.call(this, node);
+    visitClass.call(this, node);
+  }
+  var visitProperty = referencer.prototype.visitProperty;
+  referencer.prototype.visitProperty = function (node) {
+    // visit decorators that are in: Visit Property / MethodDefinition
+    visitDecorators.call(this, node);
+    visitProperty.call(this, node);
+  }
 }
 
 exports.attachComments = function (ast, comments, tokens) {

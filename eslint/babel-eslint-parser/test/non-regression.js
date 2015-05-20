@@ -55,7 +55,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "import Foo from 'foo';\n" +
       "export default Foo;",
-      { },
+      {},
       []
     );
   });
@@ -162,5 +162,97 @@ describe("verify", function () {
       { "comma-spacing": 1 },
       []
     );
+  });
+
+  describe("decorators #72", function () {
+    it("class declaration", function () {
+      verifyAndAssertMessages(
+        [
+          "import classDeclaration from 'decorator';",
+          "import decoratorParameter from 'decorator';",
+          "@classDeclaration(decoratorParameter)",
+          "@classDeclaration",
+          "class TextareaAutosize {}"
+        ].join("\n"),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
+
+    it("method definition", function () {
+      verifyAndAssertMessages(
+        [
+          "import classMethodDeclarationA from 'decorator';",
+          "import decoratorParameter from 'decorator';",
+          "class TextareaAutosize {",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "methodDeclaration(e) {",
+              "e();",
+            "}",
+          "}"
+        ].join("\n"),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
+
+    it("method definition get/set", function () {
+      verifyAndAssertMessages(
+        [
+          "import classMethodDeclarationA from 'decorator';",
+          "import decoratorParameter from 'decorator';",
+          "class TextareaAutosize {",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "get bar() { }",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "set bar() { }",
+          "}"
+        ].join("\n"),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
+
+    it("object property", function () {
+      verifyAndAssertMessages(
+        [
+          "import classMethodDeclarationA from 'decorator';",
+          "import decoratorParameter from 'decorator';",
+          "var obj = {",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "methodDeclaration(e) {",
+              "e();",
+            "}",
+          "};",
+          "obj;"
+        ].join("\n"),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
+
+    it("object property get/set", function () {
+      verifyAndAssertMessages(
+        [
+          "import classMethodDeclarationA from 'decorator';",
+          "import decoratorParameter from 'decorator';",
+          "var obj = {",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "get bar() { },",
+            "@classMethodDeclarationA(decoratorParameter)",
+            "@classMethodDeclarationA",
+            "set bar() { }",
+          "};",
+          "obj;"
+        ].join("\n"),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
   });
 });
