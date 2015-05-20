@@ -754,20 +754,22 @@ export default class TraversalPath {
    * Description
    */
 
-  getLastStatements(): Array<TraversalPath> {
+  getCompletionRecords(): Array<TraversalPath> {
     var paths = [];
 
     var add = function (path) {
-      if (path) paths = paths.concat(path.getLastStatements());
+      if (path) paths = paths.concat(path.getCompletionRecords());
     };
 
     if (this.isIfStatement()) {
       add(this.get("consequent"));
       add(this.get("alternate"));
-    } else if (this.isDoExpression()) {
+    } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
       add(this.get("body"));
     } else if (this.isProgram() || this.isBlockStatement()) {
       add(this.get("body").pop());
+    } else if (this.isFunction()) {
+      return this.get("body").getCompletionRecords();
     } else {
       paths.push(this);
     }
@@ -788,18 +790,26 @@ export default class TraversalPath {
       var container = t.functionExpression(null, [], t.blockStatement(nodes));
       container.shadow = true;
 
+      this.replaceWith(t.callExpression(container, []));
+      this.traverse(hoistVariablesVisitor);
+
       // add implicit returns to all ending expression statements
-      var last = this.getLastStatements();
+      var last = this.get("callee").getCompletionRecords();
       for (var i = 0; i < last.length; i++) {
         var lastNode = last[i];
         if (lastNode.isExpressionStatement()) {
-          lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
+          var loop = lastNode.findParent((node, path) => path.isLoop());
+          if (loop) {
+            var uid = this.get("callee").scope.generateDeclaredUidIdentifier("ret");
+            this.get("callee.body").pushContainer("body", t.returnStatement(uid));
+            lastNode.get("expression").replaceWith(
+              t.assignmentExpression("=", uid, lastNode.node.expression)
+            );
+          } else {
+            lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
+          }
         }
       }
-
-      this.replaceWith(t.callExpression(container, []));
-
-      this.traverse(hoistVariablesVisitor);
 
       return this.node;
     }
