@@ -43,7 +43,7 @@
   "nonStandard": {
     "type": "boolean",
     "default": true,
-    "description": "enable support for JSX and Flow"
+    "description": "enable/disable support for JSX and Flow (on by default)"
   },
 
   "experimental": {
@@ -51,7 +51,7 @@
   },
 
   "highlightCode": {
-    "description": "ANSI syntax highlight code frames",
+    "description": "enable/disable ANSI syntax highlighting of code frames (on by default)",
     "type": "boolean",
     "default": true
   },
@@ -148,7 +148,7 @@
   "comments": {
     "type": "boolean",
     "default": true,
-    "description": "output comments in generated output"
+    "description": "strip/output comments in generated output (on by default)"
   },
 
   "compact": {
