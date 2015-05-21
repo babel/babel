@@ -79,7 +79,9 @@ if (commander.extensions) {
 var errors = [];
 
 var filenames = commander.args.reduce(function (globbed, input) {
-  return globbed.concat(glob.sync(input));
+  var files = glob.sync(input);
+  if (!files.length) files = [input];
+  return globbed.concat(files);
 }, []);
 
 each(filenames, function (filename) {
