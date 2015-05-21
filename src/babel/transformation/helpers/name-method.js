@@ -20,7 +20,7 @@ var visitor = {
 
 var wrap = function (state, method, id, scope) {
   if (state.selfReference) {
-    if (scope.hasBinding(id.name)) {
+    if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
       scope.rename(id.name);
     } else {
