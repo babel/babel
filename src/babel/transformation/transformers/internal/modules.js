@@ -7,6 +7,14 @@
 import clone from "lodash/lang/clone";
 import * as t from "../../../types";
 
+function getDeclar(node) {
+  var declar = node.declaration;
+  t.inheritsComments(declar, node);
+  t.removeComments(node);
+  declar._ignoreUserWhitespace = true;
+  return declar;
+}
+
 export var metadata = {
   group: "builtin-setup"
 };
@@ -24,28 +32,28 @@ export function ExportDefaultDeclaration(node, parent, scope) {
 
   var declar = node.declaration;
 
-  var getDeclar = function () {
-    declar._ignoreUserWhitespace = true;
-    return declar;
-  };
-
   if (t.isClassDeclaration(declar)) {
     // export default class Foo {};
+    var nodes = [getDeclar(node), node];
     node.declaration = declar.id;
-    return [getDeclar(), node];
+    return nodes;
   } else if (t.isClassExpression(declar)) {
     // export default class {};
     var temp = scope.generateUidIdentifier("default");
-    declar = t.variableDeclaration("var", [
+    node.declaration = t.variableDeclaration("var", [
       t.variableDeclarator(temp, declar)
     ]);
+
+    var nodes = [getDeclar(node), node];
     node.declaration = temp;
-    return [getDeclar(), node];
+    return nodes;
   } else if (t.isFunctionDeclaration(declar)) {
     // export default function Foo() {}
     node._blockHoist = 2;
+
+    var nodes = [getDeclar(node), node];
     node.declaration = declar.id;
-    return [getDeclar(), node];
+    return nodes;
   }
 }
 
@@ -58,22 +66,20 @@ export function ExportNamedDeclaration(node, parent, scope) {
 
   var declar = node.declaration;
 
-  var getDeclar = function () {
-    declar._ignoreUserWhitespace = true;
-    return declar;
-  };
-
   if (t.isClassDeclaration(declar)) {
     // export class Foo {}
     node.specifiers  = [buildExportSpecifier(declar.id)];
+    var nodes = [getDeclar(node), node];
     node.declaration = null;
-    return [getDeclar(), node];
+    return nodes;
   } else if (t.isFunctionDeclaration(declar)) {
     // export function Foo() {}
     node.specifiers  = [buildExportSpecifier(declar.id)];
-    node.declaration = null;
     node._blockHoist = 2;
-    return [getDeclar(), node];
+
+    var nodes = [getDeclar(node), node];
+    node.declaration = null;
+    return nodes;
   } else if (t.isVariableDeclaration(declar)) {
     // export var foo = "bar";
     var specifiers = [];
