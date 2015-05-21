@@ -51,7 +51,7 @@ var visitor = {
   },
 
   ReferencedIdentifier(node, parent, scope, state) {
-    if (node.name === "arguments" && !state.isShadowed) {
+    if (node.name === "arguments" && (!state.isShadowed || node._shadowedFunctionLiteral)) {
       state.needsArguments = true;
       state.argumentsPaths.push(this);
     }
@@ -211,6 +211,7 @@ class TailCallTransformer {
       var decl = t.variableDeclarator(this.argumentsId);
       if (this.argumentsId) {
         decl.init = t.identifier("arguments");
+        decl.init._shadowedFunctionLiteral = true;
       }
       topVars.push(decl);
     }
@@ -291,7 +292,8 @@ class TailCallTransformer {
   }
 
   subTransformCallExpression(node) {
-    var callee = node.callee, thisBinding, args;
+    var callee = node.callee;
+    var thisBinding, args;
 
     if (t.isMemberExpression(callee, { computed: false }) && t.isIdentifier(callee.property)) {
       switch (callee.property.name) {
@@ -301,6 +303,7 @@ class TailCallTransformer {
 
         case "apply":
           args = node.arguments[1] || t.identifier("undefined");
+          this.needsArguments = true;
           break;
 
         default:
@@ -332,6 +335,10 @@ class TailCallTransformer {
 
     if (!args) {
       args = t.arrayExpression(node.arguments);
+    }
+
+    if (t.isArrayExpression(args) && args.elements.length > this.node.params.length) {
+      this.needsArguments = true;
     }
 
     var argumentsId = this.getArgumentsId();
