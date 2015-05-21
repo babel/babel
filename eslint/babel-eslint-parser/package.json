@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "babel-core": "^5.1.8",
-    "eslint": "^0.21.2",
     "lodash.assign": "^3.0.0"
   },
   "scripts": {
@@ -22,7 +21,7 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "^0.18.0",
+    "eslint": "^0.21.2",
     "espree": "^2.0.0",
     "mocha": "^2.1.0"
   }
