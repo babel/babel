@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.5
+
+ * **Bug Fix**
+  * Add `JSXIdentifier` as a valid `ReferencedIdentifier` visitor virtual type.
+  * Ignore `CallExpression` `_prettyCall` when the `retainLines` option is enabled.
+  * Inherit comments to new declaration node when exploding module declarations.
+  * Fix `es6.tailCall` transformer failing on calls that exceed the max parameters of the function.
+
 ## 5.4.4
 
  * **Bug Fix**
