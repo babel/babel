@@ -66,6 +66,10 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ImportNamespaceSpecifier":
       return false;
 
+    // no: <div NODE="foo" />
+    case "JSXAttribute":
+      return parent.name !== node;
+
     // no: import { NODE as foo } from "foo";
     // no: import { foo as NODE } from "foo";
     case "ImportSpecifier":
