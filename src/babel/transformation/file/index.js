@@ -420,6 +420,10 @@ export default class File {
 
 
   getModuleFormatter(type: string) {
+    if (isFunction(type) || !moduleFormatters[type]) {
+      this.log.deprecate("Custom module formatters are deprecated and will be removed in the next major. Please use Babel plugins instead.");
+    }
+
     var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
 
     if (!ModuleFormatter) {
