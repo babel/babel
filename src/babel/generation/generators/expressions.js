@@ -79,7 +79,9 @@ export function CallExpression(node, print) {
 
   var separator = ",";
 
-  if (node._prettyCall && !this.format.retainLines) {
+  var isPrettyCall = node._prettyCall && !this.format.retainLines;
+
+  if (isPrettyCall) {
     separator += "\n";
     this.newline();
     this.indent();
@@ -89,7 +91,7 @@ export function CallExpression(node, print) {
 
   print.list(node.arguments, { separator: separator });
 
-  if (node._prettyCall) {
+  if (isPrettyCall) {
     this.newline();
     this.dedent();
   }
