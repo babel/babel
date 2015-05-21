@@ -33,16 +33,29 @@ function assertImplementsAST(target, source, path) {
 
 function parseAndAssertSame(code) {
   var esAST = espree.parse(code, {
-    env: {
-      "es6": true,
-      "node": true
-    },
     ecmaFeatures: {
+      arrowFunctions: true,
       blockBindings: true,
+      destructuring: true,
+      regexYFlag: true,
+      regexUFlag: true,
       templateStrings: true,
-      modules: true,
+      binaryLiterals: true,
+      octalLiterals: true,
+      unicodeCodePointEscapes: true,
+      defaultParams: true,
+      restParams: true,
+      forOf: true,
+      objectLiteralComputedProperties: true,
+      objectLiteralShorthandMethods: true,
+      objectLiteralShorthandProperties: true,
+      objectLiteralDuplicateProperties: true,
+      generators: true,
+      spread: true,
       classes: true,
-      jsx: true
+      modules: true,
+      jsx: true,
+      globalReturn: true
     },
     tokens: true,
     loc: true,
@@ -123,6 +136,17 @@ describe("acorn-to-esprima", function () {
           "return f2;" +
         "}"
       );
+    });
+
+    it("template with destructuring #31", function () {
+      parseAndAssertSame([
+        "module.exports = {",
+          "render() {",
+            "var {name} = this.props;",
+            "return Math.max(null, `Name: ${name}, Name: ${name}`);",
+          "}",
+        "};"
+      ].join("\n"));
     });
   });
 

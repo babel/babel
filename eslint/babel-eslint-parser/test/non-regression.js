@@ -164,6 +164,19 @@ describe("verify", function () {
     );
   });
 
+  it("template with destructuring #31", function () {
+    verifyAndAssertMessages([
+      "module.exports = {",
+        "render() {",
+          "var {name} = this.props;",
+          "return Math.max(null, `Name: ${name}, Name: ${name}`);",
+        "}",
+      "};"].join("\n"),
+      { "comma-spacing": 1 },
+      []
+    );
+  });
+
   describe("decorators #72", function () {
     it("class declaration", function () {
       verifyAndAssertMessages(

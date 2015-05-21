@@ -80,8 +80,10 @@ function isCompatTag(tagName) {
 function convertTemplateType(tokens) {
   var startingToken    = 0;
   var currentToken     = 0;
+  // track use of {}
   var numBraces        = 0;
-  var hasTemplateEnded = true;
+  // track number of nested templates
+  var numBackQuotes     = 0;
 
   function isBackQuote(token) {
     return tokens[token].type === tt.backQuote;
@@ -89,7 +91,8 @@ function convertTemplateType(tokens) {
 
   function isTemplateStarter(token) {
     return isBackQuote(token) ||
-           tokens[token].type === tt.braceR;
+           // only can be a template starter when in a template already
+           tokens[token].type === tt.braceR && numBackQuotes > 0;
   }
 
   function isTemplateEnder(token) {
@@ -138,6 +141,10 @@ function convertTemplateType(tokens) {
   while (startingToken < tokens.length) {
     // template start: check if ` or }
     if (isTemplateStarter(startingToken) && numBraces === 0) {
+      if (isBackQuote(startingToken)) {
+        numBackQuotes++;
+      }
+
       currentToken = startingToken + 1;
 
       // check if token after template start is "template"
@@ -153,10 +160,12 @@ function convertTemplateType(tokens) {
         currentToken++;
       }
 
-      hasTemplateEnded = isBackQuote(currentToken);
+      if (isBackQuote(currentToken)) {
+        numBackQuotes--;
+      }
       // template start and end found: create new token
       replaceWithTemplateType(startingToken, currentToken);
-    } else if (!hasTemplateEnded) {
+    } else if (numBackQuotes > 0) {
       trackNumBraces(startingToken);
     }
     startingToken++;
