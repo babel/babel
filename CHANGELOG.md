@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.4.7
+
+ * **Bug Fix**
+  * Don't consider `JSXAttribute` `names` to be valid `ReferencedIdentifier`s.
+
 ## 5.4.6
 
  * **Bug Fix**
