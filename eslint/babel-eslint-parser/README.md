@@ -6,6 +6,8 @@
 **NOTE:** Please note that this is experimental and may have numerous bugs. It is however
 successfuly linting the [babel core](https://github.com/babel/babel/blob/master/.eslintrc).
 
+If there's an issue, check if it can be reproduced with the regular parser and with the latest versions of `eslint` and `babel-eslint`. For issues related to JSX, see if [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) helps!
+
 ## How does it work?
 
 ESLint allows custom parsers. This is great but some of the syntax nodes that Babel supports
