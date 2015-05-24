@@ -1,4 +1,4 @@
-import TraversalPath from "./path";
+import NodePath from "./path";
 import compact from "lodash/array/compact";
 import * as t from "../types";
 
@@ -16,7 +16,7 @@ export default class TraversalContext {
   }
 
   create(node, obj, key) {
-    var path = TraversalPath.get(this.parentPath, node, obj, key);
+    var path = NodePath.get(this.parentPath, node, obj, key);
     path.unshiftContext(this);
     return path;
   }

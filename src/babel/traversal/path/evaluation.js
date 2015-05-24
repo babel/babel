@@ -1,3 +1,5 @@
+/* eslint eqeqeq: 0 */
+
 /**
  * Walk the input `node` and statically evaluate if it's truthy.
  *

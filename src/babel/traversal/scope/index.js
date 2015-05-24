@@ -38,7 +38,7 @@ var functionVariableVisitor = {
   }
 };
 
-var programReferenceVisitor = explode({
+var programReferenceVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
     var bindingInfo = scope.getBinding(node.name);
     if (bindingInfo) {
@@ -85,9 +85,9 @@ var programReferenceVisitor = explode({
   UnaryExpression(node, parent, scope, state) {
     if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
   }
-});
+};
 
-var blockVariableVisitor = explode({
+var blockVariableVisitor = {
   Scope() {
     this.skip();
   },
@@ -97,9 +97,9 @@ var blockVariableVisitor = explode({
       state.registerDeclaration(this);
     }
   }
-});
+};
 
-var renameVisitor = explode({
+var renameVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name === state.oldName) {
       node.name = state.newName;
@@ -107,7 +107,7 @@ var renameVisitor = explode({
   },
 
   Declaration(node, parent, scope, state) {
-    var ids = this.getBindingIdentifiers();;
+    var ids = this.getBindingIdentifiers();
 
     for (var name in ids) {
       if (name === state.oldName) ids[name].name = state.newName;
@@ -121,7 +121,7 @@ var renameVisitor = explode({
       }
     }
   }
-});
+};
 
 export default class Scope {
 
@@ -130,7 +130,7 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: TraversalPath, parent?: Scope, file?: File) {
+  constructor(path: NodePath, parent?: Scope, file?: File) {
     if (parent && parent.block === path.node) {
       return parent;
     }
@@ -419,7 +419,7 @@ export default class Scope {
    * Description
    */
 
-  registerDeclaration(path: TraversalPath) {
+  registerDeclaration(path: NodePath) {
     var node = path.node;
     if (t.isFunctionDeclaration(node)) {
       this.registerBinding("hoisted", path);
@@ -441,7 +441,7 @@ export default class Scope {
    * Description
    */
 
-  registerConstantViolation(left: TraversalPath, right: TraversalPath) {
+  registerConstantViolation(left: NodePath, right: NodePath) {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
       var binding = this.getBinding(name);
@@ -460,7 +460,7 @@ export default class Scope {
    * Description
    */
 
-  registerBinding(kind: string, path: TraversalPath) {
+  registerBinding(kind: string, path: NodePath) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     if (path.isVariableDeclaration()) {

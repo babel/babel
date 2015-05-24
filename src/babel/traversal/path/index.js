@@ -1,6 +1,7 @@
-import PathHoister from "./hoister";
-import * as virtualTypes from "./virtual-types";
+import PathHoister from "./lib/hoister";
+import * as virtualTypes from "./lib/virtual-types";
 import * as messages from "../../messages";
+import * as contextual from "./lib/contextual";
 import isBoolean from "lodash/lang/isBoolean";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
@@ -15,35 +16,7 @@ import extend from "lodash/object/extend";
 import Scope from "../scope";
 import * as t from "../../types";
 
-var hoistVariablesVisitor = explode({
-  Function() {
-    this.skip();
-  },
-
-  VariableDeclaration(node, parent, scope) {
-    if (node.kind !== "var") return;
-
-    var bindings = this.getBindingIdentifiers();
-    for (var key in bindings) {
-      scope.push({ id: bindings[key] });
-    }
-
-    var exprs = [];
-
-    for (var declar of (node.declarations: Array)) {
-      var declar = node.declarations[i];
-      if (declar.init) {
-        exprs.push(t.expressionStatement(
-          t.assignmentExpression("=", declar.id, declar.init)
-        ));
-      }
-    }
-
-    return exprs;
-  }
-});
-
-export default class TraversalPath {
+export default class NodePath {
   constructor(parent, container) {
     this.container = container;
     this.contexts  = [];
@@ -55,7 +28,7 @@ export default class TraversalPath {
    * Description
    */
 
-  static get(parentPath: TraversalPath, parent, container, key) {
+  static get(parentPath: NodePath, parent, container, key) {
     var targetNode = container[key];
     var paths = container._paths = container._paths || [];
     var path;
@@ -69,7 +42,7 @@ export default class TraversalPath {
     }
 
     if (!path) {
-      path = new TraversalPath(parent, container);
+      path = new NodePath(parent, container);
       paths.push(path);
     }
 
@@ -82,7 +55,7 @@ export default class TraversalPath {
    * Description
    */
 
-  static getScope(path: TraversalPath, scope: Scope, file?: File) {
+  static getScope(path: NodePath, scope: Scope, file?: File) {
     var ourScope = scope;
 
     // we're entering a new scope so let's construct it!
@@ -91,59 +64,6 @@ export default class TraversalPath {
     }
 
     return ourScope;
-  }
-
-  /**
-   * Description
-   */
-
-  getAncestry() {
-    var ancestry = [];
-
-    var path = this.parentPath;
-    while (path) {
-      ancestry.push(path.node);
-      path = path.parentPath;
-    }
-
-    return ancestry;
-  }
-
-  /**
-   * Description
-   */
-
-  inType(types) {
-    if (!Array.isArray(types)) types = [types];
-
-    var path = this;
-    while (path) {
-      for (var type of (types: Array)) {
-        if (path.node.type === type) return true;
-      }
-      path = path.parentPath;
-    }
-
-    return false;
-  }
-
-  /**
-   * Description
-   */
-
-  inShadow() {
-    var path = this;
-    while (path) {
-      if (path.isFunction()) {
-        if (path.node.shadow) {
-          return path;
-        } else {
-          return null;
-        }
-      }
-      path = path.parentPath;
-    }
-    return null;
   }
 
   /**
@@ -160,19 +80,6 @@ export default class TraversalPath {
 
   isGenerated() {
     return !this.isUser();
-  }
-
-  /**
-   * Description
-   */
-
-  findParent(callback) {
-    var path = this;
-    while (path) {
-      if (callback(path.node, path)) return path;
-      path = path.parentPath;
-    }
-    return null;
   }
 
   /**
@@ -229,7 +136,7 @@ export default class TraversalPath {
         paths.push(path);
         this.queueNode(path);
       } else {
-        paths.push(TraversalPath.get(this, node, this.container, to));
+        paths.push(NodePath.get(this, node, this.container, to));
       }
     }
 
@@ -356,7 +263,7 @@ export default class TraversalPath {
     if (this.opts && this.opts.noScope) return;
 
     var target = this.context || this.parentPath;
-    this.scope = TraversalPath.getScope(this, target && target.scope, file);
+    this.scope = NodePath.getScope(this, target && target.scope, file);
   }
 
   /**
@@ -492,38 +399,18 @@ export default class TraversalPath {
    */
 
   remove() {
+    if (this._contextualCall("removers", "pre")) return;
+
     this.shareCommentsWithSiblings();
     this._remove();
     this.removed = true;
 
-    var parentPath = this.parentPath;
-    var parent = this.parent;
-    if (!parentPath) return;
+    this._contextualCall("removers", "post");
+  }
 
-    // we've just removed the last declarator of a variable declaration so there's no point in
-    // keeping it
-    if (parentPath.isVariableDeclaration() && parent.declarations.length === 0) {
-      return parentPath.remove();
-    }
-
-    // we're the child of an expression statement so we should remove the parent
-    if (parentPath.isExpressionStatement()) {
-      return parentPath.remove();
-    }
-
-    // we've just removed the second element of a sequence expression so let's turn that sequence
-    // expression into a regular expression
-    if (parentPath.isSequenceExpression() && parent.expressions.length === 1) {
-      parentPath.replaceWith(parent.expressions[0]);
-    }
-
-    // we're in a binary expression, better remove it and replace it with the last expression
-    if (parentPath.isBinary()) {
-      if (this.key === "left") {
-        parentPath.replaceWith(parent.right);
-      } else { // key === "right"
-        parentPath.replaceWith(parent.left);
-      }
+  _contextualCall(type, position) {
+    for (var fn of (contextual[type][position]: Array)) {
+      if (fn(this, this.parentPath)) return;
     }
   }
 
@@ -569,24 +456,6 @@ export default class TraversalPath {
    * Description
    */
 
-  replaceInline(nodes) {
-    if (Array.isArray(nodes)) {
-      if (Array.isArray(this.container)) {
-        nodes = this._verifyNodeList(nodes);
-        this._containerInsertAfter(nodes);
-        return this.remove();
-      } else {
-        return this.replaceWithMultiple(nodes);
-      }
-    } else {
-      return this.replaceWith(nodes);
-    }
-  }
-
-  /**
-   * Description
-   */
-
   _verifyNodeList(nodes) {
     if (nodes.constructor !== Array) {
       nodes = [nodes];
@@ -617,7 +486,7 @@ export default class TraversalPath {
     // doesn't matter, our nodes will be inserted anyway
 
     var container = this.node[containerKey];
-    var path      = TraversalPath.get(this, this.node, container, 0);
+    var path      = NodePath.get(this, this.node, container, 0);
 
     return path.insertBefore(nodes);
   }
@@ -634,103 +503,9 @@ export default class TraversalPath {
 
     var container = this.node[containerKey];
     var i         = container.length;
-    var path      = TraversalPath.get(this, this.node, container, i);
+    var path      = NodePath.get(this, this.node, container, i);
 
     return path.replaceWith(nodes, true);
-  }
-
-  /**
-   * Description
-   */
-
-  replaceWithMultiple(nodes: Array<Object>) {
-    nodes = this._verifyNodeList(nodes);
-    t.inheritsComments(nodes[0], this.node);
-    this.node = this.container[this.key] = null;
-    this.insertAfter(nodes);
-    if (!this.node) this.remove();
-  }
-
-  /**
-   * Description
-   */
-
-  replaceWithSourceString(replacement) {
-    try {
-      replacement = `(${replacement})`;
-      replacement = parse(replacement);
-    } catch (err) {
-      var loc = err.loc;
-      if (loc) {
-        err.message += " - make sure this is an expression.";
-        err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
-      }
-      throw err;
-    }
-
-    replacement = replacement.program.body[0].expression;
-    traverse.removeProperties(replacement);
-    return this.replaceWith(replacement);
-  }
-
-  /**
-   * Description
-   */
-
-  replaceWith(replacement, whateverAllowed) {
-    if (this.removed) {
-      throw new Error("You can't replace this node, we've already removed it");
-    }
-
-    if (!replacement) {
-      throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
-    }
-
-    if (this.node === replacement) {
-      return;
-    }
-
-    // normalise inserting an entire AST
-    if (t.isProgram(replacement)) {
-      replacement = replacement.body;
-      whateverAllowed = true;
-    }
-
-    if (Array.isArray(replacement)) {
-      if (whateverAllowed) {
-        return this.replaceWithMultiple(replacement);
-      } else {
-        throw new Error("Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
-      }
-    }
-
-    if (typeof replacement === "string") {
-      if (whateverAllowed) {
-        return this.replaceWithSourceString(replacement);
-      } else {
-        throw new Error("Don't use `path.replaceWith()` with a string, use `path.replaceWithSourceString()`");
-      }
-    }
-
-    // replacing a statement with an expression so wrap it in an expression statement
-    if (this.isPreviousType("Statement") && t.isExpression(replacement) && !this.canHaveVariableDeclarationOrExpression()) {
-      replacement = t.expressionStatement(replacement);
-    }
-
-    // replacing an expression with a statement so let's explode it
-    if (this.isPreviousType("Expression") && t.isStatement(replacement)) {
-      return this.replaceExpressionWithStatements([replacement]);
-    }
-
-    var oldNode = this.node;
-    if (oldNode) t.inheritsComments(replacement, oldNode);
-
-    // replace the node
-    this.node = this.container[this.key] = replacement;
-    this.type = replacement.type;
-
-    // potentially create new scope
-    this.setScope();
   }
 
   /**
@@ -751,7 +526,7 @@ export default class TraversalPath {
    * Description
    */
 
-  getStatementParent(): ?TraversalPath {
+  getStatementParent(): ?NodePath {
     var path = this;
 
     do {
@@ -773,7 +548,7 @@ export default class TraversalPath {
    * Description
    */
 
-  getCompletionRecords(): Array<TraversalPath> {
+  getCompletionRecords(): Array<NodePath> {
     var paths = [];
 
     var add = function (path) {
@@ -796,43 +571,6 @@ export default class TraversalPath {
     return paths;
   }
 
-  /**
-   * Description
-   */
-
-  replaceExpressionWithStatements(nodes: Array) {
-    var toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
-
-    if (toSequenceExpression) {
-      return this.replaceWith(toSequenceExpression);
-    } else {
-      var container = t.functionExpression(null, [], t.blockStatement(nodes));
-      container.shadow = true;
-
-      this.replaceWith(t.callExpression(container, []));
-      this.traverse(hoistVariablesVisitor);
-
-      // add implicit returns to all ending expression statements
-      var last = this.get("callee").getCompletionRecords();
-      for (var i = 0; i < last.length; i++) {
-        var lastNode = last[i];
-        if (lastNode.isExpressionStatement()) {
-          var loop = lastNode.findParent((node, path) => path.isLoop());
-          if (loop) {
-            var uid = this.get("callee").scope.generateDeclaredUidIdentifier("ret");
-            this.get("callee.body").pushContainer("body", t.returnStatement(uid));
-            lastNode.get("expression").replaceWith(
-              t.assignmentExpression("=", uid, lastNode.node.expression)
-            );
-          } else {
-            lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
-          }
-        }
-      }
-
-      return this.node;
-    }
-  }
 
   /**
    * Description
@@ -851,7 +589,7 @@ export default class TraversalPath {
     for (var fn of (fns: Array)) {
       if (!fn) continue;
 
-      var node = this.node;
+      let node = this.node;
       if (!node) return;
 
       var previousType = this.type;
@@ -919,14 +657,14 @@ export default class TraversalPath {
    */
 
   getSibling(key) {
-    return TraversalPath.get(this.parentPath, this.parent, this.container, key, this.file);
+    return NodePath.get(this.parentPath, this.parent, this.container, key, this.file);
   }
 
   /**
    * Description
    */
 
-  get(key: string): TraversalPath {
+  get(key: string): NodePath {
     var parts = key.split(".");
     if (parts.length === 1) { // "foo"
       return this._getKey(key);
@@ -946,10 +684,10 @@ export default class TraversalPath {
     if (Array.isArray(container)) {
       // requested a container so give them all the paths
       return container.map((_, i) => {
-        return TraversalPath.get(this, node, container, i).setContext();
+        return NodePath.get(this, node, container, i).setContext();
       });
     } else {
-      return TraversalPath.get(this, node, node, key).setContext();
+      return NodePath.get(this, node, node, key).setContext();
     }
   }
 
@@ -1014,160 +752,8 @@ export default class TraversalPath {
    * Description
    */
 
-  getTypeAnnotation(): {
-    inferred: boolean;
-    annotation: ?Object;
-  } {
-    if (this.typeInfo) {
-      return this.typeInfo;
-    }
-
-    var info = this.typeInfo = {
-      inferred: false,
-      annotation: null
-    };
-
-    var type = this.node && this.node.typeAnnotation;
-
-    if (!type) {
-      info.inferred = true;
-      type = this.inferType(this);
-    }
-
-    if (type) {
-      if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
-      info.annotation = type;
-    }
-
-    return info;
-  }
-
-  /**
-   * Description
-   */
-
-  resolve(): ?TraversalPath {
-    if (this.isVariableDeclarator()) {
-      if (this.get("id").isIdentifier()) {
-        return this.get("init").resolve();
-      } else {
-        // otherwise it's a request for a destructuring declarator and i'm not
-        // ready to resolve those just yet
-      }
-    } else if (this.isIdentifier()) {
-      var binding = this.scope.getBinding(this.node.name);
-      if (!binding || !binding.constant) return;
-
-      // todo: take into consideration infinite recursion #1149
-      return;
-
-      if (binding.path === this) {
-        return this;
-      } else {
-        return binding.path.resolve();
-      }
-    } else if (this.isMemberExpression()) {
-      // this is dangerous, as non-direct target assignments will mutate it's state
-      // making this resolution inaccurate
-
-      var targetKey = this.toComputedKey();
-      if (!t.isLiteral(targetKey)) return;
-      var targetName = targetKey.value;
-
-      var target = this.get("object").resolve();
-      if (!target || !target.isObjectExpression()) return;
-
-      var props = target.get("properties");
-      for (var i = 0; i < props.length; i++) {
-        var prop = props[i];
-        if (!prop.isProperty()) continue;
-
-        var key = prop.get("key");
-
-        // { foo: obj }
-        var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
-
-        // { "foo": "obj" } or { ["foo"]: "obj" }
-        match = match || key.isLiteral({ value: targetName });
-
-        if (match) return prop.get("value");
-      }
-    } else {
-      return this;
-    }
-  }
-
-  /**
-   * Description
-   */
-
-  inferType(path: TraversalPath): ?Object {
-    path = path.resolve();
-    if (!path) return;
-
-    if (path.isPreviousType("RestElement") || path.parentPath.isPreviousType("RestElement") || path.isPreviousType("ArrayExpression")) {
-      return t.genericTypeAnnotation(t.identifier("Array"));
-    }
-
-    if (path.parentPath.isPreviousType("TypeCastExpression")) {
-      return path.parentPath.node.typeAnnotation;
-    }
-
-    if (path.isPreviousType("TypeCastExpression")) {
-      return path.node.typeAnnotation;
-    }
-
-    if (path.isPreviousType("ObjectExpression")) {
-      return t.genericTypeAnnotation(t.identifier("Object"));
-    }
-
-    if (path.isPreviousType("Function")) {
-      return t.identifier("Function");
-    }
-
-    if (path.isPreviousType("Literal")) {
-      var value = path.node.value;
-      if (isString(value)) return t.stringTypeAnnotation();
-      if (isNumber(value)) return t.numberTypeAnnotation();
-      if (isBoolean(value)) return t.booleanTypeAnnotation();
-    }
-
-    if (path.isPreviousType("CallExpression")) {
-      var callee = path.get("callee").resolve();
-      if (callee && callee.isPreviousType("Function")) return callee.node.returnType;
-    }
-  }
-
-  /**
-   * Description
-   */
-
   isPreviousType(type: string): boolean {
     return t.isType(this.type, type);
-  }
-
-  /**
-   * Description
-   */
-
-  isTypeGeneric(genericName: string, opts = {}): boolean {
-    var typeInfo = this.getTypeAnnotation();
-    var type     = typeInfo.annotation;
-    if (!type) return false;
-
-    if (typeInfo.inferred && opts.inference === false) {
-      return false;
-    }
-
-    if (!t.isGenericTypeAnnotation(type) || !t.isIdentifier(type.id, { name: genericName })) {
-      return false;
-    }
-
-    if (opts.requireTypeParameters && !type.typeParameters) {
-      return false;
-    }
-
-    return true;
   }
 
   /**
@@ -1254,20 +840,23 @@ export default class TraversalPath {
   }
 }
 
-assign(TraversalPath.prototype, require("./evaluation"));
-assign(TraversalPath.prototype, require("./conversion"));
+assign(NodePath.prototype, require("./ancestry"));
+assign(NodePath.prototype, require("./resolution"));
+assign(NodePath.prototype, require("./replacement"));
+assign(NodePath.prototype, require("./evaluation"));
+assign(NodePath.prototype, require("./conversion"));
 
 for (let type in virtualTypes) {
   if (type[0] === "_") continue;
 
-  TraversalPath.prototype[`is${type}`] = function (opts) {
+  NodePath.prototype[`is${type}`] = function (opts) {
     return virtualTypes[type].checkPath(this, opts);
   };
 }
 
 for (let type of (t.TYPES: Array)) {
   let typeKey = `is${type}`;
-  TraversalPath.prototype[typeKey] = function (opts) {
+  NodePath.prototype[typeKey] = function (opts) {
     return t[typeKey](this.node, opts);
   };
 }

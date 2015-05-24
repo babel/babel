@@ -15,15 +15,15 @@ export function Func/*tion*/(node) {
     // but that's a small optimization. Starting here instead of at the
     // root of the AST is the key optimization, since huge async/generator
     // functions are relatively rare.
-    regenerator.transform(convertTraversalPathToNodePath(this));
+    regenerator.transform(convertNodePath(this));
   }
 }
 
-// Given a TraversalPath, return a NodePath that includes full ancestry
-// information (up to and including the Program node). This is complicated
-// by having to include intermediate objects like blockStatement.body
+// Given a Babel NodePath, return an ast-types NodePath that includes full
+// ancestry information (up to and including the Program node). This is
+// complicated by having to include intermediate objects like blockStatement.body
 // arrays, in addition to Node objects.
-function convertTraversalPathToNodePath(path) {
+function convertNodePath(path) {
   var programNode;
   var keysAlongPath = [];
 
