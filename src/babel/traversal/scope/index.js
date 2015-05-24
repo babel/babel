@@ -659,6 +659,10 @@ export default class Scope {
   push(opts: Object) {
     var path = this.path;
 
+    if (path.isSwitchStatement()) {
+      path = this.getFunctionParent().path;
+    }
+
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       t.ensureBlock(path.node);
       path = path.get("body");
@@ -721,10 +725,11 @@ export default class Scope {
 
   getBlockParent() {
     var scope = this;
-    while (scope.parent && !t.isFunction(scope.block) && !t.isLoop(scope.block) && !t.isFunction(scope.block)) {
-      scope = scope.parent;
-    }
-    return scope;
+    do {
+      if (scope.path.isProgram() || scope.path.isBlockStatement()) {
+        return scope;
+      }
+    } while (scope = scope.parent);
   }
 
   /**
