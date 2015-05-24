@@ -9,6 +9,7 @@ export default {
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
   "minification.inlineExpressions":        require("./minification/inline-expressions"),
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
+  "minification.removeReactPropTypes":     require("./minification/remove-react-prop-types"),
   _modules:                                require("./internal/modules"),
   "spec.functionName":                     require("./spec/function-name"),
 
