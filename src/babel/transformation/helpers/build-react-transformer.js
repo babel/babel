@@ -202,4 +202,4 @@ export default function (exports, opts) {
       addDisplayName(left.name, right);
     }
   };
-};
+}

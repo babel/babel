@@ -6,4 +6,4 @@ export default function (ast, comments, tokens) {
   } else {
     throw new Error("Not a valid ast?");
   }
-};
+}

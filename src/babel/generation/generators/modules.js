@@ -107,9 +107,9 @@ export function ImportDeclaration(node, print) {
 
     if (node.specifiers.length) {
       this.push("{");
-      this.space()
+      this.space();
       print.join(node.specifiers, { separator: ", " });
-      this.space()
+      this.space();
       this.push("}");
     }
 

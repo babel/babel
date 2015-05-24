@@ -1,4 +1,4 @@
-import * as virtualTypes from "./path/virtual-types";
+import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "../messages";
 import * as t from "../types";
 import clone from "lodash/lang/clone";
@@ -29,7 +29,7 @@ export function explode(visitor) {
     if (!wrapper) continue;
 
     // wrap all the functions
-    var fns = visitor[nodeType];
+    let fns = visitor[nodeType];
     for (let type in fns) {
       fns[type] = wrapCheck(wrapper, fns[type]);
     }
@@ -55,7 +55,7 @@ export function explode(visitor) {
   for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    var fns = visitor[nodeType];
+    let fns = visitor[nodeType];
 
     var aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
     if (!aliases) continue;

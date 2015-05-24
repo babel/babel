@@ -258,7 +258,7 @@ class BlockScoping {
    * Description
    */
 
-  constructor(loopPath?: TraversalPath, blockPath: TraversalPath, parent: Object, scope: Scope, file: File) {
+  constructor(loopPath?: NodePath, blockPath: NodePath, parent: Object, scope: Scope, file: File) {
     this.parent = parent;
     this.scope  = scope;
     this.file   = file;

@@ -56,4 +56,4 @@ export default function (loc, opts = {}) {
   }
 
   return opts;
-};
+}

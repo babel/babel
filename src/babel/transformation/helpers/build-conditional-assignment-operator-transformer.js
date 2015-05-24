@@ -42,4 +42,4 @@ export default function (exports, opts) {
 
     return nodes;
   };
-};
+}

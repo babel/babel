@@ -130,7 +130,7 @@ export default class ReplaceSupers {
    * Description
    */
 
-  traverseLevel(path: TraversalPath, topLevel: boolean) {
+  traverseLevel(path: NodePath, topLevel: boolean) {
     var state = { self: this, topLevel: topLevel };
     path.traverse(visitor, state);
   }
@@ -192,7 +192,7 @@ export default class ReplaceSupers {
    * Description
    */
 
-  looseHandle(path: TraversalPath, getThisReference: Function) {
+  looseHandle(path: NodePath, getThisReference: Function) {
     var node = path.node;
     if (path.isSuper()) {
       return this.getLooseSuperProperty(node, path.parent);
@@ -234,7 +234,7 @@ export default class ReplaceSupers {
    * Description
    */
 
-  specHandle(path: TraversalPath, getThisReference: Function) {
+  specHandle(path: NodePath, getThisReference: Function) {
     var methodNode = this.methodNode;
     var property;
     var computed;
@@ -274,7 +274,7 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      var binary = t.binaryExpression(node.operator[0], node.argument, t.literal(1))
+      var binary = t.binaryExpression(node.operator[0], node.argument, t.literal(1));
       if (node.prefix) {
         // ++super.foo; -> super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary, getThisReference);

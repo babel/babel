@@ -86,7 +86,7 @@ var metadataVisitor = {
 
     var declar = this.get("declaration");
     if (declar.isStatement()) {
-      var bindings = declar.getBindingIdentifiers()
+      var bindings = declar.getBindingIdentifiers();
       for (var name in bindings) {
         var binding = bindings[name];
         formatter._addExport(name, binding);

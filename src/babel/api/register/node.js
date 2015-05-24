@@ -164,4 +164,4 @@ export default function (opts = {}) {
   delete opts.only;
 
   extend(transformOpts, opts);
-};
+}

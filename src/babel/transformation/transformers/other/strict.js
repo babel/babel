@@ -24,7 +24,7 @@ export var Program = {
     }
     directive._blockHoist = Infinity;
   }
-}
+};
 
 export function ThisExpression() {
   if (!this.findParent((node) => !node.shadow && THIS_BREAK_KEYS.indexOf(node.type) >= 0)) {

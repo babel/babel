@@ -112,12 +112,12 @@ export function shouldIgnore(filename, ignore, only) {
   filename = slash(filename);
 
   if (only.length) {
-    for (var pattern of (only: Array)) {
+    for (let pattern of (only: Array)) {
       if (pattern.test(filename)) return false;
     }
     return true;
   } else if (ignore.length) {
-    for (var pattern of (ignore: Array)) {
+    for (let pattern of (ignore: Array)) {
       if (pattern.test(filename)) return true;
     }
   }

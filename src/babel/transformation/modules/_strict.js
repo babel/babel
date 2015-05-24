@@ -10,4 +10,4 @@ export default function (Parent) {
   util.inherits(Constructor, Parent);
 
   return Constructor;
-};
+}

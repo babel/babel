@@ -5,6 +5,6 @@ export var metadata = {
   group: "builtin-setup"
 };
 
-export function DebuggerStatement(node) {  
-  this.remove();  
+export function DebuggerStatement(node) {
+  this.remove();
 }

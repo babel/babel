@@ -1,3 +1,5 @@
+/* eslint quotes: 0 */
+
 import each from "lodash/collection/each";
 import * as t from "../../types";
 

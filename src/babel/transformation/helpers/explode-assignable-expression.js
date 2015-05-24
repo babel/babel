@@ -68,4 +68,4 @@ export default function (node, nodes, file, scope, allowedSingleIdent) {
     uid: uid,
     ref: ref
   };
-};
+}

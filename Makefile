@@ -22,6 +22,9 @@ watch-core: clean-core
 clean-core:
 	rm -rf lib
 
+lint:
+	eslint src/babel
+
 build:
 	mkdir -p dist
 	make build-core
@@ -61,7 +64,7 @@ test-cov:
 test-parser:
 	node test/acorn/run.js
 
-test-travis: bootstrap build test
+test-travis: bootstrap lint build test
 
 test-browser:
 	mkdir -p dist
@@ -73,7 +76,7 @@ test-browser:
 
 	test -n "`which open`" && open test/browser.html
 
-publish:
+publish: lint
 	git pull --rebase
 
 	make test

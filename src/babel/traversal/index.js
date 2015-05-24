@@ -46,17 +46,17 @@ traverse.node = function (node, opts, scope, state, parentPath) {
 
 const CLEAR_KEYS = [
   "trailingComments", "leadingComments", "extendedRange",
-  "_scopeInfo" ,"_paths",
+  "_scopeInfo", "_paths",
   "tokens", "range", "start", "end", "loc", "raw"
 ];
 
 function clearNode(node) {
   for (var i = 0; i < CLEAR_KEYS.length; i++) {
-    var key = CLEAR_KEYS[i];
+    let key = CLEAR_KEYS[i];
     if (node[key] != null) node[key] = null;
   }
 
-  for (var key in node) {
+  for (let key in node) {
     var val = node[key];
     if (Array.isArray(val)) {
       delete val._paths;

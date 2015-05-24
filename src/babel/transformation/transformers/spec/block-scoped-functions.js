@@ -4,7 +4,7 @@ function statementList(key, path, file) {
   var paths = path.get(key);
 
   for (var i = 0; i < paths.length; i++) {
-    var path = paths[i];
+    let path = paths[i];
 
     var func = path.node;
     if (!t.isFunctionDeclaration(func)) continue;

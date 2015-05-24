@@ -24,7 +24,7 @@ export function ExportDefaultDeclaration(node, parent, scope) {
 
   if (t.isClassDeclaration(declar)) {
     // export default class Foo {};
-    var nodes = [getDeclar(node), node];
+    let nodes = [getDeclar(node), node];
     node.declaration = declar.id;
     return nodes;
   } else if (t.isClassExpression(declar)) {
@@ -34,14 +34,14 @@ export function ExportDefaultDeclaration(node, parent, scope) {
       t.variableDeclarator(temp, declar)
     ]);
 
-    var nodes = [getDeclar(node), node];
+    let nodes = [getDeclar(node), node];
     node.declaration = temp;
     return nodes;
   } else if (t.isFunctionDeclaration(declar)) {
     // export default function Foo() {}
     node._blockHoist = 2;
 
-    var nodes = [getDeclar(node), node];
+    let nodes = [getDeclar(node), node];
     node.declaration = declar.id;
     return nodes;
   }
@@ -57,7 +57,8 @@ export function ExportNamedDeclaration(node, parent, scope) {
   if (t.isClassDeclaration(declar)) {
     // export class Foo {}
     node.specifiers  = [buildExportSpecifier(declar.id)];
-    var nodes = [getDeclar(node), node];
+
+    let nodes = [getDeclar(node), node];
     node.declaration = null;
     return nodes;
   } else if (t.isFunctionDeclaration(declar)) {
@@ -65,7 +66,7 @@ export function ExportNamedDeclaration(node, parent, scope) {
     node.specifiers  = [buildExportSpecifier(declar.id)];
     node._blockHoist = 2;
 
-    var nodes = [getDeclar(node), node];
+    let nodes = [getDeclar(node), node];
     node.declaration = null;
     return nodes;
   } else if (t.isVariableDeclaration(declar)) {

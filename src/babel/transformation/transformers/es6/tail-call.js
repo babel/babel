@@ -204,7 +204,7 @@ class TailCallTransformer {
     }
 
     if (this.needsArguments || this.setsArguments) {
-      for (var path of (this.argumentsPaths: Array)) {
+      for (let path of (this.argumentsPaths: Array)) {
         path.replaceWith(this.argumentsId);
       }
 
@@ -356,14 +356,14 @@ class TailCallTransformer {
       var elems = args.elements;
       for (let i = 0; i < elems.length && i < params.length; i++) {
         let param = params[i];
-        var elem = elems[i] || (elems[i] = t.identifier("undefined"));
+        let elem = elems[i] || (elems[i] = t.identifier("undefined"));
         if (!param._isDefaultPlaceholder) {
           elems[i] = t.assignmentExpression("=", param, elem);
         }
       }
 
       if (!this.needsArguments) {
-        for (var elem of (elems: Array)) {
+        for (let elem of (elems: Array)) {
           body.push(t.expressionStatement(elem));
         }
       }

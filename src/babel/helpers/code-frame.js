@@ -85,4 +85,4 @@ export default function (lines: number, lineNumber: number, colNumber: number, o
       params.before = params.before.replace(/^./, ">");
     }
   }).join("\n");
-};
+}

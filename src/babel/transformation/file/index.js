@@ -3,7 +3,7 @@ import * as optionParsers from "./option-parsers";
 import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
-import TraversalPath from "../../traversal/path";
+import NodePath from "../../traversal/path";
 import Transformer from "../transformer";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
@@ -195,7 +195,7 @@ export default class File {
     // build internal transformers
     for (var key in this.pipeline.transformers) {
       var transformer = this.pipeline.transformers[key];
-      var pass = transformers[key] = transformer.buildPass(file);
+      let pass = transformers[key] = transformer.buildPass(file);
 
       if (pass.canTransform()) {
         stack.push(pass);
@@ -228,7 +228,7 @@ export default class File {
     this.uncollapsedTransformerStack = stack = stack.concat(secondaryStack);
 
     // build dependency graph
-    for (var pass of (stack: Array)) {
+    for (let pass of (stack: Array)) {
       for (var dep of (pass.transformer.dependencies: Array)) {
         this.transformerDependencies[dep] = pass.key;
       }
@@ -410,7 +410,7 @@ export default class File {
       outputMapGenerator.applySourceMap(inputMapConsumer);
 
       var mergedMap = outputMapGenerator.toJSON();
-      mergedMap.sources = inputMap.sources
+      mergedMap.sources = inputMap.sources;
       mergedMap.file    = inputMap.file;
       return mergedMap;
     }
@@ -467,7 +467,7 @@ export default class File {
   }
 
   _addAst(ast) {
-    this.path  = TraversalPath.get(null, ast, ast, "program", this).setContext(null, this);
+    this.path  = NodePath.get(null, ast, ast, "program", this).setContext(null, this);
     this.scope = this.path.scope;
     this.ast   = ast;
   }

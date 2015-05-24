@@ -252,21 +252,23 @@ class CodeGenerator {
 
     if (opts.indent) this.indent();
 
+    var printOpts = {
+      statement: opts.statement,
+      addNewlines: opts.addNewlines,
+      after: () => {
+        if (opts.iterator) {
+          opts.iterator(node, i);
+        }
+
+        if (opts.separator && i < len - 1) {
+          this.push(opts.separator);
+        }
+      }
+    };
+
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
-      print(node, {
-        statement: opts.statement,
-        addNewlines: opts.addNewlines,
-        after: () => {
-          if (opts.iterator) {
-            opts.iterator(node, i);
-          }
-
-          if (opts.separator && i < len - 1) {
-            this.push(opts.separator);
-          }
-        }
-      });
+      print(node, printOpts);
     }
 
     if (opts.indent) this.dedent();
@@ -318,7 +320,7 @@ class CodeGenerator {
       nodes.push(node.argument);
     }
 
-    for (var node of (nodes: Array)) {
+    for (let node of (nodes: Array)) {
       comments = comments.concat(this._getComments(key, node));
     }
 

@@ -83,4 +83,4 @@ export default function (whitelist, outputType = "global") {
   }
 
   return generator(tree).code;
-};
+}

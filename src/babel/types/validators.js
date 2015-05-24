@@ -72,6 +72,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
 
     // no: import { NODE as foo } from "foo";
     // no: import { foo as NODE } from "foo";
+    // no: import NODE from "bar";
     case "ImportSpecifier":
       return false;
 
@@ -105,14 +106,6 @@ export function isReferenced(node: Object, parent: Object): boolean {
     // no: ({ NODE }) = [];
     case "ObjectPattern":
     case "ArrayPattern":
-      return false;
-
-    // no: import NODE from "bar";
-    case "ImportSpecifier":
-      return false;
-
-    // no: import * as NODE from "foo";
-    case "ImportNamespaceSpecifier":
       return false;
   }
 

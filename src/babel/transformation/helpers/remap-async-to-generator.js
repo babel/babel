@@ -55,4 +55,4 @@ export default function (node, callId, scope) {
 
     return call;
   }
-};
+}

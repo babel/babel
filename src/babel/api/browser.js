@@ -1,3 +1,5 @@
+/* eslint no-new-func: 0 */
+
 require("./node");
 var transform = module.exports = require("../transformation");
 

@@ -6,4 +6,4 @@ export default function (node) {
     if (!t.isAssignmentPattern(node.params[i])) lastNonDefault = i + 1;
   }
   return lastNonDefault;
-};
+}
