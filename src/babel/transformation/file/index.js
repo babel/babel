@@ -482,32 +482,30 @@ export default class File {
     if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
       modFormatter.init();
     }
+    this.populateModuleMetadata();
     this.log.debug("End module formatter init");
+  }
 
+  populateModuleMetadata() {
+    var modules = {};
+    this.metadata.modules = modules;
+  }
+
+  transform(dependencyGraph) {
     this.call("pre");
     for (var pass of (this.transformerStack: Array)) {
       pass.transform();
     }
     this.call("post");
+
+    return this.generate();
   }
 
   wrap(code, callback) {
     code = code + "";
 
     try {
-      if (this.shouldIgnore()) {
-        return {
-          metadata: this.metadata,
-          ignored:  true,
-          code:     code,
-          map:      null,
-          ast:      null
-        };
-      }
-
-      callback();
-
-      return this.generate();
+      return callback();
     } catch (err) {
       if (err._babel) {
         throw err;
@@ -540,11 +538,11 @@ export default class File {
     code = (code || "") + "";
     code = this.parseInputSourceMap(code);
     this.code = code;
+  }
 
-    if (parseCode) {
-      this.parseShebang();
-      this.addAst(this.parse(this.code));
-    }
+  parseCode() {
+    this.parseShebang();
+    this.addAst(this.parse(this.code));
   }
 
   shouldIgnore() {
@@ -581,28 +579,37 @@ export default class File {
     }
   }
 
-  generate(): {
-    usedHelpers?: Array<string>;
-    code: string;
-    map?: Object;
-    ast?: Object;
-  } {
-    var opts = this.opts;
-    var ast  = this.ast;
-
+  makeResult({ code, map = null, ast, ignored }) {
     var result = {
-      metadata: this.metadata,
-      code:     "",
-      map:      null,
-      ast:      null
+      metadata: null,
+      ignored:  !!ignored,
+      code:     null,
+      ast:      null,
+      map:      map
     };
 
-    if (this.opts.metadataUsedHelpers) {
+    if (this.opts.code) {
+      result.code = code;
+    }
+
+    if (this.opts.ast) {
+      result.ast = ast;
+    }
+
+    if (this.opts.metadata) {
+      result.metadata = this.metadata;
       result.metadata.usedHelpers = Object.keys(this.usedHelpers);
     }
 
-    if (opts.ast) result.ast = ast;
-    if (!opts.code) return result;
+    return result;
+  }
+
+  generate() {
+    var opts = this.opts;
+    var ast  = this.ast;
+
+    var result = { ast };
+    if (!opts.code) return this.makeResult(result);
 
     this.log.debug("Generation start");
 
@@ -629,6 +636,6 @@ export default class File {
       result.map = null;
     }
 
-    return result;
+    return this.makeResult(result);
   }
 }

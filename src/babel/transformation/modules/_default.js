@@ -69,44 +69,44 @@ var remapVisitor = {
   }
 };
 
-var importsVisitor = {
-  ImportDeclaration: {
-    enter(node, parent, scope, formatter) {
-      formatter.hasLocalImports = true;
-      extend(formatter.localImports, this.getBindingIdentifiers());
+var metadataVisitor = {
+  ModuleDeclaration(node, parent, scope, formatter) {
+    if (node.source) {
+      node.source.value = formatter.file.resolveModuleSource(node.source.value);
     }
-  }
-};
+  },
 
-var exportsVisitor = {
-  ExportDeclaration: {
-    enter(node, parent, scope, formatter) {
-      formatter.hasLocalExports = true;
+  ImportDeclaration(node, parent, scope, formatter) {
+    formatter.hasLocalImports = true;
+    extend(formatter.localImports, this.getBindingIdentifiers());
+  },
 
-      var declar = this.get("declaration");
-      if (declar.isStatement()) {
-        var bindings = declar.getBindingIdentifiers()
-        for (var name in bindings) {
-          var binding = bindings[name];
-          formatter._addExport(name, binding);
-        }
+  ExportDeclaration(node, parent, scope, formatter) {
+    formatter.hasLocalExports = true;
+
+    var declar = this.get("declaration");
+    if (declar.isStatement()) {
+      var bindings = declar.getBindingIdentifiers()
+      for (var name in bindings) {
+        var binding = bindings[name];
+        formatter._addExport(name, binding);
       }
+    }
 
-      if (this.isExportNamedDeclaration() && node.specifiers) {
-        for (var i = 0; i < node.specifiers.length; i++) {
-          var specifier = node.specifiers[i];
-          var local = specifier.local;
-          if (!local) continue;
+    if (this.isExportNamedDeclaration() && node.specifiers) {
+      for (var i = 0; i < node.specifiers.length; i++) {
+        var specifier = node.specifiers[i];
+        var local = specifier.local;
+        if (!local) continue;
 
-          formatter._addExport(local.name, specifier.exported);
-        }
+        formatter._addExport(local.name, specifier.exported);
       }
+    }
 
-      if (!t.isExportDefaultDeclaration(node)) {
-        var onlyDefault = node.specifiers && node.specifiers.length === 1 && t.isSpecifierDefault(node.specifiers[0]);
-        if (!onlyDefault) {
-          formatter.hasNonDefaultExports = true;
-        }
+    if (!t.isExportDefaultDeclaration(node)) {
+      var onlyDefault = node.specifiers && node.specifiers.length === 1 && t.isSpecifierDefault(node.specifiers[0]);
+      if (!onlyDefault) {
+        formatter.hasNonDefaultExports = true;
       }
     }
   }
@@ -128,8 +128,7 @@ export default class DefaultFormatter {
     this.localExports = object();
     this.localImports = object();
 
-    this.getLocalExports();
-    this.getLocalImports();
+    this.getMetadata();
   }
 
   isModuleType(node, type) {
@@ -145,12 +144,8 @@ export default class DefaultFormatter {
     return (t.isExportDefaultDeclaration(node) || t.isSpecifierDefault(node)) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
 
-  getLocalExports() {
-    this.file.path.traverse(exportsVisitor, this);
-  }
-
-  getLocalImports() {
-    this.file.path.traverse(importsVisitor, this);
+  getMetadata() {
+    this.file.path.traverse(metadataVisitor, this);
   }
 
   remapAssignments() {

@@ -139,6 +139,12 @@
     "type": "boolean"
   },
 
+  "metadata": {
+    "hidden": true,
+    "default": true,
+    "type": "boolean"
+  },
+
   "ast": {
     "hidden": true,
     "default": true,
@@ -179,6 +185,7 @@
   },
 
   "metadataUsedHelpers": {
+    "deprecated": "Not required anymore as this is enabled by default",
     "type": "boolean",
     "default": false,
     "hidden": true
