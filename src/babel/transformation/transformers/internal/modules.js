@@ -19,17 +19,7 @@ export var metadata = {
   group: "builtin-setup"
 };
 
-export function ImportDeclaration(node, parent, scope, file) {
-  if (node.source) {
-    node.source.value = file.resolveModuleSource(node.source.value);
-  }
-}
-
-export { ImportDeclaration as ExportAllDeclaration };
-
 export function ExportDefaultDeclaration(node, parent, scope) {
-  ImportDeclaration.apply(this, arguments);
-
   var declar = node.declaration;
 
   if (t.isClassDeclaration(declar)) {
@@ -62,8 +52,6 @@ function buildExportSpecifier(id) {
 }
 
 export function ExportNamedDeclaration(node, parent, scope) {
-  ImportDeclaration.apply(this, arguments);
-
   var declar = node.declaration;
 
   if (t.isClassDeclaration(declar)) {

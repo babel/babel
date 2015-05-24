@@ -1,9 +1,10 @@
 import * as virtualTypes from "./path/virtual-types";
 import * as messages from "../messages";
 import * as t from "../types";
+import clone from "lodash/lang/clone";
 import esquery from "esquery";
 
-export function explode(visitor, mergeConflicts) {
+export function explode(visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;
 
@@ -59,17 +60,15 @@ export function explode(visitor, mergeConflicts) {
     var aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
     if (!aliases) continue;
 
-    // clear it form the visitor
+    // clear it from the visitor
     delete visitor[nodeType];
 
     for (var alias of (aliases: Array)) {
       var existing = visitor[alias];
       if (existing) {
-        if (mergeConflicts) {
-          mergePair(existing, fns);
-        }
+        mergePair(existing, fns);
       } else {
-        visitor[alias] = fns;
+        visitor[alias] = clone(fns);
       }
     }
   }
@@ -172,6 +171,6 @@ function shouldIgnoreKey(key) {
 
 function mergePair(dest, src) {
   for (var key in src) {
-    dest[key] = (dest[key] || []).concat(src[key]);
+    dest[key] = [].concat(dest[key] || [], src[key]);
   }
 }
