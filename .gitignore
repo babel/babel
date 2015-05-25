@@ -8,10 +8,10 @@ test/core/tmp
 /browser.js
 /browser-polyfill.js
 /runtime.js
-coverage
-dist
-.package.json
-packages/babel-runtime/core-js
-packages/babel-runtime/helpers/*.js
-packages/babel-runtime/regenerator/*.js
-lib
+/coverage
+/dist
+/.package.json
+/packages/babel-runtime/core-js
+/packages/babel-runtime/helpers/*.js
+/packages/babel-runtime/regenerator/*.js
+/lib
