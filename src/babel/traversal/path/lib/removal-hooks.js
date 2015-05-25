@@ -20,31 +20,6 @@ import * as t from "../../../types";
 // pre hooks should be used for either rejecting removal or delegating removal to a replacement
 export var pre = [
   function (self) {
-    if (self.isClassDeclaration() || self.isFunctionDeclaration()) {
-      // removing a class/function declaration so we need to remove it's binding
-      self.scope.parent.removeBinding(self.id.name);
-    }
-  },
-
-  function (self) {
-    if (self.isVariableDeclaration()) {
-      // we're removing a variable declaration so remove each declarator separately to call
-      // the specific hooks
-      var declarators = self.get("declarations");
-      for (var declarator of (declarators: Array)) {
-        declarator.remove();
-      }
-      return true;
-    } else if (self.isVariableDeclarator()) {
-      // we're removing a variable declarator so remove all it's bindings
-      var ids = this.getBindingIdentifiers();
-      for (var name in ids) {
-        self.scope.removeBinding(name);
-      }
-    }
-  },
-
-  function (self) {
     if (self.key === "body" && (self.isBlockStatement() || self.isClassBody())) {
       // function () NODE
       // class NODE
