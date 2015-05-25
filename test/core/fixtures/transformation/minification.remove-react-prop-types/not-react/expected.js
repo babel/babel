@@ -2,6 +2,6 @@
 
 var foo = {
   propTypes: {
-    foo: 'bar'
+    foo: "bar"
   }
 };
