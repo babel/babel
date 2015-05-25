@@ -108,6 +108,7 @@ export function setScope(file?) {
 
   var target = this.context || this.parentPath;
   this.scope = NodePath.getScope(this, target && target.scope, file);
+  if (this.scope) this.scope.init();
 }
 
 /**
@@ -137,7 +138,14 @@ export function setContext(context, file) {
  * Description
  */
 
-export function update() {
+export function resync() {
+  if (this.removed) return;
+
+  this._resyncContainer();
+  this._resyncKey();
+}
+
+export function _resyncKey() {
   if (this.node === this.container[this.key]) return;
 
   // grrr, path key is out of sync. this is likely due to a modification to the AST
@@ -158,6 +166,17 @@ export function update() {
   }
 
   throw new Error(messages.get("lostTrackNodePath"));
+}
+
+export function _resyncContainer() {
+  var containerKey = this.containerKey;
+  var parentPath   = this.parentPath;
+  if (!containerKey || !parentPath) return;
+
+  var newContainer = parentPath.node[containerKey];
+  if (!newContainer || this.container === newContainer) return;
+
+  this.container = newContainer;
 }
 
 /**

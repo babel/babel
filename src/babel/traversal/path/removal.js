@@ -5,18 +5,23 @@ import * as removalHooks from "./lib/removal-hooks";
  */
 
 export function remove() {
-  if (this._callRemovalHooks("pre")) return;
+  this.resync();
+
+  if (this._callRemovalHooks("pre")) {
+    this._markRemoved();
+    return;
+  }
 
   this.shareCommentsWithSiblings();
   this._remove();
-  this.removed = true;
+  this._markRemoved();
 
   this._callRemovalHooks("post");
 }
 
 export function _callRemovalHooks(position) {
   for (var fn of (removalHooks[position]: Array)) {
-    if (fn(this, this.parentPath)) return;
+    if (fn(this, this.parentPath)) return true;
   }
 }
 
@@ -27,7 +32,11 @@ export function _remove() {
   } else {
     this.container[this.key] = null;
   }
+}
+
+export function _markRemoved() {
   this.node = null;
+  this.removed = true;
 }
 
 /**

@@ -55,7 +55,13 @@ export function getCompletionRecords(): Array<NodePath> {
  */
 
 export function getSibling(key) {
-  return NodePath.get(this.parentPath, this.parent, this.container, key, this.file);
+  return NodePath.get({
+    parentPath: this.parentPath,
+    parent: this.parent,
+    container: this.container,
+    containerKey: this.containerKey,
+    key: key
+  });
 }
 
 /**
@@ -82,10 +88,21 @@ export function _getKey(key) {
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
     return container.map((_, i) => {
-      return NodePath.get(this, node, container, i).setContext();
+      return NodePath.get({
+        containerKey: key,
+        parentPath: this,
+        parent: node,
+        container: container,
+        key: i
+      }).setContext();
     });
   } else {
-    return NodePath.get(this, node, node, key).setContext();
+    return NodePath.get({
+      parentPath: this,
+      parent: node,
+      container: node,
+      key: key
+    }).setContext();
   }
 }
 

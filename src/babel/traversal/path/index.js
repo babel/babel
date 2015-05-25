@@ -5,18 +5,19 @@ import Scope from "../scope";
 import * as t from "../../types";
 
 export default class NodePath {
-  constructor(parent, container) {
-    this.container = container;
-    this.contexts  = [];
-    this.parent    = parent;
-    this.data      = {};
+  constructor(parent, container, containerKey) {
+    this.containerKey = containerKey;
+    this.container    = container;
+    this.contexts     = [];
+    this.parent       = parent;
+    this.data         = {};
   }
 
   /**
    * Description
    */
 
-  static get(parentPath: NodePath, parent, container, key) {
+  static get({ parentPath, parent, container, containerKey, key }) {
     var targetNode = container[key];
     var paths = container._paths = container._paths || [];
     var path;
@@ -30,7 +31,7 @@ export default class NodePath {
     }
 
     if (!path) {
-      path = new NodePath(parent, container);
+      path = new NodePath(parent, container, containerKey);
       paths.push(path);
     }
 

@@ -462,7 +462,12 @@ export default class File {
   }
 
   _addAst(ast) {
-    this.path  = NodePath.get(null, ast, ast, "program", this).setContext(null, this);
+    this.path  = NodePath.get({
+      parentPath: null,
+      parent: ast,
+      container: ast,
+      key: "program"
+    }).setContext(null, this);
     this.scope = this.path.scope;
     this.ast   = ast;
   }

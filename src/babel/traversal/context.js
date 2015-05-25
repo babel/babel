@@ -14,15 +14,21 @@ export default class TraversalContext {
     return !!(this.opts.enter || this.opts.exit || this.opts[node.type] || (keys && keys.length));
   }
 
-  create(node, obj, key) {
-    var path = NodePath.get(this.parentPath, node, obj, key);
+  create(node, obj, key, containerKey) {
+    var path = NodePath.get({
+      parentPath: this.parentPath,
+      parent: node,
+      container: obj,
+      key: key,
+      containerKey: containerKey
+    });
     path.unshiftContext(this);
     return path;
   }
 
-  visitMultiple(nodes, node) {
+  visitMultiple(container, parent, containerKey) {
     // nothing to traverse!
-    if (nodes.length === 0) return false;
+    if (container.length === 0) return false;
 
     var visited = [];
 
@@ -30,16 +36,16 @@ export default class TraversalContext {
     var stop  = false;
 
     // build up initial queue
-    for (let i = 0; i < nodes.length; i++) {
-      var self = nodes[i];
+    for (let key = 0; key < container.length; key++) {
+      var self = container[key];
       if (self && this.shouldVisit(self)) {
-        queue.push(this.create(node, nodes, i));
+        queue.push(this.create(parent, container, key, containerKey));
       }
     }
 
     // visit the queue
     for (let path of (queue: Array)) {
-      path.update();
+      path.resync();
 
       if (visited.indexOf(path.node) >= 0) continue;
       visited.push(path.node);

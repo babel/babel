@@ -40,11 +40,17 @@ export function _containerInsert(from, nodes) {
     this.container.splice(to, 0, node);
 
     if (this.context) {
-      var path = this.context.create(this.parent, this.container, to);
+      var path = this.context.create(this.parent, this.container, to, this.containerKey);
       paths.push(path);
       this.queueNode(path);
     } else {
-      paths.push(NodePath.get(this, node, this.container, to));
+      paths.push(NodePath.get({
+        parentPath: this,
+        parent: node,
+        container: this.container,
+        containerKey: this.containerKey,
+        key: to
+      }));
     }
   }
 
@@ -145,7 +151,13 @@ export function unshiftContainer(containerKey, nodes) {
   // doesn't matter, our nodes will be inserted anyway
 
   var container = this.node[containerKey];
-  var path      = NodePath.get(this, this.node, container, 0);
+  var path      = NodePath.get({
+    parentPath: this,
+    parent: this.node,
+    container: container,
+    containerKey,
+    key: 0
+  });
 
   return path.insertBefore(nodes);
 }
@@ -162,7 +174,13 @@ export function pushContainer(containerKey, nodes) {
 
   var container = this.node[containerKey];
   var i         = container.length;
-  var path      = NodePath.get(this, this.node, container, i);
+  var path      = NodePath.get({
+    parentPath: this,
+    parent: this.node,
+    container: container,
+    containerKey,
+    key: i
+  });
 
   return path.replaceWith(nodes, true);
 }

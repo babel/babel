@@ -35,6 +35,8 @@ var hoistVariablesVisitor = {
  */
 
 export function replaceWithMultiple(nodes: Array<Object>) {
+  this.resync();
+
   nodes = this._verifyNodeList(nodes);
   t.inheritsComments(nodes[0], this.node);
   this.node = this.container[this.key] = null;
@@ -47,6 +49,8 @@ export function replaceWithMultiple(nodes: Array<Object>) {
  */
 
 export function replaceWithSourceString(replacement) {
+  this.resync();
+
   try {
     replacement = `(${replacement})`;
     replacement = parse(replacement);
@@ -69,6 +73,8 @@ export function replaceWithSourceString(replacement) {
  */
 
 export function replaceWith(replacement, whateverAllowed) {
+  this.resync();
+
   if (this.removed) {
     throw new Error("You can't replace this node, we've already removed it");
   }
@@ -129,6 +135,8 @@ export function replaceWith(replacement, whateverAllowed) {
  */
 
 export function replaceExpressionWithStatements(nodes: Array) {
+  this.resync();
+
   var toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
   if (toSequenceExpression) {
@@ -167,6 +175,8 @@ export function replaceExpressionWithStatements(nodes: Array) {
  */
 
 export function replaceInline(nodes) {
+  this.resync();
+
   if (Array.isArray(nodes)) {
     if (Array.isArray(this.container)) {
       nodes = this._verifyNodeList(nodes);

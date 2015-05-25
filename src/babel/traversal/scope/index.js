@@ -146,8 +146,6 @@ export default class Scope {
     this.parentBlock = path.parent;
     this.block       = path.node;
     this.path        = path;
-
-    this.crawl();
   }
 
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
@@ -552,9 +550,19 @@ export default class Scope {
     if (t.isIdentifier(node)) {
       var bindingInfo = this.getBinding(node.name);
       return bindingInfo && bindingInfo.constant;
+    } else if (t.isClass(node)) {
+      return !node.superClass;
     } else {
       return t.isPure(node);
     }
+  }
+
+  /**
+   * Description
+   */
+
+  init() {
+    if (!this.references) this.crawl();
   }
 
   /**
@@ -613,7 +621,7 @@ export default class Scope {
       for (let param of (params: Array)) {
         this.registerBinding("param", param);
       }
-      this.traverse(path.get("body").node, blockVariableVisitor, this);
+      path.get("body").traverse(blockVariableVisitor, this);
     }
 
     // Program, Function - var variables

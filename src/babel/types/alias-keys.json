@@ -41,8 +41,8 @@
   "SpreadProperty":  ["UnaryLike"],
   "SpreadElement":   ["UnaryLike"],
 
-  "ClassDeclaration": ["Scopable", "Class", "Pure", "Statement", "Declaration"],
-  "ClassExpression":  ["Scopable", "Class", "Pure", "Expression"],
+  "ClassDeclaration": ["Scopable", "Class", "Statement", "Declaration"],
+  "ClassExpression":  ["Scopable", "Class", "Expression"],
 
   "ForOfStatement": ["Scopable", "Statement", "For", "Loop"],
   "ForInStatement": ["Scopable", "Statement", "For", "Loop"],
