@@ -1,5 +1,4 @@
 import * as messages from "../../../messages";
-import * as t from "../../../types";
 
 export function AssignmentExpression(node, parent, scope, file) {
   var ids = this.getBindingIdentifiers();

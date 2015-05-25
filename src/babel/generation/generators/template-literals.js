@@ -1,5 +1,3 @@
-import each from "lodash/collection/each";
-
 export function TaggedTemplateExpression(node, print) {
   print(node.tag);
   print(node.quasi);

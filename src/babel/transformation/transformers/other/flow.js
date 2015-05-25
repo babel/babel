@@ -1,5 +1,3 @@
-import * as t from "../../../types";
-
 export function Flow(node) {
   this.remove();
 }

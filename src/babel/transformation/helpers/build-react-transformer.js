@@ -10,7 +10,7 @@ import * as react from "./react";
 import * as t from "../../types";
 
 export default function (exports, opts) {
-  exports.JSXIdentifier = function (node, parent) {
+  exports.JSXIdentifier = function (node) {
     if (node.name === "this" && this.isReferenced()) {
       return t.thisExpression();
     } else if (esutils.keyword.isIdentifierNameES6(node.name)) {
@@ -20,7 +20,7 @@ export default function (exports, opts) {
     }
   };
 
-  exports.JSXNamespacedName = function (node, parent, scope, file) {
+  exports.JSXNamespacedName = function () {
     throw this.errorWithNode(messages.get("JSXNamespacedTags"));
   };
 

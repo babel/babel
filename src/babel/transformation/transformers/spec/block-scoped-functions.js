@@ -1,6 +1,6 @@
 import * as t from "../../../types";
 
-function statementList(key, path, file) {
+function statementList(key, path) {
   var paths = path.get(key);
 
   for (var i = 0; i < paths.length; i++) {
@@ -23,14 +23,14 @@ function statementList(key, path, file) {
   }
 }
 
-export function BlockStatement(node, parent, scope, file) {
+export function BlockStatement(node, parent) {
   if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
     return;
   }
 
-  statementList("body", this, file);
+  statementList("body", this);
 }
 
-export function SwitchCase(node, parent, scope, file) {
-  statementList("consequent", this, file);
+export function SwitchCase() {
+  statementList("consequent", this);
 }

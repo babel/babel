@@ -1,11 +1,6 @@
-import includes from "lodash/collection/includes";
-import traverse from "../../../../traversal";
-import * as util from  "../../../../util";
 import has from "lodash/object/has";
 import * as t from "../../../../types";
 import definitions from "./definitions";
-
-var isSymbolIterator = t.buildMatchMemberExpression("Symbol.iterator");
 
 const RUNTIME_MODULE_NAME = "babel-runtime";
 

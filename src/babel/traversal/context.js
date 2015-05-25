@@ -1,5 +1,4 @@
 import NodePath from "./path";
-import compact from "lodash/array/compact";
 import * as t from "../types";
 
 export default class TraversalContext {
@@ -21,7 +20,7 @@ export default class TraversalContext {
     return path;
   }
 
-  visitMultiple(nodes, node, key) {
+  visitMultiple(nodes, node) {
     // nothing to traverse!
     if (nodes.length === 0) return false;
 

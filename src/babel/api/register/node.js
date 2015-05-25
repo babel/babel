@@ -6,7 +6,6 @@ import * as babel from "../node";
 import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
-import slash from "slash";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,

@@ -1,6 +1,5 @@
 import callDelegate from "../../helpers/call-delegate";
 import * as util from  "../../../util";
-import traverse from  "../../../traversal";
 import * as t from "../../../types";
 
 var hasDefaults = function (node) {

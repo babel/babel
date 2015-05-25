@@ -69,12 +69,6 @@ var clearVisitor = {
   exit: clearNode
 };
 
-function clearComments(comments) {
-  for (var i = 0; i < comments.length; i++) {
-    clearNode(comments[i]);
-  }
-}
-
 traverse.removeProperties = function (tree) {
   traverse(tree, clearVisitor);
   clearNode(tree);

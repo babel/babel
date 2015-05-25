@@ -33,7 +33,7 @@ export function ReferencedIdentifier(node, parent, scope) {
   }
   if (!replacement) return;
 
-  if (this.findParent((node) => replacement)) {
+  if (this.findParent((node) => node === replacement)) {
     return;
   }
 
@@ -67,7 +67,7 @@ export function ConditionalExpression(node, parent, scope) {
 }
 
 export var IfStatement = {
-  exit(node, parent, scope) {
+  exit(node) {
     var consequent = node.consequent;
     var alternate  = node.alternate;
     var test = node.test;

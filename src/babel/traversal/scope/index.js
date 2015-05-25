@@ -1,5 +1,4 @@
 import includes from "lodash/collection/includes";
-import { explode } from "../visitors";
 import traverse from "../index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../../messages";
@@ -8,7 +7,6 @@ import globals from "globals";
 import flatten from "lodash/array/flatten";
 import extend from "lodash/object/extend";
 import object from "../../helpers/object";
-import each from "lodash/collection/each";
 import * as t from "../../types";
 
 var functionVariableVisitor = {
@@ -55,7 +53,7 @@ var programReferenceVisitor = {
   },
 
   ExportDeclaration: {
-    exit(node, parent, scope, state) {
+    exit(node, parent, scope) {
       var declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         scope.getBinding(declar.id.name).reference();
@@ -74,15 +72,15 @@ var programReferenceVisitor = {
     state.addGlobal(node);
   },
 
-  AssignmentExpression(node, parent, scope, state) {
+  AssignmentExpression(node, parent, scope) {
     scope.registerConstantViolation(this.get("left"), this.get("right"));
   },
 
-  UpdateExpression(node, parent, scope, state) {
+  UpdateExpression(node, parent, scope) {
     scope.registerConstantViolation(this.get("argument"), null);
   },
 
-  UnaryExpression(node, parent, scope, state) {
+  UnaryExpression(node, parent, scope) {
     if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
   }
 };

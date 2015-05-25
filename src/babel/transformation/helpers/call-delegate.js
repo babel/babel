@@ -1,4 +1,3 @@
-import traverse from "../../traversal";
 import * as t from "../../types";
 
 var visitor = {

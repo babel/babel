@@ -498,7 +498,6 @@ class DestructuringTransformer {
     // trying to destructure a value that we can't evaluate more than once so we
     // need to save it to a variable
 
-    var shouldMemoise = true;
     if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
       var memo = this.scope.maybeGenerateMemoised(ref, true);
       if (memo) {

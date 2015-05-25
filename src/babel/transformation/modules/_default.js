@@ -1,12 +1,11 @@
 import * as messages from "../../messages";
-import traverse from "../../traversal";
 import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as util from  "../../util";
 import * as t from "../../types";
 
 var remapVisitor = {
-  enter(node, parent, scope, formatter) {
+  enter(node) {
     if (node._skipModulesRemap) {
       return this.skip();
     }

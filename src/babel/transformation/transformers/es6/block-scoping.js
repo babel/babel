@@ -597,7 +597,6 @@ class BlockScoping {
       t.variableDeclarator(ret, call)
     ]));
 
-    var loop = this.loop;
     var retCheck;
     var has = this.has;
     var cases = [];

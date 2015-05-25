@@ -4,9 +4,6 @@ import * as nameMethod from "../../helpers/name-method";
 import * as defineMap from "../../helpers/define-map";
 import * as messages from "../../../messages";
 import * as util from  "../../../util";
-import traverse from "../../../traversal";
-import each from "lodash/collection/each";
-import has from "lodash/object/has";
 import * as t from "../../../types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
@@ -30,22 +27,6 @@ var collectPropertyReferencesVisitor = {
 
       if (this.isReferenced() && scope.getBinding(node.name) === state.scope.getBinding(node.name)) {
         state.references[node.name] = true;
-      }
-    }
-  }
-};
-
-var constructorVisitor = {
-  ThisExpression: {
-    enter(node, parent, scope, ref) {
-      return ref;
-    }
-  },
-
-  Function: {
-    enter(node) {
-      if (!node.shadow) {
-        this.skip();
       }
     }
   }
@@ -141,8 +122,6 @@ class ClassTransformer {
 
   run() {
     var superName = this.superName;
-    var className = this.className;
-    var classBody = this.node.body.body;
     var classRef  = this.classRef;
     var file      = this.file;
 
@@ -276,9 +255,6 @@ class ClassTransformer {
 
   buildBody() {
     var constructorBody = this.constructorBody;
-    var constructor     = this.constructor;
-    var className       = this.className;
-    var superName       = this.superName;
     var classBody       = this.node.body.body;
     var body            = this.body;
 
@@ -501,8 +477,6 @@ class ClassTransformer {
    */
 
   pushProperty(node: { type: "ClassProperty" }) {
-    var key;
-
     this.scope.traverse(node, collectPropertyReferencesVisitor, {
       references: this.instancePropRefs,
       scope:      this.scope

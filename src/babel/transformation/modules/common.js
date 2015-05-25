@@ -1,5 +1,4 @@
 import DefaultFormatter from "./_default";
-import includes from "lodash/collection/includes";
 import * as util from  "../../util";
 import * as t from "../../types";
 
@@ -84,7 +83,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
     }, true));
   }
 
-  exportSpecifier(specifier, node, nodes) {
+  exportSpecifier(specifier) {
     if (this.doDefaultExportInterop(specifier)) {
       this.hasDefaultOnlyExport = true;
     }
@@ -92,7 +91,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
     DefaultFormatter.prototype.exportSpecifier.apply(this, arguments);
   }
 
-  exportDeclaration(node, nodes) {
+  exportDeclaration(node) {
     if (this.doDefaultExportInterop(node)) {
       this.hasDefaultOnlyExport = true;
     }
@@ -101,8 +100,6 @@ export default class CommonJSFormatter extends DefaultFormatter {
   }
 
   _getExternalReference(node, nodes) {
-    var source = node.source.value;
-
     var call = t.callExpression(t.identifier("require"), [node.source]);
     var uid;
 

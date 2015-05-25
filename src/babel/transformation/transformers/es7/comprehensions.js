@@ -10,7 +10,7 @@ export var metadata = {
 export function ComprehensionExpression(node, parent, scope, file) {
   var callback = array;
   if (node.generator) callback = generator;
-  return callback(node, parent, scope, file);
+  return callback(node, parent, scope);
 }
 
 function generator(node) {
@@ -25,7 +25,7 @@ function generator(node) {
   return t.callExpression(container, []);
 }
 
-function array(node, parent, scope, file) {
+function array(node, parent, scope) {
   var uid = scope.generateUidIdentifierBasedOnNode(parent);
 
   var container = util.template("array-comprehension-container", {

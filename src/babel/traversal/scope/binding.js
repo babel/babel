@@ -86,7 +86,7 @@ export default class Binding {
    * Description
    */
 
-  isCompatibleWithType(newType): boolean {
+  isCompatibleWithType(): boolean {
     return false;
   }
 }

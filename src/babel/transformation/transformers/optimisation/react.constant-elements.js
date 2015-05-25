@@ -1,5 +1,3 @@
-import * as react from "../../helpers/react";
-
 export var metadata = {
   optional: true
 };

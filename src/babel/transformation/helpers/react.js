@@ -1,4 +1,3 @@
-import isString from "lodash/lang/isString";
 import * as t from "../../types";
 
 var isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
@@ -24,10 +23,6 @@ export var isReactComponent = t.buildMatchMemberExpression("React.Component");
 
 export function isCompatTag(tagName) {
   return tagName && /^[a-z]|\-/.test(tagName);
-}
-
-function isStringLiteral(node) {
-  return t.isLiteral(node) && isString(node.value);
 }
 
 function cleanJSXElementLiteralChild(child, args) {

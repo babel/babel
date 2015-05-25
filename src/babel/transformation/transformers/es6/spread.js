@@ -1,4 +1,3 @@
-import includes from "lodash/collection/includes";
 import * as t from "../../../types";
 
 function getSpreadLiteral(spread, scope) {

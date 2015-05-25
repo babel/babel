@@ -1,7 +1,7 @@
 import * as t from "../../types";
 
 var awaitVisitor = {
-  enter(node, parent, scope, state) {
+  enter(node) {
     if (t.isFunction(node)) this.skip();
 
     if (t.isAwaitExpression(node)) {

@@ -4,7 +4,6 @@ import isFunction from "lodash/lang/isFunction";
 import traverse from "../traversal";
 import isObject from "lodash/lang/isObject";
 import assign from "lodash/object/assign";
-import * as acorn from "../../acorn";
 import File from "./file";
 import each from "lodash/collection/each";
 

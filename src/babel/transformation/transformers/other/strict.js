@@ -1,4 +1,3 @@
-import * as messages from "../../../messages";
 import * as t from "../../../types";
 
 export var metadata = {
@@ -8,7 +7,7 @@ export var metadata = {
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassExpression", "ClassDeclaration"];
 
 export var Program = {
-  enter(program, parent, scope, file) {
+  enter(program) {
     var first = program.body[0];
 
     var directive;

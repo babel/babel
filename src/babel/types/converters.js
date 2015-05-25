@@ -3,7 +3,6 @@ import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
 import traverse from "../traversal";
-import each from "lodash/collection/each";
 import * as t from "./index";
 
 /**

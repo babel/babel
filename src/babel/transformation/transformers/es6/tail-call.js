@@ -1,7 +1,6 @@
 import reduceRight from "lodash/collection/reduceRight";
 import * as messages from "../../../messages";
 import flatten from "lodash/array/flatten";
-import traverse from "../../../traversal";
 import * as util from  "../../../util";
 import map from "lodash/collection/map";
 import * as t from "../../../types";
@@ -21,7 +20,7 @@ function returnBlock(expr) {
 }
 
 var visitor = {
-  enter(node, parent, scope, state) {
+  enter(node, parent) {
     if (t.isTryStatement(parent)) {
       if (node === parent.block) {
         this.skip();
@@ -35,7 +34,7 @@ var visitor = {
     return state.subTransform(node.argument);
   },
 
-  Function(node, parent, scope, state) {
+  Function() {
     this.skip();
   },
 
@@ -128,7 +127,6 @@ class TailCallTransformer {
   }
 
   run() {
-    var scope = this.scope;
     var node  = this.node;
 
     // only tail recursion can be optimized as for now, so we can skip anonymous

@@ -3,7 +3,6 @@ import AMDFormatter from "./amd";
 import object from  "../../helpers/object";
 import * as util from  "../../util";
 import last from "lodash/array/last";
-import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import * as t from "../../types";
 

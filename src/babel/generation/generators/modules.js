@@ -1,4 +1,3 @@
-import each from "lodash/collection/each";
 import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {

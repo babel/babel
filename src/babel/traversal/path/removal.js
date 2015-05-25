@@ -1,5 +1,4 @@
 import * as removalHooks from "./lib/removal-hooks";
-import * as t from "../../types";
 
 /**
  * Description

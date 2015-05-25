@@ -9,7 +9,6 @@ import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
 import resolveRc from "../../tools/resolve-rc";
 import sourceMap from "source-map";
-import transform from "./../index";
 import generate from "../../generation";
 import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
@@ -18,12 +17,10 @@ import traverse from "../../traversal";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
 import parse from "../../helpers/parse";
-import Scope from "../../traversal/scope";
 import merge from "../../helpers/merge";
 import slash from "slash";
 import clone from "lodash/lang/clone";
 import * as util from  "../../util";
-import * as api from  "../../api/node";
 import path from "path";
 import * as t from "../../types";
 
@@ -348,8 +345,6 @@ export default class File {
       throw new ReferenceError(`Unknown helper ${name}`);
     }
 
-    var program = this.ast.program;
-
     var declar = this.declarations[name];
     if (declar) return declar;
 
@@ -491,7 +486,7 @@ export default class File {
     this.metadata.modules = modules;
   }
 
-  transform(dependencyGraph) {
+  transform() {
     this.call("pre");
     for (var pass of (this.transformerStack: Array)) {
       pass.transform();
@@ -534,7 +529,7 @@ export default class File {
     }
   }
 
-  addCode(code: string, parseCode?) {
+  addCode(code: string) {
     code = (code || "") + "";
     code = this.parseInputSourceMap(code);
     this.code = code;
