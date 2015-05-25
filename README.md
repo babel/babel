@@ -13,5 +13,9 @@
 </p>
 
 <p align="center">
+  Issues without instructions to reproduce <strong>will be immediately closed<strong>.
+</p>
+
+<p align="center">
   For documentation and website issues please visit the <a href="https://github.com/babel/babel.github.io">babel.github.io</a> repo.
 </p>

@@ -1,3 +1,7 @@
+# NOTE: BEFORE OPENING AN ISSUE PLEASE SEE THE [README](https://github.com/babel/babel#readme).
+
+----
+
 <p align="center">
    <strong><a href="#setup">Setup</a></strong>
    |
