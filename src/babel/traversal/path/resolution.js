@@ -39,25 +39,27 @@ export function getTypeAnnotation(): {
  * Description
  */
 
-export function resolve(): ?NodePath {
+export function resolve(resolved?): ?NodePath {
+  // detect infinite recursion
+  if (resolved && resolved.indexOf(this) >= 0) return;
+
+  resolved = resolved || [];
+  resolved.push(this);
+
   if (this.isVariableDeclarator()) {
     if (this.get("id").isIdentifier()) {
-      return this.get("init").resolve();
+      return this.get("init").resolve(resolved);
     } else {
-      // otherwise it's a request for a destructuring declarator and i'm not
-      // ready to resolve those just yet
+      // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isIdentifier()) {
     var binding = this.scope.getBinding(this.node.name);
     if (!binding || !binding.constant) return;
 
-    // todo: take into consideration infinite recursion #1149
-    return;
-
     if (binding.path === this) {
       return this;
     } else {
-      return binding.path.resolve();
+      return binding.path.resolve(resolved);
     }
   } else if (this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
@@ -67,7 +69,7 @@ export function resolve(): ?NodePath {
     if (!t.isLiteral(targetKey)) return;
     var targetName = targetKey.value;
 
-    var target = this.get("object").resolve();
+    var target = this.get("object").resolve(resolved);
     if (!target || !target.isObjectExpression()) return;
 
     var props = target.get("properties");
