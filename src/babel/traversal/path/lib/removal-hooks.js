@@ -24,25 +24,21 @@ export var pre = [
 // post hooks should be used for cleaning up parents
 export var post = [
   function (self, parent) {
-    // just remove a declaration for an export so this is no longer valid
-    if (self.key === "declaration" && parent.isExportDeclaration()) {
-      parent.remove();
-      return true;
-    }
-  },
+    var removeParent = false;
 
-  function (self, parent) {
-    // we've just removed the last declarator of a variable declaration so there's no point in
-    // keeping it
-    if (parent.isVariableDeclaration() && parent.node.declarations.length === 0) {
-      parent.remove();
-      return true;
-    }
-  },
+    // just remove a declaration for an export as this is no longer valid
+    removeParent = removeParent || (self.key === "declaration" && parent.isExportDeclaration());
 
-  function (self, parent) {
-    // we're the child of an expression statement so we should remove the parent
-    if (parent.isExpressionStatement()) {
+    // stray labels with no body
+    removeParent = removeParent || (self.key === "body" && parent.isLabeledStatement());
+
+    // remove an entire declaration if there are no declarators left
+    removeParent = removeParent || (parent.isVariableDeclaration() && parent.node.declarations.length === 0);
+
+    // remove the entire expression statement if there's no expression
+    removeParent = removeParent || (self.key === "expression" && parent.isExpressionStatement());
+
+    if (removeParent) {
       parent.remove();
       return true;
     }

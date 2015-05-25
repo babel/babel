@@ -135,7 +135,9 @@ export function setContext(context, file) {
 }
 
 /**
- * Description
+ * Here we resync the node paths `key` and `container`. If they've changed according
+ * to what we have stored internally then we attempt to resync by crawling and looking
+ * for the new values.
  */
 
 export function resync() {
@@ -149,7 +151,7 @@ export function _resyncKey() {
   if (this.node === this.container[this.key]) return;
 
   // grrr, path key is out of sync. this is likely due to a modification to the AST
-  // not through our path APIs
+  // not done through our path APIs
 
   if (Array.isArray(this.container)) {
     for (var i = 0; i < this.container.length; i++) {
@@ -175,6 +177,8 @@ export function _resyncContainer() {
 
   var newContainer = parentPath.node[containerKey];
   if (!newContainer || this.container === newContainer) return;
+
+  // container is out of sync. this is likely the result of it being reassigned
 
   this.container = newContainer;
 }
