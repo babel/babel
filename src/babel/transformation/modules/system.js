@@ -49,7 +49,7 @@ var hoistFunctionsVisitor = {
 
     if (t.isFunctionDeclaration(node) || state.formatter._canHoist(node)) {
       state.handlerBody.push(node);
-      this.remove();
+      this.dangerouslyRemove();
     }
   }
 };
@@ -68,7 +68,7 @@ var runnerSettersVisitor = {
         state.nodes.push(node);
       }
 
-      this.remove();
+      this.dangerouslyRemove();
     }
   }
 };

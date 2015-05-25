@@ -4,5 +4,5 @@ export var metadata = {
 };
 
 export function DebuggerStatement(node) {
-  this.remove();
+  this.dangerouslyRemove();
 }

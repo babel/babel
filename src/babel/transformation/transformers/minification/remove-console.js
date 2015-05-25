@@ -8,9 +8,9 @@ export var metadata = {
 export function CallExpression(node, parent) {
   if (this.get("callee").matchesPattern("console", true)) {
     if (t.isExpressionStatement(parent)) {
-      this.parentPath.remove();
+      this.parentPath.dangerouslyRemove();
     } else {
-      this.remove();
+      this.dangerouslyRemove();
     }
   }
 }

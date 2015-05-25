@@ -5,6 +5,15 @@ import * as removalHooks from "./lib/removal-hooks";
  */
 
 export function remove() {
+  console.trace("Path#remove has been renamed to Path#dangerouslyRemove, removing a node is extremely dangerous so please refrain using it.");
+  return this.dangerouslyRemove();
+}
+
+/**
+ * Description
+ */
+
+export function dangerouslyRemove() {
   this.resync();
 
   if (this._callRemovalHooks("pre")) {

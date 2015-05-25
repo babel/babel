@@ -41,7 +41,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   t.inheritsComments(nodes[0], this.node);
   this.node = this.container[this.key] = null;
   this.insertAfter(nodes);
-  if (!this.node) this.remove();
+  if (!this.node) this.dangerouslyRemove();
 }
 
 /**
@@ -80,7 +80,7 @@ export function replaceWith(replacement, whateverAllowed) {
   }
 
   if (!replacement) {
-    throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
+    throw new Error("You passed `path.replaceWith()` a falsy node, use `path.dangerouslyRemove()` instead");
   }
 
   if (this.node === replacement) {
@@ -181,7 +181,7 @@ export function replaceInline(nodes) {
     if (Array.isArray(this.container)) {
       nodes = this._verifyNodeList(nodes);
       this._containerInsertAfter(nodes);
-      return this.remove();
+      return this.dangerouslyRemove();
     } else {
       return this.replaceWithMultiple(nodes);
     }

@@ -49,14 +49,14 @@ export function ReferencedIdentifier(node, parent, scope) {
 
   t.toExpression(replacement);
   scope.removeBinding(node.name);
-  binding.path.remove();
+  binding.path.dangerouslyRemove();
   return replacement;
 }
 
 export function FunctionDeclaration(node, parent, scope) {
   var bindingInfo = scope.getBinding(node.id.name);
   if (bindingInfo && !bindingInfo.referenced) {
-    this.remove();
+    this.dangerouslyRemove();
   }
 }
 
@@ -106,7 +106,7 @@ export var IfStatement = {
       if (alternate) {
         return toStatements(alternate);
       } else {
-        return this.remove();
+        return this.dangerouslyRemove();
       }
     }
 

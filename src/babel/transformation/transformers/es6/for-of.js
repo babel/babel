@@ -31,7 +31,7 @@ export function ForOfStatement(node, parent, scope, file) {
 
   if (build.replaceParent) {
     this.parentPath.replaceWithMultiple(build.node);
-    this.remove();
+    this.dangerouslyRemove();
   } else {
     return build.node;
   }
