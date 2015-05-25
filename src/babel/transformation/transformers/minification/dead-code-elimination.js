@@ -33,6 +33,16 @@ export function ReferencedIdentifier(node, parent, scope) {
   }
   if (!replacement) return;
 
+  // ensure it's a "pure" type
+  if (!scope.isPure(replacement)) return;
+
+  if (t.isClass(replacement) || t.isFunction(replacement)) {
+    // don't change this if it's in a different scope, this can be bad
+    // for performance since it may be inside a loop or deeply nested in
+    // hot code
+    if (!binding.path.scope.parent.is(scope)) return;
+  }
+
   if (this.findParent((node) => node === replacement)) {
     return;
   }

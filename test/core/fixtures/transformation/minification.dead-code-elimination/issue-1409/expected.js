@@ -1,6 +1,6 @@
 "use strict";
 
-var A = (function () {
+var a = new ((function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
@@ -12,6 +12,4 @@ var A = (function () {
     }
   }]);
   return A;
-})();
-
-var a = new A();
+})())();
