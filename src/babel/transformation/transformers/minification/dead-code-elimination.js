@@ -34,13 +34,13 @@ export function ReferencedIdentifier(node, parent, scope) {
   if (!replacement) return;
 
   // ensure it's a "pure" type
-  if (!scope.isPure(replacement)) return;
+  if (!scope.isPure(replacement, true)) return;
 
   if (t.isClass(replacement) || t.isFunction(replacement)) {
     // don't change this if it's in a different scope, this can be bad
     // for performance since it may be inside a loop or deeply nested in
     // hot code
-    if (!binding.path.scope.parent.is(scope)) return;
+    if (binding.path.scope.parent !== scope) return;
   }
 
   if (this.findParent((node) => node === replacement)) {
@@ -63,7 +63,7 @@ export function FunctionDeclaration(node, parent, scope) {
 export { FunctionDeclaration as ClassDeclaration };
 
 export function VariableDeclarator(node, parent, scope) {
-  if (!t.isIdentifier(node.id) || !scope.isPure(node.init)) return;
+  if (!t.isIdentifier(node.id) || !scope.isPure(node.init, true)) return;
   FunctionDeclaration.apply(this, arguments);
 }
 

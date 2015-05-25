@@ -5,8 +5,7 @@ export var metadata = {
   optional: true
 };
 
-export function Identifier(node, parent, scope, file) {
-  if (!this.isReferenced()) return;
+export function ReferencedIdentifier(node, parent, scope, file) {
   if (scope.hasBinding(node.name)) return;
 
   // get the closest declaration to offer as a suggestion

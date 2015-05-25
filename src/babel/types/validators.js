@@ -113,14 +113,6 @@ export function isReferenced(node: Object, parent: Object): boolean {
 }
 
 /**
- * Check if the input `node` is an `Identifier` and `isReferenced`.
- */
-
-export function isReferencedIdentifier(node: Object, parent: Object, opts?: Object): boolean {
-  return (t.isIdentifier(node, opts) || t.isJSXIdentifier(node, opts)) && t.isReferenced(node, parent);
-}
-
-/**
  * Check if the input `name` is a valid identifier name
  * and isn't a reserved word.
  */

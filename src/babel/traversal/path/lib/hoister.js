@@ -69,7 +69,7 @@ export default class PathHoister {
     if (scope.path.isFunction()) {
       if (this.hasOwnParamBindings(scope)) {
         // should ignore this scope since it's ourselves
-        if (this.scope.is(scope)) return;
+        if (this.scope === scope) return;
 
         // needs to be attached to the body
         return scope.path.get("body").get("body")[0];

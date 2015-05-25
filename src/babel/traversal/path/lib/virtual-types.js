@@ -2,8 +2,8 @@ import * as t from "../../../types";
 
 export var ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
-  checkPath(path, opts) {
-    return t.isReferencedIdentifier(path.node, path.parent, opts);
+  checkPath({ node, parent }, opts) {
+    return (t.isIdentifier(node, opts) || t.isJSXIdentifier(node, opts)) && t.isReferenced(node, parent);
   }
 };
 

@@ -137,7 +137,7 @@ export default class Scope {
     if (cached && cached.parent === parent) {
       return cached;
     } else {
-      //path.setData("scope", this);
+      path.setData("scope", this);
     }
 
     this.parent = parent;
@@ -149,7 +149,7 @@ export default class Scope {
   }
 
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
-  static contextVariables = ["this", "arguments", "super"];
+  static contextVariables = ["this", "arguments", "super", "undefined"];
 
   /**
    * Description
@@ -546,12 +546,14 @@ export default class Scope {
    * Description
    */
 
-  isPure(node) {
+  isPure(node, constantsOnly) {
     if (t.isIdentifier(node)) {
       var bindingInfo = this.getBinding(node.name);
-      return bindingInfo && bindingInfo.constant;
+      return !!bindingInfo && (!constantsOnly || (constantsOnly && bindingInfo.constant));
     } else if (t.isClass(node)) {
       return !node.superClass;
+    } else if (t.isBinary(node)) {
+      return this.isPure(node.left, constantsOnly) && this.isPure(node.right, constantsOnly);
     } else {
       return t.isPure(node);
     }
