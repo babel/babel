@@ -105,10 +105,8 @@
   runtime.async = function(innerFn, outerFn, self, tryLocsList) {
     return new Promise(function(resolve, reject) {
       var generator = wrap(innerFn, outerFn, self, tryLocsList);
-      var callNext = step.bind(generator, "next");
-      var callThrow = step.bind(generator, "throw");
 
-      function step(method, arg) {
+      var step = function(method, arg) {
         var record = tryCatch(generator[method], generator, arg);
         if (record.type === "throw") {
           reject(record.arg);
@@ -121,7 +119,14 @@
         } else {
           Promise.resolve(info.value).then(callNext, callThrow);
         }
+      };
+
+      if (typeof process !== "undefined" && process.domain) {
+        step = process.domain.bind(step);
       }
+
+      var callNext = step.bind(generator, "next");
+      var callThrow = step.bind(generator, "throw");
 
       callNext();
     });
