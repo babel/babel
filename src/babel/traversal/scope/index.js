@@ -46,7 +46,7 @@ var programReferenceVisitor = {
     }
   },
 
-  ForXStatement(node, parent, scope, state) {
+  ForXStatement(node, parent, scope) {
     var left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
       scope.registerConstantViolation(left);
