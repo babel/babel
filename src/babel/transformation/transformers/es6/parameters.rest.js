@@ -9,6 +9,13 @@ var memberExpressionOptimisationVisitor = {
       return this.skip();
     }
 
+    var stop = () => {
+      state.canOptimise = false;
+      this.stop();
+    };
+
+    if (this.isArrowFunctionExpression()) return stop();
+
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
     if (this.isFunctionDeclaration() || this.isFunctionExpression()) {
@@ -31,8 +38,7 @@ var memberExpressionOptimisationVisitor = {
       }
     }
 
-    state.canOptimise = false;
-    this.stop();
+    stop();
   }
 };
 
@@ -90,8 +96,7 @@ export function Func/*tion*/(node, parent, scope, file) {
 
   // we only have shorthands and there's no other references
   if (state.canOptimise && state.candidates.length) {
-    for (var i = 0; i < state.candidates.length; i++) {
-      var candidate = state.candidates[i];
+    for (var candidate of (state.candidates: Array)) {
       candidate.replaceWith(argsId);
       optimizeMemberExpression(candidate.parent, node.params.length);
     }
