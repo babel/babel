@@ -170,3 +170,40 @@ export function isUser() {
 export function isGenerated() {
   return !this.isUser();
 }
+
+/**
+ * Check if the currently assigned path references the `importName` of `moduleSource`.
+ */
+
+export function referencesImport(moduleSource, importName) {
+  if (!this.isReferencedIdentifier()) return false;
+
+  var binding = this.scope.getBinding(this.node.name);
+  if (!binding || binding.kind !== "module") return false;
+
+  var path = binding.path;
+  if (!path.isImportDeclaration()) return false;
+
+  // check moduleSource
+  if (path.node.source.value === moduleSource) {
+    if (!importName) return true;
+  } else {
+    return false;
+  }
+
+  for (var specifier of (path.node.specifiers: Array)) {
+    if (t.isSpecifierDefault(specifier) && importName === "default") {
+      return true;
+    }
+
+    if (t.ImportNamespaceSpecifier(specifier) && importName === "*") {
+      return true;
+    }
+
+    if (t.isImportSpecifier(specifier) && specifier.imported.name === importName) {
+      return true;
+    }
+  }
+
+  return false;
+}
