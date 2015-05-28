@@ -59,7 +59,8 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
 }
 
 /**
- * Description
+ * Check whether we have the input `key`. If the `key` references an array then we check
+ * if the array has any items, otherwise we just check if it's falsy.
  */
 
 export function has(key): boolean {
@@ -72,15 +73,13 @@ export function has(key): boolean {
 }
 
 /**
- * Description
+ * Alias of `has`.
  */
 
-export function is(key): boolean {
-  return this.has(key);
-}
+export var is = has;
 
 /**
- * Description
+ * Opposite of `has`.
  */
 
 export function isnt(key): boolean {
@@ -88,7 +87,7 @@ export function isnt(key): boolean {
 }
 
 /**
- * Description
+ * Check whether the path node `key` strict equals `value`.
  */
 
 export function equals(key, value): boolean {
@@ -96,7 +95,8 @@ export function equals(key, value): boolean {
 }
 
 /**
- * Description
+ * Check the type against our stored internal type of the node. This is handy when a node has
+ * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
 export function isPreviousType(type: string): boolean {
@@ -109,8 +109,8 @@ export function isPreviousType(type: string): boolean {
  *   for (KEY in right);
  *   for (KEY;;);
  *
- * This is because these spots allow VariableDeclarations AND normal expressions so we need to tell the
- * path replacement that it's ok to replace this with an expression.
+ * This is because these spots allow VariableDeclarations AND normal expressions so we need
+ * to tell the path replacement that it's ok to replace this with an expression.
  */
 
  export function canHaveVariableDeclarationOrExpression() {
@@ -118,7 +118,7 @@ export function isPreviousType(type: string): boolean {
  }
 
 /**
- * Description
+ * Check whether the current path references a completion record
  */
 
 export function isCompletionRecord() {
@@ -127,10 +127,13 @@ export function isCompletionRecord() {
   do {
     var container = path.container;
 
-    if (path.isFunction()) {
+    // we're in a function so can't be a completion record
+    if (path.isFunctionDeclaration()) {
       return false;
     }
 
+    // check to see if we're the last item in the container and if we are
+    // we're a completion record!
     if (Array.isArray(container) && path.key !== container.length - 1) {
       return false;
     }
@@ -140,7 +143,8 @@ export function isCompletionRecord() {
 }
 
 /**
- * Description
+ * Check whether or not the current `key` allows either a single statement or block statement
+ * so we can explode it if necessary.
  */
 
 export function isStatementOrBlock() {

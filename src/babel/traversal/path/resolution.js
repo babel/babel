@@ -43,6 +43,7 @@ export function resolve(resolved?): ?NodePath {
   // detect infinite recursion
   if (resolved && resolved.indexOf(this) >= 0) return;
 
+  // we store all the paths we've "resolved" in this array to prevent infinite recursion
   resolved = resolved || [];
   resolved.push(this);
 

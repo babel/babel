@@ -2,7 +2,7 @@
 
 import * as t from "../../../types";
 
-// pre hooks should be used for either rejecting removal or delegating removal to a replacement
+// pre hooks should be used for either rejecting removal or delegating removal
 export var pre = [
   function (self) {
     if (self.key === "body" && (self.isBlockStatement() || self.isClassBody())) {
