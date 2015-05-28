@@ -412,6 +412,7 @@ babelArgs.forEach(function(arg){
     case "--prof_auto":
     case "--prof_lazy":
     case "--sliding_state_window":
+    case "--nolazy":
       args.unshift(arg);
       break;
 
