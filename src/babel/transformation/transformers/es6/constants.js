@@ -1,12 +1,12 @@
 import * as messages from "../../../messages";
 
-export function AssignmentExpression(node, parent, scope, file) {
-  var ids = this.getBindingIdentifiers();
+function checkPath(path, file) {
+  var ids = path.getBindingIdentifiers();
 
   for (var name in ids) {
     var id = ids[name];
 
-    var binding = scope.getBinding(name);
+    var binding = path.scope.getBinding(name);
 
     // no binding exists
     if (!binding) continue;
@@ -23,8 +23,19 @@ export function AssignmentExpression(node, parent, scope, file) {
   }
 }
 
+export function AssignmentExpression(node, parent, scope, file) {
+  checkPath(this, file);
+}
+
 export { AssignmentExpression as UpdateExpression };
 
 export function VariableDeclaration(node) {
   if (node.kind === "const") node.kind = "let";
+}
+
+export function ForXStatement(node, parent, scope, file) {
+  var left = this.get("left");
+  if (left.isIdentifier() || left.isPattern()) {
+    checkPath(left, file);
+  }
 }

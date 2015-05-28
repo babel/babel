@@ -46,6 +46,13 @@ var programReferenceVisitor = {
     }
   },
 
+  ForXStatement(node, parent, scope, state) {
+    var left = this.get("left");
+    if (left.isPattern() || left.isIdentifier()) {
+      scope.registerConstantViolation(left);
+    }
+  },
+
   Scopable(node, parent, scope, state) {
     for (var name in scope.bindings) {
       state.references[name] = true;
