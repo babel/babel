@@ -25,6 +25,9 @@ contributing, please read the
 
 ## Developing
 
+>Note: Babel moves fast. Only the latest release is guaranteed to build correctly.
+>Older releases are not officially supported. If you attempt to build them, do that at your own risk.
+
 #### Setup
 
 ```sh
@@ -82,9 +85,6 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
 * Develop your changes ensuring you're fetching updates from upstream often
 * Ensure the test are passing (`make test`)
 * Create new pull request explaining your proposed change or reference an issue in your commit message
-
->Note: Babel moves fast. Only the latest release is guaranteed to build correctly.
->Older releases are not officially supported. If you attempt to build them, do that at your own risk.
 
 #### Dependencies
 
