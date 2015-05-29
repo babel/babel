@@ -51,7 +51,6 @@ export default {
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
-  jscript:                                 require("./other/jscript"),
   flow:                                    require("./other/flow"),
 
   //- builtin-advanced
@@ -83,4 +82,8 @@ export default {
   "minification.memberExpressionLiterals": require("./minification/member-expression-literals"),
   "minification.propertyLiterals":         require("./minification/property-literals"),
   _blockHoist:                             require("./internal/block-hoist"),
+
+  //- builtin-trailing-final
+  // like builtin-trailing, but applied after them
+  jscript:                                 require("./other/jscript"),
 };
