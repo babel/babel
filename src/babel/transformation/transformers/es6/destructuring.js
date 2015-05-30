@@ -107,25 +107,10 @@ export function CatchClause(node, parent, scope, file) {
   node.body.body = nodes.concat(node.body.body);
 }
 
-export function ExpressionStatement(node, parent, scope, file) {
-  var expr = node.expression;
-  if (expr.type !== "AssignmentExpression") return;
-  if (!t.isPattern(expr.left)) return;
-  if (this.isCompletionRecord()) return;
-
-  var destructuring = new DestructuringTransformer({
-    operator: expr.operator,
-    scope:    scope,
-    file:     file,
-  });
-
-  return destructuring.init(expr.left, expr.right);
-}
-
 export function AssignmentExpression(node, parent, scope, file) {
   if (!t.isPattern(node.left)) return;
 
-  var ref = scope.generateUidIdentifier("temp");
+  var ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
   var nodes = [];
   nodes.push(t.variableDeclaration("var", [

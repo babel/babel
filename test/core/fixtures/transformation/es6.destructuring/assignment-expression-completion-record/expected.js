@@ -1,7 +1,7 @@
 "use strict";
 
 var x, y;
-var _temp = [1, 2];
-x = _temp[0];
-y = _temp[1];
-_temp;
+var _ref = [1, 2];
+x = _ref[0];
+y = _ref[1];
+_ref;

@@ -1,5 +1,5 @@
 "use strict";
 
-var _temp;
+var _ref;
 
-console.log((_temp = [123], x = _temp[0], _temp));
+console.log((_ref = [123], x = _ref[0], _ref));
