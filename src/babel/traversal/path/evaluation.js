@@ -122,7 +122,7 @@ export function evaluate(): { confident: boolean; value: any } {
         case "/": return left / right;
         case "*": return left * right;
         case "%": return left % right;
-        case "**": return Math.pow(left, right);
+        case "**": return left ** right;
         case "<": return left < right;
         case ">": return left > right;
         case "<=": return left <= right;
