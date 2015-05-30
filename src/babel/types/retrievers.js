@@ -2,8 +2,7 @@ import object from "../helpers/object";
 import * as t from "./index";
 
 /**
- * Return a list of binding identifiers associated with
- * the input `node`.
+ * Return a list of binding identifiers associated with the input `node`.
  */
 
 export function getBindingIdentifiers(node: Object): Object {
