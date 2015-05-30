@@ -19,8 +19,8 @@ export function ImportDeclaration(node, parent, scope, file) {
   var nodes = [];
 
   if (node.specifiers.length) {
-    for (var i = 0; i < node.specifiers.length; i++) {
-      file.moduleFormatter.importSpecifier(node.specifiers[i], node, nodes, parent);
+    for (var specifier of (node.specifiers: Array)) {
+      file.moduleFormatter.importSpecifier(specifier, node, nodes, parent);
     }
   } else {
     file.moduleFormatter.importDeclaration(node, nodes, parent);
