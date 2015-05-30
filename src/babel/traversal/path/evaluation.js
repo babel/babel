@@ -78,7 +78,7 @@ export function evaluate(): { confident: boolean; value: any } {
       return undefined;
     }
 
-    if (path.isIdentifier() || path.isMemberExpression()) {
+    if ((path.isIdentifier() || path.isMemberExpression()) && path.isReferenced()) {
       path = path.resolve();
       if (path) {
         return evaluate(path);

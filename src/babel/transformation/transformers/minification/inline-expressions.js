@@ -11,7 +11,3 @@ export var Expression = {
     if (res.confident) return t.valueToNode(res.value);
   }
 };
-
-export function Identifier() {
-  // override Expression
-}
