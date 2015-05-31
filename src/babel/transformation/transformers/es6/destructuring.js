@@ -110,12 +110,7 @@ export function CatchClause(node, parent, scope, file) {
 export function AssignmentExpression(node, parent, scope, file) {
   if (!t.isPattern(node.left)) return;
 
-  var ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
-
   var nodes = [];
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(ref, node.right)
-  ]));
 
   var destructuring = new DestructuringTransformer({
     operator: node.operator,
@@ -124,13 +119,24 @@ export function AssignmentExpression(node, parent, scope, file) {
     nodes: nodes
   });
 
-  if (t.isArrayExpression(node.right)) {
-    destructuring.arrays[ref.name] = true;
+  var ref;
+  if (this.isCompletionRecord() || !this.parentPath.isExpressionStatement()) {
+    ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");;
+
+    nodes.push(t.variableDeclaration("var", [
+      t.variableDeclarator(ref, node.right)
+    ]));
+
+    if (t.isArrayExpression(node.right)) {
+      destructuring.arrays[ref.name] = true;
+    }
   }
 
-  destructuring.init(node.left, ref);
+  destructuring.init(node.left, ref || node.right);
 
-  nodes.push(t.expressionStatement(ref));
+  if (ref) {
+    nodes.push(t.expressionStatement(ref));
+  }
 
   return nodes;
 }
