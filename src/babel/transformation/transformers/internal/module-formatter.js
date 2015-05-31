@@ -1,19 +1,15 @@
-import * as strict from "../../helpers/strict";
-
 export var metadata = {
   group: "builtin-modules"
 };
 
 export var Program = {
   exit(program, parent, scope, file) {
-    strict.wrap(program, function () {
-      // ensure that these are at the top, just like normal imports
-      for (var node of (file.dynamicImports: Array)) {
-        node._blockHoist = 3;
-      }
+    // ensure that these are at the top, just like normal imports
+    for (var node of (file.dynamicImports: Array)) {
+      node._blockHoist = 3;
+    }
 
-      program.body = file.dynamicImports.concat(program.body);
-    });
+    program.body = file.dynamicImports.concat(program.body);
 
     if (!file.transformers["es6.modules"].canTransform()) return;
 
