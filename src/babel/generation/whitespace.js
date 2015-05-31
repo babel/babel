@@ -82,7 +82,7 @@ export default class Whitespace {
       return 1;
     } else {
       var lines = this.getNewlinesBetween(startToken, endToken);
-      if (node.type === "Line" && !lines) {
+      if (node.type === "CommentLine" && !lines) {
         // line comment
         return 1;
       } else {

@@ -330,7 +330,7 @@ export default class File {
     if (comment) {
       node.leadingComments = node.leadingComments || [];
       node.leadingComments.push({
-        type: "Line",
+        type: "CommentLine",
         value: " " + comment
       });
     }

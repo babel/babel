@@ -267,7 +267,7 @@ class CodeGenerator {
 
   generateComment(comment) {
     var val = comment.value;
-    if (comment.type === "Line") {
+    if (comment.type === "CommentLine") {
       val = `//${val}`;
     } else {
       val = `/*${val}*/`;
@@ -343,7 +343,7 @@ class CodeGenerator {
       }
 
       //
-      if (comment.type === "Block" && this.format.indent.adjustMultilineComment) {
+      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
         var offset = comment.loc.start.column;
         if (offset) {
           var newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
@@ -360,7 +360,7 @@ class CodeGenerator {
 
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
-      if (this.format.retainLines && comment.type === "Line") {
+      if (this.format.retainLines && comment.type === "CommentLine") {
         val += "\n";
       }
 
