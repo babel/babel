@@ -103,11 +103,9 @@ var renameVisitor = {
     }
   },
 
-  Scopable(node, parent, scope, state) {
-    if (this.isScope()) {
-      if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
-        this.skip();
-      }
+  Scope(node, parent, scope, state) {
+    if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
+      this.skip();
     }
   }
 };
@@ -599,7 +597,7 @@ export default class Scope {
 
     if (path.isFunctionExpression() && path.has("id")) {
       if (!t.isProperty(path.parent, { method: true })) {
-        this.registerBinding("var", path.get("id"));
+        this.registerBinding("var", path);
       }
     }
 
@@ -626,7 +624,7 @@ export default class Scope {
     // CatchClause - param
 
     if (path.isCatchClause()) {
-      this.registerBinding("let", path.get("param"));
+      this.registerBinding("let", path);
     }
 
     // ComprehensionExpression - blocks

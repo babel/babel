@@ -32,6 +32,7 @@ export function getBindingIdentifiers(node: Object): Object {
 }
 
 getBindingIdentifiers.keys = {
+  CatchClause: ["param"],
   UnaryExpression: ["argument"],
   AssignmentExpression: ["left"],
   ImportSpecifier: ["local"],

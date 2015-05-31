@@ -1,25 +1,25 @@
 import * as t from "../../types";
 
 var awaitVisitor = {
-  enter(node) {
-    if (t.isFunction(node)) this.skip();
+  Function() {
+    this.skip();
+  },
 
-    if (t.isAwaitExpression(node)) {
-      node.type = "YieldExpression";
+  AwaitExpression(node) {
+    node.type = "YieldExpression";
 
-      if (node.all) {
-        // await* foo; -> yield Promise.all(foo);
-        node.all = false;
-        node.argument = t.callExpression(t.memberExpression(t.identifier("Promise"), t.identifier("all")), [node.argument]);
-      }
+    if (node.all) {
+      // await* foo; -> yield Promise.all(foo);
+      node.all = false;
+      node.argument = t.callExpression(t.memberExpression(t.identifier("Promise"), t.identifier("all")), [node.argument]);
     }
   }
 };
 
 var referenceVisitor = {
-  enter(node, parent, scope, state) {
+  ReferencedIdentifier(node, parent, scope, state) {
     var name = state.id.name;
-    if (this.isReferencedIdentifier({ name: name }) && scope.bindingIdentifierEquals(name, state.id)) {
+    if (node.name === name && scope.bindingIdentifierEquals(name, state.id)) {
       return state.ref = state.ref || scope.generateUidIdentifier(name);
     }
   }

@@ -44,9 +44,11 @@ var hoistVariablesVisitor = {
 };
 
 var hoistFunctionsVisitor = {
-  enter(node, parent, scope, state) {
-    if (t.isFunction(node)) this.skip();
+  Function() {
+    this.skip();
+  },
 
+  enter(node, parent, scope, state) {
     if (t.isFunctionDeclaration(node) || state.formatter._canHoist(node)) {
       state.handlerBody.push(node);
       this.dangerouslyRemove();

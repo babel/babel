@@ -6,10 +6,10 @@ var visitor = {
       state.found = true;
       this.stop();
     }
+  },
 
-    if (this.isFunction()) {
-      this.skip();
-    }
+  Function() {
+    this.skip();
   }
 };
 
