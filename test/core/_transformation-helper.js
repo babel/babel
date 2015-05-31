@@ -1,4 +1,3 @@
-var genHelpers          = require("./_generator-helpers");
 var transform           = require("../../lib/babel/transformation");
 var buildExernalHelpers = require("../../lib/babel/tools/build-external-helpers");
 var sourceMap           = require("source-map");
@@ -30,7 +29,6 @@ global.assertLacksOwnProperty = function () {
 global.assertArrayEquals = assert.deepEqual;
 global.assert = chai.assert;
 global.chai = chai;
-global.genHelpers = genHelpers;
 
 // Different Traceur generator message
 chai.assert._throw = chai.assert.throw;
