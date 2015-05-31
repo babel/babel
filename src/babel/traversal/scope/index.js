@@ -9,40 +9,31 @@ import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as t from "../../types";
 
-var functionVariableVisitor = {
-  enter(node, parent, scope, state) {
-    if (t.isFor(node)) {
-      for (var key of (t.FOR_INIT_KEYS: Array)) {
-        var declar = this.get(key);
-        if (declar.isVar()) state.scope.registerBinding("var", declar);
-      }
+var collectorVisitor = {
+  For(node, parent, scope) {
+    for (var key of (t.FOR_INIT_KEYS: Array)) {
+      var declar = this.get(key);
+      if (declar.isVar()) scope.getFunctionParent().registerBinding("var", declar);
     }
+  },
 
-    // this block is a function so we'll stop since none of the variables
-    // declared within are accessible
-    if (this.isFunction()) return this.skip();
-
-    // function identifier doesn't belong to this scope
-    if (state.blockId && node === state.blockId) return;
-
+  Declaration(node, parent, scope) {
     // delegate block scope handling to the `blockVariableVisitor`
     if (this.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    if (this.isExportDeclaration() && t.isDeclaration(node.declaration)) return;
+    if (this.isExportDeclaration() && this.get("declaration").isDeclaration()) return;
 
     // we've ran into a declaration!
-    if (this.isDeclaration()) state.scope.registerDeclaration(this);
-  }
-};
+    scope.getFunctionParent().registerDeclaration(this);
+  },
 
-var programReferenceVisitor = {
-  ReferencedIdentifier(node, parent, scope, state) {
+  ReferencedIdentifier(node, parent, scope) {
     var bindingInfo = scope.getBinding(node.name);
     if (bindingInfo) {
       bindingInfo.reference();
     } else {
-      state.addGlobal(node);
+      scope.getProgramParent().addGlobal(node);
     }
   },
 
@@ -53,9 +44,9 @@ var programReferenceVisitor = {
     }
   },
 
-  Scopable(node, parent, scope, state) {
+  Scopable(node, parent, scope) {
     for (var name in scope.bindings) {
-      state.references[name] = true;
+      scope.getProgramParent().references[name] = true;
     }
   },
 
@@ -75,8 +66,8 @@ var programReferenceVisitor = {
     }
   },
 
-  LabeledStatement(node, parent, scope, state) {
-    state.addGlobal(node);
+  LabeledStatement(node, parent, scope) {
+    scope.getProgramParent().addGlobal(node);
   },
 
   AssignmentExpression(node, parent, scope) {
@@ -89,18 +80,11 @@ var programReferenceVisitor = {
 
   UnaryExpression(node, parent, scope) {
     if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
-  }
-};
-
-var blockVariableVisitor = {
-  Scope() {
-    this.skip();
   },
 
-  enter(node, parent, scope, state) {
-    if (this.isFunctionDeclaration() || this.isBlockScoped()) {
-      state.registerDeclaration(this);
-    }
+  BlockScoped(node, parent, scope, state) {
+    if (scope.path === this) scope = scope.parent;
+    scope.getBlockParent().registerDeclaration(this);
   }
 };
 
@@ -317,19 +301,23 @@ export default class Scope {
    * Description
    */
 
-  checkBlockScopedCollisions(kind: string, name: string, id: Object) {
-    var local = this.getOwnBindingInfo(name);
-    if (!local) return;
-
-
+  checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
+    // ignore parameters
     if (kind === "param") return;
+
+    // ignore hoisted functions if there's also a local let
     if (kind === "hoisted" && local.kind === "let") return;
 
     var duplicate = false;
-    if (!duplicate) duplicate = kind === "let" || kind === "const" || local.kind === "let" || local.kind === "const" || local.kind === "module";
+
+    // don't allow duplicate bindings to exist alongside
+    if (!duplicate) duplicate = kind === "let" || local.kind === "let" || local.kind === "const" || local.kind === "module";
+
+    // don't allow a local of param with a kind of let
     if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
+      this.dump();
       throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
@@ -479,7 +467,11 @@ export default class Scope {
     for (var name in ids) {
       var id = ids[name];
 
-      this.checkBlockScopedCollisions(kind, name, id);
+      var local = this.getOwnBindingInfo(name);
+      if (local) {
+        if (local.identifier === id) continue;
+        this.checkBlockScopedCollisions(local, kind, name, id);
+      }
 
       this.bindings[name] = new Binding({
         identifier: id,
@@ -630,22 +622,6 @@ export default class Scope {
       for (let param of (params: Array)) {
         this.registerBinding("param", param);
       }
-      path.get("body").traverse(blockVariableVisitor, this);
-    }
-
-    // Program, Function - var variables
-
-    if (path.isProgram() || path.isFunction()) {
-      this.traverse(path.node, functionVariableVisitor, {
-        blockId: path.get("id").node,
-        scope:   this
-      });
-    }
-
-    // Program, BlockStatement, Function - let variables
-
-    if (path.isBlockStatement() || path.isProgram()) {
-      this.traverse(path.node, blockVariableVisitor, this);
     }
 
     // CatchClause - param
@@ -662,9 +638,12 @@ export default class Scope {
 
     // Program
 
-    if (path.isProgram()) {
-      this.traverse(path.node, programReferenceVisitor, this);
-    }
+    var parent = this.getProgramParent();
+    if (parent.crawling) return;
+
+    this.crawling = true;
+    path.traverse(collectorVisitor);
+    this.crawling = false;
   }
 
   /**
@@ -700,7 +679,7 @@ export default class Scope {
 
       this.file.attachAuxiliaryComment(declar);
 
-      var [declarPath] = path.get("body")[0]._containerInsertBefore([declar]);
+      var [declarPath] = path.unshiftContainer("body", [declar]);
       this.registerBinding(kind, declarPath);
       if (!unique) path.setData(dataKey, declar);
     }
@@ -714,10 +693,12 @@ export default class Scope {
 
   getProgramParent() {
     var scope = this;
-    while (scope.parent) {
-      scope = scope.parent;
-    }
-    return scope;
+    do {
+      if (scope.path.isProgram()) {
+        return scope;
+      }
+    } while (scope = scope.parent);
+    throw new Error("We couldn't find a Function or Program...");
   }
 
   /**
@@ -727,24 +708,31 @@ export default class Scope {
 
   getFunctionParent() {
     var scope = this;
-    while (scope.parent && !t.isFunction(scope.block)) {
-      scope = scope.parent;
-    }
-    return scope;
+    do {
+      if (scope.path.isProgram() || scope.path.isFunction()) {
+        return scope;
+      }
+    } while (scope = scope.parent);
+    throw new Error("We couldn't find a Function or Program...");
   }
 
   /**
-   * Walk up the scope tree until we hit either a BlockStatement/Loop or reach the
+   * Walk up the scope tree until we hit either a BlockStatement/Loop/Program/Function/Switch or reach the
    * very top and hit Program.
    */
 
   getBlockParent() {
     var scope = this;
     do {
-      if (scope.path.isProgram() || scope.path.isBlockStatement()) {
+      if (scope.path.isProgram() ||
+          scope.path.isBlockStatement() ||
+          scope.path.isFunction() ||
+          scope.path.isLoop() ||
+          scope.path.isSwitchStatement()) {
         return scope;
       }
     } while (scope = scope.parent);
+    throw new Error("We couldn't find a BlockStatement, For or Program...");
   }
 
   /**
