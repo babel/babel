@@ -385,9 +385,14 @@ export default class File {
   }
 
   errorWithNode(node, msg, Error = SyntaxError) {
-    var loc = node.loc.start;
-    var err = new Error(`Line ${loc.line}: ${msg}`);
-    err.loc = loc;
+    var err;
+    if (node.loc) {
+      var loc = node.loc.start;
+      err = new Error(`Line ${loc.line}: ${msg}`);
+      err.loc = loc;
+    } else {
+      err = new Error("There's been an error on a dynamic node. This is almost certainly an internal error. Please report it.");
+    }
     return err;
   }
 
