@@ -17,7 +17,7 @@ export function insertBefore(nodes) {
   } else if (this.isPreviousType("Statement") || !this.type) {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
-      this._containerInsertBefore(nodes);
+      return this._containerInsertBefore(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.push(this.node);
       this.node = this.container[this.key] = t.blockStatement(nodes);
@@ -27,6 +27,7 @@ export function insertBefore(nodes) {
   } else {
     throw new Error("No clue what to do with this node type.");
   }
+  return [this];
 }
 
 export function _containerInsert(from, nodes) {
@@ -91,7 +92,7 @@ export function insertAfter(nodes) {
   } else if (this.isPreviousType("Statement") || !this.type) {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
-      this._containerInsertAfter(nodes);
+      return this._containerInsertAfter(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.unshift(this.node);
       this.node = this.container[this.key] = t.blockStatement(nodes);
@@ -101,6 +102,7 @@ export function insertAfter(nodes) {
   } else {
     throw new Error("No clue what to do with this node type.");
   }
+  return [this];
 }
 
 /**
