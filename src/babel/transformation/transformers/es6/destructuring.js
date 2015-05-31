@@ -151,7 +151,7 @@ function variableDeclarationHasPattern(node) {
 }
 
 export function VariableDeclaration(node, parent, scope, file) {
-  if (t.isForInStatement(parent) || t.isForOfStatement(parent)) return;
+  if (t.isForXStatement(parent)) return;
   if (!variableDeclarationHasPattern(node)) return;
 
   var nodes = [];
