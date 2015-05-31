@@ -121,16 +121,19 @@ export function isPreviousType(type: string): boolean {
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord() {
+export function isCompletionRecord(allowInsideFunction?) {
   var path = this;
+  var first = true;
 
   do {
     var container = path.container;
 
     // we're in a function so can't be a completion record
-    if (path.isFunctionDeclaration()) {
-      return false;
+    if (path.isFunction() && !first) {
+      return !!allowInsideFunction;
     }
+
+    first = false;
 
     // check to see if we're the last item in the container and if we are
     // we're a completion record!

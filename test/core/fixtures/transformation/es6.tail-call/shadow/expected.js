@@ -2,12 +2,19 @@
 
 (function () {
   var _this = this,
-      _arguments = arguments;
+      _arguments2 = arguments;
 
   var foo = function foo() {
-    _this;
-    _arguments;
-    foo();
+    var _again = true;
+
+    _function: while (_again) {
+      _again = false;
+
+      _this;
+      _arguments2;
+      _again = true;
+      continue _function;
+    }
   };
   foo();
 });

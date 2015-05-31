@@ -34,6 +34,12 @@ var visitor = {
     return state.subTransform(node.argument);
   },
 
+  ExpressionStatement(node, parent, scope, state) {
+    if (this.isCompletionRecord(true)) {
+      return state.subTransform(node.expression);
+    }
+  },
+
   Function() {
     this.skip();
   },
