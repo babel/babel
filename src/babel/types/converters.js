@@ -102,16 +102,25 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
 
 export function toKeyAlias(node: Object, key: Object = node.key) {
   var alias;
-  if (t.isIdentifier(key)) {
+
+  if (node.kind === "method") {
+    return toKeyAlias.uid++;
+  } else if (t.isIdentifier(key)) {
     alias = key.name;
   } else if (t.isLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
     alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
   }
-  if (node.computed) alias = `[${alias}]`;
+
+  if (node.computed) {
+    alias = `[${alias}]`;
+  }
+
   return alias;
 }
+
+toKeyAlias.uid = 0;
 
 /*
  * Description
