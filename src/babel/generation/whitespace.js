@@ -22,7 +22,7 @@ function getLookupIndex(i, base, max) {
 
 export default class Whitespace {
   constructor(tokens, comments) {
-    this.tokens = sortBy(tokens.concat(comments), "start");
+    this.tokens = tokens;
     this.used   = {};
 
     // Profiling this code shows that while generator passes over it, indexes

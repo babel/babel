@@ -21,6 +21,20 @@ export default function (code, opts = {}) {
     ranges:                      true
   };
 
+  parseOpts.onComment = return function (block, text, start, end, startLoc, endLoc) {
+    var comment = {
+      type: block ? "Block" : "Line",
+      value: text,
+      start: start,
+      end: end,
+      loc: new acorn.SourceLocation(this, startLoc, endLoc),
+      range: [start, end]
+    };
+
+    tokens.push(comment);
+    comments.push(comment);
+  };
+
   if (opts.nonStandard) {
     parseOpts.plugins.jsx = true;
     parseOpts.plugins.flow = true;
