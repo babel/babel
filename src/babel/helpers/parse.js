@@ -21,7 +21,7 @@ export default function (code, opts = {}) {
     ranges:                      true
   };
 
-  parseOpts.onComment = return function (block, text, start, end, startLoc, endLoc) {
+  parseOpts.onComment = function (block, text, start, end, startLoc, endLoc) {
     var comment = {
       type: block ? "Block" : "Line",
       value: text,
