@@ -2,7 +2,7 @@
   var foo = () => {
     this;
     arguments;
-    foo();
+    return foo();
   };
   foo();
 });
