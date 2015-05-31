@@ -126,6 +126,7 @@ export function shouldIgnore(filename, ignore, only) {
 }
 
 var templateVisitor = {
+  noScope: true,
   enter(node, parent, scope, nodes) {
     if (t.isExpressionStatement(node)) {
       node = node.expression;
