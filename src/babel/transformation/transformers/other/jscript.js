@@ -1,7 +1,8 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  optional: true
+  optional: true,
+  group: "builtin-trailing-final"
 };
 
 export function FunctionExpression(node, print) {
