@@ -9,28 +9,11 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-export function CallExpression(node) {
-  var callee = this.get("callee");
-  if (!callee.isIdentifier()) return;
-
-  var binding = this.scope.getBinding(callee.node.name);
-  if (!binding) return;
-
-  if (!binding.path.isFunction()) return;
-  if (binding.identifier !== binding.path.node.id) return;
-
-  binding.path.setData("shouldTryTCO", true);
+export function Func/*tion*/(node, parent, scope, file) {
+  if (node.generator || node.async) return;
+  var tailCall = new TailCallTransformer(this, scope, file);
+  tailCall.run();
 }
-
-export var Func/*tion*/ = {
-  exit(node, parent, scope, file) {
-    if (node.generator || node.async) return;
-    if (!this.getData("shouldTryTCO")) return;
-
-    var tailCall = new TailCallTransformer(this, scope, file);
-    tailCall.run();
-  }
-};
 
 function returnBlock(expr) {
   return t.blockStatement([t.returnStatement(expr)]);
