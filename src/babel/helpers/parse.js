@@ -3,8 +3,9 @@ import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
 export default function (code, opts = {}) {
-  var comments = [];
-  var tokens   = [];
+  var commentsAndTokens = [];
+  var comments          = [];
+  var tokens            = [];
 
   var parseOpts = {
     allowImportExportEverywhere: opts.looseModules,
@@ -20,6 +21,11 @@ export default function (code, opts = {}) {
     ranges:                      true
   };
 
+  parseOpts.onToken = function (token) {
+    tokens.push(token);
+    commentsAndTokens.push(token);
+  };
+
   parseOpts.onComment = function (block, text, start, end, startLoc, endLoc) {
     var comment = {
       type: block ? "CommentBlock" : "CommentLine",
@@ -30,7 +36,7 @@ export default function (code, opts = {}) {
       range: [start, end]
     };
 
-    tokens.push(comment);
+    commentsAndTokens.push(comment);
     comments.push(comment);
   };
 
@@ -41,6 +47,6 @@ export default function (code, opts = {}) {
 
   var ast = acorn.parse(code, parseOpts);
   estraverse.attachComments(ast, comments, tokens);
-  ast = normalizeAst(ast, comments, tokens);
+  ast = normalizeAst(ast, comments, commentsAndTokens);
   return ast;
 }
