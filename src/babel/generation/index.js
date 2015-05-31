@@ -1,5 +1,6 @@
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
+import NodePrinter from "./node/printer";
 import repeating from "repeating";
 import SourceMap from "./source-map";
 import Position from "./position";
@@ -67,7 +68,6 @@ class CodeGenerator {
     for (var i = 0; i < tokens.length; i++) {
       var token = tokens[i];
       if (token.type.label !== "string") continue;
-      if (checked >= 3) continue;
 
       var raw = code.slice(token.start, token.end);
       if (raw[0] === "'") {
@@ -77,6 +77,7 @@ class CodeGenerator {
       }
 
       checked++;
+      if (checked >= 3) break;
     }
 
     if (occurences.single > occurences.double) {
@@ -120,33 +121,7 @@ class CodeGenerator {
   }
 
   buildPrint(parent) {
-    var print = (node, opts) => {
-      return this.print(node, parent, opts);
-    };
-
-    print.sequence = (nodes, opts = {}) => {
-      opts.statement = true;
-      return this.printJoin(print, nodes, opts);
-    };
-
-    print.join = (nodes, opts) => {
-      return this.printJoin(print, nodes, opts);
-    };
-
-    print.list = function (items, opts = {}) {
-      if (opts.separator == null) opts.separator = ", ";
-      print.join(items, opts);
-    };
-
-    print.block = (node) => {
-      return this.printBlock(print, node);
-    };
-
-    print.indentOnComments = (node) => {
-      return this.printAndIndentOnComments(print, node);
-    };
-
-    return print;
+    return new NodePrinter(this, parent);
   }
 
   catchUp(node, parent, leftParenPrinted) {
@@ -166,6 +141,36 @@ class CodeGenerator {
     return false;
   }
 
+  _printNewline(leading, node, parent, opts) {
+    if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
+      return;
+    }
+
+    var lines = 0;
+
+    if (node.start != null && !node._ignoreUserWhitespace) {
+      // user node
+      if (leading) {
+        lines = this.whitespace.getNewlinesBefore(node);
+      } else {
+        lines = this.whitespace.getNewlinesAfter(node);
+      }
+    } else {
+      // generated node
+      if (!leading) lines++; // always include at least a single line after
+      if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
+
+      var needs = n.needsWhitespaceAfter;
+      if (leading) needs = n.needsWhitespaceBefore;
+      if (needs(node, parent)) lines++;
+
+      // generated nodes can't add starting file whitespace
+      if (!this.buffer.buf) lines = 0;
+    }
+
+    this.newline(lines);
+  }
+
   print(node, parent, opts = {}) {
     if (!node) return;
 
@@ -178,36 +183,6 @@ class CodeGenerator {
       this.format.concise = true;
     }
 
-    var newline = (leading) => {
-      if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
-        return;
-      }
-
-      var lines = 0;
-
-      if (node.start != null && !node._ignoreUserWhitespace) {
-        // user node
-        if (leading) {
-          lines = this.whitespace.getNewlinesBefore(node);
-        } else {
-          lines = this.whitespace.getNewlinesAfter(node);
-        }
-      } else {
-        // generated node
-        if (!leading) lines++; // always include at least a single line after
-        if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
-
-        var needs = n.needsWhitespaceAfter;
-        if (leading) needs = n.needsWhitespaceBefore;
-        if (needs(node, parent)) lines++;
-
-        // generated nodes can't add starting file whitespace
-        if (!this.buffer.buf) lines = 0;
-      }
-
-      this.newline(lines);
-    };
-
     if (this[node.type]) {
       var needsNoLineTermParens = n.needsParensNoLineTerminator(node, parent);
       var needsParens           = needsNoLineTermParens || n.needsParens(node, parent);
@@ -219,7 +194,7 @@ class CodeGenerator {
 
       var needsParensFromCatchup = this.catchUp(node, parent, needsParens);
 
-      newline(true);
+      this._printNewline(true, node, parent, opts);
 
       if (opts.before) opts.before();
       this.map.mark(node, "start");
@@ -237,7 +212,7 @@ class CodeGenerator {
 
       this.format.concise = oldConcise;
 
-      newline(false);
+      this._printNewline(false, node, parent, opts);
 
       this.printTrailingComments(node, parent);
     } else {
@@ -268,7 +243,7 @@ class CodeGenerator {
 
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
-      print(node, printOpts);
+      print.plain(node, printOpts);
     }
 
     if (opts.indent) this.dedent();
@@ -277,7 +252,7 @@ class CodeGenerator {
   printAndIndentOnComments(print, node) {
     var indent = !!node.leadingComments;
     if (indent) this.indent();
-    print(node);
+    print.plain(node);
     if (indent) this.dedent();
   }
 
@@ -286,7 +261,7 @@ class CodeGenerator {
       this.semicolon();
     } else {
       this.push(" ");
-      print(node);
+      print.plain(node);
     }
   }
 

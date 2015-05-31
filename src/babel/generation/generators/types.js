@@ -8,7 +8,7 @@ export function Identifier(node) {
 
 export function RestElement(node, print) {
   this.push("...");
-  print(node.argument);
+  print.plain(node.argument);
 }
 
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
@@ -37,16 +37,16 @@ export function Property(node, print) {
   } else {
     if (node.computed) {
       this.push("[");
-      print(node.key);
+      print.plain(node.key);
       this.push("]");
     } else {
       // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
       if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
-        print(node.value);
+        print.plain(node.value);
         return;
       }
 
-      print(node.key);
+      print.plain(node.key);
 
       // shorthand!
       if (node.shorthand &&
@@ -59,7 +59,7 @@ export function Property(node, print) {
 
     this.push(":");
     this.space();
-    print(node.value);
+    print.plain(node.value);
   }
 }
 
@@ -80,7 +80,7 @@ export function ArrayExpression(node, print) {
       this.push(",");
     } else {
       if (i > 0) this.push(" ");
-      print(elem);
+      print.plain(elem);
       if (i < len - 1) this.push(",");
     }
   }

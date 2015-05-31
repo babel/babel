@@ -1,42 +1,42 @@
 import * as t from "../../types";
 
 export function ImportSpecifier(node, print) {
-  print(node.imported);
+  print.plain(node.imported);
   if (node.local && node.local.name !== node.imported.name) {
     this.push(" as ");
-    print(node.local);
+    print.plain(node.local);
   }
 }
 
 export function ImportDefaultSpecifier(node, print) {
-  print(node.local);
+  print.plain(node.local);
 }
 
 export function ExportDefaultSpecifier(node, print) {
-  print(node.exported);
+  print.plain(node.exported);
 }
 
 export function ExportSpecifier(node, print) {
-  print(node.local);
+  print.plain(node.local);
   if (node.exported && node.local.name !== node.exported.name) {
     this.push(" as ");
-    print(node.exported);
+    print.plain(node.exported);
   }
 }
 
 export function ExportNamespaceSpecifier(node, print) {
   this.push("* as ");
-  print(node.exported);
+  print.plain(node.exported);
 }
 
 export function ExportAllDeclaration(node, print) {
   this.push("export *");
   if (node.exported) {
     this.push(" as ");
-    print(node.exported);
+    print.plain(node.exported);
   }
   this.push(" from ");
-  print(node.source);
+  print.plain(node.source);
   this.semicolon();
 }
 
@@ -55,14 +55,14 @@ function ExportDeclaration(node, print) {
 
   if (node.declaration) {
     var declar = node.declaration;
-    print(declar);
+    print.plain(declar);
     if (t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar)) return;
   } else {
     var first = specifiers[0];
     var hasSpecial = false;
     if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
       hasSpecial = true;
-      print(specifiers.shift());
+      print.plain(specifiers.shift());
       if (specifiers.length) {
         this.push(", ");
       }
@@ -80,7 +80,7 @@ function ExportDeclaration(node, print) {
 
     if (node.source) {
       this.push(" from ");
-      print(node.source);
+      print.plain(node.source);
     }
   }
 
@@ -98,7 +98,7 @@ export function ImportDeclaration(node, print) {
   if (specfiers && specfiers.length) {
     var first = node.specifiers[0];
     if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
-      print(node.specifiers.shift());
+      print.plain(node.specifiers.shift());
       if (node.specifiers.length) {
         this.push(", ");
       }
@@ -115,11 +115,11 @@ export function ImportDeclaration(node, print) {
     this.push(" from ");
   }
 
-  print(node.source);
+  print.plain(node.source);
   this.semicolon();
 }
 
 export function ImportNamespaceSpecifier(node, print) {
   this.push("* as ");
-  print(node.local);
+  print.plain(node.local);
 }

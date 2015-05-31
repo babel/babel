@@ -1,6 +1,6 @@
 export function TaggedTemplateExpression(node, print) {
-  print(node.tag);
-  print(node.quasi);
+  print.plain(node.tag);
+  print.plain(node.quasi);
 }
 
 export function TemplateElement(node) {
@@ -14,11 +14,11 @@ export function TemplateLiteral(node, print) {
   var len    = quasis.length;
 
   for (var i = 0; i < len; i++) {
-    print(quasis[i]);
+    print.plain(quasis[i]);
 
     if (i + 1 < len) {
       this.push("${ ");
-      print(node.expressions[i]);
+      print.plain(node.expressions[i]);
       this.push(" }");
     }
   }

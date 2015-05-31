@@ -1,5 +1,5 @@
 export function File(node, print) {
-  print(node.program);
+  print.plain(node.program);
 }
 
 export function Program(node, print) {

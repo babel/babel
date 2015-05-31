@@ -5,7 +5,7 @@ export function AnyTypeAnnotation() {
 }
 
 export function ArrayTypeAnnotation(node, print) {
-  print(node.elementType);
+  print.plain(node.elementType);
   this.push("[");
   this.push("]");
 }
@@ -21,27 +21,27 @@ export function DeclareClass(node, print) {
 
 export function DeclareFunction(node, print) {
   this.push("declare function ");
-  print(node.id);
-  print(node.id.typeAnnotation.typeAnnotation);
+  print.plain(node.id);
+  print.plain(node.id.typeAnnotation.typeAnnotation);
   this.semicolon();
 }
 
 export function DeclareModule(node, print) {
   this.push("declare module ");
-  print(node.id);
+  print.plain(node.id);
   this.space();
-  print(node.body);
+  print.plain(node.body);
 }
 
 export function DeclareVariable(node, print) {
   this.push("declare var ");
-  print(node.id);
-  print(node.id.typeAnnotation);
+  print.plain(node.id);
+  print.plain(node.id.typeAnnotation);
   this.semicolon();
 }
 
 export function FunctionTypeAnnotation(node, print, parent) {
-  print(node.typeParameters);
+  print.plain(node.typeParameters);
   this.push("(");
   print.list(node.params);
 
@@ -51,7 +51,7 @@ export function FunctionTypeAnnotation(node, print, parent) {
       this.space();
     }
     this.push("...");
-    print(node.rest);
+    print.plain(node.rest);
   }
 
   this.push(")");
@@ -65,33 +65,33 @@ export function FunctionTypeAnnotation(node, print, parent) {
   }
 
   this.space();
-  print(node.returnType);
+  print.plain(node.returnType);
 }
 
 export function FunctionTypeParam(node, print) {
-  print(node.name);
+  print.plain(node.name);
   if (node.optional) this.push("?");
   this.push(":");
   this.space();
-  print(node.typeAnnotation);
+  print.plain(node.typeAnnotation);
 }
 
 export function InterfaceExtends(node, print) {
-  print(node.id);
-  print(node.typeParameters);
+  print.plain(node.id);
+  print.plain(node.typeParameters);
 }
 
 export { InterfaceExtends as ClassImplements, InterfaceExtends as GenericTypeAnnotation };
 
 export function _interfaceish(node, print) {
-  print(node.id);
-  print(node.typeParameters);
+  print.plain(node.id);
+  print.plain(node.typeParameters);
   if (node.extends.length) {
     this.push(" extends ");
     print.join(node.extends, { separator: ", " });
   }
   this.space();
-  print(node.body);
+  print.plain(node.body);
 }
 
 export function InterfaceDeclaration(node, print) {
@@ -105,7 +105,7 @@ export function IntersectionTypeAnnotation(node, print) {
 
 export function NullableTypeAnnotation(node, print) {
   this.push("?");
-  print(node.typeAnnotation);
+  print.plain(node.typeAnnotation);
 }
 
 export function NumberTypeAnnotation() {
@@ -128,17 +128,17 @@ export function TupleTypeAnnotation(node, print) {
 
 export function TypeofTypeAnnotation(node, print) {
   this.push("typeof ");
-  print(node.argument);
+  print.plain(node.argument);
 }
 
 export function TypeAlias(node, print) {
   this.push("type ");
-  print(node.id);
-  print(node.typeParameters);
+  print.plain(node.id);
+  print.plain(node.typeParameters);
   this.space();
   this.push("=");
   this.space();
-  print(node.right);
+  print.plain(node.right);
   this.semicolon();
 }
 
@@ -146,7 +146,7 @@ export function TypeAnnotation(node, print) {
   this.push(":");
   this.space();
   if (node.optional) this.push("?");
-  print(node.typeAnnotation);
+  print.plain(node.typeAnnotation);
 }
 
 export function TypeParameterInstantiation(node, print) {
@@ -183,37 +183,37 @@ export function ObjectTypeAnnotation(node, print) {
 
 export function ObjectTypeCallProperty(node, print) {
   if (node.static) this.push("static ");
-  print(node.value);
+  print.plain(node.value);
 }
 
 export function ObjectTypeIndexer(node, print) {
   if (node.static) this.push("static ");
   this.push("[");
-  print(node.id);
+  print.plain(node.id);
   this.push(":");
   this.space();
-  print(node.key);
+  print.plain(node.key);
   this.push("]");
   this.push(":");
   this.space();
-  print(node.value);
+  print.plain(node.value);
 }
 
 export function ObjectTypeProperty(node, print) {
   if (node.static) this.push("static ");
-  print(node.key);
+  print.plain(node.key);
   if (node.optional) this.push("?");
   if (!t.isFunctionTypeAnnotation(node.value)) {
     this.push(":");
     this.space();
   }
-  print(node.value);
+  print.plain(node.value);
 }
 
 export function QualifiedTypeIdentifier(node, print) {
-  print(node.qualification);
+  print.plain(node.qualification);
   this.push(".");
-  print(node.id);
+  print.plain(node.id);
 }
 
 export function UnionTypeAnnotation(node, print) {
@@ -222,8 +222,8 @@ export function UnionTypeAnnotation(node, print) {
 
 export function TypeCastExpression(node, print) {
   this.push("(");
-  print(node.expression);
-  print(node.typeAnnotation);
+  print.plain(node.expression);
+  print.plain(node.typeAnnotation);
   this.push(")");
 }
 

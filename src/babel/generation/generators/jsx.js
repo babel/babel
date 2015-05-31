@@ -1,10 +1,10 @@
 import * as t from "../../types";
 
 export function JSXAttribute(node, print) {
-  print(node.name);
+  print.plain(node.name);
   if (node.value) {
     this.push("=");
-    print(node.value);
+    print.plain(node.value);
   }
 }
 
@@ -13,32 +13,32 @@ export function JSXIdentifier(node) {
 }
 
 export function JSXNamespacedName(node, print) {
-  print(node.namespace);
+  print.plain(node.namespace);
   this.push(":");
-  print(node.name);
+  print.plain(node.name);
 }
 
 export function JSXMemberExpression(node, print) {
-  print(node.object);
+  print.plain(node.object);
   this.push(".");
-  print(node.property);
+  print.plain(node.property);
 }
 
 export function JSXSpreadAttribute(node, print) {
   this.push("{...");
-  print(node.argument);
+  print.plain(node.argument);
   this.push("}");
 }
 
 export function JSXExpressionContainer(node, print) {
   this.push("{");
-  print(node.expression);
+  print.plain(node.expression);
   this.push("}");
 }
 
 export function JSXElement(node, print) {
   var open = node.openingElement;
-  print(open);
+  print.plain(open);
   if (open.selfClosing) return;
 
   this.indent();
@@ -46,17 +46,17 @@ export function JSXElement(node, print) {
     if (t.isLiteral(child)) {
       this.push(child.value, true);
     } else {
-      print(child);
+      print.plain(child);
     }
   }
   this.dedent();
 
-  print(node.closingElement);
+  print.plain(node.closingElement);
 }
 
 export function JSXOpeningElement(node, print) {
   this.push("<");
-  print(node.name);
+  print.plain(node.name);
   if (node.attributes.length > 0) {
     this.push(" ");
     print.join(node.attributes, { separator: " " });
@@ -66,7 +66,7 @@ export function JSXOpeningElement(node, print) {
 
 export function JSXClosingElement(node, print) {
   this.push("</");
-  print(node.name);
+  print.plain(node.name);
   this.push(">");
 }
 

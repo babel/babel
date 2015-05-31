@@ -1,18 +1,18 @@
 import * as t from "../../types";
 
 export function _params(node, print) {
-  print(node.typeParameters);
+  print.plain(node.typeParameters);
   this.push("(");
   print.list(node.params, {
     iterator: (node) =>{
       if (node.optional) this.push("?");
-      print(node.typeAnnotation);
+      print.plain(node.typeAnnotation);
     }
   });
   this.push(")");
 
   if (node.returnType) {
-    print(node.returnType);
+    print.plain(node.returnType);
   }
 }
 
@@ -35,15 +35,15 @@ export function _method(node, print) {
 
   if (node.computed) {
     this.push("[");
-    print(key);
+    print.plain(key);
     this.push("]");
   } else {
-    print(key);
+    print.plain(key);
   }
 
   this._params(value, print);
   this.push(" ");
-  print(value.body);
+  print.plain(value.body);
 }
 
 export function FunctionExpression(node, print) {
@@ -53,14 +53,14 @@ export function FunctionExpression(node, print) {
 
   if (node.id) {
     this.push(" ");
-    print(node.id);
+    print.plain(node.id);
   } else {
     this.space();
   }
 
   this._params(node, print);
   this.space();
-  print(node.body);
+  print.plain(node.body);
 }
 
 export { FunctionExpression as FunctionDeclaration };
@@ -69,7 +69,7 @@ export function ArrowFunctionExpression(node, print) {
   if (node.async) this.push("async ");
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
-    print(node.params[0]);
+    print.plain(node.params[0]);
   } else {
     this._params(node, print);
   }
@@ -82,7 +82,7 @@ export function ArrowFunctionExpression(node, print) {
     this.push("(");
   }
 
-  print(node.body);
+  print.plain(node.body);
 
   if (bodyNeedsParens) {
     this.push(")");

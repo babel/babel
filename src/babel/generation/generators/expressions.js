@@ -16,40 +16,40 @@ export function UnaryExpression(node, print) {
 
   this.push(node.operator);
   if (hasSpace) this.push(" ");
-  print(node.argument);
+  print.plain(node.argument);
 }
 
 export function DoExpression(node, print) {
   this.push("do");
   this.space();
-  print(node.body);
+  print.plain(node.body);
 }
 
 export function UpdateExpression(node, print) {
   if (node.prefix) {
     this.push(node.operator);
-    print(node.argument);
+    print.plain(node.argument);
   } else {
-    print(node.argument);
+    print.plain(node.argument);
     this.push(node.operator);
   }
 }
 
 export function ConditionalExpression(node, print) {
-  print(node.test);
+  print.plain(node.test);
   this.space();
   this.push("?");
   this.space();
-  print(node.consequent);
+  print.plain(node.consequent);
   this.space();
   this.push(":");
   this.space();
-  print(node.alternate);
+  print.plain(node.alternate);
 }
 
 export function NewExpression(node, print) {
   this.push("new ");
-  print(node.callee);
+  print.plain(node.callee);
   this.push("(");
   print.list(node.arguments);
   this.push(")");
@@ -69,11 +69,11 @@ export function Super() {
 
 export function Decorator(node, print) {
   this.push("@");
-  print(node.expression);
+  print.plain(node.expression);
 }
 
 export function CallExpression(node, print) {
-  print(node.callee);
+  print.plain(node.callee);
 
   this.push("(");
 
@@ -109,7 +109,7 @@ var buildYieldAwait = function (keyword) {
 
     if (node.argument) {
       this.push(" ");
-      print(node.argument);
+      print.plain(node.argument);
     }
   };
 };
@@ -122,23 +122,23 @@ export function EmptyStatement() {
 }
 
 export function ExpressionStatement(node, print) {
-  print(node.expression);
+  print.plain(node.expression);
   this.semicolon();
 }
 
 export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
-  print(node.left);
+  print.plain(node.left);
   this.push(" ");
   this.push(node.operator);
   this.push(" ");
-  print(node.right);
+  print.plain(node.right);
 }
 
 export function BindExpression(node, print) {
-  print(node.object);
+  print.plain(node.object);
   this.push("::");
-  print(node.callee);
+  print.plain(node.callee);
 }
 
 export {
@@ -151,7 +151,7 @@ var SCIENTIFIC_NOTATION = /e/i;
 
 export function MemberExpression(node, print) {
   var obj = node.object;
-  print(obj);
+  print.plain(obj);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
@@ -164,7 +164,7 @@ export function MemberExpression(node, print) {
 
   if (computed) {
     this.push("[");
-    print(node.property);
+    print.plain(node.property);
     this.push("]");
   } else {
     // 5..toFixed(2);
@@ -173,12 +173,12 @@ export function MemberExpression(node, print) {
     }
 
     this.push(".");
-    print(node.property);
+    print.plain(node.property);
   }
 }
 
 export function MetaProperty(node, print) {
-  print(node.meta);
+  print.plain(node.meta);
   this.push(".");
-  print(node.property);
+  print.plain(node.property);
 }

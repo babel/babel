@@ -4,7 +4,7 @@ import * as t from "../../types";
 export function WithStatement(node, print) {
   this.keyword("with");
   this.push("(");
-  print(node.object);
+  print.plain(node.object);
   this.push(")");
   print.block(node.body);
 }
@@ -12,7 +12,7 @@ export function WithStatement(node, print) {
 export function IfStatement(node, print) {
   this.keyword("if");
   this.push("(");
-  print(node.test);
+  print.plain(node.test);
   this.push(")");
   this.space();
 
@@ -29,18 +29,18 @@ export function ForStatement(node, print) {
   this.keyword("for");
   this.push("(");
 
-  print(node.init);
+  print.plain(node.init);
   this.push(";");
 
   if (node.test) {
     this.push(" ");
-    print(node.test);
+    print.plain(node.test);
   }
   this.push(";");
 
   if (node.update) {
     this.push(" ");
-    print(node.update);
+    print.plain(node.update);
   }
 
   this.push(")");
@@ -50,7 +50,7 @@ export function ForStatement(node, print) {
 export function WhileStatement(node, print) {
   this.keyword("while");
   this.push("(");
-  print(node.test);
+  print.plain(node.test);
   this.push(")");
   print.block(node.body);
 }
@@ -59,9 +59,9 @@ var buildForXStatement = function (op) {
   return function (node, print) {
     this.keyword("for");
     this.push("(");
-    print(node.left);
+    print.plain(node.left);
     this.push(` ${op} `);
-    print(node.right);
+    print.plain(node.right);
     this.push(")");
     print.block(node.body);
   };
@@ -72,11 +72,11 @@ export var ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node, print) {
   this.push("do ");
-  print(node.body);
+  print.plain(node.body);
   this.space();
   this.keyword("while");
   this.push("(");
-  print(node.test);
+  print.plain(node.test);
   this.push(");");
 }
 
@@ -87,7 +87,7 @@ var buildLabelStatement = function (prefix, key) {
     var label = node[key || "label"];
     if (label) {
       this.push(" ");
-      print(label);
+      print.plain(label);
     }
 
     this.semicolon();
@@ -99,50 +99,50 @@ export var ReturnStatement   = buildLabelStatement("return", "argument");
 export var BreakStatement    = buildLabelStatement("break");
 
 export function LabeledStatement(node, print) {
-  print(node.label);
+  print.plain(node.label);
   this.push(": ");
-  print(node.body);
+  print.plain(node.body);
 }
 
 export function TryStatement(node, print) {
   this.keyword("try");
-  print(node.block);
+  print.plain(node.block);
   this.space();
 
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
   // We run into this from regenerator generated ast.
   if (node.handlers) {
-    print(node.handlers[0]);
+    print.plain(node.handlers[0]);
   } else {
-    print(node.handler);
+    print.plain(node.handler);
   }
 
   if (node.finalizer) {
     this.space();
     this.push("finally ");
-    print(node.finalizer);
+    print.plain(node.finalizer);
   }
 }
 
 export function CatchClause(node, print) {
   this.keyword("catch");
   this.push("(");
-  print(node.param);
+  print.plain(node.param);
   this.push(") ");
-  print(node.body);
+  print.plain(node.body);
 }
 
 export function ThrowStatement(node, print) {
   this.push("throw ");
-  print(node.argument);
+  print.plain(node.argument);
   this.semicolon();
 }
 
 export function SwitchStatement(node, print) {
   this.keyword("switch");
   this.push("(");
-  print(node.discriminant);
+  print.plain(node.discriminant);
   this.push(")");
   this.space();
   this.push("{");
@@ -160,7 +160,7 @@ export function SwitchStatement(node, print) {
 export function SwitchCase(node, print) {
   if (node.test) {
     this.push("case ");
-    print(node.test);
+    print.plain(node.test);
     this.push(":");
   } else {
     this.push("default:");
@@ -207,12 +207,12 @@ export function VariableDeclaration(node, print, parent) {
 }
 
 export function VariableDeclarator(node, print) {
-  print(node.id);
-  print(node.id.typeAnnotation);
+  print.plain(node.id);
+  print.plain(node.id.typeAnnotation);
   if (node.init) {
     this.space();
     this.push("=");
     this.space();
-    print(node.init);
+    print.plain(node.init);
   }
 }

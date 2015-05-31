@@ -1,9 +1,9 @@
 export function ComprehensionBlock(node, print) {
   this.keyword("for");
   this.push("(");
-  print(node.left);
+  print.plain(node.left);
   this.push(" of ");
-  print(node.right);
+  print.plain(node.right);
   this.push(")");
 }
 
@@ -16,12 +16,12 @@ export function ComprehensionExpression(node, print) {
   if (node.filter) {
     this.keyword("if");
     this.push("(");
-    print(node.filter);
+    print.plain(node.filter);
     this.push(")");
     this.space();
   }
 
-  print(node.body);
+  print.plain(node.body);
 
   this.push(node.generator ? ")" : "]");
 }
