@@ -121,7 +121,7 @@ export function AssignmentExpression(node, parent, scope, file) {
 
   var ref;
   if (this.isCompletionRecord() || !this.parentPath.isExpressionStatement()) {
-    ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");;
+    ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
     nodes.push(t.variableDeclaration("var", [
       t.variableDeclarator(ref, node.right)
