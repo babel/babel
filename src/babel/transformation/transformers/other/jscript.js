@@ -6,7 +6,7 @@ export var metadata = {
 };
 
 export var FunctionExpression = {
-  exit(node, print) {
+  exit(node) {
     if (!node.id) return;
     node._ignoreUserWhitespace = true;
 
