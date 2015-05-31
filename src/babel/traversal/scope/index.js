@@ -82,7 +82,7 @@ var collectorVisitor = {
     if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
   },
 
-  BlockScoped(node, parent, scope, state) {
+  BlockScoped(node, parent, scope) {
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
   }
@@ -317,7 +317,6 @@ export default class Scope {
     if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
-      this.dump();
       throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
