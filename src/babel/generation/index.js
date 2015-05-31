@@ -21,7 +21,7 @@ class CodeGenerator {
     this.opts     = opts;
     this.ast      = ast;
 
-    this.whitespace = new Whitespace(this.tokens, this.comments, this.format);
+    this.whitespace = new Whitespace(this.tokens);
     this.position   = new Position;
     this.map        = new SourceMap(this.position, opts, code);
     this.buffer     = new Buffer(this.position, this.format);

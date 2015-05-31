@@ -1,5 +1,3 @@
-import sortBy from "lodash/collection/sortBy";
-
 /**
  * Returns `i`th number from `base`, continuing from 0 when `max` is reached.
  * Useful for shifting `for` loop by a fixed number but going over all items.
@@ -21,7 +19,7 @@ function getLookupIndex(i, base, max) {
 }
 
 export default class Whitespace {
-  constructor(tokens, comments) {
+  constructor(tokens) {
     this.tokens = tokens;
     this.used   = {};
 
