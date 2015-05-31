@@ -59,12 +59,10 @@ export default {
   "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),
+  regenerator:                             require("./other/regenerator"),
 
   // es6 syntax transformation is **forbidden** past this point since regenerator will chuck a massive
   // hissy fit
-
-  //- regenerator
-  regenerator:                             require("./other/regenerator"),
 
   //- builtin-modules
   runtime:                                 require("./other/runtime"),
