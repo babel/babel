@@ -265,7 +265,6 @@ export default class File {
       }
       var visitor = traverse.visitors.merge(visitors);
       var mergeTransformer = new Transformer(group, visitor);
-      //console.log(mergeTransformer);
       stack.push(mergeTransformer.buildPass(this));
     }
 
