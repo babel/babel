@@ -20,7 +20,7 @@ function returnBlock(expr) {
 }
 
 var visitor = {
-  BlockStatement(node, parent) {
+  enter(node, parent) {
     if (t.isTryStatement(parent)) {
       if (node === parent.block) {
         this.skip();
