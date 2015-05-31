@@ -708,7 +708,7 @@ export default class Scope {
   getFunctionParent() {
     var scope = this;
     do {
-      if (scope.path.isProgram() || scope.path.isFunction()) {
+      if (scope.path.isFunctionParent()) {
         return scope;
       }
     } while (scope = scope.parent);
@@ -723,15 +723,11 @@ export default class Scope {
   getBlockParent() {
     var scope = this;
     do {
-      if (scope.path.isProgram() ||
-          scope.path.isBlockStatement() ||
-          scope.path.isFunction() ||
-          scope.path.isLoop() ||
-          scope.path.isSwitchStatement()) {
+      if (scope.path.isBlockParent()) {
         return scope;
       }
     } while (scope = scope.parent);
-    throw new Error("We couldn't find a BlockStatement, For or Program...");
+    throw new Error("We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...");
   }
 
   /**

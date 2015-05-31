@@ -1,19 +1,21 @@
 {
   "ExpressionStatement":      ["Statement"],
-  "BreakStatement":           ["Statement", "Terminatorless"],
-  "ContinueStatement":        ["Statement", "Terminatorless"],
   "DebuggerStatement":        ["Statement"],
-  "DoWhileStatement":         ["Statement", "Loop", "While", "Scopable"],
   "IfStatement":              ["Statement"],
-  "ReturnStatement":          ["Statement", "Terminatorless"],
-  "SwitchStatement":          ["Statement", "Scopable"],
-  "ThrowStatement":           ["Statement", "Terminatorless"],
   "TryStatement":             ["Statement"],
-  "WhileStatement":           ["Statement", "Loop", "While", "Scopable"],
   "WithStatement":            ["Statement"],
   "EmptyStatement":           ["Statement"],
   "LabeledStatement":         ["Statement"],
   "VariableDeclaration":      ["Statement", "Declaration"],
+
+  "BreakStatement":           ["Statement", "Terminatorless"],
+  "ContinueStatement":        ["Statement", "Terminatorless"],
+  "ReturnStatement":          ["Statement", "Terminatorless"],
+  "ThrowStatement":           ["Statement", "Terminatorless"],
+
+  "DoWhileStatement":         ["Statement", "BlockParent", "Loop", "While", "Scopable"],
+  "WhileStatement":           ["Statement", "BlockParent", "Loop", "While", "Scopable"],
+  "SwitchStatement":          ["Statement", "BlockParent", "Scopable"],
 
   "ImportSpecifier":            ["ModuleSpecifier"],
   "ExportSpecifier":            ["ModuleSpecifier"],
@@ -26,12 +28,12 @@
   "ExportNamedDeclaration":     ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   "ImportDeclaration":          ["Statement", "Declaration", "ModuleDeclaration"],
 
-  "ArrowFunctionExpression": ["Scopable", "Function", "Func", "Expression", "Pure"],
-  "FunctionDeclaration":     ["Scopable", "Function", "Func", "Statement", "Pure", "Declaration"],
-  "FunctionExpression":      ["Scopable", "Function", "Func", "Expression", "Pure"],
+  "ArrowFunctionExpression": ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"],
+  "FunctionDeclaration":     ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Statement", "Pure", "Declaration"],
+  "FunctionExpression":      ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"],
 
-  "BlockStatement": ["Scopable", "Statement"],
-  "Program":        ["Scopable"],
+  "BlockStatement": ["Scopable", "BlockParent", "Statement"],
+  "Program":        ["Scopable", "BlockParent", "FunctionParent"],
   "CatchClause":    ["Scopable"],
 
   "LogicalExpression": ["Binary", "Expression"],
@@ -44,9 +46,9 @@
   "ClassDeclaration": ["Scopable", "Class", "Statement", "Declaration"],
   "ClassExpression":  ["Scopable", "Class", "Expression"],
 
-  "ForOfStatement": ["Scopable", "Statement", "For", "Loop", "ForXStatement"],
-  "ForInStatement": ["Scopable", "Statement", "For", "Loop", "ForXStatement"],
-  "ForStatement":   ["Scopable", "Statement", "For", "Loop"],
+  "ForOfStatement": ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
+  "ForInStatement": ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
+  "ForStatement":   ["Scopable", "Statement", "For", "BlockParent", "Loop"],
 
   "ObjectPattern":     ["Pattern"],
   "ArrayPattern":      ["Pattern"],
@@ -54,9 +56,11 @@
 
   "Property":   ["UserWhitespacable"],
 
+  "AwaitExpression":           ["Expression", "Terminatorless"],
+  "YieldExpression":           ["Expression", "Terminatorless"],
+
   "ArrayExpression":           ["Expression"],
   "AssignmentExpression":      ["Expression"],
-  "AwaitExpression":           ["Expression", "Terminatorless"],
   "CallExpression":            ["Expression"],
   "ComprehensionExpression":   ["Expression", "Scopable"],
   "ConditionalExpression":     ["Expression"],
@@ -74,7 +78,6 @@
   "UpdateExpression":          ["Expression"],
   "JSXEmptyExpression":        ["Expression"],
   "JSXMemberExpression":       ["Expression"],
-  "YieldExpression":           ["Expression", "Terminatorless"],
 
   "AnyTypeAnnotation":           ["Flow"],
   "ArrayTypeAnnotation":         ["Flow"],
