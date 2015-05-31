@@ -108,6 +108,10 @@ var metadataVisitor = {
         formatter.hasNonDefaultExports = true;
       }
     }
+  },
+
+  Scope() {
+    this.skip();
   }
 };
 
@@ -144,7 +148,14 @@ export default class DefaultFormatter {
   }
 
   getMetadata() {
-    this.file.path.traverse(metadataVisitor, this);
+    var has = false;
+    for (var node of (this.file.ast.program.body: Array)) {
+      if (t.isModuleDeclaration(node)) {
+        has = true;
+        break;
+      }
+    }
+    if (has) this.file.path.traverse(metadataVisitor, this);
   }
 
   remapAssignments() {
