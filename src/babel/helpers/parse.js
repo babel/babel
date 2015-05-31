@@ -14,7 +14,6 @@ export default function (code, opts = {}) {
     strictMode:                  opts.strictMode,
     sourceType:                  opts.sourceType,
     locations:                   true,
-    onComment:                   comments,
     features:                    opts.features || {},
     plugins:                     opts.plugins || {},
     onToken:                     tokens,

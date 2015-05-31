@@ -5,7 +5,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var foo = _extends({}, bar);
 
 var foo = _extends({}, bar, {
-  bar: "foo" });
+  bar: "foo"
+});
 
 var foo = _extends({}, bar, {
   bar: "foo"
