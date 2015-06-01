@@ -6,6 +6,7 @@ import * as babel from "../node";
 import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
+import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -36,6 +37,12 @@ var only;
 
 var oldHandlers   = {};
 var maps          = {};
+
+var cwd = require.main ? require.main.filename : process.cwd();
+
+var getRelativePath = function (filename){
+  return path.relative(cwd, filename);
+};
 
 var mtime = function (filename) {
   return +fs.statSync(filename).mtime;
@@ -81,7 +88,7 @@ var compile = function (filename) {
 
 var shouldIgnore = function (filename) {
   if (!ignore && !only) {
-    return /node_modules/.test(filename);
+    return /node_modules/.test(getRelativePath(filename));
   } else {
     return util.shouldIgnore(filename, ignore || [], only || []);
   }
