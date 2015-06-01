@@ -85,22 +85,27 @@ export function resolve(resolved?): ?NodePath {
     var targetName = targetKey.value;
 
     var target = this.get("object").resolve(resolved);
-    if (!target || !target.isObjectExpression()) return;
+    if (!target) return;
 
-    var props = target.get("properties");
-    for (var i = 0; i < props.length; i++) {
-      var prop = props[i];
-      if (!prop.isProperty()) continue;
+    if (target.isObjectExpression()) {
+      var props = target.get("properties");
+      for (var prop of (props: Array)) {
+        if (!prop.isProperty()) continue;
 
-      var key = prop.get("key");
+        var key = prop.get("key");
 
-      // { foo: obj }
-      var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
+        // { foo: obj }
+        var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
 
-      // { "foo": "obj" } or { ["foo"]: "obj" }
-      match = match || key.isLiteral({ value: targetName });
+        // { "foo": "obj" } or { ["foo"]: "obj" }
+        match = match || key.isLiteral({ value: targetName });
 
-      if (match) return prop.get("value");
+        if (match) return prop.get("value");
+      }
+    } else if (target.isArrayExpression() && !isNaN(+targetName)) {
+      var elems = target.get("elements");
+      var elem = elems[targetName];
+      if (elem) return elem.resolve(resolved);
     }
   } else {
     return this;
