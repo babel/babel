@@ -168,12 +168,6 @@ pp.parseDoStatement = function(node) {
   this.labels.push(loopLabel)
   node.body = this.parseStatement(false)
   this.labels.pop()
-  if (this.options.features["es7.doExpressions"] && this.type !== tt._while) {
-    let container = this.startNodeAt(start)
-    container.expression = this.finishNode(node, "DoExpression")
-    this.semicolon()
-    return this.finishNode(container, "ExpressionStatement")
-  }
   this.expect(tt._while)
   node.test = this.parseParenExpression()
   if (this.options.ecmaVersion >= 6)
