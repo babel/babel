@@ -199,7 +199,7 @@ export function referencesImport(moduleSource, importName) {
       return true;
     }
 
-    if (t.ImportNamespaceSpecifier(specifier) && importName === "*") {
+    if (t.isImportNamespaceSpecifier(specifier) && importName === "*") {
       return true;
     }
 
