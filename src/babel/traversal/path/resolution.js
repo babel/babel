@@ -3,11 +3,22 @@ import isNumber from "lodash/lang/isNumber";
 import isString from "lodash/lang/isString";
 import * as t from "../../types";
 
+const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<="];
+const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|"];
+
 /**
  * Description
  */
 
-export function getTypeAnnotation(): {
+export function getTypeAnnotation() {
+  return this.getTypeAnnotationInfo().annotation;
+}
+
+/**
+ * Description
+ */
+
+export function getTypeAnnotationInfo(): {
   inferred: boolean;
   annotation: ?Object;
 } {
@@ -24,23 +35,23 @@ export function getTypeAnnotation(): {
 
   if (!type) {
     info.inferred = true;
-    type = this.inferType(this);
+    type = this.inferTypeAnnotation();
   }
 
-  if (type) {
-    if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
-    info.annotation = type;
-  }
+  if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
+  info.annotation = type;
 
   return info;
 }
 
 /**
- * Description
+ * Resolves `NodePath` pointers until it resolves to an absolute path. ie. a data type instead of a
+ * call etc. If a data type can't be resolved then the last path we were at is returned.
  */
 
 export function resolve(resolved?): ?NodePath {
   // detect infinite recursion
+  // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
 
   // we store all the paths we've "resolved" in this array to prevent infinite recursion
@@ -53,9 +64,15 @@ export function resolve(resolved?): ?NodePath {
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
-  } else if (this.isIdentifier()) {
+  } else if (this.isReferencedIdentifier()) {
     var binding = this.scope.getBinding(this.node.name);
-    if (!binding || !binding.constant) return;
+    if (!binding) return;
+
+    // reassigned so we can't really resolve it
+    if (!binding.constant) return;
+
+    // todo - lookup module in dependency graph
+    if (binding.kind === "module") return;
 
     if (binding.path === this) {
       return this;
@@ -94,43 +111,121 @@ export function resolve(resolved?): ?NodePath {
 }
 
 /**
- * Description
+ * Infer the type of the current `NodePath`.
+ *
+ * NOTE: This is not cached. Use `getTypeAnnotation()` which is cached.
  */
 
-export function inferType(path: NodePath): ?Object {
-  path = path.resolve();
+export function inferTypeAnnotation(force) {
+  return this._inferTypeAnnotation(force) || t.anyTypeAnnotation();
+}
+
+export function _inferTypeAnnotation(force?: boolean): ?Object {
+  var path = this.resolve();
   if (!path) return;
 
-  if (path.isType("RestElement") || path.parentPath.isType("RestElement") || path.isType("ArrayExpression")) {
+  if (path.isNodeType("RestElement") || path.parentPath.isNodeType("RestElement") || path.isNodeType("ArrayExpression")) {
     return t.genericTypeAnnotation(t.identifier("Array"));
   }
 
-  if (path.parentPath.isType("TypeCastExpression")) {
+  if (path.parentPath.isNodeType("TypeCastExpression")) {
     return path.parentPath.node.typeAnnotation;
   }
 
-  if (path.isType("TypeCastExpression")) {
+  if (path.parentPath.isNodeType("ReturnStatement") && !force) {
+    return path.parentPath.inferTypeAnnotation();
+  }
+
+  if (path.isNodeType("ReturnStatement")) {
+    var funcPath = this.findParent((node, path) => path.isFunction());
+    if (!funcPath) return;
+
+    var returnType = funcPath.node.returnType;
+    if (returnType) {
+      return returnType;
+    } else {
+      return this.get("argument").inferTypeAnnotation(true);
+    }
+  }
+
+  if (path.isNodeType("NewExpression")) {
+    // todo
+  }
+
+  if (path.isNodeType("Identifier") && path.node.name === "undefined") {
+    return t.voidTypeAnnotation();
+  }
+
+  if (path.isNodeType("TypeCastExpression")) {
     return path.node.typeAnnotation;
   }
 
-  if (path.isType("ObjectExpression")) {
+  if (path.isNodeType("ObjectExpression")) {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
 
-  if (path.isType("Function")) {
+  if (path.isNodeType("Function")) {
     return t.identifier("Function");
   }
 
-  if (path.isType("Literal")) {
-    var value = path.node.value;
-    if (isString(value)) return t.stringTypeAnnotation();
-    if (isNumber(value)) return t.numberTypeAnnotation();
-    if (isBoolean(value)) return t.booleanTypeAnnotation();
+  if (path.isNodeType("BinaryExpression")) {
+    var operator = path.node.operator;
+    if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
+      // these operators always result in numbers
+      return t.numberTypeAnnotation();
+    } else if (BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
+      return t.booleanTypeAnnotation();
+    } else if (operator === "+") {
+      var right = this.get("right").getTypeAnnotation();
+      var left  = this.get("left").getTypeAnnotation();
+
+      if (t.isNumberTypeAnnotation(left) && t.isNumberTypeAnnotation(right)) {
+        // both numbers so this will be a number
+        return t.numberTypeAnnotation();
+      } else if (t.isStringTypeAnnotation(left) && t.isStringTypeAnnotation(right)) {
+        // both strings so this will be a string
+        return t.stringTypeAnnotation();
+      } else {
+        // unsure if left and right are both strings or numbers so stay on the safe side
+        return t.unionTypeAnnotation([
+          t.stringTypeAnnotation(),
+          t.numberTypeAnnotation()
+        ]);
+      }
+    }
   }
 
-  if (path.isType("CallExpression")) {
+  if (path.isNodeType("LogicalExpression")) {
+    // todo: create UnionType of left and right annotations
+  }
+
+  if (path.isNodeType("UpdateExpression")) {
+    var operator = path.node.operator;
+    if (operator === "++" || operator === "--") {
+      return t.numberTypeAnnotation();
+    }
+  }
+
+  if (path.isNodeType("UnaryExpression") && path.node.prefix) {
+    var operator = path.node.operator;
+    if (operator === "!") {
+      return t.booleanTypeAnnotation();
+    } else if (operator === "+" || operator === "-") {
+      return t.numberTypeAnnotation();
+    }
+  }
+
+  if (path.isNodeType("Literal")) {
+    var value = path.node.value;
+    if (typeof value === "string") return t.stringTypeAnnotation();
+    if (typeof value === "number") return t.numberTypeAnnotation();
+    if (typeof value === "boolean") return t.booleanTypeAnnotation();
+    if (path.node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
+  }
+
+  if (path.isNodeType("CallExpression")) {
     var callee = path.get("callee").resolve();
-    if (callee && callee.isType("Function")) return callee.node.returnType;
+    if (callee && callee.isNodeType("Function")) return callee.node.returnType;
   }
 }
 
@@ -138,8 +233,8 @@ export function inferType(path: NodePath): ?Object {
  * Description
  */
 
-export function isTypeGeneric(genericName: string, opts = {}): boolean {
-  var typeInfo = this.getTypeAnnotation();
+export function isTypeAnnotationGeneric(genericName: string, opts = {}): boolean {
+  var typeInfo = this.getTypeAnnotationInfo();
   var type     = typeInfo.annotation;
   if (!type) return false;
 

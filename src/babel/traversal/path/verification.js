@@ -99,7 +99,7 @@ export function equals(key, value): boolean {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isType(type: string): boolean {
+export function isNodeType(type: string): boolean {
   return t.isType(this.type, type);
 }
 
