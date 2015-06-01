@@ -101,36 +101,36 @@ export function inferType(path: NodePath): ?Object {
   path = path.resolve();
   if (!path) return;
 
-  if (path.isPreviousType("RestElement") || path.parentPath.isPreviousType("RestElement") || path.isPreviousType("ArrayExpression")) {
+  if (path.isType("RestElement") || path.parentPath.isType("RestElement") || path.isType("ArrayExpression")) {
     return t.genericTypeAnnotation(t.identifier("Array"));
   }
 
-  if (path.parentPath.isPreviousType("TypeCastExpression")) {
+  if (path.parentPath.isType("TypeCastExpression")) {
     return path.parentPath.node.typeAnnotation;
   }
 
-  if (path.isPreviousType("TypeCastExpression")) {
+  if (path.isType("TypeCastExpression")) {
     return path.node.typeAnnotation;
   }
 
-  if (path.isPreviousType("ObjectExpression")) {
+  if (path.isType("ObjectExpression")) {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
 
-  if (path.isPreviousType("Function")) {
+  if (path.isType("Function")) {
     return t.identifier("Function");
   }
 
-  if (path.isPreviousType("Literal")) {
+  if (path.isType("Literal")) {
     var value = path.node.value;
     if (isString(value)) return t.stringTypeAnnotation();
     if (isNumber(value)) return t.numberTypeAnnotation();
     if (isBoolean(value)) return t.booleanTypeAnnotation();
   }
 
-  if (path.isPreviousType("CallExpression")) {
+  if (path.isType("CallExpression")) {
     var callee = path.get("callee").resolve();
-    if (callee && callee.isPreviousType("Function")) return callee.node.returnType;
+    if (callee && callee.isType("Function")) return callee.node.returnType;
   }
 }
 

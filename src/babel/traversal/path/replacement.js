@@ -110,12 +110,12 @@ export function replaceWith(replacement, whateverAllowed) {
   }
 
   // replacing a statement with an expression so wrap it in an expression statement
-  if (this.isPreviousType("Statement") && t.isExpression(replacement) && !this.canHaveVariableDeclarationOrExpression()) {
+  if (this.isType("Statement") && t.isExpression(replacement) && !this.canHaveVariableDeclarationOrExpression()) {
     replacement = t.expressionStatement(replacement);
   }
 
   // replacing an expression with a statement so let's explode it
-  if (this.isPreviousType("Expression") && t.isStatement(replacement)) {
+  if (this.isType("Expression") && t.isStatement(replacement)) {
     return this.replaceExpressionWithStatements([replacement]);
   }
 

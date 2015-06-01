@@ -1,7 +1,8 @@
 import * as removalHooks from "./lib/removal-hooks";
 
 /**
- * Description
+ * Deprecated in favor of `dangerouslyRemove` as it's far more scary and more accurately portrays
+ * the risk.
  */
 
 export function remove() {

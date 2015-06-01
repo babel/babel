@@ -11,10 +11,10 @@ export function insertBefore(nodes) {
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
     return this.parentPath.insertBefore(nodes);
-  } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+  } else if (this.isType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
     if (this.node) nodes.push(this.node);
     this.replaceExpressionWithStatements(nodes);
-  } else if (this.isPreviousType("Statement") || !this.type) {
+  } else if (this.isType("Statement") || !this.type) {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertBefore(nodes);
@@ -82,14 +82,14 @@ export function insertAfter(nodes) {
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
     return this.parentPath.insertAfter(nodes);
-  } else if (this.isPreviousType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+  } else if (this.isType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
     if (this.node) {
       var temp = this.scope.generateDeclaredUidIdentifier();
       nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
       nodes.push(t.expressionStatement(temp));
     }
     this.replaceExpressionWithStatements(nodes);
-  } else if (this.isPreviousType("Statement") || !this.type) {
+  } else if (this.isType("Statement") || !this.type) {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertAfter(nodes);
