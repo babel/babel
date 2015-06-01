@@ -13,7 +13,7 @@ export function getBindingIdentifiers(node: Object): Object {
     var id = search.shift();
     if (!id) continue;
 
-    var keys = t.getBindingIdentifiers.keys[id.type];
+    var key = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
       ids[id.name] = id;
@@ -21,10 +21,8 @@ export function getBindingIdentifiers(node: Object): Object {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);
       }
-    } else if (keys) {
-      for (var key of (keys: Array)) {
-        search = search.concat(id[key] || []);
-      }
+    } else if (key && id[key]) {
+      search = search.concat(id[key]);
     }
   }
 
@@ -32,27 +30,27 @@ export function getBindingIdentifiers(node: Object): Object {
 }
 
 getBindingIdentifiers.keys = {
-  CatchClause: ["param"],
-  UnaryExpression: ["argument"],
-  AssignmentExpression: ["left"],
-  ImportSpecifier: ["local"],
-  ImportNamespaceSpecifier: ["local"],
-  ImportDefaultSpecifier: ["local"],
-  VariableDeclarator: ["id"],
-  FunctionDeclaration: ["id"],
-  FunctionExpression: ["id"],
-  ClassDeclaration: ["id"],
-  ClassExpression: ["id"],
-  SpreadElement: ["argument"],
-  RestElement: ["argument"],
-  UpdateExpression: ["argument"],
-  SpreadProperty: ["argument"],
-  Property: ["value"],
-  ComprehensionBlock: ["left"],
-  AssignmentPattern: ["left"],
-  ComprehensionExpression: ["blocks"],
-  ImportDeclaration: ["specifiers"],
-  VariableDeclaration: ["declarations"],
-  ArrayPattern: ["elements"],
-  ObjectPattern: ["properties"]
+  CatchClause: "param",
+  UnaryExpression: "argument",
+  AssignmentExpression: "left",
+  ImportSpecifier: "local",
+  ImportNamespaceSpecifier: "local",
+  ImportDefaultSpecifier: "local",
+  VariableDeclarator: "id",
+  FunctionDeclaration: "id",
+  FunctionExpression: "id",
+  ClassDeclaration: "id",
+  ClassExpression: "id",
+  SpreadElement: "argument",
+  RestElement: "argument",
+  UpdateExpression: "argument",
+  SpreadProperty: "argument",
+  Property: "value",
+  ComprehensionBlock: "left",
+  AssignmentPattern: "left",
+  ComprehensionExpression: "blocks",
+  ImportDeclaration: "specifiers",
+  VariableDeclaration: "declarations",
+  ArrayPattern: "elements",
+  ObjectPattern: "properties"
 };
