@@ -1,10 +1,7 @@
-import isBoolean from "lodash/lang/isBoolean";
-import isNumber from "lodash/lang/isNumber";
-import isString from "lodash/lang/isString";
 import * as t from "../../types";
 
-const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<="];
-const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|"];
+const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in"];
+const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 
 /**
  * Description
@@ -129,7 +126,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.parentPath.isNodeType("TypeCastExpression")) {
-    return path.parentPath.node.typeAnnotation;
+    return path.parentPath.inferTypeAnnotation();
+  }
+
+  if (path.isNodeType("TypeCastExpression")) {
+    return path.node.typeAnnotation;
   }
 
   if (path.parentPath.isNodeType("ReturnStatement") && !force) {
@@ -156,10 +157,6 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     return t.voidTypeAnnotation();
   }
 
-  if (path.isNodeType("TypeCastExpression")) {
-    return path.node.typeAnnotation;
-  }
-
   if (path.isNodeType("ObjectExpression")) {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
@@ -169,21 +166,21 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.isNodeType("BinaryExpression")) {
-    var operator = path.node.operator;
+    let operator = path.node.operator;
     if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
       // these operators always result in numbers
       return t.numberTypeAnnotation();
     } else if (BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
       return t.booleanTypeAnnotation();
     } else if (operator === "+") {
-      var right = this.get("right").getTypeAnnotation();
-      var left  = this.get("left").getTypeAnnotation();
+      var right = this.get("right");
+      var left  = this.get("left");
 
-      if (t.isNumberTypeAnnotation(left) && t.isNumberTypeAnnotation(right)) {
+      if (left.isTypeAnnotationGeneric("Number") && right.isTypeAnnotationGeneric("Number")) {
         // both numbers so this will be a number
         return t.numberTypeAnnotation();
-      } else if (t.isStringTypeAnnotation(left) && t.isStringTypeAnnotation(right)) {
-        // both strings so this will be a string
+      } else if (left.isTypeAnnotationGeneric("String") || right.isTypeAnnotationGeneric("String")) {
+        // one is a string so the result will be a string
         return t.stringTypeAnnotation();
       } else {
         // unsure if left and right are both strings or numbers so stay on the safe side
@@ -199,15 +196,27 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     // todo: create UnionType of left and right annotations
   }
 
+  if (path.isNodeType("ConditionalExpression")) {
+    // todo: create UnionType of consequent and alternate annotations
+  }
+
+  if (path.isNodeType("SequenceExpression")) {
+    return this.get("expressions").pop().inferTypeAnnotation(force);
+  }
+
+  if (path.isNodeType("AssignmentExpression")) {
+    return this.get("right").inferTypeAnnotation(force);
+  }
+
   if (path.isNodeType("UpdateExpression")) {
-    var operator = path.node.operator;
+    let operator = path.node.operator;
     if (operator === "++" || operator === "--") {
       return t.numberTypeAnnotation();
     }
   }
 
   if (path.isNodeType("UnaryExpression") && path.node.prefix) {
-    var operator = path.node.operator;
+    let operator = path.node.operator;
     if (operator === "!") {
       return t.booleanTypeAnnotation();
     } else if (operator === "+" || operator === "-") {
@@ -240,6 +249,14 @@ export function isTypeAnnotationGeneric(genericName: string, opts = {}): boolean
 
   if (typeInfo.inferred && opts.inference === false) {
     return false;
+  }
+
+  if (genericName === "String") {
+    return t.isStringTypeAnnotation(type);
+  } else if (genericName === "Number") {
+    return t.isNumberTypeAnnotation(type);
+  } else if (genericName === "boolean") {
+    return t.isBooleanTypeAnnotation(type);
   }
 
   if (!t.isGenericTypeAnnotation(type) || !t.isIdentifier(type.id, { name: genericName })) {
