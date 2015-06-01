@@ -121,6 +121,9 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   var path = this.resolve();
   if (!path) return;
 
+  var node = path.node;
+  if (node.typeAnnotation) return node.typeAnnotation;
+
   if (path.isNodeType("RestElement") || path.parentPath.isNodeType("RestElement") || path.isNodeType("ArrayExpression")) {
     return t.genericTypeAnnotation(t.identifier("Array"));
   }
@@ -130,7 +133,7 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.isNodeType("TypeCastExpression")) {
-    return path.node.typeAnnotation;
+    return node.typeAnnotation;
   }
 
   if (path.parentPath.isNodeType("ReturnStatement") && !force) {
@@ -150,10 +153,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.isNodeType("NewExpression")) {
-    // todo
+    // this wont be a valid generic type annotation id unless the callee is an Identifier
+    return t.genericTypeAnnotation(node.callee);
   }
 
-  if (path.isNodeType("Identifier") && path.node.name === "undefined") {
+  if (path.isNodeType("Identifier") && node.name === "undefined") {
     return t.voidTypeAnnotation();
   }
 
@@ -161,12 +165,12 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
 
-  if (path.isNodeType("Function")) {
-    return t.identifier("Function");
+  if (path.isNodeType("Function") || path.isNodeType("Class")) {
+    return t.genericTypeAnnotation(t.identifier("Function"));
   }
 
   if (path.isNodeType("BinaryExpression")) {
-    let operator = path.node.operator;
+    let operator = node.operator;
     if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
       // these operators always result in numbers
       return t.numberTypeAnnotation();
@@ -209,14 +213,14 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.isNodeType("UpdateExpression")) {
-    let operator = path.node.operator;
+    let operator = node.operator;
     if (operator === "++" || operator === "--") {
       return t.numberTypeAnnotation();
     }
   }
 
-  if (path.isNodeType("UnaryExpression") && path.node.prefix) {
-    let operator = path.node.operator;
+  if (path.isNodeType("UnaryExpression") && node.prefix) {
+    let operator = node.operator;
     if (operator === "!") {
       return t.booleanTypeAnnotation();
     } else if (operator === "+" || operator === "-") {
@@ -225,11 +229,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (path.isNodeType("Literal")) {
-    var value = path.node.value;
+    var value = node.value;
     if (typeof value === "string") return t.stringTypeAnnotation();
     if (typeof value === "number") return t.numberTypeAnnotation();
     if (typeof value === "boolean") return t.booleanTypeAnnotation();
-    if (path.node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
+    if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
   }
 
   if (path.isNodeType("CallExpression")) {
