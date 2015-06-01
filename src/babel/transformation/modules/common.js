@@ -70,7 +70,6 @@ export default class CommonJSFormatter extends DefaultFormatter {
           t.variableDeclarator(variableName, ref)
         ]));
       } else {
-        console.log(variableName.name);
         // import { foo } from "foo";
         this.internalRemap[variableName.name] = t.memberExpression(ref, specifier.imported);
       }
