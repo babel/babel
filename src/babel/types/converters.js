@@ -74,8 +74,12 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
         exprs.push(t.conditionalExpression(node.test, consequent, alternate));
       } else if (t.isBlockStatement(node)) {
         exprs.push(convert(node.body));
+      } else if (t.isEmptyStatement(node)) {
+        // empty statement so ensure the last item is undefined if we're last
+        ensureLastUndefined = true;
+        continue;
       } else {
-        // bailed, we can't understand this
+        // bailed, we can't turn this statement into an expression
         return bailed = true;
       }
 
