@@ -26,7 +26,7 @@ export function ObjectExpression(node, parent, scope, file) {
     if (prop.decorators) memoiseDecorators(prop.decorators, scope);
 
 
-    if (prop.kind === "init") {
+    if (prop.kind === "init" && !prop.method) {
       prop.kind = "";
       prop.value = t.functionExpression(null, [], t.blockStatement([
         t.returnStatement(prop.value)
