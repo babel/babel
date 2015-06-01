@@ -45,6 +45,7 @@ var wrap = function (state, method, id, scope) {
   }
 
   method.id = id;
+  scope.getProgramParent().references[id.name] = true;
 };
 
 var visit = function (node, name, scope) {

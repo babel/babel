@@ -44,12 +44,6 @@ var collectorVisitor = {
     }
   },
 
-  Scopable(node, parent, scope) {
-    for (var name in scope.bindings) {
-      scope.getProgramParent().references[name] = true;
-    }
-  },
-
   ExportDeclaration: {
     exit(node, parent, scope) {
       var declar = node.declaration;
@@ -459,6 +453,7 @@ export default class Scope {
       return;
     }
 
+    var parent = this.getProgramParent();
     var ids = path.getBindingIdentifiers();
 
     for (var name in ids) {
@@ -469,6 +464,8 @@ export default class Scope {
         if (local.identifier === id) continue;
         this.checkBlockScopedCollisions(local, kind, name, id);
       }
+
+      parent.references[name] = true;
 
       this.bindings[name] = new Binding({
         identifier: id,
