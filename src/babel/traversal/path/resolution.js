@@ -152,8 +152,8 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     }
   }
 
-  if (path.isNodeType("NewExpression")) {
-    // this wont be a valid generic type annotation id unless the callee is an Identifier
+  if (path.isNodeType("NewExpression") && path.get("callee").isIdentifier()) {
+    // only resolve identifier callee
     return t.genericTypeAnnotation(node.callee);
   }
 
