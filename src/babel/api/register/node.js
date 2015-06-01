@@ -41,10 +41,10 @@ var mtime = function (filename) {
   return +fs.statSync(filename).mtime;
 };
 
-var compile = function (filename) {
+var compile = function (filename, opts = {}) {
   var result;
 
-  var opts = extend({}, transformOpts);
+  opts = extend(opts, transformOpts);
 
   // this will be done when the file is transformed anyway but we need all
   // the options so we can generate the cache key
@@ -97,7 +97,9 @@ if (process.env.running_under_istanbul) {
   fs.readFileSync = function (filename) {
     if (istanbulMonkey[filename]) {
       delete istanbulMonkey[filename];
-      var code = compile(filename);
+      var code = compile(filename, {
+        attachAuxiliaryComment: "istanbul ignore next"
+      });
       istanbulMonkey[filename] = true;
       return code;
     } else {
