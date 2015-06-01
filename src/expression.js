@@ -274,7 +274,13 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     if (this.options.features["es7.doExpressions"]) {
       let node = this.startNode()
       this.next()
+      var oldInFunction = this.inFunction
+      var oldLabels = this.labels
+      this.labels = []
+      this.inFunction = false
       node.body = this.parseBlock()
+      this.inFunction = oldInFunction
+      this.labels = oldLabels
       return this.finishNode(node, "DoExpression")
     }
 
