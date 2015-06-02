@@ -1,5 +1,7 @@
 /* eslint eqeqeq: 0 */
 
+const VALID_CALLEES = ["String", "Number", "Math"];
+
 /**
  * Walk the input `node` and statically evaluate if it's truthy.
  *
@@ -74,8 +76,28 @@ export function evaluate(): { confident: boolean; value: any } {
       }
     }
 
-    if (path.isIdentifier({ name: "undefined" })) {
-      return undefined;
+    if (path.isIdentifier() && !path.scope.hasBinding(node.name, true)) {
+      if (node.name === "undefined") {
+        return undefined;
+      } else if (node.name === "Infinity") {
+        return Infinity;
+      } else if (node.name === "NaN") {
+        return NaN;
+      }
+    }
+
+    // "foo".length
+    if (path.isMemberExpression() && !path.parentPath.isCallExpression({ callee: node })) {
+      let property = path.get("property");
+      let object = path.get("object");
+
+      if (object.isLiteral() && property.isIdentifier()) {
+        let value = object.node.value;
+        let type = typeof value;
+        if (type === "number" || type === "string") {
+          return value[property.node.name];
+        }
+      }
     }
 
     if ((path.isIdentifier() || path.isMemberExpression()) && path.isReferenced()) {
@@ -131,6 +153,44 @@ export function evaluate(): { confident: boolean; value: any } {
         case "!=": return left != right;
         case "===": return left === right;
         case "!==": return left !== right;
+      }
+    }
+
+    if (path.isCallExpression()) {
+      var callee = path.get("callee");
+      var context;
+      var func;
+
+      // Number(1);
+      if (callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) && VALID_CALLEES.indexOf(callee.node.name) >= 0) {
+        func = global[node.callee.name];
+      }
+
+      if (callee.isMemberExpression()) {
+        let object = callee.get("object");
+        var property = callee.get("property");
+
+        // Math.min(1, 2)
+        if (object.isIdentifier() && property.isIdentifier() && VALID_CALLEES.indexOf(object.node.name) >= 0) {
+          context = global[object.node.name];
+          func = context[property.node.name];
+        }
+
+        // "abc".charCodeAt(4)
+        if (object.isLiteral() && property.isIdentifier()) {
+          let type = typeof object.node.value;
+          if (type === "string" || type === "number") {
+            context = object.node.value;
+            func = context[property.node.name];
+          }
+        }
+      }
+
+      if (func) {
+        var args = path.get("arguments").map(evaluate);
+        if (!confident) return;
+
+        return func.apply(context, args);
       }
     }
 

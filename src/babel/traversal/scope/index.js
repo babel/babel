@@ -77,9 +77,19 @@ var collectorVisitor = {
   },
 
   BlockScoped(node, parent, scope) {
+    if (this.isFunctionDeclaration()) return;
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
-  }
+  },
+
+  Block(node, parent, scope) {
+    var paths = this.get("body");
+    for (var path of (paths: Array)) {
+      if (path.isFunctionDeclaration()) {
+        scope.getBlockParent().registerDeclaration(path);
+      }
+    }
+  },
 };
 
 var renameVisitor = {
@@ -132,7 +142,13 @@ export default class Scope {
   }
 
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
-  static contextVariables = ["this", "arguments", "super", "undefined"];
+
+  static contextVariables = [
+    "arguments",
+    "undefined",
+    "Infinity",
+    "NaN"
+  ];
 
   /**
    * Description
@@ -539,14 +555,29 @@ export default class Scope {
    * Description
    */
 
-  isPure(node, constantsOnly) {
+  isPure(node, constantsOnly?: boolean) {
     if (t.isIdentifier(node)) {
-      var bindingInfo = this.getBinding(node.name);
-      return !!bindingInfo && (!constantsOnly || (constantsOnly && bindingInfo.constant));
+      var binding = this.getBinding(node.name);
+      if (!binding) return false;
+      if (constantsOnly) return binding.constant;
+      return true;
     } else if (t.isClass(node)) {
-      return !node.superClass;
+      return !node.superClass || this.isPure(node.superClass, constantsOnly);
     } else if (t.isBinary(node)) {
       return this.isPure(node.left, constantsOnly) && this.isPure(node.right, constantsOnly);
+    } else if (t.isArrayExpression(node)) {
+      for (var elem of (node.elements: Array)) {
+        if (!this.isPure(elem, constantsOnly)) return false;
+      }
+      return true;
+    } else if (t.isObjectExpression(node)) {
+      for (var prop of (node.properties: Array)) {
+        if (!this.isPure(prop, constantsOnly)) return false;
+      }
+      return true;
+    } else if (t.isProperty(node)) {
+      if (node.computed && !t.isPure(node.key, constantsOnly)) return false;
+      return t.isPure(node.value, constantsOnly);
     } else {
       return t.isPure(node);
     }
@@ -821,13 +852,13 @@ export default class Scope {
    * Description
    */
 
-  hasBinding(name: string) {
+  hasBinding(name: string, noGlobals?) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
-    if (this.parentHasBinding(name)) return true;
+    if (this.parentHasBinding(name, noGlobals)) return true;
     if (this.hasUid(name)) return true;
-    if (includes(Scope.globals, name)) return true;
-    if (includes(Scope.contextVariables, name)) return true;
+    if (!noGlobals && includes(Scope.globals, name)) return true;
+    if (!noGlobals && includes(Scope.contextVariables, name)) return true;
     return false;
   }
 
@@ -835,8 +866,8 @@ export default class Scope {
    * Description
    */
 
-  parentHasBinding(name: string) {
-    return this.parent && this.parent.hasBinding(name);
+  parentHasBinding(name: string, noGlobals?) {
+    return this.parent && this.parent.hasBinding(name, noGlobals);
   }
 
   /**

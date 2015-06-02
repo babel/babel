@@ -8,10 +8,10 @@
   "LabeledStatement":         ["Statement"],
   "VariableDeclaration":      ["Statement", "Declaration"],
 
-  "BreakStatement":           ["Statement", "Terminatorless"],
-  "ContinueStatement":        ["Statement", "Terminatorless"],
-  "ReturnStatement":          ["Statement", "Terminatorless"],
-  "ThrowStatement":           ["Statement", "Terminatorless"],
+  "BreakStatement":           ["Statement", "Terminatorless", "CompletionStatement"],
+  "ContinueStatement":        ["Statement", "Terminatorless", "CompletionStatement"],
+  "ReturnStatement":          ["Statement", "Terminatorless", "CompletionStatement"],
+  "ThrowStatement":           ["Statement", "Terminatorless", "CompletionStatement"],
 
   "DoWhileStatement":         ["Statement", "BlockParent", "Loop", "While", "Scopable"],
   "WhileStatement":           ["Statement", "BlockParent", "Loop", "While", "Scopable"],
@@ -32,8 +32,8 @@
   "FunctionDeclaration":     ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Statement", "Pure", "Declaration"],
   "FunctionExpression":      ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"],
 
-  "BlockStatement": ["Scopable", "BlockParent", "Statement"],
-  "Program":        ["Scopable", "BlockParent", "FunctionParent"],
+  "BlockStatement": ["Scopable", "BlockParent", "Block", "Statement"],
+  "Program":        ["Scopable", "BlockParent", "Block", "FunctionParent"],
   "CatchClause":    ["Scopable"],
 
   "LogicalExpression": ["Binary", "Expression"],
