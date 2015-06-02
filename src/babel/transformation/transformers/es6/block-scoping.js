@@ -1,3 +1,6 @@
+import type NodePath from "../../../traversal/path";
+import type Scope from "../../../traversal/scope";
+import type File from "../../file";
 import traverse from "../../../traversal";
 import object from "../../../helpers/object";
 import * as util from  "../../../util";

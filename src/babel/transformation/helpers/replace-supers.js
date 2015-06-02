@@ -1,3 +1,4 @@
+import type NodePath from "../../traversal/path";
 import * as messages from "../../messages";
 import * as t from "../../types";
 

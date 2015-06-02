@@ -1,4 +1,6 @@
 import includes from "lodash/collection/includes";
+import type NodePath from "../path";
+import type File from "../../transformation/file";
 import traverse from "../index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../../messages";

@@ -1,3 +1,4 @@
+import type NodePath from "./index";
 import * as t from "../../types";
 
 const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in"];

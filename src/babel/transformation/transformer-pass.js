@@ -1,4 +1,6 @@
+import type Transformer from "./transformer";
 import traverse from "../traversal";
+import type File from "./file";
 
 /**
  * This class is responsible for traversing over the provided `File`s

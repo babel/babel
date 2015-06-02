@@ -1,3 +1,5 @@
+import type NodePath from "../../../traversal/path";
+import type File from "../../file";
 import memoiseDecorators from "../../helpers/memoise-decorators";
 import ReplaceSupers from "../../helpers/replace-supers";
 import * as nameMethod from "../../helpers/name-method";

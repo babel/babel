@@ -1,3 +1,4 @@
+import type File from "../../transformation/file";
 import * as virtualTypes from "./lib/virtual-types";
 import traverse from "../index";
 import assign from "lodash/object/assign";
