@@ -19,7 +19,7 @@ function toStatements(node) {
 
 export var metadata = {
   optional: true,
-  group: "builtin-setup"
+  group: "builtin-basic"
 };
 
 export function ReferencedIdentifier(node, parent, scope) {
@@ -73,6 +73,25 @@ export function ConditionalExpression(node, parent, scope) {
     return node.consequent;
   } else if (evaluateTest === false) {
     return node.alternate;
+  }
+}
+
+export function BlockStatement(node) {
+  var paths = this.get("body");
+
+  var purge = false;
+
+  for (var i = 0; i < paths.length; i++) {
+    let path = paths[i];
+
+    if (!purge && path.isCompletionStatement()) {
+      purge = true;
+      continue;
+    }
+
+    if (purge && !path.isFunctionDeclaration()) {
+      path.dangerouslyRemove();
+    }
   }
 }
 
