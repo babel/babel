@@ -161,7 +161,7 @@ export default function (exports, opts) {
 
     for (var i = 0; i < props.length; i++) {
       var prop = props[i];
-      if (t.isIdentifier(prop.key, { name: "displayName" })) {
+      if (t.isIdentifier(prop.key, { name: "displayName" }) || prop.key.value === "displayName") {
         safe = false;
         break;
       }
