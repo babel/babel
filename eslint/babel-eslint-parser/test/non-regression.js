@@ -185,7 +185,7 @@ describe("verify", function () {
           "import decoratorParameter from 'decorator';",
           "@classDeclaration(decoratorParameter)",
           "@classDeclaration",
-          "class TextareaAutosize {}"
+          "export class TextareaAutosize {}"
         ].join("\n"),
         { "no-unused-vars": 1 },
         []
@@ -197,7 +197,7 @@ describe("verify", function () {
         [
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
-          "class TextareaAutosize {",
+          "export class TextareaAutosize {",
             "@classMethodDeclarationA(decoratorParameter)",
             "@classMethodDeclarationA",
             "methodDeclaration(e) {",
@@ -215,7 +215,7 @@ describe("verify", function () {
         [
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
-          "class TextareaAutosize {",
+          "export class TextareaAutosize {",
             "@classMethodDeclarationA(decoratorParameter)",
             "@classMethodDeclarationA",
             "get bar() { }",
