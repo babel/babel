@@ -161,7 +161,8 @@ export default function (exports, opts) {
 
     for (var i = 0; i < props.length; i++) {
       var prop = props[i];
-      if (t.isIdentifier(prop.key, { name: "displayName" })) {
+      var key = t.toComputedKey(prop);
+      if (t.isLiteral(key, { value: "displayName" })) {
         safe = false;
         break;
       }

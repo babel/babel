@@ -4,3 +4,10 @@ var Whateva = React.createClass({
     return null;
   }
 });
+
+var Bar = React.createClass({
+  "displayName": "Ba",
+  render: function render() {
+    return null;
+  }
+});
