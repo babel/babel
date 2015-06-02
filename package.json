@@ -75,5 +75,15 @@
     "mocha": "2.2.0",
     "rimraf": "^2.3.2",
     "uglify-js": "^2.4.16"
+  },
+  "jspm": {
+    "main": "browser.js",
+    "dependencies": {},
+    "jspmNodeConversion": false,
+    "shim": {
+      "browser": {
+        "exports": "babel"
+      }
+    }
   }
 }
