@@ -8,13 +8,13 @@ export default {
   "minification.removeConsole":            require("./minification/remove-console"),
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
   "minification.constantFolding":          require("./minification/constant-folding"),
+  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "spec.functionName":                     require("./spec/function-name"),
 
   //- builtin-basic
   // this is where the bulk of the ES6 transformations take place, none of them require traversal state
   // so they can all be concatenated together for performance
-  "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   "es7.classProperties":                   require("./es7/class-properties"),
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),

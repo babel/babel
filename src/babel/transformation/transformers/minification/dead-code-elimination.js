@@ -19,7 +19,7 @@ function toStatements(node) {
 
 export var metadata = {
   optional: true,
-  group: "builtin-basic"
+  group: "builtin-setup"
 };
 
 export function ReferencedIdentifier(node, parent, scope) {
