@@ -91,6 +91,7 @@
   "InterfaceExtends":            ["id", "typeParameters"],
   "InterfaceDeclaration":        ["id", "typeParameters", "extends", "body"],
   "IntersectionTypeAnnotation":  ["types"],
+  "MixedTypeAnnotation":         [],
   "NullableTypeAnnotation":      ["typeAnnotation"],
   "NumberTypeAnnotation":        [],
   "StringLiteralTypeAnnotation": [],

@@ -103,6 +103,10 @@ export function IntersectionTypeAnnotation(node, print) {
   print.join(node.types, { separator: " & " });
 }
 
+export function MixedTypeAnnotation() {
+  this.push("mixed");
+}
+
 export function NullableTypeAnnotation(node, print) {
   this.push("?");
   print.plain(node.typeAnnotation);
