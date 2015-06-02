@@ -93,6 +93,7 @@
   "InterfaceExtends":            ["Flow"],
   "InterfaceDeclaration":        ["Flow", "Statement", "Declaration"],
   "IntersectionTypeAnnotation":  ["Flow"],
+  "MixedTypeAnnotation":         ["Flow"],
   "NullableTypeAnnotation":      ["Flow"],
   "NumberTypeAnnotation":        ["Flow"],
   "StringLiteralTypeAnnotation": ["Flow"],

@@ -415,6 +415,9 @@ pp.flow_identToTypeAnnotation = function (start, node, id) {
     case "boolean":
       return this.finishNode(node, "BooleanTypeAnnotation")
 
+    case "mixed":
+      return this.finishNode(node, "MixedTypeAnnotation")
+
     case "number":
       return this.finishNode(node, "NumberTypeAnnotation")
 

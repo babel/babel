@@ -2,7 +2,7 @@
 
 var fbTestFixture = {
   'Type Annotations': {
-    'function foo(numVal: any){}': {
+    'function foo(numVal: any, otherVal: mixed){}': {
       type: 'FunctionDeclaration',
       id: {
         type: 'Identifier',
@@ -37,22 +37,47 @@ var fbTestFixture = {
           start: { line: 1, column: 13 },
           end: { line: 1, column: 24 }
         }
+      },
+      {
+        type: 'Identifier',
+        name: 'otherVal',
+        typeAnnotation: {
+          type: 'TypeAnnotation',
+          typeAnnotation: {
+            type: 'MixedTypeAnnotation',
+            range: [36, 41],
+            loc: {
+              start: { line: 1, column: 36 },
+              end: { line: 1, column: 41 }
+            }
+          },
+          range: [34, 41],
+          loc: {
+            start: { line: 1, column: 34 },
+            end: { line: 1, column: 41 }
+          }
+        },
+        range: [26, 41],
+        loc: {
+          start: { line: 1, column: 26 },
+          end: { line: 1, column: 41 }
+        }
       }],
       body: {
         type: 'BlockStatement',
         body: [],
-        range: [25, 27],
+        range: [42, 44],
         loc: {
-          start: { line: 1, column: 25 },
-          end: { line: 1, column: 27 }
+          start: { line: 1, column: 42 },
+          end: { line: 1, column: 44 }
         }
       },
       generator: false,
       expression: false,
-      range: [0, 27],
+      range: [0, 44],
       loc: {
         start: { line: 1, column: 0 },
-        end: { line: 1, column: 27 }
+        end: { line: 1, column: 44 }
       }
     },
     'function foo(numVal: number){}': {
