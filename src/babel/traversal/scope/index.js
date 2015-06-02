@@ -79,7 +79,6 @@ var collectorVisitor = {
   },
 
   BlockScoped(node, parent, scope) {
-    if (this.isFunctionDeclaration()) return;
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
   },
