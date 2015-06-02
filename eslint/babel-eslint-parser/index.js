@@ -1,6 +1,7 @@
 var acornToEsprima = require("./acorn-to-esprima");
 var traverse       = require("babel-core").traverse;
 var assign         = require("lodash.assign");
+var pick           = require("lodash.pick");
 var Module         = require("module");
 var parse          = require("babel-core").parse;
 var path           = require("path");
@@ -46,12 +47,7 @@ function monkeypatch() {
   escope.analyze = function (ast, opts) {
     opts.ecmaVersion = 6;
     opts.sourceType = "module";
-    // Don't visit TypeAlias when analyzing scope, but retain them for other
-    // eslint rules.
-    var TypeAliasKeys = estraverse.VisitorKeys.TypeAlias;
-    estraverse.VisitorKeys.TypeAlias = [];
     var results = analyze.call(this, ast, opts);
-    estraverse.VisitorKeys.TypeAlias = TypeAliasKeys;
     return results;
   };
 
@@ -62,7 +58,17 @@ function monkeypatch() {
   } catch (err) {
     throw new ReferenceError("couldn't resolve escope/referencer");
   }
+  var referencerMod = createModule(referencerLoc);
   var referencer = require(referencerLoc);
+
+  // reference Definition
+  var definitionLoc;
+  try {
+    var definitionLoc = Module._resolveFilename("./definition", referencerMod);
+  } catch (err) {
+    throw new ReferenceError("couldn't resolve escope/definition");
+  }
+  var Definition = require(definitionLoc).Definition;
 
   // if there are decotators, then visit each
   function visitDecorators(node) {
@@ -76,18 +82,182 @@ function monkeypatch() {
     }
   }
 
-  // monkeypatch referencer methods to visit decorators
-  var visitClass = referencer.prototype.visitClass;
-  referencer.prototype.visitClass = function (node) {
-    // visit decorators that are in: Class Declaration
-    visitDecorators.call(this, node);
-    visitClass.call(this, node);
+  // iterate through part of t.VISITOR_KEYS
+  var visitorKeysMap = pick(t.VISITOR_KEYS, function(k) {
+    return t.FLIPPED_ALIAS_KEYS.Flow.concat([
+      "ArrayPattern",
+      "ClassDeclaration",
+      "ClassExpression",
+      "FunctionDeclaration",
+      "FunctionExpression",
+      "Identifier",
+      "ObjectPattern",
+      "RestElement"
+    ]).indexOf(k) === -1;
+  });
+
+  var propertyTypes = {
+    // loops
+    callProperties: { type: "loop", values: ["value"] },
+    indexers: { type: "loop", values: ["key", "value"] },
+    properties: { type: "loop", values: ["value"] },
+    types: { type: "loop" },
+    params: { type: "loop" },
+    // single property
+    argument: { type: "single" },
+    elementType: { type: "single" },
+    qualification: { type: "single" },
+    rest: { type: "single" },
+    returnType: { type: "single" },
+    // others
+    typeAnnotation: { type: "typeAnnotation" },
+    typeParameters: { type: "typeParameters" },
+    id: { type: "id" }
+  };
+
+  function visitTypeAnnotation(node) {
+    // get property to check (params, id, etc...)
+    var visitorValues = visitorKeysMap[node.type];
+    if (!visitorValues) {
+      return;
+    }
+
+    // can have multiple properties
+    for (var i = 0; i < visitorValues.length; i++) {
+      var visitorValue = visitorValues[i];
+      var propertyType = propertyTypes[visitorValue];
+      var nodeProperty = node[visitorValue];
+      // check if property or type is defined
+      if (propertyType == null || nodeProperty == null) {
+        continue;
+      }
+      if (propertyType.type === "loop") {
+        for (var j = 0; j < nodeProperty.length; j++) {
+          if (Array.isArray(propertyType.values)) {
+            for (var k = 0; k < propertyType.values.length; k++) {
+              checkIdentifierOrVisit.call(this, nodeProperty[j][propertyType.values[k]]);
+            }
+          } else {
+            checkIdentifierOrVisit.call(this, nodeProperty[j]);
+          }
+        }
+      } else if (propertyType.type === "single") {
+        checkIdentifierOrVisit.call(this, nodeProperty);
+      } else if (propertyType.type === "typeAnnotation") {
+        visitTypeAnnotation.call(this, node.typeAnnotation);
+      } else if (propertyType.type === "typeParameters") {
+        for (var j = 0; j < node.typeParameters.params.length; j++) {
+          checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
+        }
+      } else if (propertyType.type === "id") {
+        if (node.id.type === "Identifier") {
+          checkIdentifierOrVisit.call(this, node.id);
+        } else {
+          visitTypeAnnotation.call(this, node.id);
+        }
+      }
+    }
   }
+
+  function checkIdentifierOrVisit(node) {
+    if (node.typeAnnotation) {
+      visitTypeAnnotation.call(this, node.typeAnnotation);
+    } else if (node.type === "Identifier") {
+      this.visit(node);
+    } else {
+      visitTypeAnnotation.call(this, node);
+    }
+  }
+
+  // visit decorators that are in: ClassDeclaration / ClassExpression
+  var visitClass = referencer.prototype.visitClass;
+  referencer.prototype.visitClass = function(node) {
+    visitDecorators.call(this, node);
+    // visit class
+    if (node.id) {
+      this.visit(node.id);
+    }
+    // visit flow type: ClassImplements
+    if (node.implements) {
+      for (var i = 0; i < node.implements.length; i++) {
+        checkIdentifierOrVisit.call(this, node.implements[i]);
+      }
+    }
+    if (node.typeParameters) {
+      for (var i = 0; i < node.typeParameters.params.length; i++) {
+        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
+      }
+    }
+    if (node.superTypeParameters) {
+      for (var i = 0; i < node.superTypeParameters.params.length; i++) {
+        checkIdentifierOrVisit.call(this, node.superTypeParameters.params[i]);
+      }
+    }
+    visitClass.call(this, node);
+  };
+    // visit decorators that are in: Property / MethodDefinition
   var visitProperty = referencer.prototype.visitProperty;
-  referencer.prototype.visitProperty = function (node) {
-    // visit decorators that are in: Visit Property / MethodDefinition
+  referencer.prototype.visitProperty = function(node) {
+    if (node.value.type === 'TypeCastExpression') {
+      visitTypeAnnotation.call(this, node.value);
+    }
     visitDecorators.call(this, node);
     visitProperty.call(this, node);
+  };
+
+  // visit flow type in FunctionDeclaration, FunctionExpression, ArrowFunctionExpression
+  var visitFunction = referencer.prototype.visitFunction;
+  referencer.prototype.visitFunction = function(node) {
+    if (node.returnType) {
+      checkIdentifierOrVisit.call(this, node.returnType);
+    }
+    // only visit if function parameters have types
+    if (node.params) {
+      for (var i = 0; i < node.params.length; i++) {
+        if (node.params[i].typeAnnotation) {
+          checkIdentifierOrVisit.call(this, node.params[i]);
+        }
+      }
+    }
+    if (node.typeParameters) {
+      for (var i = 0; i < node.typeParameters.params.length; i++) {
+        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
+      }
+    }
+    visitFunction.call(this, node);
+  };
+
+  // visit flow type in VariableDeclaration
+  var variableDeclaration = referencer.prototype.VariableDeclaration;
+  referencer.prototype.VariableDeclaration = function(node) {
+    if (node.declarations) {
+      for (var i = 0; i < node.declarations.length; i++) {
+        checkIdentifierOrVisit.call(this, node.declarations[i].id);
+      }
+    }
+    variableDeclaration.call(this, node);
+  };
+
+  referencer.prototype.TypeAlias = function(node) {
+    this.currentScope().__define(
+      node.id,
+      new Definition(
+          "Variable",
+          node.id,
+          node,
+          null,
+          null,
+          null
+      )
+    );
+    if (node.right) {
+      visitTypeAnnotation.call(this, node.right);
+    }
+    if (node.typeParameters) {
+      for (var i = 0; i < node.typeParameters.params.length; i++) {
+        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
+      }
+    }
   }
 }
 

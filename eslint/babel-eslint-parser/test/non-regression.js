@@ -124,20 +124,757 @@ describe("verify", function () {
     );
   });
 
-  it("flow type", function () {
-    verifyAndAssertMessages(
-      "type SomeNewType = any;",
-      {},
-      []
-    );
-  });
+  describe("flow", function () {
+    it("check regular function", function () {
+      verifyAndAssertMessages([
+          "function a(b, c) { b += 1; c += 1; } a;",
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
 
-  it("type cast expression #102", function () {
-    verifyAndAssertMessages(
-      "for (let a of (a: Array)) {}",
-      {},
-      []
-    );
+    it("type alias", function () {
+      verifyAndAssertMessages(
+        "type SomeNewType = any;",
+        { "no-undef": 1 },
+        []
+      );
+    });
+
+    it("type cast expression #102", function () {
+      verifyAndAssertMessages(
+        "for (let a of (a: Array)) {}",
+        {},
+        []
+      );
+    });
+
+    it("multiple nullable type annotations and return #108", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "function log(foo: ?Foo, foo2: ?Foo2): ?Foo3 {",
+            "console.log(foo, foo2);",
+          "}",
+          "log(1, 2);"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("type parameters", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "function log<Foo, Foo2>() {}",
+          "log();"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("nested type annotations", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "function foo(callback: () => Foo) {",
+            "return callback();",
+          "}",
+          "foo();"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("type in var declaration", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "var x: Foo = 1;",
+          "x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("object type annotation", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "var a: {numVal: Foo};",
+          "a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("object property types", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var a = {",
+            "circle: (null : ?{ setNativeProps(props: Foo): Foo2 })",
+          "};",
+          "a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("namespaced types", function () {
+      verifyAndAssertMessages([
+          "var React = require('react-native');",
+          "var b = {",
+            "openExternalExample: (null: ?React.Component)",
+          "};",
+          "var c = {",
+            "render(): React.Component {}",
+          "};",
+          "b;",
+          "c;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("ArrayTypeAnnotation", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "var x: Foo[]; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("ClassImplements", function () {
+      verifyAndAssertMessages([
+          "import type Foo from 'foo';",
+          "import type Bar from 'foo';",
+          "class Foo implements Bar {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("type alias creates declaration + usage", function () {
+      verifyAndAssertMessages([
+          "type Foo = any;",
+          "var x : Foo = 1; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("type alias with type parameters", function () {
+      verifyAndAssertMessages([
+          "import type Bar from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "type Foo<Foo2> = Bar<Foo3>",
+          "var x : Foo = 1; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("export type alias", function () {
+      verifyAndAssertMessages([
+          "import type Foo2 from 'foo';",
+          "export type Foo = Foo2;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("1", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "export default function(a: Foo, b: ?Foo2, c){ a; b; c; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("2", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "export default function(a: () => Foo){ a; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("3", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "export default function(a: (_:Foo) => Foo2){ a; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("4", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "export default function(a: (_1:Foo, _2:Foo2) => Foo3){ a; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("5", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "export default function(a: (_1:Foo, ...foo:Array<Foo2>) => number){ a; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("6", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "export default function(): Foo {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("7", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "export default function():() => Foo {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("8", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "export default function():(_?:Foo) => Foo2{}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("9", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "export default function <Foo, Foo2>() {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    })
+
+    it("10", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var a=function<Foo,Foo2>() {}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("11", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a={*id<Foo>(x: Foo2): Foo3 { x; }}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("12", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a={async id<Foo>(x: Foo2): Foo3 { x; }}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("13", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a={123<Foo>(x: Foo2): Foo3 { x; }}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("14", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "class Bar {set fooProp(value:Foo):Foo2{ value; }}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("15", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "class Foo {get fooProp():Foo{}}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("16", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var numVal:Foo; numVal;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("17", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: {numVal: Foo;}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("18", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a: ?{numVal: Foo; [indexer: Foo2]: Foo3}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("19", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var a: {numVal: Foo; subObj?: ?{strVal: Foo2}}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("20", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "import type Foo4 from 'foo';",
+          "var a: { [a: Foo]: Foo2; [b: Foo3]: Foo4; }; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("21", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a: {add(x:Foo, ...y:Array<Foo2>): Foo3}; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("22", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a: { id<Foo>(x: Foo2): Foo3; }; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("23", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a:Array<Foo> = [1, 2, 3]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("24", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import Baz from 'foo';",
+          "class Bar<Foo> extends Baz<Foo2> { };"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("25", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "class Bar<Foo> { bar<Foo2>():Foo3 { return 42; }}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("26", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "class Bar { static prop1:Foo; prop2:Foo2; }"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("27", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var x : Foo | Foo2 = 4; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("28", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var x : () => Foo | () => Foo2; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("29", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var x: typeof Foo | number = Foo2; x;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("30", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          'var {x}: {x: Foo; } = { x: "hello" }; x;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("31", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          'var [x]: Array<Foo> = [ "hello" ]; x;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("32", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "export default function({x}: { x: Foo; }) {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("33", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "function foo([x]: Array<Foo>) { x; } foo();"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("34", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var a: Map<Foo, Array<Foo2> >; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("35", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: ?Promise<Foo>[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("36", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "var a:(...rest:Array<Foo>) => Foo2; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("37", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "import type Foo4 from 'foo';",
+          "var a: <Foo>(x: Foo2, ...y:Foo3[]) => Foo4; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("38", function () {
+      verifyAndAssertMessages(
+        [
+          'import type {foo, bar} from "baz";',
+          'foo; bar;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("39", function () {
+      verifyAndAssertMessages(
+        [
+          'import type {foo as bar} from "baz";',
+          'bar;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("40", function () {
+      verifyAndAssertMessages(
+        [
+          'import type from "foo";',
+          'type;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("41", function () {
+      verifyAndAssertMessages(
+        [
+          'import type, {foo} from "bar";',
+          'type; foo;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("42", function () {
+      verifyAndAssertMessages(
+        [
+          'import type * as namespace from "bar";',
+          'namespace;'
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("43", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: Foo[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("44", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: ?Foo[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("45", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: (?Foo)[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("46", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: () => Foo[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("47", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: (() => Foo)[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("48", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "var a: typeof Foo[]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("49", function () {
+      verifyAndAssertMessages(
+        [
+          "import type Foo from 'foo';",
+          "import type Foo2 from 'foo';",
+          "import type Foo3 from 'foo';",
+          "var a : [Foo, Foo2<Foo3>,] = [123, 'duck',]; a;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
   });
 
   it("class usage", function () {

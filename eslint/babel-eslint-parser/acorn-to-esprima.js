@@ -117,7 +117,7 @@ function convertTemplateType(tokens) {
   // create Template token
   function replaceWithTemplateType(start, end) {
     var templateToken = {
-      type: 'Template',
+      type: "Template",
       value: createTemplateValue(start, end),
       range: [tokens[start].start, tokens[end].end],
       loc: {
@@ -183,16 +183,35 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
-    if (this.isTypeCastExpression()) {
-      return node.expression;
-    }
-
-    if (this.isFlow()) {
-      return this.remove();
-    }
-
     if (this.isRestElement()) {
       return node.argument;
+    }
+
+    // prevent "no-undef"
+    // for "Component" in: "let x: React.Component"
+    if (this.isQualifiedTypeIdentifier()) {
+      delete node.id;
+    }
+    // for "b" in: "var a: { b: Foo }"
+    if (this.isObjectTypeProperty()) {
+      delete node.key;
+    }
+    // for "indexer" in: "var a: {[indexer: string]: number}"
+    if (this.isObjectTypeIndexer()) {
+      delete node.id;
+    }
+    // for "param" in: "var a: { func(param: Foo): Bar };"
+    if (this.isFunctionTypeParam()) {
+      delete node.name;
+    }
+
+    // flow
+
+    if (this.isDeclareModule() ||
+        this.isDeclareClass() ||
+        this.isDeclareFunction() ||
+        this.isDeclareVariable()) {
+      return this.remove();
     }
 
     // modules
