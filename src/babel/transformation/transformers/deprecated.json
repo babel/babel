@@ -6,7 +6,6 @@
   "es6.blockScopingTDZ": "es6.spec.blockScoping",
 
   "utility.inlineExpressions": "minification.constantFolding",
-  "minification.inlineExpressions": "minification.constantFolding",
   "utility.deadCodeElimination": "minification.deadCodeElimination",
   "utility.removeConsoleCalls": "minification.removeConsole",
   "utility.removeDebugger": "minification.removeDebugger"
