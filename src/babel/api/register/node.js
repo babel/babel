@@ -38,6 +38,12 @@ var only;
 var oldHandlers   = {};
 var maps          = {};
 
+var cwd = require.main ? require.main.filename : process.cwd();
+
+var getRelativePath = function (filename){
+  return path.relative(cwd, filename);
+};
+
 var mtime = function (filename) {
   return +fs.statSync(filename).mtime;
 };
@@ -82,7 +88,7 @@ var compile = function (filename, opts = {}) {
 
 var shouldIgnore = function (filename) {
   if (!ignore && !only) {
-    return filename.split(path.sep).indexOf("node_modules") >= 0;
+    return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
   } else {
     return util.shouldIgnore(filename, ignore || [], only || []);
   }
