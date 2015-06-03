@@ -6,6 +6,7 @@ import * as babel from "../node";
 import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
+import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -81,7 +82,7 @@ var compile = function (filename, opts = {}) {
 
 var shouldIgnore = function (filename) {
   if (!ignore && !only) {
-    return /node_modules/.test(filename);
+    return filename.split(path.sep).indexOf("node_modules") >= 0;
   } else {
     return util.shouldIgnore(filename, ignore || [], only || []);
   }
