@@ -568,7 +568,7 @@ pp.parseExport = function(node) {
       this.parseExportFrom(node)
       return this.finishNode(node, "ExportAllDeclaration")
     }
-  } else if (this.isExportDefaultSpecifier()) {
+  } else if (this.options.features["es7.exportExtensions"] && this.isExportDefaultSpecifier()) {
     let specifier = this.startNode()
     specifier.exported = this.parseIdent(true)
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")]
