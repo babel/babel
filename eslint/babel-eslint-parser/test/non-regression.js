@@ -296,6 +296,26 @@ describe("verify", function () {
       );
     });
 
+    it("polymorphpic types #109", function () {
+      verifyAndAssertMessages([
+          "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> {}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("types definition from import", function () {
+      verifyAndAssertMessages([
+          "import type Promise from 'bluebird';",
+          "type Operation = () => Promise;",
+          "x: Operation;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
     it("1", function () {
       verifyAndAssertMessages(
         [
