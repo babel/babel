@@ -100,6 +100,11 @@ export function evaluate(): { confident: boolean; value: any } {
       }
     }
 
+    if (path.isReferencedIdentifier()) {
+      var binding = path.scope.getBinding(node.name);
+      if (binding && binding.hasValue) return binding.value;
+    }
+
     if ((path.isIdentifier() || path.isMemberExpression()) && path.isReferenced()) {
       path = path.resolve();
       if (path) {

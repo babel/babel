@@ -7,9 +7,29 @@ export default class Binding {
     this.references = 0;
     this.referenced = false;
 
-    this.scope      = scope;
-    this.path       = path;
-    this.kind       = kind;
+    this.scope = scope;
+    this.path  = path;
+    this.kind  = kind;
+
+    this.clearValue();
+  }
+
+  /**
+   * Description
+   */
+
+  setValue(value) {
+    this.hasValue = true;
+    this.value    = value;
+  }
+
+  /**
+   * Description
+   */
+
+  clearValue() {
+    this.hasValue = false;
+    this.value    = null;
   }
 
   /**

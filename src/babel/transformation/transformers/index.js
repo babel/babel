@@ -1,4 +1,7 @@
 export default {
+  //- builtin-prepass
+  "minification.constantFolding":          require("./minification/constant-folding"),
+
   //- builtin-setup
   strict:                                  require("./other/strict"),
   _explode:                                require("./internal/explode"),
@@ -7,7 +10,6 @@ export default {
   "minification.removeDebugger":           require("./minification/remove-debugger"),
   "minification.removeConsole":            require("./minification/remove-console"),
   "utility.inlineEnvironmentVariables":    require("./utility/inline-environment-variables"),
-  "minification.constantFolding":          require("./minification/constant-folding"),
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "spec.functionName":                     require("./spec/function-name"),
