@@ -99,6 +99,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
 
     // no: [NODE = foo] = [];
     // yes: [foo = NODE] = [];
+    case "AssignmentExpression":
     case "AssignmentPattern":
       return parent.right === node;
 

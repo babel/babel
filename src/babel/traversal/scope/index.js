@@ -105,18 +105,19 @@ var renameVisitor = {
     }
   },
 
-  Declaration(node, parent, scope, state) {
-    var ids = this.getBindingIdentifiers();
-
-    for (var name in ids) {
-      if (name === state.oldName) ids[name].name = state.newName;
-    }
-  },
-
   Scope(node, parent, scope, state) {
     if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
       this.skip();
     }
+  }
+};
+
+renameVisitor.AssignmentExpression =
+renameVisitor.Declaration = function (node, parent, scope, state) {
+  var ids = this.getBindingIdentifiers();
+
+  for (var name in ids) {
+    if (name === state.oldName) ids[name].name = state.newName;
   }
 };
 
@@ -546,15 +547,6 @@ export default class Scope {
     } while (scope = scope.parent);
 
     return false;
-  }
-
-  /**
-   * Description
-   */
-
-  recrawl() {
-    this.path.setData("scopeInfo", null);
-    this.crawl();
   }
 
   /**
