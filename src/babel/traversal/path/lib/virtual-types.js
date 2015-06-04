@@ -1,9 +1,20 @@
+import * as react from "../../../transformation/helpers/react";
 import * as t from "../../../types";
 
 export var ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath({ node, parent }, opts) {
-    return (t.isIdentifier(node, opts) || t.isJSXIdentifier(node, opts)) && t.isReferenced(node, parent);
+    if (!t.isIdentifier(node, opts)) {
+      if (t.isJSXIdentifier(node, opts)) {
+        if (react.isCompatTag(node.name)) return false;
+      } else {
+        // not a JSXIdentifier or an Identifier
+        return false;
+      }
+    }
+
+    // check if node is referenced
+    return t.isReferenced(node, parent);
   }
 };
 
