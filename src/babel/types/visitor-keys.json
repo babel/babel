@@ -14,7 +14,7 @@
   "ClassBody":                 ["body"],
   "ClassDeclaration":          ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
   "ClassExpression":           ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
-  "ComprehensionBlock":        ["left", "right", "body"],
+  "ComprehensionBlock":        ["left", "right"],
   "ComprehensionExpression":   ["filter", "blocks", "body"],
   "ConditionalExpression":     ["test", "consequent", "alternate"],
   "ContinueStatement":         ["label"],

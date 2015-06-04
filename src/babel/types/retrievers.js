@@ -30,7 +30,9 @@ export function getBindingIdentifiers(node: Object): Object {
 }
 
 getBindingIdentifiers.keys = {
+  ComprehensionExpression: "blocks",
   ComprehensionBlock: "left",
+
   CatchClause: "param",
   UnaryExpression: "argument",
   AssignmentExpression: "left",
