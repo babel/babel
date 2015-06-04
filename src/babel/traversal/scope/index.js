@@ -83,6 +83,11 @@ var collectorVisitor = {
     scope.getBlockParent().registerDeclaration(this);
   },
 
+  ClassDeclaration(node, parent, scope) {
+    var name = node.id.name;
+    scope.bindings[name] = scope.getBinding(name);
+  },
+
   Block(node, parent, scope) {
     var paths = this.get("body");
     for (var path of (paths: Array)) {
@@ -631,11 +636,6 @@ export default class Scope {
     }
 
     // Class
-
-    if (path.isClassDeclaration()) {
-      var name = path.node.id.name;
-      this.bindings[name] = this.parent.bindings[name];
-    }
 
     if (path.isClassExpression() && path.has("id")) {
       this.registerBinding("var", path);
