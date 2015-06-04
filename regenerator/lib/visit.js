@@ -72,8 +72,6 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     this.reportChanged();
 
-    node.generator = false;
-
     if (node.expression) {
       // Transform expression lambdas into normal functions.
       node.expression = false;
@@ -132,9 +130,10 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var wrapArgs = [
       emitter.getContextFunction(innerFnId),
-      // Async functions don't care about the outer function because they
-      // don't need it to be marked and don't inherit from its .prototype.
-      shouldTransformAsync ? b.literal(null) : outerFnExpr,
+      // Async functions that are not generators don't care about the
+      // outer function because they don't need it to be marked and don't
+      // inherit from its .prototype.
+      node.generator ? outerFnExpr : b.literal(null),
       b.thisExpression()
     ];
 
@@ -151,12 +150,17 @@ var visitor = types.PathVisitor.fromMethodsObject({
     outerBody.push(b.returnStatement(wrapCall));
     node.body = b.blockStatement(outerBody);
 
-    if (shouldTransformAsync) {
-      node.async = false;
-      return;
+    var wasGeneratorFunction = node.generator;
+    if (wasGeneratorFunction) {
+      node.generator = false;
     }
 
-    if (n.Expression.check(node)) {
+    if (shouldTransformAsync) {
+      node.async = false;
+    }
+
+    if (wasGeneratorFunction &&
+        n.Expression.check(node)) {
       return b.callExpression(runtimeProperty("mark"), [node]);
     }
   },
@@ -247,7 +251,7 @@ function getOuterFnExpr(funPath) {
   var node = funPath.value;
   n.Function.assert(node);
 
-  if (!node.async && // Async functions don't need to be marked.
+  if (node.generator && // Non-generator functions don't need to be marked.
       n.FunctionDeclaration.check(node)) {
     var pp = funPath.parent;
 
@@ -388,6 +392,15 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
       );
     }
 
-    return b.yieldExpression(argument, false);
+    // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
+    // causes the argument to be wrapped in such a way that the runtime
+    // can distinguish between awaited and merely yielded values.
+    return b.yieldExpression(
+      b.callExpression(
+        runtimeProperty("awrap"),
+        [argument]
+      ),
+      false
+    );
   }
 });
