@@ -123,6 +123,10 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
  * Description
  */
 
+/**
+ * Description
+ */
+
 export function _verifyNodeList(nodes) {
   if (nodes.constructor !== Array) {
     nodes = [nodes];

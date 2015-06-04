@@ -2,18 +2,29 @@ import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
 import * as t from "../../types";
 
+function visitIdentifier(context, node, scope, state) {
+  // check if this node matches our function id
+  if (node.name !== state.name) return;
+
+  // check that we don't have a local variable declared as that removes the need
+  // for the wrapper
+  var localDeclar = scope.getBindingIdentifier(state.name);
+  if (localDeclar !== state.outerDeclar) return;
+
+  state.selfReference = true;
+  context.stop();
+}
+
 var visitor = {
   ReferencedIdentifier(node, parent, scope, state) {
-    // check if this node matches our function id
-    if (node.name !== state.name) return;
+    visitIdentifier(this, node, scope, state);
+  },
 
-    // check that we don't have a local variable declared as that removes the need
-    // for the wrapper
-    var localDeclar = scope.getBindingIdentifier(state.name);
-    if (localDeclar !== state.outerDeclar) return;
-
-    state.selfReference = true;
-    this.stop();
+  AssignmentExpression(node, parent, scope, state) {
+    var ids = this.getBindingIdentifiers();
+    for (var name in ids) {
+      visitIdentifier(this, ids[name], scope, state);
+    }
   }
 };
 

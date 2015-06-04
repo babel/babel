@@ -30,27 +30,33 @@ export function getBindingIdentifiers(node: Object): Object {
 }
 
 getBindingIdentifiers.keys = {
+  ComprehensionBlock: "left",
   CatchClause: "param",
   UnaryExpression: "argument",
   AssignmentExpression: "left",
+
   ImportSpecifier: "local",
   ImportNamespaceSpecifier: "local",
   ImportDefaultSpecifier: "local",
-  VariableDeclarator: "id",
+  ImportDeclaration: "specifiers",
+
   FunctionDeclaration: "id",
   FunctionExpression: "id",
+
   ClassDeclaration: "id",
   ClassExpression: "id",
+
   SpreadElement: "argument",
   RestElement: "argument",
   UpdateExpression: "argument",
+
   SpreadProperty: "argument",
   Property: "value",
-  ComprehensionBlock: "left",
+
   AssignmentPattern: "left",
-  ComprehensionExpression: "blocks",
-  ImportDeclaration: "specifiers",
-  VariableDeclaration: "declarations",
   ArrayPattern: "elements",
-  ObjectPattern: "properties"
+  ObjectPattern: "properties",
+
+  VariableDeclaration: "declarations",
+  VariableDeclarator: "id"
 };
