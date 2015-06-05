@@ -28,6 +28,55 @@ suite("api", function () {
     }).code.indexOf("foobar") >= 0);
   });
 
+  test("ignore", function () {
+    assert.ok(transform("", {
+      ignore: "node_modules",
+      filename: "/foo/node_modules/bar"
+    }).ignored);
+
+    assert.ok(transform("", {
+      ignore: "foo/node_modules",
+      filename: "/foo/node_modules/bar"
+    }).ignored);
+
+    assert.ok(transform("", {
+      ignore: "foo/node_modules/*.bar",
+      filename: "/foo/node_modules/foo.bar"
+    }).ignored);
+  });
+
+  test("only", function () {
+    assert.ok(!transform("", {
+      only: "node_modules",
+      filename: "/foo/node_modules/bar"
+    }).ignored);
+
+    assert.ok(!transform("", {
+      only: "foo/node_modules",
+      filename: "/foo/node_modules/bar"
+    }).ignored);
+
+    assert.ok(!transform("", {
+      only: "foo/node_modules/*.bar",
+      filename: "/foo/node_modules/foo.bar"
+    }).ignored);
+
+    assert.ok(transform("", {
+      only: "node_modules",
+      filename: "/foo/node_module/bar"
+    }).ignored);
+
+    assert.ok(transform("", {
+      only: "foo/node_modules",
+      filename: "/bar/node_modules/foo"
+    }).ignored);
+
+    assert.ok(transform("", {
+      only: "foo/node_modules/*.bar",
+      filename: "/foo/node_modules/bar.foo"
+    }).ignored);
+  });
+
   suite("getModuleId() {} option", function () {
     // As of this commit, `getModuleId` is the only option that isn't JSON
     // compatible which is why it's not inside /test/core/fixtures/transformation
