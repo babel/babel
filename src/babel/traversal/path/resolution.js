@@ -1,13 +1,6 @@
 import type NodePath from "./index";
 import * as t from "../../types";
 
-const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in", "instanceof"];
-const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
-
-const BOOLEAN_UNARY_OPERATORS = ["delete"];
-const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
-const STRING_UNARY_OPERATORS  = ["typeof"];
-
 /**
  * Description
  */
@@ -131,6 +124,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   var path = this.resolve();
 
   var node = path.node;
+
+  if (!node && path.key === "init" && path.parentPath.isVariableDeclarator()) {
+    return t.voidTypeAnnotation();
+  }
+
   if (!node) return;
 
   if (node.typeAnnotation) {
@@ -199,11 +197,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
 
     if (operator === "void") {
       return t.voidTypeAnnotation();
-    } else if (NUMBER_UNARY_OPERATORS.indexOf(operator) >= 0) {
+    } else if (t.NUMBER_UNARY_OPERATORS.indexOf(operator) >= 0) {
       return t.numberTypeAnnotation();
-    } else if (STRING_UNARY_OPERATORS.indexOf(operator) >= 0) {
+    } else if (t.STRING_UNARY_OPERATORS.indexOf(operator) >= 0) {
       return t.stringTypeAnnotation();
-    } else if (BOOLEAN_UNARY_OPERATORS.indexOf(operator) >= 0) {
+    } else if (t.BOOLEAN_UNARY_OPERATORS.indexOf(operator) >= 0) {
       return t.booleanTypeAnnotation();
     }
   }
@@ -211,9 +209,9 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   if (path.isBinaryExpression()) {
     let operator = node.operator;
 
-    if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
+    if (t.NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
       return t.numberTypeAnnotation();
-    } else if (BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
+    } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
       return t.booleanTypeAnnotation();
     } else if (operator === "+") {
       var right = path.get("right").resolve();
@@ -256,15 +254,6 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   if (path.isUpdateExpression()) {
     let operator = node.operator;
     if (operator === "++" || operator === "--") {
-      return t.numberTypeAnnotation();
-    }
-  }
-
-  if (path.isUnaryExpression() && node.prefix) {
-    let operator = node.operator;
-    if (operator === "!") {
-      return t.booleanTypeAnnotation();
-    } else if (operator === "+" || operator === "-") {
       return t.numberTypeAnnotation();
     }
   }

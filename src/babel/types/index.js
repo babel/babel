@@ -24,11 +24,17 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
-export var STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
-export var NATIVE_TYPE_NAMES       = ["Array", "ArrayBuffer", "Boolean", "DataView", "Date", "Error", "EvalError", "Float32Array", "Float64Array", "Function", "Int8Array", "Int16Array", "Int32Array", "Map", "Number", "Object", "Proxy", "Promise", "RangeError", "ReferenceError", "RegExp", "Set", "String", "Symbol", "SyntaxError", "TypeError", "Uint8Array", "Uint8ClampedArray", "Uint16Array", "Uint32Array", "URIError", "WeakMap", "WeakSet"];
-export var FLATTENABLE_KEYS        = ["body", "expressions"];
-export var FOR_INIT_KEYS           = ["left", "init"];
-export var COMMENT_KEYS            = ["leadingComments", "trailingComments"];
+export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
+export const FLATTENABLE_KEYS        = ["body", "expressions"];
+export const FOR_INIT_KEYS           = ["left", "init"];
+export const COMMENT_KEYS            = ["leadingComments", "trailingComments"];
+
+export const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in", "instanceof"];
+export const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+
+export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
+export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
+export const STRING_UNARY_OPERATORS  = ["typeof"];
 
 export const VISITOR_KEYS = require("./visitor-keys");
 export const BUILDER_KEYS = require("./builder-keys");
