@@ -950,7 +950,7 @@ describe("verify", function () {
     it("array #9", function () {
       verifyAndAssertMessages([
           "let arr = [1, 2, 3];",
-          "let b = [for (e of arr) String(e)];"
+          "let b = [for (e of arr) String(e)]; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -1081,5 +1081,13 @@ describe("verify", function () {
         []
       );
     });
+  });
+
+  it("detects minimal no-unused-vars case #120", function () {
+    verifyAndAssertMessages(
+      "var unused;",
+      { "no-unused-vars": 1 },
+      [ "1:4 unused is defined but never used no-unused-vars" ]
+    )
   });
 });

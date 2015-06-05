@@ -232,7 +232,10 @@ function monkeypatch() {
   referencer.prototype.VariableDeclaration = function(node) {
     if (node.declarations) {
       for (var i = 0; i < node.declarations.length; i++) {
-        checkIdentifierOrVisit.call(this, node.declarations[i].id);
+        var type = node.declarations[i].id.typeAnnotation;
+        if (type) {
+          checkIdentifierOrVisit.call(this, type);
+        }
       }
     }
     variableDeclaration.call(this, node);
