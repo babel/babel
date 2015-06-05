@@ -10,11 +10,25 @@ export function AssignmentExpression() {
   if (!left.isIdentifier()) return;
 
   var binding = this.scope.getBinding(left.node.name);
-  if (!binding) return;
+  if (!binding || binding.deoptValue) return;
 
-  var right = this.get("right");
-  var evaluated = right.evaluate();
-  //if (evaluated.confident) binding.setValue(evaluated.value);
+  var evaluated = this.get("right").evaluate();
+  if (evaluated.confident) {
+    binding.setValue(evaluated.value);
+  } else {
+    binding.deoptValue();
+  }
+}
+
+export function IfStatement() {
+  var evaluated = this.get("test").evaluate();
+  if (!evaluated.confident) return this.skip();
+
+  if (evaluated.value) {
+    this.skipKey("alternate");
+  } else {
+    this.skipKey("consequent");
+  }
 }
 
 export var Scopable = {
