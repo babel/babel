@@ -1,8 +1,23 @@
 import * as t from "../../../types";
 
-var buildBinaryExpression = function (left, right) {
-  return t.binaryExpression("+", left, right);
+export var metadata = {
+  group: "builtin-pre"
 };
+
+function buildBinaryExpression(left, right) {
+  var node = t.binaryExpression("+", left, right);
+  node._templateLiteralProduced = true;
+  return node;
+}
+
+function crawl(path) {
+  if (path.is("_templateLiteralProduced")) {
+    crawl(path.get("left"));
+    crawl(path.get("right"));
+  } else if (!path.isTypeAnnotationGeneric("String") && !path.isTypeAnnotationGeneric("Number")) {
+    path.replaceWith(t.callExpression(t.identifier("String"), [path.node]));
+  }
+}
 
 export function TaggedTemplateExpression(node, parent, scope, file) {
   var quasi = node.quasi;
@@ -11,8 +26,7 @@ export function TaggedTemplateExpression(node, parent, scope, file) {
   var strings = [];
   var raw     = [];
 
-  for (var i = 0; i < quasi.quasis.length; i++) {
-    var elem = quasi.quasis[i];
+  for (var elem of (quasi.quasis: Array)) {
     strings.push(t.literal(elem.value.cooked));
     raw.push(t.literal(elem.value.raw));
   }
@@ -31,11 +45,8 @@ export function TaggedTemplateExpression(node, parent, scope, file) {
 
 export function TemplateLiteral(node, parent, scope, file) {
   var nodes = [];
-  var i;
 
-  for (i = 0; i < node.quasis.length; i++) {
-    var elem = node.quasis[i];
-
+  for (let elem of (node.quasis: Array)) {
     nodes.push(t.literal(elem.value.cooked));
 
     var expr = node.expressions.shift();
@@ -49,11 +60,12 @@ export function TemplateLiteral(node, parent, scope, file) {
 
     var root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
-    for (i = 0; i < nodes.length; i++) {
-      root = buildBinaryExpression(root, nodes[i]);
+    for (let node of (nodes: Array)) {
+      root = buildBinaryExpression(root, node);
     }
 
-    return root;
+    this.replaceWith(root);
+    //crawl(this);
   } else {
     return nodes[0];
   }

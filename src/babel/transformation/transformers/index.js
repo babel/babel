@@ -13,6 +13,8 @@ export default {
   "minification.deadCodeElimination":      require("./minification/dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "spec.functionName":                     require("./spec/function-name"),
+  "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
+  "es6.templateLiterals":                  require("./es6/template-literals"),
 
   //- builtin-basic
   // this is where the bulk of the ES6 transformations take place, none of them require traversal state
@@ -34,8 +36,6 @@ export default {
   "es6.objectSuper":                       require("./es6/object-super"),
   "es7.objectRestSpread":                  require("./es7/object-rest-spread"),
   "es7.exponentiationOperator":            require("./es7/exponentiation-operator"),
-  "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
-  "es6.templateLiterals":                  require("./es6/template-literals"),
   "es5.properties.mutators":               require("./es5/properties.mutators"),
   "es6.properties.shorthand":              require("./es6/properties.shorthand"),
   "es6.properties.computed":               require("./es6/properties.computed"),
