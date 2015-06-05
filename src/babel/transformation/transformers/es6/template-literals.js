@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0 */
+
 import * as t from "../../../types";
 
 export var metadata = {

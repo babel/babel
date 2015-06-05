@@ -18,7 +18,7 @@ export default class Binding {
    * Description
    */
 
-  deoptValue(value) {
+  deoptValue() {
     this.clearValue();
     this.deoptValue = true;
   }

@@ -1,6 +1,5 @@
 import traverse from "../../../traversal";
 import parse from "../../../helpers/parse";
-import * as t from "../../../types";
 
 export var metadata = {
   group: "builtin-pre",
