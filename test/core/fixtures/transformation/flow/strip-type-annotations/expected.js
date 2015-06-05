@@ -64,14 +64,8 @@ class Foo8 {
   "bar"() {}
 }
 function foo(requiredParam, optParam) {}
-class Foo9 {
-  prop1;
-  prop2;
-}
-class Foo10 {
-  static prop1;
-  prop2;
-}
+class Foo9 {}
+class Foo10 {}
 var x = 4;
 class Array {
   concat(items) {}

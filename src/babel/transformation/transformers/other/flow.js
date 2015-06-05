@@ -7,7 +7,9 @@ export function Flow(node) {
 }
 
 export function ClassProperty(node) {
-  node.typeAnnotation = null;
+  // todo: uncomment when/if class properties are supported by default.
+  // node.typeAnnotation = null;
+  this.dangerouslyRemove();
 }
 
 export function Class(node) {
