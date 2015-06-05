@@ -509,7 +509,11 @@ export default class File {
     code = code + "";
 
     try {
-      return callback();
+      if (this.shouldIgnore()) {
+        return this.makeResult({ code, ignored: true });
+      } else {
+        return callback();
+      }
     } catch (err) {
       if (err._babel) {
         throw err;
