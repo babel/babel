@@ -47,6 +47,7 @@
   },
 
   "experimental": {
+    "type": "boolean",
     "description": "allow use of experimental transformers",
     "default": false
   },
