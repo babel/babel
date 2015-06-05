@@ -140,6 +140,8 @@ export function _verifyNodeList(nodes) {
       throw new Error(`Node list contains a non-object node with the index of ${i}`);
     } else if (!node.type) {
       throw new Error(`Node list contains a node without a type with the index of ${i}`);
+    } else if (node instanceof NodePath) {
+      nodes[i] = node.node;
     }
   }
 

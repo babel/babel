@@ -1,4 +1,5 @@
 import codeFrame from "../../helpers/code-frame";
+import NodePath from "./index";
 import traverse from "../index";
 import * as t from "../../types";
 import parse from "../../helpers/parse";
@@ -77,6 +78,10 @@ export function replaceWith(replacement, whateverAllowed) {
 
   if (this.removed) {
     throw new Error("You can't replace this node, we've already removed it");
+  }
+
+  if (replacement instanceof NodePath) {
+    replacement = replacement.node;
   }
 
   if (!replacement) {
