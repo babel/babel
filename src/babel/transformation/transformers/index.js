@@ -2,7 +2,7 @@ export default {
   //- builtin-prepass
   "minification.constantFolding":          require("./minification/constant-folding"),
 
-  //- builtin-setup
+  //- builtin-pre
   strict:                                  require("./other/strict"),
   eval:                                    require("./other/eval"),
   _explode:                                require("./internal/explode"),

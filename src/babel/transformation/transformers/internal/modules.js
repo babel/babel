@@ -16,7 +16,7 @@ function getDeclar(node) {
 }
 
 export var metadata = {
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 export function ExportDefaultDeclaration(node, parent, scope) {

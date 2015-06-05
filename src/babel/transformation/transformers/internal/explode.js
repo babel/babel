@@ -2,7 +2,7 @@ import clone from "lodash/lang/clone";
 import * as t from "../../../types";
 
 export var metadata = {
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 function buildClone(bindingKey, refKey, check?) {

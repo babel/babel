@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 export var BlockStatement = {

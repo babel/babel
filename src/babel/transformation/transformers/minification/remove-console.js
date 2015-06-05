@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   optional: true,
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 export function CallExpression(node, parent) {
