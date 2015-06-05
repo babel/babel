@@ -200,6 +200,8 @@ class ClassTransformer {
       }
     }
 
+    body = body.concat(this.staticPropBody);
+
     if (this.className) {
       // named class with only a constructor
       if (body.length === 1) return t.toExpression(body[0]);
@@ -213,8 +215,6 @@ class ClassTransformer {
 
       t.inheritsComments(body[0], this.node);
     }
-
-    body = body.concat(this.staticPropBody);
 
     //
 
