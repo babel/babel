@@ -577,11 +577,15 @@ pp.readTmplToken = function() {
     } else if (isNewLine(ch)) {
       out += this.input.slice(chunkStart, this.pos)
       ++this.pos
-      if (ch === 13 && this.input.charCodeAt(this.pos) === 10) {
-        ++this.pos
-        out += "\n"
-      } else {
-        out += String.fromCharCode(ch)
+      switch (ch) {
+        case 13:
+          if (this.input.charCodeAt(this.pos) === 10) ++this.pos;
+        case 10:
+          out += "\n";
+          break;
+        default:
+          out += String.fromCharCode(ch);
+          break;
       }
       if (this.options.locations) {
         ++this.curLine
