@@ -1,4 +1,5 @@
 {
+  "experimental": true,
   "externalHelpers": true,
   "noCheckAst": true,
   "blacklist": ["regenerator"],
