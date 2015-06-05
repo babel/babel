@@ -16,7 +16,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 5.5.1
 
  * **Bug Fix**
-  * Remove `ClassProperty` nodes always in the `Flow` transformer. This is fine now since.
+  * Remove `ClassProperty` nodes always in the `Flow` transformer. This is fine now since class properties aren't supported in any engine that supports classes but the `es7.classProperties` transformer will need to be updated in the future to desugar to ES6 classes instead of relying on the `es6.classes` transformer from being ran.
 
 ## 5.5.0
 
