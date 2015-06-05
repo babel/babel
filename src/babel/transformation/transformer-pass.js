@@ -15,7 +15,9 @@ export default class TransformerPass {
     this.key         = transformer.key;
 
     if (this.canTransform() && transformer.metadata.experimental && !file.opts.experimental) {
-      file.log.warn(`THE TRANSFORMER ${this.key} HAS BEEN MARKED AS EXPERIMENTAL. USE AT YOUR OWN RISK. THIS WILL HIGHLY LIKELY BREAK YOUR CODE SO USE WITH **EXTREME** CAUTION`);
+      file.log.warn(`THE TRANSFORMER ${this.key} HAS BEEN MARKED AS EXPERIMENTAL AND IS WIP. USE AT YOUR OWN RISK. ` +
+                    "THIS WILL HIGHLY LIKELY BREAK YOUR CODE SO USE WITH **EXTREME** CAUTION. ENABLE THE " +
+                    "`experimental` OPTION TO IGNORE THIS WARNING.");
     }
   }
 
