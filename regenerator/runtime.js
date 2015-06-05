@@ -168,7 +168,7 @@
       // Avoid propagating enqueueResult failures to Promises returned by
       // later invocations of the iterator, and call generator.return() to
       // allow the generator a chance to clean up.
-      previousPromise = enqueueResult.catch(invokeReturn);
+      previousPromise = enqueueResult["catch"](invokeReturn);
 
       return enqueueResult;
     }
