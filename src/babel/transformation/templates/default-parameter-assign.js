@@ -1,0 +1,1 @@
+if (VARIABLE_NAME === undefined) VARIABLE_NAME = DEFAULT_VALUE;
