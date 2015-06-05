@@ -281,9 +281,9 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   if (path.isCallExpression()) callPath = path.get("callee");
   if (path.isTaggedTemplateExpression()) callPath = path.get("tag");
   if (callPath) {
-    callPath = callPath.resolve();
+    var callee = callPath.resolve();
     // todo: read typescript/flow interfaces
-    if (callPath.isNodeType("Function")) return callee.node.returnType;
+    if (callee.isNodeType("Function")) return callee.node.returnType;
   }
 }
 
