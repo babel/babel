@@ -11,7 +11,7 @@ export function AssignmentExpression() {
   if (!left.isIdentifier()) return;
 
   var binding = this.scope.getBinding(left.node.name);
-  if (!binding || binding.deoptValue) return;
+  if (!binding || binding.hasDeoptValue) return;
 
   var evaluated = this.get("right").evaluate();
   if (evaluated.confident) {
@@ -33,6 +33,25 @@ export function IfStatement() {
 }
 
 export var Scopable = {
+  enter() {
+    var funcScope = this.scope.getFunctionParent();
+
+    for (var name in this.scope.bindings) {
+      var binding = this.scope.bindings[name];
+      var deopt = false;
+
+      for (var path of (binding.constantViolations: Array)) {
+        var funcViolationScope = path.scope.getFunctionParent();
+        if (funcViolationScope !== funcScope) {
+          deopt = true;
+          break;
+        }
+      }
+
+      if (deopt) binding.deoptValue();
+    }
+  },
+
   exit() {
     for (var name in this.scope.bindings) {
       var binding = this.scope.bindings[name];
