@@ -1,8 +1,12 @@
 import type NodePath from "./index";
 import * as t from "../../types";
 
-const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in"];
+const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in", "instanceof"];
 const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+
+const BOOLEAN_UNARY_OPERATORS = ["delete"];
+const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
+const STRING_UNARY_OPERATORS  = ["typeof"];
 
 /**
  * Description
@@ -47,7 +51,11 @@ export function getTypeAnnotationInfo(): {
  * call etc. If a data type can't be resolved then the last path we were at is returned.
  */
 
-export function resolve(resolved?): ?NodePath {
+export function resolve(resolved) {
+  return this._resolve(resolved) || this;
+}
+
+export function _resolve(resolved?): ?NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -72,9 +80,7 @@ export function resolve(resolved?): ?NodePath {
     // todo - lookup module in dependency graph
     if (binding.kind === "module") return;
 
-    if (binding.path === this) {
-      return this;
-    } else {
+    if (binding.path !== this) {
       return binding.path.resolve(resolved);
     }
   } else if (this.isMemberExpression()) {
@@ -83,10 +89,10 @@ export function resolve(resolved?): ?NodePath {
 
     var targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;
+
     var targetName = targetKey.value;
 
     var target = this.get("object").resolve(resolved);
-    if (!target) return;
 
     if (target.isObjectExpression()) {
       var props = target.get("properties");
@@ -101,15 +107,13 @@ export function resolve(resolved?): ?NodePath {
         // { "foo": "obj" } or { ["foo"]: "obj" }
         match = match || key.isLiteral({ value: targetName });
 
-        if (match) return prop.get("value");
+        if (match) return prop.get("value").resolve(resolved);
       }
     } else if (target.isArrayExpression() && !isNaN(+targetName)) {
       var elems = target.get("elements");
       var elem = elems[targetName];
       if (elem) return elem.resolve(resolved);
     }
-  } else {
-    return this;
   }
 }
 
@@ -125,28 +129,31 @@ export function inferTypeAnnotation(force) {
 
 export function _inferTypeAnnotation(force?: boolean): ?Object {
   var path = this.resolve();
-  if (!path) return;
 
   var node = path.node;
-  if (node.typeAnnotation) return node.typeAnnotation;
+  if (!node) return;
 
-  if (path.isNodeType("RestElement") || path.parentPath.isNodeType("RestElement") || path.isNodeType("ArrayExpression")) {
-    return t.genericTypeAnnotation(t.identifier("Array"));
-  }
-
-  if (path.parentPath.isNodeType("TypeCastExpression")) {
-    return path.parentPath.inferTypeAnnotation();
-  }
-
-  if (path.isNodeType("TypeCastExpression")) {
+  if (node.typeAnnotation) {
     return node.typeAnnotation;
   }
 
-  if (path.parentPath.isNodeType("ReturnStatement") && !force) {
+  if (path.isRestElement() || path.parentPath.isRestElement() || path.isArrayExpression()) {
+    return t.genericTypeAnnotation(t.identifier("Array"));
+  }
+
+  if (path.parentPath.isTypeCastExpression()) {
     return path.parentPath.inferTypeAnnotation();
   }
 
-  if (path.isNodeType("ReturnStatement")) {
+  if (path.isTypeCastExpression()) {
+    return node.typeAnnotation;
+  }
+
+  if (path.parentPath.isReturnStatement() && !force) {
+    return path.parentPath.inferTypeAnnotation();
+  }
+
+  if (path.isReturnStatement()) {
     var funcPath = this.findParent((node, path) => path.isFunction());
     if (!funcPath) return;
 
@@ -158,74 +165,98 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     }
   }
 
-  if (path.isNodeType("NewExpression") && path.get("callee").isIdentifier()) {
+  if (path.isNewExpression() && path.get("callee").isIdentifier()) {
     // only resolve identifier callee
     return t.genericTypeAnnotation(node.callee);
   }
 
-  if (path.isNodeType("Identifier") && node.name === "undefined") {
-    return t.voidTypeAnnotation();
+  if (path.isReferencedIdentifier()) {
+    if (node.name === "undefined") {
+      return t.voidTypeAnnotation();
+    } else if (node.name === "NaN") {
+      return t.numberTypeAnnotation();
+    }
   }
 
-  if (path.isNodeType("ObjectExpression")) {
+  if (path.isObjectExpression()) {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
 
-  if (path.isNodeType("Function") || path.isNodeType("Class")) {
+  if (path.isFunction() && path.parentPath.isProperty({ kind: "get" })) {
+    return node.returnType;
+  }
+
+  if (path.isFunction() || path.isClass()) {
     return t.genericTypeAnnotation(t.identifier("Function"));
   }
 
-  if (path.isNodeType("BinaryExpression")) {
+  if (path.isUnaryExpression()) {
     let operator = node.operator;
+
+    if (operator === "void") {
+      return t.voidTypeAnnotation();
+    } else if (NUMBER_UNARY_OPERATORS.indexOf(operator) >= 0) {
+      return t.numberTypeAnnotation();
+    } else if (STRING_UNARY_OPERATORS.indexOf(operator) >= 0) {
+      return t.stringTypeAnnotation();
+    } else if (BOOLEAN_UNARY_OPERATORS.indexOf(operator) >= 0) {
+      return t.booleanTypeAnnotation();
+    }
+  }
+
+  if (path.isBinaryExpression()) {
+    let operator = node.operator;
+
     if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
-      // these operators always result in numbers
       return t.numberTypeAnnotation();
     } else if (BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
       return t.booleanTypeAnnotation();
     } else if (operator === "+") {
-      var right = this.get("right");
-      var left  = this.get("left");
+      var right = path.get("right").resolve();
+      var left  = path.get("left").resolve();
 
-      if (left.isTypeAnnotationGeneric("Number") && right.isTypeAnnotationGeneric("Number")) {
-        // both numbers so this will be a number
-        return t.numberTypeAnnotation();
-      } else if (left.isTypeAnnotationGeneric("String") || right.isTypeAnnotationGeneric("String")) {
-        // one is a string so the result will be a string
-        return t.stringTypeAnnotation();
-      } else {
-        // unsure if left and right are both strings or numbers so stay on the safe side
-        return t.unionTypeAnnotation([
-          t.stringTypeAnnotation(),
-          t.numberTypeAnnotation()
-        ]);
+      if (left || right) {
+        if (left.isTypeAnnotationGeneric("Number") && right.isTypeAnnotationGeneric("Number")) {
+          // both numbers so this will be a number
+          return t.numberTypeAnnotation();
+        } else if (left.isTypeAnnotationGeneric("String") || right.isTypeAnnotationGeneric("String")) {
+          // one is a string so the result will be a string
+          return t.stringTypeAnnotation();
+        }
       }
+
+      // unsure if left and right are strings or numbers so stay on the safe side
+      return t.unionTypeAnnotation([
+        t.stringTypeAnnotation(),
+        t.numberTypeAnnotation()
+      ]);
     }
   }
 
-  if (path.isNodeType("LogicalExpression")) {
+  if (path.isLogicalExpression()) {
     // todo: create UnionType of left and right annotations
   }
 
-  if (path.isNodeType("ConditionalExpression")) {
+  if (path.isConditionalExpression()) {
     // todo: create UnionType of consequent and alternate annotations
   }
 
-  if (path.isNodeType("SequenceExpression")) {
+  if (path.isSequenceExpression()) {
     return this.get("expressions").pop().inferTypeAnnotation(force);
   }
 
-  if (path.isNodeType("AssignmentExpression")) {
+  if (path.isAssignmentExpression()) {
     return this.get("right").inferTypeAnnotation(force);
   }
 
-  if (path.isNodeType("UpdateExpression")) {
+  if (path.isUpdateExpression()) {
     let operator = node.operator;
     if (operator === "++" || operator === "--") {
       return t.numberTypeAnnotation();
     }
   }
 
-  if (path.isNodeType("UnaryExpression") && node.prefix) {
+  if (path.isUnaryExpression() && node.prefix) {
     let operator = node.operator;
     if (operator === "!") {
       return t.booleanTypeAnnotation();
@@ -234,7 +265,7 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     }
   }
 
-  if (path.isNodeType("Literal")) {
+  if (path.isLiteral()) {
     var value = node.value;
     if (typeof value === "string") return t.stringTypeAnnotation();
     if (typeof value === "number") return t.numberTypeAnnotation();
@@ -242,9 +273,10 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
   }
 
-  if (path.isNodeType("CallExpression")) {
+  if (path.isCallExpression()) {
     var callee = path.get("callee").resolve();
-    if (callee && callee.isNodeType("Function")) return callee.node.returnType;
+    // todo: read typescript/flow interfaces
+    if (callee.isNodeType("Function")) return callee.node.returnType;
   }
 }
 
@@ -261,21 +293,21 @@ export function isTypeAnnotationGeneric(genericName: string, opts = {}): boolean
     return false;
   }
 
+  if (t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName })) {
+    if (opts.requireTypeParameters && !type.typeParameters) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   if (genericName === "String") {
     return t.isStringTypeAnnotation(type);
   } else if (genericName === "Number") {
     return t.isNumberTypeAnnotation(type);
-  } else if (genericName === "boolean") {
+  } else if (genericName === "Boolean") {
     return t.isBooleanTypeAnnotation(type);
   }
 
-  if (!t.isGenericTypeAnnotation(type) || !t.isIdentifier(type.id, { name: genericName })) {
-    return false;
-  }
-
-  if (opts.requireTypeParameters && !type.typeParameters) {
-    return false;
-  }
-
-  return true;
+  return false;
 }

@@ -106,11 +106,11 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if ((path.isIdentifier() || path.isMemberExpression()) && path.isReferenced()) {
-      path = path.resolve();
-      if (path) {
-        return evaluate(path);
-      } else {
+      var resolved = path.resolve();
+      if (resolved === path) {
         return confident = false;
+      } else {
+        return evaluate(resolved);
       }
     }
 
