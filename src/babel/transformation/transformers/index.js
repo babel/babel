@@ -16,6 +16,7 @@ export default {
   "spec.functionName":                     require("./spec/function-name"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
+  "es6.symbols":                           require("./es6/symbols"),
 
   //- builtin-basic
   // this is where the bulk of the ES6 transformations take place, none of them require traversal state
@@ -51,7 +52,6 @@ export default {
   "es7.exportExtensions":                  require("./es7/export-extensions"),
   "spec.protoToAssign":                    require("./spec/proto-to-assign"),
   "es7.doExpressions":                     require("./es7/do-expressions"),
-  "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
 
