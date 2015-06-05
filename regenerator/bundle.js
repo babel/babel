@@ -7238,8 +7238,6 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     this.reportChanged();
 
-    node.generator = false;
-
     if (node.expression) {
       // Transform expression lambdas into normal functions.
       node.expression = false;
@@ -7298,9 +7296,10 @@ var visitor = types.PathVisitor.fromMethodsObject({
 
     var wrapArgs = [
       emitter.getContextFunction(innerFnId),
-      // Async functions don't care about the outer function because they
-      // don't need it to be marked and don't inherit from its .prototype.
-      shouldTransformAsync ? b.literal(null) : outerFnExpr,
+      // Async functions that are not generators don't care about the
+      // outer function because they don't need it to be marked and don't
+      // inherit from its .prototype.
+      node.generator ? outerFnExpr : b.literal(null),
       b.thisExpression()
     ];
 
@@ -7317,12 +7316,17 @@ var visitor = types.PathVisitor.fromMethodsObject({
     outerBody.push(b.returnStatement(wrapCall));
     node.body = b.blockStatement(outerBody);
 
-    if (shouldTransformAsync) {
-      node.async = false;
-      return;
+    var wasGeneratorFunction = node.generator;
+    if (wasGeneratorFunction) {
+      node.generator = false;
     }
 
-    if (n.Expression.check(node)) {
+    if (shouldTransformAsync) {
+      node.async = false;
+    }
+
+    if (wasGeneratorFunction &&
+        n.Expression.check(node)) {
       return b.callExpression(runtimeProperty("mark"), [node]);
     }
   },
@@ -7413,7 +7417,7 @@ function getOuterFnExpr(funPath) {
   var node = funPath.value;
   n.Function.assert(node);
 
-  if (!node.async && // Async functions don't need to be marked.
+  if (node.generator && // Non-generator functions don't need to be marked.
       n.FunctionDeclaration.check(node)) {
     var pp = funPath.parent;
 
@@ -7554,7 +7558,16 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
       );
     }
 
-    return b.yieldExpression(argument, false);
+    // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
+    // causes the argument to be wrapped in such a way that the runtime
+    // can distinguish between awaited and merely yielded values.
+    return b.yieldExpression(
+      b.callExpression(
+        runtimeProperty("awrap"),
+        [argument]
+      ),
+      false
+    );
   }
 });
 
@@ -44150,7 +44163,7 @@ function through (write, end, opts) {
 
 }).call(this,require('_process'))
 },{"_process":12,"stream":24}],90:[function(require,module,exports){
-(function (global){
+(function (process,global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -44239,6 +44252,16 @@ function through (write, end, opts) {
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
   GeneratorFunction.displayName = "GeneratorFunction";
 
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
   runtime.isGeneratorFunction = function(genFun) {
     var ctor = typeof genFun === "function" && genFun.constructor;
     return ctor
@@ -44255,29 +44278,87 @@ function through (write, end, opts) {
     return genFun;
   };
 
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `value instanceof AwaitArgument` to determine if the yielded value is
+  // meant to be awaited. Some may consider the name of this method too
+  // cutesy, but they are curmudgeons.
+  runtime.awrap = function(arg) {
+    return new AwaitArgument(arg);
+  };
+
+  function AwaitArgument(arg) {
+    this.arg = arg;
+  }
+
+  function AsyncIterator(generator) {
+    // This invoke function is written in a style that assumes some
+    // calling function (or Promise) will handle exceptions.
+    function invoke(method, arg) {
+      var result = generator[method](arg);
+      var value = result.value;
+      return value instanceof AwaitArgument
+        ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
+        : result;
+    }
+
+    if (typeof process === "object" && process.domain) {
+      invoke = process.domain.bind(invoke);
+    }
+
+    var invokeNext = invoke.bind(generator, "next");
+    var invokeThrow = invoke.bind(generator, "throw");
+    var invokeReturn = invoke.bind(generator, "return");
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      var enqueueResult =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(function() {
+          return invoke(method, arg);
+        }) : new Promise(function(resolve) {
+          resolve(invoke(method, arg));
+        });
+
+      // Avoid propagating enqueueResult failures to Promises returned by
+      // later invocations of the iterator, and call generator.return() to
+      // allow the generator a chance to clean up.
+      previousPromise = enqueueResult.catch(invokeReturn);
+
+      return enqueueResult;
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
   runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    return new Promise(function(resolve, reject) {
-      var generator = wrap(innerFn, outerFn, self, tryLocsList);
-      var callNext = step.bind(generator, "next");
-      var callThrow = step.bind(generator, "throw");
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
 
-      function step(method, arg) {
-        var record = tryCatch(generator[method], generator, arg);
-        if (record.type === "throw") {
-          reject(record.arg);
-          return;
-        }
-
-        var info = record.arg;
-        if (info.done) {
-          resolve(info.value);
-        } else {
-          Promise.resolve(info.value).then(callNext, callThrow);
-        }
-      }
-
-      callNext();
-    });
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
   };
 
   function makeInvokeMethod(innerFn, self, context) {
@@ -44418,14 +44499,9 @@ function through (write, end, opts) {
     };
   }
 
-  function defineGeneratorMethod(method) {
-    Gp[method] = function(arg) {
-      return this._invoke(method, arg);
-    };
-  }
-  defineGeneratorMethod("next");
-  defineGeneratorMethod("throw");
-  defineGeneratorMethod("return");
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
 
   Gp[iteratorSymbol] = function() {
     return this;
@@ -44716,6 +44792,6 @@ function through (write, end, opts) {
   typeof self === "object" ? self : this
 );
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[34])(34)
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"_process":12}]},{},[34])(34)
 });
