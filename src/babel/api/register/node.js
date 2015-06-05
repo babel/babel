@@ -105,7 +105,7 @@ if (process.env.running_under_istanbul) {
     if (istanbulMonkey[filename]) {
       delete istanbulMonkey[filename];
       var code = compile(filename, {
-        attachAuxiliaryComment: "istanbul ignore next"
+        auxiliaryComment: "istanbul ignore next"
       });
       istanbulMonkey[filename] = true;
       return code;
