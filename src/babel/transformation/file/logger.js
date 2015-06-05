@@ -16,6 +16,10 @@ export default class Logger {
     return parts;
   }
 
+  warn(msg) {
+    console.warn(this._buildMessage(msg));
+  }
+
   error(msg: string, Constructor = Error) {
     throw new Constructor(this._buildMessage(msg));
   }

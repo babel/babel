@@ -19,7 +19,8 @@ function toStatements(node) {
 
 export var metadata = {
   optional: true,
-  group: "builtin-pre"
+  group: "builtin-pre",
+  experimental: true
 };
 
 export function ReferencedIdentifier(node, parent, scope) {

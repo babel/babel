@@ -13,6 +13,10 @@ export default class TransformerPass {
     this.handlers    = transformer.handlers;
     this.file        = file;
     this.key         = transformer.key;
+
+    if (this.canTransform() && transformer.metadata.experimental && !file.opts.experimental) {
+      file.log.warn(`THE TRANSFORMER ${this.key} HAS BEEN MARKED AS EXPERIMENTAL. USE AT YOUR OWN RISK. THIS WILL HIGHLY LIKELY BREAK YOUR CODE SO USE WITH **EXTREME** CAUTION`);
+    }
   }
 
   canTransform(): boolean {

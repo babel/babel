@@ -47,7 +47,8 @@
   },
 
   "experimental": {
-    "deprecated": "use `--stage 0`/`{ stage: 0 }` instead"
+    "description": "allow use of experimental transformers",
+    "default": false
   },
 
   "highlightCode": {
