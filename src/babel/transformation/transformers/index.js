@@ -4,6 +4,7 @@ export default {
 
   //- builtin-setup
   strict:                                  require("./other/strict"),
+  eval:                                    require("./other/eval"),
   _explode:                                require("./internal/explode"),
   _validation:                             require("./internal/validation"),
   _hoistDirectives:                        require("./internal/hoist-directives"),
