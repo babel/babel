@@ -115,7 +115,7 @@ export default class File {
       if (!val && option.optional) continue;
 
       if (val && option.deprecated) {
-        throw new Error("Deprecated option " + key + ": " + option.deprecated);
+        this.log.deprecate("Deprecated option " + key + ": " + option.deprecated);
       }
 
       if (val == null) {
