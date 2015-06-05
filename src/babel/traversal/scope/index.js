@@ -30,44 +30,55 @@ var collectorVisitor = {
     scope.getFunctionParent().registerDeclaration(this);
   },
 
-  ReferencedIdentifier(node, parent, scope) {
-    var bindingInfo = scope.getBinding(node.name);
+  ReferencedIdentifier(node) {
+    var bindingInfo = this.scope.getBinding(node.name);
     if (bindingInfo) {
       bindingInfo.reference();
     } else {
-      scope.getProgramParent().addGlobal(node);
+      this.scope.getProgramParent().addGlobal(node);
     }
   },
 
-  ForXStatement(node, parent, scope) {
+  ForXStatement() {
     var left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
-      scope.registerConstantViolation(left);
+      this.scope.registerConstantViolation(left);
     }
   },
 
   ExportDeclaration: {
-    exit(node, parent, scope) {
+    exit(node) {
       var declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
-        scope.getBinding(declar.id.name).reference();
+        this.scope.getBinding(declar.id.name).reference();
       } else if (t.isVariableDeclaration(declar)) {
         for (var decl of (declar.declarations: Array)) {
           var ids = t.getBindingIdentifiers(decl);
           for (var name in ids) {
-            scope.getBinding(name).reference();
+            this.scope.getBinding(name).reference();
           }
         }
       }
     }
   },
 
-  LabeledStatement(node, parent, scope) {
-    scope.getProgramParent().addGlobal(node);
+  LabeledStatement(node) {
+    this.scope.getProgramParent().addGlobal(node);
   },
 
-  AssignmentExpression(node, parent, scope) {
-    scope.registerConstantViolation(this.get("left"), this.get("right"));
+  AssignmentExpression() {
+    // register undeclared bindings as globals
+    var ids = this.getBindingIdentifiers();
+    var programParent;
+    for (var name in ids) {
+      if (this.scope.getBinding(name)) continue;
+
+      programParent = programParent ||  this.scope.getProgramParent();
+      programParent.addGlobal(ids[name]);
+    }
+
+    // register as constant violation
+    this.scope.registerConstantViolation(this.get("left"), this.get("right"));
   },
 
   UpdateExpression(node, parent, scope) {
@@ -95,7 +106,7 @@ var collectorVisitor = {
         scope.getBlockParent().registerDeclaration(path);
       }
     }
-  },
+  }
 };
 
 var renameVisitor = {

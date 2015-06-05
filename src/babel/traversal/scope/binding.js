@@ -18,7 +18,17 @@ export default class Binding {
    * Description
    */
 
+  deoptValue(value) {
+    this.clearValue();
+    this.deoptValue = true;
+  }
+
+  /**
+   * Description
+   */
+
   setValue(value) {
+    if (this.deoptValue) return;
     this.hasValue = true;
     this.value    = value;
   }
@@ -28,8 +38,9 @@ export default class Binding {
    */
 
   clearValue() {
-    this.hasValue = false;
-    this.value    = null;
+    this.deoptValue = false;
+    this.hasValue   = false;
+    this.value      = null;
   }
 
   /**
