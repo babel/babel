@@ -32,15 +32,14 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.node = function (node, opts, scope, state, parentPath) {
+traverse.node = function (node, opts, scope, state, parentPath, skipKeys?) {
   var keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
   var context = new TraversalContext(scope, opts, state, parentPath);
-  for (var i = 0; i < keys.length; i++) {
-    if (context.visit(node, keys[i])) {
-      return;
-    }
+  for (var key of (keys: Array)) {
+    if (skipKeys && skipKeys[key]) continue;
+    if (context.visit(node, key)) return;
   }
 };
 

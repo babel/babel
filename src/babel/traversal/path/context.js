@@ -71,10 +71,10 @@ export function visit(): boolean {
       // traverse over these replacement nodes we purposely don't call exitNode
       // as the original node has been destroyed
       for (var i = 0; i < node.length; i++) {
-        traverse.node(node[i], opts, this.scope, this.state, this);
+        traverse.node(node[i], opts, this.scope, this.state, this, this.skipKeys);
       }
     } else {
-      traverse.node(node, opts, this.scope, this.state, this);
+      traverse.node(node, opts, this.scope, this.state, this, this.skipKeys);
       this.call("exit");
     }
   }
@@ -88,6 +88,14 @@ export function visit(): boolean {
 
 export function skip() {
   this.shouldSkip = true;
+}
+
+/**
+ * Description
+ */
+
+export function skipKey(key) {
+  this.skipKeys[key] = true;
 }
 
 /**
@@ -119,6 +127,7 @@ export function setContext(context, file) {
   this.shouldSkip = false;
   this.shouldStop = false;
   this.removed    = false;
+  this.skipKeys   = {};
 
   if (context) {
     this.context = context;

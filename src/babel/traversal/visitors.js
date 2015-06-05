@@ -164,7 +164,7 @@ function shouldIgnoreKey(key) {
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
 
   // ignore other options
-  if (key === "blacklist" || key === "noScope") return true;
+  if (key === "blacklist" || key === "noScope" || key === "skipKeys") return true;
 
   return false;
 }
