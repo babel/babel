@@ -190,6 +190,10 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     return t.genericTypeAnnotation(t.identifier("Function"));
   }
 
+  if (path.isTemplateLiteral()) {
+    return t.stringTypeAnnotation();
+  }
+
   if (path.isUnaryExpression()) {
     let operator = node.operator;
 
@@ -273,10 +277,13 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
   }
 
-  if (path.isCallExpression()) {
-    var callee = path.get("callee").resolve();
+  var callPath;
+  if (path.isCallExpression()) callPath = path.get("callee");
+  if (path.isTaggedTemplateExpression()) callPath = path.get("tag");
+  if (callPath) {
+    callPath = callPath.resolve();
     // todo: read typescript/flow interfaces
-    if (callee.isNodeType("Function")) return callee.node.returnType;
+    if (callPath.isNodeType("Function")) return callee.node.returnType;
   }
 }
 
