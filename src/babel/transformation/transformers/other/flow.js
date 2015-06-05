@@ -1,3 +1,7 @@
+export var metadata = {
+  group: "builtin-trailing"
+};
+
 export function Flow(node) {
   this.dangerouslyRemove();
 }

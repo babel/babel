@@ -53,7 +53,6 @@ export default {
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
-  flow:                                    require("./other/flow"),
 
   //- builtin-advanced
   "es6.destructuring":                     require("./es6/destructuring"),
@@ -83,4 +82,5 @@ export default {
   "minification.propertyLiterals":         require("./minification/property-literals"),
   _blockHoist:                             require("./internal/block-hoist"),
   jscript:                                 require("./other/jscript"),
+  flow:                                    require("./other/flow"),
 };
