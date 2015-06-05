@@ -8,5 +8,5 @@
   "utility.inlineExpressions": "minification.constantFolding",
   "utility.deadCodeElimination": "minification.deadCodeElimination",
   "utility.removeConsoleCalls": "minification.removeConsole",
-  "utility.removeDebugger": "minification.removeDebugger",
+  "utility.removeDebugger": "minification.removeDebugger"
 }
