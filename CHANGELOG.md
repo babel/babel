@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.5.2
+
+ * **Bug Fix**
+  * Fix `NodePath#isPure` on `Property` nodes.
+  * Use cwd instead of entry file directory when working out relative directory for `babel/register`.
+ * **Internal**
+  * Add scary warning for those few who choose to use the WIP experimental transformers.
+
 ## 5.5.1
 
  * **Bug Fix**
