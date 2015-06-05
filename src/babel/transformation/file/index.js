@@ -509,6 +509,15 @@ export default class File {
     code = code + "";
 
     try {
+      if (this.shouldIgnore()) {
+        return {
+          metadata: this.metadata,
+          ignored: true,
+          code: code,
+          map: null,
+          ast: null
+        };
+      }
       return callback();
     } catch (err) {
       if (err._babel) {
