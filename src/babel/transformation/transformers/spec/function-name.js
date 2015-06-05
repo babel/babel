@@ -1,7 +1,7 @@
 import { bare } from "../../helpers/name-method";
 
 export var metadata = {
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 export var FunctionExpression = {

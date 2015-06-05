@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassExpression", "ClassDeclaration"];

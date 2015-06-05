@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var metadata = {
   optional: true,
-  group: "builtin-setup"
+  group: "builtin-pre"
 };
 
 var match = t.buildMatchMemberExpression("process.env");
