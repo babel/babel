@@ -211,7 +211,7 @@ var astTransformVisitor = {
         this.isDeclareClass() ||
         this.isDeclareFunction() ||
         this.isDeclareVariable()) {
-      return this.remove();
+      return this.dangerouslyRemove();
     }
 
     // modules
