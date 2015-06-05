@@ -38,7 +38,7 @@ var only;
 var oldHandlers   = {};
 var maps          = {};
 
-var cwd = require.main ? require.main.filename : process.cwd();
+var cwd = process.cwd()
 
 var getRelativePath = function (filename){
   return path.relative(cwd, filename);
