@@ -293,7 +293,7 @@ class ClassTransformer {
           this.pushMethod(node, path);
         }
       } else if (t.isClassProperty(node)) {
-        this.pushProperty(node);
+        this.pushProperty(node, path);
       }
     }
 
@@ -478,8 +478,8 @@ class ClassTransformer {
    * Description
    */
 
-  pushProperty(node: { type: "ClassProperty" }) {
-    this.scope.traverse(node, collectPropertyReferencesVisitor, {
+  pushProperty(node: { type: "ClassProperty" }, path: NodePath) {
+    path.traverse(collectPropertyReferencesVisitor, {
       references: this.instancePropRefs,
       scope:      this.scope
     });
