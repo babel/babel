@@ -13,6 +13,30 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.5.0
+
+ * **Bug Fix**
+  * Allow pushing declarations to `SwitchStatement`s.
+  * Fix `minification.removeDebugger` to remove `DebuggerStatement`s rather than `ExpressionStatement`s with an identifier of `debugger`.
+  * Check LHS in `ForInStatement` and `ForOfStatement` for constant violations.
+  * Register function `id` as a reference when naming methods to avoid collisions.
+  * Support key literals when checking for the existence of `displayName` property when attempting to add it for `React.createClass`.
+  * Remove `ExportDefaultSpecifier` check from `t.isDefaultSpecifier`.
+  * Don't consider `JSXIdentifier` HTML tag identifiers to be references.
+ * **Polish**
+  * Update `minification.deadCodeElimination` transformer to remove all statements after completion statements.
+  * Update `minification.deadCodeElimination` transformer to not inline single used bindings that exist in different scopes.
+  * When performing Istanbul interop in `babel/register`, add the auxiliary comment `"istanbul ignore text"` to get more accurate coverage.
+  * Add `--nolazy` argument to `babel-node`.
+  * Add support for `cluster` forking.
+  * Perform scope tracking in a single pass instead of multiple.
+  * Smarten up type inferrence and resolution to support the whole array of language constructs.
+  * Optimise module metadata retrieval into a single pass.
+  * Ignore trailing commas when inferring newlines.
+  * Rename `minification.inlineExpressions` transformer to `minification.constantFolding`.
+  * Check path relative to entry file when checking to see if we're inside `node_modules` when using `babel/register`.
+  * Upgrade `regenerator`.
+
 ## 5.4.7
 
  * **Bug Fix**
