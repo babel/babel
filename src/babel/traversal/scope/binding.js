@@ -20,7 +20,7 @@ export default class Binding {
 
   deoptValue() {
     this.clearValue();
-    this.deoptValue = true;
+    this.hasDeoptedValue = true;
   }
 
   /**
@@ -28,7 +28,7 @@ export default class Binding {
    */
 
   setValue(value) {
-    if (this.deoptValue) return;
+    if (this.hasDeoptedValue) return;
     this.hasValue = true;
     this.value    = value;
   }
@@ -38,9 +38,9 @@ export default class Binding {
    */
 
   clearValue() {
-    this.deoptValue = false;
-    this.hasValue   = false;
-    this.value      = null;
+    this.hasDeoptedValue = false;
+    this.hasValue        = false;
+    this.value           = null;
   }
 
   /**
