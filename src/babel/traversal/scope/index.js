@@ -1,4 +1,5 @@
 import includes from "lodash/collection/includes";
+import repeating from "repeating";
 import type NodePath from "../path";
 import type File from "../../transformation/file";
 import traverse from "../index";
@@ -392,11 +393,20 @@ export default class Scope {
    */
 
   dump() {
+    var sep = repeating("-", 60);
+    console.log(sep);
     var scope = this;
     do {
-      console.log(scope.block.type, "Bindings:", Object.keys(scope.bindings));
+      console.log("#", scope.block.type);
+      for (var name in scope.bindings) {
+        var binding = scope.bindings[name];
+        console.log(" -", name, {
+          constant: binding.constant,
+          references: binding.references
+        });
+      }
     } while(scope = scope.parent);
-    console.log("-------------");
+    console.log(sep);
   }
 
   /**
