@@ -272,10 +272,10 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
   if (callPath) {
     var callee = callPath.resolve();
     // todo: read typescript/flow interfaces
-    if (callee.isNodeType("Function")) {
+    if (callee.isFunction()) {
       if (callee.is("async")) {
         if (callee.is("generator")) {
-          // todo
+          return t.genericTypeAnnotation(t.identifier("AsyncIterator"));
         } else {
           return t.genericTypeAnnotation(t.identifier("Promise"));
         }
