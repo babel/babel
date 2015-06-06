@@ -56,15 +56,22 @@ export function ForOfStatement(node, parent, scope, file) {
 export { ForOfStatement as ForInStatement };
 
 export function Func/*tion*/(node, parent, scope, file) {
+  var hasDestructuring = false;
+  for (let pattern of (node.params: Array)) {
+    if (t.isPattern(pattern)) {
+      hasDestructuring = true;
+      break;
+    }
+  }
+  if (!hasDestructuring) return;
+
   var nodes = [];
 
-  var hasDestructuring = false;
+  for (var i = 0; i < node.params.length; i++) {
+    let pattern = node.params[i];
+    if (!t.isPattern(pattern)) continue;
 
-  node.params = node.params.map(function (pattern, i) {
-    if (!t.isPattern(pattern)) return pattern;
-
-    hasDestructuring = true;
-    var ref = scope.generateUidIdentifier("ref");
+    var ref = node.params[i] = scope.generateUidIdentifier("ref");
     t.inherits(ref, pattern);
 
     var destructuring = new DestructuringTransformer({
@@ -74,12 +81,9 @@ export function Func/*tion*/(node, parent, scope, file) {
       file:       file,
       kind:       "let"
     });
+
     destructuring.init(pattern, ref);
-
-    return ref;
-  });
-
-  if (!hasDestructuring) return;
+  }
 
   t.ensureBlock(node);
 
@@ -216,8 +220,8 @@ function hasRest(pattern) {
 }
 
 var arrayUnpackVisitor = {
-  enter(node, parent, scope, state) {
-    if (this.isReferencedIdentifier() && state.bindings[node.name]) {
+  ReferencedIdentifier(node, parent, scope, state) {
+    if (state.bindings[node.name]) {
       state.deopt = true;
       this.stop();
     }

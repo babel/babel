@@ -10,5 +10,5 @@ export var metadata = {
 export function Func/*tion*/(node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
-  return remapAsyncToGenerator(node, file.addHelper("async-to-generator"), scope);
+  return remapAsyncToGenerator(this, file.addHelper("async-to-generator"));
 }

@@ -151,7 +151,7 @@ export function isCompletionRecord(allowInsideFunction?) {
  */
 
 export function isStatementOrBlock() {
-  if (t.isLabeledStatement(this.parent) || t.isBlockStatement(this.container)) {
+  if (this.parentPath.isLabeledStatement() || t.isBlockStatement(this.container)) {
     return false;
   } else {
     return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);

@@ -1,7 +1,7 @@
 import * as t from "../../../types";
 
 function getSpreadLiteral(spread, scope) {
-  if (scope.file.isLoose("es6.spread")) {
+  if (scope.hub.file.isLoose("es6.spread")) {
     return spread.argument;
   } else {
     return scope.toArray(spread.argument, true);

@@ -83,7 +83,7 @@ export function ExportNamedDeclaration(node, parent, scope) {
 export var Program = {
   enter(node) {
     var imports = [];
-    var rest = [];
+    var rest    = [];
 
     for (var i = 0; i < node.body.length; i++) {
       var bodyNode = node.body[i];

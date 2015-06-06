@@ -25,11 +25,13 @@ var referenceVisitor = {
   }
 };
 
-export default function (node, callId, scope) {
+export default function (path, callId) {
+  var node = path.node;
+
   node.async = false;
   node.generator = true;
 
-  scope.traverse(node, awaitVisitor, state);
+  path.traverse(awaitVisitor, state);
 
   var call = t.callExpression(callId, [node]);
 
@@ -44,11 +46,11 @@ export default function (node, callId, scope) {
     return declar;
   } else {
     if (id) {
-      var state = { id: id };
-      scope.traverse(node, referenceVisitor, state);
+      var state = { id };
+      path.traverse(referenceVisitor, state);
 
       if (state.ref) {
-        scope.parent.push({ id: state.ref });
+        path.scope.parent.push({ id: state.ref });
         return t.assignmentExpression("=", state.ref, call);
       }
     }

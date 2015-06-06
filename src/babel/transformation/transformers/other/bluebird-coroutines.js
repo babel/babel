@@ -14,8 +14,7 @@ export function Func/*tion*/(node, parent, scope, file) {
   if (!node.async || node.generator) return;
 
   return remapAsyncToGenerator(
-    node,
-    t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine")),
-    scope
+    this,
+    t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine"))
   );
 }
