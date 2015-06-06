@@ -14,6 +14,7 @@ import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
+import Hub from "../../traversal/hub";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
 import parse from "../../helpers/parse";
@@ -44,6 +45,8 @@ export default class File {
     this.ast      = {};
 
     this.buildTransformers();
+
+    this.hub = new Hub(this);
   }
 
   static helpers = [
@@ -467,11 +470,12 @@ export default class File {
 
   _addAst(ast) {
     this.path  = NodePath.get({
+      hub: this.hub,
       parentPath: null,
       parent: ast,
       container: ast,
       key: "program"
-    }).setContext(null, this);
+    }).setContext();
     this.scope = this.path.scope;
     this.ast   = ast;
   }

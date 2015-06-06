@@ -54,13 +54,6 @@ function clearNode(node) {
     let key = CLEAR_KEYS[i];
     if (node[key] != null) node[key] = null;
   }
-
-  for (let key in node) {
-    var val = node[key];
-    if (Array.isArray(val)) {
-      delete val._paths;
-    }
-  }
 }
 
 var clearVisitor = {

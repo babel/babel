@@ -15,6 +15,8 @@ export function remove() {
  */
 
 export function dangerouslyRemove() {
+  this._assertUnremoved();
+
   this.resync();
 
   if (this._callRemovalHooks("pre")) {
@@ -45,8 +47,15 @@ export function _remove() {
 }
 
 export function _markRemoved() {
-  this.node = null;
-  this.removed = true;
+  this.shouldSkip = true;
+  this.removed    = true;
+  this.node       = null;
+}
+
+export function _assertUnremoved() {
+  if (this.removed) {
+    throw this.errorWithNode("NodePath has been removed so is read-only.");
+  }
 }
 
 /**

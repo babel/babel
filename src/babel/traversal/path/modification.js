@@ -7,6 +7,8 @@ import * as t from "../../types";
  */
 
 export function insertBefore(nodes) {
+  this._assertUnremoved();
+
   nodes = this._verifyNodeList(nodes);
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
@@ -27,6 +29,7 @@ export function insertBefore(nodes) {
   } else {
     throw new Error("No clue what to do with this node type.");
   }
+
   return [this];
 }
 
@@ -78,6 +81,8 @@ export function _maybePopFromStatements(nodes) {
  */
 
 export function insertAfter(nodes) {
+  this._assertUnremoved();
+
   nodes = this._verifyNodeList(nodes);
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
@@ -102,6 +107,7 @@ export function insertAfter(nodes) {
   } else {
     throw new Error("No clue what to do with this node type.");
   }
+
   return [this];
 }
 
@@ -110,7 +116,7 @@ export function insertAfter(nodes) {
  */
 
 export function updateSiblingKeys(fromIndex, incrementBy) {
-  var paths = this.container._paths;
+  var paths = this.parent._paths;
   for (var i = 0; i < paths.length; i++) {
     let path = paths[i];
     if (path.key >= fromIndex) {
@@ -153,6 +159,8 @@ export function _verifyNodeList(nodes) {
  */
 
 export function unshiftContainer(containerKey, nodes) {
+  this._assertUnremoved();
+
   nodes = this._verifyNodeList(nodes);
 
   // get the first path and insert our nodes before it, if it doesn't exist then it
@@ -175,6 +183,8 @@ export function unshiftContainer(containerKey, nodes) {
  */
 
 export function pushContainer(containerKey, nodes) {
+  this._assertUnremoved();
+
   nodes = this._verifyNodeList(nodes);
 
   // get an invisible path that represents the last node + 1 and replace it with our

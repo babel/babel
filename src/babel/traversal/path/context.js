@@ -1,4 +1,3 @@
-import * as messages from "../../messages";
 import NodePath from "./index";
 import traverse from "../index";
 
@@ -111,11 +110,11 @@ export function stop() {
  * Description
  */
 
-export function setScope(file?) {
+export function setScope() {
   if (this.opts && this.opts.noScope) return;
 
   var target = this.context || this.parentPath;
-  this.scope = NodePath.getScope(this, target && target.scope, file);
+  this.scope = NodePath.getScope(this, target && target.scope, this.hub);
   if (this.scope) this.scope.init();
 }
 
@@ -123,7 +122,7 @@ export function setScope(file?) {
  * Description
  */
 
-export function setContext(context, file) {
+export function setContext(context) {
   this.shouldSkip = false;
   this.shouldStop = false;
   this.removed    = false;
@@ -135,10 +134,7 @@ export function setContext(context, file) {
     this.opts    = context.opts;
   }
 
-  var log = file && this.type === "Program";
-  if (log) file.log.debug("Start scope building");
-  this.setScope(file);
-  if (log) file.log.debug("End scope building");
+  this.setScope();
 
   return this;
 }
@@ -152,11 +148,21 @@ export function setContext(context, file) {
 export function resync() {
   if (this.removed) return;
 
+  this._resyncParent();
   this._resyncContainer();
   this._resyncKey();
+  //this._resyncRemoved();
+}
+
+export function _resyncParent() {
+  if (this.parentPath) {
+    this.parent = this.parentPath.node;
+  }
 }
 
 export function _resyncKey() {
+  if (!this.container) return;
+
   if (this.node === this.container[this.key]) return;
 
   // grrr, path key is out of sync. this is likely due to a modification to the AST
@@ -176,7 +182,7 @@ export function _resyncKey() {
     }
   }
 
-  throw new Error(messages.get("lostTrackNodePath"));
+  this.key = null;
 }
 
 export function _resyncContainer() {
@@ -185,11 +191,21 @@ export function _resyncContainer() {
   if (!containerKey || !parentPath) return;
 
   var newContainer = parentPath.node[containerKey];
-  if (!newContainer || this.container === newContainer) return;
+  if (this.container === newContainer) return;
 
   // container is out of sync. this is likely the result of it being reassigned
 
-  this.container = newContainer;
+  if (newContainer) {
+    this.container = newContainer;
+  } else {
+    this.container = null;
+  }
+}
+
+export function _resyncRemoved() {
+  if (this.key == null || !this.container || this.container[this.key] !== this.node) {
+    this._markRemoved();
+  }
 }
 
 /**
@@ -214,7 +230,10 @@ export function unshiftContext(context) {
  * Description
  */
 
-export function setup(parentPath, key) {
+export function setup(parentPath, container, containerKey, key) {
+  this.containerKey = containerKey;
+  this.container    = container;
+
   this.parentPath = parentPath || this.parentPath;
   this.setKey(key);
 }
