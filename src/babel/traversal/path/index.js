@@ -44,12 +44,12 @@ export default class NodePath {
    * Description
    */
 
-  static getScope(path: NodePath, scope: Scope, hub?: Hub) {
+  getScope(scope: Scope) {
     var ourScope = scope;
 
     // we're entering a new scope so let's construct it!
-    if (path.isScope()) {
-      ourScope = new Scope(path, scope, hub);
+    if (this.isScope()) {
+      ourScope = new Scope(this, scope, this.hub);
     }
 
     return ourScope;

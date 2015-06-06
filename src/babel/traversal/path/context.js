@@ -114,7 +114,7 @@ export function setScope() {
   if (this.opts && this.opts.noScope) return;
 
   var target = this.context || this.parentPath;
-  this.scope = NodePath.getScope(this, target && target.scope, this.hub);
+  this.scope = this.getScope(target && target.scope);
   if (this.scope) this.scope.init();
 }
 
