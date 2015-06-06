@@ -1,4 +1,3 @@
-import type File from "../../transformation/file";
 import type Hub from "../hub";
 import * as virtualTypes from "./lib/virtual-types";
 import traverse from "../index";
@@ -21,7 +20,7 @@ export default class NodePath {
   static get({ hub, parentPath, parent, container, containerKey, key }) {
     var targetNode = container[key];
     var paths = parent._paths = parent._paths || [];
-    var path
+    var path;
 
     for (var i = 0; i < paths.length; i++) {
       var pathCheck = paths[i];
