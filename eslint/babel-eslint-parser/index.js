@@ -1,5 +1,4 @@
 var acornToEsprima = require("./acorn-to-esprima");
-var traverse       = require("babel-core").traverse;
 var assign         = require("lodash.assign");
 var pick           = require("lodash.pick");
 var Module         = require("module");
@@ -54,7 +53,7 @@ function monkeypatch() {
   // monkeypatch escope/referencer
   var referencerLoc;
   try {
-    var referencerLoc = Module._resolveFilename("./referencer", escopeMod);
+    referencerLoc = Module._resolveFilename("./referencer", escopeMod);
   } catch (err) {
     throw new ReferenceError("couldn't resolve escope/referencer");
   }
@@ -64,7 +63,7 @@ function monkeypatch() {
   // reference Definition
   var definitionLoc;
   try {
-    var definitionLoc = Module._resolveFilename("./definition", referencerMod);
+    definitionLoc = Module._resolveFilename("./definition", referencerMod);
   } catch (err) {
     throw new ReferenceError("couldn't resolve escope/definition");
   }
@@ -146,8 +145,8 @@ function monkeypatch() {
       } else if (propertyType.type === "typeAnnotation") {
         visitTypeAnnotation.call(this, node.typeAnnotation);
       } else if (propertyType.type === "typeParameters") {
-        for (var j = 0; j < node.typeParameters.params.length; j++) {
-          checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
+        for (var l = 0; l < node.typeParameters.params.length; l++) {
+          checkIdentifierOrVisit.call(this, node.typeParameters.params[l]);
         }
       } else if (propertyType.type === "id") {
         if (node.id.type === "Identifier") {
@@ -184,13 +183,13 @@ function monkeypatch() {
       }
     }
     if (node.typeParameters) {
-      for (var i = 0; i < node.typeParameters.params.length; i++) {
-        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
+      for (var j = 0; j < node.typeParameters.params.length; j++) {
+        checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
       }
     }
     if (node.superTypeParameters) {
-      for (var i = 0; i < node.superTypeParameters.params.length; i++) {
-        checkIdentifierOrVisit.call(this, node.superTypeParameters.params[i]);
+      for (var k = 0; k < node.superTypeParameters.params.length; k++) {
+        checkIdentifierOrVisit.call(this, node.superTypeParameters.params[k]);
       }
     }
     visitClass.call(this, node);
@@ -220,8 +219,8 @@ function monkeypatch() {
       }
     }
     if (node.typeParameters) {
-      for (var i = 0; i < node.typeParameters.params.length; i++) {
-        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
+      for (var j = 0; j < node.typeParameters.params.length; j++) {
+        checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
       }
     }
     visitFunction.call(this, node);
@@ -264,7 +263,7 @@ function monkeypatch() {
         checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
       }
     }
-  }
+  };
 
   referencer.prototype.ComprehensionBlock = function(node) {
     var left = node.left;
@@ -282,7 +281,7 @@ function monkeypatch() {
     if (node.right) {
       this.visit(node.right);
     }
-  }
+  };
 }
 
 exports.attachComments = function (ast, comments, tokens) {

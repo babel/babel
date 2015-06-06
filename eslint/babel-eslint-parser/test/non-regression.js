@@ -420,7 +420,7 @@ describe("verify", function () {
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
-    })
+    });
 
     it("10", function () {
       verifyAndAssertMessages(
@@ -672,7 +672,7 @@ describe("verify", function () {
       verifyAndAssertMessages(
         [
           "import type Foo from 'foo';",
-          'var {x}: {x: Foo; } = { x: "hello" }; x;'
+          "var {x}: {x: Foo; } = { x: 'hello' }; x;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -683,7 +683,7 @@ describe("verify", function () {
       verifyAndAssertMessages(
         [
           "import type Foo from 'foo';",
-          'var [x]: Array<Foo> = [ "hello" ]; x;'
+          "var [x]: Array<Foo> = [ 'hello' ]; x;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -764,8 +764,8 @@ describe("verify", function () {
     it("38", function () {
       verifyAndAssertMessages(
         [
-          'import type {foo, bar} from "baz";',
-          'foo; bar;'
+          "import type {foo, bar} from 'baz';",
+          "foo; bar;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -775,8 +775,8 @@ describe("verify", function () {
     it("39", function () {
       verifyAndAssertMessages(
         [
-          'import type {foo as bar} from "baz";',
-          'bar;'
+          "import type {foo as bar} from 'baz';",
+          "bar;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -786,8 +786,8 @@ describe("verify", function () {
     it("40", function () {
       verifyAndAssertMessages(
         [
-          'import type from "foo";',
-          'type;'
+          "import type from 'foo';",
+          "type;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -797,8 +797,8 @@ describe("verify", function () {
     it("41", function () {
       verifyAndAssertMessages(
         [
-          'import type, {foo} from "bar";',
-          'type; foo;'
+          "import type, {foo} from 'bar';",
+          "type; foo;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -808,8 +808,8 @@ describe("verify", function () {
     it("42", function () {
       verifyAndAssertMessages(
         [
-          'import type * as namespace from "bar";',
-          'namespace;'
+          "import type * as namespace from 'bar';",
+          "namespace;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -1088,6 +1088,6 @@ describe("verify", function () {
       "var unused;",
       { "no-unused-vars": 1 },
       [ "1:4 unused is defined but never used no-unused-vars" ]
-    )
+    );
   });
 });

@@ -73,10 +73,6 @@ exports.toTokens = function (tokens) {
   return tokens.map(exports.toToken);
 };
 
-function isCompatTag(tagName) {
-  return tagName && /^[a-z]|\-/.test(tagName);
-}
-
 function convertTemplateType(tokens) {
   var startingToken    = 0;
   var currentToken     = 0;
@@ -124,7 +120,7 @@ function convertTemplateType(tokens) {
         start: tokens[start].loc.start,
         end: tokens[end].loc.end
       }
-    }
+    };
 
     // put new token in place of old tokens
     tokens.splice(start, end - start + 1, templateToken);
@@ -174,7 +170,7 @@ function convertTemplateType(tokens) {
 
 var astTransformVisitor = {
   noScope: true,
-  exit: function (node, parent) {
+  exit: function (node) { /* parent */
     if (this.isSpreadProperty()) {
       node.type = "Property";
       node.kind = "init";

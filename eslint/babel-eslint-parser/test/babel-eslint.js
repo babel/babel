@@ -195,19 +195,19 @@ describe("acorn-to-esprima", function () {
   });
 
   it("default import", function () {
-    parseAndAssertSame('import foo from "foo";');
+    parseAndAssertSame("import foo from 'foo';");
   });
 
   it("import specifier", function () {
-    parseAndAssertSame('import { foo } from "foo";');
+    parseAndAssertSame("import { foo } from 'foo';");
   });
 
   it("import specifier with name", function () {
-    parseAndAssertSame('import { foo as bar } from "foo";');
+    parseAndAssertSame("import { foo as bar } from 'foo';");
   });
 
   it("import bare", function () {
-    parseAndAssertSame('import "foo";');
+    parseAndAssertSame("import 'foo';");
   });
 
   it("export default class declaration", function () {
@@ -227,7 +227,7 @@ describe("acorn-to-esprima", function () {
   });
 
   it("export all", function () {
-    parseAndAssertSame('export * from "foo";');
+    parseAndAssertSame("export * from 'foo';");
   });
 
   it("export named", function () {
