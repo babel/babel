@@ -1,4 +1,3 @@
-import type Hub from "../hub";
 import * as virtualTypes from "./lib/virtual-types";
 import traverse from "../index";
 import assign from "lodash/object/assign";

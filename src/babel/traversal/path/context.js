@@ -1,4 +1,3 @@
-import NodePath from "./index";
 import traverse from "../index";
 
 /**
