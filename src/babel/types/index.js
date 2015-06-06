@@ -293,10 +293,12 @@ export function inherits(child: Object, parent: Object): Object {
   if (!child || !parent) return child;
 
   child._scopeInfo = parent._scopeInfo;
-  child.range      = parent.range;
-  child.start      = parent.start;
-  child.loc        = parent.loc;
-  child.end        = parent.end;
+  child._paths     = parent._paths;
+
+  child.range = parent.range;
+  child.start = parent.start;
+  child.loc   = parent.loc;
+  child.end   = parent.end;
 
   child.typeAnnotation = parent.typeAnnotation;
   child.returnType     = parent.returnType;
