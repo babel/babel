@@ -1,7 +1,7 @@
 import includes from "lodash/collection/includes";
 import repeating from "repeating";
 import type NodePath from "../path";
-import type File from "../../transformation/file";
+import type Hub from "../hub";
 import traverse from "../index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../../messages";
@@ -140,7 +140,7 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: NodePath, parent?: Scope, file?: File) {
+  constructor(path: NodePath, parent?: Scope, hub?: Hub) {
     if (parent && parent.block === path.node) {
       return parent;
     }
@@ -153,7 +153,7 @@ export default class Scope {
     }
 
     this.parent = parent;
-    this.file   = parent ? parent.file : file;
+    this.hub    = parent ? parent.hub : hub;
 
     this.parentBlock = path.parent;
     this.block       = path.node;
@@ -175,17 +175,6 @@ export default class Scope {
 
   traverse(node: Object, opts: Object, state?) {
     traverse(node, opts, this, state, this.path);
-  }
-
-
-  /**
-   * Since `Scope` instances are unique to their traversal we need some other
-   * way to compare if scopes are the same. Here we just compare `this.bindings`
-   * as it will be the same across all instances.
-   */
-
-  is(scope) {
-    return this.bindings === scope.bindings;
   }
 
   /**
@@ -344,7 +333,7 @@ export default class Scope {
     if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
-      throw this.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
+      throw this.hub.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
 
@@ -374,7 +363,7 @@ export default class Scope {
       state.binding.name = newName;
     }
 
-    var file = this.file;
+    var file = this.hub.file;
     if (file) {
       this._renameFromMap(file.moduleFormatter.localImports, oldName, newName, state.binding);
       //this._renameFromMap(file.moduleFormatter.localExports, oldName, newName);
@@ -414,7 +403,7 @@ export default class Scope {
    */
 
   toArray(node: Object, i?: number) {
-    var file = this.file;
+    var file = this.hub.file;
 
     if (t.isIdentifier(node)) {
       var binding = this.getBinding(node.name);
@@ -436,7 +425,7 @@ export default class Scope {
     } else if (i) {
       args.push(t.literal(i));
       helperName = "sliced-to-array";
-      if (this.file.isLoose("es6.forOf")) helperName += "-loose";
+      if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
     }
     return t.callExpression(file.addHelper(helperName), args);
   }
@@ -716,7 +705,7 @@ export default class Scope {
       declar._generated = true;
       declar._blockHoist = 2;
 
-      this.file.attachAuxiliaryComment(declar);
+      this.hub.file.attachAuxiliaryComment(declar);
 
       var [declarPath] = path.unshiftContainer("body", [declar]);
       this.registerBinding(kind, declarPath);

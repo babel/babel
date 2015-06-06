@@ -1,4 +1,5 @@
 import type File from "../../transformation/file";
+import type Hub from "../hub";
 import * as virtualTypes from "./lib/virtual-types";
 import traverse from "../index";
 import assign from "lodash/object/assign";
@@ -6,22 +7,21 @@ import Scope from "../scope";
 import * as t from "../../types";
 
 export default class NodePath {
-  constructor(parent, container, containerKey) {
-    this.containerKey = containerKey;
-    this.container    = container;
-    this.contexts     = [];
-    this.parent       = parent;
-    this.data         = {};
+  constructor(hub, parent) {
+    this.contexts = [];
+    this.parent   = parent;
+    this.data     = {};
+    this.hub      = hub;
   }
 
   /**
    * Description
    */
 
-  static get({ parentPath, parent, container, containerKey, key }) {
+  static get({ hub, parentPath, parent, container, containerKey, key }) {
     var targetNode = container[key];
-    var paths = container._paths = container._paths || [];
-    var path;
+    var paths = parent._paths = parent._paths || [];
+    var path
 
     for (var i = 0; i < paths.length; i++) {
       var pathCheck = paths[i];
@@ -32,11 +32,11 @@ export default class NodePath {
     }
 
     if (!path) {
-      path = new NodePath(parent, container, containerKey);
+      path = new NodePath(hub, parent);
       paths.push(path);
     }
 
-    path.setup(parentPath, key);
+    path.setup(parentPath, container, containerKey, key);
 
     return path;
   }
@@ -45,12 +45,12 @@ export default class NodePath {
    * Description
    */
 
-  static getScope(path: NodePath, scope: Scope, file?: File) {
+  static getScope(path: NodePath, scope: Scope, hub?: Hub) {
     var ourScope = scope;
 
     // we're entering a new scope so let's construct it!
     if (path.isScope()) {
-      ourScope = new Scope(path, scope, file);
+      ourScope = new Scope(path, scope, hub);
     }
 
     return ourScope;
