@@ -41,8 +41,9 @@ export default class File {
 
     this.pipeline = pipeline;
     this.log      = new Logger(this, opts.filename || "unknown");
-    this.opts     = this.normalizeOptions(opts);
     this.ast      = {};
+
+    this.normalizeOptions(opts);
 
     this.buildTransformers();
 
@@ -91,16 +92,16 @@ export default class File {
   static options = require("./options");
 
   normalizeOptions(opts: Object) {
-    opts = assign({}, opts);
+    opts = this.opts = assign({}, opts);
 
+    // resolve babelrc
     if (opts.filename) {
       var rcFilename = opts.filename;
       if (!isAbsolute(rcFilename)) rcFilename = path.join(process.cwd(), rcFilename);
       opts = resolveRc(rcFilename, opts);
     }
 
-    //
-
+    // check for unknown options
     for (let key in opts) {
       if (key[0] === "_") continue;
 
@@ -108,9 +109,11 @@ export default class File {
       if (!option) this.log.error(`Unknown option: ${key}`, ReferenceError);
     }
 
+    // merge in environment options
     var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
     if (opts.env) merge(opts, opts.env[envKey]);
 
+    // normalise options
     for (let key in File.options) {
       let option = File.options[key];
 
