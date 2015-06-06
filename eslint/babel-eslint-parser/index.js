@@ -231,9 +231,15 @@ function monkeypatch() {
   referencer.prototype.VariableDeclaration = function(node) {
     if (node.declarations) {
       for (var i = 0; i < node.declarations.length; i++) {
-        var type = node.declarations[i].id.typeAnnotation;
-        if (type) {
-          checkIdentifierOrVisit.call(this, type);
+        var id = node.declarations[i].id;
+        var typeAnnotation = id.typeAnnotation;
+        if (typeAnnotation) {
+          checkIdentifierOrVisit.call(this, typeAnnotation);
+        }
+        if (id.type === 'ObjectPattern') {
+          for (var j = 0; j < id.properties.length; j++) {
+            this.visit(id.properties[j]);
+          }
         }
       }
     }

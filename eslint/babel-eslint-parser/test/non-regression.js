@@ -1090,4 +1090,12 @@ describe("verify", function () {
       [ "1:4 unused is defined but never used no-unused-vars" ]
     );
   });
+
+  it("visits excluded properties left of spread #95", function () {
+    verifyAndAssertMessages(
+      "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
+      { "no-undef": 1, "no-unused-vars": 1 },
+      []
+    )
+  });
 });
