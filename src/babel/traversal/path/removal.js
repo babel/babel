@@ -59,6 +59,20 @@ export function _assertUnremoved() {
 }
 
 /**
+ * Description
+ */
+
+export function addComment(type, content) {
+  var node = this.node;
+  var key = `${type}Comments`;
+  var comments = node[key] = node[key] || [];
+  comments.push({
+    type: "CommentBlock",
+    value: content
+  });
+}
+
+/**
  * Share comments amongst siblings.
  */
 
