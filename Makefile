@@ -36,7 +36,7 @@ build:
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
 	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s babel $(BROWSERIFY_IGNORE) >dist/browser.js
-	node $(UGLIFY_CMD) dist/babel.js >dist/browser.min.js
+	node $(UGLIFY_CMD) dist/browser.js >dist/browser.min.js
 
 	node $(BROWSERIFY_CMD) lib/babel/api/node.js --node $(BROWSERIFY_IGNORE) >dist/node.js
 
@@ -89,8 +89,8 @@ publish: lint
 
 	make build
 
-	cp dist/babel.js browser.js
-	cp dist/babel.min.js browser.min.js
+	cp dist/browser.js browser.js
+	cp dist/browser.min.js browser.min.js
 
 	cp dist/polyfill.js browser-polyfill.js
 	cp dist/polyfill.min.js browser-polyfill.min.js
