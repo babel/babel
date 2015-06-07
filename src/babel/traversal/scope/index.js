@@ -447,6 +447,8 @@ export default class Scope {
       this.registerBinding("let", path);
     } else if (t.isImportDeclaration(node) || t.isExportDeclaration(node)) {
       this.registerBinding("module", path);
+    } else if (t.isFlowDeclaration()) {
+      this.registerBinding("type", path);
     } else {
       this.registerBinding("unknown", path);
     }
