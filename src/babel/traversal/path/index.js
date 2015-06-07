@@ -106,6 +106,7 @@ assign(NodePath.prototype, require("./context"));
 assign(NodePath.prototype, require("./removal"));
 assign(NodePath.prototype, require("./modification"));
 assign(NodePath.prototype, require("./family"));
+assign(NodePath.prototype, require("./comments"));
 
 for (let type in virtualTypes) {
   if (type[0] === "_") continue;

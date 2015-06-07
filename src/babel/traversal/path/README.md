@@ -8,3 +8,4 @@
  - `removal` - Methods responsible for removing a node.
  - `family` - Methods responsible for dealing with/retrieving children or siblings.
  - `introspection` - Methods responsible for introspecting the current path for certain values.
+ - `comments` - Methods responsible for dealing with comments.
