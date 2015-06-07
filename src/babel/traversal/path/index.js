@@ -17,6 +17,10 @@ export default class NodePath {
    */
 
   static get({ hub, parentPath, parent, container, containerKey, key }) {
+    if (!hub && parentPath) {
+      hub = parentPath.hub;
+    }
+
     var targetNode = container[key];
     var paths = parent._paths = parent._paths || [];
     var path;
