@@ -45,7 +45,7 @@ export function removeTypeDuplicates(nodes) {
 
     // find a matching generic type and merge and deduplicate the type parameters
     if (t.isGenericTypeAnnotation(node)) {
-      var name = node.id.name;
+      let name = node.id.name;
 
       if (generics[name]) {
         var existing = generics[name];
@@ -74,7 +74,7 @@ export function removeTypeDuplicates(nodes) {
   }
 
   // add back in generics
-  for (var name in generics) {
+  for (let name in generics) {
     types.push(generics[name]);
   }
 

@@ -1,4 +1,3 @@
-import isNumber from "lodash/lang/isNumber";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 

@@ -71,7 +71,7 @@ export function _ForOfStatementArray(node, scope, file) {
   }
 
   if (this.parentPath.isLabeledStatement()) {
-    loop = t.labeledStatement(this.parentPath.node.label, loop)
+    loop = t.labeledStatement(this.parentPath.node.label, loop);
   }
 
   nodes.push(loop);
