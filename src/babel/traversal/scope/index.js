@@ -1,7 +1,6 @@
 import includes from "lodash/collection/includes";
 import repeating from "repeating";
 import type NodePath from "../path";
-import type Hub from "../hub";
 import traverse from "../index";
 import defaults from "lodash/object/defaults";
 import * as messages from "../../messages";
