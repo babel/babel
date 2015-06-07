@@ -44,7 +44,7 @@ export function ReferencedIdentifier(node, parent, scope) {
     if (binding.path.scope.parent !== scope) return;
   }
 
-  if (this.findParent((node) => node === replacement)) {
+  if (this.findParent((path) => path.node === replacement)) {
     return;
   }
 

@@ -160,7 +160,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
   }
 
   if (this.isReturnStatement()) {
-    var funcPath = this.findParent((node, path) => path.isFunction());
+    var funcPath = this.findParent((path) => path.isFunction());
     if (!funcPath) return;
 
     var returnType = funcPath.node.returnType;

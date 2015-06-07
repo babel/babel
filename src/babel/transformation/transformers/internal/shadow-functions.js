@@ -8,7 +8,7 @@ function remap(path, key, create) {
   // ensure that we're shadowed
   if (!path.inShadow()) return;
 
-  var fnPath = path.findParent((node, path) => !node.shadow && (path.isFunction() || path.isProgram()));
+  var fnPath = path.findParent((path) => !path.is("shadow") && (path.isFunction() || path.isProgram()));
 
   var cached = fnPath.getData(key);
   if (cached) return cached;

@@ -158,7 +158,7 @@ export function replaceExpressionWithStatements(nodes: Array) {
     for (var i = 0; i < last.length; i++) {
       var lastNode = last[i];
       if (lastNode.isExpressionStatement()) {
-        var loop = lastNode.findParent((node, path) => path.isLoop());
+        var loop = lastNode.findParent((path) => path.isLoop());
         if (loop) {
           var uid = this.get("callee").scope.generateDeclaredUidIdentifier("ret");
           this.get("callee.body").pushContainer("body", t.returnStatement(uid));

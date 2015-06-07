@@ -5,7 +5,7 @@
 export function findParent(callback) {
   var path = this;
   while (path) {
-    if (callback(path.node, path)) return path;
+    if (callback(path)) return path;
     path = path.parentPath;
   }
   return null;

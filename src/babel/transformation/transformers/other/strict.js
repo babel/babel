@@ -26,7 +26,7 @@ export var Program = {
 };
 
 export function ThisExpression() {
-  if (!this.findParent((node) => !node.shadow && THIS_BREAK_KEYS.indexOf(node.type) >= 0)) {
+  if (!this.findParent((path) => !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0)) {
     return t.identifier("undefined");
   }
 }
