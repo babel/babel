@@ -5,6 +5,7 @@ UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs
 #UGLIFY_CMD = node_modules/uglify-js/bin/uglifyjs --mangle sort
 MOCHA_CMD = node_modules/mocha/bin/_mocha
 BABEL_CMD = node_modules/babel/bin/babel
+BROWSERIFY_IGNORE = -i esprima-fb
 
 export NODE_ENV = test
 
@@ -34,8 +35,10 @@ build:
 	node $(BROWSERIFY_CMD) -e lib/babel/polyfill.js >dist/polyfill.js
 	node $(UGLIFY_CMD) dist/polyfill.js >dist/polyfill.min.js
 
-	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s babel >dist/babel.js
-	node $(UGLIFY_CMD) dist/babel.js >dist/babel.min.js
+	node $(BROWSERIFY_CMD) lib/babel/api/browser.js -s babel $(BROWSERIFY_IGNORE) >dist/browser.js
+	node $(UGLIFY_CMD) dist/babel.js >dist/browser.min.js
+
+	node $(BROWSERIFY_CMD) lib/babel/api/node.js --node $(BROWSERIFY_IGNORE) >dist/node.js
 
 	node packages/babel-cli/bin/babel-external-helpers >dist/external-helpers.js
 	node $(UGLIFY_CMD) dist/external-helpers.js >dist/external-helpers.min.js
