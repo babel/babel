@@ -1,3 +1,5 @@
+import * as t from "../../../types";
+
 export var metadata = {
   group: "builtin-trailing"
 };
@@ -23,7 +25,10 @@ export function Func/*tion*/(node) {
 }
 
 export function TypeCastExpression(node) {
-  return node.expression;
+  do {
+    node = node.expression;
+  } while(t.isTypeCastExpression(node));
+  return node;
 }
 
 export function ImportDeclaration(node) {
