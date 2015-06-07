@@ -6,7 +6,6 @@
     require("./tests.js");
     require("./tests-harmony.js");
     require("./tests-flow.js");
-    require("./tests-jsx.js");
     require("./tests-babel.js");
     require("babel/register")
     acorn = require("../../lib/acorn")
