@@ -7,8 +7,6 @@ export const MESSAGES = {
   classesIllegalSuperCall: "Direct super call is illegal in non-constructor, use super.$1() instead",
   classesIllegalConstructorKind: "Illegal kind for constructor method",
   scopeDuplicateDeclaration: "Duplicate declaration $1",
-  undeclaredVariable: "Reference to undeclared variable $1",
-  undeclaredVariableSuggestion: "Reference to undeclared variable $1 - did you mean $2?",
   settersInvalidParamLength: "Setters must have exactly one parameter",
   settersNoRest: "Setters aren't allowed to have a rest",
   noAssignmentsInForHead: "No assignments allowed in for-in/of head",
@@ -23,6 +21,10 @@ export const MESSAGES = {
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   lostTrackNodePath: "We lost track of this nodes position, likely because the AST was directly manipulated",
+
+  undeclaredVariable: "Reference to undeclared variable $1",
+  undeclaredVariableType: "Referencing a type alias outside of a type annotation",
+  undeclaredVariableSuggestion: "Reference to undeclared variable $1 - did you mean $2?",
 
   traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",

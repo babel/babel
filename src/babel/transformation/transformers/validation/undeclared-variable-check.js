@@ -6,6 +6,11 @@ export var metadata = {
 };
 
 export function ReferencedIdentifier(node, parent, scope, file) {
+  var binding = scope.getBinding(node.name);
+  if (binding && binding.kind === "type" && !this.parentPath.isFlow()) {
+    throw this.errorWithNode(messages.get("undeclaredVariableType", node.name), ReferenceError);
+  }
+
   if (scope.hasBinding(node.name)) return;
 
   // get the closest declaration to offer as a suggestion
@@ -34,5 +39,5 @@ export function ReferencedIdentifier(node, parent, scope, file) {
 
   //
 
-  throw file.errorWithNode(node, msg, ReferenceError);
+  throw this.errorWithNode(msg, ReferenceError);
 }

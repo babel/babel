@@ -30,6 +30,13 @@ export function getBindingIdentifiers(node: Object): Object {
 }
 
 getBindingIdentifiers.keys = {
+  DeclareClass: "id",
+  DeclareFunction: "id",
+  DeclareModule: "id",
+  DeclareVariable: "id",
+  InterfaceDeclaration: "id",
+  TypeAlias: "id",
+
   ComprehensionExpression: "blocks",
   ComprehensionBlock: "left",
 

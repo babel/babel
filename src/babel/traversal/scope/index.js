@@ -447,6 +447,8 @@ export default class Scope {
       this.registerBinding("let", path);
     } else if (t.isImportDeclaration(node) || t.isExportDeclaration(node)) {
       this.registerBinding("module", path);
+    } else if (t.isFlowDeclaration()) {
+      this.registerBinding("type", path);
     } else {
       this.registerBinding("unknown", path);
     }
@@ -494,7 +496,13 @@ export default class Scope {
 
       var local = this.getOwnBindingInfo(name);
       if (local) {
+        // don't ever let a type alias shadow a local binding
+        if (kind === "type") continue;
+
+        // same identifier so continue safely as we're likely trying to register it
+        // multiple times
         if (local.identifier === id) continue;
+
         this.checkBlockScopedCollisions(local, kind, name, id);
       }
 
