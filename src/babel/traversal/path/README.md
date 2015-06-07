@@ -7,4 +7,4 @@
  - `replacement` - Methods responsible for replacing a node with another.
  - `removal` - Methods responsible for removing a node.
  - `family` - Methods responsible for dealing with/retrieving children or siblings.
- - `verification` - Methodsresponsible for introspecting the current path for certain values.
+ - `introspection` - Methods responsible for introspecting the current path for certain values.
