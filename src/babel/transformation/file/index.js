@@ -36,8 +36,17 @@ export default class File {
     this.declarations = {};
     this.usedHelpers  = {};
     this.dynamicData  = {};
-    this.metadata     = {};
     this.data         = {};
+
+    this.metadata = {
+      modules: {
+        imports: [],
+        exports: {
+          exported: [],
+          specifiers: []
+        }
+      }
+    };
 
     this.pipeline = pipeline;
     this.log      = new Logger(this, opts.filename || "unknown");
@@ -493,13 +502,7 @@ export default class File {
     if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
       modFormatter.init();
     }
-    this.populateModuleMetadata();
     this.log.debug("End module formatter init");
-  }
-
-  populateModuleMetadata() {
-    var modules = {};
-    this.metadata.modules = modules;
   }
 
   transform() {
