@@ -344,7 +344,7 @@ class CodeGenerator {
 
       //
       if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-        var offset = comment.loc.start.column;
+        var offset = comment.loc && comment.loc.start.column;
         if (offset) {
           var newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
           val = val.replace(newlineRegex, "\n");
