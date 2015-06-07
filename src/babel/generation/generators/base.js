@@ -17,3 +17,7 @@ export function BlockStatement(node, print) {
     this.rightBrace();
   }
 }
+
+export function Noop() {
+
+}

@@ -17,6 +17,8 @@ var or  = types.Type.or;
 //  .build("program")
 //  .field("program", def("Program"));
 
+def("Noop");
+
 def("AssignmentPattern")
   .bases("Pattern")
   .build("left", "right")

@@ -43,6 +43,7 @@
   "MetaProperty":              ["meta", "property"],
   "MethodDefinition":          ["key", "value", "decorators"],
   "NewExpression":             ["callee", "arguments"],
+  "Noop":                      [],
   "ObjectExpression":          ["properties"],
   "ObjectPattern":             ["properties", "typeAnnotation"],
   "Program":                   ["body"],
