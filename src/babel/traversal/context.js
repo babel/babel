@@ -10,8 +10,19 @@ export default class TraversalContext {
   }
 
   shouldVisit(node) {
+    var opts = this.opts;
+    if (opts.enter || opts.exit) return true;
+
+    if (opts[node.type]) return true;
+
     var keys = t.VISITOR_KEYS[node.type];
-    return !!(this.opts.enter || this.opts.exit || this.opts[node.type] || (keys && keys.length));
+    if (!keys || !keys.length) return false;
+
+    for (var key of (keys: Array)) {
+      if (node[key]) return true;
+    }
+
+    return false;
   }
 
   create(node, obj, key, containerKey) {
