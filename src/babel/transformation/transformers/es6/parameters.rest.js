@@ -3,12 +3,14 @@ import * as util from  "../../../util";
 import * as t from "../../../types";
 
 var memberExpressionOptimisationVisitor = {
-  enter(node, parent, scope, state) {
+  Scope(node, parent, scope, state) {
     // check if this scope has a local binding that will shadow the rest parameter
-    if (this.isScope() && !scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
-      return this.skip();
+    if (!scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
+      this.skip();
     }
+  },
 
+  enter(node, parent, scope, state) {
     var stop = () => {
       state.canOptimise = false;
       this.stop();
@@ -31,8 +33,8 @@ var memberExpressionOptimisationVisitor = {
     if (!state.noOptimise && t.isMemberExpression(parent) && parent.computed) {
       // if we know that this member expression is referencing a number then we can safely
       // optimise it
-      var prop = parent.property;
-      if (isNumber(prop.value) || t.isUnaryExpression(prop) || t.isBinaryExpression(prop)) {
+      var prop = this.parentPath.get("property");
+      if (prop.isTypeAnnotationGeneric("Number")) {
         state.candidates.push(this);
         return;
       }
@@ -43,6 +45,8 @@ var memberExpressionOptimisationVisitor = {
 };
 
 function optimizeMemberExpression(parent, offset) {
+  if (offset === 0) return;
+
   var newExpr;
   var prop = parent.property;
 

@@ -2,53 +2,14 @@ import type NodePath from "./index";
 import * as t from "../../types";
 
 /**
- * Description
+ * Resolve a "pointer" `NodePath` to it's absolute path.
  */
 
-export function getTypeAnnotation() {
-  return this.getTypeAnnotationInfo().annotation;
+export function resolve(dangerous, resolved) {
+  return this._resolve(dangerous, resolved) || this;
 }
 
-/**
- * Description
- */
-
-export function getTypeAnnotationInfo(): {
-  inferred: boolean;
-  annotation: ?Object;
-} {
-  if (this.typeInfo) {
-    return this.typeInfo;
-  }
-
-  var info = this.typeInfo = {
-    inferred: false,
-    annotation: null
-  };
-
-  var type = this.node && this.node.typeAnnotation;
-
-  if (!type) {
-    info.inferred = true;
-    type = this.inferTypeAnnotation();
-  }
-
-  if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
-  info.annotation = type;
-
-  return info;
-}
-
-/**
- * Resolves `NodePath` pointers until it resolves to an absolute path. ie. a data type instead of a
- * call etc. If a data type can't be resolved then the last path we were at is returned.
- */
-
-export function resolve(resolved) {
-  return this._resolve(resolved) || this;
-}
-
-export function _resolve(resolved?): ?NodePath {
+export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -59,7 +20,7 @@ export function _resolve(resolved?): ?NodePath {
 
   if (this.isVariableDeclarator()) {
     if (this.get("id").isIdentifier()) {
-      return this.get("init").resolve(resolved);
+      return this.get("init").resolve(dangerous, resolved);
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
@@ -74,9 +35,9 @@ export function _resolve(resolved?): ?NodePath {
     if (binding.kind === "module") return;
 
     if (binding.path !== this) {
-      return binding.path.resolve(resolved);
+      return binding.path.resolve(dangerous, resolved);
     }
-  } else if (this.isMemberExpression()) {
+  } else if (dangerous && this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
     // making this resolution inaccurate
 
@@ -85,7 +46,7 @@ export function _resolve(resolved?): ?NodePath {
 
     var targetName = targetKey.value;
 
-    var target = this.get("object").resolve(resolved);
+    var target = this.get("object").resolve(dangerous, resolved);
 
     if (target.isObjectExpression()) {
       var props = target.get("properties");
@@ -100,15 +61,16 @@ export function _resolve(resolved?): ?NodePath {
         // { "foo": "obj" } or { ["foo"]: "obj" }
         match = match || key.isLiteral({ value: targetName });
 
-        if (match) return prop.get("value").resolve(resolved);
+        if (match) return prop.get("value").resolve(dangerous, resolved);
       }
     } else if (target.isArrayExpression() && !isNaN(+targetName)) {
       var elems = target.get("elements");
       var elem = elems[targetName];
-      if (elem) return elem.resolve(resolved);
+      if (elem) return elem.resolve(dangerous, resolved);
     }
   }
 }
+
 
 /**
  * Infer the type of the current `NodePath`.
@@ -116,42 +78,88 @@ export function _resolve(resolved?): ?NodePath {
  * NOTE: This is not cached. Use `getTypeAnnotation()` which is cached.
  */
 
-export function inferTypeAnnotation(force) {
-  return this._inferTypeAnnotation(force) || t.anyTypeAnnotation();
+export function getTypeAnnotation(force) {
+  if (this.typeAnnotation) return this.typeAnnotation;
+
+  var type = this._getTypeAnnotation(force) || t.anyTypeAnnotation();
+  if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
+  return this.typeAnnotation = type;
 }
 
-export function _inferTypeAnnotation(force?: boolean): ?Object {
-  var path = this.resolve();
+export function _getTypeAnnotationBindingConstantViolations(name, types = []) {
+  var binding = this.scope.getBinding(name);
 
-  var node = path.node;
-
-  if (!node && path.key === "init" && path.parentPath.isVariableDeclarator()) {
-    return t.voidTypeAnnotation();
+  for (var constantViolation of (binding.constantViolations: Array)) {
+    types.push(constantViolation.getTypeAnnotation());
   }
 
-  if (!node) return;
+  if (types.length) {
+    return t.createUnionTypeAnnotation(types);
+  }
+}
+
+export function _getTypeAnnotation(force?: boolean): ?Object {
+  var node = this.node;
+
+  if (!node) {
+    // handle initializerless variables, add in checks for loop initializers too
+    if (this.key === "init" && this.parentPath.isVariableDeclarator()) {
+      var declar       = this.parentPath.parentPath;
+      var declarParent = declar.parentPath;
+
+      // for (var NODE in bar) {}
+      if (declar.key === "left" && declarParent.isForInStatement()) {
+        return t.stringTypeAnnotation();
+      }
+
+      // for (var NODE of bar) {}
+      if (declar.key === "left" && declarParent.isForOfStatement()) {
+        return t.anyTypeAnnotation();
+      }
+
+      return t.voidTypeAnnotation();
+    } else {
+      return;
+    }
+  }
 
   if (node.typeAnnotation) {
     return node.typeAnnotation;
   }
 
-  if (path.isRestElement() || path.parentPath.isRestElement() || path.isArrayExpression()) {
-    return t.genericTypeAnnotation(t.identifier("Array"));
+  //
+  if (this.isVariableDeclarator()) {
+    var id = this.get("id");
+
+    if (id.isIdentifier()) {
+      return this._getTypeAnnotationBindingConstantViolations(id.node.name, [
+        this.get("init").getTypeAnnotation()
+      ]);
+    } else {
+      return;
+    }
   }
 
-  if (path.parentPath.isTypeCastExpression()) {
-    return path.parentPath.inferTypeAnnotation();
+  //
+  if (this.parentPath.isTypeCastExpression()) {
+    return this.parentPath.getTypeAnnotation();
   }
 
-  if (path.isTypeCastExpression()) {
+  if (this.isTypeCastExpression()) {
     return node.typeAnnotation;
   }
 
-  if (path.parentPath.isReturnStatement() && !force) {
-    return path.parentPath.inferTypeAnnotation();
+  //
+  if (this.isRestElement() || this.parentPath.isRestElement() || this.isArrayExpression()) {
+    return t.genericTypeAnnotation(t.identifier("Array"), t.typeParameterInstantiation([t.anyTypeAnnotation()]));
   }
 
-  if (path.isReturnStatement()) {
+  //
+  if (!force && this.parentPath.isReturnStatement()) {
+    return this.parentPath.getTypeAnnotation();
+  }
+
+  if (this.isReturnStatement()) {
     var funcPath = this.findParent((node, path) => path.isFunction());
     if (!funcPath) return;
 
@@ -159,40 +167,58 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     if (returnType) {
       return returnType;
     } else {
-      return this.get("argument").inferTypeAnnotation(true);
+      return this.get("argument").getTypeAnnotation(true);
     }
   }
 
-  if (path.isNewExpression() && path.get("callee").isIdentifier()) {
+  //
+  if (this.isNewExpression() && this.get("callee").isIdentifier()) {
     // only resolve identifier callee
     return t.genericTypeAnnotation(node.callee);
   }
 
-  if (path.isReferencedIdentifier()) {
+  //
+  if (this.isReferencedIdentifier()) {
+    // check if a binding exists of this value and if so then return a union type of all
+    // possible types that the binding could be
+    var binding = this.scope.getBinding(node.name);
+    if (binding) {
+      if (binding.identifier.typeAnnotation) {
+        return binding.identifier.typeAnnotation;
+      } else {
+        return this._getTypeAnnotationBindingConstantViolations(node.name, [
+          binding.path.getTypeAnnotation()
+        ]);
+      }
+    }
+
+    // built-in values
     if (node.name === "undefined") {
       return t.voidTypeAnnotation();
-    } else if (node.name === "NaN") {
+    } else if (node.name === "NaN" || node.name === "Infinity") {
       return t.numberTypeAnnotation();
+    } else if (node.name === "arguments") {
+      // todo
     }
   }
 
-  if (path.isObjectExpression()) {
+  //
+  if (this.isObjectExpression()) {
     return t.genericTypeAnnotation(t.identifier("Object"));
   }
 
-  if (path.isFunction() && path.parentPath.isProperty({ kind: "get" })) {
-    return node.returnType;
-  }
-
-  if (path.isFunction() || path.isClass()) {
+  //
+  if (this.isFunction() || this.isClass()) {
     return t.genericTypeAnnotation(t.identifier("Function"));
   }
 
-  if (path.isTemplateLiteral()) {
+  //
+  if (this.isTemplateLiteral()) {
     return t.stringTypeAnnotation();
   }
 
-  if (path.isUnaryExpression()) {
+  //
+  if (this.isUnaryExpression()) {
     let operator = node.operator;
 
     if (operator === "void") {
@@ -206,7 +232,8 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     }
   }
 
-  if (path.isBinaryExpression()) {
+  //
+  if (this.isBinaryExpression()) {
     let operator = node.operator;
 
     if (t.NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
@@ -214,17 +241,15 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
       return t.booleanTypeAnnotation();
     } else if (operator === "+") {
-      var right = path.get("right").resolve();
-      var left  = path.get("left").resolve();
+      var right = this.get("right");
+      var left  = this.get("left");
 
-      if (left || right) {
-        if (left.isTypeAnnotationGeneric("Number") && right.isTypeAnnotationGeneric("Number")) {
-          // both numbers so this will be a number
-          return t.numberTypeAnnotation();
-        } else if (left.isTypeAnnotationGeneric("String") || right.isTypeAnnotationGeneric("String")) {
-          // one is a string so the result will be a string
-          return t.stringTypeAnnotation();
-        }
+      if (left.isTypeAnnotationGeneric("Number") && right.isTypeAnnotationGeneric("Number")) {
+        // both numbers so this will be a number
+        return t.numberTypeAnnotation();
+      } else if (left.isTypeAnnotationGeneric("String") || right.isTypeAnnotationGeneric("String")) {
+        // one is a string so the result will be a string
+        return t.stringTypeAnnotation();
       }
 
       // unsure if left and right are strings or numbers so stay on the safe side
@@ -235,30 +260,42 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     }
   }
 
-  if (path.isLogicalExpression()) {
-    // todo: create UnionType of left and right annotations
+  //
+  if (this.isLogicalExpression()) {
+    return t.createUnionTypeAnnotation([
+      this.get("left").getTypeAnnotation(),
+      this.get("right").getTypeAnnotation()
+    ]);
   }
 
-  if (path.isConditionalExpression()) {
-    // todo: create UnionType of consequent and alternate annotations
+  //
+  if (this.isConditionalExpression()) {
+    return t.createUnionTypeAnnotation([
+      this.get("consequent").getTypeAnnotation(),
+      this.get("alternate").getTypeAnnotation()
+    ]);
   }
 
-  if (path.isSequenceExpression()) {
-    return this.get("expressions").pop().inferTypeAnnotation(force);
+  //
+  if (this.isSequenceExpression()) {
+    return this.get("expressions").pop().getTypeAnnotation(force);
   }
 
-  if (path.isAssignmentExpression()) {
-    return this.get("right").inferTypeAnnotation(force);
+  //
+  if (this.isAssignmentExpression()) {
+    return this.get("right").getTypeAnnotation(force);
   }
 
-  if (path.isUpdateExpression()) {
+  //
+  if (this.isUpdateExpression()) {
     let operator = node.operator;
     if (operator === "++" || operator === "--") {
       return t.numberTypeAnnotation();
     }
   }
 
-  if (path.isLiteral()) {
+  //
+  if (this.isLiteral()) {
     var value = node.value;
     if (typeof value === "string") return t.stringTypeAnnotation();
     if (typeof value === "number") return t.numberTypeAnnotation();
@@ -266,12 +303,14 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
     if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
   }
 
+  //
   var callPath;
-  if (path.isCallExpression()) callPath = path.get("callee");
-  if (path.isTaggedTemplateExpression()) callPath = path.get("tag");
+  if (this.isCallExpression()) callPath = this.get("callee");
+  if (this.isTaggedTemplateExpression()) callPath = this.get("tag");
   if (callPath) {
     var callee = callPath.resolve();
     // todo: read typescript/flow interfaces
+
     if (callee.isFunction()) {
       if (callee.is("async")) {
         if (callee.is("generator")) {
@@ -280,7 +319,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
           return t.genericTypeAnnotation(t.identifier("Promise"));
         }
       } else {
-        return callee.node.returnType;
+        if (callee.node.returnType) {
+          return callee.node.returnType;
+        } else {
+          // todo: get union type of all return arguments
+        }
       }
     }
   }
@@ -290,21 +333,11 @@ export function _inferTypeAnnotation(force?: boolean): ?Object {
  * Description
  */
 
-export function isTypeAnnotationGeneric(genericName: string, opts = {}): boolean {
-  var typeInfo = this.getTypeAnnotationInfo();
-  var type     = typeInfo.annotation;
-  if (!type) return false;
-
-  if (typeInfo.inferred && opts.inference === false) {
-    return false;
-  }
+export function isTypeAnnotationGeneric(genericName: string): boolean {
+  var type = this.getTypeAnnotation();
 
   if (t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName })) {
-    if (opts.requireTypeParameters && !type.typeParameters) {
-      return false;
-    } else {
-      return true;
-    }
+    return true;
   }
 
   if (genericName === "String") {

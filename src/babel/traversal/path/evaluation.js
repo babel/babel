@@ -102,15 +102,15 @@ export function evaluate(): { confident: boolean; value: any } {
 
     if (path.isReferencedIdentifier()) {
       var binding = path.scope.getBinding(node.name);
-      if (binding && binding.hasValue) return binding.value;
-    }
-
-    if ((path.isIdentifier() || path.isMemberExpression()) && path.isReferenced()) {
-      var resolved = path.resolve();
-      if (resolved === path) {
-        return confident = false;
+      if (binding && binding.hasValue) {
+        return binding.value;
       } else {
-        return evaluate(resolved);
+        var resolved = path.resolve();
+        if (resolved === path) {
+          return confident = false;
+        } else {
+          return evaluate(resolved);
+        }
       }
     }
 

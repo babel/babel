@@ -23,7 +23,10 @@ export function AssignmentExpression() {
 
 export function IfStatement() {
   var evaluated = this.get("test").evaluate();
-  if (!evaluated.confident) return this.skip();
+  if (!evaluated.confident) {
+    // todo: deopt binding values for constant violations inside
+    return this.skip();
+  }
 
   if (evaluated.value) {
     this.skipKey("alternate");

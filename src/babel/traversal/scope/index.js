@@ -43,7 +43,7 @@ var collectorVisitor = {
   ForXStatement() {
     var left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
-      this.scope.registerConstantViolation(left);
+      this.scope.registerConstantViolation(left, left);
     }
   },
 
@@ -79,15 +79,15 @@ var collectorVisitor = {
     }
 
     // register as constant violation
-    this.scope.registerConstantViolation(this.get("left"), this.get("right"));
+    this.scope.registerConstantViolation(this, this.get("left"), this.get("right"));
   },
 
   UpdateExpression(node, parent, scope) {
-    scope.registerConstantViolation(this.get("argument"), null);
+    scope.registerConstantViolation(this, this.get("argument"), null);
   },
 
   UnaryExpression(node, parent, scope) {
-    if (node.operator === "delete") scope.registerConstantViolation(this.get("left"), null);
+    if (node.operator === "delete") scope.registerConstantViolation(this, this.get("left"), null);
   },
 
   BlockScoped(node, parent, scope) {
@@ -456,7 +456,7 @@ export default class Scope {
    * Description
    */
 
-  registerConstantViolation(left: NodePath, right: NodePath) {
+  registerConstantViolation(root: NodePath, left: NodePath, right: NodePath) {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
       var binding = this.getBinding(name);
@@ -467,7 +467,7 @@ export default class Scope {
         if (rightType && binding.isCompatibleWithType(rightType)) continue;
       }
 
-      binding.reassign(left, right);
+      binding.reassign(root, left, right);
     }
   }
 

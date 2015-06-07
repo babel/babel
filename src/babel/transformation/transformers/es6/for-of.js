@@ -70,6 +70,10 @@ export function _ForOfStatementArray(node, scope, file) {
     loop.body.body.unshift(t.expressionStatement(t.assignmentExpression("=", left, iterationValue)));
   }
 
+  if (this.parentPath.isLabeledStatement()) {
+    loop = t.labeledStatement(this.parentPath.node.label, loop)
+  }
+
   nodes.push(loop);
 
   return nodes;

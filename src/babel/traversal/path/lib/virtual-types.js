@@ -18,6 +18,17 @@ export var ReferencedIdentifier = {
   }
 };
 
+export var Expression = {
+  types: ["Expression"],
+  checkPath(path) {
+    if (path.isIdentifier()) {
+      return path.isReferencedIdentifier();
+    } else {
+      return t.isExpression(path.node);
+    }
+  }
+};
+
 export var Scope = {
   types: ["Scopable"],
   checkPath(path) {
