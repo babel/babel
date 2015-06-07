@@ -97,7 +97,7 @@ assign(NodePath.prototype, require("./resolution"));
 assign(NodePath.prototype, require("./replacement"));
 assign(NodePath.prototype, require("./evaluation"));
 assign(NodePath.prototype, require("./conversion"));
-assign(NodePath.prototype, require("./verification"));
+assign(NodePath.prototype, require("./introspection"));
 assign(NodePath.prototype, require("./context"));
 assign(NodePath.prototype, require("./removal"));
 assign(NodePath.prototype, require("./modification"));

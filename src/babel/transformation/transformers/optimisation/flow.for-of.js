@@ -5,7 +5,7 @@ export var metadata = {
 };
 
 export function ForOfStatement(node, parent, scope, file) {
-  if (this.get("right").isTypeAnnotationGeneric("Array")) {
+  if (this.get("right").isTypeAnnotation("Array")) {
     return _ForOfStatementArray.call(this, node, scope, file);
   }
 }

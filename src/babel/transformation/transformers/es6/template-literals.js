@@ -16,7 +16,7 @@ function crawl(path) {
   if (path.is("_templateLiteralProduced")) {
     crawl(path.get("left"));
     crawl(path.get("right"));
-  } else if (!path.isTypeAnnotationGeneric("String") && !path.isTypeAnnotationGeneric("Number")) {
+  } else if (!path.isTypeAnnotation("String") && !path.isTypeAnnotation("Number")) {
     path.replaceWith(t.callExpression(t.identifier("String"), [path.node]));
   }
 }
