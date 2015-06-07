@@ -140,7 +140,7 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: NodePath, parent?: Scope, hub?: Hub) {
+  constructor(path: NodePath, parent?: Scope) {
     if (parent && parent.block === path.node) {
       return parent;
     }
@@ -153,7 +153,7 @@ export default class Scope {
     }
 
     this.parent = parent;
-    this.hub    = parent ? parent.hub : hub;
+    this.hub    = path.hub;
 
     this.parentBlock = path.parent;
     this.block       = path.node;
@@ -407,7 +407,7 @@ export default class Scope {
 
     if (t.isIdentifier(node)) {
       var binding = this.getBinding(node.name);
-      if (binding && binding.constant && binding.path.isTypeAnnotationGeneric("Array")) return node;
+      if (binding && binding.constant && binding.path.isTypeAnnotation("Array")) return node;
     }
 
     if (t.isArrayExpression(node)) {
