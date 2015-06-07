@@ -19,7 +19,6 @@ export function removeTypeDuplicates(nodes) {
   var generics = {};
   var bases = {};
 
-  var flattened = [];
   var types = [];
 
   for (var i = 0; i < nodes.length; i++) {
