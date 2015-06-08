@@ -89,6 +89,9 @@ export function getTypeAnnotation(force) {
 export function _getTypeAnnotationBindingConstantViolations(name, types = []) {
   var binding = this.scope.getBinding(name);
 
+  var types = [];
+  this.typeAnnotation = t.unionTypeAnnotation(types);
+
   for (var constantViolation of (binding.constantViolations: Array)) {
     types.push(constantViolation.getTypeAnnotation());
   }
@@ -132,9 +135,15 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
     var id = this.get("id");
 
     if (id.isIdentifier()) {
-      return this._getTypeAnnotationBindingConstantViolations(id.node.name, [
-        this.get("init").getTypeAnnotation()
-      ]);
+      var init = this.get("init").getTypeAnnotation();
+
+      // just because we're inferring a VariableDeclarator doesn't mean that it's the same
+      // binding path as it may have been shadowed
+      if (this.scope.getBinding(id.node.name).path === this) {
+        return this._getTypeAnnotationBindingConstantViolations(id.node.name, [init]);
+      } else {
+        return init;
+      }
     } else {
       return;
     }
