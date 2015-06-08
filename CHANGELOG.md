@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.5.5
+
+ * **Bug Fix**
+  * Fix `file.opts` not being set before `file.log.deprecate` was called causing a `ReferenceError` as it was checking for a property on it.
+
 ## 5.5.4
 
  * **Bug Fix**
