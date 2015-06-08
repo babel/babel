@@ -144,8 +144,6 @@ var metadataVisitor = {
           exported: this.isExportDefaultDeclaration() ? "default" : name
         });
       }
-
-      if (declar.isTypeAlias()) return;
     }
 
     if (this.isExportNamedDeclaration() && node.specifiers) {
@@ -208,7 +206,7 @@ var metadataVisitor = {
       });
     }
 
-    if (!t.isExportDefaultDeclaration(node)) {
+    if (!t.isExportDefaultDeclaration(node) && !declar.isTypeAlias()) {
       var onlyDefault = node.specifiers && node.specifiers.length === 1 && t.isSpecifierDefault(node.specifiers[0]);
       if (!onlyDefault) {
         formatter.hasNonDefaultExports = true;
