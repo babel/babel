@@ -132,6 +132,7 @@ var metadataVisitor = {
     var declar = this.get("declaration");
     if (declar.isStatement()) {
       var bindings = declar.getBindingIdentifiers();
+
       for (var name in bindings) {
         var binding = bindings[name];
         formatter._addExport(name, binding);
@@ -143,6 +144,8 @@ var metadataVisitor = {
           exported: this.isExportDefaultDeclaration() ? "default" : name
         });
       }
+
+      if (declar.isTypeAlias()) return;
     }
 
     if (this.isExportNamedDeclaration() && node.specifiers) {
