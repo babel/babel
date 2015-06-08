@@ -133,7 +133,10 @@
       var value = result.value;
       return value instanceof AwaitArgument
         ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
-        : result;
+        : Promise.resolve(value).then(function(unwrapped) {
+            result.value = unwrapped;
+            return result;
+          }, invokeThrow);
     }
 
     if (typeof process === "object" && process.domain) {
