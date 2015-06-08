@@ -54,7 +54,7 @@ traverse.clearNode = function (node) {
     let key = CLEAR_KEYS[i];
     if (node[key] != null) node[key] = null;
   }
-}
+};
 
 var clearVisitor = {
   noScope: true,
