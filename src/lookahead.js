@@ -9,6 +9,7 @@ var STATE_KEYS = [
   "lastTokEnd",
   "lineStart",
   "startLoc",
+  "curLine",
   "endLoc",
   "start",
   "pos",
