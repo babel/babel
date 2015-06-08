@@ -434,19 +434,18 @@ export default class Scope {
    */
 
   registerDeclaration(path: NodePath) {
-    var node = path.node;
-    if (t.isFunctionDeclaration(node)) {
+    if (path.isFunctionDeclaration()) {
       this.registerBinding("hoisted", path);
-    } else if (t.isVariableDeclaration(node)) {
+    } else if (path.isVariableDeclaration()) {
       var declarations = path.get("declarations");
       for (var declar of (declarations: Array)) {
-        this.registerBinding(node.kind, declar);
+        this.registerBinding(path.node.kind, declar);
       }
-    } else if (t.isClassDeclaration(node)) {
+    } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
-    } else if (t.isImportDeclaration(node) || t.isExportDeclaration(node)) {
+    } else if (path.isImportDeclaration() || path.isExportDeclaration()) {
       this.registerBinding("module", path);
-    } else if (t.isFlowDeclaration()) {
+    } else if (path.isFlowDeclaration()) {
       this.registerBinding("type", path);
     } else {
       this.registerBinding("unknown", path);
