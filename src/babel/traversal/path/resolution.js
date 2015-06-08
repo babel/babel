@@ -89,7 +89,6 @@ export function getTypeAnnotation(force) {
 export function _getTypeAnnotationBindingConstantViolations(name, types = []) {
   var binding = this.scope.getBinding(name);
 
-  var types = [];
   this.typeAnnotation = t.unionTypeAnnotation(types);
 
   for (var constantViolation of (binding.constantViolations: Array)) {
