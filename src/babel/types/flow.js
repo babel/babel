@@ -19,11 +19,19 @@ export function removeTypeDuplicates(nodes) {
   var generics = {};
   var bases = {};
 
+  // store union type groups to circular references
+  var typeGroups = [];
+
   var types = [];
 
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i];
     if (!node) continue;
+
+    // detect duplicates
+    if (types.indexOf(node) >= 0) {
+      continue;
+    }
 
     // this type matches anything
     if (t.isAnyTypeAnnotation(node)) {
@@ -38,7 +46,10 @@ export function removeTypeDuplicates(nodes) {
 
     //
     if (t.isUnionTypeAnnotation(node)) {
-      nodes = nodes.concat(node.types);
+      if (typeGroups.indexOf(node.types) < 0) {
+        nodes = nodes.concat(node.types);
+        typeGroups.push(node.types);
+      }
       continue;
     }
 

@@ -223,3 +223,30 @@ export function getSource() {
     return "";
   }
 }
+
+/**
+ * Description
+ */
+
+export function willIMaybeExecutesBefore(target) {
+  return this._guessExecutionStatusRelativeTo(target) !== "after";
+}
+
+export function _guessExecutionStatusRelativeTo(target) {
+  var self = this.getStatementParent();
+  target = target.getStatementParent();
+
+  var targetFuncParent = target.scope.getFunctionParent();
+  var selfFuncParent = self.scope.getFunctionParent();
+  if (targetFuncParent !== selfFuncParent) {
+    return "function";
+  }
+
+  do {
+    if (target.container === self.container) {
+      return target.key > self.key ? "before" : "after";
+    }
+  } while(self = self.parentPath);
+
+  return "before";
+}

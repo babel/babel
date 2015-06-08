@@ -37,6 +37,8 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.path !== this) {
       return binding.path.resolve(dangerous, resolved);
     }
+  } else if (this.isTypeCastExpression()) {
+    return this.get("expression").resolve(dangerous, resolved);
   } else if (dangerous && this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
     // making this resolution inaccurate
@@ -74,8 +76,6 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
 
 /**
  * Infer the type of the current `NodePath`.
- *
- * NOTE: This is not cached. Use `getTypeAnnotation()` which is cached.
  */
 
 export function getTypeAnnotation(force) {
@@ -86,17 +86,103 @@ export function getTypeAnnotation(force) {
   return this.typeAnnotation = type;
 }
 
-export function _getTypeAnnotationBindingConstantViolations(name, types = []) {
+export function _getTypeAnnotationBindingConstantViolations(path, name, types = []) {
   var binding = this.scope.getBinding(name);
 
   this.typeAnnotation = t.unionTypeAnnotation(types);
 
-  for (var constantViolation of (binding.constantViolations: Array)) {
+  var functions = [];
+  var constantViolations = getConstantViolationsBefore(binding, path, functions);
+
+  var testType = getTypeAnnotationBasedOnConditional(path, name);
+  if (testType) {
+    var testConstantViolations = getConstantViolationsBefore(binding, testType.ifStatement);
+
+    // remove constant violations observed before the IfStatement
+    constantViolations = constantViolations.filter((path) => testConstantViolations.indexOf(path) < 0);
+
+    // add back on functions which would have been removed by the last filter
+    constantViolations = constantViolations.concat(functions);
+
+    // clear current types and add in observed test type
+    types = [testType.typeAnnotation];
+  }
+
+  for (var constantViolation of (constantViolations: Array)) {
     types.push(constantViolation.getTypeAnnotation());
   }
 
   if (types.length) {
     return t.createUnionTypeAnnotation(types);
+  }
+}
+
+function getConstantViolationsBefore(binding, path, functions) {
+  var violations = binding.constantViolations.slice();
+  violations.push(binding.path);
+  return violations.filter((violation) => {
+    violation = violation.resolve();
+    var status = violation._guessExecutionStatusRelativeTo(path);
+    if (functions && status === "function") functions.push(violation);
+    return status !== "after";
+  });
+}
+
+function checkBinary(path, name) {
+  var right = path.get("right").resolve();
+  var left = path.get("left").resolve();
+  if (left.isIdentifier({ name })) {
+    return right.getTypeAnnotation();
+  } else if (right.isIdentifier({ name })) {
+    return left.getTypeAnnotation();
+  } else {
+    return;
+  }
+}
+
+function getParentConditional(path) {
+  var parentPath;
+  while (parentPath = path.parentPath) {
+    if (parentPath.isIfStatement() || parentPath.isConditionalExpression()) {
+      if (path.key === "test") {
+        return;
+      } else {
+        return parentPath;
+      }
+    } else {
+      path = parentPath;
+    }
+  }
+}
+
+function getTypeAnnotationBasedOnConditional(path, name) {
+  var ifStatement = getParentConditional(path);
+  if (!ifStatement) return;
+
+  var test  = ifStatement.get("test");
+  var paths = [test];
+  var types = [];
+
+  do {
+    var path = paths.shift().resolve();
+
+    if (path.isLogicalExpression()) {
+      paths.push(path.get("left"), path.get("right"));
+    } else if (path.isBinaryExpression({ operator: "===" })) {
+      // todo: add in cases where operators imply a number
+      var type = checkBinary(path, name);
+      if (type) types.push(type);
+    }
+  } while(paths.length);
+
+  var typeAnnotation;
+  if (types.length) {
+    return {
+      typeAnnotation: t.createUnionTypeAnnotation(types),
+      ifStatement
+    };
+  } else {
+    return getTypeAnnotationBasedOnConditional(ifStatement, name);
   }
 }
 
@@ -143,7 +229,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
       // just because we're inferring a VariableDeclarator doesn't mean that it's the same
       // binding path as it may have been shadowed
       if (this.scope.getBinding(id.node.name).path === this) {
-        return this._getTypeAnnotationBindingConstantViolations(id.node.name, [init]);
+        return this._getTypeAnnotationBindingConstantViolations(this, id.node.name, [init]);
       } else {
         return init;
       }
@@ -198,7 +284,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
       if (binding.identifier.typeAnnotation) {
         return binding.identifier.typeAnnotation;
       } else {
-        return this._getTypeAnnotationBindingConstantViolations(node.name, [
+        return this._getTypeAnnotationBindingConstantViolations(this, node.name, [
           binding.path.getTypeAnnotation()
         ]);
       }

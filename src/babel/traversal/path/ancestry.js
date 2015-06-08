@@ -15,6 +15,19 @@ export function findParent(callback) {
  * Description
  */
 
+export function getStatementParent() {
+  var path = this;
+  do {
+    if (Array.isArray(path.container)) {
+      return path;
+    }
+  } while(path = path.parentPath);
+}
+
+/**
+ * Description
+ */
+
 export function getAncestry() {
   var ancestry = [];
 
