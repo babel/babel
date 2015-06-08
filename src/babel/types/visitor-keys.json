@@ -117,7 +117,7 @@
   "JSXElement":                ["openingElement", "closingElement", "children"],
   "JSXEmptyExpression":        [],
   "JSXExpressionContainer":    ["expression"],
-  "JSXIdentifier":             [],
+  "JSXIdentifier":             ["name"],
   "JSXMemberExpression":       ["object", "property"],
   "JSXNamespacedName":         ["namespace", "name"],
   "JSXOpeningElement":         ["name", "attributes"],
