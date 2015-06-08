@@ -175,7 +175,6 @@ function getTypeAnnotationBasedOnConditional(path, name) {
     }
   } while(paths.length);
 
-  var typeAnnotation;
   if (types.length) {
     return {
       typeAnnotation: t.createUnionTypeAnnotation(types),
