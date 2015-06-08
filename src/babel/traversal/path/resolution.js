@@ -164,7 +164,7 @@ function getTypeAnnotationBasedOnConditional(path, name) {
   var types = [];
 
   do {
-    var path = paths.shift().resolve();
+    let path = paths.shift().resolve();
 
     if (path.isLogicalExpression()) {
       paths.push(path.get("left"), path.get("right"));
