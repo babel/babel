@@ -1,0 +1,3 @@
+[submodule "eslint"]
+	path = eslint
+	url = https://github.com/eslint/eslint

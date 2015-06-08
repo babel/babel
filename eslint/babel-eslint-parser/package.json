@@ -13,6 +13,8 @@
     "lodash.pick": "^3.1.0"
   },
   "scripts": {
+    "bootstrap": "git submodule update --init && cd eslint && npm install",
+    "eslint": "cd eslint && mocha -c tests/lib/rules/**/*.js -r ../eslint-tester.js",
     "test": "mocha"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -22,7 +24,8 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "^0.22.1",
+    "eslint": "^0.21.2",
+    "eslint-tester": "^0.7.0",
     "espree": "^2.0.0",
     "mocha": "^2.1.0"
   }
