@@ -481,7 +481,7 @@ export default class File {
   }
 
   _addAst(ast) {
-    this.path  = NodePath.get({
+    this.path = NodePath.get({
       hub: this.hub,
       parentPath: null,
       parent: ast,

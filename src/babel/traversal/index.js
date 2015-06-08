@@ -49,7 +49,7 @@ const CLEAR_KEYS = [
   "tokens", "range", "start", "end", "loc", "raw"
 ];
 
-function clearNode(node) {
+traverse.clearNode = function (node) {
   for (var i = 0; i < CLEAR_KEYS.length; i++) {
     let key = CLEAR_KEYS[i];
     if (node[key] != null) node[key] = null;
@@ -58,12 +58,12 @@ function clearNode(node) {
 
 var clearVisitor = {
   noScope: true,
-  exit: clearNode
+  exit: traverse.clearNode
 };
 
 traverse.removeProperties = function (tree) {
   traverse(tree, clearVisitor);
-  clearNode(tree);
+  traverse.clearNode(tree);
 
   return tree;
 };

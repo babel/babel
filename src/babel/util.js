@@ -127,6 +127,7 @@ export function shouldIgnore(filename, ignore, only) {
 
 var templateVisitor = {
   noScope: true,
+
   enter(node, parent, scope, nodes) {
     if (t.isExpressionStatement(node)) {
       node = node.expression;
@@ -136,6 +137,10 @@ var templateVisitor = {
       this.skip();
       this.replaceInline(nodes[node.name]);
     }
+  },
+
+  exit(node) {
+    traverse.clearNode(node);
   }
 };
 
