@@ -508,6 +508,7 @@ export default class Scope {
 
       this.bindings[name] = new Binding({
         identifier: id,
+        existing:   local,
         scope:      this,
         path:       path,
         kind:       kind

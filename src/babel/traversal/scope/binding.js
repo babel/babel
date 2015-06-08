@@ -1,5 +1,5 @@
 export default class Binding {
-  constructor({ identifier, scope, path, kind }) {
+  constructor({ existing, identifier, scope, path, kind }) {
     this.constantViolations = [];
     this.constant           = true;
 
@@ -12,6 +12,13 @@ export default class Binding {
     this.kind  = kind;
 
     this.clearValue();
+
+    if (existing) {
+      this.constantViolations = this.constantViolations.concat(
+        existing.path,
+        existing.constantViolations
+      );
+    }
   }
 
   /**
