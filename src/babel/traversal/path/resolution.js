@@ -101,6 +101,10 @@ export function _getTypeAnnotationBindingConstantViolations(name, types = []) {
   }
 }
 
+/**
+ * todo: split up this method
+ */
+
 export function _getTypeAnnotation(force?: boolean): ?Object {
   var node = this.node;
 
@@ -160,7 +164,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
 
   //
   if (this.isRestElement() || this.parentPath.isRestElement() || this.isArrayExpression()) {
-    return t.genericTypeAnnotation(t.identifier("Array"), t.typeParameterInstantiation([t.anyTypeAnnotation()]));
+    return t.genericTypeAnnotation(t.identifier("Array"));
   }
 
   //
@@ -309,6 +313,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
     if (typeof value === "string") return t.stringTypeAnnotation();
     if (typeof value === "number") return t.numberTypeAnnotation();
     if (typeof value === "boolean") return t.booleanTypeAnnotation();
+    if (value === null) return t.voidTypeAnnotation();
     if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
   }
 
