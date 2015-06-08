@@ -292,7 +292,7 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
     //
     if (this.options.features["es7.asyncFunctions"]) {
       // async functions!
-      if (id.name === "async") {
+      if (id.name === "async" && !this.canInsertSemicolon()) {
         // arrow functions
         if (this.type === tt.parenL) {
           let expr = this.parseParenAndDistinguishExpression(start, true, true)

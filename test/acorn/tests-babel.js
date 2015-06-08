@@ -620,6 +620,63 @@ testFail("function foo(promise) { await promise; }", "Unexpected token (1:30)", 
   features: { "es7.asyncFunctions": true }
 });
 
+testFail("var x = async\n(x) => x + 1;", "Unexpected token (2:4)", {
+  ecmaVersion: 7,
+  features: { "es7.asyncFunctions": true }
+});
+
+test("async\nfunction foo() {}", {
+  type: "Program",
+  body: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "Identifier",
+        name: "async",
+        loc: {
+          start: {line: 1, column: 0},
+          end: {line: 1, column: 5}
+        }
+      },
+      loc: {
+        start: {line: 1, column: 0},
+        end: {line: 1, column: 5}
+      }
+    },
+    {
+      type: "FunctionDeclaration",
+      id: {
+        type: "Identifier",
+        name: "foo",
+        loc: {
+          start: {line: 2, column: 9},
+          end: {line: 2, column: 12}
+        }
+      },
+      params: [],
+      body: {
+        type: "BlockStatement",
+        body: [],
+        loc: {
+          start: {line: 2, column: 15},
+          end: {line: 2, column: 17}
+        }
+      },
+      generator: false,
+      expression: false,
+      async: false,
+      loc: {
+        start: {line: 2, column: 0},
+        end: {line: 2, column: 17}
+      }
+    }
+  ]
+}, {
+  ecmaVersion: 7,
+  features: { "es7.asyncFunctions": true },
+  locations: true
+});
+
 test('async function foo(promise) { await promise; }', {
   type: "Program",
   body: [{

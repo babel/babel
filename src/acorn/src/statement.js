@@ -83,10 +83,13 @@ pp.parseStatement = function(declaration, topLevel) {
     return starttype === tt._import ? this.parseImport(node) : this.parseExport(node)
 
   case tt.name:
-    if (this.options.features["es7.asyncFunctions"] && this.value === "async" && this.lookahead().type === tt._function) {
-      this.next();
-      this.expect(tt._function);
-      return this.parseFunction(node, true, false, true);
+    if (this.options.features["es7.asyncFunctions"] && this.value === "async") {
+      var lookahead = this.lookahead();
+      if (lookahead.type === tt._function && !this.canInsertSemicolon.call(lookahead)) {
+        this.next();
+        this.expect(tt._function);
+        return this.parseFunction(node, true, false, true);
+      }
     }
 
     // If the statement does not start with a statement keyword or a
