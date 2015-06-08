@@ -244,10 +244,10 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
       var right = this.get("right");
       var left  = this.get("left");
 
-      if (left.isTypeAnnotation("Number") && right.isTypeAnnotation("Number")) {
+      if (left.isGenericType("Number") && right.isGenericType("Number")) {
         // both numbers so this will be a number
         return t.numberTypeAnnotation();
-      } else if (left.isTypeAnnotation("String") || right.isTypeAnnotation("String")) {
+      } else if (left.isGenericType("String") || right.isGenericType("String")) {
         // one is a string so the result will be a string
         return t.stringTypeAnnotation();
       }
@@ -333,7 +333,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
  * Description
  */
 
-export function isTypeAnnotation(genericName: string): boolean {
+export function isGenericType(genericName: string): boolean {
   var type = this.getTypeAnnotation();
 
   if (t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName })) {
