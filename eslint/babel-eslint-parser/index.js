@@ -162,29 +162,38 @@ function monkeypatch() {
     if (node.typeAnnotation) {
       visitTypeAnnotation.call(this, node.typeAnnotation);
     } else if (node.type === "Identifier") {
-      // exception for polymorphic types: <T>, <A>, etc
-      if (node.name.length === 1 && node.name === node.name.toUpperCase()) {
-        return;
-      }
       this.visit(node);
     } else {
       visitTypeAnnotation.call(this, node);
     }
   }
 
+  function nestTypeParamScope(manager, node) {
+    var parentScope = manager.__currentScope;
+    var scope = new escope.Scope(manager, "type-parameters", parentScope, node, false);
+    manager.__nestScope(scope);
+    for (var j = 0; j < node.typeParameters.params.length; j++) {
+      var name = node.typeParameters.params[j];
+      scope.__define(name, new Definition("TypeParameter", name, name));
+    }
+    scope.__define = function() {
+      return parentScope.__define.apply(parentScope, arguments);
+    }
+    return scope;
+  }
+
   // visit decorators that are in: ClassDeclaration / ClassExpression
   var visitClass = referencer.prototype.visitClass;
   referencer.prototype.visitClass = function(node) {
     visitDecorators.call(this, node);
+    var typeParamScope;
+    if (node.typeParameters) {
+      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+    }
     // visit flow type: ClassImplements
     if (node.implements) {
       for (var i = 0; i < node.implements.length; i++) {
         checkIdentifierOrVisit.call(this, node.implements[i]);
-      }
-    }
-    if (node.typeParameters) {
-      for (var j = 0; j < node.typeParameters.params.length; j++) {
-        checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
       }
     }
     if (node.superTypeParameters) {
@@ -193,6 +202,9 @@ function monkeypatch() {
       }
     }
     visitClass.call(this, node);
+    if (typeParamScope) {
+      this.close(node);
+    }
   };
     // visit decorators that are in: Property / MethodDefinition
   var visitProperty = referencer.prototype.visitProperty;
@@ -207,6 +219,10 @@ function monkeypatch() {
   // visit flow type in FunctionDeclaration, FunctionExpression, ArrowFunctionExpression
   var visitFunction = referencer.prototype.visitFunction;
   referencer.prototype.visitFunction = function(node) {
+    var typeParamScope;
+    if (node.typeParameters) {
+      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+    }
     if (node.returnType) {
       checkIdentifierOrVisit.call(this, node.returnType);
     }
@@ -218,12 +234,10 @@ function monkeypatch() {
         }
       }
     }
-    if (node.typeParameters) {
-      for (var j = 0; j < node.typeParameters.params.length; j++) {
-        checkIdentifierOrVisit.call(this, node.typeParameters.params[j]);
-      }
-    }
     visitFunction.call(this, node);
+    if (typeParamScope) {
+      this.close(node);
+    }
   };
 
   // visit flow type in VariableDeclaration
@@ -261,13 +275,15 @@ function monkeypatch() {
 
   referencer.prototype.TypeAlias = function(node) {
     createScopeVariable.call(this, node, node.id);
+    var typeParamScope;
+    if (node.typeParameters) {
+      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+    }
     if (node.right) {
       visitTypeAnnotation.call(this, node.right);
     }
-    if (node.typeParameters) {
-      for (var i = 0; i < node.typeParameters.params.length; i++) {
-        checkIdentifierOrVisit.call(this, node.typeParameters.params[i]);
-      }
+    if (typeParamScope) {
+      this.close(node);
     }
   };
 

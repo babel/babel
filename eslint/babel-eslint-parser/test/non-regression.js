@@ -169,8 +169,8 @@ describe("verify", function () {
       verifyAndAssertMessages([
           "import type Foo from 'foo';",
           "import type Foo2 from 'foo';",
-          "function log<Foo, Foo2>() {}",
-          "log();"
+          "function log<T1, T2>(a: T1, b: T2) { return a + b; }",
+          "log<Foo, Foo2>(1, 2);"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -276,9 +276,8 @@ describe("verify", function () {
     it("type alias with type parameters", function () {
       verifyAndAssertMessages([
           "import type Bar from 'foo';",
-          "import type Foo2 from 'foo';",
           "import type Foo3 from 'foo';",
-          "type Foo<Foo2> = Bar<Foo3>",
+          "type Foo<T> = Bar<T, Foo3>",
           "var x : Foo = 1; x;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -313,6 +312,62 @@ describe("verify", function () {
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
+      );
+    });
+
+    it("polymorphpic/generic types for class #123", function () {
+      verifyAndAssertMessages([
+          "class Box<T> {",
+            "value: T;",
+          "}",
+          "var box = new Box();",
+          "console.log(box.value);"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("polymorphpic/generic types for function #123", function () {
+      verifyAndAssertMessages([
+          "export function identity<T>(value) {",
+            "var a: T = value; a;",
+          "}"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("polymorphpic/generic types for type alias #123", function () {
+      verifyAndAssertMessages([
+          "import Bar from './Bar';",
+          "type Foo<T> = Bar<T>; var x: Foo = 1; x++"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("polymorphpic/generic types - outside of fn scope #123", function () {
+      verifyAndAssertMessages([
+          "export function foo<T>(value) {",
+          "};",
+          "var b: T = 1; b;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ '1:20 T is defined but never used no-unused-vars',
+          '3:7 "T" is not defined. no-undef' ]
+      );
+    });
+
+    it("polymorphpic/generic types - extending unknown #123", function () {
+      verifyAndAssertMessages([
+          "import Bar from 'bar';",
+          "export class Foo extends Bar<T> {}",
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ '2:29 "T" is not defined. no-undef' ]
       );
     });
 
@@ -413,9 +468,7 @@ describe("verify", function () {
     it("9", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "export default function <Foo, Foo2>() {}"
+          "export default function <T1, T2>(a: T1, b: T2) {}"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -425,9 +478,7 @@ describe("verify", function () {
     it("10", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "var a=function<Foo,Foo2>() {}; a;"
+          "var a=function<T1,T2>(a: T1, b: T2) {return a + b;}; a;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -437,10 +488,7 @@ describe("verify", function () {
     it("11", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import type Foo3 from 'foo';",
-          "var a={*id<Foo>(x: Foo2): Foo3 { x; }}; a;"
+          "var a={*id<T>(x: T): T { x; }}; a;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -450,10 +498,7 @@ describe("verify", function () {
     it("12", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import type Foo3 from 'foo';",
-          "var a={async id<Foo>(x: Foo2): Foo3 { x; }}; a;"
+          "var a={async id<T>(x: T): T { x; }}; a;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -463,10 +508,7 @@ describe("verify", function () {
     it("13", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import type Foo3 from 'foo';",
-          "var a={123<Foo>(x: Foo2): Foo3 { x; }}; a;"
+          "var a={123<T>(x: T): T { x; }}; a;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -597,10 +639,8 @@ describe("verify", function () {
     it("24", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import Baz from 'foo';",
-          "export default class Bar<Foo> extends Baz<Foo2> { };"
+          "import type Baz from 'baz';",
+          "export default class Bar<T> extends Baz<T> { };"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -610,10 +650,7 @@ describe("verify", function () {
     it("25", function () {
       verifyAndAssertMessages(
         [
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import type Foo3 from 'foo';",
-          "export default class Bar<Foo> { bar<Foo2>():Foo3 { return 42; }}"
+          "export default class Bar<T> { bar(): T { return 42; }}"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
