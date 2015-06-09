@@ -97,7 +97,7 @@ export default class NodePath {
 }
 
 assign(NodePath.prototype, require("./ancestry"));
-assign(NodePath.prototype, require("./resolution"));
+assign(NodePath.prototype, require("./inference"));
 assign(NodePath.prototype, require("./replacement"));
 assign(NodePath.prototype, require("./evaluation"));
 assign(NodePath.prototype, require("./conversion"));

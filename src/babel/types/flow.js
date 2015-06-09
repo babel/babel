@@ -109,8 +109,8 @@ export function createTypeAnnotationBasedOnTypeof(type) {
   } else if (type === "boolean") {
     return t.booleanTypeAnnotation();
   } else if (type === "function") {
-    // todo
+    return t.genericTypeAnnotation(t.identifier("Function"));
   } else if (type === "object") {
-    // todo
+    return t.genericTypeAnnotation(t.identifier("Object"));
   }
 }

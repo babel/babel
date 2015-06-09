@@ -1,3 +1,4 @@
+import type NodePath from "./index";
 import includes from "lodash/collection/includes";
 import * as t from "../../types";
 
@@ -232,21 +233,105 @@ export function willIMaybeExecutesBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
+/**
+ * Given a `target` check the execution status of it relative to the current path.
+ *
+ * "Execution status" simply refers to where or not we **think** this will execuete
+ * before or after the input `target` element.
+ */
+
 export function _guessExecutionStatusRelativeTo(target) {
   var self = this.getStatementParent();
   target = target.getStatementParent();
+  if (target === self) return "before";
 
+  // check if the two paths are in different functions, we can't track execution of these
   var targetFuncParent = target.scope.getFunctionParent();
   var selfFuncParent = self.scope.getFunctionParent();
   if (targetFuncParent !== selfFuncParent) {
     return "function";
   }
 
+  // crawl up the targets parents until we hit the container we're in and check keys
   do {
+    // todo: if (target === self) return "after";
+
     if (target.container === self.container) {
-      return target.key > self.key ? "before" : "after";
+      return target.key >= self.key ? "before" : "after";
     }
   } while(self = self.parentPath);
 
   return "before";
+}
+
+/**
+ * Resolve a "pointer" `NodePath` to it's absolute path.
+ */
+
+export function resolve(dangerous, resolved) {
+  return this._resolve(dangerous, resolved) || this;
+}
+
+export function _resolve(dangerous?, resolved?): ?NodePath {
+  // detect infinite recursion
+  // todo: possibly have a max length on this just to be safe
+  if (resolved && resolved.indexOf(this) >= 0) return;
+
+  // we store all the paths we've "resolved" in this array to prevent infinite recursion
+  resolved = resolved || [];
+  resolved.push(this);
+
+  if (this.isVariableDeclarator()) {
+    if (this.get("id").isIdentifier()) {
+      return this.get("init").resolve(dangerous, resolved);
+    } else {
+      // otherwise it's a request for a pattern and that's a bit more tricky
+    }
+  } else if (this.isReferencedIdentifier()) {
+    var binding = this.scope.getBinding(this.node.name);
+    if (!binding) return;
+
+    // reassigned so we can't really resolve it
+    if (!binding.constant) return;
+
+    // todo - lookup module in dependency graph
+    if (binding.kind === "module") return;
+
+    if (binding.path !== this) {
+      return binding.path.resolve(dangerous, resolved);
+    }
+  } else if (this.isTypeCastExpression()) {
+    return this.get("expression").resolve(dangerous, resolved);
+  } else if (dangerous && this.isMemberExpression()) {
+    // this is dangerous, as non-direct target assignments will mutate it's state
+    // making this resolution inaccurate
+
+    var targetKey = this.toComputedKey();
+    if (!t.isLiteral(targetKey)) return;
+
+    var targetName = targetKey.value;
+
+    var target = this.get("object").resolve(dangerous, resolved);
+
+    if (target.isObjectExpression()) {
+      var props = target.get("properties");
+      for (var prop of (props: Array)) {
+        if (!prop.isProperty()) continue;
+
+        var key = prop.get("key");
+
+        // { foo: obj }
+        var match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
+
+        // { "foo": "obj" } or { ["foo"]: "obj" }
+        match = match || key.isLiteral({ value: targetName });
+
+        if (match) return prop.get("value").resolve(dangerous, resolved);
+      }
+    } else if (target.isArrayExpression() && !isNaN(+targetName)) {
+      var elems = target.get("elements");
+      var elem = elems[targetName];
+      if (elem) return elem.resolve(dangerous, resolved);
+    }
+  }
 }

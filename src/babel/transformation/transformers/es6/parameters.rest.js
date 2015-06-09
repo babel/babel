@@ -33,7 +33,7 @@ var memberExpressionOptimisationVisitor = {
       // if we know that this member expression is referencing a number then we can safely
       // optimise it
       var prop = this.parentPath.get("property");
-      if (prop.isGenericType("Number")) {
+      if (prop.isBaseType("number")) {
         state.candidates.push(this);
         return;
       }

@@ -29,8 +29,9 @@ export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
 export const COMMENT_KEYS            = ["leadingComments", "trailingComments"];
 
-export const BOOLEAN_BINARY_OPERATORS = ["==", "===", "!=", "!==", ">", "<", ">=", "<=", "in", "instanceof"];
-export const NUMBER_BINARY_OPERATORS  = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
+export const BOOLEAN_BINARY_OPERATORS        = ["==", "===", "!=", "!==", "in", "instanceof"].concat(BOOLEAN_NUMBER_BINARY_OPERATORS);
+export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
 export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
