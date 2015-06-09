@@ -13,8 +13,10 @@
 })(this, function (exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
+  exports = Object.create(null, {
+    __esModule: {
+      value: true
+    }
   });
   exports.foo7 = foo7;
   var foo = 1;
