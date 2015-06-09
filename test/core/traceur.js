@@ -11,17 +11,10 @@ require("./_transformation-helper")({
     // weird environmental issue make these hard to test
     "Modules",
 
-    // these are the responsibility of regenerator
-    "AsyncFunctions",
-    "Yield",
-
-    // these are the responsibility of core-js
-    "StringExtras",
-    "ArrayExtras",
-    "Collections",
-
     // not supported
     "ProperTailCalls",
+
+    // uses the old async generator proposal
     "AsyncGenerators",
 
     // these are all internal traceur tests or non-standard features
@@ -38,8 +31,25 @@ require("./_transformation-helper")({
   ],
 
   ignoreTasks: [
+    // non-standard
+    "ObjectMixin",
+
     // TODO
-    "Syntax/StrictKeywordsInPattern",
+    "Yield/GeneratorSend",
+    "Yield/BreakForOf",
+    "Yield/GeneratorThrow",
+    "Yield/ObjectModel",
+    "Yield/ReturnGenerator",
+
+    // TODO: core-js
+    "Collections/Map",
+    "Collections/Set",
+    "ArrayExtras/From",
+    "ArrayExtras/FindIndex",
+    "ArrayExtras/Find",
+
+    // TODO
+    "Syntax/IsValidSimpleAssignmentTarget",
 
     // babel has no way to check these :( TODO: add to caveats
     "TemplateLiterals/TemplateObjectCaching.module",
@@ -52,11 +62,8 @@ require("./_transformation-helper")({
     "Classes/ExtendStrange",
 
     // these are the responsibility of core-js
-    "Symbol/GetOwnPropertySymbols",
     "Spread/Type",
-    "Symbol/ObjectModel",
     "Symbol/Inherited",
-    "Symbol/Object",
     "Spread/NoIterator",
     "Destructuring/Rest",
     "Destructuring/Empty",
@@ -64,16 +71,8 @@ require("./_transformation-helper")({
     // babel doesn't like non-closing comments :)
     "Syntax/NoNewLineHereEndOfFile",
 
-    // traceur uses an old version of regexpu
-    "RegularExpression/Simple",
-
-    // class methods are still enumerable in traceur...
+    // TODO
     "Classes/PrototypeDescriptor",
-    "NumericLiteral/Simple",
-    "Classes/Method",
-
-    // Object.mixin didn't make it into ES6
-    "ObjectMixin",
 
     // Babel assumes that all code transformed is a module so this isn't necessary
     "Strict",
@@ -87,6 +86,7 @@ require("./_transformation-helper")({
     "GeneratorComprehension/Simple",
 
     // yield has been added as a keyword in ES6
+    "Syntax/StrictKeywordsInPattern",
     "Yield/YieldIdentifier",
     "Syntax/StrictKeywords"
   ]
