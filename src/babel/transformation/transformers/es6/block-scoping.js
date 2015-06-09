@@ -337,6 +337,7 @@ class BlockScoping {
       // this is the defining identifier of a declaration
       var ref = letRefs[key];
 
+      // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
         var uid = scope.generateUidIdentifier(ref.name).name;
         ref.name = uid;
