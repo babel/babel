@@ -41,13 +41,17 @@ require("./_transformation-helper")({
     "Yield/ObjectModel",
     "Yield/ReturnGenerator",
 
-    // TODO: core-js
+    // TODO: core-js fails these
     "Collections/Map",
     "Collections/Set",
     "ArrayExtras/From",
     "ArrayExtras/FindIndex",
     "ArrayExtras/Find",
-    "StringIterator",
+    "StringExtras/Includes",
+    "StringExtras/EndsWith",
+
+    // this tests pollutes Object.prototype which messes things up
+    "StringExtras/StartsWith",
 
     // TODO
     "Syntax/IsValidSimpleAssignmentTarget",
