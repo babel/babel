@@ -2,6 +2,8 @@ import * as t from "../../../types";
 
 export { default as Identifier } from "./inferer-reference";
 
+//
+
 export function VariableDeclarator() {
   var id = this.get("id");
 
@@ -12,11 +14,15 @@ export function VariableDeclarator() {
   }
 }
 
+//
+
 export function TypeCastExpression(node) {
   return node.typeAnnotation;
 }
 
 TypeCastExpression.validParent = true;
+
+//
 
 export function NewExpression(node) {
   if (this.get("callee").isIdentifier()) {
@@ -25,9 +31,13 @@ export function NewExpression(node) {
   }
 }
 
+//
+
 export function TemplateLiteral() {
   return t.stringTypeAnnotation();
 }
+
+//
 
 export function UnaryExpression(node) {
   let operator = node.operator;
@@ -42,6 +52,8 @@ export function UnaryExpression(node) {
     return t.booleanTypeAnnotation();
   }
 }
+
+//
 
 export function BinaryExpression(node) {
   let operator = node.operator;
@@ -70,12 +82,16 @@ export function BinaryExpression(node) {
   }
 }
 
+//
+
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("left").getTypeAnnotation(),
     this.get("right").getTypeAnnotation()
   ]);
 }
+
+//
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
@@ -84,13 +100,19 @@ export function ConditionalExpression() {
   ]);
 }
 
+//
+
 export function SequenceExpression(node) {
   return this.get("expressions").pop().getTypeAnnotation();
 }
 
+//
+
 export function AssignmentExpression(node) {
   return this.get("right").getTypeAnnotation();
 }
+
+//
 
 export function UpdateExpression(node) {
   let operator = node.operator;
@@ -98,6 +120,8 @@ export function UpdateExpression(node) {
     return t.numberTypeAnnotation();
   }
 }
+
+//
 
 export function Literal(node) {
   var value = node.value;
@@ -108,13 +132,19 @@ export function Literal(node) {
   if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
 }
 
+//
+
 export function ObjectExpression() {
   return t.genericTypeAnnotation(t.identifier("Object"));
 }
 
+//
+
 export function ArrayExpression () {
   return t.genericTypeAnnotation(t.identifier("Array"));
 }
+
+//
 
 export function RestElement() {
   return ArrayExpression();
@@ -122,11 +152,15 @@ export function RestElement() {
 
 RestElement.validParent = true;
 
-export function Func() {
+//
+
+function Func() {
   return t.genericTypeAnnotation(t.identifier("Function"));
 }
 
 export { Func as Function, Func as Class };
+
+//
 
 export function CallExpression() {
   return resolveCall(this.get("callee"));
