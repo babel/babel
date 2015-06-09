@@ -15,6 +15,10 @@ export function createUnionTypeAnnotation(types) {
   }
 }
 
+/**
+ * Description
+ */
+
 export function removeTypeDuplicates(nodes) {
   var generics = {};
   var bases = {};
@@ -89,4 +93,24 @@ export function removeTypeDuplicates(nodes) {
   }
 
   return types;
+}
+
+/**
+ * Description
+ */
+
+export function createTypeAnnotationBasedOnTypeof(type) {
+  if (value === "string") {
+    return t.stringTypeAnnotation();
+  } else if (value === "number") {
+    return t.numberTypeAnnotation();
+  } else if (value === "undefined") {
+    return t.voidTypeAnnotation();
+  } else if (value === "boolean") {
+    return t.booleanTypeAnnotation();
+  } else if (value === "function") {
+    // todo
+  } else if (value === "object") {
+    // todo
+  }
 }

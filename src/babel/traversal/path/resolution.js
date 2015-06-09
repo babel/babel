@@ -177,20 +177,7 @@ function checkBinary(name, path) {
   if (!typeofPath.get("argument").isIdentifier({ name })) return;
 
   // turn type value into a type annotation
-  var value = typePath.node.value;
-  if (value === "string") {
-    return t.stringTypeAnnotation();
-  } else if (value === "number") {
-    return t.numberTypeAnnotation();
-  } else if (value === "undefined") {
-    return t.voidTypeAnnotation();
-  } else if (value === "boolean") {
-    return t.booleanTypeAnnotation();
-  } else if (value === "function") {
-    // todo
-  } else if (value === "object") {
-    // todo
-  }
+  return t.createTypeAnnotationBasedOnTypeof(typePath.node.value);
 }
 
 function getParentConditional(path) {
