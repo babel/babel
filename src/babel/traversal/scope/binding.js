@@ -14,9 +14,10 @@ export default class Binding {
     this.clearValue();
 
     if (existing) {
-      this.constantViolations = this.constantViolations.concat(
+      this.constantViolations = [].concat(
         existing.path,
-        existing.constantViolations
+        existing.constantViolations,
+        this.constantViolations
       );
     }
   }

@@ -86,13 +86,14 @@ export function getTypeAnnotation(force) {
   return this.typeAnnotation = type;
 }
 
-export function _getTypeAnnotationBindingConstantViolations(path, name, types = []) {
+export function _getTypeAnnotationBindingConstantViolations(path, name) {
   var binding = this.scope.getBinding(name);
 
+  var types = [];
   this.typeAnnotation = t.unionTypeAnnotation(types);
 
-  var functions = [];
-  var constantViolations = getConstantViolationsBefore(binding, path, functions);
+  var functionConstantViolations = [];
+  var constantViolations = getConstantViolationsBefore(binding, path, functionConstantViolations);
 
   var testType = getTypeAnnotationBasedOnConditional(path, name);
   if (testType) {
@@ -101,15 +102,29 @@ export function _getTypeAnnotationBindingConstantViolations(path, name, types = 
     // remove constant violations observed before the IfStatement
     constantViolations = constantViolations.filter((path) => testConstantViolations.indexOf(path) < 0);
 
-    // add back on functions which would have been removed by the last filter
-    constantViolations = constantViolations.concat(functions);
-
     // clear current types and add in observed test type
-    types = [testType.typeAnnotation];
+    types.push(testType.typeAnnotation);
   }
 
-  for (var constantViolation of (constantViolations: Array)) {
-    types.push(constantViolation.getTypeAnnotation());
+  if (constantViolations.length) {
+    // pick one constant from each scope which will represent the last possible
+    // control flow path that it could've taken/been
+    var rawConstantViolations = constantViolations.reverse();
+    var visitedScopes = [];
+    constantViolations = [];
+    for (let violation of (rawConstantViolations: Array)) {
+      if (visitedScopes.indexOf(violation.scope) >= 0) continue;
+      visitedScopes.push(violation.scope);
+      constantViolations.push(violation);
+    }
+
+    // add back on function constant violations since we can't track calls
+    constantViolations = constantViolations.concat(functionConstantViolations);
+
+    // push on inferred types of violated paths
+    for (let violation of (constantViolations: Array)) {
+      types.push(violation.getTypeAnnotation());
+    }
   }
 
   if (types.length) {
@@ -119,24 +134,62 @@ export function _getTypeAnnotationBindingConstantViolations(path, name, types = 
 
 function getConstantViolationsBefore(binding, path, functions) {
   var violations = binding.constantViolations.slice();
-  violations.push(binding.path);
+  violations.unshift(binding.path);
   return violations.filter((violation) => {
     violation = violation.resolve();
     var status = violation._guessExecutionStatusRelativeTo(path);
     if (functions && status === "function") functions.push(violation);
-    return status !== "after";
+    return status === "before";
   });
 }
 
-function checkBinary(path, name) {
+function checkBinary(name, path) {
   var right = path.get("right").resolve();
-  var left = path.get("left").resolve();
+  var left  = path.get("left").resolve();
+
   if (left.isIdentifier({ name })) {
     return right.getTypeAnnotation();
   } else if (right.isIdentifier({ name })) {
     return left.getTypeAnnotation();
-  } else {
-    return;
+  }
+
+  //
+  var typeofPath;
+  var typePath;
+  if (left.isUnaryExpression({ operator: "typeof" })) {
+    typeofPath = left;
+    typePath = right;
+  } else if (right.isUnaryExpression({ operator: "typeof" })) {
+    typeofPath = right;
+    typePath = left;
+  }
+  if (!typePath && !typeofPath) return;
+
+  // ensure that the type path is a Literal
+  typePath = typePath.resolve();
+  if (!typePath.isLiteral()) return;
+
+  // and that it's a string so we can infer it
+  var typeValue = typePath.node.value;
+  if (typeof typeValue !== "string") return;
+
+  // and that the argument of the typeof path references us!
+  if (!typeofPath.get("argument").isIdentifier({ name })) return;
+
+  // turn type value into a type annotation
+  var value = typePath.node.value;
+  if (value === "string") {
+    return t.stringTypeAnnotation();
+  } else if (value === "number") {
+    return t.numberTypeAnnotation();
+  } else if (value === "undefined") {
+    return t.voidTypeAnnotation();
+  } else if (value === "boolean") {
+    return t.booleanTypeAnnotation();
+  } else if (value === "function") {
+    // todo
+  } else if (value === "object") {
+    // todo
   }
 }
 
@@ -167,10 +220,13 @@ function getTypeAnnotationBasedOnConditional(path, name) {
     let path = paths.shift().resolve();
 
     if (path.isLogicalExpression()) {
-      paths.push(path.get("left"), path.get("right"));
-    } else if (path.isBinaryExpression({ operator: "===" })) {
+      paths.push(path.get("left"));
+      paths.push(path.get("right"));
+    }
+
+    if (path.isBinaryExpression({ operator: "===" })) {
       // todo: add in cases where operators imply a number
-      var type = checkBinary(path, name);
+      var type = checkBinary(name, path);
       if (type) types.push(type);
     }
   } while(paths.length);
@@ -223,15 +279,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
     var id = this.get("id");
 
     if (id.isIdentifier()) {
-      var init = this.get("init").getTypeAnnotation();
-
-      // just because we're inferring a VariableDeclarator doesn't mean that it's the same
-      // binding path as it may have been shadowed
-      if (this.scope.getBinding(id.node.name).path === this) {
-        return this._getTypeAnnotationBindingConstantViolations(this, id.node.name, [init]);
-      } else {
-        return init;
-      }
+      return this.get("init").getTypeAnnotation();
     } else {
       return;
     }
@@ -283,9 +331,7 @@ export function _getTypeAnnotation(force?: boolean): ?Object {
       if (binding.identifier.typeAnnotation) {
         return binding.identifier.typeAnnotation;
       } else {
-        return this._getTypeAnnotationBindingConstantViolations(this, node.name, [
-          binding.path.getTypeAnnotation()
-        ]);
+        return this._getTypeAnnotationBindingConstantViolations(this, node.name);
       }
     }
 
