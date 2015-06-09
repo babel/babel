@@ -13,13 +13,9 @@ export function UnaryExpression(node, parent, scope, file) {
       if (right === node) {
         [left, right] = [right, left];
       }
-      if (t.isLiteral(right)) {
-        if ((operator === "==" || operator === "===") && right.value !== "symbol") {
-          return;
-        }
-        if ((operator === "!=" || operator === "!==") && right.value !== "symbol" && right.value !== "object") {
-          return;
-        }
+      if (t.isLiteral(right) && right.value !== "symbol" && right.value !== "object" &&
+          (operator === "==" || operator === "===" || operator === "!=" || operator === "!==")) {
+        return;
       }
     }
     var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
