@@ -100,17 +100,17 @@ export function removeTypeDuplicates(nodes) {
  */
 
 export function createTypeAnnotationBasedOnTypeof(type) {
-  if (value === "string") {
+  if (type === "string") {
     return t.stringTypeAnnotation();
-  } else if (value === "number") {
+  } else if (type === "number") {
     return t.numberTypeAnnotation();
-  } else if (value === "undefined") {
+  } else if (type === "undefined") {
     return t.voidTypeAnnotation();
-  } else if (value === "boolean") {
+  } else if (type === "boolean") {
     return t.booleanTypeAnnotation();
-  } else if (value === "function") {
+  } else if (type === "function") {
     // todo
-  } else if (value === "object") {
+  } else if (type === "object") {
     // todo
   }
 }
