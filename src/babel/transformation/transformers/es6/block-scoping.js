@@ -116,6 +116,13 @@ function traverseReplace(node, parent, scope, remaps) {
     replace(node, parent, scope, remaps);
   }
 
+  if (t.isAssignmentExpression(node)) {
+    var ids = t.getBindingIdentifiers(node);
+    for (var name in ids) {
+      replace(ids[name], parent, scope, remaps);
+    }
+  }
+
   scope.traverse(node, replaceVisitor, remaps);
 }
 
