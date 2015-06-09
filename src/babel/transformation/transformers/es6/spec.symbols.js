@@ -8,6 +8,20 @@ export function UnaryExpression(node, parent, scope, file) {
   if (node._ignoreSpecSymbols) return;
 
   if (node.operator === "typeof") {
+    if (t.isBinaryExpression(parent)) {
+      var {operator, left, right} = parent;
+      if (right === node) {
+        [left, right] = [right, left];
+      }
+      if (t.isLiteral(right)) {
+        if ((operator === "==" || operator === "===") && right.value !== "symbol") {
+          return;
+        }
+        if ((operator === "!=" || operator === "!==") && right.value !== "symbol" && right.value !== "object") {
+          return;
+        }
+      }
+    }
     var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
     if (this.get("argument").isIdentifier()) {
       var undefLiteral = t.literal("undefined");
