@@ -74,13 +74,28 @@ export function CallExpression(node, parent, scope) {
   }
 
   var first = nodes.shift();
+  var callee = node.callee;
+
+  // Handle `Function.prototype.call` usage
+  if (callee.property && callee.property.name === "call") {
+    node.callee = t.memberExpression(callee.object, t.identifier("apply"));
+    // Push thisArg
+    node.arguments.push(first.elements.shift());
+    if (args.length === 2) {
+      // Push a single argument and avoid the usage of concat.
+      node.arguments.push(nodes[0]);
+    } else {
+      // Push multiple arguments using concat.
+      node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
+    }
+    return;
+  }
+
   if (nodes.length) {
     node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
   } else {
     node.arguments.push(first);
   }
-
-  var callee = node.callee;
 
   if (this.get("callee").isMemberExpression()) {
     var temp = scope.maybeGenerateMemoised(callee.object);
