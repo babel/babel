@@ -47,6 +47,7 @@ require("./_transformation-helper")({
     "ArrayExtras/From",
     "ArrayExtras/FindIndex",
     "ArrayExtras/Find",
+    "StringIterator",
 
     // TODO
     "Syntax/IsValidSimpleAssignmentTarget",
