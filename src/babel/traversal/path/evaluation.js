@@ -76,6 +76,10 @@ export function evaluate(): { confident: boolean; value: any } {
       }
     }
 
+    if (path.isTypeCastExpression()) {
+      return evaluate(path.get("expression"));
+    }
+
     if (path.isIdentifier() && !path.scope.hasBinding(node.name, true)) {
       if (node.name === "undefined") {
         return undefined;
