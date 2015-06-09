@@ -85,6 +85,7 @@ export default class File {
     "get",
     "set",
     "class-call-check",
+    "new-arrow-check",
     "object-destructuring-empty",
     "temporal-undefined",
     "temporal-assert-defined",

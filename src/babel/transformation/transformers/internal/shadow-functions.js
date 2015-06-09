@@ -6,7 +6,7 @@ export var metadata = {
 
 function remap(path, key, create) {
   // ensure that we're shadowed
-  if (!path.inShadow()) return;
+  if (!path.inShadow(key)) return;
 
   var fnPath = path.findParent((path) => !path.is("shadow") && (path.isFunction() || path.isProgram()));
 
@@ -22,8 +22,10 @@ function remap(path, key, create) {
   return id;
 }
 
-export function ThisExpression() {
-  return remap(this, "this", () => t.thisExpression());
+export function ThisExpression(node) {
+  if (!node._shadowedFunctionLiteral) {
+    return remap(this, "this", () => t.thisExpression());
+  }
 }
 
 export function ReferencedIdentifier(node) {
