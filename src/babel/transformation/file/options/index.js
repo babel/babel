@@ -1,6 +1,5 @@
 import * as parsers from "./parsers";
 import config from "./config";
-import clone from "lodash/lang/clone";
 
 export { config };
 
