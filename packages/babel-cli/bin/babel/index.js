@@ -35,7 +35,7 @@ each(options, function (option, key) {
   if (option.description) desc.push(option.description);
 
   commander.option(arg, desc.join(" "));
-})
+});
 
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
@@ -51,7 +51,7 @@ commander.on("--help", function () {
     each(keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
 
-      if (obj[key].optional) key = "[" + key + "]";
+      if (obj[key].metadata.optional) key = "[" + key + "]";
 
       console.log("    - " + key);
     });
