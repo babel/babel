@@ -18,13 +18,23 @@ suite("api", function () {
     assert.ok(!result.ast);
   });
 
-  test("auxiliaryComment option", function () {
+  test("auxiliaryCommentBefore option", function () {
     assert.ok(transform("class Foo {}", {
-      auxiliaryComment: "foobar"
+      auxiliaryCommentBefore: "foobar"
     }).code.indexOf("foobar") >= 0);
 
     assert.ok(transform("for (let i in bar) { foo(function () { i; }); break; continue; }", {
-      auxiliaryComment: "foobar"
+      auxiliaryCommentBefore: "foobar"
+    }).code.indexOf("foobar") >= 0);
+  });
+
+  test("auxiliaryCommentAfter option", function () {
+    assert.ok(transform("class Foo {}", {
+      auxiliaryCommentAfter: "foobar"
+    }).code.indexOf("foobar") >= 0);
+
+    assert.ok(transform("for (let i in bar) { foo(function () { i; }); break; continue; }", {
+      auxiliaryCommentAfter: "foobar"
     }).code.indexOf("foobar") >= 0);
   });
 

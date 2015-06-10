@@ -173,10 +173,21 @@
   },
 
   "auxiliaryComment": {
+    "deprecated": "renamed to auxiliaryCommentBefore",
+    "shorthand": "a",
+    "alias": "auxiliaryCommentBefore"
+  },
+
+  "auxiliaryCommentBefore": {
     "type": "string",
     "default": "",
-    "shorthand": "a",
     "description": "attach a comment before all helper declarations and auxiliary code"
+  },
+
+  "auxiliaryCommentAfter": {
+    "type": "string",
+    "default": "",
+    "description": "attach a comment after all helper declarations and auxiliary code"
   },
 
   "externalHelpers": {

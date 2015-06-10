@@ -341,14 +341,24 @@ export default class File {
   }
 
   attachAuxiliaryComment(node: Object): Object {
-    var comment = this.opts.auxiliaryComment;
-    if (comment) {
+    var beforeComment = this.opts.auxiliaryCommentBefore;
+    if (beforeComment) {
       node.leadingComments = node.leadingComments || [];
       node.leadingComments.push({
         type: "CommentLine",
-        value: " " + comment
+        value: " " + beforeComment
       });
     }
+
+    var afterComment = this.opts.auxiliaryCommentAfter;
+    if (afterComment) {
+      node.trailingComments = node.trailingComments || [];
+      node.trailingComments.push({
+        type: "CommentLine",
+        value: " " + afterComment
+      });
+    }
+
     return node;
   }
 
