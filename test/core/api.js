@@ -49,22 +49,40 @@ suite("api", function () {
     });
 
     assert.deepEqual(transform('import localName3 from "external";').metadata.modules.imports[0], {
-      source: 'external',
-      imported: ['default'],
+      source: "external",
+      imported: ["default"],
       specifiers: [{
-        kind: 'named',
-        imported: 'default',
-        local: 'localName3'
+        kind: "named",
+        imported: "default",
+        local: "localName3"
       }]
     });
+
+    assert.deepEqual(transform('import localName from "./array";', {
+      resolveModuleSource: function() {
+        return 'override-source';
+      }
+    }).metadata.modules.imports, [
+      {
+        source: "override-source",
+        imported: ["default"],
+        specifiers: [
+          {
+            "kind": "named",
+            "imported": "default",
+            "local": "localName"
+          }
+        ]
+      }
+    ]);
 
     assert.deepEqual(transform('export * as externalName1 from "external";', {
       stage: 0
     }).metadata.modules.exports, {
       exported: ['externalName1'],
       specifiers: [{
-        kind: 'external-namespace',
-        exported: 'externalName1',
+        kind: "external-namespace",
+        exported: "externalName1",
         source: "external",
       }]
     });
