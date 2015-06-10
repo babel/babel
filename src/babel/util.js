@@ -102,7 +102,7 @@ export function arrayify(val: any, mapFn?: Function): Array {
   return [val];
 }
 
-export function booleanify(val: any): boolean {
+export function booleanify(val: any) {
   if (val === "true") return true;
   if (val === "false") return false;
   return val;
