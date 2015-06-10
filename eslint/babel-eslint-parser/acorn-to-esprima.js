@@ -216,7 +216,7 @@ var astTransformVisitor = {
       delete node.isType;
     }
 
-    if (this.isExportDeclaration(node)) {
+    if (this.isExportDeclaration())) {
       var declar = this.get("declaration");
       if (declar.isClassExpression()) {
         node.declaration.type = "ClassDeclaration";
