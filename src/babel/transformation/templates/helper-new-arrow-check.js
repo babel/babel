@@ -1,5 +1,5 @@
-(function (instance, arrowFn) {
-  if (instance instanceof arrowFn) {
+(function (innerThis, boundThis) {
+  if (innerThis !== boundThis) {
     throw new TypeError("Cannot instantiate an arrow function");
   }
 });

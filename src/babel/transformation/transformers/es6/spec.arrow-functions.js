@@ -8,19 +8,14 @@ export function ArrowFunctionExpression(node, parent, scope, file) {
   if (node.shadow) return;
   node.shadow = { this: false };
 
-  var {id} = node;
-  var expr = node;
-
-  if (!id) {
-    id = scope.parent.generateDeclaredUidIdentifier("arrow");
-    expr = t.assignmentExpression("=", id, expr);
-  }
+  var boundThis = t.thisExpression();
+  boundThis._shadowedFunctionLiteral = false;
 
   // make sure that arrow function won't be instantiated
   t.ensureBlock(node).body.unshift(t.expressionStatement(t.callExpression(file.addHelper("new-arrow-check"), [
     t.thisExpression(),
-    id
+    boundThis
   ])));
 
-  return t.callExpression(t.memberExpression(expr, t.identifier("bind")), [t.thisExpression()]);
+  return t.callExpression(t.memberExpression(node, t.identifier("bind")), [t.thisExpression()]);
 }

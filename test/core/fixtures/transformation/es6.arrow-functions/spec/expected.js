@@ -1,25 +1,20 @@
 "use strict";
 
-var _arrow;
+var _this = this;
 
-function _newArrowCheck(instance, arrowFn) { if (instance instanceof arrowFn) { throw new TypeError("Cannot instantiate an arrow function"); } }
-
-arr.map((_arrow = function (x) {
-  _newArrowCheck(this, _arrow);
-
+arr.map((function (x) {
+  babelHelpers.newArrowCheck(this, _this);
   return x * x;
 }).bind(this));
 var f = (function f(x, y) {
-  _newArrowCheck(this, f);
-
+  babelHelpers.newArrowCheck(this, _this);
   return x * y;
 }).bind(this);
 (function () {
-  var _arrow2;
+  var _this2 = this;
 
-  return (_arrow2 = function () {
-    _newArrowCheck(this, _arrow2);
-
+  return (function () {
+    babelHelpers.newArrowCheck(this, _this2);
     return this;
   }).bind(this);
 })();

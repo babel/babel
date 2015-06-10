@@ -23,13 +23,11 @@ function remap(path, key, create) {
 }
 
 export function ThisExpression(node) {
-  if (!node._shadowedFunctionLiteral) {
-    return remap(this, "this", () => t.thisExpression());
-  }
+  return remap(this, "this", () => t.thisExpression());
 }
 
 export function ReferencedIdentifier(node) {
-  if (node.name === "arguments" && !node._shadowedFunctionLiteral) {
+  if (node.name === "arguments") {
     return remap(this, "arguments", () => t.identifier("arguments"));
   }
 }

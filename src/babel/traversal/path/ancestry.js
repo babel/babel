@@ -64,9 +64,13 @@ export function inType(types) {
 
 export function inShadow(key) {
   var path = this;
+  var dontShadow = path.node._shadowedFunctionLiteral;
+  if (dontShadow !== undefined) {
+    return !dontShadow;
+  }
   while (path) {
     if (path.isFunction()) {
-      var {shadow} = path.node;
+      var { shadow } = path.node;
       if (shadow && (shadow === true || shadow[key] !== false)) {
         return path;
       } else {
