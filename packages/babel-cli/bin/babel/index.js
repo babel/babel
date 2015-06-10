@@ -118,11 +118,16 @@ if (errors.length) {
 var opts = exports.opts = {};
 
 each(options, function (opt, key) {
-  opts[key] = commander[key];
+  if (commander[key] !== undefined) {
+    opts[key] = commander[key];
+  }
 });
 
 opts.ignore = util.arrayify(opts.ignore, util.regexify);
-opts.only   = util.arrayify(opts.only, util.regexify);
+
+if (opts.only) {
+  opts.only = util.arrayify(opts.only, util.regexify);
+}
 
 var fn;
 

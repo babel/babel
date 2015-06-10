@@ -8,7 +8,7 @@ export { util, acorn, transform };
 export { pipeline } from "../transformation";
 export { canCompile } from "../util";
 
-export { default as options } from "../transformation/file/options";
+export { default as options } from "../transformation/file/options/config";
 export { default as Transformer } from "../transformation/transformer";
 export { default as TransformerPipeline } from "../transformation/transformer-pipeline";
 export { default as traverse } from "../traversal";

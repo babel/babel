@@ -111,7 +111,7 @@ export function booleanify(val: any): boolean {
 export function shouldIgnore(filename, ignore, only) {
   filename = slash(filename);
 
-  if (only.length) {
+  if (only) {
     for (let pattern of (only: Array)) {
       if (pattern.test(filename)) return false;
     }

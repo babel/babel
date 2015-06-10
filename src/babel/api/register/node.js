@@ -1,6 +1,6 @@
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import resolveRc from "../../tools/resolve-rc";
+import resolveRc from "../../transformation/file/options/resolve-rc";
 import extend from "lodash/object/extend";
 import * as babel from "../node";
 import each from "lodash/collection/each";
@@ -90,7 +90,7 @@ var shouldIgnore = function (filename) {
   if (!ignore && !only) {
     return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
   } else {
-    return util.shouldIgnore(filename, ignore || [], only || []);
+    return util.shouldIgnore(filename, ignore || [], only);
   }
 };
 

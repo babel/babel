@@ -1,5 +1,5 @@
+import { validateOption, normaliseOptions, config as optionsConfig } from "./options";
 import convertSourceMap from "convert-source-map";
-import * as optionParsers from "./option-parsers";
 import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
@@ -7,7 +7,7 @@ import NodePath from "../../traversal/path";
 import Transformer from "../transformer";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
-import resolveRc from "../../tools/resolve-rc";
+import resolveRc from "./options/resolve-rc";
 import sourceMap from "source-map";
 import generate from "../../generation";
 import codeFrame from "../../helpers/code-frame";
@@ -52,7 +52,7 @@ export default class File {
     this.log      = new Logger(this, opts.filename || "unknown");
     this.ast      = {};
 
-    this.normalizeOptions(opts);
+    this.normaliseOptions(opts);
 
     this.buildTransformers();
 
@@ -98,10 +98,10 @@ export default class File {
 
   static soloHelpers = [];
 
-  static options = require("./options");
+  static options = optionsConfig;
 
-  normalizeOptions(opts: Object) {
-    opts = this.opts = assign({}, opts);
+  normaliseOptions(opts: Object) {
+    opts = this.opts = normaliseOptions(assign({}, opts));
 
     // resolve babelrc
     if (opts.filename) {
@@ -120,26 +120,28 @@ export default class File {
 
     // merge in environment options
     var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
-    if (opts.env) merge(opts, opts.env[envKey]);
+    if (opts.env) merge(opts, normaliseOptions(opts.env[envKey]));
 
     // normalise options
     for (let key in File.options) {
       let option = File.options[key];
+      var val    = opts[key];
 
-      var val = opts[key];
+      // optional
       if (!val && option.optional) continue;
 
+      // deprecated
       if (val && option.deprecated) {
         this.log.deprecate("Deprecated option " + key + ": " + option.deprecated);
       }
 
-      if (val == null) {
-        val = clone(option.default);
-      }
+      // default
+      if (val == null) val = clone(option.default);
 
-      var optionParser = optionParsers[option.type];
-      if (optionParser) val = optionParser(key, val, this.pipeline);
+      // validate
+      if (val) val = validateOption(key, val, this.pipeline);
 
+      // aaliases
       if (option.alias) {
         opts[option.alias] = opts[option.alias] || val;
       } else {
@@ -164,7 +166,10 @@ export default class File {
     opts.basename = path.basename(opts.filename, path.extname(opts.filename));
 
     opts.ignore = util.arrayify(opts.ignore, util.regexify);
-    opts.only   = util.arrayify(opts.only, util.regexify);
+
+    if (opts.only) {
+      opts.only = util.arrayify(opts.only, util.regexify);
+    }
 
     defaults(opts, {
       moduleRoot: opts.sourceRoot
