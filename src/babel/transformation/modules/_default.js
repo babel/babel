@@ -69,54 +69,58 @@ var remapVisitor = {
 };
 
 var metadataVisitor = {
-  ModuleDeclaration(node, parent, scope, formatter) {
-    if (node.source) {
-      node.source.value = formatter.file.resolveModuleSource(node.source.value);
+  ModuleDeclaration: {
+    enter(node, parent, scope, formatter) {
+      if (node.source) {
+        node.source.value = formatter.file.resolveModuleSource(node.source.value);
+      }
     }
   },
 
-  ImportDeclaration(node, parent, scope, formatter) {
-    formatter.hasLocalImports = true;
+  ImportDeclaration: {
+    exit(node, parent, scope, formatter) {
+      formatter.hasLocalImports = true;
 
-    var specifiers = [];
-    var imported = [];
-    formatter.metadata.imports.push({
-      source: node.source.value,
-      imported,
-      specifiers
-    });
+      var specifiers = [];
+      var imported = [];
+      formatter.metadata.imports.push({
+        source: node.source.value,
+        imported,
+        specifiers
+      });
 
-    for (var specifier of (this.get("specifiers"): Array)) {
-      var ids = specifier.getBindingIdentifiers();
-      extend(formatter.localImports, ids);
+      for (var specifier of (this.get("specifiers"): Array)) {
+        var ids = specifier.getBindingIdentifiers();
+        extend(formatter.localImports, ids);
 
-      var local = specifier.node.local.name;
+        var local = specifier.node.local.name;
 
-      if (specifier.isImportDefaultSpecifier()) {
-        imported.push("default");
-        specifiers.push({
-          kind: "named",
-          imported: "default",
-          local
-        });
-      }
+        if (specifier.isImportDefaultSpecifier()) {
+          imported.push("default");
+          specifiers.push({
+            kind: "named",
+            imported: "default",
+            local
+          });
+        }
 
-      if (specifier.isImportSpecifier()) {
-        var importedName = specifier.node.imported.name;
-        imported.push(importedName);
-        specifiers.push({
-          kind: "named",
-          imported: importedName,
-          local
-        });
-      }
+        if (specifier.isImportSpecifier()) {
+          var importedName = specifier.node.imported.name;
+          imported.push(importedName);
+          specifiers.push({
+            kind: "named",
+            imported: importedName,
+            local
+          });
+        }
 
-      if (specifier.isImportNamespaceSpecifier()) {
-        imported.push("*");
-        specifiers.push({
-          kind: "namespace",
-          local
-        });
+        if (specifier.isImportNamespaceSpecifier()) {
+          imported.push("*");
+          specifiers.push({
+            kind: "namespace",
+            local
+          });
+        }
       }
     }
   },
