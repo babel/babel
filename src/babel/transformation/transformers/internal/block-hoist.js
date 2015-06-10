@@ -15,8 +15,7 @@ export var BlockStatement = {
   exit(node) {
     var hasChange = false;
     for (var i = 0; i < node.body.length; i++) {
-      var bodyNode = node.body[i];
-      if (bodyNode && bodyNode._blockHoist != null) {
+      if (node.body[i]._blockHoist != null) {
         hasChange = true;
         break;
       }
@@ -24,7 +23,7 @@ export var BlockStatement = {
     if (!hasChange) return;
 
     node.body = sortBy(node.body, function(bodyNode){
-      var priority = bodyNode && bodyNode._blockHoist;
+      var priority = bodyNode._blockHoist;
       if (priority == null) priority = 1;
       else if (priority === true) priority = 2;
 
