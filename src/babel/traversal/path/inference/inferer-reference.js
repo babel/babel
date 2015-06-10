@@ -51,8 +51,10 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
     var visitedScopes = [];
     constantViolations = [];
     for (let violation of (rawConstantViolations: Array)) {
-      if (visitedScopes.indexOf(violation.scope) >= 0) continue;
-      visitedScopes.push(violation.scope);
+      var violationScope = violation.scope;
+      if (visitedScopes.indexOf(violationScope) >= 0) continue;
+
+      visitedScopes.push(violationScope);
       constantViolations.push(violation);
     }
 

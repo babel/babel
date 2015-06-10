@@ -241,27 +241,56 @@ export function willIMaybeExecutesBefore(target) {
  */
 
 export function _guessExecutionStatusRelativeTo(target) {
-  var self = this.getStatementParent();
-  target = target.getStatementParent();
-  if (target === self) return "before";
-
   // check if the two paths are in different functions, we can't track execution of these
   var targetFuncParent = target.scope.getFunctionParent();
-  var selfFuncParent = self.scope.getFunctionParent();
+  var selfFuncParent = this.scope.getFunctionParent();
   if (targetFuncParent !== selfFuncParent) {
     return "function";
   }
 
-  // crawl up the targets parents until we hit the container we're in and check keys
-  do {
-    // todo: if (target === self) return "after";
+  var targetPaths = getAncestry(target);
+  var selfPaths   = getAncestry(this);
 
-    if (target.container === self.container) {
-      return target.key >= self.key ? "before" : "after";
+  // get ancestor where the branches intersect
+  var commonPath;
+  var targetIndex;
+  var selfIndex;
+  for (selfIndex = 0; selfIndex < selfPaths.length; selfIndex++) {
+    var selfPath = selfPaths[selfIndex];
+    targetIndex = targetPaths.indexOf(selfPath);
+    if (targetIndex >= 0) {
+      commonPath = selfPath;
+      break;
     }
-  } while(self = self.parentPath);
+  }
+  if (!commonPath) {
+    return "before";
+  }
 
-  return "before";
+  // get the relationship paths that associate these nodes to their common ancestor
+  var targetRelationship = targetPaths[targetIndex - 1];
+  var selfRelationship   = selfPaths[selfIndex - 1];
+  if (!targetRelationship || !selfRelationship) {
+    return "before";
+  }
+
+  // container list so let's see which one is after the other
+  if (targetRelationship.containerKey && targetRelationship.container === selfRelationship.container) {
+    return targetRelationship.key > selfRelationship.key ? "before" : "after";
+  }
+
+  // otherwise we're associated by a parent node, check which key comes before the other
+  var targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
+  var selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
+  return targetKeyPosition > selfKeyPosition ? "before" : "after";
+}
+
+function getAncestry(path) {
+  var paths = [];
+  do {
+    paths.push(path);
+  } while(path = path.parentPath);
+  return paths;
 }
 
 /**
