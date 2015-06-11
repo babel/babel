@@ -108,7 +108,7 @@
 
     "Symbol": {
       "for": "symbol/for",
-      "hasInstance": "symbol/for-instance",
+      "hasInstance": "symbol/has-instance",
       "is-concat-spreadable": "symbol/is-concat-spreadable",
       "iterator": "symbol/iterator",
       "keyFor": "symbol/key-for",
