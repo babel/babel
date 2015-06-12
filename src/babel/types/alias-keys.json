@@ -76,8 +76,6 @@
   "ThisExpression":            ["Expression"],
   "Super":                     ["Expression"],
   "UpdateExpression":          ["Expression"],
-  "JSXEmptyExpression":        ["Expression"],
-  "JSXMemberExpression":       ["Expression"],
 
   "AnyTypeAnnotation":           ["Flow", "FlowBaseAnnotation"],
   "ArrayTypeAnnotation":         ["Flow"],
