@@ -76,8 +76,6 @@
   "ThisExpression":            ["Expression"],
   "Super":                     ["Expression"],
   "UpdateExpression":          ["Expression"],
-  "JSXEmptyExpression":        ["Expression"],
-  "JSXMemberExpression":       ["Expression"],
 
   "AnyTypeAnnotation":           ["Flow", "FlowBaseAnnotation"],
   "ArrayTypeAnnotation":         ["Flow"],
@@ -116,10 +114,10 @@
   "JSXAttribute":           ["JSX", "Immutable"],
   "JSXClosingElement":      ["JSX", "Immutable"],
   "JSXElement":             ["JSX", "Immutable", "Expression"],
-  "JSXEmptyExpression":     ["JSX", "Immutable"],
+  "JSXEmptyExpression":     ["JSX", "Immutable", "Expression"],
   "JSXExpressionContainer": ["JSX", "Immutable"],
   "JSXIdentifier":          ["JSX"],
-  "JSXMemberExpression":    ["JSX"],
+  "JSXMemberExpression":    ["JSX", "Expression"],
   "JSXNamespacedName":      ["JSX"],
   "JSXOpeningElement":      ["JSX", "Immutable"],
   "JSXSpreadAttribute":     ["JSX"]
