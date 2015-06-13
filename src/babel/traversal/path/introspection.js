@@ -147,6 +147,18 @@ export function isCompletionRecord(allowInsideFunction?) {
 }
 
 /**
+ * Description
+ */
+
+export function isDirective() {
+  if (this.isExpressionStatement()) {
+    return this.get("expression").isLiteral();
+  } else {
+    return this.isLiteral() && this.parentPath.isExpressionStatement();
+  }
+}
+
+/**
  * Check whether or not the current `key` allows either a single statement or block statement
  * so we can explode it if necessary.
  */
@@ -229,7 +241,7 @@ export function getSource() {
  * Description
  */
 
-export function willIMaybeExecutesBefore(target) {
+export function willIMaybeExecuteBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
@@ -249,6 +261,8 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   var targetPaths = getAncestry(target);
+  //if (targetPaths.indexOf(this) >= 0) return "after";
+
   var selfPaths   = getAncestry(this);
 
   // get ancestor where the branches intersect
@@ -281,7 +295,7 @@ export function _guessExecutionStatusRelativeTo(target) {
 
   // otherwise we're associated by a parent node, check which key comes before the other
   var targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
-  var selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
+  var selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 
