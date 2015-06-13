@@ -27,6 +27,18 @@ export function getStatementParent(): ?NodePath {
  * Description
  */
 
+export function getOpposite() {
+  if (this.key === "left") {
+    return this.getSibling("right");
+  } else if (this.key === "right") {
+    return this.getSibling("left");
+  }
+}
+
+/**
+ * Description
+ */
+
 export function getCompletionRecords(): Array<NodePath> {
   var paths = [];
 
