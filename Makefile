@@ -15,7 +15,7 @@ build-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --copy-files
 
 build-core-test: clean-core
-	node $(BABEL_CMD) src --out-dir lib --copy-files --auxiliary-comment "istanbul ignore next"
+	node $(BABEL_CMD) src --out-dir lib --copy-files --auxiliary-comment-before "istanbul ignore next"
 
 watch-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --watch --copy-files
