@@ -56,6 +56,11 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
 
       visitedScopes.push(violationScope);
       constantViolations.push(violation);
+
+      if (violationScope === path.scope) {
+        constantViolations = [violation];
+        break;
+      }
     }
 
     // add back on function constant violations since we can't track calls
