@@ -71,7 +71,7 @@ var visit = function (node, name, scope) {
   // check to see if we have a local binding of the id we're setting inside of
   // the function, this is important as there are caveats associated
 
-  var bindingInfo = scope.getOwnBindingInfo(name);
+  var bindingInfo = scope.getOwnBinding(name);
 
   if (bindingInfo) {
     if (bindingInfo.kind === "param") {

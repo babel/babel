@@ -279,7 +279,7 @@ export default class Scope {
   /**
    * Determine whether evaluating the specific input `node` is a consequenceless reference. ie.
    * evaluating it wont result in potentially arbitrary code from being ran. The following are
-   * whitelisted and determined not cause side effects:
+   * whitelisted and determined not to cause side effects:
    *
    *  - `this` expressions
    *  - `super` expressions
@@ -492,7 +492,7 @@ export default class Scope {
     for (var name in ids) {
       var id = ids[name];
 
-      var local = this.getOwnBindingInfo(name);
+      var local = this.getOwnBinding(name);
       if (local) {
         // don't ever let a type alias shadow a local binding
         if (kind === "type") continue;
@@ -819,7 +819,7 @@ export default class Scope {
     var scope = this;
 
     do {
-      var binding = scope.getOwnBindingInfo(name);
+      var binding = scope.getOwnBinding(name);
       if (binding) return binding;
     } while (scope = scope.parent);
   }
@@ -828,7 +828,7 @@ export default class Scope {
    * Description
    */
 
-  getOwnBindingInfo(name: string) {
+  getOwnBinding(name: string) {
     return this.bindings[name];
   }
 
@@ -855,7 +855,7 @@ export default class Scope {
    */
 
   hasOwnBinding(name: string) {
-    return !!this.getOwnBindingInfo(name);
+    return !!this.getOwnBinding(name);
   }
 
   /**
@@ -910,3 +910,7 @@ export default class Scope {
     if (info) info.scope.removeOwnBinding(name);
   }
 }
+
+console.log(Object.keys(Scope.prototype).sort().map(function (key) {
+  return key + Scope.prototype[key].toString().match(/\((.*?)\)/g)[0];
+}).join("\n"));
