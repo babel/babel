@@ -12,6 +12,8 @@
    <strong><a href="#dependencies">Dependencies</a></strong>
    |
    <strong><a href="#code-standards">Code Standards</a></strong>
+   |
+   <strong><a href="#internals">Internals</a></strong>
 </p>
 
 ----
@@ -173,3 +175,6 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
  * **Declaration**
    * No unused variables
    * No pollution of global variables and prototypes
+
+#### Internals
+Please see [`/doc`](/doc) for internals documentation relevant to developing babel.
