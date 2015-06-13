@@ -910,7 +910,3 @@ export default class Scope {
     if (info) info.scope.removeOwnBinding(name);
   }
 }
-
-console.log(Object.keys(Scope.prototype).sort().map(function (key) {
-  return key + Scope.prototype[key].toString().match(/\((.*?)\)/g)[0];
-}).join("\n"));
