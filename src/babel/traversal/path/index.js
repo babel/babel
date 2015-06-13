@@ -81,10 +81,7 @@ export default class NodePath {
    */
 
   errorWithNode(msg, Error = SyntaxError) {
-    var loc = this.node.loc.start;
-    var err = new Error(`Line ${loc.line}: ${msg}`);
-    err.loc = loc;
-    return err;
+    return this.hub.file.errorWithNode(this.node, msg, Error);
   }
 
   /**

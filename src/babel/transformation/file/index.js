@@ -415,11 +415,12 @@ export default class File {
 
   errorWithNode(node, msg, Error = SyntaxError) {
     var err;
-    if (node.loc) {
+    if (node && node.loc) {
       var loc = node.loc.start;
       err = new Error(`Line ${loc.line}: ${msg}`);
       err.loc = loc;
     } else {
+      // todo: find errors with nodes inside to at least point to something
       err = new Error("There's been an error on a dynamic node. This is almost certainly an internal error. Please report it.");
     }
     return err;
