@@ -44,12 +44,10 @@ export function getAncestry() {
  * Description
  */
 
-export function inType(types) {
-  if (!Array.isArray(types)) types = [types];
-
+export function inType() {
   var path = this;
   while (path) {
-    for (var type of (types: Array)) {
+    for (var type of (arguments: Array)) {
       if (path.node.type === type) return true;
     }
     path = path.parentPath;
