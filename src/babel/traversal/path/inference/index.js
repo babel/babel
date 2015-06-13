@@ -51,7 +51,7 @@ export function _getTypeAnnotation(): ?Object {
     return inferer.call(this, node);
   }
 
-  inferer = inferer[this.parentPath.type];
+  inferer = inferers[this.parentPath.type];
   if (inferer && inferer.validParent) {
     return this.parentPath.getTypeAnnotation();
   }
