@@ -13,6 +13,21 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.5.8
+
+ * **Internal**
+  * Remove extremely unprofessional and harsh error message for those hotlinking to `resolve-rc`.
+
+## 5.5.7
+
+ * **Bug Fix**
+  * Push newline after decorators when doing code gen.
+  * Rewriting error handling to normalise options before merging them.
+  * Remove duplicate keys in `alias-keys.json` causing errors in strict mode.
+  * Fix `$ babel --help` not showing optional transformers as such.
+ * **New Feature**
+  * Add `auxiliaryCommentBefore` and `auxiliaryCommentAfter` options.
+
 ## 5.5.6
 
  * **Bug Fix**
