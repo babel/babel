@@ -51,7 +51,7 @@ commander.on("--help", function () {
     each(keys(obj).sort(), function (key) {
       if (key[0] === "_") return;
 
-      if (obj[key].metadata.optional) key = "[" + key + "]";
+      if (obj[key].metadata && obj[key].metadata.optional) key = "[" + key + "]";
 
       console.log("    - " + key);
     });
