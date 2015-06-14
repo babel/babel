@@ -20,7 +20,7 @@ export var ReferencedIdentifier = {
 
 export var BindingIdentifier = {
   types: ["Identifier"],
-  checkPath({ node, parent }, opts) {
+  checkPath({ node, parent }) {
     return t.isBinding(node, parent);
   }
 };
