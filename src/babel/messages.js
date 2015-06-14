@@ -10,7 +10,7 @@ export const MESSAGES = {
   settersInvalidParamLength: "Setters must have exactly one parameter",
   settersNoRest: "Setters aren't allowed to have a rest",
   noAssignmentsInForHead: "No assignments allowed in for-in/of head",
-  expectedMemberExpressionOrIdentifier: "Expected type MemeberExpression or Identifier",
+  expectedMemberExpressionOrIdentifier: "Expected type MemberExpression or Identifier",
   invalidParentForThisNode: "We don't know how to handle this node within the current parent - please open an issue",
   readOnly: "$1 is read-only",
   modulesIllegalExportName: "Illegal export $1",
