@@ -16,7 +16,7 @@ export function insertBefore(nodes) {
   } else if (this.isNodeType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
     if (this.node) nodes.push(this.node);
     this.replaceExpressionWithStatements(nodes);
-  } else if (this.isNodeType("Statement") || !this.type) {
+  } else {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertBefore(nodes);
@@ -26,8 +26,6 @@ export function insertBefore(nodes) {
     } else {
       throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
     }
-  } else {
-    throw new Error("No clue what to do with this node type.");
   }
 
   return [this];
@@ -94,7 +92,7 @@ export function insertAfter(nodes) {
       nodes.push(t.expressionStatement(temp));
     }
     this.replaceExpressionWithStatements(nodes);
-  } else if (this.isNodeType("Statement") || !this.type) {
+  } else {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertAfter(nodes);
@@ -104,8 +102,6 @@ export function insertAfter(nodes) {
     } else {
       throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
     }
-  } else {
-    throw new Error("No clue what to do with this node type.");
   }
 
   return [this];

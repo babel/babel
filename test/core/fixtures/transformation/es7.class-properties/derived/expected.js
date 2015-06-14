@@ -3,11 +3,7 @@
 var Foo = (function (_Bar) {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-
-    if (_Bar != null) {
-      _Bar.apply(this, arguments);
-    }
-
+    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).apply(this, arguments);
     this.bar = "foo";
   }
 

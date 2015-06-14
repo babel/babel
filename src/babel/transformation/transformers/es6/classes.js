@@ -252,19 +252,42 @@ class ClassTransformer {
   }
 
   /**
+   * https://www.youtube.com/watch?v=fWNaR-rxAic
+   */
+
+  constructorMeMaybe() {
+    if (!this.hasSuper) return;
+
+    var hasConstructor = false;
+    var paths = this.path.get("body.body");
+
+    for (var path of (paths: Array)) {
+      hasConstructor = path.equals("kind", "constructor");
+      if (hasConstructor) break;
+    }
+
+    if (!hasConstructor) {
+      this.path.get("body").unshiftContainer("body", t.methodDefinition(
+        t.identifier("constructor"),
+        util.template("class-derived-default-constructor"),
+        "constructor"
+      ));
+    }
+  }
+
+  /**
    * Description
    */
 
   buildBody() {
+    this.constructorMeMaybe();
+
     var constructorBody = this.constructorBody;
-    var classBody       = this.node.body.body;
+    var classBodyPaths  = this.path.get("body.body");
     var body            = this.body;
 
-    var classBodyPaths = this.path.get("body").get("body");
-
-    for (var i = 0; i < classBody.length; i++) {
-      var node = classBody[i];
-      var path = classBodyPaths[i];
+    for (var path of (classBodyPaths: Array)) {
+      var node = path.node;
 
       if (node.decorators) {
         memoiseDecorators(node.decorators, this.scope);
@@ -295,16 +318,6 @@ class ClassTransformer {
       } else if (t.isClassProperty(node)) {
         this.pushProperty(node, path);
       }
-    }
-
-    // we have no constructor, but we're a derived class
-    if (!this.hasConstructor && this.hasSuper) {
-      var helperName = "class-super-constructor-call";
-      if (this.isLoose) helperName += "-loose";
-      constructorBody.body.push(util.template(helperName, {
-        CLASS_NAME: this.classRef,
-        SUPER_NAME: this.superName
-      }, true));
     }
 
     //

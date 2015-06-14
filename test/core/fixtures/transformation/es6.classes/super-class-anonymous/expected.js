@@ -3,10 +3,7 @@
 var TestEmpty = (function (_ref) {
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
-
-    if (_ref != null) {
-      _ref.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(TestEmpty.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(TestEmpty, _ref);
@@ -22,10 +19,7 @@ var TestEmpty = (function (_ref) {
 var TestConstructorOnly = (function (_ref2) {
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-
-    if (_ref2 != null) {
-      _ref2.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(TestConstructorOnly.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(TestConstructorOnly, _ref2);
@@ -41,10 +35,7 @@ var TestConstructorOnly = (function (_ref2) {
 var TestMethodOnly = (function (_ref3) {
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
-
-    if (_ref3 != null) {
-      _ref3.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(TestMethodOnly.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(TestMethodOnly, _ref3);
@@ -64,10 +55,7 @@ var TestMethodOnly = (function (_ref3) {
 var TestConstructorAndMethod = (function (_ref4) {
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-
-    if (_ref4 != null) {
-      _ref4.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(TestConstructorAndMethod.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
@@ -87,10 +75,7 @@ var TestConstructorAndMethod = (function (_ref4) {
 var TestMultipleMethods = (function (_ref5) {
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-
-    if (_ref5 != null) {
-      _ref5.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(TestMultipleMethods.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(TestMultipleMethods, _ref5);

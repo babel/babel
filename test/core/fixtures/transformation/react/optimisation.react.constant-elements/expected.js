@@ -11,10 +11,7 @@ var _ref = React.createElement(
 var App = (function (_React$Component) {
   function App() {
     babelHelpers.classCallCheck(this, App);
-
-    if (_React$Component != null) {
-      _React$Component.apply(this, arguments);
-    }
+    babelHelpers.get(Object.getPrototypeOf(App.prototype), "constructor", this).apply(this, arguments);
   }
 
   babelHelpers.inherits(App, _React$Component);
