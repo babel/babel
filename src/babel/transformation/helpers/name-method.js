@@ -20,11 +20,8 @@ var visitor = {
     visitIdentifier(this, node, scope, state);
   },
 
-  AssignmentExpression(node, parent, scope, state) {
-    var ids = this.getBindingIdentifiers();
-    for (var name in ids) {
-      visitIdentifier(this, ids[name], scope, state);
-    }
+  BindingIdentifier(node, parent, scope, state) {
+    visitIdentifier(this, node, scope, state);
   }
 };
 

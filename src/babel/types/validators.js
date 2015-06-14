@@ -1,5 +1,19 @@
+import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
+
+/**
+ *
+ */
+
+export function isBinding(node: Object, parent: Object): boolean {
+  var bindingKey = getBindingIdentifiers.keys[parent.type];
+  if (bindingKey) {
+    return parent[bindingKey] === node;
+  } else {
+    return false;
+  }
+}
 
 /**
  * Check if the input `node` is a reference to a bound variable.

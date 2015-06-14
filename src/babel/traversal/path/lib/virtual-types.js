@@ -18,6 +18,13 @@ export var ReferencedIdentifier = {
   }
 };
 
+export var BindingIdentifier = {
+  types: ["Identifier"],
+  checkPath({ node, parent }, opts) {
+    return t.isBinding(node, parent);
+  }
+};
+
 export var Expression = {
   types: ["Expression"],
   checkPath(path) {
