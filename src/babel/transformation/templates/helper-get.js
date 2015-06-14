@@ -1,4 +1,6 @@
 (function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+
   var desc = Object.getOwnPropertyDescriptor(object, property);
 
   if (desc === undefined) {
