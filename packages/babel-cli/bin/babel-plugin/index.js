@@ -33,10 +33,23 @@ function spawnMultiple(cmds) {
   next();
 }
 
+function template(name, data) {
+  var source = fs.readFileSync(__dirname + "/templates/" + name, "utf8");
+  source = source.replace(/[A-Z_]+/g, function (key) {
+    return data[key] === undefined ? key : data[key];
+  });
+  return source;
+}
+
 function write(filename, content) {
   console.log(filename);
   fs.writeFileSync(filename, content);
 }
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 var BABEL_PLUGIN_PREFIX = "babel-plugin-";
 
@@ -48,36 +61,49 @@ var cmds = {
       name = name.slice(BABEL_PLUGIN_PREFIX.length);
     }
 
-    write("package.json", JSON.stringify({
-      name: BABEL_PLUGIN_PREFIX + name,
-      version: "1.0.0",
-      description: "",
-      license: "MIT",
-      main: "lib/index.js",
+    rl.question("Description (optional): ", function (description) {
+      rl.question("GitHub Repository (eg. sebmck/babel-plugin-foobar) (optional): ", function (repo) {
+        rl.close();
 
-      devDependencies: {
-        babel: "^5.6.0"
-      },
+        var templateData = {
+          DESCRIPTION: description,
+          FULL_NAME: BABEL_PLUGIN_PREFIX + name,
+          NAME: name
+        };
 
-      peerDependencies: {
-        babel: "^5.6.0"
-      },
+        write("package.json", JSON.stringify({
+          name: templateData.FULL_NAME,
+          version: "1.0.0",
+          description: templateData.DESCRIPTION,
+          repository: repo || undefined,
+          license: "MIT",
+          main: "lib/index.js",
 
-      scripts: {
-        build: "babel-plugin build",
-        push:  "babel-plugin publish",
-        test:  "babel-plugin test"
-      },
+          devDependencies: {
+            babel: "^5.6.0"
+          },
 
-      keywords: ["babel-plugin"]
-    }, null, "  "));
+          scripts: {
+            build: "babel-plugin build",
+            push:  "babel-plugin publish",
+            test:  "babel-plugin test"
+          },
 
-    write(".npmignore", "node_modules\n*.log\nsrc");
+          keywords: ["babel-plugin"]
+        }, null, "  ") + "\n");
 
-    write(".gitignore", "node_modules\n*.log\nlib");
+        write(".npmignore", "node_modules\n*.log\nsrc\n");
 
-    fs.mkdirSync("src");
-    write("src/index.js", "");
+        write(".gitignore", "node_modules\n*.log\nlib\n");
+
+        write("README.md", template("README.md", templateData));
+
+        if (!fs.existsSync("src")) {
+          fs.mkdirSync("src");
+          write("src/index.js", template("index.js", templateData));
+        }
+      });
+    });
   },
 
   build: function () {
@@ -85,15 +111,12 @@ var cmds = {
   },
 
   publish: function () {
-    var rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
     var pkg = require(process.cwd() + "/package.json");
     console.log("Current verison:", pkg.version);
 
     rl.question("New version (enter nothing for patch): ", function (newVersion) {
+      rl.close();
+
       newVersion = newVersion || "patch";
 
       spawnMultiple([

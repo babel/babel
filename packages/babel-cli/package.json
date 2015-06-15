@@ -24,6 +24,6 @@
     "babel": "./bin/babel/index.js",
     "babel-node": "./bin/babel-node",
     "babel-external-helpers": "./bin/babel-external-helpers",
-    "babel-plugin": "./bin/babel-plugin"
+    "babel-plugin": "./bin/babel-plugin/index.js"
   }
 }
