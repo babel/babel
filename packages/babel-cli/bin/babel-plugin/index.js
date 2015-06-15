@@ -107,7 +107,7 @@ var cmds = {
   },
 
   build: function () {
-    spawn("babel", ["src", "--out-dir", "lib"]);
+    spawn("babel", ["src", "--out-dir", "lib", "--copy-files"]);
   },
 
   publish: function () {

@@ -1,10 +1,12 @@
 import Transformer from "../transformer";
 import Plugin from "../plugin";
 import * as types from "../../types";
+import * as messages from "../../messages";
 import traverse from "../../types";
 import parse from "../../helpers/parse";
 
 var context = {
+  messages,
   Transformer,
   Plugin,
   types,
@@ -12,7 +14,6 @@ var context = {
   traverse
 };
 
-import * as messages from "../../messages";
 import * as util from  "../../util";
 
 export default class PluginManager {
