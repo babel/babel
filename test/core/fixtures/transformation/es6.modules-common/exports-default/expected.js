@@ -29,4 +29,9 @@ var Foo = function Foo() {
 
 exports["default"] = Foo;
 exports["default"] = foo;
+
+exports["default"] = (function () {
+  return "foo";
+})();
+
 module.exports = exports["default"];
