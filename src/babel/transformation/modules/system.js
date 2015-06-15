@@ -1,6 +1,5 @@
 import DefaultFormatter from "./_default";
 import AMDFormatter from "./amd";
-import object from  "../../helpers/object";
 import * as util from  "../../util";
 import last from "lodash/array/last";
 import map from "lodash/collection/map";
