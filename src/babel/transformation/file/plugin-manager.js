@@ -1,11 +1,15 @@
 import Transformer from "../transformer";
 import Plugin from "../plugin";
 import * as types from "../../types";
+import traverse from "../../types";
+import parse from "../../helpers/parse";
 
 var context = {
   Transformer,
   Plugin,
-  types
+  types,
+  parse,
+  traverse
 };
 
 import * as messages from "../../messages";
