@@ -4,8 +4,8 @@ export var metadata = {
   group: "builtin-pre"
 };
 
-export var FunctionExpression = {
-  exit: bare
+export var visitor = {
+  "ArrowFunctionExpression|FunctionExpression": {
+    exit: bare
+  }
 };
-
-export { FunctionExpression as ArrowFunctionExpression };

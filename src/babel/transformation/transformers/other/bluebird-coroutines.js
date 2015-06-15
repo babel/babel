@@ -10,11 +10,13 @@ export var metadata = {
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-export function Func/*tion*/(node, parent, scope, file) {
-  if (!node.async || node.generator) return;
+export var visitor = {
+  Function(node, parent, scope, file) {
+    if (!node.async || node.generator) return;
 
-  return remapAsyncToGenerator(
-    this,
-    t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine"))
-  );
-}
+    return remapAsyncToGenerator(
+      this,
+      t.memberExpression(file.addImport("bluebird", null, "absolute"), t.identifier("coroutine"))
+    );
+  }
+};

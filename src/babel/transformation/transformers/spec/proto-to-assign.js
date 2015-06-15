@@ -19,44 +19,46 @@ export var metadata = {
   optional: true
 };
 
-export function AssignmentExpression(node, parent, scope, file) {
-  if (!isProtoAssignmentExpression(node)) return;
+export var visitor = {
+  AssignmentExpression(node, parent, scope, file) {
+    if (!isProtoAssignmentExpression(node)) return;
 
-  var nodes = [];
-  var left  = node.left.object;
-  var temp  = scope.maybeGenerateMemoised(left);
+    var nodes = [];
+    var left  = node.left.object;
+    var temp  = scope.maybeGenerateMemoised(left);
 
-  nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
-  nodes.push(buildDefaultsCallExpression(node, temp, file));
-  if (temp) nodes.push(temp);
+    nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
+    nodes.push(buildDefaultsCallExpression(node, temp, file));
+    if (temp) nodes.push(temp);
 
-  return nodes;
-}
+    return nodes;
+  },
 
-export function ExpressionStatement(node, parent, scope, file) {
-  var expr = node.expression;
-  if (!t.isAssignmentExpression(expr, { operator: "=" })) return;
+  ExpressionStatement(node, parent, scope, file) {
+    var expr = node.expression;
+    if (!t.isAssignmentExpression(expr, { operator: "=" })) return;
 
-  if (isProtoAssignmentExpression(expr)) {
-    return buildDefaultsCallExpression(expr, expr.left.object, file);
-  }
-}
+    if (isProtoAssignmentExpression(expr)) {
+      return buildDefaultsCallExpression(expr, expr.left.object, file);
+    }
+  },
 
-export function ObjectExpression(node, parent, scope, file) {
-  var proto;
+  ObjectExpression(node, parent, scope, file) {
+    var proto;
 
-  for (var i = 0; i < node.properties.length; i++) {
-    var prop = node.properties[i];
+    for (var i = 0; i < node.properties.length; i++) {
+      var prop = node.properties[i];
 
-    if (isProtoKey(prop)) {
-      proto = prop.value;
-      pull(node.properties, prop);
+      if (isProtoKey(prop)) {
+        proto = prop.value;
+        pull(node.properties, prop);
+      }
+    }
+
+    if (proto) {
+      var args = [t.objectExpression([]), proto];
+      if (node.properties.length) args.push(node);
+      return t.callExpression(file.addHelper("extends"), args);
     }
   }
-
-  if (proto) {
-    var args = [t.objectExpression([]), proto];
-    if (node.properties.length) args.push(node);
-    return t.callExpression(file.addHelper("extends"), args);
-  }
-}
+};

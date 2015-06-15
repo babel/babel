@@ -9,20 +9,10 @@ export var metadata = {
 
 var MATH_POW = t.memberExpression(t.identifier("Math"), t.identifier("pow"));
 
-var {
-  ExpressionStatement,
-  AssignmentExpression,
-  BinaryExpression
-} = build({
+export var visitor = build({
   operator: "**",
 
   build(left, right) {
     return t.callExpression(MATH_POW, [left, right]);
   }
 });
-
-export {
-  ExpressionStatement,
-  AssignmentExpression,
-  BinaryExpression
-};

@@ -22,12 +22,14 @@ function remap(path, key, create) {
   return id;
 }
 
-export function ThisExpression() {
-  return remap(this, "this", () => t.thisExpression());
-}
+export var visitor = {
+  ThisExpression() {
+    return remap(this, "this", () => t.thisExpression());
+  },
 
-export function ReferencedIdentifier(node) {
-  if (node.name === "arguments" && !node._shadowedFunctionLiteral) {
-    return remap(this, "arguments", () => t.identifier("arguments"));
+  ReferencedIdentifier(node) {
+    if (node.name === "arguments" && !node._shadowedFunctionLiteral) {
+      return remap(this, "arguments", () => t.identifier("arguments"));
+    }
   }
-}
+};

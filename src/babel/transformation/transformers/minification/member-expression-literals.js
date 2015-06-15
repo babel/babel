@@ -5,13 +5,15 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-export var MemberExpression = {
-  exit(node) {
-    var prop = node.property;
-    if (node.computed && t.isLiteral(prop) && t.isValidIdentifier(prop.value)) {
-      // foo["bar"] => foo.bar
-      node.property = t.identifier(prop.value);
-      node.computed = false;
+export var visitor = {
+  MemberExpression: {
+    exit(node) {
+      var prop = node.property;
+      if (node.computed && t.isLiteral(prop) && t.isValidIdentifier(prop.value)) {
+        // foo["bar"] => foo.bar
+        node.property = t.identifier(prop.value);
+        node.computed = false;
+      }
     }
   }
 };

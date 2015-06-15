@@ -6,17 +6,19 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-export var Func/*tion*/ = {
-  exit(node) {
-    if (node.async || node.generator) {
-      // Although this code transforms only the subtree rooted at the given
-      // Function node, that node might contain other generator functions
-      // that will also be transformed. It might help performance to ignore
-      // nested functions, and rely on the traversal to visit them later,
-      // but that's a small optimization. Starting here instead of at the
-      // root of the AST is the key optimization, since huge async/generator
-      // functions are relatively rare.
-      regenerator.transform(convertNodePath(this));
+export var visitor = {
+  Function: {
+    exit(node) {
+      if (node.async || node.generator) {
+        // Although this code transforms only the subtree rooted at the given
+        // Function node, that node might contain other generator functions
+        // that will also be transformed. It might help performance to ignore
+        // nested functions, and rely on the traversal to visit them later,
+        // but that's a small optimization. Starting here instead of at the
+        // root of the AST is the key optimization, since huge async/generator
+        // functions are relatively rare.
+        regenerator.transform(convertNodePath(this));
+      }
     }
   }
 };

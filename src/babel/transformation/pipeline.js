@@ -1,10 +1,11 @@
-import Transformer from "./transformer";
+import PluginManager from "./file/plugin-manager";
 import normalizeAst from "../helpers/normalize-ast";
+import Plugin from "./plugin";
 import assign from "lodash/object/assign";
 import object from "../helpers/object";
 import File from "./file";
 
-export default class TransformerPipeline {
+export default class Pipeline {
   constructor() {
     this.transformers = object();
     this.namespaces   = object();
@@ -20,7 +21,7 @@ export default class TransformerPipeline {
     return this;
   }
 
-  addTransformer(key, transformer) {
+  addTransformer(key, plugin) {
     if (this.transformers[key]) throw new Error(); // todo: error
 
     var namespace = key.split(".")[0];
@@ -28,7 +29,15 @@ export default class TransformerPipeline {
     this.namespaces[namespace].push(key);
     this.namespaces[key] = namespace;
 
-    this.transformers[key] = new Transformer(key, transformer);
+    if (typeof plugin === "function") {
+      plugin = PluginManager.memoisePluginContainer(plugin);
+      plugin.key = key;
+      plugin.metadata.optional = true;
+    } else {
+      plugin = new Plugin(key, plugin);
+    }
+
+    this.transformers[key] = plugin;
   }
 
   addAliases(names) {
@@ -46,15 +55,22 @@ export default class TransformerPipeline {
     return this;
   }
 
-  canTransform(transformer, fileOpts) {
-    if (transformer.metadata.plugin) return true;
+  canTransform(plugin, fileOpts) {
+    if (plugin.metadata.plugin) {
+      return true;
+    }
 
     for (var filter of (this.filters: Array)) {
-      var result = filter(transformer, fileOpts);
+      var result = filter(plugin, fileOpts);
       if (result != null) return result;
     }
 
     return true;
+  }
+
+  analyze(code: string, opts?: Object = {}) {
+    opts.code = false;
+    return this.transform(code, opts);
   }
 
   pretransform(code: string, opts?: Object) {

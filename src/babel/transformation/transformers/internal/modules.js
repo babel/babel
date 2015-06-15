@@ -15,93 +15,95 @@ function getDeclar(node) {
   return declar;
 }
 
-export var metadata = {
-  group: "builtin-pre"
-};
-
-export function ExportDefaultDeclaration(node, parent, scope) {
-  var declar = node.declaration;
-
-  if (t.isClassDeclaration(declar)) {
-    // export default class Foo {};
-    let nodes = [getDeclar(node), node];
-    node.declaration = declar.id;
-    return nodes;
-  } else if (t.isClassExpression(declar)) {
-    // export default class {};
-    var temp = scope.generateUidIdentifier("default");
-    node.declaration = t.variableDeclaration("var", [
-      t.variableDeclarator(temp, declar)
-    ]);
-
-    let nodes = [getDeclar(node), node];
-    node.declaration = temp;
-    return nodes;
-  } else if (t.isFunctionDeclaration(declar)) {
-    // export default function Foo() {}
-    node._blockHoist = 2;
-
-    let nodes = [getDeclar(node), node];
-    node.declaration = declar.id;
-    return nodes;
-  }
-}
-
 function buildExportSpecifier(id) {
   return t.exportSpecifier(clone(id), clone(id));
 }
 
-export function ExportNamedDeclaration(node, parent, scope) {
-  var declar = node.declaration;
+export var metadata = {
+  group: "builtin-pre"
+};
 
-  if (t.isClassDeclaration(declar)) {
-    // export class Foo {}
-    node.specifiers  = [buildExportSpecifier(declar.id)];
+export var visitor = {
+  ExportDefaultDeclaration(node, parent, scope) {
+    var declar = node.declaration;
 
-    let nodes = [getDeclar(node), node];
-    node.declaration = null;
-    return nodes;
-  } else if (t.isFunctionDeclaration(declar)) {
-    // export function Foo() {}
-    node.specifiers  = [buildExportSpecifier(declar.id)];
-    node._blockHoist = 2;
+    if (t.isClassDeclaration(declar)) {
+      // export default class Foo {};
+      let nodes = [getDeclar(node), node];
+      node.declaration = declar.id;
+      return nodes;
+    } else if (t.isClassExpression(declar)) {
+      // export default class {};
+      var temp = scope.generateUidIdentifier("default");
+      node.declaration = t.variableDeclaration("var", [
+        t.variableDeclarator(temp, declar)
+      ]);
 
-    let nodes = [getDeclar(node), node];
-    node.declaration = null;
-    return nodes;
-  } else if (t.isVariableDeclaration(declar)) {
-    // export var foo = "bar";
-    var specifiers = [];
-    var bindings = this.get("declaration").getBindingIdentifiers();
-    for (var key in bindings) {
-      specifiers.push(buildExportSpecifier(bindings[key]));
+      let nodes = [getDeclar(node), node];
+      node.declaration = temp;
+      return nodes;
+    } else if (t.isFunctionDeclaration(declar)) {
+      // export default function Foo() {}
+      node._blockHoist = 2;
+
+      let nodes = [getDeclar(node), node];
+      node.declaration = declar.id;
+      return nodes;
     }
-    return [declar, t.exportNamedDeclaration(null, specifiers)];
-  }
-}
-
-export var Program = {
-  enter(node) {
-    var imports = [];
-    var rest    = [];
-
-    for (var i = 0; i < node.body.length; i++) {
-      var bodyNode = node.body[i];
-      if (t.isImportDeclaration(bodyNode)) {
-        imports.push(bodyNode);
-      } else {
-        rest.push(bodyNode);
-      }
-    }
-
-    node.body = imports.concat(rest);
   },
 
-  exit(node, parent, scope, file) {
-    if (!file.transformers["es6.modules"].canTransform()) return;
+  ExportNamedDeclaration(node) {
+    var declar = node.declaration;
 
-    if (file.moduleFormatter.setup) {
-      file.moduleFormatter.setup();
+    if (t.isClassDeclaration(declar)) {
+      // export class Foo {}
+      node.specifiers  = [buildExportSpecifier(declar.id)];
+
+      let nodes = [getDeclar(node), node];
+      node.declaration = null;
+      return nodes;
+    } else if (t.isFunctionDeclaration(declar)) {
+      // export function Foo() {}
+      node.specifiers  = [buildExportSpecifier(declar.id)];
+      node._blockHoist = 2;
+
+      let nodes = [getDeclar(node), node];
+      node.declaration = null;
+      return nodes;
+    } else if (t.isVariableDeclaration(declar)) {
+      // export var foo = "bar";
+      var specifiers = [];
+      var bindings = this.get("declaration").getBindingIdentifiers();
+      for (var key in bindings) {
+        specifiers.push(buildExportSpecifier(bindings[key]));
+      }
+      return [declar, t.exportNamedDeclaration(null, specifiers)];
+    }
+  },
+
+  Program: {
+    enter(node) {
+      var imports = [];
+      var rest    = [];
+
+      for (var i = 0; i < node.body.length; i++) {
+        var bodyNode = node.body[i];
+        if (t.isImportDeclaration(bodyNode)) {
+          imports.push(bodyNode);
+        } else {
+          rest.push(bodyNode);
+        }
+      }
+
+      node.body = imports.concat(rest);
+    },
+
+    exit(node, parent, scope, file) {
+      if (!file.transformers["es6.modules"].canTransform()) return;
+
+      if (file.moduleFormatter.setup) {
+        file.moduleFormatter.setup();
+      }
     }
   }
 };

@@ -26,14 +26,16 @@ function build(node, nodes, scope) {
   build(node, nodes, scope);
 }
 
-export function ExportNamedDeclaration(node, parent, scope) {
-  var nodes = [];
-  build(node, nodes, scope);
-  if (!nodes.length) return;
+export var visitor = {
+  ExportNamedDeclaration(node, parent, scope) {
+    var nodes = [];
+    build(node, nodes, scope);
+    if (!nodes.length) return;
 
-  if (node.specifiers.length >= 1) {
-    nodes.push(node);
+    if (node.specifiers.length >= 1) {
+      nodes.push(node);
+    }
+
+    return nodes;
   }
-
-  return nodes;
-}
+};

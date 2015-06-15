@@ -1,7 +1,7 @@
-var Transformer = require("../../lib/babel/transformation/transformer");
-var transform   = require("../../lib/babel/transformation");
-var babel       = require("../../lib/babel/api/node");
-var chai        = require("chai");
+var transform = require("../../lib/babel/transformation");
+var Plugin    = require("../../lib/babel/transformation/plugin");
+var babel     = require("../../lib/babel/api/node");
+var chai      = require("chai");
 
 suite("traversal path", function () {
   test("replaceWithSourceString", function () {
@@ -9,7 +9,7 @@ suite("traversal path", function () {
 
     var actualCode = transform(expectCode, {
       blacklist: "strict",
-      plugins: [new Transformer("foobar", {
+      plugins: [new Plugin("foobar", {
         FunctionDeclaration: function () {
           return "console.whatever()";
         }

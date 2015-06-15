@@ -26,15 +26,17 @@ var immutabilityVisitor = {
   }
 };
 
-export function JSXElement(node, parent, scope, file) {
-  if (node._hoisted) return;
+export var visitor = {
+  JSXElement(node) {
+    if (node._hoisted) return;
 
-  var state = { isImmutable: true };
-  this.traverse(immutabilityVisitor, state);
+    var state = { isImmutable: true };
+    this.traverse(immutabilityVisitor, state);
 
-  if (state.isImmutable) {
-    this.hoist();
-  } else {
-    node._hoisted = true;
+    if (state.isImmutable) {
+      this.hoist();
+    } else {
+      node._hoisted = true;
+    }
   }
-}
+};

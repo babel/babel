@@ -3,8 +3,10 @@ export var metadata = {
   group: "builtin-pre"
 };
 
-export function CallExpression(node, parent) {
-  if (this.get("callee").matchesPattern("console", true)) {
-    this.dangerouslyRemove();
+export var visitor = {
+  CallExpression() {
+    if (this.get("callee").matchesPattern("console", true)) {
+      this.dangerouslyRemove();
+    }
   }
-}
+};

@@ -5,11 +5,13 @@ export var metadata = {
   stage: 0
 };
 
-export function DoExpression(node) {
-  var body = node.body.body;
-  if (body.length) {
-    return body;
-  } else {
-    return t.identifier("undefined");
+export var visitor = {
+  DoExpression(node) {
+    var body = node.body.body;
+    if (body.length) {
+      return body;
+    } else {
+      return t.identifier("undefined");
+    }
   }
-}
+};

@@ -1,4 +1,13 @@
-import * as node from  "../../api/node";
+import Transformer from "../transformer";
+import Plugin from "../plugin";
+import * as types from "../../types";
+
+var context = {
+  Transformer,
+  Plugin,
+  types
+};
+
 import * as messages from "../../messages";
 import * as util from  "../../util";
 
@@ -11,7 +20,7 @@ export default class PluginManager {
       if (plugin.container === fn) return plugin.transformer;
     }
 
-    var transformer = fn(node);
+    var transformer = fn(context);
     PluginManager.memoisedPlugins.push({
       container: fn,
       transformer: transformer
@@ -55,7 +64,7 @@ export default class PluginManager {
     }
 
     // validate Transformer instance
-    if (!plugin.buildPass || plugin.constructor.name !== "Transformer") {
+    if (!plugin.buildPass || plugin.constructor.name !== "Plugin") {
       throw new TypeError(messages.get("pluginNotTransformer", name));
     }
 

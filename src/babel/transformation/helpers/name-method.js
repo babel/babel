@@ -68,10 +68,10 @@ var visit = function (node, name, scope) {
   // check to see if we have a local binding of the id we're setting inside of
   // the function, this is important as there are caveats associated
 
-  var bindingInfo = scope.getOwnBinding(name);
+  var binding = scope.getOwnBinding(name);
 
-  if (bindingInfo) {
-    if (bindingInfo.kind === "param") {
+  if (binding) {
+    if (binding.kind === "param") {
       // safari will blow up in strict mode with code like:
       //
       //   var t = function t(t) {};
@@ -133,8 +133,8 @@ export function bare(node, parent, scope) {
     id = parent.id;
 
     if (t.isIdentifier(id)) {
-      var bindingInfo = scope.parent.getBinding(id.name);
-      if (bindingInfo && bindingInfo.constant && scope.getBinding(id.name) === bindingInfo) {
+      var binding = scope.parent.getBinding(id.name);
+      if (binding && binding.constant && scope.getBinding(id.name) === binding) {
         // always going to reference this method
         node.id = id;
         return;

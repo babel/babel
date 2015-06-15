@@ -10,7 +10,7 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-require("../../helpers/build-react-transformer")(exports, {
+export var visitor = require("../../helpers/build-react-transformer")({
   pre(state) {
     state.callee = state.tagExpr;
   },

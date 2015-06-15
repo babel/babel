@@ -15,7 +15,7 @@ function references(node, scope, state) {
   return scope.getBindingIdentifier(node.name) === declared;
 }
 
-var visitor = {
+var refVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
     if (t.isFor(parent) && parent.left === node) return;
 
@@ -62,16 +62,16 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-export var BlockStatement = {
-  exit(node, parent, scope, file) {
-    var letRefs = node._letReferences;
-    if (!letRefs) return;
+export var visitor = {
+  "Program|Loop|BlockStatement": {
+    exit(node, parent, scope, file) {
+      var letRefs = node._letReferences;
+      if (!letRefs) return;
 
-    this.traverse(visitor, {
-      letRefs: letRefs,
-      file:    file
-    });
+      this.traverse(refVisitor, {
+        letRefs: letRefs,
+        file:    file
+      });
+    }
   }
 };
-
-export { BlockStatement as Program, BlockStatement as Loop };

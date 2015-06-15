@@ -53,7 +53,7 @@ export default {
   "es7.doExpressions":                     require("./es7/do-expressions"),
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "es7.functionBind":                      require("./es7/function-bind"),
-  "spec.undefinedToVoid":                  require("./spec/undefined-to-void"),
+  "spec.undefinedToVoid":                  require("babel-plugin-undefined-to-void"),
 
   //- builtin-advanced
   "es6.destructuring":                     require("./es6/destructuring"),

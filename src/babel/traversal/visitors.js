@@ -8,6 +8,24 @@ export function explode(visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;
 
+  // normalise pipes
+  for (let nodeType in visitor) {
+    if (shouldIgnoreKey(nodeType)) continue;
+
+    let parts = nodeType.split("|");
+    if (parts.length === 1) continue;
+
+    let fns = visitor[nodeType];
+    delete visitor[nodeType];
+
+    for (let part of (parts: Array)) {
+      visitor[part] = fns;
+    }
+  }
+
+  // verify data structure
+  verify(visitor);
+
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
   delete visitor.__esModule;
@@ -21,6 +39,7 @@ export function explode(visitor) {
   // ensure visitors are objects
   ensureEntranceObjects(visitor);
 
+  // ensure enter/exit callbacks are arrays
   ensureCallbackArrays(visitor);
 
   // add type wrappers

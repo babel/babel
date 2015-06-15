@@ -3,6 +3,8 @@ export var metadata = {
   group: "builtin-pre"
 };
 
-export function DebuggerStatement(node) {
-  this.dangerouslyRemove();
-}
+export var visitor = {
+  DebuggerStatement() {
+    this.dangerouslyRemove();
+  }
+};

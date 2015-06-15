@@ -36,16 +36,18 @@ function inferBindContext(bind, scope) {
   return tempId;
 }
 
-export function CallExpression(node, parent, scope, file) {
-  var bind = node.callee;
-  if (!t.isBindExpression(bind)) return;
+export var visitor = {
+  CallExpression(node, parent, scope) {
+    var bind = node.callee;
+    if (!t.isBindExpression(bind)) return;
 
-  var context = inferBindContext(bind, scope);
-  node.callee = t.memberExpression(bind.callee, t.identifier("call"));
-  node.arguments.unshift(context);
-}
+    var context = inferBindContext(bind, scope);
+    node.callee = t.memberExpression(bind.callee, t.identifier("call"));
+    node.arguments.unshift(context);
+  },
 
-export function BindExpression(node, parent, scope, file) {
-  var context = inferBindContext(node, scope);
-  return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]);
-}
+  BindExpression(node, parent, scope) {
+    var context = inferBindContext(node, scope);
+    return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]);
+  }
+};

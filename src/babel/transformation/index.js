@@ -1,4 +1,4 @@
-import Pipeline from "./transformer-pipeline";
+import Pipeline from "./pipeline";
 
 var pipeline = new Pipeline;
 
@@ -8,8 +8,11 @@ import transformers from "./transformers";
 
 for (var key in transformers) {
   var transformer = transformers[key];
-  var metadata = transformer.metadata = transformer.metadata || {};
-  metadata.group = metadata.group || "builtin-basic";
+
+  if (typeof transformer === "object") {
+    var metadata = transformer.metadata = transformer.metadata || {};
+    metadata.group = metadata.group || "builtin-basic";
+  }
 }
 
 pipeline.addTransformers(transformers);

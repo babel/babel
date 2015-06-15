@@ -44,47 +44,47 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-export function VariableDeclaration(node, parent, scope, file) {
-  if (!isLet(node, parent)) return;
+export var visitor = {
+  VariableDeclaration(node, parent, scope, file) {
+    if (!isLet(node, parent)) return;
 
-  if (isLetInitable(node) && file.transformers["es6.spec.blockScoping"].canTransform()) {
-    var nodes = [node];
+    if (isLetInitable(node) && file.transformers["es6.spec.blockScoping"].canTransform()) {
+      var nodes = [node];
 
-    for (var i = 0; i < node.declarations.length; i++) {
-      var decl = node.declarations[i];
-      if (decl.init) {
-        var assign = t.assignmentExpression("=", decl.id, decl.init);
-        assign._ignoreBlockScopingTDZ = true;
-        nodes.push(t.expressionStatement(assign));
+      for (var i = 0; i < node.declarations.length; i++) {
+        var decl = node.declarations[i];
+        if (decl.init) {
+          var assign = t.assignmentExpression("=", decl.id, decl.init);
+          assign._ignoreBlockScopingTDZ = true;
+          nodes.push(t.expressionStatement(assign));
+        }
+        decl.init = file.addHelper("temporal-undefined");
       }
-      decl.init = file.addHelper("temporal-undefined");
+
+      node._blockHoist = 2;
+
+      return nodes;
+    }
+  },
+
+  Loop(node, parent, scope, file) {
+    var init = node.left || node.init;
+    if (isLet(init, node)) {
+      t.ensureBlock(node);
+      node.body._letDeclarators = [init];
     }
 
-    node._blockHoist = 2;
+    var blockScoping = new BlockScoping(this, this.get("body"), parent, scope, file);
+    return blockScoping.run();
+  },
 
-    return nodes;
+  "BlockStatement|Program"(block, parent, scope, file) {
+    if (!t.isLoop(parent)) {
+      var blockScoping = new BlockScoping(null, this, parent, scope, file);
+      blockScoping.run();
+    }
   }
-}
-
-export function Loop(node, parent, scope, file) {
-  var init = node.left || node.init;
-  if (isLet(init, node)) {
-    t.ensureBlock(node);
-    node.body._letDeclarators = [init];
-  }
-
-  var blockScoping = new BlockScoping(this, this.get("body"), parent, scope, file);
-  return blockScoping.run();
-}
-
-export function BlockStatement(block, parent, scope, file) {
-  if (!t.isLoop(parent)) {
-    var blockScoping = new BlockScoping(null, this, parent, scope, file);
-    blockScoping.run();
-  }
-}
-
-export { BlockStatement as Program };
+};
 
 function replace(node, parent, scope, remaps) {
   var remap = remaps[node.name];

@@ -4,8 +4,10 @@ export var metadata = {
   optional: true
 };
 
-export function ForOfStatement(node, parent, scope, file) {
-  if (this.get("right").isGenericType("Array")) {
-    return _ForOfStatementArray.call(this, node, scope, file);
+export var visitor = {
+  ForOfStatement(node, parent, scope, file) {
+    if (this.get("right").isGenericType("Array")) {
+      return _ForOfStatementArray.call(this, node, scope, file);
+    }
   }
-}
+};

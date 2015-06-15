@@ -9,11 +9,13 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-export function Func/*tion*/(node, parent, scope, file) {
-  if (node.generator || node.async) return;
-  var tailCall = new TailCallTransformer(this, scope, file);
-  tailCall.run();
-}
+export var visitor = {
+  Function(node, parent, scope, file) {
+    if (node.generator || node.async) return;
+    var tailCall = new TailCallTransformer(this, scope, file);
+    tailCall.run();
+  }
+};
 
 function returnBlock(expr) {
   return t.blockStatement([t.returnStatement(expr)]);

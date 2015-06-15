@@ -2,40 +2,42 @@ import * as messages from "../../../messages";
 import * as util from  "../../../util";
 import * as t from "../../../types";
 
-export function ForOfStatement(node, parent, scope, file) {
-  if (this.get("right").isArrayExpression()) {
-    return _ForOfStatementArray.call(this, node, scope, file);
+export var visitor = {
+  ForOfStatement(node, parent, scope, file) {
+    if (this.get("right").isArrayExpression()) {
+      return _ForOfStatementArray.call(this, node, scope, file);
+    }
+
+    var callback = spec;
+    if (file.isLoose("es6.forOf")) callback = loose;
+
+    var build  = callback(node, parent, scope, file);
+    var declar = build.declar;
+    var loop   = build.loop;
+    var block  = loop.body;
+
+    // ensure that it's a block so we can take all its statements
+    t.ensureBlock(node);
+
+    // add the value declaration to the new loop body
+    if (declar) {
+      block.body.push(declar);
+    }
+
+    // push the rest of the original loop body onto our new body
+    block.body = block.body.concat(node.body.body);
+
+    t.inherits(loop, node);
+    t.inherits(loop.body, node.body);
+
+    if (build.replaceParent) {
+      this.parentPath.replaceWithMultiple(build.node);
+      this.dangerouslyRemove();
+    } else {
+      return build.node;
+    }
   }
-
-  var callback = spec;
-  if (file.isLoose("es6.forOf")) callback = loose;
-
-  var build  = callback(node, parent, scope, file);
-  var declar = build.declar;
-  var loop   = build.loop;
-  var block  = loop.body;
-
-  // ensure that it's a block so we can take all its statements
-  t.ensureBlock(node);
-
-  // add the value declaration to the new loop body
-  if (declar) {
-    block.body.push(declar);
-  }
-
-  // push the rest of the original loop body onto our new body
-  block.body = block.body.concat(node.body.body);
-
-  t.inherits(loop, node);
-  t.inherits(loop.body, node.body);
-
-  if (build.replaceParent) {
-    this.parentPath.replaceWithMultiple(build.node);
-    this.dangerouslyRemove();
-  } else {
-    return build.node;
-  }
-}
+};
 
 export function _ForOfStatementArray(node, scope, file) {
   var nodes = [];

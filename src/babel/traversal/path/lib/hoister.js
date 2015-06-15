@@ -8,17 +8,17 @@ var referenceVisitor = {
     }
 
     // direct references that we need to track to hoist this to the highest scope we can
-    var bindingInfo = scope.getBinding(node.name);
-    if (!bindingInfo) return;
+    var binding = scope.getBinding(node.name);
+    if (!binding) return;
 
     // this binding isn't accessible from the parent scope so we can safely ignore it
     // eg. it's in a closure etc
-    if (bindingInfo !== state.scope.getBinding(node.name)) return;
+    if (binding !== state.scope.getBinding(node.name)) return;
 
-    if (bindingInfo.constant) {
-      state.bindings[node.name] = bindingInfo;
+    if (binding.constant) {
+      state.bindings[node.name] = binding;
     } else {
-      for (var violationPath of (bindingInfo.constantViolations: Array)) {
+      for (var violationPath of (binding.constantViolations: Array)) {
         state.breakOnScopePaths.push(violationPath.scope.path);
       }
     }

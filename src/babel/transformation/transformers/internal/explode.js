@@ -25,9 +25,10 @@ function buildListClone(listKey, bindingKey, refKey) {
   };
 }
 
-export var Property = buildClone("value", "key", function (node) {
-  return t.isAssignmentPattern(node.value) && node.value.left === node.key;
-});
-
-export var ExportDeclaration = buildListClone("specifiers", "local", "exported");
-export var ImportDeclaration = buildListClone("specifiers", "local", "imported");
+export var visitor = {
+  Property: buildClone("value", "key", function (node) {
+    return t.isAssignmentPattern(node.value) && node.value.left === node.key;
+  }),
+  ExportDeclaration: buildListClone("specifiers", "local", "exported"),
+  ImportDeclaration: buildListClone("specifiers", "local", "imported")
+};

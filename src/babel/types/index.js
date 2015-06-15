@@ -312,7 +312,6 @@ export function inherits(child: Object, parent: Object): Object {
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
-exports.__esModule = true;
 assign(t, require("./retrievers"));
 assign(t, require("./validators"));
 assign(t, require("./converters"));

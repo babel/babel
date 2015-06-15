@@ -7,11 +7,13 @@ export var metadata = {
   stage: 0
 };
 
-export function ComprehensionExpression(node, parent, scope, file) {
-  var callback = array;
-  if (node.generator) callback = generator;
-  return callback(node, parent, scope);
-}
+export var visitor = {
+  ComprehensionExpression(node, parent, scope) {
+    var callback = array;
+    if (node.generator) callback = generator;
+    return callback(node, parent, scope);
+  }
+};
 
 function generator(node) {
   var body = [];

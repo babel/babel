@@ -7,8 +7,10 @@ export var metadata = {
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-export function Func/*tion*/(node, parent, scope, file) {
-  if (!node.async || node.generator) return;
+export var visitor = {
+  Function(node, parent, scope, file) {
+    if (!node.async || node.generator) return;
 
-  return remapAsyncToGenerator(this, file.addHelper("async-to-generator"));
-}
+    return remapAsyncToGenerator(this, file.addHelper("async-to-generator"));
+  }
+};

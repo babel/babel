@@ -10,15 +10,17 @@ import * as t from "../../../types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
 
-export function ClassDeclaration(node, parent, scope, file) {
-  return t.variableDeclaration("let", [
-    t.variableDeclarator(node.id, t.toExpression(node))
-  ]);
-}
+export var visitor = {
+  ClassDeclaration(node) {
+    return t.variableDeclaration("let", [
+      t.variableDeclarator(node.id, t.toExpression(node))
+    ]);
+  },
 
-export function ClassExpression(node, parent, scope, file) {
-  return new ClassTransformer(this, file).run();
-}
+  ClassExpression(node, parent, scope, file) {
+    return new ClassTransformer(this, file).run();
+  }
+};
 
 var collectPropertyReferencesVisitor = {
   Identifier: {

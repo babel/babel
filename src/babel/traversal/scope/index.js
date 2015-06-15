@@ -31,9 +31,9 @@ var collectorVisitor = {
   },
 
   ReferencedIdentifier(node) {
-    var bindingInfo = this.scope.getBinding(node.name);
-    if (bindingInfo) {
-      bindingInfo.reference();
+    var binding = this.scope.getBinding(node.name);
+    if (binding) {
+      binding.reference(this);
     } else {
       this.scope.getProgramParent().addGlobal(node);
     }

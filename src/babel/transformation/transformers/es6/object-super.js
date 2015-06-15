@@ -17,17 +17,19 @@ function Property(path, node, scope, getObjectRef, file) {
   replaceSupers.replace();
 }
 
-export function ObjectExpression(node, parent, scope, file) {
-  var objectRef;
-  var getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");
+export var visitor = {
+  ObjectExpression(node, parent, scope, file) {
+    var objectRef;
+    var getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");
 
-  var propPaths = this.get("properties");
-  for (var i = 0; i < node.properties.length; i++) {
-    Property(propPaths[i], node.properties[i], scope, getObjectRef, file);
-  }
+    var propPaths = this.get("properties");
+    for (var i = 0; i < node.properties.length; i++) {
+      Property(propPaths[i], node.properties[i], scope, getObjectRef, file);
+    }
 
-  if (objectRef) {
-    scope.push({ id: objectRef });
-    return t.assignmentExpression("=", objectRef, node);
+    if (objectRef) {
+      scope.push({ id: objectRef });
+      return t.assignmentExpression("=", objectRef, node);
+    }
   }
-}
+};

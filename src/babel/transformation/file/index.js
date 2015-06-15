@@ -4,7 +4,6 @@ import moduleFormatters from "../modules";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import NodePath from "../../traversal/path";
-import Transformer from "../transformer";
 import isFunction from "lodash/lang/isFunction";
 import isAbsolute from "path-is-absolute";
 import resolveRc from "./options/resolve-rc";
@@ -14,13 +13,14 @@ import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
-import Hub from "../../traversal/hub";
 import assign from "lodash/object/assign";
 import Logger from "./logger";
+import Plugin from "../plugin";
 import parse from "../../helpers/parse";
 import merge from "../../helpers/merge";
 import slash from "slash";
 import clone from "lodash/lang/clone";
+import Hub from "../../traversal/hub";
 import * as util from  "../../util";
 import path from "path";
 import * as t from "../../types";
@@ -246,7 +246,7 @@ export default class File {
 
     // build dependency graph
     for (let pass of (stack: Array)) {
-      for (var dep of (pass.transformer.dependencies: Array)) {
+      for (var dep of (pass.plugin.dependencies: Array)) {
         this.transformerDependencies[dep] = pass.key;
       }
     }
@@ -263,7 +263,7 @@ export default class File {
       // been merged
       if (ignore.indexOf(pass) >= 0) continue;
 
-      var group = pass.transformer.metadata.group;
+      var group = pass.plugin.metadata.group;
 
       // can't merge
       if (!pass.canTransform() || !group) {
@@ -273,7 +273,7 @@ export default class File {
 
       var mergeStack = [];
       for (let pass of (_stack: Array)) {
-        if (pass.transformer.metadata.group === group) {
+        if (pass.plugin.metadata.group === group) {
           mergeStack.push(pass);
           ignore.push(pass);
         }
@@ -281,11 +281,11 @@ export default class File {
 
       var visitors = [];
       for (let pass of (mergeStack: Array)) {
-        visitors.push(pass.handlers);
+        visitors.push(pass.plugin.visitor);
       }
       var visitor = traverse.visitors.merge(visitors);
-      var mergeTransformer = new Transformer(group, visitor);
-      stack.push(mergeTransformer.buildPass(this));
+      var mergePlugin = new Plugin(group, { visitor });
+      stack.push(mergePlugin.buildPass(this));
     }
 
     return stack;
@@ -586,7 +586,7 @@ export default class File {
 
   call(key: string) {
     for (var pass of (this.uncollapsedTransformerStack: Array)) {
-      var fn = pass.transformer[key];
+      var fn = pass.plugin[key];
       if (fn) fn(this);
     }
   }

@@ -34,10 +34,10 @@ export const MESSAGES = {
   pluginIllegalKind: "Illegal kind $1 for plugin $2",
   pluginIllegalPosition: "Illegal position $1 for plugin $2",
   pluginKeyCollision: "The plugin $1 collides with another of the same name",
-  pluginNotTransformer: "The plugin $1 didn't export a Transformer instance",
+  pluginNotTransformer: "The plugin $1 didn't export a Plugin instance",
   pluginUnknown: "Unknown plugin $1",
 
-  transformerNotFile: "Transformer $1 is resolving to a different Babel version to what is doing the actual transformation..."
+  pluginNotFile: "Plugin $1 is resolving to a different Babel version to what is doing the actual transformation..."
 };
 
 export function get(key: String, ...args) {

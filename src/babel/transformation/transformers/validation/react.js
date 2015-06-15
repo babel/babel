@@ -13,12 +13,14 @@ function check(source, file) {
   }
 }
 
-export function CallExpression(node, parent, scope, file) {
-  if (this.get("callee").isIdentifier({ name: "require" }) && node.arguments.length === 1) {
-    check(node.arguments[0], file);
-  }
-}
+export var visitor = {
+  CallExpression(node, parent, scope, file) {
+    if (this.get("callee").isIdentifier({ name: "require" }) && node.arguments.length === 1) {
+      check(node.arguments[0], file);
+    }
+  },
 
-export function ModuleDeclaration(node, parent, scope, file) {
-  check(node.source, file);
-}
+  ModuleDeclaration(node, parent, scope, file) {
+    check(node.source, file);
+  }
+};

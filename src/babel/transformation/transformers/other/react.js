@@ -7,7 +7,24 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-export function Program(node, parent, scope, file) {
+export var visitor = require("../../helpers/build-react-transformer")({
+  pre(state) {
+    var tagName = state.tagName;
+    var args    = state.args;
+    if (react.isCompatTag(tagName)) {
+      args.push(t.literal(tagName));
+    } else {
+      args.push(state.tagExpr);
+    }
+  },
+
+  post(state, file) {
+    state.callee = file.get("jsxIdentifier");
+  }
+});
+
+
+visitor.Program = function (node, parent, scope, file) {
   var id = file.opts.jsxPragma;
 
   for (var i = 0; i < file.ast.comments.length; i++) {
@@ -26,20 +43,4 @@ export function Program(node, parent, scope, file) {
   file.set("jsxIdentifier", id.split(".").map(t.identifier).reduce(function (object, property) {
     return t.memberExpression(object, property);
   }));
-}
-
-require("../../helpers/build-react-transformer")(exports, {
-  pre(state) {
-    var tagName = state.tagName;
-    var args    = state.args;
-    if (react.isCompatTag(tagName)) {
-      args.push(t.literal(tagName));
-    } else {
-      args.push(state.tagExpr);
-    }
-  },
-
-  post(state, file) {
-    state.callee = file.get("jsxIdentifier");
-  }
-});
+};

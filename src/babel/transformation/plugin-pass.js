@@ -7,14 +7,13 @@ import type File from "./file";
  * AST and running it's parent transformers handlers over it.
  */
 
-export default class TransformerPass {
-  constructor(file: File, transformer: Transformer) {
-    this.transformer = transformer;
-    this.handlers    = transformer.handlers;
-    this.file        = file;
-    this.key         = transformer.key;
+export default class PluginPass {
+  constructor(file: File, plugin: Transformer) {
+    this.plugin = plugin;
+    this.file   = file;
+    this.key    = plugin.key;
 
-    if (this.canTransform() && transformer.metadata.experimental && !file.opts.experimental) {
+    if (this.canTransform() && plugin.metadata.experimental && !file.opts.experimental) {
       file.log.warn(`THE TRANSFORMER ${this.key} HAS BEEN MARKED AS EXPERIMENTAL AND IS WIP. USE AT YOUR OWN RISK. ` +
                     "THIS WILL HIGHLY LIKELY BREAK YOUR CODE SO USE WITH **EXTREME** CAUTION. ENABLE THE " +
                     "`experimental` OPTION TO IGNORE THIS WARNING.");
@@ -23,13 +22,13 @@ export default class TransformerPass {
 
   canTransform(): boolean {
     return this.file.transformerDependencies[this.key] ||
-           this.file.pipeline.canTransform(this.transformer, this.file.opts);
+           this.file.pipeline.canTransform(this.plugin, this.file.opts);
   }
 
   transform() {
     var file = this.file;
     file.log.debug(`Start transformer ${this.key}`);
-    traverse(file.ast, this.handlers, file.scope, file);
+    traverse(file.ast, this.plugin.visitor, file.scope, file);
     file.log.debug(`Finish transformer ${this.key}`);
   }
 }

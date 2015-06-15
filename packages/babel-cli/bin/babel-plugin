@@ -1,0 +1,117 @@
+#!/usr/bin/env node
+
+var readline = require("readline");
+var child    = require("child_process");
+var path     = require("path");
+var fs       = require("fs");
+
+function spawn(cmd, args, callback) {
+  console.log(">", cmd, args);
+
+  var spawn = child.spawn(cmd, args, { stdio: "inherit" });
+
+  spawn.on("exit", function (code) {
+    if (code === 0) {
+      if (callback) callback();
+    } else {
+      console.log("Killing...");
+      process.exit(1);
+    }
+  });
+}
+
+function spawnMultiple(cmds) {
+  function next() {
+    var cmd = cmds.shift();
+    if (cmd) {
+      spawn(cmd.command, cmd.args, next);
+    } else {
+      process.exit();
+    }
+  }
+
+  next();
+}
+
+function write(filename, content) {
+  console.log(filename);
+  fs.writeFileSync(filename, content);
+}
+
+var BABEL_PLUGIN_PREFIX = "babel-plugin-";
+
+var cmds = {
+  init: function () {
+    var name = path.basename(process.cwd());
+
+    if (name.indexOf(BABEL_PLUGIN_PREFIX) === 0) {
+      name = name.slice(BABEL_PLUGIN_PREFIX.length);
+    }
+
+    write("package.json", JSON.stringify({
+      name: BABEL_PLUGIN_PREFIX + name,
+      version: "1.0.0",
+      description: "",
+      license: "MIT",
+      main: "lib/index.js",
+
+      devDependencies: {
+        babel: "^5.6.0"
+      },
+
+      peerDependencies: {
+        babel: "^5.6.0"
+      },
+
+      scripts: {
+        build: "babel-plugin build",
+        push:  "babel-plugin publish",
+        test:  "babel-plugin test"
+      },
+
+      keywords: ["babel-plugin"]
+    }, null, "  "));
+
+    write(".npmignore", "node_modules\n*.log\nsrc");
+
+    write(".gitignore", "node_modules\n*.log\nlib");
+
+    fs.mkdirSync("src");
+    write("src/index.js", "");
+  },
+
+  build: function () {
+    spawn("babel", ["src", "--out-dir", "lib"]);
+  },
+
+  publish: function () {
+    var rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    var pkg = require(process.cwd() + "/package.json");
+    console.log("Current verison:", pkg.version);
+
+    rl.question("New version (enter nothing for patch): ", function (newVersion) {
+      newVersion = newVersion || "patch";
+
+      spawnMultiple([
+        { command: "git", args: ["pull"] },
+        { command: "git", args: ["push"] },
+        { command: "babel-plugin", args: ["build"] },
+        { command: "npm", args: ["version", newVersion] },
+        { command: "npm", args: ["publish"] },
+        { command: "git", args: ["push", "--follow-tags"] }
+      ]);
+    });
+  }
+};
+
+var cmd = cmds[process.argv[2]];
+if (cmd) {
+  cmd();
+} else {
+  console.error("Unknown command:", cmd);
+  process.exit(1);
+}

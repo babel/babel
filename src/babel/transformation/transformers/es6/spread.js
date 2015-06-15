@@ -43,76 +43,78 @@ function build(props, scope) {
   return nodes;
 }
 
-export function ArrayExpression(node, parent, scope) {
-  var elements = node.elements;
-  if (!hasSpread(elements)) return;
+export var visitor = {
+  ArrayExpression(node, parent, scope) {
+    var elements = node.elements;
+    if (!hasSpread(elements)) return;
 
-  var nodes = build(elements, scope);
-  var first = nodes.shift();
+    var nodes = build(elements, scope);
+    var first = nodes.shift();
 
-  if (!t.isArrayExpression(first)) {
-    nodes.unshift(first);
-    first = t.arrayExpression([]);
-  }
-
-  return t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
-}
-
-export function CallExpression(node, parent, scope) {
-  var args = node.arguments;
-  if (!hasSpread(args)) return;
-
-  var contextLiteral = t.identifier("undefined");
-
-  node.arguments = [];
-
-  var nodes;
-  if (args.length === 1 && args[0].argument.name === "arguments") {
-    nodes = [args[0].argument];
-  } else {
-    nodes = build(args, scope);
-  }
-
-  var first = nodes.shift();
-  if (nodes.length) {
-    node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
-  } else {
-    node.arguments.push(first);
-  }
-
-  var callee = node.callee;
-
-  if (this.get("callee").isMemberExpression()) {
-    var temp = scope.maybeGenerateMemoised(callee.object);
-    if (temp) {
-      callee.object = t.assignmentExpression("=", temp, callee.object);
-      contextLiteral = temp;
-    } else {
-      contextLiteral = callee.object;
+    if (!t.isArrayExpression(first)) {
+      nodes.unshift(first);
+      first = t.arrayExpression([]);
     }
-    t.appendToMemberExpression(callee, t.identifier("apply"));
-  } else {
-    node.callee = t.memberExpression(node.callee, t.identifier("apply"));
+
+    return t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
+  },
+
+  CallExpression(node, parent, scope) {
+    var args = node.arguments;
+    if (!hasSpread(args)) return;
+
+    var contextLiteral = t.identifier("undefined");
+
+    node.arguments = [];
+
+    var nodes;
+    if (args.length === 1 && args[0].argument.name === "arguments") {
+      nodes = [args[0].argument];
+    } else {
+      nodes = build(args, scope);
+    }
+
+    var first = nodes.shift();
+    if (nodes.length) {
+      node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
+    } else {
+      node.arguments.push(first);
+    }
+
+    var callee = node.callee;
+
+    if (this.get("callee").isMemberExpression()) {
+      var temp = scope.maybeGenerateMemoised(callee.object);
+      if (temp) {
+        callee.object = t.assignmentExpression("=", temp, callee.object);
+        contextLiteral = temp;
+      } else {
+        contextLiteral = callee.object;
+      }
+      t.appendToMemberExpression(callee, t.identifier("apply"));
+    } else {
+      node.callee = t.memberExpression(node.callee, t.identifier("apply"));
+    }
+
+    node.arguments.unshift(contextLiteral);
+  },
+
+  NewExpression(node, parent, scope, file) {
+    var args = node.arguments;
+    if (!hasSpread(args)) return;
+
+    var nodes = build(args, scope);
+
+    var context = t.arrayExpression([t.literal(null)]);
+
+    args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
+
+    return t.newExpression(
+      t.callExpression(
+        t.memberExpression(file.addHelper("bind"), t.identifier("apply")),
+        [node.callee, args]
+      ),
+      []
+    );
   }
-
-  node.arguments.unshift(contextLiteral);
-}
-
-export function NewExpression(node, parent, scope, file) {
-  var args = node.arguments;
-  if (!hasSpread(args)) return;
-
-  var nodes = build(args, scope);
-
-  var context = t.arrayExpression([t.literal(null)]);
-
-  args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
-
-  return t.newExpression(
-    t.callExpression(
-      t.memberExpression(file.addHelper("bind"), t.identifier("apply")),
-      [node.callee, args]
-    ),
-    []
-  );
-}
+};

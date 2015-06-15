@@ -15,7 +15,6 @@ export default function traverse(parent, opts, scope, state, parentPath) {
 
   if (!opts) opts = {};
 
-  visitors.verify(opts);
   visitors.explode(opts);
 
   // array of nodes

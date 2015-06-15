@@ -23,14 +23,16 @@ function statementList(key, path) {
   }
 }
 
-export function BlockStatement(node, parent) {
-  if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
-    return;
+export var visitor = {
+  BlockStatement(node, parent) {
+    if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
+      return;
+    }
+
+    statementList("body", this);
+  },
+
+  SwitchCase() {
+    statementList("consequent", this);
   }
-
-  statementList("body", this);
-}
-
-export function SwitchCase() {
-  statementList("consequent", this);
-}
+};
