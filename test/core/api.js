@@ -393,15 +393,15 @@ suite("api", function () {
     test("not transformer", function () {
       assert.throws(function () {
         new PluginManager().validate("foobar", {});
-      }, /didn't export a Transformer instance/);
+      }, /didn't export a Plugin instance/);
 
       assert.throws(function () {
         new PluginManager().validate("foobar", "");
-      }, /didn't export a Transformer instance/);
+      }, /didn't export a Plugin instance/);
 
       assert.throws(function () {
         new PluginManager().validate("foobar", []);
-      }, /didn't export a Transformer instance/);
+      }, /didn't export a Plugin instance/);
     });
 
     test("object request");

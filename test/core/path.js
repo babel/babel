@@ -10,8 +10,10 @@ suite("traversal path", function () {
     var actualCode = transform(expectCode, {
       blacklist: "strict",
       plugins: [new Plugin("foobar", {
-        FunctionDeclaration: function () {
-          return "console.whatever()";
+        visitor: {
+          FunctionDeclaration: function () {
+            return "console.whatever()";
+          }
         }
       })]
     }).code;
