@@ -2445,4 +2445,99 @@ describe("expressions containing yield subexpressions", function() {
       done: true
     });
   });
+
+  it("should work even with getter member expressions", function() {
+    function *gen() {
+      return a.b + (yield "asdf");
+    }
+
+    var a = {};
+    var b = 0;
+
+    Object.defineProperty(a, "b", {
+      get: function() {
+        return ++b;
+      }
+    });
+
+    var g = gen();
+
+    assert.strictEqual(a.b, 1);
+
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+
+    assert.strictEqual(a.b, 3);
+
+    assert.deepEqual(g.next(2), {
+      value: 4,
+      done: true
+    });
+  });
+
+  it("should evaluate all array elements before yielding", function() {
+    function *gen() {
+      return [a, yield "asdf", a];
+    }
+
+    var a = 1;
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+
+    a = 3;
+
+    assert.deepEqual(g.next(2), {
+      value: [1, 2, 3],
+      done: true
+    });
+  });
+
+  it("should handle callee member expressions correctly", function() {
+    function *gen() {
+      a = a.slice(0).concat(yield "asdf");
+      return a;
+    }
+
+    var a = [];
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+
+    a.push(1);
+
+    assert.deepEqual(g.next(2), {
+      value: [2],
+      done: true
+    });
+  });
+
+  it("should handle implicit stringification correctly", function() {
+    function *gen() {
+      return a + (yield "asdf");
+    }
+
+    var a = [1, 2];
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+
+    a = [4,5];
+
+    assert.deepEqual(g.next(",3"), {
+      value: "1,2,3",
+      done: true
+    });
+  });
 });

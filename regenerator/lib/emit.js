@@ -992,28 +992,79 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "CallExpression":
-    var oldCalleePath = path.get("callee");
-    var newCallee = self.explodeExpression(oldCalleePath);
+    var calleePath = path.get("callee");
+    var argsPath = path.get("arguments");
 
-    // If the callee was not previously a MemberExpression, then the
-    // CallExpression was "unqualified," meaning its `this` object should
-    // be the global object. If the exploded expression has become a
-    // MemberExpression, then we need to force it to be unqualified by
-    // using the (0, object.property)(...) trick; otherwise, it will
-    // receive the object of the MemberExpression as its `this` object.
-    if (!n.MemberExpression.check(oldCalleePath.node) &&
-        n.MemberExpression.check(newCallee)) {
-      newCallee = b.sequenceExpression([
-        b.literal(0),
-        newCallee
-      ]);
+    var newCallee;
+    var newArgs = [];
+
+    var hasLeapingArgs = false;
+    argsPath.each(function(argPath) {
+      hasLeapingArgs = hasLeapingArgs ||
+        meta.containsLeap(argPath.value);
+    });
+
+    if (n.MemberExpression.check(calleePath.value)) {
+      if (hasLeapingArgs) {
+        // If the arguments of the CallExpression contained any yield
+        // expressions, then we need to be sure to evaluate the callee
+        // before evaluating the arguments, but if the callee was a member
+        // expression, then we must be careful that the object of the
+        // member expression still gets bound to `this` for the call.
+
+        var newObject = explodeViaTempVar(
+          // Assign the exploded callee.object expression to a temporary
+          // variable so that we can use it twice without reevaluating it.
+          self.makeTempVar(),
+          calleePath.get("object")
+        );
+
+        var newProperty = calleePath.value.computed
+          ? explodeViaTempVar(null, calleePath.get("property"))
+          : calleePath.value.property;
+
+        newArgs.unshift(newObject);
+
+        newCallee = b.memberExpression(
+          b.memberExpression(
+            newObject,
+            newProperty,
+            calleePath.value.computed
+          ),
+          b.identifier("call"),
+          false
+        );
+
+      } else {
+        newCallee = self.explodeExpression(calleePath);
+      }
+
+    } else {
+      newCallee = self.explodeExpression(calleePath);
+
+      if (n.MemberExpression.check(newCallee)) {
+        // If the callee was not previously a MemberExpression, then the
+        // CallExpression was "unqualified," meaning its `this` object
+        // should be the global object. If the exploded expression has
+        // become a MemberExpression (e.g. a context property, probably a
+        // temporary variable), then we need to force it to be unqualified
+        // by using the (0, object.property)(...) trick; otherwise, it
+        // will receive the object of the MemberExpression as its `this`
+        // object.
+        newCallee = b.sequenceExpression([
+          b.literal(0),
+          newCallee
+        ]);
+      }
     }
+
+    argsPath.each(function(argPath) {
+      newArgs.push(explodeViaTempVar(null, argPath));
+    });
 
     return finish(b.callExpression(
       newCallee,
-      path.get("arguments").map(function(argPath) {
-        return explodeViaTempVar(null, argPath);
-      })
+      newArgs
     ));
 
   case "NewExpression":
