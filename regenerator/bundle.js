@@ -5553,36 +5553,6 @@ Ep.contextProperty = function(name, computed) {
   );
 };
 
-var volatileContextPropertyNames = {
-  prev: true,
-  next: true,
-  sent: true,
-  rval: true
-};
-
-// A "volatile" context property is a MemberExpression like context.sent
-// that should probably be stored in a temporary variable when there's a
-// possibility the property will get overwritten.
-Ep.isVolatileContextProperty = function(expr) {
-  if (n.MemberExpression.check(expr)) {
-    if (expr.computed) {
-      // If it's a computed property such as context[couldBeAnything],
-      // assume the worst in terms of volatility.
-      return true;
-    }
-
-    if (n.Identifier.check(expr.object) &&
-        n.Identifier.check(expr.property) &&
-        expr.object.name === this.contextId.name &&
-        hasOwn.call(volatileContextPropertyNames,
-                    expr.property.name)) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 // Shorthand for setting context.rval and jumping to `context.stop()`.
 Ep.stop = function(rval) {
   if (rval) {
@@ -6422,17 +6392,18 @@ Ep.explodeExpression = function(path, ignoreResult) {
       // Side effects already emitted above.
 
     } else if (tempVar || (hasLeapingChildren &&
-                           (self.isVolatileContextProperty(result) ||
-                            meta.hasSideEffects(result)))) {
+                           !n.Literal.check(result))) {
       // If tempVar was provided, then the result will always be assigned
       // to it, even if the result does not otherwise need to be assigned
       // to a temporary variable.  When no tempVar is provided, we have
       // the flexibility to decide whether a temporary variable is really
-      // necessary.  In general, temporary assignment is required only
-      // when some other child contains a leap and the child in question
-      // is a context property like $ctx.sent that might get overwritten
-      // or an expression with side effects that need to occur in proper
-      // sequence relative to the leap.
+      // necessary.  Unfortunately, in general, a temporary variable is
+      // required whenever any child contains a yield expression, since it
+      // is difficult to prove (at all, let alone efficiently) whether
+      // this result would evaluate to the same value before and after the
+      // yield (see #206).  One narrow case where we can prove it doesn't
+      // matter (and thus we do not need a temporary variable) is when the
+      // result in question is a Literal value.
       result = self.emitAssign(
         tempVar || self.makeTempVar(),
         result
@@ -6456,28 +6427,79 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "CallExpression":
-    var oldCalleePath = path.get("callee");
-    var newCallee = self.explodeExpression(oldCalleePath);
+    var calleePath = path.get("callee");
+    var argsPath = path.get("arguments");
 
-    // If the callee was not previously a MemberExpression, then the
-    // CallExpression was "unqualified," meaning its `this` object should
-    // be the global object. If the exploded expression has become a
-    // MemberExpression, then we need to force it to be unqualified by
-    // using the (0, object.property)(...) trick; otherwise, it will
-    // receive the object of the MemberExpression as its `this` object.
-    if (!n.MemberExpression.check(oldCalleePath.node) &&
-        n.MemberExpression.check(newCallee)) {
-      newCallee = b.sequenceExpression([
-        b.literal(0),
-        newCallee
-      ]);
+    var newCallee;
+    var newArgs = [];
+
+    var hasLeapingArgs = false;
+    argsPath.each(function(argPath) {
+      hasLeapingArgs = hasLeapingArgs ||
+        meta.containsLeap(argPath.value);
+    });
+
+    if (n.MemberExpression.check(calleePath.value)) {
+      if (hasLeapingArgs) {
+        // If the arguments of the CallExpression contained any yield
+        // expressions, then we need to be sure to evaluate the callee
+        // before evaluating the arguments, but if the callee was a member
+        // expression, then we must be careful that the object of the
+        // member expression still gets bound to `this` for the call.
+
+        var newObject = explodeViaTempVar(
+          // Assign the exploded callee.object expression to a temporary
+          // variable so that we can use it twice without reevaluating it.
+          self.makeTempVar(),
+          calleePath.get("object")
+        );
+
+        var newProperty = calleePath.value.computed
+          ? explodeViaTempVar(null, calleePath.get("property"))
+          : calleePath.value.property;
+
+        newArgs.unshift(newObject);
+
+        newCallee = b.memberExpression(
+          b.memberExpression(
+            newObject,
+            newProperty,
+            calleePath.value.computed
+          ),
+          b.identifier("call"),
+          false
+        );
+
+      } else {
+        newCallee = self.explodeExpression(calleePath);
+      }
+
+    } else {
+      newCallee = self.explodeExpression(calleePath);
+
+      if (n.MemberExpression.check(newCallee)) {
+        // If the callee was not previously a MemberExpression, then the
+        // CallExpression was "unqualified," meaning its `this` object
+        // should be the global object. If the exploded expression has
+        // become a MemberExpression (e.g. a context property, probably a
+        // temporary variable), then we need to force it to be unqualified
+        // by using the (0, object.property)(...) trick; otherwise, it
+        // will receive the object of the MemberExpression as its `this`
+        // object.
+        newCallee = b.sequenceExpression([
+          b.literal(0),
+          newCallee
+        ]);
+      }
     }
+
+    argsPath.each(function(argPath) {
+      newArgs.push(explodeViaTempVar(null, argPath));
+    });
 
     return finish(b.callExpression(
       newCallee,
-      path.get("arguments").map(function(argPath) {
-        return explodeViaTempVar(null, argPath);
-      })
+      newArgs
     ));
 
   case "NewExpression":
@@ -43871,9 +43893,11 @@ function amdefine(module, requireFn) {
                 });
 
                 //Wait for next tick to call back the require call.
-                process.nextTick(function () {
-                    callback.apply(null, deps);
-                });
+                if (callback) {
+                    process.nextTick(function () {
+                        callback.apply(null, deps);
+                    });
+                }
             }
         }
 
@@ -44299,7 +44323,10 @@ function through (write, end, opts) {
       var value = result.value;
       return value instanceof AwaitArgument
         ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
-        : result;
+        : Promise.resolve(value).then(function(unwrapped) {
+            result.value = unwrapped;
+            return result;
+          }, invokeThrow);
     }
 
     if (typeof process === "object" && process.domain) {
@@ -44334,7 +44361,7 @@ function through (write, end, opts) {
       // Avoid propagating enqueueResult failures to Promises returned by
       // later invocations of the iterator, and call generator.return() to
       // allow the generator a chance to clean up.
-      previousPromise = enqueueResult.catch(invokeReturn);
+      previousPromise = enqueueResult["catch"](invokeReturn);
 
       return enqueueResult;
     }
