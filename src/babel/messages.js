@@ -13,7 +13,6 @@ export const MESSAGES = {
   expectedMemberExpressionOrIdentifier: "Expected type MemberExpression or Identifier",
   invalidParentForThisNode: "We don't know how to handle this node within the current parent - please open an issue",
   readOnly: "$1 is read-only",
-  modulesIllegalExportName: "Illegal export $1",
   unknownForHead: "Unknown node type $1 in ForStatement",
   didYouMean: "Did you mean $1?",
   codeGeneratorDeopt: "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
@@ -21,6 +20,9 @@ export const MESSAGES = {
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   lostTrackNodePath: "We lost track of this nodes position, likely because the AST was directly manipulated",
+
+  modulesIllegalExportName: "Illegal export $1",
+  modulesDuplicateDeclarations: "Duplicate module declarations with the same source but in different scopes",
 
   undeclaredVariable: "Reference to undeclared variable $1",
   undeclaredVariableType: "Referencing a type alias outside of a type annotation",
