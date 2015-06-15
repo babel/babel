@@ -7,6 +7,7 @@ export default class TraversalContext {
     this.scope      = scope;
     this.state      = state;
     this.opts       = opts;
+    this.queue      = null;
   }
 
   shouldVisit(node) {

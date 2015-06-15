@@ -11,6 +11,10 @@ export default class Binding {
     this.path  = path;
     this.kind  = kind;
 
+    this.hasValue         = false;
+    this.hasDeoptedValue  = false;
+    this.value            = null;
+
     this.clearValue();
 
     if (existing) {

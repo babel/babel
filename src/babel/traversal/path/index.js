@@ -10,6 +10,23 @@ export default class NodePath {
     this.parent   = parent;
     this.data     = {};
     this.hub      = hub;
+
+    this.shouldSkip         = false;
+    this.shouldStop         = false;
+    this.removed            = false;
+    this.state              = null;
+    this.opts               = null;
+    this.skipKeys           = null;
+    this.parentPath         = null;
+    this.context            = null;
+    this.container          = null;
+    this.containerKey       = null;
+    this.key                = null;
+    this.node               = null;
+    this.scope              = null;
+    this.breakOnScopePaths  = null;
+    this.type               = null;
+    this.typeAnnotation     = null;
   }
 
   /**
