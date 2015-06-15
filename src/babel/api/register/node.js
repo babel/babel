@@ -125,7 +125,7 @@ var normalLoader = function (m, filename) {
 };
 
 var registerExtension = function (ext) {
-  var old = oldHandlers[ext] || oldHandlers[".js"];
+  var old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
 
   var loader = normalLoader;
   if (process.env.running_under_istanbul) loader = istanbulLoader;
