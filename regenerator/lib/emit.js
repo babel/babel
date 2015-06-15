@@ -987,17 +987,18 @@ Ep.explodeExpression = function(path, ignoreResult) {
       // Side effects already emitted above.
 
     } else if (tempVar || (hasLeapingChildren &&
-                           (self.isVolatileContextProperty(result) ||
-                            meta.hasSideEffects(result)))) {
+                           !n.Literal.check(result))) {
       // If tempVar was provided, then the result will always be assigned
       // to it, even if the result does not otherwise need to be assigned
       // to a temporary variable.  When no tempVar is provided, we have
       // the flexibility to decide whether a temporary variable is really
-      // necessary.  In general, temporary assignment is required only
-      // when some other child contains a leap and the child in question
-      // is a context property like $ctx.sent that might get overwritten
-      // or an expression with side effects that need to occur in proper
-      // sequence relative to the leap.
+      // necessary.  Unfortunately, in general, a temporary variable is
+      // required whenever any child contains a yield expression, since it
+      // is difficult to prove (at all, let alone efficiently) whether
+      // this result would evaluate to the same value before and after the
+      // yield (see #206).  One narrow case where we can prove it doesn't
+      // matter (and thus we do not need a temporary variable) is when the
+      // result in question is a Literal value.
       result = self.emitAssign(
         tempVar || self.makeTempVar(),
         result
