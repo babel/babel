@@ -118,36 +118,6 @@ Ep.contextProperty = function(name, computed) {
   );
 };
 
-var volatileContextPropertyNames = {
-  prev: true,
-  next: true,
-  sent: true,
-  rval: true
-};
-
-// A "volatile" context property is a MemberExpression like context.sent
-// that should probably be stored in a temporary variable when there's a
-// possibility the property will get overwritten.
-Ep.isVolatileContextProperty = function(expr) {
-  if (n.MemberExpression.check(expr)) {
-    if (expr.computed) {
-      // If it's a computed property such as context[couldBeAnything],
-      // assume the worst in terms of volatility.
-      return true;
-    }
-
-    if (n.Identifier.check(expr.object) &&
-        n.Identifier.check(expr.property) &&
-        expr.object.name === this.contextId.name &&
-        hasOwn.call(volatileContextPropertyNames,
-                    expr.property.name)) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 // Shorthand for setting context.rval and jumping to `context.stop()`.
 Ep.stop = function(rval) {
   if (rval) {
