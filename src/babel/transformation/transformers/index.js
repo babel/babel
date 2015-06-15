@@ -24,11 +24,11 @@ export default {
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
-  "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
+  "validation.undeclaredVariableCheck":    require("babel-plugin-undeclared-variables-check"),
   "validation.react":                      require("./validation/react"),
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
-  "optimisation.react.constantElements":   require("./optimisation/react.constant-elements"),
+  "optimisation.react.constantElements":   require("babel-plugin-react-constant-elements"),
   "optimisation.react.inlineElements":     require("./optimisation/react.inline-elements"),
   "es7.comprehensions":                    require("./es7/comprehensions"),
   "es6.classes":                           require("./es6/classes"),
@@ -67,7 +67,7 @@ export default {
   // hissy fit
 
   //- builtin-modules
-  runtime:                                 require("./other/runtime"),
+  runtime:                                 require("babel-plugin-runtime"),
   "es6.modules":                           require("./es6/modules"),
   _moduleFormatter:                        require("./internal/module-formatter"),
 
@@ -82,6 +82,6 @@ export default {
   "minification.memberExpressionLiterals": require("babel-plugin-member-expression-literals"),
   "minification.propertyLiterals":         require("babel-plugin-property-literals"),
   _blockHoist:                             require("./internal/block-hoist"),
-  jscript:                                 require("./other/jscript"),
+  jscript:                                 require("babel-plugin-jscript"),
   flow:                                    require("./other/flow"),
 };
