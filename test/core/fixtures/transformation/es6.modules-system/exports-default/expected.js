@@ -37,6 +37,10 @@ System.register([], function (_export) {
       };
 
       _export("default", Foo);
+
+      _export("default", (function () {
+        return "foo";
+      })());
     }
   };
 });

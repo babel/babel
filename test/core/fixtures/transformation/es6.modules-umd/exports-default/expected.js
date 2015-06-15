@@ -39,4 +39,8 @@
 
   module.exports = Foo;
   module.exports = foo;
+
+  module.exports = (function () {
+    return "foo";
+  })();
 });

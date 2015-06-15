@@ -27,4 +27,8 @@ define(["exports", "module"], function (exports, module) {
 
   module.exports = Foo;
   module.exports = foo;
+
+  module.exports = (function () {
+    return "foo";
+  })();
 });

@@ -6,3 +6,4 @@ export default function () {}
 export default class {}
 export default function foo () {}
 export default class Foo {}
+export default (function(){return "foo"})();
