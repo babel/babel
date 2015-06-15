@@ -26,6 +26,7 @@ export default {
   "es7.decorators":                        require("./es7/decorators"),
   "validation.undeclaredVariableCheck":    require("./validation/undeclared-variable-check"),
   "validation.react":                      require("./validation/react"),
+  "es6.spec.arrowFunctions":               require("./es6/spec.arrow-functions"),
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
   "optimisation.react.constantElements":   require("./optimisation/react.constant-elements"),

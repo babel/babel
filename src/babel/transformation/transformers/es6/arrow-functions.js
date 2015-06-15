@@ -5,5 +5,5 @@ export function ArrowFunctionExpression(node) {
 
   node.expression = false;
   node.type = "FunctionExpression";
-  node.shadow = true;
+  node.shadow = node.shadow || true;
 }

@@ -60,11 +60,16 @@ export function inType() {
  * Description
  */
 
-export function inShadow() {
+export function inShadow(key) {
   var path = this;
+  var dontShadow = path.node._shadowedFunctionLiteral;
+  if (dontShadow !== undefined) {
+    return !dontShadow;
+  }
   while (path) {
     if (path.isFunction()) {
-      if (path.node.shadow) {
+      var { shadow } = path.node;
+      if (shadow && (shadow === true || shadow[key] !== false)) {
         return path;
       } else {
         return null;
