@@ -15,15 +15,17 @@ export var BlockStatement = {
   exit(node) {
     var hasChange = false;
     for (var i = 0; i < node.body.length; i++) {
-      var bodyNode = node.body[i];
-      if (bodyNode && bodyNode._blockHoist != null) hasChange = true;
+      if (node.body[i]._blockHoist != null) {
+        hasChange = true;
+        break;
+      }
     }
     if (!hasChange) return;
 
     node.body = sortBy(node.body, function(bodyNode){
-      var priority = bodyNode && bodyNode._blockHoist;
+      var priority = bodyNode._blockHoist;
       if (priority == null) priority = 1;
-      if (priority === true) priority = 2;
+      else if (priority === true) priority = 2;
 
       // Higher priorities should move toward the top.
       return -1 * priority;
