@@ -9,31 +9,31 @@ export function call(key) {
   if (!node) return;
 
   var opts = this.opts;
-  if (!opts[key] && !opts[node.type]) return;
 
-  var fns = [].concat(opts[key]);
-  if (opts[node.type]) fns = fns.concat(opts[node.type][key]);
+  for (var fns of [opts[key], opts[node.type] && opts[node.type][key]]){
+    if (!fns) continue;
 
-  for (var fn of (fns: Array)) {
-    if (!fn) continue;
+    for (var fn of (fns: Array)) {
+      if (!fn) continue;
 
-    let node = this.node;
-    if (!node) return;
+      let node = this.node;
+      if (!node) return;
 
-    var previousType = this.type;
+      var previousType = this.type;
 
-    // call the function with the params (node, parent, scope, state)
-    var replacement = fn.call(this, node, this.parent, this.scope, this.state);
+      // call the function with the params (node, parent, scope, state)
+      var replacement = fn.call(this, node, this.parent, this.scope, this.state);
 
-    if (replacement) {
-      this.replaceWith(replacement, true);
-    }
+      if (replacement) {
+        this.replaceWith(replacement, true);
+      }
 
-    if (this.shouldStop || this.shouldSkip || this.removed) return;
+      if (this.shouldStop || this.shouldSkip || this.removed) return;
 
-    if (previousType !== this.type) {
-      this.queueNode(this);
-      return;
+      if (previousType !== this.type) {
+        this.queueNode(this);
+        return;
+      }
     }
   }
 }

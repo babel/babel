@@ -21,6 +21,8 @@ export function explode(visitor) {
   // ensure visitors are objects
   ensureEntranceObjects(visitor);
 
+  ensureCallbackArrays(visitor);
+
   // add type wrappers
   for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
@@ -71,6 +73,12 @@ export function explode(visitor) {
         visitor[alias] = clone(fns);
       }
     }
+  }
+
+  for (let nodeType in visitor) {
+    if (shouldIgnoreKey(nodeType)) continue;
+
+    ensureCallbackArrays(visitor[nodeType]);
   }
 
   return visitor;
@@ -124,6 +132,11 @@ function ensureEntranceObjects(obj) {
       obj[key] = { enter: fns };
     }
   }
+}
+
+function ensureCallbackArrays(obj){
+  if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
+  if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 
 function addQueries(visitor) {
