@@ -16,6 +16,7 @@ export default {
   "spec.functionName":                     require("./spec/function-name"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
+  "validation.undeclaredVariableCheck":    require("babel-plugin-undeclared-variables-check"),
 
   //- builtin-basic
   // this is where the bulk of the ES6 transformations take place, none of them require traversal state
@@ -24,7 +25,6 @@ export default {
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
   "es7.decorators":                        require("./es7/decorators"),
-  "validation.undeclaredVariableCheck":    require("babel-plugin-undeclared-variables-check"),
   "validation.react":                      require("./validation/react"),
   "es6.arrowFunctions":                    require("./es6/arrow-functions"),
   "spec.blockScopedFunctions":             require("./spec/block-scoped-functions"),
