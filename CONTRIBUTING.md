@@ -24,11 +24,10 @@ Contributions are always welcome, no matter how large or small. Before
 contributing, please read the
 [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
-
 ## Developing
 
->Note: Babel moves fast. Only the latest release is guaranteed to build correctly.
->Older releases are not officially supported. If you attempt to build them, do that at your own risk.
+> Note: Babel moves fast. Only the latest release is guaranteed to build correctly.
+> Older releases are not officially supported. If you attempt to build them, do that at your own risk.
 
 #### Setup
 
