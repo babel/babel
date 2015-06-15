@@ -21,10 +21,10 @@ export var visitor = {
 
     if (node.specifiers.length) {
       for (var specifier of (node.specifiers: Array)) {
-        file.moduleFormatter.importSpecifier(specifier, node, nodes, parent);
+        file.moduleFormatter.importSpecifier(specifier, node, nodes, scope);
       }
     } else {
-      file.moduleFormatter.importDeclaration(node, nodes, parent);
+      file.moduleFormatter.importDeclaration(node, nodes, scope);
     }
 
     if (nodes.length === 1) {
@@ -37,14 +37,14 @@ export var visitor = {
 
   ExportAllDeclaration(node, parent, scope, file) {
     var nodes = [];
-    file.moduleFormatter.exportAllDeclaration(node, nodes, parent);
+    file.moduleFormatter.exportAllDeclaration(node, nodes, scope);
     keepBlockHoist(node, nodes);
     return nodes;
   },
 
   ExportDefaultDeclaration(node, parent, scope, file) {
     var nodes = [];
-    file.moduleFormatter.exportDeclaration(node, nodes, parent);
+    file.moduleFormatter.exportDeclaration(node, nodes, scope);
     keepBlockHoist(node, nodes);
     return nodes;
   },
@@ -63,10 +63,10 @@ export var visitor = {
         declar.init = declar.init || t.identifier("undefined");
       }
 
-      file.moduleFormatter.exportDeclaration(node, nodes, parent);
+      file.moduleFormatter.exportDeclaration(node, nodes, scope);
     } else if (node.specifiers) {
       for (let i = 0; i < node.specifiers.length; i++) {
-        file.moduleFormatter.exportSpecifier(node.specifiers[i], node, nodes, parent);
+        file.moduleFormatter.exportSpecifier(node.specifiers[i], node, nodes, scope);
       }
     }
 

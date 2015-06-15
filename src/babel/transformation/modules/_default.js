@@ -1,78 +1,16 @@
 import * as messages from "../../messages";
+import Remaps from "./lib/remaps";
 import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as util from  "../../util";
 import * as t from "../../types";
-
-var remapVisitor = {
-  enter(node) {
-    if (node._skipModulesRemap) {
-      return this.skip();
-    }
-  },
-
-  ReferencedIdentifier(node, parent, scope, formatter) {
-    var remap = formatter.internalRemap[node.name];
-
-    if (remap && node !== remap) {
-      if (!scope.hasBinding(node.name) || scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
-        if (this.key === "callee" && this.parentPath.isCallExpression()) {
-          return t.sequenceExpression([t.literal(0), remap]);
-        } else {
-          return remap;
-        }
-      }
-    }
-  },
-
-  AssignmentExpression: {
-    exit(node, parent, scope, formatter) {
-      if (!node._ignoreModulesRemap) {
-        var exported = formatter.getExport(node.left, scope);
-        if (exported) {
-          return formatter.remapExportAssignment(node, exported);
-        }
-      }
-    }
-  },
-
-  UpdateExpression(node, parent, scope, formatter) {
-    var exported = formatter.getExport(node.argument, scope);
-    if (!exported) return;
-
-    this.skip();
-
-    // expand to long file assignment expression
-    var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.literal(1));
-
-    // remap this assignment expression
-    var remapped = formatter.remapExportAssignment(assign, exported);
-
-    // we don't need to change the result
-    if (t.isExpressionStatement(parent) || node.prefix) {
-      return remapped;
-    }
-
-    var nodes = [];
-    nodes.push(remapped);
-
-    var operator;
-    if (node.operator === "--") {
-      operator = "+";
-    } else { // "++"
-      operator = "-";
-    }
-    nodes.push(t.binaryExpression(operator, node.argument, t.literal(1)));
-
-    return t.sequenceExpression(nodes);
-  }
-};
 
 var metadataVisitor = {
   ModuleDeclaration: {
     enter(node, parent, scope, formatter) {
       if (node.source) {
         node.source.value = formatter.file.resolveModuleSource(node.source.value);
+        formatter.addScope(this);
       }
     }
   },
@@ -218,18 +156,27 @@ var metadataVisitor = {
     }
   },
 
-  Scope() {
-    this.skip();
+  Scope(node, parent, scope, formatter) {
+    if (!formatter.isLoose()) {
+      this.skip();
+    }
   }
 };
 
 export default class DefaultFormatter {
   constructor(file) {
-    this.internalRemap = object();
-    this.defaultIds    = object();
-    this.scope         = file.scope;
-    this.file          = file;
-    this.ids           = object();
+    // object containg all module sources with the scope that they're contained in
+    this.sourceScopes = object();
+
+    // ids for use in module ids
+    this.defaultIds = object();
+    this.ids        = object();
+
+    // contains reference aliases for live bindings
+    this.remaps = new Remaps(file, this);
+
+    this.scope = file.scope;
+    this.file  = file;
 
     this.hasNonDefaultExports = false;
 
@@ -241,6 +188,18 @@ export default class DefaultFormatter {
 
     this.metadata = file.metadata.modules;
     this.getMetadata();
+  }
+
+  addScope(path) {
+    var source = path.node.source && path.node.source.value;
+    if (!source) return;
+
+    var existingScope = this.sourceScopes[source];
+    if (existingScope && existingScope !== path.scope) {
+      throw path.errorWithNode(messages.get("modulesDuplicateDeclarations"));
+    }
+
+    this.sourceScopes[source] = path.scope;
   }
 
   isModuleType(node, type) {
@@ -264,12 +223,14 @@ export default class DefaultFormatter {
         break;
       }
     }
-    if (has) this.file.path.traverse(metadataVisitor, this);
+    if (has || this.isLoose()) {
+      this.file.path.traverse(metadataVisitor, this);
+    }
   }
 
   remapAssignments() {
     if (this.hasLocalExports || this.hasLocalImports) {
-      this.file.path.traverse(remapVisitor, this);
+      this.remaps.run();
     }
   }
 

@@ -599,6 +599,38 @@ export default class Scope {
   }
 
   /**
+   * Set some arbitrary data on the current scope.
+   */
+
+  setData(key, val) {
+    return this.data[key] = val;
+  }
+
+  /**
+   * Recursively walk up scope tree looking for the data `key`.
+   */
+
+  getData(key) {
+    var scope = this;
+    do {
+      var data = scope.data[key];
+      if (data != null) return data;
+    } while(scope = scope.parent);
+  }
+  /**
+   * Recursively walk up scope tree looking for the data `key` and if it exists,
+   * remove it.
+   */
+
+  removeData(key) {
+    var scope = this;
+    do {
+      var data = scope.data[key];
+      if (data != null) scope.data[key] = null;
+    } while(scope = scope.parent);
+  }
+
+  /**
    * Description
    */
 
@@ -623,6 +655,7 @@ export default class Scope {
       bindings:   object(),
       globals:    object(),
       uids:       object(),
+      data:       object(),
     };
 
     extend(this, info);

@@ -82,6 +82,8 @@ export default class SystemFormatter extends AMDFormatter {
     this.exportIdentifier = file.scope.generateUidIdentifier("export");
     this.noInteropRequireExport = true;
     this.noInteropRequireImport = true;
+
+    this.remaps.clearAll();
   }
 
   _addImportSource(node, exportNode) {
@@ -137,13 +139,13 @@ export default class SystemFormatter extends AMDFormatter {
   importSpecifier(specifier, node, nodes) {
     AMDFormatter.prototype.importSpecifier.apply(this, arguments);
 
-    for (var name in this.internalRemap) {
+    for (var remap of (this.remaps.getAll(): Array)) {
       nodes.push(t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(name), this.internalRemap[name])
+        t.variableDeclarator(t.identifier(remap.name), remap.node)
       ]));
     }
 
-    this.internalRemap = object();
+    this.remaps.clearAll();
 
     this._addImportSource(last(nodes), node);
   }
