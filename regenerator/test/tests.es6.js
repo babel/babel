@@ -2427,3 +2427,22 @@ describe("generator return method", function() {
     ]);
   });
 });
+
+describe("expressions containing yield subexpressions", function() {
+  it("should evaluate all subexpressions before yielding", function() {
+    function *gen(x) {
+      return x * (yield (function(y) { x = y }));
+    }
+
+    var g = gen(2);
+    var result = g.next();
+    assert.strictEqual(result.done, false);
+
+    result.value(5);
+
+    assert.deepEqual(g.next(5), {
+      value: 10,
+      done: true
+    });
+  });
+});
