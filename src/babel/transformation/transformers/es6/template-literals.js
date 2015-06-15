@@ -45,6 +45,10 @@ export function TaggedTemplateExpression(node, parent, scope, file) {
   return t.callExpression(node.tag, args);
 }
 
+function isString(node) {
+  return t.isLiteral(node) && typeof node.value === "string";
+}
+
 export function TemplateLiteral(node, parent, scope, file) {
   var nodes = [];
 
@@ -56,9 +60,18 @@ export function TemplateLiteral(node, parent, scope, file) {
   }
 
   if (nodes.length > 1) {
-    // remove redundant '' at the end of the expression
-    var last = nodes[nodes.length - 1];
-    if (t.isLiteral(last, { value: "" })) nodes.pop();
+    // filter out empty string literals
+    nodes = nodes.filter(n => !t.isLiteral(n, { value: "" }));
+
+    if (nodes.length === 1 && isString(nodes[0])) {
+      return nodes[0];
+    }
+
+    // since `+` is left-to-right associative
+    // ensure the first node is a string if first/second isn't
+    if (!isString(nodes[0]) && !isString(nodes[1])) {
+      nodes.unshift(t.literal(""));
+    }
 
     var root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
