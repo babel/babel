@@ -93,9 +93,13 @@ export function replaceWith(replacement, whateverAllowed) {
   }
 
   // normalise inserting an entire AST
-  if (t.isProgram(replacement)) {
+  if (t.isProgram(replacement) && !this.isProgram()) {
     replacement = replacement.body;
     whateverAllowed = true;
+  } else {
+    if (this.isProgram()) {
+      throw new Error("You can only replace a Program root node with another Program node");
+    }
   }
 
   if (Array.isArray(replacement)) {
