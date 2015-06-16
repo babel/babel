@@ -95,6 +95,12 @@ suite("util", function () {
     }, /illegal type for regexify/);
   });
 
+  test("booleanify", function () {
+    assert.strictEqual(util.booleanify("true"), true);
+    assert.strictEqual(util.booleanify("false"), false);
+    assert.strictEqual(util.booleanify("inline"), "inline");
+  });
+
   test("toIdentifier", function () {
     assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
