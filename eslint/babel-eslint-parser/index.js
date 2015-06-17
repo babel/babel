@@ -309,6 +309,10 @@ function monkeypatch() {
   referencer.prototype.DeclareFunction =
   referencer.prototype.DeclareVariable =
   referencer.prototype.DeclareClass = function(node) {
+    if (node.id) {
+      createScopeVariable.call(this, node, node.id);
+    }
+
     var typeParamScope;
     if (node.typeParameters) {
       typeParamScope = nestTypeParamScope(this.scopeManager, node);

@@ -376,7 +376,8 @@ describe("verify", function () {
           "declare class A { static () : number }",
           "declare module B { declare var x: number; }",
           "declare function foo<T>(): void;",
-          "declare var bar"
+          "declare var bar",
+          "A; B; foo(); bar;"
         ].join("\n"),
         { "no-undef": 1, "no-unused-vars": 1 },
         []
