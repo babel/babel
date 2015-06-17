@@ -1,4 +1,3 @@
-import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "../../types";
 
@@ -148,8 +147,6 @@ export {
   AssignmentExpression as AssignmentPattern
 };
 
-var SCIENTIFIC_NOTATION = /e/i;
-
 export function MemberExpression(node, print) {
   var obj = node.object;
   print.plain(obj);
@@ -168,11 +165,6 @@ export function MemberExpression(node, print) {
     print.plain(node.property);
     this.push("]");
   } else {
-    // 5..toFixed(2);
-    if (t.isLiteral(obj) && isInteger(obj.value) && !SCIENTIFIC_NOTATION.test(obj.value.toString())) {
-      this.push(".");
-    }
-
     this.push(".");
     print.plain(node.property);
   }

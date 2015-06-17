@@ -1,5 +1,6 @@
 /* eslint quotes: 0 */
 
+import isInteger from "is-integer";
 import * as t from "../../types";
 
 export function Identifier(node) {
@@ -90,7 +91,9 @@ export function ArrayExpression(node, print) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function Literal(node) {
+const SCIENTIFIC_NOTATION = /e/i;
+
+export function Literal(node, print, parent) {
   var val  = node.value;
   var type = typeof val;
 
@@ -100,11 +103,17 @@ export function Literal(node) {
     // check to see if this is the same number as the raw one in the original source as asm.js uses
     // numbers in the form 5.0 for type hinting
     var raw = node.raw;
-    if (val === +raw && raw[raw.length - 1] !== "." && !/^0[bo]/i.test(raw)) {
-      this.push(raw);
-    } else {
-      this.push(val + "");
+    if (val === +raw && raw[raw.length - 1] !== ".") {
+      val = raw;
     }
+
+    val = val + "";
+
+    if (isInteger(+val) && t.isMemberExpression(parent, { object: node }) && !SCIENTIFIC_NOTATION.test(val)) {
+      val += ".";
+    }
+
+    this.push(val);
   } else if (type === "boolean") {
     this.push(val ? "true" : "false");
   } else if (node.regex) {
