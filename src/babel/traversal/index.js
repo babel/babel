@@ -51,7 +51,7 @@ const CLEAR_KEYS = [
 traverse.clearNode = function (node) {
   for (var i = 0; i < CLEAR_KEYS.length; i++) {
     let key = CLEAR_KEYS[i];
-    if (node[key] != null) node[key] = null;
+    if (node[key] != null) node[key] = undefined;
   }
 };
 
