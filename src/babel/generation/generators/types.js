@@ -97,6 +97,8 @@ export function Literal(node) {
   if (type === "string") {
     this._stringLiteral(val);
   } else if (type === "number") {
+    // check to see if this is the same number as the raw one in the original source as asm.js uses
+    // numbers in the form 5.0 for type hinting
     var raw = node.raw;
     this.push(val === +raw ? raw : val + "");
   } else if (type === "boolean") {
@@ -117,9 +119,16 @@ export function _stringLiteral(val) {
   });
 
   if (this.format.quotes === "single") {
+    // remove double quotes
     val = val.slice(1, -1);
+
+    // unescape double quotes
     val = val.replace(/\\"/g, '"');
+
+    // escape single quotes
     val = val.replace(/'/g, "\\'");
+
+    // add single quotes
     val = `'${val}'`;
   }
 
