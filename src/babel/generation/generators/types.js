@@ -97,7 +97,8 @@ export function Literal(node) {
   if (type === "string") {
     this._stringLiteral(val);
   } else if (type === "number") {
-    this.push(val + "");
+    var raw = node.raw;
+    this.push(val === +raw ? raw : val + "");
   } else if (type === "boolean") {
     this.push(val ? "true" : "false");
   } else if (node.regex) {
