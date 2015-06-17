@@ -9,41 +9,53 @@ var memberExpressionOptimisationVisitor = {
     }
   },
 
-  enter(node, parent, scope, state) {
-    var stop = () => {
-      state.canOptimise = false;
-      this.stop();
-    };
-
-    if (this.isArrowFunctionExpression()) return stop();
-
+  Function(node, parent, scope, state) {
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
-    if (this.isFunctionDeclaration() || this.isFunctionExpression()) {
-      state.noOptimise = true;
-      this.traverse(memberExpressionOptimisationVisitor, state);
-      state.noOptimise = false;
-      return this.skip();
+    state.noOptimise = true;
+    this.traverse(memberExpressionOptimisationVisitor, state);
+    state.noOptimise = false;
+    this.skip();
+  },
+
+  ReferencedIdentifier(node, parent, scope, state) {
+    // we can't guarantee the purity of arguments
+    if (node.name === "arguments") {
+      state.deopted = true;
     }
 
     // is this a referenced identifier and is it referencing the rest parameter?
-    if (!this.isReferencedIdentifier({ name: state.name })) return;
+    if (node.name !== state.name) return;
 
-    if (!state.noOptimise && t.isMemberExpression(parent) && parent.computed) {
-      // if we know that this member expression is referencing a number then we can safely
-      // optimise it
-      var prop = this.parentPath.get("property");
-      if (prop.isBaseType("number")) {
-        state.candidates.push(this);
-        return;
+    if (!state.noOptimise) {
+      if (this.parentPath.isMemberExpression({ computed: true, object: node })) {
+        // if we know that this member expression is referencing a number then we can safely
+        // optimise it
+        var prop = this.parentPath.get("property");
+        if (prop.isBaseType("number")) {
+          state.candidates.push(this);
+          return;
+        }
+      }
+
+      // optimise single spread args in calls
+      if (this.parentPath.isSpreadElement() && state.offset === 0) {
+        var call = this.parentPath.parentPath;
+        if (call.isCallExpression() && call.node.arguments.length === 1) {
+          return state.argumentsNode;
+        }
       }
     }
 
-    stop();
+    if (state.noOptimise) {
+      state.deopted = true;
+    } else {
+      state.references.push(this);
+    }
   }
 };
 
-function optimizeMemberExpression(parent, offset) {
+function optimiseMemberExpression(parent, offset) {
   if (offset === 0) return;
 
   var newExpr;
@@ -86,25 +98,38 @@ export var visitor = {
       node.body.body.unshift(declar);
     }
 
-    // check if rest is used in member expressions and optimise for those cases
+    // check and optimise for extremely common cases
 
     var state = {
-      outerBinding: scope.getBindingIdentifier(rest.name),
-      canOptimise:  true,
-      candidates:   [],
-      method:       node,
-      name:         rest.name
+      references: [],
+      offset:     node.params.length,
+
+      argumentsNode: argsId,
+      outerBinding:  scope.getBindingIdentifier(rest.name),
+
+      // candidate member expressions we could optimise if there are no other references
+      candidates: [],
+
+      // local rest binding name
+      name: rest.name,
+
+      // whether any references to the rest parameter were made in a function
+      deopted: false
     };
 
     this.traverse(memberExpressionOptimisationVisitor, state);
 
-    // we only have shorthands and there's no other references
-    if (state.canOptimise && state.candidates.length) {
-      for (var candidate of (state.candidates: Array)) {
-        candidate.replaceWith(argsId);
-        optimizeMemberExpression(candidate.parent, node.params.length);
+    if (!state.deopted && !state.references.length) {
+      // we only have shorthands and there are no other references
+      if (state.candidates.length) {
+        for (var candidate of (state.candidates: Array)) {
+          candidate.replaceWith(argsId);
+          optimiseMemberExpression(candidate.parent, state.offset);
+        }
       }
       return;
+    } else {
+      state.references = state.references.concat(state.candidates);
     }
 
     //
@@ -144,6 +169,13 @@ export var visitor = {
       KEY:        key,
       LEN:        len
     });
+
+    if (!state.deopted) {
+      // perform allocation at the lowest common denominator of all references
+      this.getEarliestCommonAncestorFrom(state.references).getStatementParent().insertBefore(loop);
+      return;
+    }
+
     loop._blockHoist = node.params.length + 1;
     node.body.body.unshift(loop);
   }

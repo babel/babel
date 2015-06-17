@@ -47,10 +47,11 @@ var a = function a(foo) {
 };
 
 var b = function b(foo) {
+  var join = "join";
+
   for (var _len6 = arguments.length, bar = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
     bar[_key6 - 1] = arguments[_key6];
   }
 
-  var join = "join";
   return bar[join];
 };

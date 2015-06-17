@@ -71,7 +71,7 @@ export function getSibling(key) {
     parentPath: this.parentPath,
     parent: this.parent,
     container: this.container,
-    containerKey: this.containerKey,
+    listKey: this.listKey,
     key: key
   });
 }
@@ -101,7 +101,7 @@ export function _getKey(key) {
     // requested a container so give them all the paths
     return container.map((_, i) => {
       return NodePath.get({
-        containerKey: key,
+        listKey: key,
         parentPath: this,
         parent: node,
         container: container,

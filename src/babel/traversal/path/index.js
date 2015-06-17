@@ -20,11 +20,11 @@ export default class NodePath {
     this.parentPath         = null;
     this.context            = null;
     this.container          = null;
-    this.containerKey       = null;
+    this.listKey            = null;
+    this.parentKey          = null;
     this.key                = null;
     this.node               = null;
     this.scope              = null;
-    this.breakOnScopePaths  = null;
     this.type               = null;
     this.typeAnnotation     = null;
   }
@@ -33,7 +33,7 @@ export default class NodePath {
    * Description
    */
 
-  static get({ hub, parentPath, parent, container, containerKey, key }) {
+  static get({ hub, parentPath, parent, container, listKey, key }) {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -55,7 +55,7 @@ export default class NodePath {
       paths.push(path);
     }
 
-    path.setup(parentPath, container, containerKey, key);
+    path.setup(parentPath, container, listKey, key);
 
     return path;
   }

@@ -390,7 +390,8 @@ export default class Scope {
         var binding = scope.bindings[name];
         console.log(" -", name, {
           constant: binding.constant,
-          references: binding.references
+          references: binding.references,
+          kind: binding.kind
         });
       }
     } while(scope = scope.parent);

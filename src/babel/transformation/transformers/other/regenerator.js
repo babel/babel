@@ -38,9 +38,9 @@ function convertNodePath(path) {
       keysAlongPath.push(path.key);
 
       if (parentNode !== path.container) {
-        var found = Object.keys(parentNode).some(containerKey => {
-          if (parentNode[containerKey] === path.container) {
-            keysAlongPath.push(containerKey);
+        var found = Object.keys(parentNode).some(listKey => {
+          if (parentNode[listKey] === path.container) {
+            keysAlongPath.push(listKey);
             return true;
           }
         });

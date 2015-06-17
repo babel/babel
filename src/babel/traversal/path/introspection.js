@@ -260,10 +260,10 @@ export function _guessExecutionStatusRelativeTo(target) {
     return "function";
   }
 
-  var targetPaths = getAncestry(target);
+  var targetPaths = target.getAncestry();
   //if (targetPaths.indexOf(this) >= 0) return "after";
 
-  var selfPaths   = getAncestry(this);
+  var selfPaths   = this.getAncestry();
 
   // get ancestor where the branches intersect
   var commonPath;
@@ -289,7 +289,7 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // container list so let's see which one is after the other
-  if (targetRelationship.containerKey && targetRelationship.container === selfRelationship.container) {
+  if (targetRelationship.listKey && targetRelationship.container === selfRelationship.container) {
     return targetRelationship.key > selfRelationship.key ? "before" : "after";
   }
 
@@ -297,14 +297,6 @@ export function _guessExecutionStatusRelativeTo(target) {
   var targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
   var selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
-}
-
-function getAncestry(path) {
-  var paths = [];
-  do {
-    paths.push(path);
-  } while(path = path.parentPath);
-  return paths;
 }
 
 /**

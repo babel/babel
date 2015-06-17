@@ -42,7 +42,7 @@ export function _containerInsert(from, nodes) {
     this.container.splice(to, 0, node);
 
     if (this.context) {
-      var path = this.context.create(this.parent, this.container, to, this.containerKey);
+      var path = this.context.create(this.parent, this.container, to, this.listKey);
       paths.push(path);
       this.queueNode(path);
     } else {
@@ -50,7 +50,7 @@ export function _containerInsert(from, nodes) {
         parentPath: this,
         parent: node,
         container: this.container,
-        containerKey: this.containerKey,
+        listKey: this.listKey,
         key: to
       }));
     }
@@ -154,7 +154,7 @@ export function _verifyNodeList(nodes) {
  * Description
  */
 
-export function unshiftContainer(containerKey, nodes) {
+export function unshiftContainer(listKey, nodes) {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -162,12 +162,12 @@ export function unshiftContainer(containerKey, nodes) {
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
 
-  var container = this.node[containerKey];
+  var container = this.node[listKey];
   var path      = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: container,
-    containerKey,
+    listKey,
     key: 0
   });
 
@@ -178,7 +178,7 @@ export function unshiftContainer(containerKey, nodes) {
  * Description
  */
 
-export function pushContainer(containerKey, nodes) {
+export function pushContainer(listKey, nodes) {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -186,13 +186,13 @@ export function pushContainer(containerKey, nodes) {
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
 
-  var container = this.node[containerKey];
+  var container = this.node[listKey];
   var i         = container.length;
   var path      = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: container,
-    containerKey,
+    listKey,
     key: i
   });
 

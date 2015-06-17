@@ -148,7 +148,7 @@ export function resync() {
   if (this.removed) return;
 
   this._resyncParent();
-  this._resyncContainer();
+  this._resyncList();
   this._resyncKey();
   //this._resyncRemoved();
 }
@@ -184,12 +184,12 @@ export function _resyncKey() {
   this.key = null;
 }
 
-export function _resyncContainer() {
-  var containerKey = this.containerKey;
-  var parentPath   = this.parentPath;
-  if (!containerKey || !parentPath) return;
+export function _resyncList() {
+  var listKey    = this.listKey;
+  var parentPath = this.parentPath;
+  if (!listKey || !parentPath) return;
 
-  var newContainer = parentPath.node[containerKey];
+  var newContainer = parentPath.node[listKey];
   if (this.container === newContainer) return;
 
   // container is out of sync. this is likely the result of it being reassigned
@@ -229,9 +229,10 @@ export function unshiftContext(context) {
  * Description
  */
 
-export function setup(parentPath, container, containerKey, key) {
-  this.containerKey = containerKey;
-  this.container    = container;
+export function setup(parentPath, container, listKey, key) {
+  this.listKey   = listKey;
+  this.parentKey = listKey || key;
+  this.container = container;
 
   this.parentPath = parentPath || this.parentPath;
   this.setKey(key);

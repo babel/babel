@@ -53,7 +53,7 @@ export var post = [
 
     // var NODE;
     // remove an entire declaration if there are no declarators left
-    removeParent = removeParent || (self.containerKey === "declarations" && parent.isVariableDeclaration() && parent.node.declarations.length === 0);
+    removeParent = removeParent || (self.listKey === "declarations" && parent.isVariableDeclaration() && parent.node.declarations.length === 0);
 
     // NODE;
     // remove the entire expression statement if there's no expression

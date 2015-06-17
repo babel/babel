@@ -26,19 +26,19 @@ export default class TraversalContext {
     return false;
   }
 
-  create(node, obj, key, containerKey) {
+  create(node, obj, key, listKey) {
     var path = NodePath.get({
       parentPath: this.parentPath,
       parent: node,
       container: obj,
       key: key,
-      containerKey: containerKey
+      listKey
     });
     path.unshiftContext(this);
     return path;
   }
 
-  visitMultiple(container, parent, containerKey) {
+  visitMultiple(container, parent, listKey) {
     // nothing to traverse!
     if (container.length === 0) return false;
 
@@ -51,7 +51,7 @@ export default class TraversalContext {
     for (let key = 0; key < container.length; key++) {
       var self = container[key];
       if (self && this.shouldVisit(self)) {
-        queue.push(this.create(parent, container, key, containerKey));
+        queue.push(this.create(parent, container, key, listKey));
       }
     }
 

@@ -17,7 +17,8 @@
     "no-fallthrough": 0,
     "new-cap": 0,
     "no-loop-func": 0,
-    "no-unreachable": 0
+    "no-unreachable": 0,
+    "no-labels": 0
   },
   "env": {
     "node": true
