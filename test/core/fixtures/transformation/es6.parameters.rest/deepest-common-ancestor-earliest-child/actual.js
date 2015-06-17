@@ -23,6 +23,17 @@ function r(...rest){
   }
 }
 
+// deeply nested
+function r(...rest){
+  if (true) {
+    if (true) {
+      return rest;
+    } else {
+      return rest;
+    }
+  }
+}
+
 // nested reference with root reference
 function r(...rest){
   if (noNeedToWork) return 0;

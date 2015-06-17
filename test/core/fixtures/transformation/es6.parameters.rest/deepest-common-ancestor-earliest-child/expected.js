@@ -38,12 +38,27 @@ function r() {
   }
 }
 
+// deeply nested
+function r() {
+  if (true) {
+    for (var _len4 = arguments.length, rest = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      rest[_key4] = arguments[_key4];
+    }
+
+    if (true) {
+      return rest;
+    } else {
+      return rest;
+    }
+  }
+}
+
 // nested reference with root reference
 function r() {
   if (noNeedToWork) return 0;
 
-  for (var _len4 = arguments.length, rest = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-    rest[_key4] = arguments[_key4];
+  for (var _len5 = arguments.length, rest = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+    rest[_key5] = arguments[_key5];
   }
 
   if (lol) rest;
