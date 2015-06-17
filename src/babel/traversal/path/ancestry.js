@@ -39,6 +39,7 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
     for (var ancestry of (ancestries: Array)) {
       var path = ancestry[i + 1];
 
+      // first path
       if (!earliest) {
         earliest = path;
         continue;
@@ -46,7 +47,7 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
 
       // handle containers
       if (path.listKey && earliest.listKey === path.listKey) {
-        // we're in the same container so check
+        // we're in the same container so check if we're earlier
         if (path.key < earliest.key) {
           earliest = path;
           continue;
@@ -57,7 +58,7 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
       var earliestKeyIndex = keys.indexOf(earliest.parentKey);
       var currentKeyIndex = keys.indexOf(path.parentKey);
       if (earliestKeyIndex > currentKeyIndex) {
-        // key appears after
+        // key appears before so it's earlier
         earliest = path;
       }
     }
@@ -117,6 +118,7 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
       }
     }
 
+    // next iteration may break so store these so they can be returned
     lastCommonIndex = i;
     lastCommon = shouldMatch;
   }
