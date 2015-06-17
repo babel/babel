@@ -26,4 +26,4 @@
       continue _function;
     }
   }
-})(1000000, true) === "foo";
+})(1e6, true) === "foo";

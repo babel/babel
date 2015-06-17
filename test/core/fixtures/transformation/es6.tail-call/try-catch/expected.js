@@ -8,7 +8,7 @@
   try {
     return f(n - 1);
   } catch (e) {}
-})(1000000) === "foo";
+})(1e6) === "foo";
 
 (function f(_x) {
   var _again = true;
@@ -29,7 +29,7 @@
       continue _function;
     }
   }
-})(1000000) === "foo";
+})(1e6) === "foo";
 
 (function f(n) {
   if (n <= 0) {
@@ -41,7 +41,7 @@
   } catch (e) {
     return f(n - 1);
   } finally {}
-})(1000000) === "foo";
+})(1e6) === "foo";
 
 (function f(_x2) {
   var _again2 = true;
@@ -60,4 +60,4 @@
       continue _function2;
     }
   }
-})(1000000) === "foo";
+})(1e6) === "foo";

@@ -25,4 +25,4 @@
       continue _function;
     }
   }
-})(1000000) === "foo";
+})(1e6) === "foo";
