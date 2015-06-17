@@ -103,7 +103,7 @@ export function Literal(node, print, parent) {
     // check to see if this is the same number as the raw one in the original source as asm.js uses
     // numbers in the form 5.0 for type hinting
     var raw = node.raw;
-    if (val === +raw && raw[raw.length - 1] !== ".") {
+    if (val === +raw && raw[raw.length - 1] !== "." && !/^0[bo]/i.test(raw)) {
       val = raw;
     }
 
