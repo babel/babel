@@ -178,7 +178,7 @@ function monkeypatch() {
     }
     scope.__define = function() {
       return parentScope.__define.apply(parentScope, arguments);
-    }
+    };
     return scope;
   }
 
@@ -250,7 +250,7 @@ function monkeypatch() {
         if (typeAnnotation) {
           checkIdentifierOrVisit.call(this, typeAnnotation);
         }
-        if (id.type === 'ObjectPattern') {
+        if (id.type === "ObjectPattern") {
           for (var j = 0; j < id.properties.length; j++) {
             this.visit(id.properties[j]);
           }
@@ -302,6 +302,19 @@ function monkeypatch() {
     }
     if (node.right) {
       this.visit(node.right);
+    }
+  };
+
+  referencer.prototype.DeclareModule =
+  referencer.prototype.DeclareFunction =
+  referencer.prototype.DeclareVariable =
+  referencer.prototype.DeclareClass = function(node) {
+    var typeParamScope;
+    if (node.typeParameters) {
+      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+    }
+    if (typeParamScope) {
+      this.close(node);
     }
   };
 }

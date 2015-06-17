@@ -356,7 +356,7 @@ describe("verify", function () {
           "var b: T = 1; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ '1:20 T is defined but never used no-unused-vars',
+        [ "1:20 T is defined but never used no-unused-vars",
           '3:7 "T" is not defined. no-undef' ]
       );
     });
@@ -368,6 +368,18 @@ describe("verify", function () {
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         [ '2:29 "T" is not defined. no-undef' ]
+      );
+    });
+
+    it("support declarations #132", function () {
+      verifyAndAssertMessages([
+          "declare class A { static () : number }",
+          "declare module B { declare var x: number; }",
+          "declare function foo<T>(): void;",
+          "declare var bar"
+        ].join("\n"),
+        { "no-undef": 1, "no-unused-vars": 1 },
+        []
       );
     });
 
@@ -1133,6 +1145,6 @@ describe("verify", function () {
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-undef": 1, "no-unused-vars": 1 },
       []
-    )
+    );
   });
 });

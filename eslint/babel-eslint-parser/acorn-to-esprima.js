@@ -183,7 +183,7 @@ var astTransformVisitor = {
       return node.argument;
     }
 
-    // prevent "no-undef"
+    // flow: prevent "no-undef"
     // for "Component" in: "let x: React.Component"
     if (this.isQualifiedTypeIdentifier()) {
       delete node.id;
@@ -199,15 +199,6 @@ var astTransformVisitor = {
     // for "param" in: "var a: { func(param: Foo): Bar };"
     if (this.isFunctionTypeParam()) {
       delete node.name;
-    }
-
-    // flow
-
-    if (this.isDeclareModule() ||
-        this.isDeclareClass() ||
-        this.isDeclareFunction() ||
-        this.isDeclareVariable()) {
-      return this.dangerouslyRemove();
     }
 
     // modules
