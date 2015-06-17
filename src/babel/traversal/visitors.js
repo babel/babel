@@ -151,21 +151,6 @@ function ensureCallbackArrays(obj){
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 
-function addSelector(visitor, selector, fns) {
-  selector = esquery.parse(selector);
-
-  for (var key in fns) {
-    let fn = fns[key];
-    fns[key] = function (node) {
-      if (esquery.matches(node, selector, this.getAncestry())) {
-        return fn.apply(this, arguments);
-      }
-    };
-  }
-
-  mergePair(visitor, fns);
-}
-
 function wrapCheck(wrapper, fn) {
   return function () {
     if (wrapper.checkPath(this)) {
