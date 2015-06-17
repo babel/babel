@@ -2,7 +2,6 @@ import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "../messages";
 import * as t from "../types";
 import clone from "lodash/lang/clone";
-import esquery from "esquery";
 
 export function explode(visitor) {
   if (visitor._exploded) return visitor;
@@ -29,12 +28,6 @@ export function explode(visitor) {
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
   delete visitor.__esModule;
-
-  if (visitor.queries) {
-    ensureEntranceObjects(visitor.queries);
-    addQueries(visitor);
-    delete visitor.queries;
-  }
 
   // ensure visitors are objects
   ensureEntranceObjects(visitor);
@@ -156,13 +149,6 @@ function ensureEntranceObjects(obj) {
 function ensureCallbackArrays(obj){
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
-}
-
-function addQueries(visitor) {
-  for (var selector in visitor.queries) {
-    var fns = visitor.queries[selector];
-    addSelector(visitor, selector, fns);
-  }
 }
 
 function addSelector(visitor, selector, fns) {
