@@ -10,11 +10,10 @@ import * as t from "../../types";
  */
 
 export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
- var parts = pattern.split(".");
-
   // not a member expression
   if (!this.isMemberExpression()) return false;
 
+  var parts = pattern.split(".");
   var search = [this.node];
   var i = 0;
 
@@ -45,6 +44,8 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
         search.push(node.property);
         continue;
       }
+    } else if (t.isThisExpression(node)) {
+      if (!matches("this")) return false;
     } else {
       // we can't deal with this
       return false;
