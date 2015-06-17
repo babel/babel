@@ -37,7 +37,7 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
     var keys = t.VISITOR_KEYS[deepest.type];
 
     for (var ancestry of (ancestries: Array)) {
-      var path = ancestry[i - 0];
+      var path = ancestry[i + 1];
 
       if (!earliest) {
         earliest = path;
