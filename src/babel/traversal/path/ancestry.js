@@ -28,7 +28,11 @@ export function getStatementParent() {
 }
 
 /**
- * Description
+ * Get the deepest common ancestor and then from it, get the earliest relationship path
+ * to that ancestor.
+ *
+ * Earliest is defined as being "before" all the other nodes in terms of list container
+ * position and visiting key.
  */
 
 export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath {
