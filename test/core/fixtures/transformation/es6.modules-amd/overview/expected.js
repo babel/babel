@@ -1,8 +1,10 @@
 define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
+  exports = Object.create(null, {
+    __esModule: {
+      value: true
+    }
   });
 
   var _foo2 = babelHelpers.interopRequireDefault(_foo);

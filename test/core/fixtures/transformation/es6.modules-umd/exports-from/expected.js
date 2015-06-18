@@ -13,8 +13,10 @@
 })(this, function (exports, _foo) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
+  exports = Object.create(null, {
+    __esModule: {
+      value: true
+    }
   });
   babelHelpers.defaults(exports, babelHelpers.interopRequireWildcard(_foo));
   Object.defineProperty(exports, "foo", {

@@ -2,7 +2,7 @@
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
+var _Object$create = require("babel-runtime/core-js/object/create")["default"];
 
 var _Symbol = require("babel-runtime/core-js/symbol")["default"];
 
@@ -10,10 +10,11 @@ var _interopRequireDefault = require("babel-runtime/helpers/interop-require-defa
 
 var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+exports = _Object$create(null, {
+  __esModule: {
+    value: true
+  }
 });
-
 exports.giveWord = giveWord;
 var marked0$0 = [giveWord].map(_regeneratorRuntime.mark);
 
