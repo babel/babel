@@ -14,6 +14,7 @@ For questions and support please visit the `#linting` [babel slack channel](http
 > For issues related to JSX (especially `no-unused-vars`), see if [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) helps!
 - `generator-star` with async/await functions [#78](https://github.com/babel/babel-eslint/issues/78)
 - `object-shorthand` with spread operator [#131](https://github.com/babel/babel-eslint/issues/131)
+- `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/babel-eslint/issues/132#issuecomment-112815926)
 
 ## How does it work?
 
