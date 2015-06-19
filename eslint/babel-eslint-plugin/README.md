@@ -1,6 +1,6 @@
 # eslint-plugin-babel
 
-An eslint plugin companion to babel-eslint. babel-eslint does a great job of adapting the eslint parser to valid babel code, it can't change built in rules to deal with the syntactic differences. eslint-plugin-babel reimplements problematic rules to not give false positives or negatives.
+An eslint plugin companion to babel-eslint. babel-eslint does a great job of adapting eslint for use with Babel, but to it can't change the built in rules to support experimental features. eslint-plugin-babel reimplements problematic rules so they do not give false positives or negatives.
 
 ### Install
 
