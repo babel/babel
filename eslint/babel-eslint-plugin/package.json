@@ -1,10 +1,10 @@
 {
   "name": "eslint-plugin-babel",
   "version": "1.0.0",
-  "description": "eslint rule plugin companion to babel-eslint",
+  "description": "an eslint rule plugin companion to babel-eslint",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec ./tests/*.js"
+    "test": "mocha ./tests/*.js"
   },
   "repository": {
     "type": "git",
@@ -14,21 +14,24 @@
     "babel",
     "eslint",
     "eslintplugin",
+    "eslint-plugin",
     "babel-eslint"
   ],
-  "author": "jquense @monasticpanic",
+  "author": "Jason Quense @monasticpanic",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/babel/eslint-plugin-babel/issues"
   },
   "homepage": "https://github.com/babel/eslint-plugin-babel#readme",
+  "peerDependencies": {
+    "eslint": ">=0.8.0"
+  },
   "devDependencies": {
     "babel-eslint": "^3.1.17",
     "eslint": "^0.23.0",
     "eslint-tester": "^0.8.0",
     "is-my-json-valid": "^2.12.0",
     "mocha": "^2.2.5",
-    "mocha-phantomjs": "^3.5.3",
     "phantomjs": "^1.9.17"
   },
   "dependencies": {
