@@ -16,5 +16,5 @@ var foo = {
   async foo() {},
   *foo() {},
   get foo() {},
-  set foo() {}
+  set foo(foo) {}
 };

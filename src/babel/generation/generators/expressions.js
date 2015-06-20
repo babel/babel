@@ -126,6 +126,12 @@ export function ExpressionStatement(node, print) {
   this.semicolon();
 }
 
+export function AssignmentPattern(node, print) {
+  print.plain(node.left);
+  this.push(" = ");
+  print.plain(node.right);
+}
+
 export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
   print.plain(node.left);
@@ -143,8 +149,7 @@ export function BindExpression(node, print) {
 
 export {
   AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression,
-  AssignmentExpression as AssignmentPattern
+  AssignmentExpression as LogicalExpression
 };
 
 export function MemberExpression(node, print) {
