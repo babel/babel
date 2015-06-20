@@ -13,6 +13,7 @@ export default {
   "utility.inlineEnvironmentVariables":    require("babel-plugin-inline-environment-variables"),
   "minification.deadCodeElimination":      require("babel-plugin-dead-code-elimination"),
   _modules:                                require("./internal/modules"),
+  "react.displayName":                     require("babel-plugin-react-display-name"),
   "spec.functionName":                     require("./spec/function-name"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),

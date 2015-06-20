@@ -39,6 +39,7 @@
     "babel-plugin-property-literals": "^1.0.1",
     "babel-plugin-proto-to-assign": "^1.0.3",
     "babel-plugin-react-constant-elements": "^1.0.3",
+    "babel-plugin-react-display-name": "^1.0.3",
     "babel-plugin-remove-console": "^1.0.1",
     "babel-plugin-remove-debugger": "^1.0.1",
     "babel-plugin-runtime": "^1.0.5",

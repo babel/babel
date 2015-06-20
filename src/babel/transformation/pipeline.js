@@ -33,6 +33,10 @@ export default class Pipeline {
       plugin = PluginManager.memoisePluginContainer(plugin);
       plugin.key = key;
       plugin.metadata.optional = true;
+
+      if (key === "react.displayName") {
+        plugin.metadata.optional = false;
+      }
     } else {
       plugin = new Plugin(key, plugin);
     }
