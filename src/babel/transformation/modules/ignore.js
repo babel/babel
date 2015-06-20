@@ -11,4 +11,5 @@ export default class IgnoreFormatter extends DefaultFormatter {
   importDeclaration() {}
   importSpecifier() {}
   exportSpecifier() {}
+  transform() {}
 }
