@@ -6,6 +6,7 @@ var transform        = require("babel-core").transform;
 var kebabCase        = require("lodash/string/kebabCase");
 var options          = require("babel-core").options;
 var util             = require("babel-core").util;
+var uniq             = require("lodash/array/uniq");
 var each             = require("lodash/collection/each");
 var keys             = require("lodash/object/keys");
 var fs               = require("fs");
@@ -83,6 +84,8 @@ var filenames = commander.args.reduce(function (globbed, input) {
   if (!files.length) files = [input];
   return globbed.concat(files);
 }, []);
+
+filenames = uniq(filenames);
 
 each(filenames, function (filename) {
   if (!fs.existsSync(filename)) {
