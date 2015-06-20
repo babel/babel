@@ -8,12 +8,14 @@ var remapVisitor = {
   },
 
   ReferencedIdentifier(node, parent, scope, remaps) {
+    var { formatter } = remaps;
+
     var remap = remaps.get(scope, node.name);
     if (!remap || node === remap) return;
 
     if (!scope.hasBinding(node.name) ||
-        scope.bindingIdentifierEquals(node.name, remaps.formatter.localImports[node.name])) {
-      if (this.key === "callee" && this.parentPath.isCallExpression()) {
+        scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
+      if (!formatter.isLoose() && this.key === "callee" && this.parentPath.isCallExpression()) {
         return t.sequenceExpression([t.literal(0), remap]);
       } else {
         return remap;
