@@ -13,6 +13,36 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.0
+
+ * **Bug Fix**
+  * Fix istanbul interop for register hook when registering for non-existence extension.
+  * Fix super class constructor call differing for no constructor in derived classes.
+  * Disable module import receiver when in loose mode.
+  * Fix duplicate filenames when using `babel` CLI when passing multiple matching patterns.
+  * Register labels as bindings to fix undeclared variable checks.
+ * **Polish**
+  * Remove unnecessary string binary expressions when transforming template literals.
+  * Support module live bindings in arbitary positions not in Program statement position.
+  * Throw error when attemping to replace a `Program` root node with another node not of type `Program`.
+  * Optimise rest parameters in spread element position and allocate rest array at the earliest common ancestor of all references.
+  * Generate original number representation when value was not changed.
+  * Check for invalid binding identifiers when generating inferred method names.
+  * Don't terminate CLI when watching files fail compilation on init.
+ * **New Feature**
+  * Add new plugin API.
+ * **Internal**
+  * Split react displayName addition into a plugin.
+  * Add check for `JSXMemberExpression` to `t.isReferenced`.
+  * Move `validation.undeclaredVariableCheck` transformer up.
+  * Start great core-to-plugin exodus.
+  * Add `BindingIdentifier` virtual type.
+  * Hidden class optimisations.
+  * Array allocation optimisations.
+  * Update `regenerator`.
+  * Update `js-tokens`.
+  * Sync with upstream Acorn.
+
 ## 5.5.8
 
  * **Internal**
