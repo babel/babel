@@ -1,5 +1,6 @@
 import {reservedWords, keywords} from "./identifier"
-import {types as tt, lineBreak} from "./tokentype"
+import {types as tt} from "./tokentype"
+import {lineBreak} from "./whitespace"
 
 export function Parser(options, input, startPos) {
   this.options = options

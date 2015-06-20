@@ -347,7 +347,14 @@ pp.parseLabeledStatement = function(node, maybeName, expr) {
   for (let i = 0; i < this.labels.length; ++i)
     if (this.labels[i].name === maybeName) this.raise(expr.start, "Label '" + maybeName + "' is already declared")
   let kind = this.type.isLoop ? "loop" : this.type === tt._switch ? "switch" : null
-  this.labels.push({name: maybeName, kind: kind})
+  for (let i = this.labels.length - 1; i >= 0; i--) {
+    let label = this.labels[i]
+    if (label.statementStart == node.start) {
+      label.statementStart = this.start;
+      label.kind = kind;
+    } else break;
+  }
+  this.labels.push({name: maybeName, kind: kind, statementStart: this.start})
   node.body = this.parseStatement(true)
   this.labels.pop()
   node.label = expr
@@ -466,6 +473,7 @@ pp.parseClass = function(node, isStatement) {
   this.parseClassId(node, isStatement)
   this.parseClassSuper(node)
   var classBody = this.startNode()
+  let hadConstructor = false
   classBody.body = []
   this.expect(tt.braceL)
   let decorators = []
@@ -480,16 +488,14 @@ pp.parseClass = function(node, isStatement) {
       method.decorators = decorators
       decorators = []
     }
+    let isMaybeStatic = this.type === tt.name && this.value === "static"
     var isGenerator = this.eat(tt.star), isAsync = false
     this.parsePropertyName(method)
-    if (this.type !== tt.parenL && !method.computed && method.key.type === "Identifier" &&
-        method.key.name === "static") {
+    method.static = isMaybeStatic && this.type !== tt.parenL
+    if (method.static) {
       if (isGenerator) this.unexpected()
-      method['static'] = true
       isGenerator = this.eat(tt.star)
       this.parsePropertyName(method)
-    } else {
-      method['static'] = false
     }
     if (!isGenerator && method.key.type === "Identifier" && !method.computed && this.isClassProperty()) {
       classBody.body.push(this.parseClassProperty(method))
@@ -500,23 +506,39 @@ pp.parseClass = function(node, isStatement) {
       isAsync = true
       this.parsePropertyName(method)
     }
+    let isGetSet = false
     method.kind = "method"
-    if (!method.computed && !isGenerator && !isAsync) {
-      if (method.key.type === "Identifier") {
-        if (this.type !== tt.parenL && (method.key.name === "get" || method.key.name === "set")) {
-          method.kind = method.key.name
-          this.parsePropertyName(method)
-        } else if (!method['static'] && method.key.name === "constructor") {
-          method.kind = "constructor"
-        }
-      } else if (!method['static'] && method.key.type === "Literal" && method.key.value === "constructor") {
+    if (!method.computed) {
+      let {key} = method
+      if (!isAsync && !isGenerator && key.type === "Identifier" && this.type !== tt.parenL && (key.name === "get" || key.name === "set")) {
+        isGetSet = true
+        method.kind = key.name
+        key = this.parsePropertyName(method)
+      }
+      if (!method.static && (key.type === "Identifier" && key.name === "constructor" ||
+          key.type === "Literal" && key.value === "constructor")) {
+        if (hadConstructor) this.raise(key.start, "Duplicate constructor in the same class")
+        if (isGetSet) this.raise(key.start, "Constructor can't have get/set modifier")
+        if (isGenerator) this.raise(key.start, "Constructor can't be a generator")
+        if (isAsync) this.raise(key.start, "Constructor can't be an async function")
         method.kind = "constructor"
+        hadConstructor = true
       }
     }
     if (method.kind === "constructor" && method.decorators) {
       this.raise(method.start, "You can't attach decorators to a class constructor")
     }
     this.parseClassMethod(classBody, method, isGenerator, isAsync)
+    if (isGetSet) {
+      let paramCount = method.kind === "get" ? 0 : 1
+      if (method.value.params.length !== paramCount) {
+        let start = method.value.start
+        if (method.kind === "get")
+          this.raise(start, "getter should have no params");
+        else
+          this.raise(start, "setter should have exactly one param")
+      }
+    }
   }
   if (decorators.length) {
     this.raise(this.start, "You have trailing decorators with no method");

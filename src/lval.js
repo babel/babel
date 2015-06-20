@@ -35,6 +35,7 @@ pp.toAssignable = function(node, isBinding) {
     case "AssignmentExpression":
       if (node.operator === "=") {
         node.type = "AssignmentPattern"
+        delete node.operator
       } else {
         this.raise(node.left.end, "Only '=' operator can be used for specifying default value.")
       }
@@ -171,7 +172,7 @@ pp.checkLVal = function(expr, isBinding, checkClashes) {
     break
 
   case "ObjectPattern":
-    for (let i = 0; i < expr.properties.length; i++) {
+       for (let i = 0; i < expr.properties.length; i++) {
       var prop = expr.properties[i];
       if (prop.type === "Property") prop = prop.value;
       this.checkLVal(prop, isBinding, checkClashes)
@@ -192,6 +193,10 @@ pp.checkLVal = function(expr, isBinding, checkClashes) {
   case "SpreadProperty":
   case "RestElement":
     this.checkLVal(expr.argument, isBinding, checkClashes)
+    break
+
+  case "ParenthesizedExpression":
+    this.checkLVal(expr.expression, isBinding, checkClashes)
     break
 
   default:
