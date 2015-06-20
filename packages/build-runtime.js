@@ -75,7 +75,7 @@ writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime
 
 //
 
-var coreDefinitions = require("../lib/babel/transformation/transformers/other/runtime/definitions");
+var coreDefinitions = require("babel-plugin-runtime/lib/definitions");
 
 var paths = ["is-iterable", "get-iterator"];
 
