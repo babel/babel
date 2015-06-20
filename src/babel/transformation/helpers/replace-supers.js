@@ -169,7 +169,13 @@ export default class ReplaceSupers {
 
       if (methodName.name === "constructor") {
         // constructor() { super(); }
-        return t.memberExpression(superRef, t.identifier("call"));
+        if (parent.arguments.length === 2 && t.isSpreadElement(parent.arguments[1]) && t.isIdentifier(parent.arguments[1].argument, { name: "arguments" })) {
+          // special case single arguments spread
+          parent.arguments[1] = parent.arguments[1].argument;
+          return t.memberExpression(superRef, t.identifier("apply"));
+        } else {
+          return t.memberExpression(superRef, t.identifier("call"));
+        }
       } else {
         id = superRef;
 
