@@ -370,7 +370,7 @@ export default class Scope {
     }
   }
 
-  _renameFromMap(map, oldName, newName, value) {
+  _renameFromMap(map = {}, oldName, newName, value) {
     if (map[oldName]) {
       map[newName] = value;
       map[oldName] = null;
