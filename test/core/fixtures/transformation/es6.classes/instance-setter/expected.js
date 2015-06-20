@@ -7,7 +7,7 @@ var Test = (function () {
 
   babelHelpers.createClass(Test, [{
     key: "test",
-    set: function (val) {
+    set: function set(val) {
       this._test = val;
     }
   }]);

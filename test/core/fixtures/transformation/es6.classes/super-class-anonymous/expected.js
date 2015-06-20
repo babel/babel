@@ -9,7 +9,7 @@ var TestEmpty = (function (_ref) {
   babelHelpers.inherits(TestEmpty, _ref);
   return TestEmpty;
 })((function () {
-  var _class = function () {
+  var _class = function _class() {
     babelHelpers.classCallCheck(this, _class);
   };
 
@@ -25,7 +25,7 @@ var TestConstructorOnly = (function (_ref2) {
   babelHelpers.inherits(TestConstructorOnly, _ref2);
   return TestConstructorOnly;
 })((function () {
-  var _class2 = function () {
+  var _class2 = function _class2() {
     babelHelpers.classCallCheck(this, _class2);
   };
 
@@ -41,7 +41,7 @@ var TestMethodOnly = (function (_ref3) {
   babelHelpers.inherits(TestMethodOnly, _ref3);
   return TestMethodOnly;
 })((function () {
-  var _class3 = function () {
+  var _class3 = function _class3() {
     babelHelpers.classCallCheck(this, _class3);
   };
 
@@ -61,7 +61,7 @@ var TestConstructorAndMethod = (function (_ref4) {
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
   return TestConstructorAndMethod;
 })((function () {
-  var _class4 = function () {
+  var _class4 = function _class4() {
     babelHelpers.classCallCheck(this, _class4);
   };
 
@@ -81,7 +81,7 @@ var TestMultipleMethods = (function (_ref5) {
   babelHelpers.inherits(TestMultipleMethods, _ref5);
   return TestMultipleMethods;
 })((function () {
-  var _class5 = function () {
+  var _class5 = function _class5() {
     babelHelpers.classCallCheck(this, _class5);
   };
 

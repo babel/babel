@@ -3,5 +3,5 @@
 var obj = babelHelpers.createDecoratedObject([{
   key: "foo",
   decorators: [foo],
-  set: function (bar) {}
+  set: function set(bar) {}
 }]);

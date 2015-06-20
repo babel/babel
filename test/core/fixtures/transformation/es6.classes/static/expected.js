@@ -10,8 +10,8 @@ var A = (function () {
     value: function a() {}
   }, {
     key: "b",
-    get: function () {},
-    set: function (b) {}
+    get: function get() {},
+    set: function set(b) {}
   }]);
   return A;
 })();

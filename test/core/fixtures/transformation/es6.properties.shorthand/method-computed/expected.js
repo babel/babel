@@ -3,10 +3,10 @@
 var x = "y";
 var valueSet;
 var obj = Object.defineProperties({}, babelHelpers.defineProperty({}, x, {
-  get: function () {
+  get: function get() {
     return 1;
   },
-  set: function (value) {
+  set: function set(value) {
     valueSet = value;
   },
   configurable: true,

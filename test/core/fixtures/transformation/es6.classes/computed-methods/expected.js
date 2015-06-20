@@ -13,10 +13,10 @@ var Foo = (function () {
     value: function foo() {}
   }, {
     key: bar,
-    value: function () {}
+    value: function value() {}
   }, {
     key: bar + "foo",
-    value: function () {}
+    value: function value() {}
   }]);
   return Foo;
 })();

@@ -7,7 +7,7 @@ var Test = (function () {
 
   babelHelpers.createClass(Test, [{
     key: "test",
-    get: function () {
+    get: function get() {
       return 5 + 5;
     }
   }]);

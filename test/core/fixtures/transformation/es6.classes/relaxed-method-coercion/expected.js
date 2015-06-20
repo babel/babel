@@ -9,10 +9,10 @@ var Foo = (function () {
 
   babelHelpers.createClass(Foo, [{
     key: Symbol(),
-    value: function () {}
+    value: function value() {}
   }, {
     key: Symbol(),
-    value: function () {}
+    value: function value() {}
   }]);
   return Foo;
 })();

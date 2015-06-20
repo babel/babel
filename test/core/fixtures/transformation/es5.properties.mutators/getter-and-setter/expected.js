@@ -2,10 +2,10 @@
 
 var obj = Object.defineProperties({}, {
   foo: {
-    get: function () {
+    get: function get() {
       return 5 + 5;
     },
-    set: function (value) {
+    set: function set(value) {
       this._foo = value;
     },
     configurable: true,

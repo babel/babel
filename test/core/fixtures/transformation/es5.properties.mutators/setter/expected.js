@@ -2,7 +2,7 @@
 
 var obj = Object.defineProperties({}, {
   foo: {
-    set: function (value) {
+    set: function set(value) {
       this._foo = value;
     },
     configurable: true,

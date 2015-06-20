@@ -14,7 +14,6 @@ export default {
   "minification.deadCodeElimination":      require("babel-plugin-dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "react.displayName":                     require("babel-plugin-react-display-name"),
-  "spec.functionName":                     require("./spec/function-name"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
   "validation.undeclaredVariableCheck":    require("babel-plugin-undeclared-variables-check"),
@@ -22,6 +21,7 @@ export default {
   //- builtin-basic
   // this is where the bulk of the ES6 transformations take place, none of them require traversal state
   // so they can all be concatenated together for performance
+  "spec.functionName":                     require("./spec/function-name"),
   "es7.classProperties":                   require("./es7/class-properties"),
   "es7.trailingFunctionCommas":            require("./es7/trailing-function-commas"),
   "es7.asyncFunctions":                    require("./es7/async-functions"),
