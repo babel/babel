@@ -64,6 +64,7 @@ var collectorVisitor = {
 
   LabeledStatement(node) {
     this.scope.getProgramParent().addGlobal(node);
+    this.scope.getBlockParent().registerDeclaration(this);
   },
 
   AssignmentExpression() {
@@ -435,7 +436,9 @@ export default class Scope {
    */
 
   registerDeclaration(path: NodePath) {
-    if (path.isFunctionDeclaration()) {
+    if (path.isLabeledStatement()) {
+      this.registerBinding("label", path);
+    } else if (path.isFunctionDeclaration()) {
       this.registerBinding("hoisted", path);
     } else if (path.isVariableDeclaration()) {
       var declarations = path.get("declarations");

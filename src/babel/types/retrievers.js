@@ -41,6 +41,7 @@ getBindingIdentifiers.keys = {
   ComprehensionBlock: "left",
 
   CatchClause: "param",
+  LabeledStatement: "label",
   UnaryExpression: "argument",
   AssignmentExpression: "left",
 
