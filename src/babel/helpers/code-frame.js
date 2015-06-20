@@ -79,9 +79,11 @@ export default function (lines: number, lineNumber: number, colNumber: number, o
       if (params.number !== lineNumber) {
         return;
       }
+
       if (colNumber) {
         params.line += `\n${params.before}${repeating(" ", params.width)}${params.after}${repeating(" ", colNumber - 1)}^`;
       }
+
       params.before = params.before.replace(/^./, ">");
     }
   }).join("\n");
