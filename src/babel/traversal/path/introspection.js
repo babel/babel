@@ -10,11 +10,10 @@ import * as t from "../../types";
  */
 
 export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
- var parts = pattern.split(".");
-
   // not a member expression
   if (!this.isMemberExpression()) return false;
 
+  var parts = pattern.split(".");
   var search = [this.node];
   var i = 0;
 
@@ -41,10 +40,12 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
         // we can't deal with this
         return false;
       } else {
-        search.push(node.object);
-        search.push(node.property);
+        search.unshift(node.property);
+        search.unshift(node.object);
         continue;
       }
+    } else if (t.isThisExpression(node)) {
+      if (!matches("this")) return false;
     } else {
       // we can't deal with this
       return false;
@@ -56,7 +57,7 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
     }
   }
 
-  return true;
+  return i === parts.length;
 }
 
 /**
