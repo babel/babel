@@ -10,7 +10,7 @@ var Test = (function (_Foo) {
     _Foo.call(this);
     _Foo.prototype.test.call(this);
 
-    _Foo.call.apply(_Foo, [this].concat(babelHelpers.slice.call(arguments)));
+    _Foo.apply(this, arguments);
     _Foo.call.apply(_Foo, [this, "test"].concat(babelHelpers.slice.call(arguments)));
 
     (_Foo$prototype$test = _Foo.prototype.test).call.apply(_Foo$prototype$test, [this].concat(babelHelpers.slice.call(arguments)));
