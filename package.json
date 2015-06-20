@@ -42,7 +42,7 @@
     "babel-plugin-react-display-name": "^1.0.3",
     "babel-plugin-remove-console": "^1.0.1",
     "babel-plugin-remove-debugger": "^1.0.1",
-    "babel-plugin-runtime": "^1.0.5",
+    "babel-plugin-runtime": "^1.0.7",
     "babel-plugin-undeclared-variables-check": "^1.0.2",
     "babel-plugin-undefined-to-void": "^1.1.6",
     "chalk": "^1.0.0",
