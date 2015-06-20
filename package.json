@@ -44,7 +44,6 @@
     "babel-plugin-runtime": "^1.0.5",
     "babel-plugin-undeclared-variables-check": "^1.0.2",
     "babel-plugin-undefined-to-void": "^1.1.6",
-    "bluebird": "^2.9.25",
     "chalk": "^1.0.0",
     "convert-source-map": "^1.1.0",
     "core-js": "^0.9.0",
