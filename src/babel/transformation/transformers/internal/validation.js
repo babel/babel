@@ -14,28 +14,8 @@ export var visitor = {
     }
   },
 
-  MethodDefinition(node) {
-    if (node.kind !== "constructor") {
-      // get constructor() {}
-      var isConstructor = !node.computed && t.isIdentifier(node.key, { name: "constructor" });
-
-      // get ["constructor"]() {}
-      isConstructor = isConstructor || t.isLiteral(node.key, { value: "constructor" });
-
-      if (isConstructor) {
-        throw this.errorWithNode(messages.get("classesIllegalConstructorKind"));
-      }
-    }
-
-    visitor.Property.apply(this, arguments);
-  },
-
   Property(node, parent, scope, file) {
     if (node.kind === "set") {
-      if (node.value.params.length !== 1) {
-        throw file.errorWithNode(node.value, messages.get("settersInvalidParamLength"));
-      }
-
       var first = node.value.params[0];
       if (t.isRestElement(first)) {
         throw file.errorWithNode(first, messages.get("settersNoRest"));

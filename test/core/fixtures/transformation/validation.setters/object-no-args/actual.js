@@ -1,5 +1,0 @@
-var obj = {
-  set bar() {
-
-  }
-};

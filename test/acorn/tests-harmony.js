@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2015 Ingvar Stepanyan <me@rreverser.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -6,7 +7,6 @@
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2011 Arpad Borsos <arpad.borsos@googlemail.com>
-  Copyright (C) 2014 Ingvar Stepanyan <me@rreverser.com>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -877,7 +877,7 @@ test("`\n\r\n\r`", {
   locations: true
 });
 
-test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
+test("`\\u{000042}\\u0042\\x42u0\\A`", {
   type: "Program",
   body: [{
     type: "ExpressionStatement",
@@ -885,27 +885,27 @@ test("`\\u{000042}\\u0042\\x42u0\\102\\A`", {
       type: "TemplateLiteral",
       quasis: [{
         type: "TemplateElement",
-        value: {raw: "\\u{000042}\\u0042\\x42u0\\102\\A", cooked: "BBBu0BA"},
+        value: {raw: "\\u{000042}\\u0042\\x42u0\\A", cooked: "BBBu0A"},
         tail: true,
         loc: {
           start: {line: 1, column: 1},
-          end: {line: 1, column: 29}
+          end: {line: 1, column: 25}
         }
       }],
       expressions: [],
       loc: {
         start: {line: 1, column: 0},
-        end: {line: 1, column: 30}
+        end: {line: 1, column: 26}
       }
     },
     loc: {
       start: {line: 1, column: 0},
-      end: {line: 1, column: 30}
+      end: {line: 1, column: 26}
     }
   }],
   loc: {
     start: {line: 1, column: 0},
-    end: {line: 1, column: 30}
+    end: {line: 1, column: 26}
   }
 }, {
   ecmaVersion: 6,
@@ -1714,7 +1714,7 @@ test("([a, , b]) => 42", {
 
 testFail("([a.a]) => 42", "Assigning to rvalue (1:2)", {ecmaVersion: 6});
 
-testFail("console.log(typeof () => {});", "Unexpected token (1:20)", {ecmaVersion: 6});
+testFail("console.log(typeof () => {});", "Unexpected token (1:20)", {ecmaVersion: 6})
 
 test("(x=1) => x * x", {
   type: "Program",
@@ -7222,6 +7222,12 @@ test("class A {'constructor'() {}}", {
     }
   }]
 }, {ecmaVersion: 6});
+
+testFail("class A { constructor() {} 'constructor'() }", "Duplicate constructor in the same class (1:27)", {ecmaVersion: 6});
+
+testFail("class A { get constructor() {} }", "Constructor can't have get/set modifier (1:14)", {ecmaVersion: 6});
+
+testFail("class A { *constructor() {} }", "Constructor can't be a generator (1:11)", {ecmaVersion: 6});
 
 test("class A {static foo() {}}", {
   type: "Program",
@@ -13641,21 +13647,21 @@ testFail("0B18", "Unexpected token (1:3)", {ecmaVersion: 6});
 
 testFail("0B12", "Unexpected token (1:3)", {ecmaVersion: 6});
 
-testFail("\"\\u{110000}\"", "Unexpected token (1:0)", {ecmaVersion: 6});
+testFail("\"\\u{110000}\"", "Code point out of bounds (1:4)", {ecmaVersion: 6});
 
-testFail("\"\\u{}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
+testFail("\"\\u{}\"", "Bad character escape sequence (1:4)", {ecmaVersion: 6});
 
-testFail("\"\\u{FFFF\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
+testFail("\"\\u{FFFF\"", "Bad character escape sequence (1:4)", {ecmaVersion: 6});
 
-testFail("\"\\u{FFZ}\"", "Bad character escape sequence (1:0)", {ecmaVersion: 6});
+testFail("\"\\u{FFZ}\"", "Bad character escape sequence (1:4)", {ecmaVersion: 6});
 
 testFail("[v] += ary", "Assigning to rvalue (1:0)", {ecmaVersion: 6});
 
 testFail("[2] = 42", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ obj:20 } = 42)", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
+testFail("({ obj:20 }) = 42", "Assigning to rvalue (1:7)", {ecmaVersion: 6});
 
-testFail("( { get x() {} } = 0 )", "Object pattern can't contain getter or setter (1:8)", {ecmaVersion: 6});
+testFail("( { get x() {} } ) = 0", "Object pattern can't contain getter or setter (1:8)", {ecmaVersion: 6});
 
 testFail("x \n is y", "Unexpected token (2:4)", {ecmaVersion: 6});
 
@@ -13675,9 +13681,9 @@ testFail("let default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("const default", "Unexpected token (1:6)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: eval } = obj)", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: eval }) = obj", "Assigning to eval in strict mode (1:20)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; ({ v: arguments } = obj)", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
+testFail("\"use strict\"; ({ v: arguments }) = obj", "Assigning to arguments in strict mode (1:20)", {ecmaVersion: 6});
 
 testFail("for (let x = 42 in list) process(x);", "Unexpected token (1:16)", {ecmaVersion: 6});
 
@@ -14288,7 +14294,6 @@ test("var {propName: localVar = defaultValue} = obj", {
           value: {
             type: "AssignmentPattern",
             range: [15, 38],
-            operator: "=",
             left: {
               type: "Identifier",
               range: [15, 23],
@@ -14344,7 +14349,6 @@ test("var {propName = defaultValue} = obj", {
           value: {
             type: "AssignmentPattern",
             range: [5, 28],
-            operator: "=",
             left: {
               type: "Identifier",
               range: [5, 13],
@@ -14387,7 +14391,6 @@ test("var [localVar = defaultValue] = obj", {
         elements: [{
           type: "AssignmentPattern",
           range: [5, 28],
-          operator: "=",
           left: {
             type: "Identifier",
             range: [5, 13],
@@ -14442,7 +14445,6 @@ test("({x = 0} = obj)", {
           value: {
             type: "AssignmentPattern",
             range: [2, 7],
-            operator: "=",
             left: {
               type: "Identifier",
               range: [2, 3],
@@ -14498,7 +14500,6 @@ test("({x = 0}) => x", {
           value: {
             type: "AssignmentPattern",
             range: [2, 7],
-            operator: "=",
             left: {
               type: "Identifier",
               range: [2, 3],
@@ -14575,7 +14576,6 @@ test("[a, {b: {c = 1}}] = arr", {
                   value: {
                     type: "AssignmentPattern",
                     range: [9, 14],
-                    operator: "=",
                     left: {
                       type: "Identifier",
                       range: [9, 10],
@@ -14630,7 +14630,6 @@ test("for ({x = 0} in arr);", {
         value: {
           type: "AssignmentPattern",
           range: [6, 11],
-          operator: "=",
           left: {
             type: "Identifier",
             range: [6, 7],
@@ -15262,3 +15261,70 @@ test("new.target", {
 }, {ecmaVersion: 6});
 
 testFail("new.prop", "The only valid meta property for new is new.target (1:4)", {ecmaVersion: 6});
+
+test("export default function foo() {} false", {
+  body: [
+    {
+      declaration: {
+        id: {
+          name: "foo",
+          type: "Identifier"
+        },
+        generator: false,
+        expression: false,
+        params: [],
+        body: {
+          body: [],
+          type: "BlockStatement"
+        },
+        type: "FunctionDeclaration"
+      },
+      type: "ExportDefaultDeclaration"
+    },
+    {
+      expression: {
+        value: false,
+        raw: "false",
+        type: "Literal"
+      },
+      type: "ExpressionStatement"
+    }
+  ],
+  sourceType: "module",
+  type: "Program"
+}, {ecmaVersion: 6, sourceType: "module"})
+
+// https://github.com/marijnh/acorn/issues/274
+
+testFail("`\\07`", "Octal literal in strict mode (1:1)", {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/277
+
+testFail("x = { method() 42 }", "Unexpected token (1:15)", {ecmaVersion: 6});
+
+testFail("x = { get method() 42 }", "Unexpected token (1:19)", {ecmaVersion: 6});
+
+testFail("x = { set method(val) v = val }", "Unexpected token (1:22)", {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/278
+
+testFail("/\\u{110000}/u", "Code point out of bounds (1:4)", {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/279
+
+testFail("super", "'super' outside of function or class (1:0)", {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/275
+
+testFail("class A { get prop(x) {} }", "getter should have no params (1:18)", {ecmaVersion: 6});
+testFail("class A { set prop() {} }", "setter should have exactly one param (1:18)", {ecmaVersion: 6});
+testFail("class A { set prop(x, y) {} }", "setter should have exactly one param (1:18)", {ecmaVersion: 6});
+
+// https://github.com/marijnh/acorn/issues/276
+
+testFail("({ __proto__: 1, __proto__: 2 })", "Redefinition of __proto__ property (1:17)", {ecmaVersion: 6});
+testFail("({ '__proto__': 1, __proto__: 2 })", "Redefinition of __proto__ property (1:19)", {ecmaVersion: 6});
+test("({ ['__proto__']: 1, __proto__: 2 })", {}, {ecmaVersion: 6});
+test("({ __proto__() { return 1 }, __proto__: 2 })", {}, {ecmaVersion: 6});
+test("({ get __proto__() { return 1 }, __proto__: 2 })", {}, {ecmaVersion: 6});
+test("({ __proto__, __proto__: 2 })", {}, {ecmaVersion: 6});

@@ -1,5 +1,0 @@
-class Foo {
-  set bar() {
-
-  }
-}

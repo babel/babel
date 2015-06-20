@@ -29,14 +29,23 @@ const pp = Parser.prototype
 // strict mode, init properties are also not allowed to be repeated.
 
 pp.checkPropClash = function(prop, propHash) {
-  if (this.options.ecmaVersion >= 6) return
+  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand))
+    return
   let key = prop.key, name
   switch (key.type) {
   case "Identifier": name = key.name; break
   case "Literal": name = String(key.value); break
   default: return
   }
-  let kind = prop.kind || "init", other
+  let kind = prop.kind
+  if (this.options.ecmaVersion >= 6) {
+    if (name === "__proto__" && kind === "init") {
+      if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
+      propHash.proto = true
+    }
+    return
+  }
+  let other
   if (has(propHash, name)) {
     other = propHash[name]
     let isGetSet = kind !== "init"
@@ -260,8 +269,10 @@ pp.parseNoCallExpr = function() {
 pp.parseExprAtom = function(refShorthandDefaultPos) {
   let node, canBeArrow = this.potentialArrowAt == this.start
   switch (this.type) {
-  case tt._this:
   case tt._super:
+    if (!this.inFunction)
+      this.raise(this.start, "'super' outside of function or class")
+  case tt._this:
     let type = this.type === tt._this ? "ThisExpression" : "Super"
     node = this.startNode()
     this.next()
@@ -609,6 +620,14 @@ pp.parseObjPropValue = function (prop, start, isGenerator, isAsync, isPattern, r
     prop.kind = prop.key.name
     this.parsePropertyName(prop)
     prop.value = this.parseMethod(false)
+    let paramCount = prop.kind === "get" ? 0 : 1
+    if (prop.value.params.length !== paramCount) {
+      let start = prop.value.start
+      if (prop.kind === "get")
+        this.raise(start, "getter should have no params");
+      else
+        this.raise(start, "setter should have exactly one param")
+    }
   } else if (this.options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
     prop.kind = "init"
     if (isPattern) {
@@ -634,12 +653,12 @@ pp.parsePropertyName = function(prop) {
       prop.computed = true
       prop.key = this.parseMaybeAssign()
       this.expect(tt.bracketR)
-      return
+      return prop.key
     } else {
       prop.computed = false
     }
   }
-  prop.key = (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true)
+  return prop.key = (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true)
 }
 
 // Initialize empty function node.

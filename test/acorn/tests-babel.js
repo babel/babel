@@ -2299,7 +2299,7 @@ test("class Foo { @foo bar() {} }", {
   features: { "es7.decorators": true }
 });
 
-test("class Foo { @foo set bar() {} }", {
+test("class Foo { @foo set bar(f) {} }", {
   "start": 0,
   "body": [
     {
@@ -2343,29 +2343,32 @@ test("class Foo { @foo set bar() {} }", {
               "id": null,
               "generator": false,
               "expression": false,
-              "params": [],
+              "params": [{
+                "type": "Identifier",
+                "name": "f"
+              }],
               "body": {
-                "start": 27,
+                "start": 28,
                 "body": [],
                 "type": "BlockStatement",
-                "end": 29
+                "end": 30
               },
               "type": "FunctionExpression",
-              "end": 29
+              "end": 30
             },
             "type": "MethodDefinition",
-            "end": 29
+            "end": 30
           }
         ],
         "type": "ClassBody",
-        "end": 31
+        "end": 32
       },
       "type": "ClassDeclaration",
-      "end": 31
+      "end": 32
     }
   ],
   "type": "Program",
-  "end": 31
+  "end": 32
 }, {
   ecmaVersion: 6,
   features: { "es7.decorators": true }

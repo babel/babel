@@ -25,6 +25,9 @@ export class Token {
 
 const pp = Parser.prototype
 
+// Are we running under Rhino?
+const isRhino = typeof Packages == "object" && Object.prototype.toString.call(Packages) == "[object JavaPackage]"
+
 // Move to the next token
 
 pp.next = function() {
@@ -430,23 +433,30 @@ pp.readRegexp = function() {
       // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
       // perfectly valid pattern that is equivalent to `[a-b]`, but it would
       // be replaced by `[x-b]` which throws an error.
-      tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|\\u\{([0-9a-fA-F]+)\}|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x")
+      tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, (match, code, offset) => {
+        code = Number("0x" + code)
+        if (code > 0x10FFFF) this.raise(start + offset + 3, "Code point out of bounds")
+        return "x"
+      });
+      tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x")
     }
   }
   // Detect invalid regular expressions.
-  try {
-    new RegExp(tmp)
-  } catch (e) {
-    if (e instanceof SyntaxError) this.raise(start, "Error parsing regular expression: " + e.message)
-    this.raise(e)
-  }
-  // Get a regular expression object for this pattern-flag pair, or `null` in
-  // case the current environment doesn't support the flags it uses.
-  let value
-  try {
-    value = new RegExp(content, mods)
-  } catch (err) {
-    value = null
+  let value = null
+  // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
+  // so don't do detection if we are running under Rhino
+  if (!isRhino) {
+    try {
+      new RegExp(tmp)
+    } catch (e) {
+      if (e instanceof SyntaxError) this.raise(start, "Error parsing regular expression: " + e.message)
+      this.raise(e)
+    }
+    // Get a regular expression object for this pattern-flag pair, or `null` in
+    // case the current environment doesn't support the flags it uses.
+    try {
+      value = new RegExp(content, mods)
+    } catch (err) {}
   }
   return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value})
 }
@@ -514,10 +524,10 @@ pp.readCodePoint = function() {
 
   if (ch === 123) {
     if (this.options.ecmaVersion < 6) this.unexpected()
-    ++this.pos
+    let codePos = ++this.pos
     code = this.readHexChar(this.input.indexOf('}', this.pos) - this.pos)
     ++this.pos
-    if (code > 0x10FFFF) this.unexpected()
+    if (code > 0x10FFFF) this.raise(codePos, "Code point out of bounds")
   } else {
     code = this.readHexChar(4)
   }
@@ -539,7 +549,7 @@ pp.readString = function(quote) {
     if (ch === quote) break
     if (ch === 92) { // '\'
       out += this.input.slice(chunkStart, this.pos)
-      out += this.readEscapedChar()
+      out += this.readEscapedChar(false)
       chunkStart = this.pos
     } else {
       if (isNewLine(ch)) this.raise(this.start, "Unterminated string constant")
@@ -572,7 +582,7 @@ pp.readTmplToken = function() {
     }
     if (ch === 92) { // '\'
       out += this.input.slice(chunkStart, this.pos)
-      out += this.readEscapedChar()
+      out += this.readEscapedChar(true)
       chunkStart = this.pos
     } else if (isNewLine(ch)) {
       out += this.input.slice(chunkStart, this.pos)
@@ -600,42 +610,46 @@ pp.readTmplToken = function() {
 
 // Used to read escaped characters
 
-pp.readEscapedChar = function() {
+pp.readEscapedChar = function(inTemplate) {
   let ch = this.input.charCodeAt(++this.pos)
-  let octal = /^[0-7]+/.exec(this.input.slice(this.pos, this.pos + 3))
-  if (octal) octal = octal[0]
-  while (octal && parseInt(octal, 8) > 255) octal = octal.slice(0, -1)
-  if (octal === "0") octal = null
   ++this.pos
-  if (octal) {
-    if (this.strict) this.raise(this.pos - 2, "Octal literal in strict mode")
-    this.pos += octal.length - 1
-    return String.fromCharCode(parseInt(octal, 8))
-  } else {
-    switch (ch) {
-    case 110: return "\n"; // 'n' -> '\n'
-    case 114: return "\r"; // 'r' -> '\r'
-    case 120: return String.fromCharCode(this.readHexChar(2)); // 'x'
-    case 117: return codePointToString(this.readCodePoint()); // 'u'
-    case 116: return "\t"; // 't' -> '\t'
-    case 98: return "\b"; // 'b' -> '\b'
-    case 118: return "\u000b"; // 'v' -> '\u000b'
-    case 102: return "\f"; // 'f' -> '\f'
-    case 48: return "\0"; // 0 -> '\0'
-    case 13: if (this.input.charCodeAt(this.pos) === 10) ++this.pos; // '\r\n'
-    case 10: // ' \n'
-      if (this.options.locations) { this.lineStart = this.pos; ++this.curLine }
-      return ""
-    default: return String.fromCharCode(ch)
+  switch (ch) {
+  case 110: return "\n"; // 'n' -> '\n'
+  case 114: return "\r"; // 'r' -> '\r'
+  case 120: return String.fromCharCode(this.readHexChar(2)); // 'x'
+  case 117: return codePointToString(this.readCodePoint()); // 'u'
+  case 116: return "\t"; // 't' -> '\t'
+  case 98: return "\b"; // 'b' -> '\b'
+  case 118: return "\u000b"; // 'v' -> '\u000b'
+  case 102: return "\f"; // 'f' -> '\f'
+  case 13: if (this.input.charCodeAt(this.pos) === 10) ++this.pos; // '\r\n'
+  case 10: // ' \n'
+    if (this.options.locations) { this.lineStart = this.pos; ++this.curLine }
+    return ""
+  default:
+    if (ch >= 48 && ch <= 55) {
+      let octalStr = this.input.substr(this.pos - 1, 3).match(/^[0-7]+/)[0]
+      let octal = parseInt(octalStr, 8)
+      if (octal > 255) {
+        octalStr = octalStr.slice(0, -1)
+        octal = parseInt(octalStr, 8)
+      }
+      if (octal > 0 && (this.strict || inTemplate)) {
+        this.raise(this.pos - 2, "Octal literal in strict mode")
+      }
+      this.pos += octalStr.length - 1
+      return String.fromCharCode(octal)
     }
+    return String.fromCharCode(ch)
   }
 }
 
 // Used to read character escape sequences ('\x', '\u', '\U').
 
 pp.readHexChar = function(len) {
+  let codePos = this.pos
   let n = this.readInt(16, len)
-  if (n === null) this.raise(this.start, "Bad character escape sequence")
+  if (n === null) this.raise(codePos, "Bad character escape sequence")
   return n
 }
 

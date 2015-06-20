@@ -403,7 +403,30 @@ test("(1 + 2 ) * 3", {
   preserveParens: true
 });
 
-testFail("(x) = 23", "Assigning to rvalue (1:0)", { preserveParens: true });
+test("(x) = 23", {
+  body: [
+    {
+      expression: {
+        operator: "=",
+        left: {
+          expression: {
+            name: "x",
+            type: "Identifier",
+          },
+          type: "ParenthesizedExpression",
+        },
+        right: {
+          value: 23,
+          raw: "23",
+          type: "Literal",
+        },
+        type: "AssignmentExpression",
+      },
+      type: "ExpressionStatement",
+    }
+  ],
+  type: "Program",
+}, {preserveParens: true});
 
 test("x = []", {
   type: "Program",
@@ -20637,6 +20660,9 @@ test("done: while (true) { break done; }", {
   }
 });
 
+test("target1: target2: while (true) { continue target1; }", {});
+test("target1: target2: target3: while (true) { continue target1; }", {});
+
 test("(function(){ return })", {
   type: "Program",
   body: [
@@ -26881,7 +26907,7 @@ testFail("/test",
          "Unterminated regular expression (1:1)");
 
 testFail("var x = /[a-z]/\\ux",
-         "Bad character escape sequence (1:8)");
+         "Bad character escape sequence (1:17)");
 
 testFail("3 = 4",
          "Assigning to rvalue (1:0)");
@@ -27168,7 +27194,7 @@ testFail("\"\\",
          "Unterminated string constant (1:0)");
 
 testFail("\"\\u",
-         "Bad character escape sequence (1:0)");
+         "Bad character escape sequence (1:3)");
 
 testFail("return",
          "'return' outside of function (1:0)");
@@ -28720,6 +28746,39 @@ testFail("for(x of a);", "Unexpected token (1:6)");
 
 testFail("for(var x of a);", "Unexpected token (1:10)");
 
+// Assertion Tests
+test(function TestComments() {
+    // Bear class
+    function Bear(x,y,z) {
+      this.position = [x||0,y||0,z||0]
+    }
+
+    Bear.prototype.roar = function(message) {
+      return 'RAWWW: ' + message; // Whatever
+    };
+
+    function Cat() {
+    /* 1
+       2
+       3*/
+    }
+
+    Cat.prototype.roar = function(message) {
+      return 'MEOOWW: ' + /*stuff*/ message;
+    };
+}.toString().replace(/\r\n/g, '\n'), {}, {
+  onComment: [
+    {type: "Line", value: " Bear class"},
+    {type: "Line", value: " Whatever"},
+    {type: "Block",  value: [
+            " 1",
+      "       2",
+      "       3"
+    ].join('\n')},
+    {type: "Block", value: "stuff"}
+  ]
+});
+
 test("<!--\n;", {
   type: "Program",
   body: [{
@@ -28932,3 +28991,9 @@ testAssert("[1,2,] + {foo: 1,}", function() {
     return "Unexpected result for onTrailingComma: " + result;
 }, {onTrailingComma: function(pos) { trailingCommas.push(pos); },
     loose: false})
+
+// https://github.com/marijnh/acorn/issues/275
+
+testFail("({ get prop(x) {} })", "getter should have no params (1:11)");
+testFail("({ set prop() {} })", "setter should have exactly one param (1:11)");
+testFail("({ set prop(x, y) {} })", "setter should have exactly one param (1:11)");
