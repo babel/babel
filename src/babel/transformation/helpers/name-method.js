@@ -111,8 +111,7 @@ export function property(node, file, scope) {
   var key = t.toComputedKey(node, node.key);
   if (!t.isLiteral(key)) return; // we can't set a function id with this
 
-  var name = t.toIdentifier(key.value);
-  if (name === "eval" || name === "arguments") name = "_" + name;
+  var name = t.toBindingIdentifierName(key.value);
   var id = t.identifier(name);
 
   var method = node.value;
@@ -153,7 +152,7 @@ export function bare(node, parent, scope) {
     return;
   }
 
-  name = t.toIdentifier(name);
+  name = t.toBindingIdentifierName(name);
   id = t.identifier(name);
 
   var state = visit(node, name, scope);

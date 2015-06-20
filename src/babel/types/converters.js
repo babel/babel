@@ -154,6 +154,17 @@ export function toIdentifier(name: string): string {
   return name || "_";
 }
 
+/*
+ * Description
+ */
+
+export function toBindingIdentifierName(name) {
+  name = toIdentifier(name);
+  if (name === "eval" || name === "arguments") name = "_" + name;
+  return name;
+}
+
+
 /**
  * Description
  *
