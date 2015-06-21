@@ -13,3 +13,8 @@ function foo(a, ...b) {
 function foo(...b) {
   foo(1, ...b);
 }
+
+function foo(...args){
+  args.pop()
+  foo(...args);
+}

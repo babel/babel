@@ -42,7 +42,8 @@ var memberExpressionOptimisationVisitor = {
       if (this.parentPath.isSpreadElement() && state.offset === 0) {
         var call = this.parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
-          return state.argumentsNode;
+          state.candidates.push(this);
+          return;
         }
       }
     }
@@ -124,7 +125,9 @@ export var visitor = {
       if (state.candidates.length) {
         for (var candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
-          optimiseMemberExpression(candidate.parent, state.offset);
+          if (candidate.parentPath.isMemberExpression()) {
+            optimiseMemberExpression(candidate.parent, state.offset);
+          }
         }
       }
       return;
