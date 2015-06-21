@@ -477,7 +477,7 @@ class ClassTransformer {
 
         var classRef = this.classRef;
         if (!node.static) classRef = t.memberExpression(classRef, t.identifier("prototype"));
-        var methodName = t.memberExpression(classRef, node.key, node.computed);
+        var methodName = t.memberExpression(classRef, node.key, node.computed || t.isLiteral(node.key));
 
         var expr = t.expressionStatement(t.assignmentExpression("=", methodName, node.value));
         t.inheritsComments(expr, node);
