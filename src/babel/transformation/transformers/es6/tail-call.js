@@ -150,7 +150,7 @@ class TailCallTransformer {
 
     //
 
-    var body = t.ensureBlock(node).body;
+    var body = this.path.ensureBlock().body;
 
     for (var i = 0; i < body.length; i++) {
       var bodyNode = body[i];

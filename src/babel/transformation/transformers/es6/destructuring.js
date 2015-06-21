@@ -18,7 +18,7 @@ export var visitor = {
         t.variableDeclarator(temp)
       ]);
 
-      t.ensureBlock(node);
+      this.ensureBlock();
 
       node.body.body.unshift(t.variableDeclaration("var", [
         t.variableDeclarator(left, temp)
@@ -48,7 +48,7 @@ export var visitor = {
 
     destructuring.init(pattern, key);
 
-    t.ensureBlock(node);
+    this.ensureBlock();
 
     var block = node.body;
     block.body = nodes.concat(block.body);
@@ -84,7 +84,7 @@ export var visitor = {
       destructuring.init(pattern, ref);
     }
 
-    t.ensureBlock(node);
+    this.ensureBlock();
 
     var block = node.body;
     block.body = nodes.concat(block.body);

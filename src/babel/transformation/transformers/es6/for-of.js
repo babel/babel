@@ -17,7 +17,7 @@ export var visitor = {
     var block  = loop.body;
 
     // ensure that it's a block so we can take all its statements
-    t.ensureBlock(node);
+    this.ensureBlock();
 
     // add the value declaration to the new loop body
     if (declar) {

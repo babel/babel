@@ -22,3 +22,11 @@ export function toComputedKey(): Object {
 
   return key;
 }
+
+/**
+ * Description
+ */
+
+export function ensureBlock() {
+  return t.ensureBlock(this.node);
+}

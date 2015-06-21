@@ -2,7 +2,7 @@ import * as t from "../../../types";
 
 export var visitor = {
   ArrowFunctionExpression(node) {
-    t.ensureBlock(node);
+    this.ensureBlock();
 
     node.expression = false;
     node.type = "FunctionExpression";

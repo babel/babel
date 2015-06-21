@@ -27,7 +27,7 @@ export var visitor = {
     if (!hasDefaults(node)) return;
 
     // ensure it's a block, useful for arrow functions
-    t.ensureBlock(node);
+    this.ensureBlock();
 
     var state = {
       iife: false,
