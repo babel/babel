@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.2
+
+ * **Bug Fix**
+  * Fix method key literals not turning into computed member expression in loose mode.
+  * Elect rest parameters in spread element position as candidates instead of replacing them in place.
+
 ## 5.6.0
 
  * **Bug Fix**
