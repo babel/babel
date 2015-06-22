@@ -47,7 +47,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "{ , res }",
       {},
-      [ "1:2 Unexpected token" ]
+      [ "1:2 Line X: Unexpected token" ]
     );
   });
 
@@ -297,7 +297,7 @@ describe("verify", function () {
 
     it("polymorphpic types #109", function () {
       verifyAndAssertMessages([
-          "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> {}"
+          "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -351,13 +351,12 @@ describe("verify", function () {
 
     it("polymorphpic/generic types - outside of fn scope #123", function () {
       verifyAndAssertMessages([
-          "export function foo<T>(value) {",
-          "};",
+          "export function foo<T>(value) { value; };",
           "var b: T = 1; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         [ "1:20 T is defined but never used no-unused-vars",
-          '3:7 "T" is not defined. no-undef' ]
+          '2:7 "T" is not defined. no-undef' ]
       );
     });
 
@@ -481,7 +480,7 @@ describe("verify", function () {
     it("9", function () {
       verifyAndAssertMessages(
         [
-          "export default function <T1, T2>(a: T1, b: T2) {}"
+          "export default function <T1, T2>(a: T1, b: T2) { b; }"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -744,7 +743,7 @@ describe("verify", function () {
       verifyAndAssertMessages(
         [
           "import type Foo from 'foo';",
-          "export default function({x}: { x: Foo; }) {}"
+          "export default function({x}: { x: Foo; }) { x; }"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -958,7 +957,7 @@ describe("verify", function () {
     verifyAndAssertMessages([
         "export default function root(stores) {",
           "return DecoratedComponent => class ReduxRootDecorator {",
-            "a() { DecoratedComponent; }",
+            "a() { DecoratedComponent; stores; }",
           "};",
         "}",
       ].join("\n"),

@@ -8,7 +8,7 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "babel-core": "^5.5.1",
+    "babel-core": "^5.6.4",
     "lodash.assign": "^3.0.0",
     "lodash.pick": "^3.1.0"
   },
@@ -24,9 +24,8 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "^0.21.2",
-    "eslint-tester": "^0.7.0",
-    "espree": "^2.0.0",
-    "mocha": "^2.1.0"
+    "eslint": "^0.23.0",
+    "espree": "^2.0.3",
+    "mocha": "^2.2.5"
   }
 }
