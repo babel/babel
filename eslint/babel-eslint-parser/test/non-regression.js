@@ -1084,7 +1084,7 @@ describe("verify", function () {
             "get bar() { }",
             "@classMethodDeclarationA(decoratorParameter)",
             "@classMethodDeclarationA",
-            "set bar() { }",
+            "set bar(val) { val; }",
           "}"
         ].join("\n"),
         { "no-unused-vars": 1 },
@@ -1122,7 +1122,7 @@ describe("verify", function () {
             "get bar() { },",
             "@classMethodDeclarationA(decoratorParameter)",
             "@classMethodDeclarationA",
-            "set bar() { }",
+            "set bar(val) { val; }",
           "};",
           "obj;"
         ].join("\n"),
