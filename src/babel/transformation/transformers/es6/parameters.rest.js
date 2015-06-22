@@ -100,7 +100,6 @@ export var visitor = {
     }
 
     // check and optimise for extremely common cases
-
     var state = {
       references: [],
       offset:     node.params.length,
@@ -134,6 +133,9 @@ export var visitor = {
     } else {
       state.references = state.references.concat(state.candidates);
     }
+
+    // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
+    state.deopted = state.deopted || !!node.shadow;
 
     //
 
@@ -173,13 +175,13 @@ export var visitor = {
       LEN:        len
     });
 
-    if (!state.deopted) {
+    if (state.deopted) {
+      loop._blockHoist = node.params.length + 1;
+      node.body.body.unshift(loop);
+    } else {
       // perform allocation at the lowest common denominator of all references
+      loop._blockHoist = 1;
       this.getEarliestCommonAncestorFrom(state.references).getStatementParent().insertBefore(loop);
-      return;
     }
-
-    loop._blockHoist = node.params.length + 1;
-    node.body.body.unshift(loop);
   }
 };
