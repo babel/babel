@@ -46,6 +46,7 @@
   "Noop":                      [],
   "ObjectExpression":          ["properties"],
   "ObjectPattern":             ["properties", "typeAnnotation"],
+  "ParenthesizedExpression":   ["expression"],
   "Program":                   ["body"],
   "Property":                  ["key", "value", "decorators"],
   "RestElement":               ["argument", "typeAnnotation"],

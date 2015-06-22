@@ -24,6 +24,12 @@ export function DoExpression(node, print) {
   print.plain(node.body);
 }
 
+export function ParenthesizedExpression(node, print) {
+  this.push("(");
+  print.plain(node.expression);
+  this.push(")");
+}
+
 export function UpdateExpression(node, print) {
   if (node.prefix) {
     this.push(node.operator);

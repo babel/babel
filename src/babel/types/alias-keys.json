@@ -71,6 +71,7 @@
   "MetaProperty":              ["Expression"],
   "NewExpression":             ["Expression"],
   "ObjectExpression":          ["Expression"],
+  "ParenthesizedExpression":   ["Expression"],
   "SequenceExpression":        ["Expression"],
   "TaggedTemplateExpression":  ["Expression"],
   "ThisExpression":            ["Expression"],
