@@ -19,7 +19,8 @@ var isObject = types.builtInTypes.object;
 var NodePath = types.NodePath;
 var hoist = require("./hoist").hoist;
 var Emitter = require("./emit").Emitter;
-var runtimeProperty = require("./util").runtimeProperty;
+var util = require("./util");
+var runtimeProperty = util.runtimeProperty;
 var getMarkInfo = require("private").makeAccessor();
 
 exports.transform = function transform(node, options) {
@@ -111,10 +112,13 @@ var visitor = types.PathVisitor.fromMethodsObject({
     var innerFnId = b.identifier(node.id.name + "$");
     var contextId = path.scope.declareTemporary("context$");
     var argsId = path.scope.declareTemporary("args$");
-    var shouldAliasArguments = renameArguments(path, argsId);
+
+    // Turn all declarations into vars, and replace the original
+    // declarations with equivalent assignment expressions.
     var vars = hoist(path);
 
-    if (shouldAliasArguments) {
+    var didRenameArguments = renameArguments(path, argsId);
+    if (didRenameArguments) {
       vars = vars || b.variableDeclaration("var", []);
       vars.declarations.push(b.variableDeclarator(
         argsId, b.identifier("arguments")
@@ -333,13 +337,11 @@ function shouldNotHoistAbove(stmtPath) {
 function renameArguments(funcPath, argsId) {
   assert.ok(funcPath instanceof types.NodePath);
   var func = funcPath.value;
-  var didReplaceArguments = false;
-  var hasImplicitArguments = false;
+  var didRenameArguments = false;
 
   recast.visit(funcPath, {
     visitFunction: function(path) {
       if (path.value === func) {
-        hasImplicitArguments = !path.scope.lookup("arguments");
         this.traverse(path);
       } else {
         return false;
@@ -347,27 +349,22 @@ function renameArguments(funcPath, argsId) {
     },
 
     visitIdentifier: function(path) {
-      if (path.value.name === "arguments") {
-        var isMemberProperty =
-          n.MemberExpression.check(path.parent.node) &&
-          path.name === "property" &&
-          !path.parent.node.computed;
-
-        if (!isMemberProperty) {
-          path.replace(argsId);
-          didReplaceArguments = true;
-          return false;
-        }
+      if (path.value.name === "arguments" &&
+          util.isReference(path)) {
+        path.replace(argsId);
+        didRenameArguments = true;
+        return false;
       }
 
       this.traverse(path);
     }
   });
 
-  // If the traversal replaced any arguments identifiers, and those
-  // identifiers were free variables, then we need to alias the outer
-  // function's arguments object to the variable named by argsId.
-  return didReplaceArguments && hasImplicitArguments;
+  // If the traversal replaced any arguments references, then we need to
+  // alias the outer function's arguments binding (be it the implicit
+  // arguments object or some other parameter or variable) to the variable
+  // named by argsId.
+  return didRenameArguments;
 }
 
 var awaitVisitor = types.PathVisitor.fromMethodsObject({

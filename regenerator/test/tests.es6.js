@@ -1422,11 +1422,12 @@ describe("the arguments object", function() {
 
   it("should be shadowable by explicit declarations", function() {
     function *asParameter(x, arguments) {
+      arguments = arguments + 1;
       yield x + arguments;
     }
 
-    check(asParameter(4, 5), [9]);
-    check(asParameter("asdf", "zxcv"), ["asdfzxcv"]);
+    check(asParameter(4, 5), [10]);
+    check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
 
     function *asVariable(x) {
       // TODO References to arguments before the variable declaration
@@ -1440,13 +1441,14 @@ describe("the arguments object", function() {
   });
 
   it("should not get confused by properties", function() {
-    function *gen(obj) {
+    function *gen(args) {
+      var obj = { arguments: args };
       yield obj.arguments;
       obj.arguments = "oyez";
       yield obj;
     }
 
-    check(gen({ arguments: 42 }), [42, { arguments: "oyez" }]);
+    check(gen(42), [42, { arguments: "oyez" }]);
   });
 
   it("supports .callee", function() {
