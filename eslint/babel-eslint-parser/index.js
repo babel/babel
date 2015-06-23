@@ -22,9 +22,15 @@ function monkeypatch() {
 
   var eslintLoc;
   try {
+    // avoid importing a local copy of eslint, try to find a peer dependency
     eslintLoc = Module._resolveFilename("eslint", module.parent);
   } catch (err) {
-    throw new ReferenceError("couldn't resolve eslint");
+    try {
+      // avoids breaking in jest where module.parent is undefined
+      eslintLoc = require.resolve("eslint");
+    } catch (err) {
+      throw new ReferenceError("couldn't resolve eslint");
+    }
   }
 
   // get modules relative to what eslint will load
