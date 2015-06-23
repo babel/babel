@@ -70,7 +70,8 @@ exports.isReference = function(path, name) {
       return false;
     }
 
-    if (parent.params === path.parentPath &&
+    if (path.parentPath.name === "params" &&
+        parent.params === path.parentPath.value &&
         parent.params[path.name] === node) {
       return false;
     }
