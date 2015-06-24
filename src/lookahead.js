@@ -19,7 +19,11 @@ var STATE_KEYS = [
   "exprAllowed",
   "potentialArrowAt",
   "currLine",
-  "input"
+  "input",
+  "inType",
+  "inFunction",
+  "inGenerator",
+  "labels"
 ];
 
 pp.getState = function () {
@@ -29,6 +33,7 @@ pp.getState = function () {
     state[key] = this[key]
   }
   state.context = this.context.slice()
+  state.labels = this.labels.slice()
   return state
 };
 
