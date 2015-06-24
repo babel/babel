@@ -15328,3 +15328,5 @@ test("({ ['__proto__']: 1, __proto__: 2 })", {}, {ecmaVersion: 6});
 test("({ __proto__() { return 1 }, __proto__: 2 })", {}, {ecmaVersion: 6});
 test("({ get __proto__() { return 1 }, __proto__: 2 })", {}, {ecmaVersion: 6});
 test("({ __proto__, __proto__: 2 })", {}, {ecmaVersion: 6});
+
+test("export default /foo/", {}, {ecmaVersion: 6, sourceType: "module"});
