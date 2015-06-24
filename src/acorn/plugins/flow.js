@@ -690,7 +690,11 @@ acorn.plugins.flow = function (instance) {
   // and set startExpr
   instance.extend("isKeyword", function (inner) {
     return function(name) {
-      return name !== "void" && inner.call(this, name)
+      if (this.inType && name === "void") {
+        return false
+      } else {
+        return inner.call(this, name)
+      }
     }
   })
 
