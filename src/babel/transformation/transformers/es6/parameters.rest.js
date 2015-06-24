@@ -12,9 +12,10 @@ var memberExpressionOptimisationVisitor = {
   Function(node, parent, scope, state) {
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
+    var oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     this.traverse(memberExpressionOptimisationVisitor, state);
-    state.noOptimise = false;
+    state.noOptimise = oldNoOptimise;
     this.skip();
   },
 
@@ -27,7 +28,9 @@ var memberExpressionOptimisationVisitor = {
     // is this a referenced identifier and is it referencing the rest parameter?
     if (node.name !== state.name) return;
 
-    if (!state.noOptimise) {
+    if (state.noOptimise) {
+      state.deopted = true;
+    } else {
       if (this.parentPath.isMemberExpression({ computed: true, object: node })) {
         // if we know that this member expression is referencing a number then we can safely
         // optimise it
@@ -46,11 +49,7 @@ var memberExpressionOptimisationVisitor = {
           return;
         }
       }
-    }
 
-    if (state.noOptimise) {
-      state.deopted = true;
-    } else {
       state.references.push(this);
     }
   }

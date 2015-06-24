@@ -41,3 +41,12 @@ function r(...rest){
   if (lol) rest;
   rest;
 }
+
+// nested functions
+function a(...args) {
+  return function() {
+    function b() {}
+
+    console.log("Shouldn't args be from a's scope?", args);
+  };
+}
