@@ -140,7 +140,7 @@ export function ObjectExpression() {
 
 //
 
-export function ArrayExpression () {
+export function ArrayExpression() {
   return t.genericTypeAnnotation(t.identifier("Array"));
 }
 

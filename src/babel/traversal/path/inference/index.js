@@ -61,9 +61,11 @@ export function _getTypeAnnotation(): ?Object {
  * Description
  */
 
-export function isBaseType(baseName: string): boolean {
-  var type = this.getTypeAnnotation();
+export function isBaseType(baseName: string, soft?): boolean {
+  return _isBaseType(baseName, this.getTypeAnnotation(), soft);
+}
 
+function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
     return t.isStringTypeAnnotation(type);
   } else if (baseName === "number") {
@@ -75,7 +77,31 @@ export function isBaseType(baseName: string): boolean {
   } else if (baseName === "mixed") {
     return t.isMixedTypeAnnotation(type);
   } else {
-    throw new Error(`Unknown base type ${baseName}`);
+    if (soft) {
+      return false;
+    } else {
+      throw new Error(`Unknown base type ${baseName}`);
+    }
+  }
+}
+
+/**
+ * Description
+ */
+
+export function couldBeBaseType(name: string): boolean {
+  var type = this.getTypeAnnotation();
+  if (t.isAnyTypeAnnotation(type)) return true;
+
+  if (t.isUnionTypeAnnotation(type)) {
+    for (var type2 of (type.types: Array)) {
+      if (t.isAnyTypeAnnotation(type2) || _isBaseType(name, type2, true)) {
+        return true;
+      }
+    }
+    return false;
+  } else {
+    return _isBaseType(name, type, true);
   }
 }
 
