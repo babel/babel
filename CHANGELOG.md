@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.6
+
+ * **Bug Fix**
+  * Fix weird parser bug where `void` type annotations were being parsed as keywords causing the tokeniser to lose track of context.
+
 ## 5.6.5
 
  * *Bug Fix**
