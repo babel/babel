@@ -11148,3 +11148,9 @@ for (var ns in fbTestFixture) {
     });
   }
 }
+
+test("<Foo foo={function (): void {}} />", {}, {
+  ecmaVersion: 6,
+  sourceType: "module",
+  plugins: { jsx: true, flow: true },
+});
