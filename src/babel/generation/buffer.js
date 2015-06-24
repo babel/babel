@@ -3,7 +3,6 @@ import trimRight from "trim-right";
 import isBoolean from "lodash/lang/isBoolean";
 import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
-import * as t from "../types";
 
 export default class Buffer {
   constructor(position, format) {

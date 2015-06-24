@@ -149,7 +149,7 @@ export function AssignmentExpression(node, print) {
     // http://javascript.spec.whatwg.org/#comment-syntax
     spaces = node.operator === "<" &&
              t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
-             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" })
+             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
   }
 
   this.space(spaces);
