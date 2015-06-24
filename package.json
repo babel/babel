@@ -31,7 +31,7 @@
     "acorn-jsx": "^1.0.0",
     "ast-types": "~0.7.0",
     "babel-plugin-constant-folding": "^1.0.1",
-    "babel-plugin-dead-code-elimination": "^1.0.1",
+    "babel-plugin-dead-code-elimination": "^1.0.2",
     "babel-plugin-eval": "^1.0.1",
     "babel-plugin-inline-environment-variables": "^1.0.1",
     "babel-plugin-jscript": "^1.0.1",
