@@ -75,7 +75,6 @@ export function Super() {
 export function Decorator(node, print) {
   this.push("@");
   print.plain(node.expression);
-  this.newline();
 }
 
 export function CallExpression(node, print) {

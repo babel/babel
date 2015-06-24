@@ -1,6 +1,7 @@
 class Foo {
   async foo() {}
   foo() {}
+  @bar @baz foo() {}
   ["foo"]() {}
   get foo() {}
   set foo(bar) {}

@@ -1,5 +1,13 @@
+export function _decorators(decorators, print) {
+  if (!decorators || !decorators.length) return;
+  decorators.forEach(decorator => {
+    print.plain(decorator);
+    this.newline();
+  });
+}
+
 export function ClassDeclaration(node, print) {
-  print.list(node.decorators);
+  this._decorators(node.decorators, print);
   this.push("class");
 
   if (node.id) {
@@ -43,7 +51,7 @@ export function ClassBody(node, print) {
 
 
 export function ClassProperty(node, print) {
-  print.list(node.decorators);
+  this._decorators(node.decorators, print);
 
   if (node.static) this.push("static ");
   print.plain(node.key);
@@ -58,11 +66,8 @@ export function ClassProperty(node, print) {
 }
 
 export function MethodDefinition(node, print) {
-  print.list(node.decorators);
+  this._decorators(node.decorators, print);
 
-  if (node.static) {
-    this.push("static ");
-  }
-
+  if (node.static) this.push("static ");
   this._method(node, print);
 }
