@@ -23,7 +23,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]
     // yes: NODE.child
-    // no: parent.CHILD
+    // no: parent.NODE
     case "MemberExpression":
     case "JSXMemberExpression":
       if (parent.property === node && parent.computed) {
@@ -73,21 +73,17 @@ export function isReferenced(node: Object, parent: Object): boolean {
         return parent.local === node;
       }
 
-    // no: import NODE from "foo";
-    case "ImportDefaultSpecifier":
-      return false;
-
-    // no: import * as NODE from "foo";
-    case "ImportNamespaceSpecifier":
-      return false;
-
     // no: <div NODE="foo" />
     case "JSXAttribute":
       return parent.name !== node;
 
+    // no: import NODE from "foo";
+    // no: import * as NODE from "foo";
     // no: import { NODE as foo } from "foo";
     // no: import { foo as NODE } from "foo";
     // no: import NODE from "bar";
+    case "ImportDefaultSpecifier":
+    case "ImportNamespaceSpecifier":
     case "ImportSpecifier":
       return false;
 
@@ -112,11 +108,15 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "RestElement":
       return false;
 
-    // no: [NODE = foo] = [];
-    // yes: [foo = NODE] = [];
+    // yes: left = NODE;
+    // no: NODE = right;
     case "AssignmentExpression":
-    case "AssignmentPattern":
       return parent.right === node;
+
+    // no: [NODE = foo] = [];
+    // no: [foo = NODE] = [];
+    case "AssignmentPattern":
+      return false;
 
     // no: [NODE] = [];
     // no: ({ NODE }) = [];
@@ -195,7 +195,7 @@ export function isImmutable(node: Object): boolean {
 
   if (t.isLiteral(node)) {
     if (node.regex) {
-      // regexes are mutable
+      // regexs are mutable
       return false;
     } else {
       // immutable!
