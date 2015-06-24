@@ -42,8 +42,11 @@ pp.flow_parseDeclareFunction = function (node) {
   typeNode.rest = tmp.rest
   this.expect(tt.parenR)
 
+  var oldInType = this.inType
+  this.inType = true
   this.expect(tt.colon)
   typeNode.returnType = this.flow_parseType()
+  this.inType = oldInType
 
   typeContainer.typeAnnotation = this.finishNode(typeNode, "FunctionTypeAnnotation")
   id.typeAnnotation = this.finishNode(typeContainer, "TypeAnnotation")
