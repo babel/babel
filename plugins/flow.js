@@ -1,3 +1,4 @@
+Error.stackTraceLimit = Infinity;
 var acorn = require("../src/index")
 
 var pp = acorn.Parser.prototype
@@ -352,12 +353,6 @@ pp.flow_parseGenericType = function (start, id) {
   return this.finishNode(node, "GenericTypeAnnotation")
 }
 
-pp.flow_parseVoidType = function () {
-  var node = this.startNode()
-  this.expect(tt._void)
-  return this.finishNode(node, "VoidTypeAnnotation")
-}
-
 pp.flow_parseTypeofType = function () {
   var node = this.startNode()
   this.expect(tt._typeof)
@@ -410,6 +405,9 @@ pp.flow_identToTypeAnnotation = function (start, node, id) {
   switch (id.name) {
     case "any":
       return this.finishNode(node, "AnyTypeAnnotation")
+
+    case "void":
+      return this.finishNode(node, "VoidTypeAnnotation")
 
     case "bool":
     case "boolean":
@@ -524,14 +522,8 @@ pp.flow_parsePrimaryType = function () {
       return this.finishNode(node, "StringLiteralTypeAnnotation")
 
     default:
-      if (this.type.keyword) {
-        switch (this.type.keyword) {
-          case "void":
-            return this.flow_parseVoidType()
-
-          case "typeof":
-            return this.flow_parseTypeofType()
-        }
+      if (this.type.keyword === "typeof") {
+        return this.flow_parseTypeofType()
       }
   }
 
@@ -691,6 +683,14 @@ acorn.plugins.flow = function (instance) {
       if (this.isRelational("<")) {
         node.typeParameters = this.flow_parseTypeParameterDeclaration()
       }
+    }
+  })
+
+  // don't consider `void` to be a keyword as then it'll use the void token type
+  // and set startExpr
+  instance.extend("isKeyword", function (inner) {
+    return function(name) {
+      return name !== "void" && inner.call(this, name)
     }
   })
 
