@@ -33,13 +33,13 @@ export function ForStatement(node, print) {
   this.push(";");
 
   if (node.test) {
-    this.push(" ");
+    this.space();
     print.plain(node.test);
   }
   this.push(";");
 
   if (node.update) {
-    this.push(" ");
+    this.space();
     print.plain(node.update);
   }
 
