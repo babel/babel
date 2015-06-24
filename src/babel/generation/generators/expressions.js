@@ -2,19 +2,19 @@ import isNumber from "lodash/lang/isNumber";
 import * as t from "../../types";
 
 export function UnaryExpression(node, print) {
-  var hasSpace = /[a-z]$/.test(node.operator);
+  var needsSpace = /[a-z]$/.test(node.operator);
   var arg = node.argument;
 
   if (t.isUpdateExpression(arg) || t.isUnaryExpression(arg)) {
-    hasSpace = true;
+    needsSpace = true;
   }
 
   if (t.isUnaryExpression(arg) && arg.operator === "!") {
-    hasSpace = false;
+    needsSpace = false;
   }
 
   this.push(node.operator);
-  if (hasSpace) this.push(" ");
+  if (needsSpace) this.push(" ");
   print.plain(node.argument);
 }
 
@@ -83,19 +83,16 @@ export function CallExpression(node, print) {
 
   this.push("(");
 
-  var separator = ",";
+  var isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
 
-  var isPrettyCall = node._prettyCall && !this.format.retainLines;
-
+  var separator;
   if (isPrettyCall) {
-    separator += "\n";
+    separator = ",\n";
     this.newline();
     this.indent();
-  } else {
-    separator += " ";
   }
 
-  print.list(node.arguments, { separator: separator });
+  print.list(node.arguments, { separator });
 
   if (isPrettyCall) {
     this.newline();
@@ -141,9 +138,22 @@ export function AssignmentPattern(node, print) {
 export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
   print.plain(node.left);
-  this.push(" ");
+
+  var spaces = node.operator === "in" || node.operator === "instanceof";
+  this.space(spaces);
+
   this.push(node.operator);
-  this.push(" ");
+
+  if (!spaces) {
+    // space is mandatory to avoid outputting <!--
+    // http://javascript.spec.whatwg.org/#comment-syntax
+    spaces = node.operator === "<" &&
+             t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
+             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" })
+  }
+
+  this.space(spaces);
+
   print.plain(node.right);
 }
 

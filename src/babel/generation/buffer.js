@@ -3,6 +3,7 @@ import trimRight from "trim-right";
 import isBoolean from "lodash/lang/isBoolean";
 import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
+import * as t from "../types";
 
 export default class Buffer {
   constructor(position, format) {
@@ -54,9 +55,10 @@ export default class Buffer {
     this.space();
   }
 
-  space() {
-    if (this.format.compact) return;
-    if (this.buf && !this.isLast(" ") && !this.isLast("\n")) {
+  space(force?) {
+    if (!force && this.format.compact) return;
+
+    if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
       this.push(" ");
     }
   }
@@ -155,8 +157,12 @@ export default class Buffer {
     this.buf += str;
   }
 
-  endsWith(str) {
-    return this.buf.slice(-str.length) === str;
+  endsWith(str, buf = this.buf) {
+    if (str.length === 1) {
+      return buf[buf.length - 1] === str;
+    } else {
+      return buf.slice(-str.length) === str;
+    }
   }
 
   isLast(cha) {

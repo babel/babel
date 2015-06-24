@@ -18,7 +18,11 @@ export default class NodePrinter {
   }
 
   list(items, opts = {}) {
-    if (opts.separator == null) opts.separator = ", ";
+    if (opts.separator == null) {
+      opts.separator = ",";
+      if (!this.generator.format.compact) opts.separator += " ";
+    }
+
     return this.join(items, opts);
   }
 

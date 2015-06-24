@@ -80,7 +80,7 @@ export function ArrayExpression(node, print) {
       // both (all) of the holes.
       this.push(",");
     } else {
-      if (i > 0) this.push(" ");
+      if (i > 0) this.space();
       print.plain(elem);
       if (i < len - 1) this.push(",");
     }

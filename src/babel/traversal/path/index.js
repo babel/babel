@@ -21,6 +21,7 @@ export default class NodePath {
     this.context            = null;
     this.container          = null;
     this.listKey            = null;
+    this.inList             = false;
     this.parentKey          = null;
     this.key                = null;
     this.node               = null;

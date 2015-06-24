@@ -190,16 +190,29 @@ export function VariableDeclaration(node, print, parent) {
     }
   }
 
-  var sep = ",";
+  //
+  // use a pretty separator when we aren't in compact mode, have initializers and don't have retainLines on
+  // this will format declarations like:
+  //
+  //   var foo = "bar", bar = "foo";
+  //
+  // into
+  //
+  //   var foo = "bar",
+  //       bar = "foo";
+  //
+
+  var sep;
   if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
-    sep += `\n${repeating(" ", node.kind.length + 1)}`;
-  } else {
-    sep += " ";
+    sep = `,\n${repeating(" ", node.kind.length + 1)}`;
   }
+
+  //
 
   print.list(node.declarations, { separator: sep });
 
   if (t.isFor(parent)) {
+    // don't give semicolons to these nodes since they'll be inserted in the parent generator
     if (parent.left === node || parent.init === node) return;
   }
 

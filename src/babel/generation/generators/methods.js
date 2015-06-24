@@ -42,7 +42,7 @@ export function _method(node, print) {
   }
 
   this._params(value, print);
-  this.push(" ");
+  this.space();
   print.plain(value.body);
 }
 
