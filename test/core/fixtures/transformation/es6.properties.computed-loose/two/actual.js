@@ -1,4 +1,4 @@
 var obj = {
   first: "first",
-  ["second"]: "second",
+  [second]: "second",
 };

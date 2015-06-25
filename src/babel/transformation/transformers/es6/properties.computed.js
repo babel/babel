@@ -1,8 +1,8 @@
 import * as t from "../../../types";
 
 function loose(node, body, objId) {
-  for (var i = 0; i < node.properties.length; i++) {
-    var prop = node.properties[i];
+  for (var prop of (node.properties: Array)) {
+    if (!prop) continue;
 
     body.push(t.expressionStatement(
       t.assignmentExpression(
@@ -15,31 +15,17 @@ function loose(node, body, objId) {
 }
 
 function spec(node, body, objId, initProps, file) {
-  var props = node.properties;
-
-  // add all non-computed properties and `__proto__` properties to the initializer
-
-  var broken = false;
-
-  for (let i = 0; i < props.length; i++) {
-    let prop = props[i];
-
-    if (prop.computed) {
-      broken = true;
-    }
-
-    if (prop.kind !== "init" || !broken || t.isLiteral(t.toComputedKey(prop, prop.key), { value: "__proto__" })) {
-      initProps.push(prop);
-      props[i] = null;
-    }
-  }
-
   // add a simple assignment for all Symbol member expressions due to symbol polyfill limitations
   // otherwise use Object.defineProperty
 
-  for (let i = 0; i < props.length; i++) {
-    let prop = props[i];
+  for (let prop of (node.properties: Array)) {
     if (!prop) continue;
+
+    // this wont work with Object.defineProperty
+    if (t.isLiteral(t.toComputedKey(prop), { value: "__proto__" })) {
+      initProps.push(prop);
+      continue;
+    }
 
     let key = prop.key;
     if (t.isIdentifier(key) && !prop.computed) {
@@ -68,14 +54,33 @@ export var visitor = {
     exit(node, parent, scope, file) {
       var hasComputed = false;
 
-      for (var prop of (node.properties: Array)) {
+      for (let prop of (node.properties: Array)) {
         hasComputed = t.isProperty(prop, { computed: true, kind: "init" });
         if (hasComputed) break;
       }
 
       if (!hasComputed) return;
 
+      // put all getters/setters into the first object expression as well as all initialisers up
+      // to the first computed property
+
       var initProps = [];
+      var stopInits = false;
+
+      for (var i = 0; i < node.properties.length; i++) {
+        let prop = node.properties[i];
+        if (prop.computed) {
+          stopInits = true;
+        }
+
+        if (prop.kind !== "init" || !stopInits) {
+          initProps.push(prop);
+          node.properties[i] = null;
+        }
+      }
+
+      //
+
       var objId = scope.generateUidIdentifierBasedOnNode(parent);
 
       //
