@@ -2,8 +2,6 @@ import * as t from "../../../types";
 
 function loose(node, body, objId) {
   for (var prop of (node.properties: Array)) {
-    if (!prop) continue;
-
     body.push(t.expressionStatement(
       t.assignmentExpression(
         "=",
@@ -19,8 +17,6 @@ function spec(node, body, objId, initProps, file) {
   // otherwise use Object.defineProperty
 
   for (let prop of (node.properties: Array)) {
-    if (!prop) continue;
-
     // this wont work with Object.defineProperty
     if (t.isLiteral(t.toComputedKey(prop), { value: "__proto__" })) {
       initProps.push(prop);
@@ -67,17 +63,18 @@ export var visitor = {
       var initProps = [];
       var stopInits = false;
 
-      for (var i = 0; i < node.properties.length; i++) {
-        let prop = node.properties[i];
+      node.properties = node.properties.filter(function (prop) {
         if (prop.computed) {
           stopInits = true;
         }
 
         if (prop.kind !== "init" || !stopInits) {
           initProps.push(prop);
-          node.properties[i] = null;
+          return false;
+        } else {
+          return true;
         }
-      }
+      });
 
       //
 
