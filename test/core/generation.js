@@ -35,11 +35,11 @@ _.each(helper.get("generation"), function (testSuite) {
             "es7.comprehensions": true,
             "es7.asyncFunctions": true,
             "es7.exportExtensions": true,
-            "es7.functionBind": true
+            "es7.functionBind": true,
+            "es7.decorators": true
           }
         });
         var actualCode = generate(actualAst, task.options, actual.code).code;
-
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
       });
     });
