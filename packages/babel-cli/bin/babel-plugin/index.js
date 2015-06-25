@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-var readline = require("readline");
-var child    = require("child_process");
-var path     = require("path");
-var fs       = require("fs");
+var pathExists = require("path-exists");
+var readline   = require("readline");
+var child      = require("child_process");
+var path       = require("path");
+var fs         = require("fs");
 
 function spawn(cmd, args, callback) {
   console.log(">", cmd, args);
@@ -98,7 +99,7 @@ var cmds = {
 
         write("README.md", template("README.md", templateData));
 
-        if (!fs.existsSync("src")) {
+        if (!pathExists.sync("src")) {
           fs.mkdirSync("src");
           write("src/index.js", template("index.js", templateData));
         }

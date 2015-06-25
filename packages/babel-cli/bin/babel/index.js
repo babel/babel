@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var moduleFormatters = require("babel-core/lib/babel/transformation/modules");
+var pathExists       = require("path-exists");
 var commander        = require("commander");
 var transform        = require("babel-core").transform;
 var kebabCase        = require("lodash/string/kebabCase");
@@ -88,7 +89,7 @@ var filenames = commander.args.reduce(function (globbed, input) {
 filenames = uniq(filenames);
 
 each(filenames, function (filename) {
-  if (!fs.existsSync(filename)) {
+  if (!pathExists.sync(filename)) {
     errors.push(filename + " doesn't exist");
   }
 });

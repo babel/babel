@@ -3,16 +3,15 @@ import { normaliseOptions } from "./index";
 import merge from "../../../helpers/merge";
 import path from "path";
 import fs from "fs";
+import pathExists from "path-exists";
 
 var cache = {};
 var jsons = {};
 
 function exists(filename) {
-  if (!fs.existsSync) return false;
-
   var cached = cache[filename];
   if (cached != null) return cached;
-  return cache[filename] = fs.existsSync(filename);
+  return cache[filename] = pathExists.sync(filename);
 }
 
 export default function (loc, opts = {}) {

@@ -9,6 +9,7 @@ var child          = require("child_process");
 var path           = require("path");
 var chai           = require("chai");
 var fs             = require("fs");
+var pathExists     = require("path-exists");
 var _              = require("lodash");
 
 var fixtureLoc = __dirname + "/fixtures/bin";
@@ -16,7 +17,7 @@ var tmpLoc = __dirname + "/tmp";
 
 var readDir = function (loc) {
   var files = {};
-  if (fs.existsSync(loc)) {
+  if (pathExists.sync(loc)) {
     _.each(readdir(loc), function (filename) {
       var contents = helper.readFile(loc + "/" + filename);
       files[filename] = contents;
@@ -112,7 +113,7 @@ var buildTest = function (binName, testName, opts) {
 
 var clear = function () {
   process.chdir(__dirname);
-  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
+  if (pathExists.sync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
 };
@@ -132,11 +133,11 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       };
 
       var optionsLoc = testLoc + "/options.json"
-      if (fs.existsSync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
 
       _.each(["stdout", "stdin", "stderr"], function (key) {
         var loc = testLoc + "/" + key + ".txt";
-        if (fs.existsSync(loc)) {
+        if (pathExists.sync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
           opts[key] = opts[key] || "";
