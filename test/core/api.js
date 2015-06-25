@@ -219,7 +219,7 @@ suite("api", function () {
 
     function getModuleNameTest(moduleFormat, expected) {
       var result = transform("foo('bar');", {
-        filename: "foo/bar/index",
+        filename: "/foo/bar/index",
         modules: moduleFormat,
         moduleIds: true,
         getModuleId: function (name) {
@@ -232,7 +232,7 @@ suite("api", function () {
 
     test("amd", function () {
       var expected = [
-        "define('foo/bar', ['exports'], function (exports) {",
+        "define('/foo/bar', ['exports'], function (exports) {",
         "  'use strict';",
         "",
         "  foo('bar');",
@@ -246,7 +246,7 @@ suite("api", function () {
       var expected = [
         "(function (global, factory) {",
         "  if (typeof define === 'function' && define.amd) {",
-        "    define('foo/bar', ['exports'], factory);",
+        "    define('/foo/bar', ['exports'], factory);",
         "  } else if (typeof exports !== 'undefined') {",
         "    factory(exports);",
         "  } else {",
@@ -268,7 +268,7 @@ suite("api", function () {
 
     test("system", function () {
       var expected = [
-        "System.register('foo/bar', [], function (_export) {",
+        "System.register('/foo/bar', [], function (_export) {",
         "  'use strict';",
         "",
         "  return {",
