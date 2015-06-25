@@ -112,6 +112,13 @@ export function replaceWith(replacement, whateverAllowed) {
 
   if (typeof replacement === "string") {
     if (whateverAllowed) {
+      this.hub.file.log.deprecate("Returning a string from a visitor method will be removed in the future. String " +
+                                  "building is NOT a substitute for AST generation. String building leads to " +
+                                  "terrible performance due to the additional parsing overhead and will lead to " +
+                                  "extremely brittle transformers. For those extreme cases where you're dealing " +
+                                  "with strings from a foreign source you may continue to use " +
+                                  "`path.replaceWithSourceString(code)`. Please don't abuse this. Bad plugins " +
+                                  "hurt the ecosystem.");
       return this.replaceWithSourceString(replacement);
     } else {
       throw new Error("Don't use `path.replaceWith()` with a string, use `path.replaceWithSourceString()`");
