@@ -1,5 +1,5 @@
 export function ClassDeclaration(node, print) {
-  print.list(node.decorators);
+  print.list(node.decorators, { separator: "" });
   this.push("class");
 
   if (node.id) {
@@ -43,7 +43,7 @@ export function ClassBody(node, print) {
 
 
 export function ClassProperty(node, print) {
-  print.list(node.decorators);
+  print.list(node.decorators, { separator: "" });
 
   if (node.static) this.push("static ");
   print.plain(node.key);
@@ -58,7 +58,7 @@ export function ClassProperty(node, print) {
 }
 
 export function MethodDefinition(node, print) {
-  print.list(node.decorators);
+  print.list(node.decorators, { separator: "" });
 
   if (node.static) {
     this.push("static ");

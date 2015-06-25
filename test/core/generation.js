@@ -32,6 +32,7 @@ _.each(helper.get("generation"), function (testSuite) {
           strictMode: false,
           sourceType: "module",
           features: {
+            "es7.decorators": true,
             "es7.comprehensions": true,
             "es7.asyncFunctions": true,
             "es7.exportExtensions": true,

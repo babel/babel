@@ -33,6 +33,8 @@ export function ObjectExpression(node, print) {
 export { ObjectExpression as ObjectPattern };
 
 export function Property(node, print) {
+  print.list(node.decorators, { separator: "" });
+
   if (node.method || node.kind === "get" || node.kind === "set") {
     this._method(node, print);
   } else {
