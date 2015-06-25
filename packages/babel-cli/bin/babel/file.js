@@ -1,4 +1,5 @@
 var convertSourceMap = require("convert-source-map");
+var pathExists       = require("path-exists");
 var sourceMap        = require("source-map");
 var chokidar         = require("chokidar");
 var slash            = require("slash");
