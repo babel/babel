@@ -10,7 +10,6 @@ var util             = require("babel-core").util;
 var uniq             = require("lodash/array/uniq");
 var each             = require("lodash/collection/each");
 var keys             = require("lodash/object/keys");
-var fs               = require("fs");
 var glob             = require("glob");
 
 each(options, function (option, key) {

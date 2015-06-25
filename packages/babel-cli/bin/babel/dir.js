@@ -7,7 +7,7 @@ var util           = require("./util");
 var fs             = require("fs");
 var _              = require("lodash");
 
-module.exports = function (commander, filenames, opts) {
+module.exports = function (commander, filenames) {
   var write = function (src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";

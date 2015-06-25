@@ -24,7 +24,7 @@ clean-core:
 	rm -rf lib
 
 lint:
-	eslint src/babel
+	eslint src/babel packages/babel-cli/bin
 
 build:
 	mkdir -p dist
