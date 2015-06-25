@@ -108,7 +108,7 @@ each(t.VISITOR_KEYS, function (keys, type) {
 });
 
 each(t.BUILDER_KEYS, function (keys, type) {
-  t[type[0].toLowerCase() + type.slice(1)] = function () {
+  var builder = function () {
     var node = {};
     node.start = null;
     node.type = type;
@@ -123,6 +123,9 @@ each(t.BUILDER_KEYS, function (keys, type) {
 
     return node;
   };
+
+  t[type] = builder;
+  t[type[0].toLowerCase() + type.slice(1)] = builder;
 });
 
 /*
