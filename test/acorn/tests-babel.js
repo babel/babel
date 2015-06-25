@@ -3374,12 +3374,60 @@ test("class Foo { bar(a,) { } }", {
   features: { "es7.trailingFunctionCommas": true }
 });
 
+test("(x, y, ) => 1;", {
+  start: 0,
+  body: [{
+    start: 0,
+    expression: {
+      start: 0,
+      id: null,
+      generator: false,
+      expression: true,
+      params: [
+        {
+          start: 1,
+          name: "x",
+          type: "Identifier",
+          end: 2
+        },
+        {
+          start: 4,
+          name: "y",
+          type: "Identifier",
+          end: 5
+        }
+      ],
+      body: {
+        start: 12,
+        value: 1,
+        raw: "1",
+        type: "Literal",
+        end: 13
+      },
+      type: "ArrowFunctionExpression",
+      end: 13
+    },
+    type: "ExpressionStatement",
+    end: 14
+  }],
+  type: "Program",
+  end: 14
+}, {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
+
 testFail("log(,);", "Unexpected token (1:4)", {
   ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
 testFail("function log(,) { }", "Unexpected token (1:13)", {
+  ecmaVersion: 7,
+  features: { "es7.trailingFunctionCommas": true }
+});
+
+testFail("('foo',)", "Unexpected token (1:7)", {
   ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
