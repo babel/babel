@@ -113,8 +113,6 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
 
 + [js-tokens](http://ghub.io/js-tokens) This is used to get tokens for syntax error highlighting.
 
-+ [leven](http://ghub.io/leven) A levenstein algorithm to determine how close a word is to another. This is used to offer suggestions when using the utility.undeclaredVariableCheck transformer.
-
 + [line-numbers](http://ghub.io/line-numbers) Used to produce the code frames in syntax errors.
 
 + [lodash](http://ghub.io/lodash) Used for various utilities.
