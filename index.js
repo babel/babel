@@ -21,6 +21,9 @@ var internalFiles = after.filter(function (filename) {
 });
 
 internalFiles.forEach(function (filename) {
+  // required by the node API method polyfill
+  if (filename.indexOf("polyfill") >= 0) return;
+
   var cache = require.cache[filename];
   cache.exports = {
     "": "Don't hotlink internal Babel files."
