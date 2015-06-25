@@ -140,6 +140,7 @@ export function AssignmentExpression(node, print) {
   print.plain(node.left);
 
   var spaces = node.operator === "in" || node.operator === "instanceof";
+  spaces = true; // todo: https://github.com/babel/babel/issues/1835
   this.space(spaces);
 
   this.push(node.operator);
