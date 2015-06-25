@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "babel/babel",
-  "main": "lib/babel/api/node.js",
+  "main": "index.js",
   "browser": {
     "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
   },
@@ -77,7 +77,7 @@
     "trim-right": "^1.0.0"
   },
   "devDependencies": {
-    "babel": "5.5.7",
+    "babel": "5.6.7",
     "browserify": "^9.0.8",
     "chai": "^2.2.0",
     "eslint": "^0.21.2",
