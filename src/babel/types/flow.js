@@ -112,5 +112,9 @@ export function createTypeAnnotationBasedOnTypeof(type) {
     return t.genericTypeAnnotation(t.identifier("Function"));
   } else if (type === "object") {
     return t.genericTypeAnnotation(t.identifier("Object"));
+  } else if (type === "symbol") {
+    return t.genericTypeAnnotation(t.identifier("Symbol"));
+  } else {
+    throw new Error("Invalid typeof value");
   }
 }
