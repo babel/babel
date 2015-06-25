@@ -1,4 +1,5 @@
 var outputFileSync = require("output-file-sync");
+var pathExists     = require("path-exists");
 var chokidar       = require("chokidar");
 var slash          = require("slash");
 var path           = require("path");
@@ -41,7 +42,7 @@ module.exports = function (commander, filenames, opts) {
   };
 
   var handle = function (filename) {
-    if (!fs.existsSync(filename)) return;
+    if (!pathExists.sync(filename)) return;
 
     var stat = fs.statSync(filename);
 

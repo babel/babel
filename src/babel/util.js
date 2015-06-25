@@ -18,6 +18,7 @@ import has from "lodash/object/has";
 import fs from "fs";
 import * as t from "./types";
 import slash from "slash";
+import pathExists from "path-exists";
 
 export { inherits, inspect } from "util";
 
@@ -182,7 +183,7 @@ function loadTemplates() {
   var templates = {};
 
   var templatesLoc = path.join(__dirname, "transformation/templates");
-  if (!fs.existsSync(templatesLoc)) {
+  if (!pathExists.sync(templatesLoc)) {
     throw new ReferenceError(messages.get("missingTemplatesDirectory"));
   }
 

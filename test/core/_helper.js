@@ -1,8 +1,9 @@
-var esvalid = require("esvalid");
-var util    = require("../../lib/babel/util");
-var path    = require("path");
-var fs      = require("fs");
-var _       = require("lodash");
+var pathExists = require("path-exists");
+var esvalid    = require("esvalid");
+var util       = require("../../lib/babel/util");
+var path       = require("path");
+var fs         = require("fs");
+var _          = require("lodash");
 
 var humanize = function (val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -10,7 +11,7 @@ var humanize = function (val, noext) {
 };
 
 var readFile = exports.readFile = function (filename) {
-  if (fs.existsSync(filename)) {
+  if (pathExists.sync(filename)) {
     var file = fs.readFileSync(filename, "utf8").trim();
     file = file.replace(/\r\n/g, "\n");
     return file;
@@ -31,7 +32,7 @@ exports.esvalid = function (ast, code, loc) {
 };
 
 exports.assertVendor = function (name) {
-  if (!fs.existsSync(__dirname + "/../../vendor/" + name)) {
+  if (!pathExists.sync(__dirname + "/../../vendor/" + name)) {
     console.error("No vendor/" + name + " - run `make bootstrap`");
     process.exit(1);
   }
@@ -130,13 +131,13 @@ exports.get = function (entryName, entryLoc) {
       suite.tests.push(test);
 
       var sourceMappingsLoc = taskDir + "/source-mappings.json";
-      if (fs.existsSync(sourceMappingsLoc)) {
+      if (pathExists.sync(sourceMappingsLoc)) {
         test.options.sourceMap = true;
         test.sourceMappings = require(sourceMappingsLoc);
       }
 
       var sourceMap = taskDir + "/source-map.json";
-      if (fs.existsSync(sourceMap)) {
+      if (pathExists.sync(sourceMap)) {
         test.options.sourceMap = true;
         test.sourceMap = require(sourceMap);
       }

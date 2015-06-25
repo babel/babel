@@ -100,7 +100,7 @@ module.exports = function (commander, filenames, opts) {
     results = [];
 
     _.each(filenames, function (filename) {
-      if (!fs.existsSync(filename)) return;
+      if (!pathExists.sync(filename)) return;
 
       var stat = fs.statSync(filename);
       if (stat.isDirectory()) {

@@ -61,6 +61,7 @@
     "lodash": "^3.6.0",
     "minimatch": "^2.0.3",
     "output-file-sync": "^1.1.0",
+    "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
     "regenerator": "0.8.31",
