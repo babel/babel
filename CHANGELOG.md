@@ -29,7 +29,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## 5.6.5
 
- * *Bug Fix**
+ * **Bug Fix**
   * Fix nested functions causing rest parameter optimisation to not properly detect when it should deopt on a reference.
  * **Internal**
   * Update Regenerator `0.8.31`.
