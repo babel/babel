@@ -1,7 +1,7 @@
-(function (arr, i) {
-  if (Array.isArray(arr)) {
-    return arr;
-  } else if (Symbol.iterator in Object(arr)) {
+(function () {
+  // Broken out into a separate function to avoid deoptimizations due to the try/catch for the
+  // array iterator case.
+  function sliceIterator(arr, i) {
     // this is an expanded form of `for...of` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
     // helper. sometimes spec compliancy is annoying :(
@@ -32,7 +32,15 @@
       }
     }
     return _arr;
-  } else {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
-});
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+})();
