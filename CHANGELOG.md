@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.8
+
+ * **Bug Fix**
+  * Fix binary expressions colliding with unary expression operators in compact mode.
+  * Fix node properties being set to `null` when using computed properties.
+
 ## 5.6.7
 
  * **Bug Fix**
