@@ -122,7 +122,7 @@ export default class PathHoister {
     if (parent.isJSXElement() && this.path.container === parent.node.children) {
       // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
       // an expression container
-      uid = t.jSXExpressionContainer(uid);
+      uid = t.JSXExpressionContainer(uid);
     }
 
     this.path.replaceWith(uid);
