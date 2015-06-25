@@ -9,6 +9,7 @@ module.exports = function (babel) {
         if (file.opts.filename.indexOf("tools/protect") >= 0) return;
         if (file.opts.filename.indexOf("templates") >= 0) return;
         if (file.opts.filename.indexOf("polyfill") >= 0) return;
+        if (file.opts.filename.indexOf("register") >= 0) return;
 
         var from = "/" + path.dirname(file.opts.filename.replace(/^src/, "lib"));
         var to   = "/lib/babel/tools";
