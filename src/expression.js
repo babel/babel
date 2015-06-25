@@ -432,9 +432,18 @@ pp.parseParenAndDistinguishExpression = function(start, isAsync, canBeArrow) {
     }
 
     let innerStart = this.markPosition(), exprList = [], first = true
-    let refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart
+    let refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart, optionalCommaStart
     while (this.type !== tt.parenR) {
-      first ? first = false : this.expect(tt.comma)
+      if (first) {
+        first = false;
+      } else {
+        this.expect(tt.comma)
+        if (this.type === tt.parenR && this.options.features["es7.trailingFunctionCommas"]) {
+          optionalCommaStart = this.start
+          break
+        }
+      }
+
       if (this.type === tt.ellipsis) {
         let spreadNodeStart = this.markPosition()
         spreadStart = this.start
@@ -462,6 +471,7 @@ pp.parseParenAndDistinguishExpression = function(start, isAsync, canBeArrow) {
         this.unexpected(this.lastTokStart)
       }
     }
+    if (optionalCommaStart) this.unexpected(optionalCommaStart)
     if (spreadStart) this.unexpected(spreadStart)
     if (refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start)
 
