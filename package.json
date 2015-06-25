@@ -57,7 +57,6 @@
     "home-or-tmp": "^1.0.0",
     "is-integer": "^1.0.4",
     "js-tokens": "1.0.1",
-    "leven": "^1.0.1",
     "line-numbers": "0.2.0",
     "lodash": "^3.6.0",
     "minimatch": "^2.0.3",
