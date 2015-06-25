@@ -1,3 +1,5 @@
+var path = require("path");
+
 module.exports = function (babel) {
   var t = babel.types;
 
@@ -7,8 +9,13 @@ module.exports = function (babel) {
         if (file.opts.filename.indexOf("tools/protect") >= 0) return;
         if (file.opts.filename.indexOf("templates") >= 0) return;
 
+        var from = "/" + path.dirname(file.opts.filename.replace(/^src/, "lib"));
+        var to   = "/lib/babel/tools";
+
+        var protectLoc = "./" + path.relative(from, to) + "/protect.js";
+
         this.unshiftContainer("body", [
-          t.expressionStatement(t.callExpression(file.addImport("babel-core/lib/babel/tools/protect"), [t.identifier("module")]))
+          t.expressionStatement(t.callExpression(file.addImport(protectLoc), [t.identifier("module")]))
         ]);
       }
     }
