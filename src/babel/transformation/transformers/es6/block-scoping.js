@@ -149,30 +149,26 @@ var letReferenceFunctionVisitor = {
 };
 
 var hoistVarDeclarationsVisitor = {
-  VariableDeclaration(node, parent, scope, self) {
-    return self.pushDeclar(node).map(t.expressionStatement);
-  },
-
-  ForStatement(node, parent, scope, self) {
-    if (isVar(node.init, node)) {
-      var nodes = self.pushDeclar(node.init);
-      if (nodes.length === 1) {
-        node.init = nodes[0];
-      } else {
-        node.init = t.sequenceExpression(nodes);
+  enter(node, parent, scope, self) {
+    if (this.isForStatement()) {
+      if (isVar(node.init, node)) {
+        var nodes = self.pushDeclar(node.init);
+        if (nodes.length === 1) {
+          node.init = nodes[0];
+        } else {
+          node.init = t.sequenceExpression(nodes);
+        }
       }
+    } else if (this.isFor()) {
+      if (isVar(node.left, node)) {
+        node.left = node.left.declarations[0].id;
+        self.pushDeclar(node.left);
+      }
+    } else if (isVar(node, parent)) {
+      return self.pushDeclar(node).map(t.expressionStatement);
+    } else if (this.isFunction()) {
+      return this.skip();
     }
-  },
-
-  For(node, parent, scope, self) {
-    if (isVar(node.left, node)) {
-      self.pushDeclar(node.left);
-      node.left = node.left.declarations[0].id;
-    }
-  },
-
-  Function() {
-    this.skip();
   }
 };
 
