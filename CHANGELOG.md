@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.7
+
+ * **Bug Fix**
+  * Fix hoisting of `ForXStatement` `left` `var`s when inserting a block scoping IIFE.
+ * **Polish**
+  * Combine all leading computed property initialisers into the root object in loose mode.
+ * **Internal**
+  * Deprecate returning of replacement strings from visitor methods.
+
 ## 5.6.6
 
  * **Bug Fix**
