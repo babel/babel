@@ -76,6 +76,8 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
     return t.isAnyTypeAnnotation(type);
   } else if (baseName === "mixed") {
     return t.isMixedTypeAnnotation(type);
+  } else if (baseName === "void") {
+    return t.isVoidTypeAnnotation(type);
   } else {
     if (soft) {
       return false;
@@ -102,6 +104,19 @@ export function couldBeBaseType(name: string): boolean {
     return false;
   } else {
     return _isBaseType(name, type, true);
+  }
+}
+
+/**
+ * Description
+ */
+
+export function baseTypeStrictlyMatches(right: NodePath) {
+  var left = this.getTypeAnnotation();
+  right = right.getTypeAnnotation();
+
+  if (!t.isAnyTypeAnnotation() && t.isFlowBaseAnnotation(left)) {
+    return right.type === left.type;
   }
 }
 
