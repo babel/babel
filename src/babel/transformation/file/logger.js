@@ -4,6 +4,8 @@ import buildDebug from "debug/node";
 var verboseDebug = buildDebug("babel:verbose");
 var generalDebug = buildDebug("babel");
 
+var seenDeprecatedMessages = [];
+
 export default class Logger {
   constructor(file: File, filename: string) {
     this.filename = filename;
@@ -25,9 +27,17 @@ export default class Logger {
   }
 
   deprecate(msg) {
-    if (!this.file.opts.suppressDeprecationMessages) {
-      console.error(this._buildMessage(msg));
-    }
+    if (this.file.opts.suppressDeprecationMessages) return;
+
+    msg = this._buildMessage(msg);
+
+    // already seen this message
+    if (seenDeprecatedMessages.indexOf(msg) >= 0) return;
+
+    // make sure we don't see it again
+    seenDeprecatedMessages.push(msg);
+
+    console.error(msg);
   }
 
   verbose(msg: string) {
