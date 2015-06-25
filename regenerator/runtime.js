@@ -376,7 +376,7 @@
     // locations where there is no enclosing try statement.
     this.tryEntries = [{ tryLoc: "root" }];
     tryLocsList.forEach(pushTryEntry, this);
-    this.reset();
+    this.reset(true);
   }
 
   runtime.keys = function(object) {
@@ -449,7 +449,7 @@
   Context.prototype = {
     constructor: Context,
 
-    reset: function() {
+    reset: function(skipTempReset) {
       this.prev = 0;
       this.next = 0;
       this.sent = undefined;
@@ -460,10 +460,12 @@
 
       // Pre-initialize at least 20 temporary variables to enable hidden
       // class optimizations for simple generators.
-      for (var tempIndex = 0, tempName;
-           hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
-           ++tempIndex) {
-        this[tempName] = null;
+      if (!skipTempReset) {
+        for (var tempIndex = 0, tempName;
+             hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
+             ++tempIndex) {
+          this[tempName] = null;
+        }
       }
     },
 
