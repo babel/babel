@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Babel</strong> is a compiler for writing next generation JavaScript.
+  The compiler for writing next generation JavaScript.
 </p>
 
 <p align="center">
