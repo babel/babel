@@ -84,7 +84,7 @@ export var visitor = {
     var argsId = t.identifier("arguments");
 
     // otherwise `arguments` will be remapped in arrow functions
-    argsId._shadowedFunctionLiteral = node;
+    argsId._shadowedFunctionLiteral = this;
 
     // support patterns
     if (t.isPattern(rest)) {

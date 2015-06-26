@@ -38,7 +38,7 @@ export var visitor = {
 
     //
     var argsIdentifier = t.identifier("arguments");
-    argsIdentifier._shadowedFunctionLiteral = node;
+    argsIdentifier._shadowedFunctionLiteral = this;
 
     // push a default parameter definition
     function pushDefNode(left, right, i) {

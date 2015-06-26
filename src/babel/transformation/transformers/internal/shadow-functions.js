@@ -9,14 +9,30 @@ function remap(path, key, create) {
   if (!path.inShadow()) return;
 
   var shadowed = path.node._shadowedFunctionLiteral;
+  var currentFunction;
 
   var fnPath = path.findParent(function (path) {
     if (shadowed) {
-      return path.node === shadowed;
+      // only match our shadowed function parent
+      if (path === shadowed) {
+        // found our target reference function
+        currentFunction = path;
+        return true;
+      } else {
+        return false;
+      }
+    } else if (path.isFunction() || path.isProgram()) {
+      // catch current function in case this is the shadowed one
+      if (!currentFunction) currentFunction = path;
+
+      return !path.is("shadow");
     } else {
-      return !path.is("shadow") && (path.isFunction() || path.isProgram());
+      return false;
     }
   });
+
+  // no point in realiasing if we're in this function
+  if (fnPath === currentFunction) return;
 
   var cached = fnPath.getData(key);
   if (cached) return cached;
