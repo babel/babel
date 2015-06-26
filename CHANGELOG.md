@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.10
+
+ * **Bug Fix**
+  * Fix faulty internal require check.
+ * **Polish**
+  * Add support for trailing commas in arrow function parameter lists.
+
 ## 5.6.8
 
  * **Bug Fix**
