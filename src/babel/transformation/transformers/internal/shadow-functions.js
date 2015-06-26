@@ -8,10 +8,15 @@ function remap(path, key, create) {
   // ensure that we're shadowed
   if (!path.inShadow()) return;
 
-  var fnPath = path.findParent((path) => !path.is("shadow") && (path.isFunction() || path.isProgram()));
-
   var shadowed = path.node._shadowedFunctionLiteral;
-  if (shadowed && shadowed !== fnPath.node) return;
+
+  var fnPath = path.findParent(function (path) {
+    if (shadowed) {
+      return path.node === shadowed;
+    } else {
+      return !path.is("shadow") && (path.isFunction() || path.isProgram())
+    }
+  });
 
   var cached = fnPath.getData(key);
   if (cached) return cached;
