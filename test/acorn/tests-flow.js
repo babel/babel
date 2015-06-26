@@ -9965,6 +9965,95 @@ var fbTestFixture = {
         end: { line: 1, column: 49 }
       }
     },
+    'declare class IViewFactory { didAnimate(view:Object, prop:string) :void; }': {
+      start: 0,
+      id: {
+        start: 14,
+        name: "IViewFactory",
+        type: "Identifier",
+        end: 26
+      },
+      typeParameters: null,
+      extends: [],
+      body: {
+        start: 27,
+        callProperties: [],
+        properties: [
+          {
+            start: 29,
+            value: {
+              start: 29,
+              params: [
+                {
+                  start: 40,
+                  name: {
+                    start: 40,
+                    name: "view",
+                    type: "Identifier",
+                    end: 44
+                  },
+                  optional: false,
+                  typeAnnotation: {
+                    start: 45,
+                    typeParameters: null,
+                    id: {
+                      start: 45,
+                      name: "Object",
+                      type: "Identifier",
+                      end: 51
+                    },
+                    type: "GenericTypeAnnotation",
+                    end: 51
+                  },
+                  type: "FunctionTypeParam",
+                  end: 51
+                },
+                {
+                  start: 53,
+                  name: {
+                    start: 53,
+                    name: "prop",
+                    type: "Identifier",
+                    end: 57
+                  },
+                  optional: false,
+                  typeAnnotation: {
+                    start: 58,
+                    type: "StringTypeAnnotation",
+                    end: 64
+                  },
+                  type: "FunctionTypeParam",
+                  end: 64
+                }
+              ],
+              rest: null,
+              typeParameters: null,
+              returnType: {
+                start: 67,
+                type: "VoidTypeAnnotation",
+                end: 71
+              },
+              type: "FunctionTypeAnnotation",
+              end: 71
+            },
+            key: {
+              start: 29,
+              name: "didAnimate",
+              type: "Identifier",
+              end: 39
+            },
+            optional: false,
+            type: "ObjectTypeProperty",
+            end: 72
+          }
+        ],
+        indexers: [],
+        type: "ObjectTypeAnnotation",
+        end: 74
+      },
+      type: "DeclareClass",
+      end: 74
+    },
     'declare class A {}': {
       type: 'DeclareClass',
       id: {

@@ -16,6 +16,15 @@ pp.expectRelational = function (op) {
   }
 }
 
+pp.flow_parseTypeInitialiser = function (tok) {
+  var oldInType = this.inType
+  this.inType = true
+  this.expect(tok || tt.colon)
+  var type = this.flow_parseType()
+  this.inType = oldInType
+  return type;
+}
+
 pp.flow_parseDeclareClass = function (node) {
   this.next()
   this.flow_parseInterfaceish(node, true)
@@ -41,12 +50,7 @@ pp.flow_parseDeclareFunction = function (node) {
   typeNode.params = tmp.params
   typeNode.rest = tmp.rest
   this.expect(tt.parenR)
-
-  var oldInType = this.inType
-  this.inType = true
-  this.expect(tt.colon)
-  typeNode.returnType = this.flow_parseType()
-  this.inType = oldInType
+  typeNode.returnType = this.flow_parseTypeInitialiser()
 
   typeContainer.typeAnnotation = this.finishNode(typeNode, "FunctionTypeAnnotation")
   id.typeAnnotation = this.finishNode(typeContainer, "TypeAnnotation")
@@ -157,15 +161,7 @@ pp.flow_parseTypeAlias = function (node) {
     node.typeParameters = null
   }
 
-  var oldInType = this.inType;
-  this.inType = true;
-
-  this.expect(tt.eq)
-
-  node.right = this.flow_parseType()
-
-  this.inType = oldInType;
-
+  node.right = this.flow_parseTypeInitialiser(tt.eq)
   this.semicolon()
 
   return this.finishNode(node, "TypeAlias")
@@ -218,11 +214,9 @@ pp.flow_parseObjectTypeIndexer = function (node, isStatic) {
 
   this.expect(tt.bracketL)
   node.id = this.flow_parseObjectPropertyKey()
-  this.expect(tt.colon)
-  node.key = this.flow_parseType()
+  node.key = this.flow_parseTypeInitialiser()
   this.expect(tt.bracketR)
-  this.expect(tt.colon)
-  node.value = this.flow_parseType()
+  node.value = this.flow_parseTypeInitialiser()
 
   this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeIndexer")
@@ -249,8 +243,7 @@ pp.flow_parseObjectTypeMethodish = function (node) {
     node.rest = this.flow_parseFunctionTypeParam()
   }
   this.expect(tt.parenR)
-  this.expect(tt.colon)
-  node.returnType = this.flow_parseType()
+  node.returnType = this.flow_parseTypeInitialiser()
 
   return this.finishNode(node, "FunctionTypeAnnotation")
 }
@@ -269,7 +262,7 @@ pp.flow_parseObjectTypeCallProperty = function (node, isStatic) {
   var valueNode = this.startNode()
   node.static = isStatic
   node.value = this.flow_parseObjectTypeMethodish(valueNode)
-    this.flow_objectTypeSemicolon()
+  this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeCallProperty")
 }
 
@@ -314,9 +307,8 @@ pp.flow_parseObjectType = function (allowStatic) {
         if (this.eat(tt.question)) {
           optional = true
         }
-        this.expect(tt.colon)
         node.key = propertyKey
-        node.value = this.flow_parseType()
+        node.value = this.flow_parseTypeInitialiser()
         node.optional = optional
         node.static = isStatic
         this.flow_objectTypeSemicolon()
@@ -384,9 +376,8 @@ pp.flow_parseFunctionTypeParam = function () {
   if (this.eat(tt.question)) {
     optional = true
   }
-  this.expect(tt.colon)
   node.optional = optional
-  node.typeAnnotation = this.flow_parseType()
+  node.typeAnnotation = this.flow_parseTypeInitialiser()
   return this.finishNode(node, "FunctionTypeParam")
 }
 
@@ -583,13 +574,7 @@ pp.flow_parseType = function () {
 
 pp.flow_parseTypeAnnotation = function () {
   var node = this.startNode()
-
-  var oldInType = this.inType
-  this.inType = true
-  this.expect(tt.colon)
-  node.typeAnnotation = this.flow_parseType()
-  this.inType = oldInType
-
+  node.typeAnnotation = this.flow_parseTypeInitialiser()
   return this.finishNode(node, "TypeAnnotation")
 }
 
