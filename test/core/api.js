@@ -70,7 +70,7 @@ suite("api", function () {
 
     assert.deepEqual(transform('import localName from "./array";', {
       resolveModuleSource: function() {
-        return 'override-source';
+        return "override-source";
       }
     }).metadata.modules.imports, [
       {

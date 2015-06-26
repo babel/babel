@@ -12,7 +12,7 @@ suite("traversal path", function () {
       plugins: [new Plugin("foobar", {
         visitor: {
           FunctionDeclaration: function () {
-            return "console.whatever()";
+            this.replaceWithSourceString("console.whatever()");
           }
         }
       })]
