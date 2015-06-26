@@ -10,17 +10,17 @@
     "./lib/babel/api/register/node.js": "./lib/babel/api/register/browser.js"
   },
   "keywords": [
-    "harmony",
+    "6to5",
+    "babel",
     "classes",
-    "modules",
-    "let",
     "const",
-    "var",
     "es6",
+    "harmony",
+    "let",
+    "modules",
     "transpile",
     "transpiler",
-    "6to5",
-    "babel"
+    "var"
   ],
   "scripts": {
     "bench": "make bench",
@@ -29,6 +29,7 @@
   "dependencies": {
     "acorn-jsx": "^1.0.0",
     "ast-types": "~0.7.0",
+    "babel-eslint": "^3.1.19",
     "babel-plugin-constant-folding": "^1.0.1",
     "babel-plugin-dead-code-elimination": "^1.0.2",
     "babel-plugin-eval": "^1.0.1",
@@ -77,10 +78,10 @@
   },
   "devDependencies": {
     "babel": "5.6.10",
+    "babel-eslint": "^3.1.9",
     "browserify": "^9.0.8",
     "chai": "^2.2.0",
     "eslint": "^0.21.2",
-    "babel-eslint": "^3.1.9",
     "esvalid": "^1.1.0",
     "istanbul": "^0.3.5",
     "matcha": "^0.6.0",
