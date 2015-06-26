@@ -8,27 +8,26 @@ function remap(path, key, create) {
   // ensure that we're shadowed
   if (!path.inShadow()) return;
 
-  var shadowed = path.node._shadowedFunctionLiteral;
+  var shadowFunction = path.node._shadowedFunctionLiteral;
   var currentFunction;
 
   var fnPath = path.findParent(function (path) {
-    if (shadowed) {
-      // only match our shadowed function parent
-      if (path === shadowed) {
-        // found our target reference function
-        currentFunction = path;
-        return true;
-      } else {
-        return false;
-      }
-    } else if (path.isFunction() || path.isProgram()) {
-      // catch current function in case this is the shadowed one
+    if (path.isProgram() || path.isFunction()) {
+      // catch current function in case this is the shadowed one and we can ignore it
       if (!currentFunction) currentFunction = path;
-
-      return !path.is("shadow");
-    } else {
-      return false;
     }
+
+    if (path.isProgram()) {
+      return true;
+    } else if (path.isFunction()) {
+      if (shadowFunction) {
+        return path === shadowFunction;
+      } else {
+        return !path.is("shadow");
+      }
+    }
+
+    return false;
   });
 
   // no point in realiasing if we're in this function
