@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require("babel-core");
+
 var moduleFormatters = require("babel-core/lib/babel/transformation/modules");
 var pathExists       = require("path-exists");
 var commander        = require("commander");
