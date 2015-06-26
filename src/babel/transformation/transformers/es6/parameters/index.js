@@ -1,4 +1,3 @@
-import * as util from  "../../../../util";
 import * as visitors from "../../../../traversal/visitors";
 
 import * as def from "./default";
