@@ -9,7 +9,7 @@ BROWSERIFY_IGNORE = -i esprima-fb
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test clean-core
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test clean-core prepublish
 
 build-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --copy-files
@@ -81,34 +81,20 @@ test-browser:
 
 publish: lint
 	git pull --rebase
-
 	make test
-
 	read -p "Version: " version; \
 	npm version $$version --message "v%s"
-
-	make build
-
-	cp dist/browser.js browser.js
-	cp dist/browser.min.js browser.min.js
-
-	cp dist/polyfill.js browser-polyfill.js
-	cp dist/polyfill.min.js browser-polyfill.min.js
-
-	cp dist/external-helpers.js external-helpers.js
-	cp dist/external-helpers.min.js external-helpers.min.js
-
-	node tools/cache-templates
-	test -f templates.json
-
-	npm publish
-
 	git push --follow-tags
 
-	make publish-cli
-	make publish-runtime
-
-	rm -rf templates.json browser.js browser.min.js browser-polyfill.js browser-polyfill.min.js external-helpers.js external-helpers.min.js
+prepublish: build
+	cp dist/browser.js browser.js
+	cp dist/browser.min.js browser.min.js
+	cp dist/polyfill.js browser-polyfill.js
+	cp dist/polyfill.min.js browser-polyfill.min.js
+	cp dist/external-helpers.js external-helpers.js
+	cp dist/external-helpers.min.js external-helpers.min.js
+	node tools/cache-templates
+	test -f templates.json
 
 publish-runtime:
 	cd packages; \

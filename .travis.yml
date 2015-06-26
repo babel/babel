@@ -12,3 +12,19 @@ script: "make test-travis"
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
+
+before_deploy:
+ - make prepublish
+
+after_deploy:
+ - make publish-cli
+ - make publish-runtime
+
+deploy:
+  provider: npm
+  email: sebmck@gmail.com
+  api_key:
+    secure: BCS0BJ3gjs/fyAj5GrMIj4ZAs/S3Odr/FaCAGo8+mT1+Ayinq5uQb8n07k+TqLRQC+Bm1nkjUGg97UZwBmE6NkkNA9rJkC4HCzuXkwOUmE1MxActB2Jeo1tbl3VbbcMNVBo8oTckh1oBaXN2ZbvvPaQIXMAC+0oZwaeXT5dTzQc=
+  on:
+    tags: true
+    repo: babel/babel
