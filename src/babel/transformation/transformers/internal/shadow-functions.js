@@ -14,14 +14,14 @@ function remap(path, key, create) {
   var fnPath = path.findParent(function (path) {
     if (path.isProgram() || path.isFunction()) {
       // catch current function in case this is the shadowed one and we can ignore it
-      if (!currentFunction) currentFunction = path;
+      currentFunction = currentFunction || path;
     }
 
     if (path.isProgram()) {
       return true;
     } else if (path.isFunction()) {
       if (shadowFunction) {
-        return path === shadowFunction;
+        return path === shadowFunction || path.node === shadowFunction.node;
       } else {
         return !path.is("shadow");
       }
