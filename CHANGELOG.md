@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.12
+
+ * **Bug Fix**
+  * Fix finding parent for top-level shadowed functions.
+
 ## 5.6.11
 
  ** **Internal**
