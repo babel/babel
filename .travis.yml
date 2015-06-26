@@ -1,30 +1,26 @@
-#sudo: false
 language: node_js
 cache:
   directories:
-    - node_modules
+  - node_modules
 node_js:
-  - "0.12"
-  - "iojs"
-
-before_script: "npm install -g codeclimate-test-reporter"
-script: "make test-travis"
-
+- '0.12'
+- iojs
+before_script: npm install -g codeclimate-test-reporter
+script: make test-travis
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
-
 before_deploy:
- - make prepublish
-
+- make prepublish
 after_deploy:
- - make publish-cli
- - make publish-runtime
-
+- make publish-cli
+- make publish-runtime
 deploy:
   provider: npm
   email: sebmck@gmail.com
+  skip_cleanup: true
   api_key:
-    secure: BCS0BJ3gjs/fyAj5GrMIj4ZAs/S3Odr/FaCAGo8+mT1+Ayinq5uQb8n07k+TqLRQC+Bm1nkjUGg97UZwBmE6NkkNA9rJkC4HCzuXkwOUmE1MxActB2Jeo1tbl3VbbcMNVBo8oTckh1oBaXN2ZbvvPaQIXMAC+0oZwaeXT5dTzQc=
+    secure: Q/pZStwherdYPCqCa0aUuiEktLcx6ccBxieyH8j9IXdDgty0ydmnajZfUnlZuCjN13XI9esM44nSJFTWZvntTryDQAQm37c63VXhAEnw/qrAINI06yt0gLBTT69/fKvIAkH8l48nmW32ZS2dse3rHRPZF1CwyQLC/pdMip8I4sM=
   on:
+    branch: master
     tags: true
     repo: babel/babel
