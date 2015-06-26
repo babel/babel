@@ -15,3 +15,4 @@ test/core/tmp
 /packages/babel-runtime/helpers/*.js
 /packages/babel-runtime/regenerator/*.js
 /lib
+_babel.github.io
