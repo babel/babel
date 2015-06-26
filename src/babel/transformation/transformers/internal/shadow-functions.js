@@ -14,7 +14,7 @@ function remap(path, key, create) {
     if (shadowed) {
       return path.node === shadowed;
     } else {
-      return !path.is("shadow") && (path.isFunction() || path.isProgram())
+      return !path.is("shadow") && (path.isFunction() || path.isProgram());
     }
   });
 
