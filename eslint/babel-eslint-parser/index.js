@@ -38,8 +38,15 @@ function monkeypatch() {
   var escopeLoc = Module._resolveFilename("escope", eslintMod);
   var escopeMod = createModule(escopeLoc);
 
+  // npm 3: monkeypatch estraverse if it's in escope
+  var estraverseRelative = escopeMod;
+  try {
+    var esrecurseLoc = Module._resolveFilename("esrecurse", eslintMod);
+    estraverseRelative = createModule(esrecurseLoc);
+  } catch (err) {}
+
   // monkeypatch estraverse
-  estraverse = escopeMod.require("estraverse");
+  estraverse = estraverseRelative.require("estraverse");
   assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
   // monkeypatch estraverse-fb
