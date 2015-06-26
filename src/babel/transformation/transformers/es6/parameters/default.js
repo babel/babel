@@ -1,7 +1,7 @@
-import callDelegate from "../../helpers/call-delegate";
-import getFunctionArity from "../../helpers/get-function-arity";
-import * as util from  "../../../util";
-import * as t from "../../../types";
+import callDelegate from "../../../helpers/call-delegate";
+import getFunctionArity from "../../../helpers/get-function-arity";
+import * as util from  "../../../../util";
+import * as t from "../../../../types";
 
 var hasDefaults = function (node) {
   for (var i = 0; i < node.params.length; i++) {
@@ -38,7 +38,7 @@ export var visitor = {
 
     //
     var argsIdentifier = t.identifier("arguments");
-    argsIdentifier._shadowedFunctionLiteral = true;
+    argsIdentifier._shadowedFunctionLiteral = node;
 
     // push a default parameter definition
     function pushDefNode(left, right, i) {

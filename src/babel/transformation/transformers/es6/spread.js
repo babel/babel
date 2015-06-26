@@ -43,6 +43,10 @@ function build(props, scope) {
   return nodes;
 }
 
+export var metadata = {
+  group: "builtin-advanced"
+};
+
 export var visitor = {
   ArrayExpression(node, parent, scope) {
     var elements = node.elements;

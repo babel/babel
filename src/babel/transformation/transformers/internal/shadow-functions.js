@@ -10,6 +10,9 @@ function remap(path, key, create) {
 
   var fnPath = path.findParent((path) => !path.is("shadow") && (path.isFunction() || path.isProgram()));
 
+  var shadowed = path.node._shadowedFunctionLiteral;
+  if (shadowed && shadowed !== fnPath.node) return;
+
   var cached = fnPath.getData(key);
   if (cached) return cached;
 
@@ -28,7 +31,7 @@ export var visitor = {
   },
 
   ReferencedIdentifier(node) {
-    if (node.name === "arguments" && !node._shadowedFunctionLiteral) {
+    if (node.name === "arguments") {
       return remap(this, "arguments", () => t.identifier("arguments"));
     }
   }

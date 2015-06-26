@@ -126,6 +126,8 @@ export function merge(visitors) {
   var rootVisitor = {};
 
   for (var visitor of (visitors: Array)) {
+    explode(visitor);
+
     for (var type in visitor) {
       var nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
       mergePair(nodeVisitor, visitor[type]);

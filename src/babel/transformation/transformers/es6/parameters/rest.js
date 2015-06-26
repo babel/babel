@@ -1,5 +1,5 @@
-import * as util from  "../../../util";
-import * as t from "../../../types";
+import * as util from  "../../../../util";
+import * as t from "../../../../types";
 
 var memberExpressionOptimisationVisitor = {
   Scope(node, parent, scope, state) {
@@ -84,7 +84,7 @@ export var visitor = {
     var argsId = t.identifier("arguments");
 
     // otherwise `arguments` will be remapped in arrow functions
-    argsId._shadowedFunctionLiteral = true;
+    argsId._shadowedFunctionLiteral = node;
 
     // support patterns
     if (t.isPattern(rest)) {

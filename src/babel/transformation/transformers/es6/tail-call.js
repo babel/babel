@@ -211,7 +211,7 @@ class TailCallTransformer {
       var decl = t.variableDeclarator(this.argumentsId);
       if (this.argumentsId) {
         decl.init = t.identifier("arguments");
-        decl.init._shadowedFunctionLiteral = true;
+        decl.init._shadowedFunctionLiteral = node;
       }
       topVars.push(decl);
     }

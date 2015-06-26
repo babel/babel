@@ -70,7 +70,15 @@ export var visitor = {
       let pattern = node.params[i];
       if (!t.isPattern(pattern)) continue;
 
-      var ref = node.params[i] = scope.generateUidIdentifier("ref");
+      var ref = scope.generateUidIdentifier("ref");
+      if (t.isAssignmentPattern(pattern)) {
+        var _pattern = pattern;
+        pattern = pattern.left;
+        _pattern.left = ref;
+      } else {
+        node.params[i] = ref;
+      }
+
       t.inherits(ref, pattern);
 
       var destructuring = new DestructuringTransformer({

@@ -46,9 +46,6 @@ export default {
   "es6.regex.sticky":                      require("./es6/regex.sticky"),
   "es6.regex.unicode":                     require("./es6/regex.unicode"),
   "es6.constants":                         require("./es6/constants"),
-  "es6.parameters.rest":                   require("./es6/parameters.rest"),
-  "es6.spread":                            require("./es6/spread"),
-  "es6.parameters.default":                require("./es6/parameters.default"),
   "es7.exportExtensions":                  require("./es7/export-extensions"),
   "spec.protoToAssign":                    require("babel-plugin-proto-to-assign"),
   "es7.doExpressions":                     require("./es7/do-expressions"),
@@ -57,6 +54,8 @@ export default {
   "spec.undefinedToVoid":                  require("babel-plugin-undefined-to-void"),
 
   //- builtin-advanced
+  "es6.spread":                            require("./es6/spread"),
+  "es6.parameters":                        require("./es6/parameters"),
   "es6.destructuring":                     require("./es6/destructuring"),
   "es6.blockScoping":                      require("./es6/block-scoping"),
   "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
