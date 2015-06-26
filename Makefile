@@ -9,7 +9,7 @@ BROWSERIFY_IGNORE = -i esprima-fb
 
 export NODE_ENV = test
 
-.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-core watch-core build-core-test clean-core prepublish
+.PHONY: clean test test-cov test-clean test-travis test-simple test-all test-browser test-parser publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 build-core: clean-core
 	node $(BABEL_CMD) src --out-dir lib --copy-files
@@ -104,6 +104,9 @@ publish-runtime:
 
 publish-cli:
 	@./tools/publish-cli.sh
+
+build-website:
+	@./tools/build-website.sh
 
 bootstrap:
 	npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true

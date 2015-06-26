@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 LAST_TAG=$(git describe $(git rev-list --tags --max-count=1))
 TAG_DIFF=$(git diff $LAST_TAG -- packages/babel-cli/)
