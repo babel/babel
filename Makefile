@@ -103,10 +103,7 @@ publish-runtime:
 	npm publish
 
 publish-cli:
-	cd packages; \
-	node build-cli.js; \
-	cd babel-cli; \
-	npm publish
+	@./tools/publish-cli.sh
 
 bootstrap:
 	npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true
