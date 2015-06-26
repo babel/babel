@@ -9,6 +9,11 @@ var memberExpressionOptimisationVisitor = {
     }
   },
 
+  Flow() {
+    // don't touch reference in type annotations
+    this.skip();
+  },
+
   Function(node, parent, scope, state) {
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
