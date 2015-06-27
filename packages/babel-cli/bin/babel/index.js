@@ -67,7 +67,7 @@ commander.on("--help", function () {
 });
 
 var pkg = require("../../package.json");
-commander.version(pkg.version);
+commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 
