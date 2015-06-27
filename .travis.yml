@@ -30,4 +30,5 @@ deploy:
 after_deploy:
 - make publish-cli
 - make publish-runtime
-- make rebuild-website
+- make build-website
+- make comment-issues

@@ -108,6 +108,9 @@ publish-cli:
 build-website:
 	@./tools/build-website.sh
 
+comment-issues:
+	@./tools/comment-issues.sh
+
 bootstrap:
 	npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true
 	npm install
