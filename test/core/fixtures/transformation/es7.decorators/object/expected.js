@@ -3,7 +3,7 @@
 var obj = babelHelpers.createDecoratedObject([{
   key: "bar",
   decorators: [foo],
-  value: function value() {}
+  value: function bar() {}
 }, {
   key: "foo",
   decorators: [bar],

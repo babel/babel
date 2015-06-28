@@ -1,8 +1,6 @@
 var obj = {
   @foo
-  bar() {
-
-  },
+  bar() {},
 
   @bar
   foo: "lol",
