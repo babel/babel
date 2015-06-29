@@ -226,6 +226,22 @@ describe("async functions and await expressions", function() {
         done();
       }).catch(done);
     });
+
+    it("should propagate failure when returned", function() {
+      var rejection = new Error("rejection");
+
+      async function f() {
+        return new Promise(function(resolve, reject) {
+          reject(rejection);
+        });
+      }
+
+      return f().then(function(result) {
+        assert.ok(false, "should have been rejected");
+      }, function(error) {
+        assert.strictEqual(error, rejection);
+      });
+    });
   });
 
   describe("async function expressions", function() {
