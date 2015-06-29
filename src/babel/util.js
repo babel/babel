@@ -9,6 +9,7 @@ import minimatch from "minimatch";
 import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
+import isFunction from "lodash/lang/isFunction";
 import isRegExp from "lodash/lang/isRegExp";
 import Module from "module";
 import isEmpty from "lodash/lang/isEmpty";
@@ -101,7 +102,7 @@ export function arrayify(val: any, mapFn?: Function, mapExcludeFn?: Function): A
         if (mapExcludeFn(v)) {
           return v;
         } else {
-          mapFn.apply(null, arguments);
+          return mapFn.apply(null, arguments);
         }
       });
     } else if (mapFn) {
@@ -121,9 +122,15 @@ export function booleanify(val: any) {
 }
 
 function testIgnore(ignore, filename) {
-  if (ignore instanceof Function) {
-    if (ignore(filename)) return true;
-  } else if (ignore.test(filename)) return true;
+  if (isFunction(ignore)) {
+    if (ignore(filename)) {
+      return true;
+    }
+  } else if (isRegExp(ignore)) {
+    if (ignore.test(filename)) {
+      return true;
+    }
+  }
 }
 
 export function shouldIgnore(filename, ignore, only) {
