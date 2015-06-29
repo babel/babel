@@ -161,8 +161,10 @@ hookExtensions(util.canCompile.EXTENSIONS);
 
 export default function (opts = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
-  if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify, isFunction);
-
+  if (opts.ignore != null) {
+      ignore = util.arrayify(opts.ignore,
+      item => isFunction(item) ? item : util.regexify(item));
+  }
   if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
 
   if (opts.cache === false) cache = null;

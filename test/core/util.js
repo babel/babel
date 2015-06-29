@@ -73,24 +73,17 @@ suite("util", function () {
     assert.deepEqual(util.arrayify(["foo", "bar"]), ["foo", "bar"]);
     assert.deepEqual(util.arrayify({ foo: "bar" }), [{ foo: "bar" }]);
 
-    assert.deepEqual(util.arrayify(["foo", "bar"], function (v) {
+    assert.deepEqual(util.arrayify("foo", function (v) {
+      return v + "-babel";
+    }), ["foo-babel"]);
+
+    assert.deepEqual(util.arrayify("foo,bar", function (v) {
       return v + "-babel";
     }), ["foo-babel", "bar-babel"]);
 
     assert.deepEqual(util.arrayify(["foo", "bar"], function (v) {
       return v + "-babel";
-    }, function (v) {
-      if (v === "foo") {
-        return true;
-      }
-    }), ["foo", "bar-babel"]);
-
-
-    assert.deepEqual(util.arrayify(["foo", "bar"], null, function (v) {
-      if (v === "foo") {
-        return true;
-      }
-    }), ["foo", "bar"]);
+    }), ["foo-babel", "bar-babel"]);
   });
 
   test("regexify", function () {

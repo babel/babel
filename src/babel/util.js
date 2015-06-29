@@ -91,21 +91,15 @@ export function regexify(val: any): RegExp {
   throw new TypeError("illegal type for regexify");
 }
 
-export function arrayify(val: any, mapFn?: Function, mapExcludeFn?: Function): Array {
+export function arrayify(val: any, mapFn?: Function): Array {
+
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
+  if (isFunction(val)) return arrayify([val], mapFn);
   if (isString(val)) return arrayify(list(val), mapFn);
 
   if (Array.isArray(val)) {
-    if (mapExcludeFn && mapFn) {
-      val = val.map(function (v) {
-        if (mapExcludeFn(v)) {
-          return v;
-        } else {
-          return mapFn.apply(null, arguments);
-        }
-      });
-    } else if (mapFn) {
+    if (mapFn) {
       val = val.map(mapFn);
     }
 
