@@ -110,4 +110,20 @@ suite("util", function () {
     assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
   });
+
+  test("shouldIgnore", function () {
+    var reIgnore = /\-reIgnore\.js/;
+    var fnIgnore = function (src) {
+      if (src.indexOf("fnIgnore") > 0) {
+        return true;
+      }
+    };
+
+    assert.equal(util.shouldIgnore("test.js", []), false);
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [fnIgnore]), false);
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [reIgnore]), true);
+
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [fnIgnore]), true);
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [reIgnore]), false);
+  });
 });

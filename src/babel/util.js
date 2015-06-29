@@ -90,13 +90,24 @@ export function regexify(val: any): RegExp {
   throw new TypeError("illegal type for regexify");
 }
 
-export function arrayify(val: any, mapFn?: Function): Array {
+export function arrayify(val: any, mapFn?: Function, mapExcludeFn?: Function): Array {
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
   if (isString(val)) return arrayify(list(val), mapFn);
 
   if (Array.isArray(val)) {
-    if (mapFn) val = val.map(mapFn);
+    if (mapExcludeFn && mapFn) {
+      val = val.map(function (v) {
+        if (mapExcludeFn(v)) {
+          return v;
+        } else {
+          mapFn.apply(null, arguments);
+        }
+      });
+    } else if (mapFn) {
+      val = val.map(mapFn);
+    }
+
     return val;
   }
 
@@ -109,6 +120,12 @@ export function booleanify(val: any) {
   return val;
 }
 
+function testIgnore(ignore, filename) {
+  if (ignore instanceof Function) {
+    if (ignore(filename)) return true;
+  } else if (ignore.test(filename)) return true;
+}
+
 export function shouldIgnore(filename, ignore, only) {
   filename = slash(filename);
 
@@ -118,8 +135,8 @@ export function shouldIgnore(filename, ignore, only) {
     }
     return true;
   } else if (ignore.length) {
-    for (let pattern of (ignore: Array)) {
-      if (pattern.test(filename)) return true;
+    for (let i of (ignore: Array)) {
+      if (testIgnore(i, filename)) return true;
     }
   }
 
