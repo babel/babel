@@ -495,8 +495,6 @@ export default class Scope {
 
     for (var name in ids) {
       for (var id of (ids[name]: Array)) {
-        console.log();
-
         var local = this.getOwnBinding(name);
         if (local) {
           // don't ever let a type alias shadow a local binding
