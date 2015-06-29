@@ -60,20 +60,16 @@ export var visitor = {
       if (expr) nodes.push(expr);
     }
 
+    // filter out empty string literals
+    nodes = nodes.filter(n => !t.isLiteral(n, { value: "" }));
+
+    // since `+` is left-to-right associative
+    // ensure the first node is a string if first/second isn't
+    if (!isString(nodes[0]) && !isString(nodes[1])) {
+      nodes.unshift(t.literal(""));
+    }
+
     if (nodes.length > 1) {
-      // filter out empty string literals
-      nodes = nodes.filter(n => !t.isLiteral(n, { value: "" }));
-
-      if (nodes.length === 1 && isString(nodes[0])) {
-        return nodes[0];
-      }
-
-      // since `+` is left-to-right associative
-      // ensure the first node is a string if first/second isn't
-      if (!isString(nodes[0]) && !isString(nodes[1])) {
-        nodes.unshift(t.literal(""));
-      }
-
       var root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
       for (let node of (nodes: Array)) {
