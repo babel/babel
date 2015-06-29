@@ -458,13 +458,14 @@
 
       this.tryEntries.forEach(resetTryEntry);
 
-      // Pre-initialize at least 20 temporary variables to enable hidden
-      // class optimizations for simple generators.
       if (!skipTempReset) {
-        for (var tempIndex = 0, tempName;
-             hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
-             ++tempIndex) {
-          this[tempName] = null;
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
         }
       }
     },
