@@ -5,7 +5,7 @@ import * as t from "./index";
  * Return a list of binding identifiers associated with the input `node`.
  */
 
-export function getBindingIdentifiers(node: Object): Object {
+export function getBindingIdentifiers(node: Object, duplicates?): Object {
   var search = [].concat(node);
   var ids    = object();
 
@@ -16,7 +16,12 @@ export function getBindingIdentifiers(node: Object): Object {
     var key = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
-      ids[id.name] = id;
+      if (duplicates) {
+        var _ids = ids[id.name] = ids[id.name] || [];
+        _ids.push(id);
+      } else {
+        ids[id.name] = id;
+      }
     } else if (t.isExportDeclaration(id)) {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);

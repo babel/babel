@@ -491,32 +491,34 @@ export default class Scope {
     }
 
     var parent = this.getProgramParent();
-    var ids = path.getBindingIdentifiers();
+    var ids = path.getBindingIdentifiers(true);
 
     for (var name in ids) {
-      var id = ids[name];
+      for (var id of (ids[name]: Array)) {
+        console.log();
 
-      var local = this.getOwnBinding(name);
-      if (local) {
-        // don't ever let a type alias shadow a local binding
-        if (kind === "type") continue;
+        var local = this.getOwnBinding(name);
+        if (local) {
+          // don't ever let a type alias shadow a local binding
+          if (kind === "type") continue;
 
-        // same identifier so continue safely as we're likely trying to register it
-        // multiple times
-        if (local.identifier === id) continue;
+          // same identifier so continue safely as we're likely trying to register it
+          // multiple times
+          if (local.identifier === id) continue;
 
-        this.checkBlockScopedCollisions(local, kind, name, id);
+          this.checkBlockScopedCollisions(local, kind, name, id);
+        }
+
+        parent.references[name] = true;
+
+        this.bindings[name] = new Binding({
+          identifier: id,
+          existing:   local,
+          scope:      this,
+          path:       path,
+          kind:       kind
+        });
       }
-
-      parent.references[name] = true;
-
-      this.bindings[name] = new Binding({
-        identifier: id,
-        existing:   local,
-        scope:      this,
-        path:       path,
-        kind:       kind
-      });
     }
   }
 

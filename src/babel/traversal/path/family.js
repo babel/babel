@@ -142,6 +142,6 @@ export function _getPattern(parts) {
  * Description
  */
 
-export function getBindingIdentifiers() {
-  return t.getBindingIdentifiers(this.node);
+export function getBindingIdentifiers(duplicates?) {
+  return t.getBindingIdentifiers(this.node, duplicates);
 }
