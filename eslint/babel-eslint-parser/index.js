@@ -300,22 +300,41 @@ function monkeypatch() {
     }
   };
 
-  referencer.prototype.ComprehensionBlock = function(node) {
-    var left = node.left;
-    if (left) {
-      if (left.type === "Identifier") {
-        createScopeVariable.call(this, node, left);
-      } else if (left.type === "ArrayPattern") {
-        for (var i = 0; i < left.elements.length; i++) {
-          if (left.elements[i]) {
-            createScopeVariable.call(this, left.elements, left.elements[i]);
+  referencer.prototype.ComprehensionExpression = function(node) {
+    for (var i = 0; i < node.blocks.length; i++) {
+      var block = node.blocks[i];
+      if (block.left) {
+        var scope = new escope.Scope(this.scopeManager, "comprehensions", this.currentScope(), node, false);
+        this.scopeManager.__nestScope(scope);
+
+        var left = block.left;
+        if (left.type === "Identifier") {
+          scope.__define(left, new Definition("ComprehensionElement", left, left));
+        } else if (left.type === "ArrayPattern") {
+          for (var i = 0; i < left.elements.length; i++) {
+            var name = left.elements[i];
+            if (name) {
+              scope.__define(name, new Definition("ComprehensionElement", name, name));
+            }
+          }
+        } else if (left.type === "ObjectPattern") {
+          for (var i = 0; i < left.properties.length; i++) {
+            var name = left.properties[i];
+            if (name && name.key && name.key.type === 'Identifier') {
+              scope.__define(name.key, new Definition("ComprehensionElement", name.key, name.key));
+            }
           }
         }
       }
+      if (block.right) {
+        this.visit(block.right);
+      }
     }
-    if (node.right) {
-      this.visit(node.right);
+    if (node.filter) {
+      this.visit(block.filter);
     }
+    this.visit(node.body);
+    this.close(node);
   };
 
   referencer.prototype.DeclareModule =

@@ -1017,7 +1017,7 @@ describe("verify", function () {
       );
     });
 
-    it("expression, if statement, multiple blocks", function () {
+    it("generator, if statement, multiple blocks", function () {
       verifyAndAssertMessages([
           "let arr = [1, 2, 3];",
           "let arr2 = [1, 2, 3];",
@@ -1031,10 +1031,34 @@ describe("verify", function () {
     it("ArrayPattern", function () {
       verifyAndAssertMessages([
           "let arr = [1, 2, 3];",
-          "let arr2 = [1, 2, 3];",
-          "[for ([,x] of arr) for ({[start.x]: x, [start.y]: y} of arr2) x]"
+          "[for ([,x] of arr) x]"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("ObjectPattern", function () {
+      verifyAndAssertMessages([
+          "let arr = [{x: 1, y: 2}, {x: 2, y: 3}];",
+          "[for ({x, y} of arr) x + y]"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
+
+    it("multiple comprehensions #138", function () {
+      verifyAndAssertMessages([
+          "function test() {",
+            "let items;",
+            "return {",
+              "a: [for (i of items) i],",
+              "b: [for (i of items) i]",
+            "};",
+          "} test;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1, "no-redeclare": 1 },
         []
       );
     });
