@@ -460,4 +460,34 @@ describe("async generator functions", function() {
       });
     });
   });
+
+  it("should allow yielding a rejected Promise", function() {
+    var yielded = new Error("yielded rejection");
+    var returned = new Error("returned rejection");
+
+    async function *gen() {
+      assert.strictEqual(yield Promise.reject(yielded), "first sent");
+      assert.strictEqual(yield "middle", "second sent");
+      return Promise.reject(returned);
+    }
+
+    var iter = gen();
+
+    return iter.next().then(function(result) {
+      assert.ok(false, "should have yielded a rejected Promise");
+    }, function(error) {
+      assert.strictEqual(error, yielded);
+      return iter.next("first sent");
+    }).then(function(result) {
+      assert.deepEqual(result, {
+        value: "middle",
+        done: false
+      });
+      return iter.next("second sent");
+    }).then(function(result) {
+      assert.ok(false, "should have returned a rejected Promise");
+    }, function(error) {
+      assert.strictEqual(error, returned);
+    });
+  });
 });

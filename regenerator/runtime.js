@@ -169,9 +169,8 @@
         });
 
       // Avoid propagating enqueueResult failures to Promises returned by
-      // later invocations of the iterator, and call generator.return() to
-      // allow the generator a chance to clean up.
-      previousPromise = enqueueResult["catch"](invokeReturn);
+      // later invocations of the iterator.
+      previousPromise = enqueueResult["catch"](function(ignored){});
 
       return enqueueResult;
     }
