@@ -165,7 +165,8 @@ export default class File {
 
     opts.basename = path.basename(opts.filename, path.extname(opts.filename));
 
-    opts.ignore = util.arrayify(opts.ignore, util.regexify);
+    opts.ignore = util.arrayify(opts.ignore,
+          item => isFunction(item) ? item : util.regexify(item));
 
     if (opts.only) {
       opts.only = util.arrayify(opts.only, util.regexify);
