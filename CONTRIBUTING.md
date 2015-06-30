@@ -147,6 +147,7 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
 
 + [home-or-tmp](https://github.com/sindresorhus/home-or-tmp) Gets the user home directory with fallback to the system temporary directory. This is used to resolve the babel-node/babel/register cache.
 
++ [resolve](https://www.npmjs.com/package/resolve) Implements the [`require.resolve()` algorithm](http://nodejs.org/docs/v0.12.0/api/all.html#all_require_resolve) such that we can `require.resolve()` on behalf of a file asynchronously and synchronously.
 
 #### Code Standards
 
