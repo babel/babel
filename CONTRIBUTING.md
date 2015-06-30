@@ -145,6 +145,8 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
 
 + [user-home](http://ghub.io/user-home) Gets the users home directory. This is used to resolve the babel-node/babel/register cache.
 
++ [path-exists](https://www.npmjs.com/package/path-exists) Checks if a path exists. (replaces the deprecated `fs.exists` methods)
+
 
 #### Code Standards
 
