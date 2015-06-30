@@ -107,10 +107,11 @@ class ClassTransformer {
     this.staticPropBody   = [];
     this.body             = [];
 
-    this.hasConstructor = false;
-    this.hasDecorators  = false;
-    this.className      = this.node.id;
-    this.classRef       = this.node.id || this.scope.generateUidIdentifier("class");
+    this.pushedConstructor = false;
+    this.hasConstructor    = false;
+    this.hasDecorators     = false;
+    this.className         = this.node.id;
+    this.classRef          = this.node.id || this.scope.generateUidIdentifier("class");
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.hasSuper  = !!this.node.superClass;
@@ -140,7 +141,6 @@ class ClassTransformer {
 
     if (this.className) {
       constructor = t.functionDeclaration(this.className, [], constructorBody);
-      body.push(constructor);
     } else {
       constructor = t.functionExpression(null, [], constructorBody);
     }
@@ -207,15 +207,6 @@ class ClassTransformer {
     if (this.className) {
       // named class with only a constructor
       if (body.length === 1) return t.toExpression(body[0]);
-    } else {
-      // infer class name if this is a nameless class expression
-      constructor = nameMethod.bare(constructor, this.parent, this.scope) || constructor;
-
-      body.unshift(t.variableDeclaration("var", [
-        t.variableDeclarator(classRef, constructor)
-      ]));
-
-      t.inheritsComments(body[0], this.node);
     }
 
     //
@@ -258,23 +249,26 @@ class ClassTransformer {
    */
 
   constructorMeMaybe() {
-    if (!this.hasSuper) return;
-
     var hasConstructor = false;
     var paths = this.path.get("body.body");
-
     for (var path of (paths: Array)) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }
+    if (hasConstructor) return;
 
-    if (!hasConstructor) {
-      this.path.get("body").unshiftContainer("body", t.methodDefinition(
-        t.identifier("constructor"),
-        util.template("class-derived-default-constructor"),
-        "constructor"
-      ));
+    var constructor;
+    if (this.hasSuper) {
+      constructor = util.template("class-derived-default-constructor");
+    } else {
+      constructor = t.functionExpression(null, [], t.blockStatement());
     }
+
+    this.path.get("body").unshiftContainer("body", t.methodDefinition(
+      t.identifier("constructor"),
+      constructor,
+      "constructor"
+    ));
   }
 
   /**
@@ -568,5 +562,23 @@ class ClassTransformer {
     construct.params                = fn.params;
 
     t.inherits(construct.body, fn.body);
+
+    // push constructor to body
+    if (!this.pushedConstructor) {
+      this.pushedConstructor = true;
+
+      if (this.className) {
+        this.body.push(construct);
+      } else {
+        // infer class name if this is a nameless class expression
+        this.constructor = nameMethod.bare(construct, this.parent, this.scope) || construct;
+
+        this.body.push(t.variableDeclaration("var", [
+          t.variableDeclarator(classRef, constructor)
+        ]));
+
+        t.inheritsComments(this.body[0], this.node);
+      }
+    }
   }
 }
