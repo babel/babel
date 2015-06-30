@@ -21,13 +21,9 @@
 
   module.exports = function () {};
 
-  var _default = (function () {
-    var _class = function _default() {
-      babelHelpers.classCallCheck(this, _class);
-    };
-
-    return _class;
-  })();
+  var _default = function _default() {
+    babelHelpers.classCallCheck(this, _default);
+  };
 
   module.exports = _default;
 

@@ -11,7 +11,6 @@ var x = (function () {
     4;
     5;
     6;
-
     babelHelpers.classCallCheck(this, x);
   }
 

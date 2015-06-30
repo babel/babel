@@ -11,13 +11,9 @@ exports["default"] = foo;
 
 exports["default"] = function () {};
 
-var _default = (function () {
-  var _class = function _default() {
-    babelHelpers.classCallCheck(this, _class);
-  };
-
-  return _class;
-})();
+var _default = function _default() {
+  babelHelpers.classCallCheck(this, _default);
+};
 
 exports["default"] = _default;
 

@@ -1,26 +1,14 @@
-import type NodePath from "../../../traversal/path";
-import type File from "../../file";
-import memoiseDecorators from "../../helpers/memoise-decorators";
-import ReplaceSupers from "../../helpers/replace-supers";
-import * as nameMethod from "../../helpers/name-method";
-import * as defineMap from "../../helpers/define-map";
-import * as messages from "../../../messages";
-import * as util from  "../../../util";
-import * as t from "../../../types";
+import type NodePath from "../../../../traversal/path";
+import type File from "../../../file";
+import memoiseDecorators from "../../../helpers/memoise-decorators";
+import ReplaceSupers from "../../../helpers/replace-supers";
+import * as nameMethod from "../../../helpers/name-method";
+import * as defineMap from "../../../helpers/define-map";
+import * as messages from "../../../../messages";
+import * as util from  "../../../../util";
+import * as t from "../../../../types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
-
-export var visitor = {
-  ClassDeclaration(node) {
-    return t.variableDeclaration("let", [
-      t.variableDeclarator(node.id, t.toExpression(node))
-    ]);
-  },
-
-  ClassExpression(node, parent, scope, file) {
-    return new ClassTransformer(this, file).run();
-  }
-};
 
 var collectPropertyReferencesVisitor = {
   Identifier: {
@@ -83,7 +71,7 @@ var verifyConstructorVisitor = {
   }
 };
 
-class ClassTransformer {
+export default class ClassTransformer {
 
   /**
    * Description
@@ -96,11 +84,7 @@ class ClassTransformer {
     this.path   = path;
     this.file   = file;
 
-    this.hasInstanceDescriptors = false;
-    this.hasStaticDescriptors   = false;
-
-    this.instanceMutatorMap = {};
-    this.staticMutatorMap   = {};
+    this.clearDescriptors();
 
     this.instancePropBody = [];
     this.instancePropRefs = {};
@@ -108,15 +92,21 @@ class ClassTransformer {
     this.body             = [];
 
     this.pushedConstructor = false;
-    this.hasConstructor    = false;
+    this.pushedInherits    = false;
     this.hasDecorators     = false;
-    this.className         = this.node.id;
-    this.classRef          = this.node.id || this.scope.generateUidIdentifier("class");
+    this.isLoose           = false;
+
+    // class id
+    this.className = this.node.id;
+
+    // this is the name of the binding that will **always** reference the class we've constructed
+    this.classRef = this.node.id || this.scope.generateUidIdentifier("class");
+
+    // this is a direct reference to the class we're building, class decorators can shadow the classRef
+    this.directRef = null;
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.hasSuper  = !!this.node.superClass;
-
-    this.isLoose = file.isLoose("es6.classes");
   }
 
   /**
@@ -137,15 +127,7 @@ class ClassTransformer {
     //
 
     var constructorBody = this.constructorBody = t.blockStatement([]);
-    var constructor;
-
-    if (this.className) {
-      constructor = t.functionDeclaration(this.className, [], constructorBody);
-    } else {
-      constructor = t.functionExpression(null, [], constructorBody);
-    }
-
-    this.constructor = constructor;
+    var constructor = this.constructor = this.buildConstructor();
 
     //
 
@@ -160,19 +142,15 @@ class ClassTransformer {
       closureParams.push(superName);
 
       this.superName = superName;
-      body.push(t.expressionStatement(t.callExpression(file.addHelper("inherits"), [classRef, superName])));
     }
 
     //
     var decorators = this.node.decorators;
     if (decorators) {
-      // create a class reference to use later on
-      this.classRef = this.scope.generateUidIdentifier(classRef);
-
       // this is so super calls and the decorators have access to the raw function
-      body.push(t.variableDeclaration("var", [
-        t.variableDeclarator(this.classRef, classRef)
-      ]));
+      this.directRef = this.scope.generateUidIdentifier(this.classRef);
+    } else {
+      this.directRef = this.classRef;
     }
 
     //
@@ -181,26 +159,11 @@ class ClassTransformer {
     // make sure this class isn't directly called
     constructorBody.body.unshift(t.expressionStatement(t.callExpression(file.addHelper("class-call-check"), [
       t.thisExpression(),
-      this.classRef
+      this.directRef
     ])));
 
     //
-
-    if (decorators) {
-      // reverse the decorators so we execute them in the right order
-      decorators = decorators.reverse();
-
-      for (var i = 0; i < decorators.length; i++) {
-        var decorator = decorators[i];
-
-        var decoratorNode = util.template("class-decorator", {
-          DECORATOR: decorator.expression,
-          CLASS_REF: classRef
-        }, true);
-        decoratorNode.expression._ignoreModulesRemap = true;
-        body.push(decoratorNode);
-      }
-    }
+    this.pushDecorators();
 
     body = body.concat(this.staticPropBody);
 
@@ -210,13 +173,20 @@ class ClassTransformer {
     }
 
     //
-
-    body.push(t.returnStatement(classRef));
+    body.push(t.returnStatement(this.classRef));
 
     return t.callExpression(
       t.functionExpression(null, closureParams, t.blockStatement(body)),
       closureArgs
     );
+  }
+
+  /**
+   * Description
+   */
+
+  buildConstructor() {
+    return t.functionDeclaration(this.classRef, [], this.constructorBody);
   }
 
   /**
@@ -261,7 +231,7 @@ class ClassTransformer {
     if (this.hasSuper) {
       constructor = util.template("class-derived-default-constructor");
     } else {
-      constructor = t.functionExpression(null, [], t.blockStatement());
+      constructor = t.functionExpression(null, [], t.blockStatement([]));
     }
 
     this.path.get("body").unshiftContainer("body", t.methodDefinition(
@@ -277,10 +247,17 @@ class ClassTransformer {
 
   buildBody() {
     this.constructorMeMaybe();
+    this.pushBody();
+    this.placePropertyInitializers();
+    this.pushDescriptors();
+  }
 
-    var constructorBody = this.constructorBody;
-    var classBodyPaths  = this.path.get("body.body");
-    var body            = this.body;
+  /**
+   * Description
+   */
+
+  pushBody() {
+    var classBodyPaths = this.path.get("body.body");
 
     for (var path of (classBodyPaths: Array)) {
       var node = path.node;
@@ -296,7 +273,7 @@ class ClassTransformer {
         var replaceSupers = new ReplaceSupers({
           methodPath: path,
           methodNode: node,
-          objectRef:  this.classRef,
+          objectRef:  this.directRef,
           superRef:   this.superName,
           isStatic:   node.static,
           isLoose:    this.isLoose,
@@ -315,16 +292,28 @@ class ClassTransformer {
         this.pushProperty(node, path);
       }
     }
+  }
 
-    //
-    this.placePropertyInitializers();
+  /**
+   * Description
+   */
 
-    //
-    if (this.userConstructor) {
-      constructorBody.body = constructorBody.body.concat(this.userConstructor.body.body);
-      t.inherits(this.constructor, this.userConstructor);
-      t.inherits(this.constructorBody, this.userConstructor.body);
-    }
+  clearDescriptors() {
+    this.hasInstanceDescriptors = false;
+    this.hasStaticDescriptors   = false;
+
+    this.instanceMutatorMap = {};
+    this.staticMutatorMap   = {};
+  }
+
+  /**
+   * Description
+   */
+
+  pushDescriptors() {
+    this.pushInherits();
+
+    var body = this.body;
 
     var instanceProps;
     var staticProps;
@@ -372,7 +361,13 @@ class ClassTransformer {
         t.callExpression(this.file.addHelper(classHelper), args)
       ));
     }
+
+    this.clearDescriptors();
   }
+
+  /**
+   * Description
+   */
 
   buildObjectAssignment(id) {
     return t.variableDeclaration("var", [
@@ -406,11 +401,7 @@ class ClassTransformer {
       }
     } else {
       if (this.hasSuper) {
-        if (this.hasConstructor) {
-          this.bareSuper.insertAfter(body);
-        } else {
-          this.constructorBody.body = this.constructorBody.body.concat(body);
-        }
+        this.bareSuper.insertAfter(body);
       } else {
         this.constructorBody.body = body.concat(this.constructorBody.body);
       }
@@ -431,7 +422,7 @@ class ClassTransformer {
     }
 
     return false;
-   }
+  }
 
   /**
    * Description
@@ -465,22 +456,14 @@ class ClassTransformer {
 
     if (node.kind === "method") {
       nameMethod.property(node, this.file, path ? path.get("value").scope : this.scope);
-
-      if (this.isLoose && !node.decorators) {
-        // use assignments instead of define properties for loose classes
-
-        var classRef = this.classRef;
-        if (!node.static) classRef = t.memberExpression(classRef, t.identifier("prototype"));
-        var methodName = t.memberExpression(classRef, node.key, node.computed || t.isLiteral(node.key));
-
-        var expr = t.expressionStatement(t.assignmentExpression("=", methodName, node.value));
-        t.inheritsComments(expr, node);
-        this.body.push(expr);
-        return;
-      }
+      if (this._processMethod(node)) return;
     }
 
     this.pushToMap(node);
+  }
+
+  _processMethod() {
+    return false;
   }
 
   /**
@@ -549,13 +532,16 @@ class ClassTransformer {
       fnPath.scope.rename(this.classRef.name);
     }
 
-    var construct = this.constructor;
-    var fn        = method.value;
+    var constructorBody = this.constructorBody;
+    var construct       = this.constructor;
+    var fn              = method.value;
 
     this.userConstructorPath = fnPath;
-    this.userConstructor     = fn;
-    this.hasConstructor      = true;
 
+    constructorBody.body = constructorBody.body.concat(fn.body.body);
+    t.inherits(constructorBody, fn.body);
+
+    t.inherits(construct, fn);
     t.inheritsComments(construct, method);
 
     construct._ignoreUserWhitespace = true;
@@ -564,21 +550,59 @@ class ClassTransformer {
     t.inherits(construct.body, fn.body);
 
     // push constructor to body
-    if (!this.pushedConstructor) {
-      this.pushedConstructor = true;
+    this._pushConstructor();
+  }
 
-      if (this.className) {
-        this.body.push(construct);
-      } else {
-        // infer class name if this is a nameless class expression
-        this.constructor = nameMethod.bare(construct, this.parent, this.scope) || construct;
+  _pushConstructor() {
+    if (this.pushedConstructor) return;
+    this.pushedConstructor = true;
 
-        this.body.push(t.variableDeclaration("var", [
-          t.variableDeclarator(classRef, constructor)
-        ]));
+    // we haven't pushed any descriptors yet
+    if (this.hasInstanceDescriptors || this.hasStaticDescriptors) {
+      this.pushDescriptors();
+    }
 
-        t.inheritsComments(this.body[0], this.node);
-      }
+    this.body.push(this.constructor);
+
+    this.pushInherits();
+  }
+
+  /**
+   * Push inherits helper to body.
+   */
+
+  pushInherits() {
+    if (!this.hasSuper || this.pushedInherits) return;
+
+    this.pushedInherits = true;
+    this.body.push(t.expressionStatement(t.callExpression(
+      this.file.addHelper("inherits"),
+      [this.classRef, this.superName]
+    )));
+  }
+
+  /**
+   * Push decorators to body.
+   */
+
+  pushDecorators() {
+    var decorators = this.node.decorators;
+    if (!decorators) return;
+
+    this.body.push(t.variableDeclaration("var", [
+      t.variableDeclarator(this.directRef, this.classRef)
+    ]));
+
+    // reverse the decorators so we execute them in the right order
+    decorators = decorators.reverse();
+
+    for (var decorator of (decorators: Array)) {
+      var decoratorNode = util.template("class-decorator", {
+        DECORATOR: decorator.expression,
+        CLASS_REF: this.classRef
+      }, true);
+      decoratorNode.expression._ignoreModulesRemap = true;
+      this.body.push(decoratorNode);
     }
   }
 }

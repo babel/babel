@@ -6,26 +6,22 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView = (function () {
-  var _class = function BaseView() {
-    babelHelpers.classCallCheck(this, _class);
+var BaseView = function BaseView() {
+  babelHelpers.classCallCheck(this, BaseView);
 
-    this.autoRender = true;
-  };
-
-  return _class;
-})();
+  this.autoRender = true;
+};
 
 var BaseView = (function () {
-  var _class2 = function BaseView() {
-    babelHelpers.classCallCheck(this, _class2);
-  };
+  function BaseView() {
+    babelHelpers.classCallCheck(this, BaseView);
+  }
 
-  babelHelpers.createClass(_class2, [{
+  babelHelpers.createClass(BaseView, [{
     key: "foo",
     value: function foo() {
       this.autoRender = true;
     }
   }]);
-  return _class2;
+  return BaseView;
 })();

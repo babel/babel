@@ -14,14 +14,14 @@ var Foo = (function (_Bar) {
 })(Bar);
 
 var Foo2 = (function (_Bar2) {
-  var _class = function Foo2() {
-    babelHelpers.classCallCheck(this, _class2);
+  function Foo2() {
+    babelHelpers.classCallCheck(this, _Foo2);
 
-    babelHelpers.get(Object.getPrototypeOf(_class2.prototype), "constructor", this).call(this);
-  };
+    babelHelpers.get(Object.getPrototypeOf(_Foo2.prototype), "constructor", this).call(this);
+  }
 
-  babelHelpers.inherits(_class, _Bar2);
-  var _class2 = _class;
-  _class = bar(_class) || _class;
-  return _class;
+  babelHelpers.inherits(Foo2, _Bar2);
+  var _Foo2 = Foo2;
+  Foo2 = bar(Foo2) || Foo2;
+  return Foo2;
 })(Bar);

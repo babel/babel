@@ -22,13 +22,9 @@ System.register([], function (_export) {
 
       _export("default", function () {});
 
-      _default = (function () {
-        var _class = function _default() {
-          _classCallCheck(this, _class);
-        };
-
-        return _class;
-      })();
+      _default = function _default() {
+        _classCallCheck(this, _default);
+      };
 
       _export("default", _default);
 
