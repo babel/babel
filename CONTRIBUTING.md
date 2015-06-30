@@ -143,9 +143,9 @@ your [`$PATH`](http://unix.stackexchange.com/questions/26047/how-to-correctly-ad
 
 + [trim-right](http://ghub.io/trim-right) Trims the rightside whitespace.
 
-+ [user-home](http://ghub.io/user-home) Gets the users home directory. This is used to resolve the babel-node/babel/register cache.
-
 + [path-exists](https://www.npmjs.com/package/path-exists) Checks if a path exists. (replaces the deprecated `fs.exists` methods)
+
++ [home-or-tmp](https://github.com/sindresorhus/home-or-tmp) Gets the user home directory with fallback to the system temporary directory. This is used to resolve the babel-node/babel/register cache.
 
 
 #### Code Standards
