@@ -117,7 +117,6 @@ export default class ClassTransformer {
 
   run() {
     var superName = this.superName;
-    var classRef  = this.classRef;
     var file      = this.file;
 
     //
@@ -127,7 +126,7 @@ export default class ClassTransformer {
     //
 
     var constructorBody = this.constructorBody = t.blockStatement([]);
-    var constructor = this.constructor = this.buildConstructor();
+    this.constructor    = this.buildConstructor();
 
     //
 
@@ -540,9 +539,8 @@ export default class ClassTransformer {
       fnPath.scope.rename(this.classRef.name);
     }
 
-    var constructorBody = this.constructorBody;
-    var construct       = this.constructor;
-    var fn              = method.value;
+    var construct = this.constructor;
+    var fn        = method.value;
 
     this.userConstructorPath = fnPath;
     this.userConstructor     = fn;
