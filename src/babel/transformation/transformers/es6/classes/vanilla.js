@@ -43,7 +43,7 @@ var verifyConstructorVisitor = {
         state.hasBareSuper = true;
         state.bareSuper = this;
 
-        if (!state.hasSuper) {
+        if (!state.isDerived) {
           throw this.errorWithNode("super call is only allowed in derived constructor");
         }
       }
@@ -64,7 +64,7 @@ var verifyConstructorVisitor = {
 
   ThisExpression: {
     enter(node, parent, scope, state) {
-      if (state.hasSuper && !state.hasBareSuper) {
+      if (state.isDerived && !state.hasBareSuper) {
         throw this.errorWithNode("'this' is not allowed before super()");
       }
     }
@@ -97,7 +97,7 @@ export default class ClassTransformer {
     this.isLoose           = false;
 
     // class id
-    this.className = this.node.id;
+    this.classId = this.node.id;
 
     // this is the name of the binding that will **always** reference the class we've constructed
     this.classRef = this.node.id || this.scope.generateUidIdentifier("class");
@@ -106,7 +106,7 @@ export default class ClassTransformer {
     this.directRef = null;
 
     this.superName = this.node.superClass || t.identifier("Function");
-    this.hasSuper  = !!this.node.superClass;
+    this.isDerived = !!this.node.superClass;
   }
 
   /**
@@ -135,7 +135,7 @@ export default class ClassTransformer {
     var closureArgs = [];
 
     //
-    if (this.hasSuper) {
+    if (this.isDerived) {
       closureArgs.push(superName);
 
       superName = this.scope.generateUidIdentifierBasedOnNode(superName);
@@ -167,7 +167,7 @@ export default class ClassTransformer {
 
     body = body.concat(this.staticPropBody);
 
-    if (this.className) {
+    if (this.classId) {
       // named class with only a constructor
       if (body.length === 1) return t.toExpression(body[0]);
     }
@@ -228,7 +228,7 @@ export default class ClassTransformer {
     if (hasConstructor) return;
 
     var constructor;
-    if (this.hasSuper) {
+    if (this.isDerived) {
       constructor = util.template("class-derived-default-constructor");
     } else {
       constructor = t.functionExpression(null, [], t.blockStatement([]));
@@ -249,6 +249,14 @@ export default class ClassTransformer {
     this.constructorMeMaybe();
     this.pushBody();
     this.placePropertyInitializers();
+
+    if (this.userConstructor) {
+      var constructorBody = this.constructorBody;
+      constructorBody.body = constructorBody.body.concat(this.userConstructor.body.body);
+      t.inherits(this.constructor, this.userConstructor);
+      t.inherits(constructorBody, this.userConstructor.body);
+    }
+
     this.pushDescriptors();
   }
 
@@ -394,13 +402,13 @@ export default class ClassTransformer {
         t.functionExpression(null, [], t.blockStatement(body))
       ), null, true);
 
-      if (this.hasSuper) {
+      if (this.isDerived) {
         this.bareSuper.insertAfter(call);
       } else {
         this.constructorBody.body.unshift(call);
       }
     } else {
-      if (this.hasSuper) {
+      if (this.isDerived) {
         this.bareSuper.insertAfter(body);
       } else {
         this.constructorBody.body = body.concat(this.constructorBody.body);
@@ -432,7 +440,7 @@ export default class ClassTransformer {
     var state = {
       hasBareSuper: false,
       bareSuper:    null,
-      hasSuper:     this.hasSuper,
+      isDerived:     this.isDerived,
       file:         this.file
     };
 
@@ -440,7 +448,7 @@ export default class ClassTransformer {
 
     this.bareSuper = state.bareSuper;
 
-    if (!state.hasBareSuper && this.hasSuper) {
+    if (!state.hasBareSuper && this.isDerived) {
       throw path.errorWithNode("Derived constructor must call super()");
     }
   }
@@ -537,11 +545,9 @@ export default class ClassTransformer {
     var fn              = method.value;
 
     this.userConstructorPath = fnPath;
+    this.userConstructor     = fn;
+    this.hasConstructor      = true;
 
-    constructorBody.body = constructorBody.body.concat(fn.body.body);
-    t.inherits(constructorBody, fn.body);
-
-    t.inherits(construct, fn);
     t.inheritsComments(construct, method);
 
     construct._ignoreUserWhitespace = true;
@@ -572,7 +578,7 @@ export default class ClassTransformer {
    */
 
   pushInherits() {
-    if (!this.hasSuper || this.pushedInherits) return;
+    if (!this.isDerived || this.pushedInherits) return;
 
     this.pushedInherits = true;
     this.body.push(t.expressionStatement(t.callExpression(
