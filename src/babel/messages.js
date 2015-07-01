@@ -17,7 +17,7 @@ export const MESSAGES = {
   missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
-  lostTrackNodePath: "We lost track of this nodes position, likely because the AST was directly manipulated",
+  lostTrackNodePath: "We lost track of this node's position, likely because the AST was directly manipulated",
 
   modulesIllegalExportName: "Illegal export $1",
   modulesDuplicateDeclarations: "Duplicate module declarations with the same source but in different scopes",
