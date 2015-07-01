@@ -8,4 +8,4 @@ These are properties babel stores in AST node objects for internal use, as oppos
 Stores a representation of a node's position in the tree and relationship to other nodes.
 
 ## `shadow`
-A truthy value on a function node triggers the [shadow-functions transformer](/src/babel/transformation/transformers/internal/shadow-functions.js), which transforms the node so that it references (or inherits) `arguments` and `this` from the parent scope. It is invoked for arrow functions, for example.
+A truthy value on a function node triggers the [shadow-functions transformer](/src/babel/transformation/transformers/internal/shadow-functions.js), which transforms the node so that it references (or inherits) `arguments` and the `this` context from the parent scope. It is invoked for arrow functions, for example.
