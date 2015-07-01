@@ -11,6 +11,8 @@ If there is an issue, first check if it can be reproduced with the regular parse
 For questions and support please visit the `#linting` [babel slack channel](https://babel-slack.herokuapp.com)!
 
 ## Known Issues
+- `no-undef` for global flow types: `ReactElement`, `ReactClass` [#130](https://github.com/babel/babel-eslint/issues/130#issuecomment-111215076)
+  - Workaround: define types as globals in `.eslintrc` or define types and import them `import type ReactElement from './types'` 
 - `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/babel-eslint/issues/132#issuecomment-112815926)
 - `no-unused-vars: [2, {vars: local}]` [#136](https://github.com/babel/babel-eslint/issues/136)
 
