@@ -12,6 +12,7 @@ For questions and support please visit the `#linting` [babel slack channel](http
 
 ## Known Issues
 - `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/babel-eslint/issues/132#issuecomment-112815926)
+- `no-unused-vars: [2, {vars: local}]` [#136](https://github.com/babel/babel-eslint/issues/136)
 
 Please check out [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) for react/jsx issues
 - `no-unused-vars` with jsx
