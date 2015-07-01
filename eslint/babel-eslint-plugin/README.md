@@ -26,6 +26,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
     "babel/object-shorthand": 1,
     "babel/generator-star": 1,
     "babel/generator-star-spacing": 1,
+    "babel/new-cap": 1,
   }
 }
 ```
@@ -36,3 +37,4 @@ Each rule cooresponds to a core eslint rule, and has the same options.
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/generator-star`: Handles async/await functions correctly
 - `babel/generator-star-spacing`: Handles async/await functions correctly
+- `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
