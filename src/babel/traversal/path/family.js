@@ -1,3 +1,4 @@
+import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "../../types";
 
