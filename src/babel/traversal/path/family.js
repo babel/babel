@@ -39,7 +39,7 @@ export function getOpposite() {
  * Description
  */
 
-export function getCompletionRecords(): Array<NodePath> {
+export function getCompletionRecords(): Array {
   var paths = [];
 
   var add = function (path) {
@@ -80,12 +80,13 @@ export function getSibling(key) {
  * Description
  */
 
-export function get(key: string): NodePath {
+export function get(key: string, context?: boolean | TraversalContext): NodePath {
+  if (context === true) context = this.context;
   var parts = key.split(".");
   if (parts.length === 1) { // "foo"
-    return this._getKey(key);
+    return this._getKey(key, context);
   } else { // "foo.bar"
-    return this._getPattern(parts);
+    return this._getPattern(parts, context);
   }
 }
 
@@ -93,7 +94,7 @@ export function get(key: string): NodePath {
  * Description
  */
 
-export function _getKey(key) {
+export function _getKey(key, context?) {
   var node      = this.node;
   var container = node[key];
 
@@ -106,7 +107,7 @@ export function _getKey(key) {
         parent: node,
         container: container,
         key: i
-      }).setContext();
+      }).setContext(context);
     });
   } else {
     return NodePath.get({
@@ -114,7 +115,7 @@ export function _getKey(key) {
       parent: node,
       container: node,
       key: key
-    }).setContext();
+    }).setContext(context);
   }
 }
 
@@ -122,7 +123,7 @@ export function _getKey(key) {
  * Description
  */
 
-export function _getPattern(parts) {
+export function _getPattern(parts, context) {
   var path = this;
   for (var part of (parts: Array)) {
     if (part === ".") {
@@ -131,7 +132,7 @@ export function _getPattern(parts) {
       if (Array.isArray(path)) {
         path = path[part];
       } else {
-        path = path.get(part);
+        path = path.get(part, context);
       }
     }
   }
