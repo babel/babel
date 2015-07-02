@@ -3,7 +3,7 @@ import NodePath from "./index";
 import * as t from "../../types";
 
 /**
- * Description
+ * Insert the provided nodes before the current one.
  */
 
 export function insertBefore(nodes) {
@@ -75,7 +75,8 @@ export function _maybePopFromStatements(nodes) {
 }
 
 /**
- * Description
+ * Insert the provided nodes after the current one. When inserting nodes after an
+ * expression, ensure that the completion record is correct by pushing the current node.
  */
 
 export function insertAfter(nodes) {
@@ -108,7 +109,7 @@ export function insertAfter(nodes) {
 }
 
 /**
- * Description
+ * Update all sibling node paths after `fromIndex` by `incrementBy`.
  */
 
 export function updateSiblingKeys(fromIndex, incrementBy) {
@@ -120,10 +121,6 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
     }
   }
 }
-
-/**
- * Description
- */
 
 /**
  * Description
@@ -200,7 +197,8 @@ export function pushContainer(listKey, nodes) {
 }
 
 /**
- * Description
+ * Hoist the current node to the highest scope possible and return a UID
+ * referencing it.
  */
 
 export function hoist(scope = this.scope) {

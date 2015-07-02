@@ -148,7 +148,7 @@ export function isCompletionRecord(allowInsideFunction?) {
 }
 
 /**
- * Description
+ * Check if the current node is a directive.
  */
 
 export function isDirective() {
@@ -226,7 +226,7 @@ export function referencesImport(moduleSource, importName) {
 }
 
 /**
- * Description
+ * Get the source code associated with this node.
  */
 
 export function getSource() {

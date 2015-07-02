@@ -32,7 +32,11 @@ var hoistVariablesVisitor = {
 };
 
 /**
- * Description
+ * Replace a node with an array of multiple. This method performs the following steps:
+ *
+ *  - Inherit the comments of first provided node with that of the current node.
+ *  - Insert the provided nodes after the current node.
+ *  - Remove the current node.
  */
 
 export function replaceWithMultiple(nodes: Array<Object>) {
@@ -46,7 +50,11 @@ export function replaceWithMultiple(nodes: Array<Object>) {
 }
 
 /**
- * Description
+ * Parse a string as an expression and replace the current node with the result.
+ *
+ * NOTE: This is typically not a good idea to use. Building source strings when
+ * transforming ASTs is an antipattern and SHOULD NOT be encouraged. Even if it's
+ * easier to use, your transforms will be extremely brittle.
  */
 
 export function replaceWithSourceString(replacement) {
@@ -70,7 +78,7 @@ export function replaceWithSourceString(replacement) {
 }
 
 /**
- * Description
+ * Replace the current node with another.
  */
 
 export function replaceWith(replacement, whateverAllowed) {
@@ -147,7 +155,9 @@ export function replaceWith(replacement, whateverAllowed) {
 }
 
 /**
- * Description
+ * This method takes an array of statements nodes and then explodes it
+ * into expressions. This method retains completion records which is
+ * extremely important to retain original semantics.
  */
 
 export function replaceExpressionWithStatements(nodes: Array) {

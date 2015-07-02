@@ -11,7 +11,8 @@ export function remove() {
 }
 
 /**
- * Description
+ * Dangerously remove the current node. This may sometimes result in a tainted
+ * invalid AST so use with caution.
  */
 
 export function dangerouslyRemove() {

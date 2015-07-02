@@ -2,7 +2,8 @@ import * as t from "../../types";
 import NodePath from "./index";
 
 /**
- * Description
+ * Call the provided `callback` with the `NodePath`s of all the parents.
+ * When the `callback` returns a truthy value, we return that node path.
  */
 
 export function findParent(callback) {
@@ -15,7 +16,7 @@ export function findParent(callback) {
 }
 
 /**
- * Description
+ * Walk up the tree until we hit a parent node path in a list.
  */
 
 export function getStatementParent() {
@@ -139,7 +140,9 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
 }
 
 /**
- * Description
+ * Build an array of node paths containing the entire ancestry of the current node path.
+ *
+ * NOTE: The current node path is included in this.
  */
 
 export function getAncestry() {
@@ -168,7 +171,7 @@ export function inType() {
 }
 
 /**
- * Description
+ * Check if we're inside a shadowed function.
  */
 
 export function inShadow() {
