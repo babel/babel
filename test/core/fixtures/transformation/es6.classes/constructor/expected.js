@@ -17,3 +17,12 @@ var Foo = (function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
   return Foo;
 })(Bar);
+
+var ConstructorScoping = function ConstructorScoping() {
+  babelHelpers.classCallCheck(this, ConstructorScoping);
+
+  var bar = undefined;
+  {
+    var _bar = undefined;
+  }
+};

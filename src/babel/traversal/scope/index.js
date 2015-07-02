@@ -146,7 +146,7 @@ export default class Scope {
     }
 
     var cached = path.getData("scope");
-    if (cached && cached.parent === parent) {
+    if (cached && cached.parent === parent && cached.block === path.node) {
       return cached;
     } else {
       path.setData("scope", this);

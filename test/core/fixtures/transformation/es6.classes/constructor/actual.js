@@ -10,3 +10,12 @@ class Foo extends Bar {
     this.state = "test";
   }
 }
+
+class ConstructorScoping {
+  constructor(){
+    let bar;
+    {
+      let bar;
+    }
+  }
+}
