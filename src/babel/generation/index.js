@@ -80,11 +80,7 @@ class CodeGenerator {
       if (checked >= 3) break;
     }
 
-    if (occurences.single > occurences.double) {
-      return "single";
-    } else {
-      return "double";
-    }
+    return occurences.single > occurences.double ? "single" : "double";
   }
 
   static generators = {
