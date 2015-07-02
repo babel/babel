@@ -1,7 +1,7 @@
 import * as util from  "util";
 
 export const MESSAGES = {
-  tailCallReassignmentDeopt: "Function reference has been reassigned so it's probably be dereferenced so we can't optimise this with confidence",
+  tailCallReassignmentDeopt: "Function reference has been reassigned, so it will probably be dereferenced, therefore we can't optimise this with confidence",
   JSXNamespacedTags: "Namespace tags are not supported. ReactJSX is not XML.",
   classesIllegalBareSuper: "Illegal use of bare super",
   classesIllegalSuperCall: "Direct super call is illegal in non-constructor, use super.$1() instead",
@@ -17,7 +17,7 @@ export const MESSAGES = {
   missingTemplatesDirectory: "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
-  lostTrackNodePath: "We lost track of this nodes position, likely because the AST was directly manipulated",
+  lostTrackNodePath: "We lost track of this node's position, likely because the AST was directly manipulated",
 
   modulesIllegalExportName: "Illegal export $1",
   modulesDuplicateDeclarations: "Duplicate module declarations with the same source but in different scopes",
@@ -26,7 +26,7 @@ export const MESSAGES = {
   undeclaredVariableType: "Referencing a type alias outside of a type annotation",
   undeclaredVariableSuggestion: "Reference to undeclared variable $1 - did you mean $2?",
 
-  traverseNeedsParent: "Must pass a scope and parentPath unless traversing a Program/File got a $1 node",
+  traverseNeedsParent: "You must pass a scope and parentPath unless traversing a Program/File got a $1 node",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
   traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
   traverseVerifyNodeType: "You gave us a visitor for the node type $1 but it's not a valid type",
@@ -37,7 +37,7 @@ export const MESSAGES = {
   pluginNotTransformer: "The plugin $1 didn't export a Plugin instance",
   pluginUnknown: "Unknown plugin $1",
 
-  pluginNotFile: "Plugin $1 is resolving to a different Babel version to what is doing the actual transformation..."
+  pluginNotFile: "Plugin $1 is resolving to a different Babel version than what is performing the transformation."
 };
 
 export function get(key: String, ...args) {

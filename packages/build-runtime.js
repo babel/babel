@@ -73,7 +73,6 @@ each(File.helpers, function (helperName) {
 writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime")));
 
-//
 
 var coreDefinitions = require("babel-plugin-runtime/lib/definitions");
 
@@ -93,6 +92,5 @@ each(paths, function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
-//
 
 updatePackage();
