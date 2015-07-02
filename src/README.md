@@ -3,10 +3,10 @@
 Babel is broken down into three parts:
 
 - Parsing
-- Transformation
-- Generation
+- [Transformation](babel/transformation/)
+- [Generation](babel/generation/)
 
-**Parsing** is the process of turning a piece of code into an AST (Abstract
+**Parsing** is the process of turning a piece of code into an [ESTree spec](https://github.com/estree/estree) compatible AST (Abstract
 Syntax Tree) which is a tree-like object of nodes that _describes_ the code.
 This makes it easier to transform the code over direct string manpulation.
 
@@ -19,8 +19,8 @@ done transforming the AST, the generation takes over to return normal code.
 
 ---
 
-Babel's parsing step is done by Acorn. However, because Babel is implementing
-future standards it maintains a fork of Acorn in order to do it's job. You can
+Babel's parsing step is done by [Acorn](https://github.com/marijnh/acorn). However, because Babel is implementing
+future standards it maintains a [fork of Acorn](acorn/) in order to do it's job. You can
 see that fork in the "acorn" folder.
 
 The transformation and generation steps are both handled inside of the Babel
