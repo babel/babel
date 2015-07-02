@@ -63,9 +63,7 @@ class CodeGenerator {
       double: 0
     };
 
-    var checked = 0;
-
-    for (var i = 0; i < tokens.length; i++) {
+    for (var i = 0, checked = 0; i < tokens.length; i++) {
       var token = tokens[i];
       if (token.type.label !== "string") continue;
 
