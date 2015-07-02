@@ -57,34 +57,16 @@ class CodeGenerator {
     return format;
   }
 
-  static findCommonStringDelimiter(code, tokens) {
-    var occurences = {
-      single: 0,
-      double: 0
-    };
-
-    var checked = 0;
-
-    for (var i = 0; i < tokens.length; i++) {
-      var token = tokens[i];
-      if (token.type.label !== "string") continue;
-
-      var raw = code.slice(token.start, token.end);
-      if (raw[0] === "'") {
-        occurences.single++;
-      } else {
-        occurences.double++;
-      }
-
-      checked++;
-      if (checked >= 3) break;
+  static findCommonStringDelimiter(code, tokens, occurences = {"'": 0, "\"": 0}) {
+    if (tokens.length === 0 || occurences["'"] + occurences["\""] >= 3) {
+      return occurences["'"] > occurences["\""] ? "single" : "double";
     }
 
-    if (occurences.single > occurences.double) {
-      return "single";
-    } else {
-      return "double";
+    if (tokens[0].type.label === "string") {
+      occurences[code[tokens[0].start]]++;
     }
+
+    return this.findCommonStringDelimiter(code, tokens.slice(1), occurences);
   }
 
   static generators = {
