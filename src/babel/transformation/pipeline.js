@@ -54,8 +54,8 @@ export default class Pipeline {
     return this;
   }
 
-  addFilter(filter: Function) {
-    this.filters.push(filter);
+  addFilter() {
+    this.filters.push(...arguments);
     return this;
   }
 

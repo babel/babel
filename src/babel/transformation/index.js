@@ -30,11 +30,7 @@ pipeline.addAliases(aliases);
 //
 
 import * as filters from "./transformers/filters";
-pipeline.addFilter(filters.internal);
-pipeline.addFilter(filters.blacklist);
-pipeline.addFilter(filters.whitelist);
-pipeline.addFilter(filters.stage);
-pipeline.addFilter(filters.optional);
+pipeline.addFilter(filters.internal, filters.blacklist, filters.whitelist, filters.stage, filters.optional);
 
 //
 
