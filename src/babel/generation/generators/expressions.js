@@ -2,7 +2,7 @@ import isNumber from "lodash/lang/isNumber";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints UnaryExpression, prints operator and argument.
  */
 
 export function UnaryExpression(node, print) {
@@ -23,7 +23,7 @@ export function UnaryExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DoExpression, prints body.
  */
 
 export function DoExpression(node, print) {
@@ -33,7 +33,7 @@ export function DoExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ParenthesizedExpression, prints expression.
  */
 
 export function ParenthesizedExpression(node, print) {
@@ -43,7 +43,7 @@ export function ParenthesizedExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints UpdateExpression, prints operator and argument.
  */
 
 export function UpdateExpression(node, print) {
@@ -57,7 +57,7 @@ export function UpdateExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ConditionalExpression, prints test, consequent, and alternate.
  */
 
 export function ConditionalExpression(node, print) {
@@ -73,7 +73,7 @@ export function ConditionalExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints NewExpression, prints callee and arguments.
  */
 
 export function NewExpression(node, print) {
@@ -85,7 +85,7 @@ export function NewExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints SequenceExpression.expressions.
  */
 
 export function SequenceExpression(node, print) {
@@ -93,7 +93,7 @@ export function SequenceExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ThisExpression.
  */
 
 export function ThisExpression() {
@@ -101,7 +101,7 @@ export function ThisExpression() {
 }
 
 /**
- * [Please add a description.]
+ * Prints Super.
  */
 
 export function Super() {
@@ -109,7 +109,7 @@ export function Super() {
 }
 
 /**
- * [Please add a description.]
+ * Prints Decorator, prints expression.
  */
 
 export function Decorator(node, print) {
@@ -119,7 +119,7 @@ export function Decorator(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints CallExpression, prints callee and arguments.
  */
 
 export function CallExpression(node, print) {
@@ -147,7 +147,8 @@ export function CallExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Builds yield or await expression printer.
+ * Prints delegate, all, and argument.
  */
 
 var buildYieldAwait = function (keyword) {
@@ -166,14 +167,14 @@ var buildYieldAwait = function (keyword) {
 };
 
 /**
- * [Please add a description.]
+ * Create YieldExpression and AwaitExpression printers.
  */
 
 export var YieldExpression = buildYieldAwait("yield");
 export var AwaitExpression = buildYieldAwait("await");
 
 /**
- * [Please add a description.]
+ * Prints EmptyStatement.
  */
 
 export function EmptyStatement() {
@@ -181,7 +182,7 @@ export function EmptyStatement() {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExpressionStatement, prints expression.
  */
 
 export function ExpressionStatement(node, print) {
@@ -190,7 +191,7 @@ export function ExpressionStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints AssignmentPattern, prints left and right.
  */
 
 export function AssignmentPattern(node, print) {
@@ -200,7 +201,7 @@ export function AssignmentPattern(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints AssignmentExpression, prints left, operator, and right.
  */
 
 export function AssignmentExpression(node, print) {
@@ -227,7 +228,7 @@ export function AssignmentExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints BindExpression, prints object and callee.
  */
 
 export function BindExpression(node, print) {
@@ -237,7 +238,8 @@ export function BindExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias ClassDeclaration printer as ClassExpression,
+ * and AssignmentExpression printer as LogicalExpression.
  */
 
 export {
@@ -246,7 +248,7 @@ export {
 };
 
 /**
- * [Please add a description.]
+ * Print MemberExpression, prints object, property, and value. Handles computed.
  */
 
 export function MemberExpression(node, print) {
@@ -273,7 +275,7 @@ export function MemberExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Print MetaProperty, prints meta and property.
  */
 
 export function MetaProperty(node, print) {
