@@ -4,7 +4,7 @@
   type: "div",
   ref: null,
   props: {
-    children: [bar],
+    children: bar,
     className: "foo"
   },
   key: null
