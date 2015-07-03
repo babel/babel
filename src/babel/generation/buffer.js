@@ -5,7 +5,7 @@ import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
 
 /**
- * [Please add a description.]
+ * Buffer for collecting generated output.
  */
 
 export default class Buffer {
@@ -17,7 +17,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Get the current trimmed buffer.
    */
 
   get() {
@@ -25,7 +25,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Get the current indent.
    */
 
   getIndent() {
@@ -37,7 +37,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Get the current indent size.
    */
 
   indentSize() {
@@ -45,7 +45,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Increment indent size.
    */
 
   indent() {
@@ -53,7 +53,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Decrement indent size.
    */
 
   dedent() {
@@ -61,7 +61,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Add a semicolon to the buffer.
    */
 
   semicolon() {
@@ -69,7 +69,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Ensure last character is a semicolon.
    */
 
   ensureSemicolon() {
@@ -77,7 +77,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Add a right brace to the buffer.
    */
 
   rightBrace() {
@@ -86,7 +86,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Add a keyword to the buffer.
    */
 
   keyword(name) {
@@ -95,7 +95,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Add a space to the buffer unless it is compact (override with force).
    */
 
   space(force?) {
@@ -107,7 +107,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Remove the last character.
    */
 
   removeLast(cha) {
@@ -119,7 +119,8 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Add a newline (or many newlines), maintaining formatting.
+   * Strips multiple newlines if removeLast is true.
    */
 
   newline(i, removeLast) {
@@ -153,7 +154,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Adds a newline unless there is already two previous newlines.
    */
 
   _newline(removeLast) {
@@ -193,7 +194,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Push a string to the buffer, maintaining indentation and newlines.
    */
 
   push(str, noIndent) {
@@ -212,7 +213,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Push a string to the buffer.
    */
 
   _push(str) {
@@ -221,7 +222,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Test if the buffer ends with a string.
    */
 
   endsWith(str, buf = this.buf) {
@@ -233,7 +234,7 @@ export default class Buffer {
   }
 
   /**
-   * [Please add a description.]
+   * Test if a character is last in the buffer.
    */
 
   isLast(cha) {
