@@ -7,7 +7,7 @@ const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.js
 var data = {};
 
 /**
- * [Please add a description.]
+ * Write stringified cache to disk.
  */
 
 export function save() {
@@ -15,7 +15,7 @@ export function save() {
 }
 
 /**
- * [Please add a description.]
+ * Load cache from disk and parse.
  */
 
 export function load() {
@@ -34,7 +34,7 @@ export function load() {
 }
 
 /**
- * [Please add a description.]
+ * Retrieve data from cache.
  */
 
 export function get() {
