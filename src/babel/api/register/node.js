@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 /**
- * [Please add a description.]
+ * Install sourcemaps into node.
  */
 
 sourceMapSupport.install({
@@ -28,14 +28,14 @@ sourceMapSupport.install({
 });
 
 /**
- * [Please add a description.]
+ * Load and setup cache.
  */
 
 registerCache.load();
 var cache = registerCache.get();
 
 /**
- * [Please add a description.]
+ * Store options.
  */
 
 var transformOpts = {};
@@ -49,7 +49,7 @@ var maps          = {};
 var cwd = process.cwd();
 
 /**
- * [Please add a description.]
+ * Get path from `filename` relative to the current working directory.
  */
 
 var getRelativePath = function (filename){
@@ -57,7 +57,7 @@ var getRelativePath = function (filename){
 };
 
 /**
- * [Please add a description.]
+ * Get last modified time for a `filename`.
  */
 
 var mtime = function (filename) {
@@ -65,7 +65,7 @@ var mtime = function (filename) {
 };
 
 /**
- * [Please add a description.]
+ * Compile a `filename` with optional `opts`.
  */
 
 var compile = function (filename, opts = {}) {
@@ -105,7 +105,7 @@ var compile = function (filename, opts = {}) {
 };
 
 /**
- * [Please add a description.]
+ * Test if a `filename` should be ignored by Babel.
  */
 
 var shouldIgnore = function (filename) {
@@ -117,7 +117,7 @@ var shouldIgnore = function (filename) {
 };
 
 /**
- * [Please add a description.]
+ * Monkey patch istanbul if it is running so that it works properly.
  */
 
 var istanbulMonkey = {};
@@ -142,7 +142,7 @@ if (process.env.running_under_istanbul) {
 }
 
 /**
- * [Please add a description.]
+ * Replacement for the loader for istanbul.
  */
 
 var istanbulLoader = function (m, filename, old) {
@@ -151,7 +151,7 @@ var istanbulLoader = function (m, filename, old) {
 };
 
 /**
- * [Please add a description.]
+ * Default loader.
  */
 
 var normalLoader = function (m, filename) {
@@ -159,7 +159,7 @@ var normalLoader = function (m, filename) {
 };
 
 /**
- * [Please add a description.]
+ * Register a loader for an extension.
  */
 
 var registerExtension = function (ext) {
@@ -178,7 +178,7 @@ var registerExtension = function (ext) {
 };
 
 /**
- * [Please add a description.]
+ * Register loader for given extensions.
  */
 
 var hookExtensions = function (_exts) {
@@ -199,13 +199,13 @@ var hookExtensions = function (_exts) {
 };
 
 /**
- * [Please add a description.]
+ * Register loader for default extensions.
  */
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
 /**
- * [Please add a description.]
+ * Update options at runtime.
  */
 
 export default function (opts = {}) {
