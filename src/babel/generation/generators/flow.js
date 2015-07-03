@@ -1,7 +1,7 @@
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints AnyTypeAnnotation.
  */
 
 export function AnyTypeAnnotation() {
@@ -9,7 +9,7 @@ export function AnyTypeAnnotation() {
 }
 
 /**
- * [Please add a description.]
+ * Prints ArrayTypeAnnotation, prints elementType.
  */
 
 export function ArrayTypeAnnotation(node, print) {
@@ -19,7 +19,7 @@ export function ArrayTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints BooleanTypeAnnotation.
  */
 
 export function BooleanTypeAnnotation(node) {
@@ -27,7 +27,7 @@ export function BooleanTypeAnnotation(node) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DeclareClass, prints node.
  */
 
 export function DeclareClass(node, print) {
@@ -36,7 +36,7 @@ export function DeclareClass(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DeclareFunction, prints id and id.typeAnnotation.
  */
 
 export function DeclareFunction(node, print) {
@@ -47,7 +47,7 @@ export function DeclareFunction(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DeclareModule, prints id and body.
  */
 
 export function DeclareModule(node, print) {
@@ -58,7 +58,7 @@ export function DeclareModule(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DeclareVariable, prints id and id.typeAnnotation.
  */
 
 export function DeclareVariable(node, print) {
@@ -69,7 +69,7 @@ export function DeclareVariable(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints FunctionTypeAnnotation, prints typeParameters, params, and rest.
  */
 
 export function FunctionTypeAnnotation(node, print, parent) {
@@ -101,7 +101,7 @@ export function FunctionTypeAnnotation(node, print, parent) {
 }
 
 /**
- * [Please add a description.]
+ * Prints FunctionTypeParam, prints name and typeAnnotation, handles optional.
  */
 
 export function FunctionTypeParam(node, print) {
@@ -113,7 +113,7 @@ export function FunctionTypeParam(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints InterfaceExtends, prints id and typeParameters.
  */
 
 export function InterfaceExtends(node, print) {
@@ -122,13 +122,14 @@ export function InterfaceExtends(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias InterfaceExtends printer as ClassImplements,
+ * and InterfaceExtends printer as GenericTypeAnnotation.
  */
 
 export { InterfaceExtends as ClassImplements, InterfaceExtends as GenericTypeAnnotation };
 
 /**
- * [Please add a description.]
+ * Prints interface-like node, prints id, typeParameters, extends, and body.
  */
 
 export function _interfaceish(node, print) {
@@ -143,7 +144,7 @@ export function _interfaceish(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints InterfaceDeclaration, prints node.
  */
 
 export function InterfaceDeclaration(node, print) {
@@ -152,7 +153,7 @@ export function InterfaceDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints IntersectionTypeAnnotation, prints types.
  */
 
 export function IntersectionTypeAnnotation(node, print) {
@@ -160,7 +161,7 @@ export function IntersectionTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints MixedTypeAnnotation.
  */
 
 export function MixedTypeAnnotation() {
@@ -168,7 +169,7 @@ export function MixedTypeAnnotation() {
 }
 
 /**
- * [Please add a description.]
+ * Prints NullableTypeAnnotation, prints typeAnnotation.
  */
 
 export function NullableTypeAnnotation(node, print) {
@@ -177,7 +178,7 @@ export function NullableTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints NumberTypeAnnotation.
  */
 
 export function NumberTypeAnnotation() {
@@ -185,7 +186,7 @@ export function NumberTypeAnnotation() {
 }
 
 /**
- * [Please add a description.]
+ * Prints StringLiteralTypeAnnotation, prints value.
  */
 
 export function StringLiteralTypeAnnotation(node) {
@@ -193,7 +194,7 @@ export function StringLiteralTypeAnnotation(node) {
 }
 
 /**
- * [Please add a description.]
+ * Prints StringTypeAnnotation.
  */
 
 export function StringTypeAnnotation() {
@@ -201,7 +202,7 @@ export function StringTypeAnnotation() {
 }
 
 /**
- * [Please add a description.]
+ * Prints TupleTypeAnnotation, prints types.
  */
 
 export function TupleTypeAnnotation(node, print) {
@@ -211,7 +212,7 @@ export function TupleTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TypeofTypeAnnotation, prints argument.
  */
 
 export function TypeofTypeAnnotation(node, print) {
@@ -220,7 +221,7 @@ export function TypeofTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TypeAlias, prints id, typeParameters, and right.
  */
 
 export function TypeAlias(node, print) {
@@ -235,7 +236,7 @@ export function TypeAlias(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TypeAnnotation, prints typeAnnotation, handles optional.
  */
 
 export function TypeAnnotation(node, print) {
@@ -246,7 +247,7 @@ export function TypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TypeParameterInstantiation, prints params.
  */
 
 export function TypeParameterInstantiation(node, print) {
@@ -256,13 +257,13 @@ export function TypeParameterInstantiation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias TypeParameterInstantiation printer as TypeParameterDeclaration
  */
 
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 /**
- * [Please add a description.]
+ * Prints ObjectTypeAnnotation, prints properties, callProperties, and indexers.
  */
 
 export function ObjectTypeAnnotation(node, print) {
@@ -290,7 +291,7 @@ export function ObjectTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ObjectTypeCallProperty, prints value, handles static.
  */
 
 export function ObjectTypeCallProperty(node, print) {
@@ -299,7 +300,7 @@ export function ObjectTypeCallProperty(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ObjectTypeIndexer, prints id, key, and value, handles static.
  */
 
 export function ObjectTypeIndexer(node, print) {
@@ -316,7 +317,7 @@ export function ObjectTypeIndexer(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ObjectTypeProperty, prints static, key, and value.
  */
 
 export function ObjectTypeProperty(node, print) {
@@ -331,7 +332,7 @@ export function ObjectTypeProperty(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints QualifiedTypeIdentifier, prints qualification and id.
  */
 
 export function QualifiedTypeIdentifier(node, print) {
@@ -341,7 +342,7 @@ export function QualifiedTypeIdentifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints UnionTypeAnnotation, prints types.
  */
 
 export function UnionTypeAnnotation(node, print) {
@@ -349,7 +350,7 @@ export function UnionTypeAnnotation(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TypeCastExpression, prints expression and typeAnnotation.
  */
 
 export function TypeCastExpression(node, print) {
@@ -360,7 +361,7 @@ export function TypeCastExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints VoidTypeAnnotation.
  */
 
 export function VoidTypeAnnotation(node) {
