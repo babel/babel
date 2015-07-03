@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Print ClassDeclaration, prints, decorators, typeParameters, extends, implements, and body.
  */
 
 export function ClassDeclaration(node, print) {
@@ -29,13 +29,13 @@ export function ClassDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias ClassDeclaration printer as ClassExpression.
  */
 
 export { ClassDeclaration as ClassExpression };
 
 /**
- * [Please add a description.]
+ * Print ClassBody, collapses empty blocks, prints body.
  */
 
 export function ClassBody(node, print) {
@@ -54,7 +54,8 @@ export function ClassBody(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Print ClassProperty, prints decorators, static, key, typeAnnotation, and value.
+ * Also: semicolons, deal with it.
  */
 
 export function ClassProperty(node, print) {
@@ -73,7 +74,7 @@ export function ClassProperty(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Print MethodDefinition, prints decorations, static, and method.
  */
 
 export function MethodDefinition(node, print) {
