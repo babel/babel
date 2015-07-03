@@ -20,7 +20,7 @@ import * as t from "../types";
 export { t as types };
 
 /**
- * [Please add a description.]
+ * Register Babel and polyfill globally.
  */
 
 export function register(opts?: Object) {
@@ -30,7 +30,7 @@ export function register(opts?: Object) {
 }
 
 /**
- * [Please add a description.]
+ * Register polyfill globally.
  */
 
 export function polyfill() {
@@ -38,7 +38,7 @@ export function polyfill() {
 }
 
 /**
- * [Please add a description.]
+ * Asynchronously transform `filename` with optional `opts`, calls `callback` when complete.
  */
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
@@ -65,7 +65,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 }
 
 /**
- * [Please add a description.]
+ * Synchronous form of `transformFile`.
  */
 
 export function transformFileSync(filename: string, opts?: Object = {}) {
@@ -74,7 +74,7 @@ export function transformFileSync(filename: string, opts?: Object = {}) {
 }
 
 /**
- * [Please add a description.]
+ * Parse script with Babel's parser.
  */
 
 export function parse(code, opts = {}) {
