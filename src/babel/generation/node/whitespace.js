@@ -4,7 +4,11 @@ import map from "lodash/collection/map";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Crawl a node to test if it contains a CallExpression, a Function, or a Helper.
+ *
+ * @example
+ * crawl(node)
+ * // { hasCall: false, hasFunction: true, hasHelper: false }
  */
 
 function crawl(node, state = {}) {
@@ -27,7 +31,7 @@ function crawl(node, state = {}) {
 }
 
 /**
- * [Please add a description.]
+ * Test if a node is or has a helper.
  */
 
 function isHelper(node) {
@@ -54,13 +58,13 @@ function isType(node) {
 }
 
 /**
- * [Please add a description.]
+ * Tests for node types that need whitespace.
  */
 
 exports.nodes = {
 
   /**
-   * [Please add a description.]
+   * Test if AssignmentExpression needs whitespace.
    */
 
   AssignmentExpression(node) {
@@ -74,7 +78,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if SwitchCase needs whitespace.
    */
 
   SwitchCase(node, parent) {
@@ -84,7 +88,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if LogicalExpression needs whitespace.
    */
 
   LogicalExpression(node) {
@@ -96,7 +100,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if Literal needs whitespace.
    */
 
   Literal(node) {
@@ -108,7 +112,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if CallExpression needs whitespace.
    */
 
   CallExpression(node) {
@@ -121,7 +125,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if VariableDeclaration needs whitespace.
    */
 
   VariableDeclaration(node) {
@@ -144,7 +148,7 @@ exports.nodes = {
   },
 
   /**
-   * [Please add a description.]
+   * Test if IfStatement needs whitespace.
    */
 
   IfStatement(node) {
@@ -158,7 +162,7 @@ exports.nodes = {
 };
 
 /**
- * [Please add a description.]
+ * Test if Property or SpreadProperty needs whitespace.
  */
 
 exports.nodes.Property =
@@ -171,13 +175,13 @@ exports.nodes.SpreadProperty = function (node, parent) {
 };
 
 /**
- * [Please add a description.]
+ * Returns lists from node types that need whitespace.
  */
 
 exports.list = {
 
   /**
-   * [Please add a description.]
+   * Return VariableDeclaration declarations init properties.
    */
 
   VariableDeclaration(node) {
@@ -185,7 +189,7 @@ exports.list = {
   },
 
   /**
-   * [Please add a description.]
+   * Return VariableDeclaration elements.
    */
 
   ArrayExpression(node) {
@@ -193,7 +197,7 @@ exports.list = {
   },
 
   /**
-   * [Please add a description.]
+   * Return VariableDeclaration properties.
    */
 
   ObjectExpression(node) {
@@ -202,7 +206,7 @@ exports.list = {
 };
 
 /**
- * [Please add a description.]
+ * Add whitespace tests for nodes and their aliases.
  */
 
 each({
