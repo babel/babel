@@ -1,7 +1,7 @@
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints ImportSpecifier, prints imported and local.
  */
 
 export function ImportSpecifier(node, print) {
@@ -13,7 +13,7 @@ export function ImportSpecifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ImportDefaultSpecifier, prints local.
  */
 
 export function ImportDefaultSpecifier(node, print) {
@@ -21,7 +21,7 @@ export function ImportDefaultSpecifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportDefaultSpecifier, prints exported.
  */
 
 export function ExportDefaultSpecifier(node, print) {
@@ -29,7 +29,7 @@ export function ExportDefaultSpecifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportSpecifier, prints local and exported.
  */
 
 export function ExportSpecifier(node, print) {
@@ -41,7 +41,7 @@ export function ExportSpecifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportNamespaceSpecifier, prints exported.
  */
 
 export function ExportNamespaceSpecifier(node, print) {
@@ -50,7 +50,7 @@ export function ExportNamespaceSpecifier(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportAllDeclaration, prints exported and source.
  */
 
 export function ExportAllDeclaration(node, print) {
@@ -65,7 +65,7 @@ export function ExportAllDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportNamedDeclaration, delegates to ExportDeclaration.
  */
 
 export function ExportNamedDeclaration(node, print) {
@@ -74,7 +74,7 @@ export function ExportNamedDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportDefaultDeclaration, delegates to ExportDeclaration.
  */
 
 export function ExportDefaultDeclaration(node, print) {
@@ -83,7 +83,7 @@ export function ExportDefaultDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ExportDeclaration, prints specifiers, declration, and source.
  */
 
 function ExportDeclaration(node, print) {
@@ -124,7 +124,7 @@ function ExportDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ImportDeclaration, prints specifiers and source, handles isType.
  */
 
 export function ImportDeclaration(node, print) {
@@ -160,7 +160,7 @@ export function ImportDeclaration(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ImportNamespaceSpecifier, prints local.
  */
 
 export function ImportNamespaceSpecifier(node, print) {
