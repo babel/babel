@@ -1,7 +1,7 @@
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints nodes with params, prints typeParameters, params, and returnType, handles optional params.
  */
 
 export function _params(node, print) {
@@ -21,7 +21,7 @@ export function _params(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints method-like nodes, prints key, value, and body, handles async, generator, computed, and get or set.
  */
 
 export function _method(node, print) {
@@ -55,7 +55,7 @@ export function _method(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints FunctionExpression, prints id and body, handles async and generator.
  */
 
 export function FunctionExpression(node, print) {
@@ -76,13 +76,14 @@ export function FunctionExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias FunctionExpression printer as FunctionDeclaration.
  */
 
 export { FunctionExpression as FunctionDeclaration };
 
 /**
- * [Please add a description.]
+ * Prints ArrowFunctionExpression, prints params and body, handles async.
+ * Leaves out parenthesis when single param.
  */
 
 export function ArrowFunctionExpression(node, print) {
