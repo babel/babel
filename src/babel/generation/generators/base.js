@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Print File.program
  */
 
 export function File(node, print) {
@@ -7,7 +7,7 @@ export function File(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Print all nodes in a Program.body.
  */
 
 export function Program(node, print) {
@@ -15,7 +15,7 @@ export function Program(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Print BlockStatement, collapses empty blocks, prints body.
  */
 
 export function BlockStatement(node, print) {
@@ -31,7 +31,10 @@ export function BlockStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * What is my purpose?
+ * Why am I here?
+ * Why are any of us here?
+ * Does any of this really matter?
  */
 
 export function Noop() {
