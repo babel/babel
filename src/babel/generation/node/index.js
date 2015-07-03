@@ -5,7 +5,13 @@ import some from "lodash/collection/some";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Test if node matches a set of type-matcher pairs.
+ * @example
+ * find({
+ *   VariableDeclaration(node, parent) {
+ *     return true;
+ *   }
+ * }, node, parent);
  */
 
 var find = function (obj, node, parent) {
@@ -27,7 +33,7 @@ var find = function (obj, node, parent) {
 };
 
 /**
- * [Please add a description.]
+ * Whitespace and Parenthesis related methods for nodes.
  */
 
 export default class Node {
@@ -37,7 +43,7 @@ export default class Node {
   }
 
   /**
-   * [Please add a description.]
+   * Test if `node` can have whitespace set by the user.
    */
 
   static isUserWhitespacable(node) {
@@ -45,7 +51,7 @@ export default class Node {
   }
 
   /**
-   * [Please add a description.]
+   * Test if a `node` requires whitespace.
    */
 
   static needsWhitespace(node, parent, type) {
@@ -71,7 +77,7 @@ export default class Node {
   }
 
   /**
-   * [Please add a description.]
+   * Test if a `node` requires whitespace before it.
    */
 
   static needsWhitespaceBefore(node, parent) {
@@ -79,7 +85,7 @@ export default class Node {
   }
 
   /**
-   * [Please add a description.]
+   * Test if a `note` requires whitespace after it.
    */
 
   static needsWhitespaceAfter(node, parent) {
@@ -87,7 +93,7 @@ export default class Node {
   }
 
   /**
-   * [Please add a description.]
+   * Test if a `node` needs parenthesis around it.
    */
 
   static needsParens(node, parent) {
@@ -122,7 +128,7 @@ export default class Node {
 }
 
 /**
- * [Please add a description.]
+ * Add all static methods from `Node` to `Node.prototype`.
  */
 
 each(Node, function (fn, key) {
