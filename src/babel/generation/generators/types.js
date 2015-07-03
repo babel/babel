@@ -4,7 +4,7 @@ import isInteger from "is-integer";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints Identifier, prints name.
  */
 
 export function Identifier(node) {
@@ -12,7 +12,7 @@ export function Identifier(node) {
 }
 
 /**
- * [Please add a description.]
+ * Prints RestElement, prints argument.
  */
 
 export function RestElement(node, print) {
@@ -21,13 +21,14 @@ export function RestElement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias RestElement printer as SpreadElement,
+ * and RestElement printer as SpreadProperty.
  */
 
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
 
 /**
- * [Please add a description.]
+ * Prints ObjectExpression, prints properties.
  */
 
 export function ObjectExpression(node, print) {
@@ -47,13 +48,13 @@ export function ObjectExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias ObjectExpression printer as ObjectPattern.
  */
 
 export { ObjectExpression as ObjectPattern };
 
 /**
- * [Please add a description.]
+ * Prints Property, prints decorators, key, and value, handles kind, computed, and shorthand.
  */
 
 export function Property(node, print) {
@@ -91,7 +92,7 @@ export function Property(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ArrayExpression, prints elements.
  */
 
 export function ArrayExpression(node, print) {
@@ -120,19 +121,19 @@ export function ArrayExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Alias ArrayExpression printer as ArrayPattern.
  */
 
 export { ArrayExpression as ArrayPattern };
 
 /**
- * [Please add a description.]
+ * RegExp for testing scientific notation in literals.
  */
 
 const SCIENTIFIC_NOTATION = /e/i;
 
 /**
- * [Please add a description.]
+ * Prints Literal, prints value, regex, raw, handles val type.
  */
 
 export function Literal(node, print, parent) {
@@ -166,7 +167,7 @@ export function Literal(node, print, parent) {
 }
 
 /**
- * [Please add a description.]
+ * Prints string literals, handles format.
  */
 
 export function _stringLiteral(val) {
