@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Printer for nodes, needs a `generator` and a `parent`.
  */
 
 export default class NodePrinter {
@@ -9,7 +9,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print a plain node.
    */
 
   plain(node, opts) {
@@ -17,7 +17,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print a sequence of nodes as statements.
    */
 
   sequence(nodes, opts = {}) {
@@ -26,7 +26,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print a sequence of nodes as expressions.
    */
 
   join(nodes, opts) {
@@ -34,7 +34,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print a list of nodes, with a customizable separator (defaults to ",").
    */
 
   list(items, opts = {}) {
@@ -47,7 +47,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print a block-like node.
    */
 
   block(node) {
@@ -55,7 +55,7 @@ export default class NodePrinter {
   }
 
   /**
-   * [Please add a description.]
+   * Print node and indent comments.
    */
 
   indentOnComments(node) {
