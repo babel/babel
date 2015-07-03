@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Prints TaggedTemplateExpression, prints tag and quasi.
  */
 
 export function TaggedTemplateExpression(node, print) {
@@ -8,7 +8,7 @@ export function TaggedTemplateExpression(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TemplateElement, prints value.
  */
 
 export function TemplateElement(node) {
@@ -16,7 +16,7 @@ export function TemplateElement(node) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TemplateLiteral, prints quasis, and expressions.
  */
 
 export function TemplateLiteral(node, print) {
