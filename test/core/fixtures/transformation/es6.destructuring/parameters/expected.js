@@ -1,10 +1,12 @@
 "use strict";
 
-function somethingAdvanced(_ref) {
+function somethingAdvanced(_ref, p2, p3) {
   var _ref$topLeft = _ref.topLeft;
+  _ref$topLeft = _ref$topLeft === undefined ? {} : _ref$topLeft;
   var x1 = _ref$topLeft.x;
   var y1 = _ref$topLeft.y;
   var _ref$bottomRight = _ref.bottomRight;
+  _ref$bottomRight = _ref$bottomRight === undefined ? {} : _ref$bottomRight;
   var x2 = _ref$bottomRight.x;
   var y2 = _ref$bottomRight.y;
 }
