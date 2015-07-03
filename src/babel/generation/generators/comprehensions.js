@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Prints ComprehensionBlock, prints left and right.
  */
 
 export function ComprehensionBlock(node, print) {
@@ -12,7 +12,7 @@ export function ComprehensionBlock(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ComprehensionExpression, prints blocks, filter, and body. Handles generators.
  */
 
 export function ComprehensionExpression(node, print) {
