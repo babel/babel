@@ -1,11 +1,23 @@
+/**
+ * [Please add a description.]
+ */
+
 export function TaggedTemplateExpression(node, print) {
   print.plain(node.tag);
   print.plain(node.quasi);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function TemplateElement(node) {
   this._push(node.value.raw);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function TemplateLiteral(node, print) {
   this.push("`");

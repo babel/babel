@@ -1,5 +1,9 @@
 import merge from "lodash/object/merge";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function (dest, src) {
   if (!dest || !src) return;
 

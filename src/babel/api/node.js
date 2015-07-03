@@ -19,15 +19,27 @@ export { version } from "../../../package";
 import * as t from "../types";
 export { t as types };
 
+/**
+ * [Please add a description.]
+ */
+
 export function register(opts?: Object) {
   var callback = require("./register/node-polyfill");
   if (opts != null) callback(opts);
   return callback;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function polyfill() {
   require("../polyfill");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {
@@ -52,10 +64,18 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   });
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function parse(code, opts = {}) {
   opts.allowHashBang = true;

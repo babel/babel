@@ -1,3 +1,7 @@
+/**
+ * [Please add a description.]
+ */
+
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
     this.constantViolations = [];
@@ -11,9 +15,9 @@ export default class Binding {
     this.path  = path;
     this.kind  = kind;
 
-    this.hasValue         = false;
-    this.hasDeoptedValue  = false;
-    this.value            = null;
+    this.hasValue        = false;
+    this.hasDeoptedValue = false;
+    this.value           = null;
 
     this.clearValue();
 
@@ -27,7 +31,7 @@ export default class Binding {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   deoptValue() {
@@ -36,17 +40,17 @@ export default class Binding {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
-  setValue(value) {
+  setValue(value: any) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
     this.value    = value;
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   clearValue() {
@@ -56,16 +60,16 @@ export default class Binding {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
-  reassign(path) {
+  reassign(path: Object) {
     this.constant = false;
     this.constantViolations.push(path);
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   reference() {
@@ -74,7 +78,7 @@ export default class Binding {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   dereference() {
@@ -83,7 +87,7 @@ export default class Binding {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   isCompatibleWithType(): boolean {

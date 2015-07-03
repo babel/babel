@@ -1,3 +1,7 @@
+/**
+ * [Please add a description.]
+ */
+
 export function ClassDeclaration(node, print) {
   print.list(node.decorators, { separator: "" });
   this.push("class");
@@ -24,7 +28,15 @@ export function ClassDeclaration(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { ClassDeclaration as ClassExpression };
+
+/**
+ * [Please add a description.]
+ */
 
 export function ClassBody(node, print) {
   if (node.body.length === 0) {
@@ -41,6 +53,9 @@ export function ClassBody(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
 
 export function ClassProperty(node, print) {
   print.list(node.decorators, { separator: "" });
@@ -56,6 +71,10 @@ export function ClassProperty(node, print) {
   }
   this.semicolon();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function MethodDefinition(node, print) {
   print.list(node.decorators, { separator: "" });

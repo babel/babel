@@ -9,8 +9,16 @@ export var metadata = {
 
 var MATH_POW = t.memberExpression(t.identifier("Math"), t.identifier("pow"));
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = build({
   operator: "**",
+
+  /**
+   * [Please add a description.]
+   */
 
   build(left, right) {
     return t.callExpression(MATH_POW, [left, right]);

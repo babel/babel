@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function ImportSpecifier(node, print) {
   print.plain(node.imported);
   if (node.local && node.local.name !== node.imported.name) {
@@ -8,13 +12,25 @@ export function ImportSpecifier(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ImportDefaultSpecifier(node, print) {
   print.plain(node.local);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ExportDefaultSpecifier(node, print) {
   print.plain(node.exported);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ExportSpecifier(node, print) {
   print.plain(node.local);
@@ -24,10 +40,18 @@ export function ExportSpecifier(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ExportNamespaceSpecifier(node, print) {
   this.push("* as ");
   print.plain(node.exported);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ExportAllDeclaration(node, print) {
   this.push("export *");
@@ -40,15 +64,27 @@ export function ExportAllDeclaration(node, print) {
   this.semicolon();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ExportNamedDeclaration(node, print) {
   this.push("export ");
   ExportDeclaration.call(this, node, print);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ExportDefaultDeclaration(node, print) {
   this.push("export default ");
   ExportDeclaration.call(this, node, print);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function ExportDeclaration(node, print) {
   var specifiers = node.specifiers;
@@ -87,6 +123,10 @@ function ExportDeclaration(node, print) {
   this.ensureSemicolon();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ImportDeclaration(node, print) {
   this.push("import ");
 
@@ -118,6 +158,10 @@ export function ImportDeclaration(node, print) {
   print.plain(node.source);
   this.semicolon();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ImportNamespaceSpecifier(node, print) {
   this.push("* as ");

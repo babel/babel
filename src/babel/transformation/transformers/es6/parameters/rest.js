@@ -1,7 +1,16 @@
 import * as util from  "../../../../util";
 import * as t from "../../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var memberExpressionOptimisationVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Scope(node, parent, scope, state) {
     // check if this scope has a local binding that will shadow the rest parameter
     if (!scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
@@ -9,10 +18,18 @@ var memberExpressionOptimisationVisitor = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   Flow() {
     // don't touch reference in type annotations
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   Function(node, parent, scope, state) {
     // skip over functions as whatever `arguments` we reference inside will refer
@@ -23,6 +40,10 @@ var memberExpressionOptimisationVisitor = {
     state.noOptimise = oldNoOptimise;
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   ReferencedIdentifier(node, parent, scope, state) {
     // we can't guarantee the purity of arguments
@@ -60,6 +81,10 @@ var memberExpressionOptimisationVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 function optimiseMemberExpression(parent, offset) {
   if (offset === 0) return;
 
@@ -75,11 +100,24 @@ function optimiseMemberExpression(parent, offset) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function(node, parent, scope) {
     if (!hasRest(node)) return;
 

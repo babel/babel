@@ -8,7 +8,16 @@ export var metadata = {
   stage: 1
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ObjectExpression(node, parent, scope, file) {
     var hasDecorators = false;
     for (let i = 0; i < node.properties.length; i++) {

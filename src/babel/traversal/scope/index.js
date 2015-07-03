@@ -11,13 +11,26 @@ import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var collectorVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   For(node, parent, scope) {
     for (var key of (t.FOR_INIT_KEYS: Array)) {
       var declar = this.get(key);
       if (declar.isVar()) scope.getFunctionParent().registerBinding("var", declar);
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   Declaration(node, parent, scope) {
     // delegate block scope handling to the `blockVariableVisitor`
@@ -30,6 +43,10 @@ var collectorVisitor = {
     scope.getFunctionParent().registerDeclaration(this);
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node) {
     var binding = this.scope.getBinding(node.name);
     if (binding) {
@@ -39,12 +56,20 @@ var collectorVisitor = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   ForXStatement() {
     var left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
       this.scope.registerConstantViolation(left, left);
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   ExportDeclaration: {
     exit(node) {
@@ -62,10 +87,18 @@ var collectorVisitor = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   LabeledStatement(node) {
     this.scope.getProgramParent().addGlobal(node);
     this.scope.getBlockParent().registerDeclaration(this);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   AssignmentExpression() {
     // register undeclared bindings as globals
@@ -82,23 +115,43 @@ var collectorVisitor = {
     this.scope.registerConstantViolation(this, this.get("left"), this.get("right"));
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   UpdateExpression(node, parent, scope) {
     scope.registerConstantViolation(this, this.get("argument"), null);
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   UnaryExpression(node, parent, scope) {
     if (node.operator === "delete") scope.registerConstantViolation(this, this.get("left"), null);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   BlockScoped(node, parent, scope) {
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   ClassDeclaration(node, parent, scope) {
     var name = node.id.name;
     scope.bindings[name] = scope.getBinding(name);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   Block(node, parent, scope) {
     var paths = this.get("body");
@@ -110,12 +163,25 @@ var collectorVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var renameVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name === state.oldName) {
       node.name = state.newName;
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   Scope(node, parent, scope, state) {
     if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
@@ -123,6 +189,10 @@ var renameVisitor = {
     }
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 renameVisitor.AssignmentExpression =
 renameVisitor.Declaration = function (node, parent, scope, state) {
@@ -132,6 +202,10 @@ renameVisitor.Declaration = function (node, parent, scope, state) {
     if (name === state.oldName) ids[name].name = state.newName;
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export default class Scope {
 
@@ -170,7 +244,7 @@ export default class Scope {
   ];
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   traverse(node: Object, opts: Object, state?) {
@@ -178,7 +252,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   generateDeclaredUidIdentifier(name: string = "temp") {
@@ -188,7 +262,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   generateUidIdentifier(name: string) {
@@ -196,7 +270,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   generateUid(name: string) {
@@ -217,14 +291,18 @@ export default class Scope {
     return uid;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _generateUid(name, i) {
     var id = name;
     if (i > 1) id += i;
     return `_${id}`;
   }
 
-  /*
-   * Description
+  /**
+   * [Please add a description.]
    */
 
   generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String):  Object {
@@ -300,7 +378,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
@@ -314,7 +392,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
@@ -338,7 +416,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   rename(oldName: string, newName: string, block?) {
@@ -370,6 +448,10 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _renameFromMap(map, oldName, newName, value) {
     if (map[oldName]) {
       map[newName] = value;
@@ -378,7 +460,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   dump() {
@@ -400,7 +482,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   toArray(node: Object, i?: number) {
@@ -432,7 +514,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   registerDeclaration(path: NodePath) {
@@ -457,7 +539,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   registerConstantViolation(root: NodePath, left: NodePath, right: NodePath) {
@@ -476,7 +558,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   registerBinding(kind: string, path: NodePath) {
@@ -521,7 +603,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   addGlobal(node: Object) {
@@ -529,7 +611,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   hasUid(name): boolean {
@@ -543,7 +625,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   hasGlobal(name: string): boolean {
@@ -557,7 +639,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   hasReference(name: string): boolean {
@@ -571,7 +653,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   isPure(node, constantsOnly?: boolean) {
@@ -621,6 +703,7 @@ export default class Scope {
       if (data != null) return data;
     } while(scope = scope.parent);
   }
+
   /**
    * Recursively walk up scope tree looking for the data `key` and if it exists,
    * remove it.
@@ -635,7 +718,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   init() {
@@ -643,7 +726,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   crawl() {
@@ -719,7 +802,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   push(opts: Object) {
@@ -841,7 +924,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   bindingIdentifierEquals(name: string, node: Object): boolean {
@@ -849,7 +932,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getBinding(name: string) {
@@ -862,7 +945,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getOwnBinding(name: string) {
@@ -870,7 +953,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getBindingIdentifier(name: string) {
@@ -879,7 +962,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getOwnBindingIdentifier(name: string) {
@@ -888,7 +971,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   hasOwnBinding(name: string) {
@@ -896,7 +979,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   hasBinding(name: string, noGlobals?) {
@@ -910,7 +993,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   parentHasBinding(name: string, noGlobals?) {
@@ -931,7 +1014,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   removeOwnBinding(name: string) {
@@ -939,7 +1022,7 @@ export default class Scope {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   removeBinding(name: string) {

@@ -5,7 +5,16 @@ export var metadata = {
   group: "builtin-pre"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   TemplateLiteral(node, parent) {
     if (t.isTaggedTemplateExpression(parent)) return;
 

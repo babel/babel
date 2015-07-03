@@ -4,7 +4,16 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   MemberExpression: {
     exit(node) {
       var prop = node.property;

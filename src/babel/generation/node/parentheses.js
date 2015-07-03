@@ -21,11 +21,23 @@ each([
   });
 });
 
+/**
+ * [Please add a description.]
+ */
+
 export function NullableTypeAnnotation(node, parent) {
   return t.isArrayTypeAnnotation(parent);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
+
+/**
+ * [Please add a description.]
+ */
 
 export function UpdateExpression(node, parent) {
   if (t.isMemberExpression(parent) && parent.object === node) {
@@ -33,6 +45,10 @@ export function UpdateExpression(node, parent) {
     return true;
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ObjectExpression(node, parent) {
   if (t.isExpressionStatement(parent)) {
@@ -47,6 +63,10 @@ export function ObjectExpression(node, parent) {
 
   return false;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function Binary(node, parent) {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
@@ -78,6 +98,10 @@ export function Binary(node, parent) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function BinaryExpression(node, parent) {
   if (node.operator === "in") {
     // var i = (1 in []);
@@ -91,6 +115,10 @@ export function BinaryExpression(node, parent) {
     }
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function SequenceExpression(node, parent) {
   if (t.isForStatement(parent)) {
@@ -110,6 +138,10 @@ export function SequenceExpression(node, parent) {
   return true;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function YieldExpression(node, parent) {
   return t.isBinary(parent) ||
          t.isUnaryLike(parent) ||
@@ -120,13 +152,25 @@ export function YieldExpression(node, parent) {
          t.isYieldExpression(parent);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ClassExpression(node, parent) {
   return t.isExpressionStatement(parent);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function UnaryLike(node, parent) {
   return t.isMemberExpression(parent) && parent.object === node;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function FunctionExpression(node, parent) {
   // function () {};
@@ -144,6 +188,10 @@ export function FunctionExpression(node, parent) {
     return true;
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ConditionalExpression(node, parent) {
   if (t.isUnaryLike(parent)) {
@@ -170,6 +218,10 @@ export function ConditionalExpression(node, parent) {
 
   return false;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function AssignmentExpression(node) {
   if (t.isObjectPattern(node.left)) {

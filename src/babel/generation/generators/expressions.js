@@ -1,6 +1,10 @@
 import isNumber from "lodash/lang/isNumber";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function UnaryExpression(node, print) {
   var needsSpace = /[a-z]$/.test(node.operator);
   var arg = node.argument;
@@ -18,17 +22,29 @@ export function UnaryExpression(node, print) {
   print.plain(node.argument);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function DoExpression(node, print) {
   this.push("do");
   this.space();
   print.plain(node.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ParenthesizedExpression(node, print) {
   this.push("(");
   print.plain(node.expression);
   this.push(")");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function UpdateExpression(node, print) {
   if (node.prefix) {
@@ -39,6 +55,10 @@ export function UpdateExpression(node, print) {
     this.push(node.operator);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ConditionalExpression(node, print) {
   print.plain(node.test);
@@ -52,6 +72,10 @@ export function ConditionalExpression(node, print) {
   print.plain(node.alternate);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function NewExpression(node, print) {
   this.push("new ");
   print.plain(node.callee);
@@ -60,23 +84,43 @@ export function NewExpression(node, print) {
   this.push(")");
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function SequenceExpression(node, print) {
   print.list(node.expressions);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ThisExpression() {
   this.push("this");
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function Super() {
   this.push("super");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function Decorator(node, print) {
   this.push("@");
   print.plain(node.expression);
   this.newline();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function CallExpression(node, print) {
   print.plain(node.callee);
@@ -102,6 +146,10 @@ export function CallExpression(node, print) {
   this.push(")");
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var buildYieldAwait = function (keyword) {
   return function (node, print) {
     this.push(keyword);
@@ -117,23 +165,43 @@ var buildYieldAwait = function (keyword) {
   };
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var YieldExpression = buildYieldAwait("yield");
 export var AwaitExpression = buildYieldAwait("await");
+
+/**
+ * [Please add a description.]
+ */
 
 export function EmptyStatement() {
   this.semicolon();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ExpressionStatement(node, print) {
   print.plain(node.expression);
   this.semicolon();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function AssignmentPattern(node, print) {
   print.plain(node.left);
   this.push(" = ");
   print.plain(node.right);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
@@ -158,16 +226,28 @@ export function AssignmentExpression(node, print) {
   print.plain(node.right);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function BindExpression(node, print) {
   print.plain(node.object);
   this.push("::");
   print.plain(node.callee);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export {
   AssignmentExpression as BinaryExpression,
   AssignmentExpression as LogicalExpression
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export function MemberExpression(node, print) {
   var obj = node.object;
@@ -191,6 +271,10 @@ export function MemberExpression(node, print) {
     print.plain(node.property);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function MetaProperty(node, print) {
   print.plain(node.meta);

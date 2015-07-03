@@ -1,10 +1,22 @@
+/**
+ * [Please add a description.]
+ */
+
 export function File(node, print) {
   print.plain(node.program);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function Program(node, print) {
   print.sequence(node.body);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function BlockStatement(node, print) {
   if (node.body.length === 0) {
@@ -17,6 +29,10 @@ export function BlockStatement(node, print) {
     this.rightBrace();
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function Noop() {
 

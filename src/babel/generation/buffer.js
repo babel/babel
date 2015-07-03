@@ -4,6 +4,10 @@ import isBoolean from "lodash/lang/isBoolean";
 import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
 
+/**
+ * [Please add a description.]
+ */
+
 export default class Buffer {
   constructor(position, format) {
     this.position = position;
@@ -12,9 +16,17 @@ export default class Buffer {
     this.buf      = "";
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   get() {
     return trimRight(this.buf);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   getIndent() {
     if (this.format.compact || this.format.concise) {
@@ -24,35 +36,67 @@ export default class Buffer {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   indentSize() {
     return this.getIndent().length;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   indent() {
     this._indent++;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   dedent() {
     this._indent--;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   semicolon() {
     this.push(";");
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   ensureSemicolon() {
     if (!this.isLast(";")) this.semicolon();
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   rightBrace() {
     this.newline(true);
     this.push("}");
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   keyword(name) {
     this.push(name);
     this.space();
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   space(force?) {
     if (!force && this.format.compact) return;
@@ -62,6 +106,10 @@ export default class Buffer {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   removeLast(cha) {
     if (this.format.compact) return;
     if (!this.isLast(cha)) return;
@@ -69,6 +117,10 @@ export default class Buffer {
     this.buf = this.buf.substr(0, this.buf.length - 1);
     this.position.unshift(cha);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   newline(i, removeLast) {
     if (this.format.compact || this.format.retainLines) return;
@@ -99,6 +151,10 @@ export default class Buffer {
 
     this._newline(removeLast);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _newline(removeLast) {
     // never allow more than two lines
@@ -136,6 +192,10 @@ export default class Buffer {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   push(str, noIndent) {
     if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
       // we have an indent level and we aren't pushing a newline
@@ -151,10 +211,18 @@ export default class Buffer {
     this._push(str);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _push(str) {
     this.position.push(str);
     this.buf += str;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   endsWith(str, buf = this.buf) {
     if (str.length === 1) {
@@ -163,6 +231,10 @@ export default class Buffer {
       return buf.slice(-str.length) === str;
     }
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   isLast(cha) {
     if (this.format.compact) return false;

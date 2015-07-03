@@ -4,7 +4,16 @@ import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default class NodePath {
+
+  /**
+   * [Please add a description.]
+   */
+
   constructor(hub, parent) {
     this.contexts = [];
     this.parent   = parent;
@@ -31,7 +40,7 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   static get({ hub, parentPath, parent, container, listKey, key }) {
@@ -62,7 +71,7 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getScope(scope: Scope) {
@@ -77,7 +86,7 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   setData(key, val) {
@@ -85,7 +94,7 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getData(key, def) {
@@ -95,7 +104,7 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   errorWithNode(msg, Error = SyntaxError) {
@@ -103,13 +112,17 @@ export default class NodePath {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   traverse(visitor, state) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 assign(NodePath.prototype, require("./ancestry"));
 assign(NodePath.prototype, require("./inference"));

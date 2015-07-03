@@ -4,6 +4,10 @@ import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
 
+/**
+ * [Please add a description.]
+ */
+
 var defs = {
   string:     chalk.red,
   punctuator: chalk.bold,
@@ -17,7 +21,15 @@ var defs = {
   invalid:    chalk.inverse
 };
 
+/**
+ * [Please add a description.]
+ */
+
 const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+
+/**
+ * [Please add a description.]
+ */
 
 function getTokenType(match) {
   var token = jsTokens.matchToToken(match);
@@ -42,6 +54,10 @@ function getTokenType(match) {
   return token.type;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function highlight(text) {
   return text.replace(jsTokens, function (...args) {
     var type = getTokenType(args);
@@ -53,6 +69,10 @@ function highlight(text) {
     }
   });
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
   colNumber = Math.max(colNumber, 0);

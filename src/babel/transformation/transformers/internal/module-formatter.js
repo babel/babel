@@ -2,7 +2,16 @@ export var metadata = {
   group: "builtin-modules"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Program: {
     exit(program, parent, scope, file) {
       // ensure that these are at the top, just like normal imports

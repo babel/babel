@@ -24,6 +24,10 @@ function registerType(type: string, skipAliasCheck?: boolean) {
   };
 }
 
+/**
+ * Constants.
+ */
+
 export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
@@ -42,11 +46,19 @@ export const VISITOR_KEYS = require("./visitor-keys");
 export const BUILDER_KEYS = require("./builder-keys");
 export const ALIAS_KEYS   = require("./alias-keys");
 
-t.FLIPPED_ALIAS_KEYS = {};
+/**
+ * Registers `is[Type]` and `assert[Type]` for all types.
+ */
 
 each(t.VISITOR_KEYS, function (keys, type) {
   registerType(type, true);
 });
+
+/**
+ * Flip `ALIAS_KEYS` for faster access in the reverse direction.
+ */
+
+t.FLIPPED_ALIAS_KEYS = {};
 
 each(t.ALIAS_KEYS, function (aliases, type) {
   each(aliases, function (alias) {
@@ -54,6 +66,10 @@ each(t.ALIAS_KEYS, function (aliases, type) {
     types.push(type);
   });
 });
+
+/**
+ * Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
+ */
 
 each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   t[type.toUpperCase() + "_TYPES"] = types;
@@ -69,6 +85,7 @@ export const TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_AL
  * Optionally, pass `skipAliasCheck` to directly compare `node.type` with `type`.
  */
 
+// @TODO should `skipAliasCheck` be removed?
 export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
   if (!node) return false;
 
@@ -82,7 +99,11 @@ export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: b
   }
 }
 
-export function isType(nodeType, targetType) {
+/**
+ * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
+ */
+
+export function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
   var aliases = t.FLIPPED_ALIAS_KEYS[targetType];
@@ -97,6 +118,10 @@ export function isType(nodeType, targetType) {
   return false;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 each(t.VISITOR_KEYS, function (keys, type) {
   if (t.BUILDER_KEYS[type]) return;
 
@@ -106,6 +131,10 @@ each(t.VISITOR_KEYS, function (keys, type) {
   });
   t.BUILDER_KEYS[type] = defs;
 });
+
+/**
+ * [Please add a description.]
+ */
 
 each(t.BUILDER_KEYS, function (keys, type) {
   var builder = function () {
@@ -128,8 +157,8 @@ each(t.BUILDER_KEYS, function (keys, type) {
   t[type[0].toLowerCase() + type.slice(1)] = builder;
 });
 
-/*
- * Description
+/**
+ * Test if an object is shallowly equal.
  */
 
 export function shallowEqual(actual: Object, expected: Object): boolean {
@@ -145,7 +174,7 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
 }
 
 /**
- * Description
+ * Append a node to a member expression.
  */
 
 export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
@@ -156,16 +185,17 @@ export function appendToMemberExpression(member: Object, append: Object, compute
 }
 
 /**
- * Description
+ * Prepend a node to a member expression.
  */
 
-export function prependToMemberExpression(member: Object, append: Object): Object {
-  member.object = t.memberExpression(append, member.object);
+export function prependToMemberExpression(member: Object, prepend: Object): Object {
+  member.object = t.memberExpression(prepend, member.object);
   return member;
 }
 
 /**
- * Description
+ * Ensure the `key` (defaults to "body") of a `node` is a block.
+ * Casting it to a block if it is not.
  */
 
 export function ensureBlock(node: Object, key: string = "body") {
@@ -173,7 +203,7 @@ export function ensureBlock(node: Object, key: string = "body") {
 }
 
 /**
- * Description
+ * Create a shallow clone of a `node` excluding `_private` properties.
  */
 
 export function clone(node: Object): Object {
@@ -186,7 +216,8 @@ export function clone(node: Object): Object {
 }
 
 /**
- * Description
+ * Create a deep clone of a `node` and all of it's child nodes
+ * exluding `_private` properties.
  */
 
 export function cloneDeep(node: Object): Object {
@@ -267,31 +298,31 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
 }
 
 /**
- * Description
+ * Remove comment properties from a node.
  */
 
-export function removeComments(child: Object): Object {
+export function removeComments(node: Object): Object {
   for (var key of (COMMENT_KEYS: Array)) {
-    delete child[key];
+    delete node[key];
   }
-  return child;
+  return node;
 }
 
 /**
- * Description
+ * Inherit all unique comments from `parent` node to `child` node.
  */
 
 export function inheritsComments(child: Object, parent: Object): Object {
   if (child && parent) {
     for (var key of (COMMENT_KEYS: Array)) {
-      child[key]  = uniq(compact([].concat(child[key], parent[key])));
+      child[key] = uniq(compact([].concat(child[key], parent[key])));
     }
   }
   return child;
 }
 
 /**
- * Description
+ * Inherit all contextual properties from `parent` node to `child` node.
  */
 
 export function inherits(child: Object, parent: Object): Object {
@@ -312,9 +343,11 @@ export function inherits(child: Object, parent: Object): Object {
   return child;
 }
 
+// Optimize property access.
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
+// Export all type checkers from other files.
 assign(t, require("./retrievers"));
 assign(t, require("./validators"));
 assign(t, require("./converters"));

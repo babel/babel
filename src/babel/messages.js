@@ -1,5 +1,10 @@
 import * as util from  "util";
 
+/**
+ * Mapping of messages to be used in Babel.
+ * Messages can include $0-style placeholders.
+ */
+
 export const MESSAGES = {
   tailCallReassignmentDeopt: "Function reference has been reassigned, so it will probably be dereferenced, therefore we can't optimise this with confidence",
   JSXNamespacedTags: "Namespace tags are not supported. ReactJSX is not XML.",
@@ -50,18 +55,28 @@ export const MESSAGES = {
 `
 };
 
-export function get(key: String, ...args) {
+/**
+ * Get a message with $0 placeholders replaced by arguments.
+ */
+
+export function get(key: string, ...args): string {
   var msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
+  // stringify args
   args = parseArgs(args);
 
+  // replace $0 placeholders with args
   return msg.replace(/\$(\d+)/g, function (str, i) {
     return args[--i];
   });
 }
 
-export function parseArgs(args: Array<any>) {
+/**
+ * Stingify arguments to be used inside messages.
+ */
+
+export function parseArgs(args: Array<any>): Array<string> {
   return args.map(function (val) {
     if (val != null && val.inspect) {
       return val.inspect();

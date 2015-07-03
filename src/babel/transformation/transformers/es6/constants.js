@@ -1,6 +1,15 @@
 import * as messages from "../../../messages";
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Scope(node, parent, scope) {
     for (var name in scope.bindings) {
       var binding = scope.bindings[name];
@@ -13,6 +22,10 @@ export var visitor = {
       }
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   VariableDeclaration(node) {
     if (node.kind === "const") node.kind = "let";

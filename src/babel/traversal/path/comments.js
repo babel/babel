@@ -21,7 +21,7 @@ export function shareCommentsWithSiblings() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function addComment(type, content, line?) {

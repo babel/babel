@@ -13,12 +13,25 @@ function check(source, file) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   CallExpression(node, parent, scope, file) {
     if (this.get("callee").isIdentifier({ name: "require" }) && node.arguments.length === 1) {
       check(node.arguments[0], file);
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   ModuleDeclaration(node, parent, scope, file) {
     check(node.source, file);

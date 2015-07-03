@@ -1,6 +1,15 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   enter(node, parent, scope, state) {
     if (this.isThisExpression() || this.isReferencedIdentifier({ name: "arguments" })) {
       state.found = true;
@@ -8,10 +17,18 @@ var visitor = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     this.skip();
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export default function (node, scope) {
   var container = t.functionExpression(null, [], node.body, node.generator, node.async);

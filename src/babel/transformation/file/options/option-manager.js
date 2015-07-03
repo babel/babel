@@ -31,7 +31,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   static createBareOptions() {
@@ -46,7 +46,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   addConfig(loc) {
@@ -67,7 +67,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   mergeOptions(opts, alias = "foreign") {
@@ -90,7 +90,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   findConfigs(loc) {
@@ -109,7 +109,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   normaliseOptions() {
@@ -142,7 +142,7 @@ export default class OptionManager {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   init(opts) {

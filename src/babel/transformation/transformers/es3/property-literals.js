@@ -4,7 +4,16 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Property: {
     exit(node) {
       var key = node.key;

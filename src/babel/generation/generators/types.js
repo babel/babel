@@ -3,16 +3,32 @@
 import isInteger from "is-integer";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function Identifier(node) {
   this.push(node.name);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function RestElement(node, print) {
   this.push("...");
   print.plain(node.argument);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
+
+/**
+ * [Please add a description.]
+ */
 
 export function ObjectExpression(node, print) {
   var props = node.properties;
@@ -30,7 +46,15 @@ export function ObjectExpression(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { ObjectExpression as ObjectPattern };
+
+/**
+ * [Please add a description.]
+ */
 
 export function Property(node, print) {
   print.list(node.decorators, { separator: "" });
@@ -66,6 +90,10 @@ export function Property(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ArrayExpression(node, print) {
   var elems = node.elements;
   var len   = elems.length;
@@ -91,9 +119,21 @@ export function ArrayExpression(node, print) {
   this.push("]");
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { ArrayExpression as ArrayPattern };
 
+/**
+ * [Please add a description.]
+ */
+
 const SCIENTIFIC_NOTATION = /e/i;
+
+/**
+ * [Please add a description.]
+ */
 
 export function Literal(node, print, parent) {
   var val  = node.value;
@@ -124,6 +164,10 @@ export function Literal(node, print, parent) {
     this.push("null");
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function _stringLiteral(val) {
   val = JSON.stringify(val);

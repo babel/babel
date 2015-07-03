@@ -1,3 +1,7 @@
+/**
+ * [Please add a description.]
+ */
+
 export function ComprehensionBlock(node, print) {
   this.keyword("for");
   this.push("(");
@@ -6,6 +10,10 @@ export function ComprehensionBlock(node, print) {
   print.plain(node.right);
   this.push(")");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ComprehensionExpression(node, print) {
   this.push(node.generator ? "(" : "[");

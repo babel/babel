@@ -6,6 +6,10 @@ export var metadata = {
   stage: 1
 };
 
+/**
+ * [Please add a description.]
+ */
+
 function build(node, nodes, scope) {
   var first = node.specifiers[0];
   if (!t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)) return;
@@ -26,7 +30,16 @@ function build(node, nodes, scope) {
   build(node, nodes, scope);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ExportNamedDeclaration(node, parent, scope) {
     var nodes = [];
     build(node, nodes, scope);

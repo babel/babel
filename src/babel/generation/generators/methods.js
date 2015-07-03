@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function _params(node, print) {
   print.plain(node.typeParameters);
   this.push("(");
@@ -15,6 +19,10 @@ export function _params(node, print) {
     print.plain(node.returnType);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function _method(node, print) {
   var value = node.value;
@@ -46,6 +54,10 @@ export function _method(node, print) {
   print.plain(value.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function FunctionExpression(node, print) {
   if (node.async) this.push("async ");
   this.push("function");
@@ -63,7 +75,15 @@ export function FunctionExpression(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export { FunctionExpression as FunctionDeclaration };
+
+/**
+ * [Please add a description.]
+ */
 
 export function ArrowFunctionExpression(node, print) {
   if (node.async) this.push("async ");

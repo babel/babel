@@ -2,6 +2,10 @@ import type NodePath from "../../traversal/path";
 import * as messages from "../../messages";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function isIllegalBareSuper(node, parent) {
   if (!t.isSuper(node)) return false;
   if (t.isMemberExpression(parent, { computed: false })) return false;
@@ -9,11 +13,24 @@ function isIllegalBareSuper(node, parent) {
   return true;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function isMemberExpressionSuper(node) {
   return t.isMemberExpression(node) && t.isSuper(node.object);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   enter(node, parent, scope, state) {
     var topLevel = state.topLevel;
     var self = state.self;
@@ -44,12 +61,11 @@ var visitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export default class ReplaceSupers {
-
-  /**
-   * Description
-   */
-
   constructor(opts: Object, inClass?: boolean = false) {
     this.topLevelThisReference = opts.topLevelThisReference;
     this.methodPath            = opts.methodPath;
@@ -63,6 +79,10 @@ export default class ReplaceSupers {
     this.file                  = opts.file;
     this.opts                  = opts;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   getObjectRef() {
     return this.opts.objectRef || this.opts.getObjectRef();
@@ -120,7 +140,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   replace() {
@@ -128,7 +148,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   traverseLevel(path: NodePath, topLevel: boolean) {
@@ -137,7 +157,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getThisReference() {
@@ -153,7 +173,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getLooseSuperProperty(id: Object, parent: Object) {
@@ -196,7 +216,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   looseHandle(path: NodePath, getThisReference: Function) {
@@ -216,7 +236,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   specHandleAssignmentExpression(ref, path, node, getThisReference) {
@@ -238,7 +258,7 @@ export default class ReplaceSupers {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   specHandle(path: NodePath, getThisReference: Function) {

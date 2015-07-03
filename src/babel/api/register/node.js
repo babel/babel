@@ -8,6 +8,10 @@ import * as util from  "../../util";
 import fs from "fs";
 import path from "path";
 
+/**
+ * [Please add a description.]
+ */
+
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
   retrieveSourceMap(source) {
@@ -23,12 +27,16 @@ sourceMapSupport.install({
   }
 });
 
-//
+/**
+ * [Please add a description.]
+ */
 
 registerCache.load();
 var cache = registerCache.get();
 
-//
+/**
+ * [Please add a description.]
+ */
 
 var transformOpts = {};
 
@@ -40,13 +48,25 @@ var maps          = {};
 
 var cwd = process.cwd();
 
+/**
+ * [Please add a description.]
+ */
+
 var getRelativePath = function (filename){
   return path.relative(cwd, filename);
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var mtime = function (filename) {
   return +fs.statSync(filename).mtime;
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var compile = function (filename, opts = {}) {
   var result;
@@ -84,6 +104,10 @@ var compile = function (filename, opts = {}) {
   return result.code;
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var shouldIgnore = function (filename) {
   if (!ignore && !only) {
     return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
@@ -91,6 +115,10 @@ var shouldIgnore = function (filename) {
     return util.shouldIgnore(filename, ignore || [], only);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var istanbulMonkey = {};
 
@@ -113,14 +141,26 @@ if (process.env.running_under_istanbul) {
   };
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var istanbulLoader = function (m, filename, old) {
   istanbulMonkey[filename] = true;
   old(m, filename);
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var normalLoader = function (m, filename) {
   m._compile(compile(filename), filename);
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var registerExtension = function (ext) {
   var old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
@@ -136,6 +176,10 @@ var registerExtension = function (ext) {
     }
   };
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var hookExtensions = function (_exts) {
   each(oldHandlers, function (old, ext) {
@@ -154,7 +198,15 @@ var hookExtensions = function (_exts) {
   });
 };
 
+/**
+ * [Please add a description.]
+ */
+
 hookExtensions(util.canCompile.EXTENSIONS);
+
+/**
+ * [Please add a description.]
+ */
 
 export default function (opts = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);

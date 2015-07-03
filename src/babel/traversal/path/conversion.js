@@ -1,7 +1,7 @@
 import * as t from "../../types";
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function toComputedKey(): Object {
@@ -24,7 +24,7 @@ export function toComputedKey(): Object {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function ensureBlock() {

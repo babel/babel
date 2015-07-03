@@ -1,7 +1,16 @@
 import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ObjectExpression(node, parent, scope, file) {
     var hasAny = false;
     for (var prop of (node.properties: Array)) {

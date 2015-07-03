@@ -1,6 +1,10 @@
 import repeating from "repeating";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function WithStatement(node, print) {
   this.keyword("with");
   this.push("(");
@@ -8,6 +12,10 @@ export function WithStatement(node, print) {
   this.push(")");
   print.block(node.body);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function IfStatement(node, print) {
   this.keyword("if");
@@ -24,6 +32,10 @@ export function IfStatement(node, print) {
     print.indentOnComments(node.alternate);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function ForStatement(node, print) {
   this.keyword("for");
@@ -47,6 +59,10 @@ export function ForStatement(node, print) {
   print.block(node.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function WhileStatement(node, print) {
   this.keyword("while");
   this.push("(");
@@ -54,6 +70,10 @@ export function WhileStatement(node, print) {
   this.push(")");
   print.block(node.body);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 var buildForXStatement = function (op) {
   return function (node, print) {
@@ -67,8 +87,16 @@ var buildForXStatement = function (op) {
   };
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var ForInStatement = buildForXStatement("in");
 export var ForOfStatement = buildForXStatement("of");
+
+/**
+ * [Please add a description.]
+ */
 
 export function DoWhileStatement(node, print) {
   this.push("do ");
@@ -79,6 +107,10 @@ export function DoWhileStatement(node, print) {
   print.plain(node.test);
   this.push(");");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 var buildLabelStatement = function (prefix, key) {
   return function (node, print) {
@@ -94,15 +126,27 @@ var buildLabelStatement = function (prefix, key) {
   };
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var ContinueStatement = buildLabelStatement("continue");
 export var ReturnStatement   = buildLabelStatement("return", "argument");
 export var BreakStatement    = buildLabelStatement("break");
+
+/**
+ * [Please add a description.]
+ */
 
 export function LabeledStatement(node, print) {
   print.plain(node.label);
   this.push(": ");
   print.plain(node.body);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function TryStatement(node, print) {
   this.keyword("try");
@@ -125,6 +169,10 @@ export function TryStatement(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function CatchClause(node, print) {
   this.keyword("catch");
   this.push("(");
@@ -133,11 +181,19 @@ export function CatchClause(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function ThrowStatement(node, print) {
   this.push("throw ");
   print.plain(node.argument);
   this.semicolon();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function SwitchStatement(node, print) {
   this.keyword("switch");
@@ -157,6 +213,10 @@ export function SwitchStatement(node, print) {
   this.push("}");
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function SwitchCase(node, print) {
   if (node.test) {
     this.push("case ");
@@ -172,9 +232,17 @@ export function SwitchCase(node, print) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function DebuggerStatement() {
   this.push("debugger;");
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function VariableDeclaration(node, print, parent) {
   this.push(node.kind + " ");
@@ -218,6 +286,10 @@ export function VariableDeclaration(node, print, parent) {
 
   this.semicolon();
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function VariableDeclarator(node, print) {
   print.plain(node.id);

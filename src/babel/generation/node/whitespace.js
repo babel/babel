@@ -3,6 +3,10 @@ import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function crawl(node, state = {}) {
   if (t.isMemberExpression(node)) {
     crawl(node.object, state);
@@ -22,6 +26,10 @@ function crawl(node, state = {}) {
   return state;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function isHelper(node) {
   if (t.isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
@@ -36,12 +44,25 @@ function isHelper(node) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function isType(node) {
   return t.isLiteral(node) || t.isObjectExpression(node) || t.isArrayExpression(node) ||
          t.isIdentifier(node) || t.isMemberExpression(node);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 exports.nodes = {
+
+  /**
+   * [Please add a description.]
+   */
+
   AssignmentExpression(node) {
     var state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
@@ -52,11 +73,19 @@ exports.nodes = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   SwitchCase(node, parent) {
     return {
       before: node.consequent.length || parent.cases[0] === node
     };
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   LogicalExpression(node) {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
@@ -66,6 +95,10 @@ exports.nodes = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   Literal(node) {
     if (node.value === "use strict") {
       return {
@@ -73,6 +106,10 @@ exports.nodes = {
       };
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   CallExpression(node) {
     if (t.isFunction(node.callee) || isHelper(node)) {
@@ -82,6 +119,10 @@ exports.nodes = {
       };
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   VariableDeclaration(node) {
     for (var i = 0; i < node.declarations.length; i++) {
@@ -102,6 +143,10 @@ exports.nodes = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   IfStatement(node) {
     if (t.isBlockStatement(node.consequent)) {
       return {
@@ -112,6 +157,10 @@ exports.nodes = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 exports.nodes.Property =
 exports.nodes.SpreadProperty = function (node, parent) {
   if (parent.properties[0] === node) {
@@ -121,19 +170,40 @@ exports.nodes.SpreadProperty = function (node, parent) {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 exports.list = {
+
+  /**
+   * [Please add a description.]
+   */
+
   VariableDeclaration(node) {
     return map(node.declarations, "init");
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   ArrayExpression(node) {
     return node.elements;
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   ObjectExpression(node) {
     return node.properties;
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 each({
   Function: true,

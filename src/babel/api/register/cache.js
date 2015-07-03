@@ -6,9 +6,17 @@ import pathExists from "path-exists";
 const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
 var data = {};
 
+/**
+ * [Please add a description.]
+ */
+
 export function save() {
   fs.writeFileSync(FILENAME, JSON.stringify(data, null, "  "));
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function load() {
   if (process.env.BABEL_DISABLE_CACHE) return;
@@ -24,6 +32,10 @@ export function load() {
     return;
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function get() {
   return data;

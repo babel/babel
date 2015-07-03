@@ -1,8 +1,16 @@
+/**
+ * [Please add a description.]
+ */
+
 export default class Position {
   constructor() {
     this.line = 1;
     this.column = 0;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   push(str) {
     for (var i = 0; i < str.length; i++) {
@@ -14,6 +22,10 @@ export default class Position {
       }
     }
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   unshift(str) {
     for (var i = 0; i < str.length; i++) {

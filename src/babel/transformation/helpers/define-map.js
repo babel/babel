@@ -2,6 +2,10 @@ import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export function push(mutatorMap, node, kind, file) {
   var alias = t.toKeyAlias(node);
 
@@ -43,6 +47,10 @@ export function push(mutatorMap, node, kind, file) {
   return map;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function hasComputed(mutatorMap) {
   for (var key in mutatorMap) {
     if (mutatorMap[key]._computed) {
@@ -51,6 +59,10 @@ export function hasComputed(mutatorMap) {
   }
   return false;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function toComputedObjectFromClass(obj) {
   var objExpr = t.arrayExpression([]);
@@ -64,6 +76,10 @@ export function toComputedObjectFromClass(obj) {
 
   return objExpr;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function toClassObject(mutatorMap) {
   var objExpr = t.objectExpression([]);
@@ -91,6 +107,10 @@ export function toClassObject(mutatorMap) {
 
   return objExpr;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function toDefineObject(mutatorMap) {
   each(mutatorMap, function (map) {

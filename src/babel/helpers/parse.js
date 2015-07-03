@@ -2,6 +2,10 @@ import normalizeAst from "./normalize-ast";
 import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function (code, opts = {}) {
   var commentsAndTokens = [];
   var comments          = [];

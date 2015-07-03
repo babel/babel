@@ -2,8 +2,16 @@
 
 import * as t from "../../../types";
 
-// pre hooks should be used for either rejecting removal or delegating removal
+/**
+ * Pre hooks should be used for either rejecting removal or delegating removal
+ */
+
 export var pre = [
+
+  /**
+   * [Please add a description.]
+   */
+
   function (self) {
     if (self.key === "body" && (self.isBlockStatement() || self.isClassBody())) {
       // function () NODE
@@ -14,6 +22,10 @@ export var pre = [
       return true;
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   function (self, parent) {
     var replace = false;
@@ -33,8 +45,16 @@ export var pre = [
   }
 ];
 
-// post hooks should be used for cleaning up parents
+/**
+ * Post hooks should be used for cleaning up parents
+ */
+
 export var post = [
+
+  /**
+   * [Please add a description.]
+   */
+
   function (self, parent) {
     var removeParent = false;
 
@@ -70,6 +90,10 @@ export var post = [
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   function (self, parent) {
     if (parent.isSequenceExpression() && parent.node.expressions.length === 1) {
       // (node, NODE);
@@ -79,6 +103,10 @@ export var post = [
       return true;
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   function (self, parent) {
     if (parent.isBinary()) {

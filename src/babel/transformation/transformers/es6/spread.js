@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function getSpreadLiteral(spread, scope) {
   if (scope.hub.file.isLoose("es6.spread") && !t.isIdentifier(spread.argument, { name: "arguments" })) {
     return spread.argument;
@@ -7,6 +11,10 @@ function getSpreadLiteral(spread, scope) {
     return scope.toArray(spread.argument, true);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function hasSpread(nodes) {
   for (var i = 0; i < nodes.length; i++) {
@@ -16,6 +24,10 @@ function hasSpread(nodes) {
   }
   return false;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function build(props, scope) {
   var nodes = [];
@@ -47,7 +59,16 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ArrayExpression(node, parent, scope) {
     var elements = node.elements;
     if (!hasSpread(elements)) return;
@@ -62,6 +83,10 @@ export var visitor = {
 
     return t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   CallExpression(node, parent, scope) {
     var args = node.arguments;
@@ -102,6 +127,10 @@ export var visitor = {
 
     node.arguments.unshift(contextLiteral);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   NewExpression(node, parent, scope, file) {
     var args = node.arguments;

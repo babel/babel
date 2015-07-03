@@ -4,6 +4,10 @@ import each from "lodash/collection/each";
 import some from "lodash/collection/some";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var find = function (obj, node, parent) {
   if (!obj) return;
   var result;
@@ -22,15 +26,27 @@ var find = function (obj, node, parent) {
   return result;
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export default class Node {
   constructor(node, parent) {
     this.parent = parent;
     this.node   = node;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   static isUserWhitespacable(node) {
     return t.isUserWhitespacable(node);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   static needsWhitespace(node, parent, type) {
     if (!node) return 0;
@@ -54,13 +70,25 @@ export default class Node {
     return (linesInfo && linesInfo[type]) || 0;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   static needsWhitespaceBefore(node, parent) {
     return Node.needsWhitespace(node, parent, "before");
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   static needsWhitespaceAfter(node, parent) {
     return Node.needsWhitespace(node, parent, "after");
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   static needsParens(node, parent) {
     if (!parent) return false;
@@ -77,6 +105,10 @@ export default class Node {
     return find(parens, node, parent);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   static needsParensNoLineTerminator(node, parent) {
     if (!parent) return false;
 
@@ -88,6 +120,10 @@ export default class Node {
     return t.isTerminatorless(parent);
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 each(Node, function (fn, key) {
   Node.prototype[key] = function () {

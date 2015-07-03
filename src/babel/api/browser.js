@@ -3,15 +3,27 @@
 require("./node");
 var transform = module.exports = require("../transformation");
 
+/**
+ * [Please add a description.]
+ */
+
 transform.options = require("../transformation/file/options");
 transform.version = require("../../../package").version;
 
 transform.transform = transform;
 
+/**
+ * [Please add a description.]
+ */
+
 transform.run = function (code, opts = {}) {
   opts.sourceMaps = "inline";
   return new Function(transform(code, opts).code)();
 };
+
+/**
+ * [Please add a description.]
+ */
 
 transform.load = function (url, callback, opts = {}, hold) {
   opts.filename = opts.filename || url;
@@ -19,6 +31,10 @@ transform.load = function (url, callback, opts = {}, hold) {
   var xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
   xhr.open("GET", url, true);
   if ("overrideMimeType" in xhr) xhr.overrideMimeType("text/plain");
+
+  /**
+   * [Please add a description.]
+   */
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState !== 4) return;
@@ -36,10 +52,18 @@ transform.load = function (url, callback, opts = {}, hold) {
   xhr.send(null);
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var runScripts = function () {
   var scripts = [];
   var types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
   var index   = 0;
+
+  /**
+   * [Please add a description.]
+   */
 
   var exec = function () {
     var param = scripts[index];
@@ -49,6 +73,10 @@ var runScripts = function () {
       exec();
     }
   };
+
+  /**
+   * [Please add a description.]
+   */
 
   var run = function (script, i) {
     var opts = {};
@@ -77,6 +105,10 @@ var runScripts = function () {
 
   exec();
 };
+
+/**
+ * [Please add a description.]
+ */
 
 if (global.addEventListener) {
   global.addEventListener("DOMContentLoaded", runScripts, false);

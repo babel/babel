@@ -4,10 +4,23 @@ import traverse from "../index";
 import * as t from "../../types";
 import parse from "../../helpers/parse";
 
+/**
+ * [Please add a description.]
+ */
+
 var hoistVariablesVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   VariableDeclaration(node, parent, scope) {
     if (node.kind !== "var") return;
@@ -197,7 +210,7 @@ export function replaceExpressionWithStatements(nodes: Array) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function replaceInline(nodes) {
