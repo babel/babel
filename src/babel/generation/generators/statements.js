@@ -2,7 +2,7 @@ import repeating from "repeating";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Prints WithStatement, prints object and body.
  */
 
 export function WithStatement(node, print) {
@@ -14,7 +14,7 @@ export function WithStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints IfStatement, prints test, consequent, and alternate.
  */
 
 export function IfStatement(node, print) {
@@ -34,7 +34,7 @@ export function IfStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ForStatement, prints init, test, update, and body.
  */
 
 export function ForStatement(node, print) {
@@ -60,7 +60,7 @@ export function ForStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints WhileStatement, prints test and body.
  */
 
 export function WhileStatement(node, print) {
@@ -72,7 +72,8 @@ export function WhileStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Builds ForIn or ForOf statement printers.
+ * Prints left, right, and body.
  */
 
 var buildForXStatement = function (op) {
@@ -88,14 +89,14 @@ var buildForXStatement = function (op) {
 };
 
 /**
- * [Please add a description.]
+ * Create ForInStatement and ForOfStatement printers.
  */
 
 export var ForInStatement = buildForXStatement("in");
 export var ForOfStatement = buildForXStatement("of");
 
 /**
- * [Please add a description.]
+ * Prints DoWhileStatement, prints body and test.
  */
 
 export function DoWhileStatement(node, print) {
@@ -109,7 +110,8 @@ export function DoWhileStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Builds continue, return, or break statement printers.
+ * Prints label (or key).
  */
 
 var buildLabelStatement = function (prefix, key) {
@@ -127,7 +129,7 @@ var buildLabelStatement = function (prefix, key) {
 };
 
 /**
- * [Please add a description.]
+ * Create ContinueStatement, ReturnStatement, and BreakStatement printers.
  */
 
 export var ContinueStatement = buildLabelStatement("continue");
@@ -135,7 +137,7 @@ export var ReturnStatement   = buildLabelStatement("return", "argument");
 export var BreakStatement    = buildLabelStatement("break");
 
 /**
- * [Please add a description.]
+ * Prints LabeledStatement, prints label and body.
  */
 
 export function LabeledStatement(node, print) {
@@ -145,7 +147,7 @@ export function LabeledStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints TryStatement, prints block, handlers, and finalizer.
  */
 
 export function TryStatement(node, print) {
@@ -170,7 +172,7 @@ export function TryStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints CatchClause, prints param and body.
  */
 
 export function CatchClause(node, print) {
@@ -182,7 +184,7 @@ export function CatchClause(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints ThrowStatement, prints argument.
  */
 
 export function ThrowStatement(node, print) {
@@ -192,7 +194,7 @@ export function ThrowStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints SwitchStatement, prints discriminant and cases.
  */
 
 export function SwitchStatement(node, print) {
@@ -214,7 +216,7 @@ export function SwitchStatement(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints SwitchCase, prints test and consequent.
  */
 
 export function SwitchCase(node, print) {
@@ -233,7 +235,7 @@ export function SwitchCase(node, print) {
 }
 
 /**
- * [Please add a description.]
+ * Prints DebuggerStatement.
  */
 
 export function DebuggerStatement() {
@@ -241,7 +243,7 @@ export function DebuggerStatement() {
 }
 
 /**
- * [Please add a description.]
+ * Prints VariableDeclaration, prints declarations, handles kind and format.
  */
 
 export function VariableDeclaration(node, print, parent) {
@@ -288,7 +290,7 @@ export function VariableDeclaration(node, print, parent) {
 }
 
 /**
- * [Please add a description.]
+ * Prints VariableDeclarator, handles id, id.typeAnnotation, and init.
  */
 
 export function VariableDeclarator(node, print) {
