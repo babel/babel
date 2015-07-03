@@ -4,16 +4,20 @@ require("./node");
 var transform = module.exports = require("../transformation");
 
 /**
- * [Please add a description.]
+ * Add `options` and `version` to `babel` global.
  */
 
 transform.options = require("../transformation/file/options");
 transform.version = require("../../../package").version;
 
+/**
+ * Add `transform` api to `babel` global.
+ */
+
 transform.transform = transform;
 
 /**
- * [Please add a description.]
+ * Tranform and execute script, adding in inline sourcemaps.
  */
 
 transform.run = function (code, opts = {}) {
@@ -22,7 +26,7 @@ transform.run = function (code, opts = {}) {
 };
 
 /**
- * [Please add a description.]
+ * Load scripts via xhr, and `transform` when complete (optional).
  */
 
 transform.load = function (url, callback, opts = {}, hold) {
@@ -33,7 +37,7 @@ transform.load = function (url, callback, opts = {}, hold) {
   if ("overrideMimeType" in xhr) xhr.overrideMimeType("text/plain");
 
   /**
-   * [Please add a description.]
+   * When successfully loaded, transform (optional), and call `callback`.
    */
 
   xhr.onreadystatechange = function () {
@@ -53,7 +57,10 @@ transform.load = function (url, callback, opts = {}, hold) {
 };
 
 /**
- * [Please add a description.]
+ * Load and transform all scripts of `types`.
+ *
+ * @example
+ * <script type="module"></script>
  */
 
 var runScripts = function () {
@@ -62,7 +69,7 @@ var runScripts = function () {
   var index   = 0;
 
   /**
-   * [Please add a description.]
+   * Transform and execute script. Ensures correct load order.
    */
 
   var exec = function () {
@@ -75,7 +82,7 @@ var runScripts = function () {
   };
 
   /**
-   * [Please add a description.]
+   * Load, transform, and execute all scripts.
    */
 
   var run = function (script, i) {
@@ -92,7 +99,9 @@ var runScripts = function () {
     }
   };
 
-  var _scripts = global.document .getElementsByTagName("script");
+  // Collect scripts with Babel `types`.
+
+  var _scripts = global.document.getElementsByTagName("script");
 
   for (var i = 0; i < _scripts.length; ++i) {
     var _script = _scripts[i];
@@ -107,7 +116,7 @@ var runScripts = function () {
 };
 
 /**
- * [Please add a description.]
+ * Register load event to transform and execute scripts.
  */
 
 if (global.addEventListener) {
