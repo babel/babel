@@ -25,6 +25,22 @@ export var BindingIdentifier = {
   }
 };
 
+export var Statement = {
+  types: ["Statement"],
+  checkPath({ node, parent }) {
+    if (t.isStatement(node)) {
+      if (t.isVariableDeclaration(node)) {
+        if (t.isForXStatement(parent, { left: node })) return false;
+        if (t.isForStatement(parent, { init: node })) return false;
+      }
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+
 export var Expression = {
   types: ["Expression"],
   checkPath(path) {
