@@ -25,16 +25,12 @@ var collectPropertyReferencesVisitor = {
 };
 
 var verifyConstructorVisitor = {
-  MethodDefinition: {
-    enter() {
-      this.skip();
-    }
+  MethodDefinition() {
+    this.skip();
   },
 
-  Property: {
-    enter(node) {
-      if (node.method) this.skip();
-    }
+  Property(node) {
+    if (node.method) this.skip();
   },
 
   CallExpression: {
@@ -50,23 +46,19 @@ var verifyConstructorVisitor = {
     }
   },
 
-  FunctionDeclaration: {
-    enter() {
-      this.skip();
+  "FunctionDeclaration|FunctionExpression"() {
+    this.skip();
+  },
+
+  ThisExpression(node, parent, scope, state) {
+    if (state.isDerived && !state.hasBareSuper) {
+      throw this.errorWithNode("'this' is not allowed before super()");
     }
   },
 
-  FunctionExpression: {
-    enter() {
-      this.skip();
-    }
-  },
-
-  ThisExpression: {
-    enter(node, parent, scope, state) {
-      if (state.isDerived && !state.hasBareSuper) {
-        throw this.errorWithNode("'this' is not allowed before super()");
-      }
+  Super(node, parent, scope, state) {
+    if (state.isDerived && !state.hasBareSuper && !this.parentPath.isCallExpression({ callee: node })) {
+      throw this.errorWithNode("'super.*' is not allowed before super()");
     }
   }
 };
