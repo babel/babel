@@ -23,6 +23,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
 ```json
 {
   "rules": {
+    "babel/block-scoped-var": 1,
     "babel/object-shorthand": 1,
     "babel/generator-star": 1,
     "babel/generator-star-spacing": 1,
@@ -34,6 +35,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
 
 Each rule cooresponds to a core eslint rule, and has the same options.
 
+- `babel/block-scoped-var`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/generator-star`: Handles async/await functions correctly
 - `babel/generator-star-spacing`: Handles async/await functions correctly
