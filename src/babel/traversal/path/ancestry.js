@@ -178,7 +178,7 @@ export function inShadow() {
   var path = this;
   while (path) {
     if (path.isFunction()) {
-      if (path.node.shadow) {
+      if (path.node.shadow || path.isArrowFunctionExpression()) {
         return path;
       } else {
         return null;

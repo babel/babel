@@ -52,7 +52,20 @@ var verifyConstructorVisitor = {
 
   ThisExpression(node, parent, scope, state) {
     if (state.isDerived && !state.hasBareSuper) {
-      throw this.errorWithNode("'this' is not allowed before super()");
+      if (this.inShadow()) {
+        var thisAlias = state.constructorPath.getData("this");
+
+        if (!thisAlias) {
+          thisAlias = state.constructorPath.setData(
+            "this",
+            state.constructorPath.scope.generateUidIdentifier("this")
+          );
+        }
+
+        return thisAlias;
+      } else {
+        throw this.errorWithNode("'this' is not allowed before super()");
+      }
     }
   },
 
@@ -429,13 +442,21 @@ export default class ClassTransformer {
 
    verifyConstructor(path: NodePath) {
     var state = {
-      hasBareSuper: false,
-      bareSuper:    null,
-      isDerived:     this.isDerived,
-      file:         this.file
+      constructorPath: path.get("value"),
+      hasBareSuper:    false,
+      bareSuper:       null,
+      isDerived:       this.isDerived,
+      file:            this.file,
     };
 
-    path.get("value").traverse(verifyConstructorVisitor, state);
+    state.constructorPath.traverse(verifyConstructorVisitor, state);
+
+    var thisAlias = state.constructorPath.getData("this");
+    if (thisAlias && state.bareSuper) {
+      state.bareSuper.insertAfter(t.variableDeclaration("var", [
+        t.variableDeclarator(thisAlias, t.thisExpression())
+      ]));
+    }
 
     this.bareSuper = state.bareSuper;
 

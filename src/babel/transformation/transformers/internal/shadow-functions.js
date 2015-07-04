@@ -6,7 +6,8 @@ export var metadata = {
 
 function remap(path, key, create) {
   // ensure that we're shadowed
-  if (!path.inShadow()) return;
+  var shadowPath = path.inShadow();
+  if (!shadowPath || shadowPath.isArrowFunctionExpression()) return;
 
   var shadowFunction = path.node._shadowedFunctionLiteral;
   var currentFunction;
