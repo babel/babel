@@ -53,6 +53,7 @@ var verifyConstructorVisitor = {
   ThisExpression(node, parent, scope, state) {
     if (state.isDerived && !state.hasBareSuper) {
       if (this.inShadow()) {
+        // https://github.com/babel/babel/issues/1920
         var thisAlias = state.constructorPath.getData("this");
 
         if (!thisAlias) {
