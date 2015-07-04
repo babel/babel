@@ -49,7 +49,9 @@ export var visitor = {
     pushElemProp("ref", t.literal(null));
 
     if (node.children.length) {
-      pushProp(props.properties, t.identifier("children"), t.arrayExpression(react.buildChildren(node)));
+      var children = react.buildChildren(node);
+      children = children.length === 1 ? children[0] : t.arrayExpression(children);
+      pushProp(props.properties, t.identifier("children"), children);
     }
 
     // props
