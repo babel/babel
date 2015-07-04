@@ -16,7 +16,7 @@ function render() {
     type: "foo",
     ref: null,
     props: {
-      children: [text]
+      children: text
     },
     key: null
   };
