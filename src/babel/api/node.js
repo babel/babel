@@ -61,6 +61,7 @@ export function parse(code, opts = {}) {
   opts.allowHashBang = true;
   opts.sourceType = "module";
   opts.ecmaVersion = Infinity;
+  // todo: extra plugins
   opts.plugins = {
     jsx:  true,
     flow: true

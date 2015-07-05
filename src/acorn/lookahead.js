@@ -1,4 +1,4 @@
-import {Parser} from "./state"
+import {Parser} from "acorn";
 
 const pp = Parser.prototype
 

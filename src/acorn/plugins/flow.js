@@ -1,5 +1,4 @@
-Error.stackTraceLimit = Infinity;
-var acorn = require("../src/index")
+var acorn = require("acorn")
 
 var pp = acorn.Parser.prototype
 var tt = acorn.tokTypes
@@ -14,15 +13,6 @@ pp.expectRelational = function (op) {
   } else {
     this.unexpected()
   }
-}
-
-pp.flow_parseTypeInitialiser = function (tok) {
-  var oldInType = this.inType
-  this.inType = true
-  this.expect(tok || tt.colon)
-  var type = this.flow_parseType()
-  this.inType = oldInType
-  return type;
 }
 
 pp.flow_parseDeclareClass = function (node) {
@@ -50,7 +40,9 @@ pp.flow_parseDeclareFunction = function (node) {
   typeNode.params = tmp.params
   typeNode.rest = tmp.rest
   this.expect(tt.parenR)
-  typeNode.returnType = this.flow_parseTypeInitialiser()
+
+  this.expect(tt.colon)
+  typeNode.returnType = this.flow_parseType()
 
   typeContainer.typeAnnotation = this.finishNode(typeNode, "FunctionTypeAnnotation")
   id.typeAnnotation = this.finishNode(typeContainer, "TypeAnnotation")
@@ -161,7 +153,10 @@ pp.flow_parseTypeAlias = function (node) {
     node.typeParameters = null
   }
 
-  node.right = this.flow_parseTypeInitialiser(tt.eq)
+  this.expect(tt.eq)
+
+  node.right = this.flow_parseType()
+
   this.semicolon()
 
   return this.finishNode(node, "TypeAlias")
@@ -214,9 +209,11 @@ pp.flow_parseObjectTypeIndexer = function (node, isStatic) {
 
   this.expect(tt.bracketL)
   node.id = this.flow_parseObjectPropertyKey()
-  node.key = this.flow_parseTypeInitialiser()
+  this.expect(tt.colon)
+  node.key = this.flow_parseType()
   this.expect(tt.bracketR)
-  node.value = this.flow_parseTypeInitialiser()
+  this.expect(tt.colon)
+  node.value = this.flow_parseType()
 
   this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeIndexer")
@@ -243,14 +240,15 @@ pp.flow_parseObjectTypeMethodish = function (node) {
     node.rest = this.flow_parseFunctionTypeParam()
   }
   this.expect(tt.parenR)
-  node.returnType = this.flow_parseTypeInitialiser()
+  this.expect(tt.colon)
+  node.returnType = this.flow_parseType()
 
   return this.finishNode(node, "FunctionTypeAnnotation")
 }
 
-pp.flow_parseObjectTypeMethod = function (start, isStatic, key) {
-  var node = this.startNodeAt(start)
-  node.value = this.flow_parseObjectTypeMethodish(this.startNodeAt(start))
+pp.flow_parseObjectTypeMethod = function (startPos, startLoc, isStatic, key) {
+  var node = this.startNodeAt(startPos, startLoc)
+  node.value = this.flow_parseObjectTypeMethodish(this.startNodeAt(startPos, startLoc))
   node.static = isStatic
   node.key = key
   node.optional = false
@@ -262,7 +260,7 @@ pp.flow_parseObjectTypeCallProperty = function (node, isStatic) {
   var valueNode = this.startNode()
   node.static = isStatic
   node.value = this.flow_parseObjectTypeMethodish(valueNode)
-  this.flow_objectTypeSemicolon()
+    this.flow_objectTypeSemicolon()
   return this.finishNode(node, "ObjectTypeCallProperty")
 }
 
@@ -283,7 +281,7 @@ pp.flow_parseObjectType = function (allowStatic) {
   this.expect(tt.braceL)
 
   while (this.type !== tt.braceR) {
-    var start = this.markPosition()
+    var startPos = this.start, startLoc = this.startLoc
     node = this.startNode()
     if (allowStatic && this.isContextual("static")) {
       this.next()
@@ -302,13 +300,14 @@ pp.flow_parseObjectType = function (allowStatic) {
       }
       if (this.isRelational("<") || this.type === tt.parenL) {
         // This is a method property
-        nodeStart.properties.push(this.flow_parseObjectTypeMethod(start, isStatic, propertyKey))
+        nodeStart.properties.push(this.flow_parseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey))
       } else {
         if (this.eat(tt.question)) {
           optional = true
         }
+        this.expect(tt.colon)
         node.key = propertyKey
-        node.value = this.flow_parseTypeInitialiser()
+        node.value = this.flow_parseType()
         node.optional = optional
         node.static = isStatic
         this.flow_objectTypeSemicolon()
@@ -323,19 +322,19 @@ pp.flow_parseObjectType = function (allowStatic) {
 }
 
 pp.flow_objectTypeSemicolon = function () {
-  if (!this.eat(tt.semi) && !this.eat(tt.comma) && this.type !== tt.braceR) {
+  if (!this.eat(tt.semi) && this.type !== tt.braceR) {
     this.unexpected()
   }
 }
 
-pp.flow_parseGenericType = function (start, id) {
-  var node = this.startNodeAt(start)
+pp.flow_parseGenericType = function (startPos, startLoc, id) {
+  var node = this.startNodeAt(startPos, startLoc)
 
   node.typeParameters = null
   node.id = id
 
   while (this.eat(tt.dot)) {
-    var node2 = this.startNodeAt(start)
+    var node2 = this.startNodeAt(startPos, startLoc)
     node2.qualification = node.id
     node2.id = this.parseIdent()
     node.id = this.finishNode(node2, "QualifiedTypeIdentifier")
@@ -346,6 +345,12 @@ pp.flow_parseGenericType = function (start, id) {
   }
 
   return this.finishNode(node, "GenericTypeAnnotation")
+}
+
+pp.flow_parseVoidType = function () {
+  var node = this.startNode()
+  this.expect(tt._void)
+  return this.finishNode(node, "VoidTypeAnnotation")
 }
 
 pp.flow_parseTypeofType = function () {
@@ -376,8 +381,9 @@ pp.flow_parseFunctionTypeParam = function () {
   if (this.eat(tt.question)) {
     optional = true
   }
+  this.expect(tt.colon)
   node.optional = optional
-  node.typeAnnotation = this.flow_parseTypeInitialiser()
+  node.typeAnnotation = this.flow_parseType()
   return this.finishNode(node, "FunctionTypeParam")
 }
 
@@ -395,20 +401,14 @@ pp.flow_parseFunctionTypeParams = function () {
   return ret
 }
 
-pp.flow_identToTypeAnnotation = function (start, node, id) {
+pp.flow_identToTypeAnnotation = function (startPos, startLoc, node, id) {
   switch (id.name) {
     case "any":
       return this.finishNode(node, "AnyTypeAnnotation")
 
-    case "void":
-      return this.finishNode(node, "VoidTypeAnnotation")
-
     case "bool":
     case "boolean":
       return this.finishNode(node, "BooleanTypeAnnotation")
-
-    case "mixed":
-      return this.finishNode(node, "MixedTypeAnnotation")
 
     case "number":
       return this.finishNode(node, "NumberTypeAnnotation")
@@ -417,7 +417,7 @@ pp.flow_identToTypeAnnotation = function (start, node, id) {
       return this.finishNode(node, "StringTypeAnnotation")
 
     default:
-      return this.flow_parseGenericType(start, id)
+      return this.flow_parseGenericType(startPos, startLoc, id)
   }
 }
 
@@ -428,7 +428,7 @@ pp.flow_parsePrimaryType = function () {
   var typeIdentifier = null
   var params = null
   var returnType = null
-  var start = this.markPosition()
+  var startPos = this.start, startLoc = this.startLoc
   var node = this.startNode()
   var rest = null
   var tmp
@@ -439,7 +439,7 @@ pp.flow_parsePrimaryType = function () {
 
   switch (this.type) {
     case tt.name:
-      return this.flow_identToTypeAnnotation(start, node, this.parseIdent())
+      return this.flow_identToTypeAnnotation(startPos, startLoc, node, this.parseIdent())
 
     case tt.braceL:
       return this.flow_parseObjectType()
@@ -516,8 +516,14 @@ pp.flow_parsePrimaryType = function () {
       return this.finishNode(node, "StringLiteralTypeAnnotation")
 
     default:
-      if (this.type.keyword === "typeof") {
-        return this.flow_parseTypeofType()
+      if (this.type.keyword) {
+        switch (this.type.keyword) {
+          case "void":
+            return this.flow_parseVoidType()
+
+          case "typeof":
+            return this.flow_parseTypeofType()
+        }
       }
   }
 
@@ -574,7 +580,13 @@ pp.flow_parseType = function () {
 
 pp.flow_parseTypeAnnotation = function () {
   var node = this.startNode()
-  node.typeAnnotation = this.flow_parseTypeInitialiser()
+
+  var oldInType = this.inType
+  this.inType = true
+  this.expect(tt.colon)
+  node.typeAnnotation = this.flow_parseType()
+  this.inType = oldInType
+
   return this.finishNode(node, "TypeAnnotation")
 }
 
@@ -646,16 +658,16 @@ acorn.plugins.flow = function (instance) {
     }
   })
 
-  instance.extend("shouldParseExportDeclaration", function (inner) {
+  instance.extend("shouldParseExportStatement", function (inner) {
     return function () {
       return this.isContextual("type") || inner.call(this)
     }
   })
 
   instance.extend("parseParenItem", function (inner) {
-    return function (node, start) {
+    return function (node, startPos, startLoc) {
       if (this.type === tt.colon) {
-        var typeCastNode = this.startNodeAt(start)
+        var typeCastNode = this.startNodeAt(startPos, startLoc)
         typeCastNode.expression = node
         typeCastNode.typeAnnotation = this.flow_parseTypeAnnotation()
         return this.finishNode(typeCastNode, "TypeCastExpression")
@@ -670,18 +682,6 @@ acorn.plugins.flow = function (instance) {
       inner.call(this, node, isStatement)
       if (this.isRelational("<")) {
         node.typeParameters = this.flow_parseTypeParameterDeclaration()
-      }
-    }
-  })
-
-  // don't consider `void` to be a keyword as then it'll use the void token type
-  // and set startExpr
-  instance.extend("isKeyword", function (inner) {
-    return function(name) {
-      if (this.inType && name === "void") {
-        return false
-      } else {
-        return inner.call(this, name)
       }
     }
   })
@@ -703,7 +703,7 @@ acorn.plugins.flow = function (instance) {
   })
 
   instance.extend("parseParenArrowList", function (inner) {
-    return function (start, exprList, isAsync) {
+    return function (startPos, startLoc, exprList) {
       for (var i = 0; i < exprList.length; i++) {
         var listItem = exprList[i]
         if (listItem.type === "TypeCastExpression") {
@@ -712,7 +712,7 @@ acorn.plugins.flow = function (instance) {
           exprList[i] = expr
         }
       }
-      return inner.call(this, start, exprList, isAsync)
+      return inner.apply(this, arguments)
     }
   })
 
@@ -765,7 +765,7 @@ acorn.plugins.flow = function (instance) {
     }
   })
 
-  instance.extend("parseObjPropValue", function (inner) {
+  instance.extend("parsePropertyValue", function (inner) {
     return function (prop) {
       var typeParameters
       if (this.isRelational("<")) {
@@ -777,7 +777,7 @@ acorn.plugins.flow = function (instance) {
     }
   })
 
-  instance.extend("parseAssignableListItemTypes", function (inner) {
+  instance.extend("parseBindingListItem", function (inner) {
     return function (param) {
       if (this.eat(tt.question)) {
         param.optional = true
@@ -786,25 +786,7 @@ acorn.plugins.flow = function (instance) {
         param.typeAnnotation = this.flow_parseTypeAnnotation()
       }
       this.finishNode(param, param.type)
-      return param
-    }
-  })
-
-  instance.extend("parseImportSpecifiers", function (inner) {
-    return function (node) {
-      node.isType = false
-      if (this.isContextual("type")) {
-        var start = this.markPosition()
-        var typeId = this.parseIdent()
-        if ((this.type === tt.name && this.value !== "from") || this.type === tt.braceL || this.type === tt.star) {
-          node.isType = true
-        } else {
-          node.specifiers.push(this.parseImportSpecifierDefault(typeId, start))
-          if (this.isContextual("from")) return
-          this.eat(tt.comma)
-        }
-      }
-      inner.call(this, node)
+      return inner.call(this, param)
     }
   })
 
@@ -819,13 +801,86 @@ acorn.plugins.flow = function (instance) {
   })
 
   // var foo: string = bar
-  instance.extend("parseVarHead", function (inner) {
+  instance.extend("parseVarId", function (inner) {
     return function (decl) {
       inner.call(this, decl)
       if (this.type === tt.colon) {
         decl.id.typeAnnotation = this.flow_parseTypeAnnotation()
         this.finishNode(decl.id, decl.id.type)
       }
+    }
+  })
+
+  instance.extend("parseImport", function () {
+    return function(node) {
+      this.next()
+      // import '...'
+      if (this.type === tt.string) {
+        node.specifiers = []
+        node.source = this.parseExprAtom()
+      } else {
+        node.specifiers = []
+        this.parseImportSpecifiers(node)
+        this.expectContextual("from")
+        node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected()
+      }
+      this.semicolon()
+      return this.finishNode(node, "ImportDeclaration")
+    }
+  })
+
+  instance.extend("parseImportSpecifiers", function () {
+    return function(node) {
+      node.isType = false
+      if (this.isContextual("type")) {
+        var startPos = this.start, startLoc = this.startLoc
+        var typeId = this.parseIdent()
+        if ((this.type === tt.name && this.value !== "from") || this.type === tt.braceL || this.type === tt.star) {
+          node.isType = true
+        } else {
+          node.specifiers.push(this.parseImportSpecifierDefault(typeId, startPos, startLoc))
+          if (this.isContextual("from")) return
+          this.eat(tt.comma)
+        }
+      }
+      var first = true
+      if (this.type === tt.name) {
+        // import defaultObj, { x, y as z } from '...'
+        var startPos = this.start, startLoc = this.startLoc
+        node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdent(), startPos, startLoc))
+        if (!this.eat(tt.comma)) return
+      }
+      if (this.type === tt.star) {
+        var specifier = this.startNode()
+        this.next()
+        this.expectContextual("as")
+        specifier.local = this.parseIdent()
+        this.checkLVal(specifier.local, true)
+        node.specifiers.push(this.finishNode(specifier, "ImportNamespaceSpecifier"))
+        return
+      }
+      this.expect(tt.braceL)
+      while (!this.eat(tt.braceR)) {
+        if (!first) {
+          this.expect(tt.comma)
+          if (this.afterTrailingComma(tt.braceR)) break
+        } else first = false
+
+        var specifier = this.startNode()
+        specifier.imported = this.parseIdent(true)
+        specifier.local = this.eatContextual("as") ? this.parseIdent() : specifier.imported
+        this.checkLVal(specifier.local, true)
+        node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"))
+      }
+    }
+  })
+
+  instance.extend("parseImportSpecifierDefault", function () {
+    return function (id, startPos, startLoc) {
+      var node = this.startNodeAt(startPos, startLoc)
+      node.local = id
+      this.checkLVal(node.local, true)
+      return this.finishNode(node, "ImportDefaultSpecifier")
     }
   })
 }
