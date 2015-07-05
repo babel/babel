@@ -84,4 +84,5 @@ export default {
   _blockHoist:                             require("./internal/block-hoist"),
   jscript:                                 require("babel-plugin-jscript"),
   flow:                                    require("./other/flow"),
+  "optimisation.modules.system":           require("./optimisation/modules.system"),
 };

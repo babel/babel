@@ -1,0 +1,4 @@
+{
+  "modules": "system",
+  "optional": ["optimisation.modules.system"]
+}
