@@ -46,8 +46,8 @@ var verifyConstructorVisitor = {
     }
   },
 
-  "FunctionDeclaration|FunctionExpression"() {
-    this.skip();
+  "FunctionDeclaration|FunctionExpression"(node) {
+    if (!node.shadow) this.skip();
   },
 
   ThisExpression(node, parent, scope, state) {
