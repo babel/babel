@@ -78,6 +78,7 @@ export default class SystemFormatter extends AMDFormatter {
   constructor(file) {
     super(file);
 
+    this._setters = null;
     this.exportIdentifier = file.scope.generateUidIdentifier("export");
     this.noInteropRequireExport = true;
     this.noInteropRequireImport = true;
@@ -178,11 +179,14 @@ export default class SystemFormatter extends AMDFormatter {
 
     var block = t.blockStatement(program.body);
 
+    var setterListNode = this._buildRunnerSetters(block, hoistDeclarators);
+    this._setters = setterListNode;
+
     var runner = util.template("system", {
       MODULE_DEPENDENCIES: t.arrayExpression(this.buildDependencyLiterals()),
       EXPORT_IDENTIFIER:   this.exportIdentifier,
       MODULE_NAME:         moduleNameLiteral,
-      SETTERS:             this._buildRunnerSetters(block, hoistDeclarators),
+      SETTERS:             setterListNode,
       EXECUTE:             t.functionExpression(null, [], block)
     }, true);
 
