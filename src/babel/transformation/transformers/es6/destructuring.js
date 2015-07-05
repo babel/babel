@@ -316,9 +316,12 @@ class DestructuringTransformer {
 
     var left = pattern.left;
     if (t.isPattern(left)) {
-      this.nodes.push(t.expressionStatement(
+      var tempValueDefault = t.expressionStatement(
         t.assignmentExpression("=", tempValueRef, tempConditional)
-      ));
+      );
+      tempValueDefault._blockHoist = this.blockHoist;
+
+      this.nodes.push(tempValueDefault);
       this.push(left, tempValueRef);
     } else {
       this.nodes.push(this.buildVariableAssignment(left, tempConditional));
