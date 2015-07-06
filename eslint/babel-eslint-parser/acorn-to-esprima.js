@@ -170,10 +170,12 @@ function convertTemplateType(tokens) {
 
 var astTransformVisitor = {
   noScope: true,
+  enter: function (node) {
+    // private var to track original node type
+    node._babelType = node.type;
+  },
   exit: function (node) { /* parent */
     if (this.isSpreadProperty()) {
-      // private var to track if it's a spread property
-      node._spread = true;
       node.type = "Property";
       node.kind = "init";
       node.computed = true;
