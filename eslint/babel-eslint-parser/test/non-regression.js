@@ -1171,4 +1171,12 @@ describe("verify", function () {
       []
     );
   });
+
+  it("detects no-unused-vars with object destructuring #142", function () {
+    verifyAndAssertMessages(
+      "const {Bacona} = require('baconjs')",
+      { "no-undef": 1, "no-unused-vars": 1 },
+      [ "1:7 Bacona is defined but never used no-unused-vars" ]
+    );
+  });
 });
