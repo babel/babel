@@ -11,7 +11,7 @@
     var g = function g() {};
 
     _again = false;
-    var m = _arguments.length >= 1 && _arguments[1] === undefined ? getDefaultValue() : _arguments[1];
+    var m = _arguments.length <= 1 || _arguments[1] === undefined ? getDefaultValue() : _arguments[1];
 
     // `m` should be `getDefaultValue()` after first pass
     if (n <= 0) {

@@ -8,7 +8,7 @@ function fact(_x2) {
     var n = _x2;
     acc = undefined;
     _again = false;
-    var acc = _arguments.length >= 1 && _arguments[1] === undefined ? 1 : _arguments[1];
+    var acc = _arguments.length <= 1 || _arguments[1] === undefined ? 1 : _arguments[1];
     if (n > 1) {
       _arguments = [_x2 = n - 1, acc * n];
       _again = true;
