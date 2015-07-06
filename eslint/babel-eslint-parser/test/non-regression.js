@@ -1179,4 +1179,18 @@ describe("verify", function () {
       [ "1:7 Bacona is defined but never used no-unused-vars" ]
     );
   });
+
+  it("don't warn no-unused-vars with spread #142", function () {
+    verifyAndAssertMessages([
+        "export default function test(data) {",
+          "return {",
+            "foo: 'bar',",
+            "...data",
+          "};",
+        "}",
+      ].join("\n"),
+      { "no-undef": 1, "no-unused-vars": 1 },
+      []
+    );
+  });
 });

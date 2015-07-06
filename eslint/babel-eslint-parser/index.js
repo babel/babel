@@ -266,7 +266,7 @@ function monkeypatch() {
         if (id.type === "ObjectPattern") {
           // check if object destructuring has a spread
           var hasSpread = id.properties.filter(function(p) {
-            return p.type === "SpreadProperty"
+            return p._spread === true;
           });
           // visit properties if so
           if (hasSpread.length > 0) {

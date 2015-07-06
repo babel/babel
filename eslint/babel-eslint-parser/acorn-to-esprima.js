@@ -172,7 +172,9 @@ var astTransformVisitor = {
   noScope: true,
   exit: function (node) { /* parent */
     if (this.isSpreadProperty()) {
-      node.type = "SpreadProperty";
+      // private var to track if it's a spread property
+      node._spread = true;
+      node.type = "Property";
       node.kind = "init";
       node.computed = true;
       node.key = node.value = node.argument;
