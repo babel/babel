@@ -25,6 +25,10 @@ exports.addSourceMappingUrl = function (code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 };
 
+exports.log = function (msg) {
+  if (!commander.quiet) console.log(msg);
+};
+
 exports.transform = function (filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;

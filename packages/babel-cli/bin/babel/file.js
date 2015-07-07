@@ -135,7 +135,7 @@ module.exports = function (commander, filenames, opts) {
         ignoreInitial: true
       }).on("all", function (type, filename) {
         if (type === "add" || type === "change") {
-          console.log(type, filename);
+          util.log(type + " " + filename);
           try {
             walk();
           } catch (err) {

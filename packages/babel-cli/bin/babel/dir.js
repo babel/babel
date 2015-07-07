@@ -28,7 +28,7 @@ module.exports = function (commander, filenames) {
 
     outputFileSync(dest, data.code);
 
-    console.log(src + " -> " + dest);
+    util.log(src + " -> " + dest);
   };
 
   var handleFile = function (src, filename) {
