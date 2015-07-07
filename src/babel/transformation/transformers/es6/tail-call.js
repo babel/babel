@@ -337,10 +337,6 @@ class TailCallTransformer {
       args = t.arrayExpression(node.arguments);
     }
 
-    if (t.isArrayExpression(args) && args.elements.length > this.node.params.length) {
-      this.needsArguments = true;
-    }
-
     var argumentsId = this.getArgumentsId();
     var params      = this.getParams();
 
@@ -354,17 +350,30 @@ class TailCallTransformer {
 
     if (t.isArrayExpression(args)) {
       var elems = args.elements;
-      for (let i = 0; i < elems.length && i < params.length; i++) {
+
+      // pad out the args so all the function args are reset - https://github.com/babel/babel/issues/1938
+      while (elems.length < params.length) {
+        elems.push(t.identifier("undefined"));
+      }
+
+      for (let i = 0; i < elems.length; i++) {
         let param = params[i];
-        let elem = elems[i] || (elems[i] = t.identifier("undefined"));
-        if (!param._isDefaultPlaceholder) {
+        let elem  = elems[i];
+
+        if (param && !param._isDefaultPlaceholder) {
           elems[i] = t.assignmentExpression("=", param, elem);
+        } else {
+          // exceeds parameters but push it anyway to ensure correct execution
         }
       }
 
       if (!this.needsArguments) {
         for (let elem of (elems: Array)) {
-          body.push(t.expressionStatement(elem));
+          // only push expressions that we really need, this will skip pure arguments that exceed the
+          // parameter length of the current function
+          if (!this.scope.isPure(elem)) {
+            body.push(t.expressionStatement(elem));
+          }
         }
       }
     } else {
