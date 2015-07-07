@@ -4,6 +4,7 @@ import resolveRc from "../../transformation/file/options/resolve-rc";
 import extend from "lodash/object/extend";
 import * as babel from "../node";
 import each from "lodash/collection/each";
+import isFunction from "lodash/lang/isFunction";
 import * as util from  "../../util";
 import fs from "fs";
 import path from "path";
@@ -160,8 +161,10 @@ hookExtensions(util.canCompile.EXTENSIONS);
 
 export default function (opts = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
-  if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
-
+  if (opts.ignore != null) {
+      ignore = util.arrayify(opts.ignore,
+      item => isFunction(item) ? item : util.regexify(item));
+  }
   if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
 
   if (opts.cache === false) cache = null;

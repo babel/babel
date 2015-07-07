@@ -179,6 +179,25 @@ suite("api", function () {
       ignore: "foo/node_modules/*.bar",
       filename: "/foo/node_modules/foo.bar"
     }).ignored);
+
+    assert.ok(transform("", {
+      ignore: function (fname) {
+        if (fname.indexOf("foo.bar") > 0) {
+          return true;
+        }
+      },
+      filename: "/foo/node_modules/foo.bar"
+    }).ignored);
+
+    assert.ok(!transform("", {
+      ignore: function (fname) {
+        console.log(fname);
+        if (fname.indexOf("zap") > 0) {
+          return true;
+        }
+      },
+      filename: "/foo/foo.bar"
+    }).ignored);
   });
 
   test("only option", function () {

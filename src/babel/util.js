@@ -9,6 +9,7 @@ import minimatch from "minimatch";
 import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
+import isFunction from "lodash/lang/isFunction";
 import isRegExp from "lodash/lang/isRegExp";
 import Module from "module";
 import isEmpty from "lodash/lang/isEmpty";
@@ -91,12 +92,17 @@ export function regexify(val: any): RegExp {
 }
 
 export function arrayify(val: any, mapFn?: Function): Array {
+
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
+  if (isFunction(val)) return arrayify([val], mapFn);
   if (isString(val)) return arrayify(list(val), mapFn);
 
   if (Array.isArray(val)) {
-    if (mapFn) val = val.map(mapFn);
+    if (mapFn) {
+      val = val.map(mapFn);
+    }
+
     return val;
   }
 
@@ -109,6 +115,18 @@ export function booleanify(val: any) {
   return val;
 }
 
+function testIgnore(ignore, filename) {
+  if (isFunction(ignore)) {
+    if (ignore(filename)) {
+      return true;
+    }
+  } else if (isRegExp(ignore)) {
+    if (ignore.test(filename)) {
+      return true;
+    }
+  }
+}
+
 export function shouldIgnore(filename, ignore, only) {
   filename = slash(filename);
 
@@ -118,8 +136,8 @@ export function shouldIgnore(filename, ignore, only) {
     }
     return true;
   } else if (ignore.length) {
-    for (let pattern of (ignore: Array)) {
-      if (pattern.test(filename)) return true;
+    for (let i of (ignore: Array)) {
+      if (testIgnore(i, filename)) return true;
     }
   }
 
