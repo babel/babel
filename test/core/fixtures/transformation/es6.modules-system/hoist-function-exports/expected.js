@@ -1,7 +1,7 @@
 System.register(["./evens"], function (_export) {
   "use strict";
 
-  var isEven, p, a, isOdd;
+  var isEven, p, a, i, j, isOdd;
 
   _export("nextOdd", nextOdd);
 
@@ -19,6 +19,8 @@ System.register(["./evens"], function (_export) {
       _export("p", p);
 
       for (a in b);
+
+      for (i = 0, j = 0;;);
 
       isOdd = (function (isEven) {
         return function (n) {

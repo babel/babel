@@ -33,8 +33,7 @@ var hoistVariablesVisitor = {
     }
 
     // for (var i in test)
-    // for (var i = 0;;)
-    if (t.isFor(parent) && (parent.left === node || parent.init === node)) {
+    if (t.isFor(parent) && parent.left === node) {
       return node.declarations[0].id;
     }
 
