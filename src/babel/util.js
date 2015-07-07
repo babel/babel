@@ -56,7 +56,7 @@ export function resolveRelative(loc: string) {
   }
 }
 
-export function list(val: string): Array<string> {
+export function list(val: string): Array {
   if (!val) {
     return [];
   } else if (Array.isArray(val)) {
@@ -114,16 +114,24 @@ export function shouldIgnore(filename, ignore, only) {
 
   if (only) {
     for (let pattern of (only: Array)) {
-      if (pattern.test(filename)) return false;
+      if (_shouldIgnore(pattern, filename)) return false;
     }
     return true;
   } else if (ignore.length) {
     for (let pattern of (ignore: Array)) {
-      if (pattern.test(filename)) return true;
+      if (_shouldIgnore(pattern, filename)) return true;
     }
   }
 
   return false;
+}
+
+function _shouldIgnore(pattern, filename) {
+  if (typeof pattern === "function") {
+    return pattern(filename);
+  } else {
+    return pattern.test(filename);
+  }
 }
 
 var templateVisitor = {

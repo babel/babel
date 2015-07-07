@@ -72,6 +72,7 @@ suite("util", function () {
     assert.deepEqual(util.arrayify("foo,bar"), ["foo", "bar"]);
     assert.deepEqual(util.arrayify(["foo", "bar"]), ["foo", "bar"]);
     assert.deepEqual(util.arrayify({ foo: "bar" }), [{ foo: "bar" }]);
+    assert.deepEqual(util.arrayify(function () { return "foo"; })[0](), "foo");
   });
 
   test("regexify", function () {
@@ -109,5 +110,21 @@ suite("util", function () {
   test("toIdentifier", function () {
     assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
+  });
+
+  test("shouldIgnore", function () {
+    var reIgnore = /\-reIgnore\.js/;
+    var fnIgnore = function (src) {
+      if (src.indexOf("fnIgnore") > 0) {
+        return true;
+      }
+    };
+
+    assert.equal(util.shouldIgnore("test.js", []), false);
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [fnIgnore]), false);
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [reIgnore]), true);
+
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [fnIgnore]), true);
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [reIgnore]), false);
   });
 });
