@@ -5,6 +5,13 @@ export var metadata = {
 };
 
 export var visitor = {
+  Program(node, parent, scope, file) {
+    for (var comment of (file.ast.comments: Array)) {
+      if (comment.value.indexOf("@flow") >= 0) {
+        comment._displayed = true;
+      }
+    }
+  },
   Flow() {
     this.dangerouslyRemove();
   },
