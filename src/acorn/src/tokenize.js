@@ -382,6 +382,10 @@ pp.getTokenFromCode = function(code) {
 
   case 126: // '~'
     return this.finishOp(tt.prefix, 1)
+
+  case 8230: // '…', unicode alias of ...
+    ++this.pos;
+    return this.finishToken(tt.ellipsis);
   }
 
   this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'")
