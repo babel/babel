@@ -77,3 +77,29 @@ export var Var = {
     return t.isVar(path.node);
   }
 };
+
+export var DirectiveLiteral = {
+  types: ["Literal"],
+  checkPath(path) {
+    return path.isLiteral() && path.parentPath.isExpressionStatement();
+  }
+};
+
+export var Directive = {
+  types: ["ExpressionStatement"],
+  checkPath(path) {
+    return path.get("expression").isLiteral();
+  }
+};
+
+export var User = {
+  checkPath(path) {
+    return path.node && !!path.node.loc;
+  }
+};
+
+export var Generated = {
+  checkPath(path) {
+    return !path.isUser();
+  }
+};
