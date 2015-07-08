@@ -23872,6 +23872,83 @@ test("function hello(...rest) { }", {
   locations: true
 });
 
+test("function hello(…rest) { }", {
+  type: "Program",
+  body: [
+    {
+      type: "FunctionDeclaration",
+      id: {
+        type: "Identifier",
+        name: "hello",
+        loc: {
+          start: {
+            line: 1,
+            column: 9
+          },
+          end: {
+            line: 1,
+            column: 14
+          }
+        }
+      },
+      params: [{
+        type: "RestElement",
+        argument: {
+          type: "Identifier",
+          name: "rest",
+          loc: {
+            start: {
+              line: 1,
+              column: 16
+            },
+            end: {
+              line: 1,
+              column: 20
+            }
+          }
+        }
+      }],
+      body: {
+        type: "BlockStatement",
+        body: [],
+        loc: {
+          start: {
+            line: 1,
+            column: 22
+          },
+          end: {
+            line: 1,
+            column: 25
+          }
+        }
+      },
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 25
+        }
+      }
+    }
+  ],
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 25
+    }
+  }
+}, {
+  ecmaVersion: 6,
+  locations: true
+});
+
 test("function hello(a, ...rest) { }", {
   type: "Program",
   body: [
@@ -23958,6 +24035,99 @@ test("function hello(a, ...rest) { }", {
     end: {
       line: 1,
       column: 30
+    }
+  }
+}, {
+  ecmaVersion: 6,
+  locations: true
+});
+
+test("function hello(a, …rest) { }", {
+  type: "Program",
+  body: [
+    {
+      type: "FunctionDeclaration",
+      id: {
+        type: "Identifier",
+        name: "hello",
+        loc: {
+          start: {
+            line: 1,
+            column: 9
+          },
+          end: {
+            line: 1,
+            column: 14
+          }
+        }
+      },
+      params: [
+        {
+          type: "Identifier",
+          name: "a",
+          loc: {
+            start: {
+              line: 1,
+              column: 15
+            },
+            end: {
+              line: 1,
+              column: 16
+            }
+          }
+        },
+        {
+          type: "RestElement",
+          argument: {
+            type: "Identifier",
+            name: "rest",
+            loc: {
+              start: {
+                line: 1,
+                column: 19
+              },
+              end: {
+                line: 1,
+                column: 23
+              }
+            }
+          }
+        }
+      ],
+      body: {
+        type: "BlockStatement",
+        body: [],
+        loc: {
+          start: {
+            line: 1,
+            column: 25
+          },
+          end: {
+            line: 1,
+            column: 28
+          }
+        }
+      },
+      loc: {
+        start: {
+          line: 1,
+          column: 0
+        },
+        end: {
+          line: 1,
+          column: 28
+        }
+      }
+    }
+  ],
+  loc: {
+    start: {
+      line: 1,
+      column: 0
+    },
+    end: {
+      line: 1,
+      column: 28
     }
   }
 }, {
