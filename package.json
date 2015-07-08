@@ -27,7 +27,8 @@
     "test": "make test"
   },
   "dependencies": {
-    "acorn-jsx": "^1.0.0",
+    "acorn": "^2.0.4",
+    "acorn-jsx": "^2.0.0",
     "ast-types": "~0.7.0",
     "babel-plugin-constant-folding": "^1.0.1",
     "babel-plugin-dead-code-elimination": "^1.0.2",

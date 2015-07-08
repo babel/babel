@@ -11,7 +11,7 @@ export default function (code, opts = {}) {
     allowImportExportEverywhere: opts.looseModules,
     allowReturnOutsideFunction:  opts.looseModules,
     allowHashBang:               true,
-    ecmaVersion:                 6,
+    ecmaVersion:                 7,
     strictMode:                  opts.strictMode,
     sourceType:                  opts.sourceType,
     locations:                   true,
@@ -44,6 +44,9 @@ export default function (code, opts = {}) {
     parseOpts.plugins.jsx = true;
     parseOpts.plugins.flow = true;
   }
+
+  var feats = parseOpts.features;
+  parseOpts.plugins["es7.trailingCommas"] = !!feats["es7.trailingCommas"];
 
   var ast = acorn.parse(code, parseOpts);
   estraverse.attachComments(ast, comments, tokens);
