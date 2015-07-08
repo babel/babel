@@ -10,10 +10,13 @@
 
 <p align="center">
   <a href="https://travis-ci.org/babel/babel"><img alt="Build Status" src="https://img.shields.io/travis/babel/babel.svg?style=flat"></a>
-  <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/pr?style=flat"></a>
-  <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/issue?style=flat"></a>
   <a href="http://badge.fury.io/js/babel-core"><img alt="npm version" src="https://badge.fury.io/js/babel-core.svg"></a>
   <a href="https://npmjs.org/package/babel-core"><img alt="Downloads" src="http://img.shields.io/npm/dm/babel-core.svg"></a>
+</p>
+
+<p align="center">
+  <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/pr?style=flat"></a>
+  <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/issue?style=flat"></a>
 </p>
 
 ----
