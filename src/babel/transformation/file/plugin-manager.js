@@ -2,7 +2,7 @@ import Transformer from "../transformer";
 import Plugin from "../plugin";
 import * as types from "../../types";
 import * as messages from "../../messages";
-import traverse from "../../types";
+import traverse from "../../traversal";
 import parse from "../../helpers/parse";
 
 var context = {
