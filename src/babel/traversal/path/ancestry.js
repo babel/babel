@@ -8,11 +8,18 @@ import NodePath from "./index";
 
 export function findParent(callback) {
   var path = this;
-  while (path) {
+  while (path = path.parentPath) {
     if (callback(path)) return path;
-    path = path.parentPath;
   }
   return null;
+}
+
+/**
+ * Get the parent function of the current path.
+ */
+
+export function getFunctionParent() {
+  return this.findParent((path) => path.isFunction() || path.isProgram());
 }
 
 /**

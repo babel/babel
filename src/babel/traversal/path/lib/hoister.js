@@ -19,7 +19,7 @@ var referenceVisitor = {
       state.bindings[node.name] = binding;
     } else {
       for (var violationPath of (binding.constantViolations: Array)) {
-        state.breakOnScopePaths.push(violationPath.scope.path);
+        state.breakOnScopePaths = state.breakOnScopePaths.concat(violationPath.getAncestry());
       }
     }
   }
@@ -106,12 +106,15 @@ export default class PathHoister {
 
     this.getCompatibleScopes();
 
-    var path = this.getAttachmentPath();
-    if (!path) return;
+    var attachTo = this.getAttachmentPath();
+    if (!attachTo) return;
 
-    var uid = path.scope.generateUidIdentifier("ref");
+    // don't bother hoisting to the same function as this will cause multiple branches to be evaluated more than once leading to a bad optimisation
+    if (attachTo.getFunctionParent() === this.path.getFunctionParent()) return;
 
-    path.insertBefore([
+    var uid = attachTo.scope.generateUidIdentifier("ref");
+
+    attachTo.insertBefore([
       t.variableDeclaration("var", [
         t.variableDeclarator(uid, this.path.node)
       ])
