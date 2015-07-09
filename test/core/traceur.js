@@ -34,6 +34,10 @@ require("./_transformation-helper")({
     // non-standard
     "ObjectMixin",
 
+    // Node 0.10 doesn't like these
+    "Symbol/Object",
+    "Symbol/ObjectModel",
+
     // TODO
     "Yield/GeneratorSend",
     "Yield/BreakForOf",
