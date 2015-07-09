@@ -6,17 +6,20 @@
 **NOTE:** Please note that this is experimental and may have numerous bugs. It is however
 successfuly linting the [babel core](https://github.com/babel/babel/blob/master/.eslintrc).
 
-If there is an issue, first check if it can be reproduced with the regular parser and with the latest versions of `eslint` and `babel-eslint`.
+> If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
-For questions and support please visit the `#linting` [babel slack channel](https://babel-slack.herokuapp.com)!
+For questions and support please visit the [`#linting`](https://babeljs.slack.com/messages/linting/) babel slack channel (sign up [here](https://babel-slack.herokuapp.com))!
 
 ## Known Issues
+Flow: 
 - `no-undef` for global flow types: `ReactElement`, `ReactClass` [#130](https://github.com/babel/babel-eslint/issues/130#issuecomment-111215076)
   - Workaround: define types as globals in `.eslintrc` or define types and import them `import type ReactElement from './types'` 
 - `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/babel-eslint/issues/132#issuecomment-112815926)
+
+Modules/strict mode
 - `no-unused-vars: [2, {vars: local}]` [#136](https://github.com/babel/babel-eslint/issues/136)
 
-Please check out [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) for react/jsx issues
+Please check out [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) for React/JSX issues
 - `no-unused-vars` with jsx
 
 Please check out [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) for the issues below: 
