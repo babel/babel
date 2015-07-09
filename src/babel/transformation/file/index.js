@@ -1,25 +1,20 @@
-import { validateOption, normaliseOptions, config as optionsConfig } from "./options";
 import convertSourceMap from "convert-source-map";
 import moduleFormatters from "../modules";
+import OptionManager from "./options/option-manager";
 import PluginManager from "./plugin-manager";
 import shebangRegex from "shebang-regex";
 import NodePath from "../../traversal/path";
 import isFunction from "lodash/lang/isFunction";
-import isAbsolute from "path-is-absolute";
-import resolveRc from "./options/resolve-rc";
 import sourceMap from "source-map";
 import generate from "../../generation";
 import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
-import assign from "lodash/object/assign";
 import Logger from "./logger";
 import Plugin from "../plugin";
 import parse from "../../helpers/parse";
-import merge from "../../helpers/merge";
 import slash from "slash";
-import clone from "lodash/lang/clone";
 import Hub from "../../traversal/hub";
 import * as util from  "../../util";
 import path from "path";
@@ -50,9 +45,8 @@ export default class File {
 
     this.pipeline = pipeline;
     this.log      = new Logger(this, opts.filename || "unknown");
+    this.opts     = this.initOptions(opts);
     this.ast      = {};
-
-    this.normaliseOptions(opts);
 
     this.buildTransformers();
 
@@ -98,56 +92,8 @@ export default class File {
 
   static soloHelpers = [];
 
-  static options = optionsConfig;
-
-  normaliseOptions(opts: Object) {
-    opts = this.opts = normaliseOptions(assign({}, opts));
-
-    // resolve babelrc
-    if (opts.filename) {
-      var rcFilename = opts.filename;
-      if (!isAbsolute(rcFilename)) rcFilename = path.join(process.cwd(), rcFilename);
-      opts = resolveRc(rcFilename, opts);
-    }
-
-    // check for unknown options
-    for (let key in opts) {
-      if (key[0] === "_") continue;
-
-      let option = File.options[key];
-      if (!option) this.log.error(`Unknown option: ${key}`, ReferenceError);
-    }
-
-    // merge in environment options
-    var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
-    if (opts.env) merge(opts, normaliseOptions(opts.env[envKey]));
-
-    // normalise options
-    for (let key in File.options) {
-      let option = File.options[key];
-      var val    = opts[key];
-
-      // optional
-      if (!val && option.optional) continue;
-
-      // deprecated
-      if (val && option.deprecated) {
-        this.log.deprecate("Deprecated option " + key + ": " + option.deprecated);
-      }
-
-      // default
-      if (val == null) val = clone(option.default);
-
-      // validate
-      if (val) val = validateOption(key, val, this.pipeline);
-
-      // aaliases
-      if (option.alias) {
-        opts[option.alias] = opts[option.alias] || val;
-      } else {
-        opts[key] = val;
-      }
-    }
+  initOptions(opts) {
+    opts = new OptionManager(this.log, this.pipeline).init(opts);
 
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
@@ -195,7 +141,7 @@ export default class File {
     }
 
     return opts;
-  };
+  }
 
   isLoose(key: string) {
     return includes(this.opts.loose, key);

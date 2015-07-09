@@ -253,7 +253,7 @@
   },
 
   "babelrc": {
-    "hidden": true,
-    "description": "do not load the same .babelrc file twice"
+    "description": "Specify a custom list of babelrc files to use",
+    "type": "list"
   }
 }
