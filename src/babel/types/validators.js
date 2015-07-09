@@ -77,6 +77,11 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "JSXAttribute":
       return parent.name !== node;
 
+    // no: class { NODE = value; }
+    // yes: class { key = NODE; }
+    case "ClassProperty":
+      return parent.value === node;
+
     // no: import NODE from "foo";
     // no: import * as NODE from "foo";
     // no: import { NODE as foo } from "foo";
