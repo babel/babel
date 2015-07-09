@@ -149,6 +149,10 @@ function varifyAst(ast) {
 // Convenience for just translating let/const to var declarations.
 exports.varify = varify;
 
+// Allow packages that depend on Regenerator to use the same copy of
+// ast-types, in case multiple versions are installed by NPM.
+exports.types = types;
+
 // Transforms a string of source code, returning the { code, map? } result
 // from recast.print.
 exports.compile = compile;
