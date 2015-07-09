@@ -1,6 +1,11 @@
 import regenerator from "regenerator";
 import * as t from "../../../types";
-import { NodePath } from "ast-types";
+
+// It's important to use the exact same NodePath constructor that
+// Regenerator uses, rather than require("ast-types").NodePath, because
+// the version of ast-types that Babel knows about might be different from
+// the version that Regenerator depends on. See for example #1958.
+const NodePath = regenerator.types.NodePath;
 
 export var metadata = {
   group: "builtin-advanced"

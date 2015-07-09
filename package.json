@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "acorn-jsx": "^1.0.0",
-    "ast-types": "~0.7.0",
     "babel-plugin-constant-folding": "^1.0.1",
     "babel-plugin-dead-code-elimination": "^1.0.2",
     "babel-plugin-eval": "^1.0.1",
@@ -63,8 +62,7 @@
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
-    "recast": "0.10.16",
-    "regenerator": "0.8.32",
+    "regenerator": "0.8.34",
     "regexpu": "^1.1.2",
     "repeating": "^1.1.2",
     "resolve": "^1.1.6",
