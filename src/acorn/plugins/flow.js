@@ -1,4 +1,3 @@
-Error.stackTraceLimit = Infinity;
 var acorn = require("../src/index")
 
 var pp = acorn.Parser.prototype
