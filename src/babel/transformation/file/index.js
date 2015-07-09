@@ -14,7 +14,6 @@ import traverse from "../../traversal";
 import Logger from "./logger";
 import Plugin from "../plugin";
 import parse from "../../helpers/parse";
-import slash from "slash";
 import Hub from "../../traversal/hub";
 import * as util from  "../../util";
 import path from "path";
