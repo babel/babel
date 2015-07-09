@@ -63,6 +63,7 @@
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
+    "recast": "0.10.16",
     "regenerator": "0.8.32",
     "regexpu": "^1.1.2",
     "repeating": "^1.1.2",
