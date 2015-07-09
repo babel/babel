@@ -261,18 +261,22 @@ export function toBlock(node: Object, parent: Object): Object {
  */
 
 export function valueToNode(value: any): Object {
+  // undefined
   if (value === undefined) {
     return t.identifier("undefined");
   }
 
+  // null, booleans, strings, numbers, regexs
   if (value === true || value === false || value === null || isString(value) || isNumber(value) || isRegExp(value)) {
     return t.literal(value);
   }
 
+  // array
   if (Array.isArray(value)) {
     return t.arrayExpression(value.map(t.valueToNode));
   }
 
+  // object
   if (isPlainObject(value)) {
     var props = [];
     for (var key in value) {
