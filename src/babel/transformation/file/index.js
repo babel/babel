@@ -87,7 +87,7 @@ export default class File {
     "instanceof",
 
     // legacy
-    "interop-require",
+    "interop-require"
   ];
 
   static soloHelpers = [];
@@ -99,12 +99,6 @@ export default class File {
       opts.sourceMaps = true;
     }
 
-    // normalize windows path separators to unix
-    opts.filename = slash(opts.filename);
-    if (opts.sourceRoot) {
-      opts.sourceRoot = slash(opts.sourceRoot);
-    }
-
     if (opts.moduleId) {
       opts.moduleIds = true;
     }
@@ -113,9 +107,7 @@ export default class File {
 
     opts.ignore = util.arrayify(opts.ignore, util.regexify);
 
-    if (opts.only) {
-      opts.only = util.arrayify(opts.only, util.regexify);
-    }
+    if (opts.only) opts.only = util.arrayify(opts.only, util.regexify);
 
     defaults(opts, {
       moduleRoot: opts.sourceRoot

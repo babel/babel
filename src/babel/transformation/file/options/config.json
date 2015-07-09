@@ -1,6 +1,6 @@
 {
   "filename": {
-    "type": "string",
+    "type": "filename",
     "description": "filename to use when reading from stdin - this will be used in source-maps, errors etc",
     "default": "unknown",
     "shorthand": "f"
@@ -236,12 +236,12 @@
   },
 
   "sourceRoot": {
-    "type": "string",
+    "type": "filename",
     "description": "the root from which all sources are relative"
   },
 
   "moduleRoot": {
-    "type": "string",
+    "type": "filename",
     "description": "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions"
   },
 

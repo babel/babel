@@ -1,3 +1,4 @@
+import slash from "slash";
 import * as util from "../../../util";
 
 export function transformerList(val) {
@@ -15,6 +16,8 @@ transformerList.validate = function (key, val, pipeline) {
 export function number(val) {
   return +val;
 }
+
+export var filename = slash;
 
 export function boolean(val) {
   return !!val;

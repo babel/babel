@@ -1,12 +1,12 @@
-import stripJsonComments from "strip-json-comments";
 import { validateOption, normaliseOptions } from "./index";
+import stripJsonComments from "strip-json-comments";
 import isAbsolute from "path-is-absolute";
+import pathExists from "path-exists";
 import clone from "lodash/lang/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
 import path from "path";
 import fs from "fs";
-import pathExists from "path-exists";
 
 var existsCache = {};
 var jsonCache   = {};
@@ -70,7 +70,7 @@ export default class OptionManager {
    * Description
    */
 
-  mergeOptions(opts, alias) {
+  mergeOptions(opts, alias = "foreign") {
     if (!opts) return;
 
     for (let key in opts) {
@@ -123,12 +123,14 @@ export default class OptionManager {
       if (!val && option.optional) continue;
 
       // deprecated
-      if (val && option.deprecated) {
+      if (this.log && val && option.deprecated) {
         this.log.deprecate(`Deprecated option ${key}: ${option.deprecated}`);
       }
 
       // validate
-      if (val) val = validateOption(key, val, this.pipeline);
+      if (this.pipeline && val) {
+        val = validateOption(key, val, this.pipeline);
+      }
 
       // aaliases
       if (option.alias) {

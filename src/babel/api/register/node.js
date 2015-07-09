@@ -1,6 +1,6 @@
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import resolveRc from "../../transformation/file/options/resolve-rc";
+import OptionManager from "../../transformation/file/options/option-manager";
 import extend from "lodash/object/extend";
 import * as babel from "../node";
 import each from "lodash/collection/each";
@@ -51,11 +51,9 @@ var mtime = function (filename) {
 var compile = function (filename, opts = {}) {
   var result;
 
-  opts = extend(opts, transformOpts);
-
-  // this will be done when the file is transformed anyway but we need all
-  // the options so we can generate the cache key
-  resolveRc(filename, opts);
+  var optsManager = new OptionManager;
+  optsManager.mergeOptions(transformOpts);
+  opts = optsManager.init(opts);
 
   var cacheKey = `${filename}:${JSON.stringify(opts)}:${babel.version}`;
 
