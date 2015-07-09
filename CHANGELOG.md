@@ -13,6 +13,30 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.6.16
+
+ * **Internal**
+  * Fix `recast` version to avoid pulling in a newer version.
+ * **New Feature**
+  * Add support for functions in `util.shouldIgnore`.
+ * **Polish**
+  * Strip flow directives in flow transformer.
+  * Add a check for out of bounds default parameters, drastically improving performance and removes engine deoptimisations.
+  * Various performance optimisations by [@samccone](https://github.com/samccone) 💅✨
+  * Delay `this` assignment when referencing this inside an arrow function pre-bare super in derived class constructors.
+  * Split up class body pushing if the constructor is in the wrong order.
+ * **Bug Fix**
+  * Fix hoisting of `ForInStatement` `init` variables in `system` module formatter.
+  * `PathHoister`: Don't hoist to the same function as their original paths function parent.
+  * `PathHoister`: Push each violation paths ancestry to the breakOnScopePaths collection to avoid constant hoisting to nested paths.fix tail call recursion on functions with less arguments than parameters.
+  * Disallow `super.*` before `super()` in derived class constructors.
+  * Properly regenerate scope for replaced nodes. Thanks [@loganfsmyth](https://github.com/loganfsmyth)!
+  * Move up template literal simplification logic to avoid breaking on single elements.
+
+## 5.6.13-5.6.15
+
+ * Setting up automatic Travis releases.
+
 ## 5.6.12
 
  * **Bug Fix**
