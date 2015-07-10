@@ -61,7 +61,7 @@ function parseAndAssertSame(code) {
     loc: true,
     range: true,
     comment: true,
-    attachComment: true
+    attachComments: true
   });
   var acornAST = babelEslint.parse(code);
   try {
