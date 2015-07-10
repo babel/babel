@@ -37,7 +37,17 @@ export const MESSAGES = {
   pluginNotTransformer: "The plugin $1 didn't export a Plugin instance",
   pluginUnknown: "Unknown plugin $1",
 
-  pluginNotFile: "Plugin $1 is resolving to a different Babel version than what is performing the transformation."
+  pluginNotFile: "Plugin $1 is resolving to a different Babel version than what is performing the transformation.",
+
+  pluginInvalidProperty: "Plugin $1 provided an invalid property of $2.",
+  pluginInvalidPropertyVisitor: `Define your visitor methods inside a \`visitor\` property like so:
+
+  new Plugin("foobar", {
+    visitor: {
+      // define your visitor methods here!
+    }
+  });
+`
 };
 
 export function get(key: String, ...args) {

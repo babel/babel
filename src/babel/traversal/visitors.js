@@ -106,7 +106,7 @@ export function verify(visitor) {
   for (var nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    if (t.TYPES.indexOf(nodeType) < 0 && !virtualTypes[nodeType]) {
+    if (t.TYPES.indexOf(nodeType) < 0) {
       throw new Error(messages.get("traverseVerifyNodeType", nodeType));
     }
 

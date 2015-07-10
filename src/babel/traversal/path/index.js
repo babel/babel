@@ -123,17 +123,19 @@ assign(NodePath.prototype, require("./modification"));
 assign(NodePath.prototype, require("./family"));
 assign(NodePath.prototype, require("./comments"));
 
-for (let type in virtualTypes) {
-  if (type[0] === "_") continue;
-
-  NodePath.prototype[`is${type}`] = function (opts) {
-    return virtualTypes[type].checkPath(this, opts);
-  };
-}
-
 for (let type of (t.TYPES: Array)) {
   let typeKey = `is${type}`;
   NodePath.prototype[typeKey] = function (opts) {
     return t[typeKey](this.node, opts);
+  };
+}
+
+for (let type in virtualTypes) {
+  if (type[0] === "_") continue;
+
+  t.TYPES.push(type);
+
+  NodePath.prototype[`is${type}`] = function (opts) {
+    return virtualTypes[type].checkPath(this, opts);
   };
 }

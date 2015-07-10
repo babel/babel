@@ -1,13 +1,30 @@
 import PluginPass from "./plugin-pass";
 import * as messages from "../messages";
-import isFunction from "lodash/lang/isFunction";
 import traverse from "../traversal";
 import assign from "lodash/object/assign";
 import clone from "lodash/lang/clone";
 import File from "./file";
+import * as t from "../types";
+
+const VALID_PLUGIN_PROPERTIES = [
+  "visitor", "metadata",
+  "manipulateOptions",
+  "post", "pre"
+];
+
+const VALID_METADATA_PROPERTES = [
+  "dependencies",
+  "optional",
+  "stage",
+  "group",
+  "experimental",
+  "secondPass"
+];
 
 export default class Plugin {
   constructor(key: string, plugin: Object) {
+    Plugin.validate(key, plugin);
+
     plugin = assign({}, plugin);
 
     var take = function (key) {
@@ -34,13 +51,25 @@ export default class Plugin {
     this.key     = key;
   }
 
-  normalize(visitor: Object): Object {
-    if (isFunction(visitor)) {
-      visitor = { ast: visitor };
+  static validate(name, plugin) {
+    for (let key in plugin) {
+      if (key[0] === "_") continue;
+      if (VALID_PLUGIN_PROPERTIES.indexOf(key) >= 0) continue;
+
+      var msgType = "pluginInvalidProperty";
+      if (t.TYPES.indexOf(key) >= 0) msgType = "pluginInvalidPropertyVisitor";
+      throw new Error(messages.get(msgType, name, key));
     }
 
-    traverse.explode(visitor);
+    for (let key in plugin.metadata) {
+      if (VALID_METADATA_PROPERTES.indexOf(key) >= 0) continue;
 
+      throw new Error(messages.get("pluginInvalidProperty", name, `metadata.${key}`));
+    }
+  }
+
+  normalize(visitor: Object): Object {
+    traverse.explode(visitor);
     return visitor;
   }
 
