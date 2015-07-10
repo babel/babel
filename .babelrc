@@ -2,6 +2,5 @@
   "stage": 0,
   "loose": ["all"],
   "blacklist": ["es6.tailCall"],
-  "optional": ["optimisation.flow.forOf"],
-  "plugins": ["./tools/build-plugins/protect"]
+  "optional": ["optimisation.flow.forOf"]
 }
