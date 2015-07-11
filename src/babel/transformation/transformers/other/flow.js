@@ -41,7 +41,7 @@ export var visitor = {
   },
 
   ImportDeclaration(node) {
-    if (node.isType) this.dangerouslyRemove();
+    if (node.importKind === "type" || node.importKind === "typeof") this.dangerouslyRemove();
   },
 
   ExportDeclaration() {
