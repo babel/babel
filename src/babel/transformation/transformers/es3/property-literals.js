@@ -5,13 +5,30 @@ export var metadata = {
 };
 
 /**
- * [Please add a description.]
+ * Turn reserved word properties into literals.
+ *
+ * **In**
+ *
+ * ```javascript
+ * var foo = {
+ *   catch: function () {}
+ * };
+ * ```
+ *
+ * **Out**
+ *
+ * ```javascript
+ * var foo = {
+ *   "catch": function () {}
+ * };
+ * ```
  */
 
 export var visitor = {
 
   /**
-   * [Please add a description.]
+   * Look for non-computed keys with names that are not valid identifiers.
+   * Turn them into literals.
    */
 
   Property: {
