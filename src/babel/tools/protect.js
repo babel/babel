@@ -3,7 +3,8 @@ import path from "path";
 var root = path.resolve(__dirname, "../../../");
 
 /**
- * [Please add a description.]
+ * Protect Babel internals from being hotlinked by other tools.
+ * Sorry, not sorry.
  */
 
 export default function (module) {
