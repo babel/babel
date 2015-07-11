@@ -27,24 +27,9 @@ function runTest(test) {
   if (expected.onToken = testOpts.onToken)
     testOpts.onToken = [];
 
-  return parse(test.code, testOpts).then(function (ast) {
-    if (test.error) {
-      throw new Error("Expected error message: " + test.error + ". But parsing succeeded.");
-    } else if (test.assert) {
-      var error = test.assert(ast);
-      if (error) throw new Error("Assertion failed: " + error);
-    } else {
-      var mis = misMatch(test.ast, ast);
-      for (var name in expected) {
-        if (mis) break;
-        if (expected[name]) {
-          mis = misMatch(expected[name], testOpts[name]);
-          testOpts[name] = expected[name];
-        }
-      }
-      if (mis) throw new Error(mis);
-    }
-  }, function (err) {
+  try {
+    var ast = parse(test.code, testOpts);
+  } catch (err) {
     if (test.error) {
       if (err.message === test.error) {
         return;
@@ -54,7 +39,24 @@ function runTest(test) {
     }
 
     throw err;
-  });
+  }
+
+  if (test.error) {
+    throw new Error("Expected error message: " + test.error + ". But parsing succeeded.");
+  } else if (test.assert) {
+    var error = test.assert(ast);
+    if (error) throw new Error("Assertion failed: " + error);
+  } else {
+    var mis = misMatch(test.ast, ast);
+    for (var name in expected) {
+      if (mis) break;
+      if (expected[name]) {
+        mis = misMatch(expected[name], testOpts[name]);
+        testOpts[name] = expected[name];
+      }
+    }
+    if (mis) throw new Error(mis);
+  }
 };
 
 function ppJSON(v) { return v instanceof RegExp ? v.toString() : JSON.stringify(v, null, 2); }

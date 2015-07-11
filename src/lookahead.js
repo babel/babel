@@ -1,4 +1,4 @@
-import {Parser} from "./state";
+import { Parser } from "./state";
 
 const pp = Parser.prototype;
 

@@ -3,5 +3,13 @@
 </p>
 
 <p align="center">
-  Babylon is a streaming parser for <a href="https://github.com/babel/babel">Babel</a>.
+  Babylon is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
 </p>
+
+----
+
+## Credits
+
+Heavily based on [acorn](https://github.com/marijnh/acorn) and [acorn-jsx](https://github.com/RReverser/acorn-jsx).
+Significant diversions expected to occur in the future such as streaming, EBNF definitions, sweet.js integration,
+interspacial parsing, comment attachment etc.

@@ -1,6 +1,6 @@
-import {types as tt} from "./tokentype";
-import {Parser} from "./state";
-import {lineBreak} from "./whitespace";
+import { types as tt } from "./tokentype";
+import { Parser } from "./state";
+import { lineBreak } from "./whitespace";
 
 const pp = Parser.prototype;
 
@@ -734,7 +734,7 @@ pp.parseExportSpecifiers = function () {
 
     let node = this.startNode();
     node.local = this.parseIdent(this.type === tt._default);
-    node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local;
+    node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local.__clone();
     nodes.push(this.finishNode(node, "ExportSpecifier"));
   }
 
@@ -792,7 +792,7 @@ pp.parseImportSpecifiers = function (node) {
 
     let specifier = this.startNode();
     specifier.imported = this.parseIdent(true);
-    specifier.local = this.eatContextual("as") ? this.parseIdent() : specifier.imported;
+    specifier.local = this.eatContextual("as") ? this.parseIdent() : specifier.imported.__clone();
     this.checkLVal(specifier.local, true);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }

@@ -1,7 +1,6 @@
-import {types as tt} from "./tokentype";
-import {Parser} from "./state";
-import {reservedWords} from "./identifier";
-import {has} from "./util";
+import { types as tt } from "./tokentype";
+import { Parser } from "./state";
+import { reservedWords } from "./identifier";
 
 const pp = Parser.prototype;
 

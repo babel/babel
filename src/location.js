@@ -1,5 +1,5 @@
-import {Parser} from "./state";
-import {lineBreakG} from "./whitespace";
+import { Parser } from "./state";
+import { lineBreakG } from "./whitespace";
 
 // These are used when `options.locations` is on, for the
 // `startLoc` and `endLoc` properties.

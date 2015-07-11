@@ -3,7 +3,7 @@ import { TokenType, types as tt } from "../../tokentype";
 import { TokContext, types as tc } from "../../tokencontext";
 import { Parser } from "../../state";
 import { isIdentifierChar, isIdentifierStart } from "../../identifier";
-import { isNewLine, lineBreak, lineBreakG } from "../../whitespace";
+import { isNewLine } from "../../whitespace";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -40,37 +40,39 @@ var pp = Parser.prototype;
 pp.jsxReadToken = function() {
   var out = "", chunkStart = this.pos;
   for (;;) {
-    if (this.pos >= this.input.length)
+    if (this.pos >= this.input.length) {
       this.raise(this.start, "Unterminated JSX contents");
+    }
+
     var ch = this.input.charCodeAt(this.pos);
 
     switch (ch) {
-    case 60: // "<"
-    case 123: // "{"
-      if (this.pos === this.start) {
-        if (ch === 60 && this.exprAllowed) {
-          ++this.pos;
-          return this.finishToken(tt.jsxTagStart);
+      case 60: // "<"
+      case 123: // "{"
+        if (this.pos === this.start) {
+          if (ch === 60 && this.exprAllowed) {
+            ++this.pos;
+            return this.finishToken(tt.jsxTagStart);
+          }
+          return this.getTokenFromCode(ch);
         }
-        return this.getTokenFromCode(ch);
-      }
-      out += this.input.slice(chunkStart, this.pos);
-      return this.finishToken(tt.jsxText, out);
-
-    case 38: // "&"
-      out += this.input.slice(chunkStart, this.pos);
-      out += this.jsxReadEntity();
-      chunkStart = this.pos;
-      break;
-
-    default:
-      if (isNewLine(ch)) {
         out += this.input.slice(chunkStart, this.pos);
-        out += this.jsxReadNewLine(true);
+        return this.finishToken(tt.jsxText, out);
+
+      case 38: // "&"
+        out += this.input.slice(chunkStart, this.pos);
+        out += this.jsxReadEntity();
         chunkStart = this.pos;
-      } else {
-        ++this.pos;
-      }
+        break;
+
+      default:
+        if (isNewLine(ch)) {
+          out += this.input.slice(chunkStart, this.pos);
+          out += this.jsxReadNewLine(true);
+          chunkStart = this.pos;
+        } else {
+          ++this.pos;
+        }
     }
   }
 };
@@ -96,8 +98,10 @@ pp.jsxReadNewLine = function(normalizeCRLF) {
 pp.jsxReadString = function(quote) {
   var out = "", chunkStart = ++this.pos;
   for (;;) {
-    if (this.pos >= this.input.length)
+    if (this.pos >= this.input.length) {
       this.raise(this.start, "Unterminated string constant");
+    }
+
     var ch = this.input.charCodeAt(this.pos);
     if (ch === quote) break;
     if (ch === 38) { // "&"
@@ -119,8 +123,8 @@ pp.jsxReadString = function(quote) {
 pp.jsxReadEntity = function() {
   var str = "", count = 0, entity;
   var ch = this.input[this.pos];
-  if (ch !== "&")
-    this.raise(this.pos, "Entity must start with an ampersand");
+  if (ch !== "&") this.raise(this.pos, "Entity must start with an ampersand");
+
   var startPos = ++this.pos;
   while (this.pos < this.input.length && count++ < 10) {
     ch = this.input[this.pos++];
@@ -168,27 +172,30 @@ pp.jsxReadWord = function() {
 // Transforms JSX element name to string.
 
 function getQualifiedJSXName(object) {
-  if (object.type === "JSXIdentifier")
+  if (object.type === "JSXIdentifier") {
     return object.name;
+  }
 
-  if (object.type === "JSXNamespacedName")
+  if (object.type === "JSXNamespacedName") {
     return object.namespace.name + ":" + object.name.name;
+  }
 
-  if (object.type === "JSXMemberExpression")
-    return getQualifiedJSXName(object.object) + "." +
-    getQualifiedJSXName(object.property);
+  if (object.type === "JSXMemberExpression") {
+    return getQualifiedJSXName(object.object) + "." + getQualifiedJSXName(object.property);
+  }
 }
 
 // Parse next token as JSX identifier
 
 pp.jsxParseIdentifier = function() {
   var node = this.startNode();
-  if (this.type === tt.jsxName)
+  if (this.type === tt.jsxName) {
     node.name = this.value;
-  else if (this.type.keyword)
+  } else if (this.type.keyword) {
     node.name = this.type.keyword;
-  else
+  } else {
     this.unexpected();
+  }
   this.next();
   return this.finishNode(node, "JSXIdentifier");
 };
@@ -199,6 +206,7 @@ pp.jsxParseNamespacedName = function() {
   var startPos = this.start, startLoc = this.startLoc;
   var name = this.jsxParseIdentifier();
   if (!this.eat(tt.colon)) return name;
+
   var node = this.startNodeAt(startPos, startLoc);
   node.namespace = name;
   node.name = this.jsxParseIdentifier();
@@ -224,18 +232,20 @@ pp.jsxParseElementName = function() {
 
 pp.jsxParseAttributeValue = function() {
   switch (this.type) {
-  case tt.braceL:
-    var node = this.jsxParseExpressionContainer();
-    if (node.expression.type === "JSXEmptyExpression")
-      this.raise(node.start, "JSX attributes must only be assigned a non-empty expression");
-    return node;
+    case tt.braceL:
+      var node = this.jsxParseExpressionContainer();
+      if (node.expression.type === "JSXEmptyExpression") {
+        this.raise(node.start, "JSX attributes must only be assigned a non-empty expression");
+      } else {
+        return node;
+      }
 
-  case tt.jsxTagStart:
-  case tt.string:
-    return this.parseExprAtom();
+    case tt.jsxTagStart:
+    case tt.string:
+      return this.parseExprAtom();
 
-  default:
-    this.raise(this.start, "JSX value should be either an expression or a quoted JSX text");
+    default:
+      this.raise(this.start, "JSX value should be either an expression or a quoted JSX text");
   }
 };
 
@@ -261,9 +271,11 @@ pp.jsxParseEmptyExpression = function() {
 pp.jsxParseExpressionContainer = function() {
   var node = this.startNode();
   this.next();
-  node.expression = this.type === tt.braceR
-    ? this.jsxParseEmptyExpression()
-    : this.parseExpression();
+  if (this.type === tt.braceR) {
+    node.expression = this.jsxParseEmptyExpression();
+  } else {
+    node.expression = this.parseExpression();
+  }
   this.expect(tt.braceR);
   return this.finishNode(node, "JSXExpressionContainer");
 };
@@ -289,8 +301,9 @@ pp.jsxParseOpeningElementAt = function(startPos, startLoc) {
   var node = this.startNodeAt(startPos, startLoc);
   node.attributes = [];
   node.name = this.jsxParseElementName();
-  while (this.type !== tt.slash && this.type !== tt.jsxTagEnd)
+  while (this.type !== tt.slash && this.type !== tt.jsxTagEnd) {
     node.attributes.push(this.jsxParseAttribute());
+  }
   node.selfClosing = this.eat(tt.slash);
   this.expect(tt.jsxTagEnd);
   return this.finishNode(node, "JSXOpeningElement");
@@ -317,32 +330,33 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
   if (!openingElement.selfClosing) {
     contents: for (;;) {
       switch (this.type) {
-      case tt.jsxTagStart:
-        startPos = this.start; startLoc = this.startLoc;
-        this.next();
-        if (this.eat(tt.slash)) {
-          closingElement = this.jsxParseClosingElementAt(startPos, startLoc);
-          break contents;
-        }
-        children.push(this.jsxParseElementAt(startPos, startLoc));
-        break;
+        case tt.jsxTagStart:
+          startPos = this.start; startLoc = this.startLoc;
+          this.next();
+          if (this.eat(tt.slash)) {
+            closingElement = this.jsxParseClosingElementAt(startPos, startLoc);
+            break contents;
+          }
+          children.push(this.jsxParseElementAt(startPos, startLoc));
+          break;
 
-      case tt.jsxText:
-        children.push(this.parseExprAtom());
-        break;
+        case tt.jsxText:
+          children.push(this.parseExprAtom());
+          break;
 
-      case tt.braceL:
-        children.push(this.jsxParseExpressionContainer());
-        break;
+        case tt.braceL:
+          children.push(this.jsxParseExpressionContainer());
+          break;
 
-      default:
-        this.unexpected();
+        default:
+          this.unexpected();
       }
     }
     if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
       this.raise(
         closingElement.start,
-        "Expected corresponding JSX closing tag for <" + getQualifiedJSXName(openingElement.name) + ">");
+        "Expected corresponding JSX closing tag for <" + getQualifiedJSXName(openingElement.name) + ">"
+      );
     }
   }
 
@@ -418,4 +432,4 @@ export default function(instance) {
       }
     };
   });
-};
+}
