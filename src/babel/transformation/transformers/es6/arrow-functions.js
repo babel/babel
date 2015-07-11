@@ -20,7 +20,8 @@
 export var visitor = {
 
   /**
-   * Look for arrow functions and turn them into normal functions.
+   * Look for arrow functions and mark them as "shadow functions".
+   * @see /transformation/transformers/internal/shadow-functions.js
    */
 
   ArrowFunctionExpression(node) {
