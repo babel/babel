@@ -1,6 +1,8 @@
 "use strict";
 
 var Foo = (function (_Bar) {
+  babelHelpers.inherits(Foo, _Bar);
+
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
 
@@ -8,6 +10,5 @@ var Foo = (function (_Bar) {
     this.bar = "foo";
   }
 
-  babelHelpers.inherits(Foo, _Bar);
   return Foo;
 })(Bar);
