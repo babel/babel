@@ -90,8 +90,8 @@ function ExportDeclaration(node, print) {
 export function ImportDeclaration(node, print) {
   this.push("import ");
 
-  if (node.isType) {
-    this.push("type ");
+  if (node.importKind === "type" || node.importKind === "typeof") {
+    this.push(node.importKind + " ");
   }
 
   var specfiers = node.specifiers;

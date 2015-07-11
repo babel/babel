@@ -1,4 +1,4 @@
-import {has, isArray} from "./util"
+import {has} from "./util"
 import {SourceLocation} from "./location"
 
 // A second optional argument can be given to further configure
@@ -94,11 +94,11 @@ export function getOptions(opts) {
   for (let opt in defaultOptions)
     options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt]
 
-  if (isArray(options.onToken)) {
+  if (Array.isArray(options.onToken)) {
     let tokens = options.onToken
     options.onToken = (token) => tokens.push(token)
   }
-  if (isArray(options.onComment))
+  if (Array.isArray(options.onComment))
     options.onComment = pushComment(options, options.onComment)
 
   return options
