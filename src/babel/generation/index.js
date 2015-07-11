@@ -12,7 +12,8 @@ import n from "./node";
 import * as t from "../types";
 
 /**
- * [Please add a description.]
+ * Babel's code generator, turns an ast into code, maintaining sourcemaps,
+ * user preferences, and valid output.
  */
 
 class CodeGenerator {
@@ -32,7 +33,10 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * Normalize generator options, setting defaults.
+   *
+   * - Detects code indentation.
+   * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
    */
 
   static normalizeOptions(code, opts, tokens) {
@@ -66,7 +70,7 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * Determine if input code uses more single or double quotes.
    */
   static findCommonStringDelimiter(code, tokens) {
     var occurences = {
@@ -98,7 +102,7 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * All node generators.
    */
 
   static generators = {
@@ -116,7 +120,9 @@ class CodeGenerator {
   };
 
   /**
-   * [Please add a description.]
+   * Generate code and sourcemap from ast.
+   *
+   * Appends comments that weren't attached to any node to the end of the generated output.
    */
 
   generate() {
@@ -139,7 +145,7 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * Build NodePrinter.
    */
 
   buildPrint(parent) {
