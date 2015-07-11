@@ -95,11 +95,12 @@ export function getOptions(opts) {
     options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt];
 
   if (Array.isArray(options.onToken)) {
-    let tokens = options.onToken;
-    options.onToken = (token) => tokens.push(token);
+    let tokens = options.onToken
+    options.onToken = (token) => tokens.push(token)
   }
-  if (Array.isArray(options.onComment))
-    options.onComment = pushComment(options, options.onComment);
+  if (Array.isArray(options.onComment)) {
+    options.onComment = pushComment(options, options.onComment)
+  }
 
   return options;
 }

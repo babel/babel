@@ -784,19 +784,19 @@ export default function (instance) {
 
   instance.extend("parseImportSpecifiers", function (inner) {
     return function (node) {
-      node.isType = false;
-      if (this.isContextual("type")) {
-        var startPos = this.start, startLoc = this.startLoc;
-        var typeId = this.parseIdent();
-        if ((this.type === tt.name && this.value !== "from") || this.type === tt.braceL || this.type === tt.star) {
-          node.isType = true;
-        } else {
-          node.specifiers.push(this.parseImportSpecifierDefault(typeId, startPos, startLoc));
-          if (this.isContextual("from")) return;
-          this.eat(tt.comma);
+      node.importKind = "value"
+      var kind =
+        (this.type === tt._typeof ? "typeof" :
+        (this.isContextual("type") ? "type" : null))
+      if (kind) {
+        var lh = this.lookahead()
+        if ((lh.type === tt.name && lh.value !== "from") || lh.type === tt.braceL || lh.type === tt.star) {
+          this.next()
+          node.importKind = kind
         }
       }
-      inner.call(this, node);
+
+      inner.call(this, node)
     };
   });
 
