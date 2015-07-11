@@ -5,7 +5,7 @@ import esutils from "esutils";
 import chalk from "chalk";
 
 /**
- * [Please add a description.]
+ * Chalk styles for token types.
  */
 
 var defs = {
@@ -22,13 +22,13 @@ var defs = {
 };
 
 /**
- * [Please add a description.]
+ * RegExp to test for newlines in terminal.
  */
 
 const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
 /**
- * [Please add a description.]
+ * Get the type of token, specifying punctuator type.
  */
 
 function getTokenType(match) {
@@ -55,7 +55,7 @@ function getTokenType(match) {
 }
 
 /**
- * [Please add a description.]
+ * Highlight `text`.
  */
 
 function highlight(text) {
@@ -71,7 +71,7 @@ function highlight(text) {
 }
 
 /**
- * [Please add a description.]
+ * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
 export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
