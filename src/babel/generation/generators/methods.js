@@ -83,7 +83,7 @@ export { FunctionExpression as FunctionDeclaration };
 
 /**
  * Prints ArrowFunctionExpression, prints params and body, handles async.
- * Leaves out parenthesis when single param.
+ * Leaves out parentheses when single param.
  */
 
 export function ArrowFunctionExpression(node, print) {

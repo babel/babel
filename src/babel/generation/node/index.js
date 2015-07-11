@@ -93,7 +93,7 @@ export default class Node {
   }
 
   /**
-   * Test if a `node` needs parenthesis around it.
+   * Test if a `node` needs parentheses around it.
    */
 
   static needsParens(node, parent) {

@@ -28,7 +28,7 @@ each([
 });
 
 /**
- * Test if NullableTypeAnnotation needs parenthesis.
+ * Test if NullableTypeAnnotation needs parentheses.
  */
 
 export function NullableTypeAnnotation(node, parent) {
@@ -42,7 +42,7 @@ export function NullableTypeAnnotation(node, parent) {
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
 /**
- * Test if UpdateExpression needs parenthesis.
+ * Test if UpdateExpression needs parentheses.
  */
 
 export function UpdateExpression(node, parent) {
@@ -53,7 +53,7 @@ export function UpdateExpression(node, parent) {
 }
 
 /**
- * Test if ObjectExpression needs parenthesis.
+ * Test if ObjectExpression needs parentheses.
  */
 
 export function ObjectExpression(node, parent) {
@@ -71,7 +71,7 @@ export function ObjectExpression(node, parent) {
 }
 
 /**
- * Test if Binary needs parenthesis.
+ * Test if Binary needs parentheses.
  */
 
 export function Binary(node, parent) {
@@ -105,7 +105,7 @@ export function Binary(node, parent) {
 }
 
 /**
- * Test if BinaryExpression needs parenthesis.
+ * Test if BinaryExpression needs parentheses.
  */
 
 export function BinaryExpression(node, parent) {
@@ -123,7 +123,7 @@ export function BinaryExpression(node, parent) {
 }
 
 /**
- * Test if SequenceExpression needs parenthesis.
+ * Test if SequenceExpression needs parentheses.
  */
 
 export function SequenceExpression(node, parent) {
@@ -145,7 +145,7 @@ export function SequenceExpression(node, parent) {
 }
 
 /**
- * Test if YieldExpression needs parenthesis.
+ * Test if YieldExpression needs parentheses.
  */
 
 export function YieldExpression(node, parent) {
@@ -159,7 +159,7 @@ export function YieldExpression(node, parent) {
 }
 
 /**
- * Test if ClassExpression needs parenthesis.
+ * Test if ClassExpression needs parentheses.
  */
 
 export function ClassExpression(node, parent) {
@@ -167,7 +167,7 @@ export function ClassExpression(node, parent) {
 }
 
 /**
- * Test if UnaryLike needs parenthesis.
+ * Test if UnaryLike needs parentheses.
  */
 
 export function UnaryLike(node, parent) {
@@ -175,7 +175,7 @@ export function UnaryLike(node, parent) {
 }
 
 /**
- * Test if FunctionExpression needs parenthesis.
+ * Test if FunctionExpression needs parentheses.
  */
 
 export function FunctionExpression(node, parent) {
@@ -196,7 +196,7 @@ export function FunctionExpression(node, parent) {
 }
 
 /**
- * Test if ConditionalExpression needs parenthesis.
+ * Test if ConditionalExpression needs parentheses.
  */
 
 export function ConditionalExpression(node, parent) {
@@ -226,7 +226,7 @@ export function ConditionalExpression(node, parent) {
 }
 
 /**
- * Test if AssignmentExpression needs parenthesis.
+ * Test if AssignmentExpression needs parentheses.
  */
 
 export function AssignmentExpression(node) {
