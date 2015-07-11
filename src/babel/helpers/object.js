@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Create an object with a `null` prototype.
  */
 
 export default function () {
