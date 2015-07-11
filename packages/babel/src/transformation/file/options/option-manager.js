@@ -11,8 +11,9 @@ import fs from "fs";
 var existsCache = {};
 var jsonCache   = {};
 
-const BABELRC_FILENAME = ".babelrc";
-const PACKAGE_FILENAME = "package.json";
+const BABELIGNORE_FILENAME = ".babelignore";
+const BABELRC_FILENAME     = ".babelrc";
+const PACKAGE_FILENAME     = "package.json";
 
 function exists(filename) {
   var cached = existsCache[filename];
@@ -95,6 +96,23 @@ export default class OptionManager {
    * Description
    */
 
+  addIgnoreConfig(loc) {
+    var file = fs.readFileSync(loc, "utf8");
+    var lines = file.split("\n");
+
+    lines = lines.map(function (line) {
+      return line.replace(/#(.*?)$/, "").trim();
+    }).filter((line) => !!line);
+
+    console.log(lines);
+
+    this.mergeOptions({ ignore: lines }, loc);
+  }
+
+  /**
+   * Description
+   */
+
   findConfigs(loc) {
     if (!loc) return;
 
@@ -110,6 +128,9 @@ export default class OptionManager {
 
       var pkgLoc = path.join(loc, PACKAGE_FILENAME);
       if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel");
+
+      var ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+      if (exists(ignoreLoc)) this.addIgnoreConfig(ignoreLoc);
     }
   }
 
