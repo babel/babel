@@ -34,6 +34,10 @@ export function getBindingIdentifiers(node: Object, duplicates?): Object {
   return ids;
 }
 
+/**
+ * Mapping of types to their identifier keys.
+ */
+
 getBindingIdentifiers.keys = {
   DeclareClass: "id",
   DeclareFunction: "id",

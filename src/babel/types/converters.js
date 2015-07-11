@@ -7,7 +7,7 @@ import type Scope from "../traversal/scope";
 import * as t from "./index";
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
@@ -102,7 +102,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function toKeyAlias(node: Object, key: Object = node.key) {
@@ -127,8 +127,8 @@ export function toKeyAlias(node: Object, key: Object = node.key) {
 
 toKeyAlias.uid = 0;
 
-/*
- * Description
+/**
+ * [Please add a description.]
  */
 
 export function toIdentifier(name: string): string {
@@ -154,8 +154,8 @@ export function toIdentifier(name: string): string {
   return name || "_";
 }
 
-/*
- * Description
+/**
+ * [Please add a description.]
  */
 
 export function toBindingIdentifierName(name) {
@@ -164,10 +164,8 @@ export function toBindingIdentifierName(name) {
   return name;
 }
 
-
 /**
- * Description
- *
+ * [Please add a description.]
  * @returns {Object|Boolean}
  */
 
@@ -207,7 +205,7 @@ export function toStatement(node: Object, ignore?: boolean) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function toExpression(node: Object): Object {
@@ -229,7 +227,7 @@ export function toExpression(node: Object): Object {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function toBlock(node: Object, parent: Object): Object {
@@ -257,7 +255,7 @@ export function toBlock(node: Object, parent: Object): Object {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function valueToNode(value: any): Object {

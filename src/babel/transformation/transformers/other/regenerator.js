@@ -11,7 +11,16 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function: {
     exit(node) {
       if (node.async || node.generator) {

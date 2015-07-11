@@ -1,6 +1,10 @@
 import sourceMap from "source-map";
 import * as t from "../types";
 
+/**
+ * Build a sourcemap.
+ */
+
 export default class SourceMap {
   constructor(position, opts, code) {
     this.position = position;
@@ -18,6 +22,10 @@ export default class SourceMap {
     }
   }
 
+  /**
+   * Get the sourcemap.
+   */
+
   get() {
     var map = this.map;
     if (map) {
@@ -26,6 +34,10 @@ export default class SourceMap {
       return map;
     }
   }
+
+  /**
+   * Mark a node's generated position, and add it to the sourcemap.
+   */
 
   mark(node, type) {
     var loc = node.loc;

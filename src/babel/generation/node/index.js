@@ -4,6 +4,16 @@ import each from "lodash/collection/each";
 import some from "lodash/collection/some";
 import * as t from "../../types";
 
+/**
+ * Test if node matches a set of type-matcher pairs.
+ * @example
+ * find({
+ *   VariableDeclaration(node, parent) {
+ *     return true;
+ *   }
+ * }, node, parent);
+ */
+
 var find = function (obj, node, parent) {
   if (!obj) return;
   var result;
@@ -22,15 +32,27 @@ var find = function (obj, node, parent) {
   return result;
 };
 
+/**
+ * Whitespace and Parenthesis related methods for nodes.
+ */
+
 export default class Node {
   constructor(node, parent) {
     this.parent = parent;
     this.node   = node;
   }
 
+  /**
+   * Test if `node` can have whitespace set by the user.
+   */
+
   static isUserWhitespacable(node) {
     return t.isUserWhitespacable(node);
   }
+
+  /**
+   * Test if a `node` requires whitespace.
+   */
 
   static needsWhitespace(node, parent, type) {
     if (!node) return 0;
@@ -54,13 +76,25 @@ export default class Node {
     return (linesInfo && linesInfo[type]) || 0;
   }
 
+  /**
+   * Test if a `node` requires whitespace before it.
+   */
+
   static needsWhitespaceBefore(node, parent) {
     return Node.needsWhitespace(node, parent, "before");
   }
 
+  /**
+   * Test if a `note` requires whitespace after it.
+   */
+
   static needsWhitespaceAfter(node, parent) {
     return Node.needsWhitespace(node, parent, "after");
   }
+
+  /**
+   * Test if a `node` needs parentheses around it.
+   */
 
   static needsParens(node, parent) {
     if (!parent) return false;
@@ -77,6 +111,10 @@ export default class Node {
     return find(parens, node, parent);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   static needsParensNoLineTerminator(node, parent) {
     if (!parent) return false;
 
@@ -88,6 +126,10 @@ export default class Node {
     return t.isTerminatorless(parent);
   }
 }
+
+/**
+ * Add all static methods from `Node` to `Node.prototype`.
+ */
 
 each(Node, function (fn, key) {
   Node.prototype[key] = function () {

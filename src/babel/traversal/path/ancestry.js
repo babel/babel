@@ -162,7 +162,7 @@ export function getAncestry() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function inType() {

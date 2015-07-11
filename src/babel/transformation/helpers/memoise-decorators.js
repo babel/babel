@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function (decorators, scope) {
   for (var i = 0; i < decorators.length; i++) {
     var decorator = decorators[i];

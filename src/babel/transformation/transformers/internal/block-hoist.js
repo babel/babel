@@ -4,14 +4,23 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-// Priority:
-//
-//  - 0 We want this to be at the **very** bottom
-//  - 1 Default node position
-//  - 2 Priority over normal nodes
-//  - 3 We want this to be at the **very** top
+/**
+ * [Please add a description.]
+ *
+ * Priority:
+ *
+ *  - 0 We want this to be at the **very** bottom
+ *  - 1 Default node position
+ *  - 2 Priority over normal nodes
+ *  - 3 We want this to be at the **very** top
+ */
 
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Block: {
     exit(node) {
       var hasChange = false;

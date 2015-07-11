@@ -59,12 +59,16 @@ export function _getTypeAnnotation(): ?Object {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function isBaseType(baseName: string, soft?): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
@@ -89,7 +93,7 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function couldBeBaseType(name: string): boolean {
@@ -109,7 +113,7 @@ export function couldBeBaseType(name: string): boolean {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function baseTypeStrictlyMatches(right: NodePath) {
@@ -122,7 +126,7 @@ export function baseTypeStrictlyMatches(right: NodePath) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function isGenericType(genericName: string): boolean {

@@ -16,7 +16,7 @@ export function createUnionTypeAnnotation(types) {
 }
 
 /**
- * Description
+ * Dedupe type annotations.
  */
 
 export function removeTypeDuplicates(nodes) {
@@ -96,7 +96,7 @@ export function removeTypeDuplicates(nodes) {
 }
 
 /**
- * Description
+ * Create a type anotation based on typeof expression.
  */
 
 export function createTypeAnnotationBasedOnTypeof(type) {

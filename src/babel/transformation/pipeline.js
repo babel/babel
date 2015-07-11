@@ -5,6 +5,10 @@ import assign from "lodash/object/assign";
 import object from "../helpers/object";
 import File from "./file";
 
+/**
+ * [Please add a description.]
+ */
+
 export default class Pipeline {
   constructor() {
     this.transformers = object();
@@ -14,12 +18,20 @@ export default class Pipeline {
     this.filters      = [];
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   addTransformers(transformers) {
     for (var key in transformers) {
       this.addTransformer(key, transformers[key]);
     }
     return this;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   addTransformer(key, plugin) {
     if (this.transformers[key]) throw new Error(); // todo: error
@@ -44,20 +56,36 @@ export default class Pipeline {
     this.transformers[key] = plugin;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   addAliases(names) {
     assign(this.aliases, names);
     return this;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   addDeprecated(names) {
     assign(this.deprecated, names);
     return this;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   addFilter(filter: Function) {
     this.filters.push(filter);
     return this;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   canTransform(plugin, fileOpts) {
     if (plugin.metadata.plugin) {
@@ -72,10 +100,18 @@ export default class Pipeline {
     return true;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   analyze(code: string, opts?: Object = {}) {
     opts.code = false;
     return this.transform(code, opts);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   pretransform(code: string, opts?: Object) {
     var file = new File(opts, this);
@@ -86,6 +122,10 @@ export default class Pipeline {
     });
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   transform(code: string, opts?: Object) {
     var file = new File(opts, this);
     return file.wrap(code, function () {
@@ -94,6 +134,10 @@ export default class Pipeline {
       return file.transform();
     });
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   transformFromAst(ast, code, opts) {
     ast = normalizeAst(ast);
@@ -105,6 +149,10 @@ export default class Pipeline {
       return file.transform();
     });
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _ensureTransformerNames(type: string, rawKeys: Array<string>) {
     var keys = [];

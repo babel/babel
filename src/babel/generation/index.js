@@ -11,6 +11,11 @@ import each from "lodash/collection/each";
 import n from "./node";
 import * as t from "../types";
 
+/**
+ * Babel's code generator, turns an ast into code, maintaining sourcemaps,
+ * user preferences, and valid output.
+ */
+
 class CodeGenerator {
   constructor(ast, opts, code) {
     opts = opts || {};
@@ -26,6 +31,13 @@ class CodeGenerator {
     this.map        = new SourceMap(this.position, opts, code);
     this.buffer     = new Buffer(this.position, this.format);
   }
+
+  /**
+   * Normalize generator options, setting defaults.
+   *
+   * - Detects code indentation.
+   * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
+   */
 
   static normalizeOptions(code, opts, tokens) {
     var style = "  ";
@@ -57,6 +69,9 @@ class CodeGenerator {
     return format;
   }
 
+  /**
+   * Determine if input code uses more single or double quotes.
+   */
   static findCommonStringDelimiter(code, tokens) {
     var occurences = {
       single: 0,
@@ -86,6 +101,10 @@ class CodeGenerator {
     }
   }
 
+  /**
+   * All node generators.
+   */
+
   static generators = {
     templateLiterals: require("./generators/template-literals"),
     comprehensions:   require("./generators/comprehensions"),
@@ -99,6 +118,12 @@ class CodeGenerator {
     base:             require("./generators/base"),
     jsx:              require("./generators/jsx")
   };
+
+  /**
+   * Generate code and sourcemap from ast.
+   *
+   * Appends comments that weren't attached to any node to the end of the generated output.
+   */
 
   generate() {
     var ast = this.ast;
@@ -119,9 +144,17 @@ class CodeGenerator {
     };
   }
 
+  /**
+   * Build NodePrinter.
+   */
+
   buildPrint(parent) {
     return new NodePrinter(this, parent);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   catchUp(node, parent, leftParenPrinted) {
     // catch up to this nodes newline if we're behind
@@ -138,6 +171,10 @@ class CodeGenerator {
     }
     return false;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _printNewline(leading, node, parent, opts) {
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
@@ -168,6 +205,10 @@ class CodeGenerator {
 
     this.newline(lines);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   print(node, parent, opts = {}) {
     if (!node) return;
@@ -218,6 +259,10 @@ class CodeGenerator {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   printJoin(print, nodes, opts = {}) {
     if (!nodes || !nodes.length) return;
 
@@ -247,12 +292,20 @@ class CodeGenerator {
     if (opts.indent) this.dedent();
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   printAndIndentOnComments(print, node) {
     var indent = !!node.leadingComments;
     if (indent) this.indent();
     print.plain(node);
     if (indent) this.dedent();
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   printBlock(print, node) {
     if (t.isEmptyStatement(node)) {
@@ -262,6 +315,10 @@ class CodeGenerator {
       print.plain(node);
     }
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   generateComment(comment) {
     var val = comment.value;
@@ -273,13 +330,25 @@ class CodeGenerator {
     return val;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   printTrailingComments(node, parent) {
     this._printComments(this.getComments("trailingComments", node, parent));
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   printLeadingComments(node, parent) {
     this._printComments(this.getComments("leadingComments", node, parent));
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   getComments(key, node, parent) {
     if (t.isExpressionStatement(parent)) {
@@ -300,9 +369,17 @@ class CodeGenerator {
     return comments;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _getComments(key, node) {
     return (node && node[key]) || [];
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _printComments(comments) {
     if (this.format.compact) return;
@@ -371,15 +448,27 @@ class CodeGenerator {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 each(Buffer.prototype, function (fn, key) {
   CodeGenerator.prototype[key] = function () {
     return fn.apply(this.buffer, arguments);
   };
 });
 
+/**
+ * [Please add a description.]
+ */
+
 each(CodeGenerator.generators, function (generator) {
   extend(CodeGenerator.prototype, generator);
 });
+
+/**
+ * [Please add a description.]
+ */
 
 module.exports = function (ast, opts, code) {
   var gen = new CodeGenerator(ast, opts, code);

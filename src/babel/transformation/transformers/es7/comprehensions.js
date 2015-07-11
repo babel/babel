@@ -7,13 +7,26 @@ export var metadata = {
   stage: 0
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ComprehensionExpression(node, parent, scope) {
     var callback = array;
     if (node.generator) callback = generator;
     return callback(node, parent, scope);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 function generator(node) {
   var body = [];
@@ -26,6 +39,10 @@ function generator(node) {
 
   return t.callExpression(container, []);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function array(node, parent, scope) {
   var uid = scope.generateUidIdentifierBasedOnNode(parent);

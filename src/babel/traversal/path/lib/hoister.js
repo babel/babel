@@ -1,7 +1,16 @@
 import * as react from "../../../transformation/helpers/react";
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var referenceVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     if (this.isJSXIdentifier() && react.isCompatTag(node.name)) {
       return;
@@ -25,6 +34,10 @@ var referenceVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export default class PathHoister {
   constructor(path, scope) {
     this.breakOnScopePaths = [];
@@ -33,6 +46,10 @@ export default class PathHoister {
     this.scope             = scope;
     this.path              = path;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   isCompatibleScope(scope) {
     for (var key in this.bindings) {
@@ -44,6 +61,10 @@ export default class PathHoister {
 
     return true;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   getCompatibleScopes() {
     var scope = this.path.scope;
@@ -59,6 +80,10 @@ export default class PathHoister {
       }
     } while(scope = scope.parent);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   getAttachmentPath() {
     var scopes = this.scopes;
@@ -82,10 +107,18 @@ export default class PathHoister {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   getNextScopeStatementParent() {
     var scope = this.scopes.pop();
     if (scope) return scope.path.getStatementParent();
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   hasOwnParamBindings(scope) {
     for (var name in this.bindings) {
@@ -96,6 +129,10 @@ export default class PathHoister {
     }
     return false;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   run() {
     var node = this.path.node;

@@ -1,7 +1,7 @@
 import traverse from "../index";
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function call(key) {
@@ -39,7 +39,7 @@ export function call(key) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function isBlacklisted(): boolean {
@@ -48,7 +48,7 @@ export function isBlacklisted(): boolean {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function visit(): boolean {
@@ -81,7 +81,7 @@ export function visit(): boolean {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function skip() {
@@ -89,7 +89,7 @@ export function skip() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function skipKey(key) {
@@ -97,7 +97,7 @@ export function skipKey(key) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function stop() {
@@ -106,7 +106,7 @@ export function stop() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function setScope() {
@@ -118,7 +118,7 @@ export function setScope() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function setContext(context) {
@@ -153,11 +153,19 @@ export function resync() {
   //this._resyncRemoved();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _resyncParent() {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function _resyncKey() {
   if (!this.container) return;
@@ -184,6 +192,10 @@ export function _resyncKey() {
   this.key = null;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _resyncList() {
   var listKey    = this.listKey;
   var parentPath = this.parentPath;
@@ -201,6 +213,10 @@ export function _resyncList() {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _resyncRemoved() {
   if (this.key == null || !this.container || this.container[this.key] !== this.node) {
     this._markRemoved();
@@ -208,7 +224,7 @@ export function _resyncRemoved() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function shiftContext() {
@@ -217,7 +233,7 @@ export function shiftContext() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function unshiftContext(context) {
@@ -226,7 +242,7 @@ export function unshiftContext(context) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function setup(parentPath, container, listKey, key) {
@@ -240,7 +256,7 @@ export function setup(parentPath, container, listKey, key) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function setKey(key) {
@@ -250,7 +266,7 @@ export function setKey(key) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function queueNode(path) {

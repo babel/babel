@@ -1,3 +1,7 @@
+## Path Traversal
+
+This is the Path Traversal directory.
+
  - `ancestry` - Methods that retrieve or validate anything related to the current paths ancestry.
  - `context` - Methods responsible for maintaing TraversalContexts.
  - `conversion` - Methods that convert the path node into another node or some other type of data.

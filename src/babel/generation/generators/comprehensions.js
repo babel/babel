@@ -1,3 +1,7 @@
+/**
+ * Prints ComprehensionBlock, prints left and right.
+ */
+
 export function ComprehensionBlock(node, print) {
   this.keyword("for");
   this.push("(");
@@ -6,6 +10,10 @@ export function ComprehensionBlock(node, print) {
   print.plain(node.right);
   this.push(")");
 }
+
+/**
+ * Prints ComprehensionExpression, prints blocks, filter, and body. Handles generators.
+ */
 
 export function ComprehensionExpression(node, print) {
   this.push(node.generator ? "(" : "[");

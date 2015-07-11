@@ -2,10 +2,23 @@ import DefaultFormatter from "./_default";
 import * as util from  "../../util";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default class CommonJSFormatter extends DefaultFormatter {
+
+  /**
+   * [Please add a description.]
+   */
+
   setup() {
     this._setup(this.hasLocalExports);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _setup(conditional) {
     var file  = this.file;
@@ -23,6 +36,10 @@ export default class CommonJSFormatter extends DefaultFormatter {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
 
@@ -36,6 +53,10 @@ export default class CommonJSFormatter extends DefaultFormatter {
       );
     }
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   importSpecifier(specifier, node, nodes, scope) {
     var variableName = specifier.local;
@@ -76,12 +97,20 @@ export default class CommonJSFormatter extends DefaultFormatter {
     }
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   importDeclaration(node, nodes) {
     // import "foo";
     nodes.push(util.template("require", {
       MODULE_NAME: node.source
     }, true));
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   exportSpecifier(specifier) {
     if (this.doDefaultExportInterop(specifier)) {
@@ -91,6 +120,10 @@ export default class CommonJSFormatter extends DefaultFormatter {
     DefaultFormatter.prototype.exportSpecifier.apply(this, arguments);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   exportDeclaration(node) {
     if (this.doDefaultExportInterop(node)) {
       this.hasDefaultOnlyExport = true;
@@ -98,6 +131,10 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
     DefaultFormatter.prototype.exportDeclaration.apply(this, arguments);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _getExternalReference(node, nodes) {
     var call = t.callExpression(t.identifier("require"), [node.source]);

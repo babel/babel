@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function (node) {
   var lastNonDefault = 0;
   for (var i = 0; i < node.params.length; i++) {

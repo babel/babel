@@ -3,6 +3,10 @@ import config from "./config";
 
 export { config };
 
+/**
+ * Validate an option.
+ */
+
 export function validateOption(key, val, pipeline) {
   var opt = config[key];
   var parser = opt && parsers[opt.type];
@@ -12,6 +16,10 @@ export function validateOption(key, val, pipeline) {
     return val;
   }
 }
+
+/**
+ * Normalize all options.
+ */
 
 export function normaliseOptions(options = {}) {
   for (var key in options) {

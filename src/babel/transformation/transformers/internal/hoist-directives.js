@@ -4,7 +4,16 @@ export var metadata = {
   group: "builtin-pre"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Block: {
     exit(node) {
       for (var i = 0; i < node.body.length; i++) {

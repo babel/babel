@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * Prints JSXAttribute, prints name and value.
+ */
+
 export function JSXAttribute(node, print) {
   print.plain(node.name);
   if (node.value) {
@@ -8,9 +12,17 @@ export function JSXAttribute(node, print) {
   }
 }
 
+/**
+ * Prints JSXIdentifier, prints name.
+ */
+
 export function JSXIdentifier(node) {
   this.push(node.name);
 }
+
+/**
+ * Prints JSXNamespacedName, prints namespace and name.
+ */
 
 export function JSXNamespacedName(node, print) {
   print.plain(node.namespace);
@@ -18,11 +30,19 @@ export function JSXNamespacedName(node, print) {
   print.plain(node.name);
 }
 
+/**
+ * Prints JSXMemberExpression, prints object and property.
+ */
+
 export function JSXMemberExpression(node, print) {
   print.plain(node.object);
   this.push(".");
   print.plain(node.property);
 }
+
+/**
+ * Prints JSXSpreadAttribute, prints argument.
+ */
 
 export function JSXSpreadAttribute(node, print) {
   this.push("{...");
@@ -30,11 +50,19 @@ export function JSXSpreadAttribute(node, print) {
   this.push("}");
 }
 
+/**
+ * Prints JSXExpressionContainer, prints expression.
+ */
+
 export function JSXExpressionContainer(node, print) {
   this.push("{");
   print.plain(node.expression);
   this.push("}");
 }
+
+/**
+ * Prints JSXElement, prints openingElement, children, and closingElement.
+ */
 
 export function JSXElement(node, print) {
   var open = node.openingElement;
@@ -54,6 +82,10 @@ export function JSXElement(node, print) {
   print.plain(node.closingElement);
 }
 
+/**
+ * Prints JSXOpeningElement, prints name and attributes, handles selfClosing.
+ */
+
 export function JSXOpeningElement(node, print) {
   this.push("<");
   print.plain(node.name);
@@ -64,10 +96,18 @@ export function JSXOpeningElement(node, print) {
   this.push(node.selfClosing ? " />" : ">");
 }
 
+/**
+ * Prints JSXClosingElement, prints name.
+ */
+
 export function JSXClosingElement(node, print) {
   this.push("</");
   print.plain(node.name);
   this.push(">");
 }
+
+/**
+ * Prints JSXEmptyExpression.
+ */
 
 export function JSXEmptyExpression() {}

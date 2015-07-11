@@ -4,6 +4,10 @@ import isBoolean from "lodash/lang/isBoolean";
 import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
 
+/**
+ * Buffer for collecting generated output.
+ */
+
 export default class Buffer {
   constructor(position, format) {
     this.position = position;
@@ -12,9 +16,17 @@ export default class Buffer {
     this.buf      = "";
   }
 
+  /**
+   * Get the current trimmed buffer.
+   */
+
   get() {
     return trimRight(this.buf);
   }
+
+  /**
+   * Get the current indent.
+   */
 
   getIndent() {
     if (this.format.compact || this.format.concise) {
@@ -24,35 +36,67 @@ export default class Buffer {
     }
   }
 
+  /**
+   * Get the current indent size.
+   */
+
   indentSize() {
     return this.getIndent().length;
   }
+
+  /**
+   * Increment indent size.
+   */
 
   indent() {
     this._indent++;
   }
 
+  /**
+   * Decrement indent size.
+   */
+
   dedent() {
     this._indent--;
   }
+
+  /**
+   * Add a semicolon to the buffer.
+   */
 
   semicolon() {
     this.push(";");
   }
 
+  /**
+   * Ensure last character is a semicolon.
+   */
+
   ensureSemicolon() {
     if (!this.isLast(";")) this.semicolon();
   }
+
+  /**
+   * Add a right brace to the buffer.
+   */
 
   rightBrace() {
     this.newline(true);
     this.push("}");
   }
 
+  /**
+   * Add a keyword to the buffer.
+   */
+
   keyword(name) {
     this.push(name);
     this.space();
   }
+
+  /**
+   * Add a space to the buffer unless it is compact (override with force).
+   */
 
   space(force?) {
     if (!force && this.format.compact) return;
@@ -62,6 +106,10 @@ export default class Buffer {
     }
   }
 
+  /**
+   * Remove the last character.
+   */
+
   removeLast(cha) {
     if (this.format.compact) return;
     if (!this.isLast(cha)) return;
@@ -69,6 +117,11 @@ export default class Buffer {
     this.buf = this.buf.substr(0, this.buf.length - 1);
     this.position.unshift(cha);
   }
+
+  /**
+   * Add a newline (or many newlines), maintaining formatting.
+   * Strips multiple newlines if removeLast is true.
+   */
 
   newline(i, removeLast) {
     if (this.format.compact || this.format.retainLines) return;
@@ -99,6 +152,10 @@ export default class Buffer {
 
     this._newline(removeLast);
   }
+
+  /**
+   * Adds a newline unless there is already two previous newlines.
+   */
 
   _newline(removeLast) {
     // never allow more than two lines
@@ -136,6 +193,10 @@ export default class Buffer {
     }
   }
 
+  /**
+   * Push a string to the buffer, maintaining indentation and newlines.
+   */
+
   push(str, noIndent) {
     if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
       // we have an indent level and we aren't pushing a newline
@@ -151,10 +212,18 @@ export default class Buffer {
     this._push(str);
   }
 
+  /**
+   * Push a string to the buffer.
+   */
+
   _push(str) {
     this.position.push(str);
     this.buf += str;
   }
+
+  /**
+   * Test if the buffer ends with a string.
+   */
 
   endsWith(str, buf = this.buf) {
     if (str.length === 1) {
@@ -163,6 +232,10 @@ export default class Buffer {
       return buf.slice(-str.length) === str;
     }
   }
+
+  /**
+   * Test if a character is last in the buffer.
+   */
 
   isLast(cha) {
     if (this.format.compact) return false;

@@ -4,6 +4,10 @@ import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
 
+/**
+ * Chalk styles for token types.
+ */
+
 var defs = {
   string:     chalk.red,
   punctuator: chalk.bold,
@@ -17,7 +21,15 @@ var defs = {
   invalid:    chalk.inverse
 };
 
+/**
+ * RegExp to test for newlines in terminal.
+ */
+
 const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+
+/**
+ * Get the type of token, specifying punctuator type.
+ */
 
 function getTokenType(match) {
   var token = jsTokens.matchToToken(match);
@@ -42,6 +54,10 @@ function getTokenType(match) {
   return token.type;
 }
 
+/**
+ * Highlight `text`.
+ */
+
 function highlight(text) {
   return text.replace(jsTokens, function (...args) {
     var type = getTokenType(args);
@@ -53,6 +69,10 @@ function highlight(text) {
     }
   });
 }
+
+/**
+ * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
+ */
 
 export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
   colNumber = Math.max(colNumber, 0);

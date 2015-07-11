@@ -1,11 +1,19 @@
 import VanillaTransformer from "./vanilla";
 import * as t from "../../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default class LooseClassTransformer extends VanillaTransformer {
   constructor() {
     super(...arguments);
     this.isLoose = true;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _processMethod(node) {
     if (!node.decorators) {

@@ -1,6 +1,10 @@
 import * as react from "../../../transformation/helpers/react";
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export var ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath({ node, parent }, opts) {
@@ -18,12 +22,20 @@ export var ReferencedIdentifier = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var BindingIdentifier = {
   types: ["Identifier"],
   checkPath({ node, parent }) {
     return t.isBinding(node, parent);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export var Statement = {
   types: ["Statement"],
@@ -41,6 +53,10 @@ export var Statement = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var Expression = {
   types: ["Expression"],
   checkPath(path) {
@@ -52,6 +68,10 @@ export var Expression = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var Scope = {
   types: ["Scopable"],
   checkPath(path) {
@@ -59,17 +79,29 @@ export var Scope = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var Referenced = {
   checkPath(path) {
     return t.isReferenced(path.node, path.parent);
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var BlockScoped = {
   checkPath(path) {
     return t.isBlockScoped(path.node);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export var Var = {
   types: ["VariableDeclaration"],

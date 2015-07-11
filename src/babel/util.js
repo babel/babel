@@ -22,13 +22,25 @@ import pathExists from "path-exists";
 
 export { inherits, inspect } from "util";
 
+/**
+ * Test if a filename ends with a compilable extension.
+ */
+
 export function canCompile(filename: string, altExts?: Array<string>) {
   var exts = altExts || canCompile.EXTENSIONS;
   var ext = path.extname(filename);
   return contains(exts, ext);
 }
 
+/**
+ * Default set of compilable extensions.
+ */
+
 canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
+
+/**
+ * Module resolver that swallows errors.
+ */
 
 export function resolve(loc: string) {
   try {
@@ -39,6 +51,10 @@ export function resolve(loc: string) {
 }
 
 var relativeMod;
+
+/**
+ * Resolve a filename relative to the current working directory.
+ */
 
 export function resolveRelative(loc: string) {
   // we're in the browser, probably
@@ -56,7 +72,11 @@ export function resolveRelative(loc: string) {
   }
 }
 
-export function list(val: string): Array {
+/**
+ * Create an array from any value, splitting strings by ",".
+ */
+
+export function list(val?: string): Array<string> {
   if (!val) {
     return [];
   } else if (Array.isArray(val)) {
@@ -67,6 +87,10 @@ export function list(val: string): Array {
     return [val];
   }
 }
+
+/**
+ * Create a RegExp from a string, array, or regexp.
+ */
 
 export function regexify(val: any): RegExp {
   if (!val) return new RegExp(/.^/);
@@ -90,6 +114,10 @@ export function regexify(val: any): RegExp {
   throw new TypeError("illegal type for regexify");
 }
 
+/**
+ * Create an array from a boolean, string, or array, mapped by and optional function.
+ */
+
 export function arrayify(val: any, mapFn?: Function): Array {
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
@@ -103,13 +131,21 @@ export function arrayify(val: any, mapFn?: Function): Array {
   return [val];
 }
 
-export function booleanify(val: any) {
+/**
+ * Makes boolean-like strings into booleans.
+ */
+
+export function booleanify(val: any): boolean {
   if (val === "true") return true;
   if (val === "false") return false;
   return val;
 }
 
-export function shouldIgnore(filename, ignore, only) {
+/**
+ * Tests if a filename should be ignored based on "ignore" and "only" options.
+ */
+
+export function shouldIgnore(filename: string, ignore: Array, only): boolean {
   filename = slash(filename);
 
   if (only) {
@@ -126,6 +162,10 @@ export function shouldIgnore(filename, ignore, only) {
   return false;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function _shouldIgnore(pattern, filename) {
   if (typeof pattern === "function") {
     return pattern(filename);
@@ -134,10 +174,18 @@ function _shouldIgnore(pattern, filename) {
   }
 }
 
+/**
+ * A visitor for Babel templates, replaces placeholder references.
+ */
+
 var templateVisitor = {
+
+  /**
+   * 360 NoScope PWNd
+   */
   noScope: true,
 
-  enter(node, parent, scope, nodes) {
+  enter(node: Object, parent: Object, scope, nodes: Array<Object>) {
     if (t.isExpressionStatement(node)) {
       node = node.expression;
     }
@@ -148,12 +196,14 @@ var templateVisitor = {
     }
   },
 
-  exit(node) {
+  exit(node: Object) {
     traverse.clearNode(node);
   }
 };
 
-//
+/**
+ * Create an instance of a template to use in a transformer.
+ */
 
 export function template(name: string, nodes?: Array<Object>, keepExpression?: boolean): Object {
   var ast = exports.templates[name];
@@ -181,13 +231,21 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
   }
 }
 
+/**
+ * Parse a template.
+ */
+
 export function parseTemplate(loc: string, code: string): Object {
   var ast = parse(code, { filename: loc, looseModules: true }).program;
   ast = traverse.removeProperties(ast);
   return ast;
 }
 
-function loadTemplates() {
+/**
+ * Load templates from transformation/templates directory.
+ */
+
+function loadTemplates(): Object {
   var templates = {};
 
   var templatesLoc = path.join(__dirname, "transformation/templates");

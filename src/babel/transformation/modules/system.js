@@ -5,11 +5,24 @@ import last from "lodash/array/last";
 import map from "lodash/collection/map";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var hoistVariablesVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     // nothing inside is accessible
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   VariableDeclaration(node, parent, scope, state) {
     if (node.kind !== "var" && !t.isProgram(parent)) { // let, const
@@ -41,10 +54,23 @@ var hoistVariablesVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var hoistFunctionsVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   enter(node, parent, scope, state) {
     if (t.isFunctionDeclaration(node) || state.formatter._canHoist(node)) {
@@ -54,7 +80,16 @@ var hoistFunctionsVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var runnerSettersVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   enter(node, parent, scope, state) {
     if (node._importSource === state.source) {
       if (t.isVariableDeclaration(node)) {
@@ -73,6 +108,10 @@ var runnerSettersVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export default class SystemFormatter extends AMDFormatter {
   constructor(file) {
     super(file);
@@ -85,10 +124,18 @@ export default class SystemFormatter extends AMDFormatter {
     this.remaps.clearAll();
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _addImportSource(node, exportNode) {
     if (node) node._importSource = exportNode.source && exportNode.source.value;
     return node;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   buildExportsWildcard(objectIdentifier, node) {
     var leftIdentifier = this.scope.generateUidIdentifier("key");
@@ -107,14 +154,26 @@ export default class SystemFormatter extends AMDFormatter {
     return this._addImportSource(t.forInStatement(left, right, block), node);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   buildExportsAssignment(id, init, node) {
     var call = this._buildExportCall(t.literal(id.name), init, true);
     return this._addImportSource(call, node);
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   buildExportsFromAssignment() {
     return this.buildExportsAssignment(...arguments);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   remapExportAssignment(node, exported) {
     var assign = node;
@@ -126,6 +185,10 @@ export default class SystemFormatter extends AMDFormatter {
     return assign;
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _buildExportCall(id, init, isStatement) {
     var call = t.callExpression(this.exportIdentifier, [id, init]);
     if (isStatement) {
@@ -134,6 +197,10 @@ export default class SystemFormatter extends AMDFormatter {
       return call;
     }
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   importSpecifier(specifier, node, nodes) {
     AMDFormatter.prototype.importSpecifier.apply(this, arguments);
@@ -148,6 +215,10 @@ export default class SystemFormatter extends AMDFormatter {
 
     this._addImportSource(last(nodes), node);
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   _buildRunnerSetters(block, hoistDeclarators) {
     var scope = this.file.scope;
@@ -165,9 +236,17 @@ export default class SystemFormatter extends AMDFormatter {
     }));
   }
 
+  /**
+   * [Please add a description.]
+   */
+
   _canHoist(node) {
     return node._blockHoist && !this.file.dynamicImports.length;
   }
+
+  /**
+   * [Please add a description.]
+   */
 
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
