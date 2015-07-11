@@ -2,7 +2,7 @@ import slash from "slash";
 import * as util from "../../../util";
 
 /**
- * [Please add a description.]
+ * Get a transformer list from a value.
  */
 
 export function transformerList(val) {
@@ -10,7 +10,7 @@ export function transformerList(val) {
 }
 
 /**
- * [Please add a description.]
+ * Validate transformer list. Maps "all" to all transformer names.
  */
 
 transformerList.validate = function (key, val, pipeline) {
@@ -22,7 +22,7 @@ transformerList.validate = function (key, val, pipeline) {
 };
 
 /**
- * [Please add a description.]
+ * Cast a value to a number.
  */
 
 export function number(val) {
@@ -30,7 +30,7 @@ export function number(val) {
 }
 
 /**
- * [Please add a description.]
+ * Cast a value to a boolean.
  */
 
 export var filename = slash;
@@ -44,7 +44,7 @@ export function boolean(val) {
 }
 
 /**
- * [Please add a description.]
+ * Cast a boolean-like string to a boolean.
  */
 
 export function booleanString(val) {
@@ -52,7 +52,7 @@ export function booleanString(val) {
 }
 
 /**
- * [Please add a description.]
+ * Cast a value to an array, splitting strings by ",".
  */
 
 export function list(val) {
