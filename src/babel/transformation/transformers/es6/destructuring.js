@@ -235,7 +235,7 @@ export var visitor = {
 };
 
 /**
- * [Please add a description.]
+ * Test if a VariableDeclaration's declarations contains any Patterns.
  */
 
 function variableDeclarationHasPattern(node) {
@@ -248,7 +248,7 @@ function variableDeclarationHasPattern(node) {
 }
 
 /**
- * [Please add a description.]
+ * Test if an ArrayPattern's elements contain any RestElements.
  */
 
 function hasRest(pattern) {
