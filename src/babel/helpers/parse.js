@@ -3,7 +3,7 @@ import estraverse from "estraverse";
 import * as acorn from "../../acorn";
 
 /**
- * [Please add a description.]
+ * Parse `code` with normalized options, collecting tokens and comments.
  */
 
 export default function (code, opts = {}) {
@@ -25,11 +25,17 @@ export default function (code, opts = {}) {
     ranges:                      true
   };
 
+  /**
+   * Collect all tokens.
+   */
   parseOpts.onToken = function (token) {
     tokens.push(token);
     commentsAndTokens.push(token);
   };
 
+  /**
+   * Collection all comments.
+   */
   parseOpts.onComment = function (block, text, start, end, startLoc, endLoc) {
     var comment = {
       type: block ? "CommentBlock" : "CommentLine",
