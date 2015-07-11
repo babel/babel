@@ -2,7 +2,7 @@ import sourceMap from "source-map";
 import * as t from "../types";
 
 /**
- * [Please add a description.]
+ * Build a sourcemap.
  */
 
 export default class SourceMap {
@@ -23,7 +23,7 @@ export default class SourceMap {
   }
 
   /**
-   * [Please add a description.]
+   * Get the sourcemap.
    */
 
   get() {
@@ -36,7 +36,7 @@ export default class SourceMap {
   }
 
   /**
-   * [Please add a description.]
+   * Mark a node's generated position, and add it to the sourcemap.
    */
 
   mark(node, type) {
