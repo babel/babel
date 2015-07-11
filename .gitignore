@@ -9,10 +9,12 @@ test/core/tmp
 /browser-polyfill.js
 /runtime.js
 /coverage
-/dist
+dist
 /.package.json
 /packages/babel-runtime/core-js
 /packages/babel-runtime/helpers/*.js
 /packages/babel-runtime/regenerator/*.js
-/lib
+/packages/*/lib
 _babel.github.io
+scripts
+/tests/.browser-build.js

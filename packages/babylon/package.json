@@ -1,0 +1,12 @@
+{
+  "name": "babylon",
+  "description": "",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "babel/babel",
+  "main": "lib/index.js",
+  "dependencies": {
+    "bluebird": "^2.9.33"
+  }
+}

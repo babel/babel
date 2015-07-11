@@ -1,15 +1,18 @@
+sudo: false
 language: node_js
 cache:
   directories:
   - node_modules
-node_js:
-- "0.10"
-- "0.12"
-- iojs
 
-before_script: ./tools/setup-git.sh
+node_js:
+ - iojs
+ - "0.8"
+ - "0.10"
+ - "0.12"
+
+before_script: ./scripts/travis/setup-git.sh
 script: make test-travis
-after_success: ./tools/merge-development-with-master.sh
+after_success: ./scripts/travis/merge-development-with-master.sh
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
@@ -29,7 +32,4 @@ deploy:
     repo: babel/babel
 
 after_deploy:
-- make publish-cli
-- make publish-runtime
-- make build-website
-- make comment-issues
+- make travis-deploy
