@@ -45,9 +45,8 @@ export default function (code, opts = {}) {
     parseOpts.plugins.flow = true;
   }
 
-  return babylon.parse(code, parseOpts).then(function (ast) {
-    estraverse.attachComments(ast, comments, tokens);
-    ast = normalizeAst(ast, comments, commentsAndTokens);
-    return ast;
-  });
+  var ast = babylon.parse(code, parseOpts);
+  estraverse.attachComments(ast, comments, tokens);
+  ast = normalizeAst(ast, comments, commentsAndTokens);
+  return ast;
 }

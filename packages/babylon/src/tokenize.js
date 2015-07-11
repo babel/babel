@@ -1,8 +1,8 @@
-import {isIdentifierStart, isIdentifierChar} from "./identifier";
-import {types as tt, keywords as keywordTypes} from "./tokentype";
-import {Parser} from "./state";
-import {SourceLocation} from "./location";
-import {lineBreak, lineBreakG, isNewLine, nonASCIIwhitespace} from "./whitespace";
+import { isIdentifierStart, isIdentifierChar } from "./identifier";
+import { types as tt, keywords as keywordTypes } from "./tokentype";
+import { Parser } from "./state";
+import { SourceLocation } from "./location";
+import { lineBreak, lineBreakG, isNewLine, nonASCIIwhitespace } from "./whitespace";
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -123,14 +123,15 @@ pp.skipBlockComment = function () {
 pp.skipLineComment = function (startSkip) {
   let start = this.pos;
   let startLoc = this.options.onComment && this.curPosition();
-  let ch = this.input.charCodeAt(this.pos+=startSkip);
+  let ch = this.input.charCodeAt(this.pos += startSkip);
   while (this.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
     ++this.pos;
     ch = this.input.charCodeAt(this.pos);
   }
-  if (this.options.onComment)
+  if (this.options.onComment) {
     this.options.onComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos,
                            startLoc, this.curPosition());
+  }
 };
 
 // Called at the start of the parse and after every token. Skips
@@ -143,10 +144,12 @@ pp.skipSpace = function() {
       case 32: case 160: // ' '
         ++this.pos;
         break;
+
       case 13:
         if (this.input.charCodeAt(this.pos + 1) === 10) {
           ++this.pos;
         }
+
       case 10: case 8232: case 8233:
         ++this.pos;
         if (this.options.locations) {
@@ -154,18 +157,22 @@ pp.skipSpace = function() {
           this.lineStart = this.pos;
         }
         break;
+
       case 47: // '/'
         switch (this.input.charCodeAt(this.pos + 1)) {
           case 42: // '*'
             this.skipBlockComment();
             break;
+
           case 47:
             this.skipLineComment(2);
             break;
+
           default:
             break loop;
         }
         break;
+
       default:
         if (ch > 8 && ch < 14 || ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
           ++this.pos;
@@ -402,28 +409,35 @@ pp.finishOp = function (type, size) {
   return this.finishToken(type, str);
 };
 
-var regexpUnicodeSupport = false;
-try {
-  new RegExp("\uffff", "u");
-  regexpUnicodeSupport = true;
-} catch(e) {}
-
 // Parse a regular expression. Some context-awareness is necessary,
 // since a '/' inside a '[]' set does not end the expression.
 
-pp.readRegexp = function () {
+function tryCreateRegexp(src, flags, throwErrorStart) {
+  try {
+    return new RegExp(src, flags);
+  } catch (e) {
+    if (throwErrorStart !== undefined) {
+      if (e instanceof SyntaxError) this.raise(throwErrorStart, "Error parsing regular expression: " + e.message);
+      this.raise(e);
+    }
+  }
+}
+
+var regexpUnicodeSupport = !!tryCreateRegexp("\uffff", "u");
+
+pp.readRegexp = function() {
   let escaped, inClass, start = this.pos;
   for (;;) {
     if (this.pos >= this.input.length) this.raise(start, "Unterminated regular expression");
     let ch = this.input.charAt(this.pos);
     if (lineBreak.test(ch)) this.raise(start, "Unterminated regular expression");
-    if (!escaped) {
+    if (escaped) {
+      escaped = false;
+    } else {
       if (ch === "[") inClass = true;
       else if (ch === "]" && inClass) inClass = false;
       else if (ch === "/" && !inClass) break;
       escaped = ch === "\\";
-    } else {
-      escaped = false;
     }
     ++this.pos;
   }
@@ -456,23 +470,14 @@ pp.readRegexp = function () {
   }
   // Detect invalid regular expressions.
   let value = null;
-
   // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
   // so don't do detection if we are running under Rhino
   if (!isRhino) {
-    try {
-      new RegExp(tmp);
-    } catch (e) {
-      if (e instanceof SyntaxError) this.raise(start, `Error parsing regular expression: ${e.message}`);
-      this.raise(e);
-    }
+    tryCreateRegexp(tmp, undefined, start);
     // Get a regular expression object for this pattern-flag pair, or `null` in
     // case the current environment doesn't support the flags it uses.
-    try {
-      value = new RegExp(content, mods);
-    } catch (err) {}
+    value = tryCreateRegexp(content, mods);
   }
-
   return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value});
 };
 

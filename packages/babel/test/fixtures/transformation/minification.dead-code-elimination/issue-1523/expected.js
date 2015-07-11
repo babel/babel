@@ -3,9 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function f(a) {
+
+exports.f = function f(a) {
   return !a;
-}
-
-exports.f = f;
-
+};

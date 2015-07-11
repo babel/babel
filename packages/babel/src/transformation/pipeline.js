@@ -1,6 +1,5 @@
 import PluginManager from "./file/plugin-manager";
 import normalizeAst from "../helpers/normalize-ast";
-import { Promise } from "bluebird";
 import Plugin from "./plugin";
 import assign from "lodash/object/assign";
 import object from "../helpers/object";
@@ -91,20 +90,19 @@ export default class Pipeline {
     var file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
-      return file.parseCode(code).then(() => file.transform());
+      file.parseCode(code);
+      return file.transform();
     });
   }
 
   transformFromAst(ast, code, opts) {
-    return new Promise((resolve) => {
-      ast = normalizeAst(ast);
+    ast = normalizeAst(ast);
 
-      var file = new File(opts, this);
-      resolve(file.wrap(code, function () {
-        file.addCode(code);
-        file.addAst(ast);
-        return file.transform();
-      }));
+    var file = new File(opts, this);
+    return file.wrap(code, function () {
+      file.addCode(code);
+      file.addAst(ast);
+      return file.transform();
     });
   }
 

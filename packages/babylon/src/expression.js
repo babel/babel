@@ -16,10 +16,9 @@
 //
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
-import {types as tt} from "./tokentype";
-import {Parser} from "./state";
-import {reservedWords} from "./identifier";
-import {has} from "./util";
+import { types as tt } from "./tokentype";
+import { Parser } from "./state";
+import { reservedWords } from "./identifier";
 
 const pp = Parser.prototype;
 
@@ -29,14 +28,15 @@ const pp = Parser.prototype;
 // strict mode, init properties are also not allowed to be repeated.
 
 pp.checkPropClash = function (prop, propHash) {
-  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand))
-    return;
+  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand)) return;
+
   let key = prop.key, name;
   switch (key.type) {
-  case "Identifier": name = key.name; break;
-  case "Literal": name = String(key.value); break;
-  default: return;
+    case "Identifier": name = key.name; break;
+    case "Literal": name = String(key.value); break;
+    default: return;
   }
+
   let kind = prop.kind;
   if (this.options.ecmaVersion >= 6) {
     if (name === "__proto__" && kind === "init") {
@@ -45,6 +45,7 @@ pp.checkPropClash = function (prop, propHash) {
     }
     return;
   }
+
   let other;
   if (propHash[name]) {
     other = propHash[name];
@@ -196,10 +197,11 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     this.next();
     node.argument = this.parseMaybeUnary();
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
-    if (update) this.checkLVal(node.argument);
-    else if (this.strict && node.operator === "delete" &&
-             node.argument.type === "Identifier")
+    if (update) {
+      this.checkLVal(node.argument);
+    } else if (this.strict && node.operator === "delete" && node.argument.type === "Identifier") {
       this.raise(node.start, "Deleting local variable in strict mode");
+    }
     return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
   }
   let startPos = this.start, startLoc = this.startLoc;
@@ -666,13 +668,13 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
             (this.strict && (reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name))) ||
             (!this.options.allowReserved && this.isReservedWord(prop.key.name)))
           this.raise(prop.key.start, "Binding " + prop.key.name);
-      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
+      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else if (this.type === tt.eq && refShorthandDefaultPos) {
       if (!refShorthandDefaultPos.start)
         refShorthandDefaultPos.start = this.start;
-      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
+      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else {
-      prop.value = prop.key;
+      prop.value = prop.key.__clone();
     }
     prop.shorthand = true;
   } else {

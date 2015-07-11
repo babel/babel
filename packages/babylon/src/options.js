@@ -1,5 +1,5 @@
-import {has} from "./util";
-import {SourceLocation} from "./location";
+import { has } from "./util";
+import { SourceLocation } from "./location";
 
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:

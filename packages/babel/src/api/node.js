@@ -4,11 +4,6 @@ import * as babylon from "babylon";
 import * as util from "../util";
 import fs from "fs";
 
-var deasync;
-try {
-  deasync = require("deasync");
-} catch (err) {}
-
 export { util, babylon as acorn, transform };
 export { pipeline } from "../transformation";
 export { canCompile } from "../util";
@@ -42,32 +37,24 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 
   opts.filename = filename;
 
-  return transform(fs.createReadStream(filename), opts);
+  fs.readFile(filename, function (err, code) {
+    if (err) return callback(err);
+
+    var result;
+
+    try {
+      result = transform(code, opts);
+    } catch (err) {
+      return callback(err);
+    }
+
+    callback(null, result);
+  });
 }
 
-export function __plsDontUseThis(code, opts) {
-  if (!deasync) {
-    throw new Error("Sorry, this API isn't available in the current environment.");
-  }
-
-  var done = false;
-  var result, err;
-
-  transform(code, opts).then(function (_result) {
-    result = _result;
-    done = true;
-  }, function (_err) {
-    err = _err;
-    done = true;
-  });
-
-  deasync.loopWhile(() => !done);
-
-  if (err) {
-    throw err;
-  } else {
-    return result;
-  }
+export function transformFileSync(filename: string, opts?: Object = {}) {
+  opts.filename = filename;
+  return transform(fs.readFileSync(filename, "utf8"), opts);
 }
 
 export function parse(code, opts = {}) {

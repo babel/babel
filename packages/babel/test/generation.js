@@ -22,11 +22,11 @@ suite("generation", function () {
 _.each(helper.get("generation"), function (testSuite) {
   suite("generation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, !task.disabled && function (done) {
+      test(task.title, !task.disabled && function () {
         var expect = task.expect;
         var actual = task.actual;
 
-        parse(actual.code, {
+        var actualAst = parse(actual.code, {
           filename: actual.loc,
           nonStandard: true,
           strictMode: false,
@@ -38,11 +38,10 @@ _.each(helper.get("generation"), function (testSuite) {
             "es7.exportExtensions": true,
             "es7.functionBind": true
           }
-        }).then(function (actualAst) {
-          var actualCode = generate(actualAst, task.options, actual.code).code;
-          chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
-          done();
-        }, done);
+        });
+
+        var actualCode = generate(actualAst, task.options, actual.code).code;
+        chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
       });
     });
   });

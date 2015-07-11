@@ -10,6 +10,4 @@ commander.option("-t, --output-type [type]", "Type of output (global|umd|var)", 
 commander.usage("[options]");
 commander.parse(process.argv);
 
-util.ensureTemplates().then(function () {
-  console.log(runtime(commander.whitelist, commander.outputType));
-});
+console.log(runtime(commander.whitelist, commander.outputType));

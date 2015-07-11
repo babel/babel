@@ -57,7 +57,7 @@ var compile = function (filename, opts = {}) {
   optsManager.mergeOptions(transformOpts);
   opts = optsManager.init(opts);
 
-  var cacheKey = `${filename}:${JSON.stringify(opts)}:${babel.version}`;
+  var cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
   var env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (env) cacheKey += `:${env}`;
@@ -70,8 +70,7 @@ var compile = function (filename, opts = {}) {
   }
 
   if (!result) {
-    var file = fs.readFileSync(filename, "utf8");
-    result = babel.__plsDontUseThis(file, extend(opts, {
+    result = babel.transformFileSync(filename, extend(opts, {
       sourceMap: "both",
       ast:       false
     }));

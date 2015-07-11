@@ -5,7 +5,6 @@ export default {
   //- builtin-pre
   strict:                                  require("./other/strict"),
   eval:                                    require("babel-plugin-eval"),
-  _explode:                                require("./internal/explode"),
   _validation:                             require("./internal/validation"),
   _hoistDirectives:                        require("./internal/hoist-directives"),
   "minification.removeDebugger":           require("babel-plugin-remove-debugger"),

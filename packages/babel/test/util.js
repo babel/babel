@@ -12,27 +12,18 @@ suite("util", function () {
 
   test("templates do not recurse", function () {
     var key   = __filename;
+    var KEY   = parse("replacedKey").program.body[0].expression;
+    var VALUE = parse("+KEY").program.body[0].expression;
 
+    util.templates[key] = util.parseTemplate(key, "KEY = VALUE;");
+    var result = util.template(key, { KEY: KEY, VALUE: VALUE });
+    delete util.templates[key];
 
-    return parse("replacedKey").then(function (result) {
-      var KEY = result.program.body[0].expression;
-
-      return parse("+KEY").then(function (result) {
-        var VALUE = result.program.body[0].expression;
-
-        return util.parseTemplate(key, "KEY = VALUE;").then(function (template) {
-          util.templates[key] = template;
-          var result = util.template(key, { KEY: KEY, VALUE: VALUE });
-          delete util.templates[key];
-
-          assert.strictEqual(
-            result.right.argument.name,
-            "KEY",
-            "template should not recurse into replaced nodes, replacing KEY inside VALUE"
-          );
-        });
-      });
-    });
+    assert.strictEqual(
+      result.right.argument.name,
+      "KEY",
+      "template should not recurse into replaced nodes, replacing KEY inside VALUE"
+    );
   });
 
   test("canCompile", function () {

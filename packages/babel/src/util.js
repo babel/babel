@@ -10,7 +10,6 @@ import contains from "lodash/collection/contains";
 import traverse from "./traversal";
 import isString from "lodash/lang/isString";
 import isRegExp from "lodash/lang/isRegExp";
-import { Promise } from "bluebird";
 import Module from "module";
 import isEmpty from "lodash/lang/isEmpty";
 import parse from "./helpers/parse";
@@ -157,8 +156,6 @@ var templateVisitor = {
 //
 
 export function template(name: string, nodes?: Array<Object>, keepExpression?: boolean): Object {
-  if (!exports.templates) throw new ReferenceError(`haven't initialised templates yet`);
-
   var ast = exports.templates[name];
   if (!ast) throw new ReferenceError(`unknown template ${name}`);
 
@@ -183,11 +180,10 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
     return node;
   }
 }
-
 export function parseTemplate(loc: string, code: string): Object {
-  return parse(code, { filename: loc, looseModules: true }).then(function (ast) {
-    return traverse.removeProperties(ast.program);
-  });
+  var ast = parse(code, { filename: loc, looseModules: true }).program;
+  ast = traverse.removeProperties(ast);
+  return ast;
 }
 
 function loadTemplates() {
@@ -198,37 +194,22 @@ function loadTemplates() {
     throw new ReferenceError(messages.get("missingTemplatesDirectory"));
   }
 
-  var promises = [];
+  for (var name of (fs.readdirSync(templatesLoc): Array)) {
+    if (name[0] === ".") return;
 
-  for (let name of (fs.readdirSync(templatesLoc): Array)) {
-    if (name[0] === ".") continue;
+    var key  = path.basename(name, path.extname(name));
+    var loc  = path.join(templatesLoc, name);
+    var code = fs.readFileSync(loc, "utf8");
 
-    let key  = path.basename(name, path.extname(name));
-    let loc  = path.join(templatesLoc, name);
-    let code = fs.readFileSync(loc, "utf8");
-
-    promises.push(parseTemplate(loc, code).then(function (template) {
-      templates[key] = template;
-    }));
+    templates[key] = parseTemplate(loc, code);
   }
 
-  return Promise.all(promises).then(function () {
-    return exports.templates = templates;
-  });
-}
-
-export function ensureTemplates() {
-  return new Promise((resolve) => {
-    if (exports.templates) {
-      resolve(exports.templates);
-    } else {
-      resolve(loadTemplates());
-    }
-  });
+  return templates;
 }
 
 try {
-  exports.templates = require("../templates.json");
+  exports.templates = require("../../templates.json");
 } catch (err) {
   if (err.code !== "MODULE_NOT_FOUND") throw err;
+  exports.templates = loadTemplates();
 }

@@ -1,6 +1,6 @@
-import {types as tt} from "./tokentype";
-import {Parser} from "./state";
-import {lineBreak} from "./whitespace";
+import { types as tt } from "./tokentype";
+import { Parser } from "./state";
+import { lineBreak } from "./whitespace";
 
 const pp = Parser.prototype;
 

@@ -12,7 +12,6 @@ import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
 import Logger from "./logger";
-import { Promise } from "bluebird";
 import Plugin from "../plugin";
 import parse from "../../helpers/parse";
 import Hub from "../../traversal/hub";
@@ -429,10 +428,9 @@ export default class File {
     parseOpts.sourceType = "module";
 
     this.log.debug("Parse start");
-    return parse(code, parseOpts).then((ast) => {
-      this.log.debug("Parse stop");
-      return ast;
-    });
+    var ast = parse(code, parseOpts);
+    this.log.debug("Parse stop");
+    return ast;
   }
 
   _addAst(ast) {
@@ -467,11 +465,7 @@ export default class File {
     }
     this.call("post");
 
-    return new Promise((resolve, reject) => {
-      util.ensureTemplates().then(() => {
-        resolve(this.generate());
-      }, reject);
-    });
+    return this.generate();
   }
 
   wrap(code, callback) {
@@ -479,7 +473,7 @@ export default class File {
 
     try {
       if (this.shouldIgnore()) {
-        return Promise.resolve(this.makeResult({ code, ignored: true }));
+        return this.makeResult({ code, ignored: true });
       } else {
         return callback();
       }
@@ -519,9 +513,8 @@ export default class File {
 
   parseCode() {
     this.parseShebang();
-    return this.parse(this.code).then((ast) => {
-      this.addAst(ast);
-    });
+    var ast = this.parse(this.code);
+    this.addAst(ast);
   }
 
   shouldIgnore() {
@@ -565,6 +558,10 @@ export default class File {
       code:     null,
       ast:      null,
       map:      map
+    };
+
+    result.then = function (callback) {
+      callback(result);
     };
 
     if (this.opts.code) {

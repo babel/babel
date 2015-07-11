@@ -34,9 +34,7 @@ function* x() {
   }
 }
 
-function y() {
+exports.y = function y() {
   return [].concat(babelHelpers.toConsumableArray(x()));
-}
-
-exports.y = y;
+};
 

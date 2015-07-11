@@ -12,12 +12,7 @@ var _                   = require("lodash");
 
 require("../lib/polyfill");
 
-var doneBeforeEval = false;
-function beforeEval() {
-  if (doneBeforeEval) return;
-  doneBeforeEval = true;
-  eval(buildExernalHelpers());
-}
+eval(buildExernalHelpers());
 
 global.assertNoOwnProperties = function (obj) {
   assert.equal(Object.getOwnPropertyNames(obj).length, 0);
@@ -49,7 +44,6 @@ chai.assert.throw = function (fn, msg) {
 
   return chai.assert._throw(fn, msg);
 };
-
 var run = function (task, done) {
   var actual = task.actual;
   var expect = task.expect;
@@ -74,71 +68,62 @@ var run = function (task, done) {
     helper.esvalid(result.ast.program, result.code, opts.loc);
   };
 
-  var promises = [];
-
   if (execCode) {
-    promises.push(transform(execCode, getOpts(exec)).then(function (result) {
-      execCode = result.code;
+    result = transform(execCode, getOpts(exec));
+    execCode = result.code;
 
-      try {
-        var fakeRequire = function (loc) {
-          if (loc === "../../../src/runtime/polyfills/Number.js") {
-            return Number;
-          } else if (loc === "../../../src/runtime/polyfills/Math.js") {
-            return Math;
-          } else {
-            return require(path.resolve(exec.loc, "..", loc));
-          }
-        };
+    try {
+      var fakeRequire = function (loc) {
+        if (loc === "../../../src/runtime/polyfills/Number.js") {
+          return Number;
+        } else if (loc === "../../../src/runtime/polyfills/Math.js") {
+          return Math;
+        } else {
+          return require(path.resolve(exec.loc, "..", loc));
+        }
+      };
 
-        var fn = new Function("require", "exports", execCode);
-        beforeEval();
-        fn.call(global, fakeRequire, {});
-      } catch (err) {
-        err.message = exec.loc + ": " + err.message;
-        err.message += codeFrame(execCode);
-        throw err;
-      }
+      var fn = new Function("require", "done", "exports", execCode);
+      fn.call(global, fakeRequire, chai.assert, {}, done);
+    } catch (err) {
+      err.message = exec.loc + ": " + err.message;
+      err.message += codeFrame(execCode);
+      throw err;
+    }
 
-      checkAst(result, exec);
-    }));
+    checkAst(result, exec);
   }
 
   var actualCode = actual.code;
   var expectCode = expect.code;
   if (!execCode || actualCode) {
-    promises.push(transform(actualCode, getOpts(actual)).then(function (result) {
-      actualCode = result.code.trim();
+    result     = transform(actualCode, getOpts(actual));
+    actualCode = result.code.trim();
 
-      try {
-        chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
-      } catch (err) {
-        //require("fs").writeFileSync(expect.loc, actualCode);
-        throw err;
-      }
+    try {
+      chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+    } catch (err) {
+      //require("fs").writeFileSync(expect.loc, actualCode);
+      throw err;
+    }
 
-      checkAst(result, actual);
-
-      if (task.sourceMap) {
-        chai.expect(result.map).to.deep.equal(task.sourceMap);
-      }
-
-      if (task.sourceMappings) {
-        var consumer = new sourceMap.SourceMapConsumer(result.map);
-
-        _.each(task.sourceMappings, function (mapping, i) {
-          var actual = mapping.original;
-
-          var expect = consumer.originalPositionFor(mapping.generated);
-          chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
-        });
-      }
-    }));
+    checkAst(result, actual);
   }
 
-  Promise.all(promises).then(function () {
-    done()
-  }, done);
+  if (task.sourceMap) {
+    chai.expect(result.map).to.deep.equal(task.sourceMap);
+  }
+
+  if (task.sourceMappings) {
+    var consumer = new sourceMap.SourceMapConsumer(result.map);
+
+    _.each(task.sourceMappings, function (mapping, i) {
+      var actual = mapping.original;
+
+      var expect = consumer.originalPositionFor(mapping.generated);
+      chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
+    });
+  }
 };
 
 module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
@@ -155,7 +140,11 @@ module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
       _.each(testSuite.tests, function (task) {
         if (_.contains(suiteOpts.ignoreTasks, task.title) || _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) return;
 
-        test(task.title, !task.disabled && function (done) {
+        var runTest = function (done) {
+          var runTask = function () {
+            run(task, done);
+          };
+
           _.extend(task.options, taskOpts);
           if (dynamicOpts) dynamicOpts(task.options, task);
 
@@ -165,26 +154,24 @@ module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
             // the options object with useless options
             delete task.options.throws;
 
-            return run(task, function (err) {
-              if (err) {
-                // we just wanted any error message
-                if (throwMsg === true) return done();
-
-                if (err.message.indexOf(throwMsg) >= 0) {
-                  // success!
-                  done();
-                } else {
-                  // didn't include it :(
-                  done(new Error("Expected an error message of " + JSON.stringify(throwMsg) + " but got " + JSON.stringify(err.message)));
-                }
-              } else {
-                done(new Error("Expected an error message but got none"));
-              }
+            assert.throws(runTask, function (err) {
+              return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
             });
           } else {
-            return run(task, done);
+            runTask();
           }
-        });
+        };
+
+        var callback;
+        if (task.options.asyncExec) {
+          callback = runTest;
+        } else {
+          callback = function () {
+            return runTest();
+          };
+        }
+
+        test(task.title, !task.disabled && callback);
       });
     });
   });

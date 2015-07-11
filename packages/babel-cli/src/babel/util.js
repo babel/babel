@@ -35,7 +35,7 @@ exports.transform = function (filename, code, opts) {
   opts.ignore = null;
   opts.only = null;
 
-  var result = babel.__plsDontUseThis(code, opts);
+  var result = babel.transform(code, opts);
   result.filename = filename;
   result.actual = code;
   return result;

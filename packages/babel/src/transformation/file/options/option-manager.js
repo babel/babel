@@ -97,7 +97,7 @@ export default class OptionManager {
    */
 
   addIgnoreConfig(loc) {
-    var file = fs.readFileSync(loc, "utf8");
+    var file  = fs.readFileSync(loc, "utf8");
     var lines = file.split("\n");
 
     lines = lines.map(function (line) {

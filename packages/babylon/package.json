@@ -5,8 +5,5 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "babel/babel",
-  "main": "lib/index.js",
-  "dependencies": {
-    "bluebird": "^2.9.33"
-  }
+  "main": "lib/index.js"
 }
