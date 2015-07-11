@@ -1,7 +1,7 @@
 import merge from "lodash/object/merge";
 
 /**
- * [Please add a description.]
+ * Merge options.
  */
 
 export default function (dest, src) {
