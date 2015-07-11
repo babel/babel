@@ -5,13 +5,28 @@ export var metadata = {
 };
 
 /**
- * [Please add a description.]
+ * Turn member expression reserved word properties into literals.
+ *
+ * @example
+ *
+ * **In**
+ *
+ * ```javascript
+ * foo.catch;
+ * ```
+ *
+ * **Out**
+ *
+ * ```javascript
+ * foo["catch"];
+ * ```
  */
 
 export var visitor = {
 
   /**
-   * [Please add a description.]
+   * Look for non-computed properties with names that are not valid identifiers.
+   * Turn them into computed properties with literal names.
    */
 
   MemberExpression: {
