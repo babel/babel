@@ -9,12 +9,13 @@ var _ref = React.createElement(
 );
 
 var App = (function (_React$Component) {
+  babelHelpers.inherits(App, _React$Component);
+
   function App() {
     babelHelpers.classCallCheck(this, App);
     babelHelpers.get(Object.getPrototypeOf(App.prototype), "constructor", this).apply(this, arguments);
   }
 
-  babelHelpers.inherits(App, _React$Component);
   babelHelpers.createClass(App, [{
     key: "render",
     value: function render() {
