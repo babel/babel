@@ -1,5 +1,5 @@
 /**
- * Print ClassDeclaration, prints, decorators, typeParameters, extends, implements, and body.
+ * Print ClassDeclaration, prints decorators, typeParameters, extends, implements, and body.
  */
 
 export function ClassDeclaration(node, print) {
