@@ -4,7 +4,7 @@ import config from "./config";
 export { config };
 
 /**
- * [Please add a description.]
+ * Validate an option.
  */
 
 export function validateOption(key, val, pipeline) {
@@ -18,7 +18,7 @@ export function validateOption(key, val, pipeline) {
 }
 
 /**
- * [Please add a description.]
+ * Normalize all options.
  */
 
 export function normaliseOptions(options = {}) {
