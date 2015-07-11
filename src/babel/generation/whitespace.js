@@ -19,7 +19,7 @@ function getLookupIndex(i, base, max) {
 }
 
 /**
- * [Please add a description.]
+ * Get whitespace around tokens.
  */
 
 export default class Whitespace {
@@ -39,7 +39,7 @@ export default class Whitespace {
   }
 
   /**
-   * [Please add a description.]
+   * Count all the newlines before a node.
    */
 
   getNewlinesBefore(node) {
@@ -66,7 +66,7 @@ export default class Whitespace {
   }
 
   /**
-   * [Please add a description.]
+   * Count all the newlines after a node.
    */
 
   getNewlinesAfter(node) {
@@ -104,7 +104,7 @@ export default class Whitespace {
   }
 
   /**
-   * [Please add a description.]
+   * Count all the newlines between two tokens.
    */
 
   getNewlinesBetween(startToken, endToken) {
