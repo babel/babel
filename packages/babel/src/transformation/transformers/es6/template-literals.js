@@ -6,15 +6,27 @@ export var metadata = {
   group: "builtin-pre"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 function isString(node) {
   return t.isLiteral(node) && typeof node.value === "string";
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function buildBinaryExpression(left, right) {
   var node = t.binaryExpression("+", left, right);
   node._templateLiteralProduced = true;
   return node;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function crawl(path) {
   if (path.is("_templateLiteralProduced")) {
@@ -25,7 +37,16 @@ function crawl(path) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   TaggedTemplateExpression(node, parent, scope, file) {
     var quasi = node.quasi;
     var args  = [];
@@ -49,6 +70,10 @@ export var visitor = {
 
     return t.callExpression(node.tag, args);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   TemplateLiteral(node, parent, scope, file) {
     var nodes = [];

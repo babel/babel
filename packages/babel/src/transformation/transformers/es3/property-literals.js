@@ -4,7 +4,33 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
+/**
+ * Turn reserved word properties into literals.
+ *
+ * **In**
+ *
+ * ```javascript
+ * var foo = {
+ *   catch: function () {}
+ * };
+ * ```
+ *
+ * **Out**
+ *
+ * ```javascript
+ * var foo = {
+ *   "catch": function () {}
+ * };
+ * ```
+ */
+
 export var visitor = {
+
+  /**
+   * Look for non-computed keys with names that are not valid identifiers.
+   * Turn them into literals.
+   */
+
   Property: {
     exit(node) {
       var key = node.key;

@@ -1,3 +1,7 @@
+/**
+ * [Please add a description.]
+ */
+
 export default {
   commonStrict: require("./common-strict"),
   amdStrict:    require("./amd-strict"),

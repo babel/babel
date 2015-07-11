@@ -1,9 +1,22 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 var awaitVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   AwaitExpression(node) {
     node.type = "YieldExpression";
@@ -16,7 +29,16 @@ var awaitVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var referenceVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     var name = state.id.name;
     if (node.name === name && scope.bindingIdentifierEquals(name, state.id)) {
@@ -24,6 +46,10 @@ var referenceVisitor = {
     }
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export default function (path, callId) {
   var node = path.node;

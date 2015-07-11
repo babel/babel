@@ -3,7 +3,7 @@ import NodePath from "./index";
 import * as t from "../../types";
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function getStatementParent(): ?NodePath {
@@ -25,7 +25,7 @@ export function getStatementParent(): ?NodePath {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function getOpposite() {
@@ -37,7 +37,7 @@ export function getOpposite() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function getCompletionRecords(): Array {
@@ -64,7 +64,7 @@ export function getCompletionRecords(): Array {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function getSibling(key) {
@@ -78,7 +78,7 @@ export function getSibling(key) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function get(key: string, context?: boolean | TraversalContext): NodePath {
@@ -92,7 +92,7 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function _getKey(key, context?) {
@@ -121,7 +121,7 @@ export function _getKey(key, context?) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function _getPattern(parts, context) {
@@ -141,7 +141,7 @@ export function _getPattern(parts, context) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function getBindingIdentifiers(duplicates?) {

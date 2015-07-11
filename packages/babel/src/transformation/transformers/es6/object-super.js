@@ -1,6 +1,10 @@
 import ReplaceSupers from "../../helpers/replace-supers";
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function Property(path, node, scope, getObjectRef, file) {
   if (!node.method && node.kind === "init") return;
   if (!t.isFunction(node.value)) return;
@@ -17,7 +21,16 @@ function Property(path, node, scope, getObjectRef, file) {
   replaceSupers.replace();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ObjectExpression(node, parent, scope, file) {
     var objectRef;
     var getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");

@@ -8,6 +8,10 @@ import * as t from "../../../types";
 import values from "lodash/object/values";
 import extend from "lodash/object/extend";
 
+/**
+ * [Please add a description.]
+ */
+
 function isLet(node, parent) {
   if (!t.isVariableDeclaration(node)) return false;
   if (node._let) return true;
@@ -26,13 +30,25 @@ function isLet(node, parent) {
   return true;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function isLetInitable(node, parent) {
   return !t.isFor(parent) || !t.isFor(parent, { left: node });
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function isVar(node, parent) {
   return t.isVariableDeclaration(node, { kind: "var" }) && !isLet(node, parent);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function standardizeLets(declars) {
   for (var declar of (declars: Array)) {
@@ -44,7 +60,16 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   VariableDeclaration(node, parent, scope, file) {
     if (!isLet(node, parent)) return;
 
@@ -67,6 +92,10 @@ export var visitor = {
     }
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   Loop(node, parent, scope, file) {
     var init = node.left || node.init;
     if (isLet(init, node)) {
@@ -78,6 +107,10 @@ export var visitor = {
     return blockScoping.run();
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   "BlockStatement|Program"(block, parent, scope, file) {
     if (!t.isLoop(parent)) {
       var blockScoping = new BlockScoping(null, this, parent, scope, file);
@@ -85,6 +118,10 @@ export var visitor = {
     }
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 function replace(node, parent, scope, remaps) {
   var remap = remaps[node.name];
@@ -100,8 +137,16 @@ function replace(node, parent, scope, remaps) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var replaceVisitor = {
   ReferencedIdentifier: replace,
+
+  /**
+   * [Please add a description.]
+   */
 
   AssignmentExpression(node, parent, scope, remaps) {
     var ids = this.getBindingIdentifiers();
@@ -110,6 +155,10 @@ var replaceVisitor = {
     }
   },
 };
+
+/**
+ * [Please add a description.]
+ */
 
 function traverseReplace(node, parent, scope, remaps) {
   if (t.isIdentifier(node)) {
@@ -126,14 +175,32 @@ function traverseReplace(node, parent, scope, remaps) {
   scope.traverse(node, replaceVisitor, remaps);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var letReferenceBlockVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function(node, parent, scope, state) {
     this.traverse(letReferenceFunctionVisitor, state);
     return this.skip();
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var letReferenceFunctionVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     var ref = state.letReferences[node.name];
 
@@ -147,6 +214,10 @@ var letReferenceFunctionVisitor = {
     state.closurify = true;
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var hoistVarDeclarationsVisitor = {
   enter(node, parent, scope, self) {
@@ -172,11 +243,19 @@ var hoistVarDeclarationsVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var loopLabelVisitor = {
   LabeledStatement(node, parent, scope, state) {
     state.innerLabels.push(node.label.name);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var continuationVisitor = {
   enter(node, parent, scope, state) {
@@ -190,6 +269,10 @@ var continuationVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var loopNodeTo = function (node) {
   if (t.isBreakStatement(node)) {
     return "break";
@@ -198,7 +281,16 @@ var loopNodeTo = function (node) {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var loopVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Loop(node, parent, scope, state) {
     var oldIgnoreLabeless = state.ignoreLabeless;
     state.ignoreLabeless = true;
@@ -207,9 +299,17 @@ var loopVisitor = {
     this.skip();
   },
 
+  /**
+   * [Please add a description.]
+   */
+
   Function() {
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   SwitchCase(node, parent, scope, state) {
     var oldInSwitchCase = state.inSwitchCase;
@@ -218,6 +318,10 @@ var loopVisitor = {
     state.inSwitchCase = oldInSwitchCase;
     this.skip();
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   enter(node, parent, scope, state) {
     var replace;
@@ -263,12 +367,11 @@ var loopVisitor = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 class BlockScoping {
-
-  /**
-   * Description
-   */
-
   constructor(loopPath?: NodePath, blockPath: NodePath, parent: Object, scope: Scope, file: File) {
     this.parent = parent;
     this.scope  = scope;
@@ -319,7 +422,7 @@ class BlockScoping {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   remap() {
@@ -366,7 +469,7 @@ class BlockScoping {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   wrapClosure() {
@@ -486,7 +589,7 @@ class BlockScoping {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   getLetReferences() {
@@ -599,7 +702,7 @@ class BlockScoping {
   }
 
   /**
-   * Description
+   * [Please add a description.]
    */
 
   buildHas(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {

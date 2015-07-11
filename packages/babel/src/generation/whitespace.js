@@ -18,6 +18,10 @@ function getLookupIndex(i, base, max) {
   return i;
 }
 
+/**
+ * Get whitespace around tokens.
+ */
+
 export default class Whitespace {
   constructor(tokens) {
     this.tokens = tokens;
@@ -33,6 +37,10 @@ export default class Whitespace {
 
     this._lastFoundIndex = 0;
   }
+
+  /**
+   * Count all the newlines before a node.
+   */
 
   getNewlinesBefore(node) {
     var startToken;
@@ -56,6 +64,10 @@ export default class Whitespace {
 
     return this.getNewlinesBetween(startToken, endToken);
   }
+
+  /**
+   * Count all the newlines after a node.
+   */
 
   getNewlinesAfter(node) {
     var startToken;
@@ -90,6 +102,10 @@ export default class Whitespace {
       }
     }
   }
+
+  /**
+   * Count all the newlines between two tokens.
+   */
 
   getNewlinesBetween(startToken, endToken) {
     if (!endToken || !endToken.loc) return 0;

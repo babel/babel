@@ -4,16 +4,19 @@ import * as messages from "../messages";
 import includes from "lodash/collection/includes";
 import * as t from "../types";
 
-export default function traverse(parent, opts, scope, state, parentPath) {
+/**
+ * [Please add a description.]
+ */
+
+export default function traverse(parent: Object, opts?: Object, scope?: Object, state: Object, parentPath: Object) {
   if (!parent) return;
+  if (!opts) opts = {};
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
       throw new Error(messages.get("traverseNeedsParent", parent.type));
     }
   }
-
-  if (!opts) opts = {};
 
   visitors.explode(opts);
 
@@ -31,7 +34,11 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.node = function (node, opts, scope, state, parentPath, skipKeys?) {
+/**
+ * [Please add a description.]
+ */
+
+traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
   var keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
@@ -42,39 +49,63 @@ traverse.node = function (node, opts, scope, state, parentPath, skipKeys?) {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 const CLEAR_KEYS = [
   "trailingComments", "leadingComments", "extendedRange",
   "_scopeInfo", "_paths",
   "tokens", "range", "start", "end", "loc", "raw"
 ];
 
-traverse.clearNode = function (node) {
+/**
+ * [Please add a description.]
+ */
+
+traverse.clearNode = function (node: Object) {
   for (var i = 0; i < CLEAR_KEYS.length; i++) {
     let key = CLEAR_KEYS[i];
     if (node[key] != null) node[key] = undefined;
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 var clearVisitor = {
   noScope: true,
   exit: traverse.clearNode
 };
 
-traverse.removeProperties = function (tree) {
+/**
+ * [Please add a description.]
+ */
+
+traverse.removeProperties = function (tree: Object): Object {
   traverse(tree, clearVisitor);
   traverse.clearNode(tree);
 
   return tree;
 };
 
-function hasBlacklistedType(node, parent, scope, state) {
+/**
+ * [Please add a description.]
+ */
+
+function hasBlacklistedType(node: Object, parent: Object, scope: Object, state: Object) {
   if (node.type === state.type) {
     state.has = true;
     this.skip();
   }
 }
 
-traverse.hasType = function (tree, scope, type, blacklistTypes) {
+/**
+ * [Please add a description.]
+ */
+
+traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklistTypes: Array<string>): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
 

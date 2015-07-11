@@ -2,7 +2,9 @@ import * as t from "../../../types";
 
 export { default as Identifier } from "./inferer-reference";
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function VariableDeclarator() {
   var id = this.get("id");
@@ -14,7 +16,9 @@ export function VariableDeclarator() {
   }
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function TypeCastExpression(node) {
   return node.typeAnnotation;
@@ -22,7 +26,9 @@ export function TypeCastExpression(node) {
 
 TypeCastExpression.validParent = true;
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function NewExpression(node) {
   if (this.get("callee").isIdentifier()) {
@@ -31,13 +37,17 @@ export function NewExpression(node) {
   }
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function TemplateLiteral() {
   return t.stringTypeAnnotation();
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function UnaryExpression(node) {
   let operator = node.operator;
@@ -53,7 +63,9 @@ export function UnaryExpression(node) {
   }
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function BinaryExpression(node) {
   let operator = node.operator;
@@ -82,7 +94,9 @@ export function BinaryExpression(node) {
   }
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
@@ -91,7 +105,9 @@ export function LogicalExpression() {
   ]);
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
@@ -100,19 +116,25 @@ export function ConditionalExpression() {
   ]);
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function SequenceExpression(node) {
   return this.get("expressions").pop().getTypeAnnotation();
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function AssignmentExpression(node) {
   return this.get("right").getTypeAnnotation();
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function UpdateExpression(node) {
   let operator = node.operator;
@@ -121,7 +143,9 @@ export function UpdateExpression(node) {
   }
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function Literal(node) {
   var value = node.value;
@@ -132,19 +156,25 @@ export function Literal(node) {
   if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function ObjectExpression() {
   return t.genericTypeAnnotation(t.identifier("Object"));
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function ArrayExpression() {
   return t.genericTypeAnnotation(t.identifier("Array"));
 }
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function RestElement() {
   return ArrayExpression();
@@ -152,7 +182,9 @@ export function RestElement() {
 
 RestElement.validParent = true;
 
-//
+/**
+ * [Please add a description.]
+ */
 
 function Func() {
   return t.genericTypeAnnotation(t.identifier("Function"));
@@ -160,15 +192,25 @@ function Func() {
 
 export { Func as Function, Func as Class };
 
-//
+/**
+ * [Please add a description.]
+ */
 
 export function CallExpression() {
   return resolveCall(this.get("callee"));
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function TaggedTemplateExpression() {
   return resolveCall(this.get("tag"));
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function resolveCall(callee) {
   callee = callee.resolve();

@@ -5,6 +5,10 @@ import File from "../transformation/file";
 import each from "lodash/collection/each";
 import * as t from "../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function buildGlobal(namespace, builder) {
   var body      = [];
   var container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
@@ -21,6 +25,10 @@ function buildGlobal(namespace, builder) {
 
   return tree;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function buildUmd(namespace, builder) {
   var body = [];
@@ -41,6 +49,10 @@ function buildUmd(namespace, builder) {
   return t.program([container]);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function buildVar(namespace, builder) {
   var body = [];
   body.push(t.variableDeclaration("var", [
@@ -49,6 +61,10 @@ function buildVar(namespace, builder) {
   builder(body);
   return t.program(body);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function buildHelpers(body, namespace, whitelist) {
   each(File.helpers, function (name) {
@@ -60,6 +76,10 @@ function buildHelpers(body, namespace, whitelist) {
     ));
   });
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export default function (whitelist, outputType = "global") {
   var namespace = t.identifier("babelHelpers");

@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * Prints nodes with params, prints typeParameters, params, and returnType, handles optional params.
+ */
+
 export function _params(node, print) {
   print.plain(node.typeParameters);
   this.push("(");
@@ -15,6 +19,10 @@ export function _params(node, print) {
     print.plain(node.returnType);
   }
 }
+
+/**
+ * Prints method-like nodes, prints key, value, and body, handles async, generator, computed, and get or set.
+ */
 
 export function _method(node, print) {
   var value = node.value;
@@ -46,6 +54,10 @@ export function _method(node, print) {
   print.plain(value.body);
 }
 
+/**
+ * Prints FunctionExpression, prints id and body, handles async and generator.
+ */
+
 export function FunctionExpression(node, print) {
   if (node.async) this.push("async ");
   this.push("function");
@@ -63,7 +75,16 @@ export function FunctionExpression(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * Alias FunctionExpression printer as FunctionDeclaration.
+ */
+
 export { FunctionExpression as FunctionDeclaration };
+
+/**
+ * Prints ArrowFunctionExpression, prints params and body, handles async.
+ * Leaves out parentheses when single param.
+ */
 
 export function ArrowFunctionExpression(node, print) {
   if (node.async) this.push("async ");

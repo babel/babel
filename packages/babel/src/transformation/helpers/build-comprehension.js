@@ -1,5 +1,9 @@
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function build(node, buildBody) {
   var self = node.blocks.shift();
   if (!self) return;

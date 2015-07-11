@@ -211,7 +211,7 @@ export function getSource() {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function willIMaybeExecuteBefore(target) {
@@ -279,6 +279,10 @@ export function _guessExecutionStatusRelativeTo(target) {
 export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion

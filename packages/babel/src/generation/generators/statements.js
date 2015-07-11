@@ -1,6 +1,10 @@
 import repeating from "repeating";
 import * as t from "../../types";
 
+/**
+ * Prints WithStatement, prints object and body.
+ */
+
 export function WithStatement(node, print) {
   this.keyword("with");
   this.push("(");
@@ -8,6 +12,10 @@ export function WithStatement(node, print) {
   this.push(")");
   print.block(node.body);
 }
+
+/**
+ * Prints IfStatement, prints test, consequent, and alternate.
+ */
 
 export function IfStatement(node, print) {
   this.keyword("if");
@@ -24,6 +32,10 @@ export function IfStatement(node, print) {
     print.indentOnComments(node.alternate);
   }
 }
+
+/**
+ * Prints ForStatement, prints init, test, update, and body.
+ */
 
 export function ForStatement(node, print) {
   this.keyword("for");
@@ -47,6 +59,10 @@ export function ForStatement(node, print) {
   print.block(node.body);
 }
 
+/**
+ * Prints WhileStatement, prints test and body.
+ */
+
 export function WhileStatement(node, print) {
   this.keyword("while");
   this.push("(");
@@ -54,6 +70,11 @@ export function WhileStatement(node, print) {
   this.push(")");
   print.block(node.body);
 }
+
+/**
+ * Builds ForIn or ForOf statement printers.
+ * Prints left, right, and body.
+ */
 
 var buildForXStatement = function (op) {
   return function (node, print) {
@@ -67,8 +88,16 @@ var buildForXStatement = function (op) {
   };
 };
 
+/**
+ * Create ForInStatement and ForOfStatement printers.
+ */
+
 export var ForInStatement = buildForXStatement("in");
 export var ForOfStatement = buildForXStatement("of");
+
+/**
+ * Prints DoWhileStatement, prints body and test.
+ */
 
 export function DoWhileStatement(node, print) {
   this.push("do ");
@@ -79,6 +108,11 @@ export function DoWhileStatement(node, print) {
   print.plain(node.test);
   this.push(");");
 }
+
+/**
+ * Builds continue, return, or break statement printers.
+ * Prints label (or key).
+ */
 
 var buildLabelStatement = function (prefix, key) {
   return function (node, print) {
@@ -94,15 +128,27 @@ var buildLabelStatement = function (prefix, key) {
   };
 };
 
+/**
+ * Create ContinueStatement, ReturnStatement, and BreakStatement printers.
+ */
+
 export var ContinueStatement = buildLabelStatement("continue");
 export var ReturnStatement   = buildLabelStatement("return", "argument");
 export var BreakStatement    = buildLabelStatement("break");
+
+/**
+ * Prints LabeledStatement, prints label and body.
+ */
 
 export function LabeledStatement(node, print) {
   print.plain(node.label);
   this.push(": ");
   print.plain(node.body);
 }
+
+/**
+ * Prints TryStatement, prints block, handlers, and finalizer.
+ */
 
 export function TryStatement(node, print) {
   this.keyword("try");
@@ -125,6 +171,10 @@ export function TryStatement(node, print) {
   }
 }
 
+/**
+ * Prints CatchClause, prints param and body.
+ */
+
 export function CatchClause(node, print) {
   this.keyword("catch");
   this.push("(");
@@ -133,11 +183,19 @@ export function CatchClause(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * Prints ThrowStatement, prints argument.
+ */
+
 export function ThrowStatement(node, print) {
   this.push("throw ");
   print.plain(node.argument);
   this.semicolon();
 }
+
+/**
+ * Prints SwitchStatement, prints discriminant and cases.
+ */
 
 export function SwitchStatement(node, print) {
   this.keyword("switch");
@@ -157,6 +215,10 @@ export function SwitchStatement(node, print) {
   this.push("}");
 }
 
+/**
+ * Prints SwitchCase, prints test and consequent.
+ */
+
 export function SwitchCase(node, print) {
   if (node.test) {
     this.push("case ");
@@ -172,9 +234,17 @@ export function SwitchCase(node, print) {
   }
 }
 
+/**
+ * Prints DebuggerStatement.
+ */
+
 export function DebuggerStatement() {
   this.push("debugger;");
 }
+
+/**
+ * Prints VariableDeclaration, prints declarations, handles kind and format.
+ */
 
 export function VariableDeclaration(node, print, parent) {
   this.push(node.kind + " ");
@@ -218,6 +288,10 @@ export function VariableDeclaration(node, print, parent) {
 
   this.semicolon();
 }
+
+/**
+ * Prints VariableDeclarator, handles id, id.typeAnnotation, and init.
+ */
 
 export function VariableDeclarator(node, print) {
   print.plain(node.id);

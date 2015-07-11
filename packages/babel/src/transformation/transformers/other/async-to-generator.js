@@ -7,7 +7,16 @@ export var metadata = {
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   Function(node, parent, scope, file) {
     if (!node.async || node.generator) return;
 

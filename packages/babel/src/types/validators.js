@@ -3,7 +3,7 @@ import esutils from "esutils";
 import * as t from "./index";
 
 /**
- *
+ * Check if the input `node` is a binding identifier.
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
@@ -147,7 +147,7 @@ export function isValidIdentifier(name: string): boolean {
 }
 
 /**
- * Description
+ * Check if the input `node` is a `let` variable declaration.
  */
 
 export function isLet(node: Object): boolean {
@@ -155,7 +155,7 @@ export function isLet(node: Object): boolean {
 }
 
 /**
- * Description
+ * Check if the input `node` is block scoped.
  */
 
 export function isBlockScoped(node: Object): boolean {
@@ -163,7 +163,7 @@ export function isBlockScoped(node: Object): boolean {
 }
 
 /**
- * Description
+ * Check if the input `node` is a variable declaration.
  */
 
 export function isVar(node: Object): boolean {
@@ -171,7 +171,7 @@ export function isVar(node: Object): boolean {
 }
 
 /**
- * Description
+ * Check if the input `specifier` is a `default` import or export.
  */
 
 export function isSpecifierDefault(specifier: Object): boolean {
@@ -180,7 +180,7 @@ export function isSpecifierDefault(specifier: Object): boolean {
 }
 
 /**
- * Description
+ * Check if the input `node` is a scope.
  */
 
 export function isScope(node: Object, parent: Object): boolean {
@@ -192,7 +192,7 @@ export function isScope(node: Object, parent: Object): boolean {
 }
 
 /**
- * Description
+ * Check if the input `node` is definitely immutable.
  */
 
 export function isImmutable(node: Object): boolean {

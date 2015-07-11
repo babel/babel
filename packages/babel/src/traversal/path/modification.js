@@ -31,6 +31,10 @@ export function insertBefore(nodes) {
   return [this];
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
 
@@ -59,13 +63,25 @@ export function _containerInsert(from, nodes) {
   return paths;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _containerInsertBefore(nodes) {
   return this._containerInsert(this.key, nodes);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function _maybePopFromStatements(nodes) {
   var last = nodes[nodes.length - 1];
@@ -123,7 +139,7 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function _verifyNodeList(nodes) {
@@ -148,7 +164,7 @@ export function _verifyNodeList(nodes) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function unshiftContainer(listKey, nodes) {
@@ -172,7 +188,7 @@ export function unshiftContainer(listKey, nodes) {
 }
 
 /**
- * Description
+ * [Please add a description.]
  */
 
 export function pushContainer(listKey, nodes) {

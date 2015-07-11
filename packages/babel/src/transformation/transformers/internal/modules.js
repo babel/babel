@@ -7,6 +7,10 @@
 import clone from "lodash/lang/clone";
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function getDeclar(node) {
   var declar = node.declaration;
   t.inheritsComments(declar, node);
@@ -14,6 +18,10 @@ function getDeclar(node) {
   declar._ignoreUserWhitespace = true;
   return declar;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function buildExportSpecifier(id) {
   return t.exportSpecifier(clone(id), clone(id));
@@ -23,7 +31,16 @@ export var metadata = {
   group: "builtin-pre"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ExportDefaultDeclaration(node, parent, scope) {
     var declar = node.declaration;
 
@@ -51,6 +68,10 @@ export var visitor = {
       return nodes;
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   ExportNamedDeclaration(node) {
     var declar = node.declaration;
@@ -80,6 +101,10 @@ export var visitor = {
       return [declar, t.exportNamedDeclaration(null, specifiers)];
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   Program: {
     enter(node) {

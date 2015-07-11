@@ -2,6 +2,10 @@ import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
 import * as t from "../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function visitIdentifier(context, node, scope, state) {
   // check if this node matches our function id
   if (node.name !== state.name) return;
@@ -15,15 +19,32 @@ function visitIdentifier(context, node, scope, state) {
   context.stop();
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     visitIdentifier(this, node, scope, state);
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   BindingIdentifier(node, parent, scope, state) {
     visitIdentifier(this, node, scope, state);
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var wrap = function (state, method, id, scope) {
   if (state.selfReference) {
@@ -55,6 +76,10 @@ var wrap = function (state, method, id, scope) {
   method.id = id;
   scope.getProgramParent().references[id.name] = true;
 };
+
+/**
+ * [Please add a description.]
+ */
 
 var visit = function (node, name, scope) {
   var state = {
@@ -102,10 +127,18 @@ var visit = function (node, name, scope) {
   return state;
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export function custom(node, id, scope) {
   var state = visit(node, id.name, scope);
   return wrap(state, node, id, scope);
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function property(node, file, scope) {
   var key = t.toComputedKey(node, node.key);
@@ -118,6 +151,10 @@ export function property(node, file, scope) {
   var state  = visit(method, name, scope);
   node.value = wrap(state, method, id, scope) || method;
 }
+
+/**
+ * [Please add a description.]
+ */
 
 export function bare(node, parent, scope) {
   // has an `id` so we don't need to infer one

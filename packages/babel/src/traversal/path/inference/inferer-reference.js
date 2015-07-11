@@ -1,5 +1,9 @@
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 export default function (node) {
   if (!this.isReferenced()) return;
 
@@ -23,6 +27,10 @@ export default function (node) {
     // todo
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function getTypeAnnotationBindingConstantViolations(path, name) {
   var binding = path.scope.getBinding(name);
@@ -77,6 +85,10 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
   }
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function getConstantViolationsBefore(binding, path, functions) {
   var violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
@@ -87,6 +99,10 @@ function getConstantViolationsBefore(binding, path, functions) {
     return status === "before";
   });
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function inferAnnotationFromBinaryExpression(name, path) {
   var operator = path.node.operator;
@@ -139,6 +155,10 @@ function inferAnnotationFromBinaryExpression(name, path) {
   return t.createTypeAnnotationBasedOnTypeof(typePath.node.value);
 }
 
+/**
+ * [Please add a description.]
+ */
+
 function getParentConditionalPath(path) {
   var parentPath;
   while (parentPath = path.parentPath) {
@@ -153,6 +173,10 @@ function getParentConditionalPath(path) {
     }
   }
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function getConditionalAnnotation(path, name) {
   var ifStatement = getParentConditionalPath(path);

@@ -1,3 +1,7 @@
+/**
+ * Print ClassDeclaration, prints decorators, typeParameters, extends, implements, and body.
+ */
+
 export function ClassDeclaration(node, print) {
   print.list(node.decorators, { separator: "" });
   this.push("class");
@@ -24,7 +28,15 @@ export function ClassDeclaration(node, print) {
   print.plain(node.body);
 }
 
+/**
+ * Alias ClassDeclaration printer as ClassExpression.
+ */
+
 export { ClassDeclaration as ClassExpression };
+
+/**
+ * Print ClassBody, collapses empty blocks, prints body.
+ */
 
 export function ClassBody(node, print) {
   if (node.body.length === 0) {
@@ -41,6 +53,10 @@ export function ClassBody(node, print) {
   }
 }
 
+/**
+ * Print ClassProperty, prints decorators, static, key, typeAnnotation, and value.
+ * Also: semicolons, deal with it.
+ */
 
 export function ClassProperty(node, print) {
   print.list(node.decorators, { separator: "" });
@@ -56,6 +72,10 @@ export function ClassProperty(node, print) {
   }
   this.semicolon();
 }
+
+/**
+ * Print MethodDefinition, prints decorations, static, and method.
+ */
 
 export function MethodDefinition(node, print) {
   print.list(node.decorators, { separator: "" });

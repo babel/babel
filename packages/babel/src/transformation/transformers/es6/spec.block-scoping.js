@@ -1,11 +1,19 @@
 import * as t from "../../../types";
 
+/**
+ * [Please add a description.]
+ */
+
 function buildAssert(node, file) {
   return t.callExpression(
     file.addHelper("temporal-assert-defined"),
     [node, t.literal(node.name), file.addHelper("temporal-undefined")]
   );
 }
+
+/**
+ * [Please add a description.]
+ */
 
 function references(node, scope, state) {
   var declared = state.letRefs[node.name];
@@ -15,7 +23,16 @@ function references(node, scope, state) {
   return scope.getBindingIdentifier(node.name) === declared;
 }
 
+/**
+ * [Please add a description.]
+ */
+
 var refVisitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   ReferencedIdentifier(node, parent, scope, state) {
     if (t.isFor(parent) && parent.left === node) return;
 
@@ -32,6 +49,10 @@ var refVisitor = {
       return t.logicalExpression("&&", assert, node);
     }
   },
+
+  /**
+   * [Please add a description.]
+   */
 
   AssignmentExpression: {
     exit(node, parent, scope, state) {
@@ -62,7 +83,16 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
   "Program|Loop|BlockStatement": {
     exit(node, parent, scope, file) {
       var letRefs = node._letReferences;
