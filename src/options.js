@@ -1,5 +1,5 @@
-import {has, isArray} from "./util"
-import {SourceLocation} from "./location"
+import {has} from "./util";
+import {SourceLocation} from "./location";
 
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
@@ -85,38 +85,37 @@ export const defaultOptions = {
   // Babel-specific options
   features: {},
   strictMode: null
-}
+};
 
 // Interpret and default an options object
 
 export function getOptions(opts) {
-  let options = {}
+  let options = {};
   for (let opt in defaultOptions)
-    options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt]
+    options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt];
 
-  if (isArray(options.onToken)) {
-    let tokens = options.onToken
-    options.onToken = (token) => tokens.push(token)
+  if (Array.isArray(options.onToken)) {
+    let tokens = options.onToken;
+    options.onToken = (token) => tokens.push(token);
   }
-  if (isArray(options.onComment))
-    options.onComment = pushComment(options, options.onComment)
+  if (Array.isArray(options.onComment))
+    options.onComment = pushComment(options, options.onComment);
 
-  return options
+  return options;
 }
 
 function pushComment(options, array) {
   return function (block, text, start, end, startLoc, endLoc) {
     let comment = {
-      type: block ? 'Block' : 'Line',
+      type: block ? "Block" : "Line",
       value: text,
       start: start,
       end: end
-    }
+    };
     if (options.locations)
-      comment.loc = new SourceLocation(this, startLoc, endLoc)
+      comment.loc = new SourceLocation(this, startLoc, endLoc);
     if (options.ranges)
-      comment.range = [start, end]
-    array.push(comment)
-  }
+      comment.range = [start, end];
+    array.push(comment);
+  };
 }
-

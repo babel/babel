@@ -18,24 +18,24 @@
 
 export class TokenType {
   constructor(label, conf = {}) {
-    this.label = label
-    this.keyword = conf.keyword
-    this.beforeExpr = !!conf.beforeExpr
-    this.startsExpr = !!conf.startsExpr
-    this.rightAssociative = !!conf.rightAssociative
-    this.isLoop = !!conf.isLoop
-    this.isAssign = !!conf.isAssign
-    this.prefix = !!conf.prefix
-    this.postfix = !!conf.postfix
-    this.binop = conf.binop || null
-    this.updateContext = null
+    this.label = label;
+    this.keyword = conf.keyword;
+    this.beforeExpr = !!conf.beforeExpr;
+    this.startsExpr = !!conf.startsExpr;
+    this.rightAssociative = !!conf.rightAssociative;
+    this.isLoop = !!conf.isLoop;
+    this.isAssign = !!conf.isAssign;
+    this.prefix = !!conf.prefix;
+    this.postfix = !!conf.postfix;
+    this.binop = conf.binop || null;
+    this.updateContext = null;
   }
 }
 
 function binop(name, prec) {
-  return new TokenType(name, {beforeExpr: true, binop: prec})
+  return new TokenType(name, {beforeExpr: true, binop: prec});
 }
-const beforeExpr = {beforeExpr: true}, startsExpr = {startsExpr: true}
+const beforeExpr = {beforeExpr: true}, startsExpr = {startsExpr: true};
 
 export const types = {
   num: new TokenType("num", startsExpr),
@@ -95,52 +95,52 @@ export const types = {
   star: binop("*", 10),
   slash: binop("/", 10),
   exponent: new TokenType("**", {beforeExpr: true, binop: 11, rightAssociative: true})
-}
+};
 
 // Map keyword names to token types.
 
-export const keywords = {}
+export const keywords = {};
 
 // Succinct definitions of keyword token types
 function kw(name, options = {}) {
-  options.keyword = name
-  keywords[name] = types["_" + name] = new TokenType(name, options)
+  options.keyword = name;
+  keywords[name] = types["_" + name] = new TokenType(name, options);
 }
 
-kw("break")
-kw("case", beforeExpr)
-kw("catch")
-kw("continue")
-kw("debugger")
-kw("default", beforeExpr)
-kw("do", {isLoop: true})
-kw("else", beforeExpr)
-kw("finally")
-kw("for", {isLoop: true})
-kw("function", startsExpr)
-kw("if")
-kw("return", beforeExpr)
-kw("switch")
-kw("throw", beforeExpr)
-kw("try")
-kw("var")
-kw("let")
-kw("const")
-kw("while", {isLoop: true})
-kw("with")
-kw("new", {beforeExpr: true, startsExpr: true})
-kw("this", startsExpr)
-kw("super", startsExpr)
-kw("class")
-kw("extends", beforeExpr)
-kw("export")
-kw("import")
-kw("yield", {beforeExpr: true, startsExpr: true})
-kw("null", startsExpr)
-kw("true", startsExpr)
-kw("false", startsExpr)
-kw("in", {beforeExpr: true, binop: 7})
-kw("instanceof", {beforeExpr: true, binop: 7})
-kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true})
-kw("void", {beforeExpr: true, prefix: true, startsExpr: true})
-kw("delete", {beforeExpr: true, prefix: true, startsExpr: true})
+kw("break");
+kw("case", beforeExpr);
+kw("catch");
+kw("continue");
+kw("debugger");
+kw("default", beforeExpr);
+kw("do", {isLoop: true});
+kw("else", beforeExpr);
+kw("finally");
+kw("for", {isLoop: true});
+kw("function", startsExpr);
+kw("if");
+kw("return", beforeExpr);
+kw("switch");
+kw("throw", beforeExpr);
+kw("try");
+kw("var");
+kw("let");
+kw("const");
+kw("while", {isLoop: true});
+kw("with");
+kw("new", {beforeExpr: true, startsExpr: true});
+kw("this", startsExpr);
+kw("super", startsExpr);
+kw("class");
+kw("extends", beforeExpr);
+kw("export");
+kw("import");
+kw("yield", {beforeExpr: true, startsExpr: true});
+kw("null", startsExpr);
+kw("true", startsExpr);
+kw("false", startsExpr);
+kw("in", {beforeExpr: true, binop: 7});
+kw("instanceof", {beforeExpr: true, binop: 7});
+kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true});
+kw("void", {beforeExpr: true, prefix: true, startsExpr: true});
+kw("delete", {beforeExpr: true, prefix: true, startsExpr: true});

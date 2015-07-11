@@ -19,26 +19,31 @@
 // [dammit]: acorn_loose.js
 // [walk]: util/walk.js
 
-import {Parser} from "./state"
-import {getOptions} from "./options"
-import "./parseutil"
-import "./statement"
-import "./lval"
-import "./expression"
-import "./lookahead"
+import {Parser, plugins} from "./state";
+import {getOptions} from "./options";
+import "./parseutil";
+import "./statement";
+import "./lval";
+import "./expression";
+import "./lookahead";
+import "./tokentype";
+import "./tokencontext";
 
-export {Parser, plugins} from "./state"
-export {defaultOptions} from "./options"
-export {SourceLocation} from "./location"
-export {getLineInfo} from "./location"
-export {Node} from "./node"
-export {TokenType, types as tokTypes} from "./tokentype"
-export {TokContext, types as tokContexts} from "./tokencontext"
-export {isIdentifierChar, isIdentifierStart} from "./identifier"
-export {Token} from "./tokenize"
-export {isNewLine, lineBreak, lineBreakG} from "./whitespace"
+export {Parser, plugins} from "./state";
+export {defaultOptions} from "./options";
+export {SourceLocation} from "./location";
+export {getLineInfo} from "./location";
+export {Node} from "./node";
+export {TokenType, types as tokTypes} from "./tokentype";
+export {TokContext, types as tokContexts} from "./tokencontext";
+export {isIdentifierChar, isIdentifierStart} from "./identifier";
+export {Token} from "./tokenize";
+export {isNewLine, lineBreak, lineBreakG} from "./whitespace";
 
-export const version = "1.0.0"
+import flowPlugin from "./plugins/flow";
+import jsxPlugin from "./plugins/jsx";
+plugins.flow = flowPlugin;
+plugins.jsx = jsxPlugin;
 
 // The main exported interface (under `self.acorn` when in the
 // browser) is a `parse` function that takes a code string and
@@ -48,32 +53,5 @@ export const version = "1.0.0"
 // [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 
 export function parse(input, options) {
-  let p = parser(options, input)
-  let startPos = p.options.locations ? [p.pos, p.curPosition()] : p.pos
-  p.nextToken()
-  return p.parseTopLevel(p.options.program || p.startNodeAt(startPos))
-}
-
-// This function tries to parse a single expression at a given
-// offset in a string. Useful for parsing mixed-language formats
-// that embed JavaScript expressions.
-
-export function parseExpressionAt(input, pos, options) {
-  let p = parser(options, input, pos)
-  p.nextToken()
-  return p.parseExpression()
-}
-
-// Acorn is organized as a tokenizer and a recursive-descent parser.
-// The `tokenize` export provides an interface to the tokenizer.
-// Because the tokenizer is optimized for being efficiently used by
-// the Acorn parser itself, this interface is somewhat crude and not
-// very modular.
-
-export function tokenizer(input, options) {
-  return parser(options, input)
-}
-
-function parser(options, input) {
-  return new Parser(getOptions(options), String(input))
+  return new Parser(getOptions(options), input).parse();
 }

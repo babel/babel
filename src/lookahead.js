@@ -1,6 +1,6 @@
-import {Parser} from "./state"
+import {Parser} from "./state";
 
-const pp = Parser.prototype
+const pp = Parser.prototype;
 
 var STATE_KEYS = [
   "lastTokStartLoc",
@@ -27,21 +27,21 @@ var STATE_KEYS = [
 ];
 
 pp.getState = function () {
-  var state = {}
+  var state = {};
   for (var i = 0; i < STATE_KEYS.length; i++) {
-    var key = STATE_KEYS[i]
-    state[key] = this[key]
+    var key = STATE_KEYS[i];
+    state[key] = this[key];
   }
-  state.context = this.context.slice()
-  state.labels = this.labels.slice()
-  return state
+  state.context = this.context.slice();
+  state.labels = this.labels.slice();
+  return state;
 };
 
-pp.lookahead = function() {
+pp.lookahead = function () {
   var old = this.getState();
-  this.isLookahead = true
-  this.next()
-  this.isLookahead = false
+  this.isLookahead = true;
+  this.next();
+  this.isLookahead = false;
   var curr = this.getState();
   for (var key in old) this[key] = old[key];
   return curr;
