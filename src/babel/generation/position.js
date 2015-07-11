@@ -1,5 +1,5 @@
 /**
- * [Please add a description.]
+ * Track current position in code generation.
  */
 
 export default class Position {
@@ -9,7 +9,7 @@ export default class Position {
   }
 
   /**
-   * [Please add a description.]
+   * Push a string to the current position, mantaining the current line and column.
    */
 
   push(str) {
@@ -24,7 +24,7 @@ export default class Position {
   }
 
   /**
-   * [Please add a description.]
+   * Unshift a string from the current position, mantaining the current line and column.
    */
 
   unshift(str) {
