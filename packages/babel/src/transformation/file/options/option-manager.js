@@ -11,7 +11,8 @@ import fs from "fs";
 var existsCache = {};
 var jsonCache   = {};
 
-const CONFIG_FILENAME = ".babelrc";
+const BABELRC_FILENAME = ".babelrc";
+const PACKAGE_FILENAME = "package.json";
 
 function exists(filename) {
   var cached = existsCache[filename];
@@ -49,7 +50,7 @@ export default class OptionManager {
    * Description
    */
 
-  addConfig(loc) {
+  addConfig(loc, key?) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
 
     var content = fs.readFileSync(loc, "utf8");
@@ -57,6 +58,7 @@ export default class OptionManager {
 
     try {
       opts = jsonCache[content] = jsonCache[content] || JSON.parse(stripJsonComments(content));
+      if (key) opts = opts[key];
     } catch (err) {
       err.message = `${loc}: ${err.message}`;
       throw err;
@@ -103,8 +105,11 @@ export default class OptionManager {
     while (loc !== (loc = path.dirname(loc))) {
       if (this.options.breakConfig) return;
 
-      var configLoc = path.join(loc, CONFIG_FILENAME);
+      var configLoc = path.join(loc, BABELRC_FILENAME);
       if (exists(configLoc)) this.addConfig(configLoc);
+
+      var pkgLoc = path.join(loc, PACKAGE_FILENAME);
+      if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel");
     }
   }
 
