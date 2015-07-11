@@ -15,7 +15,7 @@ export var metadata = {
 export var visitor = {
   ImportDeclaration(node, parent, scope, file) {
     // flow type
-    if (node.isType) return;
+    if (node.importKind === "type" || node.importKind === "typeof") return;
 
     var nodes = [];
 

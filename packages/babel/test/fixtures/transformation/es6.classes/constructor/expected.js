@@ -7,6 +7,8 @@ var Test = function Test() {
 };
 
 var Foo = (function (_Bar) {
+  babelHelpers.inherits(Foo, _Bar);
+
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
 
@@ -14,7 +16,6 @@ var Foo = (function (_Bar) {
     this.state = "test";
   }
 
-  babelHelpers.inherits(Foo, _Bar);
   return Foo;
 })(Bar);
 

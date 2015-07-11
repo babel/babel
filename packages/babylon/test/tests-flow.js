@@ -6728,11 +6728,47 @@ var fbTestFixture = {
           end: { line: 1, column: 26 }
         }
       },
-      isType: true,
+      importKind: 'type',
       range: [0, 27],
       loc: {
         start: { line: 1, column: 0 },
         end: { line: 1, column: 27 }
+      }
+    },
+    'import typeof foo from "bar";': {
+      type: 'ImportDeclaration',
+      specifiers: [{
+        type: 'ImportDefaultSpecifier',
+        local: {
+          type: 'Identifier',
+          name: 'foo',
+          range: [14, 17],
+          loc: {
+            start: { line: 1, column: 14 },
+            end: { line: 1, column: 17 }
+          }
+        },
+        range: [14, 17],
+        loc: {
+          start: { line: 1, column: 14 },
+          end: { line: 1, column: 17 }
+        }
+      }],
+      source: {
+        type: 'Literal',
+        value: 'bar',
+        raw: '"bar"',
+        range: [23, 28],
+        loc: {
+          start: { line: 1, column: 23 },
+          end: { line: 1, column: 28 }
+        }
+      },
+      importKind: 'typeof',
+      range: [0, 29],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 29 }
       }
     },
     'import type {foo, bar} from "baz";': {
@@ -6798,17 +6834,26 @@ var fbTestFixture = {
           end: { line: 1, column: 33 }
         }
       },
-      isType: true,
+      importKind: 'type',
       range: [0, 34],
       loc: {
         start: { line: 1, column: 0 },
         end: { line: 1, column: 34 }
       }
     },
-    'import type {foo as bar} from "baz";': {
+    'import type {foo, bar} from "baz";': {
       type: 'ImportDeclaration',
       specifiers: [{
         type: 'ImportSpecifier',
+        local: {
+          type: 'Identifier',
+          name: 'foo',
+          range: [13, 16],
+          loc: {
+            start: { line: 1, column: 13 },
+            end: { line: 1, column: 16 }
+          }
+        },
         imported: {
           type: 'Identifier',
           name: 'foo',
@@ -6818,36 +6863,97 @@ var fbTestFixture = {
             end: { line: 1, column: 16 }
           }
         },
+        range: [13, 16],
+        loc: {
+          start: { line: 1, column: 13 },
+          end: { line: 1, column: 16 }
+        }
+      }, {
+        type: 'ImportSpecifier',
         local: {
           type: 'Identifier',
           name: 'bar',
-          range: [20, 23],
+          range: [18, 21],
           loc: {
-            start: { line: 1, column: 20 },
-            end: { line: 1, column: 23 }
+            start: { line: 1, column: 18 },
+            end: { line: 1, column: 21 }
           }
         },
-        range: [13, 23],
+        imported: {
+          type: 'Identifier',
+          name: 'bar',
+          range: [18, 21],
+          loc: {
+            start: { line: 1, column: 18 },
+            end: { line: 1, column: 21 }
+          }
+        },
+        range: [18, 21],
         loc: {
-          start: { line: 1, column: 13 },
-          end: { line: 1, column: 23 }
+          start: { line: 1, column: 18 },
+          end: { line: 1, column: 21 }
         }
       }],
       source: {
         type: 'Literal',
         value: 'baz',
         raw: '"baz"',
-        range: [30, 35],
+        range: [28, 33],
         loc: {
-          start: { line: 1, column: 30 },
-          end: { line: 1, column: 35 }
+          start: { line: 1, column: 28 },
+          end: { line: 1, column: 33 }
         }
       },
-      isType: true,
-      range: [0, 36],
+      importKind: 'type',
+      range: [0, 34],
       loc: {
         start: { line: 1, column: 0 },
-        end: { line: 1, column: 36 }
+        end: { line: 1, column: 34 }
+      }
+    },
+    'import typeof {foo as bar} from "baz";': {
+      type: 'ImportDeclaration',
+      specifiers: [{
+        type: 'ImportSpecifier',
+        imported: {
+          type: 'Identifier',
+          name: 'foo',
+          range: [15, 18],
+          loc: {
+            start: { line: 1, column: 15 },
+            end: { line: 1, column: 18 }
+          }
+        },
+        local: {
+          type: 'Identifier',
+          name: 'bar',
+          range: [22, 25],
+          loc: {
+            start: { line: 1, column: 22 },
+            end: { line: 1, column: 25 }
+          }
+        },
+        range: [15, 25],
+        loc: {
+          start: { line: 1, column: 15 },
+          end: { line: 1, column: 25 }
+        }
+      }],
+      source: {
+        type: 'Literal',
+        value: 'baz',
+        raw: '"baz"',
+        range: [32, 37],
+        loc: {
+          start: { line: 1, column: 32 },
+          end: { line: 1, column: 37 }
+        }
+      },
+      importKind: 'typeof',
+      range: [0, 38],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 38 }
       }
     },
     'import type from "foo";': {
@@ -6879,7 +6985,7 @@ var fbTestFixture = {
           end: { line: 1, column: 22 }
         }
       },
-      isType: false,
+      importKind: 'value',
       range: [0, 23],
       loc: {
         start: { line: 1, column: 0 },
@@ -6940,7 +7046,7 @@ var fbTestFixture = {
           end: { line: 1, column: 29 }
         }
       },
-      isType: false,
+      importKind: 'value',
       range: [0, 30],
       loc: {
         start: { line: 1, column: 0 },
@@ -6976,11 +7082,47 @@ var fbTestFixture = {
           end: { line: 1, column: 37 }
         }
       },
-      isType: true,
+      importKind: 'type',
       range: [0, 38],
       loc: {
         start: { line: 1, column: 0 },
         end: { line: 1, column: 38 }
+      }
+    },
+    'import typeof * as namespace from "bar";': {
+      type: 'ImportDeclaration',
+      specifiers: [{
+        type: 'ImportNamespaceSpecifier',
+        local: {
+          type: 'Identifier',
+          name: 'namespace',
+          range: [19, 28],
+          loc: {
+            start: { line: 1, column: 19 },
+            end: { line: 1, column: 28 }
+          }
+        },
+        range: [14, 28],
+        loc: {
+          start: { line: 1, column: 14 },
+          end: { line: 1, column: 28 }
+        }
+      }],
+      source: {
+        type: 'Literal',
+        value: 'bar',
+        raw: '"bar"',
+        range: [34, 39],
+        loc: {
+          start: { line: 1, column: 34 },
+          end: { line: 1, column: 39 }
+        }
+      },
+      importKind: 'typeof',
+      range: [0, 40],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 40 }
       }
     },
   },

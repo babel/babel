@@ -14,13 +14,13 @@ function broken(x) {
   if (true) {
     var _ret = (function () {
       var Foo = (function (_Bar) {
+        _inherits(Foo, _Bar);
+
         function Foo() {
           _classCallCheck(this, Foo);
 
           _get(Object.getPrototypeOf(Foo.prototype), "constructor", this).apply(this, arguments);
         }
-
-        _inherits(Foo, _Bar);
 
         return Foo;
       })(Bar);

@@ -592,8 +592,10 @@ export default class ClassTransformer {
   pushInherits() {
     if (!this.isDerived || this.pushedInherits) return;
 
+    // Unshift to ensure that the constructor inheritance is set up before
+    // any properties can be assigned to the prototype.
     this.pushedInherits = true;
-    this.body.push(t.expressionStatement(t.callExpression(
+    this.body.unshift(t.expressionStatement(t.callExpression(
       this.file.addHelper("inherits"),
       [this.classRef, this.superName]
     )));
