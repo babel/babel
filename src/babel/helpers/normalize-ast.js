@@ -1,7 +1,9 @@
 import * as t from "../types";
 
 /**
- * [Please add a description.]
+ * Normalize an AST.
+ *
+ * - Wrap `Program` node with a `File` node.
  */
 
 export default function (ast, comments, tokens) {
