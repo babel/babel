@@ -234,8 +234,14 @@ export default class Scope {
     this.path        = path;
   }
 
+  /**
+   * Globals.
+   */
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
 
+  /**
+   * Variables available in current context.
+   */
   static contextVariables = [
     "arguments",
     "undefined",
@@ -244,7 +250,7 @@ export default class Scope {
   ];
 
   /**
-   * [Please add a description.]
+   * Traverse node with current scope and path.
    */
 
   traverse(node: Object, opts: Object, state?) {
@@ -252,7 +258,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Generate a unique identifier and add it to the current scope.
    */
 
   generateDeclaredUidIdentifier(name: string = "temp") {
@@ -262,7 +268,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Generate a unique identifier.
    */
 
   generateUidIdentifier(name: string) {
@@ -270,7 +276,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Generate a unique `_id1` binding.
    */
 
   generateUid(name: string) {
@@ -292,7 +298,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Generate an `_id1`.
    */
 
   _generateUid(name, i) {
@@ -302,7 +308,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Generate a unique identifier based on a node.
    */
 
   generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String):  Object {
@@ -378,7 +384,7 @@ export default class Scope {
   }
 
   /**
-   * [Please add a description.]
+   * Possibly generate a memoised identifier if it is not static and has consequences.
    */
 
   maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
