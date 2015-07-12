@@ -16,5 +16,4 @@ dist
 /packages/babel-runtime/regenerator/*.js
 /packages/*/lib
 _babel.github.io
-scripts
 /tests/.browser-build.js
