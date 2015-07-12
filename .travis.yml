@@ -9,26 +9,10 @@ node_js:
  - "0.10"
  - "0.12"
 
-before_script: ./scripts/travis/setup-git.sh
 script: make test-travis
-after_success: ./scripts/travis/merge-development-with-master.sh
+after_success:
+ - ./scripts/travis/setup=git.sh
+ - ./scripts/travis/merge-development-with-master.sh
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
-
-before_deploy:
-- make prepublish
-
-deploy:
-  provider: npm
-  email: sebmck@gmail.com
-  skip_cleanup: true
-  api_key:
-    secure: Q/pZStwherdYPCqCa0aUuiEktLcx6ccBxieyH8j9IXdDgty0ydmnajZfUnlZuCjN13XI9esM44nSJFTWZvntTryDQAQm37c63VXhAEnw/qrAINI06yt0gLBTT69/fKvIAkH8l48nmW32ZS2dse3rHRPZF1CwyQLC/pdMip8I4sM=
-  on:
-    branch: master
-    tags: true
-    repo: babel/babel
-
-after_deploy:
-- make travis-deploy
