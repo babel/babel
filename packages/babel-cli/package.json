@@ -20,9 +20,9 @@
     "slash": "^1.0.0"
   },
   "bin": {
-    "babel": "./lib/babel/index.js",
-    "babel-node": "./lib/babel-node",
-    "babel-external-helpers": "./lib/babel-external-helpers",
-    "babel-plugin": "./lib/babel-plugin/index.js"
+    "babel": "./bin/babel.js",
+    "babel-node": "./bin/babel-node.js",
+    "babel-external-helpers": "./bin/babel-external-helpers.js",
+    "babel-plugin": "./bin/babel-plugin.js"
   }
 }
