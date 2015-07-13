@@ -1,15 +1,16 @@
 #!/bin/sh
 set -e
 
+TEST_DIRS=""
+
 for f in packages/*; do
   if [ -n "$TEST_ONLY" ] && [ `basename $f` != "$TEST_ONLY" ]; then
     continue
   fi
 
   if [ -d "$f/test" ]; then
-    echo $f
-    cd $f
-    node ../../node_modules/mocha/bin/_mocha
-    cd ../../
+    TEST_DIRS="$f/test $TEST_DIRS"
   fi
 done
+
+node node_modules/mocha/bin/_mocha $TEST_DIRS --reporter dot --ui tdd

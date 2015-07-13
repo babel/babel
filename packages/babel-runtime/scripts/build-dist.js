@@ -1,5 +1,3 @@
-"use strict";
-
 var outputFile = require("output-file-sync");
 var transform  = require("../lib/babel/transformation");
 var each       = require("lodash/collection/each");
@@ -10,7 +8,7 @@ var t          = require("../lib/babel/types");
 var _          = require("lodash");
 
 function relative(filename) {
-  return __dirname + "/babel-runtime/" + filename;
+  return __dirname + "/../" + filename;
 }
 
 function readFile(filename, shouldDefaultify) {
@@ -25,16 +23,6 @@ function readFile(filename, shouldDefaultify) {
 
 function defaultify(name) {
   return 'module.exports = { "default": ' + name + ', __esModule: true };';
-}
-
-function updatePackage() {
-  var pkgLoc = relative("package.json");
-  var pkg    = require(pkgLoc);
-
-  var mainPkg = require("../package.json");
-  pkg.version = mainPkg.version;
-
-  writeRootFile("package.json", JSON.stringify(pkg, null, 2));
 }
 
 function writeRootFile(filename, content) {
@@ -92,5 +80,3 @@ each(paths, function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
-
-updatePackage();

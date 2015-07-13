@@ -12,5 +12,5 @@ if [ ! -d ./_babel ]; then
 fi
 
 make build
-git commit -am "${TRAVIS_TAG}"
-git push "https://${GH_TOKEN}@github.com/babel/babel.github.io"
+git commit -am "v`babel -V`"
+git push

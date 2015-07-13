@@ -30,6 +30,7 @@ export class Token {
 const pp = Parser.prototype;
 
 // Are we running under Rhino?
+/* global Packages */
 const isRhino = typeof Packages === "object" && Object.prototype.toString.call(Packages) === "[object JavaPackage]";
 
 // Move to the next token

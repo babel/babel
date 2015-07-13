@@ -1,5 +1,4 @@
 {
-  "noCheckAst": true,
   "externalHelpers": true,
   "optional": "es7.exportExtensions"
 }

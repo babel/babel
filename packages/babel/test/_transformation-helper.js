@@ -44,6 +44,7 @@ chai.assert.throw = function (fn, msg) {
 
   return chai.assert._throw(fn, msg);
 };
+
 var run = function (task, done) {
   var actual = task.actual;
   var expect = task.expect;
@@ -59,14 +60,6 @@ var run = function (task, done) {
 
   var execCode = exec.code;
   var result;
-
-  var noCheckAst = opts.noCheckAst;
-  delete opts.noCheckAst;
-
-  var checkAst = function (result, opts) {
-    if (noCheckAst) return;
-    helper.esvalid(result.ast.program, result.code, opts.loc);
-  };
 
   if (execCode) {
     result = transform(execCode, getOpts(exec));
@@ -90,8 +83,6 @@ var run = function (task, done) {
       err.message += codeFrame(execCode);
       throw err;
     }
-
-    checkAst(result, exec);
   }
 
   var actualCode = actual.code;
@@ -106,8 +97,6 @@ var run = function (task, done) {
       //require("fs").writeFileSync(expect.loc, actualCode);
       throw err;
     }
-
-    checkAst(result, actual);
   }
 
   if (task.sourceMap) {

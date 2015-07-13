@@ -1,5 +1,4 @@
 var pathExists = require("path-exists");
-var esvalid    = require("esvalid");
 var util       = require("../lib/util");
 var path       = require("path");
 var fs         = require("fs");
@@ -17,17 +16,6 @@ var readFile = exports.readFile = function (filename) {
     return file;
   } else {
     return "";
-  }
-};
-
-exports.esvalid = function (ast, code, loc) {
-  var errors = esvalid.errors(ast);
-  if (errors.length) {
-    var msg = [];
-    _.each(errors, function (err) {
-      msg.push(err.message + " - " + util.inspect(err.node));
-    });
-    throw new Error(loc + ": " + msg.join(". ") + "\n" + code);
   }
 };
 
