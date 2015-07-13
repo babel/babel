@@ -1,5 +1,6 @@
 {
   "name": "babel-core",
+  "version": "5.6.21",
   "description": "A compiler for writing next generation JavaScript",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -41,7 +42,7 @@
     "babel-plugin-runtime": "^1.0.7",
     "babel-plugin-undeclared-variables-check": "^1.0.2",
     "babel-plugin-undefined-to-void": "^1.1.6",
-    "babylon": "*",
+    "babylon": "^5.6.21",
     "bluebird": "^2.9.33",
     "chalk": "^1.0.0",
     "convert-source-map": "^1.1.0",

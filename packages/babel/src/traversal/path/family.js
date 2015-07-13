@@ -56,6 +56,10 @@ export function getCompletionRecords(): Array {
     add(this.get("body").pop());
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
+  } else if (this.isTryStatement()) {
+    add(this.get("block"));
+    add(this.get("handler"));
+    add(this.get("finalizer"));
   } else {
     paths.push(this);
   }

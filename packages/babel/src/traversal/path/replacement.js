@@ -156,19 +156,18 @@ export function replaceExpressionWithStatements(nodes: Array) {
 
     // add implicit returns to all ending expression statements
     var last = this.get("callee").getCompletionRecords();
-    for (var i = 0; i < last.length; i++) {
-      var lastNode = last[i];
-      if (lastNode.isExpressionStatement()) {
-        var loop = lastNode.findParent((path) => path.isLoop());
-        if (loop) {
-          var uid = this.get("callee").scope.generateDeclaredUidIdentifier("ret");
-          this.get("callee.body").pushContainer("body", t.returnStatement(uid));
-          lastNode.get("expression").replaceWith(
-            t.assignmentExpression("=", uid, lastNode.node.expression)
-          );
-        } else {
-          lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
-        }
+    for (var lastNode of (last: Array)) {
+      if (!lastNode.isExpressionStatement()) continue;
+
+      var loop = lastNode.findParent((path) => path.isLoop());
+      if (loop) {
+        var uid = this.get("callee").scope.generateDeclaredUidIdentifier("ret");
+        this.get("callee.body").pushContainer("body", t.returnStatement(uid));
+        lastNode.get("expression").replaceWith(
+          t.assignmentExpression("=", uid, lastNode.node.expression)
+        );
+      } else {
+        lastNode.replaceWith(t.returnStatement(lastNode.node.expression));
       }
     }
 
