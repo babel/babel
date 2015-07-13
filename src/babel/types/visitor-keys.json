@@ -21,7 +21,6 @@
   "Decorator":                 ["expression"],
   "DebuggerStatement":         [],
   "DoWhileStatement":          ["body", "test"],
-  "DoExpression":              ["body"],
   "EmptyStatement":            [],
   "ExpressionStatement":       ["expression"],
   "File":                      ["program"],

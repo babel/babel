@@ -64,7 +64,6 @@
   "CallExpression":            ["Expression"],
   "ComprehensionExpression":   ["Expression", "Scopable"],
   "ConditionalExpression":     ["Expression"],
-  "DoExpression":              ["Expression"],
   "Identifier":                ["Expression"],
   "Literal":                   ["Expression", "Pure"],
   "MemberExpression":          ["Expression"],

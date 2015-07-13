@@ -48,7 +48,6 @@ export default {
   "es6.constants":                         require("./es6/constants"),
   "es7.exportExtensions":                  require("./es7/export-extensions"),
   "spec.protoToAssign":                    require("babel-plugin-proto-to-assign"),
-  "es7.doExpressions":                     require("./es7/do-expressions"),
   "es6.spec.symbols":                      require("./es6/spec.symbols"),
   "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("babel-plugin-undefined-to-void"),
