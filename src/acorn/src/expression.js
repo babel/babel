@@ -281,6 +281,20 @@ pp.parseExprAtom = function(refShorthandDefaultPos) {
   case tt._yield:
     if (this.inGenerator) this.unexpected()
 
+  case tt._do:
+    if (this.options.features["es7.doExpressions"]) {
+      let node = this.startNode()
+      this.next()
+      var oldInFunction = this.inFunction
+      var oldLabels = this.labels
+      this.labels = []
+      this.inFunction = false
+      node.body = this.parseBlock()
+      this.inFunction = oldInFunction
+      this.labels = oldLabels
+      return this.finishNode(node, "DoExpression")
+    }
+
   case tt.name:
     let start = this.markPosition()
     node = this.startNode()
