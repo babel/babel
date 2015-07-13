@@ -23,16 +23,6 @@ export function UnaryExpression(node, print) {
 }
 
 /**
- * Prints DoExpression, prints body.
- */
-
-export function DoExpression(node, print) {
-  this.push("do");
-  this.space();
-  print.plain(node.body);
-}
-
-/**
  * Prints ParenthesizedExpression, prints expression.
  */
 
