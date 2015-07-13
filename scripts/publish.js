@@ -40,7 +40,7 @@ function exec(cmd, log) {
   }).trim();
 
   if (log) {
-    console.log(out);
+    if (out) console.log(out);
   } else {
     return out;
   }
@@ -60,7 +60,7 @@ var lastTagCommit = exec("git rev-list --tags --max-count=1");
 var lastTag       = exec("git describe " + lastTagCommit);
 
 var changedPackages = [];
-var changedFiles = [];
+var changedFiles = [VERSION_LOC];
 
 packageNames.forEach(function (name) {
   var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
