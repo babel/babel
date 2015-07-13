@@ -11,7 +11,7 @@ node_js:
 
 script: make test-travis
 after_success:
- - ./scripts/travis/setup=git.sh
+ - ./scripts/travis/setup-git.sh
  - ./scripts/travis/merge-development-with-master.sh
 
 notifications:
