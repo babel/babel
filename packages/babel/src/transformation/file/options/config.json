@@ -163,6 +163,11 @@
     "description": "strip/output comments in generated output (on by default)"
   },
 
+  "shouldPrintComment": {
+    "hidden": true,
+    "description": "optional callback to control whether a comment should be inserted, when this is used the comments option is ignored"
+  },
+
   "compact": {
     "type": "booleanString",
     "default": "auto",

@@ -47,6 +47,7 @@ class CodeGenerator {
     }
 
     var format = {
+      shouldPrintComment: opts.shouldPrintComment,
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
@@ -381,12 +382,28 @@ class CodeGenerator {
    * [Please add a description.]
    */
 
+  shouldPrintComment(comment) {
+    if (this.format.shouldPrintComment) {
+      return this.format.shouldPrintComment(comment.value);
+    } else {
+      if (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0) {
+        return true;
+      } else {
+        return this.format.comments;
+      }
+    }
+  }
+
+  /**
+   * [Please add a description.]
+   */
+
   _printComments(comments) {
-    if (this.format.compact) return;
-    if (!this.format.comments) return;
     if (!comments || !comments.length) return;
 
     for (var comment of (comments: Array)) {
+      if (!this.shouldPrintComment(comment)) continue;
+
       var skip = false;
 
       if (this.ast.comments) {
