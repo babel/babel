@@ -1,10 +1,10 @@
 var outputFile = require("output-file-sync");
-var transform  = require("../lib/babel/transformation");
+var transform  = require("../../packages/babel/lib/transformation");
 var each       = require("lodash/collection/each");
-var File       = require("../lib/babel/transformation/file");
-var util       = require("../lib/babel/util");
+var File       = require("../../packages/babel/lib/transformation/file");
+var util       = require("../../packages/babel/lib/util");
 var fs         = require("fs");
-var t          = require("../lib/babel/types");
+var t          = require("../../packages/babel/lib/types");
 var _          = require("lodash");
 
 function relative(filename) {
