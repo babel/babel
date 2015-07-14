@@ -30,6 +30,7 @@ packages.forEach(function (root) {
     if (!root.pkg.dependencies || !root.pkg.dependencies[sub.name]) return;
 
     if (!fs.existsSync(nodeModulesLoc + "/" + sub.name)) {
+      console.log("Linking", "packages/" + sub.folder, "to", nodeModulesLoc + "/" + sub.name);
       ln("-s", "packages/" + sub.folder, nodeModulesLoc + "/" + sub.name);
     }
   });
