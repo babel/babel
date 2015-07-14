@@ -8,7 +8,7 @@
   "repository": "babel/babel",
   "preferGlobal": true,
   "dependencies": {
-    "babel": "^5.6.21",
+    "babel-core": "^5.6.21",
     "chokidar": "^1.0.0",
     "commander": "^2.6.0",
     "convert-source-map": "^1.1.0",
