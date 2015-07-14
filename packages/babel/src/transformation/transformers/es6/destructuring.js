@@ -497,6 +497,9 @@ class DestructuringTransformer {
       // deopt on holes
       if (!elem) return false;
 
+      // deopt on spread elements
+      if (t.isSpreadElement(elem)) return false;
+
       // deopt on member expressions
       if (t.isMemberExpression(elem)) return false;
     }
