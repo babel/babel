@@ -30,4 +30,3 @@ var _ref5 = [].concat(babelHelpers.toConsumableArray(foo), [bar]);
 
 var a = _ref5[0];
 var b = _ref5[1];
-var c = _ref5[2];

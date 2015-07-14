@@ -491,17 +491,17 @@ class DestructuringTransformer {
     if (pattern.elements.length > arr.elements.length) return;
     if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
 
-    for (var i = 0; i < pattern.elements.length; i++) {
-      var elem = pattern.elements[i];
-
+    for (let elem of (pattern.elements: Array)) {
       // deopt on holes
       if (!elem) return false;
 
+      // deopt on member expressions as they may be included in the RHS
+      if (t.isMemberExpression(elem)) return false;
+    }
+
+    for (let elem of (arr.elements: Array)) {
       // deopt on spread elements
       if (t.isSpreadElement(elem)) return false;
-
-      // deopt on member expressions
-      if (t.isMemberExpression(elem)) return false;
     }
 
     // deopt on reference to left side identifiers
