@@ -1,11 +1,10 @@
-#!/usr/bin/env node
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-var args  = [__dirname + "/_babel-node"];
+var path = require("path");
+var args = [path.join(__dirname, "_babel-node")];
 
 var babelArgs = process.argv.slice(2);
 var userArgs;
@@ -407,7 +406,6 @@ babelArgs.forEach(function(arg){
     case "--debugger_port":
     case "--debug_compile_events":
     case "--debug_script_collected_events":
-    case "--gdbjit":
     case "--log_runtime":
     case "--prof_auto":
     case "--prof_lazy":
@@ -446,6 +444,6 @@ try {
       } else {
         process.exit(code);
       }
-    })
+    });
   });
 }

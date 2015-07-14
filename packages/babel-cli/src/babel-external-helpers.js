@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 var commander = require("commander");
 var util      = require("babel-core").util;
 var runtime   = require("babel-core").buildExternalHelpers;
