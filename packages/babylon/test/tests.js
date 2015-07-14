@@ -20869,6 +20869,14 @@ test("(function(){ return x * y })", {
   }
 });
 
+// Test that innocuous string that evaluates to `use strict` is not promoted to
+// Use Strict directive.
+test("'use\\x20strict'; with (x) foo = bar;", {});
+
+// Test that innocuous string that evaluates to `use strict` is not promoted to
+// Use Strict directive.
+test('"use\\x20strict"; with (x) foo = bar;', {});
+
 test("with (x) foo = bar", {
   type: "Program",
   body: [
