@@ -1,0 +1,449 @@
+/**
+ * This tiny wrapper file checks for known node flags and appends them
+ * when found, before invoking the "real" _babel-node(1) executable.
+ */
+
+var path = require("path");
+var args = [path.join(__dirname, "_babel-node")];
+
+var babelArgs = process.argv.slice(2);
+var userArgs;
+
+// separate node arguments from script arguments
+var argSeparator = babelArgs.indexOf("--");
+if (argSeparator > -1) {
+  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  babelArgs = babelArgs.slice(0, argSeparator);
+}
+
+babelArgs.forEach(function(arg){
+  var flag = arg.split("=")[0];
+
+  switch (flag) {
+    case "-d":
+      args.unshift("--debug");
+      break;
+
+    case "debug":
+    case "--debug":
+    case "--debug-brk":
+      args.unshift(arg);
+      break;
+
+    case "-gc":
+    case "--expose-gc":
+      args.unshift("--expose-gc");
+      break;
+
+    case "--use_strict":
+    case "--es_staging":
+    case "--harmony":
+    case "--harmony_shipping":
+    case "--harmony_modules":
+    case "--harmony_arrays":
+    case "--harmony_array_includes":
+    case "--harmony_regexps":
+    case "--harmony_arrow_functions":
+    case "--harmony_proxies":
+    case "--harmony_sloppy":
+    case "--harmony_unicode":
+    case "--harmony_tostring":
+    case "--harmony_numeric_literals":
+    case "--harmony_strings":
+    case "--harmony_scoping":
+    case "--harmony_classes":
+    case "--harmony_object_literals":
+    case "--harmony_templates":
+    case "--harmony_rest_parameters":
+    case "--harmony_generators":
+    case "--compiled_keyed_generic_loads":
+    case "--pretenuring_call_new":
+    case "--allocation_site_pretenuring":
+    case "--trace_pretenuring":
+    case "--trace_pretenuring_statistics":
+    case "--track_fields":
+    case "--track_double_fields":
+    case "--track_heap_object_fields":
+    case "--track_computed_fields":
+    case "--track_field_types":
+    case "--smi_binop":
+    case "--vector_ics":
+    case "--optimize_for_size":
+    case "--unbox_double_arrays":
+    case "--string_slices":
+    case "--crankshaft":
+    case "--hydrogen_filter":
+    case "--use_gvn":
+    case "--gvn_iterations":
+    case "--use_canonicalizing":
+    case "--use_inlining":
+    case "--use_escape_analysis":
+    case "--use_allocation_folding":
+    case "--use_local_allocation_folding":
+    case "--use_write_barrier_elimination":
+    case "--max_inlining_levels":
+    case "--max_inlined_source_size":
+    case "--max_inlined_nodes":
+    case "--max_inlined_nodes_cumulative":
+    case "--loop_invariant_code_motion":
+    case "--fast_math":
+    case "--collect_megamorphic_maps_from_stub_cache":
+    case "--hydrogen_stats":
+    case "--trace_check_elimination":
+    case "--trace_hydrogen":
+    case "--trace_hydrogen_filter":
+    case "--trace_hydrogen_stubs":
+    case "--trace_hydrogen_file":
+    case "--trace_phase":
+    case "--trace_inlining":
+    case "--trace_load_elimination":
+    case "--trace_store_elimination":
+    case "--trace_alloc":
+    case "--trace_all_uses":
+    case "--trace_range":
+    case "--trace_gvn":
+    case "--trace_representation":
+    case "--trace_removable_simulates":
+    case "--trace_escape_analysis":
+    case "--trace_allocation_folding":
+    case "--trace_track_allocation_sites":
+    case "--trace_migration":
+    case "--trace_generalization":
+    case "--stress_pointer_maps":
+    case "--stress_environments":
+    case "--deopt_every_n_times":
+    case "--deopt_every_n_garbage_collections":
+    case "--print_deopt_stress":
+    case "--trap_on_deopt":
+    case "--trap_on_stub_deopt":
+    case "--deoptimize_uncommon_cases":
+    case "--polymorphic_inlining":
+    case "--use_osr":
+    case "--array_bounds_checks_elimination":
+    case "--trace_bce":
+    case "--array_bounds_checks_hoisting":
+    case "--array_index_dehoisting":
+    case "--analyze_environment_liveness":
+    case "--load_elimination":
+    case "--check_elimination":
+    case "--store_elimination":
+    case "--dead_code_elimination":
+    case "--fold_constants":
+    case "--trace_dead_code_elimination":
+    case "--unreachable_code_elimination":
+    case "--trace_osr":
+    case "--stress_runs":
+    case "--lookup_sample_by_shared":
+    case "--cache_optimized_code":
+    case "--flush_optimized_code_cache":
+    case "--inline_construct":
+    case "--inline_arguments":
+    case "--inline_accessors":
+    case "--escape_analysis_iterations":
+    case "--optimize_for_in":
+    case "--concurrent_recompilation":
+    case "--job_based_recompilation":
+    case "--trace_concurrent_recompilation":
+    case "--concurrent_recompilation_queue_length":
+    case "--concurrent_recompilation_delay":
+    case "--block_concurrent_recompilation":
+    case "--concurrent_osr":
+    case "--omit_map_checks_for_leaf_maps":
+    case "--turbo_filter":
+    case "--trace_turbo":
+    case "--trace_turbo_graph":
+    case "--trace_turbo_cfg_file":
+    case "--trace_turbo_types":
+    case "--trace_turbo_scheduler":
+    case "--trace_turbo_reduction":
+    case "--trace_turbo_jt":
+    case "--turbo_asm":
+    case "--turbo_verify":
+    case "--turbo_stats":
+    case "--turbo_types":
+    case "--turbo_source_positions":
+    case "--context_specialization":
+    case "--turbo_deoptimization":
+    case "--turbo_inlining":
+    case "--turbo_inlining_intrinsics":
+    case "--trace_turbo_inlining":
+    case "--loop_assignment_analysis":
+    case "--turbo_profiling":
+    case "--turbo_reuse_spill_slots":
+    case "--turbo_delay_ssa_decon":
+    case "--turbo_move_optimization":
+    case "--turbo_jt":
+    case "--typed_array_max_size_in_heap":
+    case "--frame_count":
+    case "--interrupt_budget":
+    case "--type_info_threshold":
+    case "--generic_ic_threshold":
+    case "--self_opt_count":
+    case "--trace_opt_verbose":
+    case "--debug_code":
+    case "--code_comments":
+    case "--enable_sse3":
+    case "--enable_sse4_1":
+    case "--enable_sahf":
+    case "--enable_avx":
+    case "--enable_fma3":
+    case "--enable_vfp3":
+    case "--enable_armv7":
+    case "--enable_armv8":
+    case "--enable_neon":
+    case "--enable_sudiv":
+    case "--enable_mls":
+    case "--enable_movw_movt":
+    case "--enable_unaligned_accesses":
+    case "--enable_32dregs":
+    case "--enable_vldr_imm":
+    case "--force_long_branches":
+    case "--expose_natives_as":
+    case "--expose_debug_as":
+    case "--expose_free_buffer":
+    case "--expose_gc":
+    case "--expose_gc_as":
+    case "--expose_externalize_string":
+    case "--expose_trigger_failure":
+    case "--stack_trace_limit":
+    case "--builtins_in_stack_traces":
+    case "--disable_native_files":
+    case "--inline_new":
+    case "--trace_codegen":
+    case "--trace":
+    case "--mask_constants_with_cookie":
+    case "--lazy":
+    case "--trace_opt":
+    case "--trace_opt_stats":
+    case "--opt":
+    case "--always_opt":
+    case "--always_osr":
+    case "--prepare_always_opt":
+    case "--trace_deopt":
+    case "--trace_stub_failures":
+    case "--serialize_toplevel":
+    case "--serialize_inner":
+    case "--trace_serializer":
+    case "--min_preparse_length":
+    case "--max_opt_count":
+    case "--compilation_cache":
+    case "--cache_prototype_transitions":
+    case "--cpu_profiler_sampling_interval":
+    case "--trace_debug_json":
+    case "--trace_js_array_abuse":
+    case "--trace_external_array_abuse":
+    case "--trace_array_abuse":
+    case "--enable_liveedit":
+    case "--hard_abort":
+    case "--stack_size":
+    case "--max_stack_trace_source_length":
+    case "--always_inline_smi_code":
+    case "--min_semi_space_size":
+    case "--target_semi_space_size":
+    case "--max_semi_space_size":
+    case "--semi_space_growth_factor":
+    case "--experimental_new_space_growth_heuristic":
+    case "--max_old_space_size":
+    case "--initial_old_space_size":
+    case "--max_executable_size":
+    case "--gc_global":
+    case "--gc_interval":
+    case "--trace_gc":
+    case "--trace_gc_nvp":
+    case "--trace_gc_ignore_scavenger":
+    case "--trace_idle_notification":
+    case "--trace_idle_notification_verbose":
+    case "--print_cumulative_gc_stat":
+    case "--print_max_heap_committed":
+    case "--trace_gc_verbose":
+    case "--trace_fragmentation":
+    case "--collect_maps":
+    case "--weak_embedded_maps_in_optimized_code":
+    case "--weak_embedded_objects_in_optimized_code":
+    case "--flush_code":
+    case "--flush_code_incrementally":
+    case "--trace_code_flushing":
+    case "--age_code":
+    case "--incremental_marking":
+    case "--incremental_marking_steps":
+    case "--concurrent_sweeping":
+    case "--trace_incremental_marking":
+    case "--track_gc_object_stats":
+    case "--heap_profiler_trace_objects":
+    case "--use_idle_notification":
+    case "--use_ic":
+    case "--trace_ic":
+    case "--native_code_counters":
+    case "--always_compact":
+    case "--never_compact":
+    case "--compact_code_space":
+    case "--incremental_code_compaction":
+    case "--cleanup_code_caches_at_gc":
+    case "--use_marking_progress_bar":
+    case "--zap_code_space":
+    case "--random_seed":
+    case "--trace_weak_arrays":
+    case "--track_prototype_users":
+    case "--use_verbose_printer":
+    case "--allow_natives_syntax":
+    case "--trace_parse":
+    case "--trace_sim":
+    case "--debug_sim":
+    case "--check_icache":
+    case "--stop_sim_at":
+    case "--sim_stack_alignment":
+    case "--sim_stack_size":
+    case "--log_regs_modified":
+    case "--log_colour":
+    case "--ignore_asm_unimplemented_break":
+    case "--trace_sim_messages":
+    case "--stack_trace_on_illegal":
+    case "--abort_on_uncaught_exception":
+    case "--randomize_hashes":
+    case "--hash_seed":
+    case "--profile_deserialization":
+    case "--regexp_optimization":
+    case "--testing_bool_flag":
+    case "--testing_maybe_bool_flag":
+    case "--testing_int_flag":
+    case "--testing_float_flag":
+    case "--testing_string_flag":
+    case "--testing_prng_seed":
+    case "--testing_serialization_file":
+    case "--startup_blob":
+    case "--profile_hydrogen_code_stub_compilation":
+    case "--predictable":
+    case "--help":
+    case "--dump_counters":
+    case "--debugger":
+    case "--map_counters":
+    case "--js_arguments":
+    case "--gdbjit":
+    case "--gdbjit_full":
+    case "--gdbjit_dump":
+    case "--gdbjit_dump_filter":
+    case "--force_marking_deque_overflows":
+    case "--stress_compaction":
+    case "--log":
+    case "--log_all":
+    case "--log_api":
+    case "--log_code":
+    case "--log_gc":
+    case "--log_handles":
+    case "--log_snapshot_positions":
+    case "--log_suspect":
+    case "--prof":
+    case "--prof_browser_mode":
+    case "--log_regexp":
+    case "--logfile":
+    case "--logfile_per_isolate":
+    case "--ll_prof":
+    case "--perf_basic_prof":
+    case "--perf_jit_prof":
+    case "--gc_fake_mmap":
+    case "--log_internal_timer_events":
+    case "--log_timer_events":
+    case "--log_instruction_stats":
+    case "--log_instruction_file":
+    case "--log_instruction_period":
+    case "--redirect_code_traces":
+    case "--redirect_code_traces_to":
+    case "--hydrogen_track_positions":
+    case "--trace_elements_transitions":
+    case "--trace_creation_allocation_sites":
+    case "--print_code_stubs":
+    case "--test_secondary_stub_cache":
+    case "--test_primary_stub_cache":
+    case "--print_code":
+    case "--print_opt_code":
+    case "--print_unopt_code":
+    case "--print_code_verbose":
+    case "--print_builtin_code":
+    case "--sodium":
+    case "--print_all_code":
+    case "--es5_readonly":
+    case "--es52_globals":
+    case "--harmony_typeof":
+    case "--harmony_collections":
+    case "--packed_arrays":
+    case "--smi_only_arrays":
+    case "--clever_optimizations":
+    case "--use_range":
+    case "--eliminate_dead_phis":
+    case "--optimize_closures":
+    case "--loop_weight":
+    case "--opt_safe_uint32_operations":
+    case "--parallel_recompilation":
+    case "--trace_parallel_recompilation":
+    case "--parallel_recompilation_queue_length":
+    case "--experimental_profiler":
+    case "--watch_ic_patching":
+    case "--self_optimization":
+    case "--direct_self_opt":
+    case "--retry_self_opt":
+    case "--count_based_interrupts":
+    case "--interrupt_at_exit":
+    case "--weighted_back_edges":
+    case "--debug_code (generate extra code":
+    case "--enable_sse2":
+    case "--enable_cmov":
+    case "--enable_rdtsc":
+    case "--enable_vfp2":
+    case "--enable_fpu":
+    case "--stack_trace_on_abort":
+    case "--always_full_compiler":
+    case "--debugger_auto_break":
+    case "--break_on_abort":
+    case "--max_new_space_size":
+    case "--trace_external_memory":
+    case "--lazy_sweeping":
+    case "--trace_exception":
+    case "--preallocate_message_memory":
+    case "--preemption":
+    case "--extra_code":
+    case "--remote_debugger":
+    case "--debugger_agent":
+    case "--debugger_port":
+    case "--debug_compile_events":
+    case "--debug_script_collected_events":
+    case "--log_runtime":
+    case "--prof_auto":
+    case "--prof_lazy":
+    case "--sliding_state_window":
+    case "--nolazy":
+      args.unshift(arg);
+      break;
+
+    default:
+      if (arg.indexOf("--trace") === 0) {
+        args.unshift(arg);
+      } else {
+        args.push(arg);
+      }
+      break;
+  }
+});
+
+// append arguments passed after --
+if (argSeparator > -1) {
+  args = args.concat(userArgs);
+}
+
+try {
+  var kexec = require("kexec");
+  kexec(process.argv[0], args);
+} catch (err) {
+  if (err.code !== "MODULE_NOT_FOUND") throw err;
+
+  var child_process = require("child_process");
+  var proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
+  proc.on("exit", function (code, signal) {
+    process.on("exit", function () {
+      if (signal) {
+        process.kill(process.pid, signal);
+      } else {
+        process.exit(code);
+      }
+    });
+  });
+}

@@ -1,0 +1,10 @@
+{
+  "name": "babylon",
+  "version": "5.6.21",
+  "description": "",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "babel/babel",
+  "main": "lib/index.js"
+}

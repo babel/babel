@@ -1,4 +1,0 @@
-{
-  "blacklist": ["es6.modules"],
-  "noCheckAst": true
-}

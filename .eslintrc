@@ -19,7 +19,8 @@
     "no-loop-func": 0,
     "no-unreachable": 0,
     "no-labels": 0,
-    "no-process-exit": 0
+    "no-process-exit": 0,
+    "camelcase": 0
   },
   "env": {
     "node": true

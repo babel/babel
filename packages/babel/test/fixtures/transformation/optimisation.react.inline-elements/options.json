@@ -1,0 +1,4 @@
+{
+  "externalHelpers": true,
+  "optional": ["optimisation.react.inlineElements"]
+}

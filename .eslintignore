@@ -1,1 +1,2 @@
-src/babel/transformation/templates
+packages/babel/src/transformation/templates
+scripts

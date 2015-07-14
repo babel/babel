@@ -1,0 +1,12 @@
+*.log
+*.cache
+.*
+/lib/transformation/templates
+/test
+/dist
+/tests.json
+/CHANGELOG.md
+/.package.json
+/packages
+/src
+_babel.github.io
