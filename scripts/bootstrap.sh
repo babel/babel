@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+#
+export NODE_PATH="`pwd`/packages;$NODE_PATH"
+
 # install default set
 npm install
 
