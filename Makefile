@@ -48,4 +48,5 @@ publish: build-dist
 	./scripts/build-website.sh
 
 bootstrap:
-	./scripts/bootstrap.sh
+	npm install
+	node scripts/bootstrap.js
