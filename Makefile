@@ -40,8 +40,9 @@ test-cov: clean
 
 test-travis: bootstrap lint build test
 
-publish: build-dist
+publish:
 	git pull --rebase
+	make build-dist
 	make test
 	node scripts/publish.js
 	make clean
