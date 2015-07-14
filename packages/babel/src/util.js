@@ -267,7 +267,7 @@ function loadTemplates(): Object {
 }
 
 try {
-  exports.templates = require("../../templates.json");
+  exports.templates = require("../templates.json");
 } catch (err) {
   if (err.code !== "MODULE_NOT_FOUND") throw err;
   exports.templates = loadTemplates();
