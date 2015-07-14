@@ -21,7 +21,6 @@ lint:
 
 clean: test-clean
 	rm -rf coverage
-	rm -rf packages/*/dist dist
 	rm -rf packages/*/lib packages/babel/templates.json
 
 test-clean:
@@ -44,7 +43,8 @@ test-travis: bootstrap lint build test
 publish: build-dist
 	git pull --rebase
 	make test
-	node scripts/publish
+	node scripts/publish.js
+	make clean
 	./scripts/build-website.sh
 
 bootstrap:

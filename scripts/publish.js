@@ -63,6 +63,7 @@ var changedPackages = [];
 var changedFiles = [VERSION_LOC];
 
 packageNames.forEach(function (name) {
+  // check if package has changed since last release
   var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
   if (diff) {
     console.log("Changes detected to package", name);
@@ -77,16 +78,25 @@ changedPackages.forEach(function (name) {
   var pkgLoc = loc + "/package.json";
   var pkg = require(pkgLoc);
 
+  // set new version
   pkg.version = NEW_VERSION;
 
+  // updated dependencies
   for (var depName in pkg.dependencies) {
     if (changedPackages.indexOf(depName) >= 0) {
       pkg.dependencies[depName] = "^" + NEW_VERSION;
     }
   }
 
+  // write new package
   fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
+
+  // push to be git committed
   changedFiles.push(pkgLoc);
+
+  // prepublish script
+  var prePub = loc + "/scripts/prepublish.js";
+  if (fs.existsSync(prePub)) require(prePub);
 });
 
 changedFiles.forEach(function (loc) {
