@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.7.2
+
+ * **Bug Fix**
+  * Fix performance issue in code generator when comment columns would attempt to match up in `compact` mode causing large amounts of whitespace.
+  * Fix single line comments not outputting a newline in `compact` mode.
+ * **Polish**
+  * Add support for flow return types for arrow functions.
+
 ## 5.7.1
 
  * **Bug Fix**
