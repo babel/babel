@@ -1,4 +1,7 @@
+import codeFrame from "../../helpers/code-frame";
+import traverse from "../index";
 import NodePath from "./index";
+import parse from "../../helpers/parse";
 import * as t from "../../types";
 
 /**
@@ -60,11 +63,31 @@ export function replaceWithMultiple(nodes: Array<Object>) {
 }
 
 /**
- * DEPRECATED
+ * Parse a string as an expression and replace the current node with the result.
+ *
+ * NOTE: This is typically not a good idea to use. Building source strings when
+ * transforming ASTs is an antipattern and SHOULD NOT be encouraged. Even if it's
+ * easier to use, your transforms will be extremely brittle.
  */
 
 export function replaceWithSourceString(replacement) {
-  throw new Error("TODO");
+  this.resync();
+
+  try {
+    replacement = `(${replacement})`;
+    replacement = parse(replacement);
+  } catch (err) {
+    var loc = err.loc;
+    if (loc) {
+      err.message += " - make sure this is an expression.";
+      err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
+    }
+    throw err;
+  }
+
+  replacement = replacement.program.body[0].expression;
+  traverse.removeProperties(replacement);
+  return this.replaceWith(replacement);
 }
 
 /**
