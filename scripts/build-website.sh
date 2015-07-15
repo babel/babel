@@ -11,6 +11,7 @@ if [ ! -d ./_babel ]; then
   ln -s .. _babel
 fi
 
+git pull
 make build
 git commit -am "v`babel -V`"
 git push
