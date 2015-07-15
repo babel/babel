@@ -8,7 +8,7 @@ const pp = Parser.prototype;
 // if possible.
 
 pp.toAssignable = function (node, isBinding) {
-  if (this.options.ecmaVersion >= 6 && node) {
+  if (node) {
     switch (node.type) {
     case "Identifier":
     case "ObjectPattern":
