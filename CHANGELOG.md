@@ -13,6 +13,22 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.7.0
+
+ * **Bug Fix**
+  * Deopt on spread elements when performing array destructuring unpack optimisation.
+ * **New Feature**
+  * Add `shouldPrintComment` option to control comment output.
+  * Add `.babelignore` file to be consistent with other tools.
+  * Allow `.babelrc` configs to be specified via `package.json`.
+ * **Polish**
+  * Don't ignore comments when using `compact: true` option.
+  * Add support for Flow `import typeof`.
+  * Fix incorrect inheritance method position when using loose mode classes and constructor isn't the first item.
+ * **Internal**
+  * Completely fork Acorn with `babylon`.
+  * Rewrite build system to accommodate for multiple packages.
+
 ## 5.6.17
 
  * **Bug Fix**
