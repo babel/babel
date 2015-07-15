@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+if [ -z "$TEST_GREP" ]; then
+   TEST_GREP=""
+fi
+
 TEST_DIRS=""
 
 for f in packages/*; do
@@ -13,4 +17,4 @@ for f in packages/*; do
   fi
 done
 
-node node_modules/mocha/bin/_mocha $TEST_DIRS --reporter dot --ui tdd
+node node_modules/mocha/bin/_mocha $TEST_DIRS --reporter dot --ui tdd --grep "$TEST_GREP"
