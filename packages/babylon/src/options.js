@@ -73,9 +73,6 @@ export const defaultOptions = {
   // This value, if given, is stored in every node, whether
   // `locations` is on or off.
   directSourceFile: null,
-  // When enabled, parenthesized expressions are represented by
-  // (non-standard) ParenthesizedExpression nodes
-  preserveParens: false,
   plugins: {},
   // Babel-specific options
   features: {},

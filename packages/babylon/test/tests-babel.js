@@ -2,13 +2,9 @@ var test = require("./driver.js").test;
 var testFail = require("./driver.js").testFail;
 var testAssert = require("./driver.js").testAssert;
 
-testFail("({a}) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:1)", {
-  ecmaVersion: 6
-});
+testFail("({a}) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:1)");
 
-testFail("([a]) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `([a]) = 0` use `([a] = 0)` (1:1)", {
-  ecmaVersion: 6
-});
+testFail("([a]) = 2;", "You're trying to assign to a parenthesized expression, eg. instead of `([a]) = 0` use `([a] = 0)` (1:1)");
 
 // ES7: Exponentiation Operator
 
@@ -40,7 +36,7 @@ test('a **= 2;', {
     }
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 test('var squared = 2 ** 2;', {
@@ -83,7 +79,7 @@ test('var squared = 2 ** 2;', {
     kind: "var"
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 test("2 ** (3 ** 2)", {
@@ -112,7 +108,7 @@ test("2 ** (3 ** 2)", {
     }
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 test("2 ** 3 ** 2", {
@@ -141,7 +137,7 @@ test("2 ** 3 ** 2", {
     }
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 test("(2 ** -1) * 2", {
@@ -175,7 +171,7 @@ test("(2 ** -1) * 2", {
     }
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 test("2 ** -1 * 2", {
@@ -209,7 +205,7 @@ test("2 ** -1 * 2", {
     }
   }]
 }, {
-  ecmaVersion: 7
+  features: { "es7.exponentiationOperator": true }
 });
 
 // ES7: Object Rest/Spread
@@ -256,7 +252,6 @@ test('let {...x} = z', {
     kind: "let"
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
@@ -323,7 +318,6 @@ test('let {x, ...y} = z', {
     kind: "let"
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
@@ -392,7 +386,6 @@ test('(function({x, ...y}) { })', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
@@ -438,7 +431,6 @@ test('let z = {...x}', {
     kind: "let"
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
@@ -503,7 +495,6 @@ test('z = {x, ...y}', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
@@ -609,19 +600,16 @@ test('({x, ...y, a, ...b, c})', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.objectRestSpread": true }
 });
 
 // ES7: Async Functions
 
 testFail("function foo(promise) { await promise; }", "Unexpected token (1:30)", {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true }
 });
 
 testFail("var x = async\n(x) => x + 1;", "Unexpected token (2:4)", {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true }
 });
 
@@ -672,7 +660,6 @@ test("async\nfunction foo() {}", {
     }
   ]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -735,7 +722,6 @@ test('async function foo(promise) { await promise; }', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -829,7 +815,6 @@ test('(function(x) { async function inner() { await x } })', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -914,7 +899,6 @@ test('var foo = async function(promise) { await promise; }', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1054,7 +1038,6 @@ test('var o = { a: 1, async foo(promise) { await promise } }', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1156,7 +1139,6 @@ test('class Foo { async bar(promise) { await promise } }', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1232,7 +1214,6 @@ test('f(a, async promise => await promise)', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1341,7 +1322,6 @@ test('f(a, async(x, y) => await [x, y], b)', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1425,7 +1405,6 @@ test('f(async function(promise) { await promise })', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true
 });
@@ -1598,7 +1577,6 @@ test('f(a, async(1, 2), b)', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true,
   ranges: true
@@ -1717,7 +1695,6 @@ test('var ok = async(x)', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true,
   ranges: true
@@ -1911,7 +1888,6 @@ test('(function() { var async; async = 10 })', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true },
   locations: true,
   ranges: true
@@ -1968,7 +1944,6 @@ test('class Test { async() {} }', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true }
 });
 
@@ -2020,7 +1995,6 @@ test('var obj = { async: "test" };', {
     kind: "var"
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true }
 });
 
@@ -2080,7 +2054,6 @@ test('var obj = { async() {} };', {
     kind: "var"
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.asyncFunctions": true }
 });
 
@@ -2117,7 +2090,6 @@ test('export async function foo(){}', {
     "source": null
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.asyncFunctions": true }
 });
@@ -2162,7 +2134,6 @@ test("@foo class Foo {}", {
   "type": "Program",
   "end": 17
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2223,7 +2194,6 @@ test("var Foo = @foo class Foo {}", {
   "type": "Program",
   "end": 27
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2295,7 +2265,6 @@ test("class Foo { @foo bar() {} }", {
   "type": "Program",
   "end": 27
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2370,7 +2339,6 @@ test("class Foo { @foo set bar(f) {} }", {
   "type": "Program",
   "end": 32
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2442,7 +2410,6 @@ test("class Foo { @foo get bar() {} }", {
   "type": "Program",
   "end": 31
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2525,7 +2492,6 @@ test("class Foo { @foo @bar bar() {} }", {
   "type": "Program",
   "end": 32
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2618,7 +2584,6 @@ test('@foo({ @bar foo: "bar" }) @bar class Foo {}', {
   "type": "Program",
   "end": 43
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
@@ -2685,17 +2650,14 @@ test('@bar class Foo extends @foo class Bar {} {}', {
   "type": "Program",
   "end": 43
 }, {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 });
 
 testFail("@foo function bar() {}", "Leading decorators must be attached to a class declaration (1:5)", {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 })
 
 testFail("class Foo { @foo }", "You have trailing decorators with no method (1:18)", {
-  ecmaVersion: 6,
   features: { "es7.decorators": true }
 })
 
@@ -2747,7 +2709,6 @@ test('class Foo { foo = "bar"; }', {
   "type": "Program",
   "end": 26
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true }
 });
 
@@ -2791,7 +2752,6 @@ test('class Foo { foo; }', {
   "type": "Program",
   "end": 18
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true }
 });
 
@@ -2835,7 +2795,6 @@ test('class Foo { static foo; }', {
   "type": "Program",
   "end": 25
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true }
 });
 
@@ -2885,7 +2844,6 @@ test('class Foo { static foo = "bar"; }', {
   "type": "Program",
   "end": 33
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true }
 });
 
@@ -2948,7 +2906,6 @@ test('class Foo { @bar foo = "bar"; }', {
   "type": "Program",
   "end": 31
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true, "es7.decorators": true }
 });
 
@@ -3011,7 +2968,6 @@ test('class Foo { @bar static foo = "bar"; }', {
   "type": "Program",
   "end": 38
 }, {
-  ecmaVersion: 6,
   features: { "es7.classProperties": true, "es7.decorators": true }
 });
 
@@ -3106,7 +3062,6 @@ test('export foo, { bar } from "bar";', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
@@ -3140,7 +3095,6 @@ test('export * as foo, { bar } from "bar";', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
@@ -3168,7 +3122,6 @@ test('export foo from "bar";', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
@@ -3196,7 +3149,6 @@ test('export default from "bar";', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
@@ -3224,7 +3176,6 @@ test('export * as foo from "bar";', {
     }
   }]
 }, {
-  ecmaVersion: 7,
   sourceType: "module",
   features: { "es7.exportExtensions": true }
 });
@@ -3268,7 +3219,6 @@ test("log(n, '=', 2,);", {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
@@ -3311,7 +3261,6 @@ test("function log(n, op, val,) { }", {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
@@ -3370,7 +3319,6 @@ test("class Foo { bar(a,) { } }", {
     }
   }]
 }, {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
@@ -3413,21 +3361,17 @@ test("(x, y, ) => 1;", {
   type: "Program",
   end: 14
 }, {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
 testFail("log(,);", "Unexpected token (1:4)", {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
 testFail("function log(,) { }", "Unexpected token (1:13)", {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
 
 testFail("('foo',)", "Unexpected token (1:7)", {
-  ecmaVersion: 7,
   features: { "es7.trailingFunctionCommas": true }
 });
