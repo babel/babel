@@ -90,6 +90,17 @@ define("MetaProperty", {
   aliases: ["Expression"]
 });
 
+define("MethodDefinition", {
+  builder: {
+    key: null,
+    value: null,
+    kind: "method",
+    computed: false,
+    static: false
+  },
+  visitor: ["key", "value", "decorators"]
+});
+
 define("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
   aliases: ["Pattern"]

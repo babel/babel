@@ -141,17 +141,6 @@ define("MemberExpression", {
   aliases: ["Expression"]
 });
 
-define("MethodDefinition", {
-  builder: {
-    key: null,
-    value: null,
-    kind: "method",
-    computed: false,
-    static: false
-  },
-  visitor: ["key", "value", "decorators"]
-});
-
 define("NewExpression", {
   visitor: ["callee", "arguments"],
   aliases: ["Expression"]
@@ -169,7 +158,7 @@ define("Program", {
 
 define("Property", {
   builder: {
-    kind: null,
+    kind: "init",
     key: null,
     value: null,
     computed: false
@@ -211,6 +200,7 @@ define("ThrowStatement", {
 });
 
 define("TryStatement", {
+  builder: ["block", "handler", "finalizer"],
   visitor: ["block", "handlers", "handler", "guardedHandlers", "finalizer"],
   aliases: ["Statement"]
 });
@@ -226,6 +216,11 @@ define("UnaryExpression", {
 });
 
 define("UpdateExpression", {
+  builder: {
+    operator: null,
+    argument: null,
+    prefix: false
+  },
   visitor: ["argument"],
   aliases: ["Expression"]
 });
