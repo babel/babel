@@ -5,11 +5,6 @@ import { SourceLocation } from "./location";
 // the parser process. These options are recognized:
 
 export const defaultOptions = {
-  // `ecmaVersion` indicates the ECMAScript version to parse. Must
-  // be either 3, or 5, or 6. This influences support for strict
-  // mode, the set of reserved words, support for getters and
-  // setters and other features.
-  ecmaVersion: 5,
   // Source type ("script" or "module") for different semantics
   sourceType: "script",
   // `onInsertedSemicolon` can be a callback that will be called

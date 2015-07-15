@@ -42,21 +42,6 @@ pp.checkPropClash = function (prop, propHash) {
     if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
     propHash.proto = true;
   }
-
-  let other;
-  if (propHash[name]) {
-    other = propHash[name];
-    let isGetSet = kind !== "init";
-    if ((this.strict || isGetSet) && other[kind] || !(isGetSet ^ other.init))
-      this.raise(key.start, "Redefinition of property");
-  } else {
-    other = propHash[name] = {
-      init: false,
-      get: false,
-      set: false
-    };
-  }
-  other[kind] = true;
 };
 
 // ### Expression parsing
@@ -375,7 +360,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
     node = this.startNode();
     this.next();
     // check whether this is array comprehension or regular array
-    if ((this.options.ecmaVersion >= 7 || this.options.features["es7.comprehensions"]) && this.type === tt._for) {
+    if (this.options.features["es7.comprehensions"] && this.type === tt._for) {
       return this.parseComprehension(node, false);
     }
     node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
@@ -676,17 +661,15 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
 };
 
 pp.parsePropertyName = function (prop) {
-  if (this.options.ecmaVersion >= 6) {
-    if (this.eat(tt.bracketL)) {
-      prop.computed = true;
-      prop.key = this.parseMaybeAssign();
-      this.expect(tt.bracketR);
-      return prop.key;
-    } else {
-      prop.computed = false;
-    }
+  if (this.eat(tt.bracketL)) {
+    prop.computed = true;
+    prop.key = this.parseMaybeAssign();
+    this.expect(tt.bracketR);
+    return prop.key;
+  } else {
+    prop.computed = false;
+    return prop.key = (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true);
   }
-  return prop.key = (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true);
 };
 
 // Initialize empty function node.

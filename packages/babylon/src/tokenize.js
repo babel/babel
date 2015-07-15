@@ -89,7 +89,7 @@ pp.nextToken = function () {
 pp.readToken = function (code) {
   // Identifier or keyword. '\uXXXX' sequences are allowed in
   // identifiers, so '\' also dispatches to that.
-  if (isIdentifierStart(code, this.options.ecmaVersion >= 6) || code === 92 /* '\' */)
+  if (isIdentifierStart(code, true) || code === 92 /* '\' */)
     return this.readWord();
 
   return this.getTokenFromCode(code);
@@ -351,7 +351,6 @@ pp.getTokenFromCode = function (code) {
   case 64: ++this.pos; return this.finishToken(tt.at);
 
   case 96: // '`'
-    if (this.options.ecmaVersion < 6) break;
     ++this.pos;
     return this.finishToken(tt.backQuote);
 
@@ -542,7 +541,6 @@ pp.readCodePoint = function () {
   let ch = this.input.charCodeAt(this.pos), code;
 
   if (ch === 123) {
-    if (this.options.ecmaVersion < 6) this.unexpected();
     let codePos = ++this.pos;
     code = this.readHexChar(this.input.indexOf("}", this.pos) - this.pos);
     ++this.pos;

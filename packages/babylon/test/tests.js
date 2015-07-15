@@ -17415,92 +17415,6 @@ test("if (morning) var x = 0;", {
   }
 });
 
-test("if (morning) function a(){}", {
-  type: "Program",
-  body: [
-    {
-      type: "IfStatement",
-      test: {
-        type: "Identifier",
-        name: "morning",
-        loc: {
-          start: {
-            line: 1,
-            column: 4
-          },
-          end: {
-            line: 1,
-            column: 11
-          }
-        }
-      },
-      consequent: {
-        type: "FunctionDeclaration",
-        id: {
-          type: "Identifier",
-          name: "a",
-          loc: {
-            start: {
-              line: 1,
-              column: 22
-            },
-            end: {
-              line: 1,
-              column: 23
-            }
-          }
-        },
-        params: [],
-        body: {
-          type: "BlockStatement",
-          body: [],
-          loc: {
-            start: {
-              line: 1,
-              column: 25
-            },
-            end: {
-              line: 1,
-              column: 27
-            }
-          }
-        },
-        loc: {
-          start: {
-            line: 1,
-            column: 13
-          },
-          end: {
-            line: 1,
-            column: 27
-          }
-        }
-      },
-      alternate: null,
-      loc: {
-        start: {
-          line: 1,
-          column: 0
-        },
-        end: {
-          line: 1,
-          column: 27
-        }
-      }
-    }
-  ],
-  loc: {
-    start: {
-      line: 1,
-      column: 0
-    },
-    end: {
-      line: 1,
-      column: 27
-    }
-  }
-});
-
 test("if (morning) goodMorning(); else goodDay()", {
   type: "Program",
   body: [
@@ -26855,27 +26769,6 @@ testFail("({ set: s(a, b) { } })",
 testFail("({ get: g(d) { } })",
          "Unexpected token (1:13)");
 
-testFail("({ get i() { }, i: 42 })",
-         "Redefinition of property (1:16)");
-
-testFail("({ i: 42, get i() { } })",
-         "Redefinition of property (1:14)");
-
-testFail("({ set i(x) { }, i: 42 })",
-         "Redefinition of property (1:17)");
-
-testFail("({ i: 42, set i(x) { } })",
-         "Redefinition of property (1:14)");
-
-testFail("({ get i() { }, get i() { } })",
-         "Redefinition of property (1:20)");
-
-testFail("({ set i(x) { }, set i(x) { } })",
-         "Redefinition of property (1:21)");
-
-testFail("function t(...) { }",
-         "Unexpected token (1:11)");
-
 testFail("function t(...) { }",
          "Unexpected token (1:14)",
          { ecmaVersion: 6 });
@@ -27100,12 +26993,6 @@ testFail("(function () { 'use strict'; delete i; }())",
 testFail("(function () { 'use strict'; with (i); }())",
          "'with' in strict mode (1:29)");
 
-testFail("function hello() {'use strict'; ({ i: 42, i: 42 }) }",
-         "Redefinition of property (1:42)");
-
-testFail("function hello() {'use strict'; ({ hasOwnProperty: 42, hasOwnProperty: 42 }) }",
-         "Redefinition of property (1:55)");
-
 testFail("function hello() {'use strict'; var eval = 10; }",
          "Binding eval in strict mode (1:36)");
 
@@ -27274,79 +27161,6 @@ testFail("\"use strict\";function foo(){\"use strict\";}function bar(){var v = 0
 testFail("var this = 10;", "Unexpected token (1:4)");
 
 testFail("throw\n10;", "Illegal newline after throw (1:5)");
-
-
-// ECMA < 6 mode should work as before
-
-testFail("const a;", "Unexpected token (1:6)");
-
-testFail("let x;", "Unexpected token (1:4)");
-
-testFail("const a = 1;", "Unexpected token (1:6)");
-
-testFail("let a = 1;", "Unexpected token (1:4)");
-
-testFail("for(const x = 0;;);", "Unexpected token (1:10)");
-
-testFail("for(let x = 0;;);", "Unexpected token (1:8)");
-
-test("let++", {
-  type: "Program",
-  loc: {
-    start: {
-      line: 1,
-      column: 0
-    },
-    end: {
-      line: 1,
-      column: 5
-    }
-  },
-  body: [
-    {
-      type: "ExpressionStatement",
-      loc: {
-        start: {
-          line: 1,
-          column: 0
-        },
-        end: {
-          line: 1,
-          column: 5
-        }
-      },
-      expression: {
-        type: "UpdateExpression",
-        loc: {
-          start: {
-            line: 1,
-            column: 0
-          },
-          end: {
-            line: 1,
-            column: 5
-          }
-        },
-        operator: "++",
-        prefix: false,
-        argument: {
-          type: "Identifier",
-          loc: {
-            start: {
-              line: 1,
-              column: 0
-            },
-            end: {
-              line: 1,
-              column: 3
-            }
-          },
-          name: "let"
-        }
-      }
-    }
-  ]
-});
 
 // ECMA 6 support
 
@@ -28603,10 +28417,6 @@ test("for(const x = 0;;);", {
   }],
   range: [0, 19]
 }, {ecmaVersion: 6, ranges: true});
-
-testFail("for(x of a);", "Unexpected token (1:6)");
-
-testFail("for(var x of a);", "Unexpected token (1:10)");
 
 // Assertion Tests
 test(function TestComments() {
