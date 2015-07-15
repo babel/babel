@@ -1,8 +1,9 @@
+require("shelljs/global");
+
 var path = require("path");
 var fs   = require("fs");
 
-require("shelljs/global");
-
+// uninstall global babel install
 exec("npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true");
 
 // get packages
