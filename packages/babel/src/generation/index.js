@@ -456,7 +456,7 @@ class CodeGenerator {
 
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
-      if (this.format.retainLines && comment.type === "CommentLine") {
+      if ((this.format.compact || this.format.retainLines) && comment.type === "CommentLine") {
         val += "\n";
       }
 
