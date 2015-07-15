@@ -67,6 +67,10 @@ class CodeGenerator {
       }
     }
 
+    if (format.compact) {
+      format.indent.adjustMultilineComment = false;
+    }
+
     return format;
   }
 
