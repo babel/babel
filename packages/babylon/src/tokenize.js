@@ -237,7 +237,7 @@ pp.readToken_mult_modulo = function (code) { // '%*'
   var width = 1;
   var next = this.input.charCodeAt(this.pos + 1);
 
-  if (next === 42) { // '*'
+  if (next === 42 && this.options.features["es7.exponentiationOperator"]) { // '*'
     width++;
     next = this.input.charCodeAt(this.pos + 2);
     type = tt.exponent;
