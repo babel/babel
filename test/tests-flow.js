@@ -5879,6 +5879,623 @@ var fbTestFixture = {
         }
       }
     },
+    "var foo = (): number => bar;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 28,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 27,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: null,
+          end: 27,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 12,
+            end: 20,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 14,
+              end: 20
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          params: [],
+          body: {
+            type: "Identifier",
+            start: 24,
+            end: 27,
+            name: "bar"
+          }
+        }
+      }]
+    },
+    "var foo = (bar): number => bar;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 31,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 30,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 10,
+          end: 30,
+          id: null,
+          generator: false,
+          expression: true,
+          params: [
+            {
+              type: "Identifier",
+              start: 11,
+              end: 14,
+              name: "bar",
+              parenthesizedExpression: true
+            }
+          ],
+          body: {
+            type: "Identifier",
+            start: 27,
+            end: 30,
+            name: "bar"
+          },
+          returnType: {
+            type: "TypeAnnotation",
+            start: 15,
+            end: 23,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 17,
+              end: 23
+            }
+          }
+        }
+      }]
+    },
+    "var foo = async (): number => bar;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 34,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 33,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 10,
+          end: 33,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 18,
+            end: 26,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 20,
+              end: 26
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          async: true,
+          params: [],
+          body: {
+            type: "Identifier",
+            start: 30,
+            end: 33,
+            name: "bar"
+          }
+        }
+      }]
+    },
+    "var foo = async (bar): number => bar;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 37,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 36,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 10,
+          end: 36,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 21,
+            end: 29,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 23,
+              end: 29
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          async: true,
+          params: [
+            {
+              type: "Identifier",
+              start: 17,
+              end: 20,
+              name: "bar"
+            }
+          ],
+          body: {
+            type: "Identifier",
+            start: 33,
+            end: 36,
+            name: "bar"
+          }
+        }
+      }
+    ]
+    },
+    "var foo = ((): number => bar);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 30,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 29,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: null,
+          end: 28,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 13,
+            end: 21,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 15,
+              end: 21
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          params: [],
+          body: {
+            type: "Identifier",
+            start: 25,
+            end: 28,
+            name: "bar"
+          },
+          parenthesizedExpression: true
+        }
+      }]
+    },
+    "var foo = ((bar): number => bar);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 33,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 32,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 11,
+          end: 31,
+          id: null,
+          generator: false,
+          expression: true,
+          params: [
+            {
+              type: "Identifier",
+              start: 12,
+              end: 15,
+              name: "bar",
+              parenthesizedExpression: true
+            }
+          ],
+          body: {
+            type: "Identifier",
+            start: 28,
+            end: 31,
+            name: "bar"
+          },
+          returnType: {
+            type: "TypeAnnotation",
+            start: 16,
+            end: 24,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 18,
+              end: 24
+            }
+          },
+          parenthesizedExpression: true
+        }
+      }]
+    },
+    "var foo = (((bar): number => bar): number);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 43,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 42,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "TypeCastExpression",
+          start: 11,
+          end: 41,
+          expression: {
+            type: "ArrowFunctionExpression",
+            start: 12,
+            end: 32,
+            id: null,
+            generator: false,
+            expression: true,
+            params: [
+              {
+                type: "Identifier",
+                start: 13,
+                end: 16,
+                name: "bar",
+                parenthesizedExpression: true
+              }
+            ],
+            body: {
+              type: "Identifier",
+              start: 29,
+              end: 32,
+              name: "bar"
+            },
+            returnType: {
+              type: "TypeAnnotation",
+              start: 17,
+              end: 25,
+              typeAnnotation: {
+                type: "NumberTypeAnnotation",
+                start: 19,
+                end: 25
+              }
+            },
+            parenthesizedExpression: true
+          },
+          typeAnnotation: {
+            type: "TypeAnnotation",
+            start: 33,
+            end: 41,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 35,
+              end: 41
+            }
+          },
+          parenthesizedExpression: true
+        }
+      }]
+    },
+    "var foo = (async (): number => bar);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 36,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 35,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 11,
+          end: 34,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 19,
+            end: 27,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 21,
+              end: 27
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          async: true,
+          params: [],
+          body: {
+            type: "Identifier",
+            start: 31,
+            end: 34,
+            name: "bar"
+          },
+          parenthesizedExpression: true
+        }
+      }]
+    },
+    "var foo = (async (bar): number => bar);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 39,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 38,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ArrowFunctionExpression",
+          start: 11,
+          end: 37,
+          returnType: {
+            type: "TypeAnnotation",
+            start: 22,
+            end: 30,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 24,
+              end: 30
+            }
+          },
+          id: null,
+          generator: false,
+          expression: true,
+          async: true,
+          params: [
+            {
+              type: "Identifier",
+              start: 18,
+              end: 21,
+              name: "bar"
+            }
+          ],
+          body: {
+            type: "Identifier",
+            start: 34,
+            end: 37,
+            name: "bar"
+          },
+          parenthesizedExpression: true
+        }
+      }],
+    },
+    "var foo = ((async (bar): number => bar): number);": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 49,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 48,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "TypeCastExpression",
+          start: 11,
+          end: 47,
+          expression: {
+            type: "ArrowFunctionExpression",
+            start: 12,
+            end: 38,
+            returnType: {
+              type: "TypeAnnotation",
+              start: 23,
+              end: 31,
+              typeAnnotation: {
+                type: "NumberTypeAnnotation",
+                start: 25,
+                end: 31
+              }
+            },
+            id: null,
+            generator: false,
+            expression: true,
+            async: true,
+            params: [
+              {
+                type: "Identifier",
+                start: 19,
+                end: 22,
+                name: "bar"
+              }
+            ],
+            body: {
+              type: "Identifier",
+              start: 35,
+              end: 38,
+              name: "bar"
+            },
+            parenthesizedExpression: true
+          },
+          typeAnnotation: {
+            type: "TypeAnnotation",
+            start: 39,
+            end: 47,
+            typeAnnotation: {
+              type: "NumberTypeAnnotation",
+              start: 41,
+              end: 47
+            }
+          },
+          parenthesizedExpression: true
+        }
+      }]
+    },
+    "var foo = bar ? (foo) : number;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 31,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 30,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ConditionalExpression",
+          start: 10,
+          end: 30,
+          test: {
+            type: "Identifier",
+            start: 10,
+            end: 13,
+            name: "bar"
+          },
+          consequent: {
+            type: "Identifier",
+            start: 17,
+            end: 20,
+            name: "foo",
+            parenthesizedExpression: true
+          },
+          alternate: {
+            type: "Identifier",
+            start: 24,
+            end: 30,
+            name: "number"
+          }
+        }
+      }]
+    },
+    "var foo = bar ? (foo) : number => {} : baz;": {
+      type: "VariableDeclaration",
+      kind: "var",
+      start: 0,
+      end: 43,
+      declarations: [{
+        type: "VariableDeclarator",
+        start: 4,
+        end: 42,
+        id: {
+          type: "Identifier",
+          start: 4,
+          end: 7,
+          name: "foo"
+        },
+        init: {
+          type: "ConditionalExpression",
+          start: 10,
+          end: 42,
+          test: {
+            type: "Identifier",
+            start: 10,
+            end: 13,
+            name: "bar"
+          },
+          consequent: {
+            type: "ArrowFunctionExpression",
+            start: 16,
+            end: 36,
+            id: null,
+            generator: false,
+            expression: false,
+            params: [
+              {
+                type: "Identifier",
+                start: 17,
+                end: 20,
+                name: "foo",
+                parenthesizedExpression: true
+              }
+            ],
+            body: {
+              type: "BlockStatement",
+              start: 34,
+              end: 36,
+              body: []
+            },
+            returnType: {
+              type: "TypeAnnotation",
+              start: 22,
+              end: 30,
+              typeAnnotation: {
+                type: "NumberTypeAnnotation",
+                start: 24,
+                end: 30
+              }
+            }
+          },
+          alternate: {
+            type: "Identifier",
+            start: 39,
+            end: 42,
+            name: "baz"
+          }
+        }
+      }]
+    },
     "((...rest: Array<number>) => rest)": {
       type: "ExpressionStatement",
       start: 0,
@@ -11370,7 +11987,6 @@ for (var ns in fbTestFixture) {
       type: "Program",
       body: [ns[code]]
     }, {
-      ecmaVersion: 7,
       sourceType: "module",
       plugins: { jsx: true, flow: true },
       features: { "es7.asyncFunctions": true },
@@ -11381,7 +11997,6 @@ for (var ns in fbTestFixture) {
 }
 
 test("<Foo foo={function (): void {}} />", {}, {
-  ecmaVersion: 6,
   sourceType: "module",
   plugins: { jsx: true, flow: true },
 });

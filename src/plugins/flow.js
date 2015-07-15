@@ -596,7 +596,9 @@ export default function (instance) {
   // function name(): string {}
   instance.extend("parseFunctionBody", function (inner) {
     return function (node, allowExpression) {
-      if (this.type === tt.colon) {
+      if (this.type === tt.colon && !allowExpression) {
+        // if allowExpression is true then we're parsing an arrow function and if
+        // there's a return type then it's been handled elsewhere
         node.returnType = this.flowParseTypeAnnotation();
       }
 
@@ -644,12 +646,24 @@ export default function (instance) {
   });
 
   instance.extend("parseParenItem", function () {
-    return function (node, startLoc, startPos) {
+    return function (node, startLoc, startPos, forceArrow?) {
       if (this.type === tt.colon) {
         var typeCastNode = this.startNodeAt(startLoc, startPos);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
-        return this.finishNode(typeCastNode, "TypeCastExpression");
+
+        if (forceArrow && this.type !== tt.arrow) {
+          this.unexpected();
+        }
+
+        if (this.eat(tt.arrow)) {
+          // ((lol): number => {});
+          var func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), [node]);
+          func.returnType = typeCastNode.typeAnnotation;
+          return func;
+        } else {
+          return this.finishNode(typeCastNode, "TypeCastExpression");
+        }
       } else {
         return node;
       }
@@ -816,6 +830,54 @@ export default function (instance) {
       if (this.type === tt.colon) {
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.finishNode(decl.id, decl.id.type);
+      }
+    };
+  });
+
+  // var foo = (async (): number => {});
+  instance.extend("parseAsyncArrowFromCallExpression", function (inner) {
+    return function (node, call) {
+      if (this.type === tt.colon) {
+        node.returnType = this.flowParseTypeAnnotation();
+      }
+
+      return inner.call(this, node, call);
+    };
+  });
+
+  instance.extend("parseParenAndDistinguishExpression", function (inner) {
+    return function (startPos, startLoc, canBeArrow, isAsync) {
+      if (this.lookahead().type === tt.parenR) {
+        // var foo = (): number => {};
+        this.expect(tt.parenL);
+        this.expect(tt.parenR);
+
+        let node = this.startNodeAt(startPos, startLoc);
+        if (this.type === tt.colon) node.returnType = this.flowParseTypeAnnotation();
+        this.expect(tt.arrow);
+        return this.parseArrowExpression(node, [], isAsync);
+      } else {
+        // var foo = (foo): number => {};
+        startPos = startPos || this.start;
+        startLoc = startLoc || this.startLoc;
+        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
+
+        var state = this.getState();
+
+        if (this.type === tt.colon) {
+          try {
+            return this.parseParenItem(node, startPos, startLoc, true);
+          } catch (err) {
+            if (err instanceof SyntaxError) {
+              this.setState(state);
+              return node;
+            } else {
+              throw err;
+            }
+          }
+        } else {
+          return node;
+        }
       }
     };
   });

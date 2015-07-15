@@ -37,12 +37,18 @@ pp.getState = function () {
   return state;
 };
 
+pp.setState = function (state) {
+  for (var key in state) {
+    this[key] = state[key];
+  }
+};
+
 pp.lookahead = function () {
   var old = this.getState();
   this.isLookahead = true;
   this.next();
   this.isLookahead = false;
   var curr = this.getState();
-  for (var key in old) this[key] = old[key];
+  this.setState(old);
   return curr;
 };
