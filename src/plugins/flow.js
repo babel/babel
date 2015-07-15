@@ -847,6 +847,9 @@ export default function (instance) {
 
   instance.extend("parseParenAndDistinguishExpression", function (inner) {
     return function (startPos, startLoc, canBeArrow, isAsync) {
+      startPos = startPos || this.start;
+      startLoc = startLoc || this.startLoc;
+
       if (this.lookahead().type === tt.parenR) {
         // var foo = (): number => {};
         this.expect(tt.parenL);
@@ -858,8 +861,6 @@ export default function (instance) {
         return this.parseArrowExpression(node, [], isAsync);
       } else {
         // var foo = (foo): number => {};
-        startPos = startPos || this.start;
-        startLoc = startLoc || this.startLoc;
         let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
 
         var state = this.getState();

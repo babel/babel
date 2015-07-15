@@ -5896,7 +5896,7 @@ var fbTestFixture = {
         },
         init: {
           type: "ArrowFunctionExpression",
-          start: null,
+          start: 10,
           end: 27,
           returnType: {
             type: "TypeAnnotation",
@@ -6082,7 +6082,7 @@ var fbTestFixture = {
         },
         init: {
           type: "ArrowFunctionExpression",
-          start: null,
+          start: 11,
           end: 28,
           returnType: {
             type: "TypeAnnotation",
