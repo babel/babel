@@ -94,7 +94,6 @@ pp.parseRest = function () {
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
-  if (this.options.ecmaVersion < 6) return this.parseIdent();
   switch (this.type) {
   case tt.name:
     return this.parseIdent();

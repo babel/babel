@@ -6,7 +6,7 @@ export function Parser(options, input, startPos) {
   this.options = options;
   this.sourceFile = this.options.sourceFile || null;
   this.isKeyword = keywords[6];
-  this.isReservedWord = reservedWords[this.options.ecmaVersion];
+  this.isReservedWord = reservedWords[6];
   this.input = input;
   this.loadPlugins(this.options.plugins);
 
