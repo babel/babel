@@ -1,10 +1,10 @@
 var outputFile = require("output-file-sync");
-var transform  = require("../../packages/babel/lib/transformation");
+var transform  = require("../../babel/lib/transformation");
 var each       = require("lodash/collection/each");
-var File       = require("../../packages/babel/lib/transformation/file");
-var util       = require("../../packages/babel/lib/util");
+var File       = require("../../babel/lib/transformation/file");
+var util       = require("../../babel/lib/util");
 var fs         = require("fs");
-var t          = require("../../packages/babel/lib/types");
+var t          = require("../../babel/lib/types");
 var _          = require("lodash");
 
 function relative(filename) {
@@ -79,4 +79,3 @@ each(coreDefinitions.methods, function (props) {
 each(paths, function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
-
