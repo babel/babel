@@ -1,4 +1,4 @@
-# NOTE: BEFORE OPENING AN ISSUE PLEASE SEE THE [README](https://github.com/babel/babel#readme).
+# NOTE: BEFORE OPENING AN ISSUE READ SEE THE [README](https://github.com/babel/babel#readme).
 
 ----
 
@@ -28,32 +28,53 @@ contributing, please read the
 
 #### Setup
 
-#### Code Standards
+```sh
+$ git clone https://github.com/babel/babel
+$ cd babel
+$ make bootstrap
+```
 
- * **General**
-   * Max of five arguments for functions
-   * Max depth of four nested blocks
-   * 2-spaced soft tabs
+Then you can either run:
 
- * **Naming**
-   * CamelCase all class names
-   * camelBack all variable names
+```sh
+$ make build
+```
 
- * **Spacing**
-   * Spaces after all keywords
-   * Spaces before all left curly braces
+to build Babel **once** or:
 
- * **Comments**
-   * Use JSDoc-style comments for methods
-   * Single-line comments for ambiguous code
+```sh
+$ make watch
+```
 
- * **Quotes**
-   * Always use double quotes
-   * Only use single quotes when the string contains a double quote
+to have Babel build itself then incrementally build files on change.
 
- * **Declaration**
-   * No unused variables
-   * No pollution of global variables and prototypes
+If you wish to build a copy of Babel for distribution then run:
+
+```sh
+$ make build-dist
+```
+
+and access the files from `packages/babel/dist`.
+
+#### Running tests
+
+You can run tests for all packages via:
+
+```sh
+$ make test
+```
+
+This is mostly overkill and you can limit the package to a select by using the `TEST_ONLY` environment variable:
+
+```sh
+$ TEST_ONLY=babel-cli make test
+```
+
+Use the `TEST_GREP` variable to run a subset of tests by name:
+
+```sh
+$ TEST_GREP=transformation make test
+```
 
 #### Internals
 
