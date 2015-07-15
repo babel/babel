@@ -5,7 +5,7 @@ import { lineBreak } from "./whitespace";
 export function Parser(options, input, startPos) {
   this.options = options;
   this.sourceFile = this.options.sourceFile || null;
-  this.isKeyword = keywords[this.options.ecmaVersion >= 6 ? 6 : 5];
+  this.isKeyword = keywords[6];
   this.isReservedWord = reservedWords[this.options.ecmaVersion];
   this.input = input;
   this.loadPlugins(this.options.plugins);

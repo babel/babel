@@ -28,7 +28,7 @@ const pp = Parser.prototype;
 // strict mode, init properties are also not allowed to be repeated.
 
 pp.checkPropClash = function (prop, propHash) {
-  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand)) return;
+  if (prop.computed || prop.method || prop.shorthand) return;
 
   let key = prop.key, name;
   switch (key.type) {
@@ -38,12 +38,9 @@ pp.checkPropClash = function (prop, propHash) {
   }
 
   let kind = prop.kind;
-  if (this.options.ecmaVersion >= 6) {
-    if (name === "__proto__" && kind === "init") {
-      if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
-      propHash.proto = true;
-    }
-    return;
+  if (name === "__proto__" && kind === "init") {
+    if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
+    propHash.proto = true;
   }
 
   let other;
@@ -524,7 +521,7 @@ pp.parseNew = function () {
   let node = this.startNode();
   let meta = this.parseIdent(true);
 
-  if (this.options.ecmaVersion >= 6 && this.eat(tt.dot)) {
+  if (this.eat(tt.dot)) {
     node.meta = meta;
     node.property = this.parseIdent(true);
 
@@ -605,16 +602,14 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       node.properties.push(prop);
       continue;
     }
-    if (this.options.ecmaVersion >= 6) {
-      prop.method = false;
-      prop.shorthand = false;
-      if (isPattern || refShorthandDefaultPos) {
-        startPos = this.start;
-        startLoc = this.startLoc;
-      }
-      if (!isPattern)
-        isGenerator = this.eat(tt.star);
+    prop.method = false;
+    prop.shorthand = false;
+    if (isPattern || refShorthandDefaultPos) {
+      startPos = this.start;
+      startLoc = this.startLoc;
     }
+    if (!isPattern)
+      isGenerator = this.eat(tt.star);
     if (this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
       if (isGenerator || isPattern) this.unexpected();
       var asyncId = this.parseIdent();
@@ -641,14 +636,12 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
   if (this.eat(tt.colon)) {
     prop.value = isPattern ? this.parseMaybeDefault(this.start, this.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
     prop.kind = "init";
-  } else if (this.options.ecmaVersion >= 6 && this.type === tt.parenL) {
+  } else if (this.type === tt.parenL) {
     if (isPattern) this.unexpected();
     prop.kind = "init";
     prop.method = true;
     prop.value = this.parseMethod(isGenerator, isAsync);
-  } else if (this.options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-             (prop.key.name === "get" || prop.key.name === "set") &&
-             (this.type !== tt.comma && this.type !== tt.braceR)) {
+  } else if (!prop.computed && prop.key.type === "Identifier" && (prop.key.name === "get" || prop.key.name === "set") && (this.type !== tt.comma && this.type !== tt.braceR)) {
     if (isGenerator || isAsync || isPattern) this.unexpected();
     prop.kind = prop.key.name;
     this.parsePropertyName(prop);
@@ -661,7 +654,7 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
       else
         this.raise(start, "setter should have exactly one param");
     }
-  } else if (this.options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
+  } else if (!prop.computed && prop.key.type === "Identifier") {
     prop.kind = "init";
     if (isPattern) {
       if (this.isKeyword(prop.key.name) ||
@@ -700,10 +693,8 @@ pp.parsePropertyName = function (prop) {
 
 pp.initFunction = function (node, isAsync) {
   node.id = null;
-  if (this.options.ecmaVersion >= 6) {
-    node.generator = false;
-    node.expression = false;
-  }
+  node.generator = false;
+  node.expression = false;
   if (this.options.features["es7.asyncFunctions"]) {
     node.async = !!isAsync;
   }
@@ -716,9 +707,7 @@ pp.parseMethod = function (isGenerator, isAsync) {
   this.initFunction(node, isAsync);
   this.expect(tt.parenL);
   node.params = this.parseBindingList(tt.parenR, false, this.options.features["es7.trailingFunctionCommas"]);
-  if (this.options.ecmaVersion >= 6) {
-    node.generator = isGenerator;
-  }
+  node.generator = isGenerator;
   this.parseFunctionBody(node);
   return this.finishNode(node, "FunctionExpression");
 };
@@ -807,8 +796,7 @@ pp.parseIdent = function (liberal) {
     if (!liberal &&
         ((!this.options.allowReserved && this.isReservedWord(this.value)) ||
          (this.strict && reservedWords.strict(this.value)) &&
-         (this.options.ecmaVersion >= 6 ||
-          this.input.slice(this.start, this.end).indexOf("\\") === -1)))
+         this.input.slice(this.start, this.end).indexOf("\\") === -1))
       this.raise(this.start, "The keyword '" + this.value + "' is reserved");
     node.name = this.value;
   } else if (liberal && this.type.keyword) {

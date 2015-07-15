@@ -213,7 +213,7 @@ pp.readToken_dot = function () {
   if (next >= 48 && next <= 57) return this.readNumber(true);
 
   let next2 = this.input.charCodeAt(this.pos + 2);
-  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+  if (next === 46 && next2 === 46) { // 46 = dot '.'
     this.pos += 3;
     return this.finishToken(tt.ellipsis);
   } else {
@@ -315,7 +315,7 @@ pp.readToken_lt_gt = function (code) { // '<>'
 pp.readToken_eq_excl = function (code) { // '=!'
   let next = this.input.charCodeAt(this.pos + 1);
   if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
-  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
+  if (code === 61 && next === 62) { // '=>'
     this.pos += 2;
     return this.finishToken(tt.arrow);
   }
@@ -358,10 +358,8 @@ pp.getTokenFromCode = function (code) {
   case 48: // '0'
     let next = this.input.charCodeAt(this.pos + 1);
     if (next === 120 || next === 88) return this.readRadixNumber(16); // '0x', '0X' - hex number
-    if (this.options.ecmaVersion >= 6) {
-      if (next === 111 || next === 79) return this.readRadixNumber(8); // '0o', '0O' - octal number
-      if (next === 98 || next === 66) return this.readRadixNumber(2); // '0b', '0B' - binary number
-    }
+    if (next === 111 || next === 79) return this.readRadixNumber(8); // '0o', '0O' - octal number
+    if (next === 98 || next === 66) return this.readRadixNumber(2); // '0b', '0B' - binary number
     // Anything else beginning with a digit is an integer, octal
     // number, or float.
   case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
@@ -449,8 +447,7 @@ pp.readRegexp = function() {
   let mods = this.readWord1();
   let tmp = content;
   if (mods) {
-    let validFlags = /^[gmsiy]*$/;
-    if (this.options.ecmaVersion >= 6) validFlags = /^[gmsiyu]*$/;
+    let validFlags = /^[gmsiyu]*$/;
     if (!validFlags.test(mods)) this.raise(start, "Invalid regular expression flag");
     if (mods.indexOf("u") >= 0 && !regexpUnicodeSupport) {
       // Replace each astral symbol and every Unicode escape sequence that
@@ -693,10 +690,9 @@ var containsEsc;
 pp.readWord1 = function () {
   containsEsc = false;
   let word = "", first = true, chunkStart = this.pos;
-  let astral = this.options.ecmaVersion >= 6;
   while (this.pos < this.input.length) {
     let ch = this.fullCharCodeAtPos();
-    if (isIdentifierChar(ch, astral)) {
+    if (isIdentifierChar(ch, true)) {
       this.pos += ch <= 0xffff ? 1 : 2;
     } else if (ch === 92) { // "\"
       containsEsc = true;
@@ -710,7 +706,7 @@ pp.readWord1 = function () {
 
       ++this.pos;
       let esc = this.readCodePoint();
-      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, astral)) {
+      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
         this.raise(escStart, "Invalid Unicode escape");
       }
 
@@ -730,7 +726,7 @@ pp.readWord1 = function () {
 pp.readWord = function () {
   let word = this.readWord1();
   let type = tt.name;
-  if ((this.options.ecmaVersion >= 6 || !containsEsc) && this.isKeyword(word))
+  if (!containsEsc && this.isKeyword(word))
     type = keywordTypes[word];
   return this.finishToken(type, word);
 };

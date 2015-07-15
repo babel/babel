@@ -23,9 +23,7 @@ pp.parseTopLevel = function (node) {
     }
   }
   this.next();
-  if (this.options.ecmaVersion >= 6) {
-    node.sourceType = this.options.sourceType;
-  }
+  node.sourceType = this.options.sourceType;
   return this.finishNode(node, "Program");
 };
 
@@ -55,7 +53,7 @@ pp.parseStatement = function (declaration, topLevel) {
   case tt._do: return this.parseDoStatement(node);
   case tt._for: return this.parseForStatement(node);
   case tt._function:
-    if (!declaration && this.options.ecmaVersion >= 6) this.unexpected();
+    if (!declaration) this.unexpected();
     return this.parseFunctionStatement(node);
 
   case tt._class:
@@ -181,11 +179,7 @@ pp.parseDoStatement = function (node) {
   this.labels.pop();
   this.expect(tt._while);
   node.test = this.parseParenExpression();
-  if (this.options.ecmaVersion >= 6) {
-    this.eat(tt.semi);
-  } else {
-    this.semicolon();
-  }
+  this.eat(tt.semi);
   return this.finishNode(node, "DoWhileStatement");
 };
 
@@ -211,7 +205,7 @@ pp.parseForStatement = function (node) {
     this.next();
     this.parseVar(init, true, varKind);
     this.finishNode(init, "VariableDeclaration");
-    if ((this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init.declarations.length === 1 &&
+    if ((this.type === tt._in || this.isContextual("of")) && init.declarations.length === 1 &&
         !(varKind !== tt._var && init.declarations[0].init))
       return this.parseForIn(node, init);
     return this.parseFor(node, init);
@@ -219,7 +213,7 @@ pp.parseForStatement = function (node) {
 
   let refShorthandDefaultPos = {start: 0};
   let init = this.parseExpression(true, refShorthandDefaultPos);
-  if (this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) {
+  if (this.type === tt._in || this.isContextual("of")) {
     this.toAssignable(init);
     this.checkLVal(init);
     return this.parseForIn(node, init);
@@ -459,7 +453,7 @@ pp.parseVar = function (node, isFor, kind) {
     this.parseVarHead(decl);
     if (this.eat(tt.eq)) {
       decl.init = this.parseMaybeAssign(isFor);
-    } else if (kind === tt._const && !(this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of")))) {
+    } else if (kind === tt._const && !(this.type === tt._in || this.isContextual("of"))) {
       this.unexpected();
     } else if (decl.id.type !== "Identifier" && !(isFor && (this.type === tt._in || this.isContextual("of")))) {
       this.raise(this.lastTokEnd, "Complex binding patterns require an initialization value");
@@ -482,9 +476,7 @@ pp.parseVarHead = function (decl) {
 
 pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync) {
   this.initFunction(node, isAsync);
-  if (this.options.ecmaVersion >= 6) {
-    node.generator = this.eat(tt.star);
-  }
+  node.generator = this.eat(tt.star);
 
   if (isStatement || this.type === tt.name) {
     node.id = this.parseIdent();
