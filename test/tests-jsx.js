@@ -3647,7 +3647,6 @@ for (var ns in fbTestFixture) {
       type: 'Program',
       body: [ns[code]]
     }, {
-      ecmaVersion: 6,
       locations: true,
       ranges: true,
       plugins: { jsx: true }

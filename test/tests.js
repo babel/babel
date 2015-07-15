@@ -23644,7 +23644,6 @@ test("function hello(...rest) { }", {
     }
   }
 }, {
-  ecmaVersion: 6,
   locations: true
 });
 
@@ -23737,7 +23736,6 @@ test("function hello(a, ...rest) { }", {
     }
   }
 }, {
-  ecmaVersion: 6,
   locations: true
 });
 
@@ -24016,7 +24014,6 @@ test("var hi = function (...r) { sayHi() };", {
     }
   }
 }, {
-  ecmaVersion: 6,
   locations: true
 });
 
@@ -26770,12 +26767,10 @@ testFail("({ get: g(d) { } })",
          "Unexpected token (1:13)");
 
 testFail("function t(...) { }",
-         "Unexpected token (1:14)",
-         { ecmaVersion: 6 });
+         "Unexpected token (1:14)");
 
 testFail("function t(...rest, b) { }",
-         "Unexpected token (1:18)",
-         { ecmaVersion: 6 });
+         "Unexpected token (1:18)");
 
 testFail("function t(if) { }",
          "Unexpected token (1:11)");
@@ -26866,9 +26861,6 @@ testFail("try { }",
 
 testFail("‿ = 10",
          "Unexpected character '‿' (1:0)");
-
-testFail("if(true) let a = 1;",
-         "Unexpected token (1:13)");
 
 testFail("switch (c) { default: default: }",
          "Multiple default clauses (1:22)");
@@ -27222,7 +27214,7 @@ test("let x", {
       column: 5
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("let x, y;", {
   type: "Program",
@@ -27310,7 +27302,7 @@ test("let x, y;", {
       column: 9
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("let x = 42", {
   type: "Program",
@@ -27383,7 +27375,7 @@ test("let x = 42", {
       column: 10
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("let eval = 42, arguments = 42", {
   type: "Program",
@@ -27497,7 +27489,7 @@ test("let eval = 42, arguments = 42", {
       column: 29
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("let x = 14, y = 3, z = 1977", {
   type: "Program",
@@ -27652,7 +27644,7 @@ test("let x = 14, y = 3, z = 1977", {
       column: 27
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("for(let x = 0;;);", {
   type: "Program",
@@ -27753,7 +27745,7 @@ test("for(let x = 0;;);", {
       column: 17
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("for(let x = 0, y = 1;;);", {
   type: "Program",
@@ -27895,7 +27887,7 @@ test("for(let x = 0, y = 1;;);", {
       column: 24
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("for (let x in list) process(x);", {
   type: "Program",
@@ -28038,7 +28030,7 @@ test("for (let x in list) process(x);", {
       column: 31
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("const x = 42", {
   type: "Program",
@@ -28111,7 +28103,7 @@ test("const x = 42", {
       column: 12
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("const eval = 42, arguments = 42", {
   type: "Program",
@@ -28225,7 +28217,7 @@ test("const eval = 42, arguments = 42", {
       column: 31
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
 test("const x = 14, y = 3, z = 1977", {
   type: "Program",
@@ -28380,9 +28372,9 @@ test("const x = 14, y = 3, z = 1977", {
       column: 29
     }
   }
-}, {ecmaVersion: 6, locations: true});
+}, {locations: true});
 
-testFail("const a;", "Unexpected token (1:7)", {ecmaVersion: 6});
+testFail("const a;", "Unexpected token (1:7)");
 
 test("for(const x = 0;;);", {
   type: "Program",
@@ -28416,7 +28408,7 @@ test("for(const x = 0;;);", {
     range: [0, 19]
   }],
   range: [0, 19]
-}, {ecmaVersion: 6, ranges: true});
+}, {ranges: true});
 
 // Assertion Tests
 test(function TestComments() {
@@ -28510,7 +28502,6 @@ var tokTypes = acorn.tokTypes;
 
 test('var x = (1 + 2)', {}, {
   locations: true,
-  loose: false,
   onToken: [
     {
       type: tokTypes._var,
