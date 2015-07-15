@@ -1,3 +1,5 @@
+require("shelljs/global");
+
 var readline = require("readline-sync");
 var semver   = require("semver");
 var child    = require("child_process");
@@ -109,5 +111,10 @@ exec("git tag " + NEW_TAG_NAME, true);
 exec("git push --follow-tags", true);
 
 changedPackages.forEach(function (name) {
-  //exec("cd " + getPackageLocation(name) + " && npm publish", true);
+  var loc = getPackageLocation(name);
+  exec("cd " + loc + " && npm publish", true);
+
+  // postpublish script
+  var postPub = loc + "/scripts/postpublish.js";
+  if (fs.existsSync(postPub)) require(postPub);
 });
