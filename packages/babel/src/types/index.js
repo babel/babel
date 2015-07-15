@@ -42,9 +42,9 @@ export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
 export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
 export const STRING_UNARY_OPERATORS  = ["typeof"];
 
-export const VISITOR_KEYS = require("./visitor-keys");
-export const BUILDER_KEYS = require("./builder-keys");
-export const ALIAS_KEYS   = require("./alias-keys");
+import "./definitions/init";
+import { VISITOR_KEYS, BUILDER_KEYS, ALIAS_KEYS } from "./definitions";
+export { VISITOR_KEYS, BUILDER_KEYS, ALIAS_KEYS };
 
 /**
  * Registers `is[Type]` and `assert[Type]` for all types.
