@@ -47,7 +47,7 @@ export default class Logger {
    */
 
   deprecate(msg) {
-    if (this.file.opts.suppressDeprecationMessages) return;
+    if (this.file.opts && this.file.opts.suppressDeprecationMessages) return;
 
     msg = this._buildMessage(msg);
 
