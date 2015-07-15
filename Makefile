@@ -17,7 +17,7 @@ watch: clean
 	scripts/build.sh --watch
 
 lint:
-	eslint packages/*/src
+	node node_modules/.bin/eslint packages/*/src
 
 clean: test-clean
 	rm -rf coverage
