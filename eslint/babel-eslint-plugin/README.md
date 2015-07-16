@@ -28,6 +28,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
     "babel/generator-star": 1,
     "babel/generator-star-spacing": 1,
     "babel/new-cap": 1,
+    "babel/object-curly-spacing": 1,
     "babel/space-in-brackets": 1,
   }
 }
@@ -41,4 +42,5 @@ Each rule cooresponds to a core eslint rule, and has the same options.
 - `babel/generator-star`: Handles async/await functions correctly
 - `babel/generator-star-spacing`: Handles async/await functions correctly
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
+- `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/space-in-brackets`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`

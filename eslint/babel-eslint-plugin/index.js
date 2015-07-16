@@ -7,6 +7,7 @@ module.exports = {
     'generator-star-spacing': require('./rules/generator-star-spacing'),
     'generator-star': require('./rules/generator-star'),
     'new-cap': require('./rules/new-cap'),
+    'object-curly-spacing': require('./rules/object-curly-spacing'),
     'space-in-brackets': require('./rules/space-in-brackets'),
   },
   rulesConfig: {
