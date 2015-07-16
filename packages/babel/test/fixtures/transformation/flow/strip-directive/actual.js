@@ -6,4 +6,9 @@
  * @flow
  */
 
+/**
+ * @providesModule Foo
+ * @flow
+ */
+
 foo();

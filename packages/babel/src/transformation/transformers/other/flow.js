@@ -4,6 +4,8 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
+const FLOW_DIRECTIVE = "@flow";
+
 /**
  * [Please add a description.]
  */
@@ -16,8 +18,12 @@ export var visitor = {
 
   Program(node, parent, scope, file) {
     for (var comment of (file.ast.comments: Array)) {
-      if (comment.value.indexOf("@flow") >= 0) {
-        comment._displayed = true;
+      if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
+        // remove flow directive
+        comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
+
+        // remove the comment completely if it only consists of whitespace and/or stars
+        if (!comment.value.replace(/\*/g, "").trim()) comment._displayed = true;
       }
     }
   },

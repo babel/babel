@@ -1,1 +1,6 @@
+/**
+ * @providesModule Foo
+ * 
+ */
+
 foo();

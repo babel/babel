@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.7.4
+
+ * **Bug Fix**
+  * Fix comments containg `@flow` being completely removed from output rather than just the specific directive.
+
 ## 5.7.3
 
  * **Bug Fix**
