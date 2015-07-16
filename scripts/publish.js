@@ -108,7 +108,7 @@ changedFiles.forEach(function (loc) {
 var NEW_TAG_NAME = "v" + NEW_VERSION;
 exec("git commit -m " + NEW_TAG_NAME, true);
 exec("git tag " + NEW_TAG_NAME, true);
-exec("git push --follow-tags", true);
+exec("git push --tags", true);
 
 changedPackages.forEach(function (name) {
   var loc = getPackageLocation(name);
