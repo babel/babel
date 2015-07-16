@@ -1,2 +1,3 @@
 instrumentation:
-  root: lib
+  root: .
+  excludes: "**/node_modules/**"

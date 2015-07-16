@@ -36,7 +36,7 @@ test-browser:
 test-cov: clean
 	BABEL_ENV=test; \
 	make build
-	node $(ISTANBUL_CMD) $(MOCHA_CMD) -- test/core
+	./scripts/test-cov.sh
 
 test-travis: bootstrap lint build test
 

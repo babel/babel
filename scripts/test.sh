@@ -5,16 +5,4 @@ if [ -z "$TEST_GREP" ]; then
    TEST_GREP=""
 fi
 
-TEST_DIRS=""
-
-for f in packages/*; do
-  if [ -n "$TEST_ONLY" ] && [ `basename $f` != "$TEST_ONLY" ]; then
-    continue
-  fi
-
-  if [ -d "$f/test" ]; then
-    TEST_DIRS="$f/test $TEST_DIRS"
-  fi
-done
-
-node node_modules/mocha/bin/_mocha $TEST_DIRS --reporter dot --ui tdd --grep "$TEST_GREP"
+node node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts mocha.opts --grep "$TEST_GREP"
