@@ -2,5 +2,3 @@
  * @providesModule Foo
  * 
  */
-
-foo();

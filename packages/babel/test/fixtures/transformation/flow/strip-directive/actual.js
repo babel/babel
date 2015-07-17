@@ -10,5 +10,3 @@
  * @providesModule Foo
  * @flow
  */
-
-foo();
