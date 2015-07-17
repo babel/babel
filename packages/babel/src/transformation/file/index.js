@@ -676,10 +676,6 @@ export default class File {
       map:      map
     };
 
-    result.then = function (callback) {
-      callback(result);
-    };
-
     if (this.opts.code) {
       result.code = code;
     }
