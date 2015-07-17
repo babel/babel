@@ -110,6 +110,8 @@ exec("git commit -m " + NEW_TAG_NAME, true);
 exec("git tag " + NEW_TAG_NAME, true);
 exec("git push --tags", true);
 
+exec("make build-dist");
+
 changedPackages.forEach(function (name) {
   var loc = getPackageLocation(name);
   exec("cd " + loc + " && npm publish", true);
