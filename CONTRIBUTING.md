@@ -72,6 +72,12 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
+To test the code coverage, use:
+
+```sh
+$ make test-cov
+```
+
 #### Internals
 
 Please see [`/doc`](/doc) for internals documentation relevant to developing babel.
