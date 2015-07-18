@@ -244,7 +244,7 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
       base = this.finishNode(node, "CallExpression");
 
       if (possibleAsync && (this.type === tt.colon || this.type === tt.arrow)) {
-        return this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
+        base = this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
       }
     } else if (this.type === tt.backQuote) {
       let node = this.startNodeAt(startPos, startLoc);
@@ -315,7 +315,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       } else if (id.name === "async" && this.type === tt._function && !this.canInsertSemicolon()) {
         this.next();
         return this.parseFunction(node, false, false, true);
-      } else if (id.name === "async" && this.type === tt.name) {
+      } else if (canBeArrow && id.name === "async" && this.type === tt.name) {
         var params = [this.parseIdent()];
         this.expect(tt.arrow);
         // var foo = bar => {};
