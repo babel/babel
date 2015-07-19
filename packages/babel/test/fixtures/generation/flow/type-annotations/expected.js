@@ -16,6 +16,7 @@ function foo(): (_?: bool) => number {}
 function foo(): {} {}
 function foo<T>() {}
 function foo<T, S>() {}
+function foo<T: F>() {}
 a = function <T, S>() {};
 a = { set fooProp(value: number) {} };
 a = { set fooProp(value: number): void {} };

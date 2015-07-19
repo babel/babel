@@ -252,7 +252,12 @@ export function TypeAnnotation(node, print) {
 
 export function TypeParameterInstantiation(node, print) {
   this.push("<");
-  print.join(node.params, { separator: ", " });
+  print.join(node.params, {
+    separator: ", ",
+    iterator(node) {
+      print.plain(node.typeAnnotation);
+    }
+  });
   this.push(">");
 }
 
