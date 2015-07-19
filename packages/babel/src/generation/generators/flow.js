@@ -178,6 +178,12 @@ export function NullableTypeAnnotation(node, print) {
 }
 
 /**
+ * Prints NumberLiteralTypeAnnotation, prints value.
+ */
+
+export { Literal as NumberLiteralTypeAnnotation } from "./types";
+
+/**
  * Prints NumberTypeAnnotation.
  */
 
