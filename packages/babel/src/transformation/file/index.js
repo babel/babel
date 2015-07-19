@@ -418,7 +418,7 @@ export default class File {
     var declar = this.declarations[name];
     if (declar) return declar;
 
-    var uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
+    var uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
 
     var helperId = this.addHelper(helperName);
     var init = t.callExpression(helperId, [strings, raw]);
