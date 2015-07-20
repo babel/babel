@@ -113,19 +113,6 @@ export default class Pipeline {
    * [Please add a description.]
    */
 
-  pretransform(code: string, opts?: Object) {
-    var file = new File(opts, this);
-    return file.wrap(code, function () {
-      file.addCode(code);
-      file.parseCode(code);
-      return file;
-    });
-  }
-
-  /**
-   * [Please add a description.]
-   */
-
   transform(code: string, opts?: Object) {
     var file = new File(opts, this);
     return file.wrap(code, function () {
