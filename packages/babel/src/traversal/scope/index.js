@@ -829,7 +829,7 @@ export default class Scope {
 
     var unique = opts.unique;
     var kind   = opts.kind || "var";
-    var blockHoist = opts._blockHoist || 2;
+    var blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     var dataKey = `declaration:${kind}:${blockHoist}`;
     var declar  = !unique && path.getData(dataKey);
