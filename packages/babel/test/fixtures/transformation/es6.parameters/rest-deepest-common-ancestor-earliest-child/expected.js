@@ -80,8 +80,8 @@ function a() {
 
 // loop
 function runQueue(queue) {
-  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
+  for (var _len7 = arguments.length, args = Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+    args[_key7 - 1] = arguments[_key7];
   }
 
   for (var i = 0; i < queue.length; i++) {
@@ -92,8 +92,8 @@ function runQueue(queue) {
 // nested loop
 function runQueue(queue) {
   if (foo) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+    for (var _len8 = arguments.length, args = Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+      args[_key8 - 1] = arguments[_key8];
     }
 
     for (var i = 0; i < queue.length; i++) {
