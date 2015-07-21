@@ -91,7 +91,7 @@ export function parse(code, opts = {}) {
     opts.features[key] = true;
   }
 
-  var ast = babylon.parse(code, opts)
+  var ast = babylon.parse(code, opts);
 
   if (opts.onToken) {
     opts.onToken.push(...ast.tokens);
