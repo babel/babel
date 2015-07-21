@@ -397,7 +397,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
 pp.parseLiteral = function (value) {
   let node = this.startNode();
-  node.value = value;
+  node.rawValue = node.value = value;
   node.raw = this.input.slice(this.start, this.end);
   this.next();
   return this.finishNode(node, "Literal");

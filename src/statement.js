@@ -11,20 +11,26 @@ const pp = Parser.prototype;
 // `program` argument.  If present, the statements will be appended
 // to its body instead of creating a new node.
 
-pp.parseTopLevel = function (node) {
+pp.parseTopLevel = function (file, program) {
+  program.sourceType = this.options.sourceType;
+  program.body = [];
+
   let first = true;
-  if (!node.body) node.body = [];
   while (this.type !== tt.eof) {
     let stmt = this.parseStatement(true, true);
-    node.body.push(stmt);
+    program.body.push(stmt);
     if (first) {
       if (this.isUseStrict(stmt)) this.setStrict(true);
       first = false;
     }
   }
   this.next();
-  node.sourceType = this.options.sourceType;
-  return this.finishNode(node, "Program");
+
+  file.program  = this.finishNode(program, "Program");
+  file.comments = this.comments;
+  file.tokens   = this.tokens;
+
+  return this.finishNode(file, "File");
 };
 
 const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};

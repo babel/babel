@@ -28,13 +28,14 @@ function runTest(test) {
     testOpts.onToken = [];
 
   try {
-    var ast = parse(test.code, testOpts);
+    var ast = parse(test.code, testOpts).program;
   } catch (err) {
     if (test.error) {
       if (err.message === test.error) {
         return;
       } else {
-        throw new Error("Expected error message: " + test.error + ". Got error message: " + err.message);
+        err.message = "Expected error message: " + test.error + ". Got error message: " + err.message;
+        throw err;
       }
     }
 

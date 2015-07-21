@@ -16,7 +16,7 @@ export class Token {
     this.end = p.end;
 
     if (p.options.locations) {
-      this.loc = new SourceLocation(p, p.startLoc, p.endLoc);
+      this.loc = new SourceLocation(p.startLoc, p.endLoc);
     }
 
     if (p.options.ranges) {
@@ -36,8 +36,8 @@ const isRhino = typeof Packages === "object" && Object.prototype.toString.call(P
 // Move to the next token
 
 pp.next = function () {
-  if (this.options.onToken && !this.isLookahead)
-    this.options.onToken(new Token(this));
+  if (!this.isLookahead)
+    this.tokens.push(new Token(this));
 
   this.lastTokEnd = this.end;
   this.lastTokStart = this.start;
@@ -82,8 +82,11 @@ pp.nextToken = function () {
   if (this.options.locations) this.startLoc = this.curPosition();
   if (this.pos >= this.input.length) return this.finishToken(tt.eof);
 
-  if (curContext.override) return curContext.override(this);
-  else this.readToken(this.fullCharCodeAtPos());
+  if (curContext.override) {
+    return curContext.override(this);
+  } else {
+    return this.readToken(this.fullCharCodeAtPos());
+  }
 };
 
 pp.readToken = function (code) {
@@ -103,10 +106,26 @@ pp.fullCharCodeAtPos = function () {
   return (code << 10) + next - 0x35fdc00;
 };
 
+function pushComment(block, text, start, end, startLoc, endLoc) {
+  var comment = {
+    type: block ? "CommentBlock" : "CommentLine",
+    value: text,
+    start: start,
+    end: end,
+    loc: new SourceLocation(startLoc, endLoc),
+    range: [start, end]
+  };
+
+  this.tokens.push(comment);
+  this.comments.push(comment);
+  this.addComment(comment);
+}
+
 pp.skipBlockComment = function () {
-   let startLoc = this.options.onComment && this.curPosition();
+  let startLoc = this.curPosition();
   let start = this.pos, end = this.input.indexOf("*/", this.pos += 2);
   if (end === -1) this.raise(this.pos - 2, "Unterminated comment");
+
   this.pos = end + 2;
   if (this.options.locations) {
     lineBreakG.lastIndex = start;
@@ -116,23 +135,20 @@ pp.skipBlockComment = function () {
       this.lineStart = match.index + match[0].length;
     }
   }
-  if (this.options.onComment)
-    this.options.onComment(true, this.input.slice(start + 2, end), start, this.pos,
-                           startLoc, this.curPosition());
+
+  pushComment.call(this, true, this.input.slice(start + 2, end), start, this.pos, startLoc, this.curPosition());
 };
 
 pp.skipLineComment = function (startSkip) {
   let start = this.pos;
-  let startLoc = this.options.onComment && this.curPosition();
+  let startLoc = this.curPosition();
   let ch = this.input.charCodeAt(this.pos += startSkip);
   while (this.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
     ++this.pos;
     ch = this.input.charCodeAt(this.pos);
   }
-  if (this.options.onComment) {
-    this.options.onComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos,
-                           startLoc, this.curPosition());
-  }
+
+  pushComment.call(this, false, this.input.slice(start + startSkip, this.pos), start, this.pos, startLoc, this.curPosition());
 };
 
 // Called at the start of the parse and after every token. Skips

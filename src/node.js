@@ -13,11 +13,7 @@ export class Node {
 
     if (parser) {
       if (parser.options.locations) {
-        this.loc = new SourceLocation(parser, loc);
-      }
-
-      if (parser.options.directSourceFile) {
-        this.sourceFile = parser.options.directSourceFile;
+        this.loc = new SourceLocation(loc);
       }
 
       if (parser.options.ranges) {
@@ -46,6 +42,7 @@ function finishNodeAt(node, type, pos, loc) {
   node.end = pos;
   if (this.options.locations) node.loc.end = loc;
   if (this.options.ranges) node.range[1] = pos;
+  this.processComment(node);
   return node;
 }
 

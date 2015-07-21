@@ -16,10 +16,9 @@ export class Position {
 }
 
 export class SourceLocation {
-  constructor(p, start, end) {
+  constructor(start, end) {
     this.start = start;
     this.end = end;
-    if (p.sourceFile !== null) this.source = p.sourceFile;
   }
 }
 

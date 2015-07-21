@@ -24,6 +24,22 @@ pp.eat = function (type) {
   }
 };
 
+// TODO
+
+pp.isRelational = function (op) {
+  return this.type === tt.relational && this.value === op;
+};
+
+// TODO
+
+pp.expectRelational = function (op) {
+  if (this.isRelational(op)) {
+    this.next();
+  } else {
+    this.unexpected();
+  }
+};
+
 // Tests whether parsed token is a contextual keyword.
 
 pp.isContextual = function (name) {
@@ -52,8 +68,6 @@ pp.canInsertSemicolon = function () {
 
 pp.insertSemicolon = function () {
   if (this.canInsertSemicolon()) {
-    if (this.options.onInsertedSemicolon)
-      this.options.onInsertedSemicolon(this.lastTokEnd, this.lastTokEndLoc);
     return true;
   }
 };
@@ -67,8 +81,6 @@ pp.semicolon = function () {
 
 pp.afterTrailingComma = function (tokType) {
   if (this.type === tokType) {
-    if (this.options.onTrailingComma)
-      this.options.onTrailingComma(this.lastTokStart, this.lastTokStartLoc);
     this.next();
     return true;
   }
