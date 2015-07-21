@@ -75,6 +75,12 @@ pp.toAssignableList = function (exprList, isBinding) {
   return exprList;
 };
 
+// Convert list of expression atoms to a list of
+
+pp.toReferencedList = function (exprList) {
+  return exprList;
+};
+
 // Parses spread element.
 
 pp.parseSpread = function (refShorthandDefaultPos) {

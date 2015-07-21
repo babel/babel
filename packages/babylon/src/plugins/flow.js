@@ -3,18 +3,6 @@ import { Parser } from "../state";
 
 var pp = Parser.prototype;
 
-pp.isRelational = function (op) {
-  return this.type === tt.relational && this.value === op;
-};
-
-pp.expectRelational = function (op) {
-  if (this.isRelational(op)) {
-    this.next();
-  } else {
-    this.unexpected();
-  }
-};
-
 pp.flowParseTypeInitialiser = function (tok) {
   var oldInType = this.inType;
   this.inType = true;
@@ -707,17 +695,55 @@ export default function (instance) {
     };
   });
 
-  instance.extend("parseParenArrowList", function (inner) {
-    return function (startPos, startLoc, exprList, isAsync) {
+  function typeCastToParameter(node) {
+    node.expression.typeAnnotation = node.typeAnnotation;
+    return node.expression;
+  }
+
+  instance.extend("toAssignableList", function (inner) {
+    return function (exprList, isBinding) {
       for (var i = 0; i < exprList.length; i++) {
-        var listItem = exprList[i];
-        if (listItem.type === "TypeCastExpression") {
-          var expr = listItem.expression;
-          expr.typeAnnotation = listItem.typeAnnotation;
-          exprList[i] = expr;
+        var expr = exprList[i];
+        if (expr && expr.type === "TypeCastExpression") {
+          exprList[i] = typeCastToParameter(expr);
         }
       }
-      return inner.call(this, startPos, startLoc, exprList, isAsync);
+      return inner.call(this, exprList, isBinding);
+    };
+  });
+
+  instance.extend("toReferencedList", function () {
+    return function (exprList) {
+      var foundTypeCast = false;
+
+      for (var i = 0; i < exprList.length; i++) {
+        var expr = exprList[i];
+        if (expr && expr._exprListItem && expr.type === "TypeCastExpression") {
+          if (foundTypeCast) {
+            this.unexpected(expr.start, "Unexpected type cast");
+          } else {
+            foundTypeCast = true;
+          }
+        }
+      }
+
+      return exprList;
+    };
+  });
+
+  instance.extend("parseExprListItem", function (inner) {
+    return function (allowEmpty, refShorthandDefaultPos) {
+      var node = inner.call(this, allowEmpty, refShorthandDefaultPos);
+      if (this.type === tt.colon) {
+        return {
+          type: "TypeCastExpression",
+          _exprListItem: true,
+          expression: node,
+          typeAnnotation: this.flowParseTypeAnnotation()
+        };
+      } else {
+        return node;
+      }
     };
   });
 
