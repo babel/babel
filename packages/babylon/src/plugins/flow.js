@@ -714,16 +714,10 @@ export default function (instance) {
 
   instance.extend("toReferencedList", function () {
     return function (exprList) {
-      var foundTypeCast = false;
-
       for (var i = 0; i < exprList.length; i++) {
         var expr = exprList[i];
         if (expr && expr._exprListItem && expr.type === "TypeCastExpression") {
-          if (foundTypeCast) {
-            this.unexpected(expr.start, "Unexpected type cast");
-          } else {
-            foundTypeCast = true;
-          }
+          this.raise(expr.start, "Unexpected type cast");
         }
       }
 
@@ -733,14 +727,13 @@ export default function (instance) {
 
   instance.extend("parseExprListItem", function (inner) {
     return function (allowEmpty, refShorthandDefaultPos) {
+      var container = this.startNode();
       var node = inner.call(this, allowEmpty, refShorthandDefaultPos);
       if (this.type === tt.colon) {
-        return {
-          type: "TypeCastExpression",
-          _exprListItem: true,
-          expression: node,
-          typeAnnotation: this.flowParseTypeAnnotation()
-        };
+        container._exprListItem = true;
+        container.expression = node;
+        container.typeAnnotation = this.flowParseTypeAnnotation();
+        return this.finishNode(container, "TypeCastExpression");
       } else {
         return node;
       }
