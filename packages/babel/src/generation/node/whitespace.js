@@ -104,7 +104,7 @@ exports.nodes = {
    */
 
   Literal(node, parent) {
-    if (t.isExpressionStatement(parent)) {
+    if (t.isExpressionStatement(parent) || t.isProgram(parent)) {
       return {
         after: true
       };
