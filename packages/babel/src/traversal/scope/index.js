@@ -376,8 +376,13 @@ export default class Scope {
       return true;
     }
 
-    if (t.isIdentifier(node) && this.hasBinding(node.name)) {
-      return true;
+    if (t.isIdentifier(node)) {
+      var binding = this.getBinding(node.name);
+      if (binding) {
+        return binding.constant;
+      } else {
+        return this.hasBinding(node.name);
+      }
     }
 
     return false;
