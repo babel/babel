@@ -488,13 +488,13 @@ pp.flowParsePrimaryType = function () {
       return this.finishNode(node, "FunctionTypeAnnotation");
 
     case tt.string:
-      node.value = this.value;
+      node.rawValue = node.value = this.value;
       node.raw = this.input.slice(this.start, this.end);
       this.next();
       return this.finishNode(node, "StringLiteralTypeAnnotation");
 
     case tt.num:
-      node.value = this.value;
+      node.rawValue = node.value = this.value;
       node.raw = this.input.slice(this.start, this.end);
       this.next();
       return this.finishNode(node, "NumberLiteralTypeAnnotation");
