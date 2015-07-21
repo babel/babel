@@ -97,5 +97,9 @@ export function parse(code, opts = {}) {
     opts.onToken.push(...ast.tokens);
   }
 
+  if (opts.onComment) {
+    opts.onComment.push(...ast.comments);
+  }
+
   return ast.program;
 }
