@@ -486,10 +486,10 @@ pp.readRegexp = function() {
   // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
   // so don't do detection if we are running under Rhino
   if (!isRhino) {
-    tryCreateRegexp(tmp, undefined, start);
+    tryCreateRegexp.call(this, tmp, undefined, start);
     // Get a regular expression object for this pattern-flag pair, or `null` in
     // case the current environment doesn't support the flags it uses.
-    value = tryCreateRegexp(content, mods);
+    value = tryCreateRegexp.call(this, content, mods);
   }
   return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value});
 };
