@@ -68,6 +68,7 @@ pp.parseExpression = function (noIn, refShorthandDefaultPos) {
     while (this.eat(tt.comma)) {
       node.expressions.push(this.parseMaybeAssign(noIn, refShorthandDefaultPos));
     }
+    this.toReferencedList(node.expressions);
     return this.finishNode(node, "SequenceExpression");
   }
   return expr;
@@ -89,8 +90,9 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
     failOnShorthandAssign = false;
   }
   let startPos = this.start, startLoc = this.startLoc;
-  if (this.type === tt.parenL || this.type === tt.name)
+  if (this.type === tt.parenL || this.type === tt.name) {
     this.potentialArrowAt = this.start;
+  }
   let left = this.parseMaybeConditional(noIn, refShorthandDefaultPos);
   if (afterLeftParse) left = afterLeftParse.call(this, left, startPos, startLoc);
   if (this.type.isAssign) {
@@ -245,6 +247,8 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
 
       if (possibleAsync && (this.type === tt.colon || this.type === tt.arrow)) {
         base = this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
+      } else {
+        this.toReferencedList(node.arguments);
       }
     } else if (this.type === tt.backQuote) {
       let node = this.startNodeAt(startPos, startLoc);
@@ -323,8 +327,9 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       }
     }
 
-    if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow))
+    if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
       return this.parseArrowExpression(node, [id]);
+    }
 
     return id;
 
@@ -339,7 +344,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
   case tt._null: case tt._true: case tt._false:
     node = this.startNode();
-    node.value = this.type === tt._null ? null : this.type === tt._true;
+    node.rawValue = node.value = this.type === tt._null ? null : this.type === tt._true;
     node.raw = this.type.keyword;
     this.next();
     return this.finishNode(node, "Literal");
@@ -355,6 +360,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       return this.parseComprehension(node, false);
     }
     node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
+    this.toReferencedList(node.elements);
     return this.finishNode(node, "ArrayExpression");
 
   case tt.braceL:
@@ -446,12 +452,13 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem));
     }
   }
-  let innerEndPos = this.start, innerEndLoc = this.startLoc;
+  let innerEndPos = this.start;
+  let innerEndLoc = this.startLoc;
   this.expect(tt.parenR);
 
   if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
     if (innerParenStart) this.unexpected(innerParenStart);
-    return this.parseParenArrowList(startPos, startLoc, exprList, isAsync);
+    return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList, isAsync);
   }
 
   if (!exprList.length) {
@@ -468,6 +475,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   if (exprList.length > 1) {
     val = this.startNodeAt(innerStartPos, innerStartLoc);
     val.expressions = exprList;
+    this.toReferencedList(val.expressions);
     this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
   } else {
     val = exprList[0];
@@ -475,10 +483,6 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
 
   val.parenthesizedExpression = true;
   return val;
-};
-
-pp.parseParenArrowList = function (startPos, startLoc, exprList, isAsync) {
-  return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList, isAsync);
 };
 
 pp.parseParenItem = function (node) {
@@ -508,6 +512,7 @@ pp.parseNew = function () {
 
   if (this.eat(tt.parenL)) {
     node.arguments = this.parseExprList(tt.parenR, this.options.features["es7.trailingFunctionCommas"]);
+    this.toReferencedList(node.arguments);
   } else {
     node.arguments = [];
   }
@@ -742,17 +747,21 @@ pp.parseExprList = function (close, allowTrailingComma, allowEmpty, refShorthand
       if (allowTrailingComma && this.afterTrailingComma(close)) break;
     }
 
-    let elt;
-    if (allowEmpty && this.type === tt.comma) {
-      elt = null;
-    } else if (this.type === tt.ellipsis) {
-      elt = this.parseSpread(refShorthandDefaultPos);
-    } else {
-      elt = this.parseMaybeAssign(false, refShorthandDefaultPos);
-    }
-    elts.push(elt);
+    elts.push(this.parseExprListItem(allowEmpty, refShorthandDefaultPos));
   }
   return elts;
+};
+
+pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
+  let elt;
+  if (allowEmpty && this.type === tt.comma) {
+    elt = null;
+  } else if (this.type === tt.ellipsis) {
+    elt = this.parseSpread(refShorthandDefaultPos);
+  } else {
+    elt = this.parseMaybeAssign(false, refShorthandDefaultPos);
+  }
+  return elt;
 };
 
 // Parse the next token as an identifier. If `liberal` is true (used
@@ -761,7 +770,6 @@ pp.parseExprList = function (close, allowTrailingComma, allowEmpty, refShorthand
 
 pp.parseIdent = function (liberal) {
   let node = this.startNode();
-  if (liberal && this.options.allowReserved === "never") liberal = false;
   if (this.type === tt.name) {
     if (!liberal &&
         ((!this.options.allowReserved && this.isReservedWord(this.value)) ||
