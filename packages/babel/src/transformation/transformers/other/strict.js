@@ -6,6 +6,16 @@ export var metadata = {
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassExpression", "ClassDeclaration"];
 
+function isUseStrict(node) {
+  if (!t.isLiteral(node)) return false;
+
+  if (node.raw && node.rawValue === node.value) {
+    return node.rawValue === "use strict";
+  } else {
+    return node.value === "use strict";
+  }
+}
+
 /**
  * [Please add a description.]
  */
@@ -21,7 +31,7 @@ export var visitor = {
       var first = program.body[0];
 
       var directive;
-      if (t.isExpressionStatement(first) && t.isLiteral(first.expression, { value: "use strict" })) {
+      if (t.isExpressionStatement(first) && isUseStrict(first.expression)) {
         directive = first;
       } else {
         directive = t.expressionStatement(t.literal("use strict"));

@@ -103,8 +103,8 @@ exports.nodes = {
    * Test if Literal needs whitespace.
    */
 
-  Literal(node) {
-    if (node.value === "use strict") {
+  Literal(node, parent) {
+    if (t.isExpressionStatement(parent)) {
       return {
         after: true
       };
