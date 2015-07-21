@@ -7,5 +7,9 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^0.9.0"
+  },
+  "devDependencies": {
+    "babel-plugin-runtime": "^1.0.7",
+    "regenerator": "^0.8.34"
   }
 }

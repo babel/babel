@@ -9,6 +9,7 @@
     "eslint": "^0.21.2",
     "fs-readdir-recursive": "^0.1.2",
     "istanbul": "^0.3.5",
+    "lodash": "^3.10.0",
     "matcha": "^0.6.0",
     "mocha": "2.2.0",
     "output-file-sync": "^1.1.1",
