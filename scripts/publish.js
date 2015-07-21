@@ -67,7 +67,7 @@ var changedFiles = [VERSION_LOC];
 packageNames.forEach(function (name) {
   // check if package has changed since last release
   var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
-  if (diff) {
+  if (diff || process.env.FORCE_VERSION) {
     console.log("Changes detected to package", name);
     changedPackages.push(name);
   }
