@@ -110,12 +110,20 @@ export var Var = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var DirectiveLiteral = {
   types: ["Literal"],
   checkPath(path) {
     return path.isLiteral() && path.parentPath.isExpressionStatement();
   }
 };
+
+/**
+ * [Please add a description.]
+ */
 
 export var Directive = {
   types: ["ExpressionStatement"],
@@ -124,14 +132,39 @@ export var Directive = {
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var User = {
   checkPath(path) {
     return path.node && !!path.node.loc;
   }
 };
 
+/**
+ * [Please add a description.]
+ */
+
 export var Generated = {
   checkPath(path) {
     return !path.isUser();
+  }
+};
+
+/**
+ * [Please add a description.]
+ */
+
+export var Flow = {
+  types: ["Flow", "ImportDeclaration"],
+  checkPath({ node }) {
+    if (t.isFlow(node)) {
+      return true;
+    } else if (t.isImportDeclaration(node)) {
+      return node.importKind === "type" || node.importKind === "typeof";
+    } else {
+      return false;
+    }
   }
 };

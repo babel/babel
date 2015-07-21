@@ -145,8 +145,7 @@ for (let type of (t.TYPES: Array)) {
 
 for (let type in virtualTypes) {
   if (type[0] === "_") continue;
-
-  t.TYPES.push(type);
+  if (t.TYPES.indexOf(type) < 0) t.TYPES.push(type);
 
   NodePath.prototype[`is${type}`] = function (opts) {
     return virtualTypes[type].checkPath(this, opts);

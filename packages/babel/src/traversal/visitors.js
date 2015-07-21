@@ -40,7 +40,7 @@ export function explode(visitor) {
   ensureCallbackArrays(visitor);
 
   // add type wrappers
-  for (let nodeType in visitor) {
+  for (let nodeType of (Object.keys(visitor): Array)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     var wrapper = virtualTypes[nodeType];
