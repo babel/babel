@@ -8,5 +8,6 @@
 /CHANGELOG.md
 /.package.json
 /packages
+/scripts
 /src
 _babel.github.io
