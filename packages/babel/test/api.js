@@ -15,28 +15,37 @@ function assertNotIgnored(result) {
   assert.ok(!result.ignored);
 }
 
+// shim
+function transformAsync(code, opts) {
+  return {
+    then: function (resolve) {
+      resolve(transform(code, opts));
+    }
+  };
+}
+
 suite("api", function () {
   test("code option false", function () {
-    return transform("foo('bar');", { code: false }).then(function (result) {
+    return transformAsync("foo('bar');", { code: false }).then(function (result) {
       assert.ok(!result.code);
     });
   });
 
   test("ast option false", function () {
-    return transform("foo('bar');", { ast: false }).then(function (result) {
+    return transformAsync("foo('bar');", { ast: false }).then(function (result) {
       assert.ok(!result.ast);
     });
   });
 
   test("auxiliaryCommentBefore option", function () {
     return Promise.all([
-      transform("class Foo {}", {
+      transformAsync("class Foo {}", {
         auxiliaryCommentBefore: "foobar"
       }).then(function (result) {
         assert.ok(result.code.indexOf("foobar") >= 0);
       }),
 
-      transform("for (let i in bar) { foo(function () { i; }); break; continue; }", {
+      transformAsync("for (let i in bar) { foo(function () { i; }); break; continue; }", {
         auxiliaryCommentBefore: "foobar"
       }).then(function (result) {
         assert.ok(result.code.indexOf("foobar") >= 0);
@@ -46,13 +55,13 @@ suite("api", function () {
 
   test("auxiliaryCommentAfter option", function () {
     return Promise.all([
-      transform("class Foo {}", {
+      transformAsync("class Foo {}", {
         auxiliaryCommentAfter: "foobar"
       }).then(function (result) {
         assert.ok(result.code.indexOf("foobar") >= 0);
       }),
 
-      transform("for (let i in bar) { foo(function () { i; }); break; continue; }", {
+      transformAsync("for (let i in bar) { foo(function () { i; }); break; continue; }", {
         auxiliaryCommentAfter: "foobar"
       }).then(function (result) {
         assert.ok(result.code.indexOf("foobar") >= 0);
@@ -62,7 +71,7 @@ suite("api", function () {
 
   test("modules metadata", function () {
     return Promise.all([
-      transform('import { externalName as localName } from "external";').then(function (result) {
+      transformAsync('import { externalName as localName } from "external";').then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
           imported: ["externalName"],
@@ -74,7 +83,7 @@ suite("api", function () {
         });
       }),
 
-      transform('import * as localName2 from "external";').then(function (result) {
+      transformAsync('import * as localName2 from "external";').then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
           imported: ["*"],
@@ -85,7 +94,7 @@ suite("api", function () {
         });
       }),
 
-      transform('import localName3 from "external";').then(function (result) {
+      transformAsync('import localName3 from "external";').then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
           imported: ["default"],
@@ -97,7 +106,7 @@ suite("api", function () {
         });
       }),
 
-      transform('import localName from "./array";', {
+      transformAsync('import localName from "./array";', {
         resolveModuleSource: function() {
           return "override-source";
         }
@@ -117,7 +126,7 @@ suite("api", function () {
         ]);
       }),
 
-      transform('export * as externalName1 from "external";', {
+      transformAsync('export * as externalName1 from "external";', {
         stage: 0
       }).then(function (result) {
          assert.deepEqual(result.metadata.modules.exports, {
@@ -130,7 +139,7 @@ suite("api", function () {
         });
       }),
 
-      transform('export externalName2 from "external";', {
+      transformAsync('export externalName2 from "external";', {
         stage: 0
       }).then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
@@ -144,7 +153,7 @@ suite("api", function () {
         });
       }),
 
-      transform('export function namedFunction() {}').then(function (result) {
+      transformAsync('export function namedFunction() {}').then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["namedFunction"],
           specifiers: [{
@@ -155,7 +164,7 @@ suite("api", function () {
         });
       }),
 
-      transform('export var foo = "bar";').then(function (result) {
+      transformAsync('export var foo = "bar";').then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           "exported": ["foo"],
           specifiers: [{
@@ -166,7 +175,7 @@ suite("api", function () {
         });
       }),
 
-      transform("export { localName as externalName3 };").then(function (result) {
+      transformAsync("export { localName as externalName3 };").then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["externalName3"],
           specifiers: [{
@@ -177,7 +186,7 @@ suite("api", function () {
         });
       }),
 
-      transform('export { externalName4 } from "external";').then(function (result) {
+      transformAsync('export { externalName4 } from "external";').then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["externalName4"],
           specifiers: [{
@@ -189,7 +198,7 @@ suite("api", function () {
         });
       }),
 
-      transform('export * from "external";').then(function (result) {
+      transformAsync('export * from "external";').then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: [],
           specifiers: [{
@@ -199,7 +208,7 @@ suite("api", function () {
         });
       }),
 
-      transform("export default function defaultFunction() {}").then(function (result) {
+      transformAsync("export default function defaultFunction() {}").then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["defaultFunction"],
           specifiers: [{
@@ -214,17 +223,17 @@ suite("api", function () {
 
   test("ignore option", function () {
     return Promise.all([
-      transform("", {
+      transformAsync("", {
         ignore: "node_modules",
         filename: "/foo/node_modules/bar"
       }).then(assertIgnored),
 
-      transform("", {
+      transformAsync("", {
         ignore: "foo/node_modules",
         filename: "/foo/node_modules/bar"
       }).then(assertIgnored),
 
-      transform("", {
+      transformAsync("", {
         ignore: "foo/node_modules/*.bar",
         filename: "/foo/node_modules/foo.bar"
       }).then(assertIgnored)
@@ -233,32 +242,32 @@ suite("api", function () {
 
   test("only option", function () {
     return Promise.all([
-      transform("", {
+      transformAsync("", {
         only: "node_modules",
         filename: "/foo/node_modules/bar"
       }).then(assertNotIgnored),
 
-      transform("", {
+      transformAsync("", {
         only: "foo/node_modules",
         filename: "/foo/node_modules/bar"
       }).then(assertNotIgnored),
 
-      transform("", {
+      transformAsync("", {
         only: "foo/node_modules/*.bar",
         filename: "/foo/node_modules/foo.bar"
       }).then(assertNotIgnored),
 
-      transform("", {
+      transformAsync("", {
         only: "node_modules",
         filename: "/foo/node_module/bar"
       }).then(assertIgnored),
 
-      transform("", {
+      transformAsync("", {
         only: "foo/node_modules",
         filename: "/bar/node_modules/foo"
       }).then(assertIgnored),
 
-      transform("", {
+      transformAsync("", {
         only: "foo/node_modules/*.bar",
         filename: "/foo/node_modules/bar.foo"
       }).then(assertIgnored)
@@ -270,7 +279,7 @@ suite("api", function () {
     // compatible which is why it's not inside /test/core/fixtures/transformation
 
     function getModuleNameTest(moduleFormat, expected) {
-      return transform("foo('bar');", {
+      return transformAsync("foo('bar');", {
         filename: "/foo/bar/index",
         modules: moduleFormat,
         moduleIds: true,
@@ -351,7 +360,7 @@ suite("api", function () {
     });
 
     test("default", function () {
-      return transform("foo;", {
+      return transformAsync("foo;", {
         env: {
           development: { blacklist: "strict" }
         }
@@ -362,7 +371,7 @@ suite("api", function () {
 
     test("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
-      return transform("foo;", {
+      return transformAsync("foo;", {
         env: {
           foo: { blacklist: "strict" }
         }
@@ -373,7 +382,7 @@ suite("api", function () {
 
     test("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
-      return transform("foo;", {
+      return transformAsync("foo;", {
         env: {
           foo: { blacklist: "strict" }
         }
@@ -394,7 +403,7 @@ suite("api", function () {
     var actual = 'import foo from "foo-import-default";\nimport "foo-import-bare";\nexport { foo } from "foo-export-named";';
     var expected = 'import foo from "resolved/foo-import-default";\nimport "resolved/foo-import-bare";\nexport { foo } from "resolved/foo-export-named";';
 
-    return transform(actual, {
+    return transformAsync(actual, {
       blacklist: ["es6.modules", "strict"],
       resolveModuleSource: function (originalSource) {
         return "resolved/" + originalSource;
