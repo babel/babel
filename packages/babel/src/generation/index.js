@@ -227,41 +227,41 @@ class CodeGenerator {
       this.format.concise = true;
     }
 
-    if (this[node.type]) {
-      var needsNoLineTermParens = n.needsParensNoLineTerminator(node, parent);
-      var needsParens           = needsNoLineTermParens || n.needsParens(node, parent);
-
-      if (needsParens) this.push("(");
-      if (needsNoLineTermParens) this.indent();
-
-      this.printLeadingComments(node, parent);
-
-      var needsParensFromCatchup = this.catchUp(node, parent, needsParens);
-
-      this._printNewline(true, node, parent, opts);
-
-      if (opts.before) opts.before();
-      this.map.mark(node, "start");
-
-      this[node.type](node, this.buildPrint(node), parent);
-
-      if (needsNoLineTermParens) {
-        this.newline();
-        this.dedent();
-      }
-      if (needsParens || needsParensFromCatchup) this.push(")");
-
-      this.map.mark(node, "end");
-      if (opts.after) opts.after();
-
-      this.format.concise = oldConcise;
-
-      this._printNewline(false, node, parent, opts);
-
-      this.printTrailingComments(node, parent);
-    } else {
+    if (!this[node.type]) {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
+
+    var needsNoLineTermParens = n.needsParensNoLineTerminator(node, parent);
+    var needsParens           = needsNoLineTermParens || n.needsParens(node, parent);
+
+    if (needsParens) this.push("(");
+    if (needsNoLineTermParens) this.indent();
+
+    this.printLeadingComments(node, parent);
+
+    var needsParensFromCatchup = this.catchUp(node, parent, needsParens);
+
+    this._printNewline(true, node, parent, opts);
+
+    if (opts.before) opts.before();
+    this.map.mark(node, "start");
+
+    this[node.type](node, this.buildPrint(node), parent);
+
+    if (needsNoLineTermParens) {
+      this.newline();
+      this.dedent();
+    }
+    if (needsParens || needsParensFromCatchup) this.push(")");
+
+    this.map.mark(node, "end");
+    if (opts.after) opts.after();
+
+    this.format.concise = oldConcise;
+
+    this._printNewline(false, node, parent, opts);
+
+    this.printTrailingComments(node, parent);
   }
 
   /**
