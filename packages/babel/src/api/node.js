@@ -91,5 +91,11 @@ export function parse(code, opts = {}) {
     opts.features[key] = true;
   }
 
-  return babylon.parse(code, opts).program;
+  var ast = babylon.parse(code, opts)
+
+  if (opts.onToken) {
+    opts.onToken.push(...ast.tokens);
+  }
+
+  return ast.program;
 }
