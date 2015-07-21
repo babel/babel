@@ -1,5 +1,12 @@
+import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "../../types";
+
+/**
+ * RegExp for testing scientific notation in literals.
+ */
+
+const SCIENTIFIC_NOTATION = /e/i;
 
 /**
  * Prints UnaryExpression, prints operator and argument.
@@ -269,6 +276,13 @@ export function MemberExpression(node, print) {
     print.plain(node.property);
     this.push("]");
   } else {
+    if (t.isLiteral(node.object)) {
+      var val = this._Literal(node.object);
+      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val)) {
+        this.push(".");
+      }
+    }
+
     this.push(".");
     print.plain(node.property);
   }

@@ -4,7 +4,6 @@ import { lineBreak } from "./whitespace";
 
 export function Parser(options, input, startPos) {
   this.options = options;
-  this.sourceFile = this.options.sourceFile || null;
   this.isKeyword = keywords[6];
   this.isReservedWord = reservedWords[6];
   this.input = input;
@@ -55,10 +54,22 @@ export function Parser(options, input, startPos) {
   // Labels in scope.
   this.labels = [];
 
+  // Leading decorators.
   this.decorators = [];
 
+  // Token store.
+  this.tokens = [];
+
+  // Comment store.
+  this.comments = [];
+
+  // Comment attachment store
+  this.trailingComments = [];
+  this.leadingComments = [];
+  this.bottomRightStack = [];
+
   // If enabled, skip leading hashbang line.
-  if (this.pos === 0 && this.options.allowHashBang && this.input.slice(0, 2) === "#!") {
+  if (this.pos === 0 && this.input[0] === "#" && this.input[1] === "!") {
     this.skipLineComment(2);
   }
 }
@@ -80,7 +91,8 @@ Parser.prototype.loadPlugins = function (plugins) {
 };
 
 Parser.prototype.parse = function () {
-  let node = this.options.program || this.startNode();
+  let file = this.startNode();
+  let program = this.startNode();
   this.nextToken();
-  return this.parseTopLevel(node);
+  return this.parseTopLevel(file, program);
 };

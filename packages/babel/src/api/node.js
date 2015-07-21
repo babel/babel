@@ -91,5 +91,5 @@ export function parse(code, opts = {}) {
     opts.features[key] = true;
   }
 
-  return babylon.parse(code, opts);
+  return babylon.parse(code, opts).program;
 }

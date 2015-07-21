@@ -15,6 +15,7 @@ export default {
   "react.displayName":                     require("babel-plugin-react-display-name"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
+  "es6.literals":                          require("./es6/literals"),
   "validation.undeclaredVariableCheck":    require("babel-plugin-undeclared-variables-check"),
 
   //- builtin-basic

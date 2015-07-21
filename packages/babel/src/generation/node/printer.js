@@ -9,6 +9,18 @@ export default class NodePrinter {
   }
 
   /**
+   * Description
+   */
+
+  printInnerComments() {
+    if (!this.parent.innerComments) return;
+    var gen = this.generator;
+    gen.indent();
+    gen._printComments(this.parent.innerComments);
+    gen.dedent();
+  }
+
+  /**
    * Print a plain node.
    */
 

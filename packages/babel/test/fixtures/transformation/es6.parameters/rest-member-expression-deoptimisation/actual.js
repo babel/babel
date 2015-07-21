@@ -21,7 +21,7 @@ var z = function (foo, ...bar) {
 };
 
 var a = function (foo, ...bar) {
-  return bar.join(',');
+  return bar.join(",");
 };
 
 var b = function (foo, ...bar) {

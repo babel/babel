@@ -407,23 +407,8 @@ class CodeGenerator {
 
     for (var comment of (comments: Array)) {
       if (!this.shouldPrintComment(comment)) continue;
-
-      var skip = false;
-
-      if (this.ast.comments) {
-        // find the original comment in the ast and set it as displayed
-        for (var origComment of (this.ast.comments: Array)) {
-          if (origComment.start === comment.start) {
-            // comment has already been output
-            if (origComment._displayed) skip = true;
-
-            origComment._displayed = true;
-            break;
-          }
-        }
-      }
-
-      if (skip) return;
+      if (comment._displayed) continue;
+      comment._displayed = true;
 
       this.catchUp(comment);
 

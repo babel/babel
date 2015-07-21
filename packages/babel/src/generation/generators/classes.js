@@ -39,10 +39,11 @@ export { ClassDeclaration as ClassExpression };
  */
 
 export function ClassBody(node, print) {
+  this.push("{");
   if (node.body.length === 0) {
-    this.push("{}");
+    print.printInnerComments();
+    this.push("}");
   } else {
-    this.push("{");
     this.newline();
 
     this.indent();

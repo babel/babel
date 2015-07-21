@@ -54,9 +54,9 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
  */
 
 const CLEAR_KEYS = [
-  "trailingComments", "leadingComments", "extendedRange",
+  "trailingComments", "leadingComments", "innerComments", "extendedRange",
   "_scopeInfo", "_paths",
-  "tokens", "range", "start", "end", "loc", "raw"
+  "tokens", "range", "start", "end", "loc", "raw", "rawValue"
 ];
 
 /**

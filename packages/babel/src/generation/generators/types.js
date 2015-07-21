@@ -1,6 +1,5 @@
 /* eslint quotes: 0 */
 
-import isInteger from "is-integer";
 import * as t from "../../types";
 
 /**
@@ -34,17 +33,16 @@ export { RestElement as SpreadElement, RestElement as SpreadProperty };
 export function ObjectExpression(node, print) {
   var props = node.properties;
 
+  this.push("{");
+  print.printInnerComments();
+
   if (props.length) {
-    this.push("{");
     this.space();
-
     print.list(props, { indent: true });
-
     this.space();
-    this.push("}");
-  } else {
-    this.push("{}");
   }
+
+  this.push("}");
 }
 
 /**
@@ -100,6 +98,7 @@ export function ArrayExpression(node, print) {
   var len   = elems.length;
 
   this.push("[");
+  print.printInnerComments();
 
   for (var i = 0; i < elems.length; i++) {
     var elem = elems[i];
@@ -127,42 +126,43 @@ export function ArrayExpression(node, print) {
 export { ArrayExpression as ArrayPattern };
 
 /**
- * RegExp for testing scientific notation in literals.
- */
-
-const SCIENTIFIC_NOTATION = /e/i;
-
-/**
  * Prints Literal, prints value, regex, raw, handles val type.
  */
 
-export function Literal(node, print, parent) {
-  var val  = node.value;
-  var type = typeof val;
+export function Literal(node, print) {
+  this.push(""); // hack: catch up indentation
+  this._push(this._Literal(node));
+}
 
-  if (type === "string") {
-    this._stringLiteral(val);
-  } else if (type === "number") {
-    // check to see if this is the same number as the raw one in the original source as asm.js uses
-    // numbers in the form 5.0 for type hinting
-    var raw = node.raw;
-    if (val === +raw && raw[raw.length - 1] !== "." && !/^0[bo]/i.test(raw)) {
-      val = raw;
-    }
+export function _Literal(node) {
+  var val = node.value;
 
-    val = val + "";
+  // just use the raw property if our current value is equivalent to the one we got
+  // when we populated raw
+  if (node.raw != null && node.rawValue != null && val === node.rawValue) {
+    return node.raw;
+  }
 
-    if (isInteger(+val) && t.isMemberExpression(parent, { object: node }) && !SCIENTIFIC_NOTATION.test(val)) {
-      val += ".";
-    }
+  if (node.regex) {
+    return `/${node.regex.pattern}/${node.regex.flags}`;
+  }
 
-    this.push(val);
-  } else if (type === "boolean") {
-    this.push(val ? "true" : "false");
-  } else if (node.regex) {
-    this.push(`/${node.regex.pattern}/${node.regex.flags}`);
-  } else if (val === null) {
-    this.push("null");
+  switch (typeof val) {
+    case "string":
+      return this._stringLiteral(val);
+
+    case "number":
+      return val + "";
+
+    case "boolean":
+      return val ? "true" : "false";
+
+    default:
+      if (val === null) {
+        return "null";
+      } else {
+        throw new Error("Invalid Literal type");
+      }
   }
 }
 
@@ -192,5 +192,5 @@ export function _stringLiteral(val) {
     val = `'${val}'`;
   }
 
-  this.push(val);
+  return val;
 }

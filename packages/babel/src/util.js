@@ -1,5 +1,3 @@
-import "./patch";
-
 import escapeRegExp from "lodash/string/escapeRegExp";
 import startsWith from "lodash/string/startsWith";
 import cloneDeep from "lodash/lang/cloneDeep";

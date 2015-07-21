@@ -31,7 +31,7 @@ function registerType(type: string, skipAliasCheck?: boolean) {
 export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
-export const COMMENT_KEYS            = ["leadingComments", "trailingComments"];
+export const COMMENT_KEYS            = ["leadingComments", "trailingComments", "innerComments"];
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
 export const COMPARISON_BINARY_OPERATORS     = ["==", "===", "!=", "!==", "in", "instanceof"];

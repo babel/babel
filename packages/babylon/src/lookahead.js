@@ -23,7 +23,9 @@ var STATE_KEYS = [
   "inType",
   "inFunction",
   "inGenerator",
-  "labels"
+  "labels",
+  "tokens",
+  "comments"
 ];
 
 pp.getState = function () {
@@ -32,8 +34,10 @@ pp.getState = function () {
     var key = STATE_KEYS[i];
     state[key] = this[key];
   }
-  state.context = this.context.slice();
-  state.labels = this.labels.slice();
+  state.comments = this.comments.slice();
+  state.context  = this.context.slice();
+  state.tokens   = this.tokens.slice();
+  state.labels   = this.labels.slice();
   return state;
 };
 
@@ -45,9 +49,11 @@ pp.setState = function (state) {
 
 pp.lookahead = function () {
   var old = this.getState();
+
   this.isLookahead = true;
   this.next();
   this.isLookahead = false;
+
   var curr = this.getState();
   this.setState(old);
   return curr;

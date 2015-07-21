@@ -190,7 +190,7 @@ export function NumberTypeAnnotation() {
  */
 
 export function StringLiteralTypeAnnotation(node) {
-  this._stringLiteral(node.value);
+  this.push(this._stringLiteral(node.value));
 }
 
 /**
