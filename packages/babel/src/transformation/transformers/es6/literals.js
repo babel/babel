@@ -10,7 +10,7 @@ export var visitor = {
     }
 
     // unicode escape
-    if (typeof node.value === "string" && /\\[ux]/gi.test(node.raw)) {
+    if (typeof node.value === "string" && /\\[u]/gi.test(node.raw)) {
       node.raw = undefined;
     }
   }
