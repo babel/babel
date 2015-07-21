@@ -77,3 +77,27 @@ function a() {
     console.log("Shouldn't args be from a's scope?", args);
   };
 }
+
+// loop
+function runQueue(queue) {
+  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  for (var i = 0; i < queue.length; i++) {
+    queue[i].apply(queue, args);
+  }
+}
+
+// nested loop
+function runQueue(queue) {
+  if (foo) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    for (var i = 0; i < queue.length; i++) {
+      queue[i].apply(queue, args);
+    }
+  }
+}

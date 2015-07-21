@@ -50,3 +50,19 @@ function a(...args) {
     console.log("Shouldn't args be from a's scope?", args);
   };
 }
+
+// loop
+function runQueue(queue, ...args) {
+  for (let i = 0; i < queue.length; i++) {
+    queue[i](...args)
+  }
+}
+
+// nested loop
+function runQueue(queue, ...args) {
+  if (foo) {
+    for (let i = 0; i < queue.length; i++) {
+      queue[i](...args)
+    }
+  }
+}

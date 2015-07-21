@@ -223,7 +223,22 @@ export var visitor = {
     } else {
       // perform allocation at the lowest common denominator of all references
       loop._blockHoist = 1;
-      this.getEarliestCommonAncestorFrom(state.references).getStatementParent().insertBefore(loop);
+
+      var target = this.getEarliestCommonAncestorFrom(state.references).getStatementParent();
+
+      // don't perform the allocation inside a loop
+      var highestLoop;
+      target.findParent(function (path) {
+        if (path.isLoop()) {
+          highestLoop = path;
+        } else if (path.isFunction()) {
+          // stop crawling up for functions
+          return true;
+        }
+      });
+      if (highestLoop) target = highestLoop;
+
+      target.insertBefore(loop);
     }
   }
 };
