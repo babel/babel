@@ -10174,6 +10174,208 @@ var fbTestFixture = {
       }
     },
   },
+  'Number Literal Types': {
+    'var a: 123': {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+          type: 'Identifier',
+          name: 'a',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NumberLiteralTypeAnnotation',
+              value: 123,
+              raw: '123',
+              range: [7, 10],
+              loc: {
+                start: { line: 1, column: 7 },
+                end: { line: 1, column: 10 }
+              }
+            },
+            range: [5, 10],
+            loc: {
+              start: { line: 1, column: 5 },
+              end: { line: 1, column: 10 }
+            }
+          }
+        },
+        init: null,
+        range: [4, 10],
+        loc: {
+          start: { line: 1, column: 4 },
+          end: { line: 1, column: 10 }
+        }
+      }],
+      kind: 'var',
+      range: [0, 10],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 10 }
+      }
+    },
+    'var a: 123.0': {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+          type: 'Identifier',
+          name: 'a',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NumberLiteralTypeAnnotation',
+              value: 123,
+              raw: '123.0',
+              range: [7, 12],
+              loc: {
+                start: { line: 1, column: 7 },
+                end: { line: 1, column: 12 }
+              }
+            },
+            range: [5, 12],
+            loc: {
+              start: { line: 1, column: 5 },
+              end: { line: 1, column: 12 }
+            }
+          }
+        },
+        init: null,
+        range: [4, 12],
+        loc: {
+          start: { line: 1, column: 4 },
+          end: { line: 1, column: 12 }
+        }
+      }],
+      kind: 'var',
+      range: [0, 12],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 12 }
+      }
+    },
+    'var a: 0x7B': {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+          type: 'Identifier',
+          name: 'a',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NumberLiteralTypeAnnotation',
+              value: 123,
+              raw: '0x7B',
+              range: [7, 11],
+              loc: {
+                start: { line: 1, column: 7 },
+                end: { line: 1, column: 11 }
+              }
+            },
+            range: [5, 11],
+            loc: {
+              start: { line: 1, column: 5 },
+              end: { line: 1, column: 11 }
+            }
+          }
+        },
+        init: null,
+        range: [4, 11],
+        loc: {
+          start: { line: 1, column: 4 },
+          end: { line: 1, column: 11 }
+        }
+      }],
+      kind: 'var',
+      range: [0, 11],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 11 }
+      }
+    },
+    'var a: 0b1111011': {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+          type: 'Identifier',
+          name: 'a',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NumberLiteralTypeAnnotation',
+              value: 123,
+              raw: '0b1111011',
+              range: [7, 16],
+              loc: {
+                start: { line: 1, column: 7 },
+                end: { line: 1, column: 16 }
+              }
+            },
+            range: [5, 16],
+            loc: {
+              start: { line: 1, column: 5 },
+              end: { line: 1, column: 16 }
+            }
+          }
+        },
+        init: null,
+        range: [4, 16],
+        loc: {
+          start: { line: 1, column: 4 },
+          end: { line: 1, column: 16 }
+        }
+      }],
+      kind: 'var',
+      range: [0, 16],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 16 }
+      }
+    },
+    'var a: 0o173': {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+          type: 'Identifier',
+          name: 'a',
+          typeAnnotation: {
+            type: 'TypeAnnotation',
+            typeAnnotation: {
+              type: 'NumberLiteralTypeAnnotation',
+              value: 123,
+              raw: '0o173',
+              range: [7, 12],
+              loc: {
+                start: { line: 1, column: 7 },
+                end: { line: 1, column: 12 }
+              }
+            },
+            range: [5, 12],
+            loc: {
+              start: { line: 1, column: 5 },
+              end: { line: 1, column: 12 }
+            }
+          }
+        },
+        init: null,
+        range: [4, 12],
+        loc: {
+          start: { line: 1, column: 4 },
+          end: { line: 1, column: 12 }
+        }
+      }],
+      kind: 'var',
+      range: [0, 12],
+      loc: {
+        start: { line: 1, column: 0 },
+        end: { line: 1, column: 12 }
+      }
+    }
+  },
   'Qualified Generic Type': {
     'var a : A.B': {
       type: 'VariableDeclaration',

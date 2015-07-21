@@ -4,6 +4,7 @@ var buildExternalHelpers = require("../lib/tools/build-external-helpers");
 var PluginManager        = require("../lib/transformation/file/plugin-manager");
 var Transformer          = require("../lib/transformation/transformer");
 var transform            = require("../lib/transformation");
+var Pipeline             = require("../lib/transformation/pipeline");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file");
 
@@ -420,6 +421,11 @@ suite("api", function () {
     var file2 = new File({}, transform.pipeline);
     var file3 = new File({}, transform.pipeline);
     assert.ok(file2.opts.extra !== file3.opts.extra);
+  });
+
+  // For now just signal that it's not cruft and shouldn't be deleted.
+  test("pretransform exists", function () {
+    assert.ok(Pipeline.prototype.pretransform);
   });
 
   suite("buildExternalHelpers", function () {

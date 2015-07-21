@@ -110,7 +110,7 @@ export default class Pipeline {
   }
 
   /**
-   * [Please add a description.]
+   * Build dependency graph by recursing `metadata.modules`. WIP.
    */
 
   pretransform(code: string, opts?: Object) {

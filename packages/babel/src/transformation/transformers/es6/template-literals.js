@@ -64,7 +64,9 @@ export var visitor = {
 
     var templateName = "tagged-template-literal";
     if (file.isLoose("es6.templateLiterals")) templateName += "-loose";
-    args.push(t.callExpression(file.addHelper(templateName), [strings, raw]));
+
+    var templateObject = file.addTemplateObject(templateName, strings, raw);
+    args.push(templateObject);
 
     args = args.concat(quasi.expressions);
 

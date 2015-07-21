@@ -407,6 +407,30 @@ export default class File {
     return uid;
   }
 
+  addTemplateObject(helperName: string, strings: Array, raw: Array): Object {
+    // Generate a unique name based on the string literals so we dedupe
+    // identical strings used in the program.
+    var stringIds = raw.elements.map(function(string) {
+      return string.value;
+    });
+    var name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
+
+    var declar = this.declarations[name];
+    if (declar) return declar;
+
+    var uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
+
+    var helperId = this.addHelper(helperName);
+    var init = t.callExpression(helperId, [strings, raw]);
+    init._compact = true;
+    this.scope.push({
+      id: uid,
+      init: init,
+      _blockHoist: 1.9    // This ensures that we don't fail if not using function expression helpers
+    });
+    return uid;
+  }
+
   /**
    * [Please add a description.]
    */

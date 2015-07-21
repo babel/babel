@@ -834,14 +834,15 @@ export default class Scope {
 
     var unique = opts.unique;
     var kind   = opts.kind || "var";
+    var blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
-    var dataKey = `declaration:${kind}`;
+    var dataKey = `declaration:${kind}:${blockHoist}`;
     var declar  = !unique && path.getData(dataKey);
 
     if (!declar) {
       declar = t.variableDeclaration(kind, []);
       declar._generated = true;
-      declar._blockHoist = 2;
+      declar._blockHoist = blockHoist;
 
       this.hub.file.attachAuxiliaryComment(declar);
 
