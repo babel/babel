@@ -13,6 +13,24 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.2-5.8.3
+
+Issues with publish process.
+
+## 5.8.1
+
+ * **Bug Fix**
+  * Fix regression where async arrow functions couldn't have type annotation parameters.
+  * Output type annotations of type instantiation parameters.
+ * **Polish**
+  * Prepend to highest loop when performing rest parameter allocation optimisation.
+  * Add comment attachment to parser.
+  * Add support for retaining inner comments of empty blocks.
+
+## 5.8.0
+
+Never released due to publish environment issues.
+
 ## 5.7.4
 
  * **Bug Fix**
