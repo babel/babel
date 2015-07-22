@@ -1193,4 +1193,29 @@ describe("verify", function () {
       []
     );
   });
+
+  it("excludes comment tokens #153", function () {
+    verifyAndAssertMessages(
+      [
+        "var a = [",
+          "1,",
+          "2, // a trailing comment makes this line fail comma-dangle (always-multiline)",
+        "];",
+      ].join("\n"),
+      { "comma-dangle": [2, "always-multiline"] },
+      []
+    );
+
+    verifyAndAssertMessages(
+      [
+        "switch (a) {",
+          "// A comment here makes the above line fail brace-style",
+          "case 1:",
+            "console.log(a);",
+        "}"
+      ].join("\n"),
+      { "brace-style": 2 },
+      []
+    );
+  });
 });
