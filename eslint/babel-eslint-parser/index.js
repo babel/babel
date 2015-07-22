@@ -363,8 +363,6 @@ function monkeypatch() {
 }
 
 exports.attachComments = function (ast, comments, tokens) {
-  estraverse.attachComments(ast, comments, tokens);
-
   if (comments.length) {
     var firstComment = comments[0];
     var lastComment = comments[comments.length - 1];
@@ -456,7 +454,7 @@ exports.parse = function (code) {
     }
   }
   ast.comments = comments;
-  exports.attachComments(ast, comments, tokens);
+  exports.attachComments(ast, comments, ast.tokens);
 
   // transform esprima and acorn divergent nodes
   acornToEsprima.toAST(ast);
