@@ -10,5 +10,5 @@
       configurable: true
     }
   });
-  if (superClass) subClass.__proto__ = superClass;
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 })
