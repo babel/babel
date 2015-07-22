@@ -1218,4 +1218,13 @@ describe("verify", function () {
       []
     );
   });
+
+  it("ternary and parens #149", function () {
+    verifyAndAssertMessages([
+        "true ? (true) : false;"
+      ].join("\n"),
+      { "space-infix-ops": 1 },
+      []
+    );
+  });
 });
