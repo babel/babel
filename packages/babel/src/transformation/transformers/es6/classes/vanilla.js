@@ -226,7 +226,9 @@ export default class ClassTransformer {
    */
 
   buildConstructor() {
-    return t.functionDeclaration(this.classRef, [], this.constructorBody);
+    var func = t.functionDeclaration(this.classRef, [], this.constructorBody);
+    t.inherits(func, this.node);
+    return func;
   }
 
   /**
