@@ -260,5 +260,10 @@
   "babelrc": {
     "description": "Specify a custom list of babelrc files to use",
     "type": "list"
+  },
+
+  "sourceType": {
+    "description": "",
+    "default": "module"
   }
 }

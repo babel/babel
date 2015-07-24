@@ -509,6 +509,7 @@ export default class File {
     var parseOpts = {
       highlightCode: opts.highlightCode,
       nonStandard:   opts.nonStandard,
+      sourceType:    opts.sourceType,
       filename:      opts.filename,
       plugins:       {}
     };
@@ -521,7 +522,6 @@ export default class File {
 
     parseOpts.looseModules = this.isLoose("es6.modules");
     parseOpts.strictMode = features.strict;
-    parseOpts.sourceType = "module";
 
     this.log.debug("Parse start");
     var ast = parse(code, parseOpts);
