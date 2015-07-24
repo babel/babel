@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.4
+
+ * **Polish**
+  * Rewrite parentheses insertion for terminatorless nodes such as `BreakStatement` to be much more stable and cleaner.
+  * Use `Object.setPrototypeOf` and fallback to `__proto__` in `inherits` helper.
+
 ## 5.8.2-5.8.3
 
 Issues with publish process.
