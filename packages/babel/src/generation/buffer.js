@@ -10,6 +10,8 @@ import isNumber from "lodash/lang/isNumber";
 
 export default class Buffer {
   constructor(position, format) {
+    this.parenPushNewlineState = null;
+
     this.position = position;
     this._indent  = format.indent.base;
     this.format   = format;
@@ -119,6 +121,40 @@ export default class Buffer {
   }
 
   /**
+   * Set some state that will be modified if a newline has been inserted before any
+   * non-space characters.
+   *
+   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
+   *
+   *    return foo;
+   *
+   * returns `foo`. But if we do:
+   *
+   *   return
+   *   foo;
+   *
+   *  `undefined` will be returned and not `foo` due to the terminator.
+   */
+
+  startTerminatorless() {
+    return this.parenPushNewlineState = {
+      printed: false
+    };
+  }
+
+  /**
+   * Print an ending parentheses if a starting one has been printed.
+   */
+
+  endTerminatorless(state) {
+    if (state.printed) {
+      this.dedent();
+      this.newline();
+      this.push(")");
+    }
+  }
+
+  /**
    * Add a newline (or many newlines), maintaining formatting.
    * Strips multiple newlines if removeLast is true.
    */
@@ -217,6 +253,27 @@ export default class Buffer {
    */
 
   _push(str) {
+    // see startTerminatorless() instance method
+    var parenPushNewlineState = this.parenPushNewlineState;
+    if (parenPushNewlineState) {
+      for (var i = 0; i < str.length; i++) {
+        var cha = str[i];
+
+        // we can ignore spaces since they wont interupt a terminatorless separator
+        if (cha === " ") continue;
+
+        this.parenPushNewlineState = null;
+
+        if (cha === "\n") {
+          // we're going to break this terminator expression so we need to add a parentheses
+          this._push("(");
+          this.indent();
+          parenPushNewlineState.printed = true;
+        }
+      }
+    }
+
+    //
     this.position.push(str);
     this.buf += str;
   }

@@ -161,20 +161,13 @@ class CodeGenerator {
    * [Please add a description.]
    */
 
-  catchUp(node, parent, leftParenPrinted) {
+  catchUp(node) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buffer.buf) {
-      var needsParens = false;
-      if (!leftParenPrinted && parent && this.position.line < node.loc.start.line && t.isTerminatorless(parent)) {
-        needsParens = true;
-        this._push("(");
-      }
       while (this.position.line < node.loc.start.line) {
         this._push("\n");
       }
-      return needsParens;
     }
-    return false;
   }
 
   /**
@@ -231,15 +224,12 @@ class CodeGenerator {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
-    var needsNoLineTermParens = n.needsParensNoLineTerminator(node, parent);
-    var needsParens           = needsNoLineTermParens || n.needsParens(node, parent);
-
+    var needsParens = n.needsParens(node, parent);
     if (needsParens) this.push("(");
-    if (needsNoLineTermParens) this.indent();
 
     this.printLeadingComments(node, parent);
 
-    var needsParensFromCatchup = this.catchUp(node, parent, needsParens);
+    this.catchUp(node);
 
     this._printNewline(true, node, parent, opts);
 
@@ -248,11 +238,7 @@ class CodeGenerator {
 
     this[node.type](node, this.buildPrint(node), parent);
 
-    if (needsNoLineTermParens) {
-      this.newline();
-      this.dedent();
-    }
-    if (needsParens || needsParensFromCatchup) this.push(")");
+    if (needsParens) this.push(")");
 
     this.map.mark(node, "end");
     if (opts.after) opts.after();

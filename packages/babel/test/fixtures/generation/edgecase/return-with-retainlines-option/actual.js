@@ -3,3 +3,9 @@ function foo(l) {
     l
   );
 }
+
+function foo() {
+  return (
+    1 && 2
+  ) || 3;
+}

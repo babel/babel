@@ -114,14 +114,16 @@ export function DoWhileStatement(node, print) {
  * Prints label (or key).
  */
 
-var buildLabelStatement = function (prefix, key) {
+var buildLabelStatement = function (prefix, key = "label") {
   return function (node, print) {
     this.push(prefix);
 
-    var label = node[key || "label"];
+    var label = node[key];
     if (label) {
       this.push(" ");
+      var terminatorState = this.startTerminatorless();
       print.plain(label);
+      this.endTerminatorless(terminatorState);
     }
 
     this.semicolon();
@@ -135,6 +137,7 @@ var buildLabelStatement = function (prefix, key) {
 export var ContinueStatement = buildLabelStatement("continue");
 export var ReturnStatement   = buildLabelStatement("return", "argument");
 export var BreakStatement    = buildLabelStatement("break");
+export var ThrowStatement    = buildLabelStatement("throw", "argument");
 
 /**
  * Prints LabeledStatement, prints label and body.
@@ -181,16 +184,6 @@ export function CatchClause(node, print) {
   print.plain(node.param);
   this.push(") ");
   print.plain(node.body);
-}
-
-/**
- * Prints ThrowStatement, prints argument.
- */
-
-export function ThrowStatement(node, print) {
-  this.push("throw ");
-  print.plain(node.argument);
-  this.semicolon();
 }
 
 /**

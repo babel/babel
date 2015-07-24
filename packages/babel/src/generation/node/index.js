@@ -110,21 +110,6 @@ export default class Node {
 
     return find(parens, node, parent);
   }
-
-  /**
-   * [Please add a description.]
-   */
-
-  static needsParensNoLineTerminator(node, parent) {
-    if (!parent) return false;
-
-    // no comments
-    if (!node.leadingComments || !node.leadingComments.length) {
-      return false;
-    }
-
-    return t.isTerminatorless(parent);
-  }
 }
 
 /**

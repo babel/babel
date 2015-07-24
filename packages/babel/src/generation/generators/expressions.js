@@ -168,7 +168,9 @@ var buildYieldAwait = function (keyword) {
 
     if (node.argument) {
       this.push(" ");
+      var terminatorState = this.startTerminatorless();
       print.plain(node.argument);
+      this.endTerminatorless(terminatorState);
     }
   };
 };
