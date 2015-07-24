@@ -104,8 +104,6 @@ export default class OptionManager {
       return line.replace(/#(.*?)$/, "").trim();
     }).filter((line) => !!line);
 
-    console.log(lines);
-
     this.mergeOptions({ ignore: lines }, loc);
   }
 
