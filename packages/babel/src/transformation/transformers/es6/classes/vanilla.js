@@ -216,10 +216,9 @@ export default class ClassTransformer {
     //
     body.push(t.returnStatement(this.classRef));
 
-    return t.callExpression(
-      t.functionExpression(null, closureParams, t.blockStatement(body)),
-      closureArgs
-    );
+    var container = t.functionExpression(null, closureParams, t.blockStatement(body));
+    container.shadow = true;
+    return t.callExpression(container, closureArgs);
   }
 
   /**

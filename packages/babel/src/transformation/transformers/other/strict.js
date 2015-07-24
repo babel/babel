@@ -4,7 +4,7 @@ export var metadata = {
   group: "builtin-pre"
 };
 
-const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassExpression", "ClassDeclaration"];
+const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty"];
 
 function isUseStrict(node) {
   if (!t.isLiteral(node)) return false;
