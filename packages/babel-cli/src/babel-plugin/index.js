@@ -13,7 +13,7 @@ function spawn(cmd, args, callback) {
 
   spawn.on("exit", function (code) {
     if (code === 0) {
-      if (callback) callback();
+      callback();
     } else {
       console.log("Killing...");
       process.exit(1);
@@ -108,7 +108,7 @@ var cmds = {
   },
 
   build: function () {
-    spawn("babel", ["src", "--out-dir", "lib", "--copy-files"]);
+    spawn("babel", ["src", "--out-dir", "lib", "--copy-files"], process.exit);
   },
 
   publish: function () {
