@@ -32,6 +32,10 @@ export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
 export const COMMENT_KEYS            = ["leadingComments", "trailingComments", "innerComments"];
+export const INHERIT_KEYS            = {
+  optional: ["typeAnnotation", "typeParameters", "returnType"],
+  force: ["_scopeInfo", "_paths", "range", "start", "loc", "end"]
+};
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
 export const COMPARISON_BINARY_OPERATORS     = ["==", "===", "!=", "!==", "in", "instanceof"];
@@ -328,18 +332,18 @@ export function inheritsComments(child: Object, parent: Object): Object {
 export function inherits(child: Object, parent: Object): Object {
   if (!child || !parent) return child;
 
-  child._scopeInfo = parent._scopeInfo;
-  child._paths     = parent._paths;
+  for (let key of (t.INHERIT_KEYS.optional: Array)) {
+    if (child[key] == null) {
+      child[key] = parent[key];
+    }
+  }
 
-  child.range = parent.range;
-  child.start = parent.start;
-  child.loc   = parent.loc;
-  child.end   = parent.end;
-
-  child.typeAnnotation = parent.typeAnnotation;
-  child.returnType     = parent.returnType;
+  for (let key of (t.INHERIT_KEYS.force: Array)) {
+    child[key] = parent[key];
+  }
 
   t.inheritsComments(child, parent);
+
   return child;
 }
 
