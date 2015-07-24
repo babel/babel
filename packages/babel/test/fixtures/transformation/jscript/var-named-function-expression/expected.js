@@ -1,11 +1,13 @@
 "use strict";
 
 var IdenticalName = (function () {
-  return function IdenticalName(x) {
+  function IdenticalName(x) {
     return x;
-  };
+  }
+  return IdenticalName;
 })();
 
 (function () {
-  return function foo() {};
+  function foo() {}
+  return foo;
 })();
