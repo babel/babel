@@ -95,10 +95,6 @@ changedPackages.forEach(function (name) {
 
   // push to be git committed
   changedFiles.push(pkgLoc);
-
-  // prepublish script
-  var prePub = loc + "/scripts/prepublish.js";
-  if (fs.existsSync(prePub)) require(prePub);
 });
 
 changedFiles.forEach(function (loc) {
@@ -111,6 +107,12 @@ exec("git tag " + NEW_TAG_NAME, true);
 exec("git push --tags", true);
 
 exec("make build-dist");
+
+changedPackages.forEach(function (name) {
+  // prepublish script
+  var prePub = getPackageLocation(name) + "/scripts/prepublish.js";
+  if (fs.existsSync(prePub)) require(prePub);
+});
 
 changedPackages.forEach(function (name) {
   var loc = getPackageLocation(name);
