@@ -4,7 +4,8 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import babel, { util } from "babel-core";
+import { util } from "babel-core";
+import * as babel from "babel-core";
 import vm from "vm";
 import _ from "lodash";
 
