@@ -137,14 +137,14 @@ export function Literal(node, print) {
 export function _Literal(node) {
   var val = node.value;
 
+  if (node.regex) {
+    return `/${node.regex.pattern}/${node.regex.flags}`;
+  }
+
   // just use the raw property if our current value is equivalent to the one we got
   // when we populated raw
   if (node.raw != null && node.rawValue != null && val === node.rawValue) {
     return node.raw;
-  }
-
-  if (node.regex) {
-    return `/${node.regex.pattern}/${node.regex.flags}`;
   }
 
   switch (typeof val) {
