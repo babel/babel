@@ -1,15 +1,12 @@
-#!/usr/bin/env node
-
-var pathIsAbsolute = require("path-is-absolute");
-var commander      = require("commander");
-var Module         = require("module");
-var babel          = require("babel-core");
-var inspect        = require("util").inspect;
-var path           = require("path");
-var repl           = require("repl");
-var util           = require("babel-core").util;
-var vm             = require("vm");
-var _              = require("lodash");
+import pathIsAbsolute from "path-is-absolute";
+import commander from "commander";
+import Module from "module";
+import { inspect } from "util";
+import path from "path";
+import repl from "repl";
+import babel, { util } from "babel-core";
+import vm from "vm";
+import _ from "lodash";
 
 var program = new commander.Command("babel-node");
 

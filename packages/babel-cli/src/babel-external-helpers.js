@@ -1,6 +1,5 @@
-var commander = require("commander");
-var util      = require("babel-core").util;
-var runtime   = require("babel-core").buildExternalHelpers;
+import commander from "commander";
+import { util, runtime } from "babel-core";
 
 commander.option("-l, --whitelist [whitelist]", "Whitelist of helpers to ONLY include", util.list);
 commander.option("-t, --output-type [type]", "Type of output (global|umd|var)", "global");

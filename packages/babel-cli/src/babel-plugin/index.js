@@ -1,10 +1,8 @@
-#!/usr/bin/env node
-
-var pathExists = require("path-exists");
-var readline   = require("readline");
-var child      = require("child_process");
-var path       = require("path");
-var fs         = require("fs");
+import pathExists from "path-exists";
+import readline from "readline";
+import child from "child_process";
+import path from "path";
+import fs from "fs";
 
 function spawn(cmd, args, callback) {
   console.log(">", cmd, args);
