@@ -430,7 +430,7 @@ exports.parse = function (code) {
       err.column = err.loc.column;
 
       // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-      err.message = "Line X: " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
+      err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
     }
 
     throw err;

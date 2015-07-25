@@ -47,7 +47,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "{ , res }",
       {},
-      [ "1:2 Line X: Unexpected token" ]
+      [ "1:2 Unexpected token" ]
     );
   });
 
