@@ -6,7 +6,7 @@ cache:
 
 node_js:
  - iojs
- - "0.10"
+# - "0.10"
  - "0.12"
 
 script: make test-travis
