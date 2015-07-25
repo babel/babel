@@ -1,81 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "ArrowFunctionExpression",
-        "id": null,
-        "params": [
-          {
-            "type": "Identifier",
-            "name": "a",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 1
-              },
-              "end": {
-                "line": 1,
-                "column": 2
-              }
-            }
-          },
-          {
-            "type": "Identifier",
-            "name": "b",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 5
-              }
-            }
-          }
-        ],
-        "body": {
-          "type": "Literal",
-          "value": "test",
-          "raw": "\"test\"",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 10
-            },
-            "end": {
-              "line": 1,
-              "column": 16
-            }
-          }
-        },
-        "generator": false,
-        "expression": true,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 16
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 16
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 16,
   "loc": {
     "start": {
       "line": 1,
@@ -85,5 +11,136 @@
       "line": 1,
       "column": 16
     }
+  },
+  "range": [
+    0,
+    16
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 16,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 16
+      }
+    },
+    "range": [
+      0,
+      16
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "range": [
+          0,
+          16
+        ],
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 16
+            }
+          },
+          "range": [
+            0,
+            16
+          ],
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 1,
+              "end": 2,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 2
+                }
+              },
+              "range": [
+                1,
+                2
+              ],
+              "name": "a"
+            },
+            {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                }
+              },
+              "range": [
+                4,
+                5
+              ],
+              "name": "b"
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "start": 10,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 10
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            },
+            "range": [
+              10,
+              16
+            ],
+            "value": "test",
+            "rawValue": "test",
+            "raw": "\"test\""
+          }
+        }
+      }
+    ]
   }
 }

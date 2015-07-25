@@ -1,99 +1,146 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "foo",
-        "range": [
-          9,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 41,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 41
+    }
+  },
+  "range": [
+    0,
+    41
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 41,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "params": [
-        {
-          "type": "Identifier",
-          "name": "requiredParam",
-          "range": [
-            13,
-            26
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 13
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          }
-        },
-        {
-          "type": "Identifier",
-          "name": "optParam",
-          "optional": true,
-          "range": [
-            28,
-            37
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 28
-            },
-            "end": {
-              "line": 1,
-              "column": 37
-            }
-          }
-        }
-      ],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "range": [
-          39,
-          41
-        ],
+      "end": {
+        "line": 1,
+        "column": 41
+      }
+    },
+    "range": [
+      0,
+      41
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 41,
         "loc": {
           "start": {
             "line": 1,
-            "column": 39
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 41
           }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "range": [
-        0,
-        41
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 41
+        "range": [
+          0,
+          41
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "name": "foo"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 13,
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "range": [
+              13,
+              26
+            ],
+            "name": "requiredParam"
+          },
+          {
+            "type": "Identifier",
+            "start": 28,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 28
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
+            },
+            "range": [
+              28,
+              37
+            ],
+            "name": "optParam",
+            "optional": true
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 39,
+          "end": 41,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 39
+            },
+            "end": {
+              "line": 1,
+              "column": 41
+            }
+          },
+          "range": [
+            39,
+            41
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

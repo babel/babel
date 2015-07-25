@@ -1,69 +1,194 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 5,
-      "decorators": [
-        {
-          "start": 0,
-          "expression": {
-            "start": 1,
-            "name": "bar",
-            "type": "Identifier",
-            "end": 4
-          },
-          "type": "Decorator",
-          "end": 4
-        }
-      ],
-      "id": {
-        "start": 11,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 14
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "superClass": {
-        "start": 28,
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 5,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 5
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        },
         "decorators": [
           {
-            "start": 23,
-            "expression": {
-              "start": 24,
-              "name": "foo",
-              "type": "Identifier",
-              "end": 27
-            },
             "type": "Decorator",
-            "end": 27
+            "start": 0,
+            "end": 4,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 1,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                }
+              },
+              "name": "bar"
+            }
           }
         ],
         "id": {
-          "start": 34,
-          "name": "Bar",
           "type": "Identifier",
-          "end": 37
+          "start": 11,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 11
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            }
+          },
+          "name": "Foo"
         },
-        "superClass": null,
+        "superClass": {
+          "type": "ClassExpression",
+          "start": 28,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 28
+            },
+            "end": {
+              "line": 1,
+              "column": 40
+            }
+          },
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start": 23,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start": 24,
+                "end": 27,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 27
+                  }
+                },
+                "name": "foo"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start": 34,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 34
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
+            },
+            "name": "Bar"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 38,
+            "end": 40,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 38
+              },
+              "end": {
+                "line": 1,
+                "column": 40
+              }
+            },
+            "body": []
+          }
+        },
         "body": {
-          "start": 38,
-          "body": [],
           "type": "ClassBody",
-          "end": 40
-        },
-        "type": "ClassExpression",
-        "end": 40
-      },
-      "body": {
-        "start": 41,
-        "body": [],
-        "type": "ClassBody",
-        "end": 43
-      },
-      "type": "ClassDeclaration",
-      "end": 43
-    }
-  ],
-  "sourceType": "script",
-  "type": "Program",
-  "end": 43
+          "start": 41,
+          "end": 43,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 41
+            },
+            "end": {
+              "line": 1,
+              "column": 43
+            }
+          },
+          "body": []
+        }
+      }
+    ]
+  }
 }

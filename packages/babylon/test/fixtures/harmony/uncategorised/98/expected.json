@@ -1,5 +1,7 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 32,
   "loc": {
     "start": {
       "line": 1,
@@ -10,63 +12,112 @@
       "column": 32
     }
   },
-  "body": [
-    {
-      "type": "ImportDeclaration",
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 32
-        }
+  "range": [
+    0,
+    32
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 32,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "specifiers": [
-        {
-          "type": "ImportNamespaceSpecifier",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 7
-            },
-            "end": {
-              "line": 1,
-              "column": 18
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 12
-              },
-              "end": {
-                "line": 1,
-                "column": 18
-              }
-            },
-            "name": "crypto"
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
+      "end": {
+        "line": 1,
+        "column": 32
+      }
+    },
+    "range": [
+      0,
+      32
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 32,
         "loc": {
           "start": {
             "line": 1,
-            "column": 24
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 32
           }
         },
-        "value": "crypto",
-        "raw": "\"crypto\""
+        "range": [
+          0,
+          32
+        ],
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 7,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 18
+              }
+            },
+            "range": [
+              7,
+              18
+            ],
+            "local": {
+              "type": "Identifier",
+              "start": 12,
+              "end": 18,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 18
+                }
+              },
+              "range": [
+                12,
+                18
+              ],
+              "name": "crypto"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 24,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 24
+            },
+            "end": {
+              "line": 1,
+              "column": 32
+            }
+          },
+          "range": [
+            24,
+            32
+          ],
+          "value": "crypto",
+          "rawValue": "crypto",
+          "raw": "\"crypto\""
+        }
       }
-    }
-  ]
+    ]
+  }
 }

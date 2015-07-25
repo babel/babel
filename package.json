@@ -22,6 +22,6 @@
     "uglify-js": "^2.4.16"
   },
   "dependencies": {
-    "mocha-fixtures": "^1.0.8"
+    "mocha-fixtures": "^1.0.9"
   }
 }

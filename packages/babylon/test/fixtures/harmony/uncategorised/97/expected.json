@@ -1,78 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ImportDeclaration",
-      "specifiers": [
-        {
-          "type": "ImportSpecifier",
-          "imported": {
-            "type": "Identifier",
-            "name": "null",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
-              },
-              "end": {
-                "line": 1,
-                "column": 13
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "nil",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 17
-              },
-              "end": {
-                "line": 1,
-                "column": 20
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 20
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "bar",
-        "raw": "\"bar\"",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 28
-          },
-          "end": {
-            "line": 1,
-            "column": 33
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 33
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 33,
   "loc": {
     "start": {
       "line": 1,
@@ -82,5 +11,133 @@
       "line": 1,
       "column": 33
     }
+  },
+  "range": [
+    0,
+    33
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 33
+      }
+    },
+    "range": [
+      0,
+      33
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 33
+          }
+        },
+        "range": [
+          0,
+          33
+        ],
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 9,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "range": [
+              9,
+              20
+            ],
+            "imported": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 13,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 13
+                }
+              },
+              "range": [
+                9,
+                13
+              ],
+              "name": "null"
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 17,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 20
+                }
+              },
+              "range": [
+                17,
+                20
+              ],
+              "name": "nil"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 28,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 28
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "range": [
+            28,
+            33
+          ],
+          "value": "bar",
+          "rawValue": "bar",
+          "raw": "\"bar\""
+        }
+      }
+    ]
   }
 }

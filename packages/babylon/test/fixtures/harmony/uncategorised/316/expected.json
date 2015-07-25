@@ -1,71 +1,187 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 24,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 24
+    }
+  },
   "range": [
     0,
     24
   ],
-  "body": [
-    {
-      "type": "ClassDeclaration",
-      "range": [
-        0,
-        24
-      ],
-      "id": {
-        "type": "Identifier",
-        "range": [
-          6,
-          7
-        ],
-        "name": "A"
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 24,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "superClass": null,
-      "body": {
-        "type": "ClassBody",
+      "end": {
+        "line": 1,
+        "column": 24
+      }
+    },
+    "range": [
+      0,
+      24
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 24,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 24
+          }
+        },
         "range": [
-          8,
+          0,
           24
         ],
-        "body": [
-          {
-            "type": "MethodDefinition",
-            "range": [
-              10,
-              22
-            ],
-            "computed": false,
-            "key": {
-              "type": "Identifier",
-              "range": [
-                11,
-                17
-              ],
-              "name": "static"
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
             },
-            "static": false,
-            "kind": "method",
-            "value": {
-              "type": "FunctionExpression",
+            "end": {
+              "line": 1,
+              "column": 7
+            }
+          },
+          "range": [
+            6,
+            7
+          ],
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            }
+          },
+          "range": [
+            8,
+            24
+          ],
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start": 10,
+              "end": 22,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 22
+                }
+              },
               "range": [
-                17,
+                10,
                 22
               ],
-              "id": null,
-              "params": [],
-              "generator": true,
-              "body": {
-                "type": "BlockStatement",
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 11,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                },
                 "range": [
-                  20,
+                  11,
+                  17
+                ],
+                "name": "static"
+              },
+              "static": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start": 17,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "range": [
+                  17,
                   22
                 ],
-                "body": []
-              },
-              "expression": false
+                "id": null,
+                "generator": true,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 20,
+                  "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
+                  "range": [
+                    20,
+                    22
+                  ],
+                  "body": []
+                }
+              }
             }
-          }
-        ]
+          ]
+        }
       }
-    }
-  ]
+    ]
+  }
 }

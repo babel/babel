@@ -1,5 +1,5 @@
 {
-  "type": "Program",
+  "type": "File",
   "start": 0,
   "end": 2,
   "loc": {
@@ -12,29 +12,44 @@
       "column": 2
     }
   },
-  "sourceType": "script",
-  "body": [],
-  "leadingComments": null,
-  "innerComments": [
-    {
-      "type": "CommentLine",
-      "value": "",
-      "start": 0,
-      "end": 2,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 2
-        }
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 2,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "range": [
-        0,
-        2
-      ]
-    }
-  ]
+      "end": {
+        "line": 1,
+        "column": 2
+      }
+    },
+    "sourceType": "script",
+    "body": [],
+    "leadingComments": null,
+    "innerComments": [
+      {
+        "type": "CommentLine",
+        "value": "",
+        "start": 0,
+        "end": 2,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 2
+          }
+        },
+        "range": [
+          0,
+          2
+        ]
+      }
+    ]
+  }
 }

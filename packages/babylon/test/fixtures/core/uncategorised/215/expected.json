@@ -1,21 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "BlockStatement",
-      "body": [],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 2
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 2,
   "loc": {
     "start": {
       "line": 1,
@@ -25,5 +11,39 @@
       "line": 1,
       "column": 2
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 2,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 2
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 2,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 2
+          }
+        },
+        "body": []
+      }
+    ]
   }
 }

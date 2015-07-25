@@ -1,38 +1,114 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 5,
-      "decorators": [
-        {
-          "start": 0,
-          "expression": {
-            "start": 1,
-            "name": "foo",
-            "type": "Identifier",
-            "end": 4
-          },
-          "type": "Decorator",
-          "end": 4
-        }
-      ],
-      "id": {
-        "start": 11,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 14
-      },
-      "superClass": null,
-      "body": {
-        "start": 15,
-        "body": [],
-        "type": "ClassBody",
-        "end": 17
-      },
-      "type": "ClassDeclaration",
-      "end": 17
+  "end": 17,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 17
     }
-  ],
-  "type": "Program",
-  "end": 17
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 17,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 17
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 5,
+        "end": 17,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 5
+          },
+          "end": {
+            "line": 1,
+            "column": 17
+          }
+        },
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start": 0,
+            "end": 4,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 1,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                }
+              },
+              "name": "foo"
+            }
+          }
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 11,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 11
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            }
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 15,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          },
+          "body": []
+        }
+      }
+    ]
+  }
 }

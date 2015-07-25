@@ -1,68 +1,184 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "id": {
-        "start": 6,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 9
-      },
-      "superClass": null,
-      "body": {
-        "start": 10,
-        "body": [
-          {
-            "start": 17,
-            "decorators": [
-              {
-                "start": 12,
-                "expression": {
-                  "start": 13,
-                  "name": "foo",
-                  "type": "Identifier",
-                  "end": 16
-                },
-                "type": "Decorator",
-                "end": 16
-              }
-            ],
-            "computed": false,
-            "key": {
-              "start": 17,
-              "name": "bar",
-              "type": "Identifier",
-              "end": 20
-            },
-            "static": false,
-            "kind": "method",
-            "value": {
-              "start": 20,
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "params": [],
-              "body": {
-                "start": 23,
-                "body": [],
-                "type": "BlockStatement",
-                "end": 25
-              },
-              "type": "FunctionExpression",
-              "end": 25
-            },
-            "type": "MethodDefinition",
-            "end": 25
-          }
-        ],
-        "type": "ClassBody",
-        "end": 27
-      },
-      "type": "ClassDeclaration",
-      "end": 27
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
     }
-  ],
-  "type": "Program",
-  "end": 27
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start": 17,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                }
+              },
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start": 12,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 16
+                    }
+                  },
+                  "expression": {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      }
+                    },
+                    "name": "foo"
+                  }
+                }
+              ],
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 17,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 20
+                  }
+                },
+                "name": "bar"
+              },
+              "static": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start": 20,
+                "end": 25,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 25
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 23,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 25
+                    }
+                  },
+                  "body": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

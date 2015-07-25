@@ -1,17 +1,63 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "TypeCastExpression",
+  "type": "File",
+  "start": 0,
+  "end": 13,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "range": [
+    0,
+    13
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 13,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 13
+      }
+    },
+    "range": [
+      0,
+      13
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 13,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 13
+          }
+        },
+        "range": [
+          0,
+          13
+        ],
         "expression": {
-          "type": "Identifier",
-          "name": "xxx",
-          "range": [
-            1,
-            4
-          ],
+          "type": "TypeCastExpression",
+          "start": 1,
+          "end": 12,
           "loc": {
             "start": {
               "line": 1,
@@ -19,73 +65,74 @@
             },
             "end": {
               "line": 1,
-              "column": 4
+              "column": 12
             }
-          }
-        },
-        "typeAnnotation": {
-          "type": "TypeAnnotation",
-          "typeAnnotation": {
-            "type": "NumberTypeAnnotation",
-            "range": [
-              6,
-              12
-            ],
+          },
+          "range": [
+            1,
+            12
+          ],
+          "expression": {
+            "type": "Identifier",
+            "start": 1,
+            "end": 4,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 6
+                "column": 1
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              }
+            },
+            "range": [
+              1,
+              4
+            ],
+            "name": "xxx"
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start": 4,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
               },
               "end": {
                 "line": 1,
                 "column": 12
               }
-            }
-          },
-          "range": [
-            4,
-            12
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
             },
-            "end": {
-              "line": 1,
-              "column": 12
+            "range": [
+              4,
+              12
+            ],
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "start": 6,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                }
+              },
+              "range": [
+                6,
+                12
+              ]
             }
-          }
-        },
-        "range": [
-          1,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 1
           },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
-      },
-      "range": [
-        0,
-        13
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 13
+          "parenthesizedExpression": true
         }
       }
-    }
-  ]
+    ]
+  }
 }

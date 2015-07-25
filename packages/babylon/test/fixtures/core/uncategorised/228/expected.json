@@ -1,76 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "IfStatement",
-      "test": {
-        "type": "Identifier",
-        "name": "morning",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 4
-          },
-          "end": {
-            "line": 1,
-            "column": 11
-          }
-        }
-      },
-      "consequent": {
-        "type": "ExpressionStatement",
-        "expression": {
-          "type": "CallExpression",
-          "callee": {
-            "type": "Identifier",
-            "name": "goodMorning",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 13
-              },
-              "end": {
-                "line": 1,
-                "column": 24
-              }
-            }
-          },
-          "arguments": [],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 13
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          }
-        },
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 13
-          },
-          "end": {
-            "line": 1,
-            "column": 26
-          }
-        }
-      },
-      "alternate": null,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 26
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 26,
   "loc": {
     "start": {
       "line": 1,
@@ -80,5 +11,102 @@
       "line": 1,
       "column": 26
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 26,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 26
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 26,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 26
+          }
+        },
+        "test": {
+          "type": "Identifier",
+          "start": 4,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "name": "morning"
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 13,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            }
+          },
+          "expression": {
+            "type": "CallExpression",
+            "start": 13,
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 13,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              },
+              "name": "goodMorning"
+            },
+            "arguments": []
+          }
+        },
+        "alternate": null
+      }
+    ]
   }
 }

@@ -1,14 +1,52 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "VariableDeclaration",
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "id": {
-            "type": "Identifier",
-            "name": "o",
+  "type": "File",
+  "start": 0,
+  "end": 54,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 54
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 54,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 54
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 54,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 54
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 54,
             "loc": {
               "start": {
                 "line": 1,
@@ -16,18 +54,44 @@
               },
               "end": {
                 "line": 1,
-                "column": 5
+                "column": 54
               }
-            }
-          },
-          "init": {
-            "type": "ObjectExpression",
-            "properties": [
-              {
-                "type": "Property",
-                "key": {
-                  "type": "Identifier",
-                  "name": "a",
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                }
+              },
+              "name": "o"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start": 8,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1,
+                  "column": 54
+                }
+              },
+              "properties": [
+                {
+                  "type": "Property",
+                  "start": 10,
+                  "end": 14,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -35,95 +99,137 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 11
-                    }
-                  }
-                },
-                "value": {
-                  "type": "Literal",
-                  "value": 1,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 13
-                    },
-                    "end": {
-                      "line": 1,
                       "column": 14
                     }
-                  }
-                },
-                "kind": "init",
-                "method": false,
-                "shorthand": false,
-                "computed": false,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 10
                   },
-                  "end": {
-                    "line": 1,
-                    "column": 14
-                  }
-                }
-              },
-              {
-                "type": "Property",
-                "key": {
-                  "type": "Identifier",
-                  "name": "foo",
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 10,
+                    "end": 11,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 11
+                      }
+                    },
+                    "name": "a"
+                  },
+                  "value": {
+                    "type": "Literal",
+                    "start": 13,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
+                    "value": 1,
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "kind": "init"
+                },
+                {
+                  "type": "Property",
+                  "start": 16,
+                  "end": 52,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 22
+                      "column": 16
                     },
                     "end": {
                       "line": 1,
-                      "column": 25
+                      "column": 52
                     }
-                  }
-                },
-                "value": {
-                  "type": "FunctionExpression",
-                  "id": null,
-                  "params": [
-                    {
-                      "type": "Identifier",
-                      "name": "promise",
+                  },
+                  "method": true,
+                  "shorthand": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 22,
+                    "end": 25,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 25
+                      }
+                    },
+                    "name": "foo"
+                  },
+                  "kind": "init",
+                  "value": {
+                    "type": "FunctionExpression",
+                    "start": 25,
+                    "end": 52,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 52
+                      }
+                    },
+                    "id": null,
+                    "generator": false,
+                    "expression": false,
+                    "async": true,
+                    "params": [
+                      {
+                        "type": "Identifier",
+                        "start": 26,
+                        "end": 33,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 26
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 33
+                          }
+                        },
+                        "name": "promise"
+                      }
+                    ],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 35,
+                      "end": 52,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 26
+                          "column": 35
                         },
                         "end": {
                           "line": 1,
-                          "column": 33
+                          "column": 52
                         }
-                      }
-                    }
-                  ],
-                  "body": {
-                    "type": "BlockStatement",
-                    "body": [
-                      {
-                        "type": "ExpressionStatement",
-                        "expression": {
-                          "type": "AwaitExpression",
-                          "argument": {
-                            "type": "Identifier",
-                            "name": "promise",
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 43
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 50
-                              }
-                            }
-                          },
+                      },
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 37,
+                          "end": 50,
                           "loc": {
                             "start": {
                               "line": 1,
@@ -133,95 +239,50 @@
                               "line": 1,
                               "column": 50
                             }
-                          }
-                        },
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 37
                           },
-                          "end": {
-                            "line": 1,
-                            "column": 50
+                          "expression": {
+                            "type": "AwaitExpression",
+                            "start": 37,
+                            "end": 50,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 37
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 50
+                              }
+                            },
+                            "all": false,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 43,
+                              "end": 50,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 43
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 50
+                                }
+                              },
+                              "name": "promise"
+                            }
                           }
                         }
-                      }
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 35
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 52
-                      }
+                      ]
                     }
-                  },
-                  "generator": false,
-                  "expression": false,
-                  "async": true,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 25
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 52
-                    }
-                  }
-                },
-                "kind": "init",
-                "method": true,
-                "shorthand": false,
-                "computed": false,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 16
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 52
                   }
                 }
-              }
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 8
-              },
-              "end": {
-                "line": 1,
-                "column": 54
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
-            },
-            "end": {
-              "line": 1,
-              "column": 54
+              ]
             }
           }
-        }
-      ],
-      "kind": "var",
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 54
-        }
+        ],
+        "kind": "var"
       }
-    }
-  ]
+    ]
+  }
 }

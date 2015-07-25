@@ -1,131 +1,182 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "foo",
-        "range": [
-          9,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 36,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 36
+    }
+  },
+  "range": [
+    0,
+    36
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 36,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "params": [
-        {
-          "type": "Identifier",
-          "name": "nullableNum",
-          "typeAnnotation": {
-            "type": "TypeAnnotation",
-            "typeAnnotation": {
-              "type": "NullableTypeAnnotation",
-              "typeAnnotation": {
-                "type": "NumberTypeAnnotation",
-                "range": [
-                  27,
-                  33
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 27
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 33
-                  }
-                }
-              },
-              "range": [
-                26,
-                33
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 26
-                },
-                "end": {
-                  "line": 1,
-                  "column": 33
-                }
-              }
-            },
-            "range": [
-              24,
-              33
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 33
-              }
-            }
-          },
-          "range": [
-            13,
-            33
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 13
-            },
-            "end": {
-              "line": 1,
-              "column": 33
-            }
-          }
-        }
-      ],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "range": [
-          34,
-          36
-        ],
+      "end": {
+        "line": 1,
+        "column": 36
+      }
+    },
+    "range": [
+      0,
+      36
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 36,
         "loc": {
           "start": {
             "line": 1,
-            "column": 34
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 36
           }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "range": [
-        0,
-        36
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 36
+        "range": [
+          0,
+          36
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "name": "foo"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 13,
+            "end": 33,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            },
+            "range": [
+              13,
+              33
+            ],
+            "name": "nullableNum",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 24,
+              "end": 33,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              },
+              "range": [
+                24,
+                33
+              ],
+              "typeAnnotation": {
+                "type": "NullableTypeAnnotation",
+                "start": 26,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                },
+                "range": [
+                  26,
+                  33
+                ],
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 27,
+                  "end": 33,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 27
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 33
+                    }
+                  },
+                  "range": [
+                    27,
+                    33
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 34,
+          "end": 36,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 34
+            },
+            "end": {
+              "line": 1,
+              "column": 36
+            }
+          },
+          "range": [
+            34,
+            36
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

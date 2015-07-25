@@ -1,51 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "t",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 10
-          },
-          "end": {
-            "line": 1,
-            "column": 11
-          }
-        }
-      },
-      "params": [],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
-          },
-          "end": {
-            "line": 1,
-            "column": 16
-          }
-        }
-      },
-      "generator": true,
-      "expression": false,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 16
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 16,
   "loc": {
     "start": {
       "line": 1,
@@ -55,5 +11,93 @@
       "line": 1,
       "column": 16
     }
+  },
+  "range": [
+    0,
+    16
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 16,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 16
+      }
+    },
+    "range": [
+      0,
+      16
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "range": [
+          0,
+          16
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "range": [
+            10,
+            11
+          ],
+          "name": "t"
+        },
+        "generator": true,
+        "expression": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 14,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 16
+            }
+          },
+          "range": [
+            14,
+            16
+          ],
+          "body": []
+        }
+      }
+    ]
   }
 }

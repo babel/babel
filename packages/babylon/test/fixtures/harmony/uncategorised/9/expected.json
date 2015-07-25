@@ -1,108 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "test",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 13
-          }
-        }
-      },
-      "params": [],
-      "body": {
-        "type": "BlockStatement",
-        "body": [
-          {
-            "type": "ExpressionStatement",
-            "expression": {
-              "type": "Literal",
-              "value": "use strict",
-              "raw": "'use strict'",
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 17
-                },
-                "end": {
-                  "line": 1,
-                  "column": 29
-                }
-              }
-            },
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 17
-              },
-              "end": {
-                "line": 1,
-                "column": 30
-              }
-            }
-          },
-          {
-            "type": "ExpressionStatement",
-            "expression": {
-              "type": "Literal",
-              "value": 0,
-              "raw": "0O0",
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 31
-                },
-                "end": {
-                  "line": 1,
-                  "column": 34
-                }
-              }
-            },
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 31
-              },
-              "end": {
-                "line": 1,
-                "column": 35
-              }
-            }
-          }
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 16
-          },
-          "end": {
-            "line": 1,
-            "column": 37
-          }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 37
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 37,
   "loc": {
     "start": {
       "line": 1,
@@ -112,5 +11,176 @@
       "line": 1,
       "column": 37
     }
+  },
+  "range": [
+    0,
+    37
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 37,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 37
+      }
+    },
+    "range": [
+      0,
+      37
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 37,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 37
+          }
+        },
+        "range": [
+          0,
+          37
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "range": [
+            9,
+            13
+          ],
+          "name": "test"
+        },
+        "generator": false,
+        "expression": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 16,
+          "end": 37,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 37
+            }
+          },
+          "range": [
+            16,
+            37
+          ],
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 17,
+              "end": 30,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 30
+                }
+              },
+              "range": [
+                17,
+                30
+              ],
+              "expression": {
+                "type": "Literal",
+                "start": 17,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 29
+                  }
+                },
+                "range": [
+                  17,
+                  29
+                ],
+                "value": "use strict",
+                "rawValue": "use strict",
+                "raw": "'use strict'"
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 31,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 31
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                }
+              },
+              "range": [
+                31,
+                35
+              ],
+              "expression": {
+                "type": "Literal",
+                "start": 31,
+                "end": 34,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 34
+                  }
+                },
+                "range": [
+                  31,
+                  34
+                ],
+                "value": 0,
+                "rawValue": 0,
+                "raw": "0O0"
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

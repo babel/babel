@@ -1,72 +1,124 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "TypeAlias",
-      "id": {
-        "type": "Identifier",
-        "name": "Foo",
-        "range": [
-          5,
-          8
-        ],
+  "type": "File",
+  "start": 0,
+  "end": 20,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 20
+    }
+  },
+  "range": [
+    0,
+    20
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 20,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 20
+      }
+    },
+    "range": [
+      0,
+      20
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 0,
+        "end": 20,
         "loc": {
           "start": {
             "line": 1,
-            "column": 5
+            "column": 0
           },
           "end": {
             "line": 1,
-            "column": 8
+            "column": 20
           }
-        }
-      },
-      "typeParameters": {
-        "type": "TypeParameterDeclaration",
-        "params": [
-          {
-            "type": "Identifier",
-            "name": "T",
-            "range": [
-              9,
-              10
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
-              },
-              "end": {
-                "line": 1,
-                "column": 10
-              }
-            }
-          }
-        ],
+        },
         "range": [
-          8,
-          11
+          0,
+          20
         ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 8
-          },
-          "end": {
-            "line": 1,
-            "column": 11
-          }
-        }
-      },
-      "right": {
-        "type": "GenericTypeAnnotation",
         "id": {
           "type": "Identifier",
-          "name": "Bar",
+          "start": 5,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            }
+          },
           "range": [
-            14,
-            17
+            5,
+            8
           ],
+          "name": "Foo"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 8,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "range": [
+            8,
+            11
+          ],
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 9,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "range": [
+                9,
+                10
+              ],
+              "name": "T"
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 14,
+          "end": 20,
           "loc": {
             "start": {
               "line": 1,
@@ -74,22 +126,36 @@
             },
             "end": {
               "line": 1,
-              "column": 17
+              "column": 20
             }
-          }
-        },
-        "typeParameters": {
-          "type": "TypeParameterInstantiation",
-          "params": [
-            {
-              "type": "GenericTypeAnnotation",
-              "id": {
-                "type": "Identifier",
-                "name": "T",
-                "range": [
-                  18,
-                  19
-                ],
+          },
+          "range": [
+            14,
+            20
+          ],
+          "typeParameters": {
+            "type": "TypeParameterInstantiation",
+            "start": 17,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 17
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "range": [
+              17,
+              20
+            ],
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start": 18,
+                "end": 19,
                 "loc": {
                   "start": {
                     "line": 1,
@@ -99,69 +165,57 @@
                     "line": 1,
                     "column": 19
                   }
-                }
-              },
-              "typeParameters": null,
-              "range": [
-                18,
-                19
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 18
                 },
-                "end": {
-                  "line": 1,
-                  "column": 19
+                "range": [
+                  18,
+                  19
+                ],
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 18,
+                  "end": 19,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 19
+                    }
+                  },
+                  "range": [
+                    18,
+                    19
+                  ],
+                  "name": "T"
                 }
               }
-            }
-          ],
-          "range": [
-            17,
-            20
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 1,
-              "column": 20
-            }
-          }
-        },
-        "range": [
-          14,
-          20
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
+            ]
           },
-          "end": {
-            "line": 1,
-            "column": 20
+          "id": {
+            "type": "Identifier",
+            "start": 14,
+            "end": 17,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            },
+            "range": [
+              14,
+              17
+            ],
+            "name": "Bar"
           }
-        }
-      },
-      "range": [
-        0,
-        20
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 20
         }
       }
-    }
-  ]
+    ]
+  }
 }

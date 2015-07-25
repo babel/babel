@@ -1,65 +1,243 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "start": 0,
-      "end": 34,
-      "expression": {
-        "type": "ArrowFunctionExpression",
-        "start": 1,
-        "end": 33,
-        "id": null,
-        "generator": false,
-        "expression": true,
-        "params": [
-          {
-            "type": "RestElement",
-            "start": 2,
-            "end": 9,
-            "argument": {
-              "type": "Identifier",
-              "start": 5,
-              "end": 9,
-              "name": "rest"
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "range": [
+    0,
+    34
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "range": [
+      0,
+      34
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "range": [
+          0,
+          34
+        ],
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 1,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
             },
-            "typeAnnotation": {
-              "type": "TypeAnnotation",
-              "start": 9,
-              "end": 24,
-              "typeAnnotation": {
-                "type": "GenericTypeAnnotation",
-                "start": 11,
-                "end": 24,
-                "typeParameters": {
-                  "type": "TypeParameterInstantiation",
-                  "start": 16,
-                  "end": 24,
-                  "params": [
-                    {
-                      "type": "NumberTypeAnnotation",
-                      "start": 17,
-                      "end": 23
-                    }
-                  ]
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "range": [
+            1,
+            33
+          ],
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "RestElement",
+              "start": 2,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
                 },
-                "id": {
-                  "type": "Identifier",
+                "end": {
+                  "line": 1,
+                  "column": 9
+                }
+              },
+              "range": [
+                2,
+                9
+              ],
+              "argument": {
+                "type": "Identifier",
+                "start": 5,
+                "end": 9,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 9
+                  }
+                },
+                "range": [
+                  5,
+                  9
+                ],
+                "name": "rest"
+              },
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 9,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                },
+                "range": [
+                  9,
+                  24
+                ],
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
                   "start": 11,
-                  "end": 16,
-                  "name": "Array"
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    }
+                  },
+                  "range": [
+                    11,
+                    24
+                  ],
+                  "typeParameters": {
+                    "type": "TypeParameterInstantiation",
+                    "start": 16,
+                    "end": 24,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 24
+                      }
+                    },
+                    "range": [
+                      16,
+                      24
+                    ],
+                    "params": [
+                      {
+                        "type": "NumberTypeAnnotation",
+                        "start": 17,
+                        "end": 23,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 23
+                          }
+                        },
+                        "range": [
+                          17,
+                          23
+                        ]
+                      }
+                    ]
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      }
+                    },
+                    "range": [
+                      11,
+                      16
+                    ],
+                    "name": "Array"
+                  }
                 }
               }
             }
-          }
-        ],
-        "body": {
-          "type": "Identifier",
-          "start": 29,
-          "end": 33,
-          "name": "rest"
+          ],
+          "body": {
+            "type": "Identifier",
+            "start": 29,
+            "end": 33,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 29
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            },
+            "range": [
+              29,
+              33
+            ],
+            "name": "rest"
+          },
+          "parenthesizedExpression": true
         }
       }
-    }
-  ]
+    ]
+  }
 }

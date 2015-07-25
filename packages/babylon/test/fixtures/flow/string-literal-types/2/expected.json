@@ -1,113 +1,167 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "createElement",
-        "range": [
-          9,
-          22
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 22
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 57,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 57
+    }
+  },
+  "range": [
+    0,
+    57
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 57,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "params": [
-        {
-          "type": "Identifier",
-          "name": "tagName",
-          "typeAnnotation": {
-            "type": "TypeAnnotation",
-            "typeAnnotation": {
-              "type": "StringLiteralTypeAnnotation",
-              "value": "div",
-              "raw": "'div'",
-              "range": [
-                32,
-                37
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 32
-                },
-                "end": {
-                  "line": 1,
-                  "column": 37
-                }
-              }
-            },
-            "range": [
-              30,
-              37
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 30
-              },
-              "end": {
-                "line": 1,
-                "column": 37
-              }
-            }
-          },
-          "range": [
-            23,
-            37
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 23
-            },
-            "end": {
-              "line": 1,
-              "column": 37
-            }
-          }
-        }
-      ],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "range": [
-          55,
-          57
-        ],
+      "end": {
+        "line": 1,
+        "column": 57
+      }
+    },
+    "range": [
+      0,
+      57
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 57,
         "loc": {
           "start": {
             "line": 1,
-            "column": 55
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 57
           }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "returnType": {
-        "type": "TypeAnnotation",
-        "typeAnnotation": {
-          "type": "GenericTypeAnnotation",
-          "id": {
+        },
+        "range": [
+          0,
+          57
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          "range": [
+            9,
+            22
+          ],
+          "name": "createElement"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
             "type": "Identifier",
-            "name": "HTMLDivElement",
+            "start": 23,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
+            },
             "range": [
-              40,
-              54
+              23,
+              37
             ],
+            "name": "tagName",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 30,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              },
+              "range": [
+                30,
+                37
+              ],
+              "typeAnnotation": {
+                "type": "StringLiteralTypeAnnotation",
+                "start": 32,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 32
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 37
+                  }
+                },
+                "range": [
+                  32,
+                  37
+                ],
+                "value": "div",
+                "rawValue": "div",
+                "raw": "'div'"
+              }
+            }
+          }
+        ],
+        "returnType": {
+          "type": "TypeAnnotation",
+          "start": 38,
+          "end": 54,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 38
+            },
+            "end": {
+              "line": 1,
+              "column": 54
+            }
+          },
+          "range": [
+            38,
+            54
+          ],
+          "typeAnnotation": {
+            "type": "GenericTypeAnnotation",
+            "start": 40,
+            "end": 54,
             "loc": {
               "start": {
                 "line": 1,
@@ -117,53 +171,55 @@
                 "line": 1,
                 "column": 54
               }
+            },
+            "range": [
+              40,
+              54
+            ],
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start": 40,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 40
+                },
+                "end": {
+                  "line": 1,
+                  "column": 54
+                }
+              },
+              "range": [
+                40,
+                54
+              ],
+              "name": "HTMLDivElement"
             }
-          },
-          "typeParameters": null,
-          "range": [
-            40,
-            54
-          ],
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 55,
+          "end": 57,
           "loc": {
             "start": {
               "line": 1,
-              "column": 40
+              "column": 55
             },
             "end": {
               "line": 1,
-              "column": 54
+              "column": 57
             }
-          }
-        },
-        "range": [
-          38,
-          54
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 38
           },
-          "end": {
-            "line": 1,
-            "column": 54
-          }
-        }
-      },
-      "range": [
-        0,
-        57
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 57
+          "range": [
+            55,
+            57
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

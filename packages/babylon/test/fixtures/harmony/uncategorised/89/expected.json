@@ -1,106 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "encrypt",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
-              },
-              "end": {
-                "line": 1,
-                "column": 16
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "encrypt",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
-              },
-              "end": {
-                "line": 1,
-                "column": 16
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 16
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "dec",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 29
-              },
-              "end": {
-                "line": 1,
-                "column": 32
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "decrypt",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 18
-              },
-              "end": {
-                "line": 1,
-                "column": 25
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 18
-            },
-            "end": {
-              "line": 1,
-              "column": 32
-            }
-          }
-        }
-      ],
-      "source": null,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 34
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 34,
   "loc": {
     "start": {
       "line": 1,
@@ -110,5 +11,172 @@
       "line": 1,
       "column": 34
     }
+  },
+  "range": [
+    0,
+    34
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "range": [
+      0,
+      34
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "range": [
+          0,
+          34
+        ],
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 9,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            },
+            "range": [
+              9,
+              16
+            ],
+            "local": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 16
+                }
+              },
+              "range": [
+                9,
+                16
+              ],
+              "name": "encrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 16
+                }
+              },
+              "range": [
+                9,
+                16
+              ],
+              "name": "encrypt"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 18,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "range": [
+              18,
+              32
+            ],
+            "local": {
+              "type": "Identifier",
+              "start": 18,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                }
+              },
+              "range": [
+                18,
+                25
+              ],
+              "name": "decrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 29,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 29
+                },
+                "end": {
+                  "line": 1,
+                  "column": 32
+                }
+              },
+              "range": [
+                29,
+                32
+              ],
+              "name": "dec"
+            }
+          }
+        ],
+        "source": null
+      }
+    ]
   }
 }

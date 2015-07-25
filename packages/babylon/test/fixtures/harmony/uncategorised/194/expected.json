@@ -1,5 +1,7 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 13,
   "loc": {
     "start": {
       "line": 1,
@@ -10,21 +12,34 @@
       "column": 13
     }
   },
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 13
-        }
+  "range": [
+    0,
+    13
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 13,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "expression": {
-        "type": "CallExpression",
+      "end": {
+        "line": 1,
+        "column": 13
+      }
+    },
+    "range": [
+      0,
+      13
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 13,
         "loc": {
           "start": {
             "line": 1,
@@ -35,8 +50,14 @@
             "column": 13
           }
         },
-        "callee": {
-          "type": "Identifier",
+        "range": [
+          0,
+          13
+        ],
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 13,
           "loc": {
             "start": {
               "line": 1,
@@ -44,55 +65,96 @@
             },
             "end": {
               "line": 1,
-              "column": 4
+              "column": 13
             }
           },
-          "name": "func"
-        },
-        "arguments": [
-          {
-            "type": "SpreadElement",
+          "range": [
+            0,
+            13
+          ],
+          "callee": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 4,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 5
+                "column": 0
               },
               "end": {
                 "line": 1,
-                "column": 9
+                "column": 4
               }
             },
-            "argument": {
-              "type": "Identifier",
+            "range": [
+              0,
+              4
+            ],
+            "name": "func"
+          },
+          "arguments": [
+            {
+              "type": "SpreadElement",
+              "start": 5,
+              "end": 9,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 8
+                  "column": 5
                 },
                 "end": {
                   "line": 1,
                   "column": 9
                 }
               },
-              "name": "a"
-            }
-          },
-          {
-            "type": "Identifier",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 11
-              },
-              "end": {
-                "line": 1,
-                "column": 12
+              "range": [
+                5,
+                9
+              ],
+              "argument": {
+                "type": "Identifier",
+                "start": 8,
+                "end": 9,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 9
+                  }
+                },
+                "range": [
+                  8,
+                  9
+                ],
+                "name": "a"
               }
             },
-            "name": "b"
-          }
-        ]
+            {
+              "type": "Identifier",
+              "start": 11,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                }
+              },
+              "range": [
+                11,
+                12
+              ],
+              "name": "b"
+            }
+          ]
+        }
       }
-    }
-  ]
+    ]
+  }
 }

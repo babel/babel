@@ -1,150 +1,45 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "AssignmentExpression",
-        "operator": "=",
-        "left": {
-          "type": "Identifier",
-          "name": "a",
-          "range": [
-            0,
-            1
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 1
-            }
-          }
-        },
-        "right": {
-          "type": "ObjectExpression",
-          "properties": [
-            {
-              "type": "Property",
-              "key": {
-                "type": "Identifier",
-                "name": "fooProp",
-                "range": [
-                  7,
-                  14
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 7
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 14
-                  }
-                }
-              },
-              "value": {
-                "type": "FunctionExpression",
-                "id": null,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "body": [],
-                  "range": [
-                    23,
-                    25
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 23
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 25
-                    }
-                  }
-                },
-                "generator": false,
-                "expression": false,
-                "returnType": {
-                  "type": "TypeAnnotation",
-                  "typeAnnotation": {
-                    "type": "NumberTypeAnnotation",
-                    "range": [
-                      17,
-                      23
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 17
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 23
-                      }
-                    }
-                  },
-                  "range": [
-                    16,
-                    23
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 16
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 23
-                    }
-                  }
-                }
-              },
-              "kind": "get",
-              "method": false,
-              "shorthand": false,
-              "computed": false,
-              "range": [
-                3,
-                25
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 3
-                },
-                "end": {
-                  "line": 1,
-                  "column": 25
-                }
-              }
-            }
-          ],
-          "range": [
-            2,
-            26
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 2
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          }
-        },
-        "range": [
-          0,
-          26
-        ],
+  "type": "File",
+  "start": 0,
+  "end": 26,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 26
+    }
+  },
+  "range": [
+    0,
+    26
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 26,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 26
+      }
+    },
+    "range": [
+      0,
+      26
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 26,
         "loc": {
           "start": {
             "line": 1,
@@ -154,22 +49,198 @@
             "line": 1,
             "column": 26
           }
-        }
-      },
-      "range": [
-        0,
-        26
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 26
+        "range": [
+          0,
+          26
+        ],
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 0,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            }
+          },
+          "range": [
+            0,
+            26
+          ],
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 1,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 1
+              }
+            },
+            "range": [
+              0,
+              1
+            ],
+            "name": "a"
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start": 2,
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 2
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "range": [
+              2,
+              26
+            ],
+            "properties": [
+              {
+                "type": "Property",
+                "start": 3,
+                "end": 25,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 25
+                  }
+                },
+                "range": [
+                  3,
+                  25
+                ],
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 7,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    }
+                  },
+                  "range": [
+                    7,
+                    14
+                  ],
+                  "name": "fooProp"
+                },
+                "kind": "get",
+                "value": {
+                  "type": "FunctionExpression",
+                  "start": 14,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 25
+                    }
+                  },
+                  "range": [
+                    14,
+                    25
+                  ],
+                  "id": null,
+                  "generator": false,
+                  "expression": false,
+                  "async": false,
+                  "params": [],
+                  "returnType": {
+                    "type": "TypeAnnotation",
+                    "start": 16,
+                    "end": 23,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 23
+                      }
+                    },
+                    "range": [
+                      16,
+                      23
+                    ],
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 17,
+                      "end": 23,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 23
+                        }
+                      },
+                      "range": [
+                        17,
+                        23
+                      ]
+                    }
+                  },
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 23,
+                    "end": 25,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 25
+                      }
+                    },
+                    "range": [
+                      23,
+                      25
+                    ],
+                    "body": []
+                  }
+                }
+              }
+            ]
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }

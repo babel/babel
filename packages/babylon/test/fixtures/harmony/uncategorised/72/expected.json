@@ -1,67 +1,7 @@
 {
-  "type": "Program",
-  "sourceType": "module",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": {
-        "type": "VariableDeclaration",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "id": {
-              "type": "Identifier",
-              "name": "document",
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 11
-                },
-                "end": {
-                  "line": 1,
-                  "column": 19
-                }
-              }
-            },
-            "init": null,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 11
-              },
-              "end": {
-                "line": 1,
-                "column": 19
-              }
-            }
-          }
-        ],
-        "kind": "var",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 7
-          },
-          "end": {
-            "line": 1,
-            "column": 19
-          }
-        }
-      },
-      "specifiers": [],
-      "source": null,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 19
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 19,
   "loc": {
     "start": {
       "line": 1,
@@ -71,5 +11,114 @@
       "line": 1,
       "column": 19
     }
+  },
+  "range": [
+    0,
+    19
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    },
+    "range": [
+      0,
+      19
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          }
+        },
+        "range": [
+          0,
+          19
+        ],
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start": 7,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          },
+          "range": [
+            7,
+            19
+          ],
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 11,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 19
+                }
+              },
+              "range": [
+                11,
+                19
+              ],
+              "id": {
+                "type": "Identifier",
+                "start": 11,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 19
+                  }
+                },
+                "range": [
+                  11,
+                  19
+                ],
+                "name": "document"
+              },
+              "init": null
+            }
+          ],
+          "kind": "var"
+        },
+        "specifiers": [],
+        "source": null
+      }
+    ]
   }
 }

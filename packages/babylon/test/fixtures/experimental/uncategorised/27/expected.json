@@ -1,18 +1,64 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "VariableDeclaration",
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "id": {
-            "type": "Identifier",
-            "name": "ok",
-            "range": [
-              4,
-              6
-            ],
+  "type": "File",
+  "start": 0,
+  "end": 17,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 17
+    }
+  },
+  "range": [
+    0,
+    17
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 17,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 17
+      }
+    },
+    "range": [
+      0,
+      17
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 17,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 17
+          }
+        },
+        "range": [
+          0,
+          17
+        ],
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 17,
             "loc": {
               "start": {
                 "line": 1,
@@ -20,19 +66,37 @@
               },
               "end": {
                 "line": 1,
-                "column": 6
+                "column": 17
               }
-            }
-          },
-          "init": {
-            "type": "CallExpression",
-            "callee": {
+            },
+            "range": [
+              4,
+              17
+            ],
+            "id": {
               "type": "Identifier",
-              "name": "async",
+              "start": 4,
+              "end": 6,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 6
+                }
+              },
               "range": [
-                9,
-                14
+                4,
+                6
               ],
+              "name": "ok"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start": 9,
+              "end": 17,
               "loc": {
                 "start": {
                   "line": 1,
@@ -40,76 +104,60 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 14
+                  "column": 17
                 }
-              }
-            },
-            "arguments": [
-              {
+              },
+              "range": [
+                9,
+                17
+              ],
+              "callee": {
                 "type": "Identifier",
-                "name": "x",
-                "range": [
-                  15,
-                  16
-                ],
+                "start": 9,
+                "end": 14,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 15
+                    "column": 9
                   },
                   "end": {
                     "line": 1,
-                    "column": 16
+                    "column": 14
                   }
-                }
-              }
-            ],
-            "range": [
-              9,
-              17
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
+                },
+                "range": [
+                  9,
+                  14
+                ],
+                "name": "async"
               },
-              "end": {
-                "line": 1,
-                "column": 17
-              }
-            }
-          },
-          "range": [
-            4,
-            17
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
-            },
-            "end": {
-              "line": 1,
-              "column": 17
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 16
+                    }
+                  },
+                  "range": [
+                    15,
+                    16
+                  ],
+                  "name": "x"
+                }
+              ]
             }
           }
-        }
-      ],
-      "kind": "var",
-      "range": [
-        0,
-        17
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 17
-        }
+        ],
+        "kind": "var"
       }
-    }
-  ]
+    ]
+  }
 }

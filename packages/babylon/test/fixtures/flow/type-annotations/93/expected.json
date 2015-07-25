@@ -1,18 +1,64 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ImportDeclaration",
-      "specifiers": [
-        {
-          "type": "ImportDefaultSpecifier",
-          "local": {
-            "type": "Identifier",
-            "name": "type",
-            "range": [
-              7,
-              11
-            ],
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
+  "range": [
+    0,
+    23
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "range": [
+      0,
+      23
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "range": [
+          0,
+          23
+        ],
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 7,
+            "end": 11,
             "loc": {
               "start": {
                 "line": 1,
@@ -22,58 +68,57 @@
                 "line": 1,
                 "column": 11
               }
+            },
+            "range": [
+              7,
+              11
+            ],
+            "local": {
+              "type": "Identifier",
+              "start": 7,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
+              "range": [
+                7,
+                11
+              ],
+              "name": "type"
             }
-          },
-          "range": [
-            7,
-            11
-          ],
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "Literal",
+          "start": 17,
+          "end": 22,
           "loc": {
             "start": {
               "line": 1,
-              "column": 7
+              "column": 17
             },
             "end": {
               "line": 1,
-              "column": 11
+              "column": 22
             }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "foo",
-        "raw": "\"foo\"",
-        "range": [
-          17,
-          22
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 17
           },
-          "end": {
-            "line": 1,
-            "column": 22
-          }
-        }
-      },
-      "importKind": "value",
-      "range": [
-        0,
-        23
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 23
+          "range": [
+            17,
+            22
+          ],
+          "value": "foo",
+          "rawValue": "foo",
+          "raw": "\"foo\""
         }
       }
-    }
-  ]
+    ]
+  }
 }

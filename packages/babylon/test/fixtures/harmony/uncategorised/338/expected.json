@@ -1,31 +1,131 @@
 {
-  "body": [
-    {
-      "declaration": {
-        "id": {
-          "name": "foo",
-          "type": "Identifier"
-        },
-        "generator": false,
-        "expression": false,
-        "params": [],
-        "body": {
-          "body": [],
-          "type": "BlockStatement"
-        },
-        "type": "FunctionDeclaration"
-      },
-      "type": "ExportDefaultDeclaration"
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
     },
-    {
-      "expression": {
-        "value": false,
-        "raw": "false",
-        "type": "Literal"
-      },
-      "type": "ExpressionStatement"
+    "end": {
+      "line": 1,
+      "column": 38
     }
-  ],
-  "sourceType": "module",
-  "type": "Program"
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 38
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 32,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 32
+          }
+        },
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 15,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 32
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "name": "foo"
+          },
+          "generator": false,
+          "expression": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start": 30,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 30
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 33,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 33
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "expression": {
+          "type": "Literal",
+          "start": 33,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 33
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            }
+          },
+          "value": false,
+          "rawValue": false,
+          "raw": "false"
+        }
+      }
+    ]
+  }
 }

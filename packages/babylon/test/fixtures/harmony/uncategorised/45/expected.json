@@ -1,109 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "ArrowFunctionExpression",
-        "id": null,
-        "params": [
-          {
-            "type": "Identifier",
-            "name": "eval",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 1
-              },
-              "end": {
-                "line": 1,
-                "column": 5
-              }
-            }
-          },
-          {
-            "type": "AssignmentPattern",
-            "left": {
-              "type": "Identifier",
-              "name": "a",
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 7
-                },
-                "end": {
-                  "line": 1,
-                  "column": 8
-                }
-              }
-            },
-            "right": {
-              "type": "Literal",
-              "value": 10,
-              "raw": "10",
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 11
-                },
-                "end": {
-                  "line": 1,
-                  "column": 13
-                }
-              }
-            },
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 7
-              },
-              "end": {
-                "line": 1,
-                "column": 13
-              }
-            }
-          }
-        ],
-        "body": {
-          "type": "Literal",
-          "value": 42,
-          "raw": "42",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 18
-            },
-            "end": {
-              "line": 1,
-              "column": 20
-            }
-          }
-        },
-        "generator": false,
-        "expression": true,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 20
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 20
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 20,
   "loc": {
     "start": {
       "line": 1,
@@ -113,5 +11,177 @@
       "line": 1,
       "column": 20
     }
+  },
+  "range": [
+    0,
+    20
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 20,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 20
+      }
+    },
+    "range": [
+      0,
+      20
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 20,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        },
+        "range": [
+          0,
+          20
+        ],
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "range": [
+            0,
+            20
+          ],
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 1,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                }
+              },
+              "range": [
+                1,
+                5
+              ],
+              "name": "eval"
+            },
+            {
+              "type": "AssignmentPattern",
+              "start": 7,
+              "end": 13,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 13
+                }
+              },
+              "range": [
+                7,
+                13
+              ],
+              "left": {
+                "type": "Identifier",
+                "start": 7,
+                "end": 8,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 8
+                  }
+                },
+                "range": [
+                  7,
+                  8
+                ],
+                "name": "a"
+              },
+              "right": {
+                "type": "Literal",
+                "start": 11,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  }
+                },
+                "range": [
+                  11,
+                  13
+                ],
+                "value": 10,
+                "rawValue": 10,
+                "raw": "10"
+              }
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "start": 18,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "range": [
+              18,
+              20
+            ],
+            "value": 42,
+            "rawValue": 42,
+            "raw": "42"
+          }
+        }
+      }
+    ]
   }
 }

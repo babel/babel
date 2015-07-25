@@ -1,43 +1,133 @@
 {
-  "type": "Program",
+  "type": "File",
   "start": 0,
   "end": 16,
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "start": 0,
-      "end": 16,
-      "expression": {
-        "type": "CallExpression",
-        "callee": {
-          "type": "Identifier",
-          "name": "log",
-          "start": 0,
-          "end": 3
-        },
-        "arguments": [
-          {
-            "type": "Identifier",
-            "name": "n",
-            "start": 4,
-            "end": 5
-          },
-          {
-            "type": "Literal",
-            "value": "=",
-            "raw": "'='",
-            "start": 7,
-            "end": 10
-          },
-          {
-            "type": "Literal",
-            "raw": "2",
-            "value": 2,
-            "start": 12,
-            "end": 13
-          }
-        ]
-      }
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 16
     }
-  ]
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 16,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 16
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "callee": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 3,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 3
+              }
+            },
+            "name": "log"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                }
+              },
+              "name": "n"
+            },
+            {
+              "type": "Literal",
+              "start": 7,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "value": "=",
+              "rawValue": "=",
+              "raw": "'='"
+            },
+            {
+              "type": "Literal",
+              "start": 12,
+              "end": 13,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 13
+                }
+              },
+              "value": 2,
+              "rawValue": 2,
+              "raw": "2"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

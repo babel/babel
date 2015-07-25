@@ -1,99 +1,265 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 31,
-      "decorators": [
-        {
-          "start": 0,
-          "expression": {
-            "start": 1,
-            "callee": {
-              "start": 1,
-              "name": "foo",
-              "type": "Identifier",
-              "end": 4
-            },
-            "arguments": [
-              {
-                "start": 5,
-                "properties": [
-                  {
-                    "start": 12,
-                    "decorators": [
-                      {
-                        "start": 7,
-                        "expression": {
-                          "start": 8,
-                          "name": "bar",
-                          "type": "Identifier",
-                          "end": 11
-                        },
-                        "type": "Decorator",
-                        "end": 11
-                      }
-                    ],
-                    "method": false,
-                    "shorthand": false,
-                    "computed": false,
-                    "key": {
-                      "start": 12,
-                      "name": "foo",
-                      "type": "Identifier",
-                      "end": 15
-                    },
-                    "value": {
-                      "start": 17,
-                      "value": "bar",
-                      "raw": "\"bar\"",
-                      "type": "Literal",
-                      "end": 22
-                    },
-                    "kind": "init",
-                    "type": "Property",
-                    "end": 22
-                  }
-                ],
-                "type": "ObjectExpression",
-                "end": 24
-              }
-            ],
-            "type": "CallExpression",
-            "end": 25
-          },
-          "type": "Decorator",
-          "end": 25
-        },
-        {
-          "start": 26,
-          "expression": {
-            "start": 27,
-            "name": "bar",
-            "type": "Identifier",
-            "end": 30
-          },
-          "type": "Decorator",
-          "end": 30
-        }
-      ],
-      "id": {
-        "start": 37,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 40
-      },
-      "superClass": null,
-      "body": {
-        "start": 41,
-        "body": [],
-        "type": "ClassBody",
-        "end": 43
-      },
-      "type": "ClassDeclaration",
-      "end": 43
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
     }
-  ],
-  "sourceType": "script",
-  "type": "Program",
-  "end": 43
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 31,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 31
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        },
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start": 0,
+            "end": 25,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              }
+            },
+            "expression": {
+              "type": "CallExpression",
+              "start": 1,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                }
+              },
+              "callee": {
+                "type": "Identifier",
+                "start": 1,
+                "end": 4,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 4
+                  }
+                },
+                "name": "foo"
+              },
+              "arguments": [
+                {
+                  "type": "ObjectExpression",
+                  "start": 5,
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    }
+                  },
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 12,
+                      "end": 22,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
+                        }
+                      },
+                      "decorators": [
+                        {
+                          "type": "Decorator",
+                          "start": 7,
+                          "end": 11,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 7
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 11
+                            }
+                          },
+                          "expression": {
+                            "type": "Identifier",
+                            "start": 8,
+                            "end": 11,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 11
+                              }
+                            },
+                            "name": "bar"
+                          }
+                        }
+                      ],
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 12,
+                        "end": 15,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 15
+                          }
+                        },
+                        "name": "foo"
+                      },
+                      "value": {
+                        "type": "Literal",
+                        "start": 17,
+                        "end": 22,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 22
+                          }
+                        },
+                        "value": "bar",
+                        "rawValue": "bar",
+                        "raw": "\"bar\""
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "type": "Decorator",
+            "start": 26,
+            "end": 30,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 26
+              },
+              "end": {
+                "line": 1,
+                "column": 30
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 27,
+              "end": 30,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 30
+                }
+              },
+              "name": "bar"
+            }
+          }
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 37,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 37
+            },
+            "end": {
+              "line": 1,
+              "column": 40
+            }
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 41,
+          "end": 43,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 41
+            },
+            "end": {
+              "line": 1,
+              "column": 43
+            }
+          },
+          "body": []
+        }
+      }
+    ]
+  }
 }

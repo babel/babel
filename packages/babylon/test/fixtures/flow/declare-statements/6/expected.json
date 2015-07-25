@@ -1,145 +1,82 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "DeclareFunction",
-      "id": {
-        "type": "Identifier",
-        "name": "foo",
-        "typeAnnotation": {
-          "type": "TypeAnnotation",
-          "typeAnnotation": {
-            "type": "FunctionTypeAnnotation",
-            "params": [
-              {
-                "type": "FunctionTypeParam",
-                "name": {
-                  "type": "Identifier",
-                  "name": "x",
-                  "range": [
-                    21,
-                    22
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 21
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 22
-                    }
-                  }
-                },
-                "typeAnnotation": {
-                  "type": "NumberTypeAnnotation",
-                  "range": [
-                    24,
-                    30
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 24
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 30
-                    }
-                  }
-                },
-                "optional": false,
-                "range": [
-                  21,
-                  30
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 21
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 30
-                  }
-                }
-              },
-              {
-                "type": "FunctionTypeParam",
-                "name": {
-                  "type": "Identifier",
-                  "name": "y",
-                  "range": [
-                    32,
-                    33
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 32
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 33
-                    }
-                  }
-                },
-                "typeAnnotation": {
-                  "type": "StringTypeAnnotation",
-                  "range": [
-                    35,
-                    41
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 35
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 41
-                    }
-                  }
-                },
-                "optional": false,
-                "range": [
-                  32,
-                  41
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 32
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 41
-                  }
-                }
-              }
-            ],
-            "returnType": {
-              "type": "VoidTypeAnnotation",
-              "range": [
-                44,
-                48
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 44
-                },
-                "end": {
-                  "line": 1,
-                  "column": 48
-                }
-              }
+  "type": "File",
+  "start": 0,
+  "end": 49,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 49
+    }
+  },
+  "range": [
+    0,
+    49
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 49,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 49
+      }
+    },
+    "range": [
+      0,
+      49
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareFunction",
+        "start": 0,
+        "end": 49,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 49
+          }
+        },
+        "range": [
+          0,
+          49
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 17,
+          "end": 48,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 17
             },
-            "typeParameters": null,
-            "range": [
-              20,
-              48
-            ],
+            "end": {
+              "line": 1,
+              "column": 48
+            }
+          },
+          "range": [
+            17,
+            48
+          ],
+          "name": "foo",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start": 20,
+            "end": 48,
             "loc": {
               "start": {
                 "line": 1,
@@ -149,52 +86,174 @@
                 "line": 1,
                 "column": 48
               }
-            }
-          },
-          "range": [
-            20,
-            48
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 20
             },
-            "end": {
-              "line": 1,
-              "column": 48
+            "range": [
+              20,
+              48
+            ],
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start": 20,
+              "end": 48,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 20
+                },
+                "end": {
+                  "line": 1,
+                  "column": 48
+                }
+              },
+              "range": [
+                20,
+                48
+              ],
+              "typeParameters": null,
+              "params": [
+                {
+                  "type": "FunctionTypeParam",
+                  "start": 21,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 30
+                    }
+                  },
+                  "range": [
+                    21,
+                    30
+                  ],
+                  "name": {
+                    "type": "Identifier",
+                    "start": 21,
+                    "end": 22,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 22
+                      }
+                    },
+                    "range": [
+                      21,
+                      22
+                    ],
+                    "name": "x"
+                  },
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start": 24,
+                    "end": 30,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      }
+                    },
+                    "range": [
+                      24,
+                      30
+                    ]
+                  }
+                },
+                {
+                  "type": "FunctionTypeParam",
+                  "start": 32,
+                  "end": 41,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 41
+                    }
+                  },
+                  "range": [
+                    32,
+                    41
+                  ],
+                  "name": {
+                    "type": "Identifier",
+                    "start": 32,
+                    "end": 33,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 33
+                      }
+                    },
+                    "range": [
+                      32,
+                      33
+                    ],
+                    "name": "y"
+                  },
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 35,
+                    "end": 41,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 41
+                      }
+                    },
+                    "range": [
+                      35,
+                      41
+                    ]
+                  }
+                }
+              ],
+              "rest": null,
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start": 44,
+                "end": 48,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 44
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 48
+                  }
+                },
+                "range": [
+                  44,
+                  48
+                ]
+              }
             }
           }
-        },
-        "range": [
-          17,
-          48
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 17
-          },
-          "end": {
-            "line": 1,
-            "column": 48
-          }
-        }
-      },
-      "range": [
-        0,
-        49
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 49
         }
       }
-    }
-  ]
+    ]
+  }
 }

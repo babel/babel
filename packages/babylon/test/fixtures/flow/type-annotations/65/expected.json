@@ -1,65 +1,242 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "start": 0,
-      "end": 39,
-      "id": {
-        "type": "Identifier",
-        "start": 9,
-        "end": 12,
-        "name": "foo"
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 39
+    }
+  },
+  "range": [
+    0,
+    39
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "generator": false,
-      "expression": false,
-      "params": [
-        {
-          "type": "RestElement",
-          "start": 13,
-          "end": 35,
-          "argument": {
-            "type": "Identifier",
-            "start": 16,
-            "end": 20,
-            "name": "rest"
+      "end": {
+        "line": 1,
+        "column": 39
+      }
+    },
+    "range": [
+      0,
+      39
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
           },
-          "typeAnnotation": {
-            "type": "TypeAnnotation",
-            "start": 20,
+          "end": {
+            "line": 1,
+            "column": 39
+          }
+        },
+        "range": [
+          0,
+          39
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "name": "foo"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start": 13,
             "end": 35,
-            "typeAnnotation": {
-              "type": "GenericTypeAnnotation",
-              "start": 22,
-              "end": 35,
-              "typeParameters": {
-                "type": "TypeParameterInstantiation",
-                "start": 27,
-                "end": 35,
-                "params": [
-                  {
-                    "type": "NumberTypeAnnotation",
-                    "start": 28,
-                    "end": 34
-                  }
-                ]
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
               },
-              "id": {
-                "type": "Identifier",
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "range": [
+              13,
+              35
+            ],
+            "argument": {
+              "type": "Identifier",
+              "start": 16,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 16
+                },
+                "end": {
+                  "line": 1,
+                  "column": 20
+                }
+              },
+              "range": [
+                16,
+                20
+              ],
+              "name": "rest"
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 20,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 20
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                }
+              },
+              "range": [
+                20,
+                35
+              ],
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
                 "start": 22,
-                "end": 27,
-                "name": "Array"
+                "end": 35,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 35
+                  }
+                },
+                "range": [
+                  22,
+                  35
+                ],
+                "typeParameters": {
+                  "type": "TypeParameterInstantiation",
+                  "start": 27,
+                  "end": 35,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 27
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 35
+                    }
+                  },
+                  "range": [
+                    27,
+                    35
+                  ],
+                  "params": [
+                    {
+                      "type": "NumberTypeAnnotation",
+                      "start": 28,
+                      "end": 34,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 34
+                        }
+                      },
+                      "range": [
+                        28,
+                        34
+                      ]
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 22,
+                  "end": 27,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 27
+                    }
+                  },
+                  "range": [
+                    22,
+                    27
+                  ],
+                  "name": "Array"
+                }
               }
             }
           }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 37,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 37
+            },
+            "end": {
+              "line": 1,
+              "column": 39
+            }
+          },
+          "range": [
+            37,
+            39
+          ],
+          "body": []
         }
-      ],
-      "body": {
-        "type": "BlockStatement",
-        "start": 37,
-        "end": 39,
-        "body": []
       }
-    }
-  ]
+    ]
+  }
 }

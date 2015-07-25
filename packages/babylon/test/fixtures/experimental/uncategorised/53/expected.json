@@ -1,27 +1,99 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "start": 0,
-      "end": 26,
-      "specifiers": [
-        {
-          "type": "ExportDefaultSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "default",
-            "start": 7,
-            "end": 14
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "bar",
-        "start": 20,
-        "end": 25
-      }
+  "type": "File",
+  "start": 0,
+  "end": 26,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 26
     }
-  ]
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 26,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 26
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 26,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 26
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ExportDefaultSpecifier",
+            "start": 7,
+            "end": 14,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              }
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 7,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                }
+              },
+              "name": "default"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 20,
+          "end": 25,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 25
+            }
+          },
+          "value": "bar",
+          "rawValue": "bar",
+          "raw": "\"bar\""
+        }
+      }
+    ]
+  }
 }

@@ -1,111 +1,163 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ClassDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "Foo",
-        "range": [
-          6,
-          9
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 6
-          },
-          "end": {
-            "line": 1,
-            "column": 9
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 31,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 31
+    }
+  },
+  "range": [
+    0,
+    31
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 31,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "superClass": {
-        "type": "Identifier",
-        "name": "Bar",
-        "range": [
-          21,
-          24
-        ],
+      "end": {
+        "line": 1,
+        "column": 31
+      }
+    },
+    "range": [
+      0,
+      31
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 31,
         "loc": {
           "start": {
             "line": 1,
-            "column": 21
-          },
-          "end": {
-            "line": 1,
-            "column": 24
-          }
-        }
-      },
-      "body": {
-        "type": "ClassBody",
-        "body": [],
-        "range": [
-          28,
-          31
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 28
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 31
           }
-        }
-      },
-      "typeParameters": {
-        "type": "TypeParameterDeclaration",
-        "params": [
-          {
-            "type": "Identifier",
-            "name": "T",
-            "range": [
-              10,
-              11
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 10
-              },
-              "end": {
-                "line": 1,
-                "column": 11
-              }
-            }
-          }
-        ],
+        },
         "range": [
-          9,
-          12
+          0,
+          31
         ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
           },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
-      },
-      "superTypeParameters": {
-        "type": "TypeParameterInstantiation",
-        "params": [
-          {
-            "type": "GenericTypeAnnotation",
-            "id": {
+          "range": [
+            6,
+            9
+          ],
+          "name": "Foo"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "params": [
+            {
               "type": "Identifier",
-              "name": "T",
+              "start": 10,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
               "range": [
-                25,
-                26
+                10,
+                11
               ],
+              "name": "T"
+            }
+          ]
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start": 21,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            }
+          },
+          "range": [
+            21,
+            24
+          ],
+          "name": "Bar"
+        },
+        "superTypeParameters": {
+          "type": "TypeParameterInstantiation",
+          "start": 24,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 24
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "range": [
+            24,
+            27
+          ],
+          "params": [
+            {
+              "type": "GenericTypeAnnotation",
+              "start": 25,
+              "end": 26,
               "loc": {
                 "start": {
                   "line": 1,
@@ -115,54 +167,56 @@
                   "line": 1,
                   "column": 26
                 }
-              }
-            },
-            "typeParameters": null,
-            "range": [
-              25,
-              26
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 25
               },
-              "end": {
-                "line": 1,
-                "column": 26
+              "range": [
+                25,
+                26
+              ],
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start": 25,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "range": [
+                  25,
+                  26
+                ],
+                "name": "T"
               }
             }
-          }
-        ],
-        "range": [
-          24,
-          27
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 24
-          },
-          "end": {
-            "line": 1,
-            "column": 27
-          }
-        }
-      },
-      "range": [
-        0,
-        31
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
+          ]
         },
-        "end": {
-          "line": 1,
-          "column": 31
+        "body": {
+          "type": "ClassBody",
+          "start": 28,
+          "end": 31,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 28
+            },
+            "end": {
+              "line": 1,
+              "column": 31
+            }
+          },
+          "range": [
+            28,
+            31
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

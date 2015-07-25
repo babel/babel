@@ -1,179 +1,64 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "VariableDeclaration",
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "id": {
-            "type": "Identifier",
-            "name": "a",
-            "typeAnnotation": {
-              "type": "TypeAnnotation",
-              "typeAnnotation": {
-                "type": "ObjectTypeAnnotation",
-                "properties": [
-                  {
-                    "type": "ObjectTypeProperty",
-                    "key": {
-                      "type": "Identifier",
-                      "name": "numVal",
-                      "range": [
-                        8,
-                        14
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 14
-                        }
-                      }
-                    },
-                    "value": {
-                      "type": "NumberTypeAnnotation",
-                      "range": [
-                        16,
-                        22
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 16
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 22
-                        }
-                      }
-                    },
-                    "optional": false,
-                    "range": [
-                      8,
-                      23
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 8
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 23
-                      }
-                    }
-                  }
-                ],
-                "indexers": [
-                  {
-                    "type": "ObjectTypeIndexer",
-                    "id": {
-                      "type": "Identifier",
-                      "name": "indexer",
-                      "range": [
-                        25,
-                        32
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 25
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 32
-                        }
-                      }
-                    },
-                    "key": {
-                      "type": "StringTypeAnnotation",
-                      "range": [
-                        34,
-                        40
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 34
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 40
-                        }
-                      }
-                    },
-                    "value": {
-                      "type": "NumberTypeAnnotation",
-                      "range": [
-                        43,
-                        49
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 43
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 49
-                        }
-                      }
-                    },
-                    "range": [
-                      24,
-                      49
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 24
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 49
-                      }
-                    }
-                  }
-                ],
-                "callProperties": [],
-                "range": [
-                  7,
-                  50
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 7
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 50
-                  }
-                }
-              },
-              "range": [
-                5,
-                50
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 5
-                },
-                "end": {
-                  "line": 1,
-                  "column": 50
-                }
-              }
-            },
-            "range": [
-              4,
-              50
-            ],
+  "type": "File",
+  "start": 0,
+  "end": 51,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 51
+    }
+  },
+  "range": [
+    0,
+    51
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 51,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 51
+      }
+    },
+    "range": [
+      0,
+      51
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 51
+          }
+        },
+        "range": [
+          0,
+          51
+        ],
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 50,
             "loc": {
               "start": {
                 "line": 1,
@@ -183,40 +68,215 @@
                 "line": 1,
                 "column": 50
               }
-            }
-          },
-          "init": null,
-          "range": [
-            4,
-            50
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
             },
-            "end": {
-              "line": 1,
-              "column": 50
-            }
+            "range": [
+              4,
+              50
+            ],
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 50,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 50
+                }
+              },
+              "range": [
+                4,
+                50
+              ],
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 5,
+                "end": 50,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 50
+                  }
+                },
+                "range": [
+                  5,
+                  50
+                ],
+                "typeAnnotation": {
+                  "type": "ObjectTypeAnnotation",
+                  "start": 7,
+                  "end": 50,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 50
+                    }
+                  },
+                  "range": [
+                    7,
+                    50
+                  ],
+                  "callProperties": [],
+                  "properties": [
+                    {
+                      "type": "ObjectTypeProperty",
+                      "start": 8,
+                      "end": 23,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 23
+                        }
+                      },
+                      "range": [
+                        8,
+                        23
+                      ],
+                      "key": {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
+                          }
+                        },
+                        "range": [
+                          8,
+                          14
+                        ],
+                        "name": "numVal"
+                      },
+                      "value": {
+                        "type": "NumberTypeAnnotation",
+                        "start": 16,
+                        "end": 22,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 22
+                          }
+                        },
+                        "range": [
+                          16,
+                          22
+                        ]
+                      },
+                      "optional": false
+                    }
+                  ],
+                  "indexers": [
+                    {
+                      "type": "ObjectTypeIndexer",
+                      "start": 24,
+                      "end": 49,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 24
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 49
+                        }
+                      },
+                      "range": [
+                        24,
+                        49
+                      ],
+                      "id": {
+                        "type": "Identifier",
+                        "start": 25,
+                        "end": 32,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 32
+                          }
+                        },
+                        "range": [
+                          25,
+                          32
+                        ],
+                        "name": "indexer"
+                      },
+                      "key": {
+                        "type": "StringTypeAnnotation",
+                        "start": 34,
+                        "end": 40,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 34
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 40
+                          }
+                        },
+                        "range": [
+                          34,
+                          40
+                        ]
+                      },
+                      "value": {
+                        "type": "NumberTypeAnnotation",
+                        "start": 43,
+                        "end": 49,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 43
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 49
+                          }
+                        },
+                        "range": [
+                          43,
+                          49
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
           }
-        }
-      ],
-      "kind": "var",
-      "range": [
-        0,
-        51
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 51
-        }
+        ],
+        "kind": "var"
       }
-    }
-  ]
+    ]
+  }
 }

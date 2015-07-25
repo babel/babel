@@ -1,66 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": {
-        "type": "FunctionDeclaration",
-        "id": {
-          "type": "Identifier",
-          "name": "parse",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 16
-            },
-            "end": {
-              "line": 1,
-              "column": 21
-            }
-          }
-        },
-        "params": [],
-        "body": {
-          "type": "BlockStatement",
-          "body": [],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 24
-            },
-            "end": {
-              "line": 1,
-              "column": 27
-            }
-          }
-        },
-        "generator": false,
-        "expression": false,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 7
-          },
-          "end": {
-            "line": 1,
-            "column": 27
-          }
-        }
-      },
-      "specifiers": [],
-      "source": null,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 27
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 27,
   "loc": {
     "start": {
       "line": 1,
@@ -70,5 +11,114 @@
       "line": 1,
       "column": 27
     }
+  },
+  "range": [
+    0,
+    27
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "range": [
+      0,
+      27
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "range": [
+          0,
+          27
+        ],
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 7,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "range": [
+            7,
+            27
+          ],
+          "id": {
+            "type": "Identifier",
+            "start": 16,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 16
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            "range": [
+              16,
+              21
+            ],
+            "name": "parse"
+          },
+          "generator": false,
+          "expression": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start": 24,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "range": [
+              24,
+              27
+            ],
+            "body": []
+          }
+        },
+        "specifiers": [],
+        "source": null
+      }
+    ]
   }
 }

@@ -1,40 +1,116 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "id": {
-        "start": 6,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 9
-      },
-      "superClass": null,
-      "body": {
-        "start": 10,
-        "body": [
-          {
-            "start": 12,
-            "computed": false,
-            "key": {
-              "start": 12,
-              "name": "foo",
-              "type": "Identifier",
-              "end": 15
-            },
-            "static": false,
-            "value": null,
-            "type": "ClassProperty",
-            "end": 16
-          }
-        ],
-        "type": "ClassBody",
-        "end": 18
-      },
-      "type": "ClassDeclaration",
-      "end": 18
+  "end": 18,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 18
     }
-  ],
-  "type": "Program",
-  "end": 18
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 18,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 18
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 18,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 18
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 12,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 16
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 12,
+                "end": 15,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                },
+                "name": "foo"
+              },
+              "static": false,
+              "value": null
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

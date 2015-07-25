@@ -1,77 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "IfStatement",
-      "test": {
-        "type": "Identifier",
-        "name": "morning",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 4
-          },
-          "end": {
-            "line": 1,
-            "column": 11
-          }
-        }
-      },
-      "consequent": {
-        "type": "ExpressionStatement",
-        "expression": {
-          "type": "FunctionExpression",
-          "id": null,
-          "params": [],
-          "body": {
-            "type": "BlockStatement",
-            "body": [],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 26
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 14
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          }
-        },
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 13
-          },
-          "end": {
-            "line": 1,
-            "column": 27
-          }
-        }
-      },
-      "alternate": null,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 27
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 27,
   "loc": {
     "start": {
       "line": 1,
@@ -81,5 +11,106 @@
       "line": 1,
       "column": 27
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "test": {
+          "type": "Identifier",
+          "start": 4,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "name": "morning"
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 13,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "expression": {
+            "type": "FunctionExpression",
+            "start": 14,
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "id": null,
+            "generator": false,
+            "expression": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start": 24,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "body": []
+            },
+            "parenthesizedExpression": true
+          }
+        },
+        "alternate": null
+      }
+    ]
   }
 }

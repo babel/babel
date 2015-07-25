@@ -1,98 +1,145 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "foo",
-        "range": [
-          9,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 21,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 21
+    }
+  },
+  "range": [
+    0,
+    21
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 21,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "params": [],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "range": [
-          19,
-          21
-        ],
+      "end": {
+        "line": 1,
+        "column": 21
+      }
+    },
+    "range": [
+      0,
+      21
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 21,
         "loc": {
           "start": {
             "line": 1,
-            "column": 19
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 21
           }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "returnType": {
-        "type": "TypeAnnotation",
-        "typeAnnotation": {
-          "type": "ObjectTypeAnnotation",
-          "properties": [],
-          "indexers": [],
-          "callProperties": [],
-          "range": [
-            16,
-            18
-          ],
+        },
+        "range": [
+          0,
+          21
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
           "loc": {
             "start": {
               "line": 1,
-              "column": 16
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "name": "foo"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TypeAnnotation",
+          "start": 14,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
             },
             "end": {
               "line": 1,
               "column": 18
             }
-          }
-        },
-        "range": [
-          14,
-          18
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
           },
-          "end": {
-            "line": 1,
-            "column": 18
+          "range": [
+            14,
+            18
+          ],
+          "typeAnnotation": {
+            "type": "ObjectTypeAnnotation",
+            "start": 16,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 16
+              },
+              "end": {
+                "line": 1,
+                "column": 18
+              }
+            },
+            "range": [
+              16,
+              18
+            ],
+            "callProperties": [],
+            "properties": [],
+            "indexers": []
           }
-        }
-      },
-      "range": [
-        0,
-        21
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 21
+        "body": {
+          "type": "BlockStatement",
+          "start": 19,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          "range": [
+            19,
+            21
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }
