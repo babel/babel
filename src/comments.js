@@ -36,11 +36,11 @@ pp.addComment = function (comment) {
 };
 
 pp.processComment = function (node) {
+  if (node.type === "Program" && node.body.length > 0) return;
+
   var stack = this.bottomRightStack;
 
-  var lastChild;
-  var trailingComments;
-  var i;
+  var lastChild, trailingComments, i;
 
   if (this.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
@@ -73,9 +73,21 @@ pp.processComment = function (node) {
   }
 
   if (lastChild) {
-    if (lastChild !== node && lastChild.leadingComments && last(lastChild.leadingComments).end <= node.start) {
-      node.leadingComments = lastChild.leadingComments;
-      lastChild.leadingComments = null;
+    if (lastChild.leadingComments) {
+      if (last(lastChild.leadingComments).range[1] <= node.range[0]) {
+        node.leadingComments = lastChild.leadingComments;
+        delete lastChild.leadingComments;
+      } else {
+        // A leading comment for an anonymous class had been stolen by its first MethodDefinition,
+        // so this takes back the leading comment.
+        // See Also: https://github.com/eslint/espree/issues/158
+        for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
+          if (lastChild.leadingComments[i].range[1] <= node.range[0]) {
+            node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
+            break;
+          }
+        }
+      }
     }
   } else if (this.leadingComments.length > 0) {
     if (last(this.leadingComments).end <= node.start) {
