@@ -1,5 +1,5 @@
 import { types as tt } from "../tokenizer/types";
-import { Parser } from "../state";
+import Parser from "../parser";
 
 var pp = Parser.prototype;
 
@@ -50,11 +50,11 @@ pp.flowParseDeclareFunction = function (node) {
 };
 
 pp.flowParseDeclare = function (node) {
-  if (this.type === tt._class) {
+  if (this.state.type === tt._class) {
     return this.flowParseDeclareClass(node);
-  } else if (this.type === tt._function) {
+  } else if (this.state.type === tt._function) {
     return this.flowParseDeclareFunction(node);
-  } else if (this.type === tt._var) {
+  } else if (this.state.type === tt._var) {
     return this.flowParseDeclareVariable(node);
   } else if (this.isContextual("module")) {
     return this.flowParseDeclareModule(node);
@@ -73,7 +73,7 @@ pp.flowParseDeclareVariable = function (node) {
 pp.flowParseDeclareModule = function (node) {
   this.next();
 
-  if (this.type === tt.string) {
+  if (this.state.type === tt.string) {
     node.id = this.parseExprAtom();
   } else {
     node.id = this.parseIdent();
@@ -82,7 +82,7 @@ pp.flowParseDeclareModule = function (node) {
   var bodyNode = node.body = this.startNode();
   var body = bodyNode.body = [];
   this.expect(tt.braceL);
-  while (this.type !== tt.braceR) {
+  while (this.state.type !== tt.braceR) {
     var node2 = this.startNode();
 
     // todo: declare check
@@ -193,7 +193,7 @@ pp.flowParseTypeParameterInstantiation = function () {
 };
 
 pp.flowParseObjectPropertyKey = function () {
-  return (this.type === tt.num || this.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true);
+  return (this.state.type === tt.num || this.state.type === tt.string) ? this.parseExprAtom() : this.parseIdent(true);
 };
 
 pp.flowParseObjectTypeIndexer = function (node, isStatic) {
@@ -219,9 +219,9 @@ pp.flowParseObjectTypeMethodish = function (node) {
   }
 
   this.expect(tt.parenL);
-  while (this.type === tt.name) {
+  while (this.state.type === tt.name) {
     node.params.push(this.flowParseFunctionTypeParam());
-    if (this.type !== tt.parenR) {
+    if (this.state.type !== tt.parenR) {
       this.expect(tt.comma);
     }
   }
@@ -266,25 +266,25 @@ pp.flowParseObjectType = function (allowStatic) {
 
   this.expect(tt.braceL);
 
-  while (this.type !== tt.braceR) {
-    var startPos = this.start, startLoc = this.startLoc;
+  while (this.state.type !== tt.braceR) {
+    var startPos = this.state.start, startLoc = this.state.startLoc;
     node = this.startNode();
     if (allowStatic && this.isContextual("static")) {
       this.next();
       isStatic = true;
     }
 
-    if (this.type === tt.bracketL) {
+    if (this.state.type === tt.bracketL) {
       nodeStart.indexers.push(this.flowParseObjectTypeIndexer(node, isStatic));
-    } else if (this.type === tt.parenL || this.isRelational("<")) {
+    } else if (this.state.type === tt.parenL || this.isRelational("<")) {
       nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, allowStatic));
     } else {
-      if (isStatic && this.type === tt.colon) {
+      if (isStatic && this.state.type === tt.colon) {
         propertyKey = this.parseIdent();
       } else {
         propertyKey = this.flowParseObjectPropertyKey();
       }
-      if (this.isRelational("<") || this.type === tt.parenL) {
+      if (this.isRelational("<") || this.state.type === tt.parenL) {
         // This is a method property
         nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
       } else {
@@ -307,7 +307,7 @@ pp.flowParseObjectType = function (allowStatic) {
 };
 
 pp.flowObjectTypeSemicolon = function () {
-  if (!this.eat(tt.semi) && !this.eat(tt.comma) && this.type !== tt.braceR) {
+  if (!this.eat(tt.semi) && !this.eat(tt.comma) && this.state.type !== tt.braceR) {
     this.unexpected();
   }
 };
@@ -344,9 +344,9 @@ pp.flowParseTupleType = function () {
   node.types = [];
   this.expect(tt.bracketL);
   // We allow trailing commas
-  while (this.pos < this.input.length && this.type !== tt.bracketR) {
+  while (this.state.pos < this.input.length && this.state.type !== tt.bracketR) {
     node.types.push(this.flowParseType());
-    if (this.type === tt.bracketR) break;
+    if (this.state.type === tt.bracketR) break;
     this.expect(tt.comma);
   }
   this.expect(tt.bracketR);
@@ -367,9 +367,9 @@ pp.flowParseFunctionTypeParam = function () {
 
 pp.flowParseFunctionTypeParams = function () {
   var ret = { params: [], rest: null };
-  while (this.type === tt.name) {
+  while (this.state.type === tt.name) {
     ret.params.push(this.flowParseFunctionTypeParam());
-    if (this.type !== tt.parenR) {
+    if (this.state.type !== tt.parenR) {
       this.expect(tt.comma);
     }
   }
@@ -409,13 +409,13 @@ pp.flowIdentToTypeAnnotation = function (startPos, startLoc, node, id) {
 // primary types are kind of like primary expressions...they're the
 // primitives with which other types are constructed.
 pp.flowParsePrimaryType = function () {
-  var startPos = this.start, startLoc = this.startLoc;
+  var startPos = this.state.start, startLoc = this.state.startLoc;
   var node = this.startNode();
   var tmp;
   var type;
   var isGroupedType = false;
 
-  switch (this.type) {
+  switch (this.state.type) {
     case tt.name:
       return this.flowIdentToTypeAnnotation(startPos, startLoc, node, this.parseIdent());
 
@@ -426,7 +426,7 @@ pp.flowParsePrimaryType = function () {
       return this.flowParseTupleType();
 
     case tt.relational:
-      if (this.value === "<") {
+      if (this.state.value === "<") {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
         this.expect(tt.parenL);
         tmp = this.flowParseFunctionTypeParams();
@@ -445,8 +445,8 @@ pp.flowParsePrimaryType = function () {
       this.next();
 
       // Check to see if this is actually a grouped type
-      if (this.type !== tt.parenR && this.type !== tt.ellipsis) {
-        if (this.type === tt.name) {
+      if (this.state.type !== tt.parenR && this.state.type !== tt.ellipsis) {
+        if (this.state.type === tt.name) {
           var token = this.lookahead().type;
           isGroupedType = token !== tt.question && token !== tt.colon;
         } else {
@@ -488,19 +488,19 @@ pp.flowParsePrimaryType = function () {
       return this.finishNode(node, "FunctionTypeAnnotation");
 
     case tt.string:
-      node.rawValue = node.value = this.value;
-      node.raw = this.input.slice(this.start, this.end);
+      node.rawValue = node.value = this.state.value;
+      node.raw = this.input.slice(this.state.start, this.state.end);
       this.next();
       return this.finishNode(node, "StringLiteralTypeAnnotation");
 
     case tt.num:
-      node.rawValue = node.value = this.value;
-      node.raw = this.input.slice(this.start, this.end);
+      node.rawValue = node.value = this.state.value;
+      node.raw = this.input.slice(this.state.start, this.state.end);
       this.next();
       return this.finishNode(node, "NumberLiteralTypeAnnotation");
 
     default:
-      if (this.type.keyword === "typeof") {
+      if (this.state.type.keyword === "typeof") {
         return this.flowParseTypeofType();
       }
   }
@@ -511,7 +511,7 @@ pp.flowParsePrimaryType = function () {
 pp.flowParsePostfixType = function () {
   var node = this.startNode();
   var type = node.elementType = this.flowParsePrimaryType();
-  if (this.type === tt.bracketL) {
+  if (this.state.type === tt.bracketL) {
     this.expect(tt.bracketL);
     this.expect(tt.bracketR);
     return this.finishNode(node, "ArrayTypeAnnotation");
@@ -573,7 +573,7 @@ pp.flowParseTypeAnnotatableIdentifier = function (requireTypeAnnotation, canBeOp
     isOptionalParam = true;
   }
 
-  if (requireTypeAnnotation || this.type === tt.colon) {
+  if (requireTypeAnnotation || this.state.type === tt.colon) {
     ident.typeAnnotation = this.flowParseTypeAnnotation();
     this.finishNode(ident, ident.type);
   }
@@ -590,7 +590,7 @@ export default function (instance) {
   // function name(): string {}
   instance.extend("parseFunctionBody", function (inner) {
     return function (node, allowExpression) {
-      if (this.type === tt.colon && !allowExpression) {
+      if (this.state.type === tt.colon && !allowExpression) {
         // if allowExpression is true then we're parsing an arrow function and if
         // there's a return type then it's been handled elsewhere
         node.returnType = this.flowParseTypeAnnotation();
@@ -603,7 +603,7 @@ export default function (instance) {
   instance.extend("parseStatement", function (inner) {
     return function (declaration, topLevel) {
       // strict mode handling of `interface` since it's a reserved word
-      if (this.strict && this.type === tt.name && this.value === "interface") {
+      if (this.strict && this.state.type === tt.name && this.state.value === "interface") {
         var node = this.startNode();
         this.next();
         return this.flowParseInterface(node);
@@ -617,10 +617,10 @@ export default function (instance) {
     return function (node, expr) {
       if (expr.type === "Identifier") {
         if (expr.name === "declare") {
-          if (this.type === tt._class || this.type === tt.name || this.type === tt._function || this.type === tt._var) {
+          if (this.state.type === tt._class || this.state.type === tt.name || this.state.type === tt._function || this.state.type === tt._var) {
             return this.flowParseDeclare(node);
           }
-        } else if (this.type === tt.name) {
+        } else if (this.state.type === tt.name) {
           if (expr.name === "interface") {
             return this.flowParseInterface(node);
           } else if (expr.name === "type") {
@@ -641,12 +641,12 @@ export default function (instance) {
 
   instance.extend("parseParenItem", function () {
     return function (node, startLoc, startPos, forceArrow?) {
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         var typeCastNode = this.startNodeAt(startLoc, startPos);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
 
-        if (forceArrow && this.type !== tt.arrow) {
+        if (forceArrow && this.state.type !== tt.arrow) {
           this.unexpected();
         }
 
@@ -735,7 +735,7 @@ export default function (instance) {
     return function (allowEmpty, refShorthandDefaultPos) {
       var container = this.startNode();
       var node = inner.call(this, allowEmpty, refShorthandDefaultPos);
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         container._exprListItem = true;
         container.expression = node;
         container.typeAnnotation = this.flowParseTypeAnnotation();
@@ -748,7 +748,7 @@ export default function (instance) {
 
   instance.extend("parseClassProperty", function (inner) {
     return function (node) {
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         node.typeAnnotation = this.flowParseTypeAnnotation();
       }
       return inner.call(this, node);
@@ -757,7 +757,7 @@ export default function (instance) {
 
   instance.extend("isClassProperty", function (inner) {
     return function () {
-      return this.type === tt.colon || inner.call(this);
+      return this.state.type === tt.colon || inner.call(this);
     };
   });
 
@@ -801,7 +801,7 @@ export default function (instance) {
       var typeParameters;
       if (this.isRelational("<")) {
         typeParameters = this.flowParseTypeParameterDeclaration();
-        if (this.type !== tt.parenL) this.unexpected();
+        if (this.state.type !== tt.parenL) this.unexpected();
       }
       inner.apply(this, arguments);
       prop.value.typeParameters = typeParameters;
@@ -813,7 +813,7 @@ export default function (instance) {
       if (this.eat(tt.question)) {
         param.optional = true;
       }
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
       }
       this.finishNode(param, param.type);
@@ -825,7 +825,7 @@ export default function (instance) {
     return function (node) {
       node.importKind = "value";
 
-      var kind = (this.type === tt._typeof ? "typeof" : (this.isContextual("type") ? "type" : null));
+      var kind = (this.state.type === tt._typeof ? "typeof" : (this.isContextual("type") ? "type" : null));
       if (kind) {
         var lh = this.lookahead();
         if ((lh.type === tt.name && lh.value !== "from") || lh.type === tt.braceL || lh.type === tt.star) {
@@ -852,7 +852,7 @@ export default function (instance) {
   instance.extend("parseVarHead", function (inner) {
     return function (decl) {
       inner.call(this, decl);
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.finishNode(decl.id, decl.id.type);
       }
@@ -862,7 +862,7 @@ export default function (instance) {
   // var foo = (async (): number => {});
   instance.extend("parseAsyncArrowFromCallExpression", function (inner) {
     return function (node, call) {
-      if (this.type === tt.colon) {
+      if (this.state.type === tt.colon) {
         node.returnType = this.flowParseTypeAnnotation();
       }
 
@@ -872,8 +872,8 @@ export default function (instance) {
 
   instance.extend("parseParenAndDistinguishExpression", function (inner) {
     return function (startPos, startLoc, canBeArrow, isAsync) {
-      startPos = startPos || this.start;
-      startLoc = startLoc || this.startLoc;
+      startPos = startPos || this.state.start;
+      startLoc = startLoc || this.state.startLoc;
 
       if (this.lookahead().type === tt.parenR) {
         // var foo = (): number => {};
@@ -881,21 +881,21 @@ export default function (instance) {
         this.expect(tt.parenR);
 
         let node = this.startNodeAt(startPos, startLoc);
-        if (this.type === tt.colon) node.returnType = this.flowParseTypeAnnotation();
+        if (this.state.type === tt.colon) node.returnType = this.flowParseTypeAnnotation();
         this.expect(tt.arrow);
         return this.parseArrowExpression(node, [], isAsync);
       } else {
         // var foo = (foo): number => {};
         let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
 
-        var state = this.getState();
+        var state = this.state.clone();
 
-        if (this.type === tt.colon) {
+        if (this.state.type === tt.colon) {
           try {
             return this.parseParenItem(node, startPos, startLoc, true);
           } catch (err) {
             if (err instanceof SyntaxError) {
-              this.setState(state);
+              this.state = state;
               return node;
             } else {
               throw err;

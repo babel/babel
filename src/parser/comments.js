@@ -22,7 +22,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Parser } from "./state";
+import Parser from "./index";
 
 function last(stack) {
   return stack[stack.length - 1];
@@ -31,25 +31,25 @@ function last(stack) {
 const pp = Parser.prototype;
 
 pp.addComment = function (comment) {
-  this.trailingComments.push(comment);
-  this.leadingComments.push(comment);
+  this.state.trailingComments.push(comment);
+  this.state.leadingComments.push(comment);
 };
 
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
 
-  var stack = this.bottomRightStack;
+  var stack = this.state.bottomRightStack;
 
   var lastChild, trailingComments, i;
 
-  if (this.trailingComments.length > 0) {
+  if (this.state.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
     // current node, then we're good - all comments in the array will
     // come after the node and so it's safe to add then as official
     // trailingComments.
-    if (this.trailingComments[0].start >= node.end) {
-      trailingComments = this.trailingComments;
-      this.trailingComments = [];
+    if (this.state.trailingComments[0].start >= node.end) {
+      trailingComments = this.state.trailingComments;
+      this.state.trailingComments = [];
     } else {
       // Otherwise, if the first comment doesn't come after the
       // current node, that means we have a mix of leading and trailing
@@ -57,7 +57,7 @@ pp.processComment = function (node) {
       // same items as trailingComments. Reset trailingComments to
       // zero items and we'll handle this by evaluating leadingComments
       // later.
-      this.trailingComments.length = 0;
+      this.state.trailingComments.length = 0;
     }
   } else {
     var lastInStack = last(stack);
@@ -89,10 +89,10 @@ pp.processComment = function (node) {
         }
       }
     }
-  } else if (this.leadingComments.length > 0) {
-    if (last(this.leadingComments).end <= node.start) {
-      node.leadingComments = this.leadingComments;
-      this.leadingComments = [];
+  } else if (this.state.leadingComments.length > 0) {
+    if (last(this.state.leadingComments).end <= node.start) {
+      node.leadingComments = this.state.leadingComments;
+      this.state.leadingComments = [];
     } else {
       // https://github.com/eslint/espree/issues/2
       //
@@ -105,8 +105,8 @@ pp.processComment = function (node) {
       // This loop figures out the stopping point between the actual
       // leading and trailing comments by finding the location of the
       // first comment that comes after the given node.
-      for (i = 0; i < this.leadingComments.length; i++) {
-        if (this.leadingComments[i].end > node.start) {
+      for (i = 0; i < this.state.leadingComments.length; i++) {
+        if (this.state.leadingComments[i].end > node.start) {
           break;
         }
       }
@@ -115,14 +115,14 @@ pp.processComment = function (node) {
       // that comes after the node. Keep in mind that this could
       // result in an empty array, and if so, the array must be
       // deleted.
-      node.leadingComments = this.leadingComments.slice(0, i);
+      node.leadingComments = this.state.leadingComments.slice(0, i);
       if (node.leadingComments.length === 0) {
         node.leadingComments = null;
       }
 
       // Similarly, trailing comments are attached later. The variable
       // must be reset to null if there are no trailing comments.
-      trailingComments = this.leadingComments.slice(i);
+      trailingComments = this.state.leadingComments.slice(i);
       if (trailingComments.length === 0) {
         trailingComments = null;
       }

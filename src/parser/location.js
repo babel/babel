@@ -1,5 +1,5 @@
-import {Position, getLineInfo} from "./locutil";
-import { Parser } from "./state";
+import { getLineInfo } from "../util/location";
+import Parser from "./index";
 
 const pp = Parser.prototype;
 
@@ -15,10 +15,5 @@ pp.raise = function (pos, message) {
   let err = new SyntaxError(message);
   err.pos = pos;
   err.loc = loc;
-  err.raisedAt = this.pos;
   throw err;
-};
-
-pp.curPosition = function () {
-  return new Position(this.curLine, this.pos - this.lineStart);
 };

@@ -1,4 +1,4 @@
-import { lineBreakG } from "./util/whitespace";
+import { lineBreakG } from "./whitespace";
 
 // These are used when `options.locations` is on, for the
 // `startLoc` and `endLoc` properties.

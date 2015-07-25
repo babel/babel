@@ -1,5 +1,5 @@
-import { Parser } from "./state";
-import { SourceLocation } from "./locutil";
+import Parser from "./index";
+import { SourceLocation } from "../util/location";
 
 // Start an AST node, attaching a start offset.
 
@@ -24,7 +24,7 @@ export class Node {
 }
 
 pp.startNode = function () {
-  return new Node(this, this.start, this.startLoc);
+  return new Node(this, this.state.start, this.state.startLoc);
 };
 
 pp.startNodeAt = function (pos, loc) {
@@ -42,7 +42,7 @@ function finishNodeAt(node, type, pos, loc) {
 // Finish an AST node, adding `type` and `end` properties.
 
 pp.finishNode = function (node, type) {
-  return finishNodeAt.call(this, node, type, this.lastTokEnd, this.lastTokEndLoc);
+  return finishNodeAt.call(this, node, type, this.state.lastTokEnd, this.state.lastTokEndLoc);
 };
 
 // Finish node at given position

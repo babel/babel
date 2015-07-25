@@ -1,20 +1,21 @@
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";
-import { SourceLocation } from "../locutil";
+import { types as ct } from "./context";
+import { SourceLocation } from "../util/location";
 import { lineBreak, lineBreakG, isNewLine, nonASCIIwhitespace } from "../util/whitespace";
+import State from "./state";
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
 // used for the onToken callback and the external tokenizer.
 
 export class Token {
-  constructor(p) {
-    this.type = p.type;
-    this.value = p.value;
-    this.start = p.start;
-    this.end = p.end;
-
-    this.loc = new SourceLocation(p.startLoc, p.endLoc);
+  constructor(state) {
+    this.type = state.type;
+    this.value = state.value;
+    this.start = state.start;
+    this.end = state.end;
+    this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 }
 
@@ -53,50 +54,34 @@ function codePointToString(code) {
 var containsEsc;
 
 export default class Tokenizer {
-  constructor() {
-    // The current position of the tokenizer in the input.
-    this.pos = this.lineStart = 0;
-    this.curLine = 1;
-
-    // Properties of the current token:
-    // Its type
-    this.type = tt.eof;
-    // For tokens that include more information than their type, the value
-    this.value = null;
-    // Its start and end offset
-    this.start = this.end = this.pos;
-    // And, if locations are used, the {line, column} object
-    // corresponding to those offsets
-    this.startLoc = this.endLoc = this.curPosition();
-
-    // Position information for the previous token
-    this.lastTokEndLoc = this.lastTokStartLoc = null;
-    this.lastTokStart = this.lastTokEnd = this.pos;
-
-    // The context stack is used to superficially track syntactic
-    // context to predict whether a regular expression is allowed in a
-    // given position.
-    this.context = this.initialContext();
-    this.exprAllowed = true;
+  constructor(input) {
+    this.state = new State;
+    this.state.init(input);
   }
 
   // Move to the next token
 
   next() {
-    if (!this.isLookahead) {
-      this.tokens.push(new Token(this));
-    }
+    this.state.tokens.push(new Token(this.state));
 
-    this.lastTokEnd = this.end;
-    this.lastTokStart = this.start;
-    this.lastTokEndLoc = this.endLoc;
-    this.lastTokStartLoc = this.startLoc;
+    this.state.lastTokEnd = this.state.end;
+    this.state.lastTokStart = this.state.start;
+    this.state.lastTokEndLoc = this.state.endLoc;
+    this.state.lastTokStartLoc = this.state.startLoc;
     this.nextToken();
-  };
+  }
+
+  lookahead() {
+    var old = this.state.clone();
+    this.next();
+    var curr = this.state.clone();
+    this.state = old;
+    return curr;
+  }
 
   getToken() {
     this.next();
-    return new Token(this);
+    return new Token(this.state);
   }
 
   // Toggle strict mode. Re-reads the next number or string to please
@@ -104,17 +89,17 @@ export default class Tokenizer {
 
   setStrict(strict) {
     this.strict = strict;
-    if (this.type !== tt.num && this.type !== tt.string) return;
-    this.pos = this.start;
-    while (this.pos < this.lineStart) {
-      this.lineStart = this.input.lastIndexOf("\n", this.lineStart - 2) + 1;
-      --this.curLine;
+    if (this.state.type !== tt.num && this.state.type !== tt.string) return;
+    this.state.pos = this.state.start;
+    while (this.state.pos < this.state.lineStart) {
+      this.state.lineStart = this.input.lastIndexOf("\n", this.state.lineStart - 2) + 1;
+      --this.state.curLine;
     }
     this.nextToken();
   }
 
   curContext() {
-    return this.context[this.context.length - 1];
+    return this.state.context[this.state.context.length - 1];
   }
 
   // Read a single token, updating the parser object's token-related
@@ -124,9 +109,9 @@ export default class Tokenizer {
     let curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
-    this.start = this.pos;
-    this.startLoc = this.curPosition();
-    if (this.pos >= this.input.length) return this.finishToken(tt.eof);
+    this.state.start = this.state.pos;
+    this.state.startLoc = this.state.curPosition();
+    if (this.state.pos >= this.input.length) return this.finishToken(tt.eof);
 
     if (curContext.override) {
       return curContext.override(this);
@@ -145,10 +130,10 @@ export default class Tokenizer {
   }
 
   fullCharCodeAtPos() {
-    let code = this.input.charCodeAt(this.pos);
+    let code = this.input.charCodeAt(this.state.pos);
     if (code <= 0xd7ff || code >= 0xe000) return code;
 
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
     return (code << 10) + next - 0x35fdc00;
   }
 
@@ -162,63 +147,63 @@ export default class Tokenizer {
       range: [start, end]
     };
 
-    this.tokens.push(comment);
-    this.comments.push(comment);
+    this.state.tokens.push(comment);
+    this.state.comments.push(comment);
     this.addComment(comment);
   }
 
   skipBlockComment() {
-    let startLoc = this.curPosition();
-    let start = this.pos, end = this.input.indexOf("*/", this.pos += 2);
-    if (end === -1) this.raise(this.pos - 2, "Unterminated comment");
+    let startLoc = this.state.curPosition();
+    let start = this.state.pos, end = this.input.indexOf("*/", this.state.pos += 2);
+    if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
 
-    this.pos = end + 2;
+    this.state.pos = end + 2;
     lineBreakG.lastIndex = start;
     let match;
-    while ((match = lineBreakG.exec(this.input)) && match.index < this.pos) {
-      ++this.curLine;
-      this.lineStart = match.index + match[0].length;
+    while ((match = lineBreakG.exec(this.input)) && match.index < this.state.pos) {
+      ++this.state.curLine;
+      this.state.lineStart = match.index + match[0].length;
     }
 
-    this.pushComment(true, this.input.slice(start + 2, end), start, this.pos, startLoc, this.curPosition());
+    this.pushComment(true, this.input.slice(start + 2, end), start, this.state.pos, startLoc, this.state.curPosition());
   }
 
   skipLineComment(startSkip) {
-    let start = this.pos;
-    let startLoc = this.curPosition();
-    let ch = this.input.charCodeAt(this.pos += startSkip);
-    while (this.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
-      ++this.pos;
-      ch = this.input.charCodeAt(this.pos);
+    let start = this.state.pos;
+    let startLoc = this.state.curPosition();
+    let ch = this.input.charCodeAt(this.state.pos += startSkip);
+    while (this.state.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
+      ++this.state.pos;
+      ch = this.input.charCodeAt(this.state.pos);
     }
 
-    this.pushComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos, startLoc, this.curPosition());
+    this.pushComment(false, this.input.slice(start + startSkip, this.state.pos), start, this.state.pos, startLoc, this.state.curPosition());
   }
 
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
   skipSpace() {
-    loop: while (this.pos < this.input.length) {
-      let ch = this.input.charCodeAt(this.pos);
+    loop: while (this.state.pos < this.input.length) {
+      let ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
         case 32: case 160: // ' '
-          ++this.pos;
+          ++this.state.pos;
           break;
 
         case 13:
-          if (this.input.charCodeAt(this.pos + 1) === 10) {
-            ++this.pos;
+          if (this.input.charCodeAt(this.state.pos + 1) === 10) {
+            ++this.state.pos;
           }
 
         case 10: case 8232: case 8233:
-          ++this.pos;
-          ++this.curLine;
-          this.lineStart = this.pos;
+          ++this.state.pos;
+          ++this.state.curLine;
+          this.state.lineStart = this.state.pos;
           break;
 
         case 47: // '/'
-          switch (this.input.charCodeAt(this.pos + 1)) {
+          switch (this.input.charCodeAt(this.state.pos + 1)) {
             case 42: // '*'
               this.skipBlockComment();
               break;
@@ -234,7 +219,7 @@ export default class Tokenizer {
 
         default:
           if (ch > 8 && ch < 14 || ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
-            ++this.pos;
+            ++this.state.pos;
           } else {
             break loop;
           }
@@ -248,11 +233,11 @@ export default class Tokenizer {
   // right position.
 
   finishToken(type, val) {
-    this.end = this.pos;
-    this.endLoc = this.curPosition();
-    let prevType = this.type;
-    this.type = type;
-    this.value = val;
+    this.state.end = this.state.pos;
+    this.state.endLoc = this.state.curPosition();
+    let prevType = this.state.type;
+    this.state.type = type;
+    this.state.value = val;
 
     this.updateContext(prevType);
   }
@@ -267,23 +252,23 @@ export default class Tokenizer {
   // All in the name of speed.
   //
   readToken_dot() {
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
     if (next >= 48 && next <= 57) return this.readNumber(true);
 
-    let next2 = this.input.charCodeAt(this.pos + 2);
+    let next2 = this.input.charCodeAt(this.state.pos + 2);
     if (next === 46 && next2 === 46) { // 46 = dot '.'
-      this.pos += 3;
+      this.state.pos += 3;
       return this.finishToken(tt.ellipsis);
     } else {
-      ++this.pos;
+      ++this.state.pos;
       return this.finishToken(tt.dot);
     }
   }
 
   readToken_slash() { // '/'
-    let next = this.input.charCodeAt(this.pos + 1);
-    if (this.exprAllowed) {
-      ++this.pos;
+    let next = this.input.charCodeAt(this.state.pos + 1);
+    if (this.state.exprAllowed) {
+      ++this.state.pos;
       return this.readRegexp();
     }
     if (next === 61) return this.finishOp(tt.assign, 2);
@@ -293,11 +278,11 @@ export default class Tokenizer {
   readToken_mult_modulo(code) { // '%*'
     var type = code === 42 ? tt.star : tt.modulo;
     var width = 1;
-    var next = this.input.charCodeAt(this.pos + 1);
+    var next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === 42 && this.options.features["es7.exponentiationOperator"]) { // '*'
       width++;
-      next = this.input.charCodeAt(this.pos + 2);
+      next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
     }
 
@@ -310,14 +295,14 @@ export default class Tokenizer {
   }
 
   readToken_pipe_amp(code) { // '|&'
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
     if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
     if (next === 61) return this.finishOp(tt.assign, 2);
     return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
   }
 
   readToken_caret() { // '^'
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
     if (next === 61) {
       return this.finishOp(tt.assign, 2);
     } else {
@@ -326,10 +311,10 @@ export default class Tokenizer {
   }
 
   readToken_plus_min(code) { // '+-'
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
-      if (next === 45 && this.input.charCodeAt(this.pos + 2) === 62 && lineBreak.test(this.input.slice(this.lastTokEnd, this.pos))) {
+      if (next === 45 && this.input.charCodeAt(this.state.pos + 2) === 62 && lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.pos))) {
         // A `-->` line comment
         this.skipLineComment(3);
         this.skipSpace();
@@ -346,16 +331,16 @@ export default class Tokenizer {
   }
 
   readToken_lt_gt(code) { // '<>'
-    let next = this.input.charCodeAt(this.pos + 1);
+    let next = this.input.charCodeAt(this.state.pos + 1);
     let size = 1;
 
     if (next === code) {
-      size = code === 62 && this.input.charCodeAt(this.pos + 2) === 62 ? 3 : 2;
-      if (this.input.charCodeAt(this.pos + size) === 61) return this.finishOp(tt.assign, size + 1);
+      size = code === 62 && this.input.charCodeAt(this.state.pos + 2) === 62 ? 3 : 2;
+      if (this.input.charCodeAt(this.state.pos + size) === 61) return this.finishOp(tt.assign, size + 1);
       return this.finishOp(tt.bitShift, size);
     }
 
-    if (next === 33 && code === 60 && this.input.charCodeAt(this.pos + 2) === 45 && this.input.charCodeAt(this.pos + 3) === 45) {
+    if (next === 33 && code === 60 && this.input.charCodeAt(this.state.pos + 2) === 45 && this.input.charCodeAt(this.state.pos + 3) === 45) {
       if (this.inModule) this.unexpected();
       // `<!--`, an XML-style comment that should be interpreted as a line comment
       this.skipLineComment(4);
@@ -364,17 +349,17 @@ export default class Tokenizer {
     }
 
     if (next === 61) {
-      size = this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2;
+      size = this.input.charCodeAt(this.state.pos + 2) === 61 ? 3 : 2;
     }
 
     return this.finishOp(tt.relational, size);
   }
 
   readToken_eq_excl(code) { // '=!'
-    let next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
+    let next = this.input.charCodeAt(this.state.pos + 1);
+    if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.state.pos + 2) === 61 ? 3 : 2);
     if (code === 61 && next === 62) { // '=>'
-      this.pos += 2;
+      this.state.pos += 2;
       return this.finishToken(tt.arrow);
     }
     return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
@@ -388,32 +373,32 @@ export default class Tokenizer {
         return this.readToken_dot();
 
       // Punctuation tokens.
-      case 40: ++this.pos; return this.finishToken(tt.parenL);
-      case 41: ++this.pos; return this.finishToken(tt.parenR);
-      case 59: ++this.pos; return this.finishToken(tt.semi);
-      case 44: ++this.pos; return this.finishToken(tt.comma);
-      case 91: ++this.pos; return this.finishToken(tt.bracketL);
-      case 93: ++this.pos; return this.finishToken(tt.bracketR);
-      case 123: ++this.pos; return this.finishToken(tt.braceL);
-      case 125: ++this.pos; return this.finishToken(tt.braceR);
+      case 40: ++this.state.pos; return this.finishToken(tt.parenL);
+      case 41: ++this.state.pos; return this.finishToken(tt.parenR);
+      case 59: ++this.state.pos; return this.finishToken(tt.semi);
+      case 44: ++this.state.pos; return this.finishToken(tt.comma);
+      case 91: ++this.state.pos; return this.finishToken(tt.bracketL);
+      case 93: ++this.state.pos; return this.finishToken(tt.bracketR);
+      case 123: ++this.state.pos; return this.finishToken(tt.braceL);
+      case 125: ++this.state.pos; return this.finishToken(tt.braceR);
 
       case 58:
-        if (this.options.features["es7.functionBind"] && this.input.charCodeAt(this.pos + 1) === 58) {
+        if (this.options.features["es7.functionBind"] && this.input.charCodeAt(this.state.pos + 1) === 58) {
           return this.finishOp(tt.doubleColon, 2);
         } else {
-          ++this.pos;
+          ++this.state.pos;
           return this.finishToken(tt.colon);
         }
 
-      case 63: ++this.pos; return this.finishToken(tt.question);
-      case 64: ++this.pos; return this.finishToken(tt.at);
+      case 63: ++this.state.pos; return this.finishToken(tt.question);
+      case 64: ++this.state.pos; return this.finishToken(tt.at);
 
       case 96: // '`'
-        ++this.pos;
+        ++this.state.pos;
         return this.finishToken(tt.backQuote);
 
       case 48: // '0'
-        let next = this.input.charCodeAt(this.pos + 1);
+        let next = this.input.charCodeAt(this.state.pos + 1);
         if (next === 120 || next === 88) return this.readRadixNumber(16); // '0x', '0X' - hex number
         if (next === 111 || next === 79) return this.readRadixNumber(8); // '0o', '0O' - octal number
         if (next === 98 || next === 66) return this.readRadixNumber(2); // '0b', '0B' - binary number
@@ -456,20 +441,20 @@ export default class Tokenizer {
         return this.finishOp(tt.prefix, 1);
     }
 
-    this.raise(this.pos, `Unexpected character '${codePointToString(code)}'`);
+    this.raise(this.state.pos, `Unexpected character '${codePointToString(code)}'`);
   }
 
   finishOp(type, size) {
-    let str = this.input.slice(this.pos, this.pos + size);
-    this.pos += size;
+    let str = this.input.slice(this.state.pos, this.state.pos + size);
+    this.state.pos += size;
     return this.finishToken(type, str);
   }
 
   readRegexp() {
-    let escaped, inClass, start = this.pos;
+    let escaped, inClass, start = this.state.pos;
     for (;;) {
-      if (this.pos >= this.input.length) this.raise(start, "Unterminated regular expression");
-      let ch = this.input.charAt(this.pos);
+      if (this.state.pos >= this.input.length) this.raise(start, "Unterminated regular expression");
+      let ch = this.input.charAt(this.state.pos);
       if (lineBreak.test(ch)) this.raise(start, "Unterminated regular expression");
       if (escaped) {
         escaped = false;
@@ -479,10 +464,10 @@ export default class Tokenizer {
         else if (ch === "/" && !inClass) break;
         escaped = ch === "\\";
       }
-      ++this.pos;
+      ++this.state.pos;
     }
-    let content = this.input.slice(start, this.pos);
-    ++this.pos;
+    let content = this.input.slice(start, this.state.pos);
+    ++this.state.pos;
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     let mods = this.readWord1();
@@ -525,51 +510,51 @@ export default class Tokenizer {
   // will return `null` unless the integer has exactly `len` digits.
 
   readInt(radix, len) {
-    let start = this.pos, total = 0;
+    let start = this.state.pos, total = 0;
     for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
-      let code = this.input.charCodeAt(this.pos), val;
+      let code = this.input.charCodeAt(this.state.pos), val;
       if (code >= 97) val = code - 97 + 10; // a
       else if (code >= 65) val = code - 65 + 10; // A
       else if (code >= 48 && code <= 57) val = code - 48; // 0-9
       else val = Infinity;
       if (val >= radix) break;
-      ++this.pos;
+      ++this.state.pos;
       total = total * radix + val;
     }
-    if (this.pos === start || len != null && this.pos - start !== len) return null;
+    if (this.state.pos === start || len != null && this.state.pos - start !== len) return null;
 
     return total;
   }
 
   readRadixNumber(radix) {
-    this.pos += 2; // 0x
+    this.state.pos += 2; // 0x
     let val = this.readInt(radix);
-    if (val == null) this.raise(this.start + 2, "Expected number in radix " + radix);
-    if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.pos, "Identifier directly after number");
+    if (val == null) this.raise(this.state.start + 2, "Expected number in radix " + radix);
+    if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
     return this.finishToken(tt.num, val);
   }
 
   // Read an integer, octal integer, or floating-point number.
 
   readNumber(startsWithDot) {
-    let start = this.pos, isFloat = false, octal = this.input.charCodeAt(this.pos) === 48;
+    let start = this.state.pos, isFloat = false, octal = this.input.charCodeAt(this.state.pos) === 48;
     if (!startsWithDot && this.readInt(10) === null) this.raise(start, "Invalid number");
-    let next = this.input.charCodeAt(this.pos);
+    let next = this.input.charCodeAt(this.state.pos);
     if (next === 46) { // '.'
-      ++this.pos;
+      ++this.state.pos;
       this.readInt(10);
       isFloat = true;
-      next = this.input.charCodeAt(this.pos);
+      next = this.input.charCodeAt(this.state.pos);
     }
     if (next === 69 || next === 101) { // 'eE'
-      next = this.input.charCodeAt(++this.pos);
-      if (next === 43 || next === 45) ++this.pos; // '+-'
+      next = this.input.charCodeAt(++this.state.pos);
+      if (next === 43 || next === 45) ++this.state.pos; // '+-'
       if (this.readInt(10) === null) this.raise(start, "Invalid number");
       isFloat = true;
     }
-    if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.pos, "Identifier directly after number");
+    if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
 
-    let str = this.input.slice(start, this.pos), val;
+    let str = this.input.slice(start, this.state.pos), val;
     if (isFloat) val = parseFloat(str);
     else if (!octal || str.length === 1) val = parseInt(str, 10);
     else if (/[89]/.test(str) || this.strict) this.raise(start, "Invalid number");
@@ -580,12 +565,12 @@ export default class Tokenizer {
   // Read a string value, interpreting backslash-escapes.
 
   readCodePoint() {
-    let ch = this.input.charCodeAt(this.pos), code;
+    let ch = this.input.charCodeAt(this.state.pos), code;
 
     if (ch === 123) {
-      let codePos = ++this.pos;
-      code = this.readHexChar(this.input.indexOf("}", this.pos) - this.pos);
-      ++this.pos;
+      let codePos = ++this.state.pos;
+      code = this.readHexChar(this.input.indexOf("}", this.state.pos) - this.state.pos);
+      ++this.state.pos;
       if (code > 0x10FFFF) this.raise(codePos, "Code point out of bounds");
     } else {
       code = this.readHexChar(4);
@@ -594,54 +579,54 @@ export default class Tokenizer {
   }
 
   readString(quote) {
-    let out = "", chunkStart = ++this.pos;
+    let out = "", chunkStart = ++this.state.pos;
     for (;;) {
-      if (this.pos >= this.input.length) this.raise(this.start, "Unterminated string constant");
-      let ch = this.input.charCodeAt(this.pos);
+      if (this.state.pos >= this.input.length) this.raise(this.state.start, "Unterminated string constant");
+      let ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
       if (ch === 92) { // '\'
-        out += this.input.slice(chunkStart, this.pos);
+        out += this.input.slice(chunkStart, this.state.pos);
         out += this.readEscapedChar(false);
-        chunkStart = this.pos;
+        chunkStart = this.state.pos;
       } else {
-        if (isNewLine(ch)) this.raise(this.start, "Unterminated string constant");
-        ++this.pos;
+        if (isNewLine(ch)) this.raise(this.state.start, "Unterminated string constant");
+        ++this.state.pos;
       }
     }
-    out += this.input.slice(chunkStart, this.pos++);
+    out += this.input.slice(chunkStart, this.state.pos++);
     return this.finishToken(tt.string, out);
   }
 
   // Reads template string tokens.
 
   readTmplToken() {
-    let out = "", chunkStart = this.pos;
+    let out = "", chunkStart = this.state.pos;
     for (;;) {
-      if (this.pos >= this.input.length) this.raise(this.start, "Unterminated template");
-      let ch = this.input.charCodeAt(this.pos);
-      if (ch === 96 || ch === 36 && this.input.charCodeAt(this.pos + 1) === 123) { // '`', '${'
-        if (this.pos === this.start && this.type === tt.template) {
+      if (this.state.pos >= this.input.length) this.raise(this.state.start, "Unterminated template");
+      let ch = this.input.charCodeAt(this.state.pos);
+      if (ch === 96 || ch === 36 && this.input.charCodeAt(this.state.pos + 1) === 123) { // '`', '${'
+        if (this.state.pos === this.state.start && this.state.type === tt.template) {
           if (ch === 36) {
-            this.pos += 2;
+            this.state.pos += 2;
             return this.finishToken(tt.dollarBraceL);
           } else {
-            ++this.pos;
+            ++this.state.pos;
             return this.finishToken(tt.backQuote);
           }
         }
-        out += this.input.slice(chunkStart, this.pos);
+        out += this.input.slice(chunkStart, this.state.pos);
         return this.finishToken(tt.template, out);
       }
       if (ch === 92) { // '\'
-        out += this.input.slice(chunkStart, this.pos);
+        out += this.input.slice(chunkStart, this.state.pos);
         out += this.readEscapedChar(true);
-        chunkStart = this.pos;
+        chunkStart = this.state.pos;
       } else if (isNewLine(ch)) {
-        out += this.input.slice(chunkStart, this.pos);
-        ++this.pos;
+        out += this.input.slice(chunkStart, this.state.pos);
+        ++this.state.pos;
         switch (ch) {
           case 13:
-            if (this.input.charCodeAt(this.pos) === 10) ++this.pos;
+            if (this.input.charCodeAt(this.state.pos) === 10) ++this.state.pos;
           case 10:
             out += "\n";
             break;
@@ -649,11 +634,11 @@ export default class Tokenizer {
             out += String.fromCharCode(ch);
             break;
         }
-        ++this.curLine;
-        this.lineStart = this.pos;
-        chunkStart = this.pos;
+        ++this.state.curLine;
+        this.state.lineStart = this.state.pos;
+        chunkStart = this.state.pos;
       } else {
-        ++this.pos;
+        ++this.state.pos;
       }
     }
   }
@@ -661,8 +646,8 @@ export default class Tokenizer {
   // Used to read escaped characters
 
   readEscapedChar(inTemplate) {
-    let ch = this.input.charCodeAt(++this.pos);
-    ++this.pos;
+    let ch = this.input.charCodeAt(++this.state.pos);
+    ++this.state.pos;
     switch (ch) {
       case 110: return "\n"; // 'n' -> '\n'
       case 114: return "\r"; // 'r' -> '\r'
@@ -672,23 +657,23 @@ export default class Tokenizer {
       case 98: return "\b"; // 'b' -> '\b'
       case 118: return "\u000b"; // 'v' -> '\u000b'
       case 102: return "\f"; // 'f' -> '\f'
-      case 13: if (this.input.charCodeAt(this.pos) === 10) ++this.pos; // '\r\n'
+      case 13: if (this.input.charCodeAt(this.state.pos) === 10) ++this.state.pos; // '\r\n'
       case 10: // ' \n'
-        this.lineStart = this.pos;
-        ++this.curLine;
+        this.state.lineStart = this.state.pos;
+        ++this.state.curLine;
         return "";
       default:
         if (ch >= 48 && ch <= 55) {
-          let octalStr = this.input.substr(this.pos - 1, 3).match(/^[0-7]+/)[0];
+          let octalStr = this.input.substr(this.state.pos - 1, 3).match(/^[0-7]+/)[0];
           let octal = parseInt(octalStr, 8);
           if (octal > 255) {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
           if (octal > 0 && (this.strict || inTemplate)) {
-            this.raise(this.pos - 2, "Octal literal in strict mode");
+            this.raise(this.state.pos - 2, "Octal literal in strict mode");
           }
-          this.pos += octalStr.length - 1;
+          this.state.pos += octalStr.length - 1;
           return String.fromCharCode(octal);
         }
         return String.fromCharCode(ch);
@@ -698,7 +683,7 @@ export default class Tokenizer {
   // Used to read character escape sequences ('\x', '\u', '\U').
 
   readHexChar(len) {
-    let codePos = this.pos;
+    let codePos = this.state.pos;
     let n = this.readInt(16, len);
     if (n === null) this.raise(codePos, "Bad character escape sequence");
     return n;
@@ -712,35 +697,35 @@ export default class Tokenizer {
 
   readWord1() {
     containsEsc = false;
-    let word = "", first = true, chunkStart = this.pos;
-    while (this.pos < this.input.length) {
+    let word = "", first = true, chunkStart = this.state.pos;
+    while (this.state.pos < this.input.length) {
       let ch = this.fullCharCodeAtPos();
       if (isIdentifierChar(ch, true)) {
-        this.pos += ch <= 0xffff ? 1 : 2;
+        this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (ch === 92) { // "\"
         containsEsc = true;
 
-        word += this.input.slice(chunkStart, this.pos);
-        let escStart = this.pos;
+        word += this.input.slice(chunkStart, this.state.pos);
+        let escStart = this.state.pos;
 
-        if (this.input.charCodeAt(++this.pos) !== 117) { // "u"
-          this.raise(this.pos, "Expecting Unicode escape sequence \\uXXXX");
+        if (this.input.charCodeAt(++this.state.pos) !== 117) { // "u"
+          this.raise(this.state.pos, "Expecting Unicode escape sequence \\uXXXX");
         }
 
-        ++this.pos;
+        ++this.state.pos;
         let esc = this.readCodePoint();
         if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
           this.raise(escStart, "Invalid Unicode escape");
         }
 
         word += codePointToString(esc);
-        chunkStart = this.pos;
+        chunkStart = this.state.pos;
       } else {
         break;
       }
       first = false;
     }
-    return word + this.input.slice(chunkStart, this.pos);
+    return word + this.input.slice(chunkStart, this.state.pos);
   }
 
   // Read an identifier or keyword token. Will check for reserved
@@ -752,5 +737,39 @@ export default class Tokenizer {
     if (!containsEsc && this.isKeyword(word))
       type = keywordTypes[word];
     return this.finishToken(type, word);
+  }
+
+  braceIsBlock(prevType) {
+    if (prevType === tt.colon) {
+      let parent = this.curContext();
+      if (parent === ct.b_stat || parent === ct.b_expr) {
+        return !parent.isExpr;
+      }
+    }
+
+    if (prevType === tt._return) {
+      return lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
+    }
+
+    if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof) {
+      return true;
+    }
+
+    if (prevType === tt.braceL) {
+      return this.curContext() === ct.b_stat;
+    }
+
+    return !this.state.exprAllowed;
+  }
+
+  updateContext(prevType) {
+    let update, type = this.state.type;
+    if (type.keyword && prevType === tt.dot) {
+      this.state.exprAllowed = false;
+    } else if (update = type.updateContext) {
+      update.call(this, prevType);
+    } else {
+      this.state.exprAllowed = type.beforeExpr;
+    }
   }
 }

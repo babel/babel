@@ -1,18 +1,18 @@
-import { Parser, plugins } from "./state";
-import "./parseutil";
-import "./statement";
-import "./lval";
-import "./expression";
-import "./node";
-import "./location";
-import "./lookahead";
+import Parser, { plugins } from "./parser";
+import "./parser/util";
+import "./parser/statement";
+import "./parser/lval";
+import "./parser/expression";
+import "./parser/node";
+import "./parser/location";
+import "./parser/comments";
+
 import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer";
 import "./tokenizer/context";
-import "./comments";
+
 import flowPlugin from "./plugins/flow";
 import jsxPlugin from "./plugins/jsx";
-
 plugins.flow = flowPlugin;
 plugins.jsx = jsxPlugin;
 

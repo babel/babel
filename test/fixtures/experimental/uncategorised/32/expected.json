@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 29,
+  "end": 30,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 29
+      "column": 30
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 29,
+    "end": 30,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 29
+        "column": 30
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 0,
-        "end": 29,
+        "end": 30,
         "loc": {
           "start": {
             "line": 1,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 1,
-            "column": 29
+            "column": 30
           }
         },
         "declaration": {
           "type": "FunctionDeclaration",
           "start": 7,
-          "end": 29,
+          "end": 30,
           "loc": {
             "start": {
               "line": 1,
@@ -53,7 +53,7 @@
             },
             "end": {
               "line": 1,
-              "column": 29
+              "column": 30
             }
           },
           "id": {
@@ -78,16 +78,16 @@
           "params": [],
           "body": {
             "type": "BlockStatement",
-            "start": 27,
-            "end": 29,
+            "start": 28,
+            "end": 30,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 27
+                "column": 28
               },
               "end": {
                 "line": 1,
-                "column": 29
+                "column": 30
               }
             },
             "body": []
