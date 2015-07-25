@@ -1,12 +1,7 @@
-require("./_helper").assertVendor("traceur");
-
 var fs = require("fs");
 var _  = require("lodash");
 
-require("./_transformation-helper")({
-  name: "traceur",
-  loc: __dirname + "/../../../vendor/traceur/test/feature",
-
+require("./_transformation-helper").run("traceur", {
   ignoreSuites: [
     // weird environmental issue make these hard to test
     "Modules",
@@ -69,6 +64,7 @@ require("./_transformation-helper")({
 
     // TODO: investigate
     "Classes/ExtendStrange",
+    "Math/fround.module",
 
     // these are the responsibility of core-js
     "Spread/Type",

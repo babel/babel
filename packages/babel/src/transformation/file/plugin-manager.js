@@ -2,6 +2,7 @@ import Transformer from "../transformer";
 import Plugin from "../plugin";
 import * as types from "../../types";
 import * as messages from "../../messages";
+import resolve from "try-resolve";
 import traverse from "../../traversal";
 import parse from "../../helpers/parse";
 
@@ -17,8 +18,6 @@ var context = {
   parse,
   traverse
 };
-
-import * as util from  "../../util";
 
 /**
  * [Please add a description.]
@@ -78,7 +77,7 @@ export default class PluginManager {
     var match = name.match(/^(.*?):(after|before)$/);
     if (match) [, name, position] = match;
 
-    var loc = util.resolveRelative(`babel-plugin-${name}`) || util.resolveRelative(name);
+    var loc = resolve.relative(`babel-plugin-${name}`) || resolve.relative(name);
     if (loc) {
       var plugin = require(loc);
       return {

@@ -1,6 +1,6 @@
 var generate = require("../lib/generation");
+var fixtures = require("mocha-fixtures");
 var assert   = require("assert");
-var helper   = require("./_helper");
 var parse    = require("../lib/helpers/parse");
 var chai     = require("chai");
 var t        = require("../lib/types");
@@ -19,7 +19,7 @@ suite("generation", function () {
   });
 });
 
-_.each(helper.get("generation"), function (testSuite) {
+_.each(require("./_transformation-helper").fixtures.generation, function (testSuite) {
   suite("generation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
       test(task.title, !task.disabled && function () {

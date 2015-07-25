@@ -11,6 +11,7 @@ import codeFrame from "../../helpers/code-frame";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "../../traversal";
+import resolve from "try-resolve";
 import Logger from "./logger";
 import Plugin from "../plugin";
 import parse from "../../helpers/parse";
@@ -486,7 +487,7 @@ export default class File {
     var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
 
     if (!ModuleFormatter) {
-      var loc = util.resolveRelative(type);
+      var loc = resolve.relative(type);
       if (loc) ModuleFormatter = require(loc);
     }
 

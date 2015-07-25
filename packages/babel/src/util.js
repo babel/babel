@@ -37,40 +37,6 @@ export function canCompile(filename: string, altExts?: Array<string>) {
 canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
 
 /**
- * Module resolver that swallows errors.
- */
-
-export function resolve(loc: string) {
-  try {
-    return require.resolve(loc);
-  } catch (err) {
-    return null;
-  }
-}
-
-var relativeMod;
-
-/**
- * Resolve a filename relative to the current working directory.
- */
-
-export function resolveRelative(loc: string) {
-  // we're in the browser, probably
-  if (typeof Module === "object") return null;
-
-  if (!relativeMod) {
-    relativeMod = new Module;
-    relativeMod.paths = Module._nodeModulePaths(process.cwd());
-  }
-
-  try {
-    return Module._resolveFilename(loc, relativeMod);
-  } catch (err) {
-    return null;
-  }
-}
-
-/**
  * Create an array from any value, splitting strings by ",".
  */
 

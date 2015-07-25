@@ -32,7 +32,8 @@ export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
 export const COMMENT_KEYS            = ["leadingComments", "trailingComments", "innerComments"];
-export const INHERIT_KEYS            = {
+
+export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
   force: ["_scopeInfo", "_paths", "range", "start", "loc", "end"]
 };

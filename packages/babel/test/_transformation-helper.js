@@ -1,14 +1,18 @@
-var transform           = require("../lib/transformation");
 var buildExernalHelpers = require("../lib/tools/build-external-helpers");
+var getFixtures         = require("mocha-fixtures");
+var transform           = require("../lib/transformation");
 var sourceMap           = require("source-map");
 var codeFrame           = require("../lib/helpers/code-frame");
 var Module              = require("module");
-var helper              = require("./_helper");
 var assert              = require("assert");
 var chai                = require("chai");
 var path                = require("path");
 var util                = require("../lib/util");
 var _                   = require("lodash");
+
+exports.fixtures = getFixtures(__dirname + "/fixtures", function () {
+  return require("../test-fixtures.json");
+});
 
 require("../lib/polyfill");
 
@@ -54,7 +58,8 @@ var run = function (task, done) {
   var getOpts = function (self) {
     return _.merge({
       suppressDeprecationMessages: true,
-      filename: self.loc
+      filename: self.loc,
+      sourceMap: !!(task.sourceMappings || test.sourceMap)
     }, opts);
   };
 
@@ -115,13 +120,14 @@ var run = function (task, done) {
   }
 };
 
-module.exports = function (suiteOpts, taskOpts, dynamicOpts) {
+exports.run = function (name, suiteOpts, taskOpts, dynamicOpts) {
+  suiteOpts = suiteOpts || {};
   taskOpts = taskOpts || {};
 
-  _.each(helper.get(suiteOpts.name, suiteOpts.loc), function (testSuite) {
+  _.each(exports.fixtures[name], function (testSuite) {
     if (_.contains(suiteOpts.ignoreSuites, testSuite.title)) return;
 
-    suite(suiteOpts.name + "/" + testSuite.title, function () {
+    suite(name + "/" + testSuite.title, function () {
       setup(function () {
         require("../register")(taskOpts);
       });

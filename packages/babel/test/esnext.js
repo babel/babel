@@ -1,3 +1,1 @@
-require("./_transformation-helper")({
-  name: "esnext"
-});
+require("./_transformation-helper").run("esnext");

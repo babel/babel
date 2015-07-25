@@ -25,6 +25,7 @@ clean: test-clean
 
 test-clean:
 	rm -rf packages/*/test/tmp
+	rm -rf packages/*/test-fixtures.json
 
 test: lint
 	./scripts/test.sh
@@ -32,6 +33,7 @@ test: lint
 
 test-browser:
 	./scripts/test-browser.sh
+	make test-clean
 
 test-cov: clean
 	BABEL_ENV=test; \
