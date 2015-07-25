@@ -10,10 +10,7 @@ export class Node {
     this.type = "";
     this.start = pos;
     this.end = 0;
-
-    if (parser) {
-      this.loc = new SourceLocation(loc);
-    }
+    this.loc = new SourceLocation(loc);
   }
 
   __clone() {

@@ -8,10 +8,6 @@ export class Position {
     this.line = line;
     this.column = col;
   }
-
-  offset(n) {
-    return new Position(this.line, this.column + n);
-  }
 }
 
 export class SourceLocation {

@@ -18,6 +18,12 @@ _.each(fixtures, function (suites, name) {
   });
 });
 
+function save(test, ast) {
+  delete ast.tokens;
+  if (!ast.comments.length) delete ast.comments;
+  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
+}
+
 function runTest(test) {
   var opts = test.options;
   opts.locations = true;
@@ -38,18 +44,21 @@ function runTest(test) {
     throw err;
   }
 
+  if (!test.expect.code) {
+    test.expect.loc += "on";
+    return save(test, ast);
+  }
+
   if (opts.throws) {
     throw new Error("Expected error message: " + opts.throws + ". But parsing succeeded.");
   } else {
     try {
       var mis = misMatch(JSON.parse(test.expect.code), ast);
     } catch (err) {
-      console.log(test.expect.code);
+      // save(test, ast);
       throw err;
     }
     if (mis) {
-      //delete ast.tokens;
-      //require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
       throw new Error(mis);
     }
   }

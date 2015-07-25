@@ -121,7 +121,6 @@ pp.jsxReadString = function(quote) {
 pp.jsxReadEntity = function() {
   var str = "", count = 0, entity;
   var ch = this.input[this.state.pos];
-  if (ch !== "&") this.raise(this.state.pos, "Entity must start with an ampersand");
 
   var startPos = ++this.state.pos;
   while (this.state.pos < this.input.length && count++ < 10) {
