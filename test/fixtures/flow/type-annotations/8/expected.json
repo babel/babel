@@ -12,10 +12,6 @@
       "column": 38
     }
   },
-  "range": [
-    0,
-    38
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 38
       }
     },
-    "range": [
-      0,
-      38
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 38
           }
         },
-        "range": [
-          0,
-          38
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
                 "column": 35
               }
             },
-            "range": [
-              13,
-              35
-            ],
             "name": "callback",
             "typeAnnotation": {
               "type": "TypeAnnotation",
@@ -111,10 +91,6 @@
                   "column": 35
                 }
               },
-              "range": [
-                21,
-                35
-              ],
               "typeAnnotation": {
                 "type": "FunctionTypeAnnotation",
                 "start": 23,
@@ -129,10 +105,6 @@
                     "column": 35
                   }
                 },
-                "range": [
-                  23,
-                  35
-                ],
                 "params": [],
                 "rest": null,
                 "returnType": {
@@ -148,11 +120,7 @@
                       "line": 1,
                       "column": 35
                     }
-                  },
-                  "range": [
-                    29,
-                    35
-                  ]
+                  }
                 },
                 "typeParameters": null
               }
@@ -173,13 +141,10 @@
               "column": 38
             }
           },
-          "range": [
-            36,
-            38
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

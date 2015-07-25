@@ -12,10 +12,6 @@
       "column": 24
     }
   },
-  "range": [
-    0,
-    24
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 24
       }
     },
-    "range": [
-      0,
-      24
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 24
           }
         },
-        "range": [
-          0,
-          24
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 24
             }
           },
-          "range": [
-            8,
-            24
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 22
                 }
               },
-              "range": [
-                10,
-                22
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  11,
-                  17
-                ],
                 "name": "static"
               },
               "static": false,
@@ -149,10 +121,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  17,
-                  22
-                ],
                 "id": null,
                 "generator": true,
                 "expression": false,
@@ -171,10 +139,6 @@
                       "column": 22
                     }
                   },
-                  "range": [
-                    20,
-                    22
-                  ],
                   "body": []
                 }
               }
@@ -183,5 +147,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

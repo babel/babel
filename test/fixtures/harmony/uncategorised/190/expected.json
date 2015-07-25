@@ -12,10 +12,6 @@
       "column": 24
     }
   },
-  "range": [
-    0,
-    24
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 24
       }
     },
-    "range": [
-      0,
-      24
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 24
           }
         },
-        "range": [
-          0,
-          24
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 24
               }
             },
-            "range": [
-              4,
-              24
-            ],
             "id": {
               "type": "ArrayPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 20
                 }
               },
-              "range": [
-                4,
-                20
-              ],
               "elements": [
                 {
                   "type": "ObjectPattern",
@@ -106,10 +86,6 @@
                       "column": 13
                     }
                   },
-                  "range": [
-                    5,
-                    13
-                  ],
                   "properties": [
                     {
                       "type": "Property",
@@ -125,10 +101,6 @@
                           "column": 8
                         }
                       },
-                      "range": [
-                        7,
-                        8
-                      ],
                       "method": false,
                       "shorthand": true,
                       "computed": false,
@@ -146,10 +118,6 @@
                             "column": 8
                           }
                         },
-                        "range": [
-                          7,
-                          8
-                        ],
                         "name": "a"
                       },
                       "kind": "init",
@@ -167,10 +135,6 @@
                             "column": 8
                           }
                         },
-                        "range": [
-                          7,
-                          8
-                        ],
                         "name": "a"
                       }
                     },
@@ -188,10 +152,6 @@
                           "column": 11
                         }
                       },
-                      "range": [
-                        10,
-                        11
-                      ],
                       "method": false,
                       "shorthand": true,
                       "computed": false,
@@ -209,10 +169,6 @@
                             "column": 11
                           }
                         },
-                        "range": [
-                          10,
-                          11
-                        ],
                         "name": "b"
                       },
                       "kind": "init",
@@ -230,10 +186,6 @@
                             "column": 11
                           }
                         },
-                        "range": [
-                          10,
-                          11
-                        ],
                         "name": "b"
                       }
                     }
@@ -253,10 +205,6 @@
                       "column": 19
                     }
                   },
-                  "range": [
-                    15,
-                    19
-                  ],
                   "argument": {
                     "type": "Identifier",
                     "start": 18,
@@ -271,10 +219,6 @@
                         "column": 19
                       }
                     },
-                    "range": [
-                      18,
-                      19
-                    ],
                     "name": "c"
                   }
                 }
@@ -294,10 +238,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                23,
-                24
-              ],
               "name": "d"
             }
           }
@@ -305,5 +245,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

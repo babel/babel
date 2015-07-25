@@ -12,10 +12,6 @@
       "column": 18
     }
   },
-  "range": [
-    0,
-    18
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 18
       }
     },
-    "range": [
-      0,
-      18
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 18
           }
         },
-        "range": [
-          0,
-          18
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 18
             }
           },
-          "range": [
-            0,
-            18
-          ],
           "operator": "=",
           "left": {
             "type": "ArrayPattern",
@@ -87,10 +71,6 @@
                 "column": 14
               }
             },
-            "range": [
-              0,
-              14
-            ],
             "elements": [
               {
                 "type": "Identifier",
@@ -106,10 +86,6 @@
                     "column": 2
                   }
                 },
-                "range": [
-                  1,
-                  2
-                ],
                 "name": "a"
               },
               {
@@ -126,10 +102,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  4,
-                  13
-                ],
                 "argument": {
                   "type": "ArrayPattern",
                   "start": 7,
@@ -144,10 +116,6 @@
                       "column": 13
                     }
                   },
-                  "range": [
-                    7,
-                    13
-                  ],
                   "elements": [
                     {
                       "type": "Identifier",
@@ -163,10 +131,6 @@
                           "column": 9
                         }
                       },
-                      "range": [
-                        8,
-                        9
-                      ],
                       "name": "b"
                     },
                     {
@@ -183,10 +147,6 @@
                           "column": 12
                         }
                       },
-                      "range": [
-                        11,
-                        12
-                      ],
                       "name": "c"
                     }
                   ]
@@ -208,14 +168,11 @@
                 "column": 18
               }
             },
-            "range": [
-              17,
-              18
-            ],
             "name": "d"
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

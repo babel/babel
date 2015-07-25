@@ -12,10 +12,6 @@
       "column": 37
     }
   },
-  "range": [
-    0,
-    37
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 37
       }
     },
-    "range": [
-      0,
-      37
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 37
           }
         },
-        "range": [
-          0,
-          37
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 36
               }
             },
-            "range": [
-              4,
-              36
-            ],
             "id": {
               "type": "ArrayPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 22
                 }
               },
-              "range": [
-                4,
-                22
-              ],
               "elements": [
                 {
                   "type": "Identifier",
@@ -106,10 +86,6 @@
                       "column": 6
                     }
                   },
-                  "range": [
-                    5,
-                    6
-                  ],
                   "name": "x"
                 }
               ],
@@ -127,10 +103,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  7,
-                  22
-                ],
                 "typeAnnotation": {
                   "type": "GenericTypeAnnotation",
                   "start": 9,
@@ -145,10 +117,6 @@
                       "column": 22
                     }
                   },
-                  "range": [
-                    9,
-                    22
-                  ],
                   "typeParameters": {
                     "type": "TypeParameterInstantiation",
                     "start": 14,
@@ -163,10 +131,6 @@
                         "column": 22
                       }
                     },
-                    "range": [
-                      14,
-                      22
-                    ],
                     "params": [
                       {
                         "type": "StringTypeAnnotation",
@@ -181,11 +145,7 @@
                             "line": 1,
                             "column": 21
                           }
-                        },
-                        "range": [
-                          15,
-                          21
-                        ]
+                        }
                       }
                     ]
                   },
@@ -203,10 +163,6 @@
                         "column": 14
                       }
                     },
-                    "range": [
-                      9,
-                      14
-                    ],
                     "name": "Array"
                   }
                 }
@@ -226,10 +182,6 @@
                   "column": 36
                 }
               },
-              "range": [
-                25,
-                36
-              ],
               "elements": [
                 {
                   "type": "Literal",
@@ -245,10 +197,6 @@
                       "column": 34
                     }
                   },
-                  "range": [
-                    27,
-                    34
-                  ],
                   "value": "hello",
                   "rawValue": "hello",
                   "raw": "\"hello\""
@@ -260,5 +208,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

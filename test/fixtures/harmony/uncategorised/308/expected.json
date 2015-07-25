@@ -12,10 +12,6 @@
       "column": 14
     }
   },
-  "range": [
-    0,
-    14
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 14
       }
     },
-    "range": [
-      0,
-      14
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 14
           }
         },
-        "range": [
-          0,
-          14
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 14
             }
           },
-          "range": [
-            0,
-            14
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -90,10 +74,6 @@
                   "column": 8
                 }
               },
-              "range": [
-                1,
-                8
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -109,10 +89,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    2,
-                    7
-                  ],
                   "method": false,
                   "shorthand": true,
                   "computed": false,
@@ -130,10 +106,6 @@
                         "column": 3
                       }
                     },
-                    "range": [
-                      2,
-                      3
-                    ],
                     "name": "x"
                   },
                   "kind": "init",
@@ -151,10 +123,6 @@
                         "column": 7
                       }
                     },
-                    "range": [
-                      2,
-                      7
-                    ],
                     "operator": "=",
                     "left": {
                       "type": "Identifier",
@@ -170,10 +138,6 @@
                           "column": 3
                         }
                       },
-                      "range": [
-                        2,
-                        3
-                      ],
                       "name": "x"
                     },
                     "right": {
@@ -190,10 +154,6 @@
                           "column": 7
                         }
                       },
-                      "range": [
-                        6,
-                        7
-                      ],
                       "value": 0,
                       "rawValue": 0,
                       "raw": "0"
@@ -217,14 +177,11 @@
                 "column": 14
               }
             },
-            "range": [
-              13,
-              14
-            ],
             "name": "x"
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

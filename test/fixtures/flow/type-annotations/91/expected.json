@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "specifiers": [
           {
             "type": "ImportSpecifier",
@@ -69,10 +57,6 @@
                 "column": 16
               }
             },
-            "range": [
-              13,
-              16
-            ],
             "imported": {
               "type": "Identifier",
               "start": 13,
@@ -87,10 +71,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                13,
-                16
-              ],
               "name": "foo"
             },
             "local": {
@@ -107,10 +87,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                13,
-                16
-              ],
               "name": "foo"
             }
           },
@@ -128,10 +104,6 @@
                 "column": 21
               }
             },
-            "range": [
-              18,
-              21
-            ],
             "imported": {
               "type": "Identifier",
               "start": 18,
@@ -146,10 +118,6 @@
                   "column": 21
                 }
               },
-              "range": [
-                18,
-                21
-              ],
               "name": "bar"
             },
             "local": {
@@ -166,10 +134,6 @@
                   "column": 21
                 }
               },
-              "range": [
-                18,
-                21
-              ],
               "name": "bar"
             }
           }
@@ -189,15 +153,12 @@
               "column": 33
             }
           },
-          "range": [
-            28,
-            33
-          ],
           "value": "baz",
           "rawValue": "baz",
           "raw": "\"baz\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

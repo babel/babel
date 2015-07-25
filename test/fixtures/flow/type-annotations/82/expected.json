@@ -12,10 +12,6 @@
       "column": 33
     }
   },
-  "range": [
-    0,
-    33
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 33
       }
     },
-    "range": [
-      0,
-      33
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 33
           }
         },
-        "range": [
-          0,
-          33
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 33
               }
             },
-            "range": [
-              4,
-              33
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 33
                 }
               },
-              "range": [
-                4,
-                33
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 33
                   }
                 },
-                "range": [
-                  5,
-                  33
-                ],
                 "typeAnnotation": {
                   "type": "GenericTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 33
                     }
                   },
-                  "range": [
-                    7,
-                    33
-                  ],
                   "typeParameters": {
                     "type": "TypeParameterInstantiation",
                     "start": 10,
@@ -142,10 +114,6 @@
                         "column": 33
                       }
                     },
-                    "range": [
-                      10,
-                      33
-                    ],
                     "params": [
                       {
                         "type": "StringTypeAnnotation",
@@ -160,11 +128,7 @@
                             "line": 1,
                             "column": 17
                           }
-                        },
-                        "range": [
-                          11,
-                          17
-                        ]
+                        }
                       },
                       {
                         "type": "GenericTypeAnnotation",
@@ -180,10 +144,6 @@
                             "column": 32
                           }
                         },
-                        "range": [
-                          19,
-                          32
-                        ],
                         "typeParameters": {
                           "type": "TypeParameterInstantiation",
                           "start": 24,
@@ -198,10 +158,6 @@
                               "column": 32
                             }
                           },
-                          "range": [
-                            24,
-                            32
-                          ],
                           "params": [
                             {
                               "type": "StringTypeAnnotation",
@@ -216,11 +172,7 @@
                                   "line": 1,
                                   "column": 31
                                 }
-                              },
-                              "range": [
-                                25,
-                                31
-                              ]
+                              }
                             }
                           ]
                         },
@@ -238,10 +190,6 @@
                               "column": 24
                             }
                           },
-                          "range": [
-                            19,
-                            24
-                          ],
                           "name": "Array"
                         }
                       }
@@ -261,10 +209,6 @@
                         "column": 10
                       }
                     },
-                    "range": [
-                      7,
-                      10
-                    ],
                     "name": "Map"
                   }
                 }
@@ -276,5 +220,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

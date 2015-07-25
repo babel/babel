@@ -12,10 +12,6 @@
       "column": 40
     }
   },
-  "range": [
-    0,
-    40
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 40
       }
     },
-    "range": [
-      0,
-      40
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 40
           }
         },
-        "range": [
-          0,
-          40
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 40
             }
           },
-          "range": [
-            0,
-            40
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 15
               }
             },
-            "range": [
-              0,
-              15
-            ],
             "attributes": [
               {
                 "type": "JSXAttribute",
@@ -105,10 +85,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  3,
-                  14
-                ],
                 "name": {
                   "type": "JSXNamespacedName",
                   "start": 3,
@@ -123,10 +99,6 @@
                       "column": 8
                     }
                   },
-                  "range": [
-                    3,
-                    8
-                  ],
                   "namespace": {
                     "type": "JSXIdentifier",
                     "start": 3,
@@ -141,10 +113,6 @@
                         "column": 4
                       }
                     },
-                    "range": [
-                      3,
-                      4
-                    ],
                     "name": "n"
                   },
                   "name": {
@@ -161,10 +129,6 @@
                         "column": 8
                       }
                     },
-                    "range": [
-                      5,
-                      8
-                    ],
                     "name": "foo"
                   }
                 },
@@ -182,10 +146,6 @@
                       "column": 14
                     }
                   },
-                  "range": [
-                    9,
-                    14
-                  ],
                   "value": "bar",
                   "rawValue": "bar",
                   "raw": "\"bar\""
@@ -206,10 +166,6 @@
                   "column": 2
                 }
               },
-              "range": [
-                1,
-                2
-              ],
               "name": "a"
             },
             "selfClosing": false
@@ -228,10 +184,6 @@
                 "column": 40
               }
             },
-            "range": [
-              36,
-              40
-            ],
             "name": {
               "type": "JSXIdentifier",
               "start": 38,
@@ -246,10 +198,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                38,
-                39
-              ],
               "name": "a"
             }
           },
@@ -268,10 +216,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                15,
-                16
-              ],
               "value": " ",
               "rawValue": " ",
               "raw": " "
@@ -290,10 +234,6 @@
                   "column": 23
                 }
               },
-              "range": [
-                16,
-                23
-              ],
               "expression": {
                 "type": "Identifier",
                 "start": 17,
@@ -308,10 +248,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  17,
-                  22
-                ],
                 "name": "value"
               }
             },
@@ -329,10 +265,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                23,
-                24
-              ],
               "value": " ",
               "rawValue": " ",
               "raw": " "
@@ -351,10 +283,6 @@
                   "column": 36
                 }
               },
-              "range": [
-                24,
-                36
-              ],
               "openingElement": {
                 "type": "JSXOpeningElement",
                 "start": 24,
@@ -369,10 +297,6 @@
                     "column": 27
                   }
                 },
-                "range": [
-                  24,
-                  27
-                ],
                 "attributes": [],
                 "name": {
                   "type": "JSXIdentifier",
@@ -388,10 +312,6 @@
                       "column": 26
                     }
                   },
-                  "range": [
-                    25,
-                    26
-                  ],
                   "name": "b"
                 },
                 "selfClosing": false
@@ -410,10 +330,6 @@
                     "column": 36
                   }
                 },
-                "range": [
-                  32,
-                  36
-                ],
                 "name": {
                   "type": "JSXIdentifier",
                   "start": 34,
@@ -428,10 +344,6 @@
                       "column": 35
                     }
                   },
-                  "range": [
-                    34,
-                    35
-                  ],
                   "name": "b"
                 }
               },
@@ -450,10 +362,6 @@
                       "column": 32
                     }
                   },
-                  "range": [
-                    27,
-                    32
-                  ],
                   "openingElement": {
                     "type": "JSXOpeningElement",
                     "start": 27,
@@ -468,10 +376,6 @@
                         "column": 32
                       }
                     },
-                    "range": [
-                      27,
-                      32
-                    ],
                     "attributes": [],
                     "name": {
                       "type": "JSXIdentifier",
@@ -487,10 +391,6 @@
                           "column": 29
                         }
                       },
-                      "range": [
-                        28,
-                        29
-                      ],
                       "name": "c"
                     },
                     "selfClosing": true
@@ -504,5 +404,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

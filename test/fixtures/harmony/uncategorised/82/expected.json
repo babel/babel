@@ -12,10 +12,6 @@
       "column": 23
     }
   },
-  "range": [
-    0,
-    23
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 23
       }
     },
-    "range": [
-      0,
-      23
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 23
           }
         },
-        "range": [
-          0,
-          23
-        ],
         "declaration": {
           "type": "ClassExpression",
           "start": 15,
@@ -68,10 +56,6 @@
               "column": 23
             }
           },
-          "range": [
-            15,
-            23
-          ],
           "id": null,
           "superClass": null,
           "body": {
@@ -88,14 +72,11 @@
                 "column": 23
               }
             },
-            "range": [
-              21,
-              23
-            ],
             "body": []
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

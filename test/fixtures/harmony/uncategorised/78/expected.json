@@ -12,10 +12,6 @@
       "column": 21
     }
   },
-  "range": [
-    0,
-    21
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 21
       }
     },
-    "range": [
-      0,
-      21
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 21
           }
         },
-        "range": [
-          0,
-          21
-        ],
         "declaration": {
           "type": "ClassDeclaration",
           "start": 7,
@@ -68,10 +56,6 @@
               "column": 21
             }
           },
-          "range": [
-            7,
-            21
-          ],
           "id": {
             "type": "Identifier",
             "start": 13,
@@ -86,10 +70,6 @@
                 "column": 18
               }
             },
-            "range": [
-              13,
-              18
-            ],
             "name": "Class"
           },
           "superClass": null,
@@ -107,10 +87,6 @@
                 "column": 21
               }
             },
-            "range": [
-              19,
-              21
-            ],
             "body": []
           }
         },
@@ -118,5 +94,6 @@
         "source": null
       }
     ]
-  }
+  },
+  "comments": []
 }

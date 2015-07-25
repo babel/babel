@@ -12,10 +12,6 @@
       "column": 35
     }
   },
-  "range": [
-    0,
-    35
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 35
       }
     },
-    "range": [
-      0,
-      35
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 35
           }
         },
-        "range": [
-          0,
-          35
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 35
               }
             },
-            "range": [
-              4,
-              35
-            ],
             "id": {
               "type": "ObjectPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                4,
-                29
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -106,10 +86,6 @@
                       "column": 28
                     }
                   },
-                  "range": [
-                    5,
-                    28
-                  ],
                   "method": false,
                   "shorthand": true,
                   "computed": false,
@@ -127,10 +103,6 @@
                         "column": 13
                       }
                     },
-                    "range": [
-                      5,
-                      13
-                    ],
                     "name": "propName"
                   },
                   "kind": "init",
@@ -148,10 +120,6 @@
                         "column": 28
                       }
                     },
-                    "range": [
-                      5,
-                      28
-                    ],
                     "operator": "=",
                     "left": {
                       "type": "Identifier",
@@ -167,10 +135,6 @@
                           "column": 13
                         }
                       },
-                      "range": [
-                        5,
-                        13
-                      ],
                       "name": "propName"
                     },
                     "right": {
@@ -187,10 +151,6 @@
                           "column": 28
                         }
                       },
-                      "range": [
-                        16,
-                        28
-                      ],
                       "name": "defaultValue"
                     }
                   }
@@ -211,10 +171,6 @@
                   "column": 35
                 }
               },
-              "range": [
-                32,
-                35
-              ],
               "name": "obj"
             }
           }
@@ -222,5 +178,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

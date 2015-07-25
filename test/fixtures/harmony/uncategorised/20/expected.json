@@ -12,10 +12,6 @@
       "column": 18
     }
   },
-  "range": [
-    0,
-    18
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 18
       }
     },
-    "range": [
-      0,
-      18
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 18
           }
         },
-        "range": [
-          0,
-          18
-        ],
         "expression": {
           "type": "TaggedTemplateExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 18
             }
           },
-          "range": [
-            0,
-            18
-          ],
           "tag": {
             "type": "Identifier",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 3
               }
             },
-            "range": [
-              0,
-              3
-            ],
             "name": "raw"
           },
           "quasi": {
@@ -106,10 +86,6 @@
                 "column": 18
               }
             },
-            "range": [
-              3,
-              18
-            ],
             "expressions": [
               {
                 "type": "Identifier",
@@ -125,10 +101,6 @@
                     "column": 16
                   }
                 },
-                "range": [
-                  12,
-                  16
-                ],
                 "name": "name"
               }
             ],
@@ -147,10 +119,6 @@
                     "column": 10
                   }
                 },
-                "range": [
-                  4,
-                  10
-                ],
                 "value": {
                   "raw": "hello ",
                   "cooked": "hello "
@@ -171,10 +139,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  17,
-                  17
-                ],
                 "value": {
                   "raw": "",
                   "cooked": ""
@@ -186,5 +150,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 13
     }
   },
-  "range": [
-    0,
-    13
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 13
       }
     },
-    "range": [
-      0,
-      13
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 13
           }
         },
-        "range": [
-          0,
-          13
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 13
             }
           },
-          "range": [
-            0,
-            13
-          ],
           "id": null,
           "generator": false,
           "expression": false,
@@ -90,10 +74,6 @@
                   "column": 6
                 }
               },
-              "range": [
-                1,
-                6
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -109,10 +89,6 @@
                       "column": 4
                     }
                   },
-                  "range": [
-                    3,
-                    4
-                  ],
                   "method": false,
                   "shorthand": true,
                   "computed": false,
@@ -130,10 +106,6 @@
                         "column": 4
                       }
                     },
-                    "range": [
-                      3,
-                      4
-                    ],
                     "name": "a"
                   },
                   "kind": "init",
@@ -151,10 +123,6 @@
                         "column": 4
                       }
                     },
-                    "range": [
-                      3,
-                      4
-                    ],
                     "name": "a"
                   }
                 }
@@ -175,14 +143,11 @@
                 "column": 13
               }
             },
-            "range": [
-              11,
-              13
-            ],
             "body": []
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

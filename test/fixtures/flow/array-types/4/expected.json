@@ -12,10 +12,6 @@
       "column": 21
     }
   },
-  "range": [
-    0,
-    21
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 21
       }
     },
-    "range": [
-      0,
-      21
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 21
           }
         },
-        "range": [
-          0,
-          21
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 21
               }
             },
-            "range": [
-              4,
-              21
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 21
                 }
               },
-              "range": [
-                4,
-                21
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 21
                   }
                 },
-                "range": [
-                  5,
-                  21
-                ],
                 "typeAnnotation": {
                   "type": "FunctionTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 21
                     }
                   },
-                  "range": [
-                    7,
-                    21
-                  ],
                   "params": [],
                   "rest": null,
                   "returnType": {
@@ -144,10 +116,6 @@
                         "column": 21
                       }
                     },
-                    "range": [
-                      13,
-                      21
-                    ],
                     "elementType": {
                       "type": "NumberTypeAnnotation",
                       "start": 13,
@@ -161,11 +129,7 @@
                           "line": 1,
                           "column": 19
                         }
-                      },
-                      "range": [
-                        13,
-                        19
-                      ]
+                      }
                     }
                   },
                   "typeParameters": null
@@ -178,5 +142,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

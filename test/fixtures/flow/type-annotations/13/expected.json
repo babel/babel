@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
               "column": 25
             }
           },
-          "range": [
-            14,
-            25
-          ],
           "typeAnnotation": {
             "type": "FunctionTypeAnnotation",
             "start": 15,
@@ -110,10 +90,6 @@
                 "column": 25
               }
             },
-            "range": [
-              15,
-              25
-            ],
             "params": [],
             "rest": null,
             "returnType": {
@@ -129,11 +105,7 @@
                   "line": 1,
                   "column": 25
                 }
-              },
-              "range": [
-                21,
-                25
-              ]
+              }
             },
             "typeParameters": null
           }
@@ -152,13 +124,10 @@
               "column": 27
             }
           },
-          "range": [
-            25,
-            27
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

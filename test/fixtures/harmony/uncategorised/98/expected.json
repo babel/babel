@@ -12,10 +12,6 @@
       "column": 32
     }
   },
-  "range": [
-    0,
-    32
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 32
       }
     },
-    "range": [
-      0,
-      32
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 32
           }
         },
-        "range": [
-          0,
-          32
-        ],
         "specifiers": [
           {
             "type": "ImportNamespaceSpecifier",
@@ -69,10 +57,6 @@
                 "column": 18
               }
             },
-            "range": [
-              7,
-              18
-            ],
             "local": {
               "type": "Identifier",
               "start": 12,
@@ -87,10 +71,6 @@
                   "column": 18
                 }
               },
-              "range": [
-                12,
-                18
-              ],
               "name": "crypto"
             }
           }
@@ -109,15 +89,12 @@
               "column": 32
             }
           },
-          "range": [
-            24,
-            32
-          ],
           "value": "crypto",
           "rawValue": "crypto",
           "raw": "\"crypto\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 28
     }
   },
-  "range": [
-    0,
-    28
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 28
       }
     },
-    "range": [
-      0,
-      28
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 28
           }
         },
-        "range": [
-          0,
-          28
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 28
             }
           },
-          "range": [
-            0,
-            28
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -90,10 +74,6 @@
                   "column": 2
                 }
               },
-              "range": [
-                1,
-                2
-              ],
               "name": "x"
             }
           ],
@@ -111,10 +91,6 @@
                 "column": 27
               }
             },
-            "range": [
-              8,
-              27
-            ],
             "id": null,
             "generator": false,
             "expression": true,
@@ -133,10 +109,6 @@
                     "column": 10
                   }
                 },
-                "range": [
-                  9,
-                  10
-                ],
                 "name": "y"
               },
               {
@@ -153,10 +125,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  12,
-                  13
-                ],
                 "name": "z"
               }
             ],
@@ -174,10 +142,6 @@
                   "column": 26
                 }
               },
-              "range": [
-                19,
-                26
-              ],
               "expressions": [
                 {
                   "type": "Identifier",
@@ -193,10 +157,6 @@
                       "column": 20
                     }
                   },
-                  "range": [
-                    19,
-                    20
-                  ],
                   "name": "x"
                 },
                 {
@@ -213,10 +173,6 @@
                       "column": 23
                     }
                   },
-                  "range": [
-                    22,
-                    23
-                  ],
                   "name": "y"
                 },
                 {
@@ -233,10 +189,6 @@
                       "column": 26
                     }
                   },
-                  "range": [
-                    25,
-                    26
-                  ],
                   "name": "z"
                 }
               ],
@@ -247,5 +199,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

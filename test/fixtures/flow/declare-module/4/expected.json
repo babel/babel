@@ -12,10 +12,6 @@
       "column": 52
     }
   },
-  "range": [
-    0,
-    52
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 52
       }
     },
-    "range": [
-      0,
-      52
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 52
           }
         },
-        "range": [
-          0,
-          52
-        ],
         "id": {
           "type": "Identifier",
           "start": 15,
@@ -68,10 +56,6 @@
               "column": 16
             }
           },
-          "range": [
-            15,
-            16
-          ],
           "name": "A"
         },
         "body": {
@@ -88,10 +72,6 @@
               "column": 52
             }
           },
-          "range": [
-            17,
-            52
-          ],
           "body": [
             {
               "type": "DeclareFunction",
@@ -107,10 +87,6 @@
                   "column": 50
                 }
               },
-              "range": [
-                19,
-                50
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 36,
@@ -125,10 +101,6 @@
                     "column": 49
                   }
                 },
-                "range": [
-                  36,
-                  49
-                ],
                 "name": "foo",
                 "typeAnnotation": {
                   "type": "TypeAnnotation",
@@ -144,10 +116,6 @@
                       "column": 49
                     }
                   },
-                  "range": [
-                    39,
-                    49
-                  ],
                   "typeAnnotation": {
                     "type": "FunctionTypeAnnotation",
                     "start": 39,
@@ -162,10 +130,6 @@
                         "column": 49
                       }
                     },
-                    "range": [
-                      39,
-                      49
-                    ],
                     "typeParameters": null,
                     "params": [],
                     "rest": null,
@@ -182,11 +146,7 @@
                           "line": 1,
                           "column": 49
                         }
-                      },
-                      "range": [
-                        43,
-                        49
-                      ]
+                      }
                     }
                   }
                 }
@@ -196,5 +156,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 43
     }
   },
-  "range": [
-    0,
-    43
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 43
       }
     },
-    "range": [
-      0,
-      43
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 43
           }
         },
-        "range": [
-          0,
-          43
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 42
               }
             },
-            "range": [
-              4,
-              42
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 42
                 }
               },
-              "range": [
-                10,
-                42
-              ],
               "test": {
                 "type": "Identifier",
                 "start": 10,
@@ -125,10 +101,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  10,
-                  13
-                ],
                 "name": "bar"
               },
               "consequent": {
@@ -145,10 +117,6 @@
                     "column": 36
                   }
                 },
-                "range": [
-                  16,
-                  36
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -168,10 +136,6 @@
                         "column": 20
                       }
                     },
-                    "range": [
-                      17,
-                      20
-                    ],
                     "name": "foo",
                     "parenthesizedExpression": true
                   }
@@ -190,10 +154,6 @@
                       "column": 36
                     }
                   },
-                  "range": [
-                    34,
-                    36
-                  ],
                   "body": []
                 },
                 "returnType": {
@@ -210,10 +170,6 @@
                       "column": 30
                     }
                   },
-                  "range": [
-                    22,
-                    30
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 24,
@@ -227,11 +183,7 @@
                         "line": 1,
                         "column": 30
                       }
-                    },
-                    "range": [
-                      24,
-                      30
-                    ]
+                    }
                   }
                 }
               },
@@ -249,10 +201,6 @@
                     "column": 42
                   }
                 },
-                "range": [
-                  39,
-                  42
-                ],
                 "name": "baz"
               }
             }
@@ -261,5 +209,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 31
     }
   },
-  "range": [
-    0,
-    31
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 31
       }
     },
-    "range": [
-      0,
-      31
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 31
           }
         },
-        "range": [
-          0,
-          31
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 30
               }
             },
-            "range": [
-              4,
-              30
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 30
                 }
               },
-              "range": [
-                10,
-                30
-              ],
               "test": {
                 "type": "Identifier",
                 "start": 10,
@@ -125,10 +101,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  10,
-                  13
-                ],
                 "name": "bar"
               },
               "consequent": {
@@ -145,10 +117,6 @@
                     "column": 20
                   }
                 },
-                "range": [
-                  17,
-                  20
-                ],
                 "name": "foo",
                 "parenthesizedExpression": true
               },
@@ -166,10 +134,6 @@
                     "column": 30
                   }
                 },
-                "range": [
-                  24,
-                  30
-                ],
                 "name": "number"
               }
             }
@@ -178,5 +142,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

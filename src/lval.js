@@ -1,6 +1,6 @@
-import { types as tt } from "./tokentype";
+import { types as tt } from "./tokenizer/types";
 import { Parser } from "./state";
-import { reservedWords } from "./identifier";
+import { reservedWords } from "./util/identifier";
 
 const pp = Parser.prototype;
 
@@ -10,41 +10,40 @@ const pp = Parser.prototype;
 pp.toAssignable = function (node, isBinding) {
   if (node) {
     switch (node.type) {
-    case "Identifier":
-    case "ObjectPattern":
-    case "ArrayPattern":
-    case "AssignmentPattern":
-      break;
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+        break;
 
-    case "ObjectExpression":
-      node.type = "ObjectPattern";
-      for (let i = 0; i < node.properties.length; i++) {
-        let prop = node.properties[i];
-        if (prop.type === "SpreadProperty") continue;
-        if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter");
-        this.toAssignable(prop.value, isBinding);
-      }
-      break;
+      case "ObjectExpression":
+        node.type = "ObjectPattern";
+        for (let prop of (node.properties: Array)) {
+          if (prop.type === "SpreadProperty") continue;
+          if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter");
+          this.toAssignable(prop.value, isBinding);
+        }
+        break;
 
-    case "ArrayExpression":
-      node.type = "ArrayPattern";
-      this.toAssignableList(node.elements, isBinding);
-      break;
+      case "ArrayExpression":
+        node.type = "ArrayPattern";
+        this.toAssignableList(node.elements, isBinding);
+        break;
 
-    case "AssignmentExpression":
-      if (node.operator === "=") {
-        node.type = "AssignmentPattern";
-        delete node.operator;
-      } else {
-        this.raise(node.left.end, "Only '=' operator can be used for specifying default value.");
-      }
-      break;
+      case "AssignmentExpression":
+        if (node.operator === "=") {
+          node.type = "AssignmentPattern";
+          delete node.operator;
+        } else {
+          this.raise(node.left.end, "Only '=' operator can be used for specifying default value.");
+        }
+        break;
 
-    case "MemberExpression":
-      if (!isBinding) break;
+      case "MemberExpression":
+        if (!isBinding) break;
 
-    default:
-      this.raise(node.start, "Assigning to rvalue");
+      default:
+        this.raise(node.start, "Assigning to rvalue");
     }
   }
   return node;
@@ -181,16 +180,14 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
     break;
 
   case "ObjectPattern":
-       for (let i = 0; i < expr.properties.length; i++) {
-      var prop = expr.properties[i];
+       for (let prop of (expr.properties: Array)) {
       if (prop.type === "Property") prop = prop.value;
       this.checkLVal(prop, isBinding, checkClashes);
     }
     break;
 
   case "ArrayPattern":
-    for (let i = 0; i < expr.elements.length; i++) {
-      let elem = expr.elements[i];
+    for (let elem of (expr.elements: Array)) {
       if (elem) this.checkLVal(elem, isBinding, checkClashes);
     }
     break;

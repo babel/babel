@@ -12,10 +12,6 @@
       "column": 33
     }
   },
-  "range": [
-    0,
-    33
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 33
       }
     },
-    "range": [
-      0,
-      33
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 33
           }
         },
-        "range": [
-          0,
-          33
-        ],
         "left": {
           "type": "VariableDeclaration",
           "start": 5,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            5,
-            12
-          ],
           "declarations": [
             {
               "type": "VariableDeclarator",
@@ -87,10 +71,6 @@
                   "column": 12
                 }
               },
-              "range": [
-                11,
-                12
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 11,
@@ -105,10 +85,6 @@
                     "column": 12
                   }
                 },
-                "range": [
-                  11,
-                  12
-                ],
                 "name": "x"
               },
               "init": null
@@ -130,10 +106,6 @@
               "column": 20
             }
           },
-          "range": [
-            16,
-            20
-          ],
           "name": "list"
         },
         "body": {
@@ -150,10 +122,6 @@
               "column": 33
             }
           },
-          "range": [
-            22,
-            33
-          ],
           "expression": {
             "type": "CallExpression",
             "start": 22,
@@ -168,10 +136,6 @@
                 "column": 32
               }
             },
-            "range": [
-              22,
-              32
-            ],
             "callee": {
               "type": "Identifier",
               "start": 22,
@@ -186,10 +150,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                22,
-                29
-              ],
               "name": "process"
             },
             "arguments": [
@@ -207,10 +167,6 @@
                     "column": 31
                   }
                 },
-                "range": [
-                  30,
-                  31
-                ],
                 "name": "x"
               }
             ]
@@ -218,5 +174,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

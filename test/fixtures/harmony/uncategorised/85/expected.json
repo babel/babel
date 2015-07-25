@@ -12,10 +12,6 @@
       "column": 22
     }
   },
-  "range": [
-    0,
-    22
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 22
       }
     },
-    "range": [
-      0,
-      22
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 22
           }
         },
-        "range": [
-          0,
-          22
-        ],
         "source": {
           "type": "Literal",
           "start": 14,
@@ -68,15 +56,12 @@
               "column": 22
             }
           },
-          "range": [
-            14,
-            22
-          ],
           "value": "crypto",
           "rawValue": "crypto",
           "raw": "\"crypto\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

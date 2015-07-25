@@ -12,10 +12,6 @@
       "column": 53
     }
   },
-  "range": [
-    0,
-    53
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 53
       }
     },
-    "range": [
-      0,
-      53
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 53
           }
         },
-        "range": [
-          0,
-          53
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 52
               }
             },
-            "range": [
-              4,
-              52
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 52
                 }
               },
-              "range": [
-                4,
-                52
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 52
                   }
                 },
-                "range": [
-                  5,
-                  52
-                ],
                 "typeAnnotation": {
                   "type": "ObjectTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 52
                     }
                   },
-                  "range": [
-                    7,
-                    52
-                  ],
                   "callProperties": [],
                   "properties": [],
                   "indexers": [
@@ -145,10 +117,6 @@
                           "column": 29
                         }
                       },
-                      "range": [
-                        9,
-                        29
-                      ],
                       "id": {
                         "type": "Identifier",
                         "start": 10,
@@ -163,10 +131,6 @@
                             "column": 11
                           }
                         },
-                        "range": [
-                          10,
-                          11
-                        ],
                         "name": "a"
                       },
                       "key": {
@@ -182,11 +146,7 @@
                             "line": 1,
                             "column": 19
                           }
-                        },
-                        "range": [
-                          13,
-                          19
-                        ]
+                        }
                       },
                       "value": {
                         "type": "StringTypeAnnotation",
@@ -201,11 +161,7 @@
                             "line": 1,
                             "column": 28
                           }
-                        },
-                        "range": [
-                          22,
-                          28
-                        ]
+                        }
                       }
                     },
                     {
@@ -222,10 +178,6 @@
                           "column": 50
                         }
                       },
-                      "range": [
-                        30,
-                        50
-                      ],
                       "id": {
                         "type": "Identifier",
                         "start": 31,
@@ -240,10 +192,6 @@
                             "column": 32
                           }
                         },
-                        "range": [
-                          31,
-                          32
-                        ],
                         "name": "b"
                       },
                       "key": {
@@ -259,11 +207,7 @@
                             "line": 1,
                             "column": 40
                           }
-                        },
-                        "range": [
-                          34,
-                          40
-                        ]
+                        }
                       },
                       "value": {
                         "type": "StringTypeAnnotation",
@@ -278,11 +222,7 @@
                             "line": 1,
                             "column": 49
                           }
-                        },
-                        "range": [
-                          43,
-                          49
-                        ]
+                        }
                       }
                     }
                   ]
@@ -295,5 +235,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

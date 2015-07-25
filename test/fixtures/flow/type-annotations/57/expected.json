@@ -12,10 +12,6 @@
       "column": 41
     }
   },
-  "range": [
-    0,
-    41
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 41
       }
     },
-    "range": [
-      0,
-      41
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 41
           }
         },
-        "range": [
-          0,
-          41
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 40
               }
             },
-            "range": [
-              4,
-              40
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 35
                 }
               },
-              "range": [
-                4,
-                35
-              ],
               "name": "x",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 35
                   }
                 },
-                "range": [
-                  6,
-                  35
-                ],
                 "typeAnnotation": {
                   "type": "FunctionTypeAnnotation",
                   "start": 8,
@@ -124,10 +100,6 @@
                       "column": 35
                     }
                   },
-                  "range": [
-                    8,
-                    35
-                  ],
                   "params": [],
                   "rest": null,
                   "returnType": {
@@ -144,10 +116,6 @@
                         "column": 35
                       }
                     },
-                    "range": [
-                      14,
-                      35
-                    ],
                     "types": [
                       {
                         "type": "NumberTypeAnnotation",
@@ -162,11 +130,7 @@
                             "line": 1,
                             "column": 20
                           }
-                        },
-                        "range": [
-                          14,
-                          20
-                        ]
+                        }
                       },
                       {
                         "type": "FunctionTypeAnnotation",
@@ -182,10 +146,6 @@
                             "column": 35
                           }
                         },
-                        "range": [
-                          23,
-                          35
-                        ],
                         "params": [],
                         "rest": null,
                         "returnType": {
@@ -201,11 +161,7 @@
                               "line": 1,
                               "column": 35
                             }
-                          },
-                          "range": [
-                            29,
-                            35
-                          ]
+                          }
                         },
                         "typeParameters": null
                       }
@@ -229,10 +185,6 @@
                   "column": 40
                 }
               },
-              "range": [
-                38,
-                40
-              ],
               "name": "fn"
             }
           }
@@ -240,5 +192,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 18
     }
   },
-  "range": [
-    0,
-    18
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 18
       }
     },
-    "range": [
-      0,
-      18
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 18
           }
         },
-        "range": [
-          0,
-          18
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 18
               }
             },
-            "range": [
-              4,
-              18
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 18
                 }
               },
-              "range": [
-                4,
-                18
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 18
                   }
                 },
-                "range": [
-                  5,
-                  18
-                ],
                 "typeAnnotation": {
                   "type": "ArrayTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 18
                     }
                   },
-                  "range": [
-                    7,
-                    18
-                  ],
                   "elementType": {
                     "type": "NullableTypeAnnotation",
                     "start": 8,
@@ -142,10 +114,6 @@
                         "column": 15
                       }
                     },
-                    "range": [
-                      8,
-                      15
-                    ],
                     "typeAnnotation": {
                       "type": "NumberTypeAnnotation",
                       "start": 9,
@@ -159,11 +127,7 @@
                           "line": 1,
                           "column": 15
                         }
-                      },
-                      "range": [
-                        9,
-                        15
-                      ]
+                      }
                     }
                   }
                 }
@@ -175,5 +139,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "id": {
           "type": "Identifier",
           "start": 10,
@@ -68,10 +56,6 @@
               "column": 11
             }
           },
-          "range": [
-            10,
-            11
-          ],
           "name": "A"
         },
         "typeParameters": null,
@@ -90,10 +74,6 @@
               "column": 34
             }
           },
-          "range": [
-            12,
-            34
-          ],
           "callProperties": [],
           "properties": [
             {
@@ -110,10 +90,6 @@
                   "column": 32
                 }
               },
-              "range": [
-                14,
-                32
-              ],
               "key": {
                 "type": "Identifier",
                 "start": 14,
@@ -128,10 +104,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  14,
-                  17
-                ],
                 "name": "foo"
               },
               "value": {
@@ -148,10 +120,6 @@
                     "column": 31
                   }
                 },
-                "range": [
-                  19,
-                  31
-                ],
                 "params": [],
                 "rest": null,
                 "returnType": {
@@ -167,11 +135,7 @@
                       "line": 1,
                       "column": 31
                     }
-                  },
-                  "range": [
-                    25,
-                    31
-                  ]
+                  }
                 },
                 "typeParameters": null
               },
@@ -182,5 +146,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 31
     }
   },
-  "range": [
-    0,
-    31
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 31
       }
     },
-    "range": [
-      0,
-      31
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 31
           }
         },
-        "range": [
-          0,
-          31
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 30
               }
             },
-            "range": [
-              4,
-              30
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 30
                 }
               },
-              "range": [
-                10,
-                30
-              ],
               "id": null,
               "generator": false,
               "expression": true,
@@ -130,10 +106,6 @@
                       "column": 14
                     }
                   },
-                  "range": [
-                    11,
-                    14
-                  ],
                   "name": "bar",
                   "parenthesizedExpression": true
                 }
@@ -152,10 +124,6 @@
                     "column": 30
                   }
                 },
-                "range": [
-                  27,
-                  30
-                ],
                 "name": "bar"
               },
               "returnType": {
@@ -172,10 +140,6 @@
                     "column": 23
                   }
                 },
-                "range": [
-                  15,
-                  23
-                ],
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
                   "start": 17,
@@ -189,11 +153,7 @@
                       "line": 1,
                       "column": 23
                     }
-                  },
-                  "range": [
-                    17,
-                    23
-                  ]
+                  }
                 }
               }
             }
@@ -202,5 +162,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

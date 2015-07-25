@@ -12,10 +12,6 @@
       "column": 41
     }
   },
-  "range": [
-    0,
-    41
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 41
       }
     },
-    "range": [
-      0,
-      41
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 41
           }
         },
-        "range": [
-          0,
-          41
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 40
               }
             },
-            "range": [
-              4,
-              40
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                4,
-                24
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  6,
-                  24
-                ],
                 "typeAnnotation": {
                   "type": "TupleTypeAnnotation",
                   "start": 8,
@@ -124,10 +100,6 @@
                       "column": 24
                     }
                   },
-                  "range": [
-                    8,
-                    24
-                  ],
                   "types": [
                     {
                       "type": "NumberTypeAnnotation",
@@ -142,11 +114,7 @@
                           "line": 1,
                           "column": 15
                         }
-                      },
-                      "range": [
-                        9,
-                        15
-                      ]
+                      }
                     },
                     {
                       "type": "StringTypeAnnotation",
@@ -161,11 +129,7 @@
                           "line": 1,
                           "column": 23
                         }
-                      },
-                      "range": [
-                        17,
-                        23
-                      ]
+                      }
                     }
                   ]
                 }
@@ -185,10 +149,6 @@
                   "column": 40
                 }
               },
-              "range": [
-                27,
-                40
-              ],
               "elements": [
                 {
                   "type": "Literal",
@@ -204,10 +164,6 @@
                       "column": 31
                     }
                   },
-                  "range": [
-                    28,
-                    31
-                  ],
                   "value": 123,
                   "rawValue": 123,
                   "raw": "123"
@@ -226,10 +182,6 @@
                       "column": 39
                     }
                   },
-                  "range": [
-                    33,
-                    39
-                  ],
                   "value": "duck",
                   "rawValue": "duck",
                   "raw": "\"duck\""
@@ -241,5 +193,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

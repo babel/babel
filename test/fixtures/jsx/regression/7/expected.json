@@ -12,10 +12,6 @@
       "column": 17
     }
   },
-  "range": [
-    0,
-    62
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 17
       }
     },
-    "range": [
-      0,
-      62
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 17
           }
         },
-        "range": [
-          0,
-          62
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 17
             }
           },
-          "range": [
-            0,
-            62
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 17
               }
             },
-            "range": [
-              0,
-              62
-            ],
             "attributes": [
               {
                 "type": "JSXAttribute",
@@ -105,10 +85,6 @@
                     "column": 15
                   }
                 },
-                "range": [
-                  6,
-                  60
-                ],
                 "name": {
                   "type": "JSXIdentifier",
                   "start": 6,
@@ -123,10 +99,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    6,
-                    7
-                  ],
                   "name": "d"
                 },
                 "value": {
@@ -143,10 +115,6 @@
                       "column": 15
                     }
                   },
-                  "range": [
-                    8,
-                    60
-                  ],
                   "value": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z",
                   "rawValue": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z",
                   "raw": "\"M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z\""
@@ -167,10 +135,6 @@
                   "column": 5
                 }
               },
-              "range": [
-                1,
-                5
-              ],
               "name": "path"
             },
             "selfClosing": true
@@ -180,5 +144,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

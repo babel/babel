@@ -1,5 +1,5 @@
 import { Parser } from "./state";
-import { SourceLocation } from "./location";
+import { SourceLocation } from "./locutil";
 
 // Start an AST node, attaching a start offset.
 
@@ -12,13 +12,7 @@ export class Node {
     this.end = 0;
 
     if (parser) {
-      if (parser.options.locations) {
-        this.loc = new SourceLocation(loc);
-      }
-
-      if (parser.options.ranges) {
-        this.range = [pos, 0];
-      }
+      this.loc = new SourceLocation(loc);
     }
   }
 
@@ -40,8 +34,7 @@ pp.startNodeAt = function (pos, loc) {
 function finishNodeAt(node, type, pos, loc) {
   node.type = type;
   node.end = pos;
-  if (this.options.locations) node.loc.end = loc;
-  if (this.options.ranges) node.range[1] = pos;
+  node.loc.end = loc;
   this.processComment(node);
   return node;
 }

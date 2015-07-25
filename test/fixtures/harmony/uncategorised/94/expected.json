@@ -12,10 +12,6 @@
       "column": 39
     }
   },
-  "range": [
-    0,
-    39
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 39
       }
     },
-    "range": [
-      0,
-      39
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 39
           }
         },
-        "range": [
-          0,
-          39
-        ],
         "specifiers": [
           {
             "type": "ImportSpecifier",
@@ -69,10 +57,6 @@
                 "column": 23
               }
             },
-            "range": [
-              9,
-              23
-            ],
             "imported": {
               "type": "Identifier",
               "start": 9,
@@ -87,10 +71,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                9,
-                16
-              ],
               "name": "encrypt"
             },
             "local": {
@@ -107,10 +87,6 @@
                   "column": 23
                 }
               },
-              "range": [
-                20,
-                23
-              ],
               "name": "enc"
             }
           }
@@ -129,15 +105,12 @@
               "column": 39
             }
           },
-          "range": [
-            31,
-            39
-          ],
           "value": "crypto",
           "rawValue": "crypto",
           "raw": "\"crypto\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

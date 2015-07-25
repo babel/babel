@@ -12,10 +12,6 @@
       "column": 20
     }
   },
-  "range": [
-    0,
-    20
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 20
       }
     },
-    "range": [
-      0,
-      20
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 20
           }
         },
-        "range": [
-          0,
-          20
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 10
             }
           },
-          "range": [
-            9,
-            10
-          ],
           "name": "f"
         },
         "generator": false,
@@ -91,10 +75,6 @@
                 "column": 16
               }
             },
-            "range": [
-              11,
-              16
-            ],
             "operator": "=",
             "left": {
               "type": "Identifier",
@@ -110,10 +90,6 @@
                   "column": 12
                 }
               },
-              "range": [
-                11,
-                12
-              ],
               "name": "a"
             },
             "right": {
@@ -130,10 +106,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                15,
-                16
-              ],
               "value": 1,
               "rawValue": 1,
               "raw": "1"
@@ -154,13 +126,10 @@
               "column": 20
             }
           },
-          "range": [
-            18,
-            20
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

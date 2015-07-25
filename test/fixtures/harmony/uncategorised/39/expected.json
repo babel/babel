@@ -12,10 +12,6 @@
       "column": 14
     }
   },
-  "range": [
-    0,
-    14
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 14
       }
     },
-    "range": [
-      0,
-      14
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 14
           }
         },
-        "range": [
-          0,
-          14
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 14
             }
           },
-          "range": [
-            0,
-            14
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -90,10 +74,6 @@
                   "column": 4
                 }
               },
-              "range": [
-                1,
-                4
-              ],
               "left": {
                 "type": "Identifier",
                 "start": 1,
@@ -108,10 +88,6 @@
                     "column": 2
                   }
                 },
-                "range": [
-                  1,
-                  2
-                ],
                 "name": "x"
               },
               "right": {
@@ -128,10 +104,6 @@
                     "column": 4
                   }
                 },
-                "range": [
-                  3,
-                  4
-                ],
                 "value": 1,
                 "rawValue": 1,
                 "raw": "1"
@@ -152,10 +124,6 @@
                 "column": 14
               }
             },
-            "range": [
-              9,
-              14
-            ],
             "left": {
               "type": "Identifier",
               "start": 9,
@@ -170,10 +138,6 @@
                   "column": 10
                 }
               },
-              "range": [
-                9,
-                10
-              ],
               "name": "x"
             },
             "operator": "*",
@@ -191,15 +155,12 @@
                   "column": 14
                 }
               },
-              "range": [
-                13,
-                14
-              ],
               "name": "x"
             }
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 17
     }
   },
-  "range": [
-    0,
-    17
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 17
       }
     },
-    "range": [
-      0,
-      17
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 17
           }
         },
-        "range": [
-          0,
-          17
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 17
               }
             },
-            "range": [
-              4,
-              17
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 6
                 }
               },
-              "range": [
-                4,
-                6
-              ],
               "name": "ok"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 17
                 }
               },
-              "range": [
-                9,
-                17
-              ],
               "callee": {
                 "type": "Identifier",
                 "start": 9,
@@ -125,10 +101,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  9,
-                  14
-                ],
                 "name": "async"
               },
               "arguments": [
@@ -146,10 +118,6 @@
                       "column": 16
                     }
                   },
-                  "range": [
-                    15,
-                    16
-                  ],
                   "name": "x"
                 }
               ]
@@ -159,5 +127,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

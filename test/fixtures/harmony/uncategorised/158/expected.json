@@ -12,10 +12,6 @@
       "column": 23
     }
   },
-  "range": [
-    0,
-    23
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 23
       }
     },
-    "range": [
-      0,
-      23
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 23
           }
         },
-        "range": [
-          0,
-          23
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 22
             }
           },
-          "range": [
-            1,
-            22
-          ],
           "id": null,
           "generator": false,
           "expression": false,
@@ -90,10 +74,6 @@
                   "column": 15
                 }
               },
-              "range": [
-                2,
-                15
-              ],
               "left": {
                 "type": "ObjectPattern",
                 "start": 2,
@@ -108,10 +88,6 @@
                     "column": 5
                   }
                 },
-                "range": [
-                  2,
-                  5
-                ],
                 "properties": [
                   {
                     "type": "Property",
@@ -127,10 +103,6 @@
                         "column": 4
                       }
                     },
-                    "range": [
-                      3,
-                      4
-                    ],
                     "method": false,
                     "shorthand": true,
                     "computed": false,
@@ -148,10 +120,6 @@
                           "column": 4
                         }
                       },
-                      "range": [
-                        3,
-                        4
-                      ],
                       "name": "x"
                     },
                     "kind": "init",
@@ -169,10 +137,6 @@
                           "column": 4
                         }
                       },
-                      "range": [
-                        3,
-                        4
-                      ],
                       "name": "x"
                     }
                   }
@@ -192,10 +156,6 @@
                     "column": 15
                   }
                 },
-                "range": [
-                  8,
-                  15
-                ],
                 "properties": [
                   {
                     "type": "Property",
@@ -211,10 +171,6 @@
                         "column": 14
                       }
                     },
-                    "range": [
-                      9,
-                      14
-                    ],
                     "method": false,
                     "shorthand": false,
                     "computed": false,
@@ -232,10 +188,6 @@
                           "column": 10
                         }
                       },
-                      "range": [
-                        9,
-                        10
-                      ],
                       "name": "x"
                     },
                     "value": {
@@ -252,10 +204,6 @@
                           "column": 14
                         }
                       },
-                      "range": [
-                        12,
-                        14
-                      ],
                       "value": 10,
                       "rawValue": 10,
                       "raw": "10"
@@ -280,15 +228,12 @@
                 "column": 22
               }
             },
-            "range": [
-              20,
-              22
-            ],
             "body": []
           },
           "parenthesizedExpression": true
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

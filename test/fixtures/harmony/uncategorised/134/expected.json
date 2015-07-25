@@ -12,10 +12,6 @@
       "column": 51
     }
   },
-  "range": [
-    0,
-    51
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 51
       }
     },
-    "range": [
-      0,
-      51
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 51
           }
         },
-        "range": [
-          0,
-          51
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 51
             }
           },
-          "range": [
-            8,
-            51
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                10,
-                29
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  21,
-                  24
-                ],
                 "name": "foo"
               },
               "static": true,
@@ -149,10 +121,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  24,
-                  29
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -171,10 +139,6 @@
                       "column": 29
                     }
                   },
-                  "range": [
-                    27,
-                    29
-                  ],
                   "body": []
                 }
               }
@@ -193,10 +157,6 @@
                   "column": 49
                 }
               },
-              "range": [
-                30,
-                49
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -212,10 +172,6 @@
                     "column": 44
                   }
                 },
-                "range": [
-                  41,
-                  44
-                ],
                 "name": "bar"
               },
               "static": true,
@@ -234,10 +190,6 @@
                     "column": 49
                   }
                 },
-                "range": [
-                  44,
-                  49
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -256,10 +208,6 @@
                       "column": 49
                     }
                   },
-                  "range": [
-                    47,
-                    49
-                  ],
                   "body": []
                 }
               }
@@ -268,5 +216,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

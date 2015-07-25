@@ -12,10 +12,6 @@
       "column": 32
     }
   },
-  "range": [
-    0,
-    32
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 32
       }
     },
-    "range": [
-      0,
-      32
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 32
           }
         },
-        "range": [
-          0,
-          32
-        ],
         "id": {
           "type": "Identifier",
           "start": 17,
@@ -68,10 +56,6 @@
               "column": 31
             }
           },
-          "range": [
-            17,
-            31
-          ],
           "name": "foo",
           "typeAnnotation": {
             "type": "TypeAnnotation",
@@ -87,10 +71,6 @@
                 "column": 31
               }
             },
-            "range": [
-              20,
-              31
-            ],
             "typeAnnotation": {
               "type": "FunctionTypeAnnotation",
               "start": 20,
@@ -105,10 +85,6 @@
                   "column": 31
                 }
               },
-              "range": [
-                20,
-                31
-              ],
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
                 "start": 20,
@@ -123,10 +99,6 @@
                     "column": 23
                   }
                 },
-                "range": [
-                  20,
-                  23
-                ],
                 "params": [
                   {
                     "type": "Identifier",
@@ -142,10 +114,6 @@
                         "column": 22
                       }
                     },
-                    "range": [
-                      21,
-                      22
-                    ],
                     "name": "T"
                   }
                 ]
@@ -165,16 +133,13 @@
                     "line": 1,
                     "column": 31
                   }
-                },
-                "range": [
-                  27,
-                  31
-                ]
+                }
               }
             }
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

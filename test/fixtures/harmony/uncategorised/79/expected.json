@@ -12,10 +12,6 @@
       "column": 17
     }
   },
-  "range": [
-    0,
-    17
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 17
       }
     },
-    "range": [
-      0,
-      17
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 17
           }
         },
-        "range": [
-          0,
-          17
-        ],
         "declaration": {
           "type": "Literal",
           "start": 15,
@@ -68,15 +56,12 @@
               "column": 17
             }
           },
-          "range": [
-            15,
-            17
-          ],
           "value": 42,
           "rawValue": 42,
           "raw": "42"
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

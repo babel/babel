@@ -12,10 +12,6 @@
       "column": 12
     }
   },
-  "range": [
-    0,
-    12
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 12
       }
     },
-    "range": [
-      0,
-      12
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 12
           }
         },
-        "range": [
-          0,
-          12
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 12
               }
             },
-            "range": [
-              4,
-              12
-            ],
             "id": {
               "type": "ArrayPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "elements": [
                 {
                   "type": "Identifier",
@@ -106,10 +86,6 @@
                       "column": 6
                     }
                   },
-                  "range": [
-                    5,
-                    6
-                  ],
                   "name": "a"
                 }
               ]
@@ -128,10 +104,6 @@
                   "column": 12
                 }
               },
-              "range": [
-                10,
-                12
-              ],
               "elements": []
             }
           }
@@ -139,5 +111,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

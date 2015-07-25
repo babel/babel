@@ -12,10 +12,6 @@
       "column": 41
     }
   },
-  "range": [
-    0,
-    41
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 41
       }
     },
-    "range": [
-      0,
-      41
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 41
           }
         },
-        "range": [
-          0,
-          41
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 41
             }
           },
-          "range": [
-            0,
-            41
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 5
               }
             },
-            "range": [
-              0,
-              5
-            ],
             "attributes": [],
             "name": {
               "type": "JSXIdentifier",
@@ -105,10 +85,6 @@
                   "column": 4
                 }
               },
-              "range": [
-                1,
-                4
-              ],
               "name": "div"
             },
             "selfClosing": false
@@ -127,10 +103,6 @@
                 "column": 41
               }
             },
-            "range": [
-              35,
-              41
-            ],
             "name": {
               "type": "JSXIdentifier",
               "start": 37,
@@ -145,10 +117,6 @@
                   "column": 40
                 }
               },
-              "range": [
-                37,
-                40
-              ],
               "name": "div"
             }
           },
@@ -167,10 +135,6 @@
                   "column": 11
                 }
               },
-              "range": [
-                5,
-                11
-              ],
               "openingElement": {
                 "type": "JSXOpeningElement",
                 "start": 5,
@@ -185,10 +149,6 @@
                     "column": 11
                   }
                 },
-                "range": [
-                  5,
-                  11
-                ],
                 "attributes": [],
                 "name": {
                   "type": "JSXIdentifier",
@@ -204,10 +164,6 @@
                       "column": 8
                     }
                   },
-                  "range": [
-                    6,
-                    8
-                  ],
                   "name": "br"
                 },
                 "selfClosing": true
@@ -229,10 +185,6 @@
                   "column": 35
                 }
               },
-              "range": [
-                11,
-                35
-              ],
               "value": "7x invalid-js-identifier",
               "rawValue": "7x invalid-js-identifier",
               "raw": "7x invalid-js-identifier"
@@ -241,5 +193,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

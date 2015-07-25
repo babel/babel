@@ -12,10 +12,6 @@
       "column": 30
     }
   },
-  "range": [
-    0,
-    30
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 30
       }
     },
-    "range": [
-      0,
-      30
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 30
           }
         },
-        "range": [
-          0,
-          30
-        ],
         "expression": {
           "type": "SequenceExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 29
             }
           },
-          "range": [
-            1,
-            29
-          ],
           "expressions": [
             {
               "type": "TypeCastExpression",
@@ -87,10 +71,6 @@
                   "column": 13
                 }
               },
-              "range": [
-                2,
-                13
-              ],
               "expression": {
                 "type": "Identifier",
                 "start": 2,
@@ -105,10 +85,6 @@
                     "column": 5
                   }
                 },
-                "range": [
-                  2,
-                  5
-                ],
                 "name": "xxx"
               },
               "typeAnnotation": {
@@ -125,10 +101,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  5,
-                  13
-                ],
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
                   "start": 7,
@@ -142,11 +114,7 @@
                       "line": 1,
                       "column": 13
                     }
-                  },
-                  "range": [
-                    7,
-                    13
-                  ]
+                  }
                 }
               },
               "parenthesizedExpression": true
@@ -165,10 +133,6 @@
                   "column": 28
                 }
               },
-              "range": [
-                17,
-                28
-              ],
               "expression": {
                 "type": "Identifier",
                 "start": 17,
@@ -183,10 +147,6 @@
                     "column": 20
                   }
                 },
-                "range": [
-                  17,
-                  20
-                ],
                 "name": "yyy"
               },
               "typeAnnotation": {
@@ -203,10 +163,6 @@
                     "column": 28
                   }
                 },
-                "range": [
-                  20,
-                  28
-                ],
                 "typeAnnotation": {
                   "type": "StringTypeAnnotation",
                   "start": 22,
@@ -220,11 +176,7 @@
                       "line": 1,
                       "column": 28
                     }
-                  },
-                  "range": [
-                    22,
-                    28
-                  ]
+                  }
                 }
               },
               "parenthesizedExpression": true
@@ -234,5 +186,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

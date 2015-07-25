@@ -12,10 +12,6 @@
       "column": 19
     }
   },
-  "range": [
-    0,
-    19
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 19
       }
     },
-    "range": [
-      0,
-      19
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 19
           }
         },
-        "range": [
-          0,
-          19
-        ],
         "init": {
           "type": "VariableDeclaration",
           "start": 4,
@@ -68,10 +56,6 @@
               "column": 15
             }
           },
-          "range": [
-            4,
-            15
-          ],
           "declarations": [
             {
               "type": "VariableDeclarator",
@@ -87,10 +71,6 @@
                   "column": 15
                 }
               },
-              "range": [
-                10,
-                15
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 10,
@@ -105,10 +85,6 @@
                     "column": 11
                   }
                 },
-                "range": [
-                  10,
-                  11
-                ],
                 "name": "x"
               },
               "init": {
@@ -125,10 +101,6 @@
                     "column": 15
                   }
                 },
-                "range": [
-                  14,
-                  15
-                ],
                 "value": 0,
                 "rawValue": 0,
                 "raw": "0"
@@ -152,13 +124,10 @@
               "line": 1,
               "column": 19
             }
-          },
-          "range": [
-            18,
-            19
-          ]
+          }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

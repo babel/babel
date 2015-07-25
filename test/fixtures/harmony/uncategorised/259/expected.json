@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "expression": {
           "type": "FunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 26
             }
           },
-          "range": [
-            1,
-            26
-          ],
           "id": null,
           "generator": false,
           "expression": false,
@@ -90,10 +74,6 @@
                 "column": 26
               }
             },
-            "range": [
-              13,
-              26
-            ],
             "body": [
               {
                 "type": "ExpressionStatement",
@@ -109,10 +89,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  15,
-                  24
-                ],
                 "expression": {
                   "type": "BinaryExpression",
                   "start": 15,
@@ -127,10 +103,6 @@
                       "column": 24
                     }
                   },
-                  "range": [
-                    15,
-                    24
-                  ],
                   "left": {
                     "type": "Identifier",
                     "start": 15,
@@ -145,10 +117,6 @@
                         "column": 20
                       }
                     },
-                    "range": [
-                      15,
-                      20
-                    ],
                     "name": "yield"
                   },
                   "operator": "*",
@@ -166,10 +134,6 @@
                         "column": 24
                       }
                     },
-                    "range": [
-                      22,
-                      24
-                    ],
                     "value": 10,
                     "rawValue": 10,
                     "raw": "10"
@@ -182,5 +146,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

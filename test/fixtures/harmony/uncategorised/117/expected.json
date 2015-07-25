@@ -12,10 +12,6 @@
       "column": 21
     }
   },
-  "range": [
-    0,
-    21
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 21
       }
     },
-    "range": [
-      0,
-      21
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 21
           }
         },
-        "range": [
-          0,
-          21
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 21
             }
           },
-          "range": [
-            8,
-            21
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 20
                 }
               },
-              "range": [
-                9,
-                20
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  13,
-                  14
-                ],
                 "name": "a"
               },
               "static": false,
@@ -149,10 +121,6 @@
                     "column": 20
                   }
                 },
-                "range": [
-                  14,
-                  20
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -171,10 +139,6 @@
                         "column": 16
                       }
                     },
-                    "range": [
-                      15,
-                      16
-                    ],
                     "name": "v"
                   }
                 ],
@@ -192,10 +156,6 @@
                       "column": 20
                     }
                   },
-                  "range": [
-                    18,
-                    20
-                  ],
                   "body": []
                 }
               }
@@ -204,5 +164,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

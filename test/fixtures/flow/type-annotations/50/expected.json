@@ -12,10 +12,6 @@
       "column": 46
     }
   },
-  "range": [
-    0,
-    46
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 46
       }
     },
-    "range": [
-      0,
-      46
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 46
           }
         },
-        "range": [
-          0,
-          46
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "typeParameters": {
@@ -88,10 +72,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "params": [
             {
               "type": "Identifier",
@@ -107,10 +87,6 @@
                   "column": 11
                 }
               },
-              "range": [
-                10,
-                11
-              ],
               "name": "T"
             }
           ]
@@ -130,10 +106,6 @@
               "column": 46
             }
           },
-          "range": [
-            13,
-            46
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -149,10 +121,6 @@
                   "column": 45
                 }
               },
-              "range": [
-                15,
-                45
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -168,10 +136,6 @@
                     "column": 18
                   }
                 },
-                "range": [
-                  15,
-                  18
-                ],
                 "name": "bar"
               },
               "static": false,
@@ -190,10 +154,6 @@
                     "column": 45
                   }
                 },
-                "range": [
-                  21,
-                  45
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -213,10 +173,6 @@
                       "column": 30
                     }
                   },
-                  "range": [
-                    23,
-                    30
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 24,
@@ -230,11 +186,7 @@
                         "line": 1,
                         "column": 30
                       }
-                    },
-                    "range": [
-                      24,
-                      30
-                    ]
+                    }
                   }
                 },
                 "body": {
@@ -251,10 +203,6 @@
                       "column": 45
                     }
                   },
-                  "range": [
-                    31,
-                    45
-                  ],
                   "body": [
                     {
                       "type": "ReturnStatement",
@@ -270,10 +218,6 @@
                           "column": 43
                         }
                       },
-                      "range": [
-                        33,
-                        43
-                      ],
                       "argument": {
                         "type": "Literal",
                         "start": 40,
@@ -288,10 +232,6 @@
                             "column": 42
                           }
                         },
-                        "range": [
-                          40,
-                          42
-                        ],
                         "value": 42,
                         "rawValue": 42,
                         "raw": "42"
@@ -313,10 +253,6 @@
                       "column": 21
                     }
                   },
-                  "range": [
-                    18,
-                    21
-                  ],
                   "params": [
                     {
                       "type": "Identifier",
@@ -332,10 +268,6 @@
                           "column": 20
                         }
                       },
-                      "range": [
-                        19,
-                        20
-                      ],
                       "name": "U"
                     }
                   ]
@@ -346,5 +278,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

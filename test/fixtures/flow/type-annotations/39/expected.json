@@ -12,10 +12,6 @@
       "column": 39
     }
   },
-  "range": [
-    0,
-    39
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 39
       }
     },
-    "range": [
-      0,
-      39
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 39
           }
         },
-        "range": [
-          0,
-          39
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 39
               }
             },
-            "range": [
-              4,
-              39
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                4,
-                39
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 39
                   }
                 },
-                "range": [
-                  5,
-                  39
-                ],
                 "typeAnnotation": {
                   "type": "ObjectTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 39
                     }
                   },
-                  "range": [
-                    7,
-                    39
-                  ],
                   "callProperties": [],
                   "properties": [
                     {
@@ -144,10 +116,6 @@
                           "column": 23
                         }
                       },
-                      "range": [
-                        8,
-                        23
-                      ],
                       "key": {
                         "type": "Identifier",
                         "start": 8,
@@ -162,10 +130,6 @@
                             "column": 14
                           }
                         },
-                        "range": [
-                          8,
-                          14
-                        ],
                         "name": "param1"
                       },
                       "value": {
@@ -181,11 +145,7 @@
                             "line": 1,
                             "column": 22
                           }
-                        },
-                        "range": [
-                          16,
-                          22
-                        ]
+                        }
                       },
                       "optional": false
                     },
@@ -203,10 +163,6 @@
                           "column": 38
                         }
                       },
-                      "range": [
-                        24,
-                        38
-                      ],
                       "key": {
                         "type": "Identifier",
                         "start": 24,
@@ -221,10 +177,6 @@
                             "column": 30
                           }
                         },
-                        "range": [
-                          24,
-                          30
-                        ],
                         "name": "param2"
                       },
                       "value": {
@@ -240,11 +192,7 @@
                             "line": 1,
                             "column": 38
                           }
-                        },
-                        "range": [
-                          32,
-                          38
-                        ]
+                        }
                       },
                       "optional": false
                     }
@@ -259,5 +207,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

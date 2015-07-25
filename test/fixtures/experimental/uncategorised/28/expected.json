@@ -12,10 +12,6 @@
       "column": 38
     }
   },
-  "range": [
-    0,
-    38
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 38
       }
     },
-    "range": [
-      0,
-      38
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 38
           }
         },
-        "range": [
-          0,
-          38
-        ],
         "expression": {
           "type": "FunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 37
             }
           },
-          "range": [
-            1,
-            37
-          ],
           "id": null,
           "generator": false,
           "expression": false,
@@ -91,10 +75,6 @@
                 "column": 37
               }
             },
-            "range": [
-              12,
-              37
-            ],
             "body": [
               {
                 "type": "VariableDeclaration",
@@ -110,10 +90,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  14,
-                  24
-                ],
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
@@ -129,10 +105,6 @@
                         "column": 23
                       }
                     },
-                    "range": [
-                      18,
-                      23
-                    ],
                     "id": {
                       "type": "Identifier",
                       "start": 18,
@@ -147,10 +119,6 @@
                           "column": 23
                         }
                       },
-                      "range": [
-                        18,
-                        23
-                      ],
                       "name": "async"
                     },
                     "init": null
@@ -172,10 +140,6 @@
                     "column": 35
                   }
                 },
-                "range": [
-                  25,
-                  35
-                ],
                 "expression": {
                   "type": "AssignmentExpression",
                   "start": 25,
@@ -190,10 +154,6 @@
                       "column": 35
                     }
                   },
-                  "range": [
-                    25,
-                    35
-                  ],
                   "operator": "=",
                   "left": {
                     "type": "Identifier",
@@ -209,10 +169,6 @@
                         "column": 30
                       }
                     },
-                    "range": [
-                      25,
-                      30
-                    ],
                     "name": "async"
                   },
                   "right": {
@@ -229,10 +185,6 @@
                         "column": 35
                       }
                     },
-                    "range": [
-                      33,
-                      35
-                    ],
                     "value": 10,
                     "rawValue": 10,
                     "raw": "10"
@@ -245,5 +197,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

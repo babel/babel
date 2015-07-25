@@ -12,10 +12,6 @@
       "column": 25
     }
   },
-  "range": [
-    0,
-    25
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 25
       }
     },
-    "range": [
-      0,
-      25
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 25
           }
         },
-        "range": [
-          0,
-          25
-        ],
         "declaration": {
           "type": "VariableDeclaration",
           "start": 7,
@@ -68,10 +56,6 @@
               "column": 25
             }
           },
-          "range": [
-            7,
-            25
-          ],
           "declarations": [
             {
               "type": "VariableDeclarator",
@@ -87,10 +71,6 @@
                   "column": 25
                 }
               },
-              "range": [
-                11,
-                25
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 11,
@@ -105,10 +85,6 @@
                     "column": 19
                   }
                 },
-                "range": [
-                  11,
-                  19
-                ],
                 "name": "document"
               },
               "init": {
@@ -125,10 +101,6 @@
                     "column": 25
                   }
                 },
-                "range": [
-                  22,
-                  25
-                ],
                 "properties": []
               }
             }
@@ -139,5 +111,6 @@
         "source": null
       }
     ]
-  }
+  },
+  "comments": []
 }

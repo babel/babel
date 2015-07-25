@@ -12,10 +12,6 @@
       "column": 49
     }
   },
-  "range": [
-    0,
-    49
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 49
       }
     },
-    "range": [
-      0,
-      49
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 49
           }
         },
-        "range": [
-          0,
-          49
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 48
               }
             },
-            "range": [
-              4,
-              48
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 47
                 }
               },
-              "range": [
-                11,
-                47
-              ],
               "expression": {
                 "type": "ArrowFunctionExpression",
                 "start": 12,
@@ -125,10 +101,6 @@
                     "column": 38
                   }
                 },
-                "range": [
-                  12,
-                  38
-                ],
                 "returnType": {
                   "type": "TypeAnnotation",
                   "start": 23,
@@ -143,10 +115,6 @@
                       "column": 31
                     }
                   },
-                  "range": [
-                    23,
-                    31
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 25,
@@ -160,11 +128,7 @@
                         "line": 1,
                         "column": 31
                       }
-                    },
-                    "range": [
-                      25,
-                      31
-                    ]
+                    }
                   }
                 },
                 "id": null,
@@ -186,10 +150,6 @@
                         "column": 22
                       }
                     },
-                    "range": [
-                      19,
-                      22
-                    ],
                     "name": "bar"
                   }
                 ],
@@ -207,10 +167,6 @@
                       "column": 38
                     }
                   },
-                  "range": [
-                    35,
-                    38
-                  ],
                   "name": "bar"
                 },
                 "parenthesizedExpression": true
@@ -229,10 +185,6 @@
                     "column": 47
                   }
                 },
-                "range": [
-                  39,
-                  47
-                ],
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
                   "start": 41,
@@ -246,11 +198,7 @@
                       "line": 1,
                       "column": 47
                     }
-                  },
-                  "range": [
-                    41,
-                    47
-                  ]
+                  }
                 }
               },
               "parenthesizedExpression": true
@@ -260,5 +208,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 40
     }
   },
-  "range": [
-    0,
-    40
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 40
       }
     },
-    "range": [
-      0,
-      40
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 40
           }
         },
-        "range": [
-          0,
-          40
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 39
               }
             },
-            "range": [
-              4,
-              39
-            ],
             "id": {
               "type": "ObjectPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 22
                 }
               },
-              "range": [
-                4,
-                22
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -106,10 +86,6 @@
                       "column": 6
                     }
                   },
-                  "range": [
-                    5,
-                    6
-                  ],
                   "method": false,
                   "shorthand": true,
                   "computed": false,
@@ -127,10 +103,6 @@
                         "column": 6
                       }
                     },
-                    "range": [
-                      5,
-                      6
-                    ],
                     "name": "x"
                   },
                   "kind": "init",
@@ -148,10 +120,6 @@
                         "column": 6
                       }
                     },
-                    "range": [
-                      5,
-                      6
-                    ],
                     "name": "x"
                   }
                 }
@@ -170,10 +138,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  7,
-                  22
-                ],
                 "typeAnnotation": {
                   "type": "ObjectTypeAnnotation",
                   "start": 9,
@@ -188,10 +152,6 @@
                       "column": 22
                     }
                   },
-                  "range": [
-                    9,
-                    22
-                  ],
                   "callProperties": [],
                   "properties": [
                     {
@@ -208,10 +168,6 @@
                           "column": 20
                         }
                       },
-                      "range": [
-                        10,
-                        20
-                      ],
                       "key": {
                         "type": "Identifier",
                         "start": 10,
@@ -226,10 +182,6 @@
                             "column": 11
                           }
                         },
-                        "range": [
-                          10,
-                          11
-                        ],
                         "name": "x"
                       },
                       "value": {
@@ -245,11 +197,7 @@
                             "line": 1,
                             "column": 19
                           }
-                        },
-                        "range": [
-                          13,
-                          19
-                        ]
+                        }
                       },
                       "optional": false
                     }
@@ -272,10 +220,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                25,
-                39
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -291,10 +235,6 @@
                       "column": 37
                     }
                   },
-                  "range": [
-                    27,
-                    37
-                  ],
                   "method": false,
                   "shorthand": false,
                   "computed": false,
@@ -312,10 +252,6 @@
                         "column": 28
                       }
                     },
-                    "range": [
-                      27,
-                      28
-                    ],
                     "name": "x"
                   },
                   "value": {
@@ -332,10 +268,6 @@
                         "column": 37
                       }
                     },
-                    "range": [
-                      30,
-                      37
-                    ],
                     "value": "hello",
                     "rawValue": "hello",
                     "raw": "\"hello\""
@@ -349,5 +281,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

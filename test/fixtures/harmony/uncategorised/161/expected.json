@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 27
             }
           },
-          "range": [
-            0,
-            27
-          ],
           "operator": "=",
           "left": {
             "type": "Identifier",
@@ -87,10 +71,6 @@
                 "column": 1
               }
             },
-            "range": [
-              0,
-              1
-            ],
             "name": "x"
           },
           "right": {
@@ -107,10 +87,6 @@
                 "column": 27
               }
             },
-            "range": [
-              4,
-              27
-            ],
             "properties": [
               {
                 "type": "Property",
@@ -126,10 +102,6 @@
                     "column": 25
                   }
                 },
-                "range": [
-                  6,
-                  25
-                ],
                 "method": false,
                 "shorthand": false,
                 "computed": false,
@@ -147,10 +119,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    6,
-                    7
-                  ],
                   "name": "f"
                 },
                 "value": {
@@ -167,10 +135,6 @@
                       "column": 25
                     }
                   },
-                  "range": [
-                    9,
-                    25
-                  ],
                   "id": null,
                   "generator": false,
                   "expression": false,
@@ -189,10 +153,6 @@
                           "column": 21
                         }
                       },
-                      "range": [
-                        18,
-                        21
-                      ],
                       "operator": "=",
                       "left": {
                         "type": "Identifier",
@@ -208,10 +168,6 @@
                             "column": 19
                           }
                         },
-                        "range": [
-                          18,
-                          19
-                        ],
                         "name": "a"
                       },
                       "right": {
@@ -228,10 +184,6 @@
                             "column": 21
                           }
                         },
-                        "range": [
-                          20,
-                          21
-                        ],
                         "value": 1,
                         "rawValue": 1,
                         "raw": "1"
@@ -252,10 +204,6 @@
                         "column": 25
                       }
                     },
-                    "range": [
-                      23,
-                      25
-                    ],
                     "body": []
                   }
                 },
@@ -266,5 +214,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

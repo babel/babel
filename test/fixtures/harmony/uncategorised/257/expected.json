@@ -12,10 +12,6 @@
       "column": 14
     }
   },
-  "range": [
-    0,
-    14
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 14
       }
     },
-    "range": [
-      0,
-      14
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 14
           }
         },
-        "range": [
-          0,
-          14
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 14
             }
           },
-          "range": [
-            0,
-            14
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -90,10 +74,6 @@
                   "column": 1
                 }
               },
-              "range": [
-                0,
-                1
-              ],
               "name": "e"
             }
           ],
@@ -111,10 +91,6 @@
                 "column": 14
               }
             },
-            "range": [
-              5,
-              14
-            ],
             "left": {
               "type": "Identifier",
               "start": 5,
@@ -129,10 +105,6 @@
                   "column": 10
                 }
               },
-              "range": [
-                5,
-                10
-              ],
               "name": "yield"
             },
             "operator": "*",
@@ -150,10 +122,6 @@
                   "column": 14
                 }
               },
-              "range": [
-                12,
-                14
-              ],
               "value": 10,
               "rawValue": 10,
               "raw": "10"
@@ -162,5 +130,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 22
     }
   },
-  "range": [
-    0,
-    22
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 22
       }
     },
-    "range": [
-      0,
-      22
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 22
           }
         },
-        "range": [
-          0,
-          22
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 22
               }
             },
-            "range": [
-              4,
-              22
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 22
                 }
               },
-              "range": [
-                4,
-                22
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  5,
-                  22
-                ],
                 "typeAnnotation": {
                   "type": "ArrayTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 22
                     }
                   },
-                  "range": [
-                    7,
-                    22
-                  ],
                   "elementType": {
                     "type": "GenericTypeAnnotation",
                     "start": 7,
@@ -142,10 +114,6 @@
                         "column": 20
                       }
                     },
-                    "range": [
-                      7,
-                      20
-                    ],
                     "typeParameters": {
                       "type": "TypeParameterInstantiation",
                       "start": 14,
@@ -160,10 +128,6 @@
                           "column": 20
                         }
                       },
-                      "range": [
-                        14,
-                        20
-                      ],
                       "params": [
                         {
                           "type": "BooleanTypeAnnotation",
@@ -178,11 +142,7 @@
                               "line": 1,
                               "column": 19
                             }
-                          },
-                          "range": [
-                            15,
-                            19
-                          ]
+                          }
                         }
                       ]
                     },
@@ -200,10 +160,6 @@
                           "column": 14
                         }
                       },
-                      "range": [
-                        7,
-                        14
-                      ],
                       "name": "Promise"
                     }
                   }
@@ -216,5 +172,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

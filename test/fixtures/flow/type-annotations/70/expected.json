@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 33
               }
             },
-            "range": [
-              4,
-              33
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 33
                 }
               },
-              "range": [
-                10,
-                33
-              ],
               "returnType": {
                 "type": "TypeAnnotation",
                 "start": 18,
@@ -125,10 +101,6 @@
                     "column": 26
                   }
                 },
-                "range": [
-                  18,
-                  26
-                ],
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
                   "start": 20,
@@ -142,11 +114,7 @@
                       "line": 1,
                       "column": 26
                     }
-                  },
-                  "range": [
-                    20,
-                    26
-                  ]
+                  }
                 }
               },
               "id": null,
@@ -168,10 +136,6 @@
                     "column": 33
                   }
                 },
-                "range": [
-                  30,
-                  33
-                ],
                 "name": "bar"
               }
             }
@@ -180,5 +144,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

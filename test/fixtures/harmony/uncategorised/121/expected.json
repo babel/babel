@@ -12,10 +12,6 @@
       "column": 30
     }
   },
-  "range": [
-    0,
-    30
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 30
       }
     },
-    "range": [
-      0,
-      30
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 30
           }
         },
-        "range": [
-          0,
-          30
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 30
             }
           },
-          "range": [
-            8,
-            30
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                9,
-                29
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  10,
-                  13
-                ],
                 "name": "gen"
               },
               "static": false,
@@ -149,10 +121,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  13,
-                  29
-                ],
                 "id": null,
                 "generator": true,
                 "expression": false,
@@ -171,10 +139,6 @@
                         "column": 15
                       }
                     },
-                    "range": [
-                      14,
-                      15
-                    ],
                     "name": "v"
                   }
                 ],
@@ -192,10 +156,6 @@
                       "column": 29
                     }
                   },
-                  "range": [
-                    17,
-                    29
-                  ],
                   "body": [
                     {
                       "type": "ExpressionStatement",
@@ -211,10 +171,6 @@
                           "column": 27
                         }
                       },
-                      "range": [
-                        19,
-                        27
-                      ],
                       "expression": {
                         "type": "YieldExpression",
                         "start": 19,
@@ -229,10 +185,6 @@
                             "column": 26
                           }
                         },
-                        "range": [
-                          19,
-                          26
-                        ],
                         "delegate": false,
                         "argument": {
                           "type": "Identifier",
@@ -248,10 +200,6 @@
                               "column": 26
                             }
                           },
-                          "range": [
-                            25,
-                            26
-                          ],
                           "name": "v"
                         }
                       }
@@ -264,5 +212,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

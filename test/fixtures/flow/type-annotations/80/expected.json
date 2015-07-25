@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 33
             }
           },
-          "range": [
-            1,
-            33
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -91,10 +75,6 @@
                   "column": 9
                 }
               },
-              "range": [
-                2,
-                9
-              ],
               "argument": {
                 "type": "Identifier",
                 "start": 5,
@@ -109,10 +89,6 @@
                     "column": 9
                   }
                 },
-                "range": [
-                  5,
-                  9
-                ],
                 "name": "rest"
               },
               "typeAnnotation": {
@@ -129,10 +105,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  9,
-                  24
-                ],
                 "typeAnnotation": {
                   "type": "GenericTypeAnnotation",
                   "start": 11,
@@ -147,10 +119,6 @@
                       "column": 24
                     }
                   },
-                  "range": [
-                    11,
-                    24
-                  ],
                   "typeParameters": {
                     "type": "TypeParameterInstantiation",
                     "start": 16,
@@ -165,10 +133,6 @@
                         "column": 24
                       }
                     },
-                    "range": [
-                      16,
-                      24
-                    ],
                     "params": [
                       {
                         "type": "NumberTypeAnnotation",
@@ -183,11 +147,7 @@
                             "line": 1,
                             "column": 23
                           }
-                        },
-                        "range": [
-                          17,
-                          23
-                        ]
+                        }
                       }
                     ]
                   },
@@ -205,10 +165,6 @@
                         "column": 16
                       }
                     },
-                    "range": [
-                      11,
-                      16
-                    ],
                     "name": "Array"
                   }
                 }
@@ -229,15 +185,12 @@
                 "column": 33
               }
             },
-            "range": [
-              29,
-              33
-            ],
             "name": "rest"
           },
           "parenthesizedExpression": true
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

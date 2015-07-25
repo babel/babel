@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "declaration": null,
         "specifiers": [
           {
@@ -70,10 +58,6 @@
                 "column": 16
               }
             },
-            "range": [
-              9,
-              16
-            ],
             "local": {
               "type": "Identifier",
               "start": 9,
@@ -88,10 +72,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                9,
-                16
-              ],
               "name": "encrypt"
             },
             "exported": {
@@ -108,10 +88,6 @@
                   "column": 16
                 }
               },
-              "range": [
-                9,
-                16
-              ],
               "name": "encrypt"
             }
           },
@@ -129,10 +105,6 @@
                 "column": 25
               }
             },
-            "range": [
-              18,
-              25
-            ],
             "local": {
               "type": "Identifier",
               "start": 18,
@@ -147,10 +119,6 @@
                   "column": 25
                 }
               },
-              "range": [
-                18,
-                25
-              ],
               "name": "decrypt"
             },
             "exported": {
@@ -167,10 +135,6 @@
                   "column": 25
                 }
               },
-              "range": [
-                18,
-                25
-              ],
               "name": "decrypt"
             }
           }
@@ -178,5 +142,6 @@
         "source": null
       }
     ]
-  }
+  },
+  "comments": []
 }

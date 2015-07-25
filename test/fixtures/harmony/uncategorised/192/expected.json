@@ -12,10 +12,6 @@
       "column": 10
     }
   },
-  "range": [
-    0,
-    10
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 10
       }
     },
-    "range": [
-      0,
-      10
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 10
           }
         },
-        "range": [
-          0,
-          10
-        ],
         "expression": {
           "type": "CallExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 10
             }
           },
-          "range": [
-            0,
-            10
-          ],
           "callee": {
             "type": "Identifier",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 4
               }
             },
-            "range": [
-              0,
-              4
-            ],
             "name": "func"
           },
           "arguments": [
@@ -107,10 +87,6 @@
                   "column": 9
                 }
               },
-              "range": [
-                5,
-                9
-              ],
               "argument": {
                 "type": "Identifier",
                 "start": 8,
@@ -125,10 +101,6 @@
                     "column": 9
                   }
                 },
-                "range": [
-                  8,
-                  9
-                ],
                 "name": "a"
               }
             }
@@ -136,5 +108,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

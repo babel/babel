@@ -12,10 +12,6 @@
       "column": 35
     }
   },
-  "range": [
-    0,
-    35
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 35
       }
     },
-    "range": [
-      0,
-      35
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 35
           }
         },
-        "range": [
-          0,
-          35
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
               "column": 33
             }
           },
-          "range": [
-            14,
-            33
-          ],
           "typeAnnotation": {
             "type": "FunctionTypeAnnotation",
             "start": 15,
@@ -110,10 +90,6 @@
                 "column": 33
               }
             },
-            "range": [
-              15,
-              33
-            ],
             "params": [
               {
                 "type": "FunctionTypeParam",
@@ -129,10 +105,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  16,
-                  22
-                ],
                 "name": {
                   "type": "Identifier",
                   "start": 16,
@@ -147,10 +119,6 @@
                       "column": 17
                     }
                   },
-                  "range": [
-                    16,
-                    17
-                  ],
                   "name": "_"
                 },
                 "optional": false,
@@ -167,11 +135,7 @@
                       "line": 1,
                       "column": 22
                     }
-                  },
-                  "range": [
-                    18,
-                    22
-                  ]
+                  }
                 }
               }
             ],
@@ -189,11 +153,7 @@
                   "line": 1,
                   "column": 33
                 }
-              },
-              "range": [
-                27,
-                33
-              ]
+              }
             },
             "typeParameters": null
           }
@@ -212,13 +172,10 @@
               "column": 35
             }
           },
-          "range": [
-            33,
-            35
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

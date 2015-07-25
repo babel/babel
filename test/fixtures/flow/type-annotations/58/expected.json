@@ -12,10 +12,6 @@
       "column": 20
     }
   },
-  "range": [
-    0,
-    20
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 20
       }
     },
-    "range": [
-      0,
-      20
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 20
           }
         },
-        "range": [
-          0,
-          20
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 19
               }
             },
-            "range": [
-              4,
-              19
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 15
                 }
               },
-              "range": [
-                4,
-                15
-              ],
               "name": "x",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 15
                   }
                 },
-                "range": [
-                  5,
-                  15
-                ],
                 "typeAnnotation": {
                   "type": "TypeofTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 15
                     }
                   },
-                  "range": [
-                    7,
-                    15
-                  ],
                   "argument": {
                     "type": "GenericTypeAnnotation",
                     "start": 14,
@@ -142,10 +114,6 @@
                         "column": 15
                       }
                     },
-                    "range": [
-                      14,
-                      15
-                    ],
                     "typeParameters": null,
                     "id": {
                       "type": "Identifier",
@@ -161,10 +129,6 @@
                           "column": 15
                         }
                       },
-                      "range": [
-                        14,
-                        15
-                      ],
                       "name": "Y"
                     }
                   }
@@ -185,10 +149,6 @@
                   "column": 19
                 }
               },
-              "range": [
-                18,
-                19
-              ],
               "name": "Y"
             }
           }
@@ -196,5 +156,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

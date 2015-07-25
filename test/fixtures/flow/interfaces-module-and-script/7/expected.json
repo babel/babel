@@ -12,10 +12,6 @@
       "column": 52
     }
   },
-  "range": [
-    0,
-    52
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 52
       }
     },
-    "range": [
-      0,
-      52
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 52
           }
         },
-        "range": [
-          0,
-          52
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "superClass": {
@@ -88,10 +72,6 @@
               "column": 21
             }
           },
-          "range": [
-            18,
-            21
-          ],
           "name": "Bar"
         },
         "implements": [
@@ -109,10 +89,6 @@
                 "column": 36
               }
             },
-            "range": [
-              33,
-              36
-            ],
             "id": {
               "type": "Identifier",
               "start": 33,
@@ -127,10 +103,6 @@
                   "column": 36
                 }
               },
-              "range": [
-                33,
-                36
-              ],
               "name": "Bat"
             },
             "typeParameters": null
@@ -149,10 +121,6 @@
                 "column": 49
               }
             },
-            "range": [
-              38,
-              49
-            ],
             "id": {
               "type": "Identifier",
               "start": 38,
@@ -167,10 +135,6 @@
                   "column": 41
                 }
               },
-              "range": [
-                38,
-                41
-              ],
               "name": "Man"
             },
             "typeParameters": {
@@ -187,10 +151,6 @@
                   "column": 49
                 }
               },
-              "range": [
-                41,
-                49
-              ],
               "params": [
                 {
                   "type": "NumberTypeAnnotation",
@@ -205,11 +165,7 @@
                       "line": 1,
                       "column": 48
                     }
-                  },
-                  "range": [
-                    42,
-                    48
-                  ]
+                  }
                 }
               ]
             }
@@ -229,13 +185,10 @@
               "column": 52
             }
           },
-          "range": [
-            50,
-            52
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

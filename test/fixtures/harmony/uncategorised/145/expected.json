@@ -12,10 +12,6 @@
       "column": 31
     }
   },
-  "range": [
-    0,
-    31
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 31
       }
     },
-    "range": [
-      0,
-      31
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 31
           }
         },
-        "range": [
-          0,
-          31
-        ],
         "expression": {
           "type": "ObjectExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 30
             }
           },
-          "range": [
-            1,
-            30
-          ],
           "properties": [
             {
               "type": "Property",
@@ -87,10 +71,6 @@
                   "column": 14
                 }
               },
-              "range": [
-                2,
-                14
-              ],
               "method": false,
               "shorthand": false,
               "computed": true,
@@ -108,10 +88,6 @@
                     "column": 8
                   }
                 },
-                "range": [
-                  7,
-                  8
-                ],
                 "name": "x"
               },
               "kind": "get",
@@ -129,10 +105,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  9,
-                  14
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -151,10 +123,6 @@
                       "column": 14
                     }
                   },
-                  "range": [
-                    12,
-                    14
-                  ],
                   "body": []
                 }
               }
@@ -173,10 +141,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                16,
-                29
-              ],
               "method": false,
               "shorthand": false,
               "computed": true,
@@ -194,10 +158,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  21,
-                  22
-                ],
                 "name": "x"
               },
               "kind": "set",
@@ -215,10 +175,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  23,
-                  29
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -237,10 +193,6 @@
                         "column": 25
                       }
                     },
-                    "range": [
-                      24,
-                      25
-                    ],
                     "name": "v"
                   }
                 ],
@@ -258,10 +210,6 @@
                       "column": 29
                     }
                   },
-                  "range": [
-                    27,
-                    29
-                  ],
                   "body": []
                 }
               }
@@ -271,5 +219,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

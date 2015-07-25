@@ -12,10 +12,6 @@
       "column": 26
     }
   },
-  "range": [
-    0,
-    26
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 26
       }
     },
-    "range": [
-      0,
-      26
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 26
           }
         },
-        "range": [
-          0,
-          26
-        ],
         "expression": {
           "type": "TemplateLiteral",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 26
             }
           },
-          "range": [
-            0,
-            26
-          ],
           "expressions": [],
           "quasis": [
             {
@@ -88,10 +72,6 @@
                   "column": 25
                 }
               },
-              "range": [
-                1,
-                25
-              ],
               "value": {
                 "raw": "\\u{000042}\\u0042\\x42u0\\A",
                 "cooked": "BBBu0A"
@@ -102,5 +82,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

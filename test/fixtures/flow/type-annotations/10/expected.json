@@ -12,10 +12,6 @@
       "column": 56
     }
   },
-  "range": [
-    0,
-    56
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 56
       }
     },
-    "range": [
-      0,
-      56
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 56
           }
         },
-        "range": [
-          0,
-          56
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
                 "column": 53
               }
             },
-            "range": [
-              13,
-              53
-            ],
             "name": "callback",
             "typeAnnotation": {
               "type": "TypeAnnotation",
@@ -111,10 +91,6 @@
                   "column": 53
                 }
               },
-              "range": [
-                21,
-                53
-              ],
               "typeAnnotation": {
                 "type": "FunctionTypeAnnotation",
                 "start": 23,
@@ -129,10 +105,6 @@
                     "column": 53
                   }
                 },
-                "range": [
-                  23,
-                  53
-                ],
                 "params": [
                   {
                     "type": "FunctionTypeParam",
@@ -148,10 +120,6 @@
                         "column": 31
                       }
                     },
-                    "range": [
-                      24,
-                      31
-                    ],
                     "name": {
                       "type": "Identifier",
                       "start": 24,
@@ -166,10 +134,6 @@
                           "column": 26
                         }
                       },
-                      "range": [
-                        24,
-                        26
-                      ],
                       "name": "_1"
                     },
                     "optional": false,
@@ -186,11 +150,7 @@
                           "line": 1,
                           "column": 31
                         }
-                      },
-                      "range": [
-                        27,
-                        31
-                      ]
+                      }
                     }
                   },
                   {
@@ -207,10 +167,6 @@
                         "column": 42
                       }
                     },
-                    "range": [
-                      33,
-                      42
-                    ],
                     "name": {
                       "type": "Identifier",
                       "start": 33,
@@ -225,10 +181,6 @@
                           "column": 35
                         }
                       },
-                      "range": [
-                        33,
-                        35
-                      ],
                       "name": "_2"
                     },
                     "optional": false,
@@ -245,11 +197,7 @@
                           "line": 1,
                           "column": 42
                         }
-                      },
-                      "range": [
-                        36,
-                        42
-                      ]
+                      }
                     }
                   }
                 ],
@@ -267,11 +215,7 @@
                       "line": 1,
                       "column": 53
                     }
-                  },
-                  "range": [
-                    47,
-                    53
-                  ]
+                  }
                 },
                 "typeParameters": null
               }
@@ -292,13 +236,10 @@
               "column": 56
             }
           },
-          "range": [
-            54,
-            56
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

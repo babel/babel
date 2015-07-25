@@ -12,10 +12,6 @@
       "column": 14
     }
   },
-  "range": [
-    0,
-    14
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 14
       }
     },
-    "range": [
-      0,
-      14
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 14
           }
         },
-        "range": [
-          0,
-          14
-        ],
         "expression": {
           "type": "BinaryExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 13
             }
           },
-          "range": [
-            0,
-            13
-          ],
           "left": {
             "type": "JSXElement",
             "start": 1,
@@ -86,10 +70,6 @@
                 "column": 8
               }
             },
-            "range": [
-              1,
-              8
-            ],
             "openingElement": {
               "type": "JSXOpeningElement",
               "start": 1,
@@ -104,10 +84,6 @@
                   "column": 8
                 }
               },
-              "range": [
-                1,
-                8
-              ],
               "attributes": [],
               "name": {
                 "type": "JSXIdentifier",
@@ -123,10 +99,6 @@
                     "column": 5
                   }
                 },
-                "range": [
-                  2,
-                  5
-                ],
                 "name": "div"
               },
               "selfClosing": true
@@ -150,14 +122,11 @@
                 "column": 13
               }
             },
-            "range": [
-              12,
-              13
-            ],
             "name": "x"
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }
