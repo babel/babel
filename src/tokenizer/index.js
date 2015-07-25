@@ -79,11 +79,6 @@ export default class Tokenizer {
     return curr;
   }
 
-  getToken() {
-    this.next();
-    return new Token(this.state);
-  }
-
   // Toggle strict mode. Re-reads the next number or string to please
   // pedantic tests (`"use strict"; 010;` should fail).
 
@@ -455,13 +450,19 @@ export default class Tokenizer {
     for (;;) {
       if (this.state.pos >= this.input.length) this.raise(start, "Unterminated regular expression");
       let ch = this.input.charAt(this.state.pos);
-      if (lineBreak.test(ch)) this.raise(start, "Unterminated regular expression");
+      if (lineBreak.test(ch)) {
+        this.raise(start, "Unterminated regular expression");
+      }
       if (escaped) {
         escaped = false;
       } else {
-        if (ch === "[") inClass = true;
-        else if (ch === "]" && inClass) inClass = false;
-        else if (ch === "/" && !inClass) break;
+        if (ch === "[") {
+          inClass = true;
+        } else if (ch === "]" && inClass) {
+          inClass = false;
+        } else if (ch === "/" && !inClass) {
+          break;
+        }
         escaped = ch === "\\";
       }
       ++this.state.pos;
@@ -502,7 +503,11 @@ export default class Tokenizer {
       // case the current environment doesn't support the flags it uses.
       value = tryCreateRegexp.call(this, content, mods);
     }
-    return this.finishToken(tt.regexp, {pattern: content, flags: mods, value: value});
+    return this.finishToken(tt.regexp, {
+      pattern: content,
+      flags: mods,
+      value
+    });
   }
 
   // Read an integer in the given radix. Return null if zero digits

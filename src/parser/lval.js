@@ -100,20 +100,20 @@ pp.parseRest = function () {
 
 pp.parseBindingAtom = function () {
   switch (this.state.type) {
-  case tt.name:
-    return this.parseIdent();
+    case tt.name:
+      return this.parseIdent();
 
-  case tt.bracketL:
-    let node = this.startNode();
-    this.next();
-    node.elements = this.parseBindingList(tt.bracketR, true, true);
-    return this.finishNode(node, "ArrayPattern");
+    case tt.bracketL:
+      let node = this.startNode();
+      this.next();
+      node.elements = this.parseBindingList(tt.bracketR, true, true);
+      return this.finishNode(node, "ArrayPattern");
 
-  case tt.braceL:
-    return this.parseObj(true);
+    case tt.braceL:
+      return this.parseObj(true);
 
-  default:
-    this.unexpected();
+    default:
+      this.unexpected();
   }
 };
 
@@ -163,49 +163,45 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
 
 pp.checkLVal = function (expr, isBinding, checkClashes) {
   switch (expr.type) {
-  case "Identifier":
-    if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name)))
-      this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
-    if (checkClashes) {
-      if (checkClashes[expr.name]) {
-        this.raise(expr.start, "Argument name clash in strict mode");
-      } else {
-        checkClashes[expr.name] = true;
+    case "Identifier":
+      if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name)))
+        this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
+      if (checkClashes) {
+        if (checkClashes[expr.name]) {
+          this.raise(expr.start, "Argument name clash in strict mode");
+        } else {
+          checkClashes[expr.name] = true;
+        }
       }
-    }
-    break;
+      break;
 
-  case "MemberExpression":
-    if (isBinding) this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " member expression");
-    break;
+    case "MemberExpression":
+      if (isBinding) this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " member expression");
+      break;
 
-  case "ObjectPattern":
-       for (let prop of (expr.properties: Array)) {
-      if (prop.type === "Property") prop = prop.value;
-      this.checkLVal(prop, isBinding, checkClashes);
-    }
-    break;
+    case "ObjectPattern":
+         for (let prop of (expr.properties: Array)) {
+        if (prop.type === "Property") prop = prop.value;
+        this.checkLVal(prop, isBinding, checkClashes);
+      }
+      break;
 
-  case "ArrayPattern":
-    for (let elem of (expr.elements: Array)) {
-      if (elem) this.checkLVal(elem, isBinding, checkClashes);
-    }
-    break;
+    case "ArrayPattern":
+      for (let elem of (expr.elements: Array)) {
+        if (elem) this.checkLVal(elem, isBinding, checkClashes);
+      }
+      break;
 
-  case "AssignmentPattern":
-    this.checkLVal(expr.left, isBinding, checkClashes);
-    break;
+    case "AssignmentPattern":
+      this.checkLVal(expr.left, isBinding, checkClashes);
+      break;
 
-  case "SpreadProperty":
-  case "RestElement":
-    this.checkLVal(expr.argument, isBinding, checkClashes);
-    break;
+    case "SpreadProperty":
+    case "RestElement":
+      this.checkLVal(expr.argument, isBinding, checkClashes);
+      break;
 
-  case "ParenthesizedExpression":
-    this.checkLVal(expr.expression, isBinding, checkClashes);
-    break;
-
-  default:
-    this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " rvalue");
+    default:
+      this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " rvalue");
   }
 };
