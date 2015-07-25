@@ -12,10 +12,6 @@
       "column": 21
     }
   },
-  "range": [
-    0,
-    21
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 21
       }
     },
-    "range": [
-      0,
-      21
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 21
           }
         },
-        "range": [
-          0,
-          21
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 21
               }
             },
-            "range": [
-              4,
-              21
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 21
                 }
               },
-              "range": [
-                4,
-                21
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 21
                   }
                 },
-                "range": [
-                  6,
-                  21
-                ],
                 "typeAnnotation": {
                   "type": "TypeofTypeAnnotation",
                   "start": 8,
@@ -124,10 +100,6 @@
                       "column": 21
                     }
                   },
-                  "range": [
-                    8,
-                    21
-                  ],
                   "argument": {
                     "type": "GenericTypeAnnotation",
                     "start": 15,
@@ -142,10 +114,6 @@
                         "column": 21
                       }
                     },
-                    "range": [
-                      15,
-                      21
-                    ],
                     "typeParameters": {
                       "type": "TypeParameterInstantiation",
                       "start": 18,
@@ -160,10 +128,6 @@
                           "column": 21
                         }
                       },
-                      "range": [
-                        18,
-                        21
-                      ],
                       "params": [
                         {
                           "type": "GenericTypeAnnotation",
@@ -179,10 +143,6 @@
                               "column": 20
                             }
                           },
-                          "range": [
-                            19,
-                            20
-                          ],
                           "typeParameters": null,
                           "id": {
                             "type": "Identifier",
@@ -198,10 +158,6 @@
                                 "column": 20
                               }
                             },
-                            "range": [
-                              19,
-                              20
-                            ],
                             "name": "T"
                           }
                         }
@@ -221,10 +177,6 @@
                           "column": 18
                         }
                       },
-                      "range": [
-                        15,
-                        18
-                      ],
                       "qualification": {
                         "type": "Identifier",
                         "start": 15,
@@ -239,10 +191,6 @@
                             "column": 16
                           }
                         },
-                        "range": [
-                          15,
-                          16
-                        ],
                         "name": "A"
                       },
                       "id": {
@@ -259,10 +207,6 @@
                             "column": 18
                           }
                         },
-                        "range": [
-                          17,
-                          18
-                        ],
                         "name": "B"
                       }
                     }
@@ -276,5 +220,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

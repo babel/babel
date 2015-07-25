@@ -12,10 +12,6 @@
       "column": 29
     }
   },
-  "range": [
-    0,
-    29
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 29
       }
     },
-    "range": [
-      0,
-      29
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 29
           }
         },
-        "range": [
-          0,
-          29
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "bar"
         },
         "generator": false,
@@ -91,10 +75,6 @@
               "column": 24
             }
           },
-          "range": [
-            12,
-            24
-          ],
           "params": [
             {
               "type": "Identifier",
@@ -110,10 +90,6 @@
                   "column": 23
                 }
               },
-              "range": [
-                13,
-                23
-              ],
               "name": "T",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -129,10 +105,6 @@
                     "column": 23
                   }
                 },
-                "range": [
-                  14,
-                  23
-                ],
                 "typeAnnotation": {
                   "type": "NullableTypeAnnotation",
                   "start": 16,
@@ -147,10 +119,6 @@
                       "column": 23
                     }
                   },
-                  "range": [
-                    16,
-                    23
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 17,
@@ -164,11 +132,7 @@
                         "line": 1,
                         "column": 23
                       }
-                    },
-                    "range": [
-                      17,
-                      23
-                    ]
+                    }
                   }
                 }
               }
@@ -190,13 +154,10 @@
               "column": 29
             }
           },
-          "range": [
-            27,
-            29
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

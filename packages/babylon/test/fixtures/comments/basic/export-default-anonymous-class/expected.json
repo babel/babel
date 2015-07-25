@@ -1,149 +1,37 @@
 {
   "type": "File",
+  "start": 0,
+  "end": 121,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 10,
+      "column": 1
+    }
+  },
   "program": {
     "type": "Program",
+    "start": 0,
+    "end": 121,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 10,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
     "body": [
       {
         "type": "ExportDefaultDeclaration",
-        "declaration": {
-          "type": "ClassExpression",
-          "id": null,
-          "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "body": [
-              {
-                "type": "MethodDefinition",
-                "key": {
-                  "type": "Identifier",
-                  "name": "method1",
-                  "range": [
-                    103,
-                    110
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 8,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 8,
-                      "column": 11
-                    }
-                  }
-                },
-                "value": {
-                  "type": "FunctionExpression",
-                  "id": null,
-                  "params": [],
-                  "body": {
-                    "type": "BlockStatement",
-                    "body": [],
-                    "range": [
-                      112,
-                      119
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 8,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 9,
-                        "column": 5
-                      }
-                    }
-                  },
-                  "generator": false,
-                  "expression": false,
-                  "range": [
-                    110,
-                    119
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 8,
-                      "column": 11
-                    },
-                    "end": {
-                      "line": 9,
-                      "column": 5
-                    }
-                  }
-                },
-                "kind": "method",
-                "computed": false,
-                "range": [
-                  103,
-                  119
-                ],
-                "loc": {
-                  "start": {
-                    "line": 8,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 9,
-                    "column": 5
-                  }
-                },
-                "leadingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     * this is method1.\n     ",
-                    "range": [
-                      63,
-                      98
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 5,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 7,
-                        "column": 7
-                      }
-                    }
-                  }
-                ],
-                "static": false
-              }
-            ],
-            "range": [
-              57,
-              121
-            ],
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 21
-              },
-              "end": {
-                "line": 10,
-                "column": 1
-              }
-            }
-          },
-          "range": [
-            51,
-            121
-          ],
-          "loc": {
-            "start": {
-              "line": 4,
-              "column": 15
-            },
-            "end": {
-              "line": 10,
-              "column": 1
-            }
-          }
-        },
-        "range": [
-          36,
-          121
-        ],
+        "start": 36,
+        "end": 121,
         "loc": {
           "start": {
             "line": 4,
@@ -154,14 +42,140 @@
             "column": 1
           }
         },
+        "declaration": {
+          "type": "ClassExpression",
+          "start": 51,
+          "end": 121,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 15
+            },
+            "end": {
+              "line": 10,
+              "column": 1
+            }
+          },
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 57,
+            "end": 121,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 21
+              },
+              "end": {
+                "line": 10,
+                "column": 1
+              }
+            },
+            "body": [
+              {
+                "type": "MethodDefinition",
+                "start": 103,
+                "end": 119,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 5
+                  }
+                },
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 103,
+                  "end": 110,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 11
+                    }
+                  },
+                  "name": "method1",
+                  "leadingComments": null
+                },
+                "static": false,
+                "kind": "method",
+                "value": {
+                  "type": "FunctionExpression",
+                  "start": 110,
+                  "end": 119,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 9,
+                      "column": 5
+                    }
+                  },
+                  "id": null,
+                  "generator": false,
+                  "expression": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 112,
+                    "end": 119,
+                    "loc": {
+                      "start": {
+                        "line": 8,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 5
+                      }
+                    },
+                    "body": []
+                  }
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * this is method1.\n     ",
+                    "start": 63,
+                    "end": 98,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 7
+                      }
+                    },
+                    "range": [
+                      63,
+                      98
+                    ]
+                  }
+                ]
+              }
+            ],
+            "leadingComments": null
+          },
+          "leadingComments": null
+        },
         "leadingComments": [
           {
             "type": "CommentBlock",
             "value": "*\n * this is anonymous class.\n ",
-            "range": [
-              0,
-              35
-            ],
+            "start": 0,
+            "end": 35,
             "loc": {
               "start": {
                 "line": 1,
@@ -171,35 +185,22 @@
                 "line": 3,
                 "column": 3
               }
-            }
+            },
+            "range": [
+              0,
+              35
+            ]
           }
         ]
       }
-    ],
-    "sourceType": "module",
-    "range": [
-      0,
-      121
-    ],
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 10,
-        "column": 1
-      }
-    }
+    ]
   },
   "comments": [
     {
       "type": "CommentBlock",
       "value": "*\n * this is anonymous class.\n ",
-      "range": [
-        0,
-        35
-      ],
+      "start": 0,
+      "end": 35,
       "loc": {
         "start": {
           "line": 1,
@@ -209,15 +210,17 @@
           "line": 3,
           "column": 3
         }
-      }
+      },
+      "range": [
+        0,
+        35
+      ]
     },
     {
       "type": "CommentBlock",
       "value": "*\n     * this is method1.\n     ",
-      "range": [
-        63,
-        98
-      ],
+      "start": 63,
+      "end": 98,
       "loc": {
         "start": {
           "line": 5,
@@ -227,7 +230,11 @@
           "line": 7,
           "column": 7
         }
-      }
+      },
+      "range": [
+        63,
+        98
+      ]
     }
   ]
 }

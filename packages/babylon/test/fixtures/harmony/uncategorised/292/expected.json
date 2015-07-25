@@ -12,10 +12,6 @@
       "column": 12
     }
   },
-  "range": [
-    0,
-    12
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 12
       }
     },
-    "range": [
-      0,
-      12
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 12
           }
         },
-        "range": [
-          0,
-          12
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            0,
-            12
-          ],
           "operator": "=",
           "left": {
             "type": "ArrayPattern",
@@ -87,10 +71,6 @@
                 "column": 8
               }
             },
-            "range": [
-              0,
-              8
-            ],
             "elements": [
               {
                 "type": "RestElement",
@@ -106,10 +86,6 @@
                     "column": 5
                   }
                 },
-                "range": [
-                  1,
-                  5
-                ],
                 "argument": {
                   "type": "Identifier",
                   "start": 4,
@@ -124,10 +100,6 @@
                       "column": 5
                     }
                   },
-                  "range": [
-                    4,
-                    5
-                  ],
                   "name": "a"
                 }
               }
@@ -147,14 +119,11 @@
                 "column": 12
               }
             },
-            "range": [
-              11,
-              12
-            ],
             "name": "b"
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

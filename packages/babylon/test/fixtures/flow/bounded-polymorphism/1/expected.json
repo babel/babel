@@ -12,10 +12,6 @@
       "column": 18
     }
   },
-  "range": [
-    0,
-    18
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 18
       }
     },
-    "range": [
-      0,
-      18
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 18
           }
         },
-        "range": [
-          0,
-          18
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "typeParameters": {
@@ -88,10 +72,6 @@
               "column": 15
             }
           },
-          "range": [
-            7,
-            15
-          ],
           "params": [
             {
               "type": "Identifier",
@@ -107,10 +87,6 @@
                   "column": 14
                 }
               },
-              "range": [
-                8,
-                14
-              ],
               "name": "T",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -126,10 +102,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  9,
-                  14
-                ],
                 "typeAnnotation": {
                   "type": "GenericTypeAnnotation",
                   "start": 11,
@@ -144,10 +116,6 @@
                       "column": 14
                     }
                   },
-                  "range": [
-                    11,
-                    14
-                  ],
                   "typeParameters": null,
                   "id": {
                     "type": "Identifier",
@@ -163,10 +131,6 @@
                         "column": 14
                       }
                     },
-                    "range": [
-                      11,
-                      14
-                    ],
                     "name": "Foo"
                   }
                 }
@@ -189,13 +153,10 @@
               "column": 18
             }
           },
-          "range": [
-            16,
-            18
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

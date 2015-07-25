@@ -1,17 +1,51 @@
 {
   "type": "File",
+  "start": 0,
+  "end": 91,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 7,
+      "column": 1
+    }
+  },
   "program": {
     "type": "Program",
+    "start": 0,
+    "end": 91,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 7,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
     "body": [
       {
         "type": "SwitchStatement",
+        "start": 0,
+        "end": 91,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 1
+          }
+        },
         "discriminant": {
           "type": "Identifier",
-          "name": "foo",
-          "range": [
-            7,
-            10
-          ],
+          "start": 7,
+          "end": 10,
           "loc": {
             "start": {
               "line": 1,
@@ -21,35 +55,14 @@
               "line": 1,
               "column": 10
             }
-          }
+          },
+          "name": "foo"
         },
         "cases": [
           {
             "type": "SwitchCase",
-            "test": {
-              "type": "Literal",
-              "value": 1,
-              "raw": "1",
-              "range": [
-                34,
-                35
-              ],
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 9
-                },
-                "end": {
-                  "line": 3,
-                  "column": 10
-                }
-              }
-            },
-            "consequent": [],
-            "range": [
-              29,
-              36
-            ],
+            "start": 29,
+            "end": 36,
             "loc": {
               "start": {
                 "line": 3,
@@ -60,14 +73,32 @@
                 "column": 11
               }
             },
+            "consequent": [],
+            "test": {
+              "type": "Literal",
+              "start": 34,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 9
+                },
+                "end": {
+                  "line": 3,
+                  "column": 10
+                }
+              },
+              "value": 1,
+              "rawValue": 1,
+              "raw": "1",
+              "leadingComments": null
+            },
             "leadingComments": [
               {
                 "type": "CommentLine",
                 "value": " foo",
-                "range": [
-                  18,
-                  24
-                ],
+                "start": 18,
+                "end": 24,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -77,17 +108,19 @@
                     "line": 2,
                     "column": 10
                   }
-                }
+                },
+                "range": [
+                  18,
+                  24
+                ]
               }
             ],
             "trailingComments": [
               {
                 "type": "CommentLine",
                 "value": " falls through",
-                "range": [
-                  45,
-                  61
-                ],
+                "start": 45,
+                "end": 61,
                 "loc": {
                   "start": {
                     "line": 4,
@@ -97,90 +130,18 @@
                     "line": 4,
                     "column": 24
                   }
-                }
+                },
+                "range": [
+                  45,
+                  61
+                ]
               }
             ]
           },
           {
             "type": "SwitchCase",
-            "test": {
-              "type": "Literal",
-              "value": 2,
-              "raw": "2",
-              "range": [
-                71,
-                72
-              ],
-              "loc": {
-                "start": {
-                  "line": 5,
-                  "column": 9
-                },
-                "end": {
-                  "line": 5,
-                  "column": 10
-                }
-              }
-            },
-            "consequent": [
-              {
-                "type": "ExpressionStatement",
-                "expression": {
-                  "type": "CallExpression",
-                  "callee": {
-                    "type": "Identifier",
-                    "name": "doIt",
-                    "range": [
-                      82,
-                      86
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 6,
-                        "column": 8
-                      },
-                      "end": {
-                        "line": 6,
-                        "column": 12
-                      }
-                    }
-                  },
-                  "arguments": [],
-                  "range": [
-                    82,
-                    88
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 6,
-                      "column": 8
-                    },
-                    "end": {
-                      "line": 6,
-                      "column": 14
-                    }
-                  }
-                },
-                "range": [
-                  82,
-                  89
-                ],
-                "loc": {
-                  "start": {
-                    "line": 6,
-                    "column": 8
-                  },
-                  "end": {
-                    "line": 6,
-                    "column": 15
-                  }
-                }
-              }
-            ],
-            "range": [
-              66,
-              89
-            ],
+            "start": 66,
+            "end": 89,
             "loc": {
               "start": {
                 "line": 5,
@@ -191,14 +152,80 @@
                 "column": 15
               }
             },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 82,
+                "end": 89,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 15
+                  }
+                },
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 82,
+                  "end": 88,
+                  "loc": {
+                    "start": {
+                      "line": 6,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 6,
+                      "column": 14
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 82,
+                    "end": 86,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 12
+                      }
+                    },
+                    "name": "doIt"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "test": {
+              "type": "Literal",
+              "start": 71,
+              "end": 72,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 9
+                },
+                "end": {
+                  "line": 5,
+                  "column": 10
+                }
+              },
+              "value": 2,
+              "rawValue": 2,
+              "raw": "2",
+              "leadingComments": null
+            },
             "leadingComments": [
               {
                 "type": "CommentLine",
                 "value": " falls through",
-                "range": [
-                  45,
-                  61
-                ],
+                "start": 45,
+                "end": 61,
                 "loc": {
                   "start": {
                     "line": 4,
@@ -208,51 +235,24 @@
                     "line": 4,
                     "column": 24
                   }
-                }
+                },
+                "range": [
+                  45,
+                  61
+                ]
               }
             ]
           }
-        ],
-        "range": [
-          0,
-          91
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 7,
-            "column": 1
-          }
-        }
+        ]
       }
-    ],
-    "sourceType": "script",
-    "range": [
-      0,
-      91
-    ],
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 7,
-        "column": 1
-      }
-    }
+    ]
   },
   "comments": [
     {
       "type": "CommentLine",
       "value": " foo",
-      "range": [
-        18,
-        24
-      ],
+      "start": 18,
+      "end": 24,
       "loc": {
         "start": {
           "line": 2,
@@ -262,15 +262,17 @@
           "line": 2,
           "column": 10
         }
-      }
+      },
+      "range": [
+        18,
+        24
+      ]
     },
     {
       "type": "CommentLine",
       "value": " falls through",
-      "range": [
-        45,
-        61
-      ],
+      "start": 45,
+      "end": 61,
       "loc": {
         "start": {
           "line": 4,
@@ -280,7 +282,11 @@
           "line": 4,
           "column": 24
         }
-      }
+      },
+      "range": [
+        45,
+        61
+      ]
     }
   ]
 }

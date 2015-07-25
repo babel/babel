@@ -12,10 +12,6 @@
       "column": 56
     }
   },
-  "range": [
-    0,
-    56
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 56
       }
     },
-    "range": [
-      0,
-      56
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 56
           }
         },
-        "range": [
-          0,
-          56
-        ],
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -69,10 +57,6 @@
                 "column": 13
               }
             },
-            "range": [
-              7,
-              13
-            ],
             "local": {
               "type": "Identifier",
               "start": 7,
@@ -87,10 +71,6 @@
                   "column": 13
                 }
               },
-              "range": [
-                7,
-                13
-              ],
               "name": "crypto"
             }
           },
@@ -108,10 +88,6 @@
                 "column": 24
               }
             },
-            "range": [
-              17,
-              24
-            ],
             "imported": {
               "type": "Identifier",
               "start": 17,
@@ -126,10 +102,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                17,
-                24
-              ],
               "name": "decrypt"
             },
             "local": {
@@ -146,10 +118,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                17,
-                24
-              ],
               "name": "decrypt"
             }
           },
@@ -167,10 +135,6 @@
                 "column": 40
               }
             },
-            "range": [
-              26,
-              40
-            ],
             "imported": {
               "type": "Identifier",
               "start": 26,
@@ -185,10 +149,6 @@
                   "column": 33
                 }
               },
-              "range": [
-                26,
-                33
-              ],
               "name": "encrypt"
             },
             "local": {
@@ -205,10 +165,6 @@
                   "column": 40
                 }
               },
-              "range": [
-                37,
-                40
-              ],
               "name": "enc"
             }
           }
@@ -227,15 +183,12 @@
               "column": 56
             }
           },
-          "range": [
-            48,
-            56
-          ],
           "value": "crypto",
           "rawValue": "crypto",
           "raw": "\"crypto\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

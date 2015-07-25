@@ -1,4 +1,4 @@
-import { types as tt } from "../tokentype";
+import { types as tt } from "../tokenizer/types";
 import { Parser } from "../state";
 
 var pp = Parser.prototype;

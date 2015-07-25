@@ -12,10 +12,6 @@
       "column": 51
     }
   },
-  "range": [
-    0,
-    51
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 51
       }
     },
-    "range": [
-      0,
-      51
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 13
           }
         },
-        "range": [
-          0,
-          13
-        ],
         "expression": {
           "type": "Literal",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            0,
-            12
-          ],
           "value": "use strict",
           "rawValue": "use strict",
           "raw": "\"use strict\""
@@ -91,10 +75,6 @@
             "column": 51
           }
         },
-        "range": [
-          14,
-          51
-        ],
         "expression": {
           "type": "ClassExpression",
           "start": 15,
@@ -109,10 +89,6 @@
               "column": 50
             }
           },
-          "range": [
-            15,
-            50
-          ],
           "id": {
             "type": "Identifier",
             "start": 21,
@@ -127,10 +103,6 @@
                 "column": 22
               }
             },
-            "range": [
-              21,
-              22
-            ],
             "name": "A"
           },
           "superClass": null,
@@ -148,10 +120,6 @@
                 "column": 50
               }
             },
-            "range": [
-              23,
-              50
-            ],
             "body": [
               {
                 "type": "MethodDefinition",
@@ -167,10 +135,6 @@
                     "column": 49
                   }
                 },
-                "range": [
-                  24,
-                  49
-                ],
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -186,10 +150,6 @@
                       "column": 35
                     }
                   },
-                  "range": [
-                    24,
-                    35
-                  ],
                   "name": "constructor"
                 },
                 "static": false,
@@ -208,10 +168,6 @@
                       "column": 49
                     }
                   },
-                  "range": [
-                    35,
-                    49
-                  ],
                   "id": null,
                   "generator": false,
                   "expression": false,
@@ -230,10 +186,6 @@
                         "column": 49
                       }
                     },
-                    "range": [
-                      38,
-                      49
-                    ],
                     "body": [
                       {
                         "type": "ExpressionStatement",
@@ -249,10 +201,6 @@
                             "column": 47
                           }
                         },
-                        "range": [
-                          40,
-                          47
-                        ],
                         "expression": {
                           "type": "CallExpression",
                           "start": 40,
@@ -267,10 +215,6 @@
                               "column": 47
                             }
                           },
-                          "range": [
-                            40,
-                            47
-                          ],
                           "callee": {
                             "type": "Super",
                             "start": 40,
@@ -284,11 +228,7 @@
                                 "line": 1,
                                 "column": 45
                               }
-                            },
-                            "range": [
-                              40,
-                              45
-                            ]
+                            }
                           },
                           "arguments": []
                         }
@@ -303,5 +243,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

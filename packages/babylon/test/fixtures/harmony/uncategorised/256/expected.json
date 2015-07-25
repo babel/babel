@@ -12,10 +12,6 @@
       "column": 9
     }
   },
-  "range": [
-    0,
-    9
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 9
       }
     },
-    "range": [
-      0,
-      9
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 9
           }
         },
-        "range": [
-          0,
-          9
-        ],
         "expression": {
           "type": "BinaryExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            0,
-            9
-          ],
           "left": {
             "type": "Identifier",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 5
               }
             },
-            "range": [
-              0,
-              5
-            ],
             "name": "yield"
           },
           "operator": "*",
@@ -107,10 +87,6 @@
                 "column": 9
               }
             },
-            "range": [
-              7,
-              9
-            ],
             "value": 10,
             "rawValue": 10,
             "raw": "10"
@@ -118,5 +94,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

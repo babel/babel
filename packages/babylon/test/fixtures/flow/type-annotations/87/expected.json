@@ -12,10 +12,6 @@
       "column": 28
     }
   },
-  "range": [
-    0,
-    28
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 28
       }
     },
-    "range": [
-      0,
-      28
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 28
           }
         },
-        "range": [
-          0,
-          28
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 28
               }
             },
-            "range": [
-              4,
-              28
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 28
                 }
               },
-              "range": [
-                4,
-                28
-              ],
               "name": "identity",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 28
                   }
                 },
-                "range": [
-                  12,
-                  28
-                ],
                 "typeAnnotation": {
                   "type": "FunctionTypeAnnotation",
                   "start": 14,
@@ -124,10 +100,6 @@
                       "column": 28
                     }
                   },
-                  "range": [
-                    14,
-                    28
-                  ],
                   "typeParameters": {
                     "type": "TypeParameterDeclaration",
                     "start": 14,
@@ -142,10 +114,6 @@
                         "column": 17
                       }
                     },
-                    "range": [
-                      14,
-                      17
-                    ],
                     "params": [
                       {
                         "type": "Identifier",
@@ -161,10 +129,6 @@
                             "column": 16
                           }
                         },
-                        "range": [
-                          15,
-                          16
-                        ],
                         "name": "T"
                       }
                     ]
@@ -184,10 +148,6 @@
                           "column": 22
                         }
                       },
-                      "range": [
-                        18,
-                        22
-                      ],
                       "name": {
                         "type": "Identifier",
                         "start": 18,
@@ -202,10 +162,6 @@
                             "column": 19
                           }
                         },
-                        "range": [
-                          18,
-                          19
-                        ],
                         "name": "x"
                       },
                       "optional": false,
@@ -223,10 +179,6 @@
                             "column": 22
                           }
                         },
-                        "range": [
-                          21,
-                          22
-                        ],
                         "typeParameters": null,
                         "id": {
                           "type": "Identifier",
@@ -242,10 +194,6 @@
                               "column": 22
                             }
                           },
-                          "range": [
-                            21,
-                            22
-                          ],
                           "name": "T"
                         }
                       }
@@ -266,10 +214,6 @@
                         "column": 28
                       }
                     },
-                    "range": [
-                      27,
-                      28
-                    ],
                     "typeParameters": null,
                     "id": {
                       "type": "Identifier",
@@ -285,10 +229,6 @@
                           "column": 28
                         }
                       },
-                      "range": [
-                        27,
-                        28
-                      ],
                       "name": "T"
                     }
                   }
@@ -301,5 +241,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

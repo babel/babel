@@ -12,10 +12,6 @@
       "column": 15
     }
   },
-  "range": [
-    0,
-    15
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 15
       }
     },
-    "range": [
-      0,
-      15
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 15
           }
         },
-        "range": [
-          0,
-          15
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 14
             }
           },
-          "range": [
-            1,
-            14
-          ],
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
@@ -87,10 +71,6 @@
                 "column": 8
               }
             },
-            "range": [
-              1,
-              8
-            ],
             "properties": [
               {
                 "type": "Property",
@@ -106,10 +86,6 @@
                     "column": 7
                   }
                 },
-                "range": [
-                  2,
-                  7
-                ],
                 "method": false,
                 "shorthand": true,
                 "computed": false,
@@ -127,10 +103,6 @@
                       "column": 3
                     }
                   },
-                  "range": [
-                    2,
-                    3
-                  ],
                   "name": "x"
                 },
                 "kind": "init",
@@ -148,10 +120,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    2,
-                    7
-                  ],
                   "operator": "=",
                   "left": {
                     "type": "Identifier",
@@ -167,10 +135,6 @@
                         "column": 3
                       }
                     },
-                    "range": [
-                      2,
-                      3
-                    ],
                     "name": "x"
                   },
                   "right": {
@@ -187,10 +151,6 @@
                         "column": 7
                       }
                     },
-                    "range": [
-                      6,
-                      7
-                    ],
                     "value": 0,
                     "rawValue": 0,
                     "raw": "0"
@@ -213,15 +173,12 @@
                 "column": 14
               }
             },
-            "range": [
-              11,
-              14
-            ],
             "name": "obj"
           },
           "parenthesizedExpression": true
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

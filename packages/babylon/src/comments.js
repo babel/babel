@@ -74,7 +74,7 @@ pp.processComment = function (node) {
 
   if (lastChild) {
     if (lastChild.leadingComments) {
-      if (last(lastChild.leadingComments).range[1] <= node.range[0]) {
+      if (last(lastChild.leadingComments).end <= node.start) {
         node.leadingComments = lastChild.leadingComments;
         lastChild.leadingComments = null;
       } else {
@@ -82,7 +82,7 @@ pp.processComment = function (node) {
         // so this takes back the leading comment.
         // See Also: https://github.com/eslint/espree/issues/158
         for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
-          if (lastChild.leadingComments[i].range[1] <= node.range[0]) {
+          if (lastChild.leadingComments[i].end <= node.start) {
             node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
             break;
           }

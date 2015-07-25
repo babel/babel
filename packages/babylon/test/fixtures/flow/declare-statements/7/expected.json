@@ -12,10 +12,6 @@
       "column": 74
     }
   },
-  "range": [
-    0,
-    74
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 74
       }
     },
-    "range": [
-      0,
-      74
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 74
           }
         },
-        "range": [
-          0,
-          74
-        ],
         "id": {
           "type": "Identifier",
           "start": 14,
@@ -68,10 +56,6 @@
               "column": 26
             }
           },
-          "range": [
-            14,
-            26
-          ],
           "name": "IViewFactory"
         },
         "typeParameters": null,
@@ -90,10 +74,6 @@
               "column": 74
             }
           },
-          "range": [
-            27,
-            74
-          ],
           "callProperties": [],
           "properties": [
             {
@@ -110,10 +90,6 @@
                   "column": 72
                 }
               },
-              "range": [
-                29,
-                72
-              ],
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 29,
@@ -128,10 +104,6 @@
                     "column": 71
                   }
                 },
-                "range": [
-                  29,
-                  71
-                ],
                 "params": [
                   {
                     "type": "FunctionTypeParam",
@@ -147,10 +119,6 @@
                         "column": 51
                       }
                     },
-                    "range": [
-                      40,
-                      51
-                    ],
                     "name": {
                       "type": "Identifier",
                       "start": 40,
@@ -165,10 +133,6 @@
                           "column": 44
                         }
                       },
-                      "range": [
-                        40,
-                        44
-                      ],
                       "name": "view"
                     },
                     "optional": false,
@@ -186,10 +150,6 @@
                           "column": 51
                         }
                       },
-                      "range": [
-                        45,
-                        51
-                      ],
                       "typeParameters": null,
                       "id": {
                         "type": "Identifier",
@@ -205,10 +165,6 @@
                             "column": 51
                           }
                         },
-                        "range": [
-                          45,
-                          51
-                        ],
                         "name": "Object"
                       }
                     }
@@ -227,10 +183,6 @@
                         "column": 64
                       }
                     },
-                    "range": [
-                      53,
-                      64
-                    ],
                     "name": {
                       "type": "Identifier",
                       "start": 53,
@@ -245,10 +197,6 @@
                           "column": 57
                         }
                       },
-                      "range": [
-                        53,
-                        57
-                      ],
                       "name": "prop"
                     },
                     "optional": false,
@@ -265,11 +213,7 @@
                           "line": 1,
                           "column": 64
                         }
-                      },
-                      "range": [
-                        58,
-                        64
-                      ]
+                      }
                     }
                   }
                 ],
@@ -288,11 +232,7 @@
                       "line": 1,
                       "column": 71
                     }
-                  },
-                  "range": [
-                    67,
-                    71
-                  ]
+                  }
                 }
               },
               "key": {
@@ -309,10 +249,6 @@
                     "column": 39
                   }
                 },
-                "range": [
-                  29,
-                  39
-                ],
                 "name": "didAnimate"
               },
               "optional": false
@@ -322,5 +258,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

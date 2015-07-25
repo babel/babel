@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 27
             }
           },
-          "range": [
-            0,
-            27
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 27
               }
             },
-            "range": [
-              0,
-              27
-            ],
             "attributes": [
               {
                 "type": "JSXAttribute",
@@ -105,10 +85,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  3,
-                  24
-                ],
                 "name": {
                   "type": "JSXIdentifier",
                   "start": 3,
@@ -123,10 +99,6 @@
                       "column": 4
                     }
                   },
-                  "range": [
-                    3,
-                    4
-                  ],
                   "name": "b"
                 },
                 "value": {
@@ -143,10 +115,6 @@
                       "column": 24
                     }
                   },
-                  "range": [
-                    5,
-                    24
-                  ],
                   "expression": {
                     "type": "ConditionalExpression",
                     "start": 6,
@@ -161,10 +129,6 @@
                         "column": 23
                       }
                     },
-                    "range": [
-                      6,
-                      23
-                    ],
                     "test": {
                       "type": "Identifier",
                       "start": 6,
@@ -179,10 +143,6 @@
                           "column": 7
                         }
                       },
-                      "range": [
-                        6,
-                        7
-                      ],
                       "name": "x"
                     },
                     "consequent": {
@@ -199,10 +159,6 @@
                           "column": 15
                         }
                       },
-                      "range": [
-                        10,
-                        15
-                      ],
                       "openingElement": {
                         "type": "JSXOpeningElement",
                         "start": 10,
@@ -217,10 +173,6 @@
                             "column": 15
                           }
                         },
-                        "range": [
-                          10,
-                          15
-                        ],
                         "attributes": [],
                         "name": {
                           "type": "JSXIdentifier",
@@ -236,10 +188,6 @@
                               "column": 12
                             }
                           },
-                          "range": [
-                            11,
-                            12
-                          ],
                           "name": "c"
                         },
                         "selfClosing": true
@@ -261,10 +209,6 @@
                           "column": 23
                         }
                       },
-                      "range": [
-                        18,
-                        23
-                      ],
                       "openingElement": {
                         "type": "JSXOpeningElement",
                         "start": 18,
@@ -279,10 +223,6 @@
                             "column": 23
                           }
                         },
-                        "range": [
-                          18,
-                          23
-                        ],
                         "attributes": [],
                         "name": {
                           "type": "JSXIdentifier",
@@ -298,10 +238,6 @@
                               "column": 20
                             }
                           },
-                          "range": [
-                            19,
-                            20
-                          ],
                           "name": "d"
                         },
                         "selfClosing": true
@@ -327,10 +263,6 @@
                   "column": 2
                 }
               },
-              "range": [
-                1,
-                2
-              ],
               "name": "a"
             },
             "selfClosing": true
@@ -340,5 +272,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

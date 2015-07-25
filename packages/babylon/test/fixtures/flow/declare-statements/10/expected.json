@@ -12,10 +12,6 @@
       "column": 59
     }
   },
-  "range": [
-    0,
-    59
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 59
       }
     },
-    "range": [
-      0,
-      59
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 59
           }
         },
-        "range": [
-          0,
-          59
-        ],
         "id": {
           "type": "Identifier",
           "start": 14,
@@ -68,10 +56,6 @@
               "column": 15
             }
           },
-          "range": [
-            14,
-            15
-          ],
           "name": "A"
         },
         "typeParameters": null,
@@ -90,10 +74,6 @@
               "column": 59
             }
           },
-          "range": [
-            16,
-            59
-          ],
           "callProperties": [],
           "properties": [
             {
@@ -110,10 +90,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                18,
-                39
-              ],
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 18,
@@ -128,10 +104,6 @@
                     "column": 38
                   }
                 },
-                "range": [
-                  18,
-                  38
-                ],
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
@@ -148,11 +120,7 @@
                       "line": 1,
                       "column": 38
                     }
-                  },
-                  "range": [
-                    32,
-                    38
-                  ]
+                  }
                 }
               },
               "static": true,
@@ -170,10 +138,6 @@
                     "column": 28
                   }
                 },
-                "range": [
-                  25,
-                  28
-                ],
                 "name": "foo"
               },
               "optional": false
@@ -192,10 +156,6 @@
                   "column": 57
                 }
               },
-              "range": [
-                40,
-                57
-              ],
               "key": {
                 "type": "Identifier",
                 "start": 47,
@@ -210,10 +170,6 @@
                     "column": 48
                   }
                 },
-                "range": [
-                  47,
-                  48
-                ],
                 "name": "x"
               },
               "value": {
@@ -229,11 +185,7 @@
                     "line": 1,
                     "column": 57
                   }
-                },
-                "range": [
-                  51,
-                  57
-                ]
+                }
               },
               "optional": false,
               "static": true
@@ -243,5 +195,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

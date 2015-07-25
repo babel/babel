@@ -12,10 +12,6 @@
       "column": 44
     }
   },
-  "range": [
-    0,
-    44
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 44
       }
     },
-    "range": [
-      0,
-      44
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 44
           }
         },
-        "range": [
-          0,
-          44
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
                 "column": 24
               }
             },
-            "range": [
-              13,
-              24
-            ],
             "name": "numVal",
             "typeAnnotation": {
               "type": "TypeAnnotation",
@@ -111,10 +91,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                19,
-                24
-              ],
               "typeAnnotation": {
                 "type": "AnyTypeAnnotation",
                 "start": 21,
@@ -128,11 +104,7 @@
                     "line": 1,
                     "column": 24
                   }
-                },
-                "range": [
-                  21,
-                  24
-                ]
+                }
               }
             }
           },
@@ -150,10 +122,6 @@
                 "column": 41
               }
             },
-            "range": [
-              26,
-              41
-            ],
             "name": "otherVal",
             "typeAnnotation": {
               "type": "TypeAnnotation",
@@ -169,10 +137,6 @@
                   "column": 41
                 }
               },
-              "range": [
-                34,
-                41
-              ],
               "typeAnnotation": {
                 "type": "MixedTypeAnnotation",
                 "start": 36,
@@ -186,11 +150,7 @@
                     "line": 1,
                     "column": 41
                   }
-                },
-                "range": [
-                  36,
-                  41
-                ]
+                }
               }
             }
           }
@@ -209,13 +169,10 @@
               "column": 44
             }
           },
-          "range": [
-            42,
-            44
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

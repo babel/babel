@@ -12,10 +12,6 @@
       "column": 16
     }
   },
-  "range": [
-    0,
-    16
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 16
       }
     },
-    "range": [
-      0,
-      16
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 16
           }
         },
-        "range": [
-          0,
-          16
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 15
               }
             },
-            "range": [
-              4,
-              15
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 10
                 }
               },
-              "range": [
-                4,
-                10
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 10
                   }
                 },
-                "range": [
-                  6,
-                  10
-                ],
                 "typeAnnotation": {
                   "type": "TupleTypeAnnotation",
                   "start": 8,
@@ -124,10 +100,6 @@
                       "column": 10
                     }
                   },
-                  "range": [
-                    8,
-                    10
-                  ],
                   "types": []
                 }
               }
@@ -146,10 +118,6 @@
                   "column": 15
                 }
               },
-              "range": [
-                13,
-                15
-              ],
               "elements": []
             }
           }
@@ -157,5 +125,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

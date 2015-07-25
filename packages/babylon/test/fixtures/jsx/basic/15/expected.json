@@ -12,10 +12,6 @@
       "column": 15
     }
   },
-  "range": [
-    0,
-    15
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 15
       }
     },
-    "range": [
-      0,
-      15
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 15
           }
         },
-        "range": [
-          0,
-          15
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 15
             }
           },
-          "range": [
-            0,
-            15
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 7
               }
             },
-            "range": [
-              0,
-              7
-            ],
             "attributes": [],
             "name": {
               "type": "JSXMemberExpression",
@@ -105,10 +85,6 @@
                   "column": 6
                 }
               },
-              "range": [
-                1,
-                6
-              ],
               "object": {
                 "type": "JSXMemberExpression",
                 "start": 1,
@@ -123,10 +99,6 @@
                     "column": 4
                   }
                 },
-                "range": [
-                  1,
-                  4
-                ],
                 "object": {
                   "type": "JSXIdentifier",
                   "start": 1,
@@ -141,10 +113,6 @@
                       "column": 2
                     }
                   },
-                  "range": [
-                    1,
-                    2
-                  ],
                   "name": "a"
                 },
                 "property": {
@@ -161,10 +129,6 @@
                       "column": 4
                     }
                   },
-                  "range": [
-                    3,
-                    4
-                  ],
                   "name": "b"
                 }
               },
@@ -182,10 +146,6 @@
                     "column": 6
                   }
                 },
-                "range": [
-                  5,
-                  6
-                ],
                 "name": "c"
               }
             },
@@ -205,10 +165,6 @@
                 "column": 15
               }
             },
-            "range": [
-              7,
-              15
-            ],
             "name": {
               "type": "JSXMemberExpression",
               "start": 9,
@@ -223,10 +179,6 @@
                   "column": 14
                 }
               },
-              "range": [
-                9,
-                14
-              ],
               "object": {
                 "type": "JSXMemberExpression",
                 "start": 9,
@@ -241,10 +193,6 @@
                     "column": 12
                   }
                 },
-                "range": [
-                  9,
-                  12
-                ],
                 "object": {
                   "type": "JSXIdentifier",
                   "start": 9,
@@ -259,10 +207,6 @@
                       "column": 10
                     }
                   },
-                  "range": [
-                    9,
-                    10
-                  ],
                   "name": "a"
                 },
                 "property": {
@@ -279,10 +223,6 @@
                       "column": 12
                     }
                   },
-                  "range": [
-                    11,
-                    12
-                  ],
                   "name": "b"
                 }
               },
@@ -300,10 +240,6 @@
                     "column": 14
                   }
                 },
-                "range": [
-                  13,
-                  14
-                ],
                 "name": "c"
               }
             }
@@ -312,5 +248,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

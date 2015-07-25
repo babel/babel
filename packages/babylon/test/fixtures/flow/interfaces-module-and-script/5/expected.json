@@ -12,10 +12,6 @@
       "column": 65
     }
   },
-  "range": [
-    0,
-    65
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 65
       }
     },
-    "range": [
-      0,
-      65
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 65
           }
         },
-        "range": [
-          0,
-          65
-        ],
         "id": {
           "type": "Identifier",
           "start": 10,
@@ -68,10 +56,6 @@
               "column": 20
             }
           },
-          "range": [
-            10,
-            20
-          ],
           "name": "Dictionary"
         },
         "typeParameters": null,
@@ -90,10 +74,6 @@
               "column": 65
             }
           },
-          "range": [
-            21,
-            65
-          ],
           "callProperties": [],
           "properties": [
             {
@@ -110,10 +90,6 @@
                   "column": 63
                 }
               },
-              "range": [
-                48,
-                63
-              ],
               "key": {
                 "type": "Identifier",
                 "start": 48,
@@ -128,10 +104,6 @@
                     "column": 54
                   }
                 },
-                "range": [
-                  48,
-                  54
-                ],
                 "name": "length"
               },
               "value": {
@@ -147,11 +119,7 @@
                     "line": 1,
                     "column": 62
                   }
-                },
-                "range": [
-                  56,
-                  62
-                ]
+                }
               },
               "optional": false
             }
@@ -171,10 +139,6 @@
                   "column": 47
                 }
               },
-              "range": [
-                23,
-                47
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 24,
@@ -189,10 +153,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  24,
-                  29
-                ],
                 "name": "index"
               },
               "key": {
@@ -208,11 +168,7 @@
                     "line": 1,
                     "column": 37
                   }
-                },
-                "range": [
-                  31,
-                  37
-                ]
+                }
               },
               "value": {
                 "type": "StringTypeAnnotation",
@@ -227,16 +183,13 @@
                     "line": 1,
                     "column": 46
                   }
-                },
-                "range": [
-                  40,
-                  46
-                ]
+                }
               }
             }
           ]
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

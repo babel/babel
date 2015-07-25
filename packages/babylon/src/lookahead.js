@@ -30,8 +30,7 @@ var STATE_KEYS = [
 
 pp.getState = function () {
   var state = {};
-  for (var i = 0; i < STATE_KEYS.length; i++) {
-    var key = STATE_KEYS[i];
+  for (var key of (STATE_KEYS: Array)) {
     state[key] = this[key];
   }
   state.comments = this.comments.slice();

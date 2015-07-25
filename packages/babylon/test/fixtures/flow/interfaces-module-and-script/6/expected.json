@@ -12,10 +12,6 @@
       "column": 27
     }
   },
-  "range": [
-    0,
-    27
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 27
       }
     },
-    "range": [
-      0,
-      27
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 27
           }
         },
-        "range": [
-          0,
-          27
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "superClass": null,
@@ -90,10 +74,6 @@
                 "column": 24
               }
             },
-            "range": [
-              21,
-              24
-            ],
             "id": {
               "type": "Identifier",
               "start": 21,
@@ -108,10 +88,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                21,
-                24
-              ],
               "name": "Bar"
             },
             "typeParameters": null
@@ -131,13 +107,10 @@
               "column": 27
             }
           },
-          "range": [
-            25,
-            27
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

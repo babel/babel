@@ -12,10 +12,6 @@
       "column": 32
     }
   },
-  "range": [
-    0,
-    32
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 32
       }
     },
-    "range": [
-      0,
-      32
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 32
           }
         },
-        "range": [
-          0,
-          32
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 32
             }
           },
-          "range": [
-            0,
-            32
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 32
               }
             },
-            "range": [
-              0,
-              32
-            ],
             "attributes": [
               {
                 "type": "JSXAttribute",
@@ -105,10 +85,6 @@
                     "column": 18
                   }
                 },
-                "range": [
-                  5,
-                  18
-                ],
                 "name": {
                   "type": "JSXIdentifier",
                   "start": 5,
@@ -123,10 +99,6 @@
                       "column": 8
                     }
                   },
-                  "range": [
-                    5,
-                    8
-                  ],
                   "name": "pre"
                 },
                 "value": {
@@ -143,10 +115,6 @@
                       "column": 18
                     }
                   },
-                  "range": [
-                    9,
-                    18
-                  ],
                   "value": "leading",
                   "rawValue": "leading",
                   "raw": "\"leading\""
@@ -166,10 +134,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  19,
-                  29
-                ],
                 "argument": {
                   "type": "Identifier",
                   "start": 23,
@@ -184,10 +148,6 @@
                       "column": 28
                     }
                   },
-                  "range": [
-                    23,
-                    28
-                  ],
                   "name": "props"
                 }
               }
@@ -206,10 +166,6 @@
                   "column": 4
                 }
               },
-              "range": [
-                1,
-                4
-              ],
               "name": "div"
             },
             "selfClosing": true
@@ -219,5 +175,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 29
     }
   },
-  "range": [
-    0,
-    29
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 29
       }
     },
-    "range": [
-      0,
-      29
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 29
           }
         },
-        "range": [
-          0,
-          29
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 29
             }
           },
-          "range": [
-            8,
-            29
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 27
                 }
               },
-              "range": [
-                10,
-                27
-              ],
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 21
                   }
                 },
-                "range": [
-                  18,
-                  21
-                ],
                 "name": "foo"
               },
               "static": true,
@@ -149,10 +121,6 @@
                     "column": 27
                   }
                 },
-                "range": [
-                  22,
-                  27
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -171,10 +139,6 @@
                       "column": 27
                     }
                   },
-                  "range": [
-                    25,
-                    27
-                  ],
                   "body": []
                 }
               }
@@ -183,5 +147,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

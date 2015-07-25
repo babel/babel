@@ -12,10 +12,6 @@
       "column": 36
     }
   },
-  "range": [
-    0,
-    36
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 36
       }
     },
-    "range": [
-      0,
-      36
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 36
           }
         },
-        "range": [
-          0,
-          36
-        ],
         "id": {
           "type": "Identifier",
           "start": 10,
@@ -68,10 +56,6 @@
               "column": 11
             }
           },
-          "range": [
-            10,
-            11
-          ],
           "name": "A"
         },
         "typeParameters": {
@@ -88,10 +72,6 @@
               "column": 14
             }
           },
-          "range": [
-            11,
-            14
-          ],
           "params": [
             {
               "type": "Identifier",
@@ -107,10 +87,6 @@
                   "column": 13
                 }
               },
-              "range": [
-                12,
-                13
-              ],
               "name": "T"
             }
           ]
@@ -130,10 +106,6 @@
                 "column": 27
               }
             },
-            "range": [
-              23,
-              27
-            ],
             "id": {
               "type": "Identifier",
               "start": 23,
@@ -148,10 +120,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                23,
-                24
-              ],
               "name": "B"
             },
             "typeParameters": {
@@ -168,10 +136,6 @@
                   "column": 27
                 }
               },
-              "range": [
-                24,
-                27
-              ],
               "params": [
                 {
                   "type": "GenericTypeAnnotation",
@@ -187,10 +151,6 @@
                       "column": 26
                     }
                   },
-                  "range": [
-                    25,
-                    26
-                  ],
                   "typeParameters": null,
                   "id": {
                     "type": "Identifier",
@@ -206,10 +166,6 @@
                         "column": 26
                       }
                     },
-                    "range": [
-                      25,
-                      26
-                    ],
                     "name": "T"
                   }
                 }
@@ -230,10 +186,6 @@
                 "column": 33
               }
             },
-            "range": [
-              29,
-              33
-            ],
             "id": {
               "type": "Identifier",
               "start": 29,
@@ -248,10 +200,6 @@
                   "column": 30
                 }
               },
-              "range": [
-                29,
-                30
-              ],
               "name": "C"
             },
             "typeParameters": {
@@ -268,10 +216,6 @@
                   "column": 33
                 }
               },
-              "range": [
-                30,
-                33
-              ],
               "params": [
                 {
                   "type": "GenericTypeAnnotation",
@@ -287,10 +231,6 @@
                       "column": 32
                     }
                   },
-                  "range": [
-                    31,
-                    32
-                  ],
                   "typeParameters": null,
                   "id": {
                     "type": "Identifier",
@@ -306,10 +246,6 @@
                         "column": 32
                       }
                     },
-                    "range": [
-                      31,
-                      32
-                    ],
                     "name": "T"
                   }
                 }
@@ -331,15 +267,12 @@
               "column": 36
             }
           },
-          "range": [
-            34,
-            36
-          ],
           "callProperties": [],
           "properties": [],
           "indexers": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

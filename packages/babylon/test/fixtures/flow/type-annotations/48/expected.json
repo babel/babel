@@ -12,10 +12,6 @@
       "column": 31
     }
   },
-  "range": [
-    0,
-    31
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 31
       }
     },
-    "range": [
-      0,
-      31
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 31
           }
         },
-        "range": [
-          0,
-          31
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "typeParameters": {
@@ -88,10 +72,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "params": [
             {
               "type": "Identifier",
@@ -107,10 +87,6 @@
                   "column": 11
                 }
               },
-              "range": [
-                10,
-                11
-              ],
               "name": "T"
             }
           ]
@@ -129,10 +105,6 @@
               "column": 24
             }
           },
-          "range": [
-            21,
-            24
-          ],
           "name": "Bar"
         },
         "superTypeParameters": {
@@ -149,10 +121,6 @@
               "column": 27
             }
           },
-          "range": [
-            24,
-            27
-          ],
           "params": [
             {
               "type": "GenericTypeAnnotation",
@@ -168,10 +136,6 @@
                   "column": 26
                 }
               },
-              "range": [
-                25,
-                26
-              ],
               "typeParameters": null,
               "id": {
                 "type": "Identifier",
@@ -187,10 +151,6 @@
                     "column": 26
                   }
                 },
-                "range": [
-                  25,
-                  26
-                ],
                 "name": "T"
               }
             }
@@ -210,13 +170,10 @@
               "column": 31
             }
           },
-          "range": [
-            28,
-            31
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

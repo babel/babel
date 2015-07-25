@@ -12,10 +12,6 @@
       "column": 40
     }
   },
-  "range": [
-    0,
-    40
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 40
       }
     },
-    "range": [
-      0,
-      40
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 40
           }
         },
-        "range": [
-          0,
-          40
-        ],
         "specifiers": [
           {
             "type": "ImportNamespaceSpecifier",
@@ -69,10 +57,6 @@
                 "column": 28
               }
             },
-            "range": [
-              14,
-              28
-            ],
             "local": {
               "type": "Identifier",
               "start": 19,
@@ -87,10 +71,6 @@
                   "column": 28
                 }
               },
-              "range": [
-                19,
-                28
-              ],
               "name": "namespace"
             }
           }
@@ -110,15 +90,12 @@
               "column": 39
             }
           },
-          "range": [
-            34,
-            39
-          ],
           "value": "bar",
           "rawValue": "bar",
           "raw": "\"bar\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

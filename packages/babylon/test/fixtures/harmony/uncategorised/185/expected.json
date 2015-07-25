@@ -12,10 +12,6 @@
       "column": 13
     }
   },
-  "range": [
-    0,
-    13
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 13
       }
     },
-    "range": [
-      0,
-      13
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 13
           }
         },
-        "range": [
-          0,
-          13
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 13
             }
           },
-          "range": [
-            0,
-            13
-          ],
           "operator": "=",
           "left": {
             "type": "ArrayPattern",
@@ -87,10 +71,6 @@
                 "column": 9
               }
             },
-            "range": [
-              0,
-              9
-            ],
             "elements": [
               {
                 "type": "Identifier",
@@ -106,10 +86,6 @@
                     "column": 2
                   }
                 },
-                "range": [
-                  1,
-                  2
-                ],
                 "name": "a"
               },
               {
@@ -126,10 +102,6 @@
                     "column": 8
                   }
                 },
-                "range": [
-                  4,
-                  8
-                ],
                 "argument": {
                   "type": "Identifier",
                   "start": 7,
@@ -144,10 +116,6 @@
                       "column": 8
                     }
                   },
-                  "range": [
-                    7,
-                    8
-                  ],
                   "name": "b"
                 }
               }
@@ -167,14 +135,11 @@
                 "column": 13
               }
             },
-            "range": [
-              12,
-              13
-            ],
             "name": "c"
           }
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

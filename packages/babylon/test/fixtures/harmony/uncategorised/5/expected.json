@@ -12,10 +12,6 @@
       "column": 37
     }
   },
-  "range": [
-    0,
-    37
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 37
       }
     },
-    "range": [
-      0,
-      37
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 37
           }
         },
-        "range": [
-          0,
-          37
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 13
             }
           },
-          "range": [
-            9,
-            13
-          ],
           "name": "test"
         },
         "generator": false,
@@ -91,10 +75,6 @@
               "column": 37
             }
           },
-          "range": [
-            16,
-            37
-          ],
           "body": [
             {
               "type": "ExpressionStatement",
@@ -110,10 +90,6 @@
                   "column": 30
                 }
               },
-              "range": [
-                17,
-                30
-              ],
               "expression": {
                 "type": "Literal",
                 "start": 17,
@@ -128,10 +104,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  17,
-                  29
-                ],
                 "value": "use strict",
                 "rawValue": "use strict",
                 "raw": "'use strict'"
@@ -151,10 +123,6 @@
                   "column": 35
                 }
               },
-              "range": [
-                31,
-                35
-              ],
               "expression": {
                 "type": "Literal",
                 "start": 31,
@@ -169,10 +137,6 @@
                     "column": 34
                   }
                 },
-                "range": [
-                  31,
-                  34
-                ],
                 "value": 0,
                 "rawValue": 0,
                 "raw": "0o0"
@@ -182,5 +146,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

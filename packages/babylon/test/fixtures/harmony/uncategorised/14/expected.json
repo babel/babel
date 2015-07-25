@@ -12,10 +12,6 @@
       "column": 4
     }
   },
-  "range": [
-    0,
-    4
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 4
       }
     },
-    "range": [
-      0,
-      4
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 4
           }
         },
-        "range": [
-          0,
-          4
-        ],
         "expression": {
           "type": "Literal",
           "start": 0,
@@ -68,15 +56,12 @@
               "column": 4
             }
           },
-          "range": [
-            0,
-            4
-          ],
           "value": 2,
           "rawValue": 2,
           "raw": "0b10"
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

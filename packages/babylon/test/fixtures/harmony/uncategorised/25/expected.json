@@ -12,10 +12,6 @@
       "column": 11
     }
   },
-  "range": [
-    0,
-    11
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 11
       }
     },
-    "range": [
-      0,
-      11
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 11
           }
         },
-        "range": [
-          0,
-          11
-        ],
         "expression": {
           "type": "NewExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 11
             }
           },
-          "range": [
-            0,
-            11
-          ],
           "callee": {
             "type": "TaggedTemplateExpression",
             "start": 4,
@@ -86,10 +70,6 @@
                 "column": 11
               }
             },
-            "range": [
-              4,
-              11
-            ],
             "tag": {
               "type": "Identifier",
               "start": 4,
@@ -104,10 +84,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "raw"
             },
             "quasi": {
@@ -124,10 +100,6 @@
                   "column": 11
                 }
               },
-              "range": [
-                7,
-                11
-              ],
               "expressions": [],
               "quasis": [
                 {
@@ -144,10 +116,6 @@
                       "column": 10
                     }
                   },
-                  "range": [
-                    8,
-                    10
-                  ],
                   "value": {
                     "raw": "42",
                     "cooked": "42"
@@ -161,5 +129,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 43
     }
   },
-  "range": [
-    0,
-    43
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 43
       }
     },
-    "range": [
-      0,
-      43
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 43
           }
         },
-        "range": [
-          0,
-          43
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 42
               }
             },
-            "range": [
-              4,
-              42
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "name": "foo"
             },
             "init": {
@@ -107,10 +87,6 @@
                   "column": 41
                 }
               },
-              "range": [
-                11,
-                41
-              ],
               "expression": {
                 "type": "ArrowFunctionExpression",
                 "start": 12,
@@ -125,10 +101,6 @@
                     "column": 32
                   }
                 },
-                "range": [
-                  12,
-                  32
-                ],
                 "id": null,
                 "generator": false,
                 "expression": true,
@@ -148,10 +120,6 @@
                         "column": 16
                       }
                     },
-                    "range": [
-                      13,
-                      16
-                    ],
                     "name": "bar",
                     "parenthesizedExpression": true
                   }
@@ -170,10 +138,6 @@
                       "column": 32
                     }
                   },
-                  "range": [
-                    29,
-                    32
-                  ],
                   "name": "bar"
                 },
                 "returnType": {
@@ -190,10 +154,6 @@
                       "column": 25
                     }
                   },
-                  "range": [
-                    17,
-                    25
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 19,
@@ -207,11 +167,7 @@
                         "line": 1,
                         "column": 25
                       }
-                    },
-                    "range": [
-                      19,
-                      25
-                    ]
+                    }
                   }
                 },
                 "parenthesizedExpression": true
@@ -230,10 +186,6 @@
                     "column": 41
                   }
                 },
-                "range": [
-                  33,
-                  41
-                ],
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
                   "start": 35,
@@ -247,11 +199,7 @@
                       "line": 1,
                       "column": 41
                     }
-                  },
-                  "range": [
-                    35,
-                    41
-                  ]
+                  }
                 }
               },
               "parenthesizedExpression": true
@@ -261,5 +209,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

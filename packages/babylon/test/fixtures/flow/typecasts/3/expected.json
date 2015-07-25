@@ -12,10 +12,6 @@
       "column": 43
     }
   },
-  "range": [
-    0,
-    43
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 43
       }
     },
-    "range": [
-      0,
-      43
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 43
           }
         },
-        "range": [
-          0,
-          43
-        ],
         "expression": {
           "type": "TypeCastExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 42
             }
           },
-          "range": [
-            1,
-            42
-          ],
           "expression": {
             "type": "ArrowFunctionExpression",
             "start": 1,
@@ -86,10 +70,6 @@
                 "column": 17
               }
             },
-            "range": [
-              1,
-              17
-            ],
             "id": null,
             "generator": false,
             "expression": true,
@@ -109,10 +89,6 @@
                     "column": 5
                   }
                 },
-                "range": [
-                  2,
-                  5
-                ],
                 "name": "xxx"
               }
             ],
@@ -130,10 +106,6 @@
                   "column": 17
                 }
               },
-              "range": [
-                10,
-                17
-              ],
               "left": {
                 "type": "Identifier",
                 "start": 10,
@@ -148,10 +120,6 @@
                     "column": 13
                   }
                 },
-                "range": [
-                  10,
-                  13
-                ],
                 "name": "xxx"
               },
               "operator": "+",
@@ -169,10 +137,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  16,
-                  17
-                ],
                 "value": 1,
                 "rawValue": 1,
                 "raw": "1"
@@ -193,10 +157,6 @@
                 "column": 42
               }
             },
-            "range": [
-              17,
-              42
-            ],
             "typeAnnotation": {
               "type": "FunctionTypeAnnotation",
               "start": 19,
@@ -211,10 +171,6 @@
                   "column": 42
                 }
               },
-              "range": [
-                19,
-                42
-              ],
               "params": [
                 {
                   "type": "FunctionTypeParam",
@@ -230,10 +186,6 @@
                       "column": 31
                     }
                   },
-                  "range": [
-                    20,
-                    31
-                  ],
                   "name": {
                     "type": "Identifier",
                     "start": 20,
@@ -248,10 +200,6 @@
                         "column": 23
                       }
                     },
-                    "range": [
-                      20,
-                      23
-                    ],
                     "name": "xxx"
                   },
                   "optional": false,
@@ -268,11 +216,7 @@
                         "line": 1,
                         "column": 31
                       }
-                    },
-                    "range": [
-                      25,
-                      31
-                    ]
+                    }
                   }
                 }
               ],
@@ -290,11 +234,7 @@
                     "line": 1,
                     "column": 42
                   }
-                },
-                "range": [
-                  36,
-                  42
-                ]
+                }
               },
               "typeParameters": null
             }
@@ -303,5 +243,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

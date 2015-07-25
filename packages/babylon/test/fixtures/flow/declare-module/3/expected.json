@@ -12,10 +12,6 @@
       "column": 43
     }
   },
-  "range": [
-    0,
-    43
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 43
       }
     },
-    "range": [
-      0,
-      43
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 43
           }
         },
-        "range": [
-          0,
-          43
-        ],
         "id": {
           "type": "Identifier",
           "start": 15,
@@ -68,10 +56,6 @@
               "column": 16
             }
           },
-          "range": [
-            15,
-            16
-          ],
           "name": "A"
         },
         "body": {
@@ -88,10 +72,6 @@
               "column": 43
             }
           },
-          "range": [
-            17,
-            43
-          ],
           "body": [
             {
               "type": "DeclareVariable",
@@ -107,10 +87,6 @@
                   "column": 41
                 }
               },
-              "range": [
-                19,
-                41
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 31,
@@ -125,10 +101,6 @@
                     "column": 40
                   }
                 },
-                "range": [
-                  31,
-                  40
-                ],
                 "name": "x",
                 "typeAnnotation": {
                   "type": "TypeAnnotation",
@@ -144,10 +116,6 @@
                       "column": 40
                     }
                   },
-                  "range": [
-                    32,
-                    40
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 34,
@@ -161,11 +129,7 @@
                         "line": 1,
                         "column": 40
                       }
-                    },
-                    "range": [
-                      34,
-                      40
-                    ]
+                    }
                   }
                 }
               }
@@ -174,5 +138,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

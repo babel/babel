@@ -1,17 +1,51 @@
 {
   "type": "File",
+  "start": 0,
+  "end": 141,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 9,
+      "column": 1
+    }
+  },
   "program": {
     "type": "Program",
+    "start": 0,
+    "end": 141,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 9,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
     "body": [
       {
         "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 141,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 1
+          }
+        },
         "id": {
           "type": "Identifier",
-          "name": "bar",
-          "range": [
-            9,
-            12
-          ],
+          "start": 9,
+          "end": 12,
           "loc": {
             "start": {
               "line": 1,
@@ -21,16 +55,16 @@
               "line": 1,
               "column": 12
             }
-          }
+          },
+          "name": "bar"
         },
+        "generator": false,
+        "expression": false,
         "params": [
           {
             "type": "Identifier",
-            "name": "foo",
-            "range": [
-              13,
-              16
-            ],
+            "start": 13,
+            "end": 16,
             "loc": {
               "start": {
                 "line": 1,
@@ -40,21 +74,43 @@
                 "line": 1,
                 "column": 16
               }
-            }
+            },
+            "name": "foo"
           }
         ],
         "body": {
           "type": "BlockStatement",
+          "start": 18,
+          "end": 141,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 9,
+              "column": 1
+            }
+          },
           "body": [
             {
               "type": "SwitchStatement",
+              "start": 24,
+              "end": 139,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 8,
+                  "column": 5
+                }
+              },
               "discriminant": {
                 "type": "Identifier",
-                "name": "foo",
-                "range": [
-                  31,
-                  34
-                ],
+                "start": 31,
+                "end": 34,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -64,35 +120,14 @@
                     "line": 2,
                     "column": 14
                   }
-                }
+                },
+                "name": "foo"
               },
               "cases": [
                 {
                   "type": "SwitchCase",
-                  "test": {
-                    "type": "Literal",
-                    "value": 1,
-                    "raw": "1",
-                    "range": [
-                      66,
-                      67
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 4,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 4,
-                        "column": 14
-                      }
-                    }
-                  },
-                  "consequent": [],
-                  "range": [
-                    61,
-                    68
-                  ],
+                  "start": 61,
+                  "end": 68,
                   "loc": {
                     "start": {
                       "line": 4,
@@ -103,14 +138,32 @@
                       "column": 15
                     }
                   },
+                  "consequent": [],
+                  "test": {
+                    "type": "Literal",
+                    "start": 66,
+                    "end": 67,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 14
+                      }
+                    },
+                    "value": 1,
+                    "rawValue": 1,
+                    "raw": "1",
+                    "leadingComments": null
+                  },
                   "leadingComments": [
                     {
                       "type": "CommentLine",
                       "value": " foo",
-                      "range": [
-                        46,
-                        52
-                      ],
+                      "start": 46,
+                      "end": 52,
                       "loc": {
                         "start": {
                           "line": 3,
@@ -120,17 +173,19 @@
                           "line": 3,
                           "column": 14
                         }
-                      }
+                      },
+                      "range": [
+                        46,
+                        52
+                      ]
                     }
                   ],
                   "trailingComments": [
                     {
                       "type": "CommentLine",
                       "value": " falls through",
-                      "range": [
-                        81,
-                        97
-                      ],
+                      "start": 81,
+                      "end": 97,
                       "loc": {
                         "start": {
                           "line": 5,
@@ -140,90 +195,18 @@
                           "line": 5,
                           "column": 28
                         }
-                      }
+                      },
+                      "range": [
+                        81,
+                        97
+                      ]
                     }
                   ]
                 },
                 {
                   "type": "SwitchCase",
-                  "test": {
-                    "type": "Literal",
-                    "value": 2,
-                    "raw": "2",
-                    "range": [
-                      111,
-                      112
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 6,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 6,
-                        "column": 14
-                      }
-                    }
-                  },
-                  "consequent": [
-                    {
-                      "type": "ExpressionStatement",
-                      "expression": {
-                        "type": "CallExpression",
-                        "callee": {
-                          "type": "Identifier",
-                          "name": "doIt",
-                          "range": [
-                            126,
-                            130
-                          ],
-                          "loc": {
-                            "start": {
-                              "line": 7,
-                              "column": 12
-                            },
-                            "end": {
-                              "line": 7,
-                              "column": 16
-                            }
-                          }
-                        },
-                        "arguments": [],
-                        "range": [
-                          126,
-                          132
-                        ],
-                        "loc": {
-                          "start": {
-                            "line": 7,
-                            "column": 12
-                          },
-                          "end": {
-                            "line": 7,
-                            "column": 18
-                          }
-                        }
-                      },
-                      "range": [
-                        126,
-                        133
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 7,
-                          "column": 12
-                        },
-                        "end": {
-                          "line": 7,
-                          "column": 19
-                        }
-                      }
-                    }
-                  ],
-                  "range": [
-                    106,
-                    133
-                  ],
+                  "start": 106,
+                  "end": 133,
                   "loc": {
                     "start": {
                       "line": 6,
@@ -234,14 +217,80 @@
                       "column": 19
                     }
                   },
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 126,
+                      "end": 133,
+                      "loc": {
+                        "start": {
+                          "line": 7,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 7,
+                          "column": 19
+                        }
+                      },
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 126,
+                        "end": 132,
+                        "loc": {
+                          "start": {
+                            "line": 7,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 7,
+                            "column": 18
+                          }
+                        },
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 126,
+                          "end": 130,
+                          "loc": {
+                            "start": {
+                              "line": 7,
+                              "column": 12
+                            },
+                            "end": {
+                              "line": 7,
+                              "column": 16
+                            }
+                          },
+                          "name": "doIt"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "test": {
+                    "type": "Literal",
+                    "start": 111,
+                    "end": 112,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 14
+                      }
+                    },
+                    "value": 2,
+                    "rawValue": 2,
+                    "raw": "2",
+                    "leadingComments": null
+                  },
                   "leadingComments": [
                     {
                       "type": "CommentLine",
                       "value": " falls through",
-                      "range": [
-                        81,
-                        97
-                      ],
+                      "start": 81,
+                      "end": 97,
                       "loc": {
                         "start": {
                           "line": 5,
@@ -251,84 +300,27 @@
                           "line": 5,
                           "column": 28
                         }
-                      }
+                      },
+                      "range": [
+                        81,
+                        97
+                      ]
                     }
                   ]
                 }
-              ],
-              "range": [
-                24,
-                139
-              ],
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 4
-                },
-                "end": {
-                  "line": 8,
-                  "column": 5
-                }
-              }
+              ]
             }
-          ],
-          "range": [
-            18,
-            141
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 18
-            },
-            "end": {
-              "line": 9,
-              "column": 1
-            }
-          }
-        },
-        "generator": false,
-        "expression": false,
-        "range": [
-          0,
-          141
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 9,
-            "column": 1
-          }
+          ]
         }
       }
-    ],
-    "sourceType": "script",
-    "range": [
-      0,
-      141
-    ],
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 9,
-        "column": 1
-      }
-    }
+    ]
   },
   "comments": [
     {
       "type": "CommentLine",
       "value": " foo",
-      "range": [
-        46,
-        52
-      ],
+      "start": 46,
+      "end": 52,
       "loc": {
         "start": {
           "line": 3,
@@ -338,15 +330,17 @@
           "line": 3,
           "column": 14
         }
-      }
+      },
+      "range": [
+        46,
+        52
+      ]
     },
     {
       "type": "CommentLine",
       "value": " falls through",
-      "range": [
-        81,
-        97
-      ],
+      "start": 81,
+      "end": 97,
       "loc": {
         "start": {
           "line": 5,
@@ -356,7 +350,11 @@
           "line": 5,
           "column": 28
         }
-      }
+      },
+      "range": [
+        81,
+        97
+      ]
     }
   ]
 }

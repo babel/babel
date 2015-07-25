@@ -12,10 +12,6 @@
       "column": 12
     }
   },
-  "range": [
-    0,
-    12
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 12
       }
     },
-    "range": [
-      0,
-      12
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 12
           }
         },
-        "range": [
-          0,
-          12
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 12
               }
             },
-            "range": [
-              4,
-              12
-            ],
             "id": {
               "type": "ObjectPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 7
                 }
               },
-              "range": [
-                4,
-                7
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -106,10 +86,6 @@
                       "column": 6
                     }
                   },
-                  "range": [
-                    5,
-                    6
-                  ],
                   "method": false,
                   "shorthand": true,
                   "computed": false,
@@ -127,10 +103,6 @@
                         "column": 6
                       }
                     },
-                    "range": [
-                      5,
-                      6
-                    ],
                     "name": "a"
                   },
                   "kind": "init",
@@ -148,10 +120,6 @@
                         "column": 6
                       }
                     },
-                    "range": [
-                      5,
-                      6
-                    ],
                     "name": "a"
                   }
                 }
@@ -171,10 +139,6 @@
                   "column": 12
                 }
               },
-              "range": [
-                10,
-                12
-              ],
               "properties": []
             }
           }
@@ -182,5 +146,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

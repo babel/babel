@@ -12,10 +12,6 @@
       "column": 45
     }
   },
-  "range": [
-    0,
-    45
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 45
       }
     },
-    "range": [
-      0,
-      45
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 45
           }
         },
-        "range": [
-          0,
-          45
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 45
               }
             },
-            "range": [
-              4,
-              45
-            ],
             "id": {
               "type": "ObjectPattern",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                4,
-                39
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -106,10 +86,6 @@
                       "column": 38
                     }
                   },
-                  "range": [
-                    5,
-                    38
-                  ],
                   "method": false,
                   "shorthand": false,
                   "computed": false,
@@ -127,10 +103,6 @@
                         "column": 13
                       }
                     },
-                    "range": [
-                      5,
-                      13
-                    ],
                     "name": "propName"
                   },
                   "value": {
@@ -147,10 +119,6 @@
                         "column": 38
                       }
                     },
-                    "range": [
-                      15,
-                      38
-                    ],
                     "operator": "=",
                     "left": {
                       "type": "Identifier",
@@ -166,10 +134,6 @@
                           "column": 23
                         }
                       },
-                      "range": [
-                        15,
-                        23
-                      ],
                       "name": "localVar"
                     },
                     "right": {
@@ -186,10 +150,6 @@
                           "column": 38
                         }
                       },
-                      "range": [
-                        26,
-                        38
-                      ],
                       "name": "defaultValue"
                     }
                   },
@@ -211,10 +171,6 @@
                   "column": 45
                 }
               },
-              "range": [
-                42,
-                45
-              ],
               "name": "obj"
             }
           }
@@ -222,5 +178,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

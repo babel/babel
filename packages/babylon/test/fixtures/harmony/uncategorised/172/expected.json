@@ -12,10 +12,6 @@
       "column": 56
     }
   },
-  "range": [
-    0,
-    56
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 56
       }
     },
-    "range": [
-      0,
-      56
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 56
           }
         },
-        "range": [
-          0,
-          56
-        ],
         "expression": {
           "type": "FunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 55
             }
           },
-          "range": [
-            1,
-            55
-          ],
           "id": {
             "type": "Identifier",
             "start": 10,
@@ -86,10 +70,6 @@
                 "column": 11
               }
             },
-            "range": [
-              10,
-              11
-            ],
             "name": "x"
           },
           "generator": false,
@@ -109,10 +89,6 @@
                   "column": 38
                 }
               },
-              "range": [
-                12,
-                38
-              ],
               "properties": [
                 {
                   "type": "Property",
@@ -128,10 +104,6 @@
                       "column": 25
                     }
                   },
-                  "range": [
-                    14,
-                    25
-                  ],
                   "method": false,
                   "shorthand": false,
                   "computed": false,
@@ -149,10 +121,6 @@
                         "column": 15
                       }
                     },
-                    "range": [
-                      14,
-                      15
-                    ],
                     "name": "a"
                   },
                   "value": {
@@ -169,10 +137,6 @@
                         "column": 25
                       }
                     },
-                    "range": [
-                      17,
-                      25
-                    ],
                     "properties": [
                       {
                         "type": "Property",
@@ -188,10 +152,6 @@
                             "column": 20
                           }
                         },
-                        "range": [
-                          19,
-                          20
-                        ],
                         "method": false,
                         "shorthand": true,
                         "computed": false,
@@ -209,10 +169,6 @@
                               "column": 20
                             }
                           },
-                          "range": [
-                            19,
-                            20
-                          ],
                           "name": "w"
                         },
                         "kind": "init",
@@ -230,10 +186,6 @@
                               "column": 20
                             }
                           },
-                          "range": [
-                            19,
-                            20
-                          ],
                           "name": "w"
                         }
                       },
@@ -251,10 +203,6 @@
                             "column": 23
                           }
                         },
-                        "range": [
-                          22,
-                          23
-                        ],
                         "method": false,
                         "shorthand": true,
                         "computed": false,
@@ -272,10 +220,6 @@
                               "column": 23
                             }
                           },
-                          "range": [
-                            22,
-                            23
-                          ],
                           "name": "x"
                         },
                         "kind": "init",
@@ -293,10 +237,6 @@
                               "column": 23
                             }
                           },
-                          "range": [
-                            22,
-                            23
-                          ],
                           "name": "x"
                         }
                       }
@@ -318,10 +258,6 @@
                       "column": 36
                     }
                   },
-                  "range": [
-                    27,
-                    36
-                  ],
                   "method": false,
                   "shorthand": false,
                   "computed": false,
@@ -339,10 +275,6 @@
                         "column": 28
                       }
                     },
-                    "range": [
-                      27,
-                      28
-                    ],
                     "name": "b"
                   },
                   "value": {
@@ -359,10 +291,6 @@
                         "column": 36
                       }
                     },
-                    "range": [
-                      30,
-                      36
-                    ],
                     "elements": [
                       {
                         "type": "Identifier",
@@ -378,10 +306,6 @@
                             "column": 32
                           }
                         },
-                        "range": [
-                          31,
-                          32
-                        ],
                         "name": "y"
                       },
                       {
@@ -398,10 +322,6 @@
                             "column": 35
                           }
                         },
-                        "range": [
-                          34,
-                          35
-                        ],
                         "name": "z"
                       }
                     ]
@@ -424,10 +344,6 @@
                   "column": 52
                 }
               },
-              "range": [
-                40,
-                52
-              ],
               "argument": {
                 "type": "ArrayPattern",
                 "start": 43,
@@ -442,10 +358,6 @@
                     "column": 52
                   }
                 },
-                "range": [
-                  43,
-                  52
-                ],
                 "elements": [
                   {
                     "type": "Identifier",
@@ -461,10 +373,6 @@
                         "column": 45
                       }
                     },
-                    "range": [
-                      44,
-                      45
-                    ],
                     "name": "a"
                   },
                   {
@@ -481,10 +389,6 @@
                         "column": 48
                       }
                     },
-                    "range": [
-                      47,
-                      48
-                    ],
                     "name": "b"
                   },
                   {
@@ -501,10 +405,6 @@
                         "column": 51
                       }
                     },
-                    "range": [
-                      50,
-                      51
-                    ],
                     "name": "c"
                   }
                 ]
@@ -525,15 +425,12 @@
                 "column": 55
               }
             },
-            "range": [
-              53,
-              55
-            ],
             "body": []
           },
           "parenthesizedExpression": true
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

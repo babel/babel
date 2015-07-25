@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 34
             }
           },
-          "range": [
-            10,
-            34
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 33
                 }
               },
-              "range": [
-                11,
-                33
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 22
                   }
                 },
-                "range": [
-                  15,
-                  22
-                ],
                 "name": "fooProp"
               },
               "static": false,
@@ -149,10 +121,6 @@
                     "column": 33
                   }
                 },
-                "range": [
-                  22,
-                  33
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -172,10 +140,6 @@
                       "column": 31
                     }
                   },
-                  "range": [
-                    24,
-                    31
-                  ],
                   "typeAnnotation": {
                     "type": "NumberTypeAnnotation",
                     "start": 25,
@@ -189,11 +153,7 @@
                         "line": 1,
                         "column": 31
                       }
-                    },
-                    "range": [
-                      25,
-                      31
-                    ]
+                    }
                   }
                 },
                 "body": {
@@ -210,10 +170,6 @@
                       "column": 33
                     }
                   },
-                  "range": [
-                    31,
-                    33
-                  ],
                   "body": []
                 }
               }
@@ -222,5 +178,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

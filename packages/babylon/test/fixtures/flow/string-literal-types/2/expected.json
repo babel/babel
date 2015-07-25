@@ -12,10 +12,6 @@
       "column": 57
     }
   },
-  "range": [
-    0,
-    57
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 57
       }
     },
-    "range": [
-      0,
-      57
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 57
           }
         },
-        "range": [
-          0,
-          57
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 22
             }
           },
-          "range": [
-            9,
-            22
-          ],
           "name": "createElement"
         },
         "generator": false,
@@ -92,10 +76,6 @@
                 "column": 37
               }
             },
-            "range": [
-              23,
-              37
-            ],
             "name": "tagName",
             "typeAnnotation": {
               "type": "TypeAnnotation",
@@ -111,10 +91,6 @@
                   "column": 37
                 }
               },
-              "range": [
-                30,
-                37
-              ],
               "typeAnnotation": {
                 "type": "StringLiteralTypeAnnotation",
                 "start": 32,
@@ -129,10 +105,6 @@
                     "column": 37
                   }
                 },
-                "range": [
-                  32,
-                  37
-                ],
                 "value": "div",
                 "rawValue": "div",
                 "raw": "'div'"
@@ -154,10 +126,6 @@
               "column": 54
             }
           },
-          "range": [
-            38,
-            54
-          ],
           "typeAnnotation": {
             "type": "GenericTypeAnnotation",
             "start": 40,
@@ -172,10 +140,6 @@
                 "column": 54
               }
             },
-            "range": [
-              40,
-              54
-            ],
             "typeParameters": null,
             "id": {
               "type": "Identifier",
@@ -191,10 +155,6 @@
                   "column": 54
                 }
               },
-              "range": [
-                40,
-                54
-              ],
               "name": "HTMLDivElement"
             }
           }
@@ -213,13 +173,10 @@
               "column": 57
             }
           },
-          "range": [
-            55,
-            57
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

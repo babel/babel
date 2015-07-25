@@ -12,10 +12,6 @@
       "column": 17
     }
   },
-  "range": [
-    0,
-    17
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 17
       }
     },
-    "range": [
-      0,
-      17
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 17
           }
         },
-        "range": [
-          0,
-          17
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 17
             }
           },
-          "range": [
-            0,
-            17
-          ],
           "operator": "=",
           "left": {
             "type": "Identifier",
@@ -87,10 +71,6 @@
                 "column": 1
               }
             },
-            "range": [
-              0,
-              1
-            ],
             "name": "x"
           },
           "right": {
@@ -107,10 +87,6 @@
                 "column": 17
               }
             },
-            "range": [
-              4,
-              17
-            ],
             "properties": [
               {
                 "type": "Property",
@@ -126,10 +102,6 @@
                     "column": 15
                   }
                 },
-                "range": [
-                  6,
-                  15
-                ],
                 "method": true,
                 "shorthand": false,
                 "computed": false,
@@ -147,10 +119,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    6,
-                    7
-                  ],
                   "name": "f"
                 },
                 "kind": "init",
@@ -168,10 +136,6 @@
                       "column": 15
                     }
                   },
-                  "range": [
-                    7,
-                    15
-                  ],
                   "id": null,
                   "generator": false,
                   "expression": false,
@@ -190,10 +154,6 @@
                           "column": 11
                         }
                       },
-                      "range": [
-                        8,
-                        11
-                      ],
                       "operator": "=",
                       "left": {
                         "type": "Identifier",
@@ -209,10 +169,6 @@
                             "column": 9
                           }
                         },
-                        "range": [
-                          8,
-                          9
-                        ],
                         "name": "a"
                       },
                       "right": {
@@ -229,10 +185,6 @@
                             "column": 11
                           }
                         },
-                        "range": [
-                          10,
-                          11
-                        ],
                         "value": 1,
                         "rawValue": 1,
                         "raw": "1"
@@ -253,10 +205,6 @@
                         "column": 15
                       }
                     },
-                    "range": [
-                      13,
-                      15
-                    ],
                     "body": []
                   }
                 }
@@ -266,5 +214,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

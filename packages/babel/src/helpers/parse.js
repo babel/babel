@@ -14,8 +14,7 @@ export default function (code, opts = {}) {
     sourceType:                  opts.sourceType,
     locations:                   true,
     features:                    opts.features || {},
-    plugins:                     opts.plugins || {},
-    ranges:                      true
+    plugins:                     opts.plugins || {}
   };
 
   if (opts.nonStandard) {

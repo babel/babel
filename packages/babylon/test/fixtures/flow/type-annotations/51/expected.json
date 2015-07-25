@@ -12,10 +12,6 @@
       "column": 28
     }
   },
-  "range": [
-    0,
-    28
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 28
       }
     },
-    "range": [
-      0,
-      28
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 28
           }
         },
-        "range": [
-          0,
-          28
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 28
             }
           },
-          "range": [
-            10,
-            28
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 26
                 }
               },
-              "range": [
-                12,
-                26
-              ],
               "computed": false,
               "key": {
                 "type": "Literal",
@@ -127,10 +103,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  12,
-                  17
-                ],
                 "value": "bar",
                 "rawValue": "bar",
                 "raw": "\"bar\""
@@ -151,10 +123,6 @@
                     "column": 26
                   }
                 },
-                "range": [
-                  20,
-                  26
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -174,10 +142,6 @@
                       "column": 26
                     }
                   },
-                  "range": [
-                    23,
-                    26
-                  ],
                   "body": []
                 },
                 "typeParameters": {
@@ -194,10 +158,6 @@
                       "column": 20
                     }
                   },
-                  "range": [
-                    17,
-                    20
-                  ],
                   "params": [
                     {
                       "type": "Identifier",
@@ -213,10 +173,6 @@
                           "column": 19
                         }
                       },
-                      "range": [
-                        18,
-                        19
-                      ],
                       "name": "T"
                     }
                   ]
@@ -227,5 +183,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

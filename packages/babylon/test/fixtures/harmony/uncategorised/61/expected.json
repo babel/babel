@@ -12,10 +12,6 @@
       "column": 12
     }
   },
-  "range": [
-    0,
-    12
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 12
       }
     },
-    "range": [
-      0,
-      12
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 12
           }
         },
-        "range": [
-          0,
-          12
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            0,
-            12
-          ],
           "operator": "=",
           "left": {
             "type": "Identifier",
@@ -87,10 +71,6 @@
                 "column": 1
               }
             },
-            "range": [
-              0,
-              1
-            ],
             "name": "x"
           },
           "right": {
@@ -107,10 +87,6 @@
                 "column": 12
               }
             },
-            "range": [
-              4,
-              12
-            ],
             "properties": [
               {
                 "type": "Property",
@@ -126,10 +102,6 @@
                     "column": 7
                   }
                 },
-                "range": [
-                  6,
-                  7
-                ],
                 "method": false,
                 "shorthand": true,
                 "computed": false,
@@ -147,10 +119,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    6,
-                    7
-                  ],
                   "name": "y"
                 },
                 "kind": "init",
@@ -168,10 +136,6 @@
                       "column": 7
                     }
                   },
-                  "range": [
-                    6,
-                    7
-                  ],
                   "name": "y"
                 }
               },
@@ -189,10 +153,6 @@
                     "column": 10
                   }
                 },
-                "range": [
-                  9,
-                  10
-                ],
                 "method": false,
                 "shorthand": true,
                 "computed": false,
@@ -210,10 +170,6 @@
                       "column": 10
                     }
                   },
-                  "range": [
-                    9,
-                    10
-                  ],
                   "name": "z"
                 },
                 "kind": "init",
@@ -231,10 +187,6 @@
                       "column": 10
                     }
                   },
-                  "range": [
-                    9,
-                    10
-                  ],
                   "name": "z"
                 }
               }
@@ -243,5 +195,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 25
     }
   },
-  "range": [
-    0,
-    25
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 25
       }
     },
-    "range": [
-      0,
-      25
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 25
           }
         },
-        "range": [
-          0,
-          25
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 24
               }
             },
-            "range": [
-              4,
-              24
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 24
                 }
               },
-              "range": [
-                4,
-                24
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  5,
-                  24
-                ],
                 "typeAnnotation": {
                   "type": "NullableTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 24
                     }
                   },
-                  "range": [
-                    7,
-                    24
-                  ],
                   "typeAnnotation": {
                     "type": "ObjectTypeAnnotation",
                     "start": 8,
@@ -142,10 +114,6 @@
                         "column": 24
                       }
                     },
-                    "range": [
-                      8,
-                      24
-                    ],
                     "callProperties": [],
                     "properties": [
                       {
@@ -162,10 +130,6 @@
                             "column": 23
                           }
                         },
-                        "range": [
-                          9,
-                          23
-                        ],
                         "key": {
                           "type": "Identifier",
                           "start": 9,
@@ -180,10 +144,6 @@
                               "column": 15
                             }
                           },
-                          "range": [
-                            9,
-                            15
-                          ],
                           "name": "numVal"
                         },
                         "value": {
@@ -199,11 +159,7 @@
                               "line": 1,
                               "column": 23
                             }
-                          },
-                          "range": [
-                            17,
-                            23
-                          ]
+                          }
                         },
                         "optional": false
                       }
@@ -219,5 +175,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -1,17 +1,51 @@
 {
   "type": "File",
+  "start": 0,
+  "end": 60,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 1
+    }
+  },
   "program": {
     "type": "Program",
+    "start": 0,
+    "end": 60,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
     "body": [
       {
         "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 60,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
         "id": {
           "type": "Identifier",
-          "name": "a",
-          "range": [
-            9,
-            10
-          ],
+          "start": 9,
+          "end": 10,
           "loc": {
             "start": {
               "line": 1,
@@ -21,54 +55,31 @@
               "line": 1,
               "column": 10
             }
-          }
+          },
+          "name": "a"
         },
+        "generator": false,
+        "expression": false,
         "params": [],
         "body": {
           "type": "BlockStatement",
+          "start": 13,
+          "end": 60,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
           "body": [
             {
               "type": "ExpressionStatement",
-              "expression": {
-                "type": "CallExpression",
-                "callee": {
-                  "type": "Identifier",
-                  "name": "foo",
-                  "range": [
-                    36,
-                    39
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 7
-                    }
-                  }
-                },
-                "arguments": [],
-                "range": [
-                  36,
-                  41
-                ],
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 9
-                  }
-                }
-              },
-              "range": [
-                36,
-                42
-              ],
+              "start": 36,
+              "end": 42,
               "loc": {
                 "start": {
                   "line": 3,
@@ -79,14 +90,46 @@
                   "column": 10
                 }
               },
+              "expression": {
+                "type": "CallExpression",
+                "start": 36,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 9
+                  }
+                },
+                "callee": {
+                  "type": "Identifier",
+                  "start": 36,
+                  "end": 39,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 7
+                    }
+                  },
+                  "name": "foo",
+                  "leadingComments": null
+                },
+                "arguments": [],
+                "leadingComments": null
+              },
               "leadingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " before ",
-                  "range": [
-                    19,
-                    31
-                  ],
+                  "start": 19,
+                  "end": 31,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -96,17 +139,19 @@
                       "line": 2,
                       "column": 16
                     }
-                  }
+                  },
+                  "range": [
+                    19,
+                    31
+                  ]
                 }
               ],
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " after ",
-                  "range": [
-                    47,
-                    58
-                  ],
+                  "start": 47,
+                  "end": 58,
                   "loc": {
                     "start": {
                       "line": 4,
@@ -116,68 +161,25 @@
                       "line": 4,
                       "column": 15
                     }
-                  }
+                  },
+                  "range": [
+                    47,
+                    58
+                  ]
                 }
               ]
             }
-          ],
-          "range": [
-            13,
-            60
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 13
-            },
-            "end": {
-              "line": 5,
-              "column": 1
-            }
-          }
-        },
-        "generator": false,
-        "expression": false,
-        "range": [
-          0,
-          60
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 5,
-            "column": 1
-          }
+          ]
         }
       }
-    ],
-    "sourceType": "script",
-    "range": [
-      0,
-      60
-    ],
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 5,
-        "column": 1
-      }
-    }
+    ]
   },
   "comments": [
     {
       "type": "CommentBlock",
       "value": " before ",
-      "range": [
-        19,
-        31
-      ],
+      "start": 19,
+      "end": 31,
       "loc": {
         "start": {
           "line": 2,
@@ -187,15 +189,17 @@
           "line": 2,
           "column": 16
         }
-      }
+      },
+      "range": [
+        19,
+        31
+      ]
     },
     {
       "type": "CommentBlock",
       "value": " after ",
-      "range": [
-        47,
-        58
-      ],
+      "start": 47,
+      "end": 58,
       "loc": {
         "start": {
           "line": 4,
@@ -205,7 +209,11 @@
           "line": 4,
           "column": 15
         }
-      }
+      },
+      "range": [
+        47,
+        58
+      ]
     }
   ]
 }

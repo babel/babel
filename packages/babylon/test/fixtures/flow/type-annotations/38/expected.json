@@ -12,10 +12,6 @@
       "column": 34
     }
   },
-  "range": [
-    0,
-    34
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 34
       }
     },
-    "range": [
-      0,
-      34
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 34
           }
         },
-        "range": [
-          0,
-          34
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 34
               }
             },
-            "range": [
-              4,
-              34
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 34
                 }
               },
-              "range": [
-                4,
-                34
-              ],
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 34
                   }
                 },
-                "range": [
-                  5,
-                  34
-                ],
                 "typeAnnotation": {
                   "type": "ObjectTypeAnnotation",
                   "start": 7,
@@ -124,10 +100,6 @@
                       "column": 34
                     }
                   },
-                  "range": [
-                    7,
-                    34
-                  ],
                   "callProperties": [],
                   "properties": [
                     {
@@ -144,10 +116,6 @@
                           "column": 33
                         }
                       },
-                      "range": [
-                        8,
-                        33
-                      ],
                       "key": {
                         "type": "Identifier",
                         "start": 8,
@@ -162,10 +130,6 @@
                             "column": 14
                           }
                         },
-                        "range": [
-                          8,
-                          14
-                        ],
                         "name": "subObj"
                       },
                       "value": {
@@ -182,10 +146,6 @@
                             "column": 33
                           }
                         },
-                        "range": [
-                          16,
-                          33
-                        ],
                         "typeAnnotation": {
                           "type": "ObjectTypeAnnotation",
                           "start": 17,
@@ -200,10 +160,6 @@
                               "column": 33
                             }
                           },
-                          "range": [
-                            17,
-                            33
-                          ],
                           "callProperties": [],
                           "properties": [
                             {
@@ -220,10 +176,6 @@
                                   "column": 32
                                 }
                               },
-                              "range": [
-                                18,
-                                32
-                              ],
                               "key": {
                                 "type": "Identifier",
                                 "start": 18,
@@ -238,10 +190,6 @@
                                     "column": 24
                                   }
                                 },
-                                "range": [
-                                  18,
-                                  24
-                                ],
                                 "name": "strVal"
                               },
                               "value": {
@@ -257,11 +205,7 @@
                                     "line": 1,
                                     "column": 32
                                   }
-                                },
-                                "range": [
-                                  26,
-                                  32
-                                ]
+                                }
                               },
                               "optional": false
                             }
@@ -282,5 +226,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

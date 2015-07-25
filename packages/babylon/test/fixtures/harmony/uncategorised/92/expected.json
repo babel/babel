@@ -12,10 +12,6 @@
       "column": 22
     }
   },
-  "range": [
-    0,
-    22
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 22
       }
     },
-    "range": [
-      0,
-      22
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 22
           }
         },
-        "range": [
-          0,
-          22
-        ],
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -69,10 +57,6 @@
                 "column": 8
               }
             },
-            "range": [
-              7,
-              8
-            ],
             "local": {
               "type": "Identifier",
               "start": 7,
@@ -87,10 +71,6 @@
                   "column": 8
                 }
               },
-              "range": [
-                7,
-                8
-              ],
               "name": "$"
             }
           }
@@ -109,15 +89,12 @@
               "column": 22
             }
           },
-          "range": [
-            14,
-            22
-          ],
           "value": "jquery",
           "rawValue": "jquery",
           "raw": "\"jquery\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

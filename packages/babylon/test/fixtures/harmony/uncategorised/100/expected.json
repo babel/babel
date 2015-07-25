@@ -12,10 +12,6 @@
       "column": 4
     }
   },
-  "range": [
-    0,
-    26
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 4
       }
     },
-    "range": [
-      0,
-      26
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 4
           }
         },
-        "range": [
-          0,
-          26
-        ],
         "expression": {
           "type": "FunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 3
             }
           },
-          "range": [
-            1,
-            25
-          ],
           "id": null,
           "generator": true,
           "expression": false,
@@ -90,10 +74,6 @@
                 "column": 3
               }
             },
-            "range": [
-              14,
-              25
-            ],
             "body": [
               {
                 "type": "ExpressionStatement",
@@ -109,10 +89,6 @@
                     "column": 21
                   }
                 },
-                "range": [
-                  16,
-                  21
-                ],
                 "expression": {
                   "type": "YieldExpression",
                   "start": 16,
@@ -127,10 +103,6 @@
                       "column": 21
                     }
                   },
-                  "range": [
-                    16,
-                    21
-                  ],
                   "delegate": false,
                   "argument": null
                 }
@@ -149,10 +121,6 @@
                     "column": 1
                   }
                 },
-                "range": [
-                  22,
-                  23
-                ],
                 "expression": {
                   "type": "Identifier",
                   "start": 22,
@@ -167,10 +135,6 @@
                       "column": 1
                     }
                   },
-                  "range": [
-                    22,
-                    23
-                  ],
                   "name": "v"
                 }
               }
@@ -180,5 +144,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

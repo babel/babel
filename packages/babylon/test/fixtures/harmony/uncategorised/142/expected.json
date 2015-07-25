@@ -12,10 +12,6 @@
       "column": 19
     }
   },
-  "range": [
-    0,
-    19
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 19
       }
     },
-    "range": [
-      0,
-      19
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 19
           }
         },
-        "range": [
-          0,
-          19
-        ],
         "expression": {
           "type": "ObjectExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 18
             }
           },
-          "range": [
-            1,
-            18
-          ],
           "properties": [
             {
               "type": "Property",
@@ -87,10 +71,6 @@
                   "column": 17
                 }
               },
-              "range": [
-                2,
-                17
-              ],
               "method": false,
               "shorthand": false,
               "computed": true,
@@ -108,10 +88,6 @@
                     "column": 12
                   }
                 },
-                "range": [
-                  3,
-                  12
-                ],
                 "left": {
                   "type": "Literal",
                   "start": 3,
@@ -126,10 +102,6 @@
                       "column": 6
                     }
                   },
-                  "range": [
-                    3,
-                    6
-                  ],
                   "value": "x",
                   "rawValue": "x",
                   "raw": "\"x\""
@@ -149,10 +121,6 @@
                       "column": 12
                     }
                   },
-                  "range": [
-                    9,
-                    12
-                  ],
                   "value": "y",
                   "rawValue": "y",
                   "raw": "\"y\""
@@ -172,10 +140,6 @@
                     "column": 17
                   }
                 },
-                "range": [
-                  15,
-                  17
-                ],
                 "value": 10,
                 "rawValue": 10,
                 "raw": "10"
@@ -187,5 +151,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

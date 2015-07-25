@@ -12,10 +12,6 @@
       "column": 36
     }
   },
-  "range": [
-    0,
-    36
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 36
       }
     },
-    "range": [
-      0,
-      36
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 36
           }
         },
-        "range": [
-          0,
-          36
-        ],
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 36
             }
           },
-          "range": [
-            0,
-            36
-          ],
           "operator": "=",
           "left": {
             "type": "Identifier",
@@ -87,10 +71,6 @@
                 "column": 1
               }
             },
-            "range": [
-              0,
-              1
-            ],
             "name": "a"
           },
           "right": {
@@ -107,10 +87,6 @@
                 "column": 36
               }
             },
-            "range": [
-              2,
-              36
-            ],
             "properties": [
               {
                 "type": "Property",
@@ -126,10 +102,6 @@
                     "column": 35
                   }
                 },
-                "range": [
-                  3,
-                  35
-                ],
                 "method": false,
                 "shorthand": false,
                 "computed": false,
@@ -147,10 +119,6 @@
                       "column": 14
                     }
                   },
-                  "range": [
-                    7,
-                    14
-                  ],
                   "name": "fooProp"
                 },
                 "kind": "set",
@@ -168,10 +136,6 @@
                       "column": 35
                     }
                   },
-                  "range": [
-                    14,
-                    35
-                  ],
                   "id": null,
                   "generator": false,
                   "expression": false,
@@ -191,10 +155,6 @@
                           "column": 27
                         }
                       },
-                      "range": [
-                        15,
-                        27
-                      ],
                       "name": "value",
                       "typeAnnotation": {
                         "type": "TypeAnnotation",
@@ -210,10 +170,6 @@
                             "column": 27
                           }
                         },
-                        "range": [
-                          20,
-                          27
-                        ],
                         "typeAnnotation": {
                           "type": "NumberTypeAnnotation",
                           "start": 21,
@@ -227,11 +183,7 @@
                               "line": 1,
                               "column": 27
                             }
-                          },
-                          "range": [
-                            21,
-                            27
-                          ]
+                          }
                         }
                       }
                     }
@@ -250,10 +202,6 @@
                         "column": 33
                       }
                     },
-                    "range": [
-                      28,
-                      33
-                    ],
                     "typeAnnotation": {
                       "type": "VoidTypeAnnotation",
                       "start": 29,
@@ -267,11 +215,7 @@
                           "line": 1,
                           "column": 33
                         }
-                      },
-                      "range": [
-                        29,
-                        33
-                      ]
+                      }
                     }
                   },
                   "body": {
@@ -288,10 +232,6 @@
                         "column": 35
                       }
                     },
-                    "range": [
-                      33,
-                      35
-                    ],
                     "body": []
                   }
                 }
@@ -301,5 +241,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

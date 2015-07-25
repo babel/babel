@@ -12,10 +12,6 @@
       "column": 21
     }
   },
-  "range": [
-    0,
-    21
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 21
       }
     },
-    "range": [
-      0,
-      21
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 21
           }
         },
-        "range": [
-          0,
-          21
-        ],
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -68,10 +56,6 @@
               "column": 12
             }
           },
-          "range": [
-            9,
-            12
-          ],
           "name": "foo"
         },
         "generator": false,
@@ -92,10 +76,6 @@
               "column": 18
             }
           },
-          "range": [
-            14,
-            18
-          ],
           "typeAnnotation": {
             "type": "ObjectTypeAnnotation",
             "start": 16,
@@ -110,10 +90,6 @@
                 "column": 18
               }
             },
-            "range": [
-              16,
-              18
-            ],
             "callProperties": [],
             "properties": [],
             "indexers": []
@@ -133,13 +109,10 @@
               "column": 21
             }
           },
-          "range": [
-            19,
-            21
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

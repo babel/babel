@@ -12,10 +12,6 @@
       "column": 38
     }
   },
-  "range": [
-    0,
-    38
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 38
       }
     },
-    "range": [
-      0,
-      38
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 38
           }
         },
-        "range": [
-          0,
-          38
-        ],
         "specifiers": [
           {
             "type": "ImportSpecifier",
@@ -69,10 +57,6 @@
                 "column": 25
               }
             },
-            "range": [
-              15,
-              25
-            ],
             "imported": {
               "type": "Identifier",
               "start": 15,
@@ -87,10 +71,6 @@
                   "column": 18
                 }
               },
-              "range": [
-                15,
-                18
-              ],
               "name": "foo"
             },
             "local": {
@@ -107,10 +87,6 @@
                   "column": 25
                 }
               },
-              "range": [
-                22,
-                25
-              ],
               "name": "bar"
             }
           }
@@ -130,15 +106,12 @@
               "column": 37
             }
           },
-          "range": [
-            32,
-            37
-          ],
           "value": "baz",
           "rawValue": "baz",
           "raw": "\"baz\""
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

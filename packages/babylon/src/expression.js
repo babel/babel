@@ -16,9 +16,9 @@
 //
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
-import { types as tt } from "./tokentype";
+import { types as tt } from "./tokenizer/types";
 import { Parser } from "./state";
-import { reservedWords } from "./identifier";
+import { reservedWords } from "./util/identifier";
 
 const pp = Parser.prototype;
 
@@ -723,10 +723,12 @@ pp.parseFunctionBody = function (node, allowExpression) {
   if (this.strict || !isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) {
     let nameHash = Object.create(null), oldStrict = this.strict;
     this.strict = true;
-    if (node.id)
+    if (node.id) {
       this.checkLVal(node.id, true);
-    for (let i = 0; i < node.params.length; i++)
-      this.checkLVal(node.params[i], true, nameHash);
+    }
+    for (let param of (node.params: Array)) {
+      this.checkLVal(param, true, nameHash);
+    }
     this.strict = oldStrict;
   }
 };

@@ -12,10 +12,6 @@
       "column": 16
     }
   },
-  "range": [
-    0,
-    16
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 16
       }
     },
-    "range": [
-      0,
-      16
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 16
           }
         },
-        "range": [
-          0,
-          16
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 16
             }
           },
-          "range": [
-            0,
-            16
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 5
               }
             },
-            "range": [
-              0,
-              5
-            ],
             "attributes": [],
             "name": {
               "type": "JSXIdentifier",
@@ -105,10 +85,6 @@
                   "column": 4
                 }
               },
-              "range": [
-                1,
-                4
-              ],
               "name": "div"
             },
             "selfClosing": false
@@ -127,10 +103,6 @@
                 "column": 16
               }
             },
-            "range": [
-              10,
-              16
-            ],
             "name": {
               "type": "JSXIdentifier",
               "start": 12,
@@ -145,10 +117,6 @@
                   "column": 15
                 }
               },
-              "range": [
-                12,
-                15
-              ],
               "name": "div"
             }
           },
@@ -167,10 +135,6 @@
                   "column": 10
                 }
               },
-              "range": [
-                5,
-                10
-              ],
               "value": "/text",
               "rawValue": "/text",
               "raw": "/text"
@@ -179,5 +143,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

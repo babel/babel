@@ -12,10 +12,6 @@
       "column": 78
     }
   },
-  "range": [
-    0,
-    78
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 78
       }
     },
-    "range": [
-      0,
-      78
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 78
           }
         },
-        "range": [
-          0,
-          78
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 78
             }
           },
-          "range": [
-            8,
-            78
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 29
                 }
               },
-              "range": [
-                10,
-                29
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  21,
-                  24
-                ],
                 "name": "foo"
               },
               "static": true,
@@ -149,10 +121,6 @@
                     "column": 29
                   }
                 },
-                "range": [
-                  24,
-                  29
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -171,10 +139,6 @@
                       "column": 29
                     }
                   },
-                  "range": [
-                    27,
-                    29
-                  ],
                   "body": []
                 }
               }
@@ -193,10 +157,6 @@
                   "column": 50
                 }
               },
-              "range": [
-                30,
-                50
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -212,10 +172,6 @@
                     "column": 44
                   }
                 },
-                "range": [
-                  41,
-                  44
-                ],
                 "name": "foo"
               },
               "static": true,
@@ -234,10 +190,6 @@
                     "column": 50
                   }
                 },
-                "range": [
-                  44,
-                  50
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -256,10 +208,6 @@
                         "column": 46
                       }
                     },
-                    "range": [
-                      45,
-                      46
-                    ],
                     "name": "v"
                   }
                 ],
@@ -277,10 +225,6 @@
                       "column": 50
                     }
                   },
-                  "range": [
-                    48,
-                    50
-                  ],
                   "body": []
                 }
               }
@@ -299,10 +243,6 @@
                   "column": 63
                 }
               },
-              "range": [
-                51,
-                63
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -318,10 +258,6 @@
                     "column": 58
                   }
                 },
-                "range": [
-                  55,
-                  58
-                ],
                 "name": "foo"
               },
               "static": false,
@@ -340,10 +276,6 @@
                     "column": 63
                   }
                 },
-                "range": [
-                  58,
-                  63
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -362,10 +294,6 @@
                       "column": 63
                     }
                   },
-                  "range": [
-                    61,
-                    63
-                  ],
                   "body": []
                 }
               }
@@ -384,10 +312,6 @@
                   "column": 77
                 }
               },
-              "range": [
-                64,
-                77
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -403,10 +327,6 @@
                     "column": 71
                   }
                 },
-                "range": [
-                  68,
-                  71
-                ],
                 "name": "foo"
               },
               "static": false,
@@ -425,10 +345,6 @@
                     "column": 77
                   }
                 },
-                "range": [
-                  71,
-                  77
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -447,10 +363,6 @@
                         "column": 73
                       }
                     },
-                    "range": [
-                      72,
-                      73
-                    ],
                     "name": "v"
                   }
                 ],
@@ -468,10 +380,6 @@
                       "column": 77
                     }
                   },
-                  "range": [
-                    75,
-                    77
-                  ],
                   "body": []
                 }
               }
@@ -480,5 +388,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 40
     }
   },
-  "range": [
-    0,
-    40
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 40
       }
     },
-    "range": [
-      0,
-      40
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 40
           }
         },
-        "range": [
-          0,
-          40
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 7
             }
           },
-          "range": [
-            6,
-            7
-          ],
           "name": "A"
         },
         "superClass": {
@@ -88,10 +72,6 @@
               "column": 17
             }
           },
-          "range": [
-            16,
-            17
-          ],
           "name": "B"
         },
         "body": {
@@ -108,10 +88,6 @@
               "column": 40
             }
           },
-          "range": [
-            18,
-            40
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -127,10 +103,6 @@
                   "column": 39
                 }
               },
-              "range": [
-                20,
-                39
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -146,10 +118,6 @@
                     "column": 34
                   }
                 },
-                "range": [
-                  31,
-                  34
-                ],
                 "name": "foo"
               },
               "static": true,
@@ -168,10 +136,6 @@
                     "column": 39
                   }
                 },
-                "range": [
-                  34,
-                  39
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -190,10 +154,6 @@
                       "column": 39
                     }
                   },
-                  "range": [
-                    37,
-                    39
-                  ],
                   "body": []
                 }
               }
@@ -202,5 +162,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

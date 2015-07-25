@@ -12,10 +12,6 @@
       "column": 11
     }
   },
-  "range": [
-    0,
-    11
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 11
       }
     },
-    "range": [
-      0,
-      11
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 11
           }
         },
-        "range": [
-          0,
-          11
-        ],
         "expression": {
           "type": "JSXElement",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 11
             }
           },
-          "range": [
-            0,
-            11
-          ],
           "openingElement": {
             "type": "JSXOpeningElement",
             "start": 0,
@@ -86,10 +70,6 @@
                 "column": 5
               }
             },
-            "range": [
-              0,
-              5
-            ],
             "attributes": [],
             "name": {
               "type": "JSXIdentifier",
@@ -105,10 +85,6 @@
                   "column": 4
                 }
               },
-              "range": [
-                1,
-                4
-              ],
               "name": "日本語"
             },
             "selfClosing": false
@@ -127,10 +103,6 @@
                 "column": 11
               }
             },
-            "range": [
-              5,
-              11
-            ],
             "name": {
               "type": "JSXIdentifier",
               "start": 7,
@@ -145,10 +117,6 @@
                   "column": 10
                 }
               },
-              "range": [
-                7,
-                10
-              ],
               "name": "日本語"
             }
           },
@@ -156,5 +124,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

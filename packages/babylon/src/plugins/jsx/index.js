@@ -1,9 +1,9 @@
 import XHTMLEntities from "./xhtml";
-import { TokenType, types as tt } from "../../tokentype";
-import { TokContext, types as tc } from "../../tokencontext";
+import { TokenType, types as tt } from "../../tokenizer/types";
+import { TokContext, types as tc } from "../../tokenizer/context";
 import { Parser } from "../../state";
-import { isIdentifierChar, isIdentifierStart } from "../../identifier";
-import { isNewLine } from "../../whitespace";
+import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
+import { isNewLine } from "../../util/whitespace";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -87,10 +87,8 @@ pp.jsxReadNewLine = function(normalizeCRLF) {
   } else {
     out = String.fromCharCode(ch);
   }
-  if (this.options.locations) {
-    ++this.curLine;
-    this.lineStart = this.pos;
-  }
+  ++this.curLine;
+  this.lineStart = this.pos;
 
   return out;
 };

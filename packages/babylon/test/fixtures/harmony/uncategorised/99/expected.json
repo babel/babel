@@ -12,10 +12,6 @@
       "column": 26
     }
   },
-  "range": [
-    0,
-    26
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 26
       }
     },
-    "range": [
-      0,
-      26
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 26
           }
         },
-        "range": [
-          0,
-          26
-        ],
         "expression": {
           "type": "FunctionExpression",
           "start": 1,
@@ -68,10 +56,6 @@
               "column": 25
             }
           },
-          "range": [
-            1,
-            25
-          ],
           "id": null,
           "generator": true,
           "expression": false,
@@ -90,10 +74,6 @@
                 "column": 25
               }
             },
-            "range": [
-              14,
-              25
-            ],
             "body": [
               {
                 "type": "ExpressionStatement",
@@ -109,10 +89,6 @@
                     "column": 23
                   }
                 },
-                "range": [
-                  16,
-                  23
-                ],
                 "expression": {
                   "type": "YieldExpression",
                   "start": 16,
@@ -127,10 +103,6 @@
                       "column": 23
                     }
                   },
-                  "range": [
-                    16,
-                    23
-                  ],
                   "delegate": false,
                   "argument": {
                     "type": "Identifier",
@@ -146,10 +118,6 @@
                         "column": 23
                       }
                     },
-                    "range": [
-                      22,
-                      23
-                    ],
                     "name": "v"
                   }
                 }
@@ -160,5 +128,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 28
     }
   },
-  "range": [
-    0,
-    28
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 28
       }
     },
-    "range": [
-      0,
-      28
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 28
           }
         },
-        "range": [
-          0,
-          28
-        ],
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -69,10 +57,6 @@
                 "column": 27
               }
             },
-            "range": [
-              4,
-              27
-            ],
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -87,10 +71,6 @@
                   "column": 23
                 }
               },
-              "range": [
-                4,
-                23
-              ],
               "name": "x",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -106,10 +86,6 @@
                     "column": 23
                   }
                 },
-                "range": [
-                  6,
-                  23
-                ],
                 "typeAnnotation": {
                   "type": "UnionTypeAnnotation",
                   "start": 8,
@@ -124,10 +100,6 @@
                       "column": 23
                     }
                   },
-                  "range": [
-                    8,
-                    23
-                  ],
                   "types": [
                     {
                       "type": "NumberTypeAnnotation",
@@ -142,11 +114,7 @@
                           "line": 1,
                           "column": 14
                         }
-                      },
-                      "range": [
-                        8,
-                        14
-                      ]
+                      }
                     },
                     {
                       "type": "StringTypeAnnotation",
@@ -161,11 +129,7 @@
                           "line": 1,
                           "column": 23
                         }
-                      },
-                      "range": [
-                        17,
-                        23
-                      ]
+                      }
                     }
                   ]
                 }
@@ -185,10 +149,6 @@
                   "column": 27
                 }
               },
-              "range": [
-                26,
-                27
-              ],
               "value": 4,
               "rawValue": 4,
               "raw": "4"
@@ -198,5 +158,6 @@
         "kind": "var"
       }
     ]
-  }
+  },
+  "comments": []
 }

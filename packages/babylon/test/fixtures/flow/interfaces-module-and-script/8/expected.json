@@ -12,10 +12,6 @@
       "column": 48
     }
   },
-  "range": [
-    0,
-    48
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 48
       }
     },
-    "range": [
-      0,
-      48
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 48
           }
         },
-        "range": [
-          0,
-          48
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            6,
-            9
-          ],
           "name": "Foo"
         },
         "superClass": {
@@ -88,10 +72,6 @@
               "column": 45
             }
           },
-          "range": [
-            18,
-            45
-          ],
           "id": {
             "type": "Identifier",
             "start": 24,
@@ -106,10 +86,6 @@
                 "column": 27
               }
             },
-            "range": [
-              24,
-              27
-            ],
             "name": "Bar"
           },
           "superClass": null,
@@ -128,10 +104,6 @@
                   "column": 42
                 }
               },
-              "range": [
-                39,
-                42
-              ],
               "id": {
                 "type": "Identifier",
                 "start": 39,
@@ -146,10 +118,6 @@
                     "column": 42
                   }
                 },
-                "range": [
-                  39,
-                  42
-                ],
                 "name": "Bat"
               },
               "typeParameters": null
@@ -169,10 +137,6 @@
                 "column": 45
               }
             },
-            "range": [
-              43,
-              45
-            ],
             "body": []
           }
         },
@@ -190,13 +154,10 @@
               "column": 48
             }
           },
-          "range": [
-            46,
-            48
-          ],
           "body": []
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

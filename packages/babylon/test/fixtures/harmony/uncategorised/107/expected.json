@@ -12,10 +12,6 @@
       "column": 26
     }
   },
-  "range": [
-    0,
-    26
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 26
       }
     },
-    "range": [
-      0,
-      26
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 26
           }
         },
-        "range": [
-          0,
-          26
-        ],
         "left": {
           "type": "Identifier",
           "start": 4,
@@ -68,10 +56,6 @@
               "column": 5
             }
           },
-          "range": [
-            4,
-            5
-          ],
           "name": "x"
         },
         "right": {
@@ -88,10 +72,6 @@
               "column": 13
             }
           },
-          "range": [
-            9,
-            13
-          ],
           "name": "list"
         },
         "body": {
@@ -108,10 +88,6 @@
               "column": 26
             }
           },
-          "range": [
-            15,
-            26
-          ],
           "expression": {
             "type": "CallExpression",
             "start": 15,
@@ -126,10 +102,6 @@
                 "column": 25
               }
             },
-            "range": [
-              15,
-              25
-            ],
             "callee": {
               "type": "Identifier",
               "start": 15,
@@ -144,10 +116,6 @@
                   "column": 22
                 }
               },
-              "range": [
-                15,
-                22
-              ],
               "name": "process"
             },
             "arguments": [
@@ -165,10 +133,6 @@
                     "column": 24
                   }
                 },
-                "range": [
-                  23,
-                  24
-                ],
                 "name": "x"
               }
             ]
@@ -176,5 +140,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

@@ -12,10 +12,6 @@
       "column": 9
     }
   },
-  "range": [
-    0,
-    9
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 9
       }
     },
-    "range": [
-      0,
-      9
-    ],
     "sourceType": "script",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 9
           }
         },
-        "range": [
-          0,
-          9
-        ],
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 0,
@@ -68,10 +56,6 @@
               "column": 9
             }
           },
-          "range": [
-            0,
-            9
-          ],
           "id": null,
           "generator": false,
           "expression": true,
@@ -90,10 +74,6 @@
                   "column": 2
                 }
               },
-              "range": [
-                1,
-                2
-              ],
               "name": "a"
             }
           ],
@@ -111,10 +91,6 @@
                 "column": 9
               }
             },
-            "range": [
-              7,
-              9
-            ],
             "value": 0,
             "rawValue": 0,
             "raw": "00"
@@ -122,5 +98,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }

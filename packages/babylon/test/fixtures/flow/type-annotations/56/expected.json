@@ -12,10 +12,6 @@
       "column": 49
     }
   },
-  "range": [
-    0,
-    49
-  ],
   "program": {
     "type": "Program",
     "start": 0,
@@ -30,10 +26,6 @@
         "column": 49
       }
     },
-    "range": [
-      0,
-      49
-    ],
     "sourceType": "module",
     "body": [
       {
@@ -50,10 +42,6 @@
             "column": 49
           }
         },
-        "range": [
-          0,
-          49
-        ],
         "id": {
           "type": "Identifier",
           "start": 6,
@@ -68,10 +56,6 @@
               "column": 11
             }
           },
-          "range": [
-            6,
-            11
-          ],
           "name": "Array"
         },
         "superClass": null,
@@ -89,10 +73,6 @@
               "column": 49
             }
           },
-          "range": [
-            12,
-            49
-          ],
           "body": [
             {
               "type": "MethodDefinition",
@@ -108,10 +88,6 @@
                   "column": 46
                 }
               },
-              "range": [
-                14,
-                46
-              ],
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,10 +103,6 @@
                     "column": 20
                   }
                 },
-                "range": [
-                  14,
-                  20
-                ],
                 "name": "concat"
               },
               "static": false,
@@ -149,10 +121,6 @@
                     "column": 46
                   }
                 },
-                "range": [
-                  20,
-                  46
-                ],
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -172,10 +140,6 @@
                         "column": 42
                       }
                     },
-                    "range": [
-                      21,
-                      42
-                    ],
                     "name": "items",
                     "typeAnnotation": {
                       "type": "TypeAnnotation",
@@ -191,10 +155,6 @@
                           "column": 42
                         }
                       },
-                      "range": [
-                        26,
-                        42
-                      ],
                       "typeAnnotation": {
                         "type": "UnionTypeAnnotation",
                         "start": 27,
@@ -209,10 +169,6 @@
                             "column": 42
                           }
                         },
-                        "range": [
-                          27,
-                          42
-                        ],
                         "types": [
                           {
                             "type": "NumberTypeAnnotation",
@@ -227,11 +183,7 @@
                                 "line": 1,
                                 "column": 33
                               }
-                            },
-                            "range": [
-                              27,
-                              33
-                            ]
+                            }
                           },
                           {
                             "type": "StringTypeAnnotation",
@@ -246,11 +198,7 @@
                                 "line": 1,
                                 "column": 42
                               }
-                            },
-                            "range": [
-                              36,
-                              42
-                            ]
+                            }
                           }
                         ]
                       }
@@ -271,10 +219,6 @@
                       "column": 46
                     }
                   },
-                  "range": [
-                    44,
-                    46
-                  ],
                   "body": []
                 }
               }
@@ -283,5 +227,6 @@
         }
       }
     ]
-  }
+  },
+  "comments": []
 }
