@@ -1,0 +1,29 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "foo"
+          }
+        },
+        {
+          "type": "ImportNamespaceSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "bar"
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "baz",
+        "raw": "'baz'"
+      }
+    }
+  ]
+}

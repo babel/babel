@@ -1,0 +1,47 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "elements": [
+              {
+                "start": 5,
+                "name": "x",
+                "type": "Identifier",
+                "end": 6
+              }
+            ],
+            "type": "ArrayPattern",
+            "end": 8
+          },
+          "init": {
+            "start": 11,
+            "elements": [
+              {
+                "start": 12,
+                "value": 1,
+                "raw": "1",
+                "type": "Literal",
+                "end": 13
+              }
+            ],
+            "type": "ArrayExpression",
+            "end": 14
+          },
+          "type": "VariableDeclarator",
+          "end": 14
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 14
+    }
+  ],
+  "type": "Program",
+  "end": 14
+}

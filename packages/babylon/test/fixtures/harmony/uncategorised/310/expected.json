@@ -1,0 +1,82 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    21
+  ],
+  "body": [
+    {
+      "type": "ForInStatement",
+      "range": [
+        0,
+        21
+      ],
+      "left": {
+        "type": "ObjectPattern",
+        "range": [
+          5,
+          12
+        ],
+        "properties": [
+          {
+            "type": "Property",
+            "range": [
+              6,
+              11
+            ],
+            "method": false,
+            "shorthand": true,
+            "computed": false,
+            "key": {
+              "type": "Identifier",
+              "range": [
+                6,
+                7
+              ],
+              "name": "x"
+            },
+            "kind": "init",
+            "value": {
+              "type": "AssignmentPattern",
+              "range": [
+                6,
+                11
+              ],
+              "left": {
+                "type": "Identifier",
+                "range": [
+                  6,
+                  7
+                ],
+                "name": "x"
+              },
+              "right": {
+                "type": "Literal",
+                "range": [
+                  10,
+                  11
+                ],
+                "value": 0
+              }
+            }
+          }
+        ]
+      },
+      "right": {
+        "type": "Identifier",
+        "range": [
+          16,
+          19
+        ],
+        "name": "arr"
+      },
+      "body": {
+        "type": "EmptyStatement",
+        "range": [
+          20,
+          21
+        ]
+      }
+    }
+  ]
+}

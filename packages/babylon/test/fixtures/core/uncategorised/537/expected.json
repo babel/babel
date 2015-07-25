@@ -1,0 +1,58 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ForStatement",
+      "init": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "x",
+              "range": [
+                10,
+                11
+              ]
+            },
+            "init": {
+              "type": "Literal",
+              "value": 0,
+              "range": [
+                14,
+                15
+              ]
+            },
+            "range": [
+              10,
+              15
+            ]
+          }
+        ],
+        "kind": "const",
+        "range": [
+          4,
+          15
+        ]
+      },
+      "test": null,
+      "update": null,
+      "body": {
+        "type": "EmptyStatement",
+        "range": [
+          18,
+          19
+        ]
+      },
+      "range": [
+        0,
+        19
+      ]
+    }
+  ],
+  "range": [
+    0,
+    19
+  ]
+}

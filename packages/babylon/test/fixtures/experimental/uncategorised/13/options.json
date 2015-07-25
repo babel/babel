@@ -1,0 +1,5 @@
+{
+  "features": {
+    "es7.objectRestSpread": true
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "InterfaceDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "Dictionary",
+        "range": [
+          10,
+          20
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 10
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        }
+      },
+      "typeParameters": null,
+      "body": {
+        "type": "ObjectTypeAnnotation",
+        "properties": [
+          {
+            "type": "ObjectTypeProperty",
+            "key": {
+              "type": "Identifier",
+              "name": "length",
+              "range": [
+                48,
+                54
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 48
+                },
+                "end": {
+                  "line": 1,
+                  "column": 54
+                }
+              }
+            },
+            "value": {
+              "type": "NumberTypeAnnotation",
+              "range": [
+                56,
+                62
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 56
+                },
+                "end": {
+                  "line": 1,
+                  "column": 62
+                }
+              }
+            },
+            "optional": false,
+            "range": [
+              48,
+              63
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 48
+              },
+              "end": {
+                "line": 1,
+                "column": 63
+              }
+            }
+          }
+        ],
+        "indexers": [
+          {
+            "type": "ObjectTypeIndexer",
+            "id": {
+              "type": "Identifier",
+              "name": "index",
+              "range": [
+                24,
+                29
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 29
+                }
+              }
+            },
+            "key": {
+              "type": "StringTypeAnnotation",
+              "range": [
+                31,
+                37
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 31
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              }
+            },
+            "value": {
+              "type": "StringTypeAnnotation",
+              "range": [
+                40,
+                46
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 40
+                },
+                "end": {
+                  "line": 1,
+                  "column": 46
+                }
+              }
+            },
+            "range": [
+              23,
+              47
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "line": 1,
+                "column": 47
+              }
+            }
+          }
+        ],
+        "callProperties": [],
+        "range": [
+          21,
+          65
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 21
+          },
+          "end": {
+            "line": 1,
+            "column": 65
+          }
+        }
+      },
+      "extends": [],
+      "range": [
+        0,
+        65
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 65
+        }
+      }
+    }
+  ]
+}

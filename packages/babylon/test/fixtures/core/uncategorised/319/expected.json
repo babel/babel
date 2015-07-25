@@ -1,0 +1,29 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Literal",
+            "value": 123
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "toString"
+          },
+          "computed": false
+        },
+        "arguments": [
+          {
+            "type": "Literal",
+            "value": 10
+          }
+        ]
+      }
+    }
+  ]
+}

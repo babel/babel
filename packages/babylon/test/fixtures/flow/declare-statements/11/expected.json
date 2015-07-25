@@ -1,0 +1,133 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "DeclareClass",
+      "id": {
+        "type": "Identifier",
+        "name": "A",
+        "range": [
+          14,
+          15
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 14
+          },
+          "end": {
+            "line": 1,
+            "column": 15
+          }
+        }
+      },
+      "typeParameters": null,
+      "body": {
+        "type": "ObjectTypeAnnotation",
+        "properties": [],
+        "indexers": [
+          {
+            "type": "ObjectTypeIndexer",
+            "id": {
+              "type": "Identifier",
+              "name": "indexer",
+              "range": [
+                27,
+                34
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 34
+                }
+              }
+            },
+            "key": {
+              "type": "NumberTypeAnnotation",
+              "range": [
+                36,
+                42
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 36
+                },
+                "end": {
+                  "line": 1,
+                  "column": 42
+                }
+              }
+            },
+            "value": {
+              "type": "StringTypeAnnotation",
+              "range": [
+                45,
+                51
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 45
+                },
+                "end": {
+                  "line": 1,
+                  "column": 51
+                }
+              }
+            },
+            "static": true,
+            "range": [
+              18,
+              51
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 51
+              }
+            }
+          }
+        ],
+        "callProperties": [],
+        "range": [
+          16,
+          53
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 16
+          },
+          "end": {
+            "line": 1,
+            "column": 53
+          }
+        }
+      },
+      "extends": [],
+      "range": [
+        0,
+        53
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 53
+        }
+      }
+    }
+  ]
+}

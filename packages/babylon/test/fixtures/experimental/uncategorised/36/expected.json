@@ -1,0 +1,73 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 21,
+              "name": "bar",
+              "type": "Identifier",
+              "end": 24
+            },
+            "static": false,
+            "kind": "set",
+            "value": {
+              "start": 24,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "f"
+                }
+              ],
+              "body": {
+                "start": 28,
+                "body": [],
+                "type": "BlockStatement",
+                "end": 30
+              },
+              "type": "FunctionExpression",
+              "end": 30
+            },
+            "type": "MethodDefinition",
+            "end": 30
+          }
+        ],
+        "type": "ClassBody",
+        "end": 32
+      },
+      "type": "ClassDeclaration",
+      "end": 32
+    }
+  ],
+  "type": "Program",
+  "end": 32
+}

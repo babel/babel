@@ -1,0 +1,54 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "properties": [
+              {
+                "start": 5,
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "kind": "init",
+                "value": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "type": "Property",
+                "end": 6
+              }
+            ],
+            "type": "ObjectPattern",
+            "end": 7
+          },
+          "init": {
+            "start": 10,
+            "name": "y",
+            "type": "Identifier",
+            "end": 11
+          },
+          "type": "VariableDeclarator",
+          "end": 11
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 11
+    }
+  ],
+  "type": "Program",
+  "end": 11
+}

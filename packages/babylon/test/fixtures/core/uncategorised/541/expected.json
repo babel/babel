@@ -1,0 +1,27 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "f"
+      },
+      "params": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": []
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "Literal",
+        "regex": {
+          "pattern": " 1 ",
+          "flags": ""
+        }
+      }
+    }
+  ]
+}

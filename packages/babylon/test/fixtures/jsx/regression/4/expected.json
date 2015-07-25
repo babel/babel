@@ -1,0 +1,48 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 16,
+      "expression": {
+        "type": "JSXElement",
+        "start": 0,
+        "end": 16,
+        "openingElement": {
+          "type": "JSXOpeningElement",
+          "start": 0,
+          "end": 5,
+          "attributes": [],
+          "name": {
+            "type": "JSXIdentifier",
+            "start": 1,
+            "end": 4,
+            "name": "div"
+          },
+          "selfClosing": false
+        },
+        "closingElement": {
+          "type": "JSXClosingElement",
+          "start": 10,
+          "end": 16,
+          "name": {
+            "type": "JSXIdentifier",
+            "start": 12,
+            "end": 15,
+            "name": "div"
+          }
+        },
+        "children": [
+          {
+            "type": "Literal",
+            "start": 5,
+            "end": 10,
+            "value": "/text",
+            "raw": "/text"
+          }
+        ]
+      }
+    }
+  ]
+}

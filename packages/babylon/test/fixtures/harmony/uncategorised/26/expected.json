@@ -1,0 +1,119 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "TemplateLiteral",
+        "expressions": [
+          {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "x"
+                },
+                "value": {
+                  "type": "ObjectExpression",
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "name": "y"
+                      },
+                      "value": {
+                        "type": "Literal",
+                        "value": 10,
+                        "raw": "10"
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                },
+                "kind": "init"
+              }
+            ]
+          },
+          {
+            "type": "TemplateLiteral",
+            "expressions": [
+              {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "generator": false,
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1"
+                      }
+                    }
+                  ]
+                },
+                "expression": false
+              }
+            ],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "nested",
+                  "raw": "nested"
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "endnest",
+                  "raw": "endnest"
+                },
+                "tail": true
+              }
+            ]
+          }
+        ],
+        "quasis": [
+          {
+            "type": "TemplateElement",
+            "value": {
+              "cooked": "outer",
+              "raw": "outer"
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "value": {
+              "cooked": "bar",
+              "raw": "bar"
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "value": {
+              "cooked": "end",
+              "raw": "end"
+            },
+            "tail": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "SequenceExpression",
+        "expressions": [
+          {
+            "type": "TemplateLiteral",
+            "expressions": [
+              {
+                "type": "Identifier",
+                "name": "x"
+              }
+            ],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "{",
+                  "raw": "{"
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "}",
+                  "raw": "}"
+                },
+                "tail": true
+              }
+            ]
+          },
+          {
+            "type": "TemplateLiteral",
+            "expressions": [],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "}",
+                  "raw": "}"
+                },
+                "tail": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

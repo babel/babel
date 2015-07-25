@@ -1,0 +1,87 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "kind": "var",
+      "start": 0,
+      "end": 42,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 42,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 7,
+            "name": "foo"
+          },
+          "init": {
+            "type": "ArrowFunctionExpression",
+            "start": 10,
+            "end": 42,
+            "id": null,
+            "generator": false,
+            "expression": false,
+            "async": true,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 17,
+                "end": 20,
+                "name": "foo",
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "start": 20,
+                  "end": 25,
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start": 22,
+                    "end": 25,
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 22,
+                      "end": 25,
+                      "name": "bar"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "start": 27,
+                "end": 30,
+                "name": "bar",
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "start": 30,
+                  "end": 35,
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start": 32,
+                    "end": 35,
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 32,
+                      "end": 35,
+                      "name": "foo"
+                    }
+                  }
+                }
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start": 40,
+              "end": 42,
+              "body": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

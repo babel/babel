@@ -1,0 +1,40 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 12,
+            "computed": false,
+            "key": {
+              "start": 19,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 22
+            },
+            "static": true,
+            "value": null,
+            "type": "ClassProperty",
+            "end": 23
+          }
+        ],
+        "type": "ClassBody",
+        "end": 25
+      },
+      "type": "ClassDeclaration",
+      "end": 25
+    }
+  ],
+  "type": "Program",
+  "end": 25
+}

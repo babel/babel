@@ -1,0 +1,38 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 5,
+      "decorators": [
+        {
+          "start": 0,
+          "expression": {
+            "start": 1,
+            "name": "foo",
+            "type": "Identifier",
+            "end": 4
+          },
+          "type": "Decorator",
+          "end": 4
+        }
+      ],
+      "id": {
+        "start": 11,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 14
+      },
+      "superClass": null,
+      "body": {
+        "start": 15,
+        "body": [],
+        "type": "ClassBody",
+        "end": 17
+      },
+      "type": "ClassDeclaration",
+      "end": 17
+    }
+  ],
+  "type": "Program",
+  "end": 17
+}

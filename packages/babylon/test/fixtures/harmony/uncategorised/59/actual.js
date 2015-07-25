@@ -1,0 +1,1 @@
+(for (x of array) for (y of array2) if (x === test) x)

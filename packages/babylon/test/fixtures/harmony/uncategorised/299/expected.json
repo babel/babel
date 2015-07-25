@@ -1,0 +1,76 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "doSmth"
+        },
+        "arguments": [
+          {
+            "type": "TemplateLiteral",
+            "expressions": [
+              {
+                "type": "Identifier",
+                "name": "x"
+              },
+              {
+                "type": "Identifier",
+                "name": "y"
+              },
+              {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "x"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "name": "y"
+                }
+              }
+            ],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "",
+                  "raw": ""
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": " + ",
+                  "raw": " + "
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": " = ",
+                  "raw": " = "
+                },
+                "tail": false
+              },
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "cooked": "",
+                  "raw": ""
+                },
+                "tail": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

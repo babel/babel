@@ -1,0 +1,21 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "IfStatement",
+      "test": {
+        "type": "Literal",
+        "value": 1,
+        "raw": "1"
+      },
+      "consequent": {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "raw": "/  foo/"
+        }
+      },
+      "alternate": null
+    }
+  ]
+}

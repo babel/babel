@@ -1,0 +1,59 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "id": {
+        "start": 6,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "start": 10,
+        "body": [
+          {
+            "start": 17,
+            "decorators": [
+              {
+                "start": 12,
+                "expression": {
+                  "start": 13,
+                  "name": "bar",
+                  "type": "Identifier",
+                  "end": 16
+                },
+                "type": "Decorator",
+                "end": 16
+              }
+            ],
+            "computed": false,
+            "key": {
+              "start": 24,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 27
+            },
+            "static": true,
+            "value": {
+              "start": 30,
+              "value": "bar",
+              "raw": "\"bar\"",
+              "type": "Literal",
+              "end": 35
+            },
+            "type": "ClassProperty",
+            "end": 36
+          }
+        ],
+        "type": "ClassBody",
+        "end": 38
+      },
+      "type": "ClassDeclaration",
+      "end": 38
+    }
+  ],
+  "type": "Program",
+  "end": 38
+}

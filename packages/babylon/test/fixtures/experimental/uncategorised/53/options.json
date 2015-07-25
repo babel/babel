@@ -1,0 +1,6 @@
+{
+  "sourceType": "module",
+  "features": {
+    "es7.exportExtensions": true
+  }
+}

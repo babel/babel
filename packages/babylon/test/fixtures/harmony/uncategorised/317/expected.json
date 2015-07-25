@@ -1,0 +1,90 @@
+{
+  "type": "Program",
+  "start": 0,
+  "end": 22,
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 22,
+      "expression": {
+        "type": "TemplateLiteral",
+        "start": 0,
+        "end": 22,
+        "expressions": [
+          {
+            "type": "MemberExpression",
+            "start": 3,
+            "end": 20,
+            "object": {
+              "type": "CallExpression",
+              "start": 3,
+              "end": 17,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 3,
+                "end": 12,
+                "object": {
+                  "type": "Literal",
+                  "start": 3,
+                  "end": 7,
+                  "regex": {
+                    "pattern": "\\d",
+                    "flags": ""
+                  },
+                  "raw": "/\\d/"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 12,
+                  "name": "exec"
+                },
+                "computed": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 13,
+                  "end": 16,
+                  "value": "1",
+                  "raw": "'1'"
+                }
+              ]
+            },
+            "property": {
+              "type": "Literal",
+              "start": 18,
+              "end": 19,
+              "value": 0,
+              "raw": "0"
+            },
+            "computed": true
+          }
+        ],
+        "quasis": [
+          {
+            "type": "TemplateElement",
+            "start": 1,
+            "end": 1,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": false
+          },
+          {
+            "type": "TemplateElement",
+            "start": 21,
+            "end": 21,
+            "value": {
+              "raw": "",
+              "cooked": ""
+            },
+            "tail": true
+          }
+        ]
+      }
+    }
+  ]
+}

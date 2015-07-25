@@ -1,0 +1,40 @@
+{
+  "body": [
+    {
+      "left": {
+        "declarations": [
+          {
+            "id": {
+              "elements": [
+                {
+                  "name": "name",
+                  "type": "Identifier"
+                },
+                {
+                  "name": "value",
+                  "type": "Identifier"
+                }
+              ],
+              "type": "ArrayPattern"
+            },
+            "init": null,
+            "type": "VariableDeclarator"
+          }
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration"
+      },
+      "right": {
+        "name": "obj",
+        "type": "Identifier"
+      },
+      "body": {
+        "body": [],
+        "type": "BlockStatement"
+      },
+      "type": "ForInStatement"
+    }
+  ],
+  "sourceType": "script",
+  "type": "Program"
+}
