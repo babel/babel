@@ -76,7 +76,7 @@ pp.processComment = function (node) {
     if (lastChild.leadingComments) {
       if (last(lastChild.leadingComments).range[1] <= node.range[0]) {
         node.leadingComments = lastChild.leadingComments;
-        delete lastChild.leadingComments;
+        lastChild.leadingComments = null;
       } else {
         // A leading comment for an anonymous class had been stolen by its first MethodDefinition,
         // so this takes back the leading comment.

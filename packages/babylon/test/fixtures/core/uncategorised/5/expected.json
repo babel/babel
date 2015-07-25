@@ -56,8 +56,6 @@
               "column": 8
             }
           },
-          "value": {},
-          "rawValue": {},
           "raw": "/[a-z]/g",
           "regex": {
             "pattern": "[a-z]",

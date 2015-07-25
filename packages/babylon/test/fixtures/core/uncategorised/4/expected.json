@@ -56,8 +56,6 @@
               "column": 8
             }
           },
-          "value": {},
-          "rawValue": {},
           "raw": "/foobar/",
           "regex": {
             "pattern": "foobar",

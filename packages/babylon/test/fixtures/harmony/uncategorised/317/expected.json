@@ -113,8 +113,6 @@
                         "column": 7
                       }
                     },
-                    "value": {},
-                    "rawValue": {},
                     "raw": "/\\d/",
                     "regex": {
                       "pattern": "\\d",

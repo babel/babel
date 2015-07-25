@@ -87,8 +87,6 @@
                   "column": 17
                 }
               },
-              "value": {},
-              "rawValue": {},
               "raw": "/[P QR]/i",
               "regex": {
                 "pattern": "[P QR]",
