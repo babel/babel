@@ -21,6 +21,7 @@ _.each(fixtures, function (suites, name) {
 function runTest(test) {
   var opts = test.options;
   opts.locations = true;
+  opts.ranges = true;
 
   try {
     var ast = parse(test.actual.code, opts);
@@ -40,7 +41,12 @@ function runTest(test) {
   if (opts.throws) {
     throw new Error("Expected error message: " + opts.throws + ". But parsing succeeded.");
   } else {
-    var mis = misMatch(JSON.parse(test.expect.code), ast);
+    try {
+      var mis = misMatch(JSON.parse(test.expect.code), ast);
+    } catch (err) {
+      console.log(test.expect.code);
+      throw err;
+    }
     if (mis) {
       //delete ast.tokens;
       //require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));

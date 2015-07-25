@@ -1,6 +1,5 @@
 {
   "features": {
     "es7.asyncFunctions": true
-  },
-  "ranges": true
+  }
 }

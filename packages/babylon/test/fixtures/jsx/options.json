@@ -1,4 +1,3 @@
 {
-  "ranges": true,
   "plugins": { "jsx": true }
 }
