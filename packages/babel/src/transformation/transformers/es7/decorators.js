@@ -1,6 +1,7 @@
 import memoiseDecorators from "../../helpers/memoise-decorators";
 import * as defineMap from "../../helpers/define-map";
 import * as t from "../../../types";
+import some from "lodash/collection/some";
 
 export var metadata = {
   dependencies: ["es6.classes"],
@@ -19,15 +20,7 @@ export var visitor = {
    */
 
   ObjectExpression(node, parent, scope, file) {
-    var hasDecorators = false;
-    for (let i = 0; i < node.properties.length; i++) {
-      let prop = node.properties[i];
-      if (prop.decorators) {
-        hasDecorators = true;
-        break;
-      }
-    }
-    if (!hasDecorators) return;
+    if (!some(node.properties, "decorators")) return;
 
     var mutatorMap = {};
 
