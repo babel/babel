@@ -1,0 +1,111 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 17,
+      "expression": {
+        "type": "JSXElement",
+        "start": 0,
+        "end": 17,
+        "openingElement": {
+          "type": "JSXOpeningElement",
+          "start": 0,
+          "end": 5,
+          "attributes": [],
+          "name": {
+            "type": "JSXIdentifier",
+            "start": 1,
+            "end": 4,
+            "name": "div"
+          },
+          "selfClosing": false
+        },
+        "closingElement": {
+          "type": "JSXClosingElement",
+          "start": 11,
+          "end": 17,
+          "name": {
+            "type": "JSXIdentifier",
+            "start": 13,
+            "end": 16,
+            "name": "div"
+          }
+        },
+        "children": [
+          {
+            "type": "JSXExpressionContainer",
+            "expression": {
+              "type": "Identifier",
+              "name": "a",
+              "range": [
+                6,
+                7
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                }
+              }
+            },
+            "range": [
+              5,
+              8
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 5
+              },
+              "end": {
+                "line": 1,
+                "column": 8
+              }
+            }
+          },
+          {
+            "type": "JSXExpressionContainer",
+            "expression": {
+              "type": "Identifier",
+              "name": "b",
+              "range": [
+                9,
+                10
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              }
+            },
+            "range": [
+              8,
+              11
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

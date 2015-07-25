@@ -1,0 +1,71 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "SequenceExpression",
+        "expressions": [
+          {
+            "type": "Identifier",
+            "name": "x",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "name": "y",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 3
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 4
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 4
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 4
+    }
+  }
+}

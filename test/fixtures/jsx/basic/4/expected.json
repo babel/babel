@@ -1,0 +1,142 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "JSXElement",
+        "openingElement": {
+          "type": "JSXOpeningElement",
+          "name": {
+            "type": "JSXIdentifier",
+            "name": "a",
+            "range": [
+              1,
+              2
+            ]
+          },
+          "selfClosing": true,
+          "attributes": [
+            {
+              "type": "JSXAttribute",
+              "name": {
+                "type": "JSXIdentifier",
+                "name": "b",
+                "range": [
+                  3,
+                  4
+                ]
+              },
+              "value": {
+                "type": "JSXExpressionContainer",
+                "expression": {
+                  "type": "Literal",
+                  "value": " ",
+                  "raw": "\" \"",
+                  "range": [
+                    6,
+                    9
+                  ]
+                },
+                "range": [
+                  5,
+                  10
+                ]
+              },
+              "range": [
+                3,
+                10
+              ]
+            },
+            {
+              "type": "JSXAttribute",
+              "name": {
+                "type": "JSXIdentifier",
+                "name": "c",
+                "range": [
+                  11,
+                  12
+                ]
+              },
+              "value": {
+                "type": "Literal",
+                "value": " ",
+                "raw": "\" \"",
+                "range": [
+                  13,
+                  16
+                ]
+              },
+              "range": [
+                11,
+                16
+              ]
+            },
+            {
+              "type": "JSXAttribute",
+              "name": {
+                "type": "JSXIdentifier",
+                "name": "d",
+                "range": [
+                  17,
+                  18
+                ]
+              },
+              "value": {
+                "type": "Literal",
+                "value": "&",
+                "raw": "\"&amp;\"",
+                "range": [
+                  19,
+                  26
+                ]
+              },
+              "range": [
+                17,
+                26
+              ]
+            },
+            {
+              "type": "JSXAttribute",
+              "name": {
+                "type": "JSXIdentifier",
+                "name": "e",
+                "range": [
+                  27,
+                  28
+                ]
+              },
+              "value": {
+                "type": "Literal",
+                "value": "&ampr;",
+                "raw": "\"&ampr;\"",
+                "range": [
+                  29,
+                  37
+                ]
+              },
+              "range": [
+                27,
+                37
+              ]
+            }
+          ],
+          "range": [
+            0,
+            40
+          ]
+        },
+        "closingElement": null,
+        "children": [],
+        "range": [
+          0,
+          40
+        ]
+      },
+      "range": [
+        0,
+        40
+      ]
+    }
+  ]
+}

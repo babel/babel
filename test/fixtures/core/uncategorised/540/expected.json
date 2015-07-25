@@ -1,0 +1,25 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "BinaryExpression",
+        "left": {
+          "type": "FunctionExpression",
+          "id": null,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": []
+          }
+        },
+        "operator": "/",
+        "right": {
+          "type": "Literal",
+          "value": 1
+        }
+      }
+    }
+  ]
+}

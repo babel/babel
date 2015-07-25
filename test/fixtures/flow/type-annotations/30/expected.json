@@ -1,0 +1,95 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "numVal",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "range": [
+                  11,
+                  17
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                }
+              },
+              "range": [
+                10,
+                17
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                }
+              }
+            },
+            "range": [
+              4,
+              17
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            }
+          },
+          "init": null,
+          "range": [
+            4,
+            17
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "range": [
+        0,
+        18
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 18
+        }
+      }
+    }
+  ]
+}

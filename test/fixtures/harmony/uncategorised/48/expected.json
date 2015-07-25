@@ -1,0 +1,163 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "ArrowFunctionExpression",
+        "id": null,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "x",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 1
+              },
+              "end": {
+                "line": 1,
+                "column": 2
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "ArrowFunctionExpression",
+          "id": null,
+          "params": [
+            {
+              "type": "Identifier",
+              "name": "y",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              }
+            },
+            {
+              "type": "Identifier",
+              "name": "z",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 13
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "SequenceExpression",
+            "expressions": [
+              {
+                "type": "Identifier",
+                "name": "x",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 20
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "name": "y",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "name": "z",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            }
+          },
+          "generator": false,
+          "expression": true,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          }
+        },
+        "generator": false,
+        "expression": true,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 28
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 28
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 28
+    }
+  }
+}

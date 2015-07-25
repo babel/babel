@@ -1,0 +1,212 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ClassDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "Array",
+        "range": [
+          6,
+          11
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 6
+          },
+          "end": {
+            "line": 1,
+            "column": 11
+          }
+        }
+      },
+      "superClass": null,
+      "body": {
+        "type": "ClassBody",
+        "body": [
+          {
+            "type": "MethodDefinition",
+            "key": {
+              "type": "Identifier",
+              "name": "concat",
+              "range": [
+                14,
+                20
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 14
+                },
+                "end": {
+                  "line": 1,
+                  "column": 20
+                }
+              }
+            },
+            "value": {
+              "type": "FunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "items",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "typeAnnotation": {
+                      "type": "UnionTypeAnnotation",
+                      "types": [
+                        {
+                          "type": "NumberTypeAnnotation",
+                          "range": [
+                            27,
+                            33
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 27
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 33
+                            }
+                          }
+                        },
+                        {
+                          "type": "StringTypeAnnotation",
+                          "range": [
+                            36,
+                            42
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 36
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 42
+                            }
+                          }
+                        }
+                      ],
+                      "range": [
+                        27,
+                        42
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 42
+                        }
+                      }
+                    },
+                    "range": [
+                      26,
+                      42
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 26
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 42
+                      }
+                    }
+                  },
+                  "range": [
+                    21,
+                    42
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 42
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "range": [
+                  44,
+                  46
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 44
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 46
+                  }
+                }
+              },
+              "generator": false,
+              "expression": false
+            },
+            "kind": "method",
+            "static": false,
+            "computed": false,
+            "range": [
+              14,
+              46
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 46
+              }
+            }
+          }
+        ],
+        "range": [
+          12,
+          49
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 12
+          },
+          "end": {
+            "line": 1,
+            "column": 49
+          }
+        }
+      },
+      "range": [
+        0,
+        49
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 49
+        }
+      }
+    }
+  ]
+}

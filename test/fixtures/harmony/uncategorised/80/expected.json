@@ -1,0 +1,35 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    29
+  ],
+  "body": [
+    {
+      "type": "ExportDefaultDeclaration",
+      "range": [
+        0,
+        29
+      ],
+      "declaration": {
+        "type": "FunctionExpression",
+        "range": [
+          15,
+          29
+        ],
+        "id": null,
+        "generator": false,
+        "expression": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "range": [
+            27,
+            29
+          ],
+          "body": []
+        }
+      }
+    }
+  ]
+}

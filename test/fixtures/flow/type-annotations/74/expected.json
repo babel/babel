@@ -1,0 +1,74 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "kind": "var",
+      "start": 0,
+      "end": 43,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 42,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 7,
+            "name": "foo"
+          },
+          "init": {
+            "type": "TypeCastExpression",
+            "start": 11,
+            "end": 41,
+            "expression": {
+              "type": "ArrowFunctionExpression",
+              "start": 12,
+              "end": 32,
+              "id": null,
+              "generator": false,
+              "expression": true,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 13,
+                  "end": 16,
+                  "name": "bar",
+                  "parenthesizedExpression": true
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 32,
+                "name": "bar"
+              },
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 17,
+                "end": 25,
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 19,
+                  "end": 25
+                }
+              },
+              "parenthesizedExpression": true
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 33,
+              "end": 41,
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start": 35,
+                "end": 41
+              }
+            },
+            "parenthesizedExpression": true
+          }
+        }
+      ]
+    }
+  ]
+}

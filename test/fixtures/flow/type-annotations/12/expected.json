@@ -1,0 +1,95 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "foo",
+        "range": [
+          9,
+          12
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 9
+          },
+          "end": {
+            "line": 1,
+            "column": 12
+          }
+        }
+      },
+      "params": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [],
+        "range": [
+          21,
+          23
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 21
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        }
+      },
+      "generator": false,
+      "expression": false,
+      "returnType": {
+        "type": "TypeAnnotation",
+        "typeAnnotation": {
+          "type": "NumberTypeAnnotation",
+          "range": [
+            15,
+            21
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          }
+        },
+        "range": [
+          14,
+          21
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 14
+          },
+          "end": {
+            "line": 1,
+            "column": 21
+          }
+        }
+      },
+      "range": [
+        0,
+        23
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 23
+        }
+      }
+    }
+  ]
+}

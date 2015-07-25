@@ -1,0 +1,128 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    23
+  ],
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "range": [
+        0,
+        23
+      ],
+      "expression": {
+        "type": "AssignmentExpression",
+        "range": [
+          0,
+          23
+        ],
+        "operator": "=",
+        "left": {
+          "type": "ArrayPattern",
+          "range": [
+            0,
+            17
+          ],
+          "elements": [
+            {
+              "type": "Identifier",
+              "range": [
+                1,
+                2
+              ],
+              "name": "a"
+            },
+            {
+              "type": "ObjectPattern",
+              "range": [
+                4,
+                16
+              ],
+              "properties": [
+                {
+                  "type": "Property",
+                  "range": [
+                    5,
+                    15
+                  ],
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "range": [
+                      5,
+                      6
+                    ],
+                    "name": "b"
+                  },
+                  "value": {
+                    "type": "ObjectPattern",
+                    "range": [
+                      8,
+                      15
+                    ],
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "range": [
+                          9,
+                          14
+                        ],
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "range": [
+                            9,
+                            10
+                          ],
+                          "name": "c"
+                        },
+                        "kind": "init",
+                        "value": {
+                          "type": "AssignmentPattern",
+                          "range": [
+                            9,
+                            14
+                          ],
+                          "left": {
+                            "type": "Identifier",
+                            "range": [
+                              9,
+                              10
+                            ],
+                            "name": "c"
+                          },
+                          "right": {
+                            "type": "Literal",
+                            "range": [
+                              13,
+                              14
+                            ],
+                            "value": 1
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "kind": "init"
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "range": [
+            20,
+            23
+          ],
+          "name": "arr"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    30
+  ],
+  "body": [
+    {
+      "type": "ExportDefaultDeclaration",
+      "range": [
+        0,
+        30
+      ],
+      "declaration": {
+        "type": "FunctionDeclaration",
+        "range": [
+          15,
+          30
+        ],
+        "id": {
+          "type": "Identifier",
+          "range": [
+            24,
+            25
+          ],
+          "name": "f"
+        },
+        "generator": false,
+        "expression": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "range": [
+            28,
+            30
+          ],
+          "body": []
+        }
+      }
+    }
+  ]
+}

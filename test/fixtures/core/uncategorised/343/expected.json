@@ -1,0 +1,33 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "AssignmentExpression",
+        "operator": "=",
+        "left": {
+          "type": "Identifier",
+          "name": "x"
+        },
+        "right": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "UpdateExpression",
+            "operator": "--",
+            "prefix": false,
+            "argument": {
+              "type": "Identifier",
+              "name": "y"
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "Literal",
+            "value": 10
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "expression": {
+        "start": 0,
+        "id": null,
+        "generator": false,
+        "expression": true,
+        "params": [
+          {
+            "start": 1,
+            "name": "x",
+            "type": "Identifier",
+            "end": 2
+          },
+          {
+            "start": 4,
+            "name": "y",
+            "type": "Identifier",
+            "end": 5
+          }
+        ],
+        "body": {
+          "start": 12,
+          "value": 1,
+          "raw": "1",
+          "type": "Literal",
+          "end": 13
+        },
+        "type": "ArrowFunctionExpression",
+        "end": 13
+      },
+      "type": "ExpressionStatement",
+      "end": 14
+    }
+  ],
+  "type": "Program",
+  "end": 14
+}

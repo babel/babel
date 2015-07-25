@@ -1,0 +1,202 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ClassDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "Foo",
+        "range": [
+          6,
+          9
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 6
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        }
+      },
+      "superClass": null,
+      "body": {
+        "type": "ClassBody",
+        "body": [
+          {
+            "type": "ClassProperty",
+            "key": {
+              "type": "Identifier",
+              "name": "prop1",
+              "range": [
+                12,
+                17
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                }
+              }
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "StringTypeAnnotation",
+                "range": [
+                  18,
+                  24
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                }
+              },
+              "range": [
+                17,
+                24
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              }
+            },
+            "computed": false,
+            "static": false,
+            "range": [
+              12,
+              25
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 12
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              }
+            }
+          },
+          {
+            "type": "ClassProperty",
+            "key": {
+              "type": "Identifier",
+              "name": "prop2",
+              "range": [
+                26,
+                31
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 26
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              }
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "range": [
+                  32,
+                  38
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 32
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 38
+                  }
+                }
+              },
+              "range": [
+                31,
+                38
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 31
+                },
+                "end": {
+                  "line": 1,
+                  "column": 38
+                }
+              }
+            },
+            "computed": false,
+            "static": false,
+            "range": [
+              26,
+              39
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 26
+              },
+              "end": {
+                "line": 1,
+                "column": 39
+              }
+            }
+          }
+        ],
+        "range": [
+          10,
+          41
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 10
+          },
+          "end": {
+            "line": 1,
+            "column": 41
+          }
+        }
+      },
+      "range": [
+        0,
+        41
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 41
+        }
+      }
+    }
+  ]
+}

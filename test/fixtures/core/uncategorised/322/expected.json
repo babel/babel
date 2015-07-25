@@ -1,0 +1,12 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "Literal",
+        "value": "a&b"
+      }
+    }
+  ]
+}

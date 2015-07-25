@@ -1,0 +1,131 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "ArrayTypeAnnotation",
+                "elementType": {
+                  "type": "FunctionTypeAnnotation",
+                  "params": [],
+                  "returnType": {
+                    "type": "NumberTypeAnnotation",
+                    "range": [
+                      14,
+                      20
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      }
+                    }
+                  },
+                  "typeParameters": null,
+                  "range": [
+                    8,
+                    20
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    }
+                  }
+                },
+                "range": [
+                  7,
+                  23
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  }
+                }
+              },
+              "range": [
+                5,
+                23
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 23
+                }
+              }
+            },
+            "range": [
+              4,
+              23
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            }
+          },
+          "init": null,
+          "range": [
+            4,
+            23
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "range": [
+        0,
+        23
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 23
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "ObjectTypeAnnotation",
+                "properties": [
+                  {
+                    "type": "ObjectTypeProperty",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "numVal",
+                      "range": [
+                        8,
+                        14
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
+                        }
+                      }
+                    },
+                    "value": {
+                      "type": "NumberTypeAnnotation",
+                      "range": [
+                        16,
+                        22
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
+                        }
+                      }
+                    },
+                    "optional": false,
+                    "range": [
+                      8,
+                      23
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 23
+                      }
+                    }
+                  }
+                ],
+                "indexers": [
+                  {
+                    "type": "ObjectTypeIndexer",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "indexer",
+                      "range": [
+                        25,
+                        32
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 32
+                        }
+                      }
+                    },
+                    "key": {
+                      "type": "StringTypeAnnotation",
+                      "range": [
+                        34,
+                        40
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 34
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 40
+                        }
+                      }
+                    },
+                    "value": {
+                      "type": "NumberTypeAnnotation",
+                      "range": [
+                        43,
+                        49
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 43
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 49
+                        }
+                      }
+                    },
+                    "range": [
+                      24,
+                      49
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 49
+                      }
+                    }
+                  }
+                ],
+                "callProperties": [],
+                "range": [
+                  7,
+                  50
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 50
+                  }
+                }
+              },
+              "range": [
+                5,
+                50
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 50
+                }
+              }
+            },
+            "range": [
+              4,
+              50
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            }
+          },
+          "init": null,
+          "range": [
+            4,
+            50
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 50
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "range": [
+        0,
+        51
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 51
+        }
+      }
+    }
+  ]
+}

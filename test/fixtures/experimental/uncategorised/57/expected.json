@@ -1,0 +1,61 @@
+{
+  "type": "Program",
+  "start": 0,
+  "end": 25,
+  "body": [
+    {
+      "type": "ClassDeclaration",
+      "start": 0,
+      "end": 25,
+      "id": {
+        "type": "Identifier",
+        "name": "Foo",
+        "start": 6,
+        "end": 9
+      },
+      "superClass": null,
+      "body": {
+        "type": "ClassBody",
+        "start": 10,
+        "end": 25,
+        "body": [
+          {
+            "type": "MethodDefinition",
+            "start": 12,
+            "end": 23,
+            "static": false,
+            "key": {
+              "type": "Identifier",
+              "start": 12,
+              "end": 15,
+              "name": "bar"
+            },
+            "kind": "method",
+            "value": {
+              "type": "FunctionExpression",
+              "start": 15,
+              "end": 23,
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 16,
+                  "end": 17
+                }
+              ],
+              "generator": false,
+              "body": {
+                "type": "BlockStatement",
+                "start": 20,
+                "end": 23,
+                "body": []
+              },
+              "expression": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

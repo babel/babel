@@ -1,0 +1,1 @@
+import typeof foo from "bar";

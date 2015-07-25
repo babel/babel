@@ -1,0 +1,148 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "x",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "TypeofTypeAnnotation",
+                "argument": {
+                  "type": "GenericTypeAnnotation",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "Y",
+                    "range": [
+                      14,
+                      15
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 15
+                      }
+                    }
+                  },
+                  "typeParameters": null,
+                  "range": [
+                    14,
+                    15
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    }
+                  }
+                },
+                "range": [
+                  7,
+                  15
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                }
+              },
+              "range": [
+                5,
+                15
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 15
+                }
+              }
+            },
+            "range": [
+              4,
+              15
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 15
+              }
+            }
+          },
+          "init": {
+            "type": "Identifier",
+            "name": "Y",
+            "range": [
+              18,
+              19
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              }
+            }
+          },
+          "range": [
+            4,
+            19
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "range": [
+        0,
+        20
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 20
+        }
+      }
+    }
+  ]
+}

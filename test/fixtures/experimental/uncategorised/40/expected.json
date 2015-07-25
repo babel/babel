@@ -1,0 +1,69 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 5,
+      "decorators": [
+        {
+          "start": 0,
+          "expression": {
+            "start": 1,
+            "name": "bar",
+            "type": "Identifier",
+            "end": 4
+          },
+          "type": "Decorator",
+          "end": 4
+        }
+      ],
+      "id": {
+        "start": 11,
+        "name": "Foo",
+        "type": "Identifier",
+        "end": 14
+      },
+      "superClass": {
+        "start": 28,
+        "decorators": [
+          {
+            "start": 23,
+            "expression": {
+              "start": 24,
+              "name": "foo",
+              "type": "Identifier",
+              "end": 27
+            },
+            "type": "Decorator",
+            "end": 27
+          }
+        ],
+        "id": {
+          "start": 34,
+          "name": "Bar",
+          "type": "Identifier",
+          "end": 37
+        },
+        "superClass": null,
+        "body": {
+          "start": 38,
+          "body": [],
+          "type": "ClassBody",
+          "end": 40
+        },
+        "type": "ClassExpression",
+        "end": 40
+      },
+      "body": {
+        "start": 41,
+        "body": [],
+        "type": "ClassBody",
+        "end": 43
+      },
+      "type": "ClassDeclaration",
+      "end": 43
+    }
+  ],
+  "sourceType": "script",
+  "type": "Program",
+  "end": 43
+}

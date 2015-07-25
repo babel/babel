@@ -1,0 +1,62 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "DeclareClass",
+      "id": {
+        "type": "Identifier",
+        "name": "A",
+        "range": [
+          14,
+          15
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 14
+          },
+          "end": {
+            "line": 1,
+            "column": 15
+          }
+        }
+      },
+      "typeParameters": null,
+      "body": {
+        "type": "ObjectTypeAnnotation",
+        "properties": [],
+        "indexers": [],
+        "callProperties": [],
+        "range": [
+          16,
+          18
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 16
+          },
+          "end": {
+            "line": 1,
+            "column": 18
+          }
+        }
+      },
+      "extends": [],
+      "range": [
+        0,
+        18
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 18
+        }
+      }
+    }
+  ]
+}

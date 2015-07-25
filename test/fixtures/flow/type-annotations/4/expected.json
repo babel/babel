@@ -1,0 +1,132 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "foo",
+        "range": [
+          9,
+          12
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 9
+          },
+          "end": {
+            "line": 1,
+            "column": 12
+          }
+        }
+      },
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "numVal",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "typeAnnotation": {
+              "type": "NumberTypeAnnotation",
+              "range": [
+                21,
+                27
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 21
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                }
+              }
+            },
+            "range": [
+              19,
+              27
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            }
+          },
+          "range": [
+            13,
+            27
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          }
+        },
+        {
+          "type": "Identifier",
+          "name": "untypedVal",
+          "range": [
+            29,
+            39
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 29
+            },
+            "end": {
+              "line": 1,
+              "column": 39
+            }
+          }
+        }
+      ],
+      "body": {
+        "type": "BlockStatement",
+        "body": [],
+        "range": [
+          40,
+          42
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 40
+          },
+          "end": {
+            "line": 1,
+            "column": 42
+          }
+        }
+      },
+      "generator": false,
+      "expression": false,
+      "range": [
+        0,
+        42
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 42
+        }
+      }
+    }
+  ]
+}

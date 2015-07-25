@@ -1,0 +1,39 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ClassDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "A"
+      },
+      "superClass": null,
+      "body": {
+        "type": "ClassBody",
+        "body": [
+          {
+            "type": "MethodDefinition",
+            "computed": false,
+            "key": {
+              "type": "Literal",
+              "value": "constructor"
+            },
+            "static": false,
+            "kind": "constructor",
+            "value": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": []
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

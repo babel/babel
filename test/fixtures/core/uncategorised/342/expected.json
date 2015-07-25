@@ -1,0 +1,20 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "BinaryExpression",
+        "left": {
+          "type": "Identifier",
+          "name": "foo"
+        },
+        "operator": "+",
+        "right": {
+          "type": "Identifier",
+          "name": "baz"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "features": {
+    "es7.comprehensions": true
+  },
+  "ranges": true
+}

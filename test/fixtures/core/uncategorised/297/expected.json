@@ -1,0 +1,100 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "hi",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 6
+              }
+            }
+          },
+          "init": {
+            "type": "FunctionExpression",
+            "id": {
+              "type": "Identifier",
+              "name": "arguments",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                }
+              }
+            },
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "body": [],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 34
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  }
+}

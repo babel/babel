@@ -1,0 +1,33 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    23
+  ],
+  "body": [
+    {
+      "type": "ExportDefaultDeclaration",
+      "range": [
+        0,
+        23
+      ],
+      "declaration": {
+        "type": "ClassExpression",
+        "range": [
+          15,
+          23
+        ],
+        "id": null,
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "range": [
+            21,
+            23
+          ],
+          "body": []
+        }
+      }
+    }
+  ]
+}

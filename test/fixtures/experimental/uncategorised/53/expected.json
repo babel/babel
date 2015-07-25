@@ -1,0 +1,27 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportNamedDeclaration",
+      "start": 0,
+      "end": 26,
+      "specifiers": [
+        {
+          "type": "ExportDefaultSpecifier",
+          "exported": {
+            "type": "Identifier",
+            "name": "default",
+            "start": 7,
+            "end": 14
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "bar",
+        "start": 20,
+        "end": 25
+      }
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "ComprehensionExpression",
+        "filter": {
+          "type": "BinaryExpression",
+          "operator": "===",
+          "left": {
+            "type": "Identifier",
+            "name": "x",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 40
+              },
+              "end": {
+                "line": 1,
+                "column": 41
+              }
+            }
+          },
+          "right": {
+            "type": "Identifier",
+            "name": "test",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 46
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 40
+            },
+            "end": {
+              "line": 1,
+              "column": 50
+            }
+          }
+        },
+        "blocks": [
+          {
+            "type": "ComprehensionBlock",
+            "left": {
+              "type": "Identifier",
+              "name": "x",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                }
+              }
+            },
+            "right": {
+              "type": "Identifier",
+              "name": "array",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 16
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 1
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            }
+          },
+          {
+            "type": "ComprehensionBlock",
+            "left": {
+              "type": "Identifier",
+              "name": "y",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              }
+            },
+            "right": {
+              "type": "Identifier",
+              "name": "array2",
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 28
+                },
+                "end": {
+                  "line": 1,
+                  "column": 34
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "Identifier",
+          "name": "x",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 52
+            },
+            "end": {
+              "line": 1,
+              "column": 53
+            }
+          }
+        },
+        "generator": true,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 54
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 54
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 54
+    }
+  }
+}

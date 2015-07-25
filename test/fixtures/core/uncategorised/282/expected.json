@@ -1,0 +1,253 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "TryStatement",
+      "block": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "doThat",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  }
+                }
+              },
+              "arguments": [],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 15
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 4
+          },
+          "end": {
+            "line": 1,
+            "column": 17
+          }
+        }
+      },
+      "handler": {
+        "type": "CatchClause",
+        "param": {
+          "type": "Identifier",
+          "name": "e",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 25
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            }
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "say",
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 30
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 33
+                    }
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "e",
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 34
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 35
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 30
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 36
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 36
+                }
+              }
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 28
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 18
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        }
+      },
+      "finalizer": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "cleanup",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 49
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 56
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "stuff",
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 57
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 62
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 49
+                },
+                "end": {
+                  "line": 1,
+                  "column": 63
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 49
+              },
+              "end": {
+                "line": 1,
+                "column": 63
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 47
+          },
+          "end": {
+            "line": 1,
+            "column": 65
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 65
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 65
+    }
+  }
+}

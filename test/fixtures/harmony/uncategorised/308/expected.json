@@ -1,0 +1,87 @@
+{
+  "type": "Program",
+  "range": [
+    0,
+    14
+  ],
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "range": [
+        0,
+        14
+      ],
+      "expression": {
+        "type": "ArrowFunctionExpression",
+        "range": [
+          0,
+          14
+        ],
+        "id": null,
+        "generator": false,
+        "expression": true,
+        "params": [
+          {
+            "type": "ObjectPattern",
+            "range": [
+              1,
+              8
+            ],
+            "properties": [
+              {
+                "type": "Property",
+                "range": [
+                  2,
+                  7
+                ],
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "range": [
+                    2,
+                    3
+                  ],
+                  "name": "x"
+                },
+                "kind": "init",
+                "value": {
+                  "type": "AssignmentPattern",
+                  "range": [
+                    2,
+                    7
+                  ],
+                  "left": {
+                    "type": "Identifier",
+                    "range": [
+                      2,
+                      3
+                    ],
+                    "name": "x"
+                  },
+                  "right": {
+                    "type": "Literal",
+                    "range": [
+                      6,
+                      7
+                    ],
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "body": {
+          "type": "Identifier",
+          "range": [
+            13,
+            14
+          ],
+          "name": "x"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "body": [
+    {
+      "declaration": {
+        "id": {
+          "name": "foo",
+          "type": "Identifier"
+        },
+        "generator": false,
+        "expression": false,
+        "params": [],
+        "body": {
+          "body": [],
+          "type": "BlockStatement"
+        },
+        "type": "FunctionDeclaration"
+      },
+      "type": "ExportDefaultDeclaration"
+    },
+    {
+      "expression": {
+        "value": false,
+        "raw": "false",
+        "type": "Literal"
+      },
+      "type": "ExpressionStatement"
+    }
+  ],
+  "sourceType": "module",
+  "type": "Program"
+}

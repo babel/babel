@@ -1,0 +1,187 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "foo",
+        "range": [
+          9,
+          12
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 9
+          },
+          "end": {
+            "line": 1,
+            "column": 12
+          }
+        }
+      },
+      "params": [
+        {
+          "type": "ArrayPattern",
+          "elements": [
+            {
+              "type": "Identifier",
+              "name": "x",
+              "range": [
+                14,
+                15
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 14
+                },
+                "end": {
+                  "line": 1,
+                  "column": 15
+                }
+              }
+            }
+          ],
+          "range": [
+            13,
+            31
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 31
+            }
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "typeAnnotation": {
+              "type": "GenericTypeAnnotation",
+              "id": {
+                "type": "Identifier",
+                "name": "Array",
+                "range": [
+                  18,
+                  23
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  }
+                }
+              },
+              "typeParameters": {
+                "type": "TypeParameterInstantiation",
+                "params": [
+                  {
+                    "type": "StringTypeAnnotation",
+                    "range": [
+                      24,
+                      30
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      }
+                    }
+                  }
+                ],
+                "range": [
+                  23,
+                  31
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  }
+                }
+              },
+              "range": [
+                18,
+                31
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              }
+            },
+            "range": [
+              16,
+              31
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 16
+              },
+              "end": {
+                "line": 1,
+                "column": 31
+              }
+            }
+          }
+        }
+      ],
+      "body": {
+        "type": "BlockStatement",
+        "body": [],
+        "range": [
+          33,
+          35
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 33
+          },
+          "end": {
+            "line": 1,
+            "column": 35
+          }
+        }
+      },
+      "generator": false,
+      "expression": false,
+      "range": [
+        0,
+        35
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 35
+        }
+      }
+    }
+  ]
+}

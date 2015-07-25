@@ -1,0 +1,97 @@
+{
+  "type": "Program",
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 25
+    }
+  },
+  "body": [
+    {
+      "type": "LabeledStatement",
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 25
+        }
+      },
+      "body": {
+        "type": "IfStatement",
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 5
+          },
+          "end": {
+            "line": 1,
+            "column": 25
+          }
+        },
+        "test": {
+          "type": "Literal",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "value": true
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 25
+            }
+          },
+          "label": {
+            "type": "Identifier",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 24
+              }
+            },
+            "name": "foo"
+          }
+        },
+        "alternate": null
+      },
+      "label": {
+        "type": "Identifier",
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 3
+          }
+        },
+        "name": "foo"
+      }
+    }
+  ]
+}

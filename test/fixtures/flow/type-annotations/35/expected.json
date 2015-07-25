@@ -1,0 +1,169 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "typeAnnotation": {
+                "type": "NullableTypeAnnotation",
+                "typeAnnotation": {
+                  "type": "ObjectTypeAnnotation",
+                  "properties": [
+                    {
+                      "type": "ObjectTypeProperty",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "numVal",
+                        "range": [
+                          9,
+                          15
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 9
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 15
+                          }
+                        }
+                      },
+                      "value": {
+                        "type": "NumberTypeAnnotation",
+                        "range": [
+                          17,
+                          23
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 23
+                          }
+                        }
+                      },
+                      "optional": false,
+                      "range": [
+                        9,
+                        23
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 23
+                        }
+                      }
+                    }
+                  ],
+                  "indexers": [],
+                  "callProperties": [],
+                  "range": [
+                    8,
+                    24
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    }
+                  }
+                },
+                "range": [
+                  7,
+                  24
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                }
+              },
+              "range": [
+                5,
+                24
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              }
+            },
+            "range": [
+              4,
+              24
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 24
+              }
+            }
+          },
+          "init": null,
+          "range": [
+            4,
+            24
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "range": [
+        0,
+        25
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 25
+        }
+      }
+    }
+  ]
+}

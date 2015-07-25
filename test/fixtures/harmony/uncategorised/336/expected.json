@@ -1,0 +1,20 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "MetaProperty",
+        "meta": {
+          "type": "Identifier",
+          "name": "new"
+        },
+        "property": {
+          "type": "Identifier",
+          "name": "target"
+        }
+      }
+    }
+  ],
+  "sourceType": "script"
+}

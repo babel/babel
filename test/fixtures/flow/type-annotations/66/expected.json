@@ -1,0 +1,65 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "start": 0,
+      "end": 38,
+      "expression": {
+        "type": "FunctionExpression",
+        "start": 1,
+        "end": 37,
+        "id": null,
+        "generator": false,
+        "expression": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start": 11,
+            "end": 33,
+            "argument": {
+              "type": "Identifier",
+              "start": 14,
+              "end": 18,
+              "name": "rest"
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 18,
+              "end": 33,
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 20,
+                "end": 33,
+                "typeParameters": {
+                  "type": "TypeParameterInstantiation",
+                  "start": 25,
+                  "end": 33,
+                  "params": [
+                    {
+                      "type": "NumberTypeAnnotation",
+                      "start": 26,
+                      "end": 32
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 20,
+                  "end": 25,
+                  "name": "Array"
+                }
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 35,
+          "end": 37,
+          "body": []
+        }
+      }
+    }
+  ]
+}

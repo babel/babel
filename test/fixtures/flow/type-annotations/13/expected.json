@@ -1,0 +1,114 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "foo",
+        "range": [
+          9,
+          12
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 9
+          },
+          "end": {
+            "line": 1,
+            "column": 12
+          }
+        }
+      },
+      "params": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [],
+        "range": [
+          25,
+          27
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 25
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        }
+      },
+      "generator": false,
+      "expression": false,
+      "returnType": {
+        "type": "TypeAnnotation",
+        "typeAnnotation": {
+          "type": "FunctionTypeAnnotation",
+          "params": [],
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "range": [
+              21,
+              25
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              }
+            }
+          },
+          "typeParameters": null,
+          "range": [
+            15,
+            25
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 25
+            }
+          }
+        },
+        "range": [
+          14,
+          25
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 14
+          },
+          "end": {
+            "line": 1,
+            "column": 25
+          }
+        }
+      },
+      "range": [
+        0,
+        27
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 27
+        }
+      }
+    }
+  ]
+}

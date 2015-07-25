@@ -1,0 +1,58 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "TypeAlias",
+      "id": {
+        "type": "Identifier",
+        "name": "FBID",
+        "range": [
+          5,
+          9
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 5
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        }
+      },
+      "typeParameters": null,
+      "right": {
+        "type": "NumberTypeAnnotation",
+        "range": [
+          12,
+          18
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 12
+          },
+          "end": {
+            "line": 1,
+            "column": 18
+          }
+        }
+      },
+      "range": [
+        0,
+        19
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 19
+        }
+      }
+    }
+  ]
+}

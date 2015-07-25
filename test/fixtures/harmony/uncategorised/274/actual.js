@@ -1,0 +1,1 @@
+[for (x of [])]  // no expression

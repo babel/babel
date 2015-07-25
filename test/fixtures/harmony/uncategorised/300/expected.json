@@ -1,0 +1,36 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "normal"
+      },
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "x"
+        },
+        {
+          "type": "AssignmentPattern",
+          "left": {
+            "type": "Identifier",
+            "name": "y"
+          },
+          "right": {
+            "type": "Literal",
+            "value": 10,
+            "raw": "10"
+          }
+        }
+      ],
+      "generator": false,
+      "body": {
+        "type": "BlockStatement",
+        "body": []
+      },
+      "expression": false
+    }
+  ]
+}

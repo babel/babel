@@ -1,0 +1,178 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "f",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 1
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "a",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 2
+              },
+              "end": {
+                "line": 1,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "ArrowFunctionExpression",
+            "id": null,
+            "params": [
+              {
+                "type": "Identifier",
+                "name": "x",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "name": "y",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                }
+              }
+            ],
+            "body": {
+              "type": "AwaitExpression",
+              "argument": {
+                "type": "ArrayExpression",
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "name": "x",
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 27
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 28
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "y",
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 30
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 31
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 32
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 20
+                },
+                "end": {
+                  "line": 1,
+                  "column": 32
+                }
+              }
+            },
+            "generator": false,
+            "expression": true,
+            "async": true,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 5
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "name": "b",
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 34
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 36
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 36
+        }
+      }
+    }
+  ]
+}

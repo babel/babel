@@ -1,0 +1,85 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "IfStatement",
+      "test": {
+        "type": "Identifier",
+        "name": "morning",
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 4
+          },
+          "end": {
+            "line": 1,
+            "column": 11
+          }
+        }
+      },
+      "consequent": {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "FunctionExpression",
+          "id": null,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 13
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        }
+      },
+      "alternate": null,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 27
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  }
+}

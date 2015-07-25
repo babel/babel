@@ -1,0 +1,99 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "InterfaceDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "A",
+        "range": [
+          10,
+          11
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 10
+          },
+          "end": {
+            "line": 1,
+            "column": 11
+          }
+        }
+      },
+      "typeParameters": null,
+      "body": {
+        "type": "ObjectTypeAnnotation",
+        "properties": [],
+        "indexers": [],
+        "callProperties": [],
+        "range": [
+          22,
+          24
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 22
+          },
+          "end": {
+            "line": 1,
+            "column": 24
+          }
+        }
+      },
+      "extends": [
+        {
+          "type": "InterfaceExtends",
+          "id": {
+            "type": "Identifier",
+            "name": "B",
+            "range": [
+              20,
+              21
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 20
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            }
+          },
+          "typeParameters": null,
+          "range": [
+            20,
+            21
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "range": [
+        0,
+        24
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 24
+        }
+      }
+    }
+  ]
+}

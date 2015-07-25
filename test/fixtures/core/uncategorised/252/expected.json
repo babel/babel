@@ -1,0 +1,111 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "LabeledStatement",
+      "body": {
+        "type": "WhileStatement",
+        "test": {
+          "type": "Literal",
+          "value": true,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ContinueStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "done",
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 30
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 34
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 21
+                },
+                "end": {
+                  "line": 1,
+                  "column": 34
+                }
+              }
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 36
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 6
+          },
+          "end": {
+            "line": 1,
+            "column": 36
+          }
+        }
+      },
+      "label": {
+        "type": "Identifier",
+        "name": "done",
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 4
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 36
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 36
+    }
+  }
+}

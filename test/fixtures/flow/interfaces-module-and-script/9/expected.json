@@ -1,0 +1,188 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ClassDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "Foo",
+        "range": [
+          6,
+          9
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 6
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        }
+      },
+      "superClass": {
+        "type": "ClassExpression",
+        "id": {
+          "type": "Identifier",
+          "name": "Bar",
+          "range": [
+            24,
+            27
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 24
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          }
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "body": [],
+          "range": [
+            43,
+            45
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 43
+            },
+            "end": {
+              "line": 1,
+              "column": 45
+            }
+          }
+        },
+        "implements": [
+          {
+            "type": "ClassImplements",
+            "id": {
+              "type": "Identifier",
+              "name": "Bat",
+              "range": [
+                39,
+                42
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 39
+                },
+                "end": {
+                  "line": 1,
+                  "column": 42
+                }
+              }
+            },
+            "typeParameters": null,
+            "range": [
+              39,
+              42
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 39
+              },
+              "end": {
+                "line": 1,
+                "column": 42
+              }
+            }
+          }
+        ],
+        "range": [
+          18,
+          45
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 18
+          },
+          "end": {
+            "line": 1,
+            "column": 45
+          }
+        }
+      },
+      "body": {
+        "type": "ClassBody",
+        "body": [],
+        "range": [
+          61,
+          63
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 61
+          },
+          "end": {
+            "line": 1,
+            "column": 63
+          }
+        }
+      },
+      "implements": [
+        {
+          "type": "ClassImplements",
+          "id": {
+            "type": "Identifier",
+            "name": "Man",
+            "range": [
+              57,
+              60
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 57
+              },
+              "end": {
+                "line": 1,
+                "column": 60
+              }
+            }
+          },
+          "typeParameters": null,
+          "range": [
+            57,
+            60
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 57
+            },
+            "end": {
+              "line": 1,
+              "column": 60
+            }
+          }
+        }
+      ],
+      "range": [
+        0,
+        63
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 63
+        }
+      }
+    }
+  ]
+}

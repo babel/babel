@@ -1,0 +1,57 @@
+{
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "name": "Foo",
+            "type": "Identifier",
+            "end": 7
+          },
+          "init": {
+            "start": 15,
+            "decorators": [
+              {
+                "start": 10,
+                "expression": {
+                  "start": 11,
+                  "name": "foo",
+                  "type": "Identifier",
+                  "end": 14
+                },
+                "type": "Decorator",
+                "end": 14
+              }
+            ],
+            "id": {
+              "start": 21,
+              "name": "Foo",
+              "type": "Identifier",
+              "end": 24
+            },
+            "superClass": null,
+            "body": {
+              "start": 25,
+              "body": [],
+              "type": "ClassBody",
+              "end": 27
+            },
+            "type": "ClassExpression",
+            "end": 27
+          },
+          "type": "VariableDeclarator",
+          "end": 27
+        }
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+      "end": 27
+    }
+  ],
+  "type": "Program",
+  "end": 27
+}

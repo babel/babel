@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Assigning to eval in strict mode (1:4)"
+}

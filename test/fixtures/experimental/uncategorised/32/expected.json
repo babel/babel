@@ -1,0 +1,35 @@
+{
+  "type": "Program",
+  "start": 0,
+  "end": 29,
+  "body": [
+    {
+      "type": "ExportNamedDeclaration",
+      "start": 0,
+      "end": 29,
+      "declaration": {
+        "type": "FunctionDeclaration",
+        "start": 7,
+        "end": 29,
+        "id": {
+          "type": "Identifier",
+          "start": 22,
+          "end": 25,
+          "name": "foo"
+        },
+        "params": [],
+        "generator": false,
+        "async": true,
+        "body": {
+          "type": "BlockStatement",
+          "start": 27,
+          "end": 29,
+          "body": []
+        },
+        "expression": false
+      },
+      "specifiers": [],
+      "source": null
+    }
+  ]
+}
