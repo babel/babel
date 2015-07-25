@@ -73,7 +73,7 @@ pp.processComment = function (node) {
   }
 
   if (lastChild) {
-    if (lastChild.leadingComments && last(lastChild.leadingComments).end <= node.start) {
+    if (lastChild !== node && lastChild.leadingComments && last(lastChild.leadingComments).end <= node.start) {
       node.leadingComments = lastChild.leadingComments;
       lastChild.leadingComments = null;
     }
