@@ -1238,4 +1238,38 @@ describe("verify", function () {
       []
     );
   });
+
+  // it("line comment space-in-parens #124", function () {
+  //   verifyAndAssertMessages(
+  //     [
+  //       "React.createClass({",
+  //         "render() {",
+  //            "// return (",
+  //            "//   <div />",
+  //            "// ); // <-- this is the line that is reported",
+  //         "}",
+  //       "});"
+  //     ].join("\n"),
+  //     { "space-in-parens": 1 },
+  //     [ ]
+  //   )
+  // });
+
+  it("block comment space-in-parens #124", function () {
+    verifyAndAssertMessages(
+      [
+        "React.createClass({",
+          "render() {",
+            "/*",
+            "return (",
+            "  <div />",
+            "); // <-- this is the line that is reported",
+            "*/",
+          "}",
+        "});"
+      ].join("\n"),
+      { "space-in-parens": 1 },
+      [ ]
+    )
+  });
 });

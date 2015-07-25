@@ -265,6 +265,18 @@ describe("acorn-to-esprima", function () {
     ].join("\n"));
   });
 
+  it("block comments #124", function () {
+    parseAndAssertSame([
+      "React.createClass({",
+        "render() {",
+           "// return (",
+           "//   <div />",
+           "// ); // <-- this is the line that is reported",
+        "}",
+      "});"
+    ].join("\n"));
+  });
+
   it("null", function () {
     parseAndAssertSame("null");
   });
