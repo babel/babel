@@ -1062,6 +1062,17 @@ describe("verify", function () {
         []
       );
     });
+
+    it("visiting filter in comprehension", function () {
+      verifyAndAssertMessages([
+          "function test(items, val) {",
+            "return [ for (i of items) if (i === val) i ];",
+          "} test;"
+        ].join("\n"),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        []
+      );
+    });
   });
 
   describe("decorators #72", function () {

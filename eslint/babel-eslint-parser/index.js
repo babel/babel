@@ -338,7 +338,7 @@ function monkeypatch() {
       }
     }
     if (node.filter) {
-      this.visit(block.filter);
+      this.visit(node.filter);
     }
     this.visit(node.body);
     this.close(node);
