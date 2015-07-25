@@ -88,8 +88,6 @@
                 "column": 12
               }
             },
-            "value": {},
-            "rawValue": {},
             "raw": "/  foo/",
             "regex": {
               "pattern": "  foo",
