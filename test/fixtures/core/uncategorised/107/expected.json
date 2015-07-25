@@ -87,8 +87,6 @@
                   "column": 21
                 }
               },
-              "value": {},
-              "rawValue": {},
               "raw": "/=([^=\\s])+/g",
               "regex": {
                 "pattern": "=([^=\\s])+",

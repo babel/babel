@@ -87,8 +87,6 @@
                   "column": 16
                 }
               },
-              "value": {},
-              "rawValue": {},
               "raw": "/[a-c]/i",
               "regex": {
                 "pattern": "[a-c]",
