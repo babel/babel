@@ -59,7 +59,7 @@ var run = function (task, done) {
     return _.merge({
       suppressDeprecationMessages: true,
       filename: self.loc,
-      sourceMap: !!(task.sourceMappings || test.sourceMap)
+      sourceMap: !!(task.sourceMappings || task.sourceMap)
     }, opts);
   };
 

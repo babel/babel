@@ -102,11 +102,6 @@ suite("util", function () {
     assert.strictEqual(util.booleanify("inline"), "inline");
   });
 
-  test("resolve", function () {
-    assert.notEqual(util.resolve("is-integer").indexOf("node_modules/is-integer"), -1);
-    assert.equal(util.resolve("foo-bar-module"), null);
-  });
-
   test("toIdentifier", function () {
     assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
