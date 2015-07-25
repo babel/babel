@@ -1,1 +1,1 @@
-export async function foo(){}
+export async function foo() {}

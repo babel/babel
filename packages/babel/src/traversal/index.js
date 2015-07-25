@@ -53,11 +53,12 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
  * [Please add a description.]
  */
 
-const CLEAR_KEYS = [
-  "trailingComments", "leadingComments", "innerComments", "extendedRange",
+const CLEAR_KEYS = t.COMMENT_KEYS.concat([
   "_scopeInfo", "_paths",
-  "tokens", "range", "start", "end", "loc", "raw", "rawValue"
-];
+  "tokens", "comments",
+  "start", "end", "loc",
+  "raw", "rawValue"
+]);
 
 /**
  * [Please add a description.]

@@ -1,6 +1,6 @@
-import { types as tt } from "./tokenizer/types";
-import { Parser } from "./state";
-import { lineBreak } from "./util/whitespace";
+import { types as tt } from "../tokenizer/types";
+import Parser from "./index";
+import { lineBreak } from "../util/whitespace";
 
 const pp = Parser.prototype;
 
@@ -16,7 +16,7 @@ pp.isUseStrict = function (stmt) {
 // type, and if yes, consumes it as a side effect.
 
 pp.eat = function (type) {
-  if (this.type === type) {
+  if (this.state.type === type) {
     this.next();
     return true;
   } else {
@@ -27,7 +27,7 @@ pp.eat = function (type) {
 // TODO
 
 pp.isRelational = function (op) {
-  return this.type === tt.relational && this.value === op;
+  return this.state.type === tt.relational && this.state.value === op;
 };
 
 // TODO
@@ -43,13 +43,13 @@ pp.expectRelational = function (op) {
 // Tests whether parsed token is a contextual keyword.
 
 pp.isContextual = function (name) {
-  return this.type === tt.name && this.value === name;
+  return this.state.type === tt.name && this.state.value === name;
 };
 
 // Consumes contextual keyword if possible.
 
 pp.eatContextual = function (name) {
-  return this.value === name && this.eat(tt.name);
+  return this.state.value === name && this.eat(tt.name);
 };
 
 // Asserts that following token is given contextual keyword.
@@ -61,9 +61,9 @@ pp.expectContextual = function (name) {
 // Test whether a semicolon can be inserted at the current position.
 
 pp.canInsertSemicolon = function () {
-  return this.type === tt.eof ||
-    this.type === tt.braceR ||
-    lineBreak.test(this.input.slice(this.lastTokEnd, this.start));
+  return this.state.type === tt.eof ||
+    this.state.type === tt.braceR ||
+    lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
 };
 
 pp.insertSemicolon = function () {
@@ -80,7 +80,7 @@ pp.semicolon = function () {
 };
 
 pp.afterTrailingComma = function (tokType) {
-  if (this.type === tokType) {
+  if (this.state.type === tokType) {
     this.next();
     return true;
   }
@@ -96,5 +96,5 @@ pp.expect = function (type) {
 // Raise an unexpected token error.
 
 pp.unexpected = function (pos) {
-  this.raise(pos != null ? pos : this.start, "Unexpected token");
+  this.raise(pos != null ? pos : this.state.start, "Unexpected token");
 };

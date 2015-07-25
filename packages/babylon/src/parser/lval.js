@@ -1,6 +1,6 @@
-import { types as tt } from "./tokenizer/types";
-import { Parser } from "./state";
-import { reservedWords } from "./util/identifier";
+import { types as tt } from "../tokenizer/types";
+import Parser from "./index";
+import { reservedWords } from "../util/identifier";
 
 const pp = Parser.prototype;
 
@@ -92,14 +92,14 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  node.argument = this.type === tt.name || this.type === tt.bracketL ? this.parseBindingAtom() : this.unexpected();
+  node.argument = this.state.type === tt.name || this.state.type === tt.bracketL ? this.parseBindingAtom() : this.unexpected();
   return this.finishNode(node, "RestElement");
 };
 
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
-  switch (this.type) {
+  switch (this.state.type) {
   case tt.name:
     return this.parseIdent();
 
@@ -122,11 +122,11 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
   while (!this.eat(close)) {
     if (first) first = false;
     else this.expect(tt.comma);
-    if (allowEmpty && this.type === tt.comma) {
+    if (allowEmpty && this.state.type === tt.comma) {
       elts.push(null);
     } else if (allowTrailingComma && this.afterTrailingComma(close)) {
       break;
-    } else if (this.type === tt.ellipsis) {
+    } else if (this.state.type === tt.ellipsis) {
       elts.push(this.parseAssignableListItemTypes(this.parseRest()));
       this.expect(close);
       break;
@@ -146,8 +146,8 @@ pp.parseAssignableListItemTypes = function (param) {
 // Parses assignment pattern around given atom if possible.
 
 pp.parseMaybeDefault = function (startPos, startLoc, left) {
-  startLoc = startLoc || this.startLoc;
-  startPos = startPos || this.start;
+  startLoc = startLoc || this.state.startLoc;
+  startPos = startPos || this.state.start;
   left = left || this.parseBindingAtom();
   if (!this.eat(tt.eq)) return left;
 

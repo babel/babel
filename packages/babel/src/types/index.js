@@ -35,7 +35,7 @@ export const COMMENT_KEYS            = ["leadingComments", "trailingComments", "
 
 export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
-  force: ["_scopeInfo", "_paths", "range", "start", "loc", "end"]
+  force: ["_scopeInfo", "_paths", "start", "loc", "end"]
 };
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
