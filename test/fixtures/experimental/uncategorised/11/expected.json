@@ -1,67 +1,184 @@
 {
-  "type": "Program",
+  "type": "File",
   "start": 0,
   "end": 25,
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "start": 0,
-      "end": 25,
-      "expression": {
-        "type": "FunctionExpression",
-        "start": 1,
-        "end": 24,
-        "id": null,
-        "params": [
-          {
-            "type": "ObjectPattern",
-            "start": 10,
-            "end": 19,
-            "properties": [
-              {
-                "type": "Property",
-                "start": 11,
-                "end": 12,
-                "method": false,
-                "shorthand": true,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "start": 11,
-                  "end": 12,
-                  "name": "x"
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 25
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 25,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 25
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 25,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 25
+          }
+        },
+        "expression": {
+          "type": "FunctionExpression",
+          "start": 1,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "start": 10,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
                 },
-                "kind": "init",
-                "value": {
-                  "type": "Identifier",
-                  "start": 11,
-                  "end": 12,
-                  "name": "x"
+                "end": {
+                  "line": 1,
+                  "column": 19
                 }
               },
-              {
-                "type": "SpreadProperty",
-                "start": 14,
-                "end": 18,
-                "argument": {
-                  "type": "Identifier",
-                  "start": 17,
+              "properties": [
+                {
+                  "type": "Property",
+                  "start": 11,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    }
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 12,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 12
+                      }
+                    },
+                    "name": "x"
+                  },
+                  "kind": "init",
+                  "value": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 12,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 12
+                      }
+                    },
+                    "name": "x"
+                  }
+                },
+                {
+                  "type": "SpreadProperty",
+                  "start": 14,
                   "end": 18,
-                  "name": "y"
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 18
+                    }
+                  },
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 17,
+                    "end": 18,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 18
+                      }
+                    },
+                    "name": "y"
+                  }
                 }
+              ]
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 21,
+            "end": 24,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 24
               }
-            ]
-          }
-        ],
-        "generator": false,
-        "body": {
-          "type": "BlockStatement",
-          "start": 21,
-          "end": 24,
-          "body": []
-        },
-        "expression": false
+            },
+            "body": []
+          },
+          "parenthesizedExpression": true
+        }
       }
-    }
-  ]
+    ]
+  }
 }

@@ -1,52 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "ArrowFunctionExpression",
-        "id": null,
-        "params": [],
-        "body": {
-          "type": "Literal",
-          "value": "test",
-          "raw": "\"test\"",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 6
-            },
-            "end": {
-              "line": 1,
-              "column": 12
-            }
-          }
-        },
-        "generator": false,
-        "expression": true,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 12
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 12,
   "loc": {
     "start": {
       "line": 1,
@@ -56,5 +11,95 @@
       "line": 1,
       "column": 12
     }
+  },
+  "range": [
+    0,
+    12
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 12,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 12
+      }
+    },
+    "range": [
+      0,
+      12
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 12,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 12
+          }
+        },
+        "range": [
+          0,
+          12
+        ],
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            0,
+            12
+          ],
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "params": [],
+          "body": {
+            "type": "Literal",
+            "start": 6,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            "range": [
+              6,
+              12
+            ],
+            "value": "test",
+            "rawValue": "test",
+            "raw": "\"test\""
+          }
+        }
+      }
+    ]
   }
 }

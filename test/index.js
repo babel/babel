@@ -23,7 +23,7 @@ function runTest(test) {
   opts.locations = true;
 
   try {
-    var ast = parse(test.actual.code, opts).program;
+    var ast = parse(test.actual.code, opts);
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
@@ -42,6 +42,7 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
+      //delete ast.tokens;
       //require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
       throw new Error(mis);
     }

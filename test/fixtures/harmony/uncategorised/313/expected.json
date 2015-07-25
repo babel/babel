@@ -1,76 +1,205 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  },
   "range": [
     0,
     27
   ],
-  "body": [
-    {
-      "type": "TryStatement",
-      "range": [
-        0,
-        27
-      ],
-      "block": {
-        "type": "BlockStatement",
-        "range": [
-          4,
-          6
-        ],
-        "body": []
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "handler": {
-        "type": "CatchClause",
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "range": [
+      0,
+      27
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "TryStatement",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
         "range": [
-          7,
+          0,
           27
         ],
-        "param": {
-          "type": "ObjectPattern",
-          "range": [
-            14,
-            23
-          ],
-          "properties": [
-            {
-              "type": "Property",
-              "range": [
-                15,
-                22
-              ],
-              "method": false,
-              "shorthand": true,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "range": [
-                  15,
-                  22
-                ],
-                "name": "message"
-              },
-              "kind": "init",
-              "value": {
-                "type": "Identifier",
-                "range": [
-                  15,
-                  22
-                ],
-                "name": "message"
-              }
-            }
-          ]
-        },
-        "body": {
+        "block": {
           "type": "BlockStatement",
+          "start": 4,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            }
+          },
           "range": [
-            25,
-            27
+            4,
+            6
           ],
           "body": []
-        }
-      },
-      "finalizer": null
-    }
-  ]
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 7,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "range": [
+            7,
+            27
+          ],
+          "param": {
+            "type": "ObjectPattern",
+            "start": 14,
+            "end": 23,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            },
+            "range": [
+              14,
+              23
+            ],
+            "properties": [
+              {
+                "type": "Property",
+                "start": 15,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "range": [
+                  15,
+                  22
+                ],
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
+                  "range": [
+                    15,
+                    22
+                  ],
+                  "name": "message"
+                },
+                "kind": "init",
+                "value": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
+                  "range": [
+                    15,
+                    22
+                  ],
+                  "name": "message"
+                }
+              }
+            ]
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 25,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 25
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "range": [
+              25,
+              27
+            ],
+            "body": []
+          }
+        },
+        "guardedHandlers": [],
+        "finalizer": null
+      }
+    ]
+  }
 }

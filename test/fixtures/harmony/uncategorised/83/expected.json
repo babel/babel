@@ -1,40 +1,120 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 25,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 25
+    }
+  },
   "range": [
     0,
     25
   ],
-  "body": [
-    {
-      "type": "ExportDefaultDeclaration",
-      "range": [
-        0,
-        25
-      ],
-      "declaration": {
-        "type": "ClassDeclaration",
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 25,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 25
+      }
+    },
+    "range": [
+      0,
+      25
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 25,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 25
+          }
+        },
         "range": [
-          15,
+          0,
           25
         ],
-        "id": {
-          "type": "Identifier",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 15,
+          "end": 25,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 25
+            }
+          },
           "range": [
-            21,
-            22
-          ],
-          "name": "A"
-        },
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
-          "range": [
-            23,
+            15,
             25
           ],
-          "body": []
+          "id": {
+            "type": "Identifier",
+            "start": 21,
+            "end": 22,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            "range": [
+              21,
+              22
+            ],
+            "name": "A"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 23,
+            "end": 25,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              }
+            },
+            "range": [
+              23,
+              25
+            ],
+            "body": []
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }

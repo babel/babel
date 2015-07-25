@@ -1,55 +1,85 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ClassDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "Foo",
-        "range": [
-          6,
-          9
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 6
-          },
-          "end": {
-            "line": 1,
-            "column": 9
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  },
+  "range": [
+    0,
+    27
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "superClass": null,
-      "body": {
-        "type": "ClassBody",
-        "body": [],
-        "range": [
-          25,
-          27
-        ],
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "range": [
+      0,
+      27
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 27,
         "loc": {
           "start": {
             "line": 1,
-            "column": 25
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 27
           }
-        }
-      },
-      "implements": [
-        {
-          "type": "ClassImplements",
-          "id": {
-            "type": "Identifier",
-            "name": "Bar",
-            "range": [
-              21,
-              24
-            ],
+        },
+        "range": [
+          0,
+          27
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "range": [
+            6,
+            9
+          ],
+          "name": "Foo"
+        },
+        "superClass": null,
+        "implements": [
+          {
+            "type": "ClassImplements",
+            "start": 21,
+            "end": 24,
             "loc": {
               "start": {
                 "line": 1,
@@ -59,39 +89,55 @@
                 "line": 1,
                 "column": 24
               }
-            }
-          },
-          "typeParameters": null,
-          "range": [
-            21,
-            24
-          ],
+            },
+            "range": [
+              21,
+              24
+            ],
+            "id": {
+              "type": "Identifier",
+              "start": 21,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 21
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              },
+              "range": [
+                21,
+                24
+              ],
+              "name": "Bar"
+            },
+            "typeParameters": null
+          }
+        ],
+        "body": {
+          "type": "ClassBody",
+          "start": 25,
+          "end": 27,
           "loc": {
             "start": {
               "line": 1,
-              "column": 21
+              "column": 25
             },
             "end": {
               "line": 1,
-              "column": 24
+              "column": 27
             }
-          }
-        }
-      ],
-      "range": [
-        0,
-        27
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 27
+          },
+          "range": [
+            25,
+            27
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

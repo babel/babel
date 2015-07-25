@@ -1,47 +1,134 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "declarations": [
-        {
-          "start": 4,
-          "id": {
-            "start": 4,
-            "elements": [
-              {
-                "start": 5,
-                "name": "x",
-                "type": "Identifier",
-                "end": 6
-              }
-            ],
-            "type": "ArrayPattern",
-            "end": 8
-          },
-          "init": {
-            "start": 11,
-            "elements": [
-              {
-                "start": 12,
-                "value": 1,
-                "raw": "1",
-                "type": "Literal",
-                "end": 13
-              }
-            ],
-            "type": "ArrayExpression",
-            "end": 14
-          },
-          "type": "VariableDeclarator",
-          "end": 14
-        }
-      ],
-      "kind": "let",
-      "type": "VariableDeclaration",
-      "end": 14
+  "end": 14,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 14
     }
-  ],
-  "type": "Program",
-  "end": 14
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 14,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 14
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 14,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 14
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 14,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              }
+            },
+            "id": {
+              "type": "ArrayPattern",
+              "start": 4,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                }
+              },
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start": 5,
+                  "end": 6,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 6
+                    }
+                  },
+                  "name": "x"
+                }
+              ]
+            },
+            "init": {
+              "type": "ArrayExpression",
+              "start": 11,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                }
+              },
+              "elements": [
+                {
+                  "type": "Literal",
+                  "start": 12,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
+                  "value": 1,
+                  "rawValue": 1,
+                  "raw": "1"
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ]
+  }
 }

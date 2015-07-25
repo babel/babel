@@ -1,41 +1,118 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "expression": {
-        "start": 0,
-        "id": null,
-        "generator": false,
-        "expression": true,
-        "params": [
-          {
-            "start": 1,
-            "name": "x",
-            "type": "Identifier",
-            "end": 2
-          },
-          {
-            "start": 4,
-            "name": "y",
-            "type": "Identifier",
-            "end": 5
-          }
-        ],
-        "body": {
-          "start": 12,
-          "value": 1,
-          "raw": "1",
-          "type": "Literal",
-          "end": 13
-        },
-        "type": "ArrowFunctionExpression",
-        "end": 13
-      },
-      "type": "ExpressionStatement",
-      "end": 14
+  "end": 14,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 14
     }
-  ],
-  "type": "Program",
-  "end": 14
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 14,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 14
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 14,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 14
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 1,
+              "end": 2,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 2
+                }
+              },
+              "name": "x"
+            },
+            {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                }
+              },
+              "name": "y"
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "start": 12,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 12
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "value": 1,
+            "rawValue": 1,
+            "raw": "1"
+          }
+        }
+      }
+    ]
+  }
 }

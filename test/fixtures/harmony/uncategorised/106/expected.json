@@ -1,108 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "FunctionExpression",
-        "id": null,
-        "params": [],
-        "body": {
-          "type": "BlockStatement",
-          "body": [
-            {
-              "type": "ExpressionStatement",
-              "expression": {
-                "type": "YieldExpression",
-                "argument": {
-                  "type": "YieldExpression",
-                  "argument": {
-                    "type": "Literal",
-                    "value": 10,
-                    "raw": "10",
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 28
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 30
-                      }
-                    }
-                  },
-                  "delegate": false,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 22
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 30
-                    }
-                  }
-                },
-                "delegate": false,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 16
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 30
-                  }
-                }
-              },
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 16
-                },
-                "end": {
-                  "line": 1,
-                  "column": 30
-                }
-              }
-            }
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 14
-            },
-            "end": {
-              "line": 1,
-              "column": 32
-            }
-          }
-        },
-        "generator": true,
-        "expression": false,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 1
-          },
-          "end": {
-            "line": 1,
-            "column": 32
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 33
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 33,
   "loc": {
     "start": {
       "line": 1,
@@ -112,5 +11,176 @@
       "line": 1,
       "column": 33
     }
+  },
+  "range": [
+    0,
+    33
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 33
+      }
+    },
+    "range": [
+      0,
+      33
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 33
+          }
+        },
+        "range": [
+          0,
+          33
+        ],
+        "expression": {
+          "type": "FunctionExpression",
+          "start": 1,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
+            },
+            "end": {
+              "line": 1,
+              "column": 32
+            }
+          },
+          "range": [
+            1,
+            32
+          ],
+          "id": null,
+          "generator": true,
+          "expression": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start": 14,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "range": [
+              14,
+              32
+            ],
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 16,
+                "end": 30,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 30
+                  }
+                },
+                "range": [
+                  16,
+                  30
+                ],
+                "expression": {
+                  "type": "YieldExpression",
+                  "start": 16,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 30
+                    }
+                  },
+                  "range": [
+                    16,
+                    30
+                  ],
+                  "delegate": false,
+                  "argument": {
+                    "type": "YieldExpression",
+                    "start": 22,
+                    "end": 30,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      }
+                    },
+                    "range": [
+                      22,
+                      30
+                    ],
+                    "delegate": false,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 28,
+                      "end": 30,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 30
+                        }
+                      },
+                      "range": [
+                        28,
+                        30
+                      ],
+                      "value": 10,
+                      "rawValue": 10,
+                      "raw": "10"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "parenthesizedExpression": true
+        }
+      }
+    ]
   }
 }

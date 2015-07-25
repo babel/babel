@@ -1,20 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "DebuggerStatement",
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 9
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 9,
   "loc": {
     "start": {
       "line": 1,
@@ -24,5 +11,38 @@
       "line": 1,
       "column": 9
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 9,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 9
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "DebuggerStatement",
+        "start": 0,
+        "end": 9,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        }
+      }
+    ]
   }
 }

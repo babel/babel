@@ -1,94 +1,326 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "start": 0,
-      "id": {
-        "start": 14,
-        "name": "IViewFactory",
-        "type": "Identifier",
-        "end": 26
-      },
-      "typeParameters": null,
-      "extends": [],
-      "body": {
-        "start": 27,
-        "callProperties": [],
-        "properties": [
-          {
-            "start": 29,
-            "value": {
-              "start": 29,
-              "params": [
-                {
-                  "start": 40,
-                  "name": {
-                    "start": 40,
-                    "name": "view",
-                    "type": "Identifier",
-                    "end": 44
-                  },
-                  "optional": false,
-                  "typeAnnotation": {
-                    "start": 45,
-                    "typeParameters": null,
-                    "id": {
-                      "start": 45,
-                      "name": "Object",
-                      "type": "Identifier",
-                      "end": 51
-                    },
-                    "type": "GenericTypeAnnotation",
-                    "end": 51
-                  },
-                  "type": "FunctionTypeParam",
-                  "end": 51
-                },
-                {
-                  "start": 53,
-                  "name": {
-                    "start": 53,
-                    "name": "prop",
-                    "type": "Identifier",
-                    "end": 57
-                  },
-                  "optional": false,
-                  "typeAnnotation": {
-                    "start": 58,
-                    "type": "StringTypeAnnotation",
-                    "end": 64
-                  },
-                  "type": "FunctionTypeParam",
-                  "end": 64
-                }
-              ],
-              "rest": null,
-              "typeParameters": null,
-              "returnType": {
-                "start": 67,
-                "type": "VoidTypeAnnotation",
-                "end": 71
-              },
-              "type": "FunctionTypeAnnotation",
-              "end": 71
-            },
-            "key": {
-              "start": 29,
-              "name": "didAnimate",
-              "type": "Identifier",
-              "end": 39
-            },
-            "optional": false,
-            "type": "ObjectTypeProperty",
-            "end": 72
-          }
-        ],
-        "indexers": [],
-        "type": "ObjectTypeAnnotation",
-        "end": 74
-      },
-      "type": "DeclareClass",
-      "end": 74
+  "type": "File",
+  "start": 0,
+  "end": 74,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 74
     }
-  ]
+  },
+  "range": [
+    0,
+    74
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 74,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 74
+      }
+    },
+    "range": [
+      0,
+      74
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start": 0,
+        "end": 74,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 74
+          }
+        },
+        "range": [
+          0,
+          74
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            }
+          },
+          "range": [
+            14,
+            26
+          ],
+          "name": "IViewFactory"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 27,
+          "end": 74,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 27
+            },
+            "end": {
+              "line": 1,
+              "column": 74
+            }
+          },
+          "range": [
+            27,
+            74
+          ],
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 29,
+              "end": 72,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 29
+                },
+                "end": {
+                  "line": 1,
+                  "column": 72
+                }
+              },
+              "range": [
+                29,
+                72
+              ],
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 29,
+                "end": 71,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 71
+                  }
+                },
+                "range": [
+                  29,
+                  71
+                ],
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 40,
+                    "end": 51,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 40
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 51
+                      }
+                    },
+                    "range": [
+                      40,
+                      51
+                    ],
+                    "name": {
+                      "type": "Identifier",
+                      "start": 40,
+                      "end": 44,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 40
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 44
+                        }
+                      },
+                      "range": [
+                        40,
+                        44
+                      ],
+                      "name": "view"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "GenericTypeAnnotation",
+                      "start": 45,
+                      "end": 51,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 45
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 51
+                        }
+                      },
+                      "range": [
+                        45,
+                        51
+                      ],
+                      "typeParameters": null,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 45,
+                        "end": 51,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 45
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 51
+                          }
+                        },
+                        "range": [
+                          45,
+                          51
+                        ],
+                        "name": "Object"
+                      }
+                    }
+                  },
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 53,
+                    "end": 64,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 53
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 64
+                      }
+                    },
+                    "range": [
+                      53,
+                      64
+                    ],
+                    "name": {
+                      "type": "Identifier",
+                      "start": 53,
+                      "end": 57,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 53
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 57
+                        }
+                      },
+                      "range": [
+                        53,
+                        57
+                      ],
+                      "name": "prop"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 58,
+                      "end": 64,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 58
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 64
+                        }
+                      },
+                      "range": [
+                        58,
+                        64
+                      ]
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 67,
+                  "end": 71,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 67
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 71
+                    }
+                  },
+                  "range": [
+                    67,
+                    71
+                  ]
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 39,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 39
+                  }
+                },
+                "range": [
+                  29,
+                  39
+                ],
+                "name": "didAnimate"
+              },
+              "optional": false
+            }
+          ],
+          "indexers": []
+        }
+      }
+    ]
+  }
 }

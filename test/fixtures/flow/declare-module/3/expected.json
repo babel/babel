@@ -1,128 +1,178 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "DeclareModule",
-      "id": {
-        "type": "Identifier",
-        "name": "A",
-        "range": [
-          15,
-          16
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 15
-          },
-          "end": {
-            "line": 1,
-            "column": 16
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
+    }
+  },
+  "range": [
+    0,
+    43
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "body": {
-        "type": "BlockStatement",
-        "body": [
-          {
-            "type": "DeclareVariable",
-            "id": {
-              "type": "Identifier",
-              "name": "x",
-              "typeAnnotation": {
-                "type": "TypeAnnotation",
-                "typeAnnotation": {
-                  "type": "NumberTypeAnnotation",
-                  "range": [
-                    34,
-                    40
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 34
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 40
-                    }
-                  }
-                },
-                "range": [
-                  32,
-                  40
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 32
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 40
-                  }
-                }
-              },
-              "range": [
-                31,
-                40
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 31
-                },
-                "end": {
-                  "line": 1,
-                  "column": 40
-                }
-              }
-            },
-            "range": [
-              19,
-              41
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 19
-              },
-              "end": {
-                "line": 1,
-                "column": 41
-              }
-            }
-          }
-        ],
-        "range": [
-          17,
-          43
-        ],
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "range": [
+      0,
+      43
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 43,
         "loc": {
           "start": {
             "line": 1,
-            "column": 17
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 43
           }
-        }
-      },
-      "range": [
-        0,
-        43
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 43
+        "range": [
+          0,
+          43
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 16
+            }
+          },
+          "range": [
+            15,
+            16
+          ],
+          "name": "A"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 17,
+          "end": 43,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 17
+            },
+            "end": {
+              "line": 1,
+              "column": 43
+            }
+          },
+          "range": [
+            17,
+            43
+          ],
+          "body": [
+            {
+              "type": "DeclareVariable",
+              "start": 19,
+              "end": 41,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 19
+                },
+                "end": {
+                  "line": 1,
+                  "column": 41
+                }
+              },
+              "range": [
+                19,
+                41
+              ],
+              "id": {
+                "type": "Identifier",
+                "start": 31,
+                "end": 40,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 40
+                  }
+                },
+                "range": [
+                  31,
+                  40
+                ],
+                "name": "x",
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "start": 32,
+                  "end": 40,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 40
+                    }
+                  },
+                  "range": [
+                    32,
+                    40
+                  ],
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start": 34,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 34
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 40
+                      }
+                    },
+                    "range": [
+                      34,
+                      40
+                    ]
+                  }
+                }
+              }
+            }
+          ]
         }
       }
-    }
-  ]
+    ]
+  }
 }

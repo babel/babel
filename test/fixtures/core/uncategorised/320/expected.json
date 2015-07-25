@@ -1,20 +1,100 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "BinaryExpression",
-        "left": {
-          "type": "Literal",
-          "value": 123
+  "type": "File",
+  "start": 0,
+  "end": 6,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 6
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 6,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 6
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 6,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 6
+          }
         },
-        "operator": "+",
-        "right": {
-          "type": "Literal",
-          "value": 2
+        "expression": {
+          "type": "BinaryExpression",
+          "start": 0,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            }
+          },
+          "left": {
+            "type": "Literal",
+            "start": 0,
+            "end": 4,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              }
+            },
+            "value": 123,
+            "rawValue": 123,
+            "raw": "123."
+          },
+          "operator": "+",
+          "right": {
+            "type": "Literal",
+            "start": 5,
+            "end": 6,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 5
+              },
+              "end": {
+                "line": 1,
+                "column": 6
+              }
+            },
+            "value": 2,
+            "rawValue": 2,
+            "raw": "2"
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }

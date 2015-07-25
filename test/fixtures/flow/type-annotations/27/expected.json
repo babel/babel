@@ -1,176 +1,247 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ClassDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "Foo",
-        "range": [
-          6,
-          9
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 6
-          },
-          "end": {
-            "line": 1,
-            "column": 9
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 39
+    }
+  },
+  "range": [
+    0,
+    39
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "superClass": null,
-      "body": {
-        "type": "ClassBody",
-        "body": [
-          {
-            "type": "MethodDefinition",
-            "key": {
-              "type": "Identifier",
-              "name": "fooProp",
-              "range": [
-                15,
-                22
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 15
-                },
-                "end": {
-                  "line": 1,
-                  "column": 22
-                }
-              }
-            },
-            "value": {
-              "type": "FunctionExpression",
-              "id": null,
-              "params": [
-                {
-                  "type": "Identifier",
-                  "name": "value",
-                  "typeAnnotation": {
-                    "type": "TypeAnnotation",
-                    "typeAnnotation": {
-                      "type": "NumberTypeAnnotation",
-                      "range": [
-                        29,
-                        35
-                      ],
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 29
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 35
-                        }
-                      }
-                    },
-                    "range": [
-                      28,
-                      35
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 28
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 35
-                      }
-                    }
-                  },
-                  "range": [
-                    23,
-                    35
-                  ],
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 23
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 35
-                    }
-                  }
-                }
-              ],
-              "body": {
-                "type": "BlockStatement",
-                "body": [],
-                "range": [
-                  36,
-                  38
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 36
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 38
-                  }
-                }
-              },
-              "generator": false,
-              "expression": false
-            },
-            "kind": "set",
-            "static": false,
-            "computed": false,
-            "range": [
-              11,
-              38
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 11
-              },
-              "end": {
-                "line": 1,
-                "column": 38
-              }
-            }
-          }
-        ],
-        "range": [
-          10,
-          39
-        ],
+      "end": {
+        "line": 1,
+        "column": 39
+      }
+    },
+    "range": [
+      0,
+      39
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 39,
         "loc": {
           "start": {
             "line": 1,
-            "column": 10
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 39
           }
-        }
-      },
-      "range": [
-        0,
-        39
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 39
+        "range": [
+          0,
+          39
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "range": [
+            6,
+            9
+          ],
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 39
+            }
+          },
+          "range": [
+            10,
+            39
+          ],
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start": 11,
+              "end": 38,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 38
+                }
+              },
+              "range": [
+                11,
+                38
+              ],
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 15,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "range": [
+                  15,
+                  22
+                ],
+                "name": "fooProp"
+              },
+              "static": false,
+              "kind": "set",
+              "value": {
+                "type": "FunctionExpression",
+                "start": 22,
+                "end": 38,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 38
+                  }
+                },
+                "range": [
+                  22,
+                  38
+                ],
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 23,
+                    "end": 35,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 35
+                      }
+                    },
+                    "range": [
+                      23,
+                      35
+                    ],
+                    "name": "value",
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start": 28,
+                      "end": 35,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 35
+                        }
+                      },
+                      "range": [
+                        28,
+                        35
+                      ],
+                      "typeAnnotation": {
+                        "type": "NumberTypeAnnotation",
+                        "start": 29,
+                        "end": 35,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 29
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 35
+                          }
+                        },
+                        "range": [
+                          29,
+                          35
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 36,
+                  "end": 38,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 36
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 38
+                    }
+                  },
+                  "range": [
+                    36,
+                    38
+                  ],
+                  "body": []
+                }
+              }
+            }
+          ]
         }
       }
-    }
-  ]
+    ]
+  }
 }

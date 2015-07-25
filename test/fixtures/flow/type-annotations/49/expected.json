@@ -1,35 +1,124 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ClassDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "Foo",
-        "range": [
-          6,
-          9
-        ],
+  "type": "File",
+  "start": 0,
+  "end": 35,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 35
+    }
+  },
+  "range": [
+    0,
+    35
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 35,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 35
+      }
+    },
+    "range": [
+      0,
+      35
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 35,
         "loc": {
           "start": {
             "line": 1,
-            "column": 6
+            "column": 0
           },
           "end": {
             "line": 1,
-            "column": 9
+            "column": 35
           }
-        }
-      },
-      "superClass": {
-        "type": "CallExpression",
-        "callee": {
+        },
+        "range": [
+          0,
+          35
+        ],
+        "id": {
           "type": "Identifier",
-          "name": "mixin",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
           "range": [
-            21,
-            26
+            6,
+            9
           ],
+          "name": "Foo"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 10,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
+              "range": [
+                10,
+                11
+              ],
+              "name": "T"
+            }
+          ]
+        },
+        "superClass": {
+          "type": "CallExpression",
+          "start": 21,
+          "end": 31,
           "loc": {
             "start": {
               "line": 1,
@@ -37,114 +126,77 @@
             },
             "end": {
               "line": 1,
-              "column": 26
+              "column": 31
             }
-          }
-        },
-        "arguments": [
-          {
+          },
+          "range": [
+            21,
+            31
+          ],
+          "callee": {
             "type": "Identifier",
-            "name": "Bar",
-            "range": [
-              27,
-              30
-            ],
+            "start": 21,
+            "end": 26,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 27
+                "column": 21
               },
               "end": {
                 "line": 1,
-                "column": 30
+                "column": 26
               }
-            }
-          }
-        ],
-        "range": [
-          21,
-          31
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 21
-          },
-          "end": {
-            "line": 1,
-            "column": 31
-          }
-        }
-      },
-      "body": {
-        "type": "ClassBody",
-        "body": [],
-        "range": [
-          32,
-          35
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 32
-          },
-          "end": {
-            "line": 1,
-            "column": 35
-          }
-        }
-      },
-      "typeParameters": {
-        "type": "TypeParameterDeclaration",
-        "params": [
-          {
-            "type": "Identifier",
-            "name": "T",
+            },
             "range": [
-              10,
-              11
+              21,
+              26
             ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 10
-              },
-              "end": {
-                "line": 1,
-                "column": 11
-              }
-            }
-          }
-        ],
-        "range": [
-          9,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
+            "name": "mixin"
           },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
-      },
-      "range": [
-        0,
-        35
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 27,
+              "end": 30,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 30
+                }
+              },
+              "range": [
+                27,
+                30
+              ],
+              "name": "Bar"
+            }
+          ]
         },
-        "end": {
-          "line": 1,
-          "column": 35
+        "body": {
+          "type": "ClassBody",
+          "start": 32,
+          "end": 35,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 32
+            },
+            "end": {
+              "line": 1,
+              "column": 35
+            }
+          },
+          "range": [
+            32,
+            35
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

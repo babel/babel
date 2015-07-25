@@ -1,50 +1,184 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "VariableDeclaration",
-      "kind": "var",
-      "start": 0,
-      "end": 34,
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "start": 4,
-          "end": 33,
-          "id": {
-            "type": "Identifier",
-            "start": 4,
-            "end": 7,
-            "name": "foo"
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "range": [
+    0,
+    34
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "range": [
+      0,
+      34
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
           },
-          "init": {
-            "type": "ArrowFunctionExpression",
-            "start": 10,
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "range": [
+          0,
+          34
+        ],
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
             "end": 33,
-            "returnType": {
-              "type": "TypeAnnotation",
-              "start": 18,
-              "end": 26,
-              "typeAnnotation": {
-                "type": "NumberTypeAnnotation",
-                "start": 20,
-                "end": 26
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 33
               }
             },
-            "id": null,
-            "generator": false,
-            "expression": true,
-            "async": true,
-            "params": [],
-            "body": {
+            "range": [
+              4,
+              33
+            ],
+            "id": {
               "type": "Identifier",
-              "start": 30,
+              "start": 4,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                }
+              },
+              "range": [
+                4,
+                7
+              ],
+              "name": "foo"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start": 10,
               "end": 33,
-              "name": "bar"
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              },
+              "range": [
+                10,
+                33
+              ],
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 18,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "range": [
+                  18,
+                  26
+                ],
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 20,
+                  "end": 26,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 26
+                    }
+                  },
+                  "range": [
+                    20,
+                    26
+                  ]
+                }
+              },
+              "id": null,
+              "generator": false,
+              "expression": true,
+              "async": true,
+              "params": [],
+              "body": {
+                "type": "Identifier",
+                "start": 30,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 30
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                },
+                "range": [
+                  30,
+                  33
+                ],
+                "name": "bar"
+              }
             }
           }
-        }
-      ]
-    }
-  ]
+        ],
+        "kind": "var"
+      }
+    ]
+  }
 }

@@ -1,85 +1,226 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 45,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 45
+    }
+  },
   "range": [
     0,
     45
   ],
-  "body": [
-    {
-      "type": "VariableDeclaration",
-      "range": [
-        0,
-        45
-      ],
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "range": [
-            4,
-            45
-          ],
-          "id": {
-            "type": "ObjectPattern",
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 45,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 45
+      }
+    },
+    "range": [
+      0,
+      45
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 45,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 45
+          }
+        },
+        "range": [
+          0,
+          45
+        ],
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 45,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 45
+              }
+            },
             "range": [
               4,
-              39
-            ],
-            "properties": [
-              {
-                "type": "Property",
-                "range": [
-                  5,
-                  38
-                ],
-                "method": false,
-                "shorthand": false,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "range": [
-                    5,
-                    13
-                  ],
-                  "name": "propName"
-                },
-                "value": {
-                  "type": "AssignmentPattern",
-                  "range": [
-                    15,
-                    38
-                  ],
-                  "left": {
-                    "type": "Identifier",
-                    "range": [
-                      15,
-                      23
-                    ],
-                    "name": "localVar"
-                  },
-                  "right": {
-                    "type": "Identifier",
-                    "range": [
-                      26,
-                      38
-                    ],
-                    "name": "defaultValue"
-                  }
-                },
-                "kind": "init"
-              }
-            ]
-          },
-          "init": {
-            "type": "Identifier",
-            "range": [
-              42,
               45
             ],
-            "name": "obj"
+            "id": {
+              "type": "ObjectPattern",
+              "start": 4,
+              "end": 39,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 39
+                }
+              },
+              "range": [
+                4,
+                39
+              ],
+              "properties": [
+                {
+                  "type": "Property",
+                  "start": 5,
+                  "end": 38,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 38
+                    }
+                  },
+                  "range": [
+                    5,
+                    38
+                  ],
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 5,
+                    "end": 13,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 5
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 13
+                      }
+                    },
+                    "range": [
+                      5,
+                      13
+                    ],
+                    "name": "propName"
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "start": 15,
+                    "end": 38,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 38
+                      }
+                    },
+                    "range": [
+                      15,
+                      38
+                    ],
+                    "operator": "=",
+                    "left": {
+                      "type": "Identifier",
+                      "start": 15,
+                      "end": 23,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 23
+                        }
+                      },
+                      "range": [
+                        15,
+                        23
+                      ],
+                      "name": "localVar"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start": 26,
+                      "end": 38,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 38
+                        }
+                      },
+                      "range": [
+                        26,
+                        38
+                      ],
+                      "name": "defaultValue"
+                    }
+                  },
+                  "kind": "init"
+                }
+              ]
+            },
+            "init": {
+              "type": "Identifier",
+              "start": 42,
+              "end": 45,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 42
+                },
+                "end": {
+                  "line": 1,
+                  "column": 45
+                }
+              },
+              "range": [
+                42,
+                45
+              ],
+              "name": "obj"
+            }
           }
-        }
-      ],
-      "kind": "var"
-    }
-  ]
+        ],
+        "kind": "var"
+      }
+    ]
+  }
 }

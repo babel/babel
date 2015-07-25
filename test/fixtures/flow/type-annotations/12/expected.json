@@ -1,95 +1,142 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "FunctionDeclaration",
-      "id": {
-        "type": "Identifier",
-        "name": "foo",
-        "range": [
-          9,
-          12
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 9
-          },
-          "end": {
-            "line": 1,
-            "column": 12
-          }
-        }
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
+  "range": [
+    0,
+    23
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "params": [],
-      "body": {
-        "type": "BlockStatement",
-        "body": [],
-        "range": [
-          21,
-          23
-        ],
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "range": [
+      0,
+      23
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 23,
         "loc": {
           "start": {
             "line": 1,
-            "column": 21
+            "column": 0
           },
           "end": {
             "line": 1,
             "column": 23
           }
-        }
-      },
-      "generator": false,
-      "expression": false,
-      "returnType": {
-        "type": "TypeAnnotation",
-        "typeAnnotation": {
-          "type": "NumberTypeAnnotation",
-          "range": [
-            15,
-            21
-          ],
+        },
+        "range": [
+          0,
+          23
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
           "loc": {
             "start": {
               "line": 1,
-              "column": 15
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            9,
+            12
+          ],
+          "name": "foo"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TypeAnnotation",
+          "start": 14,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
             },
             "end": {
               "line": 1,
               "column": 21
             }
-          }
-        },
-        "range": [
-          14,
-          21
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
           },
-          "end": {
-            "line": 1,
-            "column": 21
+          "range": [
+            14,
+            21
+          ],
+          "typeAnnotation": {
+            "type": "NumberTypeAnnotation",
+            "start": 15,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 15
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            "range": [
+              15,
+              21
+            ]
           }
-        }
-      },
-      "range": [
-        0,
-        23
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
         },
-        "end": {
-          "line": 1,
-          "column": 23
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            }
+          },
+          "range": [
+            21,
+            23
+          ],
+          "body": []
         }
       }
-    }
-  ]
+    ]
+  }
 }

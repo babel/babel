@@ -1,57 +1,163 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "declarations": [
-        {
-          "start": 4,
-          "id": {
-            "start": 4,
-            "name": "Foo",
-            "type": "Identifier",
-            "end": 7
-          },
-          "init": {
-            "start": 15,
-            "decorators": [
-              {
-                "start": 10,
-                "expression": {
-                  "start": 11,
-                  "name": "foo",
-                  "type": "Identifier",
-                  "end": 14
-                },
-                "type": "Decorator",
-                "end": 14
-              }
-            ],
-            "id": {
-              "start": 21,
-              "name": "Foo",
-              "type": "Identifier",
-              "end": 24
-            },
-            "superClass": null,
-            "body": {
-              "start": 25,
-              "body": [],
-              "type": "ClassBody",
-              "end": 27
-            },
-            "type": "ClassExpression",
-            "end": 27
-          },
-          "type": "VariableDeclarator",
-          "end": 27
-        }
-      ],
-      "kind": "var",
-      "type": "VariableDeclaration",
-      "end": 27
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
     }
-  ],
-  "type": "Program",
-  "end": 27
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                }
+              },
+              "name": "Foo"
+            },
+            "init": {
+              "type": "ClassExpression",
+              "start": 15,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 15
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                }
+              },
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start": 10,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    }
+                  },
+                  "expression": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
+                    "name": "foo"
+                  }
+                }
+              ],
+              "id": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                },
+                "name": "Foo"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start": 25,
+                "end": 27,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 27
+                  }
+                },
+                "body": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ]
+  }
 }

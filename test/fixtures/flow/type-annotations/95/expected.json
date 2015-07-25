@@ -1,79 +1,124 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ImportDeclaration",
-      "specifiers": [
-        {
-          "type": "ImportNamespaceSpecifier",
-          "local": {
-            "type": "Identifier",
-            "name": "namespace",
-            "range": [
-              17,
-              26
-            ],
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 38
+    }
+  },
+  "range": [
+    0,
+    38
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 38
+      }
+    },
+    "range": [
+      0,
+      38
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "range": [
+          0,
+          38
+        ],
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 12,
+            "end": 26,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 17
+                "column": 12
               },
               "end": {
                 "line": 1,
                 "column": 26
               }
+            },
+            "range": [
+              12,
+              26
+            ],
+            "local": {
+              "type": "Identifier",
+              "start": 17,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "range": [
+                17,
+                26
+              ],
+              "name": "namespace"
             }
-          },
-          "range": [
-            12,
-            26
-          ],
+          }
+        ],
+        "importKind": "type",
+        "source": {
+          "type": "Literal",
+          "start": 32,
+          "end": 37,
           "loc": {
             "start": {
               "line": 1,
-              "column": 12
+              "column": 32
             },
             "end": {
               "line": 1,
-              "column": 26
+              "column": 37
             }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "bar",
-        "raw": "\"bar\"",
-        "range": [
-          32,
-          37
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 32
           },
-          "end": {
-            "line": 1,
-            "column": 37
-          }
-        }
-      },
-      "importKind": "type",
-      "range": [
-        0,
-        38
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 38
+          "range": [
+            32,
+            37
+          ],
+          "value": "bar",
+          "rawValue": "bar",
+          "raw": "\"bar\""
         }
       }
-    }
-  ]
+    ]
+  }
 }

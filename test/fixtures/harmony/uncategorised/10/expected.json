@@ -1,35 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "Literal",
-        "value": 2,
-        "raw": "0O2",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 3
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 3
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 3,
   "loc": {
     "start": {
       "line": 1,
@@ -39,5 +11,72 @@
       "line": 1,
       "column": 3
     }
+  },
+  "range": [
+    0,
+    3
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 3,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 3
+      }
+    },
+    "range": [
+      0,
+      3
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 3,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 3
+          }
+        },
+        "range": [
+          0,
+          3
+        ],
+        "expression": {
+          "type": "Literal",
+          "start": 0,
+          "end": 3,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 3
+            }
+          },
+          "range": [
+            0,
+            3
+          ],
+          "value": 2,
+          "rawValue": 2,
+          "raw": "0O2"
+        }
+      }
+    ]
   }
 }

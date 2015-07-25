@@ -1,82 +1,225 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 21,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 21
+    }
+  },
   "range": [
     0,
     21
   ],
-  "body": [
-    {
-      "type": "ForInStatement",
-      "range": [
-        0,
-        21
-      ],
-      "left": {
-        "type": "ObjectPattern",
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 21,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 21
+      }
+    },
+    "range": [
+      0,
+      21
+    ],
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 21,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 21
+          }
+        },
         "range": [
-          5,
-          12
+          0,
+          21
         ],
-        "properties": [
-          {
-            "type": "Property",
-            "range": [
-              6,
-              11
-            ],
-            "method": false,
-            "shorthand": true,
-            "computed": false,
-            "key": {
-              "type": "Identifier",
-              "range": [
-                6,
-                7
-              ],
-              "name": "x"
+        "left": {
+          "type": "ObjectPattern",
+          "start": 5,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
             },
-            "kind": "init",
-            "value": {
-              "type": "AssignmentPattern",
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "range": [
+            5,
+            12
+          ],
+          "properties": [
+            {
+              "type": "Property",
+              "start": 6,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
               "range": [
                 6,
                 11
               ],
-              "left": {
+              "method": false,
+              "shorthand": true,
+              "computed": false,
+              "key": {
                 "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 7
+                  }
+                },
                 "range": [
                   6,
                   7
                 ],
                 "name": "x"
               },
-              "right": {
-                "type": "Literal",
+              "kind": "init",
+              "value": {
+                "type": "AssignmentPattern",
+                "start": 6,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  }
+                },
                 "range": [
-                  10,
+                  6,
                   11
                 ],
-                "value": 0
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 6,
+                  "end": 7,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 7
+                    }
+                  },
+                  "range": [
+                    6,
+                    7
+                  ],
+                  "name": "x"
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 10,
+                  "end": 11,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 11
+                    }
+                  },
+                  "range": [
+                    10,
+                    11
+                  ],
+                  "value": 0,
+                  "rawValue": 0,
+                  "raw": "0"
+                }
               }
             }
-          }
-        ]
-      },
-      "right": {
-        "type": "Identifier",
-        "range": [
-          16,
-          19
-        ],
-        "name": "arr"
-      },
-      "body": {
-        "type": "EmptyStatement",
-        "range": [
-          20,
-          21
-        ]
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 16,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          },
+          "range": [
+            16,
+            19
+          ],
+          "name": "arr"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 20,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          "range": [
+            20,
+            21
+          ]
+        }
       }
-    }
-  ]
+    ]
+  }
 }

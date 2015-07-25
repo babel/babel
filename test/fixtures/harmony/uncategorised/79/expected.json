@@ -1,35 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportDefaultDeclaration",
-      "declaration": {
-        "type": "Literal",
-        "value": 42,
-        "raw": "42",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 15
-          },
-          "end": {
-            "line": 1,
-            "column": 17
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 17
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 17,
   "loc": {
     "start": {
       "line": 1,
@@ -39,5 +11,72 @@
       "line": 1,
       "column": 17
     }
+  },
+  "range": [
+    0,
+    17
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 17,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 17
+      }
+    },
+    "range": [
+      0,
+      17
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 17,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 17
+          }
+        },
+        "range": [
+          0,
+          17
+        ],
+        "declaration": {
+          "type": "Literal",
+          "start": 15,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          },
+          "range": [
+            15,
+            17
+          ],
+          "value": 42,
+          "rawValue": 42,
+          "raw": "42"
+        }
+      }
+    ]
   }
 }

@@ -1,35 +1,7 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportAllDeclaration",
-      "source": {
-        "type": "Literal",
-        "value": "crypto",
-        "raw": "\"crypto\"",
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
-          },
-          "end": {
-            "line": 1,
-            "column": 22
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 22
-        }
-      }
-    }
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 22,
   "loc": {
     "start": {
       "line": 1,
@@ -39,5 +11,72 @@
       "line": 1,
       "column": 22
     }
+  },
+  "range": [
+    0,
+    22
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 22,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 22
+      }
+    },
+    "range": [
+      0,
+      22
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportAllDeclaration",
+        "start": 0,
+        "end": 22,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 22
+          }
+        },
+        "range": [
+          0,
+          22
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 14,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          "range": [
+            14,
+            22
+          ],
+          "value": "crypto",
+          "rawValue": "crypto",
+          "raw": "\"crypto\""
+        }
+      }
+    ]
   }
 }

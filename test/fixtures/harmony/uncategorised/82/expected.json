@@ -1,33 +1,101 @@
 {
-  "type": "Program",
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
   "range": [
     0,
     23
   ],
-  "body": [
-    {
-      "type": "ExportDefaultDeclaration",
-      "range": [
-        0,
-        23
-      ],
-      "declaration": {
-        "type": "ClassExpression",
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "range": [
+      0,
+      23
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
         "range": [
-          15,
+          0,
           23
         ],
-        "id": null,
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
+        "declaration": {
+          "type": "ClassExpression",
+          "start": 15,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            }
+          },
           "range": [
-            21,
+            15,
             23
           ],
-          "body": []
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 21,
+            "end": 23,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            },
+            "range": [
+              21,
+              23
+            ],
+            "body": []
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }

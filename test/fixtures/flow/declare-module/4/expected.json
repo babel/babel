@@ -1,61 +1,139 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "DeclareModule",
-      "id": {
-        "type": "Identifier",
-        "name": "A",
-        "range": [
-          15,
-          16
-        ],
+  "type": "File",
+  "start": 0,
+  "end": 52,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 52
+    }
+  },
+  "range": [
+    0,
+    52
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 52,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 52
+      }
+    },
+    "range": [
+      0,
+      52
+    ],
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 52,
         "loc": {
           "start": {
             "line": 1,
-            "column": 15
+            "column": 0
           },
           "end": {
             "line": 1,
-            "column": 16
+            "column": 52
           }
-        }
-      },
-      "body": {
-        "type": "BlockStatement",
-        "body": [
-          {
-            "type": "DeclareFunction",
-            "id": {
-              "type": "Identifier",
-              "name": "foo",
-              "typeAnnotation": {
-                "type": "TypeAnnotation",
-                "typeAnnotation": {
-                  "type": "FunctionTypeAnnotation",
-                  "params": [],
-                  "returnType": {
-                    "type": "NumberTypeAnnotation",
-                    "range": [
-                      43,
-                      49
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 43
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 49
-                      }
-                    }
+        },
+        "range": [
+          0,
+          52
+        ],
+        "id": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 16
+            }
+          },
+          "range": [
+            15,
+            16
+          ],
+          "name": "A"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 17,
+          "end": 52,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 17
+            },
+            "end": {
+              "line": 1,
+              "column": 52
+            }
+          },
+          "range": [
+            17,
+            52
+          ],
+          "body": [
+            {
+              "type": "DeclareFunction",
+              "start": 19,
+              "end": 50,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 19
+                },
+                "end": {
+                  "line": 1,
+                  "column": 50
+                }
+              },
+              "range": [
+                19,
+                50
+              ],
+              "id": {
+                "type": "Identifier",
+                "start": 36,
+                "end": 49,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 36
                   },
-                  "typeParameters": null,
-                  "range": [
-                    39,
-                    49
-                  ],
+                  "end": {
+                    "line": 1,
+                    "column": 49
+                  }
+                },
+                "range": [
+                  36,
+                  49
+                ],
+                "name": "foo",
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "start": 39,
+                  "end": 49,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -65,83 +143,58 @@
                       "line": 1,
                       "column": 49
                     }
-                  }
-                },
-                "range": [
-                  39,
-                  49
-                ],
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 39
                   },
-                  "end": {
-                    "line": 1,
-                    "column": 49
+                  "range": [
+                    39,
+                    49
+                  ],
+                  "typeAnnotation": {
+                    "type": "FunctionTypeAnnotation",
+                    "start": 39,
+                    "end": 49,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 49
+                      }
+                    },
+                    "range": [
+                      39,
+                      49
+                    ],
+                    "typeParameters": null,
+                    "params": [],
+                    "rest": null,
+                    "returnType": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 43,
+                      "end": 49,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 43
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 49
+                        }
+                      },
+                      "range": [
+                        43,
+                        49
+                      ]
+                    }
                   }
                 }
-              },
-              "range": [
-                36,
-                49
-              ],
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 36
-                },
-                "end": {
-                  "line": 1,
-                  "column": 49
-                }
-              }
-            },
-            "range": [
-              19,
-              50
-            ],
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 19
-              },
-              "end": {
-                "line": 1,
-                "column": 50
               }
             }
-          }
-        ],
-        "range": [
-          17,
-          52
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 17
-          },
-          "end": {
-            "line": 1,
-            "column": 52
-          }
-        }
-      },
-      "range": [
-        0,
-        52
-      ],
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 52
+          ]
         }
       }
-    }
-  ]
+    ]
+  }
 }

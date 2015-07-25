@@ -1,46 +1,133 @@
 {
+  "type": "File",
   "start": 0,
-  "body": [
-    {
-      "start": 0,
-      "id": {
-        "start": 6,
-        "name": "Foo",
-        "type": "Identifier",
-        "end": 9
-      },
-      "superClass": null,
-      "body": {
-        "start": 10,
-        "body": [
-          {
-            "start": 12,
-            "computed": false,
-            "key": {
-              "start": 19,
-              "name": "foo",
-              "type": "Identifier",
-              "end": 22
-            },
-            "static": true,
-            "value": {
-              "start": 25,
-              "value": "bar",
-              "raw": "\"bar\"",
-              "type": "Literal",
-              "end": 30
-            },
-            "type": "ClassProperty",
-            "end": 31
-          }
-        ],
-        "type": "ClassBody",
-        "end": 33
-      },
-      "type": "ClassDeclaration",
-      "end": 33
+  "end": 33,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 33
     }
-  ],
-  "type": "Program",
-  "end": 33
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 33
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 33
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 12,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "name": "foo"
+              },
+              "static": true,
+              "value": {
+                "type": "Literal",
+                "start": 25,
+                "end": 30,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 30
+                  }
+                },
+                "value": "bar",
+                "rawValue": "bar",
+                "raw": "\"bar\""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
