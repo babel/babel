@@ -136,13 +136,12 @@
                 }
               },
               "value": "/text",
-              "rawValue": "/text",
+              "rawValue": null,
               "raw": "/text"
             }
           ]
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

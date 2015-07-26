@@ -186,13 +186,12 @@
                 }
               },
               "value": "7x invalid-js-identifier",
-              "rawValue": "7x invalid-js-identifier",
+              "rawValue": null,
               "raw": "7x invalid-js-identifier"
             }
           ]
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

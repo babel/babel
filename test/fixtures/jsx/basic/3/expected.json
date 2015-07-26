@@ -217,7 +217,7 @@
                 }
               },
               "value": " ",
-              "rawValue": " ",
+              "rawValue": null,
               "raw": " "
             },
             {
@@ -266,7 +266,7 @@
                 }
               },
               "value": " ",
-              "rawValue": " ",
+              "rawValue": null,
               "raw": " "
             },
             {
@@ -404,6 +404,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }
