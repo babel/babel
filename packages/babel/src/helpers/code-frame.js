@@ -77,9 +77,8 @@ function highlight(text) {
 export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
   colNumber = Math.max(colNumber, 0);
 
-  if (opts.highlightCode && chalk.supportsColor) {
-    lines = highlight(lines);
-  }
+  var highlighted = opts.highlightCode && chalk.supportsColor;
+  if (highlighted) lines = highlight(lines);
 
   lines = lines.split(NEWLINE);
 
@@ -91,7 +90,7 @@ export default function (lines: number, lineNumber: number, colNumber: number, o
     end = lines.length;
   }
 
-  return lineNumbers(lines.slice(start, end), {
+  var frame = lineNumbers(lines.slice(start, end), {
     start: start + 1,
     before: "  ",
     after: " | ",
@@ -107,4 +106,10 @@ export default function (lines: number, lineNumber: number, colNumber: number, o
       params.before = params.before.replace(/^./, ">");
     }
   }).join("\n");
+
+  if (highlighted) {
+    frame = chalk.reset() + frame;
+  }
+
+  return frame;
 }
