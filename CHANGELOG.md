@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.9
+
+ * **Bug Fix**
+  * Fix issue in parser where the flow plugin wasn't using state to refer to whether it as in a type or not causing lookaheads to cause breakages.
+
 ## 5.8.8
 
  * **Bug Fix**
