@@ -186,7 +186,7 @@ function getQualifiedJSXName(object) {
 
 pp.jsxParseIdentifier = function() {
   var node = this.startNode();
-  if (this.state.type === tt.jsxName) {
+  if (this.match(tt.jsxName)) {
     node.name = this.state.value;
   } else if (this.state.type.keyword) {
     node.name = this.state.type.keyword;
@@ -268,7 +268,7 @@ pp.jsxParseEmptyExpression = function() {
 pp.jsxParseExpressionContainer = function() {
   var node = this.startNode();
   this.next();
-  if (this.state.type === tt.braceR) {
+  if (this.match(tt.braceR)) {
     node.expression = this.jsxParseEmptyExpression();
   } else {
     node.expression = this.parseExpression();
@@ -298,7 +298,7 @@ pp.jsxParseOpeningElementAt = function(startPos, startLoc) {
   var node = this.startNodeAt(startPos, startLoc);
   node.attributes = [];
   node.name = this.jsxParseElementName();
-  while (this.state.type !== tt.slash && this.state.type !== tt.jsxTagEnd) {
+  while (!this.match(tt.slash) && !this.match(tt.jsxTagEnd)) {
     node.attributes.push(this.jsxParseAttribute());
   }
   node.selfClosing = this.eat(tt.slash);
@@ -360,7 +360,7 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
   node.openingElement = openingElement;
   node.closingElement = closingElement;
   node.children = children;
-  if (this.state.type === tt.relational && this.state.value === "<") {
+  if (this.match(tt.relational) && this.state.value === "<") {
     this.raise(this.state.start, "Adjacent JSX elements must be wrapped in an enclosing tag");
   }
   return this.finishNode(node, "JSXElement");
@@ -377,9 +377,9 @@ pp.jsxParseElement = function() {
 export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
-      if (this.state.type === tt.jsxText)
+      if (this.match(tt.jsxText))
         return this.parseLiteral(this.state.value);
-      else if (this.state.type === tt.jsxTagStart)
+      else if (this.match(tt.jsxTagStart))
         return this.jsxParseElement();
       else
         return inner.call(this, refShortHandDefaultPos);
@@ -414,13 +414,13 @@ export default function(instance) {
 
   instance.extend("updateContext", function(inner) {
     return function(prevType) {
-      if (this.state.type === tt.braceL) {
+      if (this.match(tt.braceL)) {
         var curContext = this.curContext();
         if (curContext === tc.j_oTag) this.state.context.push(tc.b_expr);
         else if (curContext === tc.j_expr) this.state.context.push(tc.b_tmpl);
         else inner.call(this, prevType);
         this.state.exprAllowed = true;
-      } else if (this.state.type === tt.slash && prevType === tt.jsxTagStart) {
+      } else if (this.match(tt.slash) && prevType === tt.jsxTagStart) {
         this.state.context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
         this.state.context.push(tc.j_cTag); // reconsider as closing tag context
         this.state.exprAllowed = false;

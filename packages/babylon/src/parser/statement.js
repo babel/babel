@@ -16,7 +16,7 @@ pp.parseTopLevel = function (file, program) {
   program.body = [];
 
   let first = true;
-  while (this.state.type !== tt.eof) {
+  while (!this.match(tt.eof)) {
     let stmt = this.parseStatement(true, true);
     program.body.push(stmt);
     if (first) {
@@ -43,7 +43,7 @@ const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
 // does not help.
 
 pp.parseStatement = function (declaration, topLevel) {
-  if (this.state.type === tt.at) {
+  if (this.match(tt.at)) {
     this.parseDecorators(true);
   }
 
@@ -94,7 +94,7 @@ pp.parseStatement = function (declaration, topLevel) {
         // peek ahead and see if next token is a function
         var state = this.state.clone();
         this.next();
-        if (this.state.type === tt._function && !this.canInsertSemicolon()) {
+        if (this.match(tt._function) && !this.canInsertSemicolon()) {
           this.expect(tt._function);
           return this.parseFunction(node, true, false, true);
         } else {
@@ -126,15 +126,15 @@ pp.takeDecorators = function (node) {
 };
 
 pp.parseDecorators = function (allowExport) {
-  while (this.state.type === tt.at) {
+  while (this.match(tt.at)) {
     this.state.decorators.push(this.parseDecorator());
   }
 
-  if (allowExport && this.state.type === tt._export) {
+  if (allowExport && this.match(tt._export)) {
     return;
   }
 
-  if (this.state.type !== tt._class) {
+  if (!this.match(tt._class)) {
     this.raise(this.state.start, "Leading decorators must be attached to a class declaration");
   }
 };
@@ -153,9 +153,9 @@ pp.parseBreakContinueStatement = function (node, keyword) {
   let isBreak = keyword === "break";
   this.next();
 
-  if (this.eat(tt.semi) || this.insertSemicolon()) {
+  if (this.eat(tt.semi) || this.canInsertSemicolon()) {
     node.label = null;
-  } else if (this.state.type !== tt.name) {
+  } else if (!this.match(tt.name)) {
     this.unexpected();
   } else {
     node.label = this.parseIdent();
@@ -205,16 +205,16 @@ pp.parseForStatement = function (node) {
   this.state.labels.push(loopLabel);
   this.expect(tt.parenL);
 
-  if (this.state.type === tt.semi) {
+  if (this.match(tt.semi)) {
     return this.parseFor(node, null);
   }
 
-  if (this.state.type === tt._var || this.state.type === tt._let || this.state.type === tt._const) {
+  if (this.match(tt._var) || this.match(tt._let) || this.match(tt._const)) {
     let init = this.startNode(), varKind = this.state.type;
     this.next();
     this.parseVar(init, true, varKind);
     this.finishNode(init, "VariableDeclaration");
-    if ((this.state.type === tt._in || this.isContextual("of")) && init.declarations.length === 1 &&
+    if ((this.match(tt._in) || this.isContextual("of")) && init.declarations.length === 1 &&
         !(varKind !== tt._var && init.declarations[0].init))
       return this.parseForIn(node, init);
     return this.parseFor(node, init);
@@ -222,7 +222,7 @@ pp.parseForStatement = function (node) {
 
   let refShorthandDefaultPos = {start: 0};
   let init = this.parseExpression(true, refShorthandDefaultPos);
-  if (this.state.type === tt._in || this.isContextual("of")) {
+  if (this.match(tt._in) || this.isContextual("of")) {
     this.toAssignable(init);
     this.checkLVal(init);
     return this.parseForIn(node, init);
@@ -256,7 +256,7 @@ pp.parseReturnStatement = function (node) {
   // optional arguments, we eagerly look for a semicolon or the
   // possibility to insert one.
 
-  if (this.eat(tt.semi) || this.insertSemicolon()) {
+  if (this.eat(tt.semi) || this.canInsertSemicolon()) {
     node.argument = null;
   } else {
     node.argument = this.parseExpression();
@@ -277,9 +277,9 @@ pp.parseSwitchStatement = function (node) {
   // nodes. `cur` is used to keep the node that we are currently
   // adding statements to.
 
-  for (var cur, sawDefault; this.state.type !== tt.braceR; ) {
-    if (this.state.type === tt._case || this.state.type === tt._default) {
-      let isCase = this.state.type === tt._case;
+  for (var cur, sawDefault; !this.match(tt.braceR); ) {
+    if (this.match(tt._case) || this.match(tt._default)) {
+      let isCase = this.match(tt._case);
       if (cur) this.finishNode(cur, "SwitchCase");
       node.cases.push(cur = this.startNode());
       cur.consequent = [];
@@ -320,7 +320,7 @@ pp.parseTryStatement = function (node) {
   this.next();
   node.block = this.parseBlock();
   node.handler = null;
-  if (this.state.type === tt._catch) {
+  if (this.match(tt._catch)) {
     let clause = this.startNode();
     this.next();
     this.expect(tt.parenL);
@@ -377,7 +377,7 @@ pp.parseLabeledStatement = function (node, maybeName, expr) {
     }
   }
 
-  let kind = this.state.type.isLoop ? "loop" : this.state.type === tt._switch ? "switch" : null;
+  let kind = this.state.type.isLoop ? "loop" : this.match(tt._switch) ? "switch" : null;
   for (let i = this.state.labels.length - 1; i >= 0; i--) {
     let label = this.state.labels[i];
     if (label.statementStart === node.start) {
@@ -429,9 +429,9 @@ pp.parseBlock = function (allowStrict) {
 pp.parseFor = function (node, init) {
   node.init = init;
   this.expect(tt.semi);
-  node.test = this.state.type === tt.semi ? null : this.parseExpression();
+  node.test = this.match(tt.semi) ? null : this.parseExpression();
   this.expect(tt.semi);
-  node.update = this.state.type === tt.parenR ? null : this.parseExpression();
+  node.update = this.match(tt.parenR) ? null : this.parseExpression();
   this.expect(tt.parenR);
   node.body = this.parseStatement(false);
   this.state.labels.pop();
@@ -442,7 +442,7 @@ pp.parseFor = function (node, init) {
 // same from parser's perspective.
 
 pp.parseForIn = function (node, init) {
-  let type = this.state.type === tt._in ? "ForInStatement" : "ForOfStatement";
+  let type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
   this.next();
   node.left = init;
   node.right = this.parseExpression();
@@ -462,9 +462,9 @@ pp.parseVar = function (node, isFor, kind) {
     this.parseVarHead(decl);
     if (this.eat(tt.eq)) {
       decl.init = this.parseMaybeAssign(isFor);
-    } else if (kind === tt._const && !(this.state.type === tt._in || this.isContextual("of"))) {
+    } else if (kind === tt._const && !(this.match(tt._in) || this.isContextual("of"))) {
       this.unexpected();
-    } else if (decl.id.type !== "Identifier" && !(isFor && (this.state.type === tt._in || this.isContextual("of")))) {
+    } else if (decl.id.type !== "Identifier" && !(isFor && (this.match(tt._in) || this.isContextual("of")))) {
       this.raise(this.state.lastTokEnd, "Complex binding patterns require an initialization value");
     } else {
       decl.init = null;
@@ -487,7 +487,7 @@ pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync) {
   this.initFunction(node, isAsync);
   node.generator = this.eat(tt.star);
 
-  if (isStatement || this.state.type === tt.name) {
+  if (isStatement || this.match(tt.name)) {
     node.id = this.parseIdent();
   }
 
@@ -515,7 +515,7 @@ pp.parseClass = function (node, isStatement) {
   let decorators = [];
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) continue;
-    if (this.state.type === tt.at) {
+    if (this.match(tt.at)) {
       decorators.push(this.parseDecorator());
       continue;
     }
@@ -524,10 +524,10 @@ pp.parseClass = function (node, isStatement) {
       method.decorators = decorators;
       decorators = [];
     }
-    let isMaybeStatic = this.state.type === tt.name && this.state.value === "static";
+    let isMaybeStatic = this.match(tt.name) && this.state.value === "static";
     var isGenerator = this.eat(tt.star), isAsync = false;
     this.parsePropertyName(method);
-    method.static = isMaybeStatic && this.state.type !== tt.parenL;
+    method.static = isMaybeStatic && !this.match(tt.parenL);
     if (method.static) {
       if (isGenerator) this.unexpected();
       isGenerator = this.eat(tt.star);
@@ -537,7 +537,7 @@ pp.parseClass = function (node, isStatement) {
       classBody.body.push(this.parseClassProperty(method));
       continue;
     }
-    if (this.options.features["es7.asyncFunctions"] && this.state.type !== tt.parenL &&
+    if (this.options.features["es7.asyncFunctions"] && !this.match(tt.parenL) &&
         !method.computed && method.key.type === "Identifier" && method.key.name === "async") {
       isAsync = true;
       this.parsePropertyName(method);
@@ -546,7 +546,7 @@ pp.parseClass = function (node, isStatement) {
     method.kind = "method";
     if (!method.computed) {
       let {key} = method;
-      if (!isAsync && !isGenerator && key.type === "Identifier" && this.state.type !== tt.parenL && (key.name === "get" || key.name === "set")) {
+      if (!isAsync && !isGenerator && key.type === "Identifier" && !this.match(tt.parenL) && (key.name === "get" || key.name === "set")) {
         isGetSet = true;
         method.kind = key.name;
         key = this.parsePropertyName(method);
@@ -587,11 +587,11 @@ pp.parseClass = function (node, isStatement) {
 };
 
 pp.isClassProperty = function () {
-  return this.state.type === tt.eq || (this.state.type === tt.semi || this.canInsertSemicolon());
+  return this.match(tt.eq) || (this.match(tt.semi) || this.canInsertSemicolon());
 };
 
 pp.parseClassProperty = function (node) {
-  if (this.state.type === tt.eq) {
+  if (this.match(tt.eq)) {
     if (!this.options.features["es7.classProperties"]) this.unexpected();
     this.next();
     node.value = this.parseMaybeAssign();
@@ -608,7 +608,7 @@ pp.parseClassMethod = function (classBody, method, isGenerator, isAsync) {
 };
 
 pp.parseClassId = function (node, isStatement) {
-  node.id = this.state.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null;
+  node.id = this.match(tt.name) ? this.parseIdent() : isStatement ? this.unexpected() : null;
 };
 
 pp.parseClassSuper = function (node) {
@@ -620,7 +620,7 @@ pp.parseClassSuper = function (node) {
 pp.parseExport = function (node) {
   this.next();
   // export * from '...'
-  if (this.state.type === tt.star) {
+  if (this.match(tt.star)) {
     let specifier = this.startNode();
     this.next();
     if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
@@ -636,7 +636,7 @@ pp.parseExport = function (node) {
     let specifier = this.startNode();
     specifier.exported = this.parseIdent(true);
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
-    if (this.state.type === tt.comma && this.lookahead().type === tt.star) {
+    if (this.match(tt.comma) && this.lookahead().type === tt.star) {
       this.expect(tt.comma);
       let specifier = this.startNode();
       this.expect(tt.star);
@@ -668,7 +668,7 @@ pp.parseExport = function (node) {
     node.declaration = null;
     node.specifiers = this.parseExportSpecifiers();
     if (this.eatContextual("from")) {
-      node.source = this.state.type === tt.string ? this.parseExprAtom() : this.unexpected();
+      node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
     } else {
       node.source = null;
     }
@@ -679,11 +679,11 @@ pp.parseExport = function (node) {
 };
 
 pp.isExportDefaultSpecifier = function () {
-  if (this.state.type === tt.name) {
+  if (this.match(tt.name)) {
     return this.state.value !== "type" && this.state.value !== "async";
   }
 
-  if (this.state.type !== tt._default) {
+  if (!this.match(tt._default)) {
     return false;
   }
 
@@ -699,7 +699,7 @@ pp.parseExportSpecifiersMaybe = function (node) {
 
 pp.parseExportFrom = function (node) {
   this.expectContextual("from");
-  node.source = this.state.type === tt.string ? this.parseExprAtom() : this.unexpected();
+  node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
   this.semicolon();
   this.checkExport(node);
 };
@@ -730,11 +730,11 @@ pp.parseExportSpecifiers = function () {
       first = false;
     } else {
       this.expect(tt.comma);
-      if (this.afterTrailingComma(tt.braceR)) break;
+      if (this.eat(tt.braceR)) break;
     }
 
     let node = this.startNode();
-    node.local = this.parseIdent(this.state.type === tt._default);
+    node.local = this.parseIdent(this.match(tt._default));
     node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local.__clone();
     nodes.push(this.finishNode(node, "ExportSpecifier"));
   }
@@ -748,14 +748,14 @@ pp.parseImport = function (node) {
   this.next();
 
   // import '...'
-  if (this.state.type === tt.string) {
+  if (this.match(tt.string)) {
     node.specifiers = [];
     node.source = this.parseExprAtom();
   } else {
     node.specifiers = [];
     this.parseImportSpecifiers(node);
     this.expectContextual("from");
-    node.source = this.state.type === tt.string ? this.parseExprAtom() : this.unexpected();
+    node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
   }
   this.semicolon();
   return this.finishNode(node, "ImportDeclaration");
@@ -765,14 +765,14 @@ pp.parseImport = function (node) {
 
 pp.parseImportSpecifiers = function (node) {
   var first = true;
-  if (this.state.type === tt.name) {
+  if (this.match(tt.name)) {
     // import defaultObj, { x, y as z } from '...'
     var startPos = this.state.start, startLoc = this.state.startLoc;
     node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdent(), startPos, startLoc));
     if (!this.eat(tt.comma)) return;
   }
 
-  if (this.state.type === tt.star) {
+  if (this.match(tt.star)) {
     let specifier = this.startNode();
     this.next();
     this.expectContextual("as");
@@ -788,7 +788,7 @@ pp.parseImportSpecifiers = function (node) {
       first = false;
     } else {
       this.expect(tt.comma);
-      if (this.afterTrailingComma(tt.braceR)) break;
+      if (this.eat(tt.braceR)) break;
     }
 
     let specifier = this.startNode();

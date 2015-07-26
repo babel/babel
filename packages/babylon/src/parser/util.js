@@ -12,22 +12,10 @@ pp.isUseStrict = function (stmt) {
   return stmt.type === "ExpressionStatement" && stmt.expression.type === "Literal" && stmt.expression.raw.slice(1, -1) === "use strict";
 };
 
-// Predicate that tests whether the next token is of the given
-// type, and if yes, consumes it as a side effect.
-
-pp.eat = function (type) {
-  if (this.state.type === type) {
-    this.next();
-    return true;
-  } else {
-    return false;
-  }
-};
-
 // TODO
 
 pp.isRelational = function (op) {
-  return this.state.type === tt.relational && this.state.value === op;
+  return this.match(tt.relational) && this.state.value === op;
 };
 
 // TODO
@@ -43,7 +31,7 @@ pp.expectRelational = function (op) {
 // Tests whether parsed token is a contextual keyword.
 
 pp.isContextual = function (name) {
-  return this.state.type === tt.name && this.state.value === name;
+  return this.match(tt.name) && this.state.value === name;
 };
 
 // Consumes contextual keyword if possible.
@@ -61,29 +49,16 @@ pp.expectContextual = function (name) {
 // Test whether a semicolon can be inserted at the current position.
 
 pp.canInsertSemicolon = function () {
-  return this.state.type === tt.eof ||
-    this.state.type === tt.braceR ||
+  return this.match(tt.eof) ||
+    this.match(tt.braceR) ||
     lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
-};
-
-pp.insertSemicolon = function () {
-  if (this.canInsertSemicolon()) {
-    return true;
-  }
 };
 
 // Consume a semicolon, or, failing that, see if we are allowed to
 // pretend that there is a semicolon at this position.
 
 pp.semicolon = function () {
-  if (!this.eat(tt.semi) && !this.insertSemicolon()) this.unexpected();
-};
-
-pp.afterTrailingComma = function (tokType) {
-  if (this.state.type === tokType) {
-    this.next();
-    return true;
-  }
+  if (!this.eat(tt.semi) && !this.canInsertSemicolon()) this.unexpected();
 };
 
 // Expect a token of a given type. If found, consume it, otherwise,
