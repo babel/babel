@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.8
+
+ * **Bug Fix**
+  * Fix comments not being attached if they're touching the start of their node.
+
+## 5.8.7
+
+ * Never published, environment issues, again.
+
 ## 5.8.6
 
  * **Bug Fix**
@@ -40,7 +49,7 @@ Issues with publish process.
 
 ## 5.8.0
 
-Never released due to publish environment issues.
+ * Never released due to publish environment issues.
 
 ## 5.7.4
 
