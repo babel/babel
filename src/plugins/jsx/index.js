@@ -379,7 +379,10 @@ export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
       if (this.match(tt.jsxText)) {
-        return this.parseLiteral(this.state.value);
+        var node = this.parseLiteral(this.state.value);
+        // https://github.com/babel/babel/issues/2078
+        node.rawValue = null;
+        return node;
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else {
