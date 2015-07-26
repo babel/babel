@@ -1,4 +1,4 @@
-# NOTE: BEFORE OPENING AN ISSUE READ SEE THE [README](https://github.com/babel/babel#readme).
+# NOTE: BEFORE OPENING AN ISSUE PLEASE SEE THE [README](https://github.com/babel/babel#readme).
 
 ----
 
