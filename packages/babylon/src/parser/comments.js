@@ -38,7 +38,7 @@ pp.addComment = function (comment) {
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
 
-  var stack = this.state.bottomRightStack;
+  var stack = this.state.commentStack;
 
   var lastChild, trailingComments, i;
 
@@ -80,7 +80,7 @@ pp.processComment = function (node) {
       } else {
         // A leading comment for an anonymous class had been stolen by its first MethodDefinition,
         // so this takes back the leading comment.
-        // See Also: https://github.com/eslint/espree/issues/158
+        // See also: https://github.com/eslint/espree/issues/158
         for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
           if (lastChild.leadingComments[i].end <= node.start) {
             node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
@@ -99,7 +99,7 @@ pp.processComment = function (node) {
       // In special cases, such as return (without a value) and
       // debugger, all comments will end up as leadingComments and
       // will otherwise be eliminated. This this step runs when the
-      // bottomRightStack is empty and there are comments left
+      // commentStack is empty and there are comments left
       // in leadingComments.
       //
       // This loop figures out the stopping point between the actual

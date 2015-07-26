@@ -25,9 +25,9 @@ export default class State {
     this.comments = [];
 
     // Comment attachment store
-    this.bottomRightStack = [];
     this.trailingComments = [];
     this.leadingComments  = [];
+    this.commentStack     = [];
 
     // The current position of the tokenizer in the input.
     this.pos = this.lineStart = 0;
