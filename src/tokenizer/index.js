@@ -71,6 +71,25 @@ export default class Tokenizer {
     this.nextToken();
   }
 
+  // TODO
+
+  eat(type) {
+    if (this.match(type)) {
+      this.next();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // TODO
+
+  match(type) {
+    return this.state.type === type;
+  }
+
+  // TODO
+
   lookahead() {
     var old = this.state.clone();
     this.next();
@@ -84,7 +103,7 @@ export default class Tokenizer {
 
   setStrict(strict) {
     this.strict = strict;
-    if (this.state.type !== tt.num && this.state.type !== tt.string) return;
+    if (!this.match(tt.num) && !this.match(tt.string)) return;
     this.state.pos = this.state.start;
     while (this.state.pos < this.state.lineStart) {
       this.state.lineStart = this.input.lastIndexOf("\n", this.state.lineStart - 2) + 1;
@@ -610,7 +629,7 @@ export default class Tokenizer {
       if (this.state.pos >= this.input.length) this.raise(this.state.start, "Unterminated template");
       let ch = this.input.charCodeAt(this.state.pos);
       if (ch === 96 || ch === 36 && this.input.charCodeAt(this.state.pos + 1) === 123) { // '`', '${'
-        if (this.state.pos === this.state.start && this.state.type === tt.template) {
+        if (this.state.pos === this.state.start && this.match(tt.template)) {
           if (ch === 36) {
             this.state.pos += 2;
             return this.finishToken(tt.dollarBraceL);

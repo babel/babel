@@ -92,7 +92,7 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  node.argument = this.state.type === tt.name || this.state.type === tt.bracketL ? this.parseBindingAtom() : this.unexpected();
+  node.argument = this.match(tt.name) || this.match(tt.bracketL) ? this.parseBindingAtom() : this.unexpected();
   return this.finishNode(node, "RestElement");
 };
 
@@ -122,11 +122,11 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
   while (!this.eat(close)) {
     if (first) first = false;
     else this.expect(tt.comma);
-    if (allowEmpty && this.state.type === tt.comma) {
+    if (allowEmpty && this.match(tt.comma)) {
       elts.push(null);
-    } else if (allowTrailingComma && this.afterTrailingComma(close)) {
+    } else if (allowTrailingComma && this.eat(close)) {
       break;
-    } else if (this.state.type === tt.ellipsis) {
+    } else if (this.match(tt.ellipsis)) {
       elts.push(this.parseAssignableListItemTypes(this.parseRest()));
       this.expect(close);
       break;
