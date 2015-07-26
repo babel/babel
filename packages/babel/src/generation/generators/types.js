@@ -144,7 +144,10 @@ export function _Literal(node) {
   // just use the raw property if our current value is equivalent to the one we got
   // when we populated raw
   if (node.raw != null && node.rawValue != null && val === node.rawValue) {
-    return node.raw;
+    // https://github.com/babel/babel/issues/2078
+    if (node.raw[0] === "'" || node.raw[0] === '"') {
+      return node.raw;
+    }
   }
 
   switch (typeof val) {
