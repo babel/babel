@@ -349,6 +349,7 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
           this.unexpected();
       }
     }
+
     if (getQualifiedJSXName(closingElement.name) !== getQualifiedJSXName(openingElement.name)) {
       this.raise(
         closingElement.start,
@@ -377,12 +378,13 @@ pp.jsxParseElement = function() {
 export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
-      if (this.match(tt.jsxText))
+      if (this.match(tt.jsxText)) {
         return this.parseLiteral(this.state.value);
-      else if (this.match(tt.jsxTagStart))
+      } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
-      else
+      } else {
         return inner.call(this, refShortHandDefaultPos);
+      }
     };
   });
 
@@ -390,24 +392,30 @@ export default function(instance) {
     return function(code) {
       var context = this.curContext();
 
-      if (context === tc.j_expr) return this.jsxReadToken();
+      if (context === tc.j_expr) {
+        return this.jsxReadToken();
+      }
 
       if (context === tc.j_oTag || context === tc.j_cTag) {
-        if (isIdentifierStart(code)) return this.jsxReadWord();
+        if (isIdentifierStart(code)) {
+          return this.jsxReadWord();
+        }
 
         if (code === 62) {
           ++this.state.pos;
           return this.finishToken(tt.jsxTagEnd);
         }
 
-        if ((code === 34 || code === 39) && context === tc.j_oTag)
+        if ((code === 34 || code === 39) && context === tc.j_oTag) {
           return this.jsxReadString(code);
+        }
       }
 
       if (code === 60 && this.state.exprAllowed) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }
+
       return inner.call(this, code);
     };
   });
@@ -416,9 +424,13 @@ export default function(instance) {
     return function(prevType) {
       if (this.match(tt.braceL)) {
         var curContext = this.curContext();
-        if (curContext === tc.j_oTag) this.state.context.push(tc.b_expr);
-        else if (curContext === tc.j_expr) this.state.context.push(tc.b_tmpl);
-        else inner.call(this, prevType);
+        if (curContext === tc.j_oTag) {
+          this.state.context.push(tc.b_expr);
+        } else if (curContext === tc.j_expr) {
+          this.state.context.push(tc.b_tmpl);
+        } else {
+          inner.call(this, prevType);
+        }
         this.state.exprAllowed = true;
       } else if (this.match(tt.slash) && prevType === tt.jsxTagStart) {
         this.state.context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore

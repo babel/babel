@@ -267,7 +267,9 @@ export default class Tokenizer {
   //
   readToken_dot() {
     let next = this.input.charCodeAt(this.state.pos + 1);
-    if (next >= 48 && next <= 57) return this.readNumber(true);
+    if (next >= 48 && next <= 57) {
+      return this.readNumber(true);
+    }
 
     let next2 = this.input.charCodeAt(this.state.pos + 2);
     if (next === 46 && next2 === 46) { // 46 = dot '.'
@@ -280,13 +282,17 @@ export default class Tokenizer {
   }
 
   readToken_slash() { // '/'
-    let next = this.input.charCodeAt(this.state.pos + 1);
     if (this.state.exprAllowed) {
       ++this.state.pos;
       return this.readRegexp();
     }
-    if (next === 61) return this.finishOp(tt.assign, 2);
-    return this.finishOp(tt.slash, 1);
+
+    let next = this.input.charCodeAt(this.state.pos + 1);
+    if (next === 61) {
+      return this.finishOp(tt.assign, 2);
+    } else {
+      return this.finishOp(tt.slash, 1);
+    }
   }
 
   readToken_mult_modulo(code) { // '%*'
@@ -537,10 +543,15 @@ export default class Tokenizer {
     let start = this.state.pos, total = 0;
     for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
       let code = this.input.charCodeAt(this.state.pos), val;
-      if (code >= 97) val = code - 97 + 10; // a
-      else if (code >= 65) val = code - 65 + 10; // A
-      else if (code >= 48 && code <= 57) val = code - 48; // 0-9
-      else val = Infinity;
+      if (code >= 97) {
+        val = code - 97 + 10; // a
+      } else if (code >= 65) {
+        val = code - 65 + 10; // A
+      } else if (code >= 48 && code <= 57) {
+        val = code - 48; // 0-9
+      } else  {
+        val = Infinity;
+      }
       if (val >= radix) break;
       ++this.state.pos;
       total = total * radix + val;
@@ -579,10 +590,15 @@ export default class Tokenizer {
     if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
 
     let str = this.input.slice(start, this.state.pos), val;
-    if (isFloat) val = parseFloat(str);
-    else if (!octal || str.length === 1) val = parseInt(str, 10);
-    else if (/[89]/.test(str) || this.strict) this.raise(start, "Invalid number");
-    else val = parseInt(str, 8);
+    if (isFloat) {
+      val = parseFloat(str);
+    } else if (!octal || str.length === 1) {
+      val = parseInt(str, 10);
+    } else if (/[89]/.test(str) || this.strict) {
+      this.raise(start, "Invalid number");
+    } else {
+      val = parseInt(str, 8);
+    }
     return this.finishToken(tt.num, val);
   }
 
