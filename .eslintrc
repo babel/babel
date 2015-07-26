@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
   "rules": {
+    "quotes": [2, "double", "avoid-escape"],
     "strict": 0,
     "no-underscore-dangle": 0,
     "curly": 0,
