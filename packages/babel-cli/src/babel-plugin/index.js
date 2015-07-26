@@ -32,7 +32,7 @@ function spawnMultiple(cmds) {
   next();
 }
 
-function template(name, data) {
+function template(name, data = {}) {
   var source = fs.readFileSync(path.join(__dirname, "templates", name), "utf8");
   source = source.replace(/[A-Z_]+/g, function (key) {
     return data[key] === undefined ? key : data[key];
@@ -61,48 +61,63 @@ var cmds = {
     }
 
     rl.question("Description (optional): ", function (description) {
-      rl.question("GitHub Repository (eg. sebmck/babel-plugin-foobar) (optional): ", function (repo) {
-        rl.close();
-
-        var templateData = {
-          DESCRIPTION: description,
-          FULL_NAME: BABEL_PLUGIN_PREFIX + name,
-          NAME: name
-        };
-
-        write("package.json", JSON.stringify({
-          name: templateData.FULL_NAME,
-          version: "1.0.0",
-          description: templateData.DESCRIPTION,
-          repository: repo || undefined,
-          license: "MIT",
-          main: "lib/index.js",
-
-          devDependencies: {
-            babel: "^5.6.0"
-          },
-
-          scripts: {
-            build: "babel-plugin build",
-            push:  "babel-plugin publish",
-            test:  "babel-plugin test"
-          },
-
-          keywords: ["babel-plugin"]
-        }, null, "  ") + "\n");
-
-        write(".npmignore", "node_modules\n*.log\nsrc\n");
-
-        write(".gitignore", "node_modules\n*.log\nlib\n");
-
-        write("README.md", template("README.md", templateData));
-
-        if (!pathExists.sync("src")) {
-          fs.mkdirSync("src");
-          write("src/index.js", template("index.js", templateData));
-        }
-      });
+      var remote = child.execSync("git config --get remote.origin.url").trim().match(/git@github.com:(.*?).git/);
+      if (remote) {
+        build(description, remote[1]);
+      } else {
+        rl.question("GitHub Repository (eg. sebmck/babel-plugin-foobar) (optional): ", function (repo) {
+          build(description, repo);
+        });
+      }
     });
+
+    function build(description, repo) {
+      rl.close();
+
+      var templateData = {
+        DESCRIPTION: description,
+        FULL_NAME: BABEL_PLUGIN_PREFIX + name,
+        NAME: name
+      };
+
+      write("package.json", JSON.stringify({
+        name: templateData.FULL_NAME,
+        version: "1.0.0",
+        description: templateData.DESCRIPTION,
+        repository: repo || undefined,
+        license: "MIT",
+        main: "lib/index.js",
+
+        devDependencies: {
+          babel: "^5.6.0"
+        },
+
+        scripts: {
+          publish: "babel-plugin publish",
+          build:   "babel-plugin build",
+          test:    "babel-plugin test"
+        },
+
+        keywords: ["babel-plugin"]
+      }, null, "  ") + "\n");
+
+      write(".npmignore", "node_modules\n*.log\nsrc\n");
+
+      write(".gitignore", "node_modules\n*.log\nlib\n");
+
+      write("README.md", template("README.md", templateData));
+
+      write("LICENSE", template("LICENSE", {
+        AUTHOR_EMAIL: child.execSync("git config --get user.email").trim(),
+        AUTHOR_NAME: child.execSync("git config --get user.name").trim(),
+        YEAR: new Date().getFullYear()
+      }));
+
+      if (!pathExists.sync("src")) {
+        fs.mkdirSync("src");
+        write("src/index.js", template("index.js", templateData));
+      }
+    }
   },
 
   build: function () {
