@@ -4,11 +4,11 @@ import Parser from "../parser";
 var pp = Parser.prototype;
 
 pp.flowParseTypeInitialiser = function (tok) {
-  var oldInType = this.inType;
-  this.inType = true;
+  var oldInType = this.state.inType;
+  this.state.inType = true;
   this.expect(tok || tt.colon);
   var type = this.flowParseType();
-  this.inType = oldInType;
+  this.state.inType = oldInType;
   return type;
 };
 
@@ -173,10 +173,10 @@ pp.flowParseTypeParameterDeclaration = function () {
 };
 
 pp.flowParseTypeParameterInstantiation = function () {
-  var node = this.startNode(), oldInType = this.inType;
+  var node = this.startNode(), oldInType = this.state.inType;
   node.params = [];
 
-  this.inType = true;
+  this.state.inType = true;
 
   this.expectRelational("<");
   while (!this.isRelational(">")) {
@@ -187,7 +187,7 @@ pp.flowParseTypeParameterInstantiation = function () {
   }
   this.expectRelational(">");
 
-  this.inType = oldInType;
+  this.state.inType = oldInType;
 
   return this.finishNode(node, "TypeParameterInstantiation");
 };
@@ -551,10 +551,10 @@ pp.flowParseUnionType = function () {
 };
 
 pp.flowParseType = function () {
-  var oldInType = this.inType;
-  this.inType = true;
+  var oldInType = this.state.inType;
+  this.state.inType = true;
   var type = this.flowParseUnionType();
-  this.inType = oldInType;
+  this.state.inType = oldInType;
   return type;
 };
 
@@ -677,7 +677,7 @@ export default function (instance) {
   // and set startExpr
   instance.extend("isKeyword", function (inner) {
     return function (name) {
-      if (this.inType && name === "void") {
+      if (this.state.inType && name === "void") {
         return false;
       } else {
         return inner.call(this, name);
@@ -687,7 +687,7 @@ export default function (instance) {
 
   instance.extend("readToken", function (inner) {
     return function (code) {
-      if (this.inType && (code === 62 || code === 60)) {
+      if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
       } else {
         return inner.call(this, code);
@@ -697,7 +697,7 @@ export default function (instance) {
 
   instance.extend("jsx_readToken", function (inner) {
     return function () {
-      if (!this.inType) return inner.call(this);
+      if (!this.state.inType) return inner.call(this);
     };
   });
 
@@ -888,9 +888,8 @@ export default function (instance) {
         // var foo = (foo): number => {};
         let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
 
-        var state = this.state.clone();
-
         if (this.match(tt.colon)) {
+          var state = this.state.clone();
           try {
             return this.parseParenItem(node, startPos, startLoc, true);
           } catch (err) {
