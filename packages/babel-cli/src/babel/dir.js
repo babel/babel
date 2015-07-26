@@ -8,7 +8,7 @@ var fs             = require("fs");
 var _              = require("lodash");
 
 module.exports = function (commander, filenames) {
-  var write = function (src, relative) {
+  function write(src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
@@ -29,9 +29,9 @@ module.exports = function (commander, filenames) {
     outputFileSync(dest, data.code);
 
     util.log(src + " -> " + dest);
-  };
+  }
 
-  var handleFile = function (src, filename) {
+  function handleFile(src, filename) {
     if (util.shouldIgnore(src)) return;
 
     if (util.canCompile(filename, commander.extensions)) {
@@ -39,9 +39,9 @@ module.exports = function (commander, filenames) {
     } else if (commander.copyFiles) {
       outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
     }
-  };
+  }
 
-  var handle = function (filename) {
+  function handle(filename) {
     if (!pathExists.sync(filename)) return;
 
     var stat = fs.statSync(filename);
@@ -56,7 +56,7 @@ module.exports = function (commander, filenames) {
     } else {
       write(filename, filename);
     }
-  };
+  }
 
   _.each(filenames, handle);
 
