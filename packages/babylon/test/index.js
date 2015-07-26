@@ -52,13 +52,9 @@ function runTest(test) {
   if (opts.throws) {
     throw new Error("Expected error message: " + opts.throws + ". But parsing succeeded.");
   } else {
-    try {
-      var mis = misMatch(JSON.parse(test.expect.code), ast);
-    } catch (err) {
-      // save(test, ast);
-      throw err;
-    }
+    var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
+      // save(test, ast);
       throw new Error(mis);
     }
   }

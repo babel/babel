@@ -276,7 +276,7 @@
                         }
                       },
                       "value": "monkeys /> gorillas",
-                      "rawValue": "monkeys /> gorillas",
+                      "rawValue": null,
                       "raw": "monkeys /> gorillas"
                     }
                   ]
@@ -306,6 +306,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

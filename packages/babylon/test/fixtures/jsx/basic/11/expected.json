@@ -136,13 +136,12 @@
                 }
               },
               "value": "@test content",
-              "rawValue": "@test content",
+              "rawValue": null,
               "raw": "@test content"
             }
           ]
         }
       }
     ]
-  },
-  "comments": []
+  }
 }
