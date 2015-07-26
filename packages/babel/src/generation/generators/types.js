@@ -145,7 +145,7 @@ export function _Literal(node) {
   // when we populated raw
   if (node.raw != null && node.rawValue != null && val === node.rawValue) {
     // https://github.com/babel/babel/issues/2078
-    if (node.raw[0] === "'" || node.raw[0] === '"') {
+    if (typeof val !== "string" || node.raw[0] === "'" || node.raw[0] === '"') {
       return node.raw;
     }
   }
