@@ -91,7 +91,8 @@ export default class Tokenizer {
   // TODO
 
   lookahead() {
-    var old = this.state.clone();
+    var old = this.state;
+    this.state = old.clone();
     this.next();
     var curr = this.state.clone();
     this.state = old;
