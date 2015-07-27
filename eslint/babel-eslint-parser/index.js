@@ -369,13 +369,13 @@ exports.attachComments = function (ast, comments, tokens) {
     // fixup program start
     if (!tokens.length) {
       // if no tokens, the program starts at the end of the last comment
-      ast.range[0] = lastComment.range[1];
+      ast.start = lastComment.end;
       ast.loc.start.line = lastComment.loc.end.line;
       ast.loc.start.column = lastComment.loc.end.column;
-    } else if (firstComment.start < tokens[0].range[0]) {
+    } else if (firstComment.start < tokens[0].start) {
       // if there are comments before the first token, the program starts at the first token
       var token = tokens[0];
-      ast.range[0] = token.range[0];
+      ast.start = token.start;
       ast.loc.start.line = token.loc.start.line;
       ast.loc.start.column = token.loc.start.column;
 
@@ -384,7 +384,7 @@ exports.attachComments = function (ast, comments, tokens) {
       if (ast.body.length) {
         var node = ast.body[0];
         node.leadingComments = [];
-        var firstTokenStart = token.range[0];
+        var firstTokenStart = token.start;
         var len = comments.length;
         for (var i = 0; i < len && comments[i].start < firstTokenStart; i++) {
           node.leadingComments.push(comments[i]);
@@ -394,10 +394,10 @@ exports.attachComments = function (ast, comments, tokens) {
     // fixup program end
     if (tokens.length) {
       var lastToken = tokens[tokens.length - 1];
-      if (lastComment.end > lastToken.range[1]) {
+      if (lastComment.end > lastToken.end) {
         // If there is a comment after the last token, the program ends at the
         // last token and not the comment
-        ast.range[1] = lastToken.range[1];
+        ast.end = lastToken.end;
         ast.loc.end.line = lastToken.loc.end.line;
         ast.loc.end.column = lastToken.loc.end.column;
       }
