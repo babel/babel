@@ -4,6 +4,7 @@ var t        = require("babel-core").types;
 
 exports.toToken = function (token) {
   var type = token.type;
+  token.range = [token.start, token.end];
 
   if (type === tt.name) {
     token.type = "Identifier";
@@ -63,6 +64,7 @@ exports.toToken = function (token) {
 
 exports.toAST = function (ast) {
   ast.sourceType = "module";
+  ast.range = [ast.start, ast.end];
   traverse(ast, astTransformVisitor);
 };
 
