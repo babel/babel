@@ -65,7 +65,6 @@ getBindingIdentifiers.keys = {
   ClassDeclaration: "id",
   ClassExpression: "id",
 
-  SpreadElement: "argument",
   RestElement: "argument",
   UpdateExpression: "argument",
 
