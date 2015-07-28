@@ -108,8 +108,8 @@ export default function (lines: number, lineNumber: number, colNumber: number, o
   }).join("\n");
 
   if (highlighted) {
-    frame = chalk.reset() + frame;
+    return chalk.reset(frame);
+  } else {
+    return frame;
   }
-
-  return frame;
 }
