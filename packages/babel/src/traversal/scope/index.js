@@ -1038,7 +1038,18 @@ export default class Scope {
    */
 
   removeBinding(name: string) {
+    // clear literal binding
     var info = this.getBinding(name);
-    if (info) info.scope.removeOwnBinding(name);
+    if (info) {
+      info.scope.removeOwnBinding(name);
+    }
+
+    // clear uids with this name - https://github.com/babel/babel/issues/2101
+    var scope = this;
+    do {
+      if (scope.uids[name]) {
+        scope.uids[name] = false;
+      }
+    } while(scope = scope.parent);
   }
 }
