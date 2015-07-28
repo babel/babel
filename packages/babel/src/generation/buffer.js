@@ -270,6 +270,8 @@ export default class Buffer {
           this.indent();
           parenPushNewlineState.printed = true;
         }
+        
+        break;
       }
     }
 
