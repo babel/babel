@@ -24,7 +24,7 @@ function getDeclar(node) {
  */
 
 function buildExportSpecifier(id) {
-  return t.exportSpecifier(clone(id), clone(id));
+  return t.exportSpecifier(t.identifier(id.name), t.identifier(id.name));
 }
 
 export var metadata = {
