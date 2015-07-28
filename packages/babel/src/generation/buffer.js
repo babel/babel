@@ -264,7 +264,7 @@ export default class Buffer {
 
         this.parenPushNewlineState = null;
 
-        if (cha === "\n") {
+        if (cha === "\n" || cha === "/") {
           // we're going to break this terminator expression so we need to add a parentheses
           this._push("(");
           this.indent();
