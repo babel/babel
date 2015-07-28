@@ -333,14 +333,14 @@ export default class DefaultFormatter {
   getModuleName() {
     var opts = this.file.opts;
     // moduleId is n/a if a `getModuleId()` is provided
-    if (opts.moduleId && !opts.getModuleId) {
+    if (opts.moduleId != null && !opts.getModuleId) {
       return opts.moduleId;
     }
 
     var filenameRelative = opts.filenameRelative;
     var moduleName = "";
 
-    if (opts.moduleRoot) {
+    if (opts.moduleRoot != null) {
       moduleName = opts.moduleRoot + "/";
     }
 
@@ -348,7 +348,7 @@ export default class DefaultFormatter {
       return moduleName + opts.filename.replace(/^\//, "");
     }
 
-    if (opts.sourceRoot) {
+    if (opts.sourceRoot != null) {
       // remove sourceRoot from filename
       var sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
       filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
