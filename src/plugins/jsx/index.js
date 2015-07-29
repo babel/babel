@@ -228,9 +228,10 @@ pp.jsxParseElementName = function() {
 // Parses any type of JSX attribute value.
 
 pp.jsxParseAttributeValue = function() {
+  var node;
   switch (this.state.type) {
     case tt.braceL:
-      let node = this.jsxParseExpressionContainer();
+      node = this.jsxParseExpressionContainer();
       if (node.expression.type === "JSXEmptyExpression") {
         this.raise(node.start, "JSX attributes must only be assigned a non-empty expression");
       } else {
@@ -239,7 +240,7 @@ pp.jsxParseAttributeValue = function() {
 
     case tt.jsxTagStart:
     case tt.string:
-      let node = this.parseExprAtom();
+      node = this.parseExprAtom();
       node.rawValue = null;
       return node;
 
