@@ -153,27 +153,30 @@ export default class Pipeline {
    */
 
   _ensureTransformerNames(type: string, rawKeys: Array<string>) {
-    return rawKeys.reduce((prev, key) => {
+    var keys = [];
+
+    for (var i = 0; i < rawKeys.length; i++) {
+      var key = rawKeys[i];
       var deprecatedKey = this.deprecated[key];
       var aliasKey = this.aliases[key];
       if (aliasKey) {
-        prev.push(aliasKey);
+        keys.push(aliasKey);
       } else if (deprecatedKey) {
         // deprecated key, remap it to the new one
         console.error(`[BABEL] The transformer ${key} has been renamed to ${deprecatedKey}`);
-        prev.push(deprecatedKey);
+        rawKeys.push(deprecatedKey);
       } else if (this.transformers[key]) {
         // valid key
-        prev.push(key);
+        keys.push(key);
       } else if (this.namespaces[key]) {
         // namespace, append all transformers within this namespace
-        prev = prev.concat(this.namespaces[key]);
+        keys = keys.concat(this.namespaces[key]);
       } else {
         // invalid key
         throw new ReferenceError(`Unknown transformer ${key} specified in ${type}`);
       }
+    }
 
-      return prev;
-    }, []);
+    return keys;
   }
 }
