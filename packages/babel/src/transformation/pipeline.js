@@ -155,7 +155,7 @@ export default class Pipeline {
    */
 
   _ensureTransformerNames(type: string, rawKeys: Array<string>) {
-    return rawKeys.reduce((prev, key, i) => {
+    return rawKeys.reduce((prev, key) => {
       var deprecatedKey = this.deprecated[key];
       var aliasKey = this.aliases[key];
       if (aliasKey) {
