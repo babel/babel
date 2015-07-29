@@ -102,17 +102,17 @@ export function ArrayExpression(node, print) {
 
   for (var i = 0; i < elems.length; i++) {
     var elem = elems[i];
-    if (!elem) {
+    if (elem) {
+      if (i > 0) this.space();
+      print.plain(elem);
+      if (i < len - 1) this.push(",");
+    } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
       this.push(",");
-    } else {
-      if (i > 0) this.space();
-      print.plain(elem);
-      if (i < len - 1) this.push(",");
     }
   }
 
