@@ -419,7 +419,7 @@ export default class DefaultFormatter {
    */
 
   checkExportIdentifier(node) {
-    if (node.loc && t.isIdentifier(node, { name: "__esModule" })) {
+    if (t.isIdentifier(node, { name: "__esModule" })) {
       throw this.file.errorWithNode(node, messages.get("modulesIllegalExportName", node.name));
     }
   }
