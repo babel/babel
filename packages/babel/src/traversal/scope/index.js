@@ -187,19 +187,14 @@ var renameVisitor = {
     if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
       this.skip();
     }
-  }
-};
+  },
 
-/**
- * [Please add a description.]
- */
+  "AssignmentExpression|Declaration"(node, parent, scope, state) {
+    var ids = this.getBindingIdentifiers();
 
-renameVisitor.AssignmentExpression =
-renameVisitor.Declaration = function (node, parent, scope, state) {
-  var ids = this.getBindingIdentifiers();
-
-  for (var name in ids) {
-    if (name === state.oldName) ids[name].name = state.newName;
+    for (var name in ids) {
+      if (name === state.oldName) ids[name].name = state.newName;
+    }
   }
 };
 
@@ -237,11 +232,13 @@ export default class Scope {
   /**
    * Globals.
    */
+
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
 
   /**
    * Variables available in current context.
    */
+
   static contextVariables = [
     "arguments",
     "undefined",
@@ -555,14 +552,7 @@ export default class Scope {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
       var binding = this.getBinding(name);
-      if (!binding) continue;
-
-      if (right) {
-        var rightType = right.typeAnnotation;
-        if (rightType && binding.isCompatibleWithType(rightType)) continue;
-      }
-
-      binding.reassign(root, left, right);
+      if (binding) binding.reassign(root, left, right);
     }
   }
 
