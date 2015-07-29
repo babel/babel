@@ -155,7 +155,7 @@ export default class Pipeline {
    */
 
   _ensureTransformerNames(type: string, rawKeys: Array<string>) {
-    return rawKeys.reduce((prev, key, i, arr) => {
+    return rawKeys.reduce((prev, key, i) => {
       var deprecatedKey = this.deprecated[key];
       var aliasKey = this.aliases[key];
       if (aliasKey) {
@@ -163,7 +163,7 @@ export default class Pipeline {
       } else if (deprecatedKey) {
         // deprecated key, remap it to the new one
         console.error(`[BABEL] The transformer ${key} has been renamed to ${deprecatedKey}`);
-        arr.push(deprecatedKey);
+        prev.push(deprecatedKey);
       } else if (this.transformers[key]) {
         // valid key
         prev.push(key);
