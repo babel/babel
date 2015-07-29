@@ -11,6 +11,9 @@ var VERSION_LOC = __dirname + "/../VERSION";
 var CURRENT_VERSION = fs.readFileSync(VERSION_LOC, "utf8").trim();
 console.log("Current version:", CURRENT_VERSION);
 
+var FORCE_VERSION = process.env.FORCE_VERSION;
+FORCE_VERSION = FORCE_VERSION ? FORCE_VERSION.split(",") || [];
+
 //
 
 function getVersion() {
@@ -54,71 +57,90 @@ function getPackageLocation(name) {
 
 //
 
-var packageNames = fs.readdirSync(PACKAGE_LOC).filter(function (name) {
-  return name[0] !== ".";
-});
+function publish() {
+  var packageNames = fs.readdirSync(PACKAGE_LOC).filter(function (name) {
+    return name[0] !== ".";
+  });
 
-var lastTagCommit = exec("git rev-list --tags --max-count=1");
-var lastTag       = exec("git describe " + lastTagCommit);
+  var lastTagCommit = exec("git rev-list --tags --max-count=1");
+  var lastTag       = exec("git describe " + lastTagCommit);
 
-var changedPackages = [];
-var changedFiles = [VERSION_LOC];
+  var changedPackages = [];
+  var changedFiles = [VERSION_LOC];
 
-packageNames.forEach(function (name) {
-  // check if package has changed since last release
-  var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
-  if (diff || process.env.FORCE_VERSION) {
-    console.log("Changes detected to package", name);
-    changedPackages.push(name);
-  }
-});
-
-//
-
-changedPackages.forEach(function (name) {
-  var loc = getPackageLocation(name);
-  var pkgLoc = loc + "/package.json";
-  var pkg = require(pkgLoc);
-
-  // set new version
-  pkg.version = NEW_VERSION;
-
-  // updated dependencies
-  for (var depName in pkg.dependencies) {
-    if (changedPackages.indexOf(depName) >= 0) {
-      pkg.dependencies[depName] = "^" + NEW_VERSION;
+  packageNames.forEach(function (name) {
+    // check if package has changed since last release
+    var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
+    if (diff || FORCE_VERSION.indexOf("*") >= 0 || FORCE_VERSION.indexOf(name) >= 0) {
+      console.log("Changes detected to package", name);
+      changedPackages.push(name);
     }
+  });
+
+  if (!changedPackages.length) {
+    throw new Error("No packages changed.");
   }
 
-  // write new package
-  fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
+  //
 
-  // push to be git committed
-  changedFiles.push(pkgLoc);
-});
+  changedPackages.forEach(function (name) {
+    var loc = getPackageLocation(name);
+    var pkgLoc = loc + "/package.json";
+    var pkg = require(pkgLoc);
 
-changedFiles.forEach(function (loc) {
-  exec("git add " + loc, true);
-});
+    // set new version
+    pkg.version = NEW_VERSION;
 
-var NEW_TAG_NAME = "v" + NEW_VERSION;
-exec("git commit -m " + NEW_TAG_NAME, true);
-exec("git tag " + NEW_TAG_NAME, true);
-exec("git push --tags", true);
+    // updated dependencies
+    for (var depName in pkg.dependencies) {
+      if (changedPackages.indexOf(depName) >= 0) {
+        pkg.dependencies[depName] = "^" + NEW_VERSION;
+      }
+    }
 
-exec("make build-dist");
+    // write new package
+    fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
 
-changedPackages.forEach(function (name) {
-  // prepublish script
-  var prePub = getPackageLocation(name) + "/scripts/prepublish.js";
-  if (fs.existsSync(prePub)) require(prePub);
-});
+    // push to be git committed
+    changedFiles.push(pkgLoc);
+  });
 
-changedPackages.forEach(function (name) {
-  var loc = getPackageLocation(name);
-  exec("cd " + loc + " && npm publish", true);
+  changedFiles.forEach(function (loc) {
+    exec("git add " + loc, true);
+  });
 
-  // postpublish script
-  var postPub = loc + "/scripts/postpublish.js";
-  if (fs.existsSync(postPub)) require(postPub);
-});
+  var NEW_TAG_NAME = "v" + NEW_VERSION;
+  exec("git commit -m " + NEW_TAG_NAME, true);
+  exec("git tag " + NEW_TAG_NAME, true);
+
+  exec("make build-dist");
+
+  changedPackages.forEach(function (name) {
+    // prepublish script
+    var prePub = getPackageLocation(name) + "/scripts/prepublish.js";
+    if (fs.existsSync(prePub)) require(prePub);
+  });
+
+  changedPackages.forEach(function (name) {
+    var loc = getPackageLocation(name);
+    exec("cd " + loc + " && npm publish", true);
+
+    // postpublish script
+    var postPub = loc + "/scripts/postpublish.js";
+    if (fs.existsSync(postPub)) require(postPub);
+  });
+}
+
+var originalCommit = exec("");
+
+try {
+  publish();
+} catch (err) {
+  // todo: unpublish npm packages already created
+  console.log(err.stack);
+  console.log("Rolling back to commit", originalCommit, "...");
+  exec("git checkout --hard " + originalCommit, true);
+  return;
+}
+
+exec("git push --follow-tags", true);
