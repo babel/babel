@@ -1,6 +1,6 @@
 {
   "name": "babel-runtime",
-  "version": "5.8.17",
+  "version": "5.8.18",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "babel/babel",
