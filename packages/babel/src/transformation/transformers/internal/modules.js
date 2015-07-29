@@ -23,7 +23,13 @@ function getDeclar(node) {
  */
 
 function buildExportSpecifier(id) {
-  return t.exportSpecifier(t.identifier(id.name), t.identifier(id.name));
+  return t.exportSpecifier(cloneIdentifier(id), cloneIdentifier(id));
+}
+
+function cloneIdentifier({ name, loc }) {
+  var id = t.identifier(name);
+  id._loc = loc;
+  return id;
 }
 
 export var metadata = {
@@ -84,13 +90,9 @@ export var visitor = {
       return nodes;
     } else if (t.isFunctionDeclaration(declar)) {
       // export function Foo() {}
-
-      let nodes = [
-        getDeclar(node),
-        t.exportNamedDeclaration(null, [buildExportSpecifier(declar.id)])
-      ];
-      nodes[1]._blockHoist = 2; // ensure it's hoisted
-      return nodes;
+      var newExport = t.exportNamedDeclaration(null, [buildExportSpecifier(declar.id)]);
+      newExport._blockHoist = 2;
+      return [getDeclar(node), newExport];
     } else if (t.isVariableDeclaration(declar)) {
       // export var foo = "bar";
       var specifiers = [];
