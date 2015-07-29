@@ -180,7 +180,7 @@
                     }
                   },
                   "value": " ",
-                  "rawValue": " ",
+                  "rawValue": null,
                   "raw": "\" \""
                 }
               },
@@ -229,7 +229,7 @@
                     }
                   },
                   "value": "&",
-                  "rawValue": "&",
+                  "rawValue": null,
                   "raw": "\"&amp;\""
                 }
               },
@@ -278,7 +278,7 @@
                     }
                   },
                   "value": "&ampr;",
-                  "rawValue": "&ampr;",
+                  "rawValue": null,
                   "raw": "\"&ampr;\""
                 }
               }
@@ -306,6 +306,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

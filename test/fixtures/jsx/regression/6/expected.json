@@ -116,7 +116,7 @@
                     }
                   },
                   "value": "leading",
-                  "rawValue": "leading",
+                  "rawValue": null,
                   "raw": "\"leading\""
                 }
               },
@@ -175,6 +175,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

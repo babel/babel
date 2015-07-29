@@ -213,7 +213,7 @@
                         }
                       },
                       "value": "test",
-                      "rawValue": "test",
+                      "rawValue": null,
                       "raw": "\"test\""
                     }
                   }

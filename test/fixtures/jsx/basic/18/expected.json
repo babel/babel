@@ -147,7 +147,7 @@
                     }
                   },
                   "value": "attribute",
-                  "rawValue": "attribute",
+                  "rawValue": null,
                   "raw": "\"attribute\""
                 }
               }
@@ -175,6 +175,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }
