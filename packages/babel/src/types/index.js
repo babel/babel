@@ -144,7 +144,6 @@ each(t.VISITOR_KEYS, function (keys, type) {
 each(t.BUILDER_KEYS, function (keys, type) {
   var builder = function () {
     var node = {};
-    node.start = null;
     node.type = type;
 
     var i = 0;
