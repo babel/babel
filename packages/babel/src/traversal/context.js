@@ -10,8 +10,9 @@ export default class TraversalContext {
     this.scope      = scope;
     this.state      = state;
     this.opts       = opts;
-    this.queue      = null;
   }
+
+  queue = null;
 
   /**
    * [Please add a description.]
