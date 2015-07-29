@@ -1,5 +1,5 @@
 if (global._babelPolyfill) {
-  throw new Error("only one instance of babel/polyfill is allowed");
+  throw new Error("uh, um– I CAN'T TRANSPILE UNDER ALL THIS PRESSURE!!!");
 }
 global._babelPolyfill = true;
 
