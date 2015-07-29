@@ -10,13 +10,11 @@ import File from "./file";
  */
 
 export default class Pipeline {
-  constructor() {
-    this.transformers = object();
-    this.namespaces   = object();
-    this.deprecated   = object();
-    this.aliases      = object();
-    this.filters      = [];
-  }
+  transformers = object();
+  namespaces   = object();
+  deprecated   = object();
+  aliases      = object();
+  filters      = [];
 
   /**
    * [Please add a description.]
