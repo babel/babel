@@ -540,8 +540,13 @@ export default class Scope {
       }
     } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
-    } else if (path.isImportDeclaration() || path.isExportDeclaration()) {
-      this.registerBinding("module", path);
+    } else if (path.isImportDeclaration()) {
+      var specifiers = path.get("specifiers");
+      for (var specifier of (specifiers: Array)) {
+        this.registerBinding("module", specifier);
+      }
+    } else if (path.isExportDeclaration()) {
+      this.registerBinding("module", path.get("declaration"));
     } else {
       this.registerBinding("unknown", path);
     }
