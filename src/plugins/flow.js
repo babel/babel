@@ -493,6 +493,11 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "StringLiteralTypeAnnotation");
 
+    case tt._true: case tt._false:
+      node.value = this.match(tt._true)
+      this.next();
+      return this.finishNode(node, "BooleanLiteralTypeAnnotation");
+
     case tt.num:
       node.rawValue = node.value = this.state.value;
       node.raw = this.input.slice(this.state.start, this.state.end);
