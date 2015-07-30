@@ -27,6 +27,14 @@ export function BooleanTypeAnnotation(node) {
 }
 
 /**
+ * Prints BooleanLiteralTypeAnnotation.
+ */
+
+export function BooleanLiteralTypeAnnotation(node) {
+  this.push(node.value ? "true" : "false");
+}
+
+/**
  * Prints DeclareClass, prints node.
  */
 
