@@ -627,9 +627,9 @@ pp.parseExport = function (node) {
       specifier.exported = this.parseIdent();
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
       this.parseExportSpecifiersMaybe(node);
-      this.parseExportFrom(node);
+      this.parseExportFrom(node, true);
     } else {
-      this.parseExportFrom(node);
+      this.parseExportFrom(node, true);
       return this.finishNode(node, "ExportAllDeclaration");
     }
   } else if (this.options.features["es7.exportExtensions"] && this.isExportDefaultSpecifier()) {
@@ -646,7 +646,7 @@ pp.parseExport = function (node) {
     } else {
       this.parseExportSpecifiersMaybe(node);
     }
-    this.parseExportFrom(node);
+    this.parseExportFrom(node, true);
   } else if (this.eat(tt._default)) { // export default ...
     let expr = this.parseMaybeAssign();
     let needsSemi = true;
@@ -661,21 +661,20 @@ pp.parseExport = function (node) {
     this.checkExport(node);
     return this.finishNode(node, "ExportDefaultDeclaration");
   } else if (this.state.type.keyword || this.shouldParseExportDeclaration()) {
-    node.declaration = this.parseStatement(true);
     node.specifiers = [];
     node.source = null;
+    node.declaration = this.parseExportDeclaration(node);
   } else { // export { x, y as z } [from '...']
     node.declaration = null;
     node.specifiers = this.parseExportSpecifiers();
-    if (this.eatContextual("from")) {
-      node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
-    } else {
-      node.source = null;
-    }
-    this.semicolon();
+    this.parseExportFrom(node);
   }
   this.checkExport(node);
   return this.finishNode(node, "ExportNamedDeclaration");
+};
+
+pp.parseExportDeclaration = function () {
+  return this.parseStatement(true);
 };
 
 pp.isExportDefaultSpecifier = function () {
@@ -697,11 +696,19 @@ pp.parseExportSpecifiersMaybe = function (node) {
   }
 };
 
-pp.parseExportFrom = function (node) {
-  this.expectContextual("from");
-  node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
+pp.parseExportFrom = function (node, expect?) {
+  if (this.eatContextual("from")) {
+    node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
+    this.checkExport(node);
+  } else {
+    if (expect) {
+      this.unexpected();
+    } else {
+      node.source = null;
+    }
+  }
+
   this.semicolon();
-  this.checkExport(node);
 };
 
 pp.shouldParseExportDeclaration = function () {
