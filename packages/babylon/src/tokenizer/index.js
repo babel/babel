@@ -47,12 +47,6 @@ function codePointToString(code) {
   return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
 }
 
-// Used to signal to callers of `readWord1` whether the word
-// contained any escape sequences. This is needed because words with
-// escape sequences must not be interpreted as keywords.
-
-var containsEsc;
-
 export default class Tokenizer {
   constructor(input) {
     this.state = new State;
@@ -730,21 +724,21 @@ export default class Tokenizer {
     return n;
   }
 
-  // Read an identifier, and return it as a string. Sets `containsEsc`
+  // Read an identifier, and return it as a string. Sets `this.state.containsEsc`
   // to whether the word contained a '\u' escape.
   //
   // Incrementally adds only escaped chars, adding other chunks as-is
   // as a micro-optimization.
 
   readWord1() {
-    containsEsc = false;
+    this.state.containsEsc = false;
     let word = "", first = true, chunkStart = this.state.pos;
     while (this.state.pos < this.input.length) {
       let ch = this.fullCharCodeAtPos();
       if (isIdentifierChar(ch, true)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (ch === 92) { // "\"
-        containsEsc = true;
+        this.state.containsEsc = true;
 
         word += this.input.slice(chunkStart, this.state.pos);
         let escStart = this.state.pos;
@@ -775,7 +769,7 @@ export default class Tokenizer {
   readWord() {
     let word = this.readWord1();
     let type = tt.name;
-    if (!containsEsc && this.isKeyword(word))
+    if (!this.state.containsEsc && this.isKeyword(word))
       type = keywordTypes[word];
     return this.finishToken(type, word);
   }
