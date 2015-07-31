@@ -20,6 +20,7 @@ export default function (code, opts = {}) {
   if (opts.nonStandard) {
     parseOpts.plugins.jsx = true;
     parseOpts.plugins.flow = true;
+    parseOpts.plugins.angular = true;
   }
 
   return babylon.parse(code, parseOpts);

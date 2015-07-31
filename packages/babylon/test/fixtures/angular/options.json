@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": { "flow": true, "angular": true },
+  "features": { "es7.decorators": true }
+}
