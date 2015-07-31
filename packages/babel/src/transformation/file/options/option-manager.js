@@ -51,14 +51,14 @@ export default class OptionManager {
    * [Please add a description.]
    */
 
-  addConfig(loc, key?) {
+  addConfig(loc, key?, json=json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
 
     var content = fs.readFileSync(loc, "utf8");
     var opts;
 
     try {
-      opts = jsonCache[content] = jsonCache[content] || json5.parse(content);
+      opts = jsonCache[content] = jsonCache[content] || json.parse(content);
       if (key) opts = opts[key];
     } catch (err) {
       err.message = `${loc}: Error while parsing JSON - ${err.message}`;
@@ -125,7 +125,7 @@ export default class OptionManager {
       if (exists(configLoc)) this.addConfig(configLoc);
 
       var pkgLoc = path.join(loc, PACKAGE_FILENAME);
-      if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel");
+      if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel", JSON);
 
       var ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
       if (exists(ignoreLoc)) this.addIgnoreConfig(ignoreLoc);
