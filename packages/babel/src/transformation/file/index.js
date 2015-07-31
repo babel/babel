@@ -85,6 +85,7 @@ export default class File {
     "extends",
     "get",
     "set",
+    "new-arrow-check",
     "class-call-check",
     "object-destructuring-empty",
     "temporal-undefined",
