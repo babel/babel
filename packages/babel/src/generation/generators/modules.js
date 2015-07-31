@@ -94,6 +94,10 @@ function ExportDeclaration(node, print) {
     print.plain(declar);
     if (t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar)) return;
   } else {
+    if (node.exportKind === "type") {
+      this.push("type ");
+    }
+
     var first = specifiers[0];
     var hasSpecial = false;
     if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {

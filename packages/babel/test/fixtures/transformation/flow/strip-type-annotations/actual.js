@@ -95,3 +95,5 @@ import type { foo as bar2 } from "baz";
 import type from "foo";
 import type2, { foo3 } from "bar";
 import type * as namespace from "bar";
+export type { foo };
+export type { foo } from "bar";
