@@ -13,6 +13,7 @@ export default {
   "minification.deadCodeElimination":      require("babel-plugin-dead-code-elimination"),
   _modules:                                require("./internal/modules"),
   "react.displayName":                     require("babel-plugin-react-display-name"),
+  "es6.spec.modules":                      require("./es6/spec.modules"),
   "es6.spec.arrowFunctions":               require("./es6/spec.arrow-functions"),
   "es6.spec.templateLiterals":             require("./es6/spec.template-literals"),
   "es6.templateLiterals":                  require("./es6/template-literals"),
