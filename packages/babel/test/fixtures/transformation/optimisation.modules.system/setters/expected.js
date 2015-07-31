@@ -7,7 +7,7 @@ System.register(["foo", "bar"], function (_export) {
       var _exportObj = {};
 
       for (var _key in _foo) {
-        _exportObj[_key] = _foo[_key];
+        if (_key !== "default") _exportObj[_key] = _foo[_key];
       }
 
       _exportObj["foo"] = _foo.foo;

@@ -297,7 +297,10 @@ export default class DefaultFormatter {
   buildExportsWildcard(objectIdentifier) {
     return t.expressionStatement(t.callExpression(this.file.addHelper("defaults"), [
       t.identifier("exports"),
-      t.callExpression(this.file.addHelper("interop-require-wildcard"), [objectIdentifier])
+      t.callExpression(this.file.addHelper("interop-export-wildcard"), [
+        objectIdentifier,
+        this.file.addHelper("defaults")
+      ])
     ]));
   }
 
