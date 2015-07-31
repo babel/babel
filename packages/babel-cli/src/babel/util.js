@@ -47,10 +47,23 @@ exports.compile = function (filename, opts) {
     return exports.transform(filename, code, opts);
   } catch (err) {
     if (commander.watch) {
-      console.error(err.stack);
+      console.error(toErrorStack(err));
       return { ignored: true };
     } else {
       throw err;
     }
   }
 };
+
+function toErrorStack(err) {
+  if (err._babel && err instanceof SyntaxError) {
+    return err.message + "\n" + err.codeFrame;
+  } else {
+    return err.stack;
+  }
+};
+
+process.on("uncaughtException", function (err) {
+  console.error(toErrorStack(err));
+  process.exit(1);
+});
