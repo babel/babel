@@ -12,7 +12,7 @@ var CURRENT_VERSION = fs.readFileSync(VERSION_LOC, "utf8").trim();
 console.log("Current version:", CURRENT_VERSION);
 
 var FORCE_VERSION = process.env.FORCE_VERSION;
-FORCE_VERSION = FORCE_VERSION ? FORCE_VERSION.split(",") || [];
+FORCE_VERSION = FORCE_VERSION ? FORCE_VERSION.split(",") : [];
 
 //
 
