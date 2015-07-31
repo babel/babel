@@ -57,11 +57,11 @@ exports.compile = function (filename, opts) {
 
 function toErrorStack(err) {
   if (err._babel && err instanceof SyntaxError) {
-    return err.message + "\n" + err.codeFrame;
+    return `${err.name}: ${err.message}\n${err.codeFrame}`;
   } else {
     return err.stack;
   }
-};
+}
 
 process.on("uncaughtException", function (err) {
   console.error(toErrorStack(err));
