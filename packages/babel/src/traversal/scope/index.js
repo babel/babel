@@ -543,7 +543,10 @@ export default class Scope {
         this.registerBinding("module", specifier);
       }
     } else if (path.isExportDeclaration()) {
-      this.registerDeclaration(path.get("declaration"));
+      var declar = path.get("declaration");
+      if (declar.isClassDeclaration() || declar.isFunctionDeclaration() || declar.isVariableDeclaration()) {
+        this.registerDeclaration(declar);
+      }
     } else {
       this.registerBinding("unknown", path);
     }
