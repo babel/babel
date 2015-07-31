@@ -532,7 +532,7 @@ export default class Scope {
       this.registerBinding("hoisted", path);
     } else if (path.isVariableDeclaration()) {
       var declarations = path.get("declarations");
-      for (var declar of (declarations: Array)) {
+      for (let declar of (declarations: Array)) {
         this.registerBinding(path.node.kind, declar);
       }
     } else if (path.isClassDeclaration()) {
@@ -543,7 +543,7 @@ export default class Scope {
         this.registerBinding("module", specifier);
       }
     } else if (path.isExportDeclaration()) {
-      var declar = path.get("declaration");
+      let declar = path.get("declaration");
       if (declar.isClassDeclaration() || declar.isFunctionDeclaration() || declar.isVariableDeclaration()) {
         this.registerDeclaration(declar);
       }
