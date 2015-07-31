@@ -55,6 +55,7 @@
     "home-or-tmp": "^1.0.0",
     "is-integer": "^1.0.4",
     "js-tokens": "1.0.1",
+    "json5": "^0.4.0",
     "line-numbers": "0.2.0",
     "lodash": "^3.10.0",
     "minimatch": "^2.0.3",
@@ -70,7 +71,6 @@
     "slash": "^1.0.0",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.10",
-    "strip-json-comments": "^1.0.2",
     "to-fast-properties": "^1.0.0",
     "trim-right": "^1.0.0",
     "try-resolve": "^1.0.0"

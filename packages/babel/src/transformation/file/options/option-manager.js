@@ -1,5 +1,5 @@
 import { validateOption, normaliseOptions } from "./index";
-import stripJsonComments from "strip-json-comments";
+import json5 from "json5";
 import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
 import clone from "lodash/lang/clone";
@@ -58,10 +58,10 @@ export default class OptionManager {
     var opts;
 
     try {
-      opts = jsonCache[content] = jsonCache[content] || JSON.parse(stripJsonComments(content));
+      opts = jsonCache[content] = jsonCache[content] || json5.parse(content);
       if (key) opts = opts[key];
     } catch (err) {
-      err.message = `${loc}: ${err.message}`;
+      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
       throw err;
     }
 
@@ -178,7 +178,9 @@ export default class OptionManager {
     }
 
     // resolve all .babelrc files
-    this.findConfigs(opts.filename);
+    if (opts.babelrc !== false) {
+      this.findConfigs(opts.filename);
+    }
 
     // merge in env
     var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
