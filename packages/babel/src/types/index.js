@@ -39,7 +39,8 @@ export const INHERIT_KEYS = {
 };
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
-export const COMPARISON_BINARY_OPERATORS     = ["==", "===", "!=", "!==", "in", "instanceof"];
+export const EQUALITY_BINARY_OPERATORS       = ["==", "===", "!=", "!=="];
+export const COMPARISON_BINARY_OPERATORS     = EQUALITY_BINARY_OPERATORS.concat(["in", "instanceof"]);
 export const BOOLEAN_BINARY_OPERATORS        = [].concat(COMPARISON_BINARY_OPERATORS, BOOLEAN_NUMBER_BINARY_OPERATORS);
 export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 
