@@ -126,7 +126,7 @@ var cmds = {
 
   publish: function () {
     var pkg = require(process.cwd() + "/package.json");
-    console.log("Current verison:", pkg.version);
+    console.log("Current version:", pkg.version);
 
     rl.question("New version (enter nothing for patch): ", function (newVersion) {
       rl.close();
