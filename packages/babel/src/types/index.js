@@ -318,12 +318,28 @@ export function removeComments(node: Object): Object {
  */
 
 export function inheritsComments(child: Object, parent: Object): Object {
-  if (child && parent) {
-    for (var key of (COMMENT_KEYS: Array)) {
-      child[key] = uniq(compact([].concat(child[key], parent[key])));
-    }
-  }
+  inheritTrailingComments(child, parent);
+  inheritLeadingComments(child, parent);
+  inheritInnerComments(child, parent);
   return child;
+}
+
+export function inheritTrailingComments(child, parent) {
+  _inheritComments("trailingComments", child, parent);
+}
+
+export function inheritLeadingComments(child, parent) {
+  _inheritComments("leadingComments", child, parent);
+}
+
+export function inheritInnerComments(child, parent) {
+  _inheritComments("innerComments", child, parent);
+}
+
+function _inheritComments(key, child, parent) {
+  if (child && parent) {
+    child[key] = uniq(compact([].concat(child[key], parent[key])));
+  }
 }
 
 /**
