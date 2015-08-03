@@ -82,7 +82,7 @@ var cmds = {
 
       write("package.json", JSON.stringify({
         name: templateData.FULL_NAME,
-        version: "1.0.0",
+        version: "0.0.0",
         description: templateData.DESCRIPTION,
         repository: repo || undefined,
         license: "MIT",
