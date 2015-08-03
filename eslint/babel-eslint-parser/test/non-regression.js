@@ -39,7 +39,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "module.exports = \"something\";",
       { "eol-last": 1, "semi": 1 },
-      [ "1:1 Newline required at end of file but not found. eol-last" ]
+      [ "1:2 Newline required at end of file but not found. eol-last" ]
     );
   });
 
@@ -47,7 +47,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "{ , res }",
       {},
-      [ "1:2 Unexpected token" ]
+      [ "1:3 Unexpected token" ]
     );
   });
 
@@ -108,10 +108,11 @@ describe("verify", function () {
     );
   });
 
+  // fix after updating to ESLint 1.0.0
   it("Arrow function with non-block bodies (issue #20)", function () {
     verifyAndAssertMessages(
       "\"use strict\"; () => 1",
-      { "strict": 1 },
+      { "strict": [1, "global"] },
       []
     );
   });
@@ -355,8 +356,8 @@ describe("verify", function () {
           "var b: T = 1; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:20 T is defined but never used no-unused-vars",
-          '2:7 "T" is not defined. no-undef' ]
+        [ "1:21 T is defined but never used no-unused-vars",
+          '2:8 "T" is not defined. no-undef' ]
       );
     });
 
@@ -366,7 +367,7 @@ describe("verify", function () {
           "export class Foo extends Bar<T> {}",
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ '2:29 "T" is not defined. no-undef' ]
+        [ '2:30 "T" is not defined. no-undef' ]
       );
     });
 
@@ -1171,7 +1172,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "var unused;",
       { "no-unused-vars": 1 },
-      [ "1:4 unused is defined but never used no-unused-vars" ]
+      [ "1:5 unused is defined but never used no-unused-vars" ]
     );
   });
 
@@ -1187,7 +1188,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ "1:7 Bacona is defined but never used no-unused-vars" ]
+      [ "1:8 Bacona is defined but never used no-unused-vars" ]
     );
   });
 
