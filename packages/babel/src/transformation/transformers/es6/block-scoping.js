@@ -209,7 +209,8 @@ var letReferenceFunctionVisitor = {
 
     // this scope has a variable with the same name so it couldn't belong
     // to our let scope
-    if (scope.getBindingIdentifier(node.name) !== ref) return;
+    var localBinding = scope.getBindingIdentifier(node.name);
+    if (localBinding && localBinding !== ref) return;
 
     state.closurify = true;
   }
