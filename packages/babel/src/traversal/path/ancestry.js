@@ -183,7 +183,7 @@ export function inType() {
 
 export function inShadow(key?) {
   var path = this;
-  while (path) {
+  do {
     if (path.isFunction()) {
       var shadow = path.node.shadow;
       if (shadow || path.isArrowFunctionExpression()) {
@@ -192,7 +192,7 @@ export function inShadow(key?) {
         //   { this: false }
         //
         // we need to catch this case if `inShadow` has been passed a `key`
-        if (!key || shadow[key] !== false) {
+        if (!key || !shadow || shadow[key] !== false) {
           return path;
         }
       }
@@ -200,7 +200,6 @@ export function inShadow(key?) {
       // normal function, we've found our function context
       return null;
     }
-    path = path.parentPath;
-  }
+  } while(path = path.parentPath);
   return null;
 }
