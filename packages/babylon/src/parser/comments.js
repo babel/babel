@@ -45,7 +45,7 @@ pp.processComment = function (node) {
   if (this.state.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
     // current node, then we're good - all comments in the array will
-    // come after the node and so it's safe to add then as official
+    // come after the node and so it's safe to add them as official
     // trailingComments.
     if (this.state.trailingComments[0].start >= node.end) {
       trailingComments = this.state.trailingComments;
@@ -98,7 +98,7 @@ pp.processComment = function (node) {
       //
       // In special cases, such as return (without a value) and
       // debugger, all comments will end up as leadingComments and
-      // will otherwise be eliminated. This this step runs when the
+      // will otherwise be eliminated. This step runs when the
       // commentStack is empty and there are comments left
       // in leadingComments.
       //
