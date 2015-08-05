@@ -837,12 +837,19 @@ export default function (instance) {
   instance.extend("parseObjPropValue", function (inner) {
     return function (prop) {
       var typeParameters;
+
+      // method shorthand
       if (this.isRelational("<")) {
         typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
+
       inner.apply(this, arguments);
-      prop.value.typeParameters = typeParameters;
+
+      // add typeParameters if we found them
+      if (typeParameters) {
+        prop.value.typeParameters = typeParameters;
+      }
     };
   });
 
