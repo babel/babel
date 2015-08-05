@@ -13,6 +13,47 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.21
+
+ * **New Feature**
+  * Add support for Flow export types.
+ * **Bug Fix**
+  * Fix flow type annotations on object properties being lost.
+  * Fix bug effecting nested arrow functions.
+  * Check valid `export default` `function`/`class` token when parsing export default before converting to a declaration to avoid turning expressions into declarations.
+ * **Polish**
+  * Add an exception to non-existent bindings when checking if we need to wrap block scoping blocks in a closure.
+  * Make comment retainment for multiple replacement nodes more predictable.
+ * **Internal**
+  * Remove `operator` property from `AssignmentPattern` nodes.
+  * Update `es7.asyncFunctions` and `es7.objectRestSpread` to stage 2.
+
+## 5.8.13-5.8.20
+
+**The CHANGELOG was broken for these releases. Git tags were not pushed in the correct order and are therefore incorrect. It's recommended you NOT use any versions within this range.**
+
+ * **New Feature**
+  * Add `es6.spec.modules` transformer.
+ * **Bug Fix**
+  * Don't register export declarations as a module binding.
+  * Register import bindings to the specifier instead of the declaration.
+  * `export *` should not export `default`.
+  * Clear `rawValue from JSX attribute values to avoid outputting the raw source verbatim.
+  * Add support for boolean flow literals.
+  * Fix bug where files that babel can compile weren't being written when ignored with the `--copy-files` flag.
+  * Create new raw identifiers instead of cloning the original user one when exploding export specifiers to fix source map issues resulting in incorrect locations.
+  * Break on hitting a terminator paren triggering character to avoid pushing multiple starting parens.
+  * Consider comment starting character to be a terminatorless separator to avoid starting comments breaking terminatorless nodes.
+ * **Internal**
+  * Use `json5` for parsing `.babelrc` files and `JSON` for `package.json`.
+  * Update Regenerator dependency to `0.8.35`.
+  * Remove flow types from being scope tracked.
+ * **Polish**
+  * Only register export declarations in scope tracking if they're of a valid type.
+  * Only output code frame and message on syntax errors in CLI.
+  * Set decorated initialisers that have no `initialiser` to `undefined`.
+  * Optimise common `typeof` cases in `es6.spec.symbols` transformer.
+
 ## 5.8.12
 
  * **Bug Fix**
