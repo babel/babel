@@ -4,7 +4,7 @@ import * as t from "../types";
 import clone from "lodash/lang/clone";
 
 /**
- * [Please add a description.]
+ * Normalizes the visitor object in preparation for traversal
  */
 
 export function explode(visitor) {

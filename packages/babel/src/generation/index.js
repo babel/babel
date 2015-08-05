@@ -441,7 +441,8 @@ class CodeGenerator {
 }
 
 /**
- * [Please add a description.]
+ * Mixin all buffer functions so that they can be directly called on the
+ * CodeGenerator instance
  */
 
 each(Buffer.prototype, function (fn, key) {
@@ -451,7 +452,7 @@ each(Buffer.prototype, function (fn, key) {
 });
 
 /**
- * [Please add a description.]
+ * Mixin the generator function for each node type
  */
 
 each(CodeGenerator.generators, function (generator) {
