@@ -1,10 +1,10 @@
 /* eslint-disable */
-var linter = require('eslint').linter
-  , ESLintTester = require('eslint-tester')
-  , eslintTester = new ESLintTester(linter);
+var rule = require('../rules/object-shorthand'),
+    RuleTester = require('eslint').RuleTester;
 
 var features = {
     objectLiteralShorthandMethods: true,
+    objectLiteralComputedProperties: true,
     objectLiteralShorthandProperties: true,
     arrowFunctions: true,
     destructuring: true,
@@ -16,11 +16,9 @@ function ok(code, args){
 }
 
 
-eslintTester.addRuleTest('rules/object-shorthand', {
+var ruleTester = new RuleTester();
+ruleTester.run('babel/object-shorthand', rule, {
   valid: [
-    ok('let { ...spread } = obj'),
-    ok('let { ...spread } = obj', [2, 'never']),
-
     //original test cases
     { code: "var x = {y() {}}", ecmaFeatures: features },
     { code: "var x = {y}", ecmaFeatures: features },
@@ -62,13 +60,22 @@ eslintTester.addRuleTest('rules/object-shorthand', {
     { code: "doSomething({set y(z) {}})", ecmaFeatures: features },
     { code: "doSomething({get y() {}, set y(z) {}})", ecmaFeatures: features },
 
+    // object literal computed properties
+    { code: "var x = {[y]: y}", ecmaFeatures: features, options: ["properties"] },
+    { code: "var x = {['y']: 'y'}", ecmaFeatures: features, options: ["properties"] },
+    { code: "var x = {['y']: y}", ecmaFeatures: features, options: ["properties"] },
+
     // options
-    { code: "var x = {y() {}}", ecmaFeatures: features, args: [2, "methods"] },
-    { code: "var x = {x, y() {}, a:b}", ecmaFeatures: features, args: [2, "methods"] },
-    { code: "var x = {y}", ecmaFeatures: features, args: [2, "properties"] },
-    { code: "var x = {y: {b}}", ecmaFeatures: features, args: [2, "properties"] },
-    { code: "var x = {a: n, c: d, f: g}", ecmaFeatures: features, args: [2, "never"] },
-    { code: "var x = {a: function(){}, b: {c: d}}", ecmaFeatures: features, args: [2, "never"] }
+    { code: "var x = {y() {}}", ecmaFeatures: features, options: ["methods"] },
+    { code: "var x = {x, y() {}, a:b}", ecmaFeatures: features, options: ["methods"] },
+    { code: "var x = {y}", ecmaFeatures: features, options: ["properties"] },
+    { code: "var x = {y: {b}}", ecmaFeatures: features, options: ["properties"] },
+    { code: "var x = {a: n, c: d, f: g}", ecmaFeatures: features, options: ["never"] },
+    { code: "var x = {a: function(){}, b: {c: d}}", ecmaFeatures: features, options: ["never"] },
+
+    // Babel test cases.
+    ok('let { ...spread } = obj'),
+    ok('let { ...spread } = obj', [2, 'never']),
   ],
 
   invalid: [
@@ -87,14 +94,15 @@ eslintTester.addRuleTest('rules/object-shorthand', {
     { code: "doSomething({y: function() {}})", ecmaFeatures: features, errors: [{ message: "Expected method shorthand.", type: "Property" }] },
 
     // options
-    { code: "var x = {y: function() {}}", ecmaFeatures: features, errors: [{ message: "Expected method shorthand.", type: "Property" }], args: [2, "methods"] },
-    { code: "var x = {x, y() {}, z: function() {}}", ecmaFeatures: features, errors: [{ message: "Expected method shorthand.", type: "Property" }], args: [2, "methods"] },
-    { code: "var x = {x: x}", ecmaFeatures: features, errors: [{ message: "Expected property shorthand.", type: "Property" }], args: [2, "properties"] },
-    { code: "var x = {a, b, c(){}, x: x}", ecmaFeatures: features, errors: [{ message: "Expected property shorthand.", type: "Property" }], args: [2, "properties"] },
-    { code: "var x = {y() {}}", ecmaFeatures: features, errors: [{ message: "Expected longform method syntax.", type: "Property" }], args: [2, "never"] },
-    { code: "var x = {*y() {}}", ecmaFeatures: features, errors: [{ message: "Expected longform method syntax.", type: "Property" }], args: [2, "never"] },
-    { code: "var x = {y}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }], args: [2, "never"]},
-    { code: "var x = {y, a: b, *x(){}}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }, { message: "Expected longform method syntax.", type: "Property" }], args: [2, "never"]},
-    { code: "var x = {y: {x}}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }], args: [2, "never"]}
+    { code: "var x = {y: function() {}}", ecmaFeatures: features, errors: [{ message: "Expected method shorthand.", type: "Property" }], options: ["methods"] },
+    { code: "var x = {x, y() {}, z: function() {}}", ecmaFeatures: features, errors: [{ message: "Expected method shorthand.", type: "Property" }], options: ["methods"] },
+    { code: "var x = {x: x}", ecmaFeatures: features, errors: [{ message: "Expected property shorthand.", type: "Property" }], options: ["properties"] },
+    { code: "var x = {a, b, c(){}, x: x}", ecmaFeatures: features, errors: [{ message: "Expected property shorthand.", type: "Property" }], options: ["properties"] },
+    { code: "var x = {y() {}}", ecmaFeatures: features, errors: [{ message: "Expected longform method syntax.", type: "Property" }], options: ["never"] },
+    { code: "var x = {*y() {}}", ecmaFeatures: features, errors: [{ message: "Expected longform method syntax.", type: "Property" }], options: ["never"] },
+    { code: "var x = {y}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }], options: ["never"]},
+    { code: "var x = {y, a: b, *x(){}}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }, { message: "Expected longform method syntax.", type: "Property" }], options: ["never"]},
+    { code: "var x = {y: {x}}", ecmaFeatures: features, errors: [{ message: "Expected longform property syntax.", type: "Property" }], options: ["never"]}
+
   ]
 });

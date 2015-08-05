@@ -9,12 +9,17 @@
 
 module.exports = function(context) {
 
-    var mode = {
-        before: { before: true, after: false },
-        after: { before: false, after: true },
-        both: { before: true, after: true },
-        neither: { before: false, after: false }
-    }[context.options[0] || "before"];
+    var mode = (function(option) {
+        if (option == null || typeof option === "string") {
+            return {
+                before: { before: true, after: false },
+                after: { before: false, after: true },
+                both: { before: true, after: true },
+                neither: { before: false, after: false }
+            }[option || "before"];
+        }
+        return option;
+    }(context.options[0]));
 
     function isAsyncGenerator(node){
         return context.getFirstToken(node, 2).value === '*'
@@ -87,6 +92,18 @@ module.exports = function(context) {
 
 module.exports.schema = [
     {
-        "enum": ["before", "after", "both", "neither"]
+        "oneOf": [
+            {
+                "enum": ["before", "after", "both", "neither"]
+            },
+            {
+                "type": "object",
+                "properties": {
+                    "before": {"type": "boolean"},
+                    "after": {"type": "boolean"}
+                },
+                "additionalProperties": false
+            }
+        ]
     }
 ];

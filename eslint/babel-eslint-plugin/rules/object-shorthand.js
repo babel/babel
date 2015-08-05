@@ -42,7 +42,8 @@ module.exports = function(context) {
         return;
       }
 
-      if (node.kind === 'get' || node.kind === 'set') {
+      // getters, setters and computed properties are ignored
+      if (node.kind === "get" || node.kind === "set" || node.computed) {
         return;
       }
 

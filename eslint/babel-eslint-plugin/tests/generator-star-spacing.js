@@ -1,14 +1,13 @@
 /* eslint-disable */
-var linter = require('eslint').linter
-  , ESLintTester = require('eslint-tester')
-  , eslintTester = new ESLintTester(linter);
+var rule = require('../rules/generator-star-spacing'),
+    RuleTester = require('eslint').RuleTester;
 
 var features = {
     generators: true
 };
 
 function ok(code, args){
-  return { code: code, args: args,  parser: 'babel-eslint', ecmaFeatures: features }
+  return { code: code, options: args,  parser: 'babel-eslint', ecmaFeatures: features }
 }
 
 function err(code, errors, args){
@@ -17,30 +16,10 @@ function err(code, errors, args){
   return e
 }
 
-var features = {
-    generators: true
-};
-
-function ok(code, args){
-  return { code: code, args: args,  parser: 'babel-eslint', ecmaFeatures: features }
-}
-
-function err(code, errors, args){
-  var e = ok(code, args)
-  e.errors = errors
-  return e
-}
-
-
-eslintTester.addRuleTest('rules/generator-star-spacing', {
+var ruleTester = new RuleTester();
+ruleTester.run('babel/generator-star-spacing', rule, {
   valid: [
-      ok('var test = async function(){}'),
-      ok('async function test(){}'),
-      ok('var test = async function *(){}'),
-      ok('async function *test(){}', [1, "before"]) ,
-      ok('async function* test(){}', [1, "after"]),
-      ok('async function * test(){}', [1, "both"]),
-      ok('async function*test(){}', [1, "neither"]),
+      // Default ("before")
       {
           code: "function foo(){}"
       },
@@ -88,244 +67,462 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
       // "before"
       {
           code: "function foo(){}",
-          args: [2, "before"]
+          options: ["before"]
       },
       {
           code: "function *foo(){}",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "function *foo(arg1, arg2){}",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function *foo(){};",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function *(){};",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function * (){};",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = { *foo(){} };",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "var foo = {*foo(){} };",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "class Foo { *foo(){} }",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo {*foo(){} }",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { static *foo(){} }",
-          args: [2, "before"],
+          options: ["before"],
           ecmaFeatures: { classes: true, generators: true }
       },
 
       // "after"
       {
           code: "function foo(){}",
-          args: [2, "after"]
+          options: ["after"]
       },
       {
           code: "function* foo(){}",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "function* foo(arg1, arg2){}",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function* foo(){};",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function* (){};",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function*(){};",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = {* foo(){} };",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "var foo = { * foo(){} };",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "class Foo {* foo(){} }",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { * foo(){} }",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { static* foo(){} }",
-          args: [2, "after"],
+          options: ["after"],
           ecmaFeatures: { classes: true, generators: true }
       },
 
       // "both"
       {
           code: "function foo(){}",
-          args: [2, "both"]
+          options: ["both"]
       },
       {
           code: "function * foo(){}",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "function * foo(arg1, arg2){}",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function * foo(){};",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function * (){};",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function *(){};",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = { * foo(){} };",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "var foo = {* foo(){} };",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "class Foo { * foo(){} }",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo {* foo(){} }",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { static * foo(){} }",
-          args: [2, "both"],
+          options: ["both"],
           ecmaFeatures: { classes: true, generators: true }
       },
 
       // "neither"
       {
           code: "function foo(){}",
-          args: [2, "neither"]
+          options: ["neither"]
       },
       {
           code: "function*foo(){}",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "function*foo(arg1, arg2){}",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function*foo(){};",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function*(){};",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = function* (){};",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true }
       },
       {
           code: "var foo = {*foo(){} };",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "var foo = { *foo(){} };",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
       },
       {
           code: "class Foo {*foo(){} }",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { *foo(){} }",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { classes: true, generators: true }
       },
       {
           code: "class Foo { static*foo(){} }",
-          args: [2, "neither"],
+          options: ["neither"],
           ecmaFeatures: { classes: true, generators: true }
-      }
+      },
 
+      // {"before": true, "after": false}
+      {
+          code: "function foo(){}",
+          options: [{"before": true, "after": false}]
+      },
+      {
+          code: "function *foo(){}",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "function *foo(arg1, arg2){}",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function *foo(){};",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function *(){};",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function * (){};",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = { *foo(){} };",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "var foo = {*foo(){} };",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "class Foo { *foo(){} }",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo {*foo(){} }",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { static *foo(){} }",
+          options: [{"before": true, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+
+      // {"before": false, "after": true}
+      {
+          code: "function foo(){}",
+          options: [{"before": false, "after": true}]
+      },
+      {
+          code: "function* foo(){}",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "function* foo(arg1, arg2){}",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function* foo(){};",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function* (){};",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function*(){};",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = {* foo(){} };",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "var foo = { * foo(){} };",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "class Foo {* foo(){} }",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { * foo(){} }",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { static* foo(){} }",
+          options: [{"before": false, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+
+      // {"before": true, "after": true}
+      {
+          code: "function foo(){}",
+          options: [{"before": true, "after": true}]
+      },
+      {
+          code: "function * foo(){}",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "function * foo(arg1, arg2){}",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function * foo(){};",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function * (){};",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function *(){};",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = { * foo(){} };",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "var foo = {* foo(){} };",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "class Foo { * foo(){} }",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo {* foo(){} }",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { static * foo(){} }",
+          options: [{"before": true, "after": true}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+
+      // {"before": false, "after": false}
+      {
+          code: "function foo(){}",
+          options: [{"before": false, "after": false}]
+      },
+      {
+          code: "function*foo(){}",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "function*foo(arg1, arg2){}",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function*foo(){};",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function*(){};",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = function* (){};",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true }
+      },
+      {
+          code: "var foo = {*foo(){} };",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "var foo = { *foo(){} };",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true }
+      },
+      {
+          code: "class Foo {*foo(){} }",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { *foo(){} }",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+      {
+          code: "class Foo { static*foo(){} }",
+          options: [{"before": false, "after": false}],
+          ecmaFeatures: { classes: true, generators: true }
+      },
+
+      ok('var test = async function(){}'),
+      ok('async function test(){}'),
+      ok('var test = async function *(){}'),
+      ok('async function *test(){}', ["before"]) ,
+      ok('async function* test(){}', ["after"]),
+      ok('async function * test(){}', ["both"]),
+      ok('async function*test(){}', ["neither"]),
     ],
 
     invalid: [
         // Default ("before")
-        err('async function*test(){}', [
-          { message: 'Missing space before *.' },
-        ]),
-        err('async function* test(){}', [
-          {
-              message: "Missing space before *.",
-              type: "Punctuator"
-          }, {
-              message: "Unexpected space after *.",
-              type: "Punctuator"
-          }
-        ]),
-
         {
             code: "function*foo(){}",
             ecmaFeatures: { generators: true },
@@ -392,7 +589,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         // "before"
         {
             code: "function*foo(){}",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -401,7 +598,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "function* foo(arg1, arg2){}",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -413,7 +610,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function*foo(){};",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -422,7 +619,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function* (){};",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -431,7 +628,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = {* foo(){} };",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
             errors: [{
                 message: "Unexpected space after *.",
@@ -440,7 +637,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo {* foo(){} }",
-            args: [2, "before"],
+            options: ["before"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Unexpected space after *.",
@@ -451,7 +648,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         // "after"
         {
             code: "function*foo(){}",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space after *.",
@@ -460,7 +657,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "function *foo(arg1, arg2){}",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -472,7 +669,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function *foo(){};",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -484,7 +681,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function *(){};",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -493,7 +690,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = { *foo(){} };",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
             errors: [{
                 message: "Missing space after *.",
@@ -502,7 +699,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo { *foo(){} }",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Missing space after *.",
@@ -511,7 +708,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo { static *foo(){} }",
-            args: [2, "after"],
+            options: ["after"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -525,7 +722,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         // "both"
         {
             code: "function*foo(){}",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -537,7 +734,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "function*foo(arg1, arg2){}",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -549,7 +746,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function*foo(){};",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -561,7 +758,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function*(){};",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -570,7 +767,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = {*foo(){} };",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
             errors: [{
                 message: "Missing space after *.",
@@ -579,7 +776,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo {*foo(){} }",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Missing space after *.",
@@ -588,7 +785,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo { static*foo(){} }",
-            args: [2, "both"],
+            options: ["both"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Missing space before *.",
@@ -602,7 +799,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         // "neither"
         {
             code: "function * foo(){}",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -614,7 +811,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "function * foo(arg1, arg2){}",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -626,7 +823,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function * foo(){};",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -638,7 +835,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = function * (){};",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -647,7 +844,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "var foo = { * foo(){} };",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
             errors: [{
                 message: "Unexpected space after *.",
@@ -656,7 +853,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo { * foo(){} }",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Unexpected space after *.",
@@ -665,7 +862,7 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
         },
         {
             code: "class Foo { static * foo(){} }",
-            args: [2, "neither"],
+            options: ["neither"],
             ecmaFeatures: { classes: true, generators: true },
             errors: [{
                 message: "Unexpected space before *.",
@@ -674,7 +871,306 @@ eslintTester.addRuleTest('rules/generator-star-spacing', {
                 message: "Unexpected space after *.",
                 type: "Punctuator"
             }]
-        }
+        },
+
+        // {"before": true, "after": false}
+        {
+            code: "function*foo(){}",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "function* foo(arg1, arg2){}",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function*foo(){};",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function* (){};",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = {* foo(){} };",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
+            errors: [{
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo {* foo(){} }",
+            options: [{"before": true, "after": false}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+
+        // {"before": false, "after": true}
+        {
+            code: "function*foo(){}",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "function *foo(arg1, arg2){}",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function *foo(){};",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function *(){};",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = { *foo(){} };",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
+            errors: [{
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo { *foo(){} }",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo { static *foo(){} }",
+            options: [{"before": false, "after": true}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+
+        // {"before": true, "after": true}
+        {
+            code: "function*foo(){}",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "function*foo(arg1, arg2){}",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function*foo(){};",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function*(){};",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = {*foo(){} };",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
+            errors: [{
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo {*foo(){} }",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo { static*foo(){} }",
+            options: [{"before": true, "after": true}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Missing space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Missing space after *.",
+                type: "Punctuator"
+            }]
+        },
+
+        // {"before": false, "after": false}
+        {
+            code: "function * foo(){}",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "function * foo(arg1, arg2){}",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function * foo(){};",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = function * (){};",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "var foo = { * foo(){} };",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { generators: true, objectLiteralShorthandMethods: true },
+            errors: [{
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo { * foo(){} }",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        {
+            code: "class Foo { static * foo(){} }",
+            options: [{"before": false, "after": false}],
+            ecmaFeatures: { classes: true, generators: true },
+            errors: [{
+                message: "Unexpected space before *.",
+                type: "Punctuator"
+            }, {
+                message: "Unexpected space after *.",
+                type: "Punctuator"
+            }]
+        },
+        err('async function*test(){}', [
+          { message: 'Missing space before *.' },
+        ]),
+        err('async function* test(){}', [
+          {
+              message: "Missing space before *.",
+              type: "Punctuator"
+          }, {
+              message: "Unexpected space after *.",
+              type: "Punctuator"
+          }
+        ]),
 
     ]
 });

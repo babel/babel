@@ -29,6 +29,7 @@ var CAPS_ALLOWED = [
  * @returns {string[]} Returns obj[key] if it's an Array, otherwise `fallback`
  */
 function checkArray(obj, key, fallback) {
+    /* istanbul ignore if */
     if (Object.prototype.hasOwnProperty.call(obj, key) && !Array.isArray(obj[key])) {
         throw new TypeError(key + ", if provided, must be an Array");
     }
@@ -144,7 +145,7 @@ module.exports = function(context) {
      * @returns {Boolean} Returns true if the callee may be capitalized
      */
     function isCapAllowed(allowedMap, node, calleeName) {
-        if (allowedMap[calleeName]) {
+        if (allowedMap[calleeName] || allowedMap[context.getSource(node.callee)]) {
             return true;
         }
         if (calleeName === "UTC" && node.callee.type === "MemberExpression") {

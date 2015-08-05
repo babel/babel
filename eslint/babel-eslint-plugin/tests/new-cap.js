@@ -5,12 +5,11 @@
  * @author Nicholas C. Zakas
  */
 
-var linter = require('eslint').linter
-  , ESLintTester = require('eslint-tester')
-  , eslintTester = new ESLintTester(linter);
+var rule = require('../rules/new-cap'),
+    RuleTester = require('eslint').RuleTester;
 
-
-eslintTester.addRuleTest("rules/new-cap", {
+var ruleTester = new RuleTester();
+ruleTester.run('babel/new-cap', rule, {
     valid: [
         // Original test cases.
         "var x = new Constructor();",
@@ -38,17 +37,22 @@ eslintTester.addRuleTest("rules/new-cap", {
         "var x = Symbol('symbol')",
         "var x = _();",
         "var x = $();",
-        { code: "var x = Foo(42)", args: [1, {"capIsNew": false}] },
-        { code: "var x = bar.Foo(42)", args: [1, {"capIsNew": false}] },
+        { code: "var x = Foo(42)", options: [{"capIsNew": false}] },
+        { code: "var x = bar.Foo(42)", options: [{"capIsNew": false}] },
         "var x = bar[Foo](42)",
-        {code: "var x = bar['Foo'](42)", args: [1, {"capIsNew": false}] },
+        {code: "var x = bar['Foo'](42)", options: [{"capIsNew": false}] },
         "var x = Foo.bar(42)",
-        { code: "var x = new foo(42)", args: [1, {"newIsCap": false}] },
-        "var o = { 1: function () {} }; o[1]();",
-        "var o = { 1: function () {} }; new o[1]();",
-        { code: "var x = Foo(42);", args: [1, { capIsNew: true, capIsNewExceptions: ["Foo"] }] },
-        { code: "var x = new foo(42);", args: [1, { newIsCap: true, newIsCapExceptions: ["foo"] }] },
-        { code: "var x = Object(42);", args: [1, { capIsNewExceptions: ["Foo"] }] },
+        { code: "var x = new foo(42)", options: [{"newIsCap": false}] },
+        "var o = { 1: function() {} }; o[1]();",
+        "var o = { 1: function() {} }; new o[1]();",
+        { code: "var x = Foo(42);", options: [{ capIsNew: true, capIsNewExceptions: ["Foo"] }] },
+        { code: "var x = new foo(42);", options: [{ newIsCap: true, newIsCapExceptions: ["foo"] }] },
+        { code: "var x = Object(42);", options: [{ capIsNewExceptions: ["Foo"] }] },
+
+        { code: "var x = Foo.Bar(42);", options: [{ capIsNewExceptions: ["Bar"] }] },
+        { code: "var x = Foo.Bar(42);", options: [{ capIsNewExceptions: ["Foo.Bar"] }] },
+        { code: "var x = new foo.bar(42);", options: [{ newIsCapExceptions: ["bar"] }] },
+        { code: "var x = new foo.bar(42);", options: [{ newIsCapExceptions: ["foo.bar"] }] },
 
         // Babel-specific test cases.
         { code: "@MyDecorator(123) class MyClass{}", parser: "babel-eslint" },
@@ -70,7 +74,7 @@ eslintTester.addRuleTest("rules/new-cap", {
                     message: "A function with a name starting with an uppercase letter should only be used as a constructor.",
                     type: "CallExpression",
                     line: 1,
-                    column: 10
+                    column: 11
                 }
             ]
         },
@@ -81,7 +85,7 @@ eslintTester.addRuleTest("rules/new-cap", {
                     message: "A function with a name starting with an uppercase letter should only be used as a constructor.",
                     type: "CallExpression",
                     line: 2,
-                    column: 1
+                    column: 2
                 }
             ]
         },
@@ -92,7 +96,7 @@ eslintTester.addRuleTest("rules/new-cap", {
                     message: "A constructor name should not start with a lowercase letter.",
                     type: "NewExpression",
                     line: 1,
-                    column: 14
+                    column: 15
                 }
             ]
         },
@@ -103,7 +107,7 @@ eslintTester.addRuleTest("rules/new-cap", {
                     message: "A constructor name should not start with a lowercase letter.",
                     type: "NewExpression",
                     line: 2,
-                    column: 0
+                    column: 1
                 }
             ]
         },
@@ -114,9 +118,20 @@ eslintTester.addRuleTest("rules/new-cap", {
                     message: "A constructor name should not start with a lowercase letter.",
                     type: "NewExpression",
                     line: 1,
-                    column: 12
+                    column: 13
                 }
             ]
+        },
+
+        {
+            code: "var x = Foo.Bar(42);",
+            options: [{capIsNewExceptions: ["Foo"]}],
+            errors: [{type: "CallExpression", message: "A function with a name starting with an uppercase letter should only be used as a constructor."}]
+        },
+        {
+            code: "var x = new foo.bar(42);",
+            options: [{newIsCapExceptions: ["foo"]}],
+            errors: [{type: "NewExpression", message: "A constructor name should not start with a lowercase letter."}]
         }
     ]
 });
