@@ -40,7 +40,7 @@ test-cov: clean
 	make build
 	./scripts/test-cov.sh
 
-test-travis: bootstrap lint build test
+test-travis: bootstrap lint build test test-browser
 
 publish:
 	git pull --rebase
