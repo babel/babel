@@ -143,8 +143,11 @@ pp.parseMaybeConditional = function (noIn, refShorthandDefaultPos) {
 pp.parseExprOps = function (noIn, refShorthandDefaultPos) {
   let startPos = this.state.start, startLoc = this.state.startLoc;
   let expr = this.parseMaybeUnary(refShorthandDefaultPos);
-  if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
-  return this.parseExprOp(expr, startPos, startLoc, -1, noIn);
+  if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
+    return expr;
+  } else {
+    return this.parseExprOp(expr, startPos, startLoc, -1, noIn);
+  }
 };
 
 // Parse binary operators with the operator precedence parsing
@@ -188,6 +191,7 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     }
     return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
   }
+
   let startPos = this.state.start, startLoc = this.state.startLoc;
   let expr = this.parseExprSubscripts(refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
@@ -311,7 +315,6 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       node = this.startNode();
       let id = this.parseIdent(true);
 
-      //
       if (this.options.features["es7.asyncFunctions"]) {
         if (id.name === "await") {
           if (this.inAsync) return this.parseAwait(node);
