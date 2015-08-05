@@ -152,7 +152,6 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
   if (!this.eat(tt.eq)) return left;
 
   let node = this.startNodeAt(startPos, startLoc);
-  node.operator = "=";
   node.left = left;
   node.right = this.parseMaybeAssign();
   return this.finishNode(node, "AssignmentPattern");

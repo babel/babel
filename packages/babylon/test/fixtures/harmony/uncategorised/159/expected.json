@@ -105,7 +105,6 @@
                     "column": 18
                   }
                 },
-                "operator": "=",
                 "left": {
                   "type": "Identifier",
                   "start": 13,

@@ -154,7 +154,6 @@
                           "column": 11
                         }
                       },
-                      "operator": "=",
                       "left": {
                         "type": "Identifier",
                         "start": 8,

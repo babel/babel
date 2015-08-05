@@ -75,7 +75,6 @@
                 "column": 16
               }
             },
-            "operator": "=",
             "left": {
               "type": "Identifier",
               "start": 11,

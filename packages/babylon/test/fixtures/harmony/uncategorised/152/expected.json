@@ -75,7 +75,6 @@
                 "column": 20
               }
             },
-            "operator": "=",
             "left": {
               "type": "ArrayPattern",
               "start": 11,
