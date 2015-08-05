@@ -4,11 +4,11 @@ import * as t from "../../types";
  * Prints ImportSpecifier, prints imported and local.
  */
 
-export function ImportSpecifier(node, print) {
-  print.plain(node.imported);
+export function ImportSpecifier(node) {
+  this.print(node.imported, node);
   if (node.local && node.local.name !== node.imported.name) {
     this.push(" as ");
-    print.plain(node.local);
+    this.print(node.local, node);
   }
 }
 
@@ -16,27 +16,27 @@ export function ImportSpecifier(node, print) {
  * Prints ImportDefaultSpecifier, prints local.
  */
 
-export function ImportDefaultSpecifier(node, print) {
-  print.plain(node.local);
+export function ImportDefaultSpecifier(node) {
+  this.print(node.local, node);
 }
 
 /**
  * Prints ExportDefaultSpecifier, prints exported.
  */
 
-export function ExportDefaultSpecifier(node, print) {
-  print.plain(node.exported);
+export function ExportDefaultSpecifier(node) {
+  this.print(node.exported, node);
 }
 
 /**
  * Prints ExportSpecifier, prints local and exported.
  */
 
-export function ExportSpecifier(node, print) {
-  print.plain(node.local);
+export function ExportSpecifier(node) {
+  this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
     this.push(" as ");
-    print.plain(node.exported);
+    this.print(node.exported, node);
   }
 }
 
@@ -44,23 +44,23 @@ export function ExportSpecifier(node, print) {
  * Prints ExportNamespaceSpecifier, prints exported.
  */
 
-export function ExportNamespaceSpecifier(node, print) {
+export function ExportNamespaceSpecifier(node) {
   this.push("* as ");
-  print.plain(node.exported);
+  this.print(node.exported, node);
 }
 
 /**
  * Prints ExportAllDeclaration, prints exported and source.
  */
 
-export function ExportAllDeclaration(node, print) {
+export function ExportAllDeclaration(node) {
   this.push("export *");
   if (node.exported) {
     this.push(" as ");
-    print.plain(node.exported);
+    this.print(node.exported, node);
   }
   this.push(" from ");
-  print.plain(node.source);
+  this.print(node.source, node);
   this.semicolon();
 }
 
@@ -68,37 +68,37 @@ export function ExportAllDeclaration(node, print) {
  * Prints ExportNamedDeclaration, delegates to ExportDeclaration.
  */
 
-export function ExportNamedDeclaration(node, print) {
+export function ExportNamedDeclaration(node, parent) {
   this.push("export ");
-  ExportDeclaration.call(this, node, print);
+  ExportDeclaration.call(this, node, parent);
 }
 
 /**
  * Prints ExportDefaultDeclaration, delegates to ExportDeclaration.
  */
 
-export function ExportDefaultDeclaration(node, print) {
+export function ExportDefaultDeclaration(node, parent) {
   this.push("export default ");
-  ExportDeclaration.call(this, node, print);
+  ExportDeclaration.call(this, node, parent);
 }
 
 /**
  * Prints ExportDeclaration, prints specifiers, declration, and source.
  */
 
-function ExportDeclaration(node, print) {
+function ExportDeclaration(node) {
   var specifiers = node.specifiers;
 
   if (node.declaration) {
     var declar = node.declaration;
-    print.plain(declar);
+    this.print(declar, node);
     if (t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar)) return;
   } else {
     var first = specifiers[0];
     var hasSpecial = false;
     if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
       hasSpecial = true;
-      print.plain(specifiers.shift());
+      this.print(specifiers.shift(), node);
       if (specifiers.length) {
         this.push(", ");
       }
@@ -108,7 +108,7 @@ function ExportDeclaration(node, print) {
       this.push("{");
       if (specifiers.length) {
         this.space();
-        print.join(specifiers, { separator: ", " });
+        this.printJoin(specifiers, node, { separator: ", " });
         this.space();
       }
       this.push("}");
@@ -116,7 +116,7 @@ function ExportDeclaration(node, print) {
 
     if (node.source) {
       this.push(" from ");
-      print.plain(node.source);
+      this.print(node.source, node);
     }
   }
 
@@ -127,7 +127,7 @@ function ExportDeclaration(node, print) {
  * Prints ImportDeclaration, prints specifiers and source, handles isType.
  */
 
-export function ImportDeclaration(node, print) {
+export function ImportDeclaration(node) {
   this.push("import ");
 
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -138,7 +138,7 @@ export function ImportDeclaration(node, print) {
   if (specfiers && specfiers.length) {
     var first = node.specifiers[0];
     if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
-      print.plain(node.specifiers.shift());
+      this.print(node.specifiers.shift(), node);
       if (node.specifiers.length) {
         this.push(", ");
       }
@@ -147,7 +147,7 @@ export function ImportDeclaration(node, print) {
     if (node.specifiers.length) {
       this.push("{");
       this.space();
-      print.join(node.specifiers, { separator: ", " });
+      this.printJoin(node.specifiers, node, { separator: ", " });
       this.space();
       this.push("}");
     }
@@ -155,7 +155,7 @@ export function ImportDeclaration(node, print) {
     this.push(" from ");
   }
 
-  print.plain(node.source);
+  this.print(node.source, node);
   this.semicolon();
 }
 
@@ -163,7 +163,7 @@ export function ImportDeclaration(node, print) {
  * Prints ImportNamespaceSpecifier, prints local.
  */
 
-export function ImportNamespaceSpecifier(node, print) {
+export function ImportNamespaceSpecifier(node) {
   this.push("* as ");
-  print.plain(node.local);
+  this.print(node.local, node);
 }

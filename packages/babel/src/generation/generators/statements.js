@@ -5,31 +5,31 @@ import * as t from "../../types";
  * Prints WithStatement, prints object and body.
  */
 
-export function WithStatement(node, print) {
+export function WithStatement(node) {
   this.keyword("with");
   this.push("(");
-  print.plain(node.object);
+  this.print(node.object, node);
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node.body, node);
 }
 
 /**
  * Prints IfStatement, prints test, consequent, and alternate.
  */
 
-export function IfStatement(node, print) {
+export function IfStatement(node) {
   this.keyword("if");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(")");
   this.space();
 
-  print.indentOnComments(node.consequent);
+  this.printAndIndentOnComments(node.consequent, node);
 
   if (node.alternate) {
     if (this.isLast("}")) this.space();
     this.push("else ");
-    print.indentOnComments(node.alternate);
+    this.printAndIndentOnComments(node.alternate, node);
   }
 }
 
@@ -37,38 +37,38 @@ export function IfStatement(node, print) {
  * Prints ForStatement, prints init, test, update, and body.
  */
 
-export function ForStatement(node, print) {
+export function ForStatement(node) {
   this.keyword("for");
   this.push("(");
 
-  print.plain(node.init);
+  this.print(node.init, node);
   this.push(";");
 
   if (node.test) {
     this.space();
-    print.plain(node.test);
+    this.print(node.test, node);
   }
   this.push(";");
 
   if (node.update) {
     this.space();
-    print.plain(node.update);
+    this.print(node.update, node);
   }
 
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node.body, node);
 }
 
 /**
  * Prints WhileStatement, prints test and body.
  */
 
-export function WhileStatement(node, print) {
+export function WhileStatement(node) {
   this.keyword("while");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node.body, node);
 }
 
 /**
@@ -77,14 +77,14 @@ export function WhileStatement(node, print) {
  */
 
 var buildForXStatement = function (op) {
-  return function (node, print) {
+  return function (node) {
     this.keyword("for");
     this.push("(");
-    print.plain(node.left);
+    this.print(node.left, node);
     this.push(` ${op} `);
-    print.plain(node.right);
+    this.print(node.right, node);
     this.push(")");
-    print.block(node.body);
+    this.printBlock(node.body, node);
   };
 };
 
@@ -99,13 +99,13 @@ export var ForOfStatement = buildForXStatement("of");
  * Prints DoWhileStatement, prints body and test.
  */
 
-export function DoWhileStatement(node, print) {
+export function DoWhileStatement(node) {
   this.push("do ");
-  print.plain(node.body);
+  this.print(node.body, node);
   this.space();
   this.keyword("while");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(");");
 }
 
@@ -115,14 +115,14 @@ export function DoWhileStatement(node, print) {
  */
 
 var buildLabelStatement = function (prefix, key = "label") {
-  return function (node, print) {
+  return function (node) {
     this.push(prefix);
 
     var label = node[key];
     if (label) {
       this.push(" ");
       var terminatorState = this.startTerminatorless();
-      print.plain(label);
+      this.print(label, node);
       this.endTerminatorless(terminatorState);
     }
 
@@ -143,34 +143,34 @@ export var ThrowStatement    = buildLabelStatement("throw", "argument");
  * Prints LabeledStatement, prints label and body.
  */
 
-export function LabeledStatement(node, print) {
-  print.plain(node.label);
+export function LabeledStatement(node) {
+  this.print(node.label, node);
   this.push(": ");
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
 /**
  * Prints TryStatement, prints block, handlers, and finalizer.
  */
 
-export function TryStatement(node, print) {
+export function TryStatement(node) {
   this.keyword("try");
-  print.plain(node.block);
+  this.print(node.block, node);
   this.space();
 
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
   // We run into this from regenerator generated ast.
   if (node.handlers) {
-    print.plain(node.handlers[0]);
+    this.print(node.handlers[0], node);
   } else {
-    print.plain(node.handler);
+    this.print(node.handler, node);
   }
 
   if (node.finalizer) {
     this.space();
     this.push("finally ");
-    print.plain(node.finalizer);
+    this.print(node.finalizer, node);
   }
 }
 
@@ -178,27 +178,27 @@ export function TryStatement(node, print) {
  * Prints CatchClause, prints param and body.
  */
 
-export function CatchClause(node, print) {
+export function CatchClause(node) {
   this.keyword("catch");
   this.push("(");
-  print.plain(node.param);
+  this.print(node.param, node);
   this.push(") ");
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
 /**
  * Prints SwitchStatement, prints discriminant and cases.
  */
 
-export function SwitchStatement(node, print) {
+export function SwitchStatement(node) {
   this.keyword("switch");
   this.push("(");
-  print.plain(node.discriminant);
+  this.print(node.discriminant, node);
   this.push(")");
   this.space();
   this.push("{");
 
-  print.sequence(node.cases, {
+  this.printSequence(node.cases, node, {
     indent: true,
     addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
@@ -212,10 +212,10 @@ export function SwitchStatement(node, print) {
  * Prints SwitchCase, prints test and consequent.
  */
 
-export function SwitchCase(node, print) {
+export function SwitchCase(node) {
   if (node.test) {
     this.push("case ");
-    print.plain(node.test);
+    this.print(node.test, node);
     this.push(":");
   } else {
     this.push("default:");
@@ -223,7 +223,7 @@ export function SwitchCase(node, print) {
 
   if (node.consequent.length) {
     this.newline();
-    print.sequence(node.consequent, { indent: true });
+    this.printSequence(node.consequent, node, { indent: true });
   }
 }
 
@@ -239,7 +239,7 @@ export function DebuggerStatement() {
  * Prints VariableDeclaration, prints declarations, handles kind and format.
  */
 
-export function VariableDeclaration(node, print, parent) {
+export function VariableDeclaration(node, parent) {
   this.push(node.kind + " ");
 
   var hasInits = false;
@@ -272,7 +272,7 @@ export function VariableDeclaration(node, print, parent) {
 
   //
 
-  print.list(node.declarations, { separator: sep });
+  this.printList(node.declarations, node, { separator: sep });
 
   if (t.isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
@@ -286,13 +286,13 @@ export function VariableDeclaration(node, print, parent) {
  * Prints VariableDeclarator, handles id, id.typeAnnotation, and init.
  */
 
-export function VariableDeclarator(node, print) {
-  print.plain(node.id);
-  print.plain(node.id.typeAnnotation);
+export function VariableDeclarator(node) {
+  this.print(node.id, node);
+  this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();
     this.push("=");
     this.space();
-    print.plain(node.init);
+    this.print(node.init, node);
   }
 }

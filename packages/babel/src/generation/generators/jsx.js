@@ -4,11 +4,11 @@ import * as t from "../../types";
  * Prints JSXAttribute, prints name and value.
  */
 
-export function JSXAttribute(node, print) {
-  print.plain(node.name);
+export function JSXAttribute(node) {
+  this.print(node.name, node);
   if (node.value) {
     this.push("=");
-    print.plain(node.value);
+    this.print(node.value, node);
   }
 }
 
@@ -24,29 +24,29 @@ export function JSXIdentifier(node) {
  * Prints JSXNamespacedName, prints namespace and name.
  */
 
-export function JSXNamespacedName(node, print) {
-  print.plain(node.namespace);
+export function JSXNamespacedName(node) {
+  this.print(node.namespace, node);
   this.push(":");
-  print.plain(node.name);
+  this.print(node.name, node);
 }
 
 /**
  * Prints JSXMemberExpression, prints object and property.
  */
 
-export function JSXMemberExpression(node, print) {
-  print.plain(node.object);
+export function JSXMemberExpression(node) {
+  this.print(node.object, node);
   this.push(".");
-  print.plain(node.property);
+  this.print(node.property, node);
 }
 
 /**
  * Prints JSXSpreadAttribute, prints argument.
  */
 
-export function JSXSpreadAttribute(node, print) {
+export function JSXSpreadAttribute(node) {
   this.push("{...");
-  print.plain(node.argument);
+  this.print(node.argument, node);
   this.push("}");
 }
 
@@ -54,9 +54,9 @@ export function JSXSpreadAttribute(node, print) {
  * Prints JSXExpressionContainer, prints expression.
  */
 
-export function JSXExpressionContainer(node, print) {
+export function JSXExpressionContainer(node) {
   this.push("{");
-  print.plain(node.expression);
+  this.print(node.expression, node);
   this.push("}");
 }
 
@@ -64,9 +64,9 @@ export function JSXExpressionContainer(node, print) {
  * Prints JSXElement, prints openingElement, children, and closingElement.
  */
 
-export function JSXElement(node, print) {
+export function JSXElement(node) {
   var open = node.openingElement;
-  print.plain(open);
+  this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
@@ -74,24 +74,24 @@ export function JSXElement(node, print) {
     if (t.isLiteral(child)) {
       this.push(child.value, true);
     } else {
-      print.plain(child);
+      this.print(child, node);
     }
   }
   this.dedent();
 
-  print.plain(node.closingElement);
+  this.print(node.closingElement, node);
 }
 
 /**
  * Prints JSXOpeningElement, prints name and attributes, handles selfClosing.
  */
 
-export function JSXOpeningElement(node, print) {
+export function JSXOpeningElement(node) {
   this.push("<");
-  print.plain(node.name);
+  this.print(node.name, node);
   if (node.attributes.length > 0) {
     this.push(" ");
-    print.join(node.attributes, { separator: " " });
+    this.printJoin(node.attributes, node, { separator: " " });
   }
   this.push(node.selfClosing ? " />" : ">");
 }
@@ -100,9 +100,9 @@ export function JSXOpeningElement(node, print) {
  * Prints JSXClosingElement, prints name.
  */
 
-export function JSXClosingElement(node, print) {
+export function JSXClosingElement(node) {
   this.push("</");
-  print.plain(node.name);
+  this.print(node.name, node);
   this.push(">");
 }
 

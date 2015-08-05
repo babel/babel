@@ -2,9 +2,9 @@
  * Prints TaggedTemplateExpression, prints tag and quasi.
  */
 
-export function TaggedTemplateExpression(node, print) {
-  print.plain(node.tag);
-  print.plain(node.quasi);
+export function TaggedTemplateExpression(node) {
+  this.print(node.tag, node);
+  this.print(node.quasi, node);
 }
 
 /**
@@ -19,18 +19,18 @@ export function TemplateElement(node) {
  * Prints TemplateLiteral, prints quasis, and expressions.
  */
 
-export function TemplateLiteral(node, print) {
+export function TemplateLiteral(node) {
   this.push("`");
 
   var quasis = node.quasis;
   var len    = quasis.length;
 
   for (var i = 0; i < len; i++) {
-    print.plain(quasis[i]);
+    this.print(quasis[i], node);
 
     if (i + 1 < len) {
       this.push("${ ");
-      print.plain(node.expressions[i]);
+      this.print(node.expressions[i], node);
       this.push(" }");
     }
   }

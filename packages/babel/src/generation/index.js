@@ -1,6 +1,5 @@
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
-import NodePrinter from "./node/printer";
 import repeating from "repeating";
 import SourceMap from "./source-map";
 import Position from "./position";
@@ -150,14 +149,6 @@ class CodeGenerator {
   }
 
   /**
-   * Build NodePrinter.
-   */
-
-  buildPrint(parent) {
-    return new NodePrinter(this, parent);
-  }
-
-  /**
    * [Please add a description.]
    */
 
@@ -205,7 +196,7 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * Print a plain node.
    */
 
   print(node, parent, opts = {}) {
@@ -236,7 +227,7 @@ class CodeGenerator {
     if (opts.before) opts.before();
     this.map.mark(node, "start");
 
-    this[node.type](node, this.buildPrint(node), parent);
+    this[node.type](node, parent);
 
     if (needsParens) this.push(")");
 
@@ -251,10 +242,10 @@ class CodeGenerator {
   }
 
   /**
-   * [Please add a description.]
+   * Print a sequence of nodes as statements.
    */
 
-  printJoin(print, nodes, opts = {}) {
+  printJoin(nodes, parent, opts = {}) {
     if (!nodes || !nodes.length) return;
 
     var len = nodes.length;
@@ -277,33 +268,55 @@ class CodeGenerator {
 
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i];
-      print.plain(node, printOpts);
+      this.print(node, parent, printOpts);
     }
 
     if (opts.indent) this.dedent();
   }
 
   /**
-   * [Please add a description.]
+   * Print a sequence of nodes as expressions.
    */
 
-  printAndIndentOnComments(print, node) {
+  printSequence(nodes, parent, opts = {}) {
+    opts.statement = true;
+    return this.printJoin(nodes, parent, opts);
+  }
+
+  /**
+   * Print a list of nodes, with a customizable separator (defaults to ",").
+   */
+
+  printList(items, parent, opts = {}) {
+    if (opts.separator == null) {
+      opts.separator = ",";
+      if (!this.format.compact) opts.separator += " ";
+    }
+
+    return this.printJoin(items, parent, opts);
+  }
+
+  /**
+   * Print node and indent comments.
+   */
+
+  printAndIndentOnComments(node, parent) {
     var indent = !!node.leadingComments;
     if (indent) this.indent();
-    print.plain(node);
+    this.print(node, parent);
     if (indent) this.dedent();
   }
 
   /**
-   * [Please add a description.]
+   * Print a block-like node.
    */
 
-  printBlock(print, node) {
+  printBlock(node, parent) {
     if (t.isEmptyStatement(node)) {
       this.semicolon();
     } else {
       this.push(" ");
-      print.plain(node);
+      this.print(node, parent);
     }
   }
 
@@ -327,6 +340,17 @@ class CodeGenerator {
 
   printTrailingComments(node, parent) {
     this._printComments(this.getComments("trailingComments", node, parent));
+  }
+
+  /**
+   * [Please add a description.]
+   */
+
+  printInnerComments(node) {
+    if (!node.innerComments) return;
+    this.indent();
+    this._printComments(node.innerComments);
+    this.dedent();
   }
 
   /**
