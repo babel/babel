@@ -587,10 +587,11 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       startPos = this.state.start;
       startLoc = this.state.startLoc;
     }
-    if (!isPattern)
+    if (!isPattern) {
       isGenerator = this.eat(tt.star);
-    if (this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
-      if (isGenerator || isPattern) this.unexpected();
+    }
+    if (!isPattern && this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
+      if (isGenerator) this.unexpected();
       var asyncId = this.parseIdent();
       if (this.match(tt.colon) || this.match(tt.parenL)) {
         prop.key = asyncId;
