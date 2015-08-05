@@ -122,7 +122,6 @@
                         "column": 27
                       }
                     },
-                    "operator": "=",
                     "left": {
                       "type": "ObjectPattern",
                       "start": 14,

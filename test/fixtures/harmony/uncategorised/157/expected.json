@@ -138,7 +138,6 @@
                           "column": 23
                         }
                       },
-                      "operator": "=",
                       "left": {
                         "type": "ObjectPattern",
                         "start": 10,

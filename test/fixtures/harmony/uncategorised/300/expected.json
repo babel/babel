@@ -91,7 +91,6 @@
                 "column": 25
               }
             },
-            "operator": "=",
             "left": {
               "type": "Identifier",
               "start": 19,
