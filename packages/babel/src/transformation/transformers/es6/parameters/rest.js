@@ -78,6 +78,18 @@ var memberExpressionOptimisationVisitor = {
 
       state.references.push(this);
     }
+  },
+
+  /**
+   * Deopt on use of a binding identifier with the same name as our rest param.
+   *
+   * See https://github.com/babel/babel/issues/2091
+   */
+
+  BindingIdentifier(node, parent, scope, state) {
+    if (node.name === state.name) {
+      state.deopted = true;
+    }
   }
 };
 

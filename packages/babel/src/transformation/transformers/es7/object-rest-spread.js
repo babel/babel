@@ -3,7 +3,7 @@
 import * as t from "../../../types";
 
 export var metadata = {
-  stage: 1,
+  stage: 2,
   dependencies: ["es6.destructuring"]
 };
 

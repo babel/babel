@@ -7,7 +7,7 @@
   for (var _key in _descriptor) descriptor[_key] = _descriptor[_key];
 
   // initialize it
-  descriptor.value = descriptor.initializer.call(target);
+  descriptor.value = descriptor.initializer ? descriptor.initializer.call(target) : undefined;
 
   Object.defineProperty(target, key, descriptor);
 })

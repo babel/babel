@@ -73,21 +73,5 @@ export var visitor = {
       node = node.expression;
     } while(t.isTypeCastExpression(node));
     return node;
-  },
-
-  /**
-   * [Please add a description.]
-   */
-
-  ImportDeclaration(node) {
-    if (node.importKind === "type" || node.importKind === "typeof") this.dangerouslyRemove();
-  },
-
-  /**
-   * [Please add a description.]
-   */
-
-  ExportDeclaration() {
-    if (this.get("declaration").isTypeAlias()) this.dangerouslyRemove();
   }
 };

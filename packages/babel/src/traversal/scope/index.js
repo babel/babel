@@ -187,19 +187,14 @@ var renameVisitor = {
     if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
       this.skip();
     }
-  }
-};
+  },
 
-/**
- * [Please add a description.]
- */
+  "AssignmentExpression|Declaration"(node, parent, scope, state) {
+    var ids = this.getBindingIdentifiers();
 
-renameVisitor.AssignmentExpression =
-renameVisitor.Declaration = function (node, parent, scope, state) {
-  var ids = this.getBindingIdentifiers();
-
-  for (var name in ids) {
-    if (name === state.oldName) ids[name].name = state.newName;
+    for (var name in ids) {
+      if (name === state.oldName) ids[name].name = state.newName;
+    }
   }
 };
 
@@ -237,11 +232,13 @@ export default class Scope {
   /**
    * Globals.
    */
+
   static globals = flatten([globals.builtin, globals.browser, globals.node].map(Object.keys));
 
   /**
    * Variables available in current context.
    */
+
   static contextVariables = [
     "arguments",
     "undefined",
@@ -535,15 +532,21 @@ export default class Scope {
       this.registerBinding("hoisted", path);
     } else if (path.isVariableDeclaration()) {
       var declarations = path.get("declarations");
-      for (var declar of (declarations: Array)) {
+      for (let declar of (declarations: Array)) {
         this.registerBinding(path.node.kind, declar);
       }
     } else if (path.isClassDeclaration()) {
       this.registerBinding("let", path);
-    } else if (path.isImportDeclaration() || path.isExportDeclaration()) {
-      this.registerBinding("module", path);
-    } else if (path.isFlowDeclaration()) {
-      this.registerBinding("type", path);
+    } else if (path.isImportDeclaration()) {
+      var specifiers = path.get("specifiers");
+      for (var specifier of (specifiers: Array)) {
+        this.registerBinding("module", specifier);
+      }
+    } else if (path.isExportDeclaration()) {
+      let declar = path.get("declaration");
+      if (declar.isClassDeclaration() || declar.isFunctionDeclaration() || declar.isVariableDeclaration()) {
+        this.registerDeclaration(declar);
+      }
     } else {
       this.registerBinding("unknown", path);
     }
@@ -557,14 +560,7 @@ export default class Scope {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
       var binding = this.getBinding(name);
-      if (!binding) continue;
-
-      if (right) {
-        var rightType = right.typeAnnotation;
-        if (rightType && binding.isCompatibleWithType(rightType)) continue;
-      }
-
-      binding.reassign(root, left, right);
+      if (binding) binding.reassign(root, left, right);
     }
   }
 
@@ -590,9 +586,6 @@ export default class Scope {
       for (var id of (ids[name]: Array)) {
         var local = this.getOwnBinding(name);
         if (local) {
-          // don't ever let a type alias shadow a local binding
-          if (kind === "type") continue;
-
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
           if (local.identifier === id) continue;
@@ -1038,7 +1031,18 @@ export default class Scope {
    */
 
   removeBinding(name: string) {
+    // clear literal binding
     var info = this.getBinding(name);
-    if (info) info.scope.removeOwnBinding(name);
+    if (info) {
+      info.scope.removeOwnBinding(name);
+    }
+
+    // clear uids with this name - https://github.com/babel/babel/issues/2101
+    var scope = this;
+    do {
+      if (scope.uids[name]) {
+        scope.uids[name] = false;
+      }
+    } while(scope = scope.parent);
   }
 }

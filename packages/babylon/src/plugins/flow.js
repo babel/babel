@@ -493,6 +493,11 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "StringLiteralTypeAnnotation");
 
+    case tt._true: case tt._false:
+      node.value = this.match(tt._true);
+      this.next();
+      return this.finishNode(node, "BooleanLiteralTypeAnnotation");
+
     case tt.num:
       node.rawValue = node.value = this.state.value;
       node.raw = this.input.slice(this.state.start, this.state.end);
@@ -660,6 +665,39 @@ export default function (instance) {
         }
       } else {
         return node;
+      }
+    };
+  });
+
+  instance.extend("parseExport", function (inner) {
+    return function (node) {
+      node = inner.call(this, node);
+      if (node.type === "ExportNamedDeclaration") {
+        node.exportKind = node.exportKind || "value";
+      }
+      return node;
+    };
+  });
+
+  instance.extend("parseExportDeclaration", function (inner) {
+    return function (node) {
+      if (this.isContextual("type")) {
+        node.exportKind = "type";
+
+        var declarationNode = this.startNode();
+        this.next();
+
+        if (this.match(tt.braceL)) {
+          // export type { foo, bar };
+          node.specifiers = this.parseExportSpecifiers();
+          this.parseExportFrom(node);
+          return null;
+        } else {
+          // export type Foo = Bar;
+          return this.flowParseTypeAlias(declarationNode);
+        }
+      } else {
+        return inner.call(this, node);
       }
     };
   });

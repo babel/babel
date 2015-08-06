@@ -4,7 +4,6 @@
 // a generator function as a default then regenerator will destroy the export
 // declaration and leave a variable declaration in it's place... yeah, handy.
 
-import clone from "lodash/lang/clone";
 import * as t from "../../../types";
 
 /**
@@ -24,7 +23,13 @@ function getDeclar(node) {
  */
 
 function buildExportSpecifier(id) {
-  return t.exportSpecifier(clone(id), clone(id));
+  return t.exportSpecifier(cloneIdentifier(id), cloneIdentifier(id));
+}
+
+function cloneIdentifier({ name, loc }) {
+  var id = t.identifier(name);
+  id._loc = loc;
+  return id;
 }
 
 export var metadata = {
@@ -85,12 +90,9 @@ export var visitor = {
       return nodes;
     } else if (t.isFunctionDeclaration(declar)) {
       // export function Foo() {}
-      node.specifiers  = [buildExportSpecifier(declar.id)];
-      node._blockHoist = 2;
-
-      let nodes = [getDeclar(node), node];
-      node.declaration = null;
-      return nodes;
+      var newExport = t.exportNamedDeclaration(null, [buildExportSpecifier(declar.id)]);
+      newExport._blockHoist = 2;
+      return [getDeclar(node), newExport];
     } else if (t.isVariableDeclaration(declar)) {
       // export var foo = "bar";
       var specifiers = [];

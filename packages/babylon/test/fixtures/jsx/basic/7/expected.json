@@ -116,7 +116,7 @@
                     }
                   },
                   "value": "&&",
-                  "rawValue": "&&",
+                  "rawValue": null,
                   "raw": "\"&#x0026;&#38;\""
                 }
               }

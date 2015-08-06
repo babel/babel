@@ -157,12 +157,14 @@ export var Generated = {
  */
 
 export var Flow = {
-  types: ["Flow", "ImportDeclaration"],
+  types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
   checkPath({ node }) {
     if (t.isFlow(node)) {
       return true;
     } else if (t.isImportDeclaration(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
+    } else if (t.isExportDeclaration(node)) {
+      return node.exportKind === "type";
     } else {
       return false;
     }

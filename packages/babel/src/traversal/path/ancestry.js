@@ -181,17 +181,25 @@ export function inType() {
  * Check if we're inside a shadowed function.
  */
 
-export function inShadow() {
+export function inShadow(key?) {
   var path = this;
-  while (path) {
+  do {
     if (path.isFunction()) {
-      if (path.node.shadow || path.isArrowFunctionExpression()) {
-        return path;
-      } else {
-        return null;
+      var shadow = path.node.shadow;
+      if (shadow || path.isArrowFunctionExpression()) {
+        // this is because sometimes we may have a `shadow` value of:
+        //
+        //   { this: false }
+        //
+        // we need to catch this case if `inShadow` has been passed a `key`
+        if (!key || !shadow || shadow[key] !== false) {
+          return path;
+        }
       }
+
+      // normal function, we've found our function context
+      return null;
     }
-    path = path.parentPath;
-  }
+  } while(path = path.parentPath);
   return null;
 }

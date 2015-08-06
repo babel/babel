@@ -4,14 +4,22 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
+function shouldShadow(path, shadowPath) {
+  if (path.is("_forceShadow")) {
+    return true;
+  } else {
+    return shadowPath && !shadowPath.isArrowFunctionExpression();
+  }
+}
+
 /**
  * [Please add a description.]
  */
 
 function remap(path, key, create) {
   // ensure that we're shadowed
-  var shadowPath = path.inShadow();
-  if (!shadowPath || shadowPath.isArrowFunctionExpression()) return;
+  var shadowPath = path.inShadow(key);
+  if (!shouldShadow(path, shadowPath)) return;
 
   var shadowFunction = path.node._shadowedFunctionLiteral;
   var currentFunction;

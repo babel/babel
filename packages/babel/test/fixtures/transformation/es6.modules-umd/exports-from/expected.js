@@ -16,7 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  babelHelpers.defaults(exports, babelHelpers.interopRequireWildcard(_foo));
+  babelHelpers.defaults(exports, babelHelpers.interopExportWildcard(_foo, babelHelpers.defaults));
   Object.defineProperty(exports, "foo", {
     enumerable: true,
     get: function get() {

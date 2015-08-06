@@ -1,5 +1,5 @@
 import { validateOption, normaliseOptions } from "./index";
-import stripJsonComments from "strip-json-comments";
+import json5 from "json5";
 import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
 import clone from "lodash/lang/clone";
@@ -51,17 +51,17 @@ export default class OptionManager {
    * [Please add a description.]
    */
 
-  addConfig(loc, key?) {
+  addConfig(loc, key?, json=json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
 
     var content = fs.readFileSync(loc, "utf8");
     var opts;
 
     try {
-      opts = jsonCache[content] = jsonCache[content] || JSON.parse(stripJsonComments(content));
+      opts = jsonCache[content] = jsonCache[content] || json.parse(content);
       if (key) opts = opts[key];
     } catch (err) {
-      err.message = `${loc}: ${err.message}`;
+      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
       throw err;
     }
 
@@ -125,7 +125,7 @@ export default class OptionManager {
       if (exists(configLoc)) this.addConfig(configLoc);
 
       var pkgLoc = path.join(loc, PACKAGE_FILENAME);
-      if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel");
+      if (exists(pkgLoc)) this.addConfig(pkgLoc, "babel", JSON);
 
       var ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
       if (exists(ignoreLoc)) this.addIgnoreConfig(ignoreLoc);
@@ -178,7 +178,9 @@ export default class OptionManager {
     }
 
     // resolve all .babelrc files
-    this.findConfigs(opts.filename);
+    if (opts.babelrc !== false) {
+      this.findConfigs(opts.filename);
+    }
 
     // merge in env
     var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";

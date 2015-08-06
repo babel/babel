@@ -18,9 +18,9 @@ module.exports = function (commander, filenames) {
       sourceFileName: slash(path.relative(dest + "/..", src)),
       sourceMapTarget: path.basename(relative)
     });
-    if (data.ignored) return;
+    if (!commander.copyFiles && data.ignored) return;
 
-    if (commander.sourceMaps && commander.sourceMaps !== "inline") {
+    if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
       var mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
       outputFileSync(mapLoc, JSON.stringify(data.map));

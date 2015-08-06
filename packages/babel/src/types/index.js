@@ -39,7 +39,8 @@ export const INHERIT_KEYS = {
 };
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
-export const COMPARISON_BINARY_OPERATORS     = ["==", "===", "!=", "!==", "in", "instanceof"];
+export const EQUALITY_BINARY_OPERATORS       = ["==", "===", "!=", "!=="];
+export const COMPARISON_BINARY_OPERATORS     = EQUALITY_BINARY_OPERATORS.concat(["in", "instanceof"]);
 export const BOOLEAN_BINARY_OPERATORS        = [].concat(COMPARISON_BINARY_OPERATORS, BOOLEAN_NUMBER_BINARY_OPERATORS);
 export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 
@@ -144,7 +145,6 @@ each(t.VISITOR_KEYS, function (keys, type) {
 each(t.BUILDER_KEYS, function (keys, type) {
   var builder = function () {
     var node = {};
-    node.start = null;
     node.type = type;
 
     var i = 0;
@@ -318,12 +318,28 @@ export function removeComments(node: Object): Object {
  */
 
 export function inheritsComments(child: Object, parent: Object): Object {
-  if (child && parent) {
-    for (var key of (COMMENT_KEYS: Array)) {
-      child[key] = uniq(compact([].concat(child[key], parent[key])));
-    }
-  }
+  inheritTrailingComments(child, parent);
+  inheritLeadingComments(child, parent);
+  inheritInnerComments(child, parent);
   return child;
+}
+
+export function inheritTrailingComments(child, parent) {
+  _inheritComments("trailingComments", child, parent);
+}
+
+export function inheritLeadingComments(child, parent) {
+  _inheritComments("leadingComments", child, parent);
+}
+
+export function inheritInnerComments(child, parent) {
+  _inheritComments("innerComments", child, parent);
+}
+
+function _inheritComments(key, child, parent) {
+  if (child && parent) {
+    child[key] = uniq(compact([].concat(child[key], parent[key])));
+  }
 }
 
 /**

@@ -13,6 +13,10 @@ define("BooleanTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
+define("BooleanLiteralTypeAnnotation", {
+  aliases: ["Flow"]
+});
+
 define("ClassImplements", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"]

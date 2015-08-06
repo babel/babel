@@ -147,7 +147,7 @@
                     }
                   },
                   "value": "bar",
-                  "rawValue": "bar",
+                  "rawValue": null,
                   "raw": "\"bar\""
                 }
               }

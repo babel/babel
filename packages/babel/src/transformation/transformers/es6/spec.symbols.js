@@ -17,6 +17,12 @@ export var visitor = {
   UnaryExpression(node, parent, scope, file) {
     if (node._ignoreSpecSymbols) return;
 
+    if (this.parentPath.isBinaryExpression() && t.EQUALITY_BINARY_OPERATORS.indexOf(parent.operator) >= 0) {
+      // optimise `typeof foo === "string"` since we can determine that they'll never need to handle symbols
+      var opposite = this.getOpposite();
+      if (opposite.isLiteral() && opposite.node.value !== "symbol" && opposite.node.value !== "object") return;
+    }
+
     if (node.operator === "typeof") {
       var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
       if (this.get("argument").isIdentifier()) {

@@ -13,6 +13,17 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.12
+
+ * **Bug Fix**
+  * Fix bug in lookahead causing decorators to be cleared.
+
+## 5.8.11
+
+ * **Bug Fix**
+  * Check if module options are nully instead of falsy to allow empty strings as `moduleRoot` etc.
+  * Fix bug where reassigning the rest parameter wouldn't result in a deoptimisation.
+
 ## 5.8.9
 
  * **Bug Fix**

@@ -45,6 +45,14 @@ function write(filename, content) {
   fs.writeFileSync(filename, content);
 }
 
+function execMaybe(cmd) {
+  try {
+    return child.execSync(cmd).toString();
+  } catch (err) {
+    return "";
+  }
+}
+
 var rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -61,7 +69,7 @@ var cmds = {
     }
 
     rl.question("Description (optional): ", function (description) {
-      var remote = child.execSync("git config --get remote.origin.url").trim().match(/git@github.com:(.*?).git/);
+      var remote = execMaybe("git config --get remote.origin.url").trim().match(/git@github.com:(.*?).git/);
       if (remote) {
         build(description, remote[1]);
       } else {
@@ -93,9 +101,9 @@ var cmds = {
         },
 
         scripts: {
-          publish: "babel-plugin publish",
-          build:   "babel-plugin build",
-          test:    "babel-plugin test"
+          build: "babel-plugin build",
+          push:  "babel-plugin publish",
+          test:  "babel-plugin test"
         },
 
         keywords: ["babel-plugin"]
@@ -108,8 +116,8 @@ var cmds = {
       write("README.md", template("README.md", templateData));
 
       write("LICENSE", template("LICENSE", {
-        AUTHOR_EMAIL: child.execSync("git config --get user.email").trim(),
-        AUTHOR_NAME: child.execSync("git config --get user.name").trim(),
+        AUTHOR_EMAIL: execMaybe("git config --get user.email").trim(),
+        AUTHOR_NAME: execMaybe("git config --get user.name").trim(),
         YEAR: new Date().getFullYear()
       }));
 
@@ -126,7 +134,7 @@ var cmds = {
 
   publish: function () {
     var pkg = require(process.cwd() + "/package.json");
-    console.log("Current verison:", pkg.version);
+    console.log("Current version:", pkg.version);
 
     rl.question("New version (enter nothing for patch): ", function (newVersion) {
       rl.close();

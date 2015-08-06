@@ -26,36 +26,35 @@ import * as t from "../../types";
 
 export default class File {
   constructor(opts = {}, pipeline) {
-    this.transformerDependencies = {};
-
-    this.dynamicImportTypes = {};
-    this.dynamicImportIds   = {};
-    this.dynamicImports     = [];
-
-    this.declarations = {};
-    this.usedHelpers  = {};
-    this.dynamicData  = {};
-    this.data         = {};
-
-    this.metadata = {
-      modules: {
-        imports: [],
-        exports: {
-          exported: [],
-          specifiers: []
-        }
-      }
-    };
-
     this.pipeline = pipeline;
-    this.log      = new Logger(this, opts.filename || "unknown");
-    this.opts     = this.initOptions(opts);
-    this.ast      = {};
+
+    this.log  = new Logger(this, opts.filename || "unknown");
+    this.opts = this.initOptions(opts);
 
     this.buildTransformers();
-
-    this.hub = new Hub(this);
   }
+
+  transformerDependencies = {};
+  dynamicImportTypes      = {};
+  dynamicImportIds        = {};
+  dynamicImports          = [];
+  declarations            = {};
+  usedHelpers             = {};
+  dynamicData             = {};
+  data                    = {};
+  ast                     = {};
+
+  metadata = {
+    modules: {
+      imports: [],
+      exports: {
+        exported: [],
+        specifiers: []
+      }
+    }
+  };
+
+  hub = new Hub(this);
 
   /**
    * [Please add a description.]
@@ -80,12 +79,14 @@ export default class File {
     "bind",
     "define-property",
     "async-to-generator",
+    "interop-export-wildcard",
     "interop-require-wildcard",
     "interop-require-default",
     "typeof",
     "extends",
     "get",
     "set",
+    "new-arrow-check",
     "class-call-check",
     "object-destructuring-empty",
     "temporal-undefined",
@@ -438,10 +439,10 @@ export default class File {
 
   errorWithNode(node, msg, Error = SyntaxError) {
     var err;
-    if (node && node.loc) {
-      var loc = node.loc.start;
-      err = new Error(`Line ${loc.line}: ${msg}`);
-      err.loc = loc;
+    var loc = node && (node.loc || node._loc);
+    if (loc) {
+      err = new Error(`Line ${loc.start.line}: ${msg}`);
+      err.loc = loc.start;
     } else {
       // todo: find errors with nodes inside to at least point to something
       err = new Error("There's been an error on a dynamic node. This is almost certainly an internal error. Please report it.");

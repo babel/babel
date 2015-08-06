@@ -26,7 +26,10 @@ export var visitor = {
       var hasChange = false;
       for (var i = 0; i < node.body.length; i++) {
         var bodyNode = node.body[i];
-        if (bodyNode && bodyNode._blockHoist != null) hasChange = true;
+        if (bodyNode && bodyNode._blockHoist != null) {
+          hasChange = true;
+          break;
+        }
       }
       if (!hasChange) return;
 

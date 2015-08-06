@@ -171,27 +171,26 @@ export function referencesImport(moduleSource, importName) {
   if (!binding || binding.kind !== "module") return false;
 
   var path = binding.path;
-  if (!path.isImportDeclaration()) return false;
+  var parent = path.parentPath;
+  if (!parent.isImportDeclaration()) return false;
 
   // check moduleSource
-  if (path.node.source.value === moduleSource) {
+  if (parent.node.source.value === moduleSource) {
     if (!importName) return true;
   } else {
     return false;
   }
 
-  for (var specifier of (path.node.specifiers: Array)) {
-    if (t.isSpecifierDefault(specifier) && importName === "default") {
-      return true;
-    }
+  if (path.isImportDefaultSpecifier() && importName === "default") {
+    return true;
+  }
 
-    if (t.isImportNamespaceSpecifier(specifier) && importName === "*") {
-      return true;
-    }
+  if (path.isImportNamespaceSpecifier() && importName === "*") {
+    return true;
+  }
 
-    if (t.isImportSpecifier(specifier) && specifier.imported.name === importName) {
-      return true;
-    }
+  if (path.isImportSpecifier() && path.node.imported.name === importName) {
+    return true;
   }
 
   return false;
