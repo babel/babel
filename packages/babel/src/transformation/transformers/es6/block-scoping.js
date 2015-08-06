@@ -233,8 +233,8 @@ var hoistVarDeclarationsVisitor = {
       }
     } else if (this.isFor()) {
       if (isVar(node.left, node)) {
-        node.left = node.left.declarations[0].id;
         self.pushDeclar(node.left);
+        node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent)) {
       return self.pushDeclar(node).map(t.expressionStatement);
