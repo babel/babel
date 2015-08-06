@@ -104,7 +104,7 @@ export function ArrayExpression(node) {
     var elem = elems[i];
     if (elem) {
       if (i > 0) this.space();
-      print.plain(elem);
+      this.print(elem, node);
       if (i < len - 1) this.push(",");
     } else {
       // If the array expression ends with a hole, that hole
