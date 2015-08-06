@@ -593,7 +593,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     if (!isPattern && this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
       if (isGenerator) this.unexpected();
       var asyncId = this.parseIdent();
-      if (this.match(tt.colon) || this.match(tt.parenL)) {
+      if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR)) {
         prop.key = asyncId;
       } else {
         isAsync = true;
