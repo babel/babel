@@ -606,6 +606,12 @@ export default class File {
         message += "\n" + err.codeFrame;
       }
 
+      if (process.browser) {
+        // chrome has it's own pretty stringifier which doesn't use the stack property
+        // https://github.com/babel/babel/issues/2175
+        err.message = message;
+      }
+
       if (err.stack) {
         var newStack = err.stack.replace(err.message, message);
         try {
