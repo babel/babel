@@ -72,7 +72,7 @@ var compile = function (filename, opts = {}) {
   var result;
 
   opts.filename = filename;
-  
+
   var rerunAfterOptional = transformOpts.rerunAfterOptional;
   delete transformOpts.rerunAfterOptional;
 
@@ -97,13 +97,13 @@ var compile = function (filename, opts = {}) {
       sourceMap: "both",
       ast:       false
     }));
-    
+
     if (rerunAfterOptional) {
       opts.optional = [];
       result = babel.transform(result.code, extend(opts, {
         sourceMap: "both",
         ast:       false
-      }))
+      }));
     }
   }
 
