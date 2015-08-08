@@ -73,6 +73,9 @@ var compile = function (filename, opts = {}) {
 
   opts.filename = filename;
 
+  var rerunAfterOptional = transformOpts.rerunAfterOptional;
+  delete transformOpts.rerunAfterOptional;
+
   var optsManager = new OptionManager;
   optsManager.mergeOptions(transformOpts);
   opts = optsManager.init(opts);
@@ -94,6 +97,14 @@ var compile = function (filename, opts = {}) {
       sourceMap: "both",
       ast:       false
     }));
+
+    if (rerunAfterOptional) {
+      opts.optional = [];
+      result = babel.transform(result.code, extend(opts, {
+        sourceMap: "both",
+        ast:       false
+      }));
+    }
   }
 
   if (cache) {
