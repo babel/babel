@@ -38,6 +38,22 @@ babel.register({
 
 //
 
+var replPlugin = new babel.Plugin("repl", {
+  visitor: {
+    ModuleDeclaration() {
+      throw this.errorWithNode("Modules aren't supported in the REPL");
+    },
+
+    VariableDeclaration(node) {
+      if (node.kind !== "var") {
+        throw this.errorWithNode("Only `var` variables are supported in the REPL");
+      }
+    }
+  }
+});
+
+//
+
 var _eval = function (code, filename) {
   code = code.trim();
   if (!code) return undefined;
@@ -47,7 +63,8 @@ var _eval = function (code, filename) {
     blacklist: program.blacklist,
     whitelist: program.whitelist,
     optional: program.optional,
-    stage: program.stage
+    stage: program.stage,
+    plugins: [replPlugin]
   }).code;
 
   return vm.runInThisContext(code, {
