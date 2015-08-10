@@ -483,11 +483,15 @@ pp.parseVarHead = function (decl) {
 // Parse a function declaration or literal (depending on the
 // `isStatement` parameter).
 
-pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync) {
+pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, optionalId) {
   this.initFunction(node, isAsync);
   node.generator = this.eat(tt.star);
 
-  if (isStatement || this.match(tt.name)) {
+  if (isStatement && !optionalId && !this.match(tt.name)) {
+    this.unexpected();
+  }
+
+  if (this.match(tt.name)) {
     node.id = this.parseIdent();
   }
 
@@ -504,9 +508,9 @@ pp.parseFunctionParams = function (node) {
 // Parse a class declaration or literal (depending on the
 // `isStatement` parameter).
 
-pp.parseClass = function (node, isStatement) {
+pp.parseClass = function (node, isStatement, optionalId) {
   this.next();
-  this.parseClassId(node, isStatement);
+  this.parseClassId(node, isStatement, optionalId);
   this.parseClassSuper(node);
   var classBody = this.startNode();
   let hadConstructor = false;
@@ -607,8 +611,16 @@ pp.parseClassMethod = function (classBody, method, isGenerator, isAsync) {
   classBody.body.push(this.finishNode(method, "MethodDefinition"));
 };
 
-pp.parseClassId = function (node, isStatement) {
-  node.id = this.match(tt.name) ? this.parseIdent() : isStatement ? this.unexpected() : null;
+pp.parseClassId = function (node, isStatement, optionalId) {
+  if (this.match(tt.name)) {
+    node.id = this.parseIdent();
+  } else {
+    if (optionalId || !isStatement) {
+      node.id = null;
+    } else {
+      this.unexpected();
+    }
+  }
 };
 
 pp.parseClassSuper = function (node) {
@@ -648,14 +660,17 @@ pp.parseExport = function (node) {
     }
     this.parseExportFrom(node, true);
   } else if (this.eat(tt._default)) { // export default ...
-    let possibleDeclaration = this.match(tt._function) || this.match(tt._class);
-    let expr = this.parseMaybeAssign();
-    let needsSemi = true;
-    if (possibleDeclaration) {
-      needsSemi = false;
-      if (expr.id) {
-        expr.type = expr.type === "FunctionExpression" ? "FunctionDeclaration" : "ClassDeclaration";
-      }
+    let expr = this.startNode();
+    let needsSemi = false;
+    if (this.eat(tt._function)) {
+      expr = this.parseFunction(expr, true, false, false, true);
+      if (!expr.id) expr.type = "FunctionExpression";
+    } else if (this.match(tt._class)) {
+      expr = this.parseClass(expr, true, true);
+      if (!expr.id) expr.type = "ClassExpression";
+    } else {
+      needsSemi = true;
+      expr = this.parseMaybeAssign();
     }
     node.declaration = expr;
     if (needsSemi) this.semicolon();
