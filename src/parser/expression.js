@@ -229,7 +229,7 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
     } else if (this.eat(tt.dot)) {
       let node = this.startNodeAt(startPos, startLoc);
       node.object = base;
-      node.property = this.parseIdent(true);
+      node.property = this.parseIdentifier(true);
       node.computed = false;
       base = this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.bracketL)) {
@@ -245,10 +245,10 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
 
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
-      node.arguments = this.parseExprList(tt.parenR, this.options.features["es7.trailingFunctionCommas"]);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, this.options.features["es7.trailingFunctionCommas"], possibleAsync);
       base = this.finishNode(node, "CallExpression");
 
-      if (possibleAsync && (this.match(tt.colon) || this.match(tt.arrow))) {
+      if (possibleAsync && this.shouldParseAsyncArrow()) {
         base = this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
       } else {
         this.toReferencedList(node.arguments);
@@ -262,6 +262,38 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
       return base;
     }
   }
+};
+
+pp.parseCallExpressionArguments = function (close, allowTrailingComma, possibleAsyncArrow) {
+  let innerParenStart;
+
+  let elts = [], first = true;
+  while (!this.eat(close)) {
+    if (first) {
+      first = false;
+    } else {
+      this.expect(tt.comma);
+      if (allowTrailingComma && this.eat(close)) break;
+    }
+
+    // we need to make sure that if this is an async arrow functions, that we don't allow inner parens inside the params
+    if (this.match(tt.parenL) && !innerParenStart) {
+      innerParenStart = this.state.start;
+    }
+
+    elts.push(this.parseExprListItem());
+  }
+
+  // we found an async arrow function so let's not allow any inner parens
+  if (possibleAsyncArrow && innerParenStart && this.shouldParseAsyncArrow()) {
+    this.unexpected();
+  }
+
+  return elts;
+};
+
+pp.shouldParseAsyncArrow = function () {
+  return this.match(tt.arrow);
 };
 
 pp.parseAsyncArrowFromCallExpression = function (node, call) {
@@ -286,16 +318,51 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
   let node, canBeArrow = this.state.potentialArrowAt === this.state.start;
   switch (this.state.type) {
     case tt._super:
-      if (!this.state.inFunction)
+      if (!this.state.inFunction) {
         this.raise(this.state.start, "'super' outside of function or class");
-    case tt._this:
-      let type = this.match(tt._this) ? "ThisExpression" : "Super";
+      }
+
       node = this.startNode();
       this.next();
-      return this.finishNode(node, type);
+      if (!this.match(tt.parenL) && !this.match(tt.bracketL) && !this.match(tt.dot)) {
+        this.unexpected();
+      }
+      return this.finishNode(node, "Super");
+
+    case tt._this:
+      node = this.startNode();
+      this.next();
+      return this.finishNode(node, "ThisExpression");
 
     case tt._yield:
-      if (this.state.inGenerator) this.unexpected();
+      // NOTE: falls through to _let
+      if (!this.state.inGenerator && this.strict) this.unexpected();
+
+    case tt._let:
+    case tt.name:
+      node = this.startNode();
+      let id = this.parseIdentifier(true);
+
+      if (this.options.features["es7.asyncFunctions"]) {
+        if (id.name === "await") {
+          if (this.inAsync) return this.parseAwait(node);
+        } else if (id.name === "async" && this.match(tt._function) && !this.canInsertSemicolon()) {
+          this.next();
+          return this.parseFunction(node, false, false, true);
+        } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
+          var params = [this.parseIdentifier()];
+          this.expect(tt.arrow);
+          // var foo = bar => {};
+          return this.parseArrowExpression(node, params, true);
+        }
+      }
+
+      if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
+        return this.parseArrowExpression(node, [id]);
+      }
+
+      return id;
+
 
     case tt._do:
       if (this.options.features["es7.doExpressions"]) {
@@ -310,30 +377,6 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
         this.state.labels = oldLabels;
         return this.finishNode(node, "DoExpression");
       }
-
-    case tt.name:
-      node = this.startNode();
-      let id = this.parseIdent(true);
-
-      if (this.options.features["es7.asyncFunctions"]) {
-        if (id.name === "await") {
-          if (this.inAsync) return this.parseAwait(node);
-        } else if (id.name === "async" && this.match(tt._function) && !this.canInsertSemicolon()) {
-          this.next();
-          return this.parseFunction(node, false, false, true);
-        } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
-          var params = [this.parseIdent()];
-          this.expect(tt.arrow);
-          // var foo = bar => {};
-          return this.parseArrowExpression(node, params, true);
-        }
-      }
-
-      if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
-        return this.parseArrowExpression(node, [id]);
-      }
-
-      return id;
 
     case tt.regexp:
       let value = this.state.value;
@@ -430,7 +473,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
 
   let innerStartPos = this.state.start, innerStartLoc = this.state.startLoc;
   let exprList = [], first = true;
-  let refShorthandDefaultPos = {start: 0}, spreadStart, innerParenStart, optionalCommaStart;
+  let refShorthandDefaultPos = { start: 0 }, spreadStart, innerParenStart, optionalCommaStart;
   while (!this.match(tt.parenR)) {
     if (first) {
       first = false;
@@ -454,6 +497,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem));
     }
   }
+
   let innerEndPos = this.state.start;
   let innerEndLoc = this.state.startLoc;
   this.expect(tt.parenR);
@@ -497,11 +541,11 @@ pp.parseParenItem = function (node) {
 
 pp.parseNew = function () {
   let node = this.startNode();
-  let meta = this.parseIdent(true);
+  let meta = this.parseIdentifier(true);
 
   if (this.eat(tt.dot)) {
     node.meta = meta;
-    node.property = this.parseIdent(true);
+    node.property = this.parseIdentifier(true);
 
     if (node.property.name !== "target") {
       this.raise(node.property.start, "The only valid meta property for new is new.target");
@@ -592,7 +636,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     }
     if (!isPattern && this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
       if (isGenerator) this.unexpected();
-      var asyncId = this.parseIdent();
+      var asyncId = this.parseIdentifier();
       if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR)) {
         prop.key = asyncId;
       } else {
@@ -629,22 +673,27 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
     let paramCount = prop.kind === "get" ? 0 : 1;
     if (prop.value.params.length !== paramCount) {
       let start = prop.value.start;
-      if (prop.kind === "get")
+      if (prop.kind === "get") {
         this.raise(start, "getter should have no params");
-      else
+      } else {
         this.raise(start, "setter should have exactly one param");
+      }
     }
   } else if (!prop.computed && prop.key.type === "Identifier") {
     prop.kind = "init";
     if (isPattern) {
-      if (this.isKeyword(prop.key.name) ||
-            (this.strict && (reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name))) ||
-            (!this.options.allowReserved && this.isReservedWord(prop.key.name)))
-          this.raise(prop.key.start, "Binding " + prop.key.name);
+      var illegalBinding = this.isKeyword(prop.key.name);
+      if (!illegalBinding && this.strict) {
+        illegalBinding = reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name);
+      }
+      if (illegalBinding) {
+        this.raise(prop.key.start, "Binding " + prop.key.name);
+      }
       prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else if (this.match(tt.eq) && refShorthandDefaultPos) {
-      if (!refShorthandDefaultPos.start)
+      if (!refShorthandDefaultPos.start) {
         refShorthandDefaultPos.start = this.state.start;
+      }
       prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else {
       prop.value = prop.key.__clone();
@@ -663,7 +712,7 @@ pp.parsePropertyName = function (prop) {
     return prop.key;
   } else {
     prop.computed = false;
-    return prop.key = (this.match(tt.num) || this.match(tt.string)) ? this.parseExprAtom() : this.parseIdent(true);
+    return prop.key = (this.match(tt.num) || this.match(tt.string)) ? this.parseExprAtom() : this.parseIdentifier(true);
   }
 };
 
@@ -723,16 +772,19 @@ pp.parseFunctionBody = function (node, allowExpression) {
   // If this is a strict mode function, verify that argument names
   // are not repeated, and it does not try to bind the words `eval`
   // or `arguments`.
-  if (this.strict || !isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) {
-    let nameHash = Object.create(null), oldStrict = this.strict;
-    this.strict = true;
+  var checkLVal = this.strict;
+  // arrow function
+  if (allowExpression) checkLVal = true;
+  // normal function
+  if (!isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) checkLVal = true;
+  if (checkLVal) {
+    let nameHash = Object.create(null);
     if (node.id) {
       this.checkLVal(node.id, true);
     }
     for (let param of (node.params: Array)) {
       this.checkLVal(param, true, nameHash);
     }
-    this.strict = oldStrict;
   }
 };
 
@@ -773,19 +825,21 @@ pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
 // when parsing properties), it will also convert keywords into
 // identifiers.
 
-pp.parseIdent = function (liberal) {
+pp.parseIdentifier = function (liberal) {
   let node = this.startNode();
-  if (this.match(tt.name)) {
-    if (!liberal &&
-        ((!this.options.allowReserved && this.isReservedWord(this.state.value)) ||
-         (this.strict && reservedWords.strict(this.state.value))))
+
+  if (this.isName()) {
+    if (!liberal && this.strict && reservedWords.strict(this.state.value)) {
       this.raise(this.state.start, "The keyword '" + this.state.value + "' is reserved");
+    }
+
     node.name = this.state.value;
   } else if (liberal && this.state.type.keyword) {
     node.name = this.state.type.keyword;
   } else {
     this.unexpected();
   }
+
   this.next();
   return this.finishNode(node, "Identifier");
 };

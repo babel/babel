@@ -72,8 +72,27 @@ pp.parseStatement = function (declaration, topLevel) {
     case tt._switch: return this.parseSwitchStatement(node);
     case tt._throw: return this.parseThrowStatement(node);
     case tt._try: return this.parseTryStatement(node);
-    case tt._let: case tt._const: if (!declaration) this.unexpected(); // NOTE: falls through to _var
-    case tt._var: return this.parseVarStatement(node, starttype);
+
+    case tt._let:
+      // NOTE: falls through to _const
+      if (!this.strict) {
+        let state = this.state.clone();
+        this.next();
+
+        var isBindingAtomStart = this.isName() || this.match(tt.braceL) || this.match(tt.bracketL);
+
+        // set back lookahead
+        this.state = state;
+
+        if (!isBindingAtomStart) break;
+      }
+
+    case tt._const:
+      if (!declaration) this.unexpected(); // NOTE: falls through to _var
+
+    case tt._var:
+      return this.parseVarStatement(node, starttype);
+
     case tt._while: return this.parseWhileStatement(node);
     case tt._with: return this.parseWithStatement(node);
     case tt.braceL: return this.parseBlock();
@@ -92,7 +111,7 @@ pp.parseStatement = function (declaration, topLevel) {
     case tt.name:
       if (this.options.features["es7.asyncFunctions"] && this.state.value === "async") {
         // peek ahead and see if next token is a function
-        var state = this.state.clone();
+        let state = this.state.clone();
         this.next();
         if (this.match(tt._function) && !this.canInsertSemicolon()) {
           this.expect(tt._function);
@@ -101,20 +120,19 @@ pp.parseStatement = function (declaration, topLevel) {
           this.state = state;
         }
       }
+  }
 
-      // If the statement does not start with a statement keyword or a
-      // brace, it's an ExpressionStatement or LabeledStatement. We
-      // simply start parsing an expression, and afterwards, if the
-      // next token is a colon and the expression was a simple
-      // Identifier node, we switch to interpreting it as a label.
-    default:
-      let maybeName = this.state.value, expr = this.parseExpression();
+  // If the statement does not start with a statement keyword or a
+  // brace, it's an ExpressionStatement or LabeledStatement. We
+  // simply start parsing an expression, and afterwards, if the
+  // next token is a colon and the expression was a simple
+  // Identifier node, we switch to interpreting it as a label.
+  let maybeName = this.state.value, expr = this.parseExpression();
 
-      if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon)) {
-        return this.parseLabeledStatement(node, maybeName, expr);
-      } else {
-        return this.parseExpressionStatement(node, expr);
-      }
+  if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon)) {
+    return this.parseLabeledStatement(node, maybeName, expr);
+  } else {
+    return this.parseExpressionStatement(node, expr);
   }
 };
 
@@ -158,7 +176,7 @@ pp.parseBreakContinueStatement = function (node, keyword) {
   } else if (!this.match(tt.name)) {
     this.unexpected();
   } else {
-    node.label = this.parseIdent();
+    node.label = this.parseIdentifier();
     this.semicolon();
   }
 
@@ -487,12 +505,12 @@ pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, op
   this.initFunction(node, isAsync);
   node.generator = this.eat(tt.star);
 
-  if (isStatement && !optionalId && !this.match(tt.name)) {
+  if (isStatement && !optionalId && !this.isName()) {
     this.unexpected();
   }
 
-  if (this.match(tt.name)) {
-    node.id = this.parseIdent();
+  if (this.isName()) {
+    node.id = this.parseIdentifier();
   }
 
   this.parseFunctionParams(node);
@@ -613,7 +631,7 @@ pp.parseClassMethod = function (classBody, method, isGenerator, isAsync) {
 
 pp.parseClassId = function (node, isStatement, optionalId) {
   if (this.match(tt.name)) {
-    node.id = this.parseIdent();
+    node.id = this.parseIdentifier();
   } else {
     if (optionalId || !isStatement) {
       node.id = null;
@@ -636,7 +654,7 @@ pp.parseExport = function (node) {
     let specifier = this.startNode();
     this.next();
     if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
-      specifier.exported = this.parseIdent();
+      specifier.exported = this.parseIdentifier();
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
       this.parseExportSpecifiersMaybe(node);
       this.parseExportFrom(node, true);
@@ -646,14 +664,14 @@ pp.parseExport = function (node) {
     }
   } else if (this.options.features["es7.exportExtensions"] && this.isExportDefaultSpecifier()) {
     let specifier = this.startNode();
-    specifier.exported = this.parseIdent(true);
+    specifier.exported = this.parseIdentifier(true);
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
     if (this.match(tt.comma) && this.lookahead().type === tt.star) {
       this.expect(tt.comma);
       let specifier = this.startNode();
       this.expect(tt.star);
       this.expectContextual("as");
-      specifier.exported = this.parseIdent();
+      specifier.exported = this.parseIdentifier();
       node.specifiers.push(this.finishNode(specifier, "ExportNamespaceSpecifier"));
     } else {
       this.parseExportSpecifiersMaybe(node);
@@ -744,7 +762,10 @@ pp.checkExport = function (node) {
 // Parses a comma-separated list of module exports.
 
 pp.parseExportSpecifiers = function () {
-  let nodes = [], first = true;
+  let nodes = [];
+  let first = true;
+  let needsFrom;
+
   // export { x, y as z } [from '...']
   this.expect(tt.braceL);
 
@@ -756,10 +777,18 @@ pp.parseExportSpecifiers = function () {
       if (this.eat(tt.braceR)) break;
     }
 
+    let isDefault = this.match(tt._default);
+    if (isDefault && !needsFrom) needsFrom = true;
+
     let node = this.startNode();
-    node.local = this.parseIdent(this.match(tt._default));
-    node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local.__clone();
+    node.local = this.parseIdentifier(isDefault);
+    node.exported = this.eatContextual("as") ? this.parseIdentifier(true) : node.local.__clone();
     nodes.push(this.finishNode(node, "ExportSpecifier"));
+  }
+
+  // https://github.com/ember-cli/ember-cli/pull/3739
+  if (needsFrom && !this.isContextual("from")) {
+    this.unexpected();
   }
 
   return nodes;
@@ -791,7 +820,7 @@ pp.parseImportSpecifiers = function (node) {
   if (this.match(tt.name)) {
     // import defaultObj, { x, y as z } from '...'
     var startPos = this.state.start, startLoc = this.state.startLoc;
-    node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdent(), startPos, startLoc));
+    node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdentifier(), startPos, startLoc));
     if (!this.eat(tt.comma)) return;
   }
 
@@ -799,7 +828,7 @@ pp.parseImportSpecifiers = function (node) {
     let specifier = this.startNode();
     this.next();
     this.expectContextual("as");
-    specifier.local = this.parseIdent();
+    specifier.local = this.parseIdentifier();
     this.checkLVal(specifier.local, true);
     node.specifiers.push(this.finishNode(specifier, "ImportNamespaceSpecifier"));
     return;
@@ -815,8 +844,8 @@ pp.parseImportSpecifiers = function (node) {
     }
 
     let specifier = this.startNode();
-    specifier.imported = this.parseIdent(true);
-    specifier.local = this.eatContextual("as") ? this.parseIdent() : specifier.imported.__clone();
+    specifier.imported = this.parseIdentifier(true);
+    specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
     this.checkLVal(specifier.local, true);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }

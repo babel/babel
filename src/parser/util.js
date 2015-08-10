@@ -28,6 +28,23 @@ pp.expectRelational = function (op) {
   }
 };
 
+// TODO
+
+pp.isName = function () {
+  if (this.match(tt.name)) {
+    return true;
+  } else if (!this.strict) {
+    var keyword = this.state.type.keyword;
+    if (keyword === "let") {
+      return true;
+    } else if (keyword === "yield") {
+      return !this.state.inGenerator;
+    }
+  }
+
+  return false;
+};
+
 // Tests whether parsed token is a contextual keyword.
 
 pp.isContextual = function (name) {

@@ -92,17 +92,22 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  node.argument = this.match(tt.name) || this.match(tt.bracketL) ? this.parseBindingAtom() : this.unexpected();
+  if (this.isName() || this.match(tt.bracketL)) {
+    node.argument = this.parseBindingAtom();
+  } else {
+    this.unexpected();
+  }
   return this.finishNode(node, "RestElement");
 };
 
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
-  switch (this.state.type) {
-    case tt.name:
-      return this.parseIdent();
+  if (this.isName()) {
+    return this.parseIdentifier(true);
+  }
 
+  switch (this.state.type) {
     case tt.bracketL:
       let node = this.startNode();
       this.next();
@@ -163,8 +168,10 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
 pp.checkLVal = function (expr, isBinding, checkClashes) {
   switch (expr.type) {
     case "Identifier":
-      if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name)))
+      if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name))) {
         this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
+      }
+
       if (checkClashes) {
         if (checkClashes[expr.name]) {
           this.raise(expr.start, "Argument name clash in strict mode");
@@ -179,7 +186,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       break;
 
     case "ObjectPattern":
-         for (let prop of (expr.properties: Array)) {
+      for (let prop of (expr.properties: Array)) {
         if (prop.type === "Property") prop = prop.value;
         this.checkLVal(prop, isBinding, checkClashes);
       }
