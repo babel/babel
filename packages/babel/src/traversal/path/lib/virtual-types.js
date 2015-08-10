@@ -117,7 +117,7 @@ export var Var = {
 export var DirectiveLiteral = {
   types: ["Literal"],
   checkPath(path) {
-    return path.isLiteral() && path.parentPath.isExpressionStatement();
+    return path.parentPath.isDirective();
   }
 };
 
@@ -127,8 +127,22 @@ export var DirectiveLiteral = {
 
 export var Directive = {
   types: ["ExpressionStatement"],
-  checkPath(path) {
-    return path.get("expression").isLiteral();
+  checkPath({ inList, container, key }) {
+    // needs to be in a statement list
+    if (!inList) return false;
+
+    // get the last directive node in this list
+    var lastDirective = -1;
+    for (var i = 0; i < container.length; i++) {
+      var node = container[i];
+      if (t.isExpressionStatement(node) && t.isLiteral(node.expression)) {
+        lastDirective = i;
+      } else {
+        break;
+      }
+    }
+
+    return key <= lastDirective;
   }
 };
 
