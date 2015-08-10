@@ -703,8 +703,8 @@ export default function (instance) {
   });
 
   instance.extend("parseClassId", function (inner) {
-    return function (node, isStatement) {
-      inner.call(this, node, isStatement);
+    return function (node) {
+      inner.apply(this, arguments);
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
