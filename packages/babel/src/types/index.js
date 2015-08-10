@@ -364,6 +364,14 @@ export function inherits(child: Object, parent: Object): Object {
   return child;
 }
 
+/**
+ * Description
+ */
+
+export function directive(value) {
+  return t.expressionStatement(t.literal(value));
+}
+
 // Optimize property access.
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
