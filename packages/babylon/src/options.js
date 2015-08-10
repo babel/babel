@@ -4,11 +4,6 @@
 export const defaultOptions = {
   // Source type ("script" or "module") for different semantics
   sourceType: "script",
-  // By default, reserved words are not enforced. Disable
-  // `allowReserved` to enforce them. When this option has the
-  // value "never", reserved words and keywords can also not be
-  // used as property names.
-  allowReserved: true,
   // When enabled, a return at the top level is not considered an
   // error.
   allowReturnOutsideFunction: false,
