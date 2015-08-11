@@ -1,4 +1,4 @@
-import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
+import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";
 import { types as ct } from "./context";
 import { SourceLocation } from "../util/location";
@@ -48,9 +48,9 @@ function codePointToString(code) {
 }
 
 export default class Tokenizer {
-  constructor(input) {
+  constructor(options, input) {
     this.state = new State;
-    this.state.init(input);
+    this.state.init(options, input);
   }
 
   // Move to the next token
@@ -84,6 +84,22 @@ export default class Tokenizer {
 
   // TODO
 
+  isKeyword(word) {
+    if (!this.state.strict) {
+      if (word === "yield" && !this.state.inGenerator) {
+        return false;
+      }
+
+      if (word === "let") {
+        // check if next token is a name, braceL or bracketL, if so, it's a keyword!
+      }
+    }
+
+    return isKeyword(word);
+  }
+
+  // TODO
+
   lookahead() {
     var old = this.state;
     this.state = old.clone();
@@ -97,7 +113,7 @@ export default class Tokenizer {
   // pedantic tests (`"use strict"; 010;` should fail).
 
   setStrict(strict) {
-    this.strict = strict;
+    this.state.strict = strict;
     if (!this.match(tt.num) && !this.match(tt.string)) return;
     this.state.pos = this.state.start;
     while (this.state.pos < this.state.lineStart) {
@@ -589,7 +605,7 @@ export default class Tokenizer {
       val = parseFloat(str);
     } else if (!octal || str.length === 1) {
       val = parseInt(str, 10);
-    } else if (/[89]/.test(str) || this.strict) {
+    } else if (/[89]/.test(str) || this.state.strict) {
       this.raise(start, "Invalid number");
     } else {
       val = parseInt(str, 8);
@@ -705,7 +721,7 @@ export default class Tokenizer {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0 && (this.strict || inTemplate)) {
+          if (octal > 0 && (this.state.strict || inTemplate)) {
             this.raise(this.state.pos - 2, "Octal literal in strict mode");
           }
           this.state.pos += octalStr.length - 1;
@@ -769,8 +785,9 @@ export default class Tokenizer {
   readWord() {
     let word = this.readWord1();
     let type = tt.name;
-    if (!this.state.containsEsc && this.isKeyword(word))
+    if (!this.state.containsEsc && this.isKeyword(word)) {
       type = keywordTypes[word];
+    }
     return this.finishToken(type, word);
   }
 

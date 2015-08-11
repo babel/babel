@@ -74,19 +74,6 @@ pp.parseStatement = function (declaration, topLevel) {
     case tt._try: return this.parseTryStatement(node);
 
     case tt._let:
-      // NOTE: falls through to _const
-      if (!this.strict) {
-        let state = this.state.clone();
-        this.next();
-
-        var isBindingAtomStart = this.isName() || this.match(tt.braceL) || this.match(tt.bracketL);
-
-        // set back lookahead
-        this.state = state;
-
-        if (!isBindingAtomStart) break;
-      }
-
     case tt._const:
       if (!declaration) this.unexpected(); // NOTE: falls through to _var
 
@@ -171,7 +158,7 @@ pp.parseBreakContinueStatement = function (node, keyword) {
   let isBreak = keyword === "break";
   this.next();
 
-  if (this.eat(tt.semi) || this.canInsertSemicolon()) {
+  if (this.isLineTerminator()) {
     node.label = null;
   } else if (!this.match(tt.name)) {
     this.unexpected();
@@ -232,9 +219,13 @@ pp.parseForStatement = function (node) {
     this.next();
     this.parseVar(init, true, varKind);
     this.finishNode(init, "VariableDeclaration");
-    if ((this.match(tt._in) || this.isContextual("of")) && init.declarations.length === 1 &&
-        !(varKind !== tt._var && init.declarations[0].init))
-      return this.parseForIn(node, init);
+
+    if (this.match(tt._in) || this.isContextual("of")) {
+      if (init.declarations.length === 1 && !init.declarations[0].init) {
+        return this.parseForIn(node, init);
+      }
+    }
+
     return this.parseFor(node, init);
   }
 
@@ -274,7 +265,7 @@ pp.parseReturnStatement = function (node) {
   // optional arguments, we eagerly look for a semicolon or the
   // possibility to insert one.
 
-  if (this.eat(tt.semi) || this.canInsertSemicolon()) {
+  if (this.isLineTerminator()) {
     node.argument = null;
   } else {
     node.argument = this.parseExpression();
@@ -343,7 +334,7 @@ pp.parseTryStatement = function (node) {
     this.next();
     this.expect(tt.parenL);
     clause.param = this.parseBindingAtom();
-    this.checkLVal(clause.param, true);
+    this.checkLVal(clause.param, true, Object.create(null));
     this.expect(tt.parenR);
     clause.body = this.parseBlock();
     node.handler = this.finishNode(clause, "CatchClause");
@@ -376,7 +367,7 @@ pp.parseWhileStatement = function (node) {
 };
 
 pp.parseWithStatement = function (node) {
-  if (this.strict) this.raise(this.state.start, "'with' in strict mode");
+  if (this.state.strict) this.raise(this.state.start, "'with' in strict mode");
   this.next();
   node.object = this.parseParenExpression();
   node.body = this.parseStatement(false);
@@ -431,8 +422,8 @@ pp.parseBlock = function (allowStrict) {
     let stmt = this.parseStatement(true);
     node.body.push(stmt);
     if (first && allowStrict && this.isUseStrict(stmt)) {
-      oldStrict = this.strict;
-      this.setStrict(this.strict = true);
+      oldStrict = this.state.strict;
+      this.setStrict(this.state.strict = true);
     }
     first = false;
   }
@@ -505,11 +496,11 @@ pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, op
   this.initFunction(node, isAsync);
   node.generator = this.eat(tt.star);
 
-  if (isStatement && !optionalId && !this.isName()) {
+  if (isStatement && !optionalId && !this.match(tt.name)) {
     this.unexpected();
   }
 
-  if (this.isName()) {
+  if (this.match(tt.name)) {
     node.id = this.parseIdentifier();
   }
 

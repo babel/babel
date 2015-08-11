@@ -1,4 +1,4 @@
-import { reservedWords, isKeyword } from "../util/identifier";
+import { reservedWords } from "../util/identifier";
 import { getOptions } from "../options";
 import Tokenizer from "../tokenizer";
 
@@ -8,17 +8,16 @@ export const plugins = {};
 
 export default class Parser extends Tokenizer {
   constructor(options, input) {
-    super(input);
+    options = getOptions(options);
+    super(options, input);
 
-    this.options = getOptions(options);
-    this.isKeyword = isKeyword;
+    this.options = options;
     this.isReservedWord = reservedWords[6];
     this.input = input;
     this.loadPlugins(this.options.plugins);
 
     // Figure out if it's a module code.
     this.inModule = this.options.sourceType === "module";
-    this.strict = this.options.strictMode === false ? false : this.inModule;
 
     // If enabled, skip leading hashbang line.
     if (this.state.pos === 0 && this.input[0] === "#" && this.input[1] === "!") {

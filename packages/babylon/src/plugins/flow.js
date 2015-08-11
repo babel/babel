@@ -609,7 +609,7 @@ export default function (instance) {
   instance.extend("parseStatement", function (inner) {
     return function (declaration, topLevel) {
       // strict mode handling of `interface` since it's a reserved word
-      if (this.strict && this.match(tt.name) && this.state.value === "interface") {
+      if (this.state.strict && this.match(tt.name) && this.state.value === "interface") {
         var node = this.startNode();
         this.next();
         return this.flowParseInterface(node);

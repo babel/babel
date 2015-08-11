@@ -186,7 +186,7 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
     if (update) {
       this.checkLVal(node.argument);
-    } else if (this.strict && node.operator === "delete" && node.argument.type === "Identifier") {
+    } else if (this.state.strict && node.operator === "delete" && node.argument.type === "Identifier") {
       this.raise(node.start, "Deleting local variable in strict mode");
     }
     return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
@@ -335,10 +335,8 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       return this.finishNode(node, "ThisExpression");
 
     case tt._yield:
-      // NOTE: falls through to _let
-      if (!this.state.inGenerator && this.strict) this.unexpected();
+      if (this.state.inGenerator) this.unexpected();
 
-    case tt._let:
     case tt.name:
       node = this.startNode();
       let id = this.parseIdentifier(true);
@@ -362,7 +360,6 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       }
 
       return id;
-
 
     case tt._do:
       if (this.options.features["es7.doExpressions"]) {
@@ -683,7 +680,7 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
     prop.kind = "init";
     if (isPattern) {
       var illegalBinding = this.isKeyword(prop.key.name);
-      if (!illegalBinding && this.strict) {
+      if (!illegalBinding && this.state.strict) {
         illegalBinding = reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name);
       }
       if (illegalBinding) {
@@ -772,19 +769,29 @@ pp.parseFunctionBody = function (node, allowExpression) {
   // If this is a strict mode function, verify that argument names
   // are not repeated, and it does not try to bind the words `eval`
   // or `arguments`.
-  var checkLVal = this.strict;
+  var checkLVal = this.state.strict;
+  var checkLValStrict = false;
+
   // arrow function
   if (allowExpression) checkLVal = true;
+
   // normal function
-  if (!isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) checkLVal = true;
+  if (!isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) {
+    checkLVal = true;
+    checkLValStrict = true;
+  }
+
   if (checkLVal) {
     let nameHash = Object.create(null);
+    let oldStrict = this.state.strict;
+    if (checkLValStrict) this.state.strict = true;
     if (node.id) {
       this.checkLVal(node.id, true);
     }
     for (let param of (node.params: Array)) {
       this.checkLVal(param, true, nameHash);
     }
+    this.state.strict = oldStrict;
   }
 };
 
@@ -828,8 +835,8 @@ pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
 pp.parseIdentifier = function (liberal) {
   let node = this.startNode();
 
-  if (this.isName()) {
-    if (!liberal && this.strict && reservedWords.strict(this.state.value)) {
+  if (this.match(tt.name)) {
+    if (!liberal && this.state.strict && reservedWords.strict(this.state.value)) {
       this.raise(this.state.start, "The keyword '" + this.state.value + "' is reserved");
     }
 
@@ -847,7 +854,7 @@ pp.parseIdentifier = function (liberal) {
 // Parses await expression inside async function.
 
 pp.parseAwait = function (node) {
-  if (this.eat(tt.semi) || this.canInsertSemicolon()) {
+  if (this.isLineTerminator()) {
     this.unexpected();
   }
   node.all = this.eat(tt.star);
