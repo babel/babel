@@ -6,29 +6,11 @@ require("./_transformation-helper").run("traceur", {
     // weird environmental issue make these hard to test
     "Modules",
 
-    // not supported
-    "ProperTailCalls",
-
     // uses the old async generator proposal
     "AsyncGenerators",
-
-    // these are all internal traceur tests or non-standard features
-    "ObjectMixin",
-    "Annotations",
-    "TestRunner",
-    "Tools",
-    "TempVarTransformer",
-    "AtScript",
-    "FreeVariableChecker",
-    "TypeAssertions",
-    "MemberVariables",
-    "Types"
   ],
 
   ignoreTasks: [
-    // non-standard
-    "ObjectMixin",
-
     // Node 0.10 doesn't like these
     "Symbol/Object",
     "Symbol/ObjectModel",
@@ -52,9 +34,6 @@ require("./_transformation-helper").run("traceur", {
     // this tests pollutes Object.prototype which messes things up
     "StringExtras/StartsWith",
 
-    // TODO
-    "Syntax/IsValidSimpleAssignmentTarget",
-
     // babel has no way to check these :( TODO: add to caveats
     "TemplateLiterals/TemplateObjectCaching.module",
 
@@ -68,7 +47,6 @@ require("./_transformation-helper").run("traceur", {
 
     // these are the responsibility of core-js
     "Spread/Type",
-    "Symbol/Inherited",
     "Spread/NoIterator",
     "Destructuring/Rest",
     "Destructuring/Empty",
@@ -90,10 +68,8 @@ require("./_transformation-helper").run("traceur", {
     "ArrayComprehension/Simple",
     "GeneratorComprehension/Simple",
 
-    // yield has been added as a keyword in ES6
+    // TODO
     "Syntax/StrictKeywordsInPattern",
-    "Yield/YieldIdentifier",
-    "Syntax/StrictKeywords"
   ]
 }, {
   optional: ["es6.spec.symbols", "es6.spec.templateLiterals"],

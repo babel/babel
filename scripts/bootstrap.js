@@ -42,5 +42,4 @@ packages.forEach(function (root) {
   cd("../..");
 });
 
-exec("git submodule update --init");
 exec("make build");

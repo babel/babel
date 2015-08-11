@@ -1,0 +1,1 @@
+assert.throw(() => [...null], TypeError);
