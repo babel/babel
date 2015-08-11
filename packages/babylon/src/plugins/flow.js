@@ -256,7 +256,6 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
 pp.flowParseObjectType = function (allowStatic) {
   var nodeStart = this.startNode();
   var node;
-  var optional = false;
   var propertyKey;
   var isStatic;
 
@@ -288,9 +287,7 @@ pp.flowParseObjectType = function (allowStatic) {
         // This is a method property
         nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
       } else {
-        if (this.eat(tt.question)) {
-          optional = true;
-        }
+        var optional = this.eat(tt.question) ? true : false;
         node.key = propertyKey;
         node.value = this.flowParseTypeInitialiser();
         node.optional = optional;
