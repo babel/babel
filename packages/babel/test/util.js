@@ -121,5 +121,11 @@ suite("util", function () {
 
     assert.equal(util.shouldIgnore("test-fnIgnore.js", [fnIgnore]), true);
     assert.equal(util.shouldIgnore("test-fnIgnore.js", [reIgnore]), false);
+
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [], [fnIgnore]), true);
+    assert.equal(util.shouldIgnore("test-reIgnore.js", [], [reIgnore]), false);
+
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [], [fnIgnore]), false);
+    assert.equal(util.shouldIgnore("test-fnIgnore.js", [], [reIgnore]), true);
   });
 });
