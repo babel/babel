@@ -92,7 +92,8 @@ export default class CommonJSFormatter extends DefaultFormatter {
         ]));
       } else {
         // import { foo } from "foo";
-        this.remaps.add(scope, variableName.name, t.memberExpression(ref, specifier.imported));
+        this.remaps.add(scope, variableName.name,
+          t.memberExpression(ref, t.identifier(specifier.imported.name)));
       }
     }
   }
