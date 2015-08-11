@@ -3,7 +3,7 @@ set -e
 
 mkdir -p dist
 
-node packages/babel/scripts/cache-templates
+node packages/babel-core/scripts/cache-templates
 
 for f in packages/*; do
   node node_modules/mocha-fixtures/bin/mocha-fixture-dump.js $f

@@ -50,7 +50,7 @@ If you wish to build a copy of Babel for distribution then run:
 $ make build-dist
 ```
 
-and access the files from `packages/babel/dist`.
+and access the files from `packages/babel-core/dist`.
 
 #### Running tests
 

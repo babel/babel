@@ -8,7 +8,7 @@ build: clean
 	./scripts/build.sh
 
 build-dist: build
-	cd packages/babel; \
+	cd packages/babel-core; \
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
@@ -21,7 +21,7 @@ lint:
 
 clean: test-clean
 	rm -rf coverage
-	rm -rf packages/*/lib packages/babel/templates.json
+	rm -rf packages/*/lib packages/babel-core/templates.json
 
 test-clean:
 	rm -rf packages/*/test/tmp

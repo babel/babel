@@ -1,0 +1,25 @@
+import * as t from "babel-types";
+
+export var metadata = {
+  optional: true,
+  group: "builtin-pre"
+};
+
+/**
+ * [Please add a description.]
+ */
+
+export var visitor = {
+
+  /**
+   * [Please add a description.]
+   */
+
+  TemplateLiteral(node, parent) {
+    if (t.isTaggedTemplateExpression(parent)) return;
+
+    for (var i = 0; i < node.expressions.length; i++) {
+      node.expressions[i] = t.callExpression(t.identifier("String"), [node.expressions[i]]);
+    }
+  }
+};
