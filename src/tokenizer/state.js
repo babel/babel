@@ -3,7 +3,10 @@ import { types as ct } from "./context";
 import { types as tt } from "./types";
 
 export default class State {
-  init(input) {
+  init(options, input) {
+    // strict
+    this.strict = options.strictMode === false ? false : options.sourceType === "module";
+
     this.input = input;
 
     // Used to signify the start of a potential arrow function

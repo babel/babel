@@ -92,7 +92,7 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  if (this.isName() || this.match(tt.bracketL)) {
+  if (this.match(tt.name) || this.match(tt.bracketL)) {
     node.argument = this.parseBindingAtom();
   } else {
     this.unexpected();
@@ -103,7 +103,7 @@ pp.parseRest = function () {
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
-  if (this.isName()) {
+  if (this.match(tt.name)) {
     return this.parseIdentifier(true);
   }
 
@@ -168,7 +168,7 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
 pp.checkLVal = function (expr, isBinding, checkClashes) {
   switch (expr.type) {
     case "Identifier":
-      if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name))) {
+      if (this.state.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name))) {
         this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
       }
 

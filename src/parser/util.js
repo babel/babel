@@ -28,23 +28,6 @@ pp.expectRelational = function (op) {
   }
 };
 
-// TODO
-
-pp.isName = function () {
-  if (this.match(tt.name)) {
-    return true;
-  } else if (!this.strict) {
-    var keyword = this.state.type.keyword;
-    if (keyword === "let") {
-      return true;
-    } else if (keyword === "yield") {
-      return !this.state.inGenerator;
-    }
-  }
-
-  return false;
-};
-
 // Tests whether parsed token is a contextual keyword.
 
 pp.isContextual = function (name) {
@@ -69,6 +52,12 @@ pp.canInsertSemicolon = function () {
   return this.match(tt.eof) ||
     this.match(tt.braceR) ||
     lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
+};
+
+// TODO
+
+pp.isLineTerminator = function () {
+  return this.eat(tt.semi) || this.canInsertSemicolon();
 };
 
 // Consume a semicolon, or, failing that, see if we are allowed to
