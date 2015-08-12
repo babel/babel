@@ -2,4 +2,4 @@
 
 export default function () {}
 
-import "../../polyfill";
+import "babel-polyfill";

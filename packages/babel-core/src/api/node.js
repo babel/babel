@@ -35,7 +35,8 @@ export function register(opts?: Object) {
  */
 
 export function polyfill() {
-  require("../polyfill");
+  console.trace('The use of `require("babel").polyfill() is deprecated. Please us require("babel-polyfill")');
+  require("babel-polyfill");
 }
 
 /**

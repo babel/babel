@@ -14,7 +14,7 @@ exports.fixtures = getFixtures(__dirname + "/fixtures", function () {
   return require("../test-fixtures.json");
 });
 
-require("../lib/polyfill");
+require("babel-polyfill");
 
 eval(buildExernalHelpers());
 
