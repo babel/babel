@@ -1,7 +1,6 @@
 import * as metadataVisitor from "./lib/metadata";
 import * as messages from "babel-messages";
 import Remaps from "./lib/remaps";
-import object from "../../helpers/object";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
@@ -12,11 +11,11 @@ import * as t from "babel-types";
 export default class DefaultFormatter {
   constructor(file) {
     // object containg all module sources with the scope that they're contained in
-    this.sourceScopes = object();
+    this.sourceScopes = Object.create(null);
 
     // ids for use in module ids
-    this.defaultIds = object();
-    this.ids        = object();
+    this.defaultIds = Object.create(null);
+    this.ids        = Object.create(null);
 
     // contains reference aliases for live bindings
     this.remaps = new Remaps(file, this);
@@ -29,8 +28,8 @@ export default class DefaultFormatter {
     this.hasLocalExports = false;
     this.hasLocalImports = false;
 
-    this.localExports = object();
-    this.localImports = object();
+    this.localExports = Object.create(null);
+    this.localImports = Object.create(null);
 
     this.metadata = file.metadata.modules;
     this.getMetadata();

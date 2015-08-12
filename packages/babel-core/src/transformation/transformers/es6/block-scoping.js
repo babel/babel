@@ -2,7 +2,6 @@ import type NodePath from "../../../traversal/path";
 import type Scope from "../../../traversal/scope";
 import type File from "../../file";
 import traverse from "babel-traverse";
-import object from "../../../helpers/object";
 import * as util from  "../../../util";
 import * as t from "babel-types";
 import values from "lodash/object/values";
@@ -381,9 +380,9 @@ class BlockScoping {
     this.blockPath = blockPath;
     this.block     = blockPath.node;
 
-    this.outsideLetReferences = object();
+    this.outsideLetReferences = Object.create(null);
     this.hasLetReferences     = false;
-    this.letReferences        = this.block._letReferences = object();
+    this.letReferences        = this.block._letReferences = Object.create(null);
     this.body                 = [];
 
     if (loopPath) {
@@ -435,7 +434,7 @@ class BlockScoping {
     // we have to check if any of our let variables collide with
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
-    var remaps = object();
+    var remaps = Object.create(null);
 
     for (var key in letRefs) {
       // just an Identifier node we collected in `getLetReferences`

@@ -2,7 +2,6 @@ import PluginManager from "./file/plugin-manager";
 import normalizeAst from "../helpers/normalize-ast";
 import Plugin from "./plugin";
 import assign from "lodash/object/assign";
-import object from "../helpers/object";
 import File from "./file";
 
 /**
@@ -10,10 +9,10 @@ import File from "./file";
  */
 
 export default class Pipeline {
-  transformers = object();
-  namespaces   = object();
-  deprecated   = object();
-  aliases      = object();
+  transformers = Object.create(null);
+  namespaces   = Object.create(null);
+  deprecated   = Object.create(null);
+  aliases      = Object.create(null);
   filters      = [];
 
   /**
