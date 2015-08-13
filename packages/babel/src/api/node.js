@@ -8,6 +8,7 @@ export { util, babylon as acorn, transform };
 export { pipeline } from "../transformation";
 export { canCompile } from "../util";
 
+export { default as File } from "../transformation/file";
 export { default as options } from "../transformation/file/options/config";
 export { default as Plugin } from "../transformation/plugin";
 export { default as Transformer } from "../transformation/transformer";

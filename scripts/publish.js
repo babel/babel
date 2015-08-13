@@ -143,4 +143,5 @@ try {
   return;
 }
 
-exec("git push --follow-tags", true);
+exec("git push", true);
+exec("git push --tags", true);

@@ -120,7 +120,6 @@
                       "column": 7
                     }
                   },
-                  "operator": "=",
                   "left": {
                     "type": "Identifier",
                     "start": 2,

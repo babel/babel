@@ -280,7 +280,7 @@ export function MemberExpression(node, parent) {
   } else {
     if (t.isLiteral(node.object)) {
       var val = this._Literal(node.object);
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val)) {
+      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
         this.push(".");
       }
     }

@@ -186,15 +186,17 @@ export function inShadow(key?) {
   do {
     if (path.isFunction()) {
       var shadow = path.node.shadow;
-      if (shadow || path.isArrowFunctionExpression()) {
+      if (shadow) {
         // this is because sometimes we may have a `shadow` value of:
         //
         //   { this: false }
         //
         // we need to catch this case if `inShadow` has been passed a `key`
-        if (!key || !shadow || shadow[key] !== false) {
+        if (!key || shadow[key] !== false) {
           return path;
         }
+      } else if (path.isArrowFunctionExpression()) {
+        return path;
       }
 
       // normal function, we've found our function context

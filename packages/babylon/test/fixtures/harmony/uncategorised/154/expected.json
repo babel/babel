@@ -105,7 +105,6 @@
                     "column": 26
                   }
                 },
-                "operator": "=",
                 "left": {
                   "type": "ObjectPattern",
                   "start": 13,

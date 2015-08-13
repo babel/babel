@@ -786,7 +786,7 @@ export default class Tokenizer {
       return lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
     }
 
-    if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof) {
+    if (prevType === tt._else || prevType === tt.semi || prevType === tt.eof || prevType === tt.parenR) {
       return true;
     }
 

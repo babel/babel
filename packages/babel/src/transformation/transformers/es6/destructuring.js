@@ -460,8 +460,8 @@ class DestructuringTransformer {
     // member expression then we need to assign it to a temporary variable so it's
     // only evaluated once
 
-    if (pattern.properties.length > 1 && t.isMemberExpression(objRef)) {
-      var temp = this.scope.generateUidIdentifierBasedOnNode(objRef, this.file);
+    if (pattern.properties.length > 1 && !this.scope.isStatic(objRef)) {
+      var temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
       this.nodes.push(this.buildVariableDeclaration(temp, objRef));
       objRef = temp;
     }

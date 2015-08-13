@@ -199,7 +199,6 @@
                                 "column": 14
                               }
                             },
-                            "operator": "=",
                             "left": {
                               "type": "Identifier",
                               "start": 9,

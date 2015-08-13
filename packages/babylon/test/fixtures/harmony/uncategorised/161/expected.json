@@ -153,7 +153,6 @@
                           "column": 21
                         }
                       },
-                      "operator": "=",
                       "left": {
                         "type": "Identifier",
                         "start": 18,
