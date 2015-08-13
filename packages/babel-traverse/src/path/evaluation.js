@@ -1,6 +1,7 @@
 /* eslint eqeqeq: 0 */
 
 const VALID_CALLEES = ["String", "Number", "Math"];
+const INVALID_METHODS = ["random"];
 
 /**
  * Walk the input `node` and statically evaluate if it's truthy.
@@ -180,7 +181,7 @@ export function evaluate(): { confident: boolean; value: any } {
         var property = callee.get("property");
 
         // Math.min(1, 2)
-        if (object.isIdentifier() && property.isIdentifier() && VALID_CALLEES.indexOf(object.node.name) >= 0) {
+        if (object.isIdentifier() && property.isIdentifier() && VALID_CALLEES.indexOf(object.node.name) >= 0 && INVALID_METHODS.indexOf(property.node.name) < 0) {
           context = global[object.node.name];
           func = context[property.node.name];
         }
