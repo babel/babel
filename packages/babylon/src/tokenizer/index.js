@@ -56,7 +56,9 @@ export default class Tokenizer {
   // Move to the next token
 
   next() {
-    this.state.tokens.push(new Token(this.state));
+    if (!this.isLookahead) {
+      this.state.tokens.push(new Token(this.state));
+    }
 
     this.state.lastTokEnd = this.state.end;
     this.state.lastTokStart = this.state.start;
@@ -102,9 +104,13 @@ export default class Tokenizer {
 
   lookahead() {
     var old = this.state;
-    this.state = old.clone();
+    this.state = old.clone(true);
+
+    this.isLookahead = true;
     this.next();
-    var curr = this.state.clone();
+    this.isLookahead = false;
+
+    var curr = this.state.clone(true);
     this.state = old;
     return curr;
   }
@@ -172,8 +178,10 @@ export default class Tokenizer {
       range: [start, end]
     };
 
-    this.state.tokens.push(comment);
-    this.state.comments.push(comment);
+    if (!this.isLookahead) {
+      this.state.tokens.push(comment);
+      this.state.comments.push(comment);
+    }
     this.addComment(comment);
   }
 

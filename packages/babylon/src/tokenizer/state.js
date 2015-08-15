@@ -70,11 +70,15 @@ export default class State {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
 
-  clone() {
+  clone(skipArrays?) {
     var state = new State;
     for (var key in this) {
       var val = this[key];
-      if (Array.isArray(val)) val = val.slice();
+
+      if (!skipArrays && Array.isArray(val)) {
+        val = val.slice();
+      }
+
       state[key] = val;
     }
     return state;
