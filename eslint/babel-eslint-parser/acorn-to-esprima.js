@@ -190,10 +190,6 @@ var astTransformVisitor = {
       delete node.argument;
     }
 
-    if (this.isRestElement()) {
-      return node.argument;
-    }
-
     // flow: prevent "no-undef"
     // for "Component" in: "let x: React.Component"
     if (this.isQualifiedTypeIdentifier()) {

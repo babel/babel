@@ -1273,4 +1273,11 @@ describe("verify", function () {
       [ ]
     )
   });
+
+  it("no no-undef error with rest #11", function () {
+    verifyAndAssertMessages("const [a, ...rest] = ['1', '2', '3']; a; rest;",
+      { "no-undef": 1, "no-unused-vars": 1 },
+      [ ]
+    )
+  });
 });
