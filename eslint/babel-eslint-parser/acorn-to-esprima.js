@@ -235,11 +235,6 @@ var astTransformVisitor = {
 
     // functions
 
-    if (this.isFunction()) {
-      if (node.async) node.generator = true;
-      delete node.async;
-    }
-
     if (this.isAwaitExpression()) {
       node.type = "YieldExpression";
       node.delegate = node.all;
