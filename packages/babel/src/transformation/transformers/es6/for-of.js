@@ -52,7 +52,7 @@ export var visitor = {
  * [Please add a description.]
  */
 
-export function _ForOfStatementArray(node, scope, file) {
+export function _ForOfStatementArray(node, scope) {
   var nodes = [];
   var right = node.right;
 

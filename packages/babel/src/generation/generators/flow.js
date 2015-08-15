@@ -22,7 +22,7 @@ export function ArrayTypeAnnotation(node, print) {
  * Prints BooleanTypeAnnotation.
  */
 
-export function BooleanTypeAnnotation(node) {
+export function BooleanTypeAnnotation() {
   this.push("bool");
 }
 
@@ -383,6 +383,6 @@ export function TypeCastExpression(node, print) {
  * Prints VoidTypeAnnotation.
  */
 
-export function VoidTypeAnnotation(node) {
+export function VoidTypeAnnotation() {
   this.push("void");
 }
