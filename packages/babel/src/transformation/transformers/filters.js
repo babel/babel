@@ -4,7 +4,7 @@ import includes from "lodash/collection/includes";
  * [Please add a description.]
  */
 
-export function internal(transformer, opts) {
+export function internal(transformer) {
   if (transformer.key[0] === "_") return true;
 }
 

@@ -129,7 +129,7 @@ export { ArrayExpression as ArrayPattern };
  * Prints Literal, prints value, regex, raw, handles val type.
  */
 
-export function Literal(node, print) {
+export function Literal(node) {
   this.push(""); // hack: catch up indentation
   this._push(this._Literal(node));
 }

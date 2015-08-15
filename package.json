@@ -2,11 +2,11 @@
   "private": true,
   "devDependencies": {
     "babel": "5.8.19",
-    "babel-eslint": "^3.1.19",
+    "babel-eslint": "^4.0.6",
     "browserify": "^11.0.0",
     "chai": "^2.2.0",
     "es5-shim": "^4.1.7",
-    "eslint": "^0.21.2",
+    "eslint": "^1.1.0",
     "fs-readdir-recursive": "^0.1.2",
     "istanbul": "^0.3.5",
     "lodash": "^3.10.0",

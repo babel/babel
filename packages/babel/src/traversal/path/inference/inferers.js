@@ -120,7 +120,7 @@ export function ConditionalExpression() {
  * [Please add a description.]
  */
 
-export function SequenceExpression(node) {
+export function SequenceExpression() {
   return this.get("expressions").pop().getTypeAnnotation();
 }
 
@@ -128,7 +128,7 @@ export function SequenceExpression(node) {
  * [Please add a description.]
  */
 
-export function AssignmentExpression(node) {
+export function AssignmentExpression() {
   return this.get("right").getTypeAnnotation();
 }
 
