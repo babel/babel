@@ -93,6 +93,7 @@ export const TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_AL
  */
 
 // @TODO should `skipAliasCheck` be removed?
+/*eslint-disable no-unused-vars */
 export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: boolean): boolean {
   if (!node) return false;
 
@@ -105,6 +106,7 @@ export function is(type: string, node: Object, opts?: Object, skipAliasCheck?: b
     return t.shallowEqual(node, opts);
   }
 }
+/*eslint-enable no-unused-vars */
 
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.

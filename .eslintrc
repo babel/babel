@@ -1,5 +1,6 @@
 {
   "parser": "babel-eslint",
+  "extends": "eslint:recommended",
   "rules": {
     "quotes": [2, "double", "avoid-escape"],
     "strict": 0,
@@ -21,7 +22,8 @@
     "no-unreachable": 0,
     "no-labels": 0,
     "no-process-exit": 0,
-    "camelcase": 0
+    "camelcase": 0,
+    "no-console": 0
   },
   "env": {
     "node": true

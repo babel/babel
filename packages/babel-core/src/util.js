@@ -126,7 +126,8 @@ export function shouldIgnore(filename: string, ignore: Array, only): boolean {
 }
 
 /**
- * [Please add a description.]
+ * Returns result of calling function with filename if pattern is a function.
+ * Otherwise returns result of matching pattern Regex with filename.
  */
 
 function _shouldIgnore(pattern, filename) {
