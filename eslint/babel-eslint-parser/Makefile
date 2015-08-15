@@ -4,4 +4,4 @@ publish-patch:
 	mocha
 	npm version patch
 	npm publish
-	git push --tags
+	git push --follow-tags
