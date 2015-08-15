@@ -54,7 +54,9 @@ describe("verify", function () {
   it("Modules support (issue #5)", function () {
     verifyAndAssertMessages(
       "import Foo from 'foo';\n" +
-      "export default Foo;",
+      "export default Foo;\n" +
+      "export const c = 'c';\n" +
+      "export class Store {}",
       {},
       []
     );
@@ -121,6 +123,26 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "async function foo() { await bar(); }",
       { "no-unused-expressions": 1 },
+      []
+    );
+  });
+
+  it("arrow functions (issue #27)", function () {
+    verifyAndAssertMessages(
+      "[1, 2, 3].map(i => i * 2);",
+      { "func-names": 1, "space-before-blocks": 1 },
+      []
+    );
+  });
+
+  it("comment with padded-blocks (issue #33)", function () {
+    verifyAndAssertMessages([
+        "if (a){",
+          "// i'm a comment!",
+         "let b = c",
+        "}"
+      ].join("\n"),
+      { "padded-blocks": [1, "never"] },
       []
     );
   });
@@ -967,7 +989,7 @@ describe("verify", function () {
     );
   });
 
-  it("class properties", function () {
+  it("class properties #71", function () {
     verifyAndAssertMessages(
       "class Lol { foo = 'bar'; }",
       { "no-undef": 1 },
