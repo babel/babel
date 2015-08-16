@@ -1302,4 +1302,11 @@ describe("verify", function () {
       [ ]
     )
   });
+
+  it("async function with space-before-function-paren #168", function () {
+    verifyAndAssertMessages("it('handles updates', async function() {});",
+      { "space-before-function-paren": [1, "never"] },
+      [ ]
+    )
+  });
 });
