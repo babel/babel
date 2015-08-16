@@ -27,8 +27,8 @@
     "eslint": ">=1.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^4.0.5",
-    "eslint": "^1.0.0",
+    "babel-eslint": "^4.0.7",
+    "eslint": "^1.1.0",
     "is-my-json-valid": "^2.12.0",
     "mocha": "^2.2.5",
     "phantomjs": "^1.9.17"

@@ -27,6 +27,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
     "babel/new-cap": 1,
     "babel/object-curly-spacing": 1,
     "babel/object-shorthand": 1,
+    "babel/arrow-parens": 1
   }
 }
 ```
@@ -38,3 +39,4 @@ Each rule cooresponds to a core eslint rule, and has the same options.
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
+- `babel/arrow-parens`: Handles async functions correctly
