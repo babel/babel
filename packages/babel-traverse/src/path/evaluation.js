@@ -69,6 +69,27 @@ export function evaluate(): { confident: boolean; value: any } {
       }
     }
 
+    if (path.isTemplateLiteral()) {
+      var str = "";
+
+      var i = 0;
+      var exprs = path.get("expressions");
+
+      for (let elem of (node.quasis: Array)) {
+        // not confident, evaluated an expression we don't like
+        if (!confident) break;
+
+        // add on cooked element
+        str += elem.value.cooked;
+
+        // add on interpolated expression if it's present
+        var expr = exprs[i++];
+        if (expr) str += String(evaluate(expr));
+      }
+
+      if (confident) return str;
+    }
+
     if (path.isConditionalExpression()) {
       if (evaluate(path.get("test"))) {
         return evaluate(path.get("consequent"));
