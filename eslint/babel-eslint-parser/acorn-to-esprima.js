@@ -183,11 +183,8 @@ var astTransformVisitor = {
   },
   exit: function (node) { /* parent */
     if (this.isSpreadProperty()) {
-      node.type = "Property";
-      node.kind = "init";
-      node.computed = true;
+      node.type = "SpreadProperty";
       node.key = node.value = node.argument;
-      delete node.argument;
     }
 
     // flow: prevent "no-undef"
