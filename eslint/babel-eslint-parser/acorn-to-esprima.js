@@ -223,30 +223,24 @@ var astTransformVisitor = {
       }
     }
 
-    // classes
-
-    if (this.isReferencedIdentifier({ name: "super" })) {
-      return t.inherits(t.thisExpression(), node);
-    }
-
+    // remove class property keys (or patch in escope)
     if (this.isClassProperty()) {
       delete node.key;
     }
 
-    // functions
-
+    // async function as generator
     if (this.isFunction()) {
       if (node.async) node.generator = true;
     }
 
+    // await transform to yield
     if (this.isAwaitExpression()) {
       node.type = "YieldExpression";
       node.delegate = node.all;
       delete node.all;
     }
 
-    // template strings
-
+    // template string range fixes
     if (this.isTemplateLiteral()) {
       node.quasis.forEach(function (q) {
         q.range[0] -= 1;
