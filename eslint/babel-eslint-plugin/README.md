@@ -1,14 +1,14 @@
 # eslint-plugin-babel
 
-An eslint plugin companion to babel-eslint. babel-eslint does a great job of adapting eslint for use with Babel, but to it can't change the built in rules to support experimental features. eslint-plugin-babel reimplements problematic rules so they do not give false positives or negatives.
+An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job at adapting `eslint` for use with Babel, but it can't change the built in rules to support experimental features. `eslint-plugin-babel` reimplements problematic rules so they do not give false positives or negatives.
 
 ### Install
 
 ```sh
-npm install eslint-plugin-babel -S
+npm install eslint-plugin-babel -D
 ```
 
-enable the plugin by adjusting your `.eslintrc` file to include the plugin:
+Load the plugin in your `.eslintrc` file:
 
 ```json
 {
@@ -18,7 +18,8 @@ enable the plugin by adjusting your `.eslintrc` file to include the plugin:
 }
 ```
 
-Finally enable all the rules you like to use (remember to disable the originals as well!).
+Finally enable all the rules you would like to use (remember to disable the
+original ones as well!).
 
 ```json
 {
@@ -33,7 +34,7 @@ Finally enable all the rules you like to use (remember to disable the originals 
 ```
 ### Rules
 
-Each rule cooresponds to a core eslint rule, and has the same options.
+Each rule corresponds to a core `eslint` rule, and has the same options.
 
 - `babel/generator-star-spacing`: Handles async/await functions correctly
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
