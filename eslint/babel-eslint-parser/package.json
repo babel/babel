@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "file:eslint",
+    "eslint": "^1.2.1",
     "espree": "^2.0.3",
     "mocha": "^2.2.5"
   }
