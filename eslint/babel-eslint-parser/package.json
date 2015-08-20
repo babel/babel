@@ -14,7 +14,7 @@
   },
   "scripts": {
     "bootstrap": "git submodule update --init && cd eslint && npm install",
-    "eslint": "cd eslint && mocha -c tests/lib/rules/**/*.js -r ../eslint-tester.js",
+    "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "mocha"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
     "eslint": "^1.2.1",
-    "espree": "^2.0.3",
+    "espree": "^2.2.4",
     "mocha": "^2.2.5"
   }
 }

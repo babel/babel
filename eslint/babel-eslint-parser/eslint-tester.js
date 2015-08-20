@@ -1,4 +1,4 @@
-var ESLintTester = require("./eslint/node_modules/eslint-tester");
+var ESLintTester = require("./eslint").RuleTester;
 
 console.log("Use babel-eslint for test suite");
 ESLintTester.setDefaultConfig({
