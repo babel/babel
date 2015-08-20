@@ -15,7 +15,8 @@
   "scripts": {
     "bootstrap": "git submodule update --init && cd eslint && npm install",
     "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "./node_modules/eslint/bin/eslint.js ./test index.js acorn-to-esprima.js"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",

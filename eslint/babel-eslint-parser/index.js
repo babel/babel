@@ -327,7 +327,7 @@ function monkeypatch() {
         } else if (left.type === "ObjectPattern") {
           for (var i = 0; i < left.properties.length; i++) {
             var name = left.properties[i];
-            if (name && name.key && name.key.type === 'Identifier') {
+            if (name && name.key && name.key.type === "Identifier") {
               scope.__define(name.key, new Definition("ComprehensionElement", name.key, name.key));
             }
           }
