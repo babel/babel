@@ -165,7 +165,7 @@ function ensureEntranceObjects(obj) {
 }
 
 /**
- * [Please add a description.]
+ * Makes sure that enter and exit callbacks are arrays.
  */
 
 function ensureCallbackArrays(obj){
