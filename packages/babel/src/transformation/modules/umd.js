@@ -81,10 +81,12 @@ export default class UMDFormatter extends AMDFormatter {
       COMMON_ARGUMENTS: commonArgs,
       BROWSER_ARGUMENTS: browserArgs,
       GLOBAL_ARG: globalArg,
-      GLOBAL_MODULE_ROOT: t.literal(this.file.opts.moduleRoot),
-      GLOBAL_MODULE_NAME: t.literal(moduleName.replace(this.file.opts.moduleRoot + "/", ""))
+      GLOBAL_MODULE_ROOT: t.literal(this.file.opts.moduleRoot)
     };
-    var templateName = this.file.opts.globalModuleRoot ? "umd-runner-body-global-root" : "umd-runner-body";
+    if (moduleName) {
+      templateOpts.GLOBAL_MODULE_NAME = t.literal(moduleName.replace(this.file.opts.moduleRoot + "/", ""));
+    }
+    var templateName = this.file.opts.globalModuleRoot && moduleName ? "umd-runner-body-global-root" : "umd-runner-body";
     var runner = util.template(templateName, templateOpts);
 
     //
