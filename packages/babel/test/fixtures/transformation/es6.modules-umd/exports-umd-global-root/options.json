@@ -1,0 +1,6 @@
+{
+  "moduleIds": true,
+  "moduleRoot": "mylib",
+  "globalModuleRoot": true,
+  "modules": "umd"
+}
