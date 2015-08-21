@@ -6,6 +6,7 @@
   } else {
     var mod = { exports: {} };
     factory(mod.exports, BROWSER_ARGUMENTS);
-    global[MODULE_NAME] = mod.exports;
+    global[GLOBAL_MODULE_ROOT] = global[GLOBAL_MODULE_ROOT] || {};
+    global[GLOBAL_MODULE_ROOT][GLOBAL_MODULE_NAME] = mod.exports;
   }
 });

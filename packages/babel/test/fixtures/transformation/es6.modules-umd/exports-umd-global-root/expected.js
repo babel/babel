@@ -8,7 +8,8 @@
       exports: {}
     };
     factory(mod.exports);
-    global["mylib/es6.modules-umd/exports-umd-global-root/expected"] = mod.exports;
+    global["mylib"] = global["mylib"] || {};
+    global["mylib"]["es6.modules-umd/exports-umd-global-root/expected"] = mod.exports;
   }
 })(this, function (exports) {
   "use strict";
