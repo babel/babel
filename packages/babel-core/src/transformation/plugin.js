@@ -18,7 +18,8 @@ const VALID_METADATA_PROPERTES = [
   "stage",
   "group",
   "experimental",
-  "secondPass"
+  "secondPass",
+  "mode"
 ];
 
 /**

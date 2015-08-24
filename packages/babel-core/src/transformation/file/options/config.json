@@ -25,6 +25,11 @@
     "default": {}
   },
 
+  "mode": {
+    "description": "",
+    "hidden": true
+  },
+
   "moduleId": {
     "description": "specify a custom name for module ids",
     "type": "string"

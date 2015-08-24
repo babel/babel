@@ -44,6 +44,8 @@ export default class File {
   ast                     = {};
 
   metadata = {
+    marked: [],
+
     modules: {
       imports: [],
       exports: {
@@ -518,7 +520,7 @@ export default class File {
     var features = parseOpts.features = {};
     for (var key in this.transformers) {
       var transformer = this.transformers[key];
-      features[key] = transformer.canTransform();
+      features[key] = transformer.canRun();
     }
 
     parseOpts.looseModules = this.isLoose("es6.modules");
@@ -660,7 +662,7 @@ export default class File {
   call(key: string) {
     for (var pass of (this.uncollapsedTransformerStack: Array)) {
       var fn = pass.plugin[key];
-      if (fn) fn(this);
+      if (fn) fn.call(pass, this);
     }
   }
 

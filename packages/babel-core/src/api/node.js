@@ -5,7 +5,7 @@ import * as util from "../util";
 import fs from "fs";
 
 export { util, babylon as acorn, transform };
-export { pipeline } from "../transformation";
+export { pipeline, lint } from "../transformation";
 export { canCompile } from "../util";
 
 export { default as File } from "../transformation/file";

@@ -84,7 +84,7 @@ export default class Pipeline {
    * [Please add a description.]
    */
 
-  canTransform(plugin, fileOpts) {
+  canRun(plugin, fileOpts) {
     if (plugin.metadata.plugin) {
       return true;
     }
@@ -101,8 +101,9 @@ export default class Pipeline {
    * [Please add a description.]
    */
 
-  analyze(code: string, opts?: Object = {}) {
+  lint(code: string, opts?: Object = {}) {
     opts.code = false;
+    opts.mode = "lint";
     return this.transform(code, opts);
   }
 
