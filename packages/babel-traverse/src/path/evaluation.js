@@ -57,7 +57,7 @@ export function evaluate(): { confident: boolean; value: any } {
     var node = path.node;
 
     if (path.isSequenceExpression()) {
-      var exprs = path.get("expressions");
+      let exprs = path.get("expressions");
       return evaluate(exprs[exprs.length - 1]);
     }
 
@@ -73,7 +73,7 @@ export function evaluate(): { confident: boolean; value: any } {
       var str = "";
 
       var i = 0;
-      var exprs = path.get("expressions");
+      let exprs = path.get("expressions");
 
       for (let elem of (node.quasis: Array)) {
         // not confident, evaluated an expression we don't like
