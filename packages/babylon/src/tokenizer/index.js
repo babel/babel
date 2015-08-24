@@ -27,8 +27,11 @@ export class Token {
 
 function codePointToString(code) {
   // UTF-16 Decoding
-  if (code <= 0xFFFF) return String.fromCharCode(code);
-  return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
+  if (code <= 0xFFFF) {
+    return String.fromCharCode(code);
+  } else {
+    return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
+  }
 }
 
 export default class Tokenizer {
@@ -138,10 +141,11 @@ export default class Tokenizer {
   readToken(code) {
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code, true) || code === 92 /* '\' */)
+    if (isIdentifierStart(code, true) || code === 92 /* '\' */) {
       return this.readWord();
-
-    return this.getTokenFromCode(code);
+    } else {
+      return this.getTokenFromCode(code);
+    }
   }
 
   fullCharCodeAtPos() {
@@ -166,6 +170,7 @@ export default class Tokenizer {
       this.state.tokens.push(comment);
       this.state.comments.push(comment);
     }
+
     this.addComment(comment);
   }
 
