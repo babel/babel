@@ -3,6 +3,7 @@
   "loose": ["all"],
   "blacklist": ["es6.tailCall"],
   "optional": ["optimisation.flow.forOf", "bluebirdCoroutines"],
+  //"plugins": ["./scripts/build-plugins/inline-node-type-checks", "./scripts/build-plugins/inline-node-builders"],
   "env": {
     "test": {
       "auxiliaryCommentBefore": "istanbul ignore next"
