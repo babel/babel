@@ -1,8 +1,9 @@
-import type NodePath from "../../../traversal/path";
-import type Scope from "../../../traversal/scope";
-import type File from "../../file";
+import type NodePath from "babel-traverse";
+import type Scope from "babel-traverse";
+import type File from "../../../file";
 import traverse from "babel-traverse";
-import * as util from  "../../../util";
+import { visitor as tdzVisitor } from "./tdz";
+import * as util from  "../../../../util";
 import * as t from "babel-types";
 import values from "lodash/object/values";
 import extend from "lodash/object/extend";
@@ -72,7 +73,7 @@ export var visitor = {
   VariableDeclaration(node, parent, scope, file) {
     if (!isLet(node, parent)) return;
 
-    if (isLetInitable(node) && file.transformers["es6.spec.blockScoping"].canTransform()) {
+    if (isLetInitable(node) && node._tdzThis) {
       var nodes = [node];
 
       for (var i = 0; i < node.declarations.length; i++) {
@@ -86,6 +87,12 @@ export var visitor = {
       }
 
       node._blockHoist = 2;
+
+      if (this.isCompletionRecord()) {
+        // ensure we don't break completion record semantics by returning
+        // the initialiser of the last declarator
+        nodes.push(t.expressionStatement(t.identifier("undefined")));
+      }
 
       return nodes;
     }
@@ -178,7 +185,7 @@ function traverseReplace(node, parent, scope, remaps) {
  * [Please add a description.]
  */
 
-var letReferenceBlockVisitor = {
+var letReferenceBlockVisitor = traverse.visitors.merge([{
 
   /**
    * [Please add a description.]
@@ -188,13 +195,13 @@ var letReferenceBlockVisitor = {
     this.traverse(letReferenceFunctionVisitor, state);
     return this.skip();
   }
-};
+}, tdzVisitor]);
 
 /**
  * [Please add a description.]
  */
 
-var letReferenceFunctionVisitor = {
+var letReferenceFunctionVisitor = traverse.visitors.merge([{
 
   /**
    * [Please add a description.]
@@ -213,7 +220,7 @@ var letReferenceFunctionVisitor = {
 
     state.closurify = true;
   }
-};
+}, tdzVisitor]);
 
 /**
  * [Please add a description.]
@@ -273,13 +280,13 @@ var continuationVisitor = {
  * [Please add a description.]
  */
 
-var loopNodeTo = function (node) {
+function loopNodeTo(node) {
   if (t.isBreakStatement(node)) {
     return "break";
   } else if (t.isContinueStatement(node)) {
     return "continue";
   }
-};
+}
 
 /**
  * [Please add a description.]
@@ -323,7 +330,7 @@ var loopVisitor = {
    * [Please add a description.]
    */
 
-  enter(node, parent, scope, state) {
+  "BreakStatement|ContinueStatement|ReturnStatement"(node, parent, scope, state) {
     var replace;
     var loopText = loopNodeTo(node);
 
@@ -382,7 +389,7 @@ class BlockScoping {
 
     this.outsideLetReferences = Object.create(null);
     this.hasLetReferences     = false;
-    this.letReferences        = this.block._letReferences = Object.create(null);
+    this.letReferences        = Object.create(null);
     this.body                 = [];
 
     if (loopPath) {
@@ -629,7 +636,8 @@ class BlockScoping {
 
     var state = {
       letReferences: this.letReferences,
-      closurify:     false
+      closurify:     false,
+      file:          this.file
     };
 
     // traverse through this block, stopping on functions and checking if they
