@@ -17,29 +17,13 @@ export class Token {
     this.end = state.end;
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
-}
 
-// ## Tokenizer
-
-// Are we running under Rhino?
-/* global Packages */
-const isRhino = typeof Packages === "object" && Object.prototype.toString.call(Packages) === "[object JavaPackage]";
-
-// Parse a regular expression. Some context-awareness is necessary,
-// since a '/' inside a '[]' set does not end the expression.
-
-function tryCreateRegexp(src, flags, throwErrorStart) {
-  try {
-    return new RegExp(src, flags);
-  } catch (e) {
-    if (throwErrorStart !== undefined) {
-      if (e instanceof SyntaxError) this.raise(throwErrorStart, "Error parsing regular expression: " + e.message);
-      this.raise(e);
-    }
+  get range() {
+    return [this.start, this.end];
   }
 }
 
-var regexpUnicodeSupport = !!tryCreateRegexp("\uffff", "u");
+// ## Tokenizer
 
 function codePointToString(code) {
   // UTF-16 Decoding
@@ -516,41 +500,13 @@ export default class Tokenizer {
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     let mods = this.readWord1();
-    let tmp = content;
     if (mods) {
       let validFlags = /^[gmsiyu]*$/;
       if (!validFlags.test(mods)) this.raise(start, "Invalid regular expression flag");
-      if (mods.indexOf("u") >= 0 && !regexpUnicodeSupport) {
-        // Replace each astral symbol and every Unicode escape sequence that
-        // possibly represents an astral symbol or a paired surrogate with a
-        // single ASCII symbol to avoid throwing on regular expressions that
-        // are only valid in combination with the `/u` flag.
-        // Note: replacing with the ASCII symbol `x` might cause false
-        // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-        // perfectly valid pattern that is equivalent to `[a-b]`, but it would
-        // be replaced by `[x-b]` which throws an error.
-        tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, (match, code, offset) => {
-          code = Number("0x" + code);
-          if (code > 0x10FFFF) this.raise(start + offset + 3, "Code point out of bounds");
-          return "x";
-        });
-        tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
-      }
-    }
-    // Detect invalid regular expressions.
-    let value = null;
-    // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
-    // so don't do detection if we are running under Rhino
-    if (!isRhino) {
-      tryCreateRegexp.call(this, tmp, undefined, start);
-      // Get a regular expression object for this pattern-flag pair, or `null` in
-      // case the current environment doesn't support the flags it uses.
-      value = tryCreateRegexp.call(this, content, mods);
     }
     return this.finishToken(tt.regexp, {
       pattern: content,
-      flags: mods,
-      value
+      flags: mods
     });
   }
 
