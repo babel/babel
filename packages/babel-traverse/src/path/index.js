@@ -118,6 +118,18 @@ export default class NodePath {
   traverse(visitor, state) {
     traverse(this.node, visitor, this.scope, state, this);
   }
+
+  /**
+   * [Please add a description.]
+   */
+
+  mark(type, message) {
+    this.hub.file.metadata.marked.push({
+      type,
+      message,
+      loc: this.node.loc
+    });
+  }
 }
 
 /**
