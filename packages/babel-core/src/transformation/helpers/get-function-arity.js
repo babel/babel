@@ -5,12 +5,11 @@ import * as t from "babel-types";
  */
 
 export default function (node) {
-  var lastNonDefault = 0;
   for (var i = 0; i < node.params.length; i++) {
     var param = node.params[i];
-    if (!t.isAssignmentPattern(param) && !t.isRestElement(param)) {
-      lastNonDefault = i + 1;
+    if (t.isAssignmentPattern(param) || t.isRestElement(param)) {
+      return i;
     }
   }
-  return lastNonDefault;
+  return node.params.length;
 }
