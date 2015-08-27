@@ -13,9 +13,9 @@ node $BROWSERIFY_CMD -e lib/polyfill.js >dist/polyfill.js
 node $UGLIFY_CMD dist/polyfill.js >dist/polyfill.min.js
 
 # Add a Unicode BOM so browsers will interpret the file as UTF-8
-printf '\xEF\xBB\xBF' > dist/browser.js
+node -p '"\uFEFF"' > dist/browser.js
 node $BROWSERIFY_CMD lib/api/browser.js -s babel $BROWSERIFY_IGNORE >>dist/browser.js
-printf '\xEF\xBB\xBF' > dist/browser.min.js
+node -p '"\uFEFF"' > dist/browser.min.js
 node $UGLIFY_CMD dist/browser.js >>dist/browser.min.js
 
 node $BROWSERIFY_CMD lib/api/node.js --node $BROWSERIFY_IGNORE >dist/node.js
