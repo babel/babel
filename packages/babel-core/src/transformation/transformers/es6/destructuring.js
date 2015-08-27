@@ -95,7 +95,7 @@ export var visitor = {
       t.inherits(ref, pattern);
 
       var destructuring = new DestructuringTransformer({
-        blockHoist: node.params.length - i,
+        blockHoist: node.params.length - i + 1,
         nodes:      nodes,
         scope:      scope,
         file:       file,
