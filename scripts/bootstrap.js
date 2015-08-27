@@ -10,14 +10,17 @@ exec("npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babe
 var packages = [];
 ls("packages/*").forEach(function (loc) {
   var name = path.basename(loc);
-  if (name[0] !== ".") {
-    var pkg = require("../packages/" + name + "/package.json");
-    packages.push({
-      folder: name,
-      pkg: pkg,
-      name: pkg.name
-    });
-  }
+  if (name[0] === ".") return;
+
+  var pkgLoc = __dirname + "/../packages/" + name + "/package.json";
+  if (!fs.existsSync(pkgLoc)) return;
+
+  var pkg = require(pkgLoc);
+  packages.push({
+    folder: name,
+    pkg: pkg,
+    name: pkg.name
+  });
 });
 
 // create links
