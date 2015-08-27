@@ -256,7 +256,6 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
 pp.flowParseObjectType = function (allowStatic) {
   var nodeStart = this.startNode();
   var node;
-  var optional = false;
   var propertyKey;
   var isStatic;
 
@@ -267,6 +266,7 @@ pp.flowParseObjectType = function (allowStatic) {
   this.expect(tt.braceL);
 
   while (!this.match(tt.braceR)) {
+    var optional = false;
     var startPos = this.state.start, startLoc = this.state.startLoc;
     node = this.startNode();
     if (allowStatic && this.isContextual("static")) {
