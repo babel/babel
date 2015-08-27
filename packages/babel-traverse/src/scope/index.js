@@ -829,21 +829,22 @@ export default class Scope {
     var blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     var dataKey = `declaration:${kind}:${blockHoist}`;
-    var declar  = !unique && path.getData(dataKey);
+    var declarPath  = !unique && path.getData(dataKey);
 
-    if (!declar) {
-      declar = t.variableDeclaration(kind, []);
+    if (!declarPath) {
+      var declar = t.variableDeclaration(kind, []);
       declar._generated = true;
       declar._blockHoist = blockHoist;
 
       this.hub.file.attachAuxiliaryComment(declar);
 
-      var [declarPath] = path.unshiftContainer("body", [declar]);
-      this.registerBinding(kind, declarPath);
-      if (!unique) path.setData(dataKey, declar);
+      [declarPath] = path.unshiftContainer("body", [declar]);
+      if (!unique) path.setData(dataKey, declarPath);
     }
 
-    declar.declarations.push(t.variableDeclarator(opts.id, opts.init));
+    var declarator = t.variableDeclarator(opts.id, opts.init);
+    declarPath.node.declarations.push(declarator);
+    this.registerBinding(kind, declarPath.get("declarations").pop());
   }
 
   /**
