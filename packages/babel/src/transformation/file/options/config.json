@@ -30,6 +30,13 @@
     "type": "string"
   },
 
+  "defineId": {
+    "description": "specify a custom name for the AMDFormatter to use as a define function",
+    "type": "string",
+    "default": "define",
+    "hidden": true
+  },
+
   "getModuleId": {
     "hidden": true
   },

@@ -59,9 +59,22 @@ export default class AMDFormatter extends DefaultFormatter {
     var moduleName = this.getModuleName();
     if (moduleName) defineArgs.unshift(t.literal(moduleName));
 
-    var call = t.callExpression(t.identifier("define"), defineArgs);
+    var call = t.callExpression(this.getDefineIdentifier(), defineArgs);
 
     program.body = [t.expressionStatement(call)];
+  }
+
+  /**
+   * Get the module definition function identifier. Defaults to `define`, but
+   * can be overridden via `opts.defineId`.
+   */
+  getDefineIdentifier() {
+    var defineId = "define";
+    if (this.file.opts.defineId) {
+      defineId = this.file.opts.defineId;
+    }
+
+    return t.identifier(defineId);
   }
 
   /**
