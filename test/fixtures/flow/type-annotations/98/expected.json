@@ -1,0 +1,259 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 57,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 57
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 57,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 57
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 57,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 57
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 57,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 57
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 57,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 57
+                }
+              },
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 5,
+                "end": 57,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 57
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "ObjectTypeAnnotation",
+                  "start": 7,
+                  "end": 57,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 57
+                    }
+                  },
+                  "callProperties": [],
+                  "properties": [
+                    {
+                      "type": "ObjectTypeProperty",
+                      "start": 8,
+                      "end": 24,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 24
+                        }
+                      },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
+                          }
+                        },
+                        "name": "param1"
+                      },
+                      "value": {
+                        "type": "NumberTypeAnnotation",
+                        "start": 17,
+                        "end": 23,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 23
+                          }
+                        }
+                      },
+                      "optional": true
+                    },
+                    {
+                      "type": "ObjectTypeProperty",
+                      "start": 25,
+                      "end": 40,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 40
+                        }
+                      },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 25,
+                        "end": 31,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 31
+                          }
+                        },
+                        "name": "param2"
+                      },
+                      "value": {
+                        "type": "StringTypeAnnotation",
+                        "start": 33,
+                        "end": 39,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 33
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 39
+                          }
+                        }
+                      },
+                      "optional": false
+                    },
+                    {
+                      "type": "ObjectTypeProperty",
+                      "start": 41,
+                      "end": 56,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 41
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 56
+                        }
+                      },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 41,
+                        "end": 47,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 41
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 47
+                          }
+                        },
+                        "name": "param3"
+                      },
+                      "value": {
+                        "type": "StringTypeAnnotation",
+                        "start": 49,
+                        "end": 55,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 49
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 55
+                          }
+                        }
+                      },
+                      "optional": false
+                    }
+                  ],
+                  "indexers": []
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ]
+  },
+  "comments": []
+}
