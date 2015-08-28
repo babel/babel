@@ -17,12 +17,13 @@
 <p align="center">
   <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/pr?style=flat"></a>
   <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/issue?style=flat"></a>
+  <a href="http://www.projecttalk.io/boards/babel%2Fbabel?utm_campaign=gh-badge&utm_medium=badge&utm_source=github"><img alt="ProjectTalk message board" src="http://www.projecttalk.io/images/gh_badge-3e578a9f437f841de7446bab9a49d103.svg?vsn=d"></a>
 </p>
 
 ----
 
 <p align="center">
-  For questions and support please visit the <a href="https://babel-slack.herokuapp.com">Slack community</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>. The Babel issue tracker is <strong>exclusively</strong> for bug reports and feature requests.
+  For questions and support please visit the <a href="https://babel-slack.herokuapp.com">Slack community</a>, <a href="http://www.projecttalk.io/boards/babel%2Fbabel">message board</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>. The Babel issue tracker is <strong>exclusively</strong> for bug reports and feature requests.
 </p>
 
 <p align="center">
