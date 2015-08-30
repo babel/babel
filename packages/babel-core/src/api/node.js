@@ -31,15 +31,6 @@ export function register(opts?: Object) {
 }
 
 /**
- * Register polyfill globally.
- */
-
-export function polyfill() {
-  console.trace('The use of `require("babel").polyfill() is deprecated. Please us require("babel-polyfill")');
-  require("babel-polyfill");
-}
-
-/**
  * Asynchronously transform `filename` with optional `opts`, calls `callback` when complete.
  */
 
