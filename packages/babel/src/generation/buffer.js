@@ -3,6 +3,7 @@ import trimRight from "trim-right";
 import isBoolean from "lodash/lang/isBoolean";
 import includes from "lodash/collection/includes";
 import isNumber from "lodash/lang/isNumber";
+import { EOL } from "os";
 
 /**
  * Buffer for collecting generated output.
@@ -103,7 +104,7 @@ export default class Buffer {
   space(force?) {
     if (!force && this.format.compact) return;
 
-    if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
+    if (force || this.buf && !this.isLast(" ") && !this.isLast(EOL.split(""))) {
       this.push(" ");
     }
   }
@@ -114,9 +115,9 @@ export default class Buffer {
 
   removeLast(cha) {
     if (this.format.compact) return;
-    if (!this.isLast(cha)) return;
+    if (!this.isLast(cha.split(""))) return;
 
-    this.buf = this.buf.substr(0, this.buf.length - 1);
+    this.buf = this.buf.substr(0, this.buf.length - cha.length);
     this.position.unshift(cha);
   }
 
@@ -172,7 +173,7 @@ export default class Buffer {
     if (isNumber(i)) {
       i = Math.min(2, i);
 
-      if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
+      if (this.endsWith(`{${EOL}`) || this.endsWith(`:${EOL}`)) i--;
       if (i <= 0) return;
 
       while (i > 0) {
@@ -195,14 +196,14 @@ export default class Buffer {
 
   _newline(removeLast) {
     // never allow more than two lines
-    if (this.endsWith("\n\n")) return;
+    if (this.endsWith(`${EOL}${EOL}`)) return;
 
     // remove the last newline
-    if (removeLast && this.isLast("\n")) this.removeLast("\n");
+    if (removeLast && this.isLast(EOL.split(""))) this.removeLast(EOL);
 
     this.removeLast(" ");
     this._removeSpacesAfterLastNewline();
-    this._push("\n");
+    this._push(EOL);
   }
 
   /**
@@ -210,7 +211,7 @@ export default class Buffer {
    */
 
   _removeSpacesAfterLastNewline() {
-    var lastNewlineIndex = this.buf.lastIndexOf("\n");
+    var lastNewlineIndex = this.buf.lastIndexOf(EOL) + EOL.length - 1;
     if (lastNewlineIndex === -1) {
       return;
     }
@@ -234,15 +235,15 @@ export default class Buffer {
    */
 
   push(str, noIndent) {
-    if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
+    if (!this.format.compact && this._indent && !noIndent && str !== EOL) {
       // we have an indent level and we aren't pushing a newline
       var indent = this.getIndent();
 
       // replace all newlines with newlines with the indentation
-      str = str.replace(/\n/g, `\n${indent}`);
+      str = str.replace(new RegExp(EOL, "g"), `${EOL}${indent}`);
 
       // we've got a newline before us so prepend on the indentation
-      if (this.isLast("\n")) this._push(indent);
+      if (this.isLast(EOL.split(""))) this._push(indent);
     }
 
     this._push(str);
@@ -264,7 +265,7 @@ export default class Buffer {
 
         this.parenPushNewlineState = null;
 
-        if (cha === "\n" || cha === "/") {
+        if (cha === "/" || str.substr(i, EOL.length) === EOL) {
           // we're going to break this terminator expression so we need to add a parentheses
           this._push("(");
           this.indent();
