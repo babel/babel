@@ -294,4 +294,12 @@ describe("acorn-to-esprima", function () {
   it("regexp in a template string", function () {
     parseAndAssertSame("`${/\\d/.exec(\"1\")[0]}`");
   });
+
+  it("first line is empty", function () {
+    parseAndAssertSame("\nimport Immutable from \"immutable\";");
+  });
+
+  it("empty", function () {
+    parseAndAssertSame("");
+  });
 });
